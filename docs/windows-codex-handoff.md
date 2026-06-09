@@ -46,11 +46,10 @@ npx playwright install
 너는 Windows PC에서 실행 중인 Codex야. 이 저장소의 목표는 LOGH VII 자료를 기반으로 한글화와 게임 서버 구성을 완성하는 것이다.
 
 작업 시작 전에 다음을 반드시 수행해:
-1. 현재 위치가 LOGH-7-rework 저장소인지 확인한다.
-2. `git status --short --branch`로 브랜치와 dirty state를 확인한다.
-3. `git pull`과 `git lfs pull`을 실행해 macOS 작업자가 푸시한 최신 문서와 LFS CD 아티팩트를 받는다.
-4. `npm install`을 실행한다. 이미 설치되어 있으면 빠르게 끝나도 된다.
-5. `npm run build`와 `npm test`를 실행해 현재 표면을 검증한다. Playwright 브라우저가 없으면 `npx playwright install` 후 다시 테스트한다.
+1. `git status --short --branch`로 브랜치와 dirty state를 확인한다.
+2. `git pull`과 `git lfs pull`을 실행해 macOS 작업자가 푸시한 최신 문서와 LFS CD 아티팩트를 받는다.
+3. `npm install`을 실행한다. 이미 설치되어 있으면 빠르게 끝나도 된다.
+4. `npm run build`와 `npm test`를 실행해 현재 표면을 검증한다. Playwright 브라우저가 없으면 `npx playwright install` 후 다시 테스트한다.
 
 그 다음 자동으로 작업을 이어가:
 - 문서와 현재 코드부터 읽고, 최종 목표인 한글화와 게임 서버 구성을 충족하는 방향으로 직접 구현한다.
