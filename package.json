@@ -6,7 +6,11 @@
   "scripts": {
     "dev": "vite --host 127.0.0.1",
     "build": "vite build",
-    "test": "playwright test"
+    "server:logh7": "node src/server/logh7-server.mjs serve",
+    "server:health": "node src/server/logh7-server.mjs health",
+    "test:server": "node --test tests/server/*.test.mjs",
+    "test:tools": "python -m unittest discover -s tools/tests",
+    "test": "npm run test:tools && npm run test:server && playwright test"
   },
   "dependencies": {
     "@vitejs/plugin-react": "^4.5.2",
