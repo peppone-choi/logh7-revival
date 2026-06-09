@@ -3,6 +3,7 @@ import subprocess
 import sys
 import tempfile
 import unittest
+import zipfile
 from pathlib import Path
 
 
@@ -162,6 +163,83 @@ class Logh7PipelineTests(unittest.TestCase):
             self.assertIn("Gin7UpdateClient.exe", discovery["executables"])
             self.assertIn("update.ini", discovery["configFiles"])
             self.assertIn("http://www.gineiden.com", discovery["urls"])
+
+    def test_package_installed_writes_windows_zip_and_hash_manifest(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            temp_path = Path(temp)
+            installed = temp_path / "installed"
+            overlay = temp_path / "overlay"
+            out = temp_path / "logh7-ko.zip"
+            manifest = temp_path / "package-manifest.json"
+            (installed / "GameData").mkdir(parents=True)
+            (overlay / "GameData").mkdir(parents=True)
+            (installed / "G7Start.exe").write_bytes(b"launcher")
+            (installed / "GameData" / "constmsg.dat").write_bytes(b"jp")
+            (overlay / "GameData" / "constmsg.dat").write_bytes("ko".encode("utf-8"))
+
+            result = subprocess.run(
+                [
+                    sys.executable,
+                    str(TOOL),
+                    "package-installed",
+                    str(installed),
+                    "--overlay",
+                    str(overlay),
+                    "--out",
+                    str(out),
+                    "--manifest-out",
+                    str(manifest),
+                ],
+                cwd=REPO_ROOT,
+                text=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                check=False,
+            )
+
+            self.assertEqual(result.returncode, 0, result.stderr)
+            package_manifest = json.loads(manifest.read_text(encoding="utf-8"))
+            self.assertEqual(package_manifest["archive"], str(out))
+            self.assertEqual(package_manifest["source"], str(installed))
+            self.assertEqual(package_manifest["overlay"], str(overlay))
+            self.assertEqual(package_manifest["entries"][0]["path"], "G7Start.exe")
+            self.assertIn("GameData/constmsg.dat", {entry["path"] for entry in package_manifest["entries"]})
+            with zipfile.ZipFile(out) as archive:
+                self.assertEqual(sorted(archive.namelist()), ["G7Start.exe", "GameData/constmsg.dat", "MANIFEST.json"])
+                self.assertEqual(archive.read("GameData/constmsg.dat"), b"ko")
+
+    def test_package_installed_rejects_cd_images_from_distribution_zip(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            temp_path = Path(temp)
+            installed = temp_path / "installed"
+            out = temp_path / "logh7-ko.zip"
+            manifest = temp_path / "package-manifest.json"
+            installed.mkdir()
+            (installed / "G7Start.exe").write_bytes(b"launcher")
+            (installed / "Logh7_mode2_2048.iso").write_bytes(b"image")
+
+            result = subprocess.run(
+                [
+                    sys.executable,
+                    str(TOOL),
+                    "package-installed",
+                    str(installed),
+                    "--out",
+                    str(out),
+                    "--manifest-out",
+                    str(manifest),
+                ],
+                cwd=REPO_ROOT,
+                text=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                check=False,
+            )
+
+            self.assertNotEqual(result.returncode, 0)
+            self.assertIn("forbidden image artifact", result.stderr)
+            self.assertFalse(out.exists())
+            self.assertFalse(manifest.exists())
 
 
 if __name__ == "__main__":

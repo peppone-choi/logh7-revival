@@ -4,139 +4,14 @@ from __future__ import annotations
 import argparse
 import json
 import sys
-from dataclasses import dataclass
 from pathlib import Path
-from typing import Final
 
+from logh7_iso import InvalidIsoError, IsoImage, PipelineError, read_extent_prefix, read_file_bytes, read_iso
+from logh7_packager import PackageError, package_installed_tree
 from logh7_server_discovery import ServerDiscoverySource, discover_server
 
 
-SECTOR_SIZE: Final = 2048
-PVD_SECTOR: Final = 16
-PVD_ROOT_RECORD_OFFSET: Final = 156
-
 JsonValue = str | int | bool | None | list["JsonValue"] | dict[str, "JsonValue"]
-
-
-@dataclass(frozen=True, slots=True)
-class IsoEntry:
-    path: str
-    extent: int
-    size: int
-    is_directory: bool
-
-
-@dataclass(frozen=True, slots=True)
-class IsoImage:
-    source: Path
-    system_identifier: str
-    volume_identifier: str
-    entries: tuple[IsoEntry, ...]
-
-
-class PipelineError(Exception):
-    pass
-
-
-class MissingSourceError(PipelineError):
-    pass
-
-
-class InvalidIsoError(PipelineError):
-    pass
-
-
-def _ascii_field(raw: bytes) -> str:
-    return raw.decode("ascii", errors="replace").strip()
-
-
-def _entry_name(raw: bytes) -> str:
-    if raw == b"\x00":
-        return "."
-    if raw == b"\x01":
-        return ".."
-    name = raw.decode("ascii", errors="replace")
-    return name.split(";")[0].lower()
-
-
-def _read_record(record: bytes, base_path: str) -> IsoEntry:
-    name_length = record[32]
-    name = _entry_name(record[33 : 33 + name_length])
-    path = name if not base_path else f"{base_path}/{name}"
-    return IsoEntry(
-        path=path,
-        extent=int.from_bytes(record[2:6], "little"),
-        size=int.from_bytes(record[10:14], "little"),
-        is_directory=bool(record[25] & 0x02),
-    )
-
-
-def _directory_entries(data: bytes, base_path: str) -> tuple[IsoEntry, ...]:
-    entries: list[IsoEntry] = []
-    offset = 0
-    while offset < len(data):
-        record_length = data[offset]
-        if record_length == 0:
-            offset = ((offset // SECTOR_SIZE) + 1) * SECTOR_SIZE
-            continue
-        record = data[offset : offset + record_length]
-        entry = _read_record(record, base_path)
-        if entry.path not in {".", ".."} and not entry.path.endswith(("/.", "/..")):
-            entries.append(entry)
-        offset += record_length
-    return tuple(entries)
-
-
-def _read_extent(source: Path, extent: int, size: int) -> bytes:
-    with source.open("rb") as handle:
-        handle.seek(extent * SECTOR_SIZE)
-        return handle.read(size)
-
-
-def _read_extent_prefix(source: Path, extent: int, size: int, limit: int) -> bytes:
-    with source.open("rb") as handle:
-        handle.seek(extent * SECTOR_SIZE)
-        return handle.read(min(size, limit))
-
-
-def read_iso(source: Path) -> IsoImage:
-    if not source.exists():
-        raise MissingSourceError(f"{source} does not exist")
-
-    with source.open("rb") as handle:
-        handle.seek(PVD_SECTOR * SECTOR_SIZE)
-        descriptor = handle.read(SECTOR_SIZE)
-
-    if len(descriptor) != SECTOR_SIZE or descriptor[1:6] != b"CD001":
-        raise InvalidIsoError(f"{source} is not a readable ISO 9660 image")
-
-    root_record_length = descriptor[PVD_ROOT_RECORD_OFFSET]
-    root_record = descriptor[PVD_ROOT_RECORD_OFFSET : PVD_ROOT_RECORD_OFFSET + root_record_length]
-    root = _read_record(root_record, "")
-    pending = list(_directory_entries(_read_extent(source, root.extent, root.size), ""))
-    entries: list[IsoEntry] = []
-
-    while pending:
-        entry = pending.pop(0)
-        entries.append(entry)
-        if entry.is_directory:
-            child_data = _read_extent(source, entry.extent, entry.size)
-            pending.extend(_directory_entries(child_data, entry.path))
-
-    return IsoImage(
-        source=source,
-        system_identifier=_ascii_field(descriptor[8:40]),
-        volume_identifier=_ascii_field(descriptor[40:72]),
-        entries=tuple(entries),
-    )
-
-
-def _read_file_bytes(image: IsoImage, path: str) -> bytes | None:
-    wanted = path.lower()
-    for entry in image.entries:
-        if entry.path == wanted and not entry.is_directory:
-            return _read_extent(image.source, entry.extent, entry.size)
-    return None
 
 
 def _parse_ini_fields(raw: bytes) -> dict[str, str]:
@@ -171,13 +46,13 @@ def _candidate_reason(path: str) -> str:
 
 
 def build_manifest(image: IsoImage) -> dict[str, JsonValue]:
-    setup_raw = _read_file_bytes(image, "setup.ini")
+    setup_raw = read_file_bytes(image, "setup.ini")
     setup_fields = _parse_ini_fields(setup_raw) if setup_raw is not None else {}
     cab_entries = []
     for entry in image.entries:
         if not entry.path.endswith(".cab") or entry.is_directory:
             continue
-        raw = _read_extent_prefix(image.source, entry.extent, entry.size, 4)
+        raw = read_extent_prefix(image.source, entry.extent, entry.size, 4)
         cab_entries.append(
             {
                 "path": entry.path,
@@ -241,22 +116,39 @@ def inspect_iso(source: Path, destination: Path) -> None:
 def write_server_discovery(source: Path, destination: Path) -> None:
     image = read_iso(source)
     discovery = discover_server(
-        ServerDiscoverySource(image_source=image.source, read_file_bytes=lambda path: _read_file_bytes(image, path))
+        ServerDiscoverySource(image_source=image.source, read_file_bytes=lambda path: read_file_bytes(image, path))
     )
     destination.parent.mkdir(parents=True, exist_ok=True)
     destination.write_text(json.dumps(discovery, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(f"wrote {destination}")
 
 
-def main() -> int:
-    parser = argparse.ArgumentParser(description="Inspect LOGH VII CD artifacts for localization work.")
-    subparsers = parser.add_subparsers(dest="command", required=True)
+def _add_inspect_parser(subparsers: argparse._SubParsersAction[argparse.ArgumentParser]) -> None:
     inspect_parser = subparsers.add_parser("inspect")
     inspect_parser.add_argument("iso", type=Path)
     inspect_parser.add_argument("--out", type=Path, required=True)
+
+
+def _add_server_parser(subparsers: argparse._SubParsersAction[argparse.ArgumentParser]) -> None:
     server_parser = subparsers.add_parser("discover-server")
     server_parser.add_argument("iso", type=Path)
     server_parser.add_argument("--out", type=Path, required=True)
+
+
+def _add_package_parser(subparsers: argparse._SubParsersAction[argparse.ArgumentParser]) -> None:
+    package_parser = subparsers.add_parser("package-installed")
+    package_parser.add_argument("installed_tree", type=Path)
+    package_parser.add_argument("--overlay", type=Path)
+    package_parser.add_argument("--out", type=Path, required=True)
+    package_parser.add_argument("--manifest-out", type=Path, required=True)
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description="Inspect and package LOGH VII artifacts for localization work.")
+    subparsers = parser.add_subparsers(dest="command", required=True)
+    _add_inspect_parser(subparsers)
+    _add_server_parser(subparsers)
+    _add_package_parser(subparsers)
     args = parser.parse_args()
 
     try:
@@ -265,9 +157,13 @@ def main() -> int:
                 inspect_iso(args.iso, args.out)
             case "discover-server":
                 write_server_discovery(args.iso, args.out)
+            case "package-installed":
+                package_installed_tree(args.installed_tree, args.overlay, args.out, args.manifest_out)
+                print(f"wrote {args.out}")
+                print(f"wrote {args.manifest_out}")
             case unreachable:
                 raise InvalidIsoError(f"unsupported command: {unreachable}")
-    except PipelineError as error:
+    except (PipelineError, PackageError) as error:
         print(str(error), file=sys.stderr)
         return 1
     return 0

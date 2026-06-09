@@ -109,6 +109,14 @@ python tools/logh7_pipeline.py inspect artifacts/logh7-cd/Logh7_mode2_2048.iso -
 10. Windows 클라이언트에서 zip을 풀고 런처/클라이언트를 실행해 검증한다.
 11. 검증된 빌드 명령, 해시, 로그를 문서와 매니페스트에 기록한다.
 
+현재 저장소는 9단계를 다음 명령으로 자동화한다. `--overlay`는 선택 사항이며, 있으면 기준 설치 트리 위에 같은 상대 경로로 덮어쓴 뒤 zip을 만든다.
+
+```powershell
+python tools/logh7_pipeline.py package-installed .omo/work/logh7-installed --overlay .omo/work/logh7-ko-overlay --out .omo/work/logh7-build/logh7-ko-installed.zip --manifest-out .omo/work/logh7-build/logh7-ko-installed-manifest.json
+```
+
+이 명령은 zip 내부 경로를 Windows에서 풀기 좋은 상대 경로로 고정하고, `MANIFEST.json`과 외부 매니페스트에 SHA-256 해시를 기록한다. 배포 트리 안에 `.bin`, `.cue`, `.iso` 파일이 있으면 최종 사용자가 CD 이미지를 받는 형태가 되므로 zip 생성을 중단한다.
+
 ### 배포 형태
 
 최종 배포는 사용자가 별도 원본 CD를 구할 수 없다는 전제로 결정한다.
@@ -128,6 +136,8 @@ python tools/logh7_pipeline.py inspect artifacts/logh7-cd/Logh7_mode2_2048.iso -
 ```powershell
 npm run test:tools
 python tools/logh7_pipeline.py inspect artifacts/logh7-cd/Logh7_mode2_2048.iso --out .omo/ulw-loop/evidence/localization-manifest.json
+python tools/logh7_pipeline.py package-installed .omo/work/logh7-installed --overlay .omo/work/logh7-ko-overlay --out .omo/work/logh7-build/logh7-ko-installed.zip --manifest-out .omo/work/logh7-build/logh7-ko-installed-manifest.json
 ```
 
 `localization-manifest.json`에 `data1.cab`, `data2.cab`, `setup.ini`, `setup.inx`, CP932 `setup_ini`, `installshield-cab` 판정이 들어가면 현재 단계는 재현 가능하다.
+`package-installed`는 InstallShield 추출이 끝난 설치 완료 트리를 입력으로 받는 배포 포장 단계다. 아직 `.omo/work/logh7-installed/`가 없으면 먼저 InstallShield 전용 추출기로 기준 설치 트리를 만들어야 한다.

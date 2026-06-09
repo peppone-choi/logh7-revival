@@ -38,6 +38,14 @@ npm test
 npx playwright install
 ```
 
+설치 완료 트리와 한글화 오버레이가 준비된 뒤 배포 zip 후보를 만들 때는 다음을 실행합니다.
+
+```powershell
+python tools/logh7_pipeline.py package-installed .omo/work/logh7-installed --overlay .omo/work/logh7-ko-overlay --out .omo/work/logh7-build/logh7-ko-installed.zip --manifest-out .omo/work/logh7-build/logh7-ko-installed-manifest.json
+```
+
+이 zip 생성 명령은 `.bin`, `.cue`, `.iso`가 배포 트리에 섞이면 실패합니다. 최종 사용자가 CD 이미지나 LFS 아티팩트를 받지 않도록 하기 위한 검증입니다.
+
 ## Windows PC Codex 자동 재개 프롬프트
 
 아래 프롬프트를 Windows PC의 Codex에 그대로 붙여 넣습니다.
@@ -58,6 +66,7 @@ npx playwright install
 - 모르는 형식이나 프로토콜은 추측으로 덮지 말고 샘플 추출, 헥스/문자열 분석, 실행 로그, 공식/신뢰 가능한 자료로 근거를 확보한다.
 - `node_modules/`, `dist/`, Playwright 리포트, 테스트 산출물은 커밋하지 않는다.
 - 웹/도구 표면을 바꾸면 관련 테스트를 추가하거나 갱신하고, `npm run build`와 `npm test`로 검증한다.
+- 설치 완료 트리와 한글화 오버레이가 준비되면 `python tools/logh7_pipeline.py package-installed .omo/work/logh7-installed --overlay .omo/work/logh7-ko-overlay --out .omo/work/logh7-build/logh7-ko-installed.zip --manifest-out .omo/work/logh7-build/logh7-ko-installed-manifest.json`로 Windows 배포 zip 후보와 해시 매니페스트를 만든다.
 - 커밋이 필요하면 Lore Commit Protocol을 따른다.
 - 완료 전에는 실제 실행/변환/서버/테스트 표면으로 동작을 확인하고, 최종 답변에는 변경 파일, 통과한 검증, 남은 위험을 짧게 보고한다.
 
