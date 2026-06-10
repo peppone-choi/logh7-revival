@@ -43,22 +43,40 @@ python tools/logh7_pipeline.py inspect artifacts/logh7-cd/Logh7_mode2_2048.iso -
 
 Windows에서 해야 할 핵심 작업은 ISO 안의 InstallShield 페이로드를 풀어 실제 설치 완료 상태의 파일 트리를 재구성하는 것이다.
 
+먼저 ISO 루트 파일을 작업 디렉터리에 추출한다.
+
+```powershell
+python tools/logh7_pipeline.py extract-root artifacts/logh7-cd/Logh7_mode2_2048.iso --out .omo/work/logh7-iso-root --manifest-out .omo/work/logh7-iso-root-manifest.json
+```
+
+InstallShield CAB 추출기는 `unshield`를 사용한다. Scoop이 있으면 다음으로 설치할 수 있다.
+
+```powershell
+scoop install unshield
+unshield -d .omo/work/logh7-extracted x .omo/work/logh7-iso-root/data1.cab
+python tools/logh7_pipeline.py build-installed .omo/work/logh7-extracted --iso-root .omo/work/logh7-iso-root --out .omo/work/logh7-installed --manifest-out .omo/work/logh7-installed-manifest.json
+```
+
 필수 작업:
 
-- `data1.cab`, `data2.cab`를 InstallShield 지원 도구로 푼다.
-- 설치 결과와 같은 구조를 `.omo/work/logh7-installed/`에 만든다.
+- `.omo/work/logh7-iso-root/data1.hdr`, `.omo/work/logh7-iso-root/data1.cab`, `.omo/work/logh7-iso-root/data2.cab`가 추출 입력에 있는지 확인한다.
+- `unshield` 추출 결과에서 `update.ini`, `Gin7UpdateClient.exe`, `exe/G7MTClient.exe`, `data/MsgDat/constmsg.dat`가 있는 설치 루트를 확인한다.
+- `build-installed` 명령으로 `.omo/work/logh7-installed/`를 만든다. 이 명령은 ISO 루트의 `g7start.exe`를 설치 트리 루트의 `G7Start.exe`로 추가하고, `setup-local.ps1`, `launch-client.ps1`, `WINDOWS-COMPATIBILITY.txt`를 생성한다.
 - 한글화 교체 파일은 `.omo/work/logh7-ko-overlay/`에 같은 상대 경로로 둔다.
 
 예시 구조:
 
 ```text
 .omo/work/logh7-installed/G7Start.exe
-.omo/work/logh7-installed/G7MTClient.exe
+.omo/work/logh7-installed/exe/G7MTClient.exe
 .omo/work/logh7-installed/Gin7UpdateClient.exe
 .omo/work/logh7-installed/update.ini
-.omo/work/logh7-installed/GameData/constmsg.dat
+.omo/work/logh7-installed/data/MsgDat/constmsg.dat
+.omo/work/logh7-installed/setup-local.ps1
+.omo/work/logh7-installed/launch-client.ps1
+.omo/work/logh7-installed/WINDOWS-COMPATIBILITY.txt
 
-.omo/work/logh7-ko-overlay/GameData/constmsg.dat
+.omo/work/logh7-ko-overlay/data/MsgDat/constmsg.dat
 ```
 
 ## 5. Windows 배포 zip 후보 만들기
@@ -82,19 +100,27 @@ python tools/logh7_pipeline.py package-installed .omo/work/logh7-installed --ove
 ```powershell
 Expand-Archive .omo/work/logh7-build/logh7-ko-installed.zip .omo/work/windows-smoke
 cd .omo/work/windows-smoke
-.\G7Start.exe
+powershell -ExecutionPolicy Bypass -File .\setup-local.ps1
+powershell -ExecutionPolicy Bypass -File .\launch-client.ps1
 ```
 
 검증할 항목:
 
-- 런처 또는 클라이언트가 실행되는지
+- `setup-local.ps1`이 `HKCU\Software\BOTHTEC\銀河英雄伝説VII\1.0`의 `Install` 값과 per-user AppCompatFlags를 만든다.
+- `launch-client.ps1`이 `exe`를 working directory로 두고 `G7MTClient.exe`를 실행한다.
+- `launch-client.ps1` 실행 전후로 `exe/String.txt`가 `exe/String.txt.original`에서 복원된다.
 - 누락 DLL이 있는지
-- 일본어 로캘 또는 CP932 설정이 필요한지
-- DirectX 런타임이 필요한지
-- 레지스트리 초기화가 필요한지
-- `setup-local.ps1` 같은 로컬 초기화 스크립트가 필요한지
+- 일본어 로캘 또는 Locale Emulator CP932 설정이 필요한지
 - 클라이언트가 접속하려는 서버 host/port가 어디인지
 - 한글 텍스트가 깨지지 않고 표시되는지
+
+패킷 캡처를 남겼으면 같은 작업 디렉터리에서 분석 결과를 생성한다.
+
+```powershell
+python tools/logh7_pipeline.py gameplay-trace-analyze .omo/ulw-loop/evidence/gameplay-trace.jsonl --out .omo/ulw-loop/evidence/gameplay-packets.json
+```
+
+현재 확인된 로그인 요청은 `0x0034` client-to-server frame이고, configured response probe의 서버 응답 후보는 `0x0035` server-to-client frame이다. 이 분석 결과는 서버 schema를 늘릴 때 입력 증거로 쓰되, 로그인 성공 응답으로 간주하지 않는다.
 
 ## 7. 완료 시 남길 증거
 

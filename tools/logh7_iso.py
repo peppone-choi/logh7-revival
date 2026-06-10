@@ -47,7 +47,7 @@ def entry_name(raw: bytes) -> str:
         return "."
     if raw == b"\x01":
         return ".."
-    name = raw.decode("ascii", errors="replace")
+    name = raw.decode("cp932", errors="replace")
     return name.split(";")[0].lower()
 
 

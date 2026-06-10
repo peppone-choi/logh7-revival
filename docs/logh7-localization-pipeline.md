@@ -1,4 +1,4 @@
-# LOGH VII 한글화 파이프라인
+﻿# LOGH VII 한글화 파이프라인
 
 이 저장소의 기준 CD 자료는 `artifacts/logh7-cd/` 아래 Git LFS 아티팩트로 보관한다. 사용자가 별도 원본 CD를 구한다는 전제는 두지 않는다. LFS의 BIN/ISO는 개발자 분석과 추출용 입력일 뿐이며, 최종 배포물은 이미지를 필요로 하지 않아야 한다. 한글화는 CD/ISO에서 필요한 파일을 모두 풀어낸 실행 가능한 설치 디렉터리에 반영하고, 그 디렉터리를 zip으로 묶어 배포한다.
 
@@ -26,6 +26,9 @@ npx playwright install
 ```powershell
 python tools/convert_mode2_bin_to_iso.py artifacts/logh7-cd/Logh7.bin artifacts/logh7-cd/Logh7_mode2_2048.iso
 python tools/logh7_pipeline.py inspect artifacts/logh7-cd/Logh7_mode2_2048.iso --out .omo/ulw-loop/evidence/localization-manifest.json
+python tools/logh7_pipeline.py extract-root artifacts/logh7-cd/Logh7_mode2_2048.iso --out .omo/work/logh7-iso-root --manifest-out .omo/work/logh7-iso-root-manifest.json
+unshield -d .omo/work/logh7-extracted x .omo/work/logh7-iso-root/data1.cab
+python tools/logh7_pipeline.py build-installed .omo/work/logh7-extracted --iso-root .omo/work/logh7-iso-root --out .omo/work/logh7-installed --manifest-out .omo/work/logh7-installed-manifest.json
 ```
 
 현재 확인된 구조:
@@ -50,12 +53,13 @@ python tools/logh7_pipeline.py inspect artifacts/logh7-cd/Logh7_mode2_2048.iso -
 
 ## 다음 패치 경로
 
-1. InstallShield CAB를 지원하는 추출기를 준비한다. 7-Zip은 현재 `data1.cab`/`data2.cab`를 일반 CAB로 열지 못한다.
-2. 추출 결과를 `.omo/work/logh7-extracted/` 같은 무시되는 작업 디렉터리에 둔다.
-3. `constmsg.dat`, `messages_*.dat`, `messages_com_*.dat`, `messages_tac_*.dat`가 추출되는지 확인한다.
-4. 파일별 인코딩을 샘플 바이트와 문자열 테이블 단위로 판정한다. 현재 ISO/설치 메타데이터의 기본 근거는 CP932와 Japanese locale `0x0011`이다.
-5. 한글 번역은 원본 바이트 길이, 종료 문자, 포인터/오프셋 테이블을 확인하기 전까지 원본 파일에 직접 쓰지 않는다.
-6. 패치 산출물은 원본 LFS 아티팩트가 아니라 `.omo/work/logh7-ko-overlay/` 또는 별도 패치 파일로 만든다.
+1. `extract-root` 명령으로 ISO 루트의 `setup.ini`, `setup.inx`, `data1.hdr`, `data1.cab`, `data2.cab`, 런처, DirectX 파일을 `.omo/work/logh7-iso-root/`에 추출한다.
+2. InstallShield CAB를 지원하는 `unshield`를 준비한다. 7-Zip은 현재 `data1.cab`/`data2.cab`를 일반 CAB로 열지 못한다.
+3. `unshield -d .omo/work/logh7-extracted x .omo/work/logh7-iso-root/data1.cab`로 InstallShield 페이로드를 푼다.
+4. `constmsg.dat`, `messages_*.dat`, `messages_com_*.dat`, `messages_tac_*.dat`가 추출되는지 확인한다.
+5. 파일별 인코딩을 샘플 바이트와 문자열 테이블 단위로 판정한다. 현재 ISO/설치 메타데이터의 기본 근거는 CP932와 Japanese locale `0x0011`이다.
+6. 한글 번역은 원본 바이트 길이, 종료 문자, 포인터/오프셋 테이블을 확인하기 전까지 원본 파일에 직접 쓰지 않는다.
+7. 패치 산출물은 원본 LFS 아티팩트가 아니라 `.omo/work/logh7-ko-overlay/` 또는 별도 패치 파일로 만든다.
 
 ## 아티팩트 반영 전략
 
@@ -97,9 +101,9 @@ python tools/logh7_pipeline.py inspect artifacts/logh7-cd/Logh7_mode2_2048.iso -
 
 ### 반영 흐름
 
-1. LFS 기준 ISO를 읽어 `data1.hdr`, `data1.cab`, `data2.cab`를 추출한다.
-2. InstallShield 전용 추출기로 설치 페이로드를 `.omo/work/logh7-extracted/`에 푼다.
-3. 설치 프로그램이 Windows에 배치하는 최종 파일 구조를 `.omo/work/logh7-installed/`에 재구성한다.
+1. LFS 기준 ISO를 읽어 `extract-root` 명령으로 `data1.hdr`, `data1.cab`, `data2.cab`와 설치 루트 파일을 추출한다.
+2. InstallShield 전용 추출기 `unshield`로 설치 페이로드를 `.omo/work/logh7-extracted/`에 푼다.
+3. `build-installed` 명령으로 설치 프로그램이 Windows에 배치하는 최종 파일 구조를 `.omo/work/logh7-installed/`에 재구성한다.
 4. 한글화 대상 파일을 매니페스트와 해시로 고정한다.
 5. 번역 카탈로그와 패치 레시피를 만든다.
 6. 오버레이 파일을 `.omo/work/logh7-ko-overlay/`에 생성한다.
@@ -136,8 +140,13 @@ python tools/logh7_pipeline.py package-installed .omo/work/logh7-installed --ove
 ```powershell
 npm run test:tools
 python tools/logh7_pipeline.py inspect artifacts/logh7-cd/Logh7_mode2_2048.iso --out .omo/ulw-loop/evidence/localization-manifest.json
+python tools/logh7_pipeline.py extract-root artifacts/logh7-cd/Logh7_mode2_2048.iso --out .omo/work/logh7-iso-root --manifest-out .omo/work/logh7-iso-root-manifest.json
+unshield -d .omo/work/logh7-extracted x .omo/work/logh7-iso-root/data1.cab
+python tools/logh7_pipeline.py build-installed .omo/work/logh7-extracted --iso-root .omo/work/logh7-iso-root --out .omo/work/logh7-installed --manifest-out .omo/work/logh7-installed-manifest.json
 python tools/logh7_pipeline.py package-installed .omo/work/logh7-installed --overlay .omo/work/logh7-ko-overlay --out .omo/work/logh7-build/logh7-ko-installed.zip --manifest-out .omo/work/logh7-build/logh7-ko-installed-manifest.json
 ```
 
 `localization-manifest.json`에 `data1.cab`, `data2.cab`, `setup.ini`, `setup.inx`, CP932 `setup_ini`, `installshield-cab` 판정이 들어가면 현재 단계는 재현 가능하다.
+`extract-root`는 ISO 루트 파일을 `.omo/work/logh7-iso-root/`에 쓰고 SHA-256 매니페스트를 남긴다. 이 추출본은 InstallShield 전용 추출기의 입력으로 사용한다.
+`build-installed`는 `update.ini`, `Gin7UpdateClient.exe`, `exe/G7MTClient.exe`, `data/MsgDat/constmsg.dat` 마커로 설치 루트를 찾고 ISO 루트의 `g7start.exe`를 `G7Start.exe`로 추가한다. `G7Start.exe`는 PE import와 실행 QA상 `DSETUP.dll`을 요구하고 DirectX setup 런타임 쌍도 필요하므로, ISO 루트의 `dsetup.dll`과 `dsetup32.dll`도 설치 트리 루트에 `DSETUP.dll`, `DSETUP32.dll`로 배치한다. 생성된 설치 트리의 `G7MTClient.exe`는 단일 legacy 로그인 주소 `202.8.80.179`를 `127.0.0.1`로 치환해 로컬 gameplay 서버로 접속하게 한다. 또한 Windows 현재 실행용 `setup-local.ps1`, `launch-client.ps1`, `WINDOWS-COMPATIBILITY.txt`를 생성한다. `setup-local.ps1`은 per-user registry/AppCompatFlags를 만들고, `launch-client.ps1`은 `exe/String.txt`를 백업본에서 복원한 뒤 `exe` working directory로 클라이언트를 실행한다. 매니페스트의 `server.clientProtocol`에는 ASCII 심볼 근거의 login/session/world 메시지 그룹, login 등록 코드(`LobbyLoginRequest=0x2000`, `LobbyLoginOK=0x2001`, `LobbyLoginNG=0x2002`), cipher transport 코드(`0x0034`, `0x0035`), 내부 dispatch 코드(`0x0030 -> 0x0300/0x0301`, `0x0034 -> 0x0405`, `0x0035 -> 0x0406`, `0x0036 -> 0x040c`), phase3 param2 runtime observations, request-derived phase3 probe 결과, phase1/phase2/phase3 decoded payload layout/checksum rule과 구현된 builder/parser 범위, phase3 manager/child-codec vtable processing pipeline, child codec Blowfish-like block transform/key-flow schema와 PE static table/corrected key schedule/block codec/phase3 encrypted frame builder/live phase1 replay 구현 범위, phase1-derived `0x0035` response가 실제 클라이언트를 후속 `0x0036`/`0x0030` packet까지 진행시킨 probe 결과, `post-handshake-handler-index`가 복원한 internal `0x040c`/`0x0301` handler 단서와 internal `0x0300` direct-handler 부재, `post-handshake-body-decode`가 복원한 stable decoded `0x0030` login/session-like body, `post-handshake-response-candidates`가 복원한 candidate response transports `0x0031/0x0032/0x0033`, `post-0030-payload-layout`이 복원한 candidate handler decoded body copy layout, `post-0030-followup-effects`가 복원한 candidate follow-up 소비 경로, `command-ok-layout`이 복원한 command OK decoded body offset/stream slot layout, `command-ok-response-candidates`가 구성한 zero-count encrypted command OK probe frames, raw `0x0030` dword ack candidate probe 결과, configured/static and dynamic response manifest schema, static/runtime request-key 후보 배제 결과, runtime key probe 실패 경로, checksum-correct decoded payload raw-wire probe 결과, post-call encoded output capture 결과, `mpsCipherManager` 키 교환 진단 스키마가 포함된다. `gameplay-trace-analyze` CLI는 JSONL trace를 frame 방향, big-endian length, message code, `0x0034` login request, `0x0035` phase3 response candidate, observed post-handshake `0x0036`/`0x0030` client packet, `0x0031/0x0032/0x0033` command OK response candidate, 그리고 command OK 이후 client follow-up count/probe finding 단위로 정규화한다. `transport-dispatch-index` CLI는 실제 `G7MTClient.exe` jump table과 handler disassembly에서 post-handshake transport mapping을 JSON으로 복원한다. `post-handshake-handler-index` CLI는 internal `0x040c` phase4 builder가 serialize하는 client offsets, internal `0x0301` ack/timing handler의 첫 dword read/state writes, 그리고 internal `0x0300`이 같은 internal dispatch routine에서 direct payload handler가 아니라는 route 결론을 JSON으로 복원한다. `post-handshake-body-decode` CLI는 같은 connection의 `0x0034` request에서 phase1 key를 얻고 그 key로 client `0x0030` body를 child codec decode해 stable 48-byte decoded body와 marker/text field hints를 JSON으로 복원한다. `post-handshake-response-candidates` CLI는 decoded `0x0030` 이후 추적할 candidate server response transports와 internal handler targets를 transport jump table 및 internal switch table에서 JSON으로 복원한다. `post-0030-payload-layout` CLI는 candidate internal `0x0400/0x0401/0x0402` handler가 decoded body pointer에서 client state로 복사하는 크기, destination offset, follow-up call target을 JSON으로 복원한다. `post-0030-followup-effects` CLI는 candidate follow-up routine의 activation gate, entity lookup, normalizer, motion/apply call, action code writes를 JSON으로 복원한다. `command-ok-layout` CLI는 `Input_/Output_Command*` stream routine에서 Move/Parallel 1052-byte body와 Turn 276-byte body의 count offset, max count, entry base/stride, stream vtable slot을 JSON으로 복원한다. `command-ok-response-candidates` CLI는 같은 connection의 phase1 key와 child codec으로 zero-count decoded command OK body를 `0x0031/0x0032/0x0033` 전체 transport frame candidate로 구성한다. 추가 `runtime-patch-targets` CLI는 debugger attach 없이 file-backed 계측 패치를 준비하기 위해 key setup/store/read helper, child codec encode, phase1 child encode post-call, phase3 compare callsite의 VA, PE file offset, 원본 signature, executable code cave, 파일 출력용 IAT slot을 JSON guard schema로 출력한다. `runtime-keylog-patch`, `runtime-keysetup-log-patch`, `runtime-keyread-log-patch`, `runtime-child-encode-log-patch`, `runtime-child-encode-post-log-patch`, `runtime-child-schedule-log-patch` CLI는 trampoline이 runtime record buffer를 쓸 수 있도록 패치 산출물의 code-cave section에 `MEM_WRITE`를 추가하고 manifest에 section characteristics를 기록한다. 실제 prepatched `keySetupWrapper` probe는 로그인 요청과 같은 실행에서 두 GUID key setup caller `0x0061285c`와 16-byte session key setup caller `0x00612d0b`를 raw key bytes 포함 `KLG2` record로 캡처했다. 실제 prepatched `keyReadHelper` probe는 phase1 outbound read caller `0x006451a2`에서 stored image와 raw xor-0x17 key를 캡처했지만 이 후보도 observed `0x0034` request body를 디코드하지 못했다. 실제 prepatched `childCodecEncode` probe는 caller `0x006452cc`에서 phase1 plaintext, generated phase1 key, active transport codec GUID key image를 `CLG2` record로 캡처했다. 실제 prepatched `childCodecEncodePostCall` probe는 `0x6452cc` post-call에서 output `88396949581bcc872316b86f23a92d45014cbc56d722012b`를 캡처했고, 이는 같은 실행의 `0x0034` request body와 일치한다. 실제 prepatched `childCodecEncodeScheduleEntry` probe는 stored key image와 scheduled P-array head를 같은 record에 캡처했고, corrected Python child codec replay는 captured plaintext와 raw GUID transport key로 실제 `0x0034` request body를 재현한다. `runtime-keylog-read`와 `runtime-child-trace-read` CLI는 `KLG2`/`CLG2` record를 JSON으로 파싱하고 callsite label을 붙인다. 다음 runtime 작업은 `server.gameplay.dynamicProbe`로 같은 connection phase1 key 기반 `0x0035`와 `0x0031/0x0032/0x0033` command OK candidate frames를 실제 클라이언트에서 runtime-probe하는 것이다.
 `package-installed`는 InstallShield 추출이 끝난 설치 완료 트리를 입력으로 받는 배포 포장 단계다. 아직 `.omo/work/logh7-installed/`가 없으면 먼저 InstallShield 전용 추출기로 기준 설치 트리를 만들어야 한다.
