@@ -7,3 +7,9 @@ __pycache__/
 playwright-report/
 test-results/
 *.log
+
+# transient tool artifacts (RE decompilation dumps .omc_*.txt stay tracked)
+.omc/
+*.stackdump
+Elogh7-revival.omcf*.txt
+Elogh7-revivalfactory_dump.txt

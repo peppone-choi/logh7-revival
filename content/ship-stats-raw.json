@@ -1,0 +1,6181 @@
+{
+ "_source": "content/manual/ship-units.json (gin7 manual 別表 艦艇ユニット) — REAL numbers only, each field {value, raw source substring, confidence, note}; null when OCR-corrupt/absent.",
+ "_wire_target": "ResponseStaticInformationUnitShip 0x30b (28004 B = 4 + 200x140); fields per static dump 0x760984..0x760b2c (armor_front/side/back, shield, shield_capacity, beam_power, gun_power, missile_power, antiaircraft_power, speed, crew, term, repair, resource_loadage, fighter_num).",
+ "count": 63,
+ "ships": [
+  {
+   "key": "SS75",
+   "name": "標準戦艦 (SS75型標準戦艦)",
+   "side": "empire",
+   "shipClass": "battleship",
+   "family": "SS75",
+   "is_base": true,
+   "raw": {
+    "armor": {
+     "value": null,
+     "raw": "390 / -",
+     "confidence": "none",
+     "note": "装甲 numbers corrupt/absent in OCR fragment"
+    },
+    "shield_guard": {
+     "value": 70,
+     "raw": "70 / 20,000",
+     "confidence": "med",
+     "note": null
+    },
+    "shield_capacity": {
+     "value": 20000,
+     "raw": "70 / 20,000",
+     "confidence": "med",
+     "note": null
+    },
+    "beam_power": {
+     "value": 5,
+     "raw": "5/110",
+     "confidence": "med",
+     "note": null
+    },
+    "gun_power": {
+     "value": 4,
+     "raw": "4",
+     "confidence": "med",
+     "note": null
+    },
+    "missile_power": {
+     "value": 100,
+     "raw": "100, 100/1, 200/1, 120/5, 100/1, 80/5",
+     "confidence": "med",
+     "note": null
+    },
+    "antiaircraft_power": {
+     "value": 80,
+     "raw": "80",
+     "confidence": "med",
+     "note": null
+    },
+    "speed": {
+     "value": 5600,
+     "raw": "20, 12, 5,600",
+     "confidence": "med",
+     "note": null
+    },
+    "crew": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "必要乗組員: no in-band value (OCR corrupt)"
+    },
+    "build_term": {
+     "value": 90,
+     "raw": "90, 110",
+     "confidence": "med",
+     "note": null
+    },
+    "repair_cost": {
+     "value": 110,
+     "raw": "110",
+     "confidence": "med",
+     "note": null
+    },
+    "supply_capacity": {
+     "value": 760,
+     "raw": "760 140 680 600 800",
+     "confidence": "med",
+     "note": null
+    },
+    "fighter_num": {
+     "value": 3,
+     "raw": "3, 48, 12, 4, 3",
+     "confidence": "low",
+     "note": null
+    },
+    "unit_count": {
+     "value": 100,
+     "raw": "100",
+     "confidence": "med",
+     "note": null
+    }
+   },
+   "desc": "SS75型標準戦艦。強力な中性子ビーム砲とレーザー水爆ミサイル発射システムを主兵装とする宇宙艦隊の主力艦。艦隊戦・空戦・地上攻撃に対応可能な万能艦。やや旧式だが艦体の堅牢性に定評。バリエーション: 戦艦(旗艦), 戦艦Ⅰ〜Ⅷ。"
+  },
+  {
+   "key": "PK86",
+   "name": "高速戦艦 (PK86型標準高速戦艦)",
+   "side": "empire",
+   "shipClass": "fast_battleship",
+   "family": "PK86",
+   "is_base": true,
+   "raw": {
+    "armor": {
+     "value": null,
+     "raw": "",
+     "confidence": "none",
+     "note": "装甲 numbers corrupt/absent in OCR fragment"
+    },
+    "shield_guard": {
+     "value": 70,
+     "raw": "70",
+     "confidence": "med",
+     "note": null
+    },
+    "shield_capacity": {
+     "value": null,
+     "raw": "70",
+     "confidence": "none",
+     "note": "no シールド容量 (defenseless or OCR-lost)"
+    },
+    "beam_power": {
+     "value": 28,
+     "raw": "28, 10, 8, 48",
+     "confidence": "med",
+     "note": null
+    },
+    "gun_power": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "ガン破壊力: no in-band value (OCR corrupt)"
+    },
+    "missile_power": {
+     "value": 100,
+     "raw": "100/5, 120/6, 90, 100/5, 30 18 10 32, 10",
+     "confidence": "med",
+     "note": null
+    },
+    "antiaircraft_power": {
+     "value": 100,
+     "raw": "100",
+     "confidence": "med",
+     "note": null
+    },
+    "speed": {
+     "value": 5600,
+     "raw": "5,600",
+     "confidence": "med",
+     "note": null
+    },
+    "crew": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "必要乗組員: no in-band value (OCR corrupt)"
+    },
+    "build_term": {
+     "value": 120,
+     "raw": "120",
+     "confidence": "med",
+     "note": null
+    },
+    "repair_cost": {
+     "value": 120,
+     "raw": "120",
+     "confidence": "med",
+     "note": null
+    },
+    "supply_capacity": {
+     "value": 760,
+     "raw": "760, 800, 760, 600 760 400",
+     "confidence": "med",
+     "note": null
+    },
+    "fighter_num": {
+     "value": 3,
+     "raw": "3",
+     "confidence": "low",
+     "note": null
+    },
+    "unit_count": {
+     "value": 410,
+     "raw": "410",
+     "confidence": "med",
+     "note": null
+    }
+   },
+   "desc": "PK86型標準高速戦艦。戦艦の打撃力と巡航艦に匹敵する高速航行能力を持つ主力艦。艦首主砲を中性子ビーム砲とし余剰容積を高出力機関へ。機動遊撃/前進部隊の中核。巨大機関部は重量軽減のため一部非装甲で防御に難点。バリエーション: 高速戦艦(旗艦), 高速戦艦Ⅰ〜Ⅷ。"
+  },
+  {
+   "key": "SK80",
+   "name": "巡航艦 (SK80型標準巡航艦)",
+   "side": "empire",
+   "shipClass": "cruiser",
+   "family": "SK80",
+   "is_base": true,
+   "raw": {
+    "armor": {
+     "value": {
+      "front": 28,
+      "side": 16,
+      "back": 8
+     },
+     "raw": "28 16 / 8; 23,000 4,800; 22 14 6 / 33 19 10 / 28 16",
+     "confidence": "med",
+     "note": null
+    },
+    "shield_guard": {
+     "value": 50,
+     "raw": "50",
+     "confidence": "med",
+     "note": null
+    },
+    "shield_capacity": {
+     "value": null,
+     "raw": "50",
+     "confidence": "none",
+     "note": "no シールド容量 (defenseless or OCR-lost)"
+    },
+    "beam_power": {
+     "value": 25,
+     "raw": "25",
+     "confidence": "med",
+     "note": null
+    },
+    "gun_power": {
+     "value": 60,
+     "raw": "60",
+     "confidence": "med",
+     "note": null
+    },
+    "missile_power": {
+     "value": 2,
+     "raw": "2, 60/3, 60/3",
+     "confidence": "med",
+     "note": null
+    },
+    "antiaircraft_power": {
+     "value": 24,
+     "raw": "24, 60",
+     "confidence": "med",
+     "note": null
+    },
+    "speed": {
+     "value": 25000,
+     "raw": "25,000 20,000 22,000",
+     "confidence": "med",
+     "note": null
+    },
+    "crew": {
+     "value": 3,
+     "raw": "-, 22,000, 3, 5,600, 2",
+     "confidence": "low",
+     "note": null
+    },
+    "build_term": {
+     "value": 80,
+     "raw": "80 100 90 100",
+     "confidence": "med",
+     "note": null
+    },
+    "repair_cost": {
+     "value": 120,
+     "raw": "120",
+     "confidence": "med",
+     "note": null
+    },
+    "supply_capacity": {
+     "value": 480,
+     "raw": "480 520 480 360 400 480 600 520",
+     "confidence": "med",
+     "note": null
+    },
+    "fighter_num": {
+     "value": 8,
+     "raw": "8, 2 3 1 2",
+     "confidence": "low",
+     "note": null
+    },
+    "unit_count": {
+     "value": 260,
+     "raw": "260",
+     "confidence": "med",
+     "note": null
+    }
+   },
+   "desc": "SK80型標準巡航艦。中性子パルス砲および中性子ミサイル発射システムを主兵装とする中型艦。高速航行性能と戦艦に準ずる重武装・重装甲・戦闘艇搭載能力で幅広い作戦遂行能力。バリエーション: 巡航艦(旗艦), 巡航艦Ⅰ〜Ⅷ。"
+  },
+  {
+   "key": "Z82",
+   "name": "駆逐艦 (Z82型標準駆逐艦)",
+   "side": "empire",
+   "shipClass": "destroyer",
+   "family": "Z82",
+   "is_base": true,
+   "raw": {
+    "armor": {
+     "value": {
+      "front": 8,
+      "side": 7,
+      "back": 4
+     },
+     "raw": "8 7/4 5/2 2; 8/4/2; 7/3/1; 8/4/2; 9/5/3",
+     "confidence": "med",
+     "note": null
+    },
+    "shield_guard": {
+     "value": 30,
+     "raw": "30 20",
+     "confidence": "med",
+     "note": null
+    },
+    "shield_capacity": {
+     "value": 20,
+     "raw": "30 20",
+     "confidence": "med",
+     "note": null
+    },
+    "beam_power": {
+     "value": 19,
+     "raw": "19 19",
+     "confidence": "med",
+     "note": null
+    },
+    "gun_power": {
+     "value": 104,
+     "raw": "104 24, 104/1, 50/2, 30/1, 104/1, 50/2 6",
+     "confidence": "med",
+     "note": null
+    },
+    "missile_power": {
+     "value": null,
+     "raw": null,
+     "confidence": "none",
+     "note": "no ミサイル破壊力 label"
+    },
+    "antiaircraft_power": {
+     "value": 50,
+     "raw": "50 40, 50/2",
+     "confidence": "med",
+     "note": null
+    },
+    "speed": {
+     "value": 2400,
+     "raw": "2,400 4,000 2,400 4,800 3,200; 30,000 27",
+     "confidence": "med",
+     "note": null
+    },
+    "crew": {
+     "value": 30,
+     "raw": "30, 40, 1",
+     "confidence": "low",
+     "note": null
+    },
+    "build_term": {
+     "value": 200,
+     "raw": "200 170",
+     "confidence": "med",
+     "note": null
+    },
+    "repair_cost": {
+     "value": 50,
+     "raw": "50 40",
+     "confidence": "med",
+     "note": null
+    },
+    "supply_capacity": {
+     "value": 64,
+     "raw": "64 240 360, 40 20 240, 40, 280 320 240",
+     "confidence": "med",
+     "note": null
+    },
+    "fighter_num": {
+     "value": 1,
+     "raw": "1, 50, 1",
+     "confidence": "low",
+     "note": null
+    },
+    "unit_count": {
+     "value": 40,
+     "raw": "40",
+     "confidence": "med",
+     "note": null
+    }
+   },
+   "desc": "Z82型標準駆逐艦。劣化ウラニウム弾頭を短射程で発射するレールガンを主兵装とした高速艦。至近距離で極めて高い攻撃力、防御は軽微。小型ながら戦闘艇を搭載し複合的戦闘能力。バリエーション: 駆逐艦(旗艦), 高速艇(旗艦), 駆逐艦Ⅰ〜Ⅷ, 高速艇。"
+  },
+  {
+   "key": "FR88",
+   "name": "戦闘艇母艦 (FR88型戦闘艇母艦)",
+   "side": "empire",
+   "shipClass": "carrier",
+   "family": "FR88",
+   "is_base": true,
+   "raw": {
+    "armor": {
+     "value": {
+      "front": 45,
+      "side": 23,
+      "back": 20
+     },
+     "raw": "45 / 23 / 20",
+     "confidence": "med",
+     "note": null
+    },
+    "shield_guard": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "no シールド防護値 (unarmored/'-' or OCR-lost)"
+    },
+    "shield_capacity": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "no シールド容量 (defenseless or OCR-lost)"
+    },
+    "beam_power": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "ビーム破壊力: no in-band value (OCR corrupt)"
+    },
+    "gun_power": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "ガン破壊力: no in-band value (OCR corrupt)"
+    },
+    "missile_power": {
+     "value": 110,
+     "raw": "-, 110",
+     "confidence": "med",
+     "note": null
+    },
+    "antiaircraft_power": {
+     "value": 110,
+     "raw": "-, 110",
+     "confidence": "med",
+     "note": null
+    },
+    "speed": {
+     "value": 18000,
+     "raw": "18,000, 2,400, 10,000",
+     "confidence": "med",
+     "note": null
+    },
+    "crew": {
+     "value": null,
+     "raw": "5,600",
+     "confidence": "none",
+     "note": "必要乗組員: no in-band value (OCR corrupt)"
+    },
+    "build_term": {
+     "value": 180,
+     "raw": "180 160 180 140",
+     "confidence": "med",
+     "note": null
+    },
+    "repair_cost": {
+     "value": 220,
+     "raw": "220",
+     "confidence": "med",
+     "note": null
+    },
+    "supply_capacity": {
+     "value": 2000,
+     "raw": "2,000, 1,600 2,000",
+     "confidence": "med",
+     "note": null
+    },
+    "fighter_num": {
+     "value": 10,
+     "raw": "10, 12 10",
+     "confidence": "low",
+     "note": null
+    },
+    "unit_count": {
+     "value": 128,
+     "raw": "128",
+     "confidence": "med",
+     "note": null
+    }
+   },
+   "desc": "FR88型戦闘艇母艦。旧式化したGIS12型艦隊旗艦の艦体を改装し上部に戦闘艇格納庫を増設。艦隊指揮機能・レールガン・レーザー水爆ミサイル発射システムは除去。バリエーション: 戦闘艇母艦Ⅰ〜Ⅳ。"
+  },
+  {
+   "key": "TR88",
+   "name": "雷撃艇母艦 (TR88型雷撃艇母艦)",
+   "side": "empire",
+   "shipClass": "torpedo_carrier",
+   "family": "TR88",
+   "is_base": true,
+   "raw": {
+    "armor": {
+     "value": {
+      "front": 45,
+      "side": 23,
+      "back": 20
+     },
+     "raw": "45 / 23 / 20",
+     "confidence": "med",
+     "note": null
+    },
+    "shield_guard": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "no シールド防護値 (unarmored/'-' or OCR-lost)"
+    },
+    "shield_capacity": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "no シールド容量 (defenseless or OCR-lost)"
+    },
+    "beam_power": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "ビーム破壊力: no in-band value (OCR corrupt)"
+    },
+    "gun_power": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "ガン破壊力: no in-band value (OCR corrupt)"
+    },
+    "missile_power": {
+     "value": 110,
+     "raw": "-, 110",
+     "confidence": "med",
+     "note": null
+    },
+    "antiaircraft_power": {
+     "value": 110,
+     "raw": "-, 110",
+     "confidence": "med",
+     "note": null
+    },
+    "speed": {
+     "value": 2400,
+     "raw": "2,400; 18,000 10,000 20,000",
+     "confidence": "med",
+     "note": null
+    },
+    "crew": {
+     "value": null,
+     "raw": "5,600",
+     "confidence": "none",
+     "note": "必要乗組員: no in-band value (OCR corrupt)"
+    },
+    "build_term": {
+     "value": 180,
+     "raw": "180 170 150 180",
+     "confidence": "med",
+     "note": null
+    },
+    "repair_cost": {
+     "value": 220,
+     "raw": "220",
+     "confidence": "med",
+     "note": null
+    },
+    "supply_capacity": {
+     "value": 1600,
+     "raw": "1,600",
+     "confidence": "med",
+     "note": null
+    },
+    "fighter_num": {
+     "value": 2,
+     "raw": "2",
+     "confidence": "low",
+     "note": null
+    },
+    "unit_count": {
+     "value": 128,
+     "raw": "128",
+     "confidence": "med",
+     "note": null
+    }
+   },
+   "desc": "TR88型雷撃艇母艦。FR88型同様に旧式化したGIS12型艦隊旗艦の艦体を改装、艦体上部に雷撃艇格納庫を増設。バリエーション: 雷撃艇母艦Ⅰ〜Ⅳ。"
+  },
+  {
+   "key": "A76",
+   "name": "工作艦 (A76型標準工作艦)",
+   "side": "empire",
+   "shipClass": "repair",
+   "family": "A76",
+   "is_base": true,
+   "raw": {
+    "armor": {
+     "value": {
+      "front": 26,
+      "side": 16,
+      "back": 10
+     },
+     "raw": "26 / 16 / 10",
+     "confidence": "med",
+     "note": null
+    },
+    "shield_guard": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "no シールド防護値 (unarmored/'-' or OCR-lost)"
+    },
+    "shield_capacity": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "no シールド容量 (defenseless or OCR-lost)"
+    },
+    "beam_power": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "ビーム破壊力: no in-band value (OCR corrupt)"
+    },
+    "gun_power": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "ガン破壊力: no in-band value (OCR corrupt)"
+    },
+    "missile_power": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "ミサイル破壊力: no in-band value (OCR corrupt)"
+    },
+    "antiaircraft_power": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "対空破壊力: no in-band value (OCR corrupt)"
+    },
+    "speed": {
+     "value": 2400,
+     "raw": "2,400; 19,000 10,000",
+     "confidence": "med",
+     "note": null
+    },
+    "crew": {
+     "value": null,
+     "raw": "18,000",
+     "confidence": "none",
+     "note": "必要乗組員: no in-band value (OCR corrupt)"
+    },
+    "build_term": {
+     "value": 120,
+     "raw": "120 110",
+     "confidence": "med",
+     "note": null
+    },
+    "repair_cost": {
+     "value": 100,
+     "raw": "100",
+     "confidence": "med",
+     "note": null
+    },
+    "supply_capacity": {
+     "value": 1200,
+     "raw": "1,200 1,600 800 1,200",
+     "confidence": "med",
+     "note": null
+    },
+    "fighter_num": {
+     "value": 20,
+     "raw": "-, 20",
+     "confidence": "low",
+     "note": null
+    },
+    "unit_count": {
+     "value": 1,
+     "raw": "1",
+     "confidence": "med",
+     "note": null
+    }
+   },
+   "desc": "A76型標準工作艦。上下2箇所に工作セクションを有し、宇宙空間で銀河帝国軍に属するすべての種類の艦艇を修理可能。バリエーション: 工作艦Ⅰ〜Ⅳ。"
+  },
+  {
+   "key": "A74",
+   "name": "輸送艦 (A74型標準輸送艦)",
+   "side": "empire",
+   "shipClass": "transport",
+   "family": "A74",
+   "is_base": true,
+   "raw": {
+    "armor": {
+     "value": {
+      "front": 48,
+      "side": 29,
+      "back": 17
+     },
+     "raw": "48 29 17",
+     "confidence": "med",
+     "note": null
+    },
+    "shield_guard": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "no シールド防護値 (unarmored/'-' or OCR-lost)"
+    },
+    "shield_capacity": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "no シールド容量 (defenseless or OCR-lost)"
+    },
+    "beam_power": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "ビーム破壊力: no in-band value (OCR corrupt)"
+    },
+    "gun_power": {
+     "value": 32,
+     "raw": "32, -",
+     "confidence": "med",
+     "note": null
+    },
+    "missile_power": {
+     "value": null,
+     "raw": null,
+     "confidence": "none",
+     "note": "no ミサイル破壊力 label"
+    },
+    "antiaircraft_power": {
+     "value": 40,
+     "raw": "40, -",
+     "confidence": "med",
+     "note": null
+    },
+    "speed": {
+     "value": 12000,
+     "raw": "12,000; 14,000",
+     "confidence": "med",
+     "note": null
+    },
+    "crew": {
+     "value": 1,
+     "raw": "1, -",
+     "confidence": "low",
+     "note": null
+    },
+    "build_term": {
+     "value": 90,
+     "raw": "90 80 100",
+     "confidence": "med",
+     "note": null
+    },
+    "repair_cost": {
+     "value": 200,
+     "raw": "200",
+     "confidence": "med",
+     "note": null
+    },
+    "supply_capacity": {
+     "value": 32,
+     "raw": "-, 32; 20,000 16,000",
+     "confidence": "med",
+     "note": null
+    },
+    "fighter_num": {
+     "value": null,
+     "raw": null,
+     "confidence": "none",
+     "note": "no 戦闘艇搭載数 label"
+    },
+    "unit_count": {
+     "value": 1,
+     "raw": "1",
+     "confidence": "med",
+     "note": null
+    }
+   },
+   "desc": "A74型標準輸送艦。艦隊旗艦に匹敵する全長の超大型輸送艦、最大50万トンの貨物を輸送可能。自衛用に中性子パルス砲を装備し限定的戦闘力。バリエーション: 輸送艦Ⅰ〜Ⅳ。"
+  },
+  {
+   "key": "A72",
+   "name": "兵員輸送艦 (A72型標準兵員輸送艦)",
+   "side": "empire",
+   "shipClass": "trooper",
+   "family": "A72",
+   "is_base": true,
+   "raw": {
+    "armor": {
+     "value": {
+      "front": 6,
+      "side": 8,
+      "back": 16
+     },
+     "raw": "6 8 / 16 9 4 2 / 6",
+     "confidence": "med",
+     "note": null
+    },
+    "shield_guard": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "no シールド防護値 (unarmored/'-' or OCR-lost)"
+    },
+    "shield_capacity": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "no シールド容量 (defenseless or OCR-lost)"
+    },
+    "beam_power": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "ビーム破壊力: no in-band value (OCR corrupt)"
+    },
+    "gun_power": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "ガン破壊力: no in-band value (OCR corrupt)"
+    },
+    "missile_power": {
+     "value": 40,
+     "raw": "40/1, -",
+     "confidence": "med",
+     "note": null
+    },
+    "antiaircraft_power": {
+     "value": 40,
+     "raw": "40",
+     "confidence": "med",
+     "note": null
+    },
+    "speed": {
+     "value": 20000,
+     "raw": "20,000 18,000",
+     "confidence": "med",
+     "note": null
+    },
+    "crew": {
+     "value": 1,
+     "raw": "18,000, 1, -",
+     "confidence": "low",
+     "note": null
+    },
+    "build_term": {
+     "value": 120,
+     "raw": "120 140",
+     "confidence": "med",
+     "note": null
+    },
+    "repair_cost": {
+     "value": 100,
+     "raw": "100",
+     "confidence": "med",
+     "note": null
+    },
+    "supply_capacity": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "物資搭載量: no in-band value (OCR corrupt)"
+    },
+    "fighter_num": {
+     "value": 30,
+     "raw": "-, 30",
+     "confidence": "low",
+     "note": null
+    },
+    "unit_count": {
+     "value": 1,
+     "raw": "1",
+     "confidence": "med",
+     "note": null
+    }
+   },
+   "desc": "A72型標準兵員輸送艦。完全武装の兵員を約500名とその装備を輸送可能。バリエーション: 兵員輸送艦Ⅰ〜Ⅳ。"
+  },
+  {
+   "key": "A78",
+   "name": "揚陸艦 (A78型標準揚陸艦)",
+   "side": "empire",
+   "shipClass": "lander",
+   "family": "A78",
+   "is_base": true,
+   "raw": {
+    "armor": {
+     "value": {
+      "front": 15,
+      "side": 10,
+      "back": 5
+     },
+     "raw": "15 10 / 5 / 17 12",
+     "confidence": "med",
+     "note": null
+    },
+    "shield_guard": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "no シールド防護値 (unarmored/'-' or OCR-lost)"
+    },
+    "shield_capacity": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "no シールド容量 (defenseless or OCR-lost)"
+    },
+    "beam_power": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "ビーム破壊力: no in-band value (OCR corrupt)"
+    },
+    "gun_power": {
+     "value": 40,
+     "raw": "-, 40/1, 7",
+     "confidence": "med",
+     "note": null
+    },
+    "missile_power": {
+     "value": null,
+     "raw": null,
+     "confidence": "none",
+     "note": "no ミサイル破壊力 label"
+    },
+    "antiaircraft_power": {
+     "value": 30,
+     "raw": "-, 30, -",
+     "confidence": "med",
+     "note": null
+    },
+    "speed": {
+     "value": 12000,
+     "raw": "12,000 50; 15,000 12,000",
+     "confidence": "med",
+     "note": null
+    },
+    "crew": {
+     "value": 1,
+     "raw": "1, -",
+     "confidence": "low",
+     "note": null
+    },
+    "build_term": {
+     "value": null,
+     "raw": null,
+     "confidence": "none",
+     "note": "no 工期 label"
+    },
+    "repair_cost": {
+     "value": 20,
+     "raw": "20",
+     "confidence": "med",
+     "note": null
+    },
+    "supply_capacity": {
+     "value": 30,
+     "raw": "-, 30, -",
+     "confidence": "med",
+     "note": null
+    },
+    "fighter_num": {
+     "value": null,
+     "raw": null,
+     "confidence": "none",
+     "note": "no 戦闘艇搭載数 label"
+    },
+    "unit_count": {
+     "value": 1,
+     "raw": "1",
+     "confidence": "med",
+     "note": null
+    }
+   },
+   "desc": "A78型標準揚陸艦。外見は同一だが、旗艦使用艦は高性能通信設備モジュールを搭載した揚陸指揮艦。バリエーション: 揚陸艦Ⅰ〜Ⅳ。"
+  },
+  {
+   "key": "民間船 / 商船",
+   "name": "民間船 / 商船",
+   "side": "empire",
+   "shipClass": "civilian",
+   "family": null,
+   "is_base": true,
+   "raw": {
+    "armor": {
+     "value": {
+      "front": 20,
+      "side": 12,
+      "back": 8
+     },
+     "raw": "20 12 / 8 / 4",
+     "confidence": "med",
+     "note": null
+    },
+    "shield_guard": {
+     "value": 20,
+     "raw": "20, -, 16, -",
+     "confidence": "med",
+     "note": null
+    },
+    "shield_capacity": {
+     "value": 16,
+     "raw": "20, -, 16, -",
+     "confidence": "med",
+     "note": null
+    },
+    "beam_power": {
+     "value": 10,
+     "raw": "-, 10, -",
+     "confidence": "med",
+     "note": null
+    },
+    "gun_power": {
+     "value": 10,
+     "raw": "-, 10, -",
+     "confidence": "med",
+     "note": null
+    },
+    "missile_power": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "ミサイル破壊力: no in-band value (OCR corrupt)"
+    },
+    "antiaircraft_power": {
+     "value": 30,
+     "raw": "30, -",
+     "confidence": "med",
+     "note": null
+    },
+    "speed": {
+     "value": 10000,
+     "raw": "10,000",
+     "confidence": "med",
+     "note": null
+    },
+    "crew": {
+     "value": 30,
+     "raw": "30, -, 100, -",
+     "confidence": "low",
+     "note": null
+    },
+    "build_term": {
+     "value": null,
+     "raw": null,
+     "confidence": "none",
+     "note": "no 工期 label"
+    },
+    "repair_cost": {
+     "value": 40,
+     "raw": "40",
+     "confidence": "med",
+     "note": null
+    },
+    "supply_capacity": {
+     "value": 4000,
+     "raw": "4,000",
+     "confidence": "med",
+     "note": null
+    },
+    "fighter_num": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "戦闘艇搭載数: no in-band value (OCR corrupt)"
+    },
+    "unit_count": {
+     "value": 100,
+     "raw": "100",
+     "confidence": "med",
+     "note": null
+    }
+   },
+   "desc": "銀河帝国で使用される典型的な商船。船倉モジュールを変更することで乗客・コンテナ・液体等を輸送可能な貨客船。重要人物搭乗船は宇宙海賊対抗のため武装するケースが多い。バリエーション: 民間船(旗艦), 商船。"
+  },
+  {
+   "key": "標準戦艦",
+   "name": "標準戦艦 (787年型標準戦艦)",
+   "side": "alliance",
+   "shipClass": "battleship",
+   "family": "787",
+   "is_base": true,
+   "raw": {
+    "armor": {
+     "value": {
+      "front": 32,
+      "side": 16,
+      "back": 8
+     },
+     "raw": "rows include 32/16/8, 30/22/14, 28, 34, 30/18/10",
+     "confidence": "low",
+     "note": null
+    },
+    "shield_guard": {
+     "value": 70,
+     "raw": "70 / 30",
+     "confidence": "low",
+     "note": null
+    },
+    "shield_capacity": {
+     "value": 30,
+     "raw": "70 / 30",
+     "confidence": "low",
+     "note": null
+    },
+    "beam_power": {
+     "value": 90,
+     "raw": "5,600 (also 6,400/4,800/5,600 main-gun f",
+     "confidence": "low",
+     "note": null
+    },
+    "gun_power": {
+     "value": 80,
+     "raw": "80/1, 140/2, 100/6",
+     "confidence": "low",
+     "note": null
+    },
+    "missile_power": {
+     "value": 90,
+     "raw": "90/5, 100/6",
+     "confidence": "low",
+     "note": null
+    },
+    "antiaircraft_power": {
+     "value": 90,
+     "raw": "90, 64, 100, 80/1",
+     "confidence": "low",
+     "note": null
+    },
+    "speed": {
+     "value": 23000,
+     "raw": "23,000 / 20,000 / 22,000 / 18,000 / 22,0",
+     "confidence": "low",
+     "note": null
+    },
+    "crew": {
+     "value": 400,
+     "raw": "400, 22,000;",
+     "confidence": "low",
+     "note": null
+    },
+    "build_term": {
+     "value": null,
+     "raw": null,
+     "confidence": "none",
+     "note": "no 工期 label"
+    },
+    "repair_cost": {
+     "value": 90,
+     "raw": "90/5→760",
+     "confidence": "low",
+     "note": null
+    },
+    "supply_capacity": {
+     "value": 760,
+     "raw": "760, 800, 190",
+     "confidence": "low",
+     "note": null
+    },
+    "fighter_num": {
+     "value": 3,
+     "raw": "3 (also 3/1)",
+     "confidence": "low",
+     "note": null
+    },
+    "unit_count": {
+     "value": null,
+     "raw": "ユニット数 column present (values shown: e.g. 4, 1)",
+     "confidence": "none",
+     "note": null
+    }
+   },
+   "desc": "Main capital ship of the fleet (787-type standard battleship). Primary armament: powerful photon cannons, laser-hydrogen-bomb (レーザー水爆) missile launch system, and fighter craft. Built to counter the Imperial SS75-type standard battleship. Its semi-retractable fighter hangar is a defensive weak point, so it loses slightly in armor/defense, but is said to decisively surpass the SS75 in main-gun firepower, sailing/maneuver performance, and electronic-warfare capability. Variants: Ⅱ=787-G near-range rail-cannon upgrade w/ added armor; Ⅲ=787-M long-range laser-hydrogen-bomb system, hangar removed for ammo space; Ⅳ=787-L lightened armor, higher mobility ('快速戦艦'/fast battleship) for pursuit; Ⅴ=787-H heavily armored, hangar moved internal, slight mobility loss; Ⅵ=787-R recon battleship w/ Tengeri-class flagship-grade sensors & boosted thrusters (better turning); Ⅶ=787-E wartime rush-build, low-output engine (slower), cheap standard-cruiser sensors; Ⅷ=787-U automated 'unmanned ship' (無人艦), needs ~25% crew except special ops, no fighters, used for blockade/ramming-type special operations."
+  },
+  {
+   "key": "巡航艦",
+   "name": "巡航艦 (795年型標準巡航艦)",
+   "side": "alliance",
+   "shipClass": "cruiser",
+   "family": "795",
+   "is_base": true,
+   "raw": {
+    "armor": {
+     "value": {
+      "front": 16,
+      "side": 8,
+      "back": 22
+     },
+     "raw": "16/8, 22/13, 18/10",
+     "confidence": "low",
+     "note": null
+    },
+    "shield_guard": {
+     "value": 60,
+     "raw": "60 / 22 (also 18)",
+     "confidence": "low",
+     "note": null
+    },
+    "shield_capacity": {
+     "value": 22,
+     "raw": "60 / 22 (also 18)",
+     "confidence": "low",
+     "note": null
+    },
+    "beam_power": {
+     "value": 50,
+     "raw": "50, 24, 36",
+     "confidence": "low",
+     "note": null
+    },
+    "gun_power": {
+     "value": 50,
+     "raw": "50/3, 90/4, 40/2",
+     "confidence": "low",
+     "note": null
+    },
+    "missile_power": {
+     "value": 50,
+     "raw": "50/3",
+     "confidence": "low",
+     "note": null
+    },
+    "antiaircraft_power": {
+     "value": 60,
+     "raw": "60, 50, 24",
+     "confidence": "low",
+     "note": null
+    },
+    "speed": {
+     "value": 25000,
+     "raw": "25,000 / 22,000 / 23,000 / 24,000",
+     "confidence": "low",
+     "note": null
+    },
+    "crew": {
+     "value": 250,
+     "raw": "250, 4,800;",
+     "confidence": "low",
+     "note": null
+    },
+    "build_term": {
+     "value": null,
+     "raw": null,
+     "confidence": "none",
+     "note": "no 工期 label"
+    },
+    "repair_cost": {
+     "value": 360,
+     "raw": "360 / 320",
+     "confidence": "low",
+     "note": null
+    },
+    "supply_capacity": {
+     "value": 360,
+     "raw": "360, 320, 400",
+     "confidence": "low",
+     "note": null
+    },
+    "fighter_num": {
+     "value": 1,
+     "raw": "1, 2",
+     "confidence": "low",
+     "note": null
+    },
+    "unit_count": {
+     "value": null,
+     "raw": "ユニット数 column present (e.g. 5, 6, 9 in rows)",
+     "confidence": "none",
+     "note": null
+    }
+   },
+   "desc": "Medium ship (795-type standard cruiser). Primary armament: neutron missiles, photon pulse cannons, and fighter craft; designed for shorter-range engagement than the battleship. Smaller than the Imperial SK80-type standard cruiser but roughly matches it in combat power except for missile attack. The Alliance-characteristic semi-retractable fighter hangar remains a defensive problem. Variants: Ⅱ=795-B new bow neutron-pulse cannon, no fighters so fewer hull openings → better defense; Ⅲ=795-M longer-range/higher-power laser-hydrogen-bomb missiles, long-range missile support for battleships; Ⅳ=795-L stripped armor + high-output engine ('高速巡航艦'/fast cruiser); Ⅴ=795-H composite armor added, no fighters, slower & worse turning but trusted for toughness; Ⅵ=795-R fitted w/ 787-type battleship sensors ('偵察巡航艦'/recon cruiser, core of vanguard); Ⅶ=795-Ri improved R-type w/ Tengeri-class sensors, build cost rose to that of a 787 battleship so mass production cancelled; Ⅷ=795-C long-endurance refit ('フリゲート艦'/frigate) for convoy escort."
+  },
+  {
+   "key": "打撃巡航艦",
+   "name": "打撃巡航艦 (794年型打撃巡航艦)",
+   "side": "alliance",
+   "shipClass": "strike_cruiser",
+   "family": "794",
+   "is_base": true,
+   "raw": {
+    "armor": {
+     "value": {
+      "front": 16,
+      "side": 10,
+      "back": 6
+     },
+     "raw": "16/10/6, 24/14/8, 16/10/6, 15/7/5, 17/12/8, 16/10/6",
+     "confidence": "low",
+     "note": null
+    },
+    "shield_guard": {
+     "value": 50,
+     "raw": "50/22, 70/25",
+     "confidence": "low",
+     "note": null
+    },
+    "shield_capacity": {
+     "value": 22,
+     "raw": "50/22, 70/25",
+     "confidence": "low",
+     "note": null
+    },
+    "beam_power": {
+     "value": 32,
+     "raw": "32 (also '-' for most)",
+     "confidence": "low",
+     "note": null
+    },
+    "gun_power": {
+     "value": null,
+     "raw": "'-'",
+     "confidence": "none",
+     "note": "ガン破壊力: no in-band value (OCR corrupt)"
+    },
+    "missile_power": {
+     "value": 150,
+     "raw": "150/8",
+     "confidence": "low",
+     "note": null
+    },
+    "antiaircraft_power": {
+     "value": 150,
+     "raw": "150, 60, 50, 60, 40",
+     "confidence": "low",
+     "note": null
+    },
+    "speed": {
+     "value": 24000,
+     "raw": "24,000 / 28,000 / 24,000 / 25,000 / 22,0",
+     "confidence": "low",
+     "note": null
+    },
+    "crew": {
+     "value": 230,
+     "raw": "230 / 300; 4,000 / 5,600 / 3,200",
+     "confidence": "low",
+     "note": null
+    },
+    "build_term": {
+     "value": null,
+     "raw": null,
+     "confidence": "none",
+     "note": "no 工期 label"
+    },
+    "repair_cost": {
+     "value": 60,
+     "raw": "60 / 100 / 60",
+     "confidence": "low",
+     "note": null
+    },
+    "supply_capacity": {
+     "value": 480,
+     "raw": "480 / 400 / 480",
+     "confidence": "low",
+     "note": null
+    },
+    "fighter_num": {
+     "value": null,
+     "raw": "'-'",
+     "confidence": "none",
+     "note": "戦闘艇搭載数: no in-band value (OCR corrupt)"
+    },
+    "unit_count": {
+     "value": null,
+     "raw": "ユニット数 column present (e.g. 4, 2)",
+     "confidence": "none",
+     "note": null
+    }
+   },
+   "desc": "Strike cruiser (794-type). Created by removing the beam armament and fighter-carrying capability of the obsolete 790-type standard cruiser and fitting numerous neutron-missile launch systems. Has 3x the missile-throw capacity of the 795-type standard cruiser but reduced sustained-combat ability. Variants: Ⅱ=794-L lightened (non-essential composite armor removed) for better sailing; Ⅲ=794-H heavily armored but reduced missile capacity (armor eats internal space); Ⅳ=794-E wartime rush-build w/ merchant low-output engine and 796-type-destroyer-grade sensors."
+  },
+  {
+   "key": "偵察巡航艦",
+   "name": "偵察巡航艦 (レダ級偵察巡航艦, 795年〜建造)",
+   "side": "alliance",
+   "shipClass": "cruiser",
+   "family": "795",
+   "is_base": true,
+   "raw": {
+    "armor": {
+     "value": null,
+     "raw": null,
+     "confidence": "none",
+     "note": "no 装甲 label parsed"
+    },
+    "shield_guard": {
+     "value": null,
+     "raw": null,
+     "confidence": "none",
+     "note": "no シールド防護値 (unarmored/'-' or OCR-lost)"
+    },
+    "shield_capacity": {
+     "value": null,
+     "raw": null,
+     "confidence": "none",
+     "note": "no シールド容量 (defenseless or OCR-lost)"
+    },
+    "beam_power": {
+     "value": null,
+     "raw": null,
+     "confidence": "none",
+     "note": "no ビーム破壊力 label"
+    },
+    "gun_power": {
+     "value": null,
+     "raw": null,
+     "confidence": "none",
+     "note": "no ガン破壊力 label"
+    },
+    "missile_power": {
+     "value": null,
+     "raw": null,
+     "confidence": "none",
+     "note": "no ミサイル破壊力 label"
+    },
+    "antiaircraft_power": {
+     "value": null,
+     "raw": null,
+     "confidence": "none",
+     "note": "no 対空破壊力 label"
+    },
+    "speed": {
+     "value": null,
+     "raw": null,
+     "confidence": "none",
+     "note": "no 最高速度 label"
+    },
+    "crew": {
+     "value": null,
+     "raw": null,
+     "confidence": "none",
+     "note": "no 必要乗組員 label"
+    },
+    "build_term": {
+     "value": null,
+     "raw": null,
+     "confidence": "none",
+     "note": "no 工期 label"
+    },
+    "repair_cost": {
+     "value": null,
+     "raw": null,
+     "confidence": "none",
+     "note": "no 修理消費物資 label"
+    },
+    "supply_capacity": {
+     "value": null,
+     "raw": null,
+     "confidence": "none",
+     "note": "no 物資搭載量 label"
+    },
+    "fighter_num": {
+     "value": null,
+     "raw": null,
+     "confidence": "none",
+     "note": "no 戦闘艇搭載数 label"
+    },
+    "unit_count": {
+     "value": null,
+     "raw": null,
+     "confidence": "none",
+     "note": null
+    }
+   },
+   "desc": "Reda-class recon cruiser (production started 795). A fast ship dedicated to scout/liaison duty. Carries battleship-grade photon cannons and laser-hydrogen-bomb missiles, designed to also fight independently. Due to limited role, production count is very small. (Listed within the strike-cruiser appendix block; entry '偵察巡航艦隊' appears as a related grouping.)"
+  },
+  {
+   "key": "駆逐艦",
+   "name": "駆逐艦 (796年型標準駆逐艦)",
+   "side": "alliance",
+   "shipClass": "destroyer",
+   "family": "796",
+   "is_base": true,
+   "raw": {
+    "armor": {
+     "value": {
+      "front": 10,
+      "side": 6,
+      "back": 4
+     },
+     "raw": "10/6/4, 8/4/1, 12/8/6, 10",
+     "confidence": "low",
+     "note": null
+    },
+    "shield_guard": {
+     "value": 40,
+     "raw": "40 / 19",
+     "confidence": "low",
+     "note": null
+    },
+    "shield_capacity": {
+     "value": 19,
+     "raw": "40 / 19",
+     "confidence": "low",
+     "note": null
+    },
+    "beam_power": {
+     "value": 50,
+     "raw": "50",
+     "confidence": "low",
+     "note": null
+    },
+    "gun_power": {
+     "value": 50,
+     "raw": "50/2, 80/3, 50/2",
+     "confidence": "low",
+     "note": null
+    },
+    "missile_power": {
+     "value": 24,
+     "raw": "24 (figures)",
+     "confidence": "low",
+     "note": null
+    },
+    "antiaircraft_power": {
+     "value": 120,
+     "raw": "120, 50, 24",
+     "confidence": "low",
+     "note": null
+    },
+    "speed": {
+     "value": 30000,
+     "raw": "30,000 / 26,000 / 27,000 / 28,000 / 30,0",
+     "confidence": "low",
+     "note": null
+    },
+    "crew": {
+     "value": 220,
+     "raw": "220 / 30; 3,200",
+     "confidence": "low",
+     "note": null
+    },
+    "build_term": {
+     "value": null,
+     "raw": null,
+     "confidence": "none",
+     "note": "no 工期 label"
+    },
+    "repair_cost": {
+     "value": 90,
+     "raw": "90 / 50 / 40, 160 / 120 / 80 / 8",
+     "confidence": "low",
+     "note": null
+    },
+    "supply_capacity": {
+     "value": 4000,
+     "raw": "4,000 / 2,400",
+     "confidence": "low",
+     "note": null
+    },
+    "fighter_num": {
+     "value": null,
+     "raw": "'-'",
+     "confidence": "none",
+     "note": "戦闘艇搭載数: no in-band value (OCR corrupt)"
+    },
+    "unit_count": {
+     "value": null,
+     "raw": "ユニット数 column present (rows show 1, 6)",
+     "confidence": "none",
+     "note": null
+    }
+   },
+   "desc": "Destroyer (796-type). A heavily armed ship mounting 6 photon pulse cannons on a hull a bit over 1/2 the size of the 795-type cruiser. Shields, sensors, and crew living facilities are only the bare minimum for a spacecraft; carries no fighters in order to secure weapon volume. Variants: Ⅱ=796-M added neutron-missile system + extra attitude thrusters (slightly better turning); Ⅲ=796-L armor removed for high speed (almost no armor), escort for fast fleet flagships; Ⅳ=796-H added armor, slight mobility loss; Ⅴ=796-C long-endurance refit ('コルベット艦'/corvette) for convoy escort; Ⅵ=796-R forced-recon refit w/ 795-cruiser sensors + EM signal-blocking & stealth; Ⅶ=796-A AA-focused ('防空駆逐艦'/air-defense destroyer), AA power exceeds 795 cruiser; Ⅷ=796-E wartime rush-build, simplified sensors, neutron missiles as external launcher (only 4 shots), completes in ~half the build time."
+  },
+  {
+   "key": "戦闘艇母艦",
+   "name": "戦闘艇母艦 (796年型標準戦闘艇母艦)",
+   "side": "alliance",
+   "shipClass": "destroyer",
+   "family": "796",
+   "is_base": true,
+   "raw": {
+    "armor": {
+     "value": {
+      "front": 20,
+      "side": 14,
+      "back": 18
+     },
+     "raw": "20/14, 18/22",
+     "confidence": "low",
+     "note": null
+    },
+    "shield_guard": {
+     "value": null,
+     "raw": "'-' (mostly)",
+     "confidence": "none",
+     "note": "no シールド防護値 (unarmored/'-' or OCR-lost)"
+    },
+    "shield_capacity": {
+     "value": null,
+     "raw": "'-' (mostly)",
+     "confidence": "none",
+     "note": "no シールド容量 (defenseless or OCR-lost)"
+    },
+    "beam_power": {
+     "value": 64,
+     "raw": "64",
+     "confidence": "low",
+     "note": null
+    },
+    "gun_power": {
+     "value": 70,
+     "raw": "'-' / 70/3",
+     "confidence": "low",
+     "note": null
+    },
+    "missile_power": {
+     "value": 70,
+     "raw": "'-' / 70/3",
+     "confidence": "low",
+     "note": null
+    },
+    "antiaircraft_power": {
+     "value": 180,
+     "raw": "180, 10, 64",
+     "confidence": "low",
+     "note": null
+    },
+    "speed": {
+     "value": 16000,
+     "raw": "16,000 / 18,000 / 14,000",
+     "confidence": "low",
+     "note": null
+    },
+    "crew": {
+     "value": 180,
+     "raw": "180 / 7; 6,400",
+     "confidence": "low",
+     "note": null
+    },
+    "build_term": {
+     "value": null,
+     "raw": null,
+     "confidence": "none",
+     "note": "no 工期 label"
+    },
+    "repair_cost": {
+     "value": 180,
+     "raw": "180",
+     "confidence": "low",
+     "note": null
+    },
+    "supply_capacity": {
+     "value": 2240,
+     "raw": "2,240 / 2,000",
+     "confidence": "low",
+     "note": null
+    },
+    "fighter_num": {
+     "value": 100,
+     "raw": "100 (Spartanian, per description)",
+     "confidence": "low",
+     "note": null
+    },
+    "unit_count": {
+     "value": null,
+     "raw": "ユニット数 column present (row shows 7)",
+     "confidence": "none",
+     "note": null
+    }
+   },
+   "desc": "Fighter-craft carrier (796-type). A large warship carrying 100 single-seat 'Spartanian' fighters in a semi-retractable hangar, with gunnery comparable to the 787-type battleship. Variants: Ⅱ=796-A simplified structure w/o bow photon cannon, but outwardly disguised to look identical to the standard carrier to avoid being singled out; Ⅲ=796-L reduced armor for high speed, lighter/weaker structure so turning is limited; Ⅳ=796-H composite armor added but the central semi-retractable fighter hangar untouched, still a defensive weak point."
+  },
+  {
+   "key": "工作艦",
+   "name": "工作艦 (793年型標準工作艦)",
+   "side": "alliance",
+   "shipClass": "repair",
+   "family": "793",
+   "is_base": true,
+   "raw": {
+    "armor": {
+     "value": {
+      "front": 24,
+      "side": 14,
+      "back": 8
+     },
+     "raw": "24/14/8, 22/12",
+     "confidence": "low",
+     "note": null
+    },
+    "shield_guard": {
+     "value": null,
+     "raw": "'-' (unarmed)",
+     "confidence": "none",
+     "note": "no シールド防護値 (unarmored/'-' or OCR-lost)"
+    },
+    "shield_capacity": {
+     "value": null,
+     "raw": "'-' (unarmed)",
+     "confidence": "none",
+     "note": "no シールド容量 (defenseless or OCR-lost)"
+    },
+    "beam_power": {
+     "value": null,
+     "raw": "'-' (unarmed)",
+     "confidence": "none",
+     "note": "ビーム破壊力: no in-band value (OCR corrupt)"
+    },
+    "gun_power": {
+     "value": null,
+     "raw": "'-' (unarmed)",
+     "confidence": "none",
+     "note": "ガン破壊力: no in-band value (OCR corrupt)"
+    },
+    "missile_power": {
+     "value": null,
+     "raw": "'-' (unarmed)",
+     "confidence": "none",
+     "note": "ミサイル破壊力: no in-band value (OCR corrupt)"
+    },
+    "antiaircraft_power": {
+     "value": 40,
+     "raw": "40",
+     "confidence": "low",
+     "note": null
+    },
+    "speed": {
+     "value": 18000,
+     "raw": "18,000 / 20,000 / 14,000 / 18,000",
+     "confidence": "low",
+     "note": null
+    },
+    "crew": {
+     "value": 120,
+     "raw": "120 / 100; 2,400",
+     "confidence": "low",
+     "note": null
+    },
+    "build_term": {
+     "value": null,
+     "raw": null,
+     "confidence": "none",
+     "note": "no 工期 label"
+    },
+    "repair_cost": {
+     "value": 100,
+     "raw": "100",
+     "confidence": "low",
+     "note": null
+    },
+    "supply_capacity": {
+     "value": 1200,
+     "raw": "1,200",
+     "confidence": "low",
+     "note": null
+    },
+    "fighter_num": {
+     "value": null,
+     "raw": null,
+     "confidence": "none",
+     "note": "no 戦闘艇搭載数 label"
+    },
+    "unit_count": {
+     "value": null,
+     "raw": "ユニット数 column present (row shows 1)",
+     "confidence": "none",
+     "note": null
+    }
+   },
+   "desc": "Repair/engineering ship (793-type). Capable of repairing all types of ships belonging to the Free Planets Alliance fleet in space. Variants: Ⅱ=793-L lightweight hull, better mobility; Ⅲ=793-E small-ship low-output engine (greatly reduced sailing performance); Ⅳ=793-S increased repair-material loading capacity."
+  },
+  {
+   "key": "輸送艦",
+   "name": "輸送艦 (792年型標準輸送艦)",
+   "side": "alliance",
+   "shipClass": "transport",
+   "family": "792",
+   "is_base": true,
+   "raw": {
+    "armor": {
+     "value": {
+      "front": 60,
+      "side": 36,
+      "back": 22
+     },
+     "raw": "60/36/22",
+     "confidence": "low",
+     "note": null
+    },
+    "shield_guard": {
+     "value": null,
+     "raw": "'-'",
+     "confidence": "none",
+     "note": "no シールド防護値 (unarmored/'-' or OCR-lost)"
+    },
+    "shield_capacity": {
+     "value": null,
+     "raw": "'-'",
+     "confidence": "none",
+     "note": "no シールド容量 (defenseless or OCR-lost)"
+    },
+    "beam_power": {
+     "value": null,
+     "raw": "'-'",
+     "confidence": "none",
+     "note": "ビーム破壊力: no in-band value (OCR corrupt)"
+    },
+    "gun_power": {
+     "value": null,
+     "raw": "'-'",
+     "confidence": "none",
+     "note": "ガン破壊力: no in-band value (OCR corrupt)"
+    },
+    "missile_power": {
+     "value": null,
+     "raw": "'-'",
+     "confidence": "none",
+     "note": "ミサイル破壊力: no in-band value (OCR corrupt)"
+    },
+    "antiaircraft_power": {
+     "value": 40,
+     "raw": "40, 24, 30/40",
+     "confidence": "low",
+     "note": null
+    },
+    "speed": {
+     "value": 14000,
+     "raw": "14,000 / 13,000 / 15,000 / 20,000 / 16,0",
+     "confidence": "low",
+     "note": null
+    },
+    "crew": {
+     "value": 90,
+     "raw": "90; 1,600 / 2,400",
+     "confidence": "low",
+     "note": null
+    },
+    "build_term": {
+     "value": null,
+     "raw": null,
+     "confidence": "none",
+     "note": "no 工期 label"
+    },
+    "repair_cost": {
+     "value": null,
+     "raw": "values per OCR",
+     "confidence": "none",
+     "note": "修理消費物資: no in-band value (OCR corrupt)"
+    },
+    "supply_capacity": {
+     "value": 2400,
+     "raw": "2,400 / 240",
+     "confidence": "low",
+     "note": null
+    },
+    "fighter_num": {
+     "value": null,
+     "raw": null,
+     "confidence": "none",
+     "note": "no 戦闘艇搭載数 label"
+    },
+    "unit_count": {
+     "value": null,
+     "raw": "ユニット数 column present (row shows 1)",
+     "confidence": "none",
+     "note": null
+    }
+   },
+   "desc": "Transport ship (792-type). Super-large transport about twice the overall length of a fleet flagship, able to carry up to 500,000 tons (50万トン) of cargo. Equipped with photon pulse cannons for self-defense, giving limited combat power. Variants: Ⅱ=792-A photon pulse cannon omitted, some used for civilian purposes; Ⅲ=792-S improved A-type w/ thoroughly simplified sensors, always operated in convoy (not for solo voyage); Ⅳ=792-L boosted engine output for high speed, reduced cargo capacity (engine eats space)."
+  },
+  {
+   "key": "兵員輸送艦",
+   "name": "兵員輸送艦 (788年型標準兵員輸送艦)",
+   "side": "alliance",
+   "shipClass": "trooper",
+   "family": "788",
+   "is_base": true,
+   "raw": {
+    "armor": {
+     "value": {
+      "front": 5,
+      "side": 3,
+      "back": 2
+     },
+     "raw": "5/3/2, 7/5",
+     "confidence": "low",
+     "note": null
+    },
+    "shield_guard": {
+     "value": null,
+     "raw": "'-'",
+     "confidence": "none",
+     "note": "no シールド防護値 (unarmored/'-' or OCR-lost)"
+    },
+    "shield_capacity": {
+     "value": null,
+     "raw": "'-'",
+     "confidence": "none",
+     "note": "no シールド容量 (defenseless or OCR-lost)"
+    },
+    "beam_power": {
+     "value": null,
+     "raw": "'-'",
+     "confidence": "none",
+     "note": "ビーム破壊力: no in-band value (OCR corrupt)"
+    },
+    "gun_power": {
+     "value": 4,
+     "raw": "'-' / 4 (figure)",
+     "confidence": "low",
+     "note": null
+    },
+    "missile_power": {
+     "value": 4,
+     "raw": "'-' / 4 (figure)",
+     "confidence": "low",
+     "note": null
+    },
+    "antiaircraft_power": {
+     "value": 40,
+     "raw": "40/1, 40",
+     "confidence": "low",
+     "note": null
+    },
+    "speed": {
+     "value": 18000,
+     "raw": "18,000 / 19,000 / 18,000",
+     "confidence": "low",
+     "note": null
+    },
+    "crew": {
+     "value": 100,
+     "raw": "100 / 120; 2,400",
+     "confidence": "low",
+     "note": null
+    },
+    "build_term": {
+     "value": null,
+     "raw": null,
+     "confidence": "none",
+     "note": "no 工期 label"
+    },
+    "repair_cost": {
+     "value": null,
+     "raw": "per OCR",
+     "confidence": "none",
+     "note": "修理消費物資: no in-band value (OCR corrupt)"
+    },
+    "supply_capacity": {
+     "value": 30,
+     "raw": "30",
+     "confidence": "low",
+     "note": null
+    },
+    "fighter_num": {
+     "value": null,
+     "raw": null,
+     "confidence": "none",
+     "note": "no 戦闘艇搭載数 label"
+    },
+    "unit_count": {
+     "value": null,
+     "raw": "ユニット数 column present (row shows 1)",
+     "confidence": "none",
+     "note": null
+    }
+   },
+   "desc": "Troop transport (788-type). In the Free Planets Alliance, government-subsidized fast merchant ships were requisitioned to transport troops. Can carry about 600 fully-armed troops and their equipment. Variants: Ⅱ=788-A added self-defense neutron-missile launch system; Ⅲ=788-L new engine for high speed, used to move troops within combat zones; Ⅳ=788-H reinforced armor, but the base is an unarmored civilian ship so defense is still not very strong."
+  },
+  {
+   "key": "揚陸艦",
+   "name": "揚陸艦 (795年型標準揚陸艦 / 786年型系)",
+   "side": "alliance",
+   "shipClass": "cruiser",
+   "family": "795",
+   "is_base": true,
+   "raw": {
+    "armor": {
+     "value": {
+      "front": 17,
+      "side": 12,
+      "back": 7
+     },
+     "raw": "17/12/7, 19/14/9, 23/18/18",
+     "confidence": "low",
+     "note": null
+    },
+    "shield_guard": {
+     "value": null,
+     "raw": "'-'",
+     "confidence": "none",
+     "note": "no シールド防護値 (unarmored/'-' or OCR-lost)"
+    },
+    "shield_capacity": {
+     "value": null,
+     "raw": "'-'",
+     "confidence": "none",
+     "note": "no シールド容量 (defenseless or OCR-lost)"
+    },
+    "beam_power": {
+     "value": null,
+     "raw": "'-'",
+     "confidence": "none",
+     "note": "ビーム破壊力: no in-band value (OCR corrupt)"
+    },
+    "gun_power": {
+     "value": 40,
+     "raw": "'-' / 40/1",
+     "confidence": "low",
+     "note": null
+    },
+    "missile_power": {
+     "value": 40,
+     "raw": "'-' / 40/1",
+     "confidence": "low",
+     "note": null
+    },
+    "antiaircraft_power": {
+     "value": 40,
+     "raw": "40, 30",
+     "confidence": "low",
+     "note": null
+    },
+    "speed": {
+     "value": 15000,
+     "raw": "15,000 / 18,000 / 15,000 / 18,000",
+     "confidence": "low",
+     "note": null
+    },
+    "crew": {
+     "value": 50,
+     "raw": "50 / 60; 2,400",
+     "confidence": "low",
+     "note": null
+    },
+    "build_term": {
+     "value": null,
+     "raw": null,
+     "confidence": "none",
+     "note": "no 工期 label"
+    },
+    "repair_cost": {
+     "value": 40,
+     "raw": "40",
+     "confidence": "low",
+     "note": null
+    },
+    "supply_capacity": {
+     "value": null,
+     "raw": "per OCR",
+     "confidence": "none",
+     "note": "物資搭載量: no in-band value (OCR corrupt)"
+    },
+    "fighter_num": {
+     "value": null,
+     "raw": null,
+     "confidence": "none",
+     "note": "no 戦闘艇搭載数 label"
+    },
+    "unit_count": {
+     "value": null,
+     "raw": "ユニット数 column present (row shows 1)",
+     "confidence": "none",
+     "note": null
+    }
+   },
+   "desc": "Landing ship (listed as 795-type standard landing ship; variant descriptions reference 786-type). Outwardly identical, but the flagship version is a landing-command ship carrying a high-performance comms-equipment module. Variants: Ⅱ=786-L new engine for high speed, used for landing ops in combat zones; Ⅲ=786-H reinforced armor for combat-zone landing ops; Ⅳ=786-F specially modified for fortress-assault, boosted engine output for high speed and among the best-armored small ships, but designed only to carry armored grenadiers (装甲擲弾兵) — cannot load large vehicles like armored troopers."
+  },
+  {
+   "key": "民間船 / 商船/a",
+   "name": "民間船 / 商船 (Civilian ship / Merchant ship)",
+   "side": "alliance",
+   "shipClass": "civilian",
+   "family": null,
+   "is_base": true,
+   "raw": {
+    "armor": {
+     "value": {
+      "front": 20,
+      "side": 16,
+      "back": 8
+     },
+     "raw": "20/16/8, 12/8/4",
+     "confidence": "low",
+     "note": null
+    },
+    "shield_guard": {
+     "value": 40,
+     "raw": "40 / 16",
+     "confidence": "low",
+     "note": null
+    },
+    "shield_capacity": {
+     "value": 16,
+     "raw": "40 / 16",
+     "confidence": "low",
+     "note": null
+    },
+    "beam_power": {
+     "value": 20,
+     "raw": "20",
+     "confidence": "low",
+     "note": null
+    },
+    "gun_power": {
+     "value": null,
+     "raw": "'-'",
+     "confidence": "none",
+     "note": "ガン破壊力: no in-band value (OCR corrupt)"
+    },
+    "missile_power": {
+     "value": null,
+     "raw": "'-'",
+     "confidence": "none",
+     "note": "ミサイル破壊力: no in-band value (OCR corrupt)"
+    },
+    "antiaircraft_power": {
+     "value": 30,
+     "raw": "30",
+     "confidence": "low",
+     "note": null
+    },
+    "speed": {
+     "value": 10000,
+     "raw": "10,000 / 4,000",
+     "confidence": "low",
+     "note": null
+    },
+    "crew": {
+     "value": 30,
+     "raw": "30 / 100; 2,400",
+     "confidence": "low",
+     "note": null
+    },
+    "build_term": {
+     "value": null,
+     "raw": null,
+     "confidence": "none",
+     "note": "no 工期 label"
+    },
+    "repair_cost": {
+     "value": 40,
+     "raw": "40",
+     "confidence": "low",
+     "note": null
+    },
+    "supply_capacity": {
+     "value": null,
+     "raw": "per OCR",
+     "confidence": "none",
+     "note": "物資搭載量: no in-band value (OCR corrupt)"
+    },
+    "fighter_num": {
+     "value": null,
+     "raw": null,
+     "confidence": "none",
+     "note": "no 戦闘艇搭載数 label"
+    },
+    "unit_count": {
+     "value": null,
+     "raw": "ユニット数 column present (row shows 1)",
+     "confidence": "none",
+     "note": null
+    }
+   },
+   "desc": "Typical merchant ship used in the Free Planets Alliance. Ships carrying VIPs are often armed to fend off space pirates. The merchant ship is a passenger-cargo vessel that, by swapping cargo-hold modules, can transport passengers, containers, liquids, etc."
+  },
+  {
+   "key": "SS75a",
+   "name": "戦艦Ⅲ (SS75a型戦艦)",
+   "side": "empire",
+   "shipClass": "battleship",
+   "family": "SS75",
+   "is_base": false,
+   "inherits_from": "SS75",
+   "raw": {
+    "armor": {
+     "value": null,
+     "raw": "390 / -",
+     "confidence": "none",
+     "note": "装甲 numbers corrupt/absent in OCR fragment"
+    },
+    "shield_guard": {
+     "value": 70,
+     "raw": "70 / 20,000",
+     "confidence": "med",
+     "note": null
+    },
+    "shield_capacity": {
+     "value": 20000,
+     "raw": "70 / 20,000",
+     "confidence": "med",
+     "note": null
+    },
+    "beam_power": {
+     "value": 5,
+     "raw": "5/110",
+     "confidence": "med",
+     "note": null
+    },
+    "gun_power": {
+     "value": 4,
+     "raw": "4",
+     "confidence": "med",
+     "note": null
+    },
+    "missile_power": {
+     "value": 100,
+     "raw": "100, 100/1, 200/1, 120/5, 100/1, 80/5",
+     "confidence": "med",
+     "note": null
+    },
+    "antiaircraft_power": {
+     "value": 80,
+     "raw": "80",
+     "confidence": "med",
+     "note": null
+    },
+    "speed": {
+     "value": 5600,
+     "raw": "20, 12, 5,600",
+     "confidence": "med",
+     "note": null
+    },
+    "crew": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "必要乗組員: no in-band value (OCR corrupt)"
+    },
+    "build_term": {
+     "value": 90,
+     "raw": "90, 110",
+     "confidence": "med",
+     "note": null
+    },
+    "repair_cost": {
+     "value": 110,
+     "raw": "110",
+     "confidence": "med",
+     "note": null
+    },
+    "supply_capacity": {
+     "value": 760,
+     "raw": "760 140 680 600 800",
+     "confidence": "med",
+     "note": null
+    },
+    "fighter_num": {
+     "value": 3,
+     "raw": "3, 48, 12, 4, 3",
+     "confidence": "low",
+     "note": null
+    },
+    "unit_count": {
+     "value": 100,
+     "raw": "100",
+     "confidence": "med",
+     "note": null
+    }
+   },
+   "variant_modifier": "SS75a型戦艦。中性子ビーム砲をフェザーン経由で入手した同盟軍仕様の光子砲に換装。レールガンを除去。ビーム砲戦能力が飛躍的向上だが部品入手難で建造費高騰。",
+   "tier": "Ⅲ"
+  },
+  {
+   "key": "SS75b",
+   "name": "戦艦Ⅳ (SS75b型戦艦)",
+   "side": "empire",
+   "shipClass": "battleship",
+   "family": "SS75",
+   "is_base": false,
+   "inherits_from": "SS75",
+   "raw": {
+    "armor": {
+     "value": null,
+     "raw": "390 / -",
+     "confidence": "none",
+     "note": "装甲 numbers corrupt/absent in OCR fragment"
+    },
+    "shield_guard": {
+     "value": 70,
+     "raw": "70 / 20,000",
+     "confidence": "med",
+     "note": null
+    },
+    "shield_capacity": {
+     "value": 20000,
+     "raw": "70 / 20,000",
+     "confidence": "med",
+     "note": null
+    },
+    "beam_power": {
+     "value": 5,
+     "raw": "5/110",
+     "confidence": "med",
+     "note": null
+    },
+    "gun_power": {
+     "value": 4,
+     "raw": "4",
+     "confidence": "med",
+     "note": null
+    },
+    "missile_power": {
+     "value": 100,
+     "raw": "100, 100/1, 200/1, 120/5, 100/1, 80/5",
+     "confidence": "med",
+     "note": null
+    },
+    "antiaircraft_power": {
+     "value": 80,
+     "raw": "80",
+     "confidence": "med",
+     "note": null
+    },
+    "speed": {
+     "value": 5600,
+     "raw": "20, 12, 5,600",
+     "confidence": "med",
+     "note": null
+    },
+    "crew": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "必要乗組員: no in-band value (OCR corrupt)"
+    },
+    "build_term": {
+     "value": 90,
+     "raw": "90, 110",
+     "confidence": "med",
+     "note": null
+    },
+    "repair_cost": {
+     "value": 110,
+     "raw": "110",
+     "confidence": "med",
+     "note": null
+    },
+    "supply_capacity": {
+     "value": 760,
+     "raw": "760 140 680 600 800",
+     "confidence": "med",
+     "note": null
+    },
+    "fighter_num": {
+     "value": 3,
+     "raw": "3, 48, 12, 4, 3",
+     "confidence": "low",
+     "note": null
+    },
+    "unit_count": {
+     "value": 100,
+     "raw": "100",
+     "confidence": "med",
+     "note": null
+    }
+   },
+   "variant_modifier": "SS75b型戦艦。ミサイル発射システムを除去し近接戦闘用のレールキャノンを増設。極至近距離の混戦で真価を発揮。",
+   "tier": "Ⅳ"
+  },
+  {
+   "key": "SS75c",
+   "name": "戦艦Ⅴ (SS75c型戦艦)",
+   "side": "empire",
+   "shipClass": "battleship",
+   "family": "SS75",
+   "is_base": false,
+   "inherits_from": "SS75",
+   "raw": {
+    "armor": {
+     "value": null,
+     "raw": "390 / -",
+     "confidence": "none",
+     "note": "装甲 numbers corrupt/absent in OCR fragment"
+    },
+    "shield_guard": {
+     "value": 70,
+     "raw": "70 / 20,000",
+     "confidence": "med",
+     "note": null
+    },
+    "shield_capacity": {
+     "value": 20000,
+     "raw": "70 / 20,000",
+     "confidence": "med",
+     "note": null
+    },
+    "beam_power": {
+     "value": 5,
+     "raw": "5/110",
+     "confidence": "med",
+     "note": null
+    },
+    "gun_power": {
+     "value": 4,
+     "raw": "4",
+     "confidence": "med",
+     "note": null
+    },
+    "missile_power": {
+     "value": 100,
+     "raw": "100, 100/1, 200/1, 120/5, 100/1, 80/5",
+     "confidence": "med",
+     "note": null
+    },
+    "antiaircraft_power": {
+     "value": 80,
+     "raw": "80",
+     "confidence": "med",
+     "note": null
+    },
+    "speed": {
+     "value": 5600,
+     "raw": "20, 12, 5,600",
+     "confidence": "med",
+     "note": null
+    },
+    "crew": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "必要乗組員: no in-band value (OCR corrupt)"
+    },
+    "build_term": {
+     "value": 90,
+     "raw": "90, 110",
+     "confidence": "med",
+     "note": null
+    },
+    "repair_cost": {
+     "value": 110,
+     "raw": "110",
+     "confidence": "med",
+     "note": null
+    },
+    "supply_capacity": {
+     "value": 760,
+     "raw": "760 140 680 600 800",
+     "confidence": "med",
+     "note": null
+    },
+    "fighter_num": {
+     "value": 3,
+     "raw": "3, 48, 12, 4, 3",
+     "confidence": "low",
+     "note": null
+    },
+    "unit_count": {
+     "value": 100,
+     "raw": "100",
+     "confidence": "med",
+     "note": null
+    }
+   },
+   "variant_modifier": "SS75c型戦艦。レールガンを除去しミサイル発射システムを増設。遠距離ミサイル戦に特化。ただしミサイル搭載数は標準型と同一で継戦能力が低下。",
+   "tier": "Ⅴ"
+  },
+  {
+   "key": "SS75d",
+   "name": "戦艦Ⅵ (SS75d型戦艦)",
+   "side": "empire",
+   "shipClass": "battleship",
+   "family": "SS75",
+   "is_base": false,
+   "inherits_from": "SS75",
+   "raw": {
+    "armor": {
+     "value": null,
+     "raw": "390 / -",
+     "confidence": "none",
+     "note": "装甲 numbers corrupt/absent in OCR fragment"
+    },
+    "shield_guard": {
+     "value": 70,
+     "raw": "70 / 20,000",
+     "confidence": "med",
+     "note": null
+    },
+    "shield_capacity": {
+     "value": 20000,
+     "raw": "70 / 20,000",
+     "confidence": "med",
+     "note": null
+    },
+    "beam_power": {
+     "value": 5,
+     "raw": "5/110",
+     "confidence": "med",
+     "note": null
+    },
+    "gun_power": {
+     "value": 4,
+     "raw": "4",
+     "confidence": "med",
+     "note": null
+    },
+    "missile_power": {
+     "value": 100,
+     "raw": "100, 100/1, 200/1, 120/5, 100/1, 80/5",
+     "confidence": "med",
+     "note": null
+    },
+    "antiaircraft_power": {
+     "value": 80,
+     "raw": "80",
+     "confidence": "med",
+     "note": null
+    },
+    "speed": {
+     "value": 5600,
+     "raw": "20, 12, 5,600",
+     "confidence": "med",
+     "note": null
+    },
+    "crew": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "必要乗組員: no in-band value (OCR corrupt)"
+    },
+    "build_term": {
+     "value": 90,
+     "raw": "90, 110",
+     "confidence": "med",
+     "note": null
+    },
+    "repair_cost": {
+     "value": 110,
+     "raw": "110",
+     "confidence": "med",
+     "note": null
+    },
+    "supply_capacity": {
+     "value": 760,
+     "raw": "760 140 680 600 800",
+     "confidence": "med",
+     "note": null
+    },
+    "fighter_num": {
+     "value": 3,
+     "raw": "3, 48, 12, 4, 3",
+     "confidence": "low",
+     "note": null
+    },
+    "unit_count": {
+     "value": 100,
+     "raw": "100",
+     "confidence": "med",
+     "note": null
+    }
+   },
+   "variant_modifier": "SS75d型戦艦。一部装甲を除去し高速航行可能としたもの。PK86型標準高速戦艦就役までは機動遊撃兵力の中核。",
+   "tier": "Ⅵ"
+  },
+  {
+   "key": "SS75e",
+   "name": "戦艦Ⅶ (SS75e型戦艦)",
+   "side": "empire",
+   "shipClass": "battleship",
+   "family": "SS75",
+   "is_base": false,
+   "inherits_from": "SS75",
+   "raw": {
+    "armor": {
+     "value": null,
+     "raw": "390 / -",
+     "confidence": "none",
+     "note": "装甲 numbers corrupt/absent in OCR fragment"
+    },
+    "shield_guard": {
+     "value": 70,
+     "raw": "70 / 20,000",
+     "confidence": "med",
+     "note": null
+    },
+    "shield_capacity": {
+     "value": 20000,
+     "raw": "70 / 20,000",
+     "confidence": "med",
+     "note": null
+    },
+    "beam_power": {
+     "value": 5,
+     "raw": "5/110",
+     "confidence": "med",
+     "note": null
+    },
+    "gun_power": {
+     "value": 4,
+     "raw": "4",
+     "confidence": "med",
+     "note": null
+    },
+    "missile_power": {
+     "value": 100,
+     "raw": "100, 100/1, 200/1, 120/5, 100/1, 80/5",
+     "confidence": "med",
+     "note": null
+    },
+    "antiaircraft_power": {
+     "value": 80,
+     "raw": "80",
+     "confidence": "med",
+     "note": null
+    },
+    "speed": {
+     "value": 5600,
+     "raw": "20, 12, 5,600",
+     "confidence": "med",
+     "note": null
+    },
+    "crew": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "必要乗組員: no in-band value (OCR corrupt)"
+    },
+    "build_term": {
+     "value": 90,
+     "raw": "90, 110",
+     "confidence": "med",
+     "note": null
+    },
+    "repair_cost": {
+     "value": 110,
+     "raw": "110",
+     "confidence": "med",
+     "note": null
+    },
+    "supply_capacity": {
+     "value": 760,
+     "raw": "760 140 680 600 800",
+     "confidence": "med",
+     "note": null
+    },
+    "fighter_num": {
+     "value": 3,
+     "raw": "3, 48, 12, 4, 3",
+     "confidence": "low",
+     "note": null
+    },
+    "unit_count": {
+     "value": 100,
+     "raw": "100",
+     "confidence": "med",
+     "note": null
+    }
+   },
+   "variant_modifier": "SS75e型戦艦。複合装甲を増設し防御力を増加。複合装甲を装甲内側に設置したため物資搭載容積が減少、重量増加で航行性能が若干低下。",
+   "tier": "Ⅶ"
+  },
+  {
+   "key": "SS75f",
+   "name": "戦艦Ⅷ (SS75f型 / SS75g型戦艦)",
+   "side": "empire",
+   "shipClass": "battleship",
+   "family": "SS75",
+   "is_base": false,
+   "inherits_from": "SS75",
+   "raw": {
+    "armor": {
+     "value": null,
+     "raw": "390 / -",
+     "confidence": "none",
+     "note": "装甲 numbers corrupt/absent in OCR fragment"
+    },
+    "shield_guard": {
+     "value": 70,
+     "raw": "70 / 20,000",
+     "confidence": "med",
+     "note": null
+    },
+    "shield_capacity": {
+     "value": 20000,
+     "raw": "70 / 20,000",
+     "confidence": "med",
+     "note": null
+    },
+    "beam_power": {
+     "value": 5,
+     "raw": "5/110",
+     "confidence": "med",
+     "note": null
+    },
+    "gun_power": {
+     "value": 4,
+     "raw": "4",
+     "confidence": "med",
+     "note": null
+    },
+    "missile_power": {
+     "value": 100,
+     "raw": "100, 100/1, 200/1, 120/5, 100/1, 80/5",
+     "confidence": "med",
+     "note": null
+    },
+    "antiaircraft_power": {
+     "value": 80,
+     "raw": "80",
+     "confidence": "med",
+     "note": null
+    },
+    "speed": {
+     "value": 5600,
+     "raw": "20, 12, 5,600",
+     "confidence": "med",
+     "note": null
+    },
+    "crew": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "必要乗組員: no in-band value (OCR corrupt)"
+    },
+    "build_term": {
+     "value": 90,
+     "raw": "90, 110",
+     "confidence": "med",
+     "note": null
+    },
+    "repair_cost": {
+     "value": 110,
+     "raw": "110",
+     "confidence": "med",
+     "note": null
+    },
+    "supply_capacity": {
+     "value": 760,
+     "raw": "760 140 680 600 800",
+     "confidence": "med",
+     "note": null
+    },
+    "fighter_num": {
+     "value": 3,
+     "raw": "3, 48, 12, 4, 3",
+     "confidence": "low",
+     "note": null
+    },
+    "unit_count": {
+     "value": 100,
+     "raw": "100",
+     "confidence": "med",
+     "note": null
+    }
+   },
+   "variant_modifier": "SS75f型: 同盟軍796年型標準戦闘艇母艦に対抗し物資搭載スペースに格納庫を増設、戦闘艇ワルキューレ搭載数を増加(前線では“航空戦艦”)。SS75g型: 各部署を徹底自動化し約20%の乗組員を削減。(OCR上Ⅶ/Ⅷの記述が両型に跨る)",
+   "tier": "Ⅷ"
+  },
+  {
+   "key": "PK86a",
+   "name": "高速戦艦Ⅲ (PK86a型 / PK86b型高速戦艦)",
+   "side": "empire",
+   "shipClass": "fast_battleship",
+   "family": "PK86",
+   "is_base": false,
+   "inherits_from": "PK86",
+   "raw": {
+    "armor": {
+     "value": null,
+     "raw": "",
+     "confidence": "none",
+     "note": "装甲 numbers corrupt/absent in OCR fragment"
+    },
+    "shield_guard": {
+     "value": 70,
+     "raw": "70",
+     "confidence": "med",
+     "note": null
+    },
+    "shield_capacity": {
+     "value": null,
+     "raw": "70",
+     "confidence": "none",
+     "note": "no シールド容量 (defenseless or OCR-lost)"
+    },
+    "beam_power": {
+     "value": 28,
+     "raw": "28, 10, 8, 48",
+     "confidence": "med",
+     "note": null
+    },
+    "gun_power": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "ガン破壊力: no in-band value (OCR corrupt)"
+    },
+    "missile_power": {
+     "value": 100,
+     "raw": "100/5, 120/6, 90, 100/5, 30 18 10 32, 10",
+     "confidence": "med",
+     "note": null
+    },
+    "antiaircraft_power": {
+     "value": 100,
+     "raw": "100",
+     "confidence": "med",
+     "note": null
+    },
+    "speed": {
+     "value": 5600,
+     "raw": "5,600",
+     "confidence": "med",
+     "note": null
+    },
+    "crew": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "必要乗組員: no in-band value (OCR corrupt)"
+    },
+    "build_term": {
+     "value": 120,
+     "raw": "120",
+     "confidence": "med",
+     "note": null
+    },
+    "repair_cost": {
+     "value": 120,
+     "raw": "120",
+     "confidence": "med",
+     "note": null
+    },
+    "supply_capacity": {
+     "value": 760,
+     "raw": "760, 800, 760, 600 760 400",
+     "confidence": "med",
+     "note": null
+    },
+    "fighter_num": {
+     "value": 3,
+     "raw": "3",
+     "confidence": "low",
+     "note": null
+    },
+    "unit_count": {
+     "value": 410,
+     "raw": "410",
+     "confidence": "med",
+     "note": null
+    }
+   },
+   "variant_modifier": "PK86a型: 艦首主砲を長射程の中性子ビーム砲に換装、門数半減(量産艦は外見区別不可)。PK86b型: ミサイル発射システムを増設、戦闘艇格納を廃しミサイル搭載量増加、“気まま狩り”の遊撃作戦で主用。",
+   "tier": "Ⅲ"
+  },
+  {
+   "key": "PK86c",
+   "name": "高速戦艦Ⅳ／Ⅴ (PK86c型 / PK86d型高速戦艦)",
+   "side": "empire",
+   "shipClass": "fast_battleship",
+   "family": "PK86",
+   "is_base": false,
+   "inherits_from": "PK86",
+   "raw": {
+    "armor": {
+     "value": null,
+     "raw": "",
+     "confidence": "none",
+     "note": "装甲 numbers corrupt/absent in OCR fragment"
+    },
+    "shield_guard": {
+     "value": 70,
+     "raw": "70",
+     "confidence": "med",
+     "note": null
+    },
+    "shield_capacity": {
+     "value": null,
+     "raw": "70",
+     "confidence": "none",
+     "note": "no シールド容量 (defenseless or OCR-lost)"
+    },
+    "beam_power": {
+     "value": 28,
+     "raw": "28, 10, 8, 48",
+     "confidence": "med",
+     "note": null
+    },
+    "gun_power": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "ガン破壊力: no in-band value (OCR corrupt)"
+    },
+    "missile_power": {
+     "value": 100,
+     "raw": "100/5, 120/6, 90, 100/5, 30 18 10 32, 10",
+     "confidence": "med",
+     "note": null
+    },
+    "antiaircraft_power": {
+     "value": 100,
+     "raw": "100",
+     "confidence": "med",
+     "note": null
+    },
+    "speed": {
+     "value": 5600,
+     "raw": "5,600",
+     "confidence": "med",
+     "note": null
+    },
+    "crew": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "必要乗組員: no in-band value (OCR corrupt)"
+    },
+    "build_term": {
+     "value": 120,
+     "raw": "120",
+     "confidence": "med",
+     "note": null
+    },
+    "repair_cost": {
+     "value": 120,
+     "raw": "120",
+     "confidence": "med",
+     "note": null
+    },
+    "supply_capacity": {
+     "value": 760,
+     "raw": "760, 800, 760, 600 760 400",
+     "confidence": "med",
+     "note": null
+    },
+    "fighter_num": {
+     "value": 3,
+     "raw": "3",
+     "confidence": "low",
+     "note": null
+    },
+    "unit_count": {
+     "value": 410,
+     "raw": "410",
+     "confidence": "med",
+     "note": null
+    }
+   },
+   "variant_modifier": "PK86c型: 一部装甲を除去しさらなる高速航行を可能に(旋回性能犠牲)。PK86d型: 艦首部に複合装甲を増設し防御力増加(機関部防御は標準型同等、航行性能若干低下)。",
+   "tier": "Ⅴ"
+  },
+  {
+   "key": "PK86e",
+   "name": "高速戦艦Ⅵ (PK86e型標準高速戦艦)",
+   "side": "empire",
+   "shipClass": "fast_battleship",
+   "family": "PK86",
+   "is_base": false,
+   "inherits_from": "PK86",
+   "raw": {
+    "armor": {
+     "value": null,
+     "raw": "",
+     "confidence": "none",
+     "note": "装甲 numbers corrupt/absent in OCR fragment"
+    },
+    "shield_guard": {
+     "value": 70,
+     "raw": "70",
+     "confidence": "med",
+     "note": null
+    },
+    "shield_capacity": {
+     "value": null,
+     "raw": "70",
+     "confidence": "none",
+     "note": "no シールド容量 (defenseless or OCR-lost)"
+    },
+    "beam_power": {
+     "value": 28,
+     "raw": "28, 10, 8, 48",
+     "confidence": "med",
+     "note": null
+    },
+    "gun_power": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "ガン破壊力: no in-band value (OCR corrupt)"
+    },
+    "missile_power": {
+     "value": 100,
+     "raw": "100/5, 120/6, 90, 100/5, 30 18 10 32, 10",
+     "confidence": "med",
+     "note": null
+    },
+    "antiaircraft_power": {
+     "value": 100,
+     "raw": "100",
+     "confidence": "med",
+     "note": null
+    },
+    "speed": {
+     "value": 5600,
+     "raw": "5,600",
+     "confidence": "med",
+     "note": null
+    },
+    "crew": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "必要乗組員: no in-band value (OCR corrupt)"
+    },
+    "build_term": {
+     "value": 120,
+     "raw": "120",
+     "confidence": "med",
+     "note": null
+    },
+    "repair_cost": {
+     "value": 120,
+     "raw": "120",
+     "confidence": "med",
+     "note": null
+    },
+    "supply_capacity": {
+     "value": 760,
+     "raw": "760, 800, 760, 600 760 400",
+     "confidence": "med",
+     "note": null
+    },
+    "fighter_num": {
+     "value": 3,
+     "raw": "3",
+     "confidence": "low",
+     "note": null
+    },
+    "unit_count": {
+     "value": 410,
+     "raw": "410",
+     "confidence": "med",
+     "note": null
+    }
+   },
+   "variant_modifier": "PK86e型。同盟軍796年型標準戦闘艇母艦に対抗し物資搭載スペースに格納庫を増設、戦闘艇ワルキューレ搭載数増加。前線では“高速航空戦艦”。",
+   "tier": "Ⅵ"
+  },
+  {
+   "key": "PK86f",
+   "name": "高速戦艦Ⅶ (PK86f型高速戦艦)",
+   "side": "empire",
+   "shipClass": "fast_battleship",
+   "family": "PK86",
+   "is_base": false,
+   "inherits_from": "PK86",
+   "raw": {
+    "armor": {
+     "value": null,
+     "raw": "",
+     "confidence": "none",
+     "note": "装甲 numbers corrupt/absent in OCR fragment"
+    },
+    "shield_guard": {
+     "value": 70,
+     "raw": "70",
+     "confidence": "med",
+     "note": null
+    },
+    "shield_capacity": {
+     "value": null,
+     "raw": "70",
+     "confidence": "none",
+     "note": "no シールド容量 (defenseless or OCR-lost)"
+    },
+    "beam_power": {
+     "value": 28,
+     "raw": "28, 10, 8, 48",
+     "confidence": "med",
+     "note": null
+    },
+    "gun_power": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "ガン破壊力: no in-band value (OCR corrupt)"
+    },
+    "missile_power": {
+     "value": 100,
+     "raw": "100/5, 120/6, 90, 100/5, 30 18 10 32, 10",
+     "confidence": "med",
+     "note": null
+    },
+    "antiaircraft_power": {
+     "value": 100,
+     "raw": "100",
+     "confidence": "med",
+     "note": null
+    },
+    "speed": {
+     "value": 5600,
+     "raw": "5,600",
+     "confidence": "med",
+     "note": null
+    },
+    "crew": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "必要乗組員: no in-band value (OCR corrupt)"
+    },
+    "build_term": {
+     "value": 120,
+     "raw": "120",
+     "confidence": "med",
+     "note": null
+    },
+    "repair_cost": {
+     "value": 120,
+     "raw": "120",
+     "confidence": "med",
+     "note": null
+    },
+    "supply_capacity": {
+     "value": 760,
+     "raw": "760, 800, 760, 600 760 400",
+     "confidence": "med",
+     "note": null
+    },
+    "fighter_num": {
+     "value": 3,
+     "raw": "3",
+     "confidence": "low",
+     "note": null
+    },
+    "unit_count": {
+     "value": 410,
+     "raw": "410",
+     "confidence": "med",
+     "note": null
+    }
+   },
+   "variant_modifier": "PK86f型。長距離センサーを増設、強行偵察に主用。電磁信号を徹底遮断し隠密性能向上。偵察に不要な戦闘艇は非搭載。",
+   "tier": "Ⅶ"
+  },
+  {
+   "key": "PK86g",
+   "name": "高速戦艦Ⅷ (PK86g型高速戦艦)",
+   "side": "empire",
+   "shipClass": "fast_battleship",
+   "family": "PK86",
+   "is_base": false,
+   "inherits_from": "PK86",
+   "raw": {
+    "armor": {
+     "value": null,
+     "raw": "",
+     "confidence": "none",
+     "note": "装甲 numbers corrupt/absent in OCR fragment"
+    },
+    "shield_guard": {
+     "value": 70,
+     "raw": "70",
+     "confidence": "med",
+     "note": null
+    },
+    "shield_capacity": {
+     "value": null,
+     "raw": "70",
+     "confidence": "none",
+     "note": "no シールド容量 (defenseless or OCR-lost)"
+    },
+    "beam_power": {
+     "value": 28,
+     "raw": "28, 10, 8, 48",
+     "confidence": "med",
+     "note": null
+    },
+    "gun_power": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "ガン破壊力: no in-band value (OCR corrupt)"
+    },
+    "missile_power": {
+     "value": 100,
+     "raw": "100/5, 120/6, 90, 100/5, 30 18 10 32, 10",
+     "confidence": "med",
+     "note": null
+    },
+    "antiaircraft_power": {
+     "value": 100,
+     "raw": "100",
+     "confidence": "med",
+     "note": null
+    },
+    "speed": {
+     "value": 5600,
+     "raw": "5,600",
+     "confidence": "med",
+     "note": null
+    },
+    "crew": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "必要乗組員: no in-band value (OCR corrupt)"
+    },
+    "build_term": {
+     "value": 120,
+     "raw": "120",
+     "confidence": "med",
+     "note": null
+    },
+    "repair_cost": {
+     "value": 120,
+     "raw": "120",
+     "confidence": "med",
+     "note": null
+    },
+    "supply_capacity": {
+     "value": 760,
+     "raw": "760, 800, 760, 600 760 400",
+     "confidence": "med",
+     "note": null
+    },
+    "fighter_num": {
+     "value": 3,
+     "raw": "3",
+     "confidence": "low",
+     "note": null
+    },
+    "unit_count": {
+     "value": 410,
+     "raw": "410",
+     "confidence": "med",
+     "note": null
+    }
+   },
+   "variant_modifier": "PK86g型。ミサイル発射システムを除去し近接戦闘用レールキャノンを搭載。航行性能に影響しない範囲で艦首部装甲を強化。",
+   "tier": "Ⅷ"
+  },
+  {
+   "key": "SK80a",
+   "name": "巡航艦Ⅲ (SK80a型巡航艦)",
+   "side": "empire",
+   "shipClass": "cruiser",
+   "family": "SK80",
+   "is_base": false,
+   "inherits_from": "SK80",
+   "raw": {
+    "armor": {
+     "value": {
+      "front": 28,
+      "side": 16,
+      "back": 8
+     },
+     "raw": "28 16 / 8; 23,000 4,800; 22 14 6 / 33 19 10 / 28 16",
+     "confidence": "med",
+     "note": null
+    },
+    "shield_guard": {
+     "value": 50,
+     "raw": "50",
+     "confidence": "med",
+     "note": null
+    },
+    "shield_capacity": {
+     "value": null,
+     "raw": "50",
+     "confidence": "none",
+     "note": "no シールド容量 (defenseless or OCR-lost)"
+    },
+    "beam_power": {
+     "value": 25,
+     "raw": "25",
+     "confidence": "med",
+     "note": null
+    },
+    "gun_power": {
+     "value": 60,
+     "raw": "60",
+     "confidence": "med",
+     "note": null
+    },
+    "missile_power": {
+     "value": 2,
+     "raw": "2, 60/3, 60/3",
+     "confidence": "med",
+     "note": null
+    },
+    "antiaircraft_power": {
+     "value": 24,
+     "raw": "24, 60",
+     "confidence": "med",
+     "note": null
+    },
+    "speed": {
+     "value": 25000,
+     "raw": "25,000 20,000 22,000",
+     "confidence": "med",
+     "note": null
+    },
+    "crew": {
+     "value": 3,
+     "raw": "-, 22,000, 3, 5,600, 2",
+     "confidence": "low",
+     "note": null
+    },
+    "build_term": {
+     "value": 80,
+     "raw": "80 100 90 100",
+     "confidence": "med",
+     "note": null
+    },
+    "repair_cost": {
+     "value": 120,
+     "raw": "120",
+     "confidence": "med",
+     "note": null
+    },
+    "supply_capacity": {
+     "value": 480,
+     "raw": "480 520 480 360 400 480 600 520",
+     "confidence": "med",
+     "note": null
+    },
+    "fighter_num": {
+     "value": 8,
+     "raw": "8, 2 3 1 2",
+     "confidence": "low",
+     "note": null
+    },
+    "unit_count": {
+     "value": 260,
+     "raw": "260",
+     "confidence": "med",
+     "note": null
+    }
+   },
+   "variant_modifier": "SK80a型。中性子ミサイルをより長射程のレーザー水爆ミサイルに換装。遠距離ミサイル戦に特化、戦闘艇格納を廃しミサイル搭載量増加。“気まま狩り”の遊撃作戦で主用。",
+   "tier": "Ⅲ"
+  },
+  {
+   "key": "SK80b",
+   "name": "巡航艦Ⅳ (SK80b型巡航艦)",
+   "side": "empire",
+   "shipClass": "cruiser",
+   "family": "SK80",
+   "is_base": false,
+   "inherits_from": "SK80",
+   "raw": {
+    "armor": {
+     "value": {
+      "front": 28,
+      "side": 16,
+      "back": 8
+     },
+     "raw": "28 16 / 8; 23,000 4,800; 22 14 6 / 33 19 10 / 28 16",
+     "confidence": "med",
+     "note": null
+    },
+    "shield_guard": {
+     "value": 50,
+     "raw": "50",
+     "confidence": "med",
+     "note": null
+    },
+    "shield_capacity": {
+     "value": null,
+     "raw": "50",
+     "confidence": "none",
+     "note": "no シールド容量 (defenseless or OCR-lost)"
+    },
+    "beam_power": {
+     "value": 25,
+     "raw": "25",
+     "confidence": "med",
+     "note": null
+    },
+    "gun_power": {
+     "value": 60,
+     "raw": "60",
+     "confidence": "med",
+     "note": null
+    },
+    "missile_power": {
+     "value": 2,
+     "raw": "2, 60/3, 60/3",
+     "confidence": "med",
+     "note": null
+    },
+    "antiaircraft_power": {
+     "value": 24,
+     "raw": "24, 60",
+     "confidence": "med",
+     "note": null
+    },
+    "speed": {
+     "value": 25000,
+     "raw": "25,000 20,000 22,000",
+     "confidence": "med",
+     "note": null
+    },
+    "crew": {
+     "value": 3,
+     "raw": "-, 22,000, 3, 5,600, 2",
+     "confidence": "low",
+     "note": null
+    },
+    "build_term": {
+     "value": 80,
+     "raw": "80 100 90 100",
+     "confidence": "med",
+     "note": null
+    },
+    "repair_cost": {
+     "value": 120,
+     "raw": "120",
+     "confidence": "med",
+     "note": null
+    },
+    "supply_capacity": {
+     "value": 480,
+     "raw": "480 520 480 360 400 480 600 520",
+     "confidence": "med",
+     "note": null
+    },
+    "fighter_num": {
+     "value": 8,
+     "raw": "8, 2 3 1 2",
+     "confidence": "low",
+     "note": null
+    },
+    "unit_count": {
+     "value": 260,
+     "raw": "260",
+     "confidence": "med",
+     "note": null
+    }
+   },
+   "variant_modifier": "SK80b型。一部装甲を除去しさらなる高速航行を可能に。前線では“軽巡航艦”。",
+   "tier": "Ⅳ"
+  },
+  {
+   "key": "SK80c",
+   "name": "巡航艦Ⅴ (SK80c型 / SK80d型巡航艦)",
+   "side": "empire",
+   "shipClass": "cruiser",
+   "family": "SK80",
+   "is_base": false,
+   "inherits_from": "SK80",
+   "raw": {
+    "armor": {
+     "value": {
+      "front": 28,
+      "side": 16,
+      "back": 8
+     },
+     "raw": "28 16 / 8; 23,000 4,800; 22 14 6 / 33 19 10 / 28 16",
+     "confidence": "med",
+     "note": null
+    },
+    "shield_guard": {
+     "value": 50,
+     "raw": "50",
+     "confidence": "med",
+     "note": null
+    },
+    "shield_capacity": {
+     "value": null,
+     "raw": "50",
+     "confidence": "none",
+     "note": "no シールド容量 (defenseless or OCR-lost)"
+    },
+    "beam_power": {
+     "value": 25,
+     "raw": "25",
+     "confidence": "med",
+     "note": null
+    },
+    "gun_power": {
+     "value": 60,
+     "raw": "60",
+     "confidence": "med",
+     "note": null
+    },
+    "missile_power": {
+     "value": 2,
+     "raw": "2, 60/3, 60/3",
+     "confidence": "med",
+     "note": null
+    },
+    "antiaircraft_power": {
+     "value": 24,
+     "raw": "24, 60",
+     "confidence": "med",
+     "note": null
+    },
+    "speed": {
+     "value": 25000,
+     "raw": "25,000 20,000 22,000",
+     "confidence": "med",
+     "note": null
+    },
+    "crew": {
+     "value": 3,
+     "raw": "-, 22,000, 3, 5,600, 2",
+     "confidence": "low",
+     "note": null
+    },
+    "build_term": {
+     "value": 80,
+     "raw": "80 100 90 100",
+     "confidence": "med",
+     "note": null
+    },
+    "repair_cost": {
+     "value": 120,
+     "raw": "120",
+     "confidence": "med",
+     "note": null
+    },
+    "supply_capacity": {
+     "value": 480,
+     "raw": "480 520 480 360 400 480 600 520",
+     "confidence": "med",
+     "note": null
+    },
+    "fighter_num": {
+     "value": 8,
+     "raw": "8, 2 3 1 2",
+     "confidence": "low",
+     "note": null
+    },
+    "unit_count": {
+     "value": 260,
+     "raw": "260",
+     "confidence": "med",
+     "note": null
+    }
+   },
+   "variant_modifier": "SK80c型: 複合装甲を増設し防御力増加(物資搭載容積減少、航行性能若干低下)。SK80d型: 物資搭載スペースに格納庫を増設しワルキューレ搭載数増加、中性子ミサイル発射システム除去、PK86e型を補完し少数配備。",
+   "tier": "Ⅴ"
+  },
+  {
+   "key": "SK80e",
+   "name": "巡航艦Ⅵ (SK80e型巡航艦)",
+   "side": "empire",
+   "shipClass": "cruiser",
+   "family": "SK80",
+   "is_base": false,
+   "inherits_from": "SK80",
+   "raw": {
+    "armor": {
+     "value": {
+      "front": 28,
+      "side": 16,
+      "back": 8
+     },
+     "raw": "28 16 / 8; 23,000 4,800; 22 14 6 / 33 19 10 / 28 16",
+     "confidence": "med",
+     "note": null
+    },
+    "shield_guard": {
+     "value": 50,
+     "raw": "50",
+     "confidence": "med",
+     "note": null
+    },
+    "shield_capacity": {
+     "value": null,
+     "raw": "50",
+     "confidence": "none",
+     "note": "no シールド容量 (defenseless or OCR-lost)"
+    },
+    "beam_power": {
+     "value": 25,
+     "raw": "25",
+     "confidence": "med",
+     "note": null
+    },
+    "gun_power": {
+     "value": 60,
+     "raw": "60",
+     "confidence": "med",
+     "note": null
+    },
+    "missile_power": {
+     "value": 2,
+     "raw": "2, 60/3, 60/3",
+     "confidence": "med",
+     "note": null
+    },
+    "antiaircraft_power": {
+     "value": 24,
+     "raw": "24, 60",
+     "confidence": "med",
+     "note": null
+    },
+    "speed": {
+     "value": 25000,
+     "raw": "25,000 20,000 22,000",
+     "confidence": "med",
+     "note": null
+    },
+    "crew": {
+     "value": 3,
+     "raw": "-, 22,000, 3, 5,600, 2",
+     "confidence": "low",
+     "note": null
+    },
+    "build_term": {
+     "value": 80,
+     "raw": "80 100 90 100",
+     "confidence": "med",
+     "note": null
+    },
+    "repair_cost": {
+     "value": 120,
+     "raw": "120",
+     "confidence": "med",
+     "note": null
+    },
+    "supply_capacity": {
+     "value": 480,
+     "raw": "480 520 480 360 400 480 600 520",
+     "confidence": "med",
+     "note": null
+    },
+    "fighter_num": {
+     "value": 8,
+     "raw": "8, 2 3 1 2",
+     "confidence": "low",
+     "note": null
+    },
+    "unit_count": {
+     "value": 260,
+     "raw": "260",
+     "confidence": "med",
+     "note": null
+    }
+   },
+   "variant_modifier": "SK80e型。長距離センサーを増設、強行偵察に主用。電磁信号を徹底遮断し隠密性能向上、偵察に不要な戦闘艇は非搭載。",
+   "tier": "Ⅵ"
+  },
+  {
+   "key": "SK80f",
+   "name": "巡航艦Ⅶ (SK80f型巡航艦)",
+   "side": "empire",
+   "shipClass": "cruiser",
+   "family": "SK80",
+   "is_base": false,
+   "inherits_from": "SK80",
+   "raw": {
+    "armor": {
+     "value": {
+      "front": 28,
+      "side": 16,
+      "back": 8
+     },
+     "raw": "28 16 / 8; 23,000 4,800; 22 14 6 / 33 19 10 / 28 16",
+     "confidence": "med",
+     "note": null
+    },
+    "shield_guard": {
+     "value": 50,
+     "raw": "50",
+     "confidence": "med",
+     "note": null
+    },
+    "shield_capacity": {
+     "value": null,
+     "raw": "50",
+     "confidence": "none",
+     "note": "no シールド容量 (defenseless or OCR-lost)"
+    },
+    "beam_power": {
+     "value": 25,
+     "raw": "25",
+     "confidence": "med",
+     "note": null
+    },
+    "gun_power": {
+     "value": 60,
+     "raw": "60",
+     "confidence": "med",
+     "note": null
+    },
+    "missile_power": {
+     "value": 2,
+     "raw": "2, 60/3, 60/3",
+     "confidence": "med",
+     "note": null
+    },
+    "antiaircraft_power": {
+     "value": 24,
+     "raw": "24, 60",
+     "confidence": "med",
+     "note": null
+    },
+    "speed": {
+     "value": 25000,
+     "raw": "25,000 20,000 22,000",
+     "confidence": "med",
+     "note": null
+    },
+    "crew": {
+     "value": 3,
+     "raw": "-, 22,000, 3, 5,600, 2",
+     "confidence": "low",
+     "note": null
+    },
+    "build_term": {
+     "value": 80,
+     "raw": "80 100 90 100",
+     "confidence": "med",
+     "note": null
+    },
+    "repair_cost": {
+     "value": 120,
+     "raw": "120",
+     "confidence": "med",
+     "note": null
+    },
+    "supply_capacity": {
+     "value": 480,
+     "raw": "480 520 480 360 400 480 600 520",
+     "confidence": "med",
+     "note": null
+    },
+    "fighter_num": {
+     "value": 8,
+     "raw": "8, 2 3 1 2",
+     "confidence": "low",
+     "note": null
+    },
+    "unit_count": {
+     "value": 260,
+     "raw": "260",
+     "confidence": "med",
+     "note": null
+    }
+   },
+   "variant_modifier": "SK80f型。長期間の連続作戦行動のための改装。戦闘艇搭載量を減少させ艦首容積の大部分を弾薬庫増設に充当。",
+   "tier": "Ⅶ"
+  },
+  {
+   "key": "SK80g",
+   "name": "巡航艦Ⅷ (SK80g型巡航艦)",
+   "side": "empire",
+   "shipClass": "cruiser",
+   "family": "SK80",
+   "is_base": false,
+   "inherits_from": "SK80",
+   "raw": {
+    "armor": {
+     "value": {
+      "front": 28,
+      "side": 16,
+      "back": 8
+     },
+     "raw": "28 16 / 8; 23,000 4,800; 22 14 6 / 33 19 10 / 28 16",
+     "confidence": "med",
+     "note": null
+    },
+    "shield_guard": {
+     "value": 50,
+     "raw": "50",
+     "confidence": "med",
+     "note": null
+    },
+    "shield_capacity": {
+     "value": null,
+     "raw": "50",
+     "confidence": "none",
+     "note": "no シールド容量 (defenseless or OCR-lost)"
+    },
+    "beam_power": {
+     "value": 25,
+     "raw": "25",
+     "confidence": "med",
+     "note": null
+    },
+    "gun_power": {
+     "value": 60,
+     "raw": "60",
+     "confidence": "med",
+     "note": null
+    },
+    "missile_power": {
+     "value": 2,
+     "raw": "2, 60/3, 60/3",
+     "confidence": "med",
+     "note": null
+    },
+    "antiaircraft_power": {
+     "value": 24,
+     "raw": "24, 60",
+     "confidence": "med",
+     "note": null
+    },
+    "speed": {
+     "value": 25000,
+     "raw": "25,000 20,000 22,000",
+     "confidence": "med",
+     "note": null
+    },
+    "crew": {
+     "value": 3,
+     "raw": "-, 22,000, 3, 5,600, 2",
+     "confidence": "low",
+     "note": null
+    },
+    "build_term": {
+     "value": 80,
+     "raw": "80 100 90 100",
+     "confidence": "med",
+     "note": null
+    },
+    "repair_cost": {
+     "value": 120,
+     "raw": "120",
+     "confidence": "med",
+     "note": null
+    },
+    "supply_capacity": {
+     "value": 480,
+     "raw": "480 520 480 360 400 480 600 520",
+     "confidence": "med",
+     "note": null
+    },
+    "fighter_num": {
+     "value": 8,
+     "raw": "8, 2 3 1 2",
+     "confidence": "low",
+     "note": null
+    },
+    "unit_count": {
+     "value": 260,
+     "raw": "260",
+     "confidence": "med",
+     "note": null
+    }
+   },
+   "variant_modifier": "SK80g型。各部署を徹底自動化し約33%の乗組員を削減。",
+   "tier": "Ⅷ"
+  },
+  {
+   "key": "K86",
+   "name": "高速艇 (K86型高速艇)",
+   "side": "empire",
+   "shipClass": "corvette",
+   "family": "K86",
+   "is_base": false,
+   "inherits_from": null,
+   "raw": null,
+   "variant_modifier": "K86型高速艇。Z82型標準駆逐艦に匹敵する船体に高出力推進機関を搭載、長距離連絡任務や要人移動に使用。自衛用に小型レールガンと隠顕式中性子ミサイル発射システムを装備。",
+   "tier": null
+  },
+  {
+   "key": "Z82a",
+   "name": "駆逐艦Ⅱ (Z82a型駆逐艦)",
+   "side": "empire",
+   "shipClass": "destroyer",
+   "family": "Z82",
+   "is_base": false,
+   "inherits_from": "Z82",
+   "raw": {
+    "armor": {
+     "value": {
+      "front": 8,
+      "side": 7,
+      "back": 4
+     },
+     "raw": "8 7/4 5/2 2; 8/4/2; 7/3/1; 8/4/2; 9/5/3",
+     "confidence": "med",
+     "note": null
+    },
+    "shield_guard": {
+     "value": 30,
+     "raw": "30 20",
+     "confidence": "med",
+     "note": null
+    },
+    "shield_capacity": {
+     "value": 20,
+     "raw": "30 20",
+     "confidence": "med",
+     "note": null
+    },
+    "beam_power": {
+     "value": 19,
+     "raw": "19 19",
+     "confidence": "med",
+     "note": null
+    },
+    "gun_power": {
+     "value": 104,
+     "raw": "104 24, 104/1, 50/2, 30/1, 104/1, 50/2 6",
+     "confidence": "med",
+     "note": null
+    },
+    "missile_power": {
+     "value": null,
+     "raw": null,
+     "confidence": "none",
+     "note": "no ミサイル破壊力 label"
+    },
+    "antiaircraft_power": {
+     "value": 50,
+     "raw": "50 40, 50/2",
+     "confidence": "med",
+     "note": null
+    },
+    "speed": {
+     "value": 2400,
+     "raw": "2,400 4,000 2,400 4,800 3,200; 30,000 27",
+     "confidence": "med",
+     "note": null
+    },
+    "crew": {
+     "value": 30,
+     "raw": "30, 40, 1",
+     "confidence": "low",
+     "note": null
+    },
+    "build_term": {
+     "value": 200,
+     "raw": "200 170",
+     "confidence": "med",
+     "note": null
+    },
+    "repair_cost": {
+     "value": 50,
+     "raw": "50 40",
+     "confidence": "med",
+     "note": null
+    },
+    "supply_capacity": {
+     "value": 64,
+     "raw": "64 240 360, 40 20 240, 40, 280 320 240",
+     "confidence": "med",
+     "note": null
+    },
+    "fighter_num": {
+     "value": 1,
+     "raw": "1, 50, 1",
+     "confidence": "low",
+     "note": null
+    },
+    "unit_count": {
+     "value": 40,
+     "raw": "40",
+     "confidence": "med",
+     "note": null
+    }
+   },
+   "variant_modifier": "Z82a型。ミサイルを半減しSK80型標準巡航艦と同性能のセンサーを装備した哨戒駆逐艦。辺境航路の警備に使用。",
+   "tier": "Ⅱ"
+  },
+  {
+   "key": "Z82b",
+   "name": "駆逐艦Ⅲ (Z82b型駆逐艦)",
+   "side": "empire",
+   "shipClass": "destroyer",
+   "family": "Z82",
+   "is_base": false,
+   "inherits_from": "Z82",
+   "raw": {
+    "armor": {
+     "value": {
+      "front": 8,
+      "side": 7,
+      "back": 4
+     },
+     "raw": "8 7/4 5/2 2; 8/4/2; 7/3/1; 8/4/2; 9/5/3",
+     "confidence": "med",
+     "note": null
+    },
+    "shield_guard": {
+     "value": 30,
+     "raw": "30 20",
+     "confidence": "med",
+     "note": null
+    },
+    "shield_capacity": {
+     "value": 20,
+     "raw": "30 20",
+     "confidence": "med",
+     "note": null
+    },
+    "beam_power": {
+     "value": 19,
+     "raw": "19 19",
+     "confidence": "med",
+     "note": null
+    },
+    "gun_power": {
+     "value": 104,
+     "raw": "104 24, 104/1, 50/2, 30/1, 104/1, 50/2 6",
+     "confidence": "med",
+     "note": null
+    },
+    "missile_power": {
+     "value": null,
+     "raw": null,
+     "confidence": "none",
+     "note": "no ミサイル破壊力 label"
+    },
+    "antiaircraft_power": {
+     "value": 50,
+     "raw": "50 40, 50/2",
+     "confidence": "med",
+     "note": null
+    },
+    "speed": {
+     "value": 2400,
+     "raw": "2,400 4,000 2,400 4,800 3,200; 30,000 27",
+     "confidence": "med",
+     "note": null
+    },
+    "crew": {
+     "value": 30,
+     "raw": "30, 40, 1",
+     "confidence": "low",
+     "note": null
+    },
+    "build_term": {
+     "value": 200,
+     "raw": "200 170",
+     "confidence": "med",
+     "note": null
+    },
+    "repair_cost": {
+     "value": 50,
+     "raw": "50 40",
+     "confidence": "med",
+     "note": null
+    },
+    "supply_capacity": {
+     "value": 64,
+     "raw": "64 240 360, 40 20 240, 40, 280 320 240",
+     "confidence": "med",
+     "note": null
+    },
+    "fighter_num": {
+     "value": 1,
+     "raw": "1, 50, 1",
+     "confidence": "low",
+     "note": null
+    },
+    "unit_count": {
+     "value": 40,
+     "raw": "40",
+     "confidence": "med",
+     "note": null
+    }
+   },
+   "variant_modifier": "Z82b型。戦闘艇艤装を廃し搭載スペースを長距離センサーと弾薬庫に充当。長期間の作戦行動継続が可能。",
+   "tier": "Ⅲ"
+  },
+  {
+   "key": "Z82c",
+   "name": "駆逐艦Ⅳ (Z82c型駆逐艦)",
+   "side": "empire",
+   "shipClass": "destroyer",
+   "family": "Z82",
+   "is_base": false,
+   "inherits_from": "Z82",
+   "raw": {
+    "armor": {
+     "value": {
+      "front": 8,
+      "side": 7,
+      "back": 4
+     },
+     "raw": "8 7/4 5/2 2; 8/4/2; 7/3/1; 8/4/2; 9/5/3",
+     "confidence": "med",
+     "note": null
+    },
+    "shield_guard": {
+     "value": 30,
+     "raw": "30 20",
+     "confidence": "med",
+     "note": null
+    },
+    "shield_capacity": {
+     "value": 20,
+     "raw": "30 20",
+     "confidence": "med",
+     "note": null
+    },
+    "beam_power": {
+     "value": 19,
+     "raw": "19 19",
+     "confidence": "med",
+     "note": null
+    },
+    "gun_power": {
+     "value": 104,
+     "raw": "104 24, 104/1, 50/2, 30/1, 104/1, 50/2 6",
+     "confidence": "med",
+     "note": null
+    },
+    "missile_power": {
+     "value": null,
+     "raw": null,
+     "confidence": "none",
+     "note": "no ミサイル破壊力 label"
+    },
+    "antiaircraft_power": {
+     "value": 50,
+     "raw": "50 40, 50/2",
+     "confidence": "med",
+     "note": null
+    },
+    "speed": {
+     "value": 2400,
+     "raw": "2,400 4,000 2,400 4,800 3,200; 30,000 27",
+     "confidence": "med",
+     "note": null
+    },
+    "crew": {
+     "value": 30,
+     "raw": "30, 40, 1",
+     "confidence": "low",
+     "note": null
+    },
+    "build_term": {
+     "value": 200,
+     "raw": "200 170",
+     "confidence": "med",
+     "note": null
+    },
+    "repair_cost": {
+     "value": 50,
+     "raw": "50 40",
+     "confidence": "med",
+     "note": null
+    },
+    "supply_capacity": {
+     "value": 64,
+     "raw": "64 240 360, 40 20 240, 40, 280 320 240",
+     "confidence": "med",
+     "note": null
+    },
+    "fighter_num": {
+     "value": 1,
+     "raw": "1, 50, 1",
+     "confidence": "low",
+     "note": null
+    },
+    "unit_count": {
+     "value": 40,
+     "raw": "40",
+     "confidence": "med",
+     "note": null
+    }
+   },
+   "variant_modifier": "Z82c型。機関強化と装甲除去による重量軽減でより高速を発揮。機関搭載容積確保のため戦闘艇艤装も除去。",
+   "tier": "Ⅳ"
+  },
+  {
+   "key": "Z82d",
+   "name": "駆逐艦Ⅴ (Z82d型駆逐艦)",
+   "side": "empire",
+   "shipClass": "destroyer",
+   "family": "Z82",
+   "is_base": false,
+   "inherits_from": "Z82",
+   "raw": {
+    "armor": {
+     "value": {
+      "front": 8,
+      "side": 7,
+      "back": 4
+     },
+     "raw": "8 7/4 5/2 2; 8/4/2; 7/3/1; 8/4/2; 9/5/3",
+     "confidence": "med",
+     "note": null
+    },
+    "shield_guard": {
+     "value": 30,
+     "raw": "30 20",
+     "confidence": "med",
+     "note": null
+    },
+    "shield_capacity": {
+     "value": 20,
+     "raw": "30 20",
+     "confidence": "med",
+     "note": null
+    },
+    "beam_power": {
+     "value": 19,
+     "raw": "19 19",
+     "confidence": "med",
+     "note": null
+    },
+    "gun_power": {
+     "value": 104,
+     "raw": "104 24, 104/1, 50/2, 30/1, 104/1, 50/2 6",
+     "confidence": "med",
+     "note": null
+    },
+    "missile_power": {
+     "value": null,
+     "raw": null,
+     "confidence": "none",
+     "note": "no ミサイル破壊力 label"
+    },
+    "antiaircraft_power": {
+     "value": 50,
+     "raw": "50 40, 50/2",
+     "confidence": "med",
+     "note": null
+    },
+    "speed": {
+     "value": 2400,
+     "raw": "2,400 4,000 2,400 4,800 3,200; 30,000 27",
+     "confidence": "med",
+     "note": null
+    },
+    "crew": {
+     "value": 30,
+     "raw": "30, 40, 1",
+     "confidence": "low",
+     "note": null
+    },
+    "build_term": {
+     "value": 200,
+     "raw": "200 170",
+     "confidence": "med",
+     "note": null
+    },
+    "repair_cost": {
+     "value": 50,
+     "raw": "50 40",
+     "confidence": "med",
+     "note": null
+    },
+    "supply_capacity": {
+     "value": 64,
+     "raw": "64 240 360, 40 20 240, 40, 280 320 240",
+     "confidence": "med",
+     "note": null
+    },
+    "fighter_num": {
+     "value": 1,
+     "raw": "1, 50, 1",
+     "confidence": "low",
+     "note": null
+    },
+    "unit_count": {
+     "value": 40,
+     "raw": "40",
+     "confidence": "med",
+     "note": null
+    }
+   },
+   "variant_modifier": "Z82d型。より高速の駆逐艦を実戦化する484-S計画に沿いZ82c型にさらに機関を増設。高速の代償として中性子ミサイル発射システム非搭載で総合戦闘能力が低下。",
+   "tier": "Ⅴ"
+  },
+  {
+   "key": "Z82e",
+   "name": "駆逐艦Ⅵ (Z82e型駆逐艦)",
+   "side": "empire",
+   "shipClass": "destroyer",
+   "family": "Z82",
+   "is_base": false,
+   "inherits_from": "Z82",
+   "raw": {
+    "armor": {
+     "value": {
+      "front": 8,
+      "side": 7,
+      "back": 4
+     },
+     "raw": "8 7/4 5/2 2; 8/4/2; 7/3/1; 8/4/2; 9/5/3",
+     "confidence": "med",
+     "note": null
+    },
+    "shield_guard": {
+     "value": 30,
+     "raw": "30 20",
+     "confidence": "med",
+     "note": null
+    },
+    "shield_capacity": {
+     "value": 20,
+     "raw": "30 20",
+     "confidence": "med",
+     "note": null
+    },
+    "beam_power": {
+     "value": 19,
+     "raw": "19 19",
+     "confidence": "med",
+     "note": null
+    },
+    "gun_power": {
+     "value": 104,
+     "raw": "104 24, 104/1, 50/2, 30/1, 104/1, 50/2 6",
+     "confidence": "med",
+     "note": null
+    },
+    "missile_power": {
+     "value": null,
+     "raw": null,
+     "confidence": "none",
+     "note": "no ミサイル破壊力 label"
+    },
+    "antiaircraft_power": {
+     "value": 50,
+     "raw": "50 40, 50/2",
+     "confidence": "med",
+     "note": null
+    },
+    "speed": {
+     "value": 2400,
+     "raw": "2,400 4,000 2,400 4,800 3,200; 30,000 27",
+     "confidence": "med",
+     "note": null
+    },
+    "crew": {
+     "value": 30,
+     "raw": "30, 40, 1",
+     "confidence": "low",
+     "note": null
+    },
+    "build_term": {
+     "value": 200,
+     "raw": "200 170",
+     "confidence": "med",
+     "note": null
+    },
+    "repair_cost": {
+     "value": 50,
+     "raw": "50 40",
+     "confidence": "med",
+     "note": null
+    },
+    "supply_capacity": {
+     "value": 64,
+     "raw": "64 240 360, 40 20 240, 40, 280 320 240",
+     "confidence": "med",
+     "note": null
+    },
+    "fighter_num": {
+     "value": 1,
+     "raw": "1, 50, 1",
+     "confidence": "low",
+     "note": null
+    },
+    "unit_count": {
+     "value": 40,
+     "raw": "40",
+     "confidence": "med",
+     "note": null
+    }
+   },
+   "variant_modifier": "Z82e型。中性子ミサイルをより長射程のレーザー水爆ミサイルに換装。遠距離ミサイル戦に特化、戦闘艇艤装を廃しミサイル搭載量増加。“気まま狩り”の遊撃作戦で主用。",
+   "tier": "Ⅵ"
+  },
+  {
+   "key": "Z82f",
+   "name": "駆逐艦Ⅶ (Z82f型駆逐艦)",
+   "side": "empire",
+   "shipClass": "destroyer",
+   "family": "Z82",
+   "is_base": false,
+   "inherits_from": "Z82",
+   "raw": {
+    "armor": {
+     "value": {
+      "front": 8,
+      "side": 7,
+      "back": 4
+     },
+     "raw": "8 7/4 5/2 2; 8/4/2; 7/3/1; 8/4/2; 9/5/3",
+     "confidence": "med",
+     "note": null
+    },
+    "shield_guard": {
+     "value": 30,
+     "raw": "30 20",
+     "confidence": "med",
+     "note": null
+    },
+    "shield_capacity": {
+     "value": 20,
+     "raw": "30 20",
+     "confidence": "med",
+     "note": null
+    },
+    "beam_power": {
+     "value": 19,
+     "raw": "19 19",
+     "confidence": "med",
+     "note": null
+    },
+    "gun_power": {
+     "value": 104,
+     "raw": "104 24, 104/1, 50/2, 30/1, 104/1, 50/2 6",
+     "confidence": "med",
+     "note": null
+    },
+    "missile_power": {
+     "value": null,
+     "raw": null,
+     "confidence": "none",
+     "note": "no ミサイル破壊力 label"
+    },
+    "antiaircraft_power": {
+     "value": 50,
+     "raw": "50 40, 50/2",
+     "confidence": "med",
+     "note": null
+    },
+    "speed": {
+     "value": 2400,
+     "raw": "2,400 4,000 2,400 4,800 3,200; 30,000 27",
+     "confidence": "med",
+     "note": null
+    },
+    "crew": {
+     "value": 30,
+     "raw": "30, 40, 1",
+     "confidence": "low",
+     "note": null
+    },
+    "build_term": {
+     "value": 200,
+     "raw": "200 170",
+     "confidence": "med",
+     "note": null
+    },
+    "repair_cost": {
+     "value": 50,
+     "raw": "50 40",
+     "confidence": "med",
+     "note": null
+    },
+    "supply_capacity": {
+     "value": 64,
+     "raw": "64 240 360, 40 20 240, 40, 280 320 240",
+     "confidence": "med",
+     "note": null
+    },
+    "fighter_num": {
+     "value": 1,
+     "raw": "1, 50, 1",
+     "confidence": "low",
+     "note": null
+    },
+    "unit_count": {
+     "value": 40,
+     "raw": "40",
+     "confidence": "med",
+     "note": null
+    }
+   },
+   "variant_modifier": "Z82f型。Z82e型のレールガンをすべて除去しレーザー水爆ミサイル発射システムを増設。通称“ミサイル砲艦”。",
+   "tier": "Ⅶ"
+  },
+  {
+   "key": "Z82g",
+   "name": "駆逐艦Ⅷ (Z82g型駆逐艦)",
+   "side": "empire",
+   "shipClass": "destroyer",
+   "family": "Z82",
+   "is_base": false,
+   "inherits_from": "Z82",
+   "raw": {
+    "armor": {
+     "value": {
+      "front": 8,
+      "side": 7,
+      "back": 4
+     },
+     "raw": "8 7/4 5/2 2; 8/4/2; 7/3/1; 8/4/2; 9/5/3",
+     "confidence": "med",
+     "note": null
+    },
+    "shield_guard": {
+     "value": 30,
+     "raw": "30 20",
+     "confidence": "med",
+     "note": null
+    },
+    "shield_capacity": {
+     "value": 20,
+     "raw": "30 20",
+     "confidence": "med",
+     "note": null
+    },
+    "beam_power": {
+     "value": 19,
+     "raw": "19 19",
+     "confidence": "med",
+     "note": null
+    },
+    "gun_power": {
+     "value": 104,
+     "raw": "104 24, 104/1, 50/2, 30/1, 104/1, 50/2 6",
+     "confidence": "med",
+     "note": null
+    },
+    "missile_power": {
+     "value": null,
+     "raw": null,
+     "confidence": "none",
+     "note": "no ミサイル破壊力 label"
+    },
+    "antiaircraft_power": {
+     "value": 50,
+     "raw": "50 40, 50/2",
+     "confidence": "med",
+     "note": null
+    },
+    "speed": {
+     "value": 2400,
+     "raw": "2,400 4,000 2,400 4,800 3,200; 30,000 27",
+     "confidence": "med",
+     "note": null
+    },
+    "crew": {
+     "value": 30,
+     "raw": "30, 40, 1",
+     "confidence": "low",
+     "note": null
+    },
+    "build_term": {
+     "value": 200,
+     "raw": "200 170",
+     "confidence": "med",
+     "note": null
+    },
+    "repair_cost": {
+     "value": 50,
+     "raw": "50 40",
+     "confidence": "med",
+     "note": null
+    },
+    "supply_capacity": {
+     "value": 64,
+     "raw": "64 240 360, 40 20 240, 40, 280 320 240",
+     "confidence": "med",
+     "note": null
+    },
+    "fighter_num": {
+     "value": 1,
+     "raw": "1, 50, 1",
+     "confidence": "low",
+     "note": null
+    },
+    "unit_count": {
+     "value": 40,
+     "raw": "40",
+     "confidence": "med",
+     "note": null
+    }
+   },
+   "variant_modifier": "Z82g型。艦体電磁波を遮断し隠密航行性能を高め、装甲も全面強化。艦隊決戦前の強行偵察に主用。",
+   "tier": "Ⅷ"
+  },
+  {
+   "key": "FR88b",
+   "name": "戦闘艇母艦Ⅲ (FR88b型戦闘艇母艦)",
+   "side": "empire",
+   "shipClass": "carrier",
+   "family": "FR88",
+   "is_base": false,
+   "inherits_from": "FR88",
+   "raw": {
+    "armor": {
+     "value": {
+      "front": 45,
+      "side": 23,
+      "back": 20
+     },
+     "raw": "45 / 23 / 20",
+     "confidence": "med",
+     "note": null
+    },
+    "shield_guard": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "no シールド防護値 (unarmored/'-' or OCR-lost)"
+    },
+    "shield_capacity": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "no シールド容量 (defenseless or OCR-lost)"
+    },
+    "beam_power": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "ビーム破壊力: no in-band value (OCR corrupt)"
+    },
+    "gun_power": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "ガン破壊力: no in-band value (OCR corrupt)"
+    },
+    "missile_power": {
+     "value": 110,
+     "raw": "-, 110",
+     "confidence": "med",
+     "note": null
+    },
+    "antiaircraft_power": {
+     "value": 110,
+     "raw": "-, 110",
+     "confidence": "med",
+     "note": null
+    },
+    "speed": {
+     "value": 18000,
+     "raw": "18,000, 2,400, 10,000",
+     "confidence": "med",
+     "note": null
+    },
+    "crew": {
+     "value": null,
+     "raw": "5,600",
+     "confidence": "none",
+     "note": "必要乗組員: no in-band value (OCR corrupt)"
+    },
+    "build_term": {
+     "value": 180,
+     "raw": "180 160 180 140",
+     "confidence": "med",
+     "note": null
+    },
+    "repair_cost": {
+     "value": 220,
+     "raw": "220",
+     "confidence": "med",
+     "note": null
+    },
+    "supply_capacity": {
+     "value": 2000,
+     "raw": "2,000, 1,600 2,000",
+     "confidence": "med",
+     "note": null
+    },
+    "fighter_num": {
+     "value": 10,
+     "raw": "10, 12 10",
+     "confidence": "low",
+     "note": null
+    },
+    "unit_count": {
+     "value": 128,
+     "raw": "128",
+     "confidence": "med",
+     "note": null
+    }
+   },
+   "variant_modifier": "FR88b型。FR88a型を改設計し戦闘艇ワルキューレ搭載数を20%増加。物資積載量が限られ連続戦闘には不向き。(ⅡはFR88a型量産化で中性子ビーム砲非装備=艦隊戦攻撃力なし)",
+   "tier": "Ⅲ"
+  },
+  {
+   "key": "FR88b/e",
+   "name": "戦闘艇母艦Ⅳ (FR88b型戦闘艇母艦・戦時急造型)",
+   "side": "empire",
+   "shipClass": "carrier",
+   "family": "FR88",
+   "is_base": false,
+   "inherits_from": "FR88",
+   "raw": {
+    "armor": {
+     "value": {
+      "front": 45,
+      "side": 23,
+      "back": 20
+     },
+     "raw": "45 / 23 / 20",
+     "confidence": "med",
+     "note": null
+    },
+    "shield_guard": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "no シールド防護値 (unarmored/'-' or OCR-lost)"
+    },
+    "shield_capacity": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "no シールド容量 (defenseless or OCR-lost)"
+    },
+    "beam_power": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "ビーム破壊力: no in-band value (OCR corrupt)"
+    },
+    "gun_power": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "ガン破壊力: no in-band value (OCR corrupt)"
+    },
+    "missile_power": {
+     "value": 110,
+     "raw": "-, 110",
+     "confidence": "med",
+     "note": null
+    },
+    "antiaircraft_power": {
+     "value": 110,
+     "raw": "-, 110",
+     "confidence": "med",
+     "note": null
+    },
+    "speed": {
+     "value": 18000,
+     "raw": "18,000, 2,400, 10,000",
+     "confidence": "med",
+     "note": null
+    },
+    "crew": {
+     "value": null,
+     "raw": "5,600",
+     "confidence": "none",
+     "note": "必要乗組員: no in-band value (OCR corrupt)"
+    },
+    "build_term": {
+     "value": 180,
+     "raw": "180 160 180 140",
+     "confidence": "med",
+     "note": null
+    },
+    "repair_cost": {
+     "value": 220,
+     "raw": "220",
+     "confidence": "med",
+     "note": null
+    },
+    "supply_capacity": {
+     "value": 2000,
+     "raw": "2,000, 1,600 2,000",
+     "confidence": "med",
+     "note": null
+    },
+    "fighter_num": {
+     "value": 10,
+     "raw": "10, 12 10",
+     "confidence": "low",
+     "note": null
+    },
+    "unit_count": {
+     "value": 128,
+     "raw": "128",
+     "confidence": "med",
+     "note": null
+    }
+   },
+   "variant_modifier": "FR88b型戦時急造型。FR88a型を改設計し量産効率をさらに向上。不備承知で小型艦用低出力機関を搭載し極めて低速。",
+   "tier": "Ⅳ"
+  },
+  {
+   "key": "TR88b",
+   "name": "雷撃艇母艦Ⅲ (TR88b型雷撃艇母艦)",
+   "side": "empire",
+   "shipClass": "torpedo_carrier",
+   "family": "TR88",
+   "is_base": false,
+   "inherits_from": "TR88",
+   "raw": {
+    "armor": {
+     "value": {
+      "front": 45,
+      "side": 23,
+      "back": 20
+     },
+     "raw": "45 / 23 / 20",
+     "confidence": "med",
+     "note": null
+    },
+    "shield_guard": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "no シールド防護値 (unarmored/'-' or OCR-lost)"
+    },
+    "shield_capacity": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "no シールド容量 (defenseless or OCR-lost)"
+    },
+    "beam_power": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "ビーム破壊力: no in-band value (OCR corrupt)"
+    },
+    "gun_power": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "ガン破壊力: no in-band value (OCR corrupt)"
+    },
+    "missile_power": {
+     "value": 110,
+     "raw": "-, 110",
+     "confidence": "med",
+     "note": null
+    },
+    "antiaircraft_power": {
+     "value": 110,
+     "raw": "-, 110",
+     "confidence": "med",
+     "note": null
+    },
+    "speed": {
+     "value": 2400,
+     "raw": "2,400; 18,000 10,000 20,000",
+     "confidence": "med",
+     "note": null
+    },
+    "crew": {
+     "value": null,
+     "raw": "5,600",
+     "confidence": "none",
+     "note": "必要乗組員: no in-band value (OCR corrupt)"
+    },
+    "build_term": {
+     "value": 180,
+     "raw": "180 170 150 180",
+     "confidence": "med",
+     "note": null
+    },
+    "repair_cost": {
+     "value": 220,
+     "raw": "220",
+     "confidence": "med",
+     "note": null
+    },
+    "supply_capacity": {
+     "value": 1600,
+     "raw": "1,600",
+     "confidence": "med",
+     "note": null
+    },
+    "fighter_num": {
+     "value": 2,
+     "raw": "2",
+     "confidence": "low",
+     "note": null
+    },
+    "unit_count": {
+     "value": 128,
+     "raw": "128",
+     "confidence": "med",
+     "note": null
+    }
+   },
+   "variant_modifier": "TR88b型戦時急造型。TR88a型を改設計し量産効率をさらに向上。小型艦用低出力機関搭載で極めて低速。(ⅡはTR88a型量産化、複雑構造ゆえFR88a型ほどの効率化は未達)",
+   "tier": "Ⅲ"
+  },
+  {
+   "key": "TR88c",
+   "name": "雷撃艇母艦Ⅳ (TR88c型雷撃艇母艦)",
+   "side": "empire",
+   "shipClass": "torpedo_carrier",
+   "family": "TR88",
+   "is_base": false,
+   "inherits_from": "TR88",
+   "raw": {
+    "armor": {
+     "value": {
+      "front": 45,
+      "side": 23,
+      "back": 20
+     },
+     "raw": "45 / 23 / 20",
+     "confidence": "med",
+     "note": null
+    },
+    "shield_guard": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "no シールド防護値 (unarmored/'-' or OCR-lost)"
+    },
+    "shield_capacity": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "no シールド容量 (defenseless or OCR-lost)"
+    },
+    "beam_power": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "ビーム破壊力: no in-band value (OCR corrupt)"
+    },
+    "gun_power": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "ガン破壊力: no in-band value (OCR corrupt)"
+    },
+    "missile_power": {
+     "value": 110,
+     "raw": "-, 110",
+     "confidence": "med",
+     "note": null
+    },
+    "antiaircraft_power": {
+     "value": 110,
+     "raw": "-, 110",
+     "confidence": "med",
+     "note": null
+    },
+    "speed": {
+     "value": 2400,
+     "raw": "2,400; 18,000 10,000 20,000",
+     "confidence": "med",
+     "note": null
+    },
+    "crew": {
+     "value": null,
+     "raw": "5,600",
+     "confidence": "none",
+     "note": "必要乗組員: no in-band value (OCR corrupt)"
+    },
+    "build_term": {
+     "value": 180,
+     "raw": "180 170 150 180",
+     "confidence": "med",
+     "note": null
+    },
+    "repair_cost": {
+     "value": 220,
+     "raw": "220",
+     "confidence": "med",
+     "note": null
+    },
+    "supply_capacity": {
+     "value": 1600,
+     "raw": "1,600",
+     "confidence": "med",
+     "note": null
+    },
+    "fighter_num": {
+     "value": 2,
+     "raw": "2",
+     "confidence": "low",
+     "note": null
+    },
+    "unit_count": {
+     "value": 128,
+     "raw": "128",
+     "confidence": "med",
+     "note": null
+    }
+   },
+   "variant_modifier": "TR88c型。TR88a型の機関を強化し高速航行可能。前線では“高速雷撃艇母艦”。他の装備はTR88a型に準じる。",
+   "tier": "Ⅳ"
+  },
+  {
+   "key": "A76a",
+   "name": "工作艦Ⅱ (A76a型工作艦)",
+   "side": "empire",
+   "shipClass": "repair",
+   "family": "A76",
+   "is_base": false,
+   "inherits_from": "A76",
+   "raw": {
+    "armor": {
+     "value": {
+      "front": 26,
+      "side": 16,
+      "back": 10
+     },
+     "raw": "26 / 16 / 10",
+     "confidence": "med",
+     "note": null
+    },
+    "shield_guard": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "no シールド防護値 (unarmored/'-' or OCR-lost)"
+    },
+    "shield_capacity": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "no シールド容量 (defenseless or OCR-lost)"
+    },
+    "beam_power": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "ビーム破壊力: no in-band value (OCR corrupt)"
+    },
+    "gun_power": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "ガン破壊力: no in-band value (OCR corrupt)"
+    },
+    "missile_power": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "ミサイル破壊力: no in-band value (OCR corrupt)"
+    },
+    "antiaircraft_power": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "対空破壊力: no in-band value (OCR corrupt)"
+    },
+    "speed": {
+     "value": 2400,
+     "raw": "2,400; 19,000 10,000",
+     "confidence": "med",
+     "note": null
+    },
+    "crew": {
+     "value": null,
+     "raw": "18,000",
+     "confidence": "none",
+     "note": "必要乗組員: no in-band value (OCR corrupt)"
+    },
+    "build_term": {
+     "value": 120,
+     "raw": "120 110",
+     "confidence": "med",
+     "note": null
+    },
+    "repair_cost": {
+     "value": 100,
+     "raw": "100",
+     "confidence": "med",
+     "note": null
+    },
+    "supply_capacity": {
+     "value": 1200,
+     "raw": "1,200 1,600 800 1,200",
+     "confidence": "med",
+     "note": null
+    },
+    "fighter_num": {
+     "value": 20,
+     "raw": "-, 20",
+     "confidence": "low",
+     "note": null
+    },
+    "unit_count": {
+     "value": 1,
+     "raw": "1",
+     "confidence": "med",
+     "note": null
+    }
+   },
+   "variant_modifier": "A76a型。修理用資材の積載量を増加。",
+   "tier": "Ⅱ"
+  },
+  {
+   "key": "A76b",
+   "name": "工作艦Ⅲ (A76b型工作艦)",
+   "side": "empire",
+   "shipClass": "repair",
+   "family": "A76",
+   "is_base": false,
+   "inherits_from": "A76",
+   "raw": {
+    "armor": {
+     "value": {
+      "front": 26,
+      "side": 16,
+      "back": 10
+     },
+     "raw": "26 / 16 / 10",
+     "confidence": "med",
+     "note": null
+    },
+    "shield_guard": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "no シールド防護値 (unarmored/'-' or OCR-lost)"
+    },
+    "shield_capacity": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "no シールド容量 (defenseless or OCR-lost)"
+    },
+    "beam_power": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "ビーム破壊力: no in-band value (OCR corrupt)"
+    },
+    "gun_power": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "ガン破壊力: no in-band value (OCR corrupt)"
+    },
+    "missile_power": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "ミサイル破壊力: no in-band value (OCR corrupt)"
+    },
+    "antiaircraft_power": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "対空破壊力: no in-band value (OCR corrupt)"
+    },
+    "speed": {
+     "value": 2400,
+     "raw": "2,400; 19,000 10,000",
+     "confidence": "med",
+     "note": null
+    },
+    "crew": {
+     "value": null,
+     "raw": "18,000",
+     "confidence": "none",
+     "note": "必要乗組員: no in-band value (OCR corrupt)"
+    },
+    "build_term": {
+     "value": 120,
+     "raw": "120 110",
+     "confidence": "med",
+     "note": null
+    },
+    "repair_cost": {
+     "value": 100,
+     "raw": "100",
+     "confidence": "med",
+     "note": null
+    },
+    "supply_capacity": {
+     "value": 1200,
+     "raw": "1,200 1,600 800 1,200",
+     "confidence": "med",
+     "note": null
+    },
+    "fighter_num": {
+     "value": 20,
+     "raw": "-, 20",
+     "confidence": "low",
+     "note": null
+    },
+    "unit_count": {
+     "value": 1,
+     "raw": "1",
+     "confidence": "med",
+     "note": null
+    }
+   },
+   "variant_modifier": "A76b型。機関を強化し高速航行を可能に。修理資材の搭載量は減少。",
+   "tier": "Ⅲ"
+  },
+  {
+   "key": "A76b/e",
+   "name": "工作艦Ⅳ (A76b型工作艦・戦時急造型)",
+   "side": "empire",
+   "shipClass": "repair",
+   "family": "A76",
+   "is_base": false,
+   "inherits_from": "A76",
+   "raw": {
+    "armor": {
+     "value": {
+      "front": 26,
+      "side": 16,
+      "back": 10
+     },
+     "raw": "26 / 16 / 10",
+     "confidence": "med",
+     "note": null
+    },
+    "shield_guard": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "no シールド防護値 (unarmored/'-' or OCR-lost)"
+    },
+    "shield_capacity": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "no シールド容量 (defenseless or OCR-lost)"
+    },
+    "beam_power": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "ビーム破壊力: no in-band value (OCR corrupt)"
+    },
+    "gun_power": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "ガン破壊力: no in-band value (OCR corrupt)"
+    },
+    "missile_power": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "ミサイル破壊力: no in-band value (OCR corrupt)"
+    },
+    "antiaircraft_power": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "対空破壊力: no in-band value (OCR corrupt)"
+    },
+    "speed": {
+     "value": 2400,
+     "raw": "2,400; 19,000 10,000",
+     "confidence": "med",
+     "note": null
+    },
+    "crew": {
+     "value": null,
+     "raw": "18,000",
+     "confidence": "none",
+     "note": "必要乗組員: no in-band value (OCR corrupt)"
+    },
+    "build_term": {
+     "value": 120,
+     "raw": "120 110",
+     "confidence": "med",
+     "note": null
+    },
+    "repair_cost": {
+     "value": 100,
+     "raw": "100",
+     "confidence": "med",
+     "note": null
+    },
+    "supply_capacity": {
+     "value": 1200,
+     "raw": "1,200 1,600 800 1,200",
+     "confidence": "med",
+     "note": null
+    },
+    "fighter_num": {
+     "value": 20,
+     "raw": "-, 20",
+     "confidence": "low",
+     "note": null
+    },
+    "unit_count": {
+     "value": 1,
+     "raw": "1",
+     "confidence": "med",
+     "note": null
+    }
+   },
+   "variant_modifier": "A76b型戦時急造型。機関を小型艦用低出力機関に換装、航行性能が大幅低下。",
+   "tier": "Ⅳ"
+  },
+  {
+   "key": "A74a",
+   "name": "輸送艦Ⅱ (A74a型輸送艦)",
+   "side": "empire",
+   "shipClass": "transport",
+   "family": "A74",
+   "is_base": false,
+   "inherits_from": "A74",
+   "raw": {
+    "armor": {
+     "value": {
+      "front": 48,
+      "side": 29,
+      "back": 17
+     },
+     "raw": "48 29 17",
+     "confidence": "med",
+     "note": null
+    },
+    "shield_guard": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "no シールド防護値 (unarmored/'-' or OCR-lost)"
+    },
+    "shield_capacity": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "no シールド容量 (defenseless or OCR-lost)"
+    },
+    "beam_power": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "ビーム破壊力: no in-band value (OCR corrupt)"
+    },
+    "gun_power": {
+     "value": 32,
+     "raw": "32, -",
+     "confidence": "med",
+     "note": null
+    },
+    "missile_power": {
+     "value": null,
+     "raw": null,
+     "confidence": "none",
+     "note": "no ミサイル破壊力 label"
+    },
+    "antiaircraft_power": {
+     "value": 40,
+     "raw": "40, -",
+     "confidence": "med",
+     "note": null
+    },
+    "speed": {
+     "value": 12000,
+     "raw": "12,000; 14,000",
+     "confidence": "med",
+     "note": null
+    },
+    "crew": {
+     "value": 1,
+     "raw": "1, -",
+     "confidence": "low",
+     "note": null
+    },
+    "build_term": {
+     "value": 90,
+     "raw": "90 80 100",
+     "confidence": "med",
+     "note": null
+    },
+    "repair_cost": {
+     "value": 200,
+     "raw": "200",
+     "confidence": "med",
+     "note": null
+    },
+    "supply_capacity": {
+     "value": 32,
+     "raw": "-, 32; 20,000 16,000",
+     "confidence": "med",
+     "note": null
+    },
+    "fighter_num": {
+     "value": null,
+     "raw": null,
+     "confidence": "none",
+     "note": "no 戦闘艇搭載数 label"
+    },
+    "unit_count": {
+     "value": 1,
+     "raw": "1",
+     "confidence": "med",
+     "note": null
+    }
+   },
+   "variant_modifier": "A74a型。中性子パルス砲を省略。一部は民生用に使用。",
+   "tier": "Ⅱ"
+  },
+  {
+   "key": "A74b",
+   "name": "輸送艦Ⅲ (A74b型輸送艦)",
+   "side": "empire",
+   "shipClass": "transport",
+   "family": "A74",
+   "is_base": false,
+   "inherits_from": "A74",
+   "raw": {
+    "armor": {
+     "value": {
+      "front": 48,
+      "side": 29,
+      "back": 17
+     },
+     "raw": "48 29 17",
+     "confidence": "med",
+     "note": null
+    },
+    "shield_guard": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "no シールド防護値 (unarmored/'-' or OCR-lost)"
+    },
+    "shield_capacity": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "no シールド容量 (defenseless or OCR-lost)"
+    },
+    "beam_power": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "ビーム破壊力: no in-band value (OCR corrupt)"
+    },
+    "gun_power": {
+     "value": 32,
+     "raw": "32, -",
+     "confidence": "med",
+     "note": null
+    },
+    "missile_power": {
+     "value": null,
+     "raw": null,
+     "confidence": "none",
+     "note": "no ミサイル破壊力 label"
+    },
+    "antiaircraft_power": {
+     "value": 40,
+     "raw": "40, -",
+     "confidence": "med",
+     "note": null
+    },
+    "speed": {
+     "value": 12000,
+     "raw": "12,000; 14,000",
+     "confidence": "med",
+     "note": null
+    },
+    "crew": {
+     "value": 1,
+     "raw": "1, -",
+     "confidence": "low",
+     "note": null
+    },
+    "build_term": {
+     "value": 90,
+     "raw": "90 80 100",
+     "confidence": "med",
+     "note": null
+    },
+    "repair_cost": {
+     "value": 200,
+     "raw": "200",
+     "confidence": "med",
+     "note": null
+    },
+    "supply_capacity": {
+     "value": 32,
+     "raw": "-, 32; 20,000 16,000",
+     "confidence": "med",
+     "note": null
+    },
+    "fighter_num": {
+     "value": null,
+     "raw": null,
+     "confidence": "none",
+     "note": "no 戦闘艇搭載数 label"
+    },
+    "unit_count": {
+     "value": 1,
+     "raw": "1",
+     "confidence": "med",
+     "note": null
+    }
+   },
+   "variant_modifier": "A74b型。防空用レーザー機銃を増設。",
+   "tier": "Ⅲ"
+  },
+  {
+   "key": "A74c",
+   "name": "輸送艦Ⅳ (A74c型輸送艦)",
+   "side": "empire",
+   "shipClass": "transport",
+   "family": "A74",
+   "is_base": false,
+   "inherits_from": "A74",
+   "raw": {
+    "armor": {
+     "value": {
+      "front": 48,
+      "side": 29,
+      "back": 17
+     },
+     "raw": "48 29 17",
+     "confidence": "med",
+     "note": null
+    },
+    "shield_guard": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "no シールド防護値 (unarmored/'-' or OCR-lost)"
+    },
+    "shield_capacity": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "no シールド容量 (defenseless or OCR-lost)"
+    },
+    "beam_power": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "ビーム破壊力: no in-band value (OCR corrupt)"
+    },
+    "gun_power": {
+     "value": 32,
+     "raw": "32, -",
+     "confidence": "med",
+     "note": null
+    },
+    "missile_power": {
+     "value": null,
+     "raw": null,
+     "confidence": "none",
+     "note": "no ミサイル破壊力 label"
+    },
+    "antiaircraft_power": {
+     "value": 40,
+     "raw": "40, -",
+     "confidence": "med",
+     "note": null
+    },
+    "speed": {
+     "value": 12000,
+     "raw": "12,000; 14,000",
+     "confidence": "med",
+     "note": null
+    },
+    "crew": {
+     "value": 1,
+     "raw": "1, -",
+     "confidence": "low",
+     "note": null
+    },
+    "build_term": {
+     "value": 90,
+     "raw": "90 80 100",
+     "confidence": "med",
+     "note": null
+    },
+    "repair_cost": {
+     "value": 200,
+     "raw": "200",
+     "confidence": "med",
+     "note": null
+    },
+    "supply_capacity": {
+     "value": 32,
+     "raw": "-, 32; 20,000 16,000",
+     "confidence": "med",
+     "note": null
+    },
+    "fighter_num": {
+     "value": null,
+     "raw": null,
+     "confidence": "none",
+     "note": "no 戦闘艇搭載数 label"
+    },
+    "unit_count": {
+     "value": 1,
+     "raw": "1",
+     "confidence": "med",
+     "note": null
+    }
+   },
+   "variant_modifier": "A74c型。機関出力を強化し高速航行可能。機関部に圧迫され物資搭載量が減少。",
+   "tier": "Ⅳ"
+  },
+  {
+   "key": "A72a",
+   "name": "兵員輸送艦Ⅱ (A72a型兵員輸送艦)",
+   "side": "empire",
+   "shipClass": "trooper",
+   "family": "A72",
+   "is_base": false,
+   "inherits_from": "A72",
+   "raw": {
+    "armor": {
+     "value": {
+      "front": 6,
+      "side": 8,
+      "back": 16
+     },
+     "raw": "6 8 / 16 9 4 2 / 6",
+     "confidence": "med",
+     "note": null
+    },
+    "shield_guard": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "no シールド防護値 (unarmored/'-' or OCR-lost)"
+    },
+    "shield_capacity": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "no シールド容量 (defenseless or OCR-lost)"
+    },
+    "beam_power": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "ビーム破壊力: no in-band value (OCR corrupt)"
+    },
+    "gun_power": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "ガン破壊力: no in-band value (OCR corrupt)"
+    },
+    "missile_power": {
+     "value": 40,
+     "raw": "40/1, -",
+     "confidence": "med",
+     "note": null
+    },
+    "antiaircraft_power": {
+     "value": 40,
+     "raw": "40",
+     "confidence": "med",
+     "note": null
+    },
+    "speed": {
+     "value": 20000,
+     "raw": "20,000 18,000",
+     "confidence": "med",
+     "note": null
+    },
+    "crew": {
+     "value": 1,
+     "raw": "18,000, 1, -",
+     "confidence": "low",
+     "note": null
+    },
+    "build_term": {
+     "value": 120,
+     "raw": "120 140",
+     "confidence": "med",
+     "note": null
+    },
+    "repair_cost": {
+     "value": 100,
+     "raw": "100",
+     "confidence": "med",
+     "note": null
+    },
+    "supply_capacity": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "物資搭載量: no in-band value (OCR corrupt)"
+    },
+    "fighter_num": {
+     "value": 30,
+     "raw": "-, 30",
+     "confidence": "low",
+     "note": null
+    },
+    "unit_count": {
+     "value": 1,
+     "raw": "1",
+     "confidence": "med",
+     "note": null
+    }
+   },
+   "variant_modifier": "A72a型。自衛用の中性子ミサイル発射システムを搭載。",
+   "tier": "Ⅱ"
+  },
+  {
+   "key": "A72b",
+   "name": "兵員輸送艦Ⅲ (A72b型兵員輸送艦)",
+   "side": "empire",
+   "shipClass": "trooper",
+   "family": "A72",
+   "is_base": false,
+   "inherits_from": "A72",
+   "raw": {
+    "armor": {
+     "value": {
+      "front": 6,
+      "side": 8,
+      "back": 16
+     },
+     "raw": "6 8 / 16 9 4 2 / 6",
+     "confidence": "med",
+     "note": null
+    },
+    "shield_guard": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "no シールド防護値 (unarmored/'-' or OCR-lost)"
+    },
+    "shield_capacity": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "no シールド容量 (defenseless or OCR-lost)"
+    },
+    "beam_power": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "ビーム破壊力: no in-band value (OCR corrupt)"
+    },
+    "gun_power": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "ガン破壊力: no in-band value (OCR corrupt)"
+    },
+    "missile_power": {
+     "value": 40,
+     "raw": "40/1, -",
+     "confidence": "med",
+     "note": null
+    },
+    "antiaircraft_power": {
+     "value": 40,
+     "raw": "40",
+     "confidence": "med",
+     "note": null
+    },
+    "speed": {
+     "value": 20000,
+     "raw": "20,000 18,000",
+     "confidence": "med",
+     "note": null
+    },
+    "crew": {
+     "value": 1,
+     "raw": "18,000, 1, -",
+     "confidence": "low",
+     "note": null
+    },
+    "build_term": {
+     "value": 120,
+     "raw": "120 140",
+     "confidence": "med",
+     "note": null
+    },
+    "repair_cost": {
+     "value": 100,
+     "raw": "100",
+     "confidence": "med",
+     "note": null
+    },
+    "supply_capacity": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "物資搭載量: no in-band value (OCR corrupt)"
+    },
+    "fighter_num": {
+     "value": 30,
+     "raw": "-, 30",
+     "confidence": "low",
+     "note": null
+    },
+    "unit_count": {
+     "value": 1,
+     "raw": "1",
+     "confidence": "med",
+     "note": null
+    }
+   },
+   "variant_modifier": "A72b型。新型機関を搭載し高速化。戦闘宙域での兵員輸送に用いられる。",
+   "tier": "Ⅲ"
+  },
+  {
+   "key": "A72c",
+   "name": "兵員輸送艦Ⅳ (A72c型兵員輸送艦)",
+   "side": "empire",
+   "shipClass": "trooper",
+   "family": "A72",
+   "is_base": false,
+   "inherits_from": "A72",
+   "raw": {
+    "armor": {
+     "value": {
+      "front": 6,
+      "side": 8,
+      "back": 16
+     },
+     "raw": "6 8 / 16 9 4 2 / 6",
+     "confidence": "med",
+     "note": null
+    },
+    "shield_guard": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "no シールド防護値 (unarmored/'-' or OCR-lost)"
+    },
+    "shield_capacity": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "no シールド容量 (defenseless or OCR-lost)"
+    },
+    "beam_power": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "ビーム破壊力: no in-band value (OCR corrupt)"
+    },
+    "gun_power": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "ガン破壊力: no in-band value (OCR corrupt)"
+    },
+    "missile_power": {
+     "value": 40,
+     "raw": "40/1, -",
+     "confidence": "med",
+     "note": null
+    },
+    "antiaircraft_power": {
+     "value": 40,
+     "raw": "40",
+     "confidence": "med",
+     "note": null
+    },
+    "speed": {
+     "value": 20000,
+     "raw": "20,000 18,000",
+     "confidence": "med",
+     "note": null
+    },
+    "crew": {
+     "value": 1,
+     "raw": "18,000, 1, -",
+     "confidence": "low",
+     "note": null
+    },
+    "build_term": {
+     "value": 120,
+     "raw": "120 140",
+     "confidence": "med",
+     "note": null
+    },
+    "repair_cost": {
+     "value": 100,
+     "raw": "100",
+     "confidence": "med",
+     "note": null
+    },
+    "supply_capacity": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "物資搭載量: no in-band value (OCR corrupt)"
+    },
+    "fighter_num": {
+     "value": 30,
+     "raw": "-, 30",
+     "confidence": "low",
+     "note": null
+    },
+    "unit_count": {
+     "value": 1,
+     "raw": "1",
+     "confidence": "med",
+     "note": null
+    }
+   },
+   "variant_modifier": "A72c型。装甲を強化。A72b型と共に戦闘宙域での兵員輸送に用いられる。",
+   "tier": "Ⅳ"
+  },
+  {
+   "key": "A78a",
+   "name": "揚陸艦Ⅱ (A78a型標準揚陸艦)",
+   "side": "empire",
+   "shipClass": "lander",
+   "family": "A78",
+   "is_base": false,
+   "inherits_from": "A78",
+   "raw": {
+    "armor": {
+     "value": {
+      "front": 15,
+      "side": 10,
+      "back": 5
+     },
+     "raw": "15 10 / 5 / 17 12",
+     "confidence": "med",
+     "note": null
+    },
+    "shield_guard": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "no シールド防護値 (unarmored/'-' or OCR-lost)"
+    },
+    "shield_capacity": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "no シールド容量 (defenseless or OCR-lost)"
+    },
+    "beam_power": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "ビーム破壊力: no in-band value (OCR corrupt)"
+    },
+    "gun_power": {
+     "value": 40,
+     "raw": "-, 40/1, 7",
+     "confidence": "med",
+     "note": null
+    },
+    "missile_power": {
+     "value": null,
+     "raw": null,
+     "confidence": "none",
+     "note": "no ミサイル破壊力 label"
+    },
+    "antiaircraft_power": {
+     "value": 30,
+     "raw": "-, 30, -",
+     "confidence": "med",
+     "note": null
+    },
+    "speed": {
+     "value": 12000,
+     "raw": "12,000 50; 15,000 12,000",
+     "confidence": "med",
+     "note": null
+    },
+    "crew": {
+     "value": 1,
+     "raw": "1, -",
+     "confidence": "low",
+     "note": null
+    },
+    "build_term": {
+     "value": null,
+     "raw": null,
+     "confidence": "none",
+     "note": "no 工期 label"
+    },
+    "repair_cost": {
+     "value": 20,
+     "raw": "20",
+     "confidence": "med",
+     "note": null
+    },
+    "supply_capacity": {
+     "value": 30,
+     "raw": "-, 30, -",
+     "confidence": "med",
+     "note": null
+    },
+    "fighter_num": {
+     "value": null,
+     "raw": null,
+     "confidence": "none",
+     "note": "no 戦闘艇搭載数 label"
+    },
+    "unit_count": {
+     "value": 1,
+     "raw": "1",
+     "confidence": "med",
+     "note": null
+    }
+   },
+   "variant_modifier": "A78a型。自衛用の中性子ミサイル発射システムを搭載。",
+   "tier": "Ⅱ"
+  },
+  {
+   "key": "A78b",
+   "name": "揚陸艦Ⅲ (A78b型標準揚陸艦)",
+   "side": "empire",
+   "shipClass": "lander",
+   "family": "A78",
+   "is_base": false,
+   "inherits_from": "A78",
+   "raw": {
+    "armor": {
+     "value": {
+      "front": 15,
+      "side": 10,
+      "back": 5
+     },
+     "raw": "15 10 / 5 / 17 12",
+     "confidence": "med",
+     "note": null
+    },
+    "shield_guard": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "no シールド防護値 (unarmored/'-' or OCR-lost)"
+    },
+    "shield_capacity": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "no シールド容量 (defenseless or OCR-lost)"
+    },
+    "beam_power": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "ビーム破壊力: no in-band value (OCR corrupt)"
+    },
+    "gun_power": {
+     "value": 40,
+     "raw": "-, 40/1, 7",
+     "confidence": "med",
+     "note": null
+    },
+    "missile_power": {
+     "value": null,
+     "raw": null,
+     "confidence": "none",
+     "note": "no ミサイル破壊力 label"
+    },
+    "antiaircraft_power": {
+     "value": 30,
+     "raw": "-, 30, -",
+     "confidence": "med",
+     "note": null
+    },
+    "speed": {
+     "value": 12000,
+     "raw": "12,000 50; 15,000 12,000",
+     "confidence": "med",
+     "note": null
+    },
+    "crew": {
+     "value": 1,
+     "raw": "1, -",
+     "confidence": "low",
+     "note": null
+    },
+    "build_term": {
+     "value": null,
+     "raw": null,
+     "confidence": "none",
+     "note": "no 工期 label"
+    },
+    "repair_cost": {
+     "value": 20,
+     "raw": "20",
+     "confidence": "med",
+     "note": null
+    },
+    "supply_capacity": {
+     "value": 30,
+     "raw": "-, 30, -",
+     "confidence": "med",
+     "note": null
+    },
+    "fighter_num": {
+     "value": null,
+     "raw": null,
+     "confidence": "none",
+     "note": "no 戦闘艇搭載数 label"
+    },
+    "unit_count": {
+     "value": 1,
+     "raw": "1",
+     "confidence": "med",
+     "note": null
+    }
+   },
+   "variant_modifier": "A78b型。新型機関を搭載し高速化。戦闘宙域での揚陸作戦に用いられる。",
+   "tier": "Ⅲ"
+  },
+  {
+   "key": "A78c",
+   "name": "揚陸艦Ⅳ (A78c型標準揚陸艦)",
+   "side": "empire",
+   "shipClass": "lander",
+   "family": "A78",
+   "is_base": false,
+   "inherits_from": "A78",
+   "raw": {
+    "armor": {
+     "value": {
+      "front": 15,
+      "side": 10,
+      "back": 5
+     },
+     "raw": "15 10 / 5 / 17 12",
+     "confidence": "med",
+     "note": null
+    },
+    "shield_guard": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "no シールド防護値 (unarmored/'-' or OCR-lost)"
+    },
+    "shield_capacity": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "no シールド容量 (defenseless or OCR-lost)"
+    },
+    "beam_power": {
+     "value": null,
+     "raw": "-",
+     "confidence": "none",
+     "note": "ビーム破壊力: no in-band value (OCR corrupt)"
+    },
+    "gun_power": {
+     "value": 40,
+     "raw": "-, 40/1, 7",
+     "confidence": "med",
+     "note": null
+    },
+    "missile_power": {
+     "value": null,
+     "raw": null,
+     "confidence": "none",
+     "note": "no ミサイル破壊力 label"
+    },
+    "antiaircraft_power": {
+     "value": 30,
+     "raw": "-, 30, -",
+     "confidence": "med",
+     "note": null
+    },
+    "speed": {
+     "value": 12000,
+     "raw": "12,000 50; 15,000 12,000",
+     "confidence": "med",
+     "note": null
+    },
+    "crew": {
+     "value": 1,
+     "raw": "1, -",
+     "confidence": "low",
+     "note": null
+    },
+    "build_term": {
+     "value": null,
+     "raw": null,
+     "confidence": "none",
+     "note": "no 工期 label"
+    },
+    "repair_cost": {
+     "value": 20,
+     "raw": "20",
+     "confidence": "med",
+     "note": null
+    },
+    "supply_capacity": {
+     "value": 30,
+     "raw": "-, 30, -",
+     "confidence": "med",
+     "note": null
+    },
+    "fighter_num": {
+     "value": null,
+     "raw": null,
+     "confidence": "none",
+     "note": "no 戦闘艇搭載数 label"
+    },
+    "unit_count": {
+     "value": 1,
+     "raw": "1",
+     "confidence": "med",
+     "note": null
+    }
+   },
+   "variant_modifier": "A78c型。装甲を強化。戦闘宙域での揚陸作戦に用いられる。",
+   "tier": "Ⅳ"
+  }
+ ]
+}

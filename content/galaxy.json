@@ -1,0 +1,2580 @@
+{
+ "_source": "gin7manualsaved.pdf 星系図 special Text annotations (80 systems)",
+ "_extracted": "2026-06-12",
+ "systems": [
+  {
+   "system": "ルンビーニ",
+   "planets": [
+    {
+     "name": "バグタプール",
+     "orbit": 1
+    },
+    {
+     "name": "カライヤ",
+     "orbit": 2
+    },
+    {
+     "name": "バドガオン",
+     "orbit": 3
+    }
+   ],
+   "fortresses": [],
+   "rect": [
+    249.18018,
+    52.316888,
+    269.18019,
+    74.31689
+   ],
+   "page": 101,
+   "faction": "alliance",
+   "cx": 259.2,
+   "cy": 63.3,
+   "in_iv_ex": true,
+   "is_corridor": 0
+  },
+  {
+   "system": "シロン",
+   "planets": [
+    {
+     "name": "ネプティス",
+     "orbit": 1
+    },
+    {
+     "name": "ジャライン",
+     "orbit": 2
+    },
+    {
+     "name": "アヌビス",
+     "orbit": 3
+    },
+    {
+     "name": "オシリス",
+     "orbit": 4
+    }
+   ],
+   "fortresses": [],
+   "rect": [
+    207.65015,
+    58.874269,
+    227.65015,
+    80.87427
+   ],
+   "page": 101,
+   "faction": "alliance",
+   "cx": 217.7,
+   "cy": 69.9,
+   "in_iv_ex": false,
+   "is_corridor": 0
+  },
+  {
+   "system": "エリューセラ",
+   "planets": [
+    {
+     "name": "コルテラッツォ",
+     "orbit": 1
+    },
+    {
+     "name": "ポンテ・クレパルド",
+     "orbit": 2
+    },
+    {
+     "name": "クルッキド",
+     "orbit": 3
+    },
+    {
+     "name": "アンドロス",
+     "orbit": 4
+    }
+   ],
+   "fortresses": [],
+   "rect": [
+    341.52986,
+    67.61743,
+    361.52986,
+    89.617427
+   ],
+   "page": 101,
+   "faction": "alliance",
+   "cx": 351.5,
+   "cy": 78.6,
+   "in_iv_ex": true,
+   "is_corridor": 0
+  },
+  {
+   "system": "タナトス",
+   "planets": [
+    {
+     "name": "エコニア",
+     "orbit": 1
+    },
+    {
+     "name": "プロスキナス",
+     "orbit": 2
+    },
+    {
+     "name": "マスジット",
+     "orbit": 3
+    },
+    {
+     "name": "ケール",
+     "orbit": 4
+    }
+   ],
+   "fortresses": [],
+   "rect": [
+    292.34956,
+    80.18573,
+    312.34956,
+    102.18573
+   ],
+   "page": 101,
+   "faction": "alliance",
+   "cx": 302.3,
+   "cy": 91.2,
+   "in_iv_ex": true,
+   "is_corridor": 0
+  },
+  {
+   "system": "リオ・ヴェルデ",
+   "planets": [
+    {
+     "name": "メサ・デル・アグア",
+     "orbit": 1
+    },
+    {
+     "name": "サン・カルロス",
+     "orbit": 2
+    },
+    {
+     "name": "リアノ・ブランコ",
+     "orbit": 3
+    },
+    {
+     "name": "イスラ・ブランカ",
+     "orbit": 4
+    }
+   ],
+   "fortresses": [],
+   "rect": [
+    337.15827,
+    94.93982,
+    357.15827,
+    116.93982
+   ],
+   "page": 101,
+   "faction": "alliance",
+   "cx": 347.2,
+   "cy": 105.9,
+   "in_iv_ex": true,
+   "is_corridor": 0
+  },
+  {
+   "system": "ロフォーテン",
+   "planets": [
+    {
+     "name": "アルスタッド",
+     "orbit": 1
+    },
+    {
+     "name": "バルスタッド",
+     "orbit": 2
+    },
+    {
+     "name": "スボルヴェア",
+     "orbit": 3
+    }
+   ],
+   "fortresses": [
+    "ルドミラ"
+   ],
+   "rect": [
+    187.43158,
+    110.24036,
+    207.43158,
+    132.24036
+   ],
+   "page": 101,
+   "faction": "alliance",
+   "cx": 197.4,
+   "cy": 121.2,
+   "in_iv_ex": true,
+   "is_corridor": 0
+  },
+  {
+   "system": "バーラト",
+   "planets": [
+    {
+     "name": "テルヌーゼン",
+     "orbit": 1
+    },
+    {
+     "name": "カスバ・ナグム",
+     "orbit": 2
+    },
+    {
+     "name": "ハイネセン",
+     "orbit": 3
+    },
+    {
+     "name": "シリューナガル",
+     "orbit": 4
+    }
+   ],
+   "fortresses": [],
+   "rect": [
+    250.81952,
+    116.251277,
+    270.81953,
+    138.25128
+   ],
+   "page": 101,
+   "faction": "alliance",
+   "cx": 260.8,
+   "cy": 127.3,
+   "in_iv_ex": true,
+   "is_corridor": 0
+  },
+  {
+   "system": "ファラーファラ",
+   "planets": [
+    {
+     "name": "アラム・バダー",
+     "orbit": 1
+    },
+    {
+     "name": "ラムル",
+     "orbit": 2
+    },
+    {
+     "name": "ミセヌム",
+     "orbit": 3
+    },
+    {
+     "name": "アスワン",
+     "orbit": 4
+    }
+   ],
+   "fortresses": [],
+   "rect": [
+    156.8305,
+    145.75946,
+    176.8305,
+    167.75946
+   ],
+   "page": 101,
+   "faction": "alliance",
+   "cx": 166.8,
+   "cy": 156.8,
+   "in_iv_ex": false,
+   "is_corridor": 0
+  },
+  {
+   "system": "ケリム",
+   "planets": [
+    {
+     "name": "カッシナ",
+     "orbit": 1
+    },
+    {
+     "name": "バフラ",
+     "orbit": 2
+    },
+    {
+     "name": "アユディン",
+     "orbit": 3
+    },
+    {
+     "name": "パラス",
+     "orbit": 4
+    }
+   ],
+   "fortresses": [],
+   "rect": [
+    207.65015,
+    145.75946,
+    227.65015,
+    167.75946
+   ],
+   "page": 101,
+   "faction": "alliance",
+   "cx": 217.7,
+   "cy": 156.8,
+   "in_iv_ex": true,
+   "is_corridor": 0
+  },
+  {
+   "system": "ポリスーン",
+   "planets": [
+    {
+     "name": "エルデン",
+     "orbit": 1
+    },
+    {
+     "name": "ベレケト",
+     "orbit": 2
+    },
+    {
+     "name": "キルニス",
+     "orbit": 3
+    }
+   ],
+   "fortresses": [
+    "ダヤン・ハーン"
+   ],
+   "rect": [
+    429.5079,
+    147.3988,
+    449.5079,
+    169.39879
+   ],
+   "page": 101,
+   "faction": "alliance",
+   "cx": 439.5,
+   "cy": 158.4,
+   "in_iv_ex": false,
+   "is_corridor": 0
+  },
+  {
+   "system": "ライガール",
+   "planets": [
+    {
+     "name": "シンガラ",
+     "orbit": 1
+    },
+    {
+     "name": "ミルパラ",
+     "orbit": 2
+    },
+    {
+     "name": "アユアラ",
+     "orbit": 3
+    }
+   ],
+   "fortresses": [],
+   "rect": [
+    350.81947,
+    167.61737,
+    370.81947,
+    189.61737
+   ],
+   "page": 101,
+   "faction": "alliance",
+   "cx": 360.8,
+   "cy": 178.6,
+   "in_iv_ex": true,
+   "is_corridor": 0
+  },
+  {
+   "system": "バーミリオン",
+   "planets": [
+    {
+     "name": "エイクロン",
+     "orbit": 1
+    },
+    {
+     "name": "ロートン",
+     "orbit": 2
+    },
+    {
+     "name": "カスケード",
+     "orbit": 3
+    }
+   ],
+   "fortresses": [],
+   "rect": [
+    299.45338,
+    168.16382,
+    319.45338,
+    190.16382
+   ],
+   "page": 101,
+   "faction": "alliance",
+   "cx": 309.5,
+   "cy": 179.2,
+   "in_iv_ex": true,
+   "is_corridor": 0
+  },
+  {
+   "system": "リューカス",
+   "planets": [
+    {
+     "name": "ザカリアス",
+     "orbit": 1
+    },
+    {
+     "name": "インコバネ",
+     "orbit": 2
+    },
+    {
+     "name": "ヴァルミー",
+     "orbit": 3
+    }
+   ],
+   "fortresses": [],
+   "rect": [
+    271.0381,
+    181.82501,
+    291.0381,
+    203.82501
+   ],
+   "page": 101,
+   "faction": "alliance",
+   "cx": 281.0,
+   "cy": 192.8,
+   "in_iv_ex": true,
+   "is_corridor": 0
+  },
+  {
+   "system": "マローヴィア",
+   "planets": [],
+   "fortresses": [],
+   "rect": [
+    121.31139,
+    182.37146,
+    141.3114,
+    204.37146
+   ],
+   "page": 101,
+   "faction": "alliance",
+   "cx": 131.3,
+   "cy": 193.4,
+   "in_iv_ex": false,
+   "is_corridor": 0
+  },
+  {
+   "system": "ハダト",
+   "planets": [
+    {
+     "name": "シャンプール",
+     "orbit": 1
+    },
+    {
+     "name": "ベラスィ",
+     "orbit": 2
+    },
+    {
+     "name": "アンジャル",
+     "orbit": 3
+    }
+   ],
+   "fortresses": [],
+   "rect": [
+    150.81958,
+    188.92882,
+    170.81958,
+    210.92882
+   ],
+   "page": 101,
+   "faction": "alliance",
+   "cx": 160.8,
+   "cy": 199.9,
+   "in_iv_ex": false,
+   "is_corridor": 0
+  },
+  {
+   "system": "ジャムシード",
+   "planets": [
+    {
+     "name": "タフテ・ジャムジード",
+     "orbit": 1
+    },
+    {
+     "name": "カッファー",
+     "orbit": 2
+    },
+    {
+     "name": "ムハバット",
+     "orbit": 3
+    },
+    {
+     "name": "アバダナ",
+     "orbit": 4
+    }
+   ],
+   "fortresses": [],
+   "rect": [
+    220.21843,
+    190.02173,
+    240.21843,
+    212.02173
+   ],
+   "page": 101,
+   "faction": "alliance",
+   "cx": 230.2,
+   "cy": 201.0,
+   "in_iv_ex": true,
+   "is_corridor": 0
+  },
+  {
+   "system": "トリプラ",
+   "planets": [
+    {
+     "name": "パルメレンド",
+     "orbit": 1
+    },
+    {
+     "name": "アガタラ",
+     "orbit": 2
+    },
+    {
+     "name": "カリャンプール",
+     "orbit": 3
+    },
+    {
+     "name": "イスファハン",
+     "orbit": 4
+    }
+   ],
+   "fortresses": [],
+   "rect": [
+    378.6883,
+    196.03264,
+    398.6883,
+    218.03264
+   ],
+   "page": 101,
+   "faction": "alliance",
+   "cx": 388.7,
+   "cy": 207.0,
+   "in_iv_ex": true,
+   "is_corridor": 0
+  },
+  {
+   "system": "タッシリ",
+   "planets": [
+    {
+     "name": "タッシリ・ナジェール",
+     "orbit": 1
+    },
+    {
+     "name": "アドラル・ソアフ",
+     "orbit": 2
+    },
+    {
+     "name": "トゥアレグ",
+     "orbit": 3
+    }
+   ],
+   "fortresses": [],
+   "rect": [
+    314.7539,
+    203.13646,
+    334.7539,
+    225.13646
+   ],
+   "page": 101,
+   "faction": "alliance",
+   "cx": 324.8,
+   "cy": 214.1,
+   "in_iv_ex": true,
+   "is_corridor": 0
+  },
+  {
+   "system": "シュパーラ",
+   "planets": [
+    {
+     "name": "アルンキパ",
+     "orbit": 1
+    },
+    {
+     "name": "ヴィスカ・グランデ",
+     "orbit": 2
+    },
+    {
+     "name": "シウダ・ロドリゴ",
+     "orbit": 3
+    },
+    {
+     "name": "ヴィシュコフ",
+     "orbit": 4
+    }
+   ],
+   "fortresses": [],
+   "rect": [
+    430.60084,
+    203.13646,
+    450.60084,
+    225.13646
+   ],
+   "page": 101,
+   "faction": "alliance",
+   "cx": 440.6,
+   "cy": 214.1,
+   "in_iv_ex": true,
+   "is_corridor": 0
+  },
+  {
+   "system": "ドーリア",
+   "planets": [
+    {
+     "name": "モンテカプラロ",
+     "orbit": 1
+    },
+    {
+     "name": "カスタノーラ",
+     "orbit": 2
+    },
+    {
+     "name": "ビエヴェッタ",
+     "orbit": 3
+    },
+    {
+     "name": "ボルケーゼ",
+     "orbit": 4
+    }
+   ],
+   "fortresses": [],
+   "rect": [
+    193.44249,
+    225.54082,
+    213.44249,
+    247.54082
+   ],
+   "page": 101,
+   "faction": "alliance",
+   "cx": 203.4,
+   "cy": 236.5,
+   "in_iv_ex": true,
+   "is_corridor": 0
+  },
+  {
+   "system": "シヴァ",
+   "planets": [
+    {
+     "name": "パールヴァティ",
+     "orbit": 1
+    },
+    {
+     "name": "ガンガー",
+     "orbit": 2
+    },
+    {
+     "name": "ナンディ",
+     "orbit": 3
+    },
+    {
+     "name": "アナンタ",
+     "orbit": 4
+    }
+   ],
+   "fortresses": [],
+   "rect": [
+    136.61194,
+    232.64464,
+    156.61194,
+    254.64464
+   ],
+   "page": 101,
+   "faction": "alliance",
+   "cx": 146.6,
+   "cy": 243.6,
+   "in_iv_ex": true,
+   "is_corridor": 0
+  },
+  {
+   "system": "エル・ファシル",
+   "planets": [
+    {
+     "name": "カルタヘナ",
+     "orbit": 1
+    },
+    {
+     "name": "ラス・カシタス",
+     "orbit": 2
+    },
+    {
+     "name": "サンタ・アナ",
+     "orbit": 3
+    },
+    {
+     "name": "サルバドル",
+     "orbit": 4
+    }
+   ],
+   "fortresses": [],
+   "rect": [
+    228.96161,
+    241.38782,
+    248.96161,
+    263.38783
+   ],
+   "page": 101,
+   "faction": "alliance",
+   "cx": 239.0,
+   "cy": 252.4,
+   "in_iv_ex": true,
+   "is_corridor": 0
+  },
+  {
+   "system": "ガンダルヴァ",
+   "planets": [
+    {
+     "name": "ウルヴァシー",
+     "orbit": 1
+    },
+    {
+     "name": "カルティケーヤ",
+     "orbit": 2
+    },
+    {
+     "name": "アガスティア",
+     "orbit": 3
+    },
+    {
+     "name": "ヴァルナ",
+     "orbit": 4
+    }
+   ],
+   "fortresses": [],
+   "rect": [
+    343.71565,
+    247.94519,
+    363.71565,
+    269.9452
+   ],
+   "page": 101,
+   "faction": "alliance",
+   "cx": 353.7,
+   "cy": 258.9,
+   "in_iv_ex": true,
+   "is_corridor": 0
+  },
+  {
+   "system": "ランテマリオ",
+   "planets": [
+    {
+     "name": "ルエヴィト",
+     "orbit": 1
+    },
+    {
+     "name": "スヴェン・ヴィト",
+     "orbit": 2
+    },
+    {
+     "name": "ヤロヴィト",
+     "orbit": 3
+    }
+   ],
+   "fortresses": [],
+   "rect": [
+    279.2348,
+    254.50255,
+    299.2348,
+    276.50257
+   ],
+   "page": 101,
+   "faction": "alliance",
+   "cx": 289.2,
+   "cy": 265.5,
+   "in_iv_ex": true,
+   "is_corridor": 0
+  },
+  {
+   "system": "メルカルト",
+   "planets": [
+    {
+     "name": "アシュール",
+     "orbit": 1
+    },
+    {
+     "name": "ネルガル",
+     "orbit": 2
+    },
+    {
+     "name": "バール・ザフォン",
+     "orbit": 3
+    }
+   ],
+   "fortresses": [],
+   "rect": [
+    422.95057,
+    255.049,
+    442.95057,
+    277.049
+   ],
+   "page": 101,
+   "faction": "alliance",
+   "cx": 433.0,
+   "cy": 266.0,
+   "in_iv_ex": false,
+   "is_corridor": 0
+  },
+  {
+   "system": "エルゴン",
+   "planets": [
+    {
+     "name": "カモロク",
+     "orbit": 1
+    },
+    {
+     "name": "ブタンディガ",
+     "orbit": 2
+    },
+    {
+     "name": "ムバレ",
+     "orbit": 3
+    },
+    {
+     "name": "カンパラ",
+     "orbit": 4
+    }
+   ],
+   "fortresses": [],
+   "rect": [
+    163.93433,
+    260.5135,
+    183.93433,
+    282.5135
+   ],
+   "page": 101,
+   "faction": "alliance",
+   "cx": 173.9,
+   "cy": 271.5,
+   "in_iv_ex": true,
+   "is_corridor": 0
+  },
+  {
+   "system": "マル・アデッタ",
+   "planets": [
+    {
+     "name": "バラセット",
+     "orbit": 1
+    },
+    {
+     "name": "アヴェラノス",
+     "orbit": 2
+    },
+    {
+     "name": "ファルネーゼ",
+     "orbit": 3
+    },
+    {
+     "name": "マントヴァ",
+     "orbit": 4
+    }
+   ],
+   "fortresses": [],
+   "rect": [
+    307.6501,
+    282.3714,
+    327.6501,
+    304.3714
+   ],
+   "page": 101,
+   "faction": "alliance",
+   "cx": 317.7,
+   "cy": 293.4,
+   "in_iv_ex": true,
+   "is_corridor": 0
+  },
+  {
+   "system": "バラトループ",
+   "planets": [
+    {
+     "name": "バラトループ1",
+     "orbit": 1
+    },
+    {
+     "name": "バラトループ2",
+     "orbit": 2
+    },
+    {
+     "name": "バラトループ3",
+     "orbit": 3
+    }
+   ],
+   "fortresses": [],
+   "rect": [
+    393.44239,
+    289.47523,
+    413.44239,
+    311.47523
+   ],
+   "page": 101,
+   "faction": "alliance",
+   "cx": 403.4,
+   "cy": 300.5,
+   "in_iv_ex": true,
+   "is_corridor": 0
+  },
+  {
+   "system": "シャンダルーア",
+   "planets": [
+    {
+     "name": "シャンダルーア1",
+     "orbit": 1
+    },
+    {
+     "name": "シャンダルーア2",
+     "orbit": 2
+    },
+    {
+     "name": "シャンダルーア3",
+     "orbit": 3
+    }
+   ],
+   "fortresses": [],
+   "rect": [
+    336.06538,
+    290.02168,
+    356.06538,
+    312.02168
+   ],
+   "page": 101,
+   "faction": "alliance",
+   "cx": 346.1,
+   "cy": 301.0,
+   "in_iv_ex": true,
+   "is_corridor": 0
+  },
+  {
+   "system": "ダゴン",
+   "planets": [
+    {
+     "name": "ダゴン1",
+     "orbit": 1
+    },
+    {
+     "name": "ダゴン2",
+     "orbit": 2
+    },
+    {
+     "name": "ダゴン3",
+     "orbit": 3
+    },
+    {
+     "name": "ダゴン4",
+     "orbit": 4
+    }
+   ],
+   "fortresses": [],
+   "rect": [
+    151.91248,
+    297.67195,
+    171.91248,
+    319.67195
+   ],
+   "page": 101,
+   "faction": "alliance",
+   "cx": 161.9,
+   "cy": 308.7,
+   "in_iv_ex": true,
+   "is_corridor": 0
+  },
+  {
+   "system": "ティアマト",
+   "planets": [
+    {
+     "name": "ティアマト1",
+     "orbit": 1
+    },
+    {
+     "name": "ティアマト2",
+     "orbit": 2
+    },
+    {
+     "name": "ティアマト3",
+     "orbit": 3
+    },
+    {
+     "name": "ティアマト4",
+     "orbit": 4
+    }
+   ],
+   "fortresses": [],
+   "rect": [
+    213.66107,
+    297.67195,
+    233.66106,
+    319.67195
+   ],
+   "page": 101,
+   "faction": "alliance",
+   "cx": 223.7,
+   "cy": 308.7,
+   "in_iv_ex": true,
+   "is_corridor": 0
+  },
+  {
+   "system": "ドラゴニア",
+   "planets": [
+    {
+     "name": "ドラゴニア1",
+     "orbit": 1
+    },
+    {
+     "name": "ドラゴニア2",
+     "orbit": 2
+    },
+    {
+     "name": "ドラゴニア3",
+     "orbit": 3
+    }
+   ],
+   "fortresses": [],
+   "rect": [
+    243.7157,
+    303.68287,
+    263.7157,
+    325.68287
+   ],
+   "page": 101,
+   "faction": "alliance",
+   "cx": 253.7,
+   "cy": 314.7,
+   "in_iv_ex": false,
+   "is_corridor": 0
+  },
+  {
+   "system": "フォルセティ",
+   "planets": [],
+   "fortresses": [],
+   "rect": [
+    279.2348,
+    304.77577,
+    299.2348,
+    326.77577
+   ],
+   "page": 101,
+   "faction": "alliance",
+   "cx": 289.2,
+   "cy": 315.8,
+   "in_iv_ex": true,
+   "is_corridor": 0
+  },
+  {
+   "system": "アスターテ",
+   "planets": [
+    {
+     "name": "アスターテ1",
+     "orbit": 1
+    },
+    {
+     "name": "アスターテ2",
+     "orbit": 2
+    },
+    {
+     "name": "アスターテ3",
+     "orbit": 3
+    },
+    {
+     "name": "アスターテ4",
+     "orbit": 4
+    }
+   ],
+   "fortresses": [],
+   "rect": [
+    185.79224,
+    317.8905,
+    205.79224,
+    339.8905
+   ],
+   "page": 101,
+   "faction": "alliance",
+   "cx": 195.8,
+   "cy": 328.9,
+   "in_iv_ex": true,
+   "is_corridor": 0
+  },
+  {
+   "system": "ファイアザード",
+   "planets": [
+    {
+     "name": "ファイアザード1",
+     "orbit": 1
+    },
+    {
+     "name": "ファイアザード2",
+     "orbit": 2
+    },
+    {
+     "name": "ファイアザード3",
+     "orbit": 3
+    }
+   ],
+   "fortresses": [],
+   "rect": [
+    308.74299,
+    317.8905,
+    328.74299,
+    339.8905
+   ],
+   "page": 101,
+   "faction": "alliance",
+   "cx": 318.7,
+   "cy": 328.9,
+   "in_iv_ex": true,
+   "is_corridor": 0
+  },
+  {
+   "system": "ポレヴィト",
+   "planets": [
+    {
+     "name": "ルジアーナ",
+     "orbit": 1
+    },
+    {
+     "name": "チェルノボーグ",
+     "orbit": 2
+    },
+    {
+     "name": "スヴァローグ",
+     "orbit": 3
+    },
+    {
+     "name": "ポレヴィーク",
+     "orbit": 4
+    }
+   ],
+   "fortresses": [],
+   "rect": [
+    373.77027,
+    324.44789,
+    393.77027,
+    346.44789
+   ],
+   "page": 101,
+   "faction": "alliance",
+   "cx": 383.8,
+   "cy": 335.4,
+   "in_iv_ex": true,
+   "is_corridor": 0
+  },
+  {
+   "system": "アルレスハイム",
+   "planets": [
+    {
+     "name": "アルレスハイム1",
+     "orbit": 1
+    },
+    {
+     "name": "アルレスハイム2",
+     "orbit": 2
+    },
+    {
+     "name": "アルレスハイム3",
+     "orbit": 3
+    },
+    {
+     "name": "アルレスハイム4",
+     "orbit": 4
+    }
+   ],
+   "fortresses": [],
+   "rect": [
+    243.16925,
+    326.08723,
+    263.16926,
+    348.08723
+   ],
+   "page": 101,
+   "faction": "alliance",
+   "cx": 253.2,
+   "cy": 337.1,
+   "in_iv_ex": true,
+   "is_corridor": 0
+  },
+  {
+   "system": "パランティア",
+   "planets": [
+    {
+     "name": "パランティア1",
+     "orbit": 1
+    },
+    {
+     "name": "パランティア2",
+     "orbit": 2
+    },
+    {
+     "name": "パランティア3",
+     "orbit": 3
+    },
+    {
+     "name": "パランティア4",
+     "orbit": 4
+    }
+   ],
+   "fortresses": [],
+   "rect": [
+    278.1419,
+    327.1801,
+    298.1419,
+    349.1801
+   ],
+   "page": 101,
+   "faction": "alliance",
+   "cx": 288.1,
+   "cy": 338.2,
+   "in_iv_ex": true,
+   "is_corridor": 0
+  },
+  {
+   "system": "アルトミュール",
+   "planets": [
+    {
+     "name": "カプチェランカ",
+     "orbit": 1
+    },
+    {
+     "name": "ヴァウブジフ",
+     "orbit": 2
+    },
+    {
+     "name": "エディルネ",
+     "orbit": 3
+    },
+    {
+     "name": "レグニッツァ",
+     "orbit": 4
+    }
+   ],
+   "fortresses": [],
+   "rect": [
+    210.92882,
+    337.01618,
+    230.92882,
+    359.01618
+   ],
+   "page": 101,
+   "faction": "alliance",
+   "cx": 220.9,
+   "cy": 348.0,
+   "in_iv_ex": false,
+   "is_corridor": 0
+  },
+  {
+   "system": "ヴァンフリート",
+   "planets": [
+    {
+     "name": "ヴァンフリート1",
+     "orbit": 1
+    },
+    {
+     "name": "ヴァンフリート2",
+     "orbit": 2
+    },
+    {
+     "name": "ヴァンフリート3",
+     "orbit": 3
+    },
+    {
+     "name": "ヴァンフリート4",
+     "orbit": 4
+    }
+   ],
+   "fortresses": [],
+   "rect": [
+    192.89606,
+    341.38777,
+    212.89606,
+    363.38777
+   ],
+   "page": 101,
+   "faction": "alliance",
+   "cx": 202.9,
+   "cy": 352.4,
+   "in_iv_ex": true,
+   "is_corridor": 1
+  },
+  {
+   "system": "フェザーン",
+   "planets": [
+    {
+     "name": "ジラー",
+     "orbit": 1
+    },
+    {
+     "name": "リウドルフィンク",
+     "orbit": 2
+    },
+    {
+     "name": "ザリエル",
+     "orbit": 3
+    },
+    {
+     "name": "フェザーン",
+     "orbit": 4
+    }
+   ],
+   "fortresses": [],
+   "rect": [
+    371.03804,
+    376.90687,
+    391.03804,
+    398.90687
+   ],
+   "page": 101,
+   "faction": "neutral",
+   "cx": 381.0,
+   "cy": 387.9,
+   "in_iv_ex": true,
+   "is_corridor": 1
+  },
+  {
+   "system": "イゼルローン",
+   "planets": [],
+   "fortresses": [
+    "イゼルローン"
+   ],
+   "rect": [
+    192.89606,
+    389.47517,
+    212.89606,
+    411.47517
+   ],
+   "page": 101,
+   "faction": "empire",
+   "cx": 202.9,
+   "cy": 400.5,
+   "in_iv_ex": true,
+   "is_corridor": 1
+  },
+  {
+   "system": "アイゼンヘルツ",
+   "planets": [
+    {
+     "name": "ヒンターヴィルド",
+     "orbit": 1
+    },
+    {
+     "name": "ラドメール",
+     "orbit": 2
+    },
+    {
+     "name": "ゴータ",
+     "orbit": 3
+    }
+   ],
+   "fortresses": [
+    "ガイエスブルク"
+   ],
+   "rect": [
+    373.22383,
+    418.98335,
+    393.22383,
+    440.98335
+   ],
+   "page": 101,
+   "faction": "empire",
+   "cx": 383.2,
+   "cy": 430.0,
+   "in_iv_ex": true,
+   "is_corridor": 1
+  },
+  {
+   "system": "アムリッツァ",
+   "planets": [
+    {
+     "name": "クラインゲルト",
+     "orbit": 1
+    },
+    {
+     "name": "モールゲン",
+     "orbit": 2
+    },
+    {
+     "name": "ダンク",
+     "orbit": 3
+    },
+    {
+     "name": "ハーフェン",
+     "orbit": 4
+    }
+   ],
+   "fortresses": [],
+   "rect": [
+    192.89606,
+    440.84126,
+    212.89606,
+    462.84126
+   ],
+   "page": 101,
+   "faction": "empire",
+   "cx": 202.9,
+   "cy": 451.8,
+   "in_iv_ex": true,
+   "is_corridor": 1
+  },
+  {
+   "system": "フォルゲン",
+   "planets": [
+    {
+     "name": "シュヴァンガウ",
+     "orbit": 1
+    },
+    {
+     "name": "フュッセン",
+     "orbit": 2
+    },
+    {
+     "name": "ボーデルスベルグ",
+     "orbit": 3
+    }
+   ],
+   "fortresses": [],
+   "rect": [
+    437.1582,
+    440.84126,
+    457.1582,
+    462.84126
+   ],
+   "page": 101,
+   "faction": "empire",
+   "cx": 447.2,
+   "cy": 451.8,
+   "in_iv_ex": true,
+   "is_corridor": 1
+  },
+  {
+   "system": "ヨーツンヘイム",
+   "planets": [
+    {
+     "name": "ウトガルド",
+     "orbit": 1
+    },
+    {
+     "name": "ヨーツンヘイム",
+     "orbit": 2
+    },
+    {
+     "name": "エーリヴァーガル",
+     "orbit": 3
+    }
+   ],
+   "fortresses": [],
+   "rect": [
+    387.43147,
+    455.0489,
+    407.43147,
+    477.0489
+   ],
+   "page": 101,
+   "faction": "empire",
+   "cx": 397.4,
+   "cy": 466.0,
+   "in_iv_ex": false,
+   "is_corridor": 0
+  },
+  {
+   "system": "ヴァンステイド",
+   "planets": [
+    {
+     "name": "ラブンストラップ",
+     "orbit": 1
+    },
+    {
+     "name": "レグステッド",
+     "orbit": 2
+    },
+    {
+     "name": "ファルドガルデ",
+     "orbit": 3
+    }
+   ],
+   "fortresses": [],
+   "rect": [
+    237.15833,
+    455.59535,
+    257.15834,
+    477.59535
+   ],
+   "page": 101,
+   "faction": "empire",
+   "cx": 247.2,
+   "cy": 466.6,
+   "in_iv_ex": true,
+   "is_corridor": 0
+  },
+  {
+   "system": "ビルロスト",
+   "planets": [
+    {
+     "name": "ヘイムダル",
+     "orbit": 1
+    },
+    {
+     "name": "ヒミンギョルグ",
+     "orbit": 2
+    },
+    {
+     "name": "ブルトガング",
+     "orbit": 3
+    },
+    {
+     "name": "ギャランホルン",
+     "orbit": 4
+    }
+   ],
+   "fortresses": [],
+   "rect": [
+    142.07642,
+    461.05979,
+    162.07642,
+    483.05979
+   ],
+   "page": 101,
+   "faction": "empire",
+   "cx": 152.1,
+   "cy": 472.1,
+   "in_iv_ex": true,
+   "is_corridor": 0
+  },
+  {
+   "system": "アルメントフベール",
+   "planets": [
+    {
+     "name": "ビッケンバッハ",
+     "orbit": 1
+    },
+    {
+     "name": "ゲルンスハイム",
+     "orbit": 2
+    },
+    {
+     "name": "アルスバッハ",
+     "orbit": 3
+    },
+    {
+     "name": "クレーベルク",
+     "orbit": 4
+    }
+   ],
+   "fortresses": [],
+   "rect": [
+    336.61183,
+    462.69917,
+    356.61183,
+    484.69917
+   ],
+   "page": 101,
+   "faction": "empire",
+   "cx": 346.6,
+   "cy": 473.7,
+   "in_iv_ex": true,
+   "is_corridor": 0
+  },
+  {
+   "system": "トラーバッハ",
+   "planets": [
+    {
+     "name": "ヴォルフェルスドルフ",
+     "orbit": 1
+    },
+    {
+     "name": "ファルクヴィーラー",
+     "orbit": 2
+    },
+    {
+     "name": "シュテルネンベルク",
+     "orbit": 3
+    },
+    {
+     "name": "トラーベン",
+     "orbit": 4
+    }
+   ],
+   "fortresses": [],
+   "rect": [
+    285.79219,
+    463.2456,
+    305.79219,
+    485.2456
+   ],
+   "page": 101,
+   "faction": "empire",
+   "cx": 295.8,
+   "cy": 474.2,
+   "in_iv_ex": true,
+   "is_corridor": 0
+  },
+  {
+   "system": "ブラウンシュヴァイク",
+   "planets": [
+    {
+     "name": "ヴェスターラント",
+     "orbit": 1
+    },
+    {
+     "name": "ヴェーデル",
+     "orbit": 2
+    },
+    {
+     "name": "ショーペンシュタット",
+     "orbit": 3
+    },
+    {
+     "name": "フォルケンローデ",
+     "orbit": 4
+    }
+   ],
+   "fortresses": [],
+   "rect": [
+    414.75386,
+    483.46418,
+    434.75386,
+    505.46418
+   ],
+   "page": 101,
+   "faction": "empire",
+   "cx": 424.8,
+   "cy": 494.5,
+   "in_iv_ex": true,
+   "is_corridor": 0
+  },
+  {
+   "system": "ボルソルン",
+   "planets": [
+    {
+     "name": "ベストラ",
+     "orbit": 1
+    },
+    {
+     "name": "ボルソルン",
+     "orbit": 2
+    },
+    {
+     "name": "ヴァイセンバッハ",
+     "orbit": 3
+    },
+    {
+     "name": "ボル",
+     "orbit": 4
+    }
+   ],
+   "fortresses": [],
+   "rect": [
+    157.37696,
+    490.56797,
+    177.37696,
+    512.568
+   ],
+   "page": 101,
+   "faction": "empire",
+   "cx": 167.4,
+   "cy": 501.6,
+   "in_iv_ex": true,
+   "is_corridor": 0
+  },
+  {
+   "system": "ドヴェルグ",
+   "planets": [
+    {
+     "name": "グレイプニル",
+     "orbit": 1
+    },
+    {
+     "name": "イーヴァンルディ",
+     "orbit": 2
+    },
+    {
+     "name": "レージング",
+     "orbit": 3
+    },
+    {
+     "name": "カバール",
+     "orbit": 4
+    }
+   ],
+   "fortresses": [],
+   "rect": [
+    192.89606,
+    491.6609,
+    212.89606,
+    513.6609
+   ],
+   "page": 101,
+   "faction": "empire",
+   "cx": 202.9,
+   "cy": 502.7,
+   "in_iv_ex": true,
+   "is_corridor": 0
+  },
+  {
+   "system": "アルタイル",
+   "planets": [
+    {
+     "name": "カタラウヌム",
+     "orbit": 1
+    },
+    {
+     "name": "アンティノウス",
+     "orbit": 2
+    },
+    {
+     "name": "テルモビュレー",
+     "orbit": 3
+    },
+    {
+     "name": "アルタイル",
+     "orbit": 4
+    }
+   ],
+   "fortresses": [],
+   "rect": [
+    257.3769,
+    506.41499,
+    277.3769,
+    528.415
+   ],
+   "page": 101,
+   "faction": "empire",
+   "cx": 267.4,
+   "cy": 517.4,
+   "in_iv_ex": false,
+   "is_corridor": 0
+  },
+  {
+   "system": "フレイア",
+   "planets": [
+    {
+     "name": "フォールクヴァング",
+     "orbit": 1
+    },
+    {
+     "name": "フェンサリル",
+     "orbit": 2
+    },
+    {
+     "name": "ブリシンガメン",
+     "orbit": 3
+    }
+   ],
+   "fortresses": [
+    "レンテンベルグ"
+   ],
+   "rect": [
+    342.0763,
+    506.96144,
+    362.0763,
+    528.9614
+   ],
+   "page": 101,
+   "faction": "empire",
+   "cx": 352.1,
+   "cy": 518.0,
+   "in_iv_ex": true,
+   "is_corridor": 0
+  },
+  {
+   "system": "ヤヴァンハール",
+   "planets": [
+    {
+     "name": "ハールバルド",
+     "orbit": 1
+    },
+    {
+     "name": "リューゲン",
+     "orbit": 2
+    },
+    {
+     "name": "ヴィスマール",
+     "orbit": 3
+    },
+    {
+     "name": "シュヴェリーン",
+     "orbit": 4
+    }
+   ],
+   "fortresses": [],
+   "rect": [
+    215.30042,
+    512.97238,
+    235.30042,
+    534.97238
+   ],
+   "page": 101,
+   "faction": "empire",
+   "cx": 225.3,
+   "cy": 524.0,
+   "in_iv_ex": true,
+   "is_corridor": 0
+  },
+  {
+   "system": "キフォイザー",
+   "planets": [
+    {
+     "name": "ロールバッハ",
+     "orbit": 1
+    },
+    {
+     "name": "ヴァーゲンバッハ",
+     "orbit": 2
+    },
+    {
+     "name": "ヴァルテンキルヒェン",
+     "orbit": 3
+    }
+   ],
+   "fortresses": [
+    "ガルミッシュ"
+   ],
+   "rect": [
+    422.95057,
+    526.0871,
+    442.95057,
+    548.0871
+   ],
+   "page": 101,
+   "faction": "empire",
+   "cx": 433.0,
+   "cy": 537.1,
+   "in_iv_ex": true,
+   "is_corridor": 0
+  },
+  {
+   "system": "アルヴィース",
+   "planets": [
+    {
+     "name": "ビルスキルニル",
+     "orbit": 1
+    },
+    {
+     "name": "スルード",
+     "orbit": 2
+    },
+    {
+     "name": "ウンターグリューン",
+     "orbit": 3
+    },
+    {
+     "name": "ヴァンガル",
+     "orbit": 4
+    }
+   ],
+   "fortresses": [],
+   "rect": [
+    299.45338,
+    547.945,
+    319.45338,
+    569.945
+   ],
+   "page": 101,
+   "faction": "empire",
+   "cx": 309.5,
+   "cy": 558.9,
+   "in_iv_ex": true,
+   "is_corridor": 0
+  },
+  {
+   "system": "太陽系",
+   "planets": [
+    {
+     "name": "○水星",
+     "orbit": 1
+    },
+    {
+     "name": "○金星",
+     "orbit": 2
+    },
+    {
+     "name": "○地球",
+     "orbit": 3
+    },
+    {
+     "name": "○火星",
+     "orbit": 4
+    }
+   ],
+   "fortresses": [],
+   "rect": [
+    126.77588,
+    549.0379,
+    146.77588,
+    571.0379
+   ],
+   "page": 101,
+   "faction": "empire",
+   "cx": 136.8,
+   "cy": 560.0,
+   "in_iv_ex": false,
+   "is_corridor": 0
+  },
+  {
+   "system": "バルドル",
+   "planets": [
+    {
+     "name": "ブレイザブリク",
+     "orbit": 1
+    },
+    {
+     "name": "フリングオルニ",
+     "orbit": 2
+    },
+    {
+     "name": "グリトニル",
+     "orbit": 3
+    },
+    {
+     "name": "ホズ",
+     "orbit": 4
+    }
+   ],
+   "fortresses": [],
+   "rect": [
+    436.61177,
+    556.1417,
+    456.61177,
+    578.1417
+   ],
+   "page": 101,
+   "faction": "empire",
+   "cx": 446.6,
+   "cy": 567.1,
+   "in_iv_ex": false,
+   "is_corridor": 0
+  },
+  {
+   "system": "リンダーホーフ",
+   "planets": [
+    {
+     "name": "ノイシュヴァンシュタイン",
+     "orbit": 1
+    },
+    {
+     "name": "キームゼー",
+     "orbit": 2
+    },
+    {
+     "name": "ホーエンシュヴァンガウ",
+     "orbit": 3
+    },
+    {
+     "name": "オーバーアマガウ",
+     "orbit": 4
+    }
+   ],
+   "fortresses": [],
+   "rect": [
+    185.79224,
+    562.6991,
+    205.79224,
+    584.6991
+   ],
+   "page": 101,
+   "faction": "empire",
+   "cx": 195.8,
+   "cy": 573.7,
+   "in_iv_ex": false,
+   "is_corridor": 0
+  },
+  {
+   "system": "シリウス",
+   "planets": [
+    {
+     "name": "ポ・トロ",
+     "orbit": 1
+    },
+    {
+     "name": "エンメ・ヤ",
+     "orbit": 2
+    },
+    {
+     "name": "ノンモ",
+     "orbit": 3
+    },
+    {
+     "name": "ロンドリーナ",
+     "orbit": 4
+    }
+   ],
+   "fortresses": [],
+   "rect": [
+    113.661128,
+    576.3603,
+    133.66114,
+    598.3603
+   ],
+   "page": 101,
+   "faction": "empire",
+   "cx": 123.7,
+   "cy": 587.4,
+   "in_iv_ex": false,
+   "is_corridor": 0
+  },
+  {
+   "system": "ヴェガ",
+   "planets": [
+    {
+     "name": "オルフェウス",
+     "orbit": 1
+    },
+    {
+     "name": "エウリュディケ",
+     "orbit": 2
+    },
+    {
+     "name": "アクリシオス",
+     "orbit": 3
+    },
+    {
+     "name": "ベルセボネー",
+     "orbit": 4
+    }
+   ],
+   "fortresses": [],
+   "rect": [
+    134.9726,
+    577.99966,
+    154.9726,
+    599.99966
+   ],
+   "page": 101,
+   "faction": "empire",
+   "cx": 145.0,
+   "cy": 589.0,
+   "in_iv_ex": false,
+   "is_corridor": 0
+  },
+  {
+   "system": "アルテナ",
+   "planets": [
+    {
+     "name": "ヴェセルデ",
+     "orbit": 1
+    },
+    {
+     "name": "ナッハロート",
+     "orbit": 2
+    },
+    {
+     "name": "ノイエンラーデ",
+     "orbit": 3
+    },
+    {
+     "name": "ヘートフェルト",
+     "orbit": 4
+    }
+   ],
+   "fortresses": [],
+   "rect": [
+    337.15827,
+    584.01058,
+    357.15827,
+    606.01058
+   ],
+   "page": 101,
+   "faction": "empire",
+   "cx": 347.2,
+   "cy": 595.0,
+   "in_iv_ex": true,
+   "is_corridor": 0
+  },
+  {
+   "system": "リッテンハイム",
+   "planets": [
+    {
+     "name": "インゲンハイム",
+     "orbit": 1
+    },
+    {
+     "name": "デュンツェンハイム",
+     "orbit": 2
+    },
+    {
+     "name": "アルテンハイム",
+     "orbit": 3
+    },
+    {
+     "name": "ローゲンドルフ",
+     "orbit": 4
+    }
+   ],
+   "fortresses": [],
+   "rect": [
+    414.75386,
+    591.6608,
+    434.75386,
+    613.6608
+   ],
+   "page": 101,
+   "faction": "empire",
+   "cx": 424.8,
+   "cy": 602.7,
+   "in_iv_ex": true,
+   "is_corridor": 0
+  },
+  {
+   "system": "ヴェルラ",
+   "planets": [
+    {
+     "name": "マルクト",
+     "orbit": 1
+    },
+    {
+     "name": "ヤコビ",
+     "orbit": 2
+    },
+    {
+     "name": "シュテファニ",
+     "orbit": 3
+    }
+   ],
+   "fortresses": [],
+   "rect": [
+    263.93428,
+    599.3111,
+    283.93428,
+    621.3111
+   ],
+   "page": 101,
+   "faction": "empire",
+   "cx": 273.9,
+   "cy": 610.3,
+   "in_iv_ex": false,
+   "is_corridor": 0
+  },
+  {
+   "system": "ヴィレンシュタイン",
+   "planets": [
+    {
+     "name": "ウイツィッヒハウゼン",
+     "orbit": 1
+    },
+    {
+     "name": "ヴァイセンホルン",
+     "orbit": 2
+    },
+    {
+     "name": "グラフェルツホーフェン",
+     "orbit": 3
+    },
+    {
+     "name": "オーベンハウゼン",
+     "orbit": 4
+    }
+   ],
+   "fortresses": [],
+   "rect": [
+    172.67749,
+    613.51876,
+    192.67749,
+    635.51876
+   ],
+   "page": 101,
+   "faction": "empire",
+   "cx": 182.7,
+   "cy": 624.5,
+   "in_iv_ex": true,
+   "is_corridor": 0
+  },
+  {
+   "system": "ハインスベルク",
+   "planets": [
+    {
+     "name": "ランデラート",
+     "orbit": 1
+    },
+    {
+     "name": "ダッセル",
+     "orbit": 2
+    },
+    {
+     "name": "ミュレンアルク",
+     "orbit": 3
+    }
+   ],
+   "fortresses": [],
+   "rect": [
+    214.75397,
+    634.8302,
+    234.75397,
+    656.8302
+   ],
+   "page": 101,
+   "faction": "empire",
+   "cx": 224.8,
+   "cy": 645.8,
+   "in_iv_ex": false,
+   "is_corridor": 0
+  },
+  {
+   "system": "ヴァルデマール",
+   "planets": [
+    {
+     "name": "ウーファー",
+     "orbit": 1
+    },
+    {
+     "name": "パウル",
+     "orbit": 2
+    },
+    {
+     "name": "リンケ",
+     "orbit": 3
+    }
+   ],
+   "fortresses": [],
+   "rect": [
+    371.03804,
+    635.37667,
+    391.03804,
+    657.37667
+   ],
+   "page": 101,
+   "faction": "empire",
+   "cx": 381.0,
+   "cy": 646.4,
+   "in_iv_ex": false,
+   "is_corridor": 0
+  },
+  {
+   "system": "ヴァルハラ",
+   "planets": [
+    {
+     "name": "ゾースト",
+     "orbit": 1
+    },
+    {
+     "name": "オーディン",
+     "orbit": 2
+    },
+    {
+     "name": "トゥール",
+     "orbit": 3
+    },
+    {
+     "name": "ヴァルグリンド",
+     "orbit": 4
+    }
+   ],
+   "fortresses": [],
+   "rect": [
+    278.1419,
+    635.9231,
+    298.1419,
+    657.9231
+   ],
+   "page": 101,
+   "faction": "empire",
+   "cx": 288.1,
+   "cy": 646.9,
+   "in_iv_ex": true,
+   "is_corridor": 0
+  },
+  {
+   "system": "シャンタウ",
+   "planets": [
+    {
+     "name": "クネスドルフ",
+     "orbit": 1
+    },
+    {
+     "name": "ハーケンドルフ",
+     "orbit": 2
+    },
+    {
+     "name": "ノイエンキルヒェン",
+     "orbit": 3
+    },
+    {
+     "name": "ゼードルフ",
+     "orbit": 4
+    }
+   ],
+   "fortresses": [],
+   "rect": [
+    330.05445,
+    635.9231,
+    350.05445,
+    657.9231
+   ],
+   "page": 101,
+   "faction": "empire",
+   "cx": 340.1,
+   "cy": 646.9,
+   "in_iv_ex": true,
+   "is_corridor": 0
+  },
+  {
+   "system": "ニヴルヘイム",
+   "planets": [
+    {
+     "name": "エリューズニル",
+     "orbit": 1
+    },
+    {
+     "name": "ギョッル",
+     "orbit": 2
+    },
+    {
+     "name": "フヴェルゲルミル",
+     "orbit": 3
+    }
+   ],
+   "fortresses": [],
+   "rect": [
+    236.61188,
+    641.3876,
+    256.61189,
+    663.3876
+   ],
+   "page": 101,
+   "faction": "empire",
+   "cx": 246.6,
+   "cy": 652.4,
+   "in_iv_ex": false,
+   "is_corridor": 0
+  },
+  {
+   "system": "ランメルスベルク",
+   "planets": [
+    {
+     "name": "ハルスブリュッケ",
+     "orbit": 1
+    },
+    {
+     "name": "ハルテンシュタイン",
+     "orbit": 2
+    },
+    {
+     "name": "ヒンメルスフュルスト",
+     "orbit": 3
+    },
+    {
+     "name": "シュレマ",
+     "orbit": 4
+    }
+   ],
+   "fortresses": [],
+   "rect": [
+    408.74293,
+    642.48049,
+    428.74293,
+    664.48049
+   ],
+   "page": 101,
+   "faction": "empire",
+   "cx": 418.7,
+   "cy": 653.5,
+   "in_iv_ex": false,
+   "is_corridor": 0
+  },
+  {
+   "system": "カストロプ",
+   "planets": [
+    {
+     "name": "カストロプ",
+     "orbit": 1
+    },
+    {
+     "name": "ニーダー・ヴィンデンボルン",
+     "orbit": 2
+    },
+    {
+     "name": "ヴォルディングボルグ",
+     "orbit": 3
+    },
+    {
+     "name": "マリーンドルフ",
+     "orbit": 4
+    }
+   ],
+   "fortresses": [],
+   "rect": [
+    163.38788,
+    663.79196,
+    183.38788,
+    685.79196
+   ],
+   "page": 101,
+   "faction": "empire",
+   "cx": 173.4,
+   "cy": 674.8,
+   "in_iv_ex": true,
+   "is_corridor": 0
+  },
+  {
+   "system": "アスガルド",
+   "planets": [
+    {
+     "name": "ミーミル",
+     "orbit": 1
+    },
+    {
+     "name": "ギンヌンガガガブ",
+     "orbit": 2
+    },
+    {
+     "name": "トイトブルク",
+     "orbit": 3
+    },
+    {
+     "name": "イーダリル",
+     "orbit": 4
+    }
+   ],
+   "fortresses": [],
+   "rect": [
+    314.20747,
+    664.8848,
+    334.20747,
+    686.8848
+   ],
+   "page": 101,
+   "faction": "empire",
+   "cx": 324.2,
+   "cy": 675.9,
+   "in_iv_ex": false,
+   "is_corridor": 0
+  },
+  {
+   "system": "ヴァナヘイム",
+   "planets": [
+    {
+     "name": "エインヘリヤル",
+     "orbit": 1
+    },
+    {
+     "name": "ノーアトゥーン",
+     "orbit": 2
+    },
+    {
+     "name": "ニョルド",
+     "orbit": 3
+    },
+    {
+     "name": "フレイ",
+     "orbit": 4
+    }
+   ],
+   "fortresses": [],
+   "rect": [
+    214.75397,
+    670.89578,
+    234.75397,
+    692.89578
+   ],
+   "page": 101,
+   "faction": "empire",
+   "cx": 224.8,
+   "cy": 681.9,
+   "in_iv_ex": false,
+   "is_corridor": 0
+  },
+  {
+   "system": "ヴィッテルスバッハ",
+   "planets": [
+    {
+     "name": "レジデンツ",
+     "orbit": 1
+    },
+    {
+     "name": "ニュンフェンブルク",
+     "orbit": 2
+    },
+    {
+     "name": "ヴィクトアーリエン",
+     "orbit": 3
+    }
+   ],
+   "fortresses": [],
+   "rect": [
+    371.58448,
+    672.5351,
+    391.58448,
+    694.5351
+   ],
+   "page": 101,
+   "faction": "empire",
+   "cx": 381.6,
+   "cy": 683.5,
+   "in_iv_ex": false,
+   "is_corridor": 0
+  },
+  {
+   "system": "ルイトポルディング",
+   "planets": [
+    {
+     "name": "ルイトポルト",
+     "orbit": 1
+    },
+    {
+     "name": "ベルトホルト",
+     "orbit": 2
+    },
+    {
+     "name": "アルヌルフ",
+     "orbit": 3
+    }
+   ],
+   "fortresses": [],
+   "rect": [
+    273.22389,
+    685.64987,
+    293.22389,
+    707.64987
+   ],
+   "page": 101,
+   "faction": "empire",
+   "cx": 283.2,
+   "cy": 696.6,
+   "in_iv_ex": false,
+   "is_corridor": 0
+  },
+  {
+   "system": "ヴィンスティンゲン",
+   "planets": [
+    {
+     "name": "フォルマール",
+     "orbit": 1
+    },
+    {
+     "name": "ヴィート",
+     "orbit": 2
+    },
+    {
+     "name": "イーゼンブルク",
+     "orbit": 3
+    }
+   ],
+   "fortresses": [],
+   "rect": [
+    352.4588,
+    700.9504,
+    372.4588,
+    722.9504
+   ],
+   "page": 101,
+   "faction": "empire",
+   "cx": 362.5,
+   "cy": 712.0,
+   "in_iv_ex": false,
+   "is_corridor": 0
+  },
+  {
+   "system": "ウォームスガウ",
+   "planets": [
+    {
+     "name": "ヴェルナー",
+     "orbit": 1
+    },
+    {
+     "name": "コンラート",
+     "orbit": 2
+    },
+    {
+     "name": "ブルーノ",
+     "orbit": 3
+    },
+    {
+     "name": "リウドルフ",
+     "orbit": 4
+    }
+   ],
+   "fortresses": [],
+   "rect": [
+    315.8468,
+    708.0542,
+    335.8468,
+    730.0542
+   ],
+   "page": 101,
+   "faction": "empire",
+   "cx": 325.8,
+   "cy": 719.1,
+   "in_iv_ex": false,
+   "is_corridor": 0
+  }
+ ],
+ "_planet_order": "orbital inner->outer (orbit index 1-based); evidenced by numbered systems + capital orbit variance (Odin=2,Heinessen=3,Fezzan=4)"
+}

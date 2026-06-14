@@ -17,10 +17,27 @@ class Logh7MsgDatTests(unittest.TestCase):
             source = temp_path / "MsgDat"
             out = temp_path / "msgdat-index.json"
             source.mkdir()
+            hfwr_records = [
+                "$r10$$xcommand$日時・$xdate$",
+                "パスワードが一致しません。",
+            ]
+            hfwr_payload = b"\x00".join(record.encode("cp932") for record in hfwr_records) + b"\x00"
+            hfwr_table = b"\x00\x00\x00\x00" * 4
             (source / "messages_0.dat").write_bytes(
-                b"HFWR\x00\x00\x00\x00$r10$$xcommand$\x93\xfa\x8e\x9e\x81\x45$xdate$"
+                b"HFWR"
+                + b"\x00\x00\x00\x00"
+                + len(hfwr_records).to_bytes(4, "little")
+                + (1).to_bytes(4, "little")
+                + hfwr_table
+                + hfwr_payload
             )
-            (source / "g7sw.dat").write_bytes(b"GFWR\x00K0_0\x00M0a0L0D0")
+            gfwr_words = ["気違い", "阿呆"]
+            gfwr_payload = b"".join(
+                len(word).to_bytes(4, "little") + word.encode("utf-16le") for word in gfwr_words
+            )
+            (source / "g7sw.dat").write_bytes(
+                b"GFWR" + b"\x00\x00\x00\x00" + b"\x00\x00\x00\x00" + len(gfwr_words).to_bytes(4, "little") + gfwr_payload
+            )
 
             result = subprocess.run(
                 [sys.executable, str(TOOL), "msgdat-index", str(source), "--out", str(out)],
@@ -37,6 +54,16 @@ class Logh7MsgDatTests(unittest.TestCase):
             self.assertEqual(by_path["messages_0.dat"]["magic"], "HFWR")
             self.assertEqual(by_path["g7sw.dat"]["magic"], "GFWR")
             self.assertIn("$xcommand$", {token["value"] for token in by_path["messages_0.dat"]["tokens"]})
+            self.assertEqual(by_path["messages_0.dat"]["layout"]["textPointerCount"], 2)
+            self.assertEqual(by_path["messages_0.dat"]["layout"]["offsetTableCount"], 1)
+            self.assertEqual(
+                [(record["id"], record["text"]) for record in by_path["messages_0.dat"]["records"]],
+                [(0, "$r10$$xcommand$日時・$xdate$"), (1, "パスワードが一致しません。")],
+            )
+            self.assertEqual(
+                [(record["id"], record["text"]) for record in by_path["g7sw.dat"]["records"]],
+                [(0, "気違い"), (1, "阿呆")],
+            )
             self.assertIn(
                 "\u65e5\u6642\u30fb",
                 {candidate["text"] for candidate in by_path["messages_0.dat"]["textCandidates"]},

@@ -1,0 +1,2534 @@
+{
+  "_meta": {
+    "n_characters": 97,
+    "n_assigned": 97,
+    "n_pinned": 2,
+    "n_reused": 0,
+    "n_unfilled": 0,
+    "hard_constraint_violations": 0
+  },
+  "assignments": [
+    {
+      "index": 0,
+      "character": "Friedrich IV",
+      "faction": "empire",
+      "sex": "male",
+      "desired": {
+        "hair_color": null,
+        "hair_style": null,
+        "age_band": "40s"
+      },
+      "assigned_atlas_slot": "oem_0002",
+      "assigned_attrs": {
+        "sex": "male",
+        "age_band": "40s",
+        "hair_color": "black",
+        "hair_style": "short",
+        "facial_hair": "none",
+        "expression": "stern",
+        "vibe": "grim veteran imperial officer",
+        "faction_guess": "empire"
+      },
+      "match_score": 7.0,
+      "pinned": false,
+      "reused": false,
+      "face_number": null
+    },
+    {
+      "index": 1,
+      "character": "Klasen",
+      "faction": "empire",
+      "sex": "male",
+      "desired": {
+        "hair_color": null,
+        "hair_style": null,
+        "age_band": "40s"
+      },
+      "assigned_atlas_slot": "oem_0114",
+      "assigned_attrs": {
+        "sex": "male",
+        "age_band": "40s",
+        "hair_color": "blond",
+        "hair_style": "short",
+        "facial_hair": "beard",
+        "expression": "stern",
+        "vibe": "rugged bearded officer in cap",
+        "faction_guess": "empire"
+      },
+      "match_score": 7.0,
+      "pinned": false,
+      "reused": false,
+      "face_number": null
+    },
+    {
+      "index": 2,
+      "character": "Lichtenlade",
+      "faction": "empire",
+      "sex": "male",
+      "desired": {
+        "hair_color": null,
+        "hair_style": null,
+        "age_band": "40s"
+      },
+      "assigned_atlas_slot": "oem_0142",
+      "assigned_attrs": {
+        "sex": "male",
+        "age_band": "40s",
+        "hair_color": "blond",
+        "hair_style": "short",
+        "facial_hair": "mustache",
+        "expression": "neutral",
+        "vibe": "mustached middle-aged gentleman",
+        "faction_guess": "empire"
+      },
+      "match_score": 7.0,
+      "pinned": false,
+      "reused": false,
+      "face_number": null
+    },
+    {
+      "index": 3,
+      "character": "Gerlach",
+      "faction": "empire",
+      "sex": "male",
+      "desired": {
+        "hair_color": null,
+        "hair_style": null,
+        "age_band": "40s"
+      },
+      "assigned_atlas_slot": "oem_0130",
+      "assigned_attrs": {
+        "sex": "male",
+        "age_band": "40s",
+        "hair_color": "black",
+        "hair_style": "short",
+        "facial_hair": "mustache",
+        "expression": "calm",
+        "vibe": "dignified mustached aristocrat",
+        "faction_guess": "empire"
+      },
+      "match_score": 7.0,
+      "pinned": false,
+      "reused": false,
+      "face_number": null
+    },
+    {
+      "index": 4,
+      "character": "Remscheid",
+      "faction": "empire",
+      "sex": "male",
+      "desired": {
+        "hair_color": null,
+        "hair_style": null,
+        "age_band": "40s"
+      },
+      "assigned_atlas_slot": "oem_0098",
+      "assigned_attrs": {
+        "sex": "male",
+        "age_band": "40s",
+        "hair_color": "brown",
+        "hair_style": "medium",
+        "facial_hair": "beard",
+        "expression": "calm",
+        "vibe": "bearded scholarly officer",
+        "faction_guess": "empire"
+      },
+      "match_score": 7.0,
+      "pinned": false,
+      "reused": false,
+      "face_number": null
+    },
+    {
+      "index": 5,
+      "character": "Ehrenberg",
+      "faction": "empire",
+      "sex": "male",
+      "desired": {
+        "hair_color": null,
+        "hair_style": null,
+        "age_band": "40s"
+      },
+      "assigned_atlas_slot": "oem_0021",
+      "assigned_attrs": {
+        "sex": "male",
+        "age_band": "40s",
+        "hair_color": "black",
+        "hair_style": "short",
+        "facial_hair": "goatee",
+        "expression": "confident",
+        "vibe": "goateed sharp-eyed commander",
+        "faction_guess": "empire"
+      },
+      "match_score": 7.0,
+      "pinned": false,
+      "reused": false,
+      "face_number": null
+    },
+    {
+      "index": 6,
+      "character": "Haupt",
+      "faction": "empire",
+      "sex": "male",
+      "desired": {
+        "hair_color": null,
+        "hair_style": null,
+        "age_band": "40s"
+      },
+      "assigned_atlas_slot": "oem_0008",
+      "assigned_attrs": {
+        "sex": "male",
+        "age_band": "40s",
+        "hair_color": "brown",
+        "hair_style": "medium",
+        "facial_hair": "beard",
+        "expression": "stern",
+        "vibe": "bearded seasoned officer",
+        "faction_guess": "empire"
+      },
+      "match_score": 7.0,
+      "pinned": false,
+      "reused": false,
+      "face_number": null
+    },
+    {
+      "index": 7,
+      "character": "Steinhof",
+      "faction": "empire",
+      "sex": "male",
+      "desired": {
+        "hair_color": null,
+        "hair_style": null,
+        "age_band": "40s"
+      },
+      "assigned_atlas_slot": "oem_0157",
+      "assigned_attrs": {
+        "sex": "male",
+        "age_band": "40s",
+        "hair_color": "brown",
+        "hair_style": "medium",
+        "facial_hair": "beard",
+        "expression": "angry",
+        "vibe": "fierce full-bearded warrior",
+        "faction_guess": "empire"
+      },
+      "match_score": 7.0,
+      "pinned": false,
+      "reused": false,
+      "face_number": null
+    },
+    {
+      "index": 8,
+      "character": "Abendroth",
+      "faction": "empire",
+      "sex": "male",
+      "desired": {
+        "hair_color": null,
+        "hair_style": null,
+        "age_band": "40s"
+      },
+      "assigned_atlas_slot": "oem_0037",
+      "assigned_attrs": {
+        "sex": "male",
+        "age_band": "40s",
+        "hair_color": "brown",
+        "hair_style": "short",
+        "facial_hair": "mustache",
+        "expression": "smug",
+        "vibe": "sneering mustached officer",
+        "faction_guess": "empire"
+      },
+      "match_score": 7.0,
+      "pinned": false,
+      "reused": false,
+      "face_number": null
+    },
+    {
+      "index": 9,
+      "character": "G. Muckenberger",
+      "faction": "empire",
+      "sex": "male",
+      "desired": {
+        "hair_color": null,
+        "hair_style": null,
+        "age_band": "40s"
+      },
+      "assigned_atlas_slot": "oem_0013",
+      "assigned_attrs": {
+        "sex": "male",
+        "age_band": "40s",
+        "hair_color": "blond",
+        "hair_style": "short",
+        "facial_hair": "none",
+        "expression": "stern",
+        "vibe": "weathered rugged commander",
+        "faction_guess": "empire"
+      },
+      "match_score": 7.0,
+      "pinned": false,
+      "reused": false,
+      "face_number": null
+    },
+    {
+      "index": 10,
+      "character": "Greifs",
+      "faction": "empire",
+      "sex": "male",
+      "desired": {
+        "hair_color": null,
+        "hair_style": null,
+        "age_band": "40s"
+      },
+      "assigned_atlas_slot": "oem_0103",
+      "assigned_attrs": {
+        "sex": "male",
+        "age_band": "40s",
+        "hair_color": "brown",
+        "hair_style": "medium",
+        "facial_hair": "none",
+        "expression": "confident",
+        "vibe": "polished senior commander",
+        "faction_guess": "empire"
+      },
+      "match_score": 7.0,
+      "pinned": false,
+      "reused": false,
+      "face_number": null
+    },
+    {
+      "index": 11,
+      "character": "Oppenheimer",
+      "faction": "empire",
+      "sex": "male",
+      "desired": {
+        "hair_color": null,
+        "hair_style": null,
+        "age_band": "40s"
+      },
+      "assigned_atlas_slot": "oem_0158",
+      "assigned_attrs": {
+        "sex": "male",
+        "age_band": "40s",
+        "hair_color": "brown",
+        "hair_style": "medium",
+        "facial_hair": "goatee",
+        "expression": "stern",
+        "vibe": "bearded veteran officer",
+        "faction_guess": "empire"
+      },
+      "match_score": 7.0,
+      "pinned": false,
+      "reused": false,
+      "face_number": null
+    },
+    {
+      "index": 12,
+      "character": "Ofresser",
+      "faction": "empire",
+      "sex": "male",
+      "desired": {
+        "hair_color": null,
+        "hair_style": null,
+        "age_band": "40s"
+      },
+      "assigned_atlas_slot": "oem_0045",
+      "assigned_attrs": {
+        "sex": "male",
+        "age_band": "40s",
+        "hair_color": "black",
+        "hair_style": "short",
+        "facial_hair": "none",
+        "expression": "stern",
+        "vibe": "imposing slicked-back officer",
+        "faction_guess": "empire"
+      },
+      "match_score": 7.0,
+      "pinned": false,
+      "reused": false,
+      "face_number": null
+    },
+    {
+      "index": 13,
+      "character": "Schaft",
+      "faction": "empire",
+      "sex": "male",
+      "desired": {
+        "hair_color": null,
+        "hair_style": null,
+        "age_band": "40s"
+      },
+      "assigned_atlas_slot": "oem_0150",
+      "assigned_attrs": {
+        "sex": "male",
+        "age_band": "40s",
+        "hair_color": "brown",
+        "hair_style": "short",
+        "facial_hair": "none",
+        "expression": "smug",
+        "vibe": "fleshy scheming official",
+        "faction_guess": "empire"
+      },
+      "match_score": 7.0,
+      "pinned": false,
+      "reused": false,
+      "face_number": null
+    },
+    {
+      "index": 14,
+      "character": "Lohengramm",
+      "faction": "empire",
+      "sex": "male",
+      "desired": {
+        "hair_color": "blond",
+        "hair_style": "long",
+        "age_band": "20s"
+      },
+      "assigned_atlas_slot": "oem_0112",
+      "assigned_attrs": {
+        "sex": "male",
+        "age_band": "20s",
+        "hair_color": "blond",
+        "hair_style": "long",
+        "facial_hair": "none",
+        "expression": "calm",
+        "vibe": "youthful long wavy blond hair, beautiful features",
+        "faction_guess": "empire"
+      },
+      "match_score": 12.0,
+      "pinned": false,
+      "reused": false,
+      "face_number": null
+    },
+    {
+      "index": 15,
+      "character": "Merkatz",
+      "faction": "empire",
+      "sex": "male",
+      "desired": {
+        "hair_color": null,
+        "hair_style": null,
+        "age_band": "40s"
+      },
+      "assigned_atlas_slot": "oem_0127",
+      "assigned_attrs": {
+        "sex": "male",
+        "age_band": "40s",
+        "hair_color": "blond",
+        "hair_style": "short",
+        "facial_hair": "none",
+        "expression": "calm",
+        "vibe": "weathered blond commander",
+        "faction_guess": "empire"
+      },
+      "match_score": 7.0,
+      "pinned": false,
+      "reused": false,
+      "face_number": null
+    },
+    {
+      "index": 16,
+      "character": "Staden",
+      "faction": "empire",
+      "sex": "male",
+      "desired": {
+        "hair_color": null,
+        "hair_style": null,
+        "age_band": "40s"
+      },
+      "assigned_atlas_slot": "oem_0129",
+      "assigned_attrs": {
+        "sex": "male",
+        "age_band": "40s",
+        "hair_color": "brown",
+        "hair_style": "medium",
+        "facial_hair": "none",
+        "expression": "stern",
+        "vibe": "gaunt brooding profile officer",
+        "faction_guess": "empire"
+      },
+      "match_score": 7.0,
+      "pinned": false,
+      "reused": false,
+      "face_number": null
+    },
+    {
+      "index": 17,
+      "character": "Vogel",
+      "faction": "empire",
+      "sex": "male",
+      "desired": {
+        "hair_color": null,
+        "hair_style": null,
+        "age_band": "40s"
+      },
+      "assigned_atlas_slot": "oem_0038",
+      "assigned_attrs": {
+        "sex": "male",
+        "age_band": "40s",
+        "hair_color": "black",
+        "hair_style": "short",
+        "facial_hair": "mustache",
+        "expression": "stern",
+        "vibe": "veteran with thick mustache",
+        "faction_guess": "empire"
+      },
+      "match_score": 7.0,
+      "pinned": false,
+      "reused": false,
+      "face_number": null
+    },
+    {
+      "index": 18,
+      "character": "Hildesheim",
+      "faction": "empire",
+      "sex": "male",
+      "desired": {
+        "hair_color": null,
+        "hair_style": null,
+        "age_band": "40s"
+      },
+      "assigned_atlas_slot": "oem_0134",
+      "assigned_attrs": {
+        "sex": "male",
+        "age_band": "40s",
+        "hair_color": "blond",
+        "hair_style": "short",
+        "facial_hair": "none",
+        "expression": "stern",
+        "vibe": "heavyset stern blond commander",
+        "faction_guess": "empire"
+      },
+      "match_score": 7.0,
+      "pinned": false,
+      "reused": false,
+      "face_number": null
+    },
+    {
+      "index": 19,
+      "character": "Kircheis",
+      "faction": "empire",
+      "sex": "male",
+      "desired": {
+        "hair_color": "red",
+        "hair_style": "long",
+        "age_band": "20s"
+      },
+      "assigned_atlas_slot": "oem_0025",
+      "assigned_attrs": {
+        "sex": "male",
+        "age_band": "20s",
+        "hair_color": "red",
+        "hair_style": "short",
+        "facial_hair": "none",
+        "expression": "neutral",
+        "vibe": "slender red-haired youth",
+        "faction_guess": "empire"
+      },
+      "match_score": 10.5,
+      "pinned": false,
+      "reused": false,
+      "face_number": null
+    },
+    {
+      "index": 20,
+      "character": "Landsberg",
+      "faction": "empire",
+      "sex": "male",
+      "desired": {
+        "hair_color": null,
+        "hair_style": null,
+        "age_band": "40s"
+      },
+      "assigned_atlas_slot": "oem_0042",
+      "assigned_attrs": {
+        "sex": "male",
+        "age_band": "40s",
+        "hair_color": "brown",
+        "hair_style": "short",
+        "facial_hair": "none",
+        "expression": "smug",
+        "vibe": "sharp-featured aristocratic profile",
+        "faction_guess": "empire"
+      },
+      "match_score": 7.0,
+      "pinned": false,
+      "reused": false,
+      "face_number": null
+    },
+    {
+      "index": 21,
+      "character": "Flegel",
+      "faction": "empire",
+      "sex": "male",
+      "desired": {
+        "hair_color": null,
+        "hair_style": null,
+        "age_band": "40s"
+      },
+      "assigned_atlas_slot": "oem_0141",
+      "assigned_attrs": {
+        "sex": "male",
+        "age_band": "40s",
+        "hair_color": "brown",
+        "hair_style": "medium",
+        "facial_hair": "goatee",
+        "expression": "calm",
+        "vibe": "refined gentleman with goatee",
+        "faction_guess": "empire"
+      },
+      "match_score": 7.0,
+      "pinned": false,
+      "reused": false,
+      "face_number": null
+    },
+    {
+      "index": 22,
+      "character": "Seeckt",
+      "faction": "empire",
+      "sex": "male",
+      "desired": {
+        "hair_color": null,
+        "hair_style": null,
+        "age_band": "40s"
+      },
+      "assigned_atlas_slot": "oem_0122",
+      "assigned_attrs": {
+        "sex": "male",
+        "age_band": "40s",
+        "hair_color": "brown",
+        "hair_style": "short",
+        "facial_hair": "mustache",
+        "expression": "stern",
+        "vibe": "bushy-mustached hard veteran",
+        "faction_guess": "empire"
+      },
+      "match_score": 7.0,
+      "pinned": false,
+      "reused": false,
+      "face_number": null
+    },
+    {
+      "index": 23,
+      "character": "Grunemann",
+      "faction": "empire",
+      "sex": "male",
+      "desired": {
+        "hair_color": null,
+        "hair_style": null,
+        "age_band": "40s"
+      },
+      "assigned_atlas_slot": "oem_0088",
+      "assigned_attrs": {
+        "sex": "male",
+        "age_band": "40s",
+        "hair_color": "brown",
+        "hair_style": "medium",
+        "facial_hair": "mustache",
+        "expression": "stern",
+        "vibe": "mustached middle-aged officer",
+        "faction_guess": "empire"
+      },
+      "match_score": 7.0,
+      "pinned": false,
+      "reused": false,
+      "face_number": null
+    },
+    {
+      "index": 24,
+      "character": "Dittersdorf",
+      "faction": "empire",
+      "sex": "male",
+      "desired": {
+        "hair_color": null,
+        "hair_style": null,
+        "age_band": "40s"
+      },
+      "assigned_atlas_slot": "oem_0145",
+      "assigned_attrs": {
+        "sex": "male",
+        "age_band": "40s",
+        "hair_color": "brown",
+        "hair_style": "short",
+        "facial_hair": "goatee",
+        "expression": "smug",
+        "vibe": "goateed sly officer",
+        "faction_guess": "empire"
+      },
+      "match_score": 7.0,
+      "pinned": false,
+      "reused": false,
+      "face_number": null
+    },
+    {
+      "index": 25,
+      "character": "Hofmeister",
+      "faction": "empire",
+      "sex": "male",
+      "desired": {
+        "hair_color": null,
+        "hair_style": null,
+        "age_band": "40s"
+      },
+      "assigned_atlas_slot": "oem_0018",
+      "assigned_attrs": {
+        "sex": "male",
+        "age_band": "40s",
+        "hair_color": "gray",
+        "hair_style": "medium",
+        "facial_hair": "none",
+        "expression": "smug",
+        "vibe": "sharp graying schemer",
+        "faction_guess": "empire"
+      },
+      "match_score": 7.0,
+      "pinned": false,
+      "reused": false,
+      "face_number": null
+    },
+    {
+      "index": 26,
+      "character": "(unnamed-26)",
+      "faction": "empire",
+      "sex": "male",
+      "desired": {
+        "hair_color": null,
+        "hair_style": null,
+        "age_band": "40s"
+      },
+      "assigned_atlas_slot": "oem_0152",
+      "assigned_attrs": {
+        "sex": "male",
+        "age_band": "40s",
+        "hair_color": "brown",
+        "hair_style": "short",
+        "facial_hair": "none",
+        "expression": "stern",
+        "vibe": "gaunt severe officer with sharp cheekbones",
+        "faction_guess": "empire"
+      },
+      "match_score": 7.0,
+      "pinned": false,
+      "reused": false,
+      "face_number": null
+    },
+    {
+      "index": 27,
+      "character": "Mittermeyer",
+      "faction": "empire",
+      "sex": "male",
+      "desired": {
+        "hair_color": "silver",
+        "hair_style": "short",
+        "age_band": "30s"
+      },
+      "assigned_atlas_slot": "oem_0106",
+      "assigned_attrs": {
+        "sex": "male",
+        "age_band": "30s",
+        "hair_color": "silver",
+        "hair_style": "short",
+        "facial_hair": "none",
+        "expression": "calm",
+        "vibe": "neat silver-haired officer",
+        "faction_guess": "empire"
+      },
+      "match_score": 12.0,
+      "pinned": false,
+      "reused": false,
+      "face_number": null
+    },
+    {
+      "index": 28,
+      "character": "Reuenthal",
+      "faction": "empire",
+      "sex": "male",
+      "desired": {
+        "hair_color": "black",
+        "hair_style": "medium",
+        "age_band": "30s"
+      },
+      "assigned_atlas_slot": "oem_0072",
+      "assigned_attrs": {
+        "sex": "male",
+        "age_band": "30s",
+        "hair_color": "black",
+        "hair_style": "medium",
+        "facial_hair": "none",
+        "expression": "smug",
+        "vibe": "slicked-back confident officer",
+        "faction_guess": "empire"
+      },
+      "match_score": 12.0,
+      "pinned": false,
+      "reused": false,
+      "face_number": null
+    },
+    {
+      "index": 29,
+      "character": "Lennenkampf",
+      "faction": "empire",
+      "sex": "male",
+      "desired": {
+        "hair_color": null,
+        "hair_style": null,
+        "age_band": "40s"
+      },
+      "assigned_atlas_slot": "oem_0081",
+      "assigned_attrs": {
+        "sex": "male",
+        "age_band": "40s",
+        "hair_color": "gray",
+        "hair_style": "medium",
+        "facial_hair": "beard",
+        "expression": "stern",
+        "vibe": "bearded gray-haired veteran commander",
+        "faction_guess": "empire"
+      },
+      "match_score": 7.0,
+      "pinned": false,
+      "reused": false,
+      "face_number": null
+    },
+    {
+      "index": 30,
+      "character": "Stockhausen",
+      "faction": "empire",
+      "sex": "male",
+      "desired": {
+        "hair_color": null,
+        "hair_style": null,
+        "age_band": "40s"
+      },
+      "assigned_atlas_slot": "oem_0140",
+      "assigned_attrs": {
+        "sex": "male",
+        "age_band": "40s",
+        "hair_color": "brown",
+        "hair_style": "short",
+        "facial_hair": "mustache",
+        "expression": "stern",
+        "vibe": "slicked-back hair with bushy mustache, dignified",
+        "faction_guess": "empire"
+      },
+      "match_score": 7.0,
+      "pinned": false,
+      "reused": false,
+      "face_number": null
+    },
+    {
+      "index": 31,
+      "character": "Sanford",
+      "faction": "alliance",
+      "sex": "male",
+      "desired": {
+        "hair_color": null,
+        "hair_style": null,
+        "age_band": "40s"
+      },
+      "assigned_atlas_slot": "oam_0208",
+      "assigned_attrs": {
+        "sex": "male",
+        "age_band": "40s",
+        "hair_color": "brown",
+        "hair_style": "short",
+        "facial_hair": "beard",
+        "expression": "calm",
+        "vibe": "bearded beret-wearing alliance officer",
+        "faction_guess": "alliance"
+      },
+      "match_score": 7.0,
+      "pinned": false,
+      "reused": false,
+      "face_number": null
+    },
+    {
+      "index": 32,
+      "character": "Trunicht",
+      "faction": "alliance",
+      "sex": "male",
+      "desired": {
+        "hair_color": null,
+        "hair_style": null,
+        "age_band": "40s"
+      },
+      "assigned_atlas_slot": "oam_0270",
+      "assigned_attrs": {
+        "sex": "male",
+        "age_band": "40s",
+        "hair_color": "blond",
+        "hair_style": "short",
+        "facial_hair": "none",
+        "expression": "stern",
+        "vibe": "burly tough alliance commander",
+        "faction_guess": "alliance"
+      },
+      "match_score": 7.0,
+      "pinned": false,
+      "reused": false,
+      "face_number": null
+    },
+    {
+      "index": 33,
+      "character": "Lebello",
+      "faction": "alliance",
+      "sex": "male",
+      "desired": {
+        "hair_color": null,
+        "hair_style": null,
+        "age_band": "40s"
+      },
+      "assigned_atlas_slot": "oam_0286",
+      "assigned_attrs": {
+        "sex": "male",
+        "age_band": "40s",
+        "hair_color": "black",
+        "hair_style": "short",
+        "facial_hair": "mustache",
+        "expression": "stern",
+        "vibe": "curly-haired mustached officer",
+        "faction_guess": "alliance"
+      },
+      "match_score": 7.0,
+      "pinned": false,
+      "reused": false,
+      "face_number": null
+    },
+    {
+      "index": 34,
+      "character": "Huang",
+      "faction": "alliance",
+      "sex": "male",
+      "desired": {
+        "hair_color": null,
+        "hair_style": null,
+        "age_band": "40s"
+      },
+      "assigned_atlas_slot": "oam_0003",
+      "assigned_attrs": {
+        "sex": "male",
+        "age_band": "40s",
+        "hair_color": "brown",
+        "hair_style": "short",
+        "facial_hair": "mustache",
+        "expression": "neutral",
+        "vibe": "capped mustached career soldier",
+        "faction_guess": "alliance"
+      },
+      "match_score": 7.0,
+      "pinned": false,
+      "reused": false,
+      "face_number": null
+    },
+    {
+      "index": 35,
+      "character": "Winser",
+      "faction": "alliance",
+      "sex": "male",
+      "desired": {
+        "hair_color": null,
+        "hair_style": null,
+        "age_band": "40s"
+      },
+      "assigned_atlas_slot": "oam_0241",
+      "assigned_attrs": {
+        "sex": "male",
+        "age_band": "40s",
+        "hair_color": "black",
+        "hair_style": "short",
+        "facial_hair": "mustache",
+        "expression": "angry",
+        "vibe": "dark-skinned scowling mustached officer",
+        "faction_guess": "alliance"
+      },
+      "match_score": 7.0,
+      "pinned": false,
+      "reused": false,
+      "face_number": null
+    },
+    {
+      "index": 36,
+      "character": "Henslow",
+      "faction": "alliance",
+      "sex": "male",
+      "desired": {
+        "hair_color": null,
+        "hair_style": null,
+        "age_band": "40s"
+      },
+      "assigned_atlas_slot": "oam_0237",
+      "assigned_attrs": {
+        "sex": "male",
+        "age_band": "40s",
+        "hair_color": "brown",
+        "hair_style": "medium",
+        "facial_hair": "mustache",
+        "expression": "calm",
+        "vibe": "refined auburn mustached gentleman",
+        "faction_guess": "alliance"
+      },
+      "match_score": 7.0,
+      "pinned": false,
+      "reused": false,
+      "face_number": null
+    },
+    {
+      "index": 37,
+      "character": "Sithole",
+      "faction": "alliance",
+      "sex": "male",
+      "desired": {
+        "hair_color": null,
+        "hair_style": null,
+        "age_band": "40s"
+      },
+      "assigned_atlas_slot": "oam_0289",
+      "assigned_attrs": {
+        "sex": "male",
+        "age_band": "40s",
+        "hair_color": "blond",
+        "hair_style": "short",
+        "facial_hair": "none",
+        "expression": "stern",
+        "vibe": "stocky grim blond commander",
+        "faction_guess": "alliance"
+      },
+      "match_score": 7.0,
+      "pinned": false,
+      "reused": false,
+      "face_number": null
+    },
+    {
+      "index": 38,
+      "character": "Dawson",
+      "faction": "alliance",
+      "sex": "male",
+      "desired": {
+        "hair_color": null,
+        "hair_style": null,
+        "age_band": "40s"
+      },
+      "assigned_atlas_slot": "oam_0297",
+      "assigned_attrs": {
+        "sex": "male",
+        "age_band": "40s",
+        "hair_color": "blond",
+        "hair_style": "short",
+        "facial_hair": "mustache",
+        "expression": "stern",
+        "vibe": "burly stern mustached officer",
+        "faction_guess": "alliance"
+      },
+      "match_score": 7.0,
+      "pinned": false,
+      "reused": false,
+      "face_number": null
+    },
+    {
+      "index": 39,
+      "character": "Rockwell",
+      "faction": "alliance",
+      "sex": "male",
+      "desired": {
+        "hair_color": null,
+        "hair_style": null,
+        "age_band": "40s"
+      },
+      "assigned_atlas_slot": "oam_0298",
+      "assigned_attrs": {
+        "sex": "male",
+        "age_band": "40s",
+        "hair_color": "gray",
+        "hair_style": "medium",
+        "facial_hair": "none",
+        "expression": "calm",
+        "vibe": "distinguished graying gentleman",
+        "faction_guess": "alliance"
+      },
+      "match_score": 7.0,
+      "pinned": false,
+      "reused": false,
+      "face_number": null
+    },
+    {
+      "index": 40,
+      "character": "Grosvenor",
+      "faction": "alliance",
+      "sex": "male",
+      "desired": {
+        "hair_color": null,
+        "hair_style": null,
+        "age_band": "40s"
+      },
+      "assigned_atlas_slot": "oam_0250",
+      "assigned_attrs": {
+        "sex": "male",
+        "age_band": "40s",
+        "hair_color": "brown",
+        "hair_style": "short",
+        "facial_hair": "none",
+        "expression": "angry",
+        "vibe": "scowling hard-faced officer",
+        "faction_guess": "alliance"
+      },
+      "match_score": 7.0,
+      "pinned": false,
+      "reused": false,
+      "face_number": null
+    },
+    {
+      "index": 41,
+      "character": "Bronze",
+      "faction": "alliance",
+      "sex": "male",
+      "desired": {
+        "hair_color": null,
+        "hair_style": null,
+        "age_band": "40s"
+      },
+      "assigned_atlas_slot": "oam_0006",
+      "assigned_attrs": {
+        "sex": "male",
+        "age_band": "40s",
+        "hair_color": "red",
+        "hair_style": "medium",
+        "facial_hair": "beard",
+        "expression": "stern",
+        "vibe": "fiery red-bearded beret soldier",
+        "faction_guess": "alliance"
+      },
+      "match_score": 7.0,
+      "pinned": false,
+      "reused": false,
+      "face_number": null
+    },
+    {
+      "index": 42,
+      "character": "Lobos",
+      "faction": "alliance",
+      "sex": "male",
+      "desired": {
+        "hair_color": null,
+        "hair_style": null,
+        "age_band": "40s"
+      },
+      "assigned_atlas_slot": "oam_0233",
+      "assigned_attrs": {
+        "sex": "male",
+        "age_band": "40s",
+        "hair_color": "black",
+        "hair_style": "short",
+        "facial_hair": "beard",
+        "expression": "confident",
+        "vibe": "dark-bearded composed commander",
+        "faction_guess": "alliance"
+      },
+      "match_score": 7.0,
+      "pinned": false,
+      "reused": false,
+      "face_number": null
+    },
+    {
+      "index": 43,
+      "character": "D. Greenhill",
+      "faction": "alliance",
+      "sex": "male",
+      "desired": {
+        "hair_color": null,
+        "hair_style": null,
+        "age_band": "50s"
+      },
+      "assigned_atlas_slot": "oam_0292",
+      "assigned_attrs": {
+        "sex": "male",
+        "age_band": "50s",
+        "hair_color": "blond",
+        "hair_style": "short",
+        "facial_hair": "none",
+        "expression": "stern",
+        "vibe": "weathered stern senior officer",
+        "faction_guess": "alliance"
+      },
+      "match_score": 7.0,
+      "pinned": false,
+      "reused": false,
+      "face_number": null
+    },
+    {
+      "index": 44,
+      "character": "Kubersly",
+      "faction": "alliance",
+      "sex": "male",
+      "desired": {
+        "hair_color": null,
+        "hair_style": null,
+        "age_band": "40s"
+      },
+      "assigned_atlas_slot": "oam_0219",
+      "assigned_attrs": {
+        "sex": "male",
+        "age_band": "40s",
+        "hair_color": "black",
+        "hair_style": "short",
+        "facial_hair": "none",
+        "expression": "smug",
+        "vibe": "heavy-browed roguish officer in cap",
+        "faction_guess": "alliance"
+      },
+      "match_score": 7.0,
+      "pinned": false,
+      "reused": false,
+      "face_number": null
+    },
+    {
+      "index": 45,
+      "character": "Paetta",
+      "faction": "alliance",
+      "sex": "male",
+      "desired": {
+        "hair_color": null,
+        "hair_style": null,
+        "age_band": "40s"
+      },
+      "assigned_atlas_slot": "oam_0244",
+      "assigned_attrs": {
+        "sex": "male",
+        "age_band": "40s",
+        "hair_color": "brown",
+        "hair_style": "short",
+        "facial_hair": "mustache",
+        "expression": "smug",
+        "vibe": "wry mustached officer",
+        "faction_guess": "alliance"
+      },
+      "match_score": 7.0,
+      "pinned": false,
+      "reused": false,
+      "face_number": null
+    },
+    {
+      "index": 46,
+      "character": "Lefebvre",
+      "faction": "alliance",
+      "sex": "male",
+      "desired": {
+        "hair_color": null,
+        "hair_style": null,
+        "age_band": "40s"
+      },
+      "assigned_atlas_slot": "oam_0285",
+      "assigned_attrs": {
+        "sex": "male",
+        "age_band": "40s",
+        "hair_color": "gray",
+        "hair_style": "short",
+        "facial_hair": "mustache",
+        "expression": "stern",
+        "vibe": "steel-haired mustached officer",
+        "faction_guess": "alliance"
+      },
+      "match_score": 7.0,
+      "pinned": false,
+      "reused": false,
+      "face_number": null
+    },
+    {
+      "index": 47,
+      "character": "Pastolle",
+      "faction": "alliance",
+      "sex": "male",
+      "desired": {
+        "hair_color": null,
+        "hair_style": null,
+        "age_band": "40s"
+      },
+      "assigned_atlas_slot": "oam_0220",
+      "assigned_attrs": {
+        "sex": "male",
+        "age_band": "40s",
+        "hair_color": "gray",
+        "hair_style": "short",
+        "facial_hair": "none",
+        "expression": "stern",
+        "vibe": "graying bereted veteran",
+        "faction_guess": "alliance"
+      },
+      "match_score": 7.0,
+      "pinned": false,
+      "reused": false,
+      "face_number": null
+    },
+    {
+      "index": 48,
+      "character": "(unnamed-48)",
+      "faction": "alliance",
+      "sex": "male",
+      "desired": {
+        "hair_color": null,
+        "hair_style": null,
+        "age_band": "40s"
+      },
+      "assigned_atlas_slot": "oam_0295",
+      "assigned_attrs": {
+        "sex": "male",
+        "age_band": "40s",
+        "hair_color": "black",
+        "hair_style": "medium",
+        "facial_hair": "mustache",
+        "expression": "calm",
+        "vibe": "dark-haired mustached gentleman",
+        "faction_guess": "alliance"
+      },
+      "match_score": 7.0,
+      "pinned": false,
+      "reused": false,
+      "face_number": null
+    },
+    {
+      "index": 49,
+      "character": "Bucock",
+      "faction": "alliance",
+      "sex": "male",
+      "desired": {
+        "hair_color": null,
+        "hair_style": null,
+        "age_band": "40s"
+      },
+      "assigned_atlas_slot": "oam_0273",
+      "assigned_attrs": {
+        "sex": "male",
+        "age_band": "40s",
+        "hair_color": "brown",
+        "hair_style": "short",
+        "facial_hair": "none",
+        "expression": "angry",
+        "vibe": "scowling intense officer",
+        "faction_guess": "alliance"
+      },
+      "match_score": 7.0,
+      "pinned": false,
+      "reused": false,
+      "face_number": null
+    },
+    {
+      "index": 50,
+      "character": "(unnamed-50)",
+      "faction": "alliance",
+      "sex": "male",
+      "desired": {
+        "hair_color": null,
+        "hair_style": null,
+        "age_band": "40s"
+      },
+      "assigned_atlas_slot": "oam_0266",
+      "assigned_attrs": {
+        "sex": "male",
+        "age_band": "40s",
+        "hair_color": "black",
+        "hair_style": "short",
+        "facial_hair": "beard",
+        "expression": "stern",
+        "vibe": "bearded capped officer, weathered and grim",
+        "faction_guess": "alliance"
+      },
+      "match_score": 7.0,
+      "pinned": false,
+      "reused": false,
+      "face_number": null
+    },
+    {
+      "index": 51,
+      "character": "Moore",
+      "faction": "alliance",
+      "sex": "male",
+      "desired": {
+        "hair_color": null,
+        "hair_style": null,
+        "age_band": "40s"
+      },
+      "assigned_atlas_slot": "oam_0305",
+      "assigned_attrs": {
+        "sex": "male",
+        "age_band": "40s",
+        "hair_color": "black",
+        "hair_style": "short",
+        "facial_hair": "none",
+        "expression": "stern",
+        "vibe": "heavyset dark-skinned official, imposing",
+        "faction_guess": "alliance"
+      },
+      "match_score": 7.0,
+      "pinned": false,
+      "reused": false,
+      "face_number": null
+    },
+    {
+      "index": 52,
+      "character": "Hawood",
+      "faction": "alliance",
+      "sex": "male",
+      "desired": {
+        "hair_color": null,
+        "hair_style": null,
+        "age_band": "40s"
+      },
+      "assigned_atlas_slot": "oam_0001",
+      "assigned_attrs": {
+        "sex": "male",
+        "age_band": "40s",
+        "hair_color": "blond",
+        "hair_style": "short",
+        "facial_hair": "none",
+        "expression": "stern",
+        "vibe": "capped blond alliance soldier, grim",
+        "faction_guess": "alliance"
+      },
+      "match_score": 7.0,
+      "pinned": false,
+      "reused": false,
+      "face_number": null
+    },
+    {
+      "index": 53,
+      "character": "Appleton",
+      "faction": "alliance",
+      "sex": "male",
+      "desired": {
+        "hair_color": null,
+        "hair_style": null,
+        "age_band": "40s"
+      },
+      "assigned_atlas_slot": "oam_0239",
+      "assigned_attrs": {
+        "sex": "male",
+        "age_band": "40s",
+        "hair_color": "black",
+        "hair_style": "short",
+        "facial_hair": "mustache",
+        "expression": "calm",
+        "vibe": "bereted dark-haired officer, mustache",
+        "faction_guess": "alliance"
+      },
+      "match_score": 7.0,
+      "pinned": false,
+      "reused": false,
+      "face_number": null
+    },
+    {
+      "index": 54,
+      "character": "Al-Salem",
+      "faction": "alliance",
+      "sex": "male",
+      "desired": {
+        "hair_color": null,
+        "hair_style": null,
+        "age_band": "40s"
+      },
+      "assigned_atlas_slot": "oam_0234",
+      "assigned_attrs": {
+        "sex": "male",
+        "age_band": "40s",
+        "hair_color": "brown",
+        "hair_style": "short",
+        "facial_hair": "none",
+        "expression": "angry",
+        "vibe": "tan rugged man, scowling intense",
+        "faction_guess": "alliance"
+      },
+      "match_score": 7.0,
+      "pinned": false,
+      "reused": false,
+      "face_number": null
+    },
+    {
+      "index": 55,
+      "character": "Ahmed",
+      "faction": "alliance",
+      "sex": "male",
+      "desired": {
+        "hair_color": null,
+        "hair_style": null,
+        "age_band": "40s"
+      },
+      "assigned_atlas_slot": "oam_0291",
+      "assigned_attrs": {
+        "sex": "male",
+        "age_band": "40s",
+        "hair_color": "brown",
+        "hair_style": "medium",
+        "facial_hair": "none",
+        "expression": "calm",
+        "vibe": "civilian brown-haired man, warm look",
+        "faction_guess": "alliance"
+      },
+      "match_score": 7.0,
+      "pinned": false,
+      "reused": false,
+      "face_number": null
+    },
+    {
+      "index": 56,
+      "character": "Ulanhu",
+      "faction": "alliance",
+      "sex": "male",
+      "desired": {
+        "hair_color": null,
+        "hair_style": null,
+        "age_band": "40s"
+      },
+      "assigned_atlas_slot": "oam_0280",
+      "assigned_attrs": {
+        "sex": "male",
+        "age_band": "40s",
+        "hair_color": "white",
+        "hair_style": "short",
+        "facial_hair": "none",
+        "expression": "stern",
+        "vibe": "white/silver-haired stern officer",
+        "faction_guess": "alliance"
+      },
+      "match_score": 7.0,
+      "pinned": false,
+      "reused": false,
+      "face_number": null
+    },
+    {
+      "index": 57,
+      "character": "Morton",
+      "faction": "alliance",
+      "sex": "male",
+      "desired": {
+        "hair_color": null,
+        "hair_style": null,
+        "age_band": "40s"
+      },
+      "assigned_atlas_slot": "oam_0245",
+      "assigned_attrs": {
+        "sex": "male",
+        "age_band": "40s",
+        "hair_color": "blond",
+        "hair_style": "short",
+        "facial_hair": "beard",
+        "expression": "stern",
+        "vibe": "bereted bearded veteran",
+        "faction_guess": "alliance"
+      },
+      "match_score": 7.0,
+      "pinned": false,
+      "reused": false,
+      "face_number": null
+    },
+    {
+      "index": 58,
+      "character": "Chen",
+      "faction": "alliance",
+      "sex": "male",
+      "desired": {
+        "hair_color": null,
+        "hair_style": null,
+        "age_band": "40s"
+      },
+      "assigned_atlas_slot": "oam_0272",
+      "assigned_attrs": {
+        "sex": "male",
+        "age_band": "40s",
+        "hair_color": "brown",
+        "hair_style": "short",
+        "facial_hair": "none",
+        "expression": "neutral",
+        "vibe": "plain stolid officer",
+        "faction_guess": "alliance"
+      },
+      "match_score": 7.0,
+      "pinned": false,
+      "reused": false,
+      "face_number": null
+    },
+    {
+      "index": 59,
+      "character": "Holland",
+      "faction": "alliance",
+      "sex": "male",
+      "desired": {
+        "hair_color": null,
+        "hair_style": null,
+        "age_band": "40s"
+      },
+      "assigned_atlas_slot": "oam_0236",
+      "assigned_attrs": {
+        "sex": "male",
+        "age_band": "40s",
+        "hair_color": "brown",
+        "hair_style": "short",
+        "facial_hair": "none",
+        "expression": "stern",
+        "vibe": "bereted hard-bitten soldier",
+        "faction_guess": "alliance"
+      },
+      "match_score": 7.0,
+      "pinned": false,
+      "reused": false,
+      "face_number": null
+    },
+    {
+      "index": 60,
+      "character": "Borodin",
+      "faction": "alliance",
+      "sex": "male",
+      "desired": {
+        "hair_color": null,
+        "hair_style": null,
+        "age_band": "40s"
+      },
+      "assigned_atlas_slot": "oam_0306",
+      "assigned_attrs": {
+        "sex": "male",
+        "age_band": "40s",
+        "hair_color": "brown",
+        "hair_style": "short",
+        "facial_hair": "none",
+        "expression": "stern",
+        "vibe": "heavyset grim official",
+        "faction_guess": "alliance"
+      },
+      "match_score": 7.0,
+      "pinned": false,
+      "reused": false,
+      "face_number": null
+    },
+    {
+      "index": 61,
+      "character": "Carlsen",
+      "faction": "alliance",
+      "sex": "male",
+      "desired": {
+        "hair_color": null,
+        "hair_style": null,
+        "age_band": "40s"
+      },
+      "assigned_atlas_slot": "oam_0287",
+      "assigned_attrs": {
+        "sex": "male",
+        "age_band": "40s",
+        "hair_color": "blond",
+        "hair_style": "short",
+        "facial_hair": "none",
+        "expression": "confident",
+        "vibe": "genial seasoned officer",
+        "faction_guess": "alliance"
+      },
+      "match_score": 7.0,
+      "pinned": false,
+      "reused": false,
+      "face_number": null
+    },
+    {
+      "index": 62,
+      "character": "Marinetti",
+      "faction": "alliance",
+      "sex": "male",
+      "desired": {
+        "hair_color": null,
+        "hair_style": null,
+        "age_band": "40s"
+      },
+      "assigned_atlas_slot": "oam_0242",
+      "assigned_attrs": {
+        "sex": "male",
+        "age_band": "40s",
+        "hair_color": "brown",
+        "hair_style": "short",
+        "facial_hair": "mustache",
+        "expression": "stern",
+        "vibe": "mustached intense officer",
+        "faction_guess": "alliance"
+      },
+      "match_score": 7.0,
+      "pinned": false,
+      "reused": false,
+      "face_number": null
+    },
+    {
+      "index": 63,
+      "character": "Connery",
+      "faction": "alliance",
+      "sex": "male",
+      "desired": {
+        "hair_color": null,
+        "hair_style": null,
+        "age_band": "40s"
+      },
+      "assigned_atlas_slot": "o_0213",
+      "assigned_attrs": {
+        "sex": "male",
+        "age_band": "40s",
+        "hair_color": "other",
+        "hair_style": "bald",
+        "facial_hair": "none",
+        "expression": "stern",
+        "vibe": "bald heavy-browed imposing man",
+        "faction_guess": "unknown"
+      },
+      "match_score": 6.5,
+      "pinned": false,
+      "reused": false,
+      "face_number": null
+    },
+    {
+      "index": 64,
+      "character": "Alarcon",
+      "faction": "alliance",
+      "sex": "male",
+      "desired": {
+        "hair_color": null,
+        "hair_style": null,
+        "age_band": "40s"
+      },
+      "assigned_atlas_slot": "o_0222",
+      "assigned_attrs": {
+        "sex": "male",
+        "age_band": "40s",
+        "hair_color": "blond",
+        "hair_style": "short",
+        "facial_hair": "none",
+        "expression": "calm",
+        "vibe": "heavyset jowly fair-haired man",
+        "faction_guess": "unknown"
+      },
+      "match_score": 6.5,
+      "pinned": false,
+      "reused": false,
+      "face_number": null
+    },
+    {
+      "index": 65,
+      "character": "(unnamed-65)",
+      "faction": "alliance",
+      "sex": "male",
+      "desired": {
+        "hair_color": null,
+        "hair_style": null,
+        "age_band": "40s"
+      },
+      "assigned_atlas_slot": "o_0215",
+      "assigned_attrs": {
+        "sex": "male",
+        "age_band": "40s",
+        "hair_color": "gray",
+        "hair_style": "short",
+        "facial_hair": "none",
+        "expression": "neutral",
+        "vibe": "graying middle-aged man, weary",
+        "faction_guess": "unknown"
+      },
+      "match_score": 6.5,
+      "pinned": false,
+      "reused": false,
+      "face_number": null
+    },
+    {
+      "index": 66,
+      "character": "Lagrange",
+      "faction": "alliance",
+      "sex": "male",
+      "desired": {
+        "hair_color": null,
+        "hair_style": null,
+        "age_band": "40s"
+      },
+      "assigned_atlas_slot": "oam_0246",
+      "assigned_attrs": {
+        "sex": "male",
+        "age_band": "30s",
+        "hair_color": "blond",
+        "hair_style": "medium",
+        "facial_hair": "none",
+        "expression": "calm",
+        "vibe": "blond officer in beret",
+        "faction_guess": "alliance"
+      },
+      "match_score": 5.0,
+      "pinned": false,
+      "reused": false,
+      "face_number": null
+    },
+    {
+      "index": 67,
+      "character": "Desch",
+      "faction": "alliance",
+      "sex": "male",
+      "desired": {
+        "hair_color": null,
+        "hair_style": null,
+        "age_band": "40s"
+      },
+      "assigned_atlas_slot": "oam_0216",
+      "assigned_attrs": {
+        "sex": "male",
+        "age_band": "30s",
+        "hair_color": "brown",
+        "hair_style": "short",
+        "facial_hair": "none",
+        "expression": "calm",
+        "vibe": "friendly approachable officer",
+        "faction_guess": "alliance"
+      },
+      "match_score": 5.0,
+      "pinned": false,
+      "reused": false,
+      "face_number": null
+    },
+    {
+      "index": 68,
+      "character": "Mascagni",
+      "faction": "alliance",
+      "sex": "male",
+      "desired": {
+        "hair_color": null,
+        "hair_style": null,
+        "age_band": "40s"
+      },
+      "assigned_atlas_slot": "oam_0247",
+      "assigned_attrs": {
+        "sex": "male",
+        "age_band": "30s",
+        "hair_color": "brown",
+        "hair_style": "short",
+        "facial_hair": "mustache",
+        "expression": "neutral",
+        "vibe": "lean mustached officer in cap",
+        "faction_guess": "alliance"
+      },
+      "match_score": 5.0,
+      "pinned": false,
+      "reused": false,
+      "face_number": null
+    },
+    {
+      "index": 69,
+      "character": "Nguyen",
+      "faction": "alliance",
+      "sex": "male",
+      "desired": {
+        "hair_color": null,
+        "hair_style": null,
+        "age_band": "40s"
+      },
+      "assigned_atlas_slot": "oam_0226",
+      "assigned_attrs": {
+        "sex": "male",
+        "age_band": "30s",
+        "hair_color": "brown",
+        "hair_style": "short",
+        "facial_hair": "none",
+        "expression": "smug",
+        "vibe": "burly smirking officer in beret",
+        "faction_guess": "alliance"
+      },
+      "match_score": 5.0,
+      "pinned": false,
+      "reused": false,
+      "face_number": null
+    },
+    {
+      "index": 70,
+      "character": "(unnamed-70)",
+      "faction": "empire",
+      "sex": "male",
+      "desired": {
+        "hair_color": null,
+        "hair_style": null,
+        "age_band": "40s"
+      },
+      "assigned_atlas_slot": "oem_0023",
+      "assigned_attrs": {
+        "sex": "male",
+        "age_band": "40s",
+        "hair_color": "brown",
+        "hair_style": "short",
+        "facial_hair": "none",
+        "expression": "calm",
+        "vibe": "rounded affable middle-aged officer",
+        "faction_guess": "empire"
+      },
+      "match_score": 7.0,
+      "pinned": false,
+      "reused": false,
+      "face_number": null
+    },
+    {
+      "index": 71,
+      "character": "Attenborough",
+      "faction": "alliance",
+      "sex": "male",
+      "desired": {
+        "hair_color": null,
+        "hair_style": null,
+        "age_band": "40s"
+      },
+      "assigned_atlas_slot": "oam_0240",
+      "assigned_attrs": {
+        "sex": "male",
+        "age_band": "30s",
+        "hair_color": "brown",
+        "hair_style": "short",
+        "facial_hair": "none",
+        "expression": "calm",
+        "vibe": "clean-cut earnest officer",
+        "faction_guess": "alliance"
+      },
+      "match_score": 5.0,
+      "pinned": false,
+      "reused": false,
+      "face_number": null
+    },
+    {
+      "index": 72,
+      "character": "Ansbach",
+      "faction": "empire",
+      "sex": "male",
+      "desired": {
+        "hair_color": null,
+        "hair_style": null,
+        "age_band": "40s"
+      },
+      "assigned_atlas_slot": "oem_0138",
+      "assigned_attrs": {
+        "sex": "male",
+        "age_band": "40s",
+        "hair_color": "brown",
+        "hair_style": "short",
+        "facial_hair": "mustache",
+        "expression": "calm",
+        "vibe": "mustached officer in pale uniform, measured look",
+        "faction_guess": "empire"
+      },
+      "match_score": 7.0,
+      "pinned": false,
+      "reused": false,
+      "face_number": null
+    },
+    {
+      "index": 73,
+      "character": "Oberstein",
+      "faction": "empire",
+      "sex": "male",
+      "desired": {
+        "hair_color": "silver",
+        "hair_style": "short",
+        "age_band": "40s"
+      },
+      "assigned_atlas_slot": "oem_0132",
+      "assigned_attrs": {
+        "sex": "male",
+        "age_band": "40s",
+        "hair_color": "silver",
+        "hair_style": "medium",
+        "facial_hair": "none",
+        "expression": "stern",
+        "vibe": "cold silver-haired officer",
+        "faction_guess": "empire"
+      },
+      "match_score": 10.0,
+      "pinned": false,
+      "reused": false,
+      "face_number": null
+    },
+    {
+      "index": 74,
+      "character": "Caselnes",
+      "faction": "alliance",
+      "sex": "male",
+      "desired": {
+        "hair_color": null,
+        "hair_style": null,
+        "age_band": "40s"
+      },
+      "assigned_atlas_slot": "oam_0294",
+      "assigned_attrs": {
+        "sex": "male",
+        "age_band": "50s",
+        "hair_color": "brown",
+        "hair_style": "short",
+        "facial_hair": "none",
+        "expression": "calm",
+        "vibe": "reserved middle-aged official",
+        "faction_guess": "alliance"
+      },
+      "match_score": 5.0,
+      "pinned": false,
+      "reused": false,
+      "face_number": null
+    },
+    {
+      "index": 75,
+      "character": "Greenhill",
+      "faction": "alliance",
+      "sex": "female",
+      "desired": {
+        "hair_color": "brown",
+        "hair_style": "medium",
+        "age_band": "20s"
+      },
+      "assigned_atlas_slot": "o_0208",
+      "assigned_attrs": {
+        "sex": "female",
+        "age_band": "20s",
+        "hair_color": "orange",
+        "hair_style": "medium",
+        "facial_hair": "none",
+        "expression": "calm",
+        "vibe": "striking auburn-haired woman",
+        "faction_guess": "unknown"
+      },
+      "match_score": 8.5,
+      "pinned": false,
+      "reused": false,
+      "face_number": null
+    },
+    {
+      "index": 76,
+      "character": "Kessler",
+      "faction": "empire",
+      "sex": "male",
+      "desired": {
+        "hair_color": null,
+        "hair_style": null,
+        "age_band": "40s"
+      },
+      "assigned_atlas_slot": "oem_0055",
+      "assigned_attrs": {
+        "sex": "male",
+        "age_band": "40s",
+        "hair_color": "gray",
+        "hair_style": "short",
+        "facial_hair": "mustache",
+        "expression": "stern",
+        "vibe": "slicked gray hair with thin mustache, aristocratic",
+        "faction_guess": "empire"
+      },
+      "match_score": 7.0,
+      "pinned": false,
+      "reused": false,
+      "face_number": null
+    },
+    {
+      "index": 77,
+      "character": "Kempff",
+      "faction": "empire",
+      "sex": "male",
+      "desired": {
+        "hair_color": null,
+        "hair_style": null,
+        "age_band": "40s"
+      },
+      "assigned_atlas_slot": "oem_0031",
+      "assigned_attrs": {
+        "sex": "male",
+        "age_band": "40s",
+        "hair_color": "brown",
+        "hair_style": "short",
+        "facial_hair": "mustache",
+        "expression": "stern",
+        "vibe": "thick-mustached firm officer",
+        "faction_guess": "empire"
+      },
+      "match_score": 7.0,
+      "pinned": false,
+      "reused": false,
+      "face_number": null
+    },
+    {
+      "index": 78,
+      "character": "(unnamed-78)",
+      "faction": "alliance",
+      "sex": "male",
+      "desired": {
+        "hair_color": null,
+        "hair_style": null,
+        "age_band": "40s"
+      },
+      "assigned_atlas_slot": "oam_0225",
+      "assigned_attrs": {
+        "sex": "male",
+        "age_band": "30s",
+        "hair_color": "brown",
+        "hair_style": "medium",
+        "facial_hair": "none",
+        "expression": "smug",
+        "vibe": "lean sardonic officer",
+        "faction_guess": "alliance"
+      },
+      "match_score": 5.0,
+      "pinned": false,
+      "reused": false,
+      "face_number": null
+    },
+    {
+      "index": 79,
+      "character": "Schonkopp",
+      "faction": "alliance",
+      "sex": "male",
+      "desired": {
+        "hair_color": "brown",
+        "hair_style": "medium",
+        "age_band": "30s"
+      },
+      "assigned_atlas_slot": "oam_0230",
+      "assigned_attrs": {
+        "sex": "male",
+        "age_band": "30s",
+        "hair_color": "brown",
+        "hair_style": "medium",
+        "facial_hair": "stubble",
+        "expression": "smug",
+        "vibe": "rugged roguish grinning warrior",
+        "faction_guess": "alliance"
+      },
+      "match_score": 99.0,
+      "pinned": true,
+      "reused": false,
+      "face_number": null
+    },
+    {
+      "index": 80,
+      "character": "Steinmetz",
+      "faction": "empire",
+      "sex": "male",
+      "desired": {
+        "hair_color": null,
+        "hair_style": null,
+        "age_band": "40s"
+      },
+      "assigned_atlas_slot": "oem_0144",
+      "assigned_attrs": {
+        "sex": "male",
+        "age_band": "40s",
+        "hair_color": "brown",
+        "hair_style": "short",
+        "facial_hair": "none",
+        "expression": "stern",
+        "vibe": "civilian-suited stern man, receding hair",
+        "faction_guess": "empire"
+      },
+      "match_score": 7.0,
+      "pinned": false,
+      "reused": false,
+      "face_number": null
+    },
+    {
+      "index": 81,
+      "character": "(unnamed-81)",
+      "faction": "alliance",
+      "sex": "male",
+      "desired": {
+        "hair_color": null,
+        "hair_style": null,
+        "age_band": "40s"
+      },
+      "assigned_atlas_slot": "oam_0209",
+      "assigned_attrs": {
+        "sex": "male",
+        "age_band": "50s",
+        "hair_color": "brown",
+        "hair_style": "short",
+        "facial_hair": "mustache",
+        "expression": "stern",
+        "vibe": "portly jovial mustached elder",
+        "faction_guess": "alliance"
+      },
+      "match_score": 5.0,
+      "pinned": false,
+      "reused": false,
+      "face_number": null
+    },
+    {
+      "index": 82,
+      "character": "(unnamed-82)",
+      "faction": "alliance",
+      "sex": "male",
+      "desired": {
+        "hair_color": null,
+        "hair_style": null,
+        "age_band": "40s"
+      },
+      "assigned_atlas_slot": "oam_0248",
+      "assigned_attrs": {
+        "sex": "male",
+        "age_band": "30s",
+        "hair_color": "brown",
+        "hair_style": "medium",
+        "facial_hair": "none",
+        "expression": "smug",
+        "vibe": "roguish bereted grinning officer",
+        "faction_guess": "alliance"
+      },
+      "match_score": 5.0,
+      "pinned": false,
+      "reused": false,
+      "face_number": null
+    },
+    {
+      "index": 83,
+      "character": "Bittenfeld",
+      "faction": "empire",
+      "sex": "male",
+      "desired": {
+        "hair_color": "orange",
+        "hair_style": "medium",
+        "age_band": "30s"
+      },
+      "assigned_atlas_slot": "oem_0119",
+      "assigned_attrs": {
+        "sex": "male",
+        "age_band": "30s",
+        "hair_color": "orange",
+        "hair_style": "short",
+        "facial_hair": "none",
+        "expression": "stern",
+        "vibe": "stern ginger officer",
+        "faction_guess": "empire"
+      },
+      "match_score": 10.5,
+      "pinned": false,
+      "reused": false,
+      "face_number": null
+    },
+    {
+      "index": 84,
+      "character": "Fahrenheit",
+      "faction": "empire",
+      "sex": "male",
+      "desired": {
+        "hair_color": null,
+        "hair_style": null,
+        "age_band": "40s"
+      },
+      "assigned_atlas_slot": "oem_0107",
+      "assigned_attrs": {
+        "sex": "male",
+        "age_band": "40s",
+        "hair_color": "black",
+        "hair_style": "long",
+        "facial_hair": "mustache",
+        "expression": "smug",
+        "vibe": "aloof long-haired aristocrat",
+        "faction_guess": "empire"
+      },
+      "match_score": 7.0,
+      "pinned": false,
+      "reused": false,
+      "face_number": null
+    },
+    {
+      "index": 85,
+      "character": "(unnamed-85)",
+      "faction": "alliance",
+      "sex": "male",
+      "desired": {
+        "hair_color": null,
+        "hair_style": null,
+        "age_band": "40s"
+      },
+      "assigned_atlas_slot": "oam_0271",
+      "assigned_attrs": {
+        "sex": "male",
+        "age_band": "30s",
+        "hair_color": "black",
+        "hair_style": "medium",
+        "facial_hair": "none",
+        "expression": "calm",
+        "vibe": "handsome dark-haired bereted officer",
+        "faction_guess": "alliance"
+      },
+      "match_score": 5.0,
+      "pinned": false,
+      "reused": false,
+      "face_number": null
+    },
+    {
+      "index": 86,
+      "character": "(unnamed-86)",
+      "faction": "alliance",
+      "sex": "male",
+      "desired": {
+        "hair_color": null,
+        "hair_style": null,
+        "age_band": "40s"
+      },
+      "assigned_atlas_slot": "oam_0252",
+      "assigned_attrs": {
+        "sex": "male",
+        "age_band": "30s",
+        "hair_color": "black",
+        "hair_style": "short",
+        "facial_hair": "none",
+        "expression": "stern",
+        "vibe": "stern capped dark-haired officer",
+        "faction_guess": "alliance"
+      },
+      "match_score": 5.0,
+      "pinned": false,
+      "reused": false,
+      "face_number": null
+    },
+    {
+      "index": 87,
+      "character": "(unnamed-87)",
+      "faction": "alliance",
+      "sex": "male",
+      "desired": {
+        "hair_color": null,
+        "hair_style": null,
+        "age_band": "40s"
+      },
+      "assigned_atlas_slot": "oam_0267",
+      "assigned_attrs": {
+        "sex": "male",
+        "age_band": "30s",
+        "hair_color": "red",
+        "hair_style": "medium",
+        "facial_hair": "none",
+        "expression": "confident",
+        "vibe": "ruddy curly reddish-haired officer",
+        "faction_guess": "alliance"
+      },
+      "match_score": 5.0,
+      "pinned": false,
+      "reused": false,
+      "face_number": null
+    },
+    {
+      "index": 88,
+      "character": "Poplan",
+      "faction": "alliance",
+      "sex": "male",
+      "desired": {
+        "hair_color": null,
+        "hair_style": null,
+        "age_band": "40s"
+      },
+      "assigned_atlas_slot": "oam_0258",
+      "assigned_attrs": {
+        "sex": "male",
+        "age_band": "30s",
+        "hair_color": "blond",
+        "hair_style": "short",
+        "facial_hair": "none",
+        "expression": "neutral",
+        "vibe": "rugged bereted blond officer",
+        "faction_guess": "alliance"
+      },
+      "match_score": 5.0,
+      "pinned": false,
+      "reused": false,
+      "face_number": null
+    },
+    {
+      "index": 89,
+      "character": "(unnamed-89)",
+      "faction": "empire",
+      "sex": "male",
+      "desired": {
+        "hair_color": null,
+        "hair_style": null,
+        "age_band": "40s"
+      },
+      "assigned_atlas_slot": "oem_0154",
+      "assigned_attrs": {
+        "sex": "male",
+        "age_band": "40s",
+        "hair_color": "gray",
+        "hair_style": "short",
+        "facial_hair": "none",
+        "expression": "stern",
+        "vibe": "steely senior officer",
+        "faction_guess": "empire"
+      },
+      "match_score": 7.0,
+      "pinned": false,
+      "reused": false,
+      "face_number": null
+    },
+    {
+      "index": 90,
+      "character": "Muller",
+      "faction": "empire",
+      "sex": "male",
+      "desired": {
+        "hair_color": null,
+        "hair_style": null,
+        "age_band": "40s"
+      },
+      "assigned_atlas_slot": "oem_0056",
+      "assigned_attrs": {
+        "sex": "male",
+        "age_band": "40s",
+        "hair_color": "blond",
+        "hair_style": "medium",
+        "facial_hair": "mustache",
+        "expression": "calm",
+        "vibe": "mustached genial officer",
+        "faction_guess": "empire"
+      },
+      "match_score": 7.0,
+      "pinned": false,
+      "reused": false,
+      "face_number": null
+    },
+    {
+      "index": 91,
+      "character": "Murai",
+      "faction": "alliance",
+      "sex": "male",
+      "desired": {
+        "hair_color": null,
+        "hair_style": null,
+        "age_band": "40s"
+      },
+      "assigned_atlas_slot": "oam_0296",
+      "assigned_attrs": {
+        "sex": "male",
+        "age_band": "30s",
+        "hair_color": "brown",
+        "hair_style": "medium",
+        "facial_hair": "none",
+        "expression": "smug",
+        "vibe": "sleek confident swept-hair officer",
+        "faction_guess": "alliance"
+      },
+      "match_score": 5.0,
+      "pinned": false,
+      "reused": false,
+      "face_number": null
+    },
+    {
+      "index": 92,
+      "character": "Mecklinger",
+      "faction": "empire",
+      "sex": "male",
+      "desired": {
+        "hair_color": null,
+        "hair_style": null,
+        "age_band": "40s"
+      },
+      "assigned_atlas_slot": "oem_0151",
+      "assigned_attrs": {
+        "sex": "male",
+        "age_band": "40s",
+        "hair_color": "black",
+        "hair_style": "medium",
+        "facial_hair": "mustache",
+        "expression": "neutral",
+        "vibe": "bowl-cut mustached man",
+        "faction_guess": "empire"
+      },
+      "match_score": 7.0,
+      "pinned": false,
+      "reused": false,
+      "face_number": null
+    },
+    {
+      "index": 93,
+      "character": "Lutz",
+      "faction": "empire",
+      "sex": "male",
+      "desired": {
+        "hair_color": null,
+        "hair_style": null,
+        "age_band": "40s"
+      },
+      "assigned_atlas_slot": "oem_0090",
+      "assigned_attrs": {
+        "sex": "male",
+        "age_band": "40s",
+        "hair_color": "silver",
+        "hair_style": "medium",
+        "facial_hair": "none",
+        "expression": "confident",
+        "vibe": "silver-haired easygoing officer",
+        "faction_guess": "empire"
+      },
+      "match_score": 7.0,
+      "pinned": false,
+      "reused": false,
+      "face_number": null
+    },
+    {
+      "index": 94,
+      "character": "Wahlen",
+      "faction": "empire",
+      "sex": "male",
+      "desired": {
+        "hair_color": null,
+        "hair_style": null,
+        "age_band": "40s"
+      },
+      "assigned_atlas_slot": "oem_0022",
+      "assigned_attrs": {
+        "sex": "male",
+        "age_band": "30s",
+        "hair_color": "red",
+        "hair_style": "medium",
+        "facial_hair": "beard",
+        "expression": "angry",
+        "vibe": "fierce red-bearded warrior",
+        "faction_guess": "empire"
+      },
+      "match_score": 5.0,
+      "pinned": false,
+      "reused": false,
+      "face_number": null
+    },
+    {
+      "index": 95,
+      "character": "von Musel",
+      "faction": "empire",
+      "sex": "female",
+      "desired": {
+        "hair_color": "blond",
+        "hair_style": "long",
+        "age_band": "20s"
+      },
+      "assigned_atlas_slot": "o_0002",
+      "assigned_attrs": {
+        "sex": "female",
+        "age_band": "20s",
+        "hair_color": "blond",
+        "hair_style": "long",
+        "facial_hair": "none",
+        "expression": "calm",
+        "vibe": "serene long-blond woman",
+        "faction_guess": "unknown"
+      },
+      "match_score": 11.5,
+      "pinned": false,
+      "reused": false,
+      "face_number": null
+    },
+    {
+      "index": 96,
+      "character": "Yang Wen-li",
+      "faction": "alliance",
+      "sex": "male",
+      "desired": {
+        "hair_color": "black",
+        "hair_style": "medium",
+        "age_band": "30s"
+      },
+      "assigned_atlas_slot": "oam_0274",
+      "assigned_attrs": {
+        "sex": "male",
+        "age_band": "20s",
+        "hair_color": "black",
+        "hair_style": "medium",
+        "facial_hair": "none",
+        "expression": "calm",
+        "vibe": "young dark-haired bereted soldier",
+        "faction_guess": "alliance"
+      },
+      "match_score": 99.0,
+      "pinned": true,
+      "reused": false,
+      "face_number": null
+    }
+  ]
+}

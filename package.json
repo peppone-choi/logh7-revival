@@ -8,6 +8,7 @@
     "build": "vite build",
     "server:logh7": "node src/server/logh7-server.mjs serve",
     "server:gameplay": "node src/server/logh7-server.mjs serve-gameplay",
+    "server:auth": "node src/server/logh7-server.mjs serve-auth",
     "server:health": "node src/server/logh7-server.mjs health",
     "test:server": "node --test tests/server/*.test.mjs",
     "test:tools": "node tools/run_python_tests.mjs",

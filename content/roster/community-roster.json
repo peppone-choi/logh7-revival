@@ -1,0 +1,77 @@
+{
+  "_purpose": "Output of the EXHAUSTIVE community/fan web sweep (Korean Netmarble 'spacewar' service + Japanese Bothtec gin7) for any pre-made CHARACTER roster of 銀河英雄伝説VII online. Companion to content/roster/face-name-map.json (12 official face<->name pairs). See docs/logh7-community-roster-sweep.md for the full method log and every source.",
+  "_sweep_date": "2026-06-12",
+  "_verdict": "NO fan/community-compiled VII-online character roster (with or without face numbers) survives anywhere on the public web, Korean or Japanese. The 2005 rights-dispute shutdown scrubbed all VII-online fan documentation; surviving sources cover only the anime/novel or later/other LOGH games, never the gin7-online chara/NNN numbering. ZERO new name<->face-number pairs beyond the official 12. The one materially useful artifact recovered is the Korean-localized DUTY/POST (직무) hierarchy (below), transcribed from a 2022 ruliweb CBT-tester memoir.",
+  "_new_face_name_pairs_recovered": 0,
+  "_new_names_recovered_beyond_official_12_and_manual_75": 0,
+  "_confidence_note": "A fan-compiled list, had one been found, would be tagged 'community' (non-authoritative but useful). None was found, so this file carries process artifacts, not new authoritative data.",
+
+  "community_canon_names_attested": [
+    {
+      "name_ja": "ブラウンシュヴァイク",
+      "name_kr": "폰 브라운슈바이크",
+      "name_romaji": "Otho von Braunschweig",
+      "faction": "empire",
+      "face_number": null,
+      "source": "ruliweb-cbt-memoir-2022 (bbs.ruliweb.com/community/board/300781/read/58901153)",
+      "confidence": "attested-in-KR-CBT",
+      "note": "Korean CBT tester recalls Duke von Braunschweig was the dominant unlockable canon admiral ('우주 제일의 명장', solo-beat 3 Alliance fleets). Confirms a門閥貴族-era canon character was playable, consistent with our manual roster. Already a known LOGH character; NO face number attached. Not added to face-name-map (no NNN)."
+    }
+  ],
+
+  "cbt_character_model_confirmation": {
+    "source": "ruliweb-cbt-memoir-2022 + ohmynews-2004 + gamemeca",
+    "finding": "Korean CBT players first CREATE an original/fictional officer (explicitly likened to 삼국지 신무장 = Romance of the Three Kingdoms custom officer), then UNLOCK canon characters by accumulating 점수/공적 (merit). This independently corroborates our reversed-engineering model where face = an index into a shared portrait POOL (Face/<NNN>.tga) rather than a fixed per-character ID, and the server-authoritative roster assigns faces from that pool.",
+    "impact": "Supports memory note logh7-portrait-pool and logh7-character-record-schema: name<->face was never a fixed canon mapping in this game; the developer's st_char.html 12-sample is the only curated name<->NNN data that ever existed."
+  },
+
+  "korean_duty_post_localization": {
+    "_purpose": "Korean (cp949-target) translation of the gin7 duty-card / post hierarchy (직무), transcribed from the 2022 ruliweb CBT memoir screenshots (i2/i3.ruliweb.com/img/22/10/05/183a443f*..183a4440*.jpg). This is the MOST USEFUL artifact of the sweep: it gives the authoritative Korean post names matching content/roster/manual-roster.json postDefinitions (121 posts), directly reusable for the cp949 String.txt localization layer. These are POST/TITLE names, NOT character names.",
+    "_caveat": "Hand-transcribed from low-res 2022 screenshots; verify spacing/spelling against client String.txt before shipping. Faction headers shown bilingually in-client: 은하제국 (銀河帝国) / 자유행성동맹 (自由惑星同盟).",
+    "empire": {
+      "황궁": ["황제", "제국군 최고 사령관", "막료총감", "대본영 참모", "제국재상"],
+      "내각": ["국무서경", "내무서경", "재무서경", "궁내서경", "사법서경", "전례서경", "과학서경", "내각 서기관장"],
+      "주페잔 변무관 사무소": ["페잔 주재 고등판무관", "페잔 주재 보좌관", "페잔 주재 무관"],
+      "군무성": ["군무상서", "군무성 차관", "군무성 인사국장", "군무성 조사국장", "군무성 참사관"],
+      "통수본부": ["통수본부 총장", "통수본부 차장", "통수본부 작전 1과 과장", "통수본부 작전 2과 과장", "통수본부 작전 3과 과장", "통수본부 감찰관"],
+      "우주함대 사령부": ["우주함대 사령장관", "우주함대 부사령장관", "우주함대 총참모장", "우주함대 참모"],
+      "헌병본부": ["헌병총감", "헌병부총감"],
+      "장갑척탄병 총감부": ["장갑척탄병 총감", "장갑척탄병 부총감"],
+      "과학기술 총감부": ["과학기술 총감"],
+      "제국군 사관학교": ["사관학교장", "사관학교 교관"],
+      "함대": ["함대 사령관", "함대 부사령관", "함대 참모장", "함대 참모", "함대 사령관 부관"],
+      "수송함대": ["수송함대 사령관", "소송함대 부사령관", "수송함대 사령관 부관"],
+      "순찰대": ["순찰대 사령관", "순찰대 부사령관", "순찰대 사령관 부관"],
+      "지상부대": ["지상부대 지휘관"],
+      "요새": ["요새 사령관", "요새 주둔함대 지휘관", "요새 사무 총감"],
+      "수도행성을 제외한 각 행성": ["행성총독", "행성 수비대 지휘관"],
+      "수도행성": ["수도 방위 사령관", "근위병 총감"],
+      "통합 정찰국": ["첩보관"]
+    },
+    "alliance": {
+      "최고 평의회": ["의장", "부의장", "국무 위원장", "국방 위원장", "재정 위원장", "법질서 위원장", "천연자원 위원장", "인적자원 위원장", "경제 개발 위원장", "지역사회 개발 위원장", "정보 교통 위원장", "서기"],
+      "주페잔 변무관 사무소": ["페잔 주재 변무관", "페잔 주재 보좌관", "페잔 주재 무관"],
+      "통합 작전 본부": ["통합 작전 본부장", "통합 작전 본부 제1차장", "통합 작전 본부 제2차장", "통합 작전 본부 제3차장", "통합 작전 본부 참사관", "육전 총감 부장"],
+      "후방 근무 본부": ["후방 근무 본부장", "후방 근무 본부 차장", "후방 근무 본부 참사관", "과학기술 본부장", "헌병 사령관"],
+      "국방 위원회": ["사열 부장", "전략 부장", "인사 부장", "방위 부장", "정보 부장", "통신 부장", "장비 부장", "시설 부장", "경리 부장", "교육 부장", "위생 부장"],
+      "우주 함대 사령부": ["우주 함대 사령장관", "우주 함대 부사령장관", "우주 함대 총참모장", "우주 함대 참모"],
+      "동맹군 사관학교": ["사관학교장", "사관학교 교관"],
+      "함대": ["함대 사령관", "함대 부사령관", "함대 참모장", "함대 참모", "함대 사령관 부관"],
+      "수송 함대": ["수송 함대 사령관", "수송 함대 부사령관", "수송 함대 사령관 부관"],
+      "순찰대": ["순찰대 사령관", "순찰대 부사령관", "순찰대 사령관 부관"],
+      "지상 부대": ["지상 부대 지휘관"],
+      "요새": ["요새 사령관", "요새 수비대 지휘관", "요새 사무 총감"],
+      "수도행성을 제외한 각행성": ["지사", "행성 수비대 지휘관"],
+      "행성 수도": ["수도 사정관", "수도 방위 지휘관"],
+      "전략 작전국": ["첩보관"]
+    }
+  },
+
+  "fleet_unit_structure_kr": {
+    "source": "ruliweb-cbt-memoir-2022 screenshot (함대 panel)",
+    "max_units": 60,
+    "max_ships": 18000,
+    "roles_per_fleet_kr": ["함대 사령관 1명", "부사령관 1명", "참모장 1명", "참모 6명", "부관 1명 (최대 10명 캐릭터 편성)"],
+    "note": "Matches our reversed in-world multiplayer model (logh7-inworld-multiplayer-protocol): fleet = up to 10 player characters with commander/vice/staff roles."
+  }
+}

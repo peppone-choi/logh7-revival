@@ -10,11 +10,14 @@ from logh7_client_protocol import write_client_protocol_index
 from logh7_command_ok_layout import write_command_ok_layout
 from logh7_command_ok_response_candidates import write_command_ok_response_candidates
 from logh7_extractor import extract_iso_root
+from logh7_game_function_catalog import write_game_function_catalog
 from logh7_installed_tree import build_installed_tree
 from logh7_internal_handlers import write_post_handshake_handler_index
 from logh7_iso import InvalidIsoError, IsoImage, PipelineError, read_extent_prefix, read_file_bytes, read_iso
+from logh7_message_family_maps import write_message_family_index
 from logh7_msgdat import write_msgdat_index
 from logh7_packager import PackageError, package_installed_tree
+from logh7_pe_inventory import write_pe_inventory
 from logh7_post_0030_followups import write_post_0030_followup_effects
 from logh7_post_0030_payload_layout import write_post_0030_payload_layout
 from logh7_post_handshake_body import write_post_handshake_body_decode
@@ -276,6 +279,14 @@ def _add_command_ok_response_candidates_parser(subparsers: argparse._SubParsersA
     candidates_parser.add_argument("--out", type=Path, required=True)
 
 
+def _add_game_function_catalog_parser(subparsers: argparse._SubParsersAction[argparse.ArgumentParser]) -> None:
+    catalog_parser = subparsers.add_parser("game-function-catalog")
+    catalog_parser.add_argument("source", type=Path)
+    catalog_parser.add_argument("--installed-root", type=Path, required=True)
+    catalog_parser.add_argument("--manual-pdf", type=Path)
+    catalog_parser.add_argument("--out", type=Path, required=True)
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="Inspect and package LOGH VII artifacts for localization work.")
     subparsers = parser.add_subparsers(dest="command", required=True)
@@ -284,8 +295,10 @@ def main() -> int:
     _add_extract_parser(subparsers)
     _add_build_installed_parser(subparsers)
     _add_package_parser(subparsers)
+    _add_source_out_parser(subparsers, "pe-inventory")
     _add_msgdat_parser(subparsers)
     _add_client_protocol_parser(subparsers)
+    _add_source_out_parser(subparsers, "message-family-index")
     _add_source_out_parser(subparsers, "transport-dispatch-index")
     _add_source_out_parser(subparsers, "session-bootstrap-index")
     _add_source_out_parser(subparsers, "post-handshake-handler-index")
@@ -295,6 +308,7 @@ def main() -> int:
     _add_source_out_parser(subparsers, "post-0030-followup-effects")
     _add_source_out_parser(subparsers, "command-ok-layout")
     _add_command_ok_response_candidates_parser(subparsers)
+    _add_game_function_catalog_parser(subparsers)
     _add_runtime_patch_targets_parser(subparsers)
     _add_source_out_parser(subparsers, "runtime-manager-index")
     _add_binary_patch_parser(subparsers, "runtime-manager-log-patch")
@@ -344,10 +358,14 @@ def main() -> int:
                 package_installed_tree(args.installed_tree, args.overlay, args.out, args.manifest_out)
                 print(f"wrote {args.out}")
                 print(f"wrote {args.manifest_out}")
+            case "pe-inventory":
+                write_pe_inventory(args.source, args.out)
             case "msgdat-index":
                 write_msgdat_schema_index(args.source, args.out)
             case "client-protocol-index":
                 write_client_protocol_schema_index(args.source, args.out)
+            case "message-family-index":
+                write_message_family_index(args.source, args.out)
             case "transport-dispatch-index":
                 write_transport_dispatch_index(args.source, args.out)
             case "session-bootstrap-index":
@@ -377,6 +395,8 @@ def main() -> int:
                     phase1_key_hex=args.phase1_key_hex,
                     entity_key_hex=args.entity_key_hex,
                 )
+            case "game-function-catalog":
+                write_game_function_catalog(args.source, args.installed_root, args.manual_pdf, args.out)
             case "runtime-patch-targets":
                 write_runtime_patch_targets(args.source, args.out)
             case "runtime-manager-index":

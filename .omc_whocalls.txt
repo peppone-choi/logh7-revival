@@ -1,0 +1,6 @@
+0x004ae0d0  FUN_004ae0d0  (3 hit)  e.g. void __thiscall FUN_004ae0d0(int param_1,uint param_2,undefined4 param_3,undefined4 *param
+0x004b8850  FUN_004b8850  (1 hit)  e.g. uint __thiscall FUN_004b8850(int param_1,undefined4 param_2,undefined4 *param_3)
+0x004b8950  FUN_004b8950  (1 hit)  e.g. FUN_004ba2b0(*(undefined2 *)(iVar4 + 0x3552bc),*(undefined4 *)(param_1 + iVar1 * 4));
+0x004ba2b0  FUN_004ba2b0  (1 hit)  e.g. void __thiscall FUN_004ba2b0(int param_1,uint param_2,undefined4 *param_3)
+
+// 4 functions matched

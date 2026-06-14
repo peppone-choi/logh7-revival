@@ -1,0 +1,148 @@
+// CONTAINING (entry 0x004ad780)  0x004ad780  FUN_004ad780  undefined FUN_004ad780()
+
+undefined4 * __thiscall
+FUN_004ad780(undefined4 *param_1,undefined1 *param_2,undefined4 param_3,undefined4 param_4,
+            undefined4 param_5)
+
+{
+  char cVar1;
+  undefined4 uVar2;
+  int *piVar3;
+  int iVar4;
+  uint uVar5;
+  uint uVar6;
+  undefined4 *puVar7;
+  char *pcVar8;
+  undefined4 *puVar9;
+  char *pcVar10;
+  undefined1 *puVar11;
+  undefined1 *puVar12;
+  undefined1 auStack_6c [4];
+  undefined1 auStack_68 [4];
+  undefined4 *local_64;
+  undefined1 local_60 [4];
+  char *local_5c;
+  uint local_58;
+  undefined **local_50 [3];
+  undefined1 local_44;
+  undefined4 local_34;
+  void *pvStack_24;
+  undefined1 uStack_1c;
+  void *pvStack_c;
+  undefined1 *puStack_8;
+  undefined4 local_4;
+  
+  local_4 = 0xffffffff;
+  puStack_8 = &LAB_006622c3;
+  pvStack_c = ExceptionList;
+  ExceptionList = &pvStack_c;
+  local_64 = param_1;
+  FUN_004ae740();
+  *param_1 = &PTR_FUN_0066e120;
+  param_1[5] = &PTR_FUN_0066e0bc;
+  param_1[6] = &PTR_FUN_0066e118;
+  local_4 = 0;
+  *(undefined1 *)(param_1 + 8) = param_2._0_1_;
+  uVar2 = FUN_004ab2b0(0,0);
+  param_1[9] = uVar2;
+  param_1[10] = 0;
+  param_1[7] = &PTR_FUN_0066e0ac;
+  param_1[0xb] = param_2;
+  *(undefined1 *)((int)param_1 + 0x32) = 0;
+  param_1[0x11] = param_5;
+  *param_1 = &PTR_FUN_0066e0fc;
+  param_1[5] = &PTR_FUN_0066e0f8;
+  param_1[6] = &PTR_FUN_0066e0f0;
+  puVar7 = &DAT_0076bbf0;
+  puVar9 = &local_34;
+  for (iVar4 = 9; iVar4 != 0; iVar4 = iVar4 + -1) {
+    *puVar9 = *puVar7;
+    puVar7 = puVar7 + 1;
+    puVar9 = puVar9 + 1;
+  }
+  *(undefined2 *)puVar9 = *(undefined2 *)puVar7;
+  local_4._0_1_ = 1;
+  *(undefined1 *)((int)puVar9 + 2) = *(undefined1 *)((int)puVar7 + 2);
+  iVar4 = FUN_00612030(0x1f4000,0x3e8000,0xf000,3,
+                       -(uint)(param_1 != (undefined4 *)0x0) & (uint)(param_1 + 5),param_5,&local_34
+                       ,0x26,0x10,4,0,0);
+  param_1[0x10] = iVar4;
+  if (iVar4 != 0) {
+    FUN_00612570(30000);
+    DAT_007c25f4 = param_1;
+    *(undefined1 *)(param_1 + 0xc) = 0;
+    *(undefined1 *)((int)param_1 + 0x31) = 0;
+    DAT_007c25f8 = 0;
+    FUN_004ae1c0(local_60,param_1,&LAB_004adeb0);
+    thunk_FUN_004ae700();
+    FUN_004aca80(local_60,0,param_1,FUN_004add60);
+    thunk_FUN_004ae700();
+    piVar3 = (int *)FUN_004abd90();
+    uVar2 = (**(code **)(*piVar3 + 0x1c))();
+    FUN_004aca80(local_60,1,piVar3,uVar2);
+    thunk_FUN_004ae700();
+    puVar12 = &LAB_004adf60;
+    puVar11 = local_60;
+    puVar7 = param_1;
+    (**(code **)(*piVar3 + 0x18))(puVar11,param_1,&LAB_004adf60);
+    FUN_004ae1f0(puVar11,puVar7,puVar12);
+    thunk_FUN_004ae700();
+    FUN_004ea730();
+    local_4._0_1_ = 4;
+    FUN_004ea730();
+    local_4 = CONCAT31(local_4._1_3_,5);
+    FUN_004eaaf0(auStack_68,PTR_s_ginei00_0076ee10,0xffffffff);
+    FUN_004eaaf0(auStack_6c,PTR_s_dummy_0076ee18,0xffffffff);
+    iVar4 = *piVar3;
+    uVar2 = FUN_004eae30(auStack_6c,1);
+    uVar2 = FUN_004eae30(auStack_68,uVar2);
+    (**(code **)(iVar4 + 0x14))(param_1[0x10],param_3,param_4,uVar2);
+    uStack_1c = 4;
+    FUN_004ea740();
+    uStack_1c = 1;
+    FUN_004ea740();
+    ExceptionList = pvStack_24;
+    return param_1;
+  }
+  local_60[0] = param_2._0_1_;
+  FUN_00403360(0);
+  uVar5 = 0xffffffff;
+  pcVar8 = s__mpsClientBaseSystem__create_con_0076beb8;
+  do {
+    if (uVar5 == 0) break;
+    uVar5 = uVar5 - 1;
+    cVar1 = *pcVar8;
+    pcVar8 = pcVar8 + 1;
+  } while (cVar1 != '\0');
+  uVar5 = ~uVar5 - 1;
+  cVar1 = FUN_004033d0(uVar5,1);
+  if (cVar1 != '\0') {
+    pcVar8 = s__mpsClientBaseSystem__create_con_0076beb8;
+    pcVar10 = local_5c;
+    for (uVar6 = uVar5 >> 2; uVar6 != 0; uVar6 = uVar6 - 1) {
+      *(undefined4 *)pcVar10 = *(undefined4 *)pcVar8;
+      pcVar8 = pcVar8 + 4;
+      pcVar10 = pcVar10 + 4;
+    }
+    for (uVar6 = uVar5 & 3; uVar6 != 0; uVar6 = uVar6 - 1) {
+      *pcVar10 = *pcVar8;
+      pcVar8 = pcVar8 + 1;
+      pcVar10 = pcVar10 + 1;
+    }
+    local_5c[uVar5] = '\0';
+    local_58 = uVar5;
+  }
+  local_4._0_1_ = 2;
+  param_2 = &DAT_007c1bb8;
+  FUN_005fe804(&param_2);
+  local_4._0_1_ = 3;
+  local_44 = local_60[0];
+  FUN_00403360(0);
+  FUN_00403160(local_60,0,DAT_0066bfe4);
+  local_50[0] = &PTR_FUN_00744f38;
+  local_4 = CONCAT31(local_4._1_3_,2);
+                    /* WARNING: Subroutine does not return */
+  __CxxThrowException_8(local_50,&DAT_00747a28);
+}
+
+

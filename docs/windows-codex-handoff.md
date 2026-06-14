@@ -100,3 +100,116 @@ python tools/logh7_pipeline.py package-installed .omo/work/logh7-installed --ove
 - `dist/`
 - Playwright 리포트와 테스트 산출물
 - 로컬 로그 파일
+
+## 2026-06-10 OMO Loop Handoff
+
+현재 목표는 여전히 LOGH VII를 한글화된 상태로 점진적으로 접속/플레이 가능하게 만드는 것이다. 이번 loop에서는 사용자 지시에 따라 패킷 캡처 우선 탐색을 멈추고, 게임 파일 정적 리버스 엔지니어링 우선으로 방향을 정정했다. 전체 목표는 아직 완료가 아니다.
+
+현재 uncommitted 변경:
+
+- `tools/logh7_message_family_maps.py`: `G7MTClient.exe` 내부 message-family lookup 객체를 정적으로 인덱싱한다.
+- `tools/tests/test_logh7_message_family_maps.py`: `message-family-index` RED/GREEN 테스트.
+- `tools/logh7_pe_inventory.py`: 설치 트리의 모든 `.exe`/`.dll`을 RE triage 인벤토리로 만든다.
+- `tools/tests/test_logh7_pe_inventory.py`: `pe-inventory` RED/GREEN 테스트.
+- `tools/logh7_packet_trace.py`, `tools/tests/test_logh7_packet_trace.py`: `0x0013/0x0014` world/grid 후보 trace 분류를 추가했다.
+- `tools/logh7_pipeline.py`: `message-family-index`, `pe-inventory` CLI를 연결했다.
+- `tools/logh7_launcher_update_index.py`: 런처/업데이터 PE의 서버/업데이트/실행 marker를 byte-precise offset/VA로 인덱싱한다.
+- `tools/tests/test_logh7_launcher_update_index.py`: launcher/update index RED/GREEN 테스트.
+- `docs/logh7-server-setup.md`, `.omo/ulw-loop/notepad.md`, `.omo/ulw-loop/ledger.jsonl`: G080/G081/G082 증거와 방향 정정 기록.
+
+검증 완료:
+
+- `python -m unittest tools.tests.test_logh7_message_family_maps tools.tests.test_logh7_pe_inventory tools.tests.test_logh7_packet_trace` 통과.
+- `python -m unittest tools.tests.test_logh7_launcher_update_index` 통과.
+- `npm test` 통과: Python 122 tests, Node server 25 tests, Playwright 5 tests.
+- `npm run build` 통과.
+- `git diff --check` 통과. CRLF 변환 경고만 있음.
+- 프로세스/포트 cleanup 확인: `G7MTClient`, `G7Start`, `Gin7UpdateClient` 없음; `4787`, `47900`, `47901` listening 없음.
+
+새 정적 RE 증거:
+
+- `.omo/ulw-loop/evidence/g080-message-family-index.json`
+  - `session-bootstrap`: base `0x0200`, count `8`, object size `0x0108`, lookup `0x0044f060`.
+  - `post-handshake`: base `0x0400`, count `67`, object size `0x041c`, lookup `0x004aa530`.
+  - `world-grid`: base `0x0f00`, count `32`, object size `0x74cc`, lookup `0x0048cd20`.
+  - 결론: `0x0200/0x0205`, `0x0f01/0x0f03`은 임의 packet body가 아니라 등록된 internal message-family object lookup 대상이다.
+- `.omo/ulw-loop/evidence/g081-pe-inventory.json`
+  - 설치 트리 PE 6개, 모두 `machineHex=0x014c` 32-bit x86 GUI.
+  - high: `exe/G7MTClient.exe`.
+  - medium: `G7Start.exe`, `Gin7UpdateClient.exe`.
+  - low: `BootFirst.exe`, `DSETUP.dll`, `DSETUP32.dll`.
+- `.omo/ulw-loop/evidence/g082-launcher-update-index.json`
+  - `Gin7UpdateClient.exe`: default server `202.8.80.179` at raw `0x0004a540` / VA `0x0044a540`.
+  - 같은 바이너리 안에 `.\\exe\\G7MTClient.exe`, `SERVER_PORT`, `SERVER_ADDRESS`, `UPDATE`, `%sSERVER.INI`, `Gin7UpdateClient.new`, `UPDATE.LOG`, `ProxyServer`, `HTTP/%d.%d`, `ftp://`, `http://`가 있다.
+  - `G7Start.exe`: `exe\\G7MTClient.exe`, `SETUP.EXE`.
+  - `BootFirst.exe`: `.\\Gin7UpdateClient.exe`, `.old`, `.new`.
+
+다음 RE 타깃:
+
+- 모든 EXE/DLL을 같은 깊이로 파지 말고, 다음에는 `Gin7UpdateClient.exe`의 server-config string xref를 추적한다.
+- 우선순위 marker는 다음과 같다:
+  - `0x4a51c`: `.\\exe\\G7MTClient.exe`
+  - `0x4a540`: `202.8.80.179`
+  - `0x4a5a0`: `SERVER_PORT`
+  - `0x4a5ac`: `SERVER_ADDRESS`
+  - `0x4a5bc`: `UPDATE`
+  - `0x4a5e8`: `%sSERVER.INI`
+  - `0x4a63c`: `Gin7UpdateClient.new`
+  - `0x4a668`: `UPDATE.LOG`
+  - `0x4f234`: `http`
+  - `0x4f61c`: `ftp://`
+  - `0x4f62c`: `http://`
+- `G7Start.exe`는 `exe\\G7MTClient.exe`와 `.INI` 문자열을 포함하지만, 다음 깊은 xref 타깃은 아니다.
+- `BootFirst.exe`는 `.\\Gin7UpdateClient.exe`, `.old`, `.new`를 포함하므로 update replacement 보조 증거로 둔다.
+
+권장 다음 증분:
+
+1. `tools/logh7_launcher_update_xrefs.py` 같은 좁은 정적 xref 도구를 추가한다.
+2. `Gin7UpdateClient.exe`의 G082 marker VA를 참조하는 함수 주변을 capstone으로 디스어셈블한다.
+3. server file read/write, process launch, update replacement 흐름을 분류한다.
+4. RED/GREEN 테스트와 실제 PE evidence를 남긴다.
+5. 이 정적 결과로 서버 주소/업데이트 경로를 클라이언트 단독 patch가 아니라 launcher/updater 포함 정책으로 확정한다.
+
+주의:
+
+- `.omc/`는 로컬 OMO/session state로 보이며 이번 코드 변경 대상이 아니다. 커밋하지 않는다.
+- 전체 목표는 아직 완료가 아니므로 `update_goal complete`로 닫지 않는다.
+
+## 2026-06-10 G083 launcher/update flow classification (완료)
+
+위 "권장 다음 증분"을 이행했다. 도구 이름은 `logh7_launcher_update_flow.py`로 두었다(흐름 분류가 목적이라 `_flow`).
+
+추가 파일:
+
+- `tools/logh7_launcher_update_flow.py`: import table를 해석하고 실행 섹션을 선형 디스어셈블해 watched Win32 import(`GetPrivateProfileString/Int`, `WritePrivateProfileString`, `CreateProcess`, `MoveFile/DeleteFile`, registry) 호출과 인접한 config 문자열 push를 상관시킨다. 세 결론을 도출한다: `serverIniOverride`, `processLaunch`, `updateFileReplacement`. 표준 입력 `root --out OUT`. (pipeline.py에 묶지 않고 `logh7_launcher_update_index.py`처럼 standalone 유지.)
+- `tools/tests/test_logh7_launcher_update_flow.py`: 2섹션(.text/.rdata) 합성 PE + 손수 만든 import table로 세 결론을 모두 검증하는 RED/GREEN 테스트.
+
+검증 완료:
+
+- RED `.omo/ulw-loop/evidence/g083-launcher-update-flow-red.txt`(도구 부재 시 실패) → GREEN `g083-launcher-update-flow-green.txt`(통과).
+- `node tools/run_python_tests.mjs` 통과: Python 125 tests OK.
+- `python -m py_compile tools/logh7_launcher_update_flow.py` 통과.
+- `git diff --check` 통과(CRLF 경고만).
+
+실제 정적 RE 증거 `.omo/ulw-loop/evidence/g083-launcher-update-flow.json`:
+
+- `Gin7UpdateClient.exe`: `serverIniOverride=true`. config-load 함수 `0x00404de0`가 `[UPDATE]` 섹션의 `SERVER_ADDRESS`/`SERVER_PORT`를 `GetPrivateProfileString` 래퍼 `0x00404fd0`로 읽고, INI 값이 비었을 때만 하드코딩 `202.8.80.179`(push `0x00404eca`)로 폴백한다. `GetPrivateProfileIntA`(`0x00404e13`) 인자에서 `[VERSION, UPDATE]` 확인. 클라이언트는 `.\\exe\\G7MTClient.exe`를 `CreateProcessA`(`0x004072c2`, lpApplicationName=NULL, dwCreationFlags=0x20, wShowWindow=5)로 기동.
+- `G7Start.exe`: `exe\\G7MTClient.exe`를 3개 지점에서 `CreateProcessA`로 기동, ini-write + registry import 보유.
+- `BootFirst.exe`: `MoveFile` import + `.\\Gin7UpdateClient.new`/`.old` 참조 → 자가 업데이트 파일 교체 보조 증거.
+
+결론(서버 주소 정책 확정):
+
+- **클라이언트 단독 바이너리 패치가 아니라 `SERVER.INI`의 `[UPDATE] SERVER_ADDRESS`(+`SERVER_PORT`) 키로 서버 주소를 로컬로 돌릴 수 있다.** 하드코딩 `202.8.80.179`는 폴백일 뿐이다. 현재 설치 트리에는 `update.ini`(`[UPDATE] VERSION=131 ...`)만 있고 `SERVER_ADDRESS` 키는 없어 폴백이 적용된다. 로컬 플레이는 `SERVER.INI`를 추가/생성하는 정책으로 확정한다.
+
+다음 RE 타깃:
+
+- `SERVER.INI` 파일명 조립 경로(`%sSERVER.INI`의 `%s` prefix = `BASE_DIR`)와 어느 프로세스가 최종적으로 `G7MTClient.exe`에 서버 주소를 전달하는지(updater write-back → client read) 체인을 확정한다.
+- 그 위에서 남은 핵심 블로커인 SSLoginOK(`0x0200`)/SSGameLoginOK(`0x0205`) 응답 프레임을 G080 message-family 객체 레이아웃 기반으로 역설계해 서버가 합성하도록 한다. 이것이 "연결만 됨"을 "로그인+월드 진입"으로 바꾸는 단일 관문이다.
+
+## 2026-06-11 로비 블로커 정밀 진단 + 클라 RE 인프라 (최신, 우선)
+
+상세 인수인계: **`docs/codex-handoff-2026-06-11.md`** (자기완결). 요약:
+- Cipher(Blowfish, 키=phase1Key) 해독 완료. 13,800함수 Ghidra 디컴파일 인덱스(`tools/logh7_redex.py`).
+- 로비 블로커 정밀 핀포인트(frida): **conn2가 0x2001(20B) 수신·링소비까지 하나 decipher(0x645db0)로 디코드 안 됨** — 라우터 `FUN_006130a0`의 conn2 0x0030 분기가 원인.
+- 다음 결정타: ui_explorer + 라우터 분기 프로브(frida는 타이밍 레이스 교란으로 간헐적). 그 후 분기 패치 → loginOkFlag.
+- 부수: CD 무결성/메달/한글화-폰트(GDI ANSI DEFAULT_CHARSET, cp949 String.txt+1바이트 패치) 모두 정리됨.

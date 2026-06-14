@@ -15,6 +15,9 @@ def write_gameplay_trace_analysis(source: Path, destination: Path) -> None:
     session_bootstrap_responses = [
         packet for packet in packets if packet["frame"]["kind"] == "session-bootstrap-response-candidate"
     ]
+    world_init_responses = [
+        packet for packet in packets if packet["frame"]["kind"] == "world-grid-init-response-candidate"
+    ]
     destination.parent.mkdir(parents=True, exist_ok=True)
     destination.write_text(
         json.dumps(
@@ -31,6 +34,11 @@ def write_gameplay_trace_analysis(source: Path, destination: Path) -> None:
                         packets,
                         "session-bootstrap-response-candidate",
                     ),
+                    "worldInitResponseCandidates": len(world_init_responses),
+                    "postWorldInitClientPackets": _post_candidate_client_packets(
+                        packets,
+                        "world-grid-init-response-candidate",
+                    ),
                     "closes": sum(1 for event in events if event.get("event") == "close"),
                 },
                 "probeFindings": {
@@ -39,6 +47,11 @@ def write_gameplay_trace_analysis(source: Path, destination: Path) -> None:
                         packets,
                         "session-bootstrap-response-candidate",
                         "session bootstrap candidate",
+                    ),
+                    "worldInitCandidateRuntimeProbe": _candidate_probe_finding(
+                        packets,
+                        "world-grid-init-response-candidate",
+                        "world/grid init candidate",
                     ),
                 },
                 "packets": packets,
@@ -116,6 +129,7 @@ def _frame(packet: bytes) -> dict[str, JsonValue]:
         "lengthMatches": length_matches,
         **_command_ok_fields(declared, code, length_matches),
         **_session_bootstrap_fields(code, length_matches),
+        **_world_init_fields(code, length_matches),
     }
 
 
@@ -134,6 +148,8 @@ def _frame_kind(declared: int, code: int, length_matches: bool) -> str:
         return "command-ok-response-candidate"
     if code in {0x0001, 0x0003}:
         return "session-bootstrap-response-candidate"
+    if code in {0x0013, 0x0014}:
+        return "world-grid-init-response-candidate"
     return "unknown-observed-frame"
 
 
@@ -174,6 +190,28 @@ def _session_bootstrap_fields(code: int, length_matches: bool) -> dict[str, Json
                 "handlerInternalHex": "0x0205",
                 "pairedInternalHex": "0x0206",
                 "candidateStatus": "constructed session bootstrap response; handler execution must be observed separately",
+            }
+        case _:
+            return {}
+
+
+def _world_init_fields(code: int, length_matches: bool) -> dict[str, JsonValue]:
+    if not length_matches:
+        return {}
+    match code:
+        case 0x0013:
+            return {
+                "messageName": "ResponseWorldInitialize",
+                "queuedInternalHex": "0x0f00",
+                "handlerInternalHex": "0x0f01",
+                "candidateStatus": "constructed world init response; handler execution must be observed separately",
+            }
+        case 0x0014:
+            return {
+                "messageName": "ResponseGridInitialize",
+                "queuedInternalHex": "0x0f02",
+                "handlerInternalHex": "0x0f03",
+                "candidateStatus": "constructed grid init response; handler execution must be observed separately",
             }
         case _:
             return {}

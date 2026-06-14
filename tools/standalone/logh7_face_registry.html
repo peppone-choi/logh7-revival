@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>LOGH VII 포트레잇 이름 배정 (재명명)</title>
+<style>
+  :root { --o:#c0392b; --g:#2980b9; --bg:#0e1726; --panel:#16223a; --line:#26344f; --txt:#e6ecf5; --mut:#8aa0c0; }
+  *{box-sizing:border-box;} body{margin:0;font-family:"Malgun Gothic","맑은 고딕",system-ui,sans-serif;background:var(--bg);color:var(--txt);}
+  header{padding:14px 20px;background:var(--panel);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5;}
+  h1{font-size:17px;margin:0 0 8px;} .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
+  button,select,input[type=text]{background:#1f2d49;color:var(--txt);border:1px solid var(--line);border-radius:6px;padding:6px 10px;font-size:13px;}
+  button{cursor:pointer;} button:hover{background:#27395c;}
+  .stat{color:var(--mut);font-size:12px;} .badge{font-size:11px;font-weight:700;padding:1px 7px;border-radius:10px;color:#fff;}
+  .badge.O{background:var(--o);} .badge.G{background:var(--g);}
+  main{padding:14px 20px;} .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:8px;text-align:center;}
+  .card.named{border-color:#2ecc71;} .por{width:96px;height:120px;object-fit:contain;border-radius:5px;background:#0b1322;border:1px solid var(--line);image-rendering:pixelated;}
+  .meta{font-size:11px;color:var(--mut);margin:3px 0;} code{color:#9fd3ff;font-size:11px;}
+  .kr{width:100%;margin-top:5px;font-size:14px;text-align:center;} .help{color:var(--mut);font-size:12px;max-width:900px;line-height:1.5;}
+</style>
+</head>
+<body>
+<header>
+  <h1>LOGH VII 포트레잇 이름 배정 — <b style="color:#ffcc66">전체 재명명</b> <span class="stat">(기존 AI 분류 무시)</span></h1>
+  <div class="row">
+    <label>📁 포트레잇 폴더 선택 <input type="file" id="dir" webkitdirectory directory multiple></label>
+    <label>이어하기(저장본 불러오기) <input type="file" id="load" accept=".json"></label>
+    <select id="fgroup"><option value="">전체</option><option value="O">O군(원작 전용)</option><option value="G">G군(플레이어)</option></select>
+    <select id="fatlas"><option value="">전체 아틀라스</option></select>
+    <label><input type="checkbox" id="fmiss" checked> 미명명만</label>
+    <input type="text" id="fsearch" placeholder="이름 검색">
+    <button id="export">💾 names.json 내보내기</button>
+    <span class="stat" id="stat"></span>
+  </div>
+  <div class="help" style="margin-top:8px">
+    <b>사용법</b>: 포트레잇 폴더(예: <code>canon-portraits</code>, 하위에 oem/oam/o/gem/gef/gam/gaf)를 선택하면 <u>모든 포트레잇</u>이 공백으로 뜹니다. 이미지를 직접 보고 한글 이름을 입력하세요. <span class="badge O">O</span>=원작(canon) 전용 얼굴, <span class="badge G">G</span>=플레이어 생성용. 진행상황은 자동 메모리 반영, <b>내보내기</b>로 <code>names.json</code> 저장(이어하기로 다시 불러옴). <i>기존 자동분류 이름은 신뢰 불가라 전부 새로 답니다.</i>
+  </div>
+</header>
+<main>
+  <div id="grid" class="grid"></div>
+  <p class="help" id="empty">포트레잇 폴더를 선택하세요.</p>
+</main>
+<script>
+const ATLAS={oem:{g:"O",fac:"제국",sex:"남",rank:"士"},oam:{g:"O",fac:"동맹",sex:"남",rank:"士"},o:{g:"O",fac:"기타",sex:"-",rank:"-"},
+  gem:{g:"G",fac:"제국",sex:"남",rank:"将"},gef:{g:"G",fac:"제국",sex:"여",rank:"将"},gam:{g:"G",fac:"동맹",sex:"남",rank:"将"},gaf:{g:"G",fac:"동맹",sex:"여",rank:"将"}};
+const BASE={oem:0,oam:100000,o:10000,gem:1000000,gef:1010000,gam:1100000,gaf:1110000};
+const CAP={oem:199,oam:95,o:99,gem:99,gef:31,gam:99,gaf:31};
+let entries=[]; // {key, atlas, index, group, file, url, name_kr}
+function faceCode(a,i){ return (i<=CAP[a]) ? BASE[a]+i : null; } // calibrated only
+
+document.getElementById("dir").addEventListener("change", e=>{
+  const map=new Map(); // key -> entry
+  for(const f of e.target.files){
+    if(!/\.(png|jpg|jpeg|bmp|gif)$/i.test(f.name)) continue;
+    const parts=f.webkitRelativePath.split("/");
+    const atlas=parts.length>=2 ? parts[parts.length-2] : "";
+    if(!ATLAS[atlas]) continue;
+    const m=f.name.match(/(\d+)/); const idx=m?parseInt(m[1],10):null; if(idx==null) continue;
+    const key=atlas+"_"+String(idx).padStart(4,"0");
+    map.set(key,{key,atlas,index:idx,group:ATLAS[atlas].g,file:f.webkitRelativePath,url:URL.createObjectURL(f),name_kr:""});
+  }
+  entries=[...map.values()].sort((a,b)=> a.atlas<b.atlas?-1:a.atlas>b.atlas?1:a.index-b.index);
+  const sel=document.getElementById("fatlas"); sel.length=1;
+  [...new Set(entries.map(e=>e.atlas))].forEach(a=>{const o=document.createElement("option");o.value=a;o.textContent=a;sel.appendChild(o);});
+  render();
+});
+document.getElementById("load").addEventListener("change", async e=>{
+  const f=e.target.files[0]; if(!f)return; const saved=JSON.parse(await f.text());
+  const byKey=new Map((saved.entries||saved).map(x=>[x.key||(x.atlas+"_"+String(x.index).padStart(4,"0")), x.name_kr]));
+  for(const en of entries){ if(byKey.get(en.key)) en.name_kr=byKey.get(en.key); }
+  render();
+});
+["fgroup","fatlas","fmiss","fsearch"].forEach(id=>document.getElementById(id).addEventListener("input",render));
+function render(){
+  const g=document.getElementById("grid"); g.innerHTML="";
+  const fg=fgroup.value,fa=fatlas.value,fm=fmiss.checked,fs=fsearch.value.trim().toLowerCase();
+  let shown=0,named=0;
+  for(const en of entries){
+    if(en.name_kr)named++;
+    if(fg&&en.group!==fg)continue; if(fa&&en.atlas!==fa)continue; if(fm&&en.name_kr)continue;
+    if(fs&&!(en.name_kr||"").toLowerCase().includes(fs))continue;
+    shown++;
+    const m=ATLAS[en.atlas]; const fc=faceCode(en.atlas,en.index);
+    const card=document.createElement("div"); card.className="card"+(en.name_kr?" named":"");
+    card.innerHTML=`<img class="por" src="${en.url}" loading="lazy">
+      <div class="meta"><span class="badge ${en.group}">${en.group}</span> ${en.atlas} #${en.index}</div>
+      <div class="meta">${m.fac}·${m.sex}·${m.rank} · face=<code>${fc??'미캘리브'}</code></div>`;
+    const inp=document.createElement("input"); inp.type="text"; inp.className="kr"; inp.placeholder="이름"; inp.value=en.name_kr;
+    inp.addEventListener("input",()=>{en.name_kr=inp.value; card.className="card"+(inp.value?" named":""); document.getElementById("stat").textContent=statText();});
+    card.appendChild(inp); g.appendChild(card);
+  }
+  document.getElementById("empty").style.display=entries.length?"none":"block";
+  document.getElementById("stat").textContent=statText();
+}
+function statText(){ const named=entries.filter(e=>e.name_kr).length;
+  return `포트레잇 ${entries.length} · 명명 ${named} · 남음 ${entries.length-named} (O ${entries.filter(e=>e.group==='O').length} / G ${entries.filter(e=>e.group==='G').length})`; }
+document.getElementById("export").addEventListener("click",()=>{
+  const out={_purpose:"LOGH VII portrait->name fresh assignment (AI classification discarded)",
+    _count:entries.filter(e=>e.name_kr).length,
+    entries:entries.map(e=>({key:e.key,atlas:e.atlas,index:e.index,group:e.group,faceCode:faceCode(e.atlas,e.index),file:e.file,name_kr:e.name_kr||null}))};
+  const b=new Blob([JSON.stringify(out,null,2)],{type:"application/json"});
+  const a=document.createElement("a"); a.href=URL.createObjectURL(b); a.download="names.json"; a.click();
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,5116 @@
+{
+ "_meta": {
+  "purpose": "AI vision classification of LOGH VII portraits. ATTRIBUTES are reliable; IDENTITY (name) is NOT resolvable from current decode due to global-index misalignment.",
+  "attribute_status": "RELIABLE — pass1 validated 0 sex/faction conflicts vs atlas code; full pool covered.",
+  "identity_status": "BLOCKED — dumpall global face-number index is misaligned to art (proven: dumpall/0085!=canon Schenkopp, dumpall/0206!=canon Yang, dumpall/0209 not blond Reinhard). Only 2 identities are image-confirmed (pixel-match). Stamping the official 12 face-number names onto decoded art is UNSAFE until tcf.hed indexing is correctly reverse-engineered.",
+  "index_check_evidence": "review/INDEXCHECK.png; hash idx#85!=Schenkopp, idx#206!=Yang both False-match.",
+  "reliable_named_anchors": [
+   {
+    "key": "oam/0274",
+    "name": "Yang Wen-li",
+    "method": "official-art pixel-match NCC 0.937",
+    "png": "content/roster/canon-portraits/oam/0274.png"
+   },
+   {
+    "key": "oam/0230",
+    "name": "Walter von Schenkopp",
+    "method": "official-art pixel-match NCC 0.881",
+    "png": "content/roster/canon-portraits/oam/0230.png"
+   }
+  ]
+ },
+ "attributes_global": [
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "brown",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "calm",
+   "faction_guess": "alliance",
+   "vibe": "earnest junior officer",
+   "attr_source": "vision-global",
+   "face_index": 1,
+   "exact_dupes": [
+    1,
+    201,
+    351
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "brown",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "calm",
+   "faction_guess": "alliance",
+   "vibe": "earnest clean-cut officer",
+   "attr_source": "vision-global",
+   "face_index": 2,
+   "exact_dupes": [
+    2,
+    202,
+    352
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "40s",
+   "hair_color": "brown",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "stern",
+   "faction_guess": "alliance",
+   "vibe": "weathered career officer, downturned mouth",
+   "attr_source": "vision-global",
+   "face_index": 3,
+   "exact_dupes": [
+    3,
+    203,
+    353,
+    454,
+    754,
+    904,
+    1204
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "black",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "stern",
+   "faction_guess": "alliance",
+   "vibe": "tough determined officer",
+   "attr_source": "vision-global",
+   "face_index": 4,
+   "exact_dupes": [
+    4,
+    204,
+    354
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "black",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "confident",
+   "faction_guess": "alliance",
+   "vibe": "rugged steady officer",
+   "attr_source": "vision-global",
+   "face_index": 5,
+   "exact_dupes": [
+    5,
+    205,
+    355
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "red",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "stern",
+   "faction_guess": "empire",
+   "vibe": "hard-jawed auburn officer",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 7,
+   "exact_dupes": [
+    7
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "40s",
+   "hair_color": "brown",
+   "hair_style": "medium",
+   "facial_hair": "beard",
+   "expression": "stern",
+   "faction_guess": "empire",
+   "vibe": "bearded seasoned officer",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 8,
+   "exact_dupes": [
+    8
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "brown",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "confident",
+   "faction_guess": "empire",
+   "vibe": "spirited bright-eyed officer",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 9,
+   "exact_dupes": [
+    9
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "black",
+   "hair_style": "short",
+   "facial_hair": "stubble",
+   "expression": "stern",
+   "faction_guess": "empire",
+   "vibe": "rugged hard-bitten officer",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 10,
+   "exact_dupes": [
+    10
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "brown",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "smug",
+   "faction_guess": "empire",
+   "vibe": "rugged confident officer with sidelong smirk",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 11,
+   "exact_dupes": [
+    11
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "red",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "stern",
+   "faction_guess": "empire",
+   "vibe": "reddish-brown wavy hair, square jaw",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 12,
+   "exact_dupes": [
+    12
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "40s",
+   "hair_color": "blond",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "stern",
+   "faction_guess": "empire",
+   "vibe": "weathered rugged commander",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 13,
+   "exact_dupes": [
+    13
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "50s",
+   "hair_color": "gray",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "stern",
+   "faction_guess": "empire",
+   "vibe": "grizzled green-gray haired senior",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 14,
+   "exact_dupes": [
+    14
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "50s",
+   "hair_color": "gray",
+   "hair_style": "medium",
+   "facial_hair": "none",
+   "expression": "stern",
+   "faction_guess": "empire",
+   "vibe": "graying severe commander",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 15,
+   "exact_dupes": [
+    15
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "blond",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "stern",
+   "faction_guess": "empire",
+   "vibe": "stern blond officer",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 16,
+   "exact_dupes": [
+    16
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "60s+",
+   "hair_color": "white",
+   "hair_style": "medium",
+   "facial_hair": "beard",
+   "expression": "stern",
+   "faction_guess": "empire",
+   "vibe": "monocled white-bearded elder",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 17,
+   "exact_dupes": [
+    17
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "40s",
+   "hair_color": "gray",
+   "hair_style": "medium",
+   "facial_hair": "none",
+   "expression": "smug",
+   "faction_guess": "empire",
+   "vibe": "sharp graying schemer",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 18,
+   "exact_dupes": [
+    18
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "orange",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "stern",
+   "faction_guess": "empire",
+   "vibe": "rugged ginger officer",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 19,
+   "exact_dupes": [
+    19
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "blond",
+   "hair_style": "medium",
+   "facial_hair": "none",
+   "expression": "calm",
+   "faction_guess": "empire",
+   "vibe": "pale slick blond aristocrat",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 20,
+   "exact_dupes": [
+    20
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "40s",
+   "hair_color": "black",
+   "hair_style": "short",
+   "facial_hair": "goatee",
+   "expression": "confident",
+   "faction_guess": "empire",
+   "vibe": "goateed sharp-eyed commander",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 21,
+   "exact_dupes": [
+    21
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "red",
+   "hair_style": "medium",
+   "facial_hair": "beard",
+   "expression": "angry",
+   "faction_guess": "empire",
+   "vibe": "fierce red-bearded warrior",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 22,
+   "exact_dupes": [
+    22
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "40s",
+   "hair_color": "brown",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "calm",
+   "faction_guess": "empire",
+   "vibe": "rounded affable middle-aged officer",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 23,
+   "exact_dupes": [
+    23
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "black",
+   "hair_style": "medium",
+   "facial_hair": "none",
+   "expression": "stern",
+   "faction_guess": "empire",
+   "vibe": "grim dark-haired officer",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 24,
+   "exact_dupes": [
+    24
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "20s",
+   "hair_color": "red",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "neutral",
+   "faction_guess": "empire",
+   "vibe": "slender red-haired youth",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 25,
+   "exact_dupes": [
+    25
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "20s",
+   "hair_color": "red",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "calm",
+   "faction_guess": "empire",
+   "vibe": "gentle red-haired youth",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 26,
+   "exact_dupes": [
+    26
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "brown",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "smug",
+   "faction_guess": "empire",
+   "vibe": "confident rakish officer",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 27,
+   "exact_dupes": [
+    27
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "blond",
+   "hair_style": "medium",
+   "facial_hair": "none",
+   "expression": "stern",
+   "faction_guess": "empire",
+   "vibe": "strong-jawed blond commander",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 28,
+   "exact_dupes": [
+    28
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "20s",
+   "hair_color": "red",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "smug",
+   "faction_guess": "empire",
+   "vibe": "sly dark-red youth",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 29,
+   "exact_dupes": [
+    29
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "black",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "stern",
+   "faction_guess": "empire",
+   "vibe": "slicked-back dark officer",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 30,
+   "exact_dupes": [
+    30
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "40s",
+   "hair_color": "brown",
+   "hair_style": "short",
+   "facial_hair": "mustache",
+   "expression": "stern",
+   "faction_guess": "empire",
+   "vibe": "thick-mustached firm officer",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 31,
+   "exact_dupes": [
+    31
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "brown",
+   "hair_style": "medium",
+   "facial_hair": "none",
+   "expression": "calm",
+   "faction_guess": "empire",
+   "vibe": "tousled brown-haired man, gentle demeanor",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 32,
+   "exact_dupes": [
+    32
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "brown",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "confident",
+   "faction_guess": "empire",
+   "vibe": "smooth poised officer",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 33,
+   "exact_dupes": [
+    33
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "blond",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "stern",
+   "faction_guess": "empire",
+   "vibe": "curly blond brute",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 34,
+   "exact_dupes": [
+    34
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "20s",
+   "hair_color": "black",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "stern",
+   "faction_guess": "empire",
+   "vibe": "serious dark-haired youth",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 35,
+   "exact_dupes": [
+    35
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "black",
+   "hair_style": "medium",
+   "facial_hair": "none",
+   "expression": "calm",
+   "faction_guess": "empire",
+   "vibe": "rugged dark-haired officer with silver-streaked fringe",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 36,
+   "exact_dupes": [
+    36
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "40s",
+   "hair_color": "brown",
+   "hair_style": "short",
+   "facial_hair": "mustache",
+   "expression": "smug",
+   "faction_guess": "empire",
+   "vibe": "sneering mustached officer",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 37,
+   "exact_dupes": [
+    37
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "40s",
+   "hair_color": "black",
+   "hair_style": "short",
+   "facial_hair": "mustache",
+   "expression": "stern",
+   "faction_guess": "empire",
+   "vibe": "veteran with thick mustache",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 38,
+   "exact_dupes": [
+    38
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "black",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "stern",
+   "faction_guess": "empire",
+   "vibe": "stolid square-jawed officer",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 39,
+   "exact_dupes": [
+    39
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "brown",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "stern",
+   "faction_guess": "empire",
+   "vibe": "graying-temple officer, firm jaw",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 40,
+   "exact_dupes": [
+    40
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "brown",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "stern",
+   "faction_guess": "empire",
+   "vibe": "slicked-back brown hair, strong jaw",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 41,
+   "exact_dupes": [
+    41
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "40s",
+   "hair_color": "brown",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "smug",
+   "faction_guess": "empire",
+   "vibe": "sharp-featured aristocratic profile",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 42,
+   "exact_dupes": [
+    42
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "50s",
+   "hair_color": "gray",
+   "hair_style": "short",
+   "facial_hair": "mustache",
+   "expression": "stern",
+   "faction_guess": "empire",
+   "vibe": "stout graying officer with mustache",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 43,
+   "exact_dupes": [
+    43
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "20s",
+   "hair_color": "blond",
+   "hair_style": "medium",
+   "facial_hair": "none",
+   "expression": "calm",
+   "faction_guess": "empire",
+   "vibe": "cool fair-haired young officer",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 44,
+   "exact_dupes": [
+    44
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "40s",
+   "hair_color": "black",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "stern",
+   "faction_guess": "empire",
+   "vibe": "imposing slicked-back officer",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 45,
+   "exact_dupes": [
+    45
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "20s",
+   "hair_color": "brown",
+   "hair_style": "medium",
+   "facial_hair": "none",
+   "expression": "calm",
+   "faction_guess": "empire",
+   "vibe": "youthful soft-featured officer",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 46,
+   "exact_dupes": [
+    46
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "black",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "confident",
+   "faction_guess": "empire",
+   "vibe": "rugged curly-haired officer",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 47,
+   "exact_dupes": [
+    47
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "50s",
+   "hair_color": "brown",
+   "hair_style": "bald",
+   "facial_hair": "mustache",
+   "expression": "smug",
+   "faction_guess": "empire",
+   "vibe": "bald heavyset mustached officer",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 48,
+   "exact_dupes": [
+    48
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "blond",
+   "hair_style": "medium",
+   "facial_hair": "none",
+   "expression": "calm",
+   "faction_guess": "empire",
+   "vibe": "blond officer, soft features",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 49,
+   "exact_dupes": [
+    49
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "other",
+   "hair_style": "other",
+   "facial_hair": "none",
+   "expression": "neutral",
+   "faction_guess": "empire",
+   "vibe": "helmeted armored figure, face obscured",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 50,
+   "exact_dupes": [
+    50
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "brown",
+   "hair_style": "medium",
+   "facial_hair": "none",
+   "expression": "stern",
+   "faction_guess": "empire",
+   "vibe": "brooding swept-back hair officer",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 51,
+   "exact_dupes": [
+    51
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "50s",
+   "hair_color": "gray",
+   "hair_style": "short",
+   "facial_hair": "mustache",
+   "expression": "calm",
+   "faction_guess": "empire",
+   "vibe": "graying mustached senior officer",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 52,
+   "exact_dupes": [
+    52
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "brown",
+   "hair_style": "medium",
+   "facial_hair": "goatee",
+   "expression": "angry",
+   "faction_guess": "empire",
+   "vibe": "intense glaring man with goatee",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 53,
+   "exact_dupes": [
+    53
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "60s+",
+   "hair_color": "white",
+   "hair_style": "medium",
+   "facial_hair": "mustache",
+   "expression": "stern",
+   "faction_guess": "empire",
+   "vibe": "white-haired elder statesman, mustache",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 54,
+   "exact_dupes": [
+    54
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "40s",
+   "hair_color": "gray",
+   "hair_style": "short",
+   "facial_hair": "mustache",
+   "expression": "stern",
+   "faction_guess": "empire",
+   "vibe": "slicked gray hair with thin mustache, aristocratic",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 55,
+   "exact_dupes": [
+    55
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "40s",
+   "hair_color": "blond",
+   "hair_style": "medium",
+   "facial_hair": "mustache",
+   "expression": "calm",
+   "faction_guess": "empire",
+   "vibe": "mustached genial officer",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 56,
+   "exact_dupes": [
+    56
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "brown",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "confident",
+   "faction_guess": "empire",
+   "vibe": "composed handsome officer",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 57,
+   "exact_dupes": [
+    57
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "brown",
+   "hair_style": "medium",
+   "facial_hair": "none",
+   "expression": "stern",
+   "faction_guess": "empire",
+   "vibe": "tousled brown-haired commander",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 58,
+   "exact_dupes": [
+    58
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "20s",
+   "hair_color": "blond",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "stern",
+   "faction_guess": "empire",
+   "vibe": "wavy-haired young officer",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 59,
+   "exact_dupes": [
+    59
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "20s",
+   "hair_color": "brown",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "calm",
+   "faction_guess": "empire",
+   "vibe": "earnest young officer",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 60,
+   "exact_dupes": [
+    60
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "50s",
+   "hair_color": "white",
+   "hair_style": "medium",
+   "facial_hair": "none",
+   "expression": "stern",
+   "faction_guess": "empire",
+   "vibe": "white-haired stern elder with heavy brow",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 61,
+   "exact_dupes": [
+    61
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "blond",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "confident",
+   "faction_guess": "empire",
+   "vibe": "slicked-back blond hard-faced officer",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 62,
+   "exact_dupes": [
+    62
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "black",
+   "hair_style": "medium",
+   "facial_hair": "none",
+   "expression": "stern",
+   "faction_guess": "empire",
+   "vibe": "dark-haired heavy-browed officer",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 63,
+   "exact_dupes": [
+    63
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "20s",
+   "hair_color": "black",
+   "hair_style": "medium",
+   "facial_hair": "none",
+   "expression": "smug",
+   "faction_guess": "empire",
+   "vibe": "confident handsome young officer",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 64,
+   "exact_dupes": [
+    64
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "20s",
+   "hair_color": "black",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "neutral",
+   "faction_guess": "empire",
+   "vibe": "clean-cut dark-haired young officer",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 65,
+   "exact_dupes": [
+    65
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "20s",
+   "hair_color": "brown",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "calm",
+   "faction_guess": "empire",
+   "vibe": "youthful clean-cut officer",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 66,
+   "exact_dupes": [
+    66
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "brown",
+   "hair_style": "medium",
+   "facial_hair": "none",
+   "expression": "neutral",
+   "faction_guess": "empire",
+   "vibe": "curly-haired stout officer",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 67,
+   "exact_dupes": [
+    67
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "gray",
+   "hair_style": "medium",
+   "facial_hair": "none",
+   "expression": "smug",
+   "faction_guess": "empire",
+   "vibe": "handsome gray-haired man with confident smirk",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 68,
+   "exact_dupes": [
+    68
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "blond",
+   "hair_style": "short",
+   "facial_hair": "beard",
+   "expression": "stern",
+   "faction_guess": "empire",
+   "vibe": "blond officer with full beard, resolute",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 69,
+   "exact_dupes": [
+    69
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "black",
+   "hair_style": "medium",
+   "facial_hair": "none",
+   "expression": "calm",
+   "faction_guess": "empire",
+   "vibe": "composed dark-haired officer",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 70,
+   "exact_dupes": [
+    70
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "20s",
+   "hair_color": "orange",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "calm",
+   "faction_guess": "empire",
+   "vibe": "young short-haired officer",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 71,
+   "exact_dupes": [
+    71
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "black",
+   "hair_style": "medium",
+   "facial_hair": "none",
+   "expression": "smug",
+   "faction_guess": "empire",
+   "vibe": "slicked-back confident officer",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 72,
+   "exact_dupes": [
+    72
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "brown",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "sad",
+   "faction_guess": "empire",
+   "vibe": "weary downcast officer",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 73,
+   "exact_dupes": [
+    73
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "20s",
+   "hair_color": "brown",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "calm",
+   "faction_guess": "empire",
+   "vibe": "earnest young officer",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 74,
+   "exact_dupes": [
+    74
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "black",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "stern",
+   "faction_guess": "empire",
+   "vibe": "stiff square-jawed officer",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 75,
+   "exact_dupes": [
+    75
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "brown",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "stern",
+   "faction_guess": "empire",
+   "vibe": "square-jawed brown-haired officer",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 76,
+   "exact_dupes": [
+    76
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "black",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "calm",
+   "faction_guess": "empire",
+   "vibe": "broad genial officer",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 77,
+   "exact_dupes": [
+    77
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "black",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "stern",
+   "faction_guess": "empire",
+   "vibe": "hard-faced officer in peaked military cap",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 78,
+   "exact_dupes": [
+    78
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "blond",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "stern",
+   "faction_guess": "empire",
+   "vibe": "stoic blond officer",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 79,
+   "exact_dupes": [
+    79
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "red",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "confident",
+   "faction_guess": "empire",
+   "vibe": "auburn-haired self-assured officer",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 80,
+   "exact_dupes": [
+    80
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "40s",
+   "hair_color": "gray",
+   "hair_style": "medium",
+   "facial_hair": "beard",
+   "expression": "stern",
+   "faction_guess": "empire",
+   "vibe": "bearded gray-haired veteran commander",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 81,
+   "exact_dupes": [
+    81
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "20s",
+   "hair_color": "red",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "smug",
+   "faction_guess": "empire",
+   "vibe": "fiery red-haired young man with cocky grin",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 82,
+   "exact_dupes": [
+    82
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "brown",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "smug",
+   "faction_guess": "empire",
+   "vibe": "neat brown-haired officer, slight smirk",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 83,
+   "exact_dupes": [
+    83
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "black",
+   "hair_style": "medium",
+   "facial_hair": "none",
+   "expression": "angry",
+   "faction_guess": "empire",
+   "vibe": "scowling dark-haired officer",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 84,
+   "exact_dupes": [
+    84
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "50s",
+   "hair_color": "brown",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "stern",
+   "faction_guess": "empire",
+   "vibe": "lined-face senior officer",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 85,
+   "exact_dupes": [
+    85
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "blond",
+   "hair_style": "medium",
+   "facial_hair": "none",
+   "expression": "calm",
+   "faction_guess": "empire",
+   "vibe": "blond officer with side-swept hair, composed",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 86,
+   "exact_dupes": [
+    86
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "silver",
+   "hair_style": "medium",
+   "facial_hair": "none",
+   "expression": "calm",
+   "faction_guess": "empire",
+   "vibe": "silver-haired handsome officer",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 87,
+   "exact_dupes": [
+    87
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "40s",
+   "hair_color": "brown",
+   "hair_style": "medium",
+   "facial_hair": "mustache",
+   "expression": "stern",
+   "faction_guess": "empire",
+   "vibe": "mustached middle-aged officer",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 88,
+   "exact_dupes": [
+    88
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "20s",
+   "hair_color": "black",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "calm",
+   "faction_guess": "empire",
+   "vibe": "young curly-haired soldier",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 89,
+   "exact_dupes": [
+    89
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "40s",
+   "hair_color": "silver",
+   "hair_style": "medium",
+   "facial_hair": "none",
+   "expression": "confident",
+   "faction_guess": "empire",
+   "vibe": "silver-haired easygoing officer",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 90,
+   "exact_dupes": [
+    90
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "brown",
+   "hair_style": "medium",
+   "facial_hair": "none",
+   "expression": "stern",
+   "faction_guess": "empire",
+   "vibe": "tense determined officer",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 91,
+   "exact_dupes": [
+    91
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "20s",
+   "hair_color": "black",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "stern",
+   "faction_guess": "empire",
+   "vibe": "young curly-haired soldier, intense gaze",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 92,
+   "exact_dupes": [
+    92
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "black",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "calm",
+   "faction_guess": "empire",
+   "vibe": "broad-faced affable officer",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 93,
+   "exact_dupes": [
+    93
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "20s",
+   "hair_color": "blond",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "confident",
+   "faction_guess": "empire",
+   "vibe": "young blond officer, sharp look",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 94,
+   "exact_dupes": [
+    94
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "brown",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "smug",
+   "faction_guess": "empire",
+   "vibe": "sly confident officer",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 95,
+   "exact_dupes": [
+    95
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "20s",
+   "hair_color": "brown",
+   "hair_style": "medium",
+   "facial_hair": "none",
+   "expression": "smug",
+   "faction_guess": "empire",
+   "vibe": "bowl-cut sly young man",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 96,
+   "exact_dupes": [
+    96
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "black",
+   "hair_style": "medium",
+   "facial_hair": "none",
+   "expression": "smug",
+   "faction_guess": "empire",
+   "vibe": "dark-haired confident officer",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 97,
+   "exact_dupes": [
+    97
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "40s",
+   "hair_color": "brown",
+   "hair_style": "medium",
+   "facial_hair": "beard",
+   "expression": "calm",
+   "faction_guess": "empire",
+   "vibe": "bearded scholarly officer",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 98,
+   "exact_dupes": [
+    98
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "20s",
+   "hair_color": "brown",
+   "hair_style": "medium",
+   "facial_hair": "none",
+   "expression": "calm",
+   "faction_guess": "empire",
+   "vibe": "handsome composed young officer",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 99,
+   "exact_dupes": [
+    99
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "brown",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "angry",
+   "faction_guess": "empire",
+   "vibe": "broad-faced scowling officer",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 100,
+   "exact_dupes": [
+    100
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "50s",
+   "hair_color": "gray",
+   "hair_style": "medium",
+   "facial_hair": "beard",
+   "expression": "stern",
+   "faction_guess": "empire",
+   "vibe": "graying bearded senior admiral",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 101,
+   "exact_dupes": [
+    101
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "20s",
+   "hair_color": "brown",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "neutral",
+   "faction_guess": "empire",
+   "vibe": "clean-cut young officer",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 102,
+   "exact_dupes": [
+    102
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "40s",
+   "hair_color": "brown",
+   "hair_style": "medium",
+   "facial_hair": "none",
+   "expression": "confident",
+   "faction_guess": "empire",
+   "vibe": "polished senior commander",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 103,
+   "exact_dupes": [
+    103
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "blond",
+   "hair_style": "medium",
+   "facial_hair": "none",
+   "expression": "stern",
+   "faction_guess": "empire",
+   "vibe": "fair-haired displeased officer",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 104,
+   "exact_dupes": [
+    104
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "20s",
+   "hair_color": "orange",
+   "hair_style": "medium",
+   "facial_hair": "none",
+   "expression": "calm",
+   "faction_guess": "empire",
+   "vibe": "wavy strawberry-blond young officer",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 105,
+   "exact_dupes": [
+    105
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "silver",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "calm",
+   "faction_guess": "empire",
+   "vibe": "neat silver-haired officer",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 106,
+   "exact_dupes": [
+    106
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "40s",
+   "hair_color": "black",
+   "hair_style": "long",
+   "facial_hair": "mustache",
+   "expression": "smug",
+   "faction_guess": "empire",
+   "vibe": "aloof long-haired aristocrat",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 107,
+   "exact_dupes": [
+    107
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "50s",
+   "hair_color": "gray",
+   "hair_style": "short",
+   "facial_hair": "mustache",
+   "expression": "stern",
+   "faction_guess": "empire",
+   "vibe": "graying veteran with mustache",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 108,
+   "exact_dupes": [
+    108
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "50s",
+   "hair_color": "gray",
+   "hair_style": "medium",
+   "facial_hair": "none",
+   "expression": "stern",
+   "faction_guess": "empire",
+   "vibe": "scowling veteran commander",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 109,
+   "exact_dupes": [
+    109
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "brown",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "stern",
+   "faction_guess": "empire",
+   "vibe": "capped frontline soldier",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 110,
+   "exact_dupes": [
+    110
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "blond",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "confident",
+   "faction_guess": "empire",
+   "vibe": "slick-back bright blond officer",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 111,
+   "exact_dupes": [
+    111
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "20s",
+   "hair_color": "blond",
+   "hair_style": "long",
+   "facial_hair": "none",
+   "expression": "calm",
+   "faction_guess": "empire",
+   "vibe": "youthful long wavy blond hair, beautiful features",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 112,
+   "exact_dupes": [
+    112
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "blond",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "calm",
+   "faction_guess": "empire",
+   "vibe": "ash-blond composed officer",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 113,
+   "exact_dupes": [
+    113
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "40s",
+   "hair_color": "blond",
+   "hair_style": "short",
+   "facial_hair": "beard",
+   "expression": "stern",
+   "faction_guess": "empire",
+   "vibe": "rugged bearded officer in cap",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 114,
+   "exact_dupes": [
+    114
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "20s",
+   "hair_color": "brown",
+   "hair_style": "medium",
+   "facial_hair": "none",
+   "expression": "calm",
+   "faction_guess": "empire",
+   "vibe": "young auburn-haired man, bangs",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 115,
+   "exact_dupes": [
+    115
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "brown",
+   "hair_style": "medium",
+   "facial_hair": "none",
+   "expression": "smiling",
+   "faction_guess": "empire",
+   "vibe": "warm wavy-haired officer",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 116,
+   "exact_dupes": [
+    116
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "20s",
+   "hair_color": "brown",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "confident",
+   "faction_guess": "empire",
+   "vibe": "youthful brown-haired officer",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 117,
+   "exact_dupes": [
+    117
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "brown",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "stern",
+   "faction_guess": "empire",
+   "vibe": "sharp-browed determined officer",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 118,
+   "exact_dupes": [
+    118
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "orange",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "stern",
+   "faction_guess": "empire",
+   "vibe": "stern ginger officer",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 119,
+   "exact_dupes": [
+    119
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "brown",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "stern",
+   "faction_guess": "empire",
+   "vibe": "square-jawed determined officer",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 120,
+   "exact_dupes": [
+    120
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "blond",
+   "hair_style": "medium",
+   "facial_hair": "none",
+   "expression": "calm",
+   "faction_guess": "empire",
+   "vibe": "composed fair-haired officer",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 121,
+   "exact_dupes": [
+    121
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "40s",
+   "hair_color": "brown",
+   "hair_style": "short",
+   "facial_hair": "mustache",
+   "expression": "stern",
+   "faction_guess": "empire",
+   "vibe": "bushy-mustached hard veteran",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 122,
+   "exact_dupes": [
+    122
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "50s",
+   "hair_color": "gray",
+   "hair_style": "short",
+   "facial_hair": "mustache",
+   "expression": "stern",
+   "faction_guess": "empire",
+   "vibe": "heavyset graying mustached general",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 123,
+   "exact_dupes": [
+    123
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "black",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "smug",
+   "faction_guess": "empire",
+   "vibe": "smooth confident aristocrat",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 124,
+   "exact_dupes": [
+    124
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "brown",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "angry",
+   "faction_guess": "empire",
+   "vibe": "scowling thick-browed officer",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 125,
+   "exact_dupes": [
+    125
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "blond",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "calm",
+   "faction_guess": "empire",
+   "vibe": "wavy blond officer",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 126,
+   "exact_dupes": [
+    126
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "40s",
+   "hair_color": "blond",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "calm",
+   "faction_guess": "empire",
+   "vibe": "weathered blond commander",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 127,
+   "exact_dupes": [
+    127
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "teens",
+   "hair_color": "brown",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "neutral",
+   "faction_guess": "empire",
+   "vibe": "young crowned boy noble",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 128,
+   "exact_dupes": [
+    128
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "40s",
+   "hair_color": "brown",
+   "hair_style": "medium",
+   "facial_hair": "none",
+   "expression": "stern",
+   "faction_guess": "empire",
+   "vibe": "gaunt brooding profile officer",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 129,
+   "exact_dupes": [
+    129
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "40s",
+   "hair_color": "black",
+   "hair_style": "short",
+   "facial_hair": "mustache",
+   "expression": "calm",
+   "faction_guess": "empire",
+   "vibe": "dignified mustached aristocrat",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 130,
+   "exact_dupes": [
+    130
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "50s",
+   "hair_color": "blond",
+   "hair_style": "short",
+   "facial_hair": "mustache",
+   "expression": "stern",
+   "faction_guess": "empire",
+   "vibe": "gruff thick-mustached veteran commander",
+   "attr_source": "vision-global",
+   "face_index": 131,
+   "exact_dupes": [
+    131
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "50s",
+   "hair_color": "blond",
+   "hair_style": "short",
+   "facial_hair": "mustache",
+   "expression": "stern",
+   "faction_guess": "empire",
+   "vibe": "gruff senior commander",
+   "attr_source": "vision-global",
+   "face_index": 132,
+   "exact_dupes": [
+    132,
+    583
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "40s",
+   "hair_color": "brown",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "stern",
+   "faction_guess": "empire",
+   "vibe": "weary veteran",
+   "attr_source": "vision-global",
+   "face_index": 133,
+   "exact_dupes": [
+    133
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "40s",
+   "hair_color": "brown",
+   "hair_style": "short",
+   "facial_hair": "goatee",
+   "expression": "stern",
+   "faction_guess": "alliance",
+   "vibe": "mustache+goatee veteran",
+   "attr_source": "vision-global",
+   "face_index": 134,
+   "exact_dupes": [
+    134
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "40s",
+   "hair_color": "brown",
+   "hair_style": "medium",
+   "facial_hair": "goatee",
+   "expression": "calm",
+   "faction_guess": "alliance",
+   "vibe": "thoughtful bearded staff type",
+   "attr_source": "vision-global",
+   "face_index": 135,
+   "exact_dupes": [
+    135,
+    586
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "black",
+   "hair_style": "medium",
+   "facial_hair": "none",
+   "expression": "calm",
+   "faction_guess": "empire",
+   "vibe": "gentle curly-haired man",
+   "attr_source": "vision-global",
+   "face_index": 136,
+   "exact_dupes": [
+    136
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "black",
+   "hair_style": "medium",
+   "facial_hair": "none",
+   "expression": "calm",
+   "faction_guess": "alliance",
+   "vibe": "curly-haired thoughtful officer",
+   "attr_source": "vision-global",
+   "face_index": 137,
+   "exact_dupes": [
+    137
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "black",
+   "hair_style": "medium",
+   "facial_hair": "none",
+   "expression": "calm",
+   "faction_guess": "alliance",
+   "vibe": "wavy-haired mild officer",
+   "attr_source": "vision-global",
+   "face_index": 138,
+   "exact_dupes": [
+    138,
+    589
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "gray",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "confident",
+   "faction_guess": "empire",
+   "vibe": "sharp ash-haired officer, slight smirk",
+   "attr_source": "vision-global",
+   "face_index": 139,
+   "exact_dupes": [
+    139
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "40s",
+   "hair_color": "gray",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "angry",
+   "faction_guess": "empire",
+   "vibe": "snarling hardened officer",
+   "attr_source": "vision-global",
+   "face_index": 140,
+   "exact_dupes": [
+    140
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "50s",
+   "hair_color": "gray",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "angry",
+   "faction_guess": "empire",
+   "vibe": "snarling hardliner",
+   "attr_source": "vision-global",
+   "face_index": 141,
+   "exact_dupes": [
+    141,
+    592
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "40s",
+   "hair_color": "gray",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "confident",
+   "faction_guess": "empire",
+   "vibe": "slick-backed graying officer",
+   "attr_source": "vision-global",
+   "face_index": 142,
+   "exact_dupes": [
+    142
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "50s",
+   "hair_color": "gray",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "stern",
+   "faction_guess": "empire",
+   "vibe": "slicked-back gray senior officer",
+   "attr_source": "vision-global",
+   "face_index": 143,
+   "exact_dupes": [
+    143
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "50s",
+   "hair_color": "gray",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "stern",
+   "faction_guess": "empire",
+   "vibe": "stately slicked-back elder",
+   "attr_source": "vision-global",
+   "face_index": 144,
+   "exact_dupes": [
+    144,
+    595
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "40s",
+   "hair_color": "brown",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "neutral",
+   "faction_guess": "alliance",
+   "vibe": "jowly tired administrator",
+   "attr_source": "vision-global",
+   "face_index": 145,
+   "exact_dupes": [
+    145
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "40s",
+   "hair_color": "brown",
+   "hair_style": "short",
+   "facial_hair": "mustache",
+   "expression": "calm",
+   "faction_guess": "alliance",
+   "vibe": "amiable mustached officer",
+   "attr_source": "vision-global",
+   "face_index": 146,
+   "exact_dupes": [
+    146
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "40s",
+   "hair_color": "brown",
+   "hair_style": "short",
+   "facial_hair": "mustache",
+   "expression": "calm",
+   "faction_guess": "alliance",
+   "vibe": "affable mustached middle-aged officer",
+   "attr_source": "vision-global",
+   "face_index": 147,
+   "exact_dupes": [
+    147,
+    598
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "blond",
+   "hair_style": "short",
+   "facial_hair": "stubble",
+   "expression": "smug",
+   "faction_guess": "empire",
+   "vibe": "stout cocky officer",
+   "attr_source": "vision-global",
+   "face_index": 148,
+   "exact_dupes": [
+    148
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "40s",
+   "hair_color": "blond",
+   "hair_style": "short",
+   "facial_hair": "goatee",
+   "expression": "calm",
+   "faction_guess": "alliance",
+   "vibe": "dapper bearded officer",
+   "attr_source": "vision-global",
+   "face_index": 149,
+   "exact_dupes": [
+    149
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "40s",
+   "hair_color": "brown",
+   "hair_style": "short",
+   "facial_hair": "goatee",
+   "expression": "stern",
+   "faction_guess": "alliance",
+   "vibe": "rugged bearded commander",
+   "attr_source": "vision-global",
+   "face_index": 150,
+   "exact_dupes": [
+    150,
+    601
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "50s",
+   "hair_color": "gray",
+   "hair_style": "medium",
+   "facial_hair": "none",
+   "expression": "calm",
+   "faction_guess": "alliance",
+   "vibe": "longer-haired graying intellectual",
+   "attr_source": "vision-global",
+   "face_index": 151,
+   "exact_dupes": [
+    151
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "50s",
+   "hair_color": "gray",
+   "hair_style": "medium",
+   "facial_hair": "none",
+   "expression": "calm",
+   "faction_guess": "empire",
+   "vibe": "weary lined elder",
+   "attr_source": "vision-global",
+   "face_index": 152,
+   "exact_dupes": [
+    152
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "60s+",
+   "hair_color": "gray",
+   "hair_style": "medium",
+   "facial_hair": "none",
+   "expression": "stern",
+   "faction_guess": "empire",
+   "vibe": "grim aged commander",
+   "attr_source": "vision-global",
+   "face_index": 153,
+   "exact_dupes": [
+    153,
+    604
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "50s",
+   "hair_color": "gray",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "calm",
+   "faction_guess": "alliance",
+   "vibe": "heavyset graying elder",
+   "attr_source": "vision-global",
+   "face_index": 154,
+   "exact_dupes": [
+    154
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "50s",
+   "hair_color": "gray",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "neutral",
+   "faction_guess": "alliance",
+   "vibe": "stout broad-faced veteran",
+   "attr_source": "vision-global",
+   "face_index": 155,
+   "exact_dupes": [
+    155
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "50s",
+   "hair_color": "gray",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "neutral",
+   "faction_guess": "empire",
+   "vibe": "broad-faced senior officer",
+   "attr_source": "vision-global",
+   "face_index": 156,
+   "exact_dupes": [
+    156,
+    607
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "40s",
+   "hair_color": "silver",
+   "hair_style": "medium",
+   "facial_hair": "none",
+   "expression": "calm",
+   "faction_guess": "empire",
+   "vibe": "cool silver-haired officer",
+   "attr_source": "vision-global",
+   "face_index": 157,
+   "exact_dupes": [
+    157
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "40s",
+   "hair_color": "silver",
+   "hair_style": "medium",
+   "facial_hair": "none",
+   "expression": "calm",
+   "faction_guess": "empire",
+   "vibe": "silver-haired composed officer",
+   "attr_source": "vision-global",
+   "face_index": 158,
+   "exact_dupes": [
+    158
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "40s",
+   "hair_color": "black",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "stern",
+   "faction_guess": "alliance",
+   "vibe": "hardened senior commander",
+   "attr_source": "vision-global",
+   "face_index": 206,
+   "exact_dupes": [
+    6,
+    206,
+    356,
+    457,
+    757,
+    907,
+    1207
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "40s",
+   "hair_color": "gray",
+   "hair_style": "short",
+   "facial_hair": "stubble",
+   "expression": "confident",
+   "faction_guess": "alliance",
+   "vibe": "rugged slick-backed officer with stubble",
+   "attr_source": "vision-global",
+   "face_index": 207,
+   "exact_dupes": [
+    207,
+    361
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "40s",
+   "hair_color": "gray",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "confident",
+   "faction_guess": "empire",
+   "vibe": "sly smiling officer",
+   "attr_source": "vision-global",
+   "face_index": 208,
+   "exact_dupes": [
+    208,
+    362
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "50s",
+   "hair_color": "gray",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "smug",
+   "faction_guess": "empire",
+   "vibe": "shrewd elder statesman",
+   "attr_source": "vision-global",
+   "face_index": 209,
+   "exact_dupes": [
+    209,
+    363,
+    460,
+    760,
+    910,
+    1210
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "20s",
+   "hair_color": "brown",
+   "hair_style": "medium",
+   "facial_hair": "none",
+   "expression": "smug",
+   "faction_guess": "empire",
+   "vibe": "smirking young noble officer",
+   "attr_source": "vision-global",
+   "face_index": 210,
+   "exact_dupes": [
+    210,
+    364
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "brown",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "confident",
+   "faction_guess": "alliance",
+   "vibe": "ruddy energetic young officer",
+   "attr_source": "vision-global",
+   "face_index": 211,
+   "exact_dupes": [
+    211,
+    371
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "brown",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "calm",
+   "faction_guess": "empire",
+   "vibe": "earnest green-eyed officer",
+   "attr_source": "vision-global",
+   "face_index": 212,
+   "exact_dupes": [
+    212,
+    372,
+    463,
+    913
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "blond",
+   "hair_style": "medium",
+   "facial_hair": "none",
+   "expression": "confident",
+   "faction_guess": "empire",
+   "vibe": "handsome blond noble",
+   "attr_source": "vision-global",
+   "face_index": 213,
+   "exact_dupes": [
+    213,
+    373
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "blond",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "confident",
+   "faction_guess": "empire",
+   "vibe": "blond confident officer",
+   "attr_source": "vision-global",
+   "face_index": 214,
+   "exact_dupes": [
+    214,
+    391
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "blond",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "smug",
+   "faction_guess": "empire",
+   "vibe": "self-assured blond officer, smirk",
+   "attr_source": "vision-global",
+   "face_index": 215,
+   "exact_dupes": [
+    215,
+    392,
+    466,
+    916
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "black",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "smug",
+   "faction_guess": "empire",
+   "vibe": "sharp arrogant profile",
+   "attr_source": "vision-global",
+   "face_index": 216,
+   "exact_dupes": [
+    216,
+    393
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "40s",
+   "hair_color": "black",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "stern",
+   "faction_guess": "empire",
+   "vibe": "heavy-jawed enforcer",
+   "attr_source": "vision-global",
+   "face_index": 217,
+   "exact_dupes": [
+    217,
+    394
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "40s",
+   "hair_color": "gray",
+   "hair_style": "medium",
+   "facial_hair": "none",
+   "expression": "stern",
+   "faction_guess": "empire",
+   "vibe": "gaunt severe officer",
+   "attr_source": "vision-global",
+   "face_index": 218,
+   "exact_dupes": [
+    218,
+    401,
+    469,
+    919
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "20s",
+   "hair_color": "black",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "calm",
+   "faction_guess": "alliance",
+   "vibe": "earnest young dark-haired junior officer",
+   "attr_source": "vision-global",
+   "face_index": 219,
+   "exact_dupes": [
+    219,
+    402
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "black",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "neutral",
+   "faction_guess": "alliance",
+   "vibe": "quiet young officer",
+   "attr_source": "vision-global",
+   "face_index": 220,
+   "exact_dupes": [
+    220,
+    411
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "black",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "neutral",
+   "faction_guess": "empire",
+   "vibe": "intense dark-haired officer",
+   "attr_source": "vision-global",
+   "face_index": 221,
+   "exact_dupes": [
+    221,
+    412,
+    472,
+    922
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "20s",
+   "hair_color": "brown",
+   "hair_style": "ponytail",
+   "facial_hair": "none",
+   "expression": "confident",
+   "faction_guess": "empire",
+   "vibe": "ponytailed sharp young officer",
+   "attr_source": "vision-global",
+   "face_index": 222,
+   "exact_dupes": [
+    222,
+    413
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "brown",
+   "hair_style": "ponytail",
+   "facial_hair": "none",
+   "expression": "confident",
+   "faction_guess": "alliance",
+   "vibe": "slick ponytailed grinning officer",
+   "attr_source": "vision-global",
+   "face_index": 223,
+   "exact_dupes": [
+    223,
+    421
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "brown",
+   "hair_style": "ponytail",
+   "facial_hair": "none",
+   "expression": "confident",
+   "faction_guess": "alliance",
+   "vibe": "rakish ponytailed officer",
+   "attr_source": "vision-global",
+   "face_index": 224,
+   "exact_dupes": [
+    224,
+    422,
+    475,
+    925
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "20s",
+   "hair_color": "brown",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "angry",
+   "faction_guess": "alliance",
+   "vibe": "hot-headed young officer",
+   "attr_source": "vision-global",
+   "face_index": 225,
+   "exact_dupes": [
+    225,
+    423
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "20s",
+   "hair_color": "brown",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "angry",
+   "faction_guess": "empire",
+   "vibe": "snarling intense youth",
+   "attr_source": "vision-global",
+   "face_index": 226,
+   "exact_dupes": [
+    226
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "brown",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "angry",
+   "faction_guess": "alliance",
+   "vibe": "intense shouting officer",
+   "attr_source": "vision-global",
+   "face_index": 227,
+   "exact_dupes": [
+    227,
+    478,
+    928
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "20s",
+   "hair_color": "blond",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "calm",
+   "faction_guess": "empire",
+   "vibe": "clean-cut young officer",
+   "attr_source": "vision-global",
+   "face_index": 228,
+   "exact_dupes": [
+    228
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "blond",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "stern",
+   "faction_guess": "empire",
+   "vibe": "stolid blond officer",
+   "attr_source": "vision-global",
+   "face_index": 229,
+   "exact_dupes": [
+    229
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "40s",
+   "hair_color": "blond",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "stern",
+   "faction_guess": "empire",
+   "vibe": "stolid blond senior officer",
+   "attr_source": "vision-global",
+   "face_index": 230,
+   "exact_dupes": [
+    230,
+    481,
+    931
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "gray",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "smiling",
+   "faction_guess": "alliance",
+   "vibe": "gentle smiling young officer in profile",
+   "attr_source": "vision-global",
+   "face_index": 231,
+   "exact_dupes": [
+    231
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "gray",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "confident",
+   "faction_guess": "alliance",
+   "vibe": "easy-going smiler",
+   "attr_source": "vision-global",
+   "face_index": 232,
+   "exact_dupes": [
+    232
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "gray",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "smiling",
+   "faction_guess": "alliance",
+   "vibe": "amiable confident officer",
+   "attr_source": "vision-global",
+   "face_index": 233,
+   "exact_dupes": [
+    233,
+    484,
+    934
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "brown",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "stern",
+   "faction_guess": "empire",
+   "vibe": "burly determined officer",
+   "attr_source": "vision-global",
+   "face_index": 234,
+   "exact_dupes": [
+    234
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "brown",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "stern",
+   "faction_guess": "empire",
+   "vibe": "solid square-jawed officer",
+   "attr_source": "vision-global",
+   "face_index": 235,
+   "exact_dupes": [
+    235
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "40s",
+   "hair_color": "brown",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "stern",
+   "faction_guess": "empire",
+   "vibe": "stern slicked veteran",
+   "attr_source": "vision-global",
+   "face_index": 236,
+   "exact_dupes": [
+    236,
+    487,
+    937
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "50s",
+   "hair_color": "silver",
+   "hair_style": "medium",
+   "facial_hair": "none",
+   "expression": "smug",
+   "faction_guess": "empire",
+   "vibe": "smooth silver-haired aristocrat",
+   "attr_source": "vision-global",
+   "face_index": 237,
+   "exact_dupes": [
+    237
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "50s",
+   "hair_color": "silver",
+   "hair_style": "medium",
+   "facial_hair": "none",
+   "expression": "calm",
+   "faction_guess": "empire",
+   "vibe": "silver-haired seasoned officer",
+   "attr_source": "vision-global",
+   "face_index": 238,
+   "exact_dupes": [
+    238
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "60s+",
+   "hair_color": "white",
+   "hair_style": "medium",
+   "facial_hair": "none",
+   "expression": "calm",
+   "faction_guess": "alliance",
+   "vibe": "kindly white-haired elder statesman",
+   "attr_source": "vision-global",
+   "face_index": 239,
+   "exact_dupes": [
+    239,
+    490,
+    940
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "20s",
+   "hair_color": "brown",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "neutral",
+   "faction_guess": "alliance",
+   "vibe": "heavyset young soldier",
+   "attr_source": "vision-global",
+   "face_index": 240,
+   "exact_dupes": [
+    240
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "40s",
+   "hair_color": "brown",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "smug",
+   "faction_guess": "empire",
+   "vibe": "stout brutish thug",
+   "attr_source": "vision-global",
+   "face_index": 241,
+   "exact_dupes": [
+    241
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "brown",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "smug",
+   "faction_guess": "empire",
+   "vibe": "heavyset brutish officer",
+   "attr_source": "vision-global",
+   "face_index": 242,
+   "exact_dupes": [
+    242,
+    493,
+    943
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "20s",
+   "hair_color": "black",
+   "hair_style": "medium",
+   "facial_hair": "none",
+   "expression": "smiling",
+   "faction_guess": "alliance",
+   "vibe": "youthful black-haired smiling officer",
+   "attr_source": "vision-global",
+   "face_index": 243,
+   "exact_dupes": [
+    243
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "black",
+   "hair_style": "medium",
+   "facial_hair": "none",
+   "expression": "confident",
+   "faction_guess": "alliance",
+   "vibe": "handsome charming officer",
+   "attr_source": "vision-global",
+   "face_index": 244,
+   "exact_dupes": [
+    244
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "40s",
+   "hair_color": "black",
+   "hair_style": "medium",
+   "facial_hair": "none",
+   "expression": "smug",
+   "faction_guess": "empire",
+   "vibe": "charismatic dark-haired noble",
+   "attr_source": "vision-global",
+   "face_index": 245,
+   "exact_dupes": [
+    245,
+    496,
+    946
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "brown",
+   "hair_style": "medium",
+   "facial_hair": "none",
+   "expression": "stern",
+   "faction_guess": "empire",
+   "vibe": "tousled resolute officer",
+   "attr_source": "vision-global",
+   "face_index": 246,
+   "exact_dupes": [
+    246
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "50s",
+   "hair_color": "brown",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "stern",
+   "faction_guess": "empire",
+   "vibe": "lean hawkish older officer, profile",
+   "attr_source": "vision-global",
+   "face_index": 247,
+   "exact_dupes": [
+    247
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "60s+",
+   "hair_color": "white",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "stern",
+   "faction_guess": "empire",
+   "vibe": "fierce white-haired elder",
+   "attr_source": "vision-global",
+   "face_index": 248,
+   "exact_dupes": [
+    248,
+    499
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "black",
+   "hair_style": "long",
+   "facial_hair": "none",
+   "expression": "calm",
+   "faction_guess": "empire",
+   "vibe": "elegant long-haired officer",
+   "attr_source": "vision-global",
+   "face_index": 249,
+   "exact_dupes": [
+    249
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "black",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "confident",
+   "faction_guess": "empire",
+   "vibe": "handsome composed officer",
+   "attr_source": "vision-global",
+   "face_index": 250,
+   "exact_dupes": [
+    250
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "40s",
+   "hair_color": "black",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "confident",
+   "faction_guess": "empire",
+   "vibe": "handsome dark-haired commander",
+   "attr_source": "vision-global",
+   "face_index": 251,
+   "exact_dupes": [
+    251,
+    502
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "blond",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "stern",
+   "faction_guess": "alliance",
+   "vibe": "rugged spiky-haired soldier",
+   "attr_source": "vision-global",
+   "face_index": 252,
+   "exact_dupes": [
+    252
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "orange",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "confident",
+   "faction_guess": "empire",
+   "vibe": "spiky orange-haired aggressor",
+   "attr_source": "vision-global",
+   "face_index": 253,
+   "exact_dupes": [
+    253
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "orange",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "confident",
+   "faction_guess": "empire",
+   "vibe": "spiky orange-haired aggressive officer",
+   "attr_source": "vision-global",
+   "face_index": 254,
+   "exact_dupes": [
+    254,
+    505
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "40s",
+   "hair_color": "black",
+   "hair_style": "medium",
+   "facial_hair": "goatee",
+   "expression": "stern",
+   "faction_guess": "empire",
+   "vibe": "dark brooding bearded officer",
+   "attr_source": "vision-global",
+   "face_index": 255,
+   "exact_dupes": [
+    255
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "40s",
+   "hair_color": "black",
+   "hair_style": "medium",
+   "facial_hair": "goatee",
+   "expression": "stern",
+   "faction_guess": "empire",
+   "vibe": "scheming bearded officer",
+   "attr_source": "vision-global",
+   "face_index": 256,
+   "exact_dupes": [
+    256
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "40s",
+   "hair_color": "black",
+   "hair_style": "medium",
+   "facial_hair": "mustache",
+   "expression": "stern",
+   "faction_guess": "empire",
+   "vibe": "brooding mustached officer",
+   "attr_source": "vision-global",
+   "face_index": 257,
+   "exact_dupes": [
+    257,
+    508
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "50s",
+   "hair_color": "white",
+   "hair_style": "medium",
+   "facial_hair": "none",
+   "expression": "calm",
+   "faction_guess": "empire",
+   "vibe": "heavyset white-haired elder",
+   "attr_source": "vision-global",
+   "face_index": 258,
+   "exact_dupes": [
+    258
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "50s",
+   "hair_color": "blond",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "angry",
+   "faction_guess": "empire",
+   "vibe": "heavyset jowly aggressive officer",
+   "attr_source": "vision-global",
+   "face_index": 259,
+   "exact_dupes": [
+    259
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "50s",
+   "hair_color": "gray",
+   "hair_style": "medium",
+   "facial_hair": "none",
+   "expression": "confident",
+   "faction_guess": "empire",
+   "vibe": "burly grinning veteran",
+   "attr_source": "vision-global",
+   "face_index": 260,
+   "exact_dupes": [
+    260,
+    511
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "40s",
+   "hair_color": "brown",
+   "hair_style": "medium",
+   "facial_hair": "none",
+   "expression": "calm",
+   "faction_guess": "empire",
+   "vibe": "composed dark-brown officer",
+   "attr_source": "vision-global",
+   "face_index": 261,
+   "exact_dupes": [
+    261
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "40s",
+   "hair_color": "gray",
+   "hair_style": "medium",
+   "facial_hair": "none",
+   "expression": "smug",
+   "faction_guess": "empire",
+   "vibe": "sly graying aristocrat",
+   "attr_source": "vision-global",
+   "face_index": 262,
+   "exact_dupes": [
+    262
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "60s+",
+   "hair_color": "gray",
+   "hair_style": "medium",
+   "facial_hair": "none",
+   "expression": "stern",
+   "faction_guess": "alliance",
+   "vibe": "gaunt severe elder officer",
+   "attr_source": "vision-global",
+   "face_index": 263,
+   "exact_dupes": [
+    263,
+    514
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "50s",
+   "hair_color": "silver",
+   "hair_style": "short",
+   "facial_hair": "mustache",
+   "expression": "calm",
+   "faction_guess": "alliance",
+   "vibe": "silver bereted senior officer",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 264,
+   "exact_dupes": [
+    264
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "20s",
+   "hair_color": "black",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "calm",
+   "faction_guess": "alliance",
+   "vibe": "young tan-skinned curly-haired man",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 265,
+   "exact_dupes": [
+    265
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "40s",
+   "hair_color": "black",
+   "hair_style": "short",
+   "facial_hair": "beard",
+   "expression": "stern",
+   "faction_guess": "alliance",
+   "vibe": "bearded capped officer, weathered and grim",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 266,
+   "exact_dupes": [
+    266
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "red",
+   "hair_style": "medium",
+   "facial_hair": "none",
+   "expression": "confident",
+   "faction_guess": "alliance",
+   "vibe": "ruddy curly reddish-haired officer",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 267,
+   "exact_dupes": [
+    267
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "black",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "calm",
+   "faction_guess": "alliance",
+   "vibe": "curly dark-haired man, hat brim",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 268,
+   "exact_dupes": [
+    268
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "teens",
+   "hair_color": "blond",
+   "hair_style": "medium",
+   "facial_hair": "none",
+   "expression": "calm",
+   "faction_guess": "alliance",
+   "vibe": "soft-faced young cadet",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 269,
+   "exact_dupes": [
+    269
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "40s",
+   "hair_color": "blond",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "stern",
+   "faction_guess": "alliance",
+   "vibe": "burly tough alliance commander",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 270,
+   "exact_dupes": [
+    270
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "black",
+   "hair_style": "medium",
+   "facial_hair": "none",
+   "expression": "calm",
+   "faction_guess": "alliance",
+   "vibe": "handsome dark-haired bereted officer",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 271,
+   "exact_dupes": [
+    271
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "40s",
+   "hair_color": "brown",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "neutral",
+   "faction_guess": "alliance",
+   "vibe": "plain stolid officer",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 272,
+   "exact_dupes": [
+    272
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "40s",
+   "hair_color": "brown",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "angry",
+   "faction_guess": "alliance",
+   "vibe": "scowling intense officer",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 273,
+   "exact_dupes": [
+    273
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "20s",
+   "hair_color": "black",
+   "hair_style": "medium",
+   "facial_hair": "none",
+   "expression": "calm",
+   "faction_guess": "alliance",
+   "vibe": "young dark-haired bereted soldier",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 274,
+   "exact_dupes": [
+    274
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "20s",
+   "hair_color": "brown",
+   "hair_style": "medium",
+   "facial_hair": "none",
+   "expression": "sad",
+   "faction_guess": "alliance",
+   "vibe": "melancholy long-faced youth",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 275,
+   "exact_dupes": [
+    275
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "blond",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "smiling",
+   "faction_guess": "alliance",
+   "vibe": "blond beret officer with relaxed friendly look",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 276,
+   "exact_dupes": [
+    276
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "50s",
+   "hair_color": "gray",
+   "hair_style": "medium",
+   "facial_hair": "none",
+   "expression": "calm",
+   "faction_guess": "alliance",
+   "vibe": "graying mature officer, composed",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 277,
+   "exact_dupes": [
+    277
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "20s",
+   "hair_color": "blond",
+   "hair_style": "medium",
+   "facial_hair": "none",
+   "expression": "smiling",
+   "faction_guess": "alliance",
+   "vibe": "handsome gentle blond young man",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 278,
+   "exact_dupes": [
+    278
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "brown",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "stern",
+   "faction_guess": "alliance",
+   "vibe": "bereted light-brown soldier, firm",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 279,
+   "exact_dupes": [
+    279
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "40s",
+   "hair_color": "white",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "stern",
+   "faction_guess": "alliance",
+   "vibe": "white/silver-haired stern officer",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 280,
+   "exact_dupes": [
+    280
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "50s",
+   "hair_color": "gray",
+   "hair_style": "medium",
+   "facial_hair": "none",
+   "expression": "calm",
+   "faction_guess": "alliance",
+   "vibe": "distinguished gray statesman",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 281,
+   "exact_dupes": [
+    281
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "brown",
+   "hair_style": "short",
+   "facial_hair": "stubble",
+   "expression": "stern",
+   "faction_guess": "alliance",
+   "vibe": "rugged beret soldier with five-o-clock shadow",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 282,
+   "exact_dupes": [
+    282
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "60s+",
+   "hair_color": "white",
+   "hair_style": "short",
+   "facial_hair": "mustache",
+   "expression": "stern",
+   "faction_guess": "alliance",
+   "vibe": "grizzled old admiral",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 283,
+   "exact_dupes": [
+    283
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "brown",
+   "hair_style": "short",
+   "facial_hair": "stubble",
+   "expression": "angry",
+   "faction_guess": "alliance",
+   "vibe": "fierce capped fighter",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 284,
+   "exact_dupes": [
+    284
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "40s",
+   "hair_color": "gray",
+   "hair_style": "short",
+   "facial_hair": "mustache",
+   "expression": "stern",
+   "faction_guess": "alliance",
+   "vibe": "steel-haired mustached officer",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 285,
+   "exact_dupes": [
+    285
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "40s",
+   "hair_color": "black",
+   "hair_style": "short",
+   "facial_hair": "mustache",
+   "expression": "stern",
+   "faction_guess": "alliance",
+   "vibe": "curly-haired mustached officer",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 286,
+   "exact_dupes": [
+    286
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "40s",
+   "hair_color": "blond",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "confident",
+   "faction_guess": "alliance",
+   "vibe": "genial seasoned officer",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 287,
+   "exact_dupes": [
+    287
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "50s",
+   "hair_color": "gray",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "stern",
+   "faction_guess": "alliance",
+   "vibe": "craggy gray-haired veteran with hard stare",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 288,
+   "exact_dupes": [
+    288
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "40s",
+   "hair_color": "blond",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "stern",
+   "faction_guess": "alliance",
+   "vibe": "stocky grim blond commander",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 289,
+   "exact_dupes": [
+    289
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "50s",
+   "hair_color": "white",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "calm",
+   "faction_guess": "alliance",
+   "vibe": "white-haired elder statesman, composed",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 290,
+   "exact_dupes": [
+    290
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "40s",
+   "hair_color": "brown",
+   "hair_style": "medium",
+   "facial_hair": "none",
+   "expression": "calm",
+   "faction_guess": "alliance",
+   "vibe": "civilian brown-haired man, warm look",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 291,
+   "exact_dupes": [
+    291
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "50s",
+   "hair_color": "blond",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "stern",
+   "faction_guess": "alliance",
+   "vibe": "weathered stern senior officer",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 292,
+   "exact_dupes": [
+    292
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "50s",
+   "hair_color": "black",
+   "hair_style": "short",
+   "facial_hair": "mustache",
+   "expression": "stern",
+   "faction_guess": "alliance",
+   "vibe": "heavyset mustached commander",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 293,
+   "exact_dupes": [
+    293
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "50s",
+   "hair_color": "brown",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "calm",
+   "faction_guess": "alliance",
+   "vibe": "reserved middle-aged official",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 294,
+   "exact_dupes": [
+    294
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "40s",
+   "hair_color": "black",
+   "hair_style": "medium",
+   "facial_hair": "mustache",
+   "expression": "calm",
+   "faction_guess": "alliance",
+   "vibe": "dark-haired mustached gentleman",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 295,
+   "exact_dupes": [
+    295
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "brown",
+   "hair_style": "medium",
+   "facial_hair": "none",
+   "expression": "smug",
+   "faction_guess": "alliance",
+   "vibe": "sleek confident swept-hair officer",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 296,
+   "exact_dupes": [
+    296
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "40s",
+   "hair_color": "blond",
+   "hair_style": "short",
+   "facial_hair": "mustache",
+   "expression": "stern",
+   "faction_guess": "alliance",
+   "vibe": "burly stern mustached officer",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 297,
+   "exact_dupes": [
+    297
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "40s",
+   "hair_color": "gray",
+   "hair_style": "medium",
+   "facial_hair": "none",
+   "expression": "calm",
+   "faction_guess": "alliance",
+   "vibe": "distinguished graying gentleman",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 298,
+   "exact_dupes": [
+    298
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "brown",
+   "hair_style": "medium",
+   "facial_hair": "none",
+   "expression": "confident",
+   "faction_guess": "alliance",
+   "vibe": "wavy brown hair, blue-eyed handsome",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 299,
+   "exact_dupes": [
+    299
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "brown",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "stern",
+   "faction_guess": "alliance",
+   "vibe": "beret-clad determined officer",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 300,
+   "exact_dupes": [
+    300
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "brown",
+   "hair_style": "short",
+   "facial_hair": "stubble",
+   "expression": "smug",
+   "faction_guess": "alliance",
+   "vibe": "burly heavyset bruiser",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 301,
+   "exact_dupes": [
+    301
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "blond",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "calm",
+   "faction_guess": "alliance",
+   "vibe": "slicked platinum-blond officer",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 302,
+   "exact_dupes": [
+    302
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "blond",
+   "hair_style": "ponytail",
+   "facial_hair": "none",
+   "expression": "smiling",
+   "faction_guess": "alliance",
+   "vibe": "amiable blond ponytailed man",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 303,
+   "exact_dupes": [
+    303
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "50s",
+   "hair_color": "brown",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "calm",
+   "faction_guess": "alliance",
+   "vibe": "graying-temple middle-aged man in suit",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 304,
+   "exact_dupes": [
+    304
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "40s",
+   "hair_color": "black",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "stern",
+   "faction_guess": "alliance",
+   "vibe": "heavyset dark-skinned official, imposing",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 305,
+   "exact_dupes": [
+    305
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "40s",
+   "hair_color": "brown",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "stern",
+   "faction_guess": "alliance",
+   "vibe": "heavyset grim official",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 306,
+   "exact_dupes": [
+    306
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "50s",
+   "hair_color": "gray",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "smiling",
+   "faction_guess": "alliance",
+   "vibe": "silver-haired smiling statesman",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 307,
+   "exact_dupes": [
+    307
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "brown",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "stern",
+   "faction_guess": "alliance",
+   "vibe": "suited brown-haired man, hard gaze",
+   "attr_source": "pass1-canon-pixelkeyed",
+   "face_index": 308,
+   "exact_dupes": [
+    308
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "50s",
+   "hair_color": "gray",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "confident",
+   "faction_guess": "alliance",
+   "vibe": "seasoned grinning commander",
+   "attr_source": "vision-global",
+   "face_index": 520,
+   "exact_dupes": [
+    520
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "40s",
+   "hair_color": "brown",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "angry",
+   "faction_guess": "alliance",
+   "vibe": "agitated weathered officer",
+   "attr_source": "vision-global",
+   "face_index": 523,
+   "exact_dupes": [
+    523
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "40s",
+   "hair_color": "brown",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "confident",
+   "faction_guess": "empire",
+   "vibe": "rugged smiling officer",
+   "attr_source": "vision-global",
+   "face_index": 526,
+   "exact_dupes": [
+    526
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "40s",
+   "hair_color": "brown",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "calm",
+   "faction_guess": "alliance",
+   "vibe": "plain steady middle-aged officer",
+   "attr_source": "vision-global",
+   "face_index": 529,
+   "exact_dupes": [
+    529
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "gray",
+   "hair_style": "medium",
+   "facial_hair": "stubble",
+   "expression": "stern",
+   "faction_guess": "alliance",
+   "vibe": "rough wavy-haired fighter",
+   "attr_source": "vision-global",
+   "face_index": 532,
+   "exact_dupes": [
+    532
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "40s",
+   "hair_color": "black",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "stern",
+   "faction_guess": "alliance",
+   "vibe": "blunt determined officer",
+   "attr_source": "vision-global",
+   "face_index": 535,
+   "exact_dupes": [
+    535
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "50s",
+   "hair_color": "gray",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "stern",
+   "faction_guess": "empire",
+   "vibe": "grim graying senior officer",
+   "attr_source": "vision-global",
+   "face_index": 538,
+   "exact_dupes": [
+    538
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "50s",
+   "hair_color": "blond",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "smug",
+   "faction_guess": "empire",
+   "vibe": "slick aristocratic noble, smirk",
+   "attr_source": "vision-global",
+   "face_index": 541,
+   "exact_dupes": [
+    541
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "50s",
+   "hair_color": "gray",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "stern",
+   "faction_guess": "empire",
+   "vibe": "dignified senior aristocrat",
+   "attr_source": "vision-global",
+   "face_index": 544,
+   "exact_dupes": [
+    544
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "50s",
+   "hair_color": "gray",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "angry",
+   "faction_guess": "empire",
+   "vibe": "fierce gray veteran",
+   "attr_source": "vision-global",
+   "face_index": 547,
+   "exact_dupes": [
+    547
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "brown",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "stern",
+   "faction_guess": "empire",
+   "vibe": "intense frowning officer",
+   "attr_source": "vision-global",
+   "face_index": 550,
+   "exact_dupes": [
+    550
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "50s",
+   "hair_color": "black",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "smug",
+   "faction_guess": "empire",
+   "vibe": "fleshy slicked-back noble in profile",
+   "attr_source": "vision-global",
+   "face_index": 553,
+   "exact_dupes": [
+    553
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "40s",
+   "hair_color": "brown",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "angry",
+   "faction_guess": "empire",
+   "vibe": "scowling intense officer",
+   "attr_source": "vision-global",
+   "face_index": 556,
+   "exact_dupes": [
+    556
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "40s",
+   "hair_color": "gray",
+   "hair_style": "medium",
+   "facial_hair": "none",
+   "expression": "smug",
+   "faction_guess": "empire",
+   "vibe": "sardonic gray-haired officer",
+   "attr_source": "vision-global",
+   "face_index": 559,
+   "exact_dupes": [
+    559
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "50s",
+   "hair_color": "silver",
+   "hair_style": "medium",
+   "facial_hair": "none",
+   "expression": "stern",
+   "faction_guess": "empire",
+   "vibe": "distinguished silver-haired elder",
+   "attr_source": "vision-global",
+   "face_index": 562,
+   "exact_dupes": [
+    562
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "50s",
+   "hair_color": "gray",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "stern",
+   "faction_guess": "alliance",
+   "vibe": "stolid gray senior officer",
+   "attr_source": "vision-global",
+   "face_index": 565,
+   "exact_dupes": [
+    565
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "40s",
+   "hair_color": "brown",
+   "hair_style": "medium",
+   "facial_hair": "none",
+   "expression": "confident",
+   "faction_guess": "empire",
+   "vibe": "smooth confident officer",
+   "attr_source": "vision-global",
+   "face_index": 568,
+   "exact_dupes": [
+    568
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "brown",
+   "hair_style": "medium",
+   "facial_hair": "none",
+   "expression": "calm",
+   "faction_guess": "empire",
+   "vibe": "tousled mild officer",
+   "attr_source": "vision-global",
+   "face_index": 571,
+   "exact_dupes": [
+    571
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "50s",
+   "hair_color": "gray",
+   "hair_style": "long",
+   "facial_hair": "beard",
+   "expression": "calm",
+   "faction_guess": "empire",
+   "vibe": "long-haired bearded sage",
+   "attr_source": "vision-global",
+   "face_index": 574,
+   "exact_dupes": [
+    574
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "40s",
+   "hair_color": "brown",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "smug",
+   "faction_guess": "empire",
+   "vibe": "lean smirking officer",
+   "attr_source": "vision-global",
+   "face_index": 577,
+   "exact_dupes": [
+    577
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "60s+",
+   "hair_color": "gray",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "stern",
+   "faction_guess": "empire",
+   "vibe": "heavy jowly old statesman",
+   "attr_source": "vision-global",
+   "face_index": 580,
+   "exact_dupes": [
+    580
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "60s+",
+   "hair_color": "gray",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "calm",
+   "faction_guess": "alliance",
+   "vibe": "kindly old statesman",
+   "attr_source": "vision-global",
+   "face_index": 610,
+   "exact_dupes": [
+    610
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "20s",
+   "hair_color": "blond",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "smiling",
+   "faction_guess": "alliance",
+   "vibe": "cheerful young blond",
+   "attr_source": "vision-global",
+   "face_index": 613,
+   "exact_dupes": [
+    613
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "40s",
+   "hair_color": "blond",
+   "hair_style": "medium",
+   "facial_hair": "none",
+   "expression": "calm",
+   "faction_guess": "alliance",
+   "vibe": "pale wispy-haired mild officer",
+   "attr_source": "vision-global",
+   "face_index": 616,
+   "exact_dupes": [
+    616
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "40s",
+   "hair_color": "black",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "angry",
+   "faction_guess": "empire",
+   "vibe": "shouting fierce officer",
+   "attr_source": "vision-global",
+   "face_index": 619,
+   "exact_dupes": [
+    619
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "40s",
+   "hair_color": "gray",
+   "hair_style": "medium",
+   "facial_hair": "none",
+   "expression": "neutral",
+   "faction_guess": "empire",
+   "vibe": "somber gray-haired man",
+   "attr_source": "vision-global",
+   "face_index": 622,
+   "exact_dupes": [
+    622
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "brown",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "calm",
+   "faction_guess": "alliance",
+   "vibe": "plain steady officer",
+   "attr_source": "vision-global",
+   "face_index": 625,
+   "exact_dupes": [
+    625
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "50s",
+   "hair_color": "gray",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "stern",
+   "faction_guess": "alliance",
+   "vibe": "grizzled hard-bitten veteran",
+   "attr_source": "vision-global",
+   "face_index": 628,
+   "exact_dupes": [
+    628
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "20s",
+   "hair_color": "blond",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "confident",
+   "faction_guess": "empire",
+   "vibe": "bold blond young officer",
+   "attr_source": "vision-global",
+   "face_index": 631,
+   "exact_dupes": [
+    631
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "60s+",
+   "hair_color": "white",
+   "hair_style": "long",
+   "facial_hair": "none",
+   "expression": "calm",
+   "faction_guess": "alliance",
+   "vibe": "aged white-haired sage",
+   "attr_source": "vision-global",
+   "face_index": 634,
+   "exact_dupes": [
+    634
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "50s",
+   "hair_color": "brown",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "calm",
+   "faction_guess": "alliance",
+   "vibe": "lean aging officer in green",
+   "attr_source": "vision-global",
+   "face_index": 637,
+   "exact_dupes": [
+    637
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "50s",
+   "hair_color": "gray",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "stern",
+   "faction_guess": "alliance",
+   "vibe": "dignified graying officer, raised brow",
+   "attr_source": "vision-global",
+   "face_index": 640,
+   "exact_dupes": [
+    640
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "60s+",
+   "hair_color": "white",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "stern",
+   "faction_guess": "empire",
+   "vibe": "imposing white-haired elder",
+   "attr_source": "vision-global",
+   "face_index": 643,
+   "exact_dupes": [
+    643
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "60s+",
+   "hair_color": "white",
+   "hair_style": "medium",
+   "facial_hair": "none",
+   "expression": "stern",
+   "faction_guess": "alliance",
+   "vibe": "imposing white-haired elder",
+   "attr_source": "vision-global",
+   "face_index": 646,
+   "exact_dupes": [
+    646
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "60s+",
+   "hair_color": "gray",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "stern",
+   "faction_guess": "alliance",
+   "vibe": "balding stern elder",
+   "attr_source": "vision-global",
+   "face_index": 649,
+   "exact_dupes": [
+    649
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "60s+",
+   "hair_color": "white",
+   "hair_style": "medium",
+   "facial_hair": "none",
+   "expression": "calm",
+   "faction_guess": "alliance",
+   "vibe": "venerable white-haired admiral in braided dress uniform",
+   "attr_source": "vision-global",
+   "face_index": 652,
+   "exact_dupes": [
+    652
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "60s+",
+   "hair_color": "white",
+   "hair_style": "medium",
+   "facial_hair": "none",
+   "expression": "calm",
+   "faction_guess": "alliance",
+   "vibe": "noble silver-haired statesman",
+   "attr_source": "vision-global",
+   "face_index": 655,
+   "exact_dupes": [
+    655
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "50s",
+   "hair_color": "gray",
+   "hair_style": "medium",
+   "facial_hair": "none",
+   "expression": "calm",
+   "faction_guess": "alliance",
+   "vibe": "dignified gray officer",
+   "attr_source": "vision-global",
+   "face_index": 658,
+   "exact_dupes": [
+    658
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "60s+",
+   "hair_color": "black",
+   "hair_style": "medium",
+   "facial_hair": "none",
+   "expression": "sad",
+   "faction_guess": "alliance",
+   "vibe": "weary dark-haired elder",
+   "attr_source": "vision-global",
+   "face_index": 661,
+   "exact_dupes": [
+    661
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "60s+",
+   "hair_color": "gray",
+   "hair_style": "medium",
+   "facial_hair": "none",
+   "expression": "sad",
+   "faction_guess": "alliance",
+   "vibe": "gaunt weary downcast elder",
+   "attr_source": "vision-global",
+   "face_index": 664,
+   "exact_dupes": [
+    664
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "60s+",
+   "hair_color": "gray",
+   "hair_style": "medium",
+   "facial_hair": "none",
+   "expression": "stern",
+   "faction_guess": "alliance",
+   "vibe": "craggy stern elder",
+   "attr_source": "vision-global",
+   "face_index": 667,
+   "exact_dupes": [
+    667
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "brown",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "sad",
+   "faction_guess": "alliance",
+   "vibe": "anxious civilian in robe",
+   "attr_source": "vision-global",
+   "face_index": 670,
+   "exact_dupes": [
+    670
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "60s+",
+   "hair_color": "white",
+   "hair_style": "medium",
+   "facial_hair": "mustache",
+   "expression": "calm",
+   "faction_guess": "alliance",
+   "vibe": "white-haired mustached statesman",
+   "attr_source": "vision-global",
+   "face_index": 673,
+   "exact_dupes": [
+    673
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "50s",
+   "hair_color": "blond",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "stern",
+   "faction_guess": "alliance",
+   "vibe": "lean greenish-blond officer in profile",
+   "attr_source": "vision-global",
+   "face_index": 676,
+   "exact_dupes": [
+    676
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "brown",
+   "hair_style": "medium",
+   "facial_hair": "none",
+   "expression": "neutral",
+   "faction_guess": "alliance",
+   "vibe": "wavy-haired civilian-ish man",
+   "attr_source": "vision-global",
+   "face_index": 679,
+   "exact_dupes": [
+    679
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "40s",
+   "hair_color": "blond",
+   "hair_style": "medium",
+   "facial_hair": "none",
+   "expression": "calm",
+   "faction_guess": "alliance",
+   "vibe": "weathered blond civilian",
+   "attr_source": "vision-global",
+   "face_index": 682,
+   "exact_dupes": [
+    682
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "40s",
+   "hair_color": "brown",
+   "hair_style": "medium",
+   "facial_hair": "none",
+   "expression": "calm",
+   "faction_guess": "alliance",
+   "vibe": "civilian-dressed composed man",
+   "attr_source": "vision-global",
+   "face_index": 685,
+   "exact_dupes": [
+    685
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "60s+",
+   "hair_color": "white",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "calm",
+   "faction_guess": "empire",
+   "vibe": "distinguished white-haired senior officer",
+   "attr_source": "vision-global",
+   "face_index": 688,
+   "exact_dupes": [
+    688
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "gray",
+   "hair_style": "medium",
+   "facial_hair": "none",
+   "expression": "confident",
+   "faction_guess": "alliance",
+   "vibe": "charming smiler, white coat",
+   "attr_source": "vision-global",
+   "face_index": 691,
+   "exact_dupes": [
+    691
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "50s",
+   "hair_color": "gray",
+   "hair_style": "medium",
+   "facial_hair": "none",
+   "expression": "smug",
+   "faction_guess": "alliance",
+   "vibe": "smooth gray civilian",
+   "attr_source": "vision-global",
+   "face_index": 694,
+   "exact_dupes": [
+    694
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "40s",
+   "hair_color": "gray",
+   "hair_style": "medium",
+   "facial_hair": "none",
+   "expression": "calm",
+   "faction_guess": "alliance",
+   "vibe": "slick-backed civilian official",
+   "attr_source": "vision-global",
+   "face_index": 697,
+   "exact_dupes": [
+    697
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "50s",
+   "hair_color": "brown",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "smiling",
+   "faction_guess": "alliance",
+   "vibe": "jovial squinting civilian-ish man",
+   "attr_source": "vision-global",
+   "face_index": 700,
+   "exact_dupes": [
+    700
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "60s+",
+   "hair_color": "white",
+   "hair_style": "medium",
+   "facial_hair": "none",
+   "expression": "calm",
+   "faction_guess": "alliance",
+   "vibe": "balding scholarly elder",
+   "attr_source": "vision-global",
+   "face_index": 703,
+   "exact_dupes": [
+    703
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "50s",
+   "hair_color": "blond",
+   "hair_style": "ponytail",
+   "facial_hair": "none",
+   "expression": "calm",
+   "faction_guess": "alliance",
+   "vibe": "stout ponytailed civilian",
+   "attr_source": "vision-global",
+   "face_index": 706,
+   "exact_dupes": [
+    706
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "50s",
+   "hair_color": "blond",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "calm",
+   "faction_guess": "alliance",
+   "vibe": "stout aging blond gentleman",
+   "attr_source": "vision-global",
+   "face_index": 709,
+   "exact_dupes": [
+    709
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "50s",
+   "hair_color": "brown",
+   "hair_style": "medium",
+   "facial_hair": "none",
+   "expression": "neutral",
+   "faction_guess": "alliance",
+   "vibe": "portly heavy-jowled civilian",
+   "attr_source": "vision-global",
+   "face_index": 712,
+   "exact_dupes": [
+    712
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "40s",
+   "hair_color": "gray",
+   "hair_style": "medium",
+   "facial_hair": "goatee",
+   "expression": "smiling",
+   "faction_guess": "alliance",
+   "vibe": "warm bearded everyman",
+   "attr_source": "vision-global",
+   "face_index": 715,
+   "exact_dupes": [
+    715
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "brown",
+   "hair_style": "long",
+   "facial_hair": "none",
+   "expression": "smiling",
+   "faction_guess": "alliance",
+   "vibe": "charming long-haired civilian",
+   "attr_source": "vision-global",
+   "face_index": 718,
+   "exact_dupes": [
+    718
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "40s",
+   "hair_color": "brown",
+   "hair_style": "medium",
+   "facial_hair": "none",
+   "expression": "calm",
+   "faction_guess": "alliance",
+   "vibe": "tousled civilian intellectual",
+   "attr_source": "vision-global",
+   "face_index": 721,
+   "exact_dupes": [
+    721
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "20s",
+   "hair_color": "black",
+   "hair_style": "ponytail",
+   "facial_hair": "none",
+   "expression": "smiling",
+   "faction_guess": "alliance",
+   "vibe": "handsome long-haired young man, sly smile",
+   "attr_source": "vision-global",
+   "face_index": 763,
+   "exact_dupes": [
+    763
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "30s",
+   "hair_color": "silver",
+   "hair_style": "medium",
+   "facial_hair": "none",
+   "expression": "calm",
+   "faction_guess": "empire",
+   "vibe": "elegant silver-haired man",
+   "attr_source": "vision-global",
+   "face_index": 766,
+   "exact_dupes": [
+    766
+   ]
+  },
+  {
+   "sex": "female",
+   "age_band": "30s",
+   "hair_color": "silver",
+   "hair_style": "short",
+   "facial_hair": "none",
+   "expression": "calm",
+   "faction_guess": "alliance",
+   "vibe": "cool short-haired woman",
+   "attr_source": "vision-global",
+   "face_index": 769,
+   "exact_dupes": [
+    769
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "20s",
+   "hair_color": "blond",
+   "hair_style": "medium",
+   "facial_hair": "none",
+   "expression": "calm",
+   "faction_guess": "empire",
+   "vibe": "soft fair-haired youth",
+   "attr_source": "vision-global",
+   "face_index": 772,
+   "exact_dupes": [
+    772
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "20s",
+   "hair_color": "other",
+   "hair_style": "medium",
+   "facial_hair": "none",
+   "expression": "confident",
+   "faction_guess": "empire",
+   "vibe": "youthful green-haired red-eyed officer",
+   "attr_source": "vision-global",
+   "face_index": 775,
+   "exact_dupes": [
+    775
+   ]
+  },
+  {
+   "sex": "female",
+   "age_band": "20s",
+   "hair_color": "brown",
+   "hair_style": "medium",
+   "facial_hair": "none",
+   "expression": "smug",
+   "faction_guess": "alliance",
+   "vibe": "playful smirking young woman",
+   "attr_source": "vision-global",
+   "face_index": 778,
+   "exact_dupes": [
+    778
+   ]
+  },
+  {
+   "sex": "female",
+   "age_band": "30s",
+   "hair_color": "silver",
+   "hair_style": "long",
+   "facial_hair": "none",
+   "expression": "calm",
+   "faction_guess": "empire",
+   "vibe": "elegant long-haired woman",
+   "attr_source": "vision-global",
+   "face_index": 781,
+   "exact_dupes": [
+    781
+   ]
+  },
+  {
+   "sex": "female",
+   "age_band": "40s",
+   "hair_color": "white",
+   "hair_style": "medium",
+   "facial_hair": "none",
+   "expression": "calm",
+   "faction_guess": "unknown",
+   "vibe": "white-haired woman with necklace",
+   "attr_source": "vision-global",
+   "face_index": 784,
+   "exact_dupes": [
+    784
+   ]
+  },
+  {
+   "sex": "female",
+   "age_band": "20s",
+   "hair_color": "blond",
+   "hair_style": "ponytail",
+   "facial_hair": "none",
+   "expression": "smiling",
+   "faction_guess": "alliance",
+   "vibe": "bright young blonde woman, ponytail",
+   "attr_source": "vision-global",
+   "face_index": 787,
+   "exact_dupes": [
+    787
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "20s",
+   "hair_color": "other",
+   "hair_style": "medium",
+   "facial_hair": "none",
+   "expression": "confident",
+   "faction_guess": "empire",
+   "vibe": "androgynous purple-haired youth",
+   "attr_source": "vision-global",
+   "face_index": 790,
+   "exact_dupes": [
+    790
+   ]
+  },
+  {
+   "sex": "female",
+   "age_band": "30s",
+   "hair_color": "gray",
+   "hair_style": "long",
+   "facial_hair": "none",
+   "expression": "smiling",
+   "faction_guess": "alliance",
+   "vibe": "warm curly-haired woman",
+   "attr_source": "vision-global",
+   "face_index": 793,
+   "exact_dupes": [
+    793
+   ]
+  },
+  {
+   "sex": "male",
+   "age_band": "20s",
+   "hair_color": "brown",
+   "hair_style": "medium",
+   "facial_hair": "none",
+   "expression": "smiling",
+   "faction_guess": "alliance",
+   "vibe": "amiable young man in white",
+   "attr_source": "vision-global",
+   "face_index": 796,
+   "exact_dupes": [
+    796
+   ]
+  },
+  {
+   "sex": "female",
+   "age_band": "20s",
+   "hair_color": "brown",
+   "hair_style": "other",
+   "facial_hair": "none",
+   "expression": "calm",
+   "faction_guess": "alliance",
+   "vibe": "demure young woman with earrings, upswept hair",
+   "attr_source": "vision-global",
+   "face_index": 799,
+   "exact_dupes": [
+    799
+   ]
+  },
+  {
+   "sex": "female",
+   "age_band": "30s",
+   "hair_color": "brown",
+   "hair_style": "ponytail",
+   "facial_hair": "none",
+   "expression": "confident",
+   "faction_guess": "alliance",
+   "vibe": "earring-wearing assured woman",
+   "attr_source": "vision-global",
+   "face_index": 802,
+   "exact_dupes": [
+    802
+   ]
+  },
+  {
+   "sex": "female",
+   "age_band": "20s",
+   "hair_color": "black",
+   "hair_style": "long",
+   "facial_hair": "none",
+   "expression": "calm",
+   "faction_guess": "alliance",
+   "vibe": "graceful long-haired young woman",
+   "attr_source": "vision-global",
+   "face_index": 805,
+   "exact_dupes": [
+    805
+   ]
+  }
+ ]
+}

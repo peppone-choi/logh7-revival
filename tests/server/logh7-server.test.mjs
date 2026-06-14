@@ -599,6 +599,218 @@ test('emits dynamic phase3 and command OK candidates from one live phase1 reques
   }
 });
 
+test('records synchronized dynamic gameplay phases across split and coalesced TCP frames', async () => {
+  const root = await mkdtemp(path.join(tmpdir(), 'logh7-gameplay-'));
+  const manifest = path.join(root, 'manifest.json');
+  const trace = path.join(root, 'gameplay-trace.jsonl');
+  const clientExe = path.resolve('.omo/work/logh7-installed/exe/G7MTClient.exe');
+  const transportKeyHex = '7b41344331333734382d303135392d346335342d414542332d3144363835373537363142337d';
+  const requestFrame = Buffer.from('001a003422785b40fcdcf830b86fbd86cbc8cd0a4771041b05b0873c', 'hex');
+  const phase3 = buildPhase3ResponseFromPhase1Request({
+    clientExe,
+    transportKey: Buffer.from(transportKeyHex, 'hex'),
+    requestFrame,
+    decipherKey: Buffer.from('XY', 'ascii'),
+  });
+  const commandOk = buildCommandOkResponseCandidate({
+    tables: extractChildCodecStaticTables(clientExe),
+    phase1Key: phase3.phase1Key,
+    responseCode: 0x0031,
+    entityKey: 0x12345678,
+  });
+  await writeFile(
+    manifest,
+    JSON.stringify({
+      title: 'LOGH VII',
+      server: {
+        gameplay: {
+          MODE: 'tcp-capture-stub',
+          HOST: '127.0.0.1',
+          PORT: 47900,
+          LEGACY_ADDRESS: '202.8.80.179',
+          CLIENT_LITERAL: 'ginei00',
+          dynamicProbe: {
+            clientExePath: clientExe,
+            transportKeyHex,
+            decipherKeyHex: Buffer.from('XY', 'ascii').toString('hex'),
+            commandOkResponseCode: 49,
+            commandOkEntityKey: 0x12345678,
+            evidence: 'g024-dynamic-probe-server-green.txt',
+            policy: 'explicit dynamic phase3 plus command OK probe only',
+          },
+        },
+      },
+    }),
+    'utf8',
+  );
+  const server = await startLogh7GameplayServer({ host: '127.0.0.1', port: 0, manifestPath: manifest, tracePath: trace });
+
+  try {
+    const received = await new Promise((resolve, reject) => {
+      const socket = net.createConnection({ host: server.host, port: server.port });
+      const chunks = [];
+      const timeout = setTimeout(() => {
+        socket.destroy();
+        reject(new Error('timed out waiting for synchronized dynamic probe responses'));
+      }, 2000);
+      socket.once('error', reject);
+      socket.once('connect', () => {
+        socket.write(requestFrame.subarray(0, 7));
+        socket.write(requestFrame.subarray(7));
+      });
+      socket.on('data', (chunk) => {
+        chunks.push(chunk);
+        const body = Buffer.concat(chunks);
+        if (body.length === phase3.frame.length) {
+          socket.write(
+            Buffer.from(
+              '000a003629af89de470c628000320030590ca783b7cecfa3797058413770ac8d752dd02709b1ee545a3107fcabf0a2d83d54a1fcb9bcd135d389f3b40cdb78ef',
+              'hex',
+            ),
+          );
+        }
+        if (body.length >= phase3.frame.length + commandOk.length) {
+          socket.end();
+        }
+      });
+      socket.once('close', () => {
+        clearTimeout(timeout);
+        resolve(Buffer.concat(chunks));
+      });
+    });
+
+    assert.equal(received.subarray(0, phase3.frame.length).toString('hex'), phase3.frame.toString('hex'));
+    assert.equal(received.subarray(phase3.frame.length).toString('hex'), commandOk.toString('hex'));
+    const lines = (await readFile(trace, 'utf8')).trim().split('\n').map((line) => JSON.parse(line));
+    const payloads = lines.filter((line) => line.event === 'payload');
+    assert.deepEqual(
+      payloads.map((line) => line.frame.messageCode),
+      [52, 54, 48],
+    );
+    assert.deepEqual(
+      payloads.map((line) => line.sync),
+      [
+        {
+          sequence: 1,
+          phaseBefore: 'awaiting-login',
+          phaseAfter: 'phase3-response-sent',
+          accepted: true,
+          responseKind: 'dynamic-phase3-candidate',
+        },
+        {
+          sequence: 2,
+          phaseBefore: 'phase3-response-sent',
+          phaseAfter: 'post-phase3-observed',
+          accepted: true,
+        },
+        {
+          sequence: 3,
+          phaseBefore: 'post-phase3-observed',
+          phaseAfter: 'post-handshake-observed',
+          accepted: true,
+          responseKind: 'dynamic-command-ok-candidate',
+        },
+      ],
+    );
+  } finally {
+    await server.close();
+    await rm(root, { recursive: true, force: true });
+  }
+});
+
+test('does not emit a second phase3 response for duplicate login packets on one TCP session', async () => {
+  const root = await mkdtemp(path.join(tmpdir(), 'logh7-gameplay-'));
+  const manifest = path.join(root, 'manifest.json');
+  const trace = path.join(root, 'gameplay-trace.jsonl');
+  const clientExe = path.resolve('.omo/work/logh7-installed/exe/G7MTClient.exe');
+  const transportKeyHex = '7b41344331333734382d303135392d346335342d414542332d3144363835373537363142337d';
+  const requestFrame = Buffer.from('001a003422785b40fcdcf830b86fbd86cbc8cd0a4771041b05b0873c', 'hex');
+  const phase3 = buildPhase3ResponseFromPhase1Request({
+    clientExe,
+    transportKey: Buffer.from(transportKeyHex, 'hex'),
+    requestFrame,
+    decipherKey: Buffer.from('XY', 'ascii'),
+  });
+  await writeFile(
+    manifest,
+    JSON.stringify({
+      title: 'LOGH VII',
+      server: {
+        gameplay: {
+          MODE: 'tcp-capture-stub',
+          HOST: '127.0.0.1',
+          PORT: 47900,
+          LEGACY_ADDRESS: '202.8.80.179',
+          CLIENT_LITERAL: 'ginei00',
+          dynamicProbe: {
+            clientExePath: clientExe,
+            transportKeyHex,
+            decipherKeyHex: Buffer.from('XY', 'ascii').toString('hex'),
+            commandOkResponseCode: 49,
+            commandOkEntityKey: 0x12345678,
+            evidence: 'g024-dynamic-probe-server-green.txt',
+            policy: 'explicit dynamic phase3 plus command OK probe only',
+          },
+        },
+      },
+    }),
+    'utf8',
+  );
+  const server = await startLogh7GameplayServer({ host: '127.0.0.1', port: 0, manifestPath: manifest, tracePath: trace });
+
+  try {
+    const received = await new Promise((resolve, reject) => {
+      const socket = net.createConnection({ host: server.host, port: server.port });
+      const chunks = [];
+      const timeout = setTimeout(() => socket.end(), 100);
+      socket.once('error', reject);
+      socket.once('connect', () => socket.write(requestFrame));
+      socket.on('data', (chunk) => {
+        chunks.push(chunk);
+        const body = Buffer.concat(chunks);
+        if (body.length === phase3.frame.length) {
+          socket.write(requestFrame);
+        }
+        if (body.length >= phase3.frame.length * 2) {
+          socket.end();
+        }
+      });
+      socket.once('close', () => {
+        clearTimeout(timeout);
+        resolve(Buffer.concat(chunks));
+      });
+    });
+
+    assert.equal(received.toString('hex'), phase3.frame.toString('hex'));
+    const lines = (await readFile(trace, 'utf8')).trim().split('\n').map((line) => JSON.parse(line));
+    const payloads = lines.filter((line) => line.event === 'payload');
+    const responses = lines.filter((line) => line.event === 'response');
+    assert.equal(responses.length, 1);
+    assert.deepEqual(
+      payloads.map((line) => line.sync),
+      [
+        {
+          sequence: 1,
+          phaseBefore: 'awaiting-login',
+          phaseAfter: 'phase3-response-sent',
+          accepted: true,
+          responseKind: 'dynamic-phase3-candidate',
+        },
+        {
+          sequence: 2,
+          phaseBefore: 'phase3-response-sent',
+          phaseAfter: 'phase3-response-sent',
+          accepted: false,
+          reason: 'login request is only valid before phase3 response',
+        },
+      ],
+    );
+  } finally {
+    await server.close();
+    await rm(root, { recursive: true, force: true });
+  }
+});
+
 test('records malformed gameplay packet frames without a fabricated login response', async () => {
   const root = await mkdtemp(path.join(tmpdir(), 'logh7-gameplay-'));
   const manifest = path.join(root, 'manifest.json');

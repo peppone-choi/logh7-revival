@@ -1,0 +1,3778 @@
+{
+ "_purpose": "Consolidated LOGH VII named-character roster. Lane B build. Real 8-ability stats kept EXACTLY from characters.json; unknown values are null with a note. Every record cites its source[]. NOTHING invented.",
+ "_built": "2026-06-13",
+ "_builder": "tools/build_character_roster.py",
+ "_stat_keys": [
+  "tochi",
+  "seiji",
+  "unei",
+  "joho",
+  "shiki",
+  "kido",
+  "kogeki",
+  "bogyo"
+ ],
+ "_stat_key_meaning_ja": {
+  "tochi": "統率",
+  "seiji": "政治",
+  "unei": "運用",
+  "joho": "情報",
+  "shiki": "指揮",
+  "kido": "機動",
+  "kogeki": "攻撃",
+  "bogyo": "防御"
+ },
+ "_sources": [
+  "content/roster/characters.json (97 chars, real 8-ability stats)",
+  "content/roster/official-roster.json (12 gineiden.com official sample: face_index, bio, romaji)",
+  "content/roster/face-name-map.json (12 name<->face_number)",
+  "content/roster/manual-roster.json (gin7 manual duty cards: post/rank/unit)",
+  "content/roster/community-roster.json (KR CBT memoir attested names)"
+ ],
+ "_count": 99,
+ "_count_with_stats": 97,
+ "_count_without_stats": 2,
+ "_count_with_face_number": 12,
+ "_unresolved_no_stats": [
+  "ネグロポンティ",
+  "ブラウンシュヴァイク"
+ ],
+ "characters": [
+  {
+   "id": "friedrich-iv",
+   "name_ja": "フリードリヒⅣ世",
+   "name_romaji": "Friedrich IV",
+   "name_kr": null,
+   "faction": "empire",
+   "branch": null,
+   "kind": "emperor",
+   "rank": null,
+   "post": "皇帝",
+   "unit": null,
+   "flagship": null,
+   "face_number": 270,
+   "bio_ja": "ゴールデンバウム王朝第36代皇帝。皇位をめぐる政戦により兄リヒャルトと弟クレメンツが共倒れした結果、生き残った彼がオトフリート�｣世逝去の後に帝位につく。その治世は特筆すべき政治的業績もないが、それほどの悪業も為さなかった。国政にはほとんど関心を示さず、日々享楽的な生活を送る。帝国暦487年１0月、後継者を定めぬまま、心臓疾患により逝去。",
+   "stats": {
+    "tochi": 72,
+    "seiji": 95,
+    "unei": 93,
+    "joho": 92,
+    "shiki": 111,
+    "kido": 101,
+    "kogeki": 105,
+    "bogyo": 81
+   },
+   "stats_known": true,
+   "source": [
+    "characters.json (gin7 manual roster; stats archetype+individual)",
+    "manual-roster.json (gin7 duty card: post/rank/unit)",
+    "official-roster.json (gineiden.com st_char.html: face_index/bio)"
+   ],
+   "portrait_file": "content/roster/canon-portraits/oem/0002.png",
+   "atlas_slot": "oem_0002",
+   "face_value": 2,
+   "portrait_confidence": "assigned",
+   "portrait_method": "attribute-assignment (faction/sex/age/hair)",
+   "portrait_evidence": [
+    "face-assignment.json slot oem_0002"
+   ]
+  },
+  {
+   "id": "klasen",
+   "name_ja": "クラーゼン",
+   "name_romaji": "Klasen",
+   "name_kr": null,
+   "faction": "empire",
+   "branch": null,
+   "kind": "military",
+   "rank": "元帥",
+   "post": "幕僚総監",
+   "unit": null,
+   "flagship": null,
+   "face_number": null,
+   "bio_ja": null,
+   "stats": {
+    "tochi": 90,
+    "seiji": 60,
+    "unei": 60,
+    "joho": 93,
+    "shiki": 55,
+    "kido": 89,
+    "kogeki": 62,
+    "bogyo": 87
+   },
+   "stats_known": true,
+   "source": [
+    "characters.json (gin7 manual roster; stats archetype+individual)",
+    "manual-roster.json (gin7 duty card: post/rank/unit)"
+   ],
+   "portrait_file": "content/roster/canon-portraits/oem/0114.png",
+   "atlas_slot": "oem_0114",
+   "face_value": 114,
+   "portrait_confidence": "assigned",
+   "portrait_method": "attribute-assignment (faction/sex/age/hair)",
+   "portrait_evidence": [
+    "face-assignment.json slot oem_0114"
+   ]
+  },
+  {
+   "id": "lichtenlade",
+   "name_ja": "リヒテンラーデ",
+   "name_romaji": "Lichtenlade",
+   "name_kr": null,
+   "faction": "empire",
+   "branch": null,
+   "kind": "politician",
+   "rank": null,
+   "post": "帝国宰相",
+   "unit": null,
+   "flagship": null,
+   "face_number": null,
+   "bio_ja": null,
+   "stats": {
+    "tochi": 107,
+    "seiji": 105,
+    "unei": 67,
+    "joho": 116,
+    "shiki": 70,
+    "kido": 87,
+    "kogeki": 40,
+    "bogyo": 48
+   },
+   "stats_known": true,
+   "source": [
+    "characters.json (gin7 manual roster; stats archetype+individual)",
+    "manual-roster.json (gin7 duty card: post/rank/unit)"
+   ],
+   "portrait_file": "content/roster/canon-portraits/oem/0142.png",
+   "atlas_slot": "oem_0142",
+   "face_value": 142,
+   "portrait_confidence": "assigned",
+   "portrait_method": "attribute-assignment (faction/sex/age/hair)",
+   "portrait_evidence": [
+    "face-assignment.json slot oem_0142"
+   ]
+  },
+  {
+   "id": "gerlach",
+   "name_ja": "ゲルラッハ",
+   "name_romaji": "Gerlach",
+   "name_kr": null,
+   "faction": "empire",
+   "branch": null,
+   "kind": "politician",
+   "rank": null,
+   "post": "財務尚書",
+   "unit": null,
+   "flagship": null,
+   "face_number": null,
+   "bio_ja": null,
+   "stats": {
+    "tochi": 73,
+    "seiji": 75,
+    "unei": 91,
+    "joho": 62,
+    "shiki": 64,
+    "kido": 83,
+    "kogeki": 81,
+    "bogyo": 40
+   },
+   "stats_known": true,
+   "source": [
+    "characters.json (gin7 manual roster; stats archetype+individual)",
+    "manual-roster.json (gin7 duty card: post/rank/unit)"
+   ],
+   "portrait_file": "content/roster/canon-portraits/oem/0130.png",
+   "atlas_slot": "oem_0130",
+   "face_value": 130,
+   "portrait_confidence": "assigned",
+   "portrait_method": "attribute-assignment (faction/sex/age/hair)",
+   "portrait_evidence": [
+    "face-assignment.json slot oem_0130"
+   ]
+  },
+  {
+   "id": "remscheid",
+   "name_ja": "レムシャイト",
+   "name_romaji": "Remscheid",
+   "name_kr": null,
+   "faction": "empire",
+   "branch": null,
+   "kind": "politician",
+   "rank": null,
+   "post": "フェザーン駐在高等弁務官",
+   "unit": null,
+   "flagship": null,
+   "face_number": 286,
+   "bio_ja": "伯爵。帝国のフェザーン駐在高等弁務官。“リップシュタット戦役”直後に自由惑星同盟へ亡命。帝国暦489年８月、亡命した皇太孫エルウィン・ヨーゼフ��世を擁立し、“銀河帝国正統政府”を樹立して自ら帝国宰相の座に着く。",
+   "stats": {
+    "tochi": 95,
+    "seiji": 96,
+    "unei": 65,
+    "joho": 80,
+    "shiki": 40,
+    "kido": 41,
+    "kogeki": 40,
+    "bogyo": 85
+   },
+   "stats_known": true,
+   "source": [
+    "characters.json (gin7 manual roster; stats archetype+individual)",
+    "manual-roster.json (gin7 duty card: post/rank/unit)",
+    "official-roster.json (gineiden.com st_char.html: face_index/bio)"
+   ],
+   "portrait_file": "content/roster/canon-portraits/oem/0098.png",
+   "atlas_slot": "oem_0098",
+   "face_value": 98,
+   "portrait_confidence": "assigned",
+   "portrait_method": "attribute-assignment (faction/sex/age/hair)",
+   "portrait_evidence": [
+    "face-assignment.json slot oem_0098"
+   ]
+  },
+  {
+   "id": "ehrenberg",
+   "name_ja": "エーレンベルグ",
+   "name_romaji": "Ehrenberg",
+   "name_kr": null,
+   "faction": "empire",
+   "branch": null,
+   "kind": "military",
+   "rank": "元帥",
+   "post": "軍務尚書",
+   "unit": null,
+   "flagship": null,
+   "face_number": null,
+   "bio_ja": null,
+   "stats": {
+    "tochi": 51,
+    "seiji": 89,
+    "unei": 86,
+    "joho": 65,
+    "shiki": 61,
+    "kido": 85,
+    "kogeki": 99,
+    "bogyo": 60
+   },
+   "stats_known": true,
+   "source": [
+    "characters.json (gin7 manual roster; stats archetype+individual)",
+    "manual-roster.json (gin7 duty card: post/rank/unit)"
+   ],
+   "portrait_file": "content/roster/canon-portraits/oem/0021.png",
+   "atlas_slot": "oem_0021",
+   "face_value": 21,
+   "portrait_confidence": "assigned",
+   "portrait_method": "attribute-assignment (faction/sex/age/hair)",
+   "portrait_evidence": [
+    "face-assignment.json slot oem_0021"
+   ]
+  },
+  {
+   "id": "haupt",
+   "name_ja": "ハウプト",
+   "name_romaji": "Haupt",
+   "name_kr": null,
+   "faction": "empire",
+   "branch": null,
+   "kind": "military",
+   "rank": "大将",
+   "post": "軍務省人事局長",
+   "unit": null,
+   "flagship": null,
+   "face_number": null,
+   "bio_ja": null,
+   "stats": {
+    "tochi": 73,
+    "seiji": 68,
+    "unei": 64,
+    "joho": 90,
+    "shiki": 88,
+    "kido": 65,
+    "kogeki": 94,
+    "bogyo": 52
+   },
+   "stats_known": true,
+   "source": [
+    "characters.json (gin7 manual roster; stats archetype+individual)",
+    "manual-roster.json (gin7 duty card: post/rank/unit)"
+   ],
+   "portrait_file": "content/roster/canon-portraits/oem/0008.png",
+   "atlas_slot": "oem_0008",
+   "face_value": 8,
+   "portrait_confidence": "assigned",
+   "portrait_method": "attribute-assignment (faction/sex/age/hair)",
+   "portrait_evidence": [
+    "face-assignment.json slot oem_0008"
+   ]
+  },
+  {
+   "id": "steinhof",
+   "name_ja": "シュタインホフ",
+   "name_romaji": "Steinhof",
+   "name_kr": null,
+   "faction": "empire",
+   "branch": null,
+   "kind": "military",
+   "rank": "元帥",
+   "post": "統帥本部総長",
+   "unit": null,
+   "flagship": null,
+   "face_number": null,
+   "bio_ja": null,
+   "stats": {
+    "tochi": 58,
+    "seiji": 93,
+    "unei": 43,
+    "joho": 90,
+    "shiki": 47,
+    "kido": 43,
+    "kogeki": 38,
+    "bogyo": 42
+   },
+   "stats_known": true,
+   "source": [
+    "characters.json (IV EX real save-diff stats) iv_id=34",
+    "manual-roster.json (gin7 duty card: post/rank/unit)"
+   ],
+   "portrait_file": "content/roster/canon-portraits/oem/0157.png",
+   "atlas_slot": "oem_0157",
+   "face_value": 157,
+   "portrait_confidence": "assigned",
+   "portrait_method": "attribute-assignment (faction/sex/age/hair)",
+   "portrait_evidence": [
+    "face-assignment.json slot oem_0157"
+   ]
+  },
+  {
+   "id": "abendroth",
+   "name_ja": "アーベントロート",
+   "name_romaji": "Abendroth",
+   "name_kr": null,
+   "faction": "empire",
+   "branch": null,
+   "kind": "military",
+   "rank": "中将",
+   "post": "統帥本部作戦二課課長",
+   "unit": null,
+   "flagship": null,
+   "face_number": null,
+   "bio_ja": null,
+   "stats": {
+    "tochi": 67,
+    "seiji": 76,
+    "unei": 52,
+    "joho": 83,
+    "shiki": 103,
+    "kido": 56,
+    "kogeki": 89,
+    "bogyo": 91
+   },
+   "stats_known": true,
+   "source": [
+    "characters.json (gin7 manual roster; stats archetype+individual)",
+    "manual-roster.json (gin7 duty card: post/rank/unit)"
+   ],
+   "portrait_file": "content/roster/canon-portraits/oem/0037.png",
+   "atlas_slot": "oem_0037",
+   "face_value": 37,
+   "portrait_confidence": "assigned",
+   "portrait_method": "attribute-assignment (faction/sex/age/hair)",
+   "portrait_evidence": [
+    "face-assignment.json slot oem_0037"
+   ]
+  },
+  {
+   "id": "g-muckenberger",
+   "name_ja": "G.ミュッケンベルガー",
+   "name_romaji": "G. Muckenberger",
+   "name_kr": null,
+   "faction": "empire",
+   "branch": null,
+   "kind": "military",
+   "rank": "元帥",
+   "post": "宇宙艦隊司令長官",
+   "unit": null,
+   "flagship": null,
+   "face_number": null,
+   "bio_ja": null,
+   "stats": {
+    "tochi": 104,
+    "seiji": 59,
+    "unei": 84,
+    "joho": 55,
+    "shiki": 79,
+    "kido": 82,
+    "kogeki": 91,
+    "bogyo": 65
+   },
+   "stats_known": true,
+   "source": [
+    "characters.json (gin7 manual roster; stats archetype+individual)",
+    "manual-roster.json (gin7 duty card: post/rank/unit)"
+   ],
+   "portrait_file": "content/roster/canon-portraits/oem/0013.png",
+   "atlas_slot": "oem_0013",
+   "face_value": 13,
+   "portrait_confidence": "assigned",
+   "portrait_method": "attribute-assignment (faction/sex/age/hair)",
+   "portrait_evidence": [
+    "face-assignment.json slot oem_0013"
+   ]
+  },
+  {
+   "id": "greifs",
+   "name_ja": "グライフス",
+   "name_romaji": "Greifs",
+   "name_kr": null,
+   "faction": "empire",
+   "branch": null,
+   "kind": "military",
+   "rank": "上級大将",
+   "post": "宇宙艦隊総参謀長",
+   "unit": null,
+   "flagship": null,
+   "face_number": null,
+   "bio_ja": null,
+   "stats": {
+    "tochi": 96,
+    "seiji": 88,
+    "unei": 55,
+    "joho": 73,
+    "shiki": 85,
+    "kido": 65,
+    "kogeki": 105,
+    "bogyo": 108
+   },
+   "stats_known": true,
+   "source": [
+    "characters.json (gin7 manual roster; stats archetype+individual)",
+    "manual-roster.json (gin7 duty card: post/rank/unit)"
+   ],
+   "portrait_file": "content/roster/canon-portraits/oem/0103.png",
+   "atlas_slot": "oem_0103",
+   "face_value": 103,
+   "portrait_confidence": "assigned",
+   "portrait_method": "attribute-assignment (faction/sex/age/hair)",
+   "portrait_evidence": [
+    "face-assignment.json slot oem_0103"
+   ]
+  },
+  {
+   "id": "oppenheimer",
+   "name_ja": "オッペンハイマー",
+   "name_romaji": "Oppenheimer",
+   "name_kr": null,
+   "faction": "empire",
+   "branch": null,
+   "kind": "military",
+   "rank": "大将",
+   "post": "憲兵総監",
+   "unit": null,
+   "flagship": null,
+   "face_number": null,
+   "bio_ja": null,
+   "stats": {
+    "tochi": 60,
+    "seiji": 79,
+    "unei": 99,
+    "joho": 50,
+    "shiki": 62,
+    "kido": 76,
+    "kogeki": 92,
+    "bogyo": 83
+   },
+   "stats_known": true,
+   "source": [
+    "characters.json (gin7 manual roster; stats archetype+individual)",
+    "manual-roster.json (gin7 duty card: post/rank/unit)"
+   ],
+   "portrait_file": "content/roster/canon-portraits/oem/0158.png",
+   "atlas_slot": "oem_0158",
+   "face_value": 158,
+   "portrait_confidence": "assigned",
+   "portrait_method": "attribute-assignment (faction/sex/age/hair)",
+   "portrait_evidence": [
+    "face-assignment.json slot oem_0158"
+   ]
+  },
+  {
+   "id": "ofresser",
+   "name_ja": "オフレッサー",
+   "name_romaji": "Ofresser",
+   "name_kr": null,
+   "faction": "empire",
+   "branch": null,
+   "kind": "military",
+   "rank": "上級大将",
+   "post": "装甲擲弾兵総監",
+   "unit": null,
+   "flagship": null,
+   "face_number": 41,
+   "bio_ja": "帝国軍上級大将。装甲擲弾兵総監。幾多の戦場をくぐり抜けてきた白兵戦の猛者。その存在だけで敵を威圧することができる。下級貴族出身でありながら、白兵戦技によって上級大将にまで上り詰めたことは特筆に価する。リップシュタット戦役で貴族連合軍に参加するも罠に掛かり裏切り者として味方に射殺される。",
+   "stats": {
+    "tochi": 9,
+    "seiji": 4,
+    "unei": 18,
+    "joho": 2,
+    "shiki": 4,
+    "kido": 8,
+    "kogeki": 100,
+    "bogyo": 8
+   },
+   "stats_known": true,
+   "source": [
+    "characters.json (IV EX real save-diff stats) iv_id=11",
+    "manual-roster.json (gin7 duty card: post/rank/unit)",
+    "official-roster.json (gineiden.com st_char.html: face_index/bio)"
+   ],
+   "portrait_file": "content/roster/canon-portraits/oem/0045.png",
+   "atlas_slot": "oem_0045",
+   "face_value": 45,
+   "portrait_confidence": "assigned",
+   "portrait_method": "attribute-assignment (faction/sex/age/hair)",
+   "portrait_evidence": [
+    "face-assignment.json slot oem_0045"
+   ]
+  },
+  {
+   "id": "schaft",
+   "name_ja": "シャフト",
+   "name_romaji": "Schaft",
+   "name_kr": null,
+   "faction": "empire",
+   "branch": null,
+   "kind": "military",
+   "rank": "大将",
+   "post": "科学技術総監",
+   "unit": null,
+   "flagship": null,
+   "face_number": null,
+   "bio_ja": null,
+   "stats": {
+    "tochi": 85,
+    "seiji": 52,
+    "unei": 84,
+    "joho": 94,
+    "shiki": 96,
+    "kido": 88,
+    "kogeki": 72,
+    "bogyo": 75
+   },
+   "stats_known": true,
+   "source": [
+    "characters.json (gin7 manual roster; stats archetype+individual)",
+    "manual-roster.json (gin7 duty card: post/rank/unit)"
+   ],
+   "portrait_file": "content/roster/canon-portraits/oem/0150.png",
+   "atlas_slot": "oem_0150",
+   "face_value": 150,
+   "portrait_confidence": "assigned",
+   "portrait_method": "attribute-assignment (faction/sex/age/hair)",
+   "portrait_evidence": [
+    "face-assignment.json slot oem_0150"
+   ]
+  },
+  {
+   "id": "lohengramm",
+   "name_ja": "ローエングラム",
+   "name_romaji": "Lohengramm",
+   "name_kr": null,
+   "faction": "empire",
+   "branch": null,
+   "kind": "military",
+   "rank": "中将",
+   "post": "第２艦隊",
+   "unit": "第２艦隊",
+   "flagship": null,
+   "face_number": 209,
+   "bio_ja": "皇帝の後宮へと売られた姉を取り戻すため帝国軍に参加し、その卓越した才能により異例の出世をとげ、ローエングラム伯の名を得る。「金髪の小僧」として門閥貴族らから疎まれていたが「リップシュタット戦役」で旧勢力を一掃し帝国軍の全権を握るも、旧知の友キルヒアイスを失ってしまうこととなる。同盟軍との戦いでも数々の勝利を収め、ついに皇帝となりローエングラム王朝を開き権力の頂点を極めることとなる。",
+   "stats": {
+    "tochi": 101,
+    "seiji": 32,
+    "unei": 96,
+    "joho": 93,
+    "shiki": 93,
+    "kido": 70,
+    "kogeki": 74,
+    "bogyo": 95
+   },
+   "stats_known": true,
+   "source": [
+    "characters.json (IV EX real save-diff stats) iv_id=81",
+    "manual-roster.json (gin7 duty card: post/rank/unit)",
+    "official-roster.json (gineiden.com st_char.html: face_index/bio)"
+   ],
+   "portrait_file": "content/roster/canon-portraits/oem/0112.png",
+   "atlas_slot": "oem_0112",
+   "face_value": 112,
+   "portrait_confidence": "proven_medium",
+   "portrait_method": "canon-unique-appearance (anime/wiki) + AI-vision named candidate + atlas faction",
+   "portrait_evidence": [
+    "ANIME/WIKI: Reinhard = 'the blond admiral' / 'blond angel' with iconic golden wavy hair (legendofthegalacticheroes.fandom.com; gineipaedia.com). Atlas slot oem/0112 shows a youthful long wavy blond empire officer with beautiful/androgynous features -> match.",
+    "AI-VISION: portrait-ai-classification.json named_candidate oem_0112 = 'Reinhard' conf 0.60, 'youthful long wavy blond hair, beautiful features' (highest-conf empire named candidate).",
+    "ATLAS FACTION: oem = empire/male agrees with Reinhard (empire).",
+    "OFFICIAL NAME (separate fact): gineiden.com gives Reinhard's face_number = 209, BUT chara/209.jpg did NOT survive Wayback (only 085/206 did), so 209 cannot be pixel-tied to a slot. This link is the canonical-look slot, NOT a claim that oem/0112 == face 209."
+   ]
+  },
+  {
+   "id": "merkatz",
+   "name_ja": "メルカッツ",
+   "name_romaji": "Merkatz",
+   "name_kr": null,
+   "faction": "empire",
+   "branch": null,
+   "kind": "military",
+   "rank": "大将",
+   "post": "第３艦隊",
+   "unit": "第３艦隊",
+   "flagship": null,
+   "face_number": null,
+   "bio_ja": null,
+   "stats": {
+    "tochi": 86,
+    "seiji": 33,
+    "unei": 98,
+    "joho": 63,
+    "shiki": 92,
+    "kido": 77,
+    "kogeki": 72,
+    "bogyo": 95
+   },
+   "stats_known": true,
+   "source": [
+    "characters.json (IV EX real save-diff stats) iv_id=85",
+    "manual-roster.json (gin7 duty card: post/rank/unit)"
+   ],
+   "portrait_file": "content/roster/canon-portraits/oem/0127.png",
+   "atlas_slot": "oem_0127",
+   "face_value": 127,
+   "portrait_confidence": "assigned",
+   "portrait_method": "attribute-assignment (faction/sex/age/hair)",
+   "portrait_evidence": [
+    "face-assignment.json slot oem_0127"
+   ]
+  },
+  {
+   "id": "staden",
+   "name_ja": "シュターデン",
+   "name_romaji": "Staden",
+   "name_kr": null,
+   "faction": "empire",
+   "branch": null,
+   "kind": "military",
+   "rank": "中将",
+   "post": "第４艦隊",
+   "unit": "第４艦隊",
+   "flagship": null,
+   "face_number": null,
+   "bio_ja": null,
+   "stats": {
+    "tochi": 38,
+    "seiji": 86,
+    "unei": 56,
+    "joho": 55,
+    "shiki": 72,
+    "kido": 27,
+    "kogeki": 35,
+    "bogyo": 58
+   },
+   "stats_known": true,
+   "source": [
+    "characters.json (IV EX real save-diff stats) iv_id=36",
+    "manual-roster.json (gin7 duty card: post/rank/unit)"
+   ],
+   "portrait_file": "content/roster/canon-portraits/oem/0129.png",
+   "atlas_slot": "oem_0129",
+   "face_value": 129,
+   "portrait_confidence": "assigned",
+   "portrait_method": "attribute-assignment (faction/sex/age/hair)",
+   "portrait_evidence": [
+    "face-assignment.json slot oem_0129"
+   ]
+  },
+  {
+   "id": "vogel",
+   "name_ja": "フォーゲル",
+   "name_romaji": "Vogel",
+   "name_kr": null,
+   "faction": "empire",
+   "branch": null,
+   "kind": "military",
+   "rank": "中将",
+   "post": "第５艦隊",
+   "unit": "第５艦隊",
+   "flagship": null,
+   "face_number": null,
+   "bio_ja": null,
+   "stats": {
+    "tochi": 54,
+    "seiji": 45,
+    "unei": 86,
+    "joho": 53,
+    "shiki": 66,
+    "kido": 87,
+    "kogeki": 53,
+    "bogyo": 87
+   },
+   "stats_known": true,
+   "source": [
+    "characters.json (gin7 manual roster; stats archetype+individual)",
+    "manual-roster.json (gin7 duty card: post/rank/unit)"
+   ],
+   "portrait_file": "content/roster/canon-portraits/oem/0038.png",
+   "atlas_slot": "oem_0038",
+   "face_value": 38,
+   "portrait_confidence": "assigned",
+   "portrait_method": "attribute-assignment (faction/sex/age/hair)",
+   "portrait_evidence": [
+    "face-assignment.json slot oem_0038"
+   ]
+  },
+  {
+   "id": "hildesheim",
+   "name_ja": "ヒルデスハイム",
+   "name_romaji": "Hildesheim",
+   "name_kr": null,
+   "faction": "empire",
+   "branch": null,
+   "kind": "military",
+   "rank": "中将",
+   "post": "第６艦隊",
+   "unit": "第６艦隊",
+   "flagship": null,
+   "face_number": null,
+   "bio_ja": null,
+   "stats": {
+    "tochi": 66,
+    "seiji": 78,
+    "unei": 52,
+    "joho": 81,
+    "shiki": 97,
+    "kido": 87,
+    "kogeki": 53,
+    "bogyo": 82
+   },
+   "stats_known": true,
+   "source": [
+    "characters.json (gin7 manual roster; stats archetype+individual)",
+    "manual-roster.json (gin7 duty card: post/rank/unit)"
+   ],
+   "portrait_file": "content/roster/canon-portraits/oem/0134.png",
+   "atlas_slot": "oem_0134",
+   "face_value": 134,
+   "portrait_confidence": "assigned",
+   "portrait_method": "attribute-assignment (faction/sex/age/hair)",
+   "portrait_evidence": [
+    "face-assignment.json slot oem_0134"
+   ]
+  },
+  {
+   "id": "kircheis",
+   "name_ja": "キルヒアイス",
+   "name_romaji": "Kircheis",
+   "name_kr": null,
+   "faction": "empire",
+   "branch": null,
+   "kind": "military",
+   "rank": "少佐",
+   "post": "司令官副官",
+   "unit": "第６艦隊",
+   "flagship": null,
+   "face_number": null,
+   "bio_ja": null,
+   "stats": {
+    "tochi": 98,
+    "seiji": 57,
+    "unei": 86,
+    "joho": 64,
+    "shiki": 92,
+    "kido": 72,
+    "kogeki": 84,
+    "bogyo": 88
+   },
+   "stats_known": true,
+   "source": [
+    "characters.json (IV EX real save-diff stats) iv_id=15",
+    "manual-roster.json (gin7 duty card: post/rank/unit)"
+   ],
+   "portrait_file": "content/roster/canon-portraits/oem/0026.png",
+   "atlas_slot": "oem_0025",
+   "face_value": 25,
+   "portrait_confidence": "proven_medium",
+   "portrait_method": "canon-unique-appearance (anime/wiki) + AI-vision named candidate + atlas faction",
+   "portrait_evidence": [
+    "ANIME/WIKI: Kircheis's defining, near-unique canonical feature is 'flame-like red hair' (gineipaedia.com/wiki/Siegfried_Kircheis; legendofthegalacticheroes.fandom.com). The atlas slot oem/0026 shows a young red-haired empire officer -> visible match.",
+    "AI-VISION: portrait-ai-classification.json named_candidate oem_0026 = 'Kircheis' conf 0.50, 'gentle red-haired youth'.",
+    "ATLAS FACTION: oem = empire/male (decode atlas code) agrees with Kircheis (empire).",
+    "CAVEAT: NO official face_number anchor (only 2 official portraits survived); confidence rests on the rarity of red hair in the empire roster, not on a confirmed source mapping."
+   ]
+  },
+  {
+   "id": "landsberg",
+   "name_ja": "ランズベルク",
+   "name_romaji": "Landsberg",
+   "name_kr": null,
+   "faction": "empire",
+   "branch": null,
+   "kind": "military",
+   "rank": "中将",
+   "post": "第８艦隊",
+   "unit": "第８艦隊",
+   "flagship": null,
+   "face_number": null,
+   "bio_ja": null,
+   "stats": {
+    "tochi": 73,
+    "seiji": 50,
+    "unei": 100,
+    "joho": 58,
+    "shiki": 101,
+    "kido": 91,
+    "kogeki": 91,
+    "bogyo": 80
+   },
+   "stats_known": true,
+   "source": [
+    "characters.json (gin7 manual roster; stats archetype+individual)",
+    "manual-roster.json (gin7 duty card: post/rank/unit)"
+   ],
+   "portrait_file": "content/roster/canon-portraits/oem/0042.png",
+   "atlas_slot": "oem_0042",
+   "face_value": 42,
+   "portrait_confidence": "assigned",
+   "portrait_method": "attribute-assignment (faction/sex/age/hair)",
+   "portrait_evidence": [
+    "face-assignment.json slot oem_0042"
+   ]
+  },
+  {
+   "id": "flegel",
+   "name_ja": "フレーゲル",
+   "name_romaji": "Flegel",
+   "name_kr": null,
+   "faction": "empire",
+   "branch": null,
+   "kind": "military",
+   "rank": "中将",
+   "post": "第１０艦隊",
+   "unit": "第１０艦隊",
+   "flagship": null,
+   "face_number": null,
+   "bio_ja": null,
+   "stats": {
+    "tochi": 19,
+    "seiji": 8,
+    "unei": 23,
+    "joho": 36,
+    "shiki": 42,
+    "kido": 20,
+    "kogeki": 35,
+    "bogyo": 39
+   },
+   "stats_known": true,
+   "source": [
+    "characters.json (IV EX real save-diff stats) iv_id=73",
+    "manual-roster.json (gin7 duty card: post/rank/unit)"
+   ],
+   "portrait_file": "content/roster/canon-portraits/oem/0141.png",
+   "atlas_slot": "oem_0141",
+   "face_value": 141,
+   "portrait_confidence": "assigned",
+   "portrait_method": "attribute-assignment (faction/sex/age/hair)",
+   "portrait_evidence": [
+    "face-assignment.json slot oem_0141"
+   ]
+  },
+  {
+   "id": "seeckt",
+   "name_ja": "ゼークト",
+   "name_romaji": "Seeckt",
+   "name_kr": null,
+   "faction": "empire",
+   "branch": null,
+   "kind": "military",
+   "rank": "大将",
+   "post": "第１２艦隊",
+   "unit": "第１２艦隊",
+   "flagship": null,
+   "face_number": null,
+   "bio_ja": null,
+   "stats": {
+    "tochi": 72,
+    "seiji": 31,
+    "unei": 79,
+    "joho": 24,
+    "shiki": 76,
+    "kido": 61,
+    "kogeki": 48,
+    "bogyo": 75
+   },
+   "stats_known": true,
+   "source": [
+    "characters.json (IV EX real save-diff stats) iv_id=44",
+    "manual-roster.json (gin7 duty card: post/rank/unit)"
+   ],
+   "portrait_file": "content/roster/canon-portraits/oem/0122.png",
+   "atlas_slot": "oem_0122",
+   "face_value": 122,
+   "portrait_confidence": "assigned",
+   "portrait_method": "attribute-assignment (faction/sex/age/hair)",
+   "portrait_evidence": [
+    "face-assignment.json slot oem_0122"
+   ]
+  },
+  {
+   "id": "grunemann",
+   "name_ja": "グリューネマン",
+   "name_romaji": "Grunemann",
+   "name_kr": null,
+   "faction": "empire",
+   "branch": null,
+   "kind": "military",
+   "rank": "少将",
+   "post": "第４巡察隊",
+   "unit": "第４巡察隊",
+   "flagship": null,
+   "face_number": null,
+   "bio_ja": null,
+   "stats": {
+    "tochi": 70,
+    "seiji": 41,
+    "unei": 58,
+    "joho": 31,
+    "shiki": 60,
+    "kido": 64,
+    "kogeki": 59,
+    "bogyo": 65
+   },
+   "stats_known": true,
+   "source": [
+    "characters.json (IV EX real save-diff stats) iv_id=22",
+    "manual-roster.json (gin7 duty card: post/rank/unit)"
+   ],
+   "portrait_file": "content/roster/canon-portraits/oem/0088.png",
+   "atlas_slot": "oem_0088",
+   "face_value": 88,
+   "portrait_confidence": "assigned",
+   "portrait_method": "attribute-assignment (faction/sex/age/hair)",
+   "portrait_evidence": [
+    "face-assignment.json slot oem_0088"
+   ]
+  },
+  {
+   "id": "dittersdorf",
+   "name_ja": "ディッタースドルフ",
+   "name_romaji": "Dittersdorf",
+   "name_kr": null,
+   "faction": "empire",
+   "branch": null,
+   "kind": "military",
+   "rank": "少将",
+   "post": "第５巡察隊",
+   "unit": "第５巡察隊",
+   "flagship": null,
+   "face_number": null,
+   "bio_ja": null,
+   "stats": {
+    "tochi": 68,
+    "seiji": 47,
+    "unei": 46,
+    "joho": 71,
+    "shiki": 101,
+    "kido": 78,
+    "kogeki": 110,
+    "bogyo": 57
+   },
+   "stats_known": true,
+   "source": [
+    "characters.json (gin7 manual roster; stats archetype+individual)",
+    "manual-roster.json (gin7 duty card: post/rank/unit)"
+   ],
+   "portrait_file": "content/roster/canon-portraits/oem/0145.png",
+   "atlas_slot": "oem_0145",
+   "face_value": 145,
+   "portrait_confidence": "assigned",
+   "portrait_method": "attribute-assignment (faction/sex/age/hair)",
+   "portrait_evidence": [
+    "face-assignment.json slot oem_0145"
+   ]
+  },
+  {
+   "id": "hofmeister",
+   "name_ja": "ホフマイスター",
+   "name_romaji": "Hofmeister",
+   "name_kr": null,
+   "faction": "empire",
+   "branch": null,
+   "kind": "military",
+   "rank": "少将",
+   "post": "第２９巡察隊",
+   "unit": "第２９巡察隊",
+   "flagship": null,
+   "face_number": null,
+   "bio_ja": null,
+   "stats": {
+    "tochi": 75,
+    "seiji": 77,
+    "unei": 57,
+    "joho": 67,
+    "shiki": 81,
+    "kido": 59,
+    "kogeki": 91,
+    "bogyo": 58
+   },
+   "stats_known": true,
+   "source": [
+    "characters.json (gin7 manual roster; stats archetype+individual)",
+    "manual-roster.json (gin7 duty card: post/rank/unit)"
+   ],
+   "portrait_file": "content/roster/canon-portraits/oem/0018.png",
+   "atlas_slot": "oem_0018",
+   "face_value": 18,
+   "portrait_confidence": "assigned",
+   "portrait_method": "attribute-assignment (faction/sex/age/hair)",
+   "portrait_evidence": [
+    "face-assignment.json slot oem_0018"
+   ]
+  },
+  {
+   "id": "char-27",
+   "name_ja": "グルーゼンシュテルン",
+   "name_romaji": null,
+   "name_kr": null,
+   "faction": "empire",
+   "branch": null,
+   "kind": "military",
+   "rank": "少将",
+   "post": "第４４巡察隊",
+   "unit": "第４４巡察隊",
+   "flagship": null,
+   "face_number": null,
+   "bio_ja": null,
+   "stats": {
+    "tochi": 94,
+    "seiji": 44,
+    "unei": 85,
+    "joho": 45,
+    "shiki": 73,
+    "kido": 107,
+    "kogeki": 101,
+    "bogyo": 57
+   },
+   "stats_known": true,
+   "source": [
+    "characters.json (gin7 manual roster; stats archetype+individual)",
+    "manual-roster.json (gin7 duty card: post/rank/unit)"
+   ],
+   "portrait_file": null,
+   "atlas_slot": null,
+   "face_value": null,
+   "portrait_confidence": "none",
+   "portrait_method": "no assignment",
+   "portrait_evidence": []
+  },
+  {
+   "id": "mittermeyer",
+   "name_ja": "ミッターマイヤー",
+   "name_romaji": "Mittermeyer",
+   "name_kr": null,
+   "faction": "empire",
+   "branch": null,
+   "kind": "military",
+   "rank": "少将",
+   "post": "第５３巡察隊",
+   "unit": "第５３巡察隊",
+   "flagship": null,
+   "face_number": 195,
+   "bio_ja": "ラインハルトを支える勇将としてロイエンタールと共に“帝国軍の双璧”と呼ばれる。また、その迅速かつ正確な用兵は他者の追随を許さず、“疾風ウォルフ”の令名を馳せる。公明正大かつ柔軟な性格で、部下からも敬愛されていた。複数艦隊を統率するに充分な力量を持つが、自らも前線へ出て戦う傾向がある。戦術レベルでも隙のない戦闘技術を持つが、むしろ、その戦略的な機動性を生かした侵攻作戦などを得意とした。",
+   "stats": {
+    "tochi": 94,
+    "seiji": 36,
+    "unei": 84,
+    "joho": 74,
+    "shiki": 93,
+    "kido": 100,
+    "kogeki": 76,
+    "bogyo": 84
+   },
+   "stats_known": true,
+   "source": [
+    "characters.json (IV EX real save-diff stats) iv_id=80",
+    "manual-roster.json (gin7 duty card: post/rank/unit)",
+    "official-roster.json (gineiden.com st_char.html: face_index/bio)"
+   ],
+   "portrait_file": "content/roster/canon-portraits/oem/0106.png",
+   "atlas_slot": "oem_0106",
+   "face_value": 106,
+   "portrait_confidence": "assigned",
+   "portrait_method": "attribute-assignment (faction/sex/age/hair)",
+   "portrait_evidence": [
+    "face-assignment.json slot oem_0106"
+   ]
+  },
+  {
+   "id": "reuenthal",
+   "name_ja": "ロイエンタール",
+   "name_romaji": "Reuenthal",
+   "name_kr": null,
+   "faction": "empire",
+   "branch": null,
+   "kind": "military",
+   "rank": "少将",
+   "post": "第５４巡察隊",
+   "unit": "第５４巡察隊",
+   "flagship": null,
+   "face_number": null,
+   "bio_ja": null,
+   "stats": {
+    "tochi": 92,
+    "seiji": 57,
+    "unei": 91,
+    "joho": 74,
+    "shiki": 83,
+    "kido": 73,
+    "kogeki": 78,
+    "bogyo": 91
+   },
+   "stats_known": true,
+   "source": [
+    "characters.json (IV EX real save-diff stats) iv_id=98",
+    "manual-roster.json (gin7 duty card: post/rank/unit)"
+   ],
+   "portrait_file": "content/roster/canon-portraits/oem/0072.png",
+   "atlas_slot": "oem_0072",
+   "face_value": 72,
+   "portrait_confidence": "assigned",
+   "portrait_method": "attribute-assignment (faction/sex/age/hair)",
+   "portrait_evidence": [
+    "face-assignment.json slot oem_0072"
+   ]
+  },
+  {
+   "id": "lennenkampf",
+   "name_ja": "レンネンカンプ",
+   "name_romaji": "Lennenkampf",
+   "name_kr": null,
+   "faction": "empire",
+   "branch": null,
+   "kind": "military",
+   "rank": "少将",
+   "post": "第５５巡察隊",
+   "unit": "第５５巡察隊",
+   "flagship": null,
+   "face_number": null,
+   "bio_ja": null,
+   "stats": {
+    "tochi": 85,
+    "seiji": 45,
+    "unei": 84,
+    "joho": 52,
+    "shiki": 74,
+    "kido": 62,
+    "kogeki": 72,
+    "bogyo": 85
+   },
+   "stats_known": true,
+   "source": [
+    "characters.json (IV EX real save-diff stats) iv_id=97",
+    "manual-roster.json (gin7 duty card: post/rank/unit)"
+   ],
+   "portrait_file": "content/roster/canon-portraits/oem/0081.png",
+   "atlas_slot": "oem_0081",
+   "face_value": 81,
+   "portrait_confidence": "assigned",
+   "portrait_method": "attribute-assignment (faction/sex/age/hair)",
+   "portrait_evidence": [
+    "face-assignment.json slot oem_0081"
+   ]
+  },
+  {
+   "id": "stockhausen",
+   "name_ja": "シュトックハウゼン",
+   "name_romaji": "Stockhausen",
+   "name_kr": null,
+   "faction": "empire",
+   "branch": null,
+   "kind": "military",
+   "rank": "上級大将",
+   "post": "要塞司令官",
+   "unit": "イゼルローン要塞",
+   "flagship": null,
+   "face_number": null,
+   "bio_ja": null,
+   "stats": {
+    "tochi": 97,
+    "seiji": 50,
+    "unei": 66,
+    "joho": 58,
+    "shiki": 90,
+    "kido": 61,
+    "kogeki": 98,
+    "bogyo": 72
+   },
+   "stats_known": true,
+   "source": [
+    "characters.json (gin7 manual roster; stats archetype+individual)",
+    "manual-roster.json (gin7 duty card: post/rank/unit)"
+   ],
+   "portrait_file": "content/roster/canon-portraits/oem/0140.png",
+   "atlas_slot": "oem_0140",
+   "face_value": 140,
+   "portrait_confidence": "assigned",
+   "portrait_method": "attribute-assignment (faction/sex/age/hair)",
+   "portrait_evidence": [
+    "face-assignment.json slot oem_0140"
+   ]
+  },
+  {
+   "id": "sanford",
+   "name_ja": "サンフォード",
+   "name_romaji": "Sanford",
+   "name_kr": null,
+   "faction": "alliance",
+   "branch": null,
+   "kind": "politician",
+   "rank": null,
+   "post": "議長",
+   "unit": null,
+   "flagship": null,
+   "face_number": null,
+   "bio_ja": null,
+   "stats": {
+    "tochi": 91,
+    "seiji": 107,
+    "unei": 111,
+    "joho": 79,
+    "shiki": 77,
+    "kido": 62,
+    "kogeki": 59,
+    "bogyo": 40
+   },
+   "stats_known": true,
+   "source": [
+    "characters.json (gin7 manual roster; stats archetype+individual)",
+    "manual-roster.json (gin7 duty card: post/rank/unit)"
+   ],
+   "portrait_file": "content/roster/canon-portraits/oam/0208.png",
+   "atlas_slot": "oam_0208",
+   "face_value": 100095,
+   "portrait_confidence": "assigned",
+   "portrait_method": "attribute-assignment (faction/sex/age/hair)",
+   "portrait_evidence": [
+    "face-assignment.json slot oam_0208"
+   ]
+  },
+  {
+   "id": "trunicht",
+   "name_ja": "トリューニヒト",
+   "name_romaji": "Trunicht",
+   "name_kr": null,
+   "faction": "alliance",
+   "branch": null,
+   "kind": "politician",
+   "rank": null,
+   "post": "国防委員長",
+   "unit": null,
+   "flagship": null,
+   "face_number": 125,
+   "bio_ja": "自由惑星同盟最高評議会国防委員長。宇宙暦796年８月の帝国領侵攻作戦の失敗によって辞任したサンフォード最高評議会議長の後を受けて暫定政府首班、翌年に最高評議会議長となる。宇宙暦799年５月、ハイネセンに侵攻した帝国軍に降伏し、“バーラトの和約”を締結した。その後、帝国に保護を求めて亡命し、新領土総督高等参事官としてハイネセンに帰還するもロイエンタール元帥に射殺される。",
+   "stats": {
+    "tochi": 103,
+    "seiji": 75,
+    "unei": 90,
+    "joho": 68,
+    "shiki": 61,
+    "kido": 40,
+    "kogeki": 40,
+    "bogyo": 43
+   },
+   "stats_known": true,
+   "source": [
+    "characters.json (gin7 manual roster; stats archetype+individual)",
+    "manual-roster.json (gin7 duty card: post/rank/unit)",
+    "official-roster.json (gineiden.com st_char.html: face_index/bio)"
+   ],
+   "portrait_file": "content/roster/canon-portraits/oam/0270.png",
+   "atlas_slot": "oam_0270",
+   "face_value": 100095,
+   "portrait_confidence": "assigned",
+   "portrait_method": "attribute-assignment (faction/sex/age/hair)",
+   "portrait_evidence": [
+    "face-assignment.json slot oam_0270"
+   ]
+  },
+  {
+   "id": "lebello",
+   "name_ja": "レベロ",
+   "name_romaji": "Lebello",
+   "name_kr": null,
+   "faction": "alliance",
+   "branch": null,
+   "kind": "politician",
+   "rank": null,
+   "post": "財政委員長",
+   "unit": null,
+   "flagship": null,
+   "face_number": 285,
+   "bio_ja": "自由惑星同盟評議会財務委員長を務め、宇宙暦796年８月の最高評議会における帝国領侵攻作戦承認の採決では反対を唱える。宇宙暦798年５月の“バーラトの和約”成立後、最高評議会議長に就任。帝国軍からの疑惑を晴らすため、ヤン退役元帥の謀殺をはかるも、ヤン一党に反撃を被り身柄を拘束され、事実上レンネンカンプ高等弁務官の身柄を売り渡す密約を交わす。宇宙暦800年２月、帝国軍の再侵攻に際して、皇帝の歓心を買おうとしたロックウェル大将によって殺害される。",
+   "stats": {
+    "tochi": 65,
+    "seiji": 97,
+    "unei": 85,
+    "joho": 65,
+    "shiki": 40,
+    "kido": 62,
+    "kogeki": 40,
+    "bogyo": 68
+   },
+   "stats_known": true,
+   "source": [
+    "characters.json (gin7 manual roster; stats archetype+individual)",
+    "manual-roster.json (gin7 duty card: post/rank/unit)",
+    "official-roster.json (gineiden.com st_char.html: face_index/bio)"
+   ],
+   "portrait_file": "content/roster/canon-portraits/oam/0286.png",
+   "atlas_slot": "oam_0286",
+   "face_value": 100095,
+   "portrait_confidence": "assigned",
+   "portrait_method": "attribute-assignment (faction/sex/age/hair)",
+   "portrait_evidence": [
+    "face-assignment.json slot oam_0286"
+   ]
+  },
+  {
+   "id": "huang",
+   "name_ja": "ホワン",
+   "name_romaji": "Huang",
+   "name_kr": null,
+   "faction": "alliance",
+   "branch": null,
+   "kind": "politician",
+   "rank": null,
+   "post": "人的資源委員長",
+   "unit": null,
+   "flagship": null,
+   "face_number": null,
+   "bio_ja": null,
+   "stats": {
+    "tochi": 86,
+    "seiji": 116,
+    "unei": 83,
+    "joho": 103,
+    "shiki": 40,
+    "kido": 90,
+    "kogeki": 61,
+    "bogyo": 66
+   },
+   "stats_known": true,
+   "source": [
+    "characters.json (gin7 manual roster; stats archetype+individual)",
+    "manual-roster.json (gin7 duty card: post/rank/unit)"
+   ],
+   "portrait_file": "content/roster/canon-portraits/oam/0003.png",
+   "atlas_slot": "oam_0003",
+   "face_value": 100003,
+   "portrait_confidence": "assigned",
+   "portrait_method": "attribute-assignment (faction/sex/age/hair)",
+   "portrait_evidence": [
+    "face-assignment.json slot oam_0003"
+   ]
+  },
+  {
+   "id": "winser",
+   "name_ja": "ウィンザー",
+   "name_romaji": "Winser",
+   "name_kr": null,
+   "faction": "alliance",
+   "branch": null,
+   "kind": "politician",
+   "rank": null,
+   "post": "情報交通委員長",
+   "unit": null,
+   "flagship": null,
+   "face_number": null,
+   "bio_ja": null,
+   "stats": {
+    "tochi": 112,
+    "seiji": 72,
+    "unei": 119,
+    "joho": 116,
+    "shiki": 52,
+    "kido": 40,
+    "kogeki": 83,
+    "bogyo": 56
+   },
+   "stats_known": true,
+   "source": [
+    "characters.json (gin7 manual roster; stats archetype+individual)",
+    "manual-roster.json (gin7 duty card: post/rank/unit)"
+   ],
+   "portrait_file": "content/roster/canon-portraits/oam/0241.png",
+   "atlas_slot": "oam_0241",
+   "face_value": 100095,
+   "portrait_confidence": "assigned",
+   "portrait_method": "attribute-assignment (faction/sex/age/hair)",
+   "portrait_evidence": [
+    "face-assignment.json slot oam_0241"
+   ]
+  },
+  {
+   "id": "henslow",
+   "name_ja": "ヘンスロー",
+   "name_romaji": "Henslow",
+   "name_kr": null,
+   "faction": "alliance",
+   "branch": null,
+   "kind": "politician",
+   "rank": null,
+   "post": "フェザーン駐在弁務官",
+   "unit": null,
+   "flagship": null,
+   "face_number": null,
+   "bio_ja": null,
+   "stats": {
+    "tochi": 93,
+    "seiji": 90,
+    "unei": 84,
+    "joho": 88,
+    "shiki": 59,
+    "kido": 40,
+    "kogeki": 84,
+    "bogyo": 56
+   },
+   "stats_known": true,
+   "source": [
+    "characters.json (gin7 manual roster; stats archetype+individual)",
+    "manual-roster.json (gin7 duty card: post/rank/unit)"
+   ],
+   "portrait_file": "content/roster/canon-portraits/oam/0237.png",
+   "atlas_slot": "oam_0237",
+   "face_value": 100095,
+   "portrait_confidence": "assigned",
+   "portrait_method": "attribute-assignment (faction/sex/age/hair)",
+   "portrait_evidence": [
+    "face-assignment.json slot oam_0237"
+   ]
+  },
+  {
+   "id": "sithole",
+   "name_ja": "シトレ",
+   "name_romaji": "Sithole",
+   "name_kr": null,
+   "faction": "alliance",
+   "branch": null,
+   "kind": "military",
+   "rank": "元帥",
+   "post": "統合作戦本部長",
+   "unit": null,
+   "flagship": null,
+   "face_number": null,
+   "bio_ja": null,
+   "stats": {
+    "tochi": 90,
+    "seiji": 58,
+    "unei": 88,
+    "joho": 58,
+    "shiki": 65,
+    "kido": 65,
+    "kogeki": 57,
+    "bogyo": 75
+   },
+   "stats_known": true,
+   "source": [
+    "characters.json (IV EX real save-diff stats) iv_id=123",
+    "manual-roster.json (gin7 duty card: post/rank/unit)"
+   ],
+   "portrait_file": "content/roster/canon-portraits/oam/0289.png",
+   "atlas_slot": "oam_0289",
+   "face_value": 100095,
+   "portrait_confidence": "assigned",
+   "portrait_method": "attribute-assignment (faction/sex/age/hair)",
+   "portrait_evidence": [
+    "face-assignment.json slot oam_0289"
+   ]
+  },
+  {
+   "id": "dawson",
+   "name_ja": "ドーソン",
+   "name_romaji": "Dawson",
+   "name_kr": null,
+   "faction": "alliance",
+   "branch": null,
+   "kind": "military",
+   "rank": "大将",
+   "post": "統合作戦本部第一次長",
+   "unit": null,
+   "flagship": null,
+   "face_number": null,
+   "bio_ja": null,
+   "stats": {
+    "tochi": 60,
+    "seiji": 92,
+    "unei": 36,
+    "joho": 74,
+    "shiki": 30,
+    "kido": 32,
+    "kogeki": 48,
+    "bogyo": 33
+   },
+   "stats_known": true,
+   "source": [
+    "characters.json (IV EX real save-diff stats) iv_id=129",
+    "manual-roster.json (gin7 duty card: post/rank/unit)"
+   ],
+   "portrait_file": "content/roster/canon-portraits/oam/0297.png",
+   "atlas_slot": "oam_0297",
+   "face_value": 100095,
+   "portrait_confidence": "assigned",
+   "portrait_method": "attribute-assignment (faction/sex/age/hair)",
+   "portrait_evidence": [
+    "face-assignment.json slot oam_0297"
+   ]
+  },
+  {
+   "id": "rockwell",
+   "name_ja": "ロックウェル",
+   "name_romaji": "Rockwell",
+   "name_kr": null,
+   "faction": "alliance",
+   "branch": null,
+   "kind": "military",
+   "rank": "大将",
+   "post": "後方勤務本部長",
+   "unit": null,
+   "flagship": null,
+   "face_number": null,
+   "bio_ja": null,
+   "stats": {
+    "tochi": 73,
+    "seiji": 85,
+    "unei": 101,
+    "joho": 98,
+    "shiki": 85,
+    "kido": 58,
+    "kogeki": 75,
+    "bogyo": 100
+   },
+   "stats_known": true,
+   "source": [
+    "characters.json (gin7 manual roster; stats archetype+individual)",
+    "manual-roster.json (gin7 duty card: post/rank/unit)"
+   ],
+   "portrait_file": "content/roster/canon-portraits/oam/0298.png",
+   "atlas_slot": "oam_0298",
+   "face_value": 100095,
+   "portrait_confidence": "assigned",
+   "portrait_method": "attribute-assignment (faction/sex/age/hair)",
+   "portrait_evidence": [
+    "face-assignment.json slot oam_0298"
+   ]
+  },
+  {
+   "id": "grosvenor",
+   "name_ja": "グローブナー",
+   "name_romaji": "Grosvenor",
+   "name_kr": null,
+   "faction": "alliance",
+   "branch": null,
+   "kind": "military",
+   "rank": "大将",
+   "post": "人事部長",
+   "unit": null,
+   "flagship": null,
+   "face_number": null,
+   "bio_ja": null,
+   "stats": {
+    "tochi": 85,
+    "seiji": 95,
+    "unei": 55,
+    "joho": 50,
+    "shiki": 62,
+    "kido": 100,
+    "kogeki": 94,
+    "bogyo": 69
+   },
+   "stats_known": true,
+   "source": [
+    "characters.json (gin7 manual roster; stats archetype+individual)",
+    "manual-roster.json (gin7 duty card: post/rank/unit)"
+   ],
+   "portrait_file": "content/roster/canon-portraits/oam/0250.png",
+   "atlas_slot": "oam_0250",
+   "face_value": 100095,
+   "portrait_confidence": "assigned",
+   "portrait_method": "attribute-assignment (faction/sex/age/hair)",
+   "portrait_evidence": [
+    "face-assignment.json slot oam_0250"
+   ]
+  },
+  {
+   "id": "bronze",
+   "name_ja": "ブロンズ",
+   "name_romaji": "Bronze",
+   "name_kr": null,
+   "faction": "alliance",
+   "branch": null,
+   "kind": "military",
+   "rank": "中将",
+   "post": "情報部長",
+   "unit": null,
+   "flagship": null,
+   "face_number": null,
+   "bio_ja": null,
+   "stats": {
+    "tochi": 50,
+    "seiji": 71,
+    "unei": 102,
+    "joho": 70,
+    "shiki": 88,
+    "kido": 103,
+    "kogeki": 69,
+    "bogyo": 71
+   },
+   "stats_known": true,
+   "source": [
+    "characters.json (gin7 manual roster; stats archetype+individual)",
+    "manual-roster.json (gin7 duty card: post/rank/unit)"
+   ],
+   "portrait_file": "content/roster/canon-portraits/oam/0006.png",
+   "atlas_slot": "oam_0006",
+   "face_value": 100006,
+   "portrait_confidence": "assigned",
+   "portrait_method": "attribute-assignment (faction/sex/age/hair)",
+   "portrait_evidence": [
+    "face-assignment.json slot oam_0006"
+   ]
+  },
+  {
+   "id": "lobos",
+   "name_ja": "ロボス",
+   "name_romaji": "Lobos",
+   "name_kr": null,
+   "faction": "alliance",
+   "branch": null,
+   "kind": "military",
+   "rank": "元帥",
+   "post": "宇宙艦隊司令長官",
+   "unit": null,
+   "flagship": null,
+   "face_number": null,
+   "bio_ja": null,
+   "stats": {
+    "tochi": 86,
+    "seiji": 39,
+    "unei": 82,
+    "joho": 55,
+    "shiki": 75,
+    "kido": 68,
+    "kogeki": 54,
+    "bogyo": 79
+   },
+   "stats_known": true,
+   "source": [
+    "characters.json (IV EX real save-diff stats) iv_id=164",
+    "manual-roster.json (gin7 duty card: post/rank/unit)"
+   ],
+   "portrait_file": "content/roster/canon-portraits/oam/0233.png",
+   "atlas_slot": "oam_0233",
+   "face_value": 100095,
+   "portrait_confidence": "assigned",
+   "portrait_method": "attribute-assignment (faction/sex/age/hair)",
+   "portrait_evidence": [
+    "face-assignment.json slot oam_0233"
+   ]
+  },
+  {
+   "id": "d-greenhill",
+   "name_ja": "D.グリーンヒル",
+   "name_romaji": "D. Greenhill",
+   "name_kr": null,
+   "faction": "alliance",
+   "branch": null,
+   "kind": "military",
+   "rank": "大将",
+   "post": "宇宙艦隊総参謀長",
+   "unit": null,
+   "flagship": null,
+   "face_number": null,
+   "bio_ja": null,
+   "stats": {
+    "tochi": 81,
+    "seiji": 98,
+    "unei": 60,
+    "joho": 85,
+    "shiki": 48,
+    "kido": 46,
+    "kogeki": 53,
+    "bogyo": 55
+   },
+   "stats_known": true,
+   "source": [
+    "characters.json (IV EX real save-diff stats) iv_id=114",
+    "manual-roster.json (gin7 duty card: post/rank/unit)"
+   ],
+   "portrait_file": "content/roster/canon-portraits/oam/0292.png",
+   "atlas_slot": "oam_0292",
+   "face_value": 100095,
+   "portrait_confidence": "assigned",
+   "portrait_method": "attribute-assignment (faction/sex/age/hair)",
+   "portrait_evidence": [
+    "face-assignment.json slot oam_0292"
+   ]
+  },
+  {
+   "id": "kubersly",
+   "name_ja": "クブルスリー",
+   "name_romaji": "Kubersly",
+   "name_kr": null,
+   "faction": "alliance",
+   "branch": null,
+   "kind": "military",
+   "rank": "中将",
+   "post": "第１艦隊",
+   "unit": "第１艦隊",
+   "flagship": null,
+   "face_number": null,
+   "bio_ja": null,
+   "stats": {
+    "tochi": 57,
+    "seiji": 62,
+    "unei": 100,
+    "joho": 56,
+    "shiki": 66,
+    "kido": 56,
+    "kogeki": 55,
+    "bogyo": 77
+   },
+   "stats_known": true,
+   "source": [
+    "characters.json (gin7 manual roster; stats archetype+individual)",
+    "manual-roster.json (gin7 duty card: post/rank/unit)"
+   ],
+   "portrait_file": "content/roster/canon-portraits/oam/0219.png",
+   "atlas_slot": "oam_0219",
+   "face_value": 100095,
+   "portrait_confidence": "assigned",
+   "portrait_method": "attribute-assignment (faction/sex/age/hair)",
+   "portrait_evidence": [
+    "face-assignment.json slot oam_0219"
+   ]
+  },
+  {
+   "id": "paetta",
+   "name_ja": "パエッタ",
+   "name_romaji": "Paetta",
+   "name_kr": null,
+   "faction": "alliance",
+   "branch": null,
+   "kind": "military",
+   "rank": "中将",
+   "post": "第２艦隊",
+   "unit": "第２艦隊",
+   "flagship": null,
+   "face_number": null,
+   "bio_ja": null,
+   "stats": {
+    "tochi": 84,
+    "seiji": 74,
+    "unei": 96,
+    "joho": 53,
+    "shiki": 98,
+    "kido": 98,
+    "kogeki": 95,
+    "bogyo": 105
+   },
+   "stats_known": true,
+   "source": [
+    "characters.json (gin7 manual roster; stats archetype+individual)",
+    "manual-roster.json (gin7 duty card: post/rank/unit)"
+   ],
+   "portrait_file": "content/roster/canon-portraits/oam/0244.png",
+   "atlas_slot": "oam_0244",
+   "face_value": 100095,
+   "portrait_confidence": "assigned",
+   "portrait_method": "attribute-assignment (faction/sex/age/hair)",
+   "portrait_evidence": [
+    "face-assignment.json slot oam_0244"
+   ]
+  },
+  {
+   "id": "lefebvre",
+   "name_ja": "ルフェーブル",
+   "name_romaji": "Lefebvre",
+   "name_kr": null,
+   "faction": "alliance",
+   "branch": null,
+   "kind": "military",
+   "rank": "中将",
+   "post": "第３艦隊",
+   "unit": "第３艦隊",
+   "flagship": null,
+   "face_number": null,
+   "bio_ja": null,
+   "stats": {
+    "tochi": 107,
+    "seiji": 48,
+    "unei": 92,
+    "joho": 61,
+    "shiki": 98,
+    "kido": 69,
+    "kogeki": 95,
+    "bogyo": 101
+   },
+   "stats_known": true,
+   "source": [
+    "characters.json (gin7 manual roster; stats archetype+individual)",
+    "manual-roster.json (gin7 duty card: post/rank/unit)"
+   ],
+   "portrait_file": "content/roster/canon-portraits/oam/0285.png",
+   "atlas_slot": "oam_0285",
+   "face_value": 100095,
+   "portrait_confidence": "assigned",
+   "portrait_method": "attribute-assignment (faction/sex/age/hair)",
+   "portrait_evidence": [
+    "face-assignment.json slot oam_0285"
+   ]
+  },
+  {
+   "id": "pastolle",
+   "name_ja": "パストーレ",
+   "name_romaji": "Pastolle",
+   "name_kr": null,
+   "faction": "alliance",
+   "branch": null,
+   "kind": "military",
+   "rank": "中将",
+   "post": "第４艦隊",
+   "unit": "第４艦隊",
+   "flagship": null,
+   "face_number": null,
+   "bio_ja": null,
+   "stats": {
+    "tochi": 94,
+    "seiji": 65,
+    "unei": 58,
+    "joho": 78,
+    "shiki": 66,
+    "kido": 72,
+    "kogeki": 89,
+    "bogyo": 80
+   },
+   "stats_known": true,
+   "source": [
+    "characters.json (gin7 manual roster; stats archetype+individual)",
+    "manual-roster.json (gin7 duty card: post/rank/unit)"
+   ],
+   "portrait_file": "content/roster/canon-portraits/oam/0220.png",
+   "atlas_slot": "oam_0220",
+   "face_value": 100095,
+   "portrait_confidence": "assigned",
+   "portrait_method": "attribute-assignment (faction/sex/age/hair)",
+   "portrait_evidence": [
+    "face-assignment.json slot oam_0220"
+   ]
+  },
+  {
+   "id": "char-49",
+   "name_ja": "タナンチャイ",
+   "name_romaji": null,
+   "name_kr": null,
+   "faction": "alliance",
+   "branch": null,
+   "kind": "military",
+   "rank": "少将",
+   "post": "第４艦隊",
+   "unit": "第４艦隊",
+   "flagship": null,
+   "face_number": null,
+   "bio_ja": null,
+   "stats": {
+    "tochi": 71,
+    "seiji": 97,
+    "unei": 55,
+    "joho": 85,
+    "shiki": 98,
+    "kido": 61,
+    "kogeki": 80,
+    "bogyo": 75
+   },
+   "stats_known": true,
+   "source": [
+    "characters.json (gin7 manual roster; stats archetype+individual)",
+    "manual-roster.json (gin7 duty card: post/rank/unit)"
+   ],
+   "portrait_file": null,
+   "atlas_slot": null,
+   "face_value": null,
+   "portrait_confidence": "none",
+   "portrait_method": "no assignment",
+   "portrait_evidence": []
+  },
+  {
+   "id": "bucock",
+   "name_ja": "ビュコック",
+   "name_romaji": "Bucock",
+   "name_kr": null,
+   "faction": "alliance",
+   "branch": null,
+   "kind": "military",
+   "rank": "中将",
+   "post": "第５艦隊",
+   "unit": "第５艦隊",
+   "flagship": null,
+   "face_number": null,
+   "bio_ja": null,
+   "stats": {
+    "tochi": 108,
+    "seiji": 82,
+    "unei": 88,
+    "joho": 92,
+    "shiki": 110,
+    "kido": 85,
+    "kogeki": 95,
+    "bogyo": 112
+   },
+   "stats_known": true,
+   "source": [
+    "characters.json (gin7 manual roster; stats archetype+individual)",
+    "manual-roster.json (gin7 duty card: post/rank/unit)"
+   ],
+   "portrait_file": "content/roster/canon-portraits/oam/0283.png",
+   "atlas_slot": "oam_0273",
+   "face_value": 100095,
+   "portrait_confidence": "proven_low",
+   "portrait_method": "AI-vision named candidate + canon look (non-unique elderly admiral)",
+   "portrait_evidence": [
+    "AI-VISION: portrait-ai-classification.json named_candidate oam_0283 = 'Bucock' conf 0.60, 'grizzled old admiral, white hair'.",
+    "ANIME/WIKI: Bucock is canonically an elderly white-haired/bearded alliance admiral -> consistent with the slot.",
+    "CAVEAT (why LOW): white-haired elderly alliance admiral is NOT unique (Bucock, Cubresly, etc.); AI also proposed Bucock for oam_0232. No official anchor. Not asserted above low."
+   ]
+  },
+  {
+   "id": "char-51",
+   "name_ja": "モンシャルマン",
+   "name_romaji": null,
+   "name_kr": null,
+   "faction": "alliance",
+   "branch": null,
+   "kind": "military",
+   "rank": "少将",
+   "post": "第５艦隊",
+   "unit": "第５艦隊",
+   "flagship": null,
+   "face_number": null,
+   "bio_ja": null,
+   "stats": {
+    "tochi": 93,
+    "seiji": 52,
+    "unei": 66,
+    "joho": 52,
+    "shiki": 69,
+    "kido": 65,
+    "kogeki": 55,
+    "bogyo": 90
+   },
+   "stats_known": true,
+   "source": [
+    "characters.json (gin7 manual roster; stats archetype+individual)",
+    "manual-roster.json (gin7 duty card: post/rank/unit)"
+   ],
+   "portrait_file": null,
+   "atlas_slot": null,
+   "face_value": null,
+   "portrait_confidence": "none",
+   "portrait_method": "no assignment",
+   "portrait_evidence": []
+  },
+  {
+   "id": "moore",
+   "name_ja": "ムーア",
+   "name_romaji": "Moore",
+   "name_kr": null,
+   "faction": "alliance",
+   "branch": null,
+   "kind": "military",
+   "rank": "中将",
+   "post": "第６艦隊",
+   "unit": "第６艦隊",
+   "flagship": null,
+   "face_number": null,
+   "bio_ja": null,
+   "stats": {
+    "tochi": 77,
+    "seiji": 50,
+    "unei": 85,
+    "joho": 90,
+    "shiki": 82,
+    "kido": 98,
+    "kogeki": 58,
+    "bogyo": 108
+   },
+   "stats_known": true,
+   "source": [
+    "characters.json (gin7 manual roster; stats archetype+individual)",
+    "manual-roster.json (gin7 duty card: post/rank/unit)"
+   ],
+   "portrait_file": "content/roster/canon-portraits/oam/0305.png",
+   "atlas_slot": "oam_0305",
+   "face_value": 100095,
+   "portrait_confidence": "assigned",
+   "portrait_method": "attribute-assignment (faction/sex/age/hair)",
+   "portrait_evidence": [
+    "face-assignment.json slot oam_0305"
+   ]
+  },
+  {
+   "id": "hawood",
+   "name_ja": "ホーウッド",
+   "name_romaji": "Hawood",
+   "name_kr": null,
+   "faction": "alliance",
+   "branch": null,
+   "kind": "military",
+   "rank": "中将",
+   "post": "第７艦隊",
+   "unit": "第７艦隊",
+   "flagship": null,
+   "face_number": null,
+   "bio_ja": null,
+   "stats": {
+    "tochi": 74,
+    "seiji": 96,
+    "unei": 87,
+    "joho": 99,
+    "shiki": 108,
+    "kido": 99,
+    "kogeki": 58,
+    "bogyo": 105
+   },
+   "stats_known": true,
+   "source": [
+    "characters.json (gin7 manual roster; stats archetype+individual)",
+    "manual-roster.json (gin7 duty card: post/rank/unit)"
+   ],
+   "portrait_file": "content/roster/canon-portraits/oam/0001.png",
+   "atlas_slot": "oam_0001",
+   "face_value": 100001,
+   "portrait_confidence": "assigned",
+   "portrait_method": "attribute-assignment (faction/sex/age/hair)",
+   "portrait_evidence": [
+    "face-assignment.json slot oam_0001"
+   ]
+  },
+  {
+   "id": "appleton",
+   "name_ja": "アップルトン",
+   "name_romaji": "Appleton",
+   "name_kr": null,
+   "faction": "alliance",
+   "branch": null,
+   "kind": "military",
+   "rank": "中将",
+   "post": "第８艦隊",
+   "unit": "第８艦隊",
+   "flagship": null,
+   "face_number": null,
+   "bio_ja": null,
+   "stats": {
+    "tochi": 98,
+    "seiji": 46,
+    "unei": 57,
+    "joho": 87,
+    "shiki": 58,
+    "kido": 96,
+    "kogeki": 94,
+    "bogyo": 64
+   },
+   "stats_known": true,
+   "source": [
+    "characters.json (gin7 manual roster; stats archetype+individual)",
+    "manual-roster.json (gin7 duty card: post/rank/unit)"
+   ],
+   "portrait_file": "content/roster/canon-portraits/oam/0239.png",
+   "atlas_slot": "oam_0239",
+   "face_value": 100095,
+   "portrait_confidence": "assigned",
+   "portrait_method": "attribute-assignment (faction/sex/age/hair)",
+   "portrait_evidence": [
+    "face-assignment.json slot oam_0239"
+   ]
+  },
+  {
+   "id": "al-salem",
+   "name_ja": "アル・サレム",
+   "name_romaji": "Al-Salem",
+   "name_kr": null,
+   "faction": "alliance",
+   "branch": null,
+   "kind": "military",
+   "rank": "中将",
+   "post": "第９艦隊",
+   "unit": "第９艦隊",
+   "flagship": null,
+   "face_number": null,
+   "bio_ja": null,
+   "stats": {
+    "tochi": 88,
+    "seiji": 41,
+    "unei": 57,
+    "joho": 64,
+    "shiki": 82,
+    "kido": 71,
+    "kogeki": 99,
+    "bogyo": 85
+   },
+   "stats_known": true,
+   "source": [
+    "characters.json (gin7 manual roster; stats archetype+individual)",
+    "manual-roster.json (gin7 duty card: post/rank/unit)"
+   ],
+   "portrait_file": "content/roster/canon-portraits/oam/0234.png",
+   "atlas_slot": "oam_0234",
+   "face_value": 100095,
+   "portrait_confidence": "assigned",
+   "portrait_method": "attribute-assignment (faction/sex/age/hair)",
+   "portrait_evidence": [
+    "face-assignment.json slot oam_0234"
+   ]
+  },
+  {
+   "id": "ahmed",
+   "name_ja": "アーメド",
+   "name_romaji": "Ahmed",
+   "name_kr": null,
+   "faction": "alliance",
+   "branch": null,
+   "kind": "military",
+   "rank": "少将",
+   "post": "第９艦隊",
+   "unit": "第９艦隊",
+   "flagship": null,
+   "face_number": null,
+   "bio_ja": null,
+   "stats": {
+    "tochi": 82,
+    "seiji": 93,
+    "unei": 60,
+    "joho": 84,
+    "shiki": 85,
+    "kido": 69,
+    "kogeki": 105,
+    "bogyo": 48
+   },
+   "stats_known": true,
+   "source": [
+    "characters.json (gin7 manual roster; stats archetype+individual)",
+    "manual-roster.json (gin7 duty card: post/rank/unit)"
+   ],
+   "portrait_file": "content/roster/canon-portraits/oam/0291.png",
+   "atlas_slot": "oam_0291",
+   "face_value": 100095,
+   "portrait_confidence": "assigned",
+   "portrait_method": "attribute-assignment (faction/sex/age/hair)",
+   "portrait_evidence": [
+    "face-assignment.json slot oam_0291"
+   ]
+  },
+  {
+   "id": "ulanhu",
+   "name_ja": "ウランフ",
+   "name_romaji": "Ulanhu",
+   "name_kr": null,
+   "faction": "alliance",
+   "branch": null,
+   "kind": "military",
+   "rank": "中将",
+   "post": "第１０艦隊",
+   "unit": "第１０艦隊",
+   "flagship": null,
+   "face_number": null,
+   "bio_ja": null,
+   "stats": {
+    "tochi": 84,
+    "seiji": 39,
+    "unei": 75,
+    "joho": 57,
+    "shiki": 94,
+    "kido": 76,
+    "kogeki": 73,
+    "bogyo": 94
+   },
+   "stats_known": true,
+   "source": [
+    "characters.json (IV EX real save-diff stats) iv_id=106",
+    "manual-roster.json (gin7 duty card: post/rank/unit)"
+   ],
+   "portrait_file": "content/roster/canon-portraits/oam/0280.png",
+   "atlas_slot": "oam_0280",
+   "face_value": 100095,
+   "portrait_confidence": "assigned",
+   "portrait_method": "attribute-assignment (faction/sex/age/hair)",
+   "portrait_evidence": [
+    "face-assignment.json slot oam_0280"
+   ]
+  },
+  {
+   "id": "morton",
+   "name_ja": "モートン",
+   "name_romaji": "Morton",
+   "name_kr": null,
+   "faction": "alliance",
+   "branch": null,
+   "kind": "military",
+   "rank": "少将",
+   "post": "第１０艦隊",
+   "unit": "第１０艦隊",
+   "flagship": null,
+   "face_number": null,
+   "bio_ja": null,
+   "stats": {
+    "tochi": 97,
+    "seiji": 85,
+    "unei": 74,
+    "joho": 89,
+    "shiki": 59,
+    "kido": 92,
+    "kogeki": 81,
+    "bogyo": 87
+   },
+   "stats_known": true,
+   "source": [
+    "characters.json (gin7 manual roster; stats archetype+individual)",
+    "manual-roster.json (gin7 duty card: post/rank/unit)"
+   ],
+   "portrait_file": "content/roster/canon-portraits/oam/0245.png",
+   "atlas_slot": "oam_0245",
+   "face_value": 100095,
+   "portrait_confidence": "assigned",
+   "portrait_method": "attribute-assignment (faction/sex/age/hair)",
+   "portrait_evidence": [
+    "face-assignment.json slot oam_0245"
+   ]
+  },
+  {
+   "id": "chen",
+   "name_ja": "チェン",
+   "name_romaji": "Chen",
+   "name_kr": null,
+   "faction": "alliance",
+   "branch": null,
+   "kind": "military",
+   "rank": "少将",
+   "post": "第１０艦隊",
+   "unit": "第１０艦隊",
+   "flagship": null,
+   "face_number": null,
+   "bio_ja": null,
+   "stats": {
+    "tochi": 103,
+    "seiji": 56,
+    "unei": 62,
+    "joho": 86,
+    "shiki": 61,
+    "kido": 69,
+    "kogeki": 83,
+    "bogyo": 101
+   },
+   "stats_known": true,
+   "source": [
+    "characters.json (gin7 manual roster; stats archetype+individual)",
+    "manual-roster.json (gin7 duty card: post/rank/unit)"
+   ],
+   "portrait_file": "content/roster/canon-portraits/oam/0272.png",
+   "atlas_slot": "oam_0272",
+   "face_value": 100095,
+   "portrait_confidence": "assigned",
+   "portrait_method": "attribute-assignment (faction/sex/age/hair)",
+   "portrait_evidence": [
+    "face-assignment.json slot oam_0272"
+   ]
+  },
+  {
+   "id": "holland",
+   "name_ja": "ホーランド",
+   "name_romaji": "Holland",
+   "name_kr": null,
+   "faction": "alliance",
+   "branch": null,
+   "kind": "military",
+   "rank": "中将",
+   "post": "第１１艦隊",
+   "unit": "第１１艦隊",
+   "flagship": null,
+   "face_number": null,
+   "bio_ja": null,
+   "stats": {
+    "tochi": 96,
+    "seiji": 78,
+    "unei": 70,
+    "joho": 101,
+    "shiki": 106,
+    "kido": 61,
+    "kogeki": 95,
+    "bogyo": 82
+   },
+   "stats_known": true,
+   "source": [
+    "characters.json (gin7 manual roster; stats archetype+individual)",
+    "manual-roster.json (gin7 duty card: post/rank/unit)"
+   ],
+   "portrait_file": "content/roster/canon-portraits/oam/0236.png",
+   "atlas_slot": "oam_0236",
+   "face_value": 100095,
+   "portrait_confidence": "assigned",
+   "portrait_method": "attribute-assignment (faction/sex/age/hair)",
+   "portrait_evidence": [
+    "face-assignment.json slot oam_0236"
+   ]
+  },
+  {
+   "id": "borodin",
+   "name_ja": "ボロディン",
+   "name_romaji": "Borodin",
+   "name_kr": null,
+   "faction": "alliance",
+   "branch": null,
+   "kind": "military",
+   "rank": "中将",
+   "post": "第１２艦隊",
+   "unit": "第１２艦隊",
+   "flagship": null,
+   "face_number": null,
+   "bio_ja": null,
+   "stats": {
+    "tochi": 82,
+    "seiji": 28,
+    "unei": 79,
+    "joho": 58,
+    "shiki": 91,
+    "kido": 78,
+    "kogeki": 75,
+    "bogyo": 85
+   },
+   "stats_known": true,
+   "source": [
+    "characters.json (IV EX real save-diff stats) iv_id=149",
+    "manual-roster.json (gin7 duty card: post/rank/unit)"
+   ],
+   "portrait_file": "content/roster/canon-portraits/oam/0306.png",
+   "atlas_slot": "oam_0306",
+   "face_value": 100095,
+   "portrait_confidence": "assigned",
+   "portrait_method": "attribute-assignment (faction/sex/age/hair)",
+   "portrait_evidence": [
+    "face-assignment.json slot oam_0306"
+   ]
+  },
+  {
+   "id": "carlsen",
+   "name_ja": "カールセン",
+   "name_romaji": "Carlsen",
+   "name_kr": null,
+   "faction": "alliance",
+   "branch": null,
+   "kind": "military",
+   "rank": "少将",
+   "post": "第１１巡察隊",
+   "unit": "第１１巡察隊",
+   "flagship": null,
+   "face_number": null,
+   "bio_ja": null,
+   "stats": {
+    "tochi": 86,
+    "seiji": 96,
+    "unei": 59,
+    "joho": 104,
+    "shiki": 91,
+    "kido": 63,
+    "kogeki": 74,
+    "bogyo": 76
+   },
+   "stats_known": true,
+   "source": [
+    "characters.json (gin7 manual roster; stats archetype+individual)",
+    "manual-roster.json (gin7 duty card: post/rank/unit)"
+   ],
+   "portrait_file": "content/roster/canon-portraits/oam/0287.png",
+   "atlas_slot": "oam_0287",
+   "face_value": 100095,
+   "portrait_confidence": "assigned",
+   "portrait_method": "attribute-assignment (faction/sex/age/hair)",
+   "portrait_evidence": [
+    "face-assignment.json slot oam_0287"
+   ]
+  },
+  {
+   "id": "marinetti",
+   "name_ja": "マリネッティ",
+   "name_romaji": "Marinetti",
+   "name_kr": null,
+   "faction": "alliance",
+   "branch": null,
+   "kind": "military",
+   "rank": "准将",
+   "post": "第１６巡察隊",
+   "unit": "第１６巡察隊",
+   "flagship": null,
+   "face_number": null,
+   "bio_ja": null,
+   "stats": {
+    "tochi": 56,
+    "seiji": 48,
+    "unei": 73,
+    "joho": 37,
+    "shiki": 77,
+    "kido": 73,
+    "kogeki": 56,
+    "bogyo": 78
+   },
+   "stats_known": true,
+   "source": [
+    "characters.json (IV EX real save-diff stats) iv_id=151",
+    "manual-roster.json (gin7 duty card: post/rank/unit)"
+   ],
+   "portrait_file": "content/roster/canon-portraits/oam/0242.png",
+   "atlas_slot": "oam_0242",
+   "face_value": 100095,
+   "portrait_confidence": "assigned",
+   "portrait_method": "attribute-assignment (faction/sex/age/hair)",
+   "portrait_evidence": [
+    "face-assignment.json slot oam_0242"
+   ]
+  },
+  {
+   "id": "connery",
+   "name_ja": "コナリー",
+   "name_romaji": "Connery",
+   "name_kr": null,
+   "faction": "alliance",
+   "branch": null,
+   "kind": "military",
+   "rank": "少将",
+   "post": "第１６巡察隊",
+   "unit": "第１６巡察隊",
+   "flagship": null,
+   "face_number": null,
+   "bio_ja": null,
+   "stats": {
+    "tochi": 52,
+    "seiji": 55,
+    "unei": 102,
+    "joho": 68,
+    "shiki": 56,
+    "kido": 65,
+    "kogeki": 94,
+    "bogyo": 89
+   },
+   "stats_known": true,
+   "source": [
+    "characters.json (gin7 manual roster; stats archetype+individual)",
+    "manual-roster.json (gin7 duty card: post/rank/unit)"
+   ],
+   "portrait_file": "content/roster/canon-portraits/o/0213.png",
+   "atlas_slot": "o_0213",
+   "face_value": 10099,
+   "portrait_confidence": "assigned",
+   "portrait_method": "attribute-assignment (faction/sex/age/hair)",
+   "portrait_evidence": [
+    "face-assignment.json slot o_0213"
+   ]
+  },
+  {
+   "id": "alarcon",
+   "name_ja": "アラルコン",
+   "name_romaji": "Alarcon",
+   "name_kr": null,
+   "faction": "alliance",
+   "branch": null,
+   "kind": "military",
+   "rank": "少将",
+   "post": "第２１巡察隊",
+   "unit": "第２１巡察隊",
+   "flagship": null,
+   "face_number": null,
+   "bio_ja": null,
+   "stats": {
+    "tochi": 92,
+    "seiji": 67,
+    "unei": 65,
+    "joho": 72,
+    "shiki": 109,
+    "kido": 85,
+    "kogeki": 58,
+    "bogyo": 78
+   },
+   "stats_known": true,
+   "source": [
+    "characters.json (gin7 manual roster; stats archetype+individual)",
+    "manual-roster.json (gin7 duty card: post/rank/unit)"
+   ],
+   "portrait_file": "content/roster/canon-portraits/o/0222.png",
+   "atlas_slot": "o_0222",
+   "face_value": 10099,
+   "portrait_confidence": "assigned",
+   "portrait_method": "attribute-assignment (faction/sex/age/hair)",
+   "portrait_evidence": [
+    "face-assignment.json slot o_0222"
+   ]
+  },
+  {
+   "id": "char-66",
+   "name_ja": "ザーニアル",
+   "name_romaji": null,
+   "name_kr": null,
+   "faction": "alliance",
+   "branch": null,
+   "kind": "military",
+   "rank": "准将",
+   "post": "第２６巡察隊",
+   "unit": "第２６巡察隊",
+   "flagship": null,
+   "face_number": null,
+   "bio_ja": null,
+   "stats": {
+    "tochi": 101,
+    "seiji": 98,
+    "unei": 64,
+    "joho": 88,
+    "shiki": 66,
+    "kido": 91,
+    "kogeki": 59,
+    "bogyo": 68
+   },
+   "stats_known": true,
+   "source": [
+    "characters.json (gin7 manual roster; stats archetype+individual)",
+    "manual-roster.json (gin7 duty card: post/rank/unit)"
+   ],
+   "portrait_file": null,
+   "atlas_slot": null,
+   "face_value": null,
+   "portrait_confidence": "none",
+   "portrait_method": "no assignment",
+   "portrait_evidence": []
+  },
+  {
+   "id": "lagrange",
+   "name_ja": "ルグランジュ",
+   "name_romaji": "Lagrange",
+   "name_kr": null,
+   "faction": "alliance",
+   "branch": null,
+   "kind": "military",
+   "rank": "少将",
+   "post": "第３１巡察隊",
+   "unit": "第３１巡察隊",
+   "flagship": null,
+   "face_number": null,
+   "bio_ja": null,
+   "stats": {
+    "tochi": 62,
+    "seiji": 93,
+    "unei": 69,
+    "joho": 69,
+    "shiki": 102,
+    "kido": 93,
+    "kogeki": 75,
+    "bogyo": 81
+   },
+   "stats_known": true,
+   "source": [
+    "characters.json (gin7 manual roster; stats archetype+individual)",
+    "manual-roster.json (gin7 duty card: post/rank/unit)"
+   ],
+   "portrait_file": "content/roster/canon-portraits/oam/0246.png",
+   "atlas_slot": "oam_0246",
+   "face_value": 100095,
+   "portrait_confidence": "assigned",
+   "portrait_method": "attribute-assignment (faction/sex/age/hair)",
+   "portrait_evidence": [
+    "face-assignment.json slot oam_0246"
+   ]
+  },
+  {
+   "id": "desch",
+   "name_ja": "デッシュ",
+   "name_romaji": "Desch",
+   "name_kr": null,
+   "faction": "alliance",
+   "branch": null,
+   "kind": "military",
+   "rank": "准将",
+   "post": "第３６巡察隊",
+   "unit": "第３６巡察隊",
+   "flagship": null,
+   "face_number": null,
+   "bio_ja": null,
+   "stats": {
+    "tochi": 106,
+    "seiji": 72,
+    "unei": 73,
+    "joho": 58,
+    "shiki": 89,
+    "kido": 69,
+    "kogeki": 79,
+    "bogyo": 103
+   },
+   "stats_known": true,
+   "source": [
+    "characters.json (gin7 manual roster; stats archetype+individual)",
+    "manual-roster.json (gin7 duty card: post/rank/unit)"
+   ],
+   "portrait_file": "content/roster/canon-portraits/oam/0216.png",
+   "atlas_slot": "oam_0216",
+   "face_value": 100095,
+   "portrait_confidence": "assigned",
+   "portrait_method": "attribute-assignment (faction/sex/age/hair)",
+   "portrait_evidence": [
+    "face-assignment.json slot oam_0216"
+   ]
+  },
+  {
+   "id": "mascagni",
+   "name_ja": "マスカーニ",
+   "name_romaji": "Mascagni",
+   "name_kr": null,
+   "faction": "alliance",
+   "branch": null,
+   "kind": "military",
+   "rank": "准将",
+   "post": "第４６巡察隊",
+   "unit": "第４６巡察隊",
+   "flagship": null,
+   "face_number": null,
+   "bio_ja": null,
+   "stats": {
+    "tochi": 92,
+    "seiji": 85,
+    "unei": 77,
+    "joho": 58,
+    "shiki": 100,
+    "kido": 74,
+    "kogeki": 90,
+    "bogyo": 95
+   },
+   "stats_known": true,
+   "source": [
+    "characters.json (gin7 manual roster; stats archetype+individual)",
+    "manual-roster.json (gin7 duty card: post/rank/unit)"
+   ],
+   "portrait_file": "content/roster/canon-portraits/oam/0247.png",
+   "atlas_slot": "oam_0247",
+   "face_value": 100095,
+   "portrait_confidence": "assigned",
+   "portrait_method": "attribute-assignment (faction/sex/age/hair)",
+   "portrait_evidence": [
+    "face-assignment.json slot oam_0247"
+   ]
+  },
+  {
+   "id": "nguyen",
+   "name_ja": "グエン",
+   "name_romaji": "Nguyen",
+   "name_kr": null,
+   "faction": "alliance",
+   "branch": null,
+   "kind": "military",
+   "rank": "准将",
+   "post": "第５６巡察隊",
+   "unit": "第５６巡察隊",
+   "flagship": null,
+   "face_number": null,
+   "bio_ja": null,
+   "stats": {
+    "tochi": 58,
+    "seiji": 58,
+    "unei": 63,
+    "joho": 70,
+    "shiki": 96,
+    "kido": 85,
+    "kogeki": 102,
+    "bogyo": 78
+   },
+   "stats_known": true,
+   "source": [
+    "characters.json (gin7 manual roster; stats archetype+individual)",
+    "manual-roster.json (gin7 duty card: post/rank/unit)"
+   ],
+   "portrait_file": "content/roster/canon-portraits/oam/0226.png",
+   "atlas_slot": "oam_0226",
+   "face_value": 100095,
+   "portrait_confidence": "assigned",
+   "portrait_method": "attribute-assignment (faction/sex/age/hair)",
+   "portrait_evidence": [
+    "face-assignment.json slot oam_0226"
+   ]
+  },
+  {
+   "id": "char-71",
+   "name_ja": "アイゼナッハ",
+   "name_romaji": null,
+   "name_kr": null,
+   "faction": "empire",
+   "branch": null,
+   "kind": "military",
+   "rank": null,
+   "post": null,
+   "unit": null,
+   "flagship": null,
+   "face_number": null,
+   "bio_ja": null,
+   "stats": {
+    "tochi": 61,
+    "seiji": 55,
+    "unei": 67,
+    "joho": 71,
+    "shiki": 87,
+    "kido": 104,
+    "kogeki": 74,
+    "bogyo": 64
+   },
+   "stats_known": true,
+   "source": [
+    "characters.json (IV EX-derived stats)"
+   ],
+   "portrait_file": null,
+   "atlas_slot": null,
+   "face_value": null,
+   "portrait_confidence": "none",
+   "portrait_method": "no assignment",
+   "portrait_evidence": []
+  },
+  {
+   "id": "attenborough",
+   "name_ja": "アッテンボロー",
+   "name_romaji": "Attenborough",
+   "name_kr": null,
+   "faction": "alliance",
+   "branch": null,
+   "kind": "military",
+   "rank": null,
+   "post": null,
+   "unit": null,
+   "flagship": null,
+   "face_number": null,
+   "bio_ja": null,
+   "stats": {
+    "tochi": 72,
+    "seiji": 34,
+    "unei": 83,
+    "joho": 64,
+    "shiki": 89,
+    "kido": 85,
+    "kogeki": 50,
+    "bogyo": 81
+   },
+   "stats_known": true,
+   "source": [
+    "characters.json (IV EX real save-diff stats) iv_id=100"
+   ],
+   "portrait_file": "content/roster/canon-portraits/oam/0240.png",
+   "atlas_slot": "oam_0240",
+   "face_value": 100095,
+   "portrait_confidence": "assigned",
+   "portrait_method": "attribute-assignment (faction/sex/age/hair)",
+   "portrait_evidence": [
+    "face-assignment.json slot oam_0240"
+   ]
+  },
+  {
+   "id": "ansbach",
+   "name_ja": "アンスバッハ",
+   "name_romaji": "Ansbach",
+   "name_kr": null,
+   "faction": "empire",
+   "branch": null,
+   "kind": "military",
+   "rank": null,
+   "post": null,
+   "unit": null,
+   "flagship": null,
+   "face_number": null,
+   "bio_ja": null,
+   "stats": {
+    "tochi": 58,
+    "seiji": 92,
+    "unei": 58,
+    "joho": 89,
+    "shiki": 63,
+    "kido": 60,
+    "kogeki": 45,
+    "bogyo": 36
+   },
+   "stats_known": true,
+   "source": [
+    "characters.json (IV EX real save-diff stats) iv_id=4"
+   ],
+   "portrait_file": "content/roster/canon-portraits/oem/0138.png",
+   "atlas_slot": "oem_0138",
+   "face_value": 138,
+   "portrait_confidence": "assigned",
+   "portrait_method": "attribute-assignment (faction/sex/age/hair)",
+   "portrait_evidence": [
+    "face-assignment.json slot oem_0138"
+   ]
+  },
+  {
+   "id": "oberstein",
+   "name_ja": "オーベルシュタイン",
+   "name_romaji": "Oberstein",
+   "name_kr": null,
+   "faction": "empire",
+   "branch": null,
+   "kind": "military",
+   "rank": null,
+   "post": null,
+   "unit": null,
+   "flagship": null,
+   "face_number": null,
+   "bio_ja": null,
+   "stats": {
+    "tochi": 52,
+    "seiji": 99,
+    "unei": 21,
+    "joho": 98,
+    "shiki": 20,
+    "kido": 18,
+    "kogeki": 20,
+    "bogyo": 29
+   },
+   "stats_known": true,
+   "source": [
+    "characters.json (IV EX real save-diff stats) iv_id=10"
+   ],
+   "portrait_file": "content/roster/canon-portraits/oem/0132.png",
+   "atlas_slot": "oem_0132",
+   "face_value": 132,
+   "portrait_confidence": "assigned",
+   "portrait_method": "attribute-assignment (faction/sex/age/hair)",
+   "portrait_evidence": [
+    "face-assignment.json slot oem_0132"
+   ]
+  },
+  {
+   "id": "caselnes",
+   "name_ja": "キャゼルヌ",
+   "name_romaji": "Caselnes",
+   "name_kr": null,
+   "faction": "alliance",
+   "branch": null,
+   "kind": "military",
+   "rank": null,
+   "post": null,
+   "unit": null,
+   "flagship": null,
+   "face_number": 48,
+   "bio_ja": "同盟を後方より支えたデスクワークの達人。実戦指揮の経験はほとんどないが、後方支援・軍政の専門家として、あるいは私人としてもヤンファミリーの中で常に重要な地位を占めた。",
+   "stats": {
+    "tochi": 89,
+    "seiji": 46,
+    "unei": 54,
+    "joho": 50,
+    "shiki": 108,
+    "kido": 89,
+    "kogeki": 72,
+    "bogyo": 90
+   },
+   "stats_known": true,
+   "source": [
+    "characters.json (IV EX-derived stats)",
+    "official-roster.json (gineiden.com st_char.html: face_index/bio)"
+   ],
+   "portrait_file": "content/roster/canon-portraits/oam/0294.png",
+   "atlas_slot": "oam_0294",
+   "face_value": 100095,
+   "portrait_confidence": "assigned",
+   "portrait_method": "attribute-assignment (faction/sex/age/hair)",
+   "portrait_evidence": [
+    "face-assignment.json slot oam_0294"
+   ]
+  },
+  {
+   "id": "greenhill",
+   "name_ja": "グリーンヒル",
+   "name_romaji": "Greenhill",
+   "name_kr": null,
+   "faction": "alliance",
+   "branch": null,
+   "kind": "military",
+   "rank": null,
+   "post": null,
+   "unit": null,
+   "flagship": null,
+   "face_number": null,
+   "bio_ja": null,
+   "stats": {
+    "tochi": 81,
+    "seiji": 98,
+    "unei": 60,
+    "joho": 85,
+    "shiki": 48,
+    "kido": 46,
+    "kogeki": 53,
+    "bogyo": 55
+   },
+   "stats_known": true,
+   "source": [
+    "characters.json (IV EX real save-diff stats) iv_id=114"
+   ],
+   "portrait_file": "content/roster/canon-portraits/o/0208.png",
+   "atlas_slot": "o_0208",
+   "face_value": 10099,
+   "portrait_confidence": "assigned",
+   "portrait_method": "attribute-assignment (faction/sex/age/hair)",
+   "portrait_evidence": [
+    "face-assignment.json slot o_0208"
+   ]
+  },
+  {
+   "id": "kessler",
+   "name_ja": "ケスラー",
+   "name_romaji": "Kessler",
+   "name_kr": null,
+   "faction": "empire",
+   "branch": null,
+   "kind": "military",
+   "rank": null,
+   "post": null,
+   "unit": null,
+   "flagship": null,
+   "face_number": 69,
+   "bio_ja": "ローエングラム元帥府に参加し、主に後方任務や憲兵総監として活躍した。早くからラインハルトの知遇を得ていた提督の一人で、その時に憲兵隊に出向していたことが彼の人生を決定づけた。本人は艦隊の指揮を希望していたが、経験不足からかその用兵手腕は二線級に止まり、もっぱら有能な軍務官僚として活躍することとなる。",
+   "stats": {
+    "tochi": 93,
+    "seiji": 75,
+    "unei": 62,
+    "joho": 86,
+    "shiki": 73,
+    "kido": 52,
+    "kogeki": 69,
+    "bogyo": 58
+   },
+   "stats_known": true,
+   "source": [
+    "characters.json (IV EX real save-diff stats) iv_id=28",
+    "official-roster.json (gineiden.com st_char.html: face_index/bio)"
+   ],
+   "portrait_file": "content/roster/canon-portraits/oem/0055.png",
+   "atlas_slot": "oem_0055",
+   "face_value": 55,
+   "portrait_confidence": "assigned",
+   "portrait_method": "attribute-assignment (faction/sex/age/hair)",
+   "portrait_evidence": [
+    "face-assignment.json slot oem_0055"
+   ]
+  },
+  {
+   "id": "kempff",
+   "name_ja": "ケンプ",
+   "name_romaji": "Kempff",
+   "name_kr": null,
+   "faction": "empire",
+   "branch": null,
+   "kind": "military",
+   "rank": null,
+   "post": null,
+   "unit": null,
+   "flagship": null,
+   "face_number": null,
+   "bio_ja": null,
+   "stats": {
+    "tochi": 90,
+    "seiji": 20,
+    "unei": 80,
+    "joho": 36,
+    "shiki": 96,
+    "kido": 85,
+    "kogeki": 81,
+    "bogyo": 100
+   },
+   "stats_known": true,
+   "source": [
+    "characters.json (IV EX real save-diff stats) iv_id=29"
+   ],
+   "portrait_file": "content/roster/canon-portraits/oem/0031.png",
+   "atlas_slot": "oem_0031",
+   "face_value": 31,
+   "portrait_confidence": "assigned",
+   "portrait_method": "attribute-assignment (faction/sex/age/hair)",
+   "portrait_evidence": [
+    "face-assignment.json slot oem_0031"
+   ]
+  },
+  {
+   "id": "char-79",
+   "name_ja": "コーネフ",
+   "name_romaji": null,
+   "name_kr": null,
+   "faction": "alliance",
+   "branch": null,
+   "kind": "military",
+   "rank": null,
+   "post": null,
+   "unit": null,
+   "flagship": null,
+   "face_number": null,
+   "bio_ja": null,
+   "stats": {
+    "tochi": 59,
+    "seiji": 91,
+    "unei": 35,
+    "joho": 86,
+    "shiki": 29,
+    "kido": 38,
+    "kogeki": 40,
+    "bogyo": 34
+   },
+   "stats_known": true,
+   "source": [
+    "characters.json (IV EX real save-diff stats) iv_id=118"
+   ],
+   "portrait_file": null,
+   "atlas_slot": null,
+   "face_value": null,
+   "portrait_confidence": "none",
+   "portrait_method": "no assignment",
+   "portrait_evidence": []
+  },
+  {
+   "id": "schonkopp",
+   "name_ja": "シェーンコップ",
+   "name_romaji": "Schonkopp",
+   "name_kr": null,
+   "faction": "alliance",
+   "branch": null,
+   "kind": "military",
+   "rank": null,
+   "post": null,
+   "unit": null,
+   "flagship": null,
+   "face_number": 85,
+   "bio_ja": "帝国よりの亡命者の子弟を中心に結成された“薔薇の騎士連隊”第13代連隊長。自身も亡命貴族の子供。格闘戦の達人で強力なリーダーシップにより部隊を無敵の陸戦隊として率い、帝国軍にも恐れられている。第６次イゼルローン要塞攻防戦では部隊を率いてイゼルローン要塞に潜入し要塞を奪取、この功によって同盟軍准将に昇進し、イゼルローン要塞防御司令官に任じられる。無類の好色家でもある。",
+   "stats": {
+    "tochi": 20,
+    "seiji": 32,
+    "unei": 33,
+    "joho": 18,
+    "shiki": 27,
+    "kido": 34,
+    "kogeki": 100,
+    "bogyo": 20
+   },
+   "stats_known": true,
+   "source": [
+    "characters.json (IV EX real save-diff stats) iv_id=122",
+    "official-roster.json (gineiden.com st_char.html: face_index/bio)"
+   ],
+   "portrait_file": "content/roster/canon-portraits/oam/0230.png",
+   "atlas_slot": "oam_0230",
+   "face_value": 100095,
+   "portrait_confidence": "proven_high",
+   "portrait_method": "official-image pixel-anchor + AI-vision named-hit + anime/wiki canon look",
+   "portrait_evidence": [
+    "OFFICIAL: gineiden.com/picture/chara/085.jpg (Wayback 20050407195502, the other of only 2 surviving official VII portraits) pixel-matched to decoded atlas slot oam/0230 at NCC=0.878 (face-name-map.json entry face_number 85; duplicates oam/0481, oam/0931).",
+    "OFFICIAL NAME: gineiden.com/st_char.html lists face_number 85 = シェーンコップ (Walter von Schenkopp), post 要塞守備隊指揮官 (official-roster.json).",
+    "AI-VISION (independent named hit): portrait-ai-classification.json oam_0230 named 'Walter von Schenkopp' conf 0.55 (anchor_validation result: 'independent hit').",
+    "ANIME/WIKI: Schenkopp = rugged roguish Rosen Ritter commander, matches slot's 'rugged roguish grinning warrior' look."
+   ]
+  },
+  {
+   "id": "steinmetz",
+   "name_ja": "シュタインメッツ",
+   "name_romaji": "Steinmetz",
+   "name_kr": null,
+   "faction": "empire",
+   "branch": null,
+   "kind": "military",
+   "rank": null,
+   "post": null,
+   "unit": null,
+   "flagship": null,
+   "face_number": null,
+   "bio_ja": null,
+   "stats": {
+    "tochi": 71,
+    "seiji": 90,
+    "unei": 82,
+    "joho": 95,
+    "shiki": 80,
+    "kido": 66,
+    "kogeki": 45,
+    "bogyo": 65
+   },
+   "stats_known": true,
+   "source": [
+    "characters.json (IV EX real save-diff stats) iv_id=35"
+   ],
+   "portrait_file": "content/roster/canon-portraits/oem/0144.png",
+   "atlas_slot": "oem_0144",
+   "face_value": 144,
+   "portrait_confidence": "assigned",
+   "portrait_method": "attribute-assignment (faction/sex/age/hair)",
+   "portrait_evidence": [
+    "face-assignment.json slot oem_0144"
+   ]
+  },
+  {
+   "id": "char-82",
+   "name_ja": "チュン",
+   "name_romaji": null,
+   "name_kr": null,
+   "faction": "alliance",
+   "branch": null,
+   "kind": "military",
+   "rank": null,
+   "post": null,
+   "unit": null,
+   "flagship": null,
+   "face_number": null,
+   "bio_ja": null,
+   "stats": {
+    "tochi": 94,
+    "seiji": 98,
+    "unei": 82,
+    "joho": 64,
+    "shiki": 87,
+    "kido": 91,
+    "kogeki": 58,
+    "bogyo": 102
+   },
+   "stats_known": true,
+   "source": [
+    "characters.json (IV EX-derived stats)"
+   ],
+   "portrait_file": null,
+   "atlas_slot": null,
+   "face_value": null,
+   "portrait_confidence": "none",
+   "portrait_method": "no assignment",
+   "portrait_evidence": []
+  },
+  {
+   "id": "char-83",
+   "name_ja": "パトリチェフ",
+   "name_romaji": null,
+   "name_kr": null,
+   "faction": "alliance",
+   "branch": null,
+   "kind": "military",
+   "rank": null,
+   "post": null,
+   "unit": null,
+   "flagship": null,
+   "face_number": null,
+   "bio_ja": null,
+   "stats": {
+    "tochi": 67,
+    "seiji": 76,
+    "unei": 67,
+    "joho": 48,
+    "shiki": 103,
+    "kido": 77,
+    "kogeki": 72,
+    "bogyo": 101
+   },
+   "stats_known": true,
+   "source": [
+    "characters.json (IV EX-derived stats)"
+   ],
+   "portrait_file": null,
+   "atlas_slot": null,
+   "face_value": null,
+   "portrait_confidence": "none",
+   "portrait_method": "no assignment",
+   "portrait_evidence": []
+  },
+  {
+   "id": "bittenfeld",
+   "name_ja": "ビッテンフェルト",
+   "name_romaji": "Bittenfeld",
+   "name_kr": null,
+   "faction": "empire",
+   "branch": null,
+   "kind": "military",
+   "rank": null,
+   "post": null,
+   "unit": null,
+   "flagship": null,
+   "face_number": null,
+   "bio_ja": null,
+   "stats": {
+    "tochi": 75,
+    "seiji": 22,
+    "unei": 55,
+    "joho": 38,
+    "shiki": 100,
+    "kido": 80,
+    "kogeki": 75,
+    "bogyo": 88
+   },
+   "stats_known": true,
+   "source": [
+    "characters.json (IV EX real save-diff stats) iv_id=62"
+   ],
+   "portrait_file": "content/roster/canon-portraits/oem/0119.png",
+   "atlas_slot": "oem_0119",
+   "face_value": 119,
+   "portrait_confidence": "assigned",
+   "portrait_method": "attribute-assignment (faction/sex/age/hair)",
+   "portrait_evidence": [
+    "face-assignment.json slot oem_0119"
+   ]
+  },
+  {
+   "id": "fahrenheit",
+   "name_ja": "ファーレンハイト",
+   "name_romaji": "Fahrenheit",
+   "name_kr": null,
+   "faction": "empire",
+   "branch": null,
+   "kind": "military",
+   "rank": null,
+   "post": null,
+   "unit": null,
+   "flagship": null,
+   "face_number": null,
+   "bio_ja": null,
+   "stats": {
+    "tochi": 80,
+    "seiji": 27,
+    "unei": 67,
+    "joho": 37,
+    "shiki": 94,
+    "kido": 86,
+    "kogeki": 75,
+    "bogyo": 91
+   },
+   "stats_known": true,
+   "source": [
+    "characters.json (IV EX real save-diff stats) iv_id=65"
+   ],
+   "portrait_file": "content/roster/canon-portraits/oem/0107.png",
+   "atlas_slot": "oem_0107",
+   "face_value": 107,
+   "portrait_confidence": "assigned",
+   "portrait_method": "attribute-assignment (faction/sex/age/hair)",
+   "portrait_evidence": [
+    "face-assignment.json slot oem_0107"
+   ]
+  },
+  {
+   "id": "char-86",
+   "name_ja": "フィッシャー",
+   "name_romaji": null,
+   "name_kr": null,
+   "faction": "alliance",
+   "branch": null,
+   "kind": "military",
+   "rank": null,
+   "post": null,
+   "unit": null,
+   "flagship": null,
+   "face_number": null,
+   "bio_ja": null,
+   "stats": {
+    "tochi": 56,
+    "seiji": 41,
+    "unei": 59,
+    "joho": 45,
+    "shiki": 72,
+    "kido": 100,
+    "kogeki": 55,
+    "bogyo": 72
+   },
+   "stats_known": true,
+   "source": [
+    "characters.json (IV EX real save-diff stats) iv_id=139"
+   ],
+   "portrait_file": null,
+   "atlas_slot": null,
+   "face_value": null,
+   "portrait_confidence": "none",
+   "portrait_method": "no assignment",
+   "portrait_evidence": []
+  },
+  {
+   "id": "char-87",
+   "name_ja": "フォーク",
+   "name_romaji": null,
+   "name_kr": null,
+   "faction": "alliance",
+   "branch": null,
+   "kind": "military",
+   "rank": null,
+   "post": null,
+   "unit": null,
+   "flagship": null,
+   "face_number": null,
+   "bio_ja": null,
+   "stats": {
+    "tochi": 96,
+    "seiji": 73,
+    "unei": 98,
+    "joho": 46,
+    "shiki": 107,
+    "kido": 81,
+    "kogeki": 81,
+    "bogyo": 53
+   },
+   "stats_known": true,
+   "source": [
+    "characters.json (IV EX-derived stats)"
+   ],
+   "portrait_file": null,
+   "atlas_slot": null,
+   "face_value": null,
+   "portrait_confidence": "none",
+   "portrait_method": "no assignment",
+   "portrait_evidence": []
+  },
+  {
+   "id": "char-88",
+   "name_ja": "ブルームハルト",
+   "name_romaji": null,
+   "name_kr": null,
+   "faction": "alliance",
+   "branch": null,
+   "kind": "military",
+   "rank": null,
+   "post": null,
+   "unit": null,
+   "flagship": null,
+   "face_number": null,
+   "bio_ja": null,
+   "stats": {
+    "tochi": 89,
+    "seiji": 92,
+    "unei": 52,
+    "joho": 72,
+    "shiki": 71,
+    "kido": 103,
+    "kogeki": 54,
+    "bogyo": 65
+   },
+   "stats_known": true,
+   "source": [
+    "characters.json (IV EX-derived stats)"
+   ],
+   "portrait_file": null,
+   "atlas_slot": null,
+   "face_value": null,
+   "portrait_confidence": "none",
+   "portrait_method": "no assignment",
+   "portrait_evidence": []
+  },
+  {
+   "id": "poplan",
+   "name_ja": "ポプラン",
+   "name_romaji": "Poplan",
+   "name_kr": null,
+   "faction": "alliance",
+   "branch": null,
+   "kind": "military",
+   "rank": null,
+   "post": null,
+   "unit": null,
+   "flagship": null,
+   "face_number": null,
+   "bio_ja": null,
+   "stats": {
+    "tochi": 8,
+    "seiji": 5,
+    "unei": 19,
+    "joho": 12,
+    "shiki": 28,
+    "kido": 39,
+    "kogeki": 52,
+    "bogyo": 100
+   },
+   "stats_known": true,
+   "source": [
+    "characters.json (IV EX real save-diff stats) iv_id=148"
+   ],
+   "portrait_file": "content/roster/canon-portraits/oam/0258.png",
+   "atlas_slot": "oam_0258",
+   "face_value": 100095,
+   "portrait_confidence": "assigned",
+   "portrait_method": "attribute-assignment (faction/sex/age/hair)",
+   "portrait_evidence": [
+    "face-assignment.json slot oam_0258"
+   ]
+  },
+  {
+   "id": "char-90",
+   "name_ja": "ミュッケンベルガー",
+   "name_romaji": null,
+   "name_kr": null,
+   "faction": "empire",
+   "branch": null,
+   "kind": "military",
+   "rank": null,
+   "post": null,
+   "unit": null,
+   "flagship": null,
+   "face_number": null,
+   "bio_ja": null,
+   "stats": {
+    "tochi": 52,
+    "seiji": 80,
+    "unei": 71,
+    "joho": 60,
+    "shiki": 103,
+    "kido": 67,
+    "kogeki": 80,
+    "bogyo": 74
+   },
+   "stats_known": true,
+   "source": [
+    "characters.json (IV EX-derived stats)"
+   ],
+   "portrait_file": null,
+   "atlas_slot": null,
+   "face_value": null,
+   "portrait_confidence": "none",
+   "portrait_method": "no assignment",
+   "portrait_evidence": []
+  },
+  {
+   "id": "muller",
+   "name_ja": "ミュラー",
+   "name_romaji": "Muller",
+   "name_kr": null,
+   "faction": "empire",
+   "branch": null,
+   "kind": "military",
+   "rank": null,
+   "post": null,
+   "unit": null,
+   "flagship": null,
+   "face_number": null,
+   "bio_ja": null,
+   "stats": {
+    "tochi": 82,
+    "seiji": 25,
+    "unei": 101,
+    "joho": 54,
+    "shiki": 71,
+    "kido": 68,
+    "kogeki": 81,
+    "bogyo": 82
+   },
+   "stats_known": true,
+   "source": [
+    "characters.json (IV EX real save-diff stats) iv_id=83"
+   ],
+   "portrait_file": "content/roster/canon-portraits/oem/0056.png",
+   "atlas_slot": "oem_0056",
+   "face_value": 56,
+   "portrait_confidence": "assigned",
+   "portrait_method": "attribute-assignment (faction/sex/age/hair)",
+   "portrait_evidence": [
+    "face-assignment.json slot oem_0056"
+   ]
+  },
+  {
+   "id": "murai",
+   "name_ja": "ムライ",
+   "name_romaji": "Murai",
+   "name_kr": null,
+   "faction": "alliance",
+   "branch": null,
+   "kind": "military",
+   "rank": null,
+   "post": null,
+   "unit": null,
+   "flagship": null,
+   "face_number": null,
+   "bio_ja": null,
+   "stats": {
+    "tochi": 58,
+    "seiji": 96,
+    "unei": 72,
+    "joho": 88,
+    "shiki": 40,
+    "kido": 45,
+    "kogeki": 48,
+    "bogyo": 45
+   },
+   "stats_known": true,
+   "source": [
+    "characters.json (IV EX real save-diff stats) iv_id=154"
+   ],
+   "portrait_file": "content/roster/canon-portraits/oam/0296.png",
+   "atlas_slot": "oam_0296",
+   "face_value": 100095,
+   "portrait_confidence": "assigned",
+   "portrait_method": "attribute-assignment (faction/sex/age/hair)",
+   "portrait_evidence": [
+    "face-assignment.json slot oam_0296"
+   ]
+  },
+  {
+   "id": "mecklinger",
+   "name_ja": "メックリンガー",
+   "name_romaji": "Mecklinger",
+   "name_kr": null,
+   "faction": "empire",
+   "branch": null,
+   "kind": "military",
+   "rank": null,
+   "post": null,
+   "unit": null,
+   "flagship": null,
+   "face_number": null,
+   "bio_ja": null,
+   "stats": {
+    "tochi": 64,
+    "seiji": 96,
+    "unei": 60,
+    "joho": 92,
+    "shiki": 72,
+    "kido": 61,
+    "kogeki": 40,
+    "bogyo": 51
+   },
+   "stats_known": true,
+   "source": [
+    "characters.json (IV EX real save-diff stats) iv_id=84"
+   ],
+   "portrait_file": "content/roster/canon-portraits/oem/0151.png",
+   "atlas_slot": "oem_0151",
+   "face_value": 151,
+   "portrait_confidence": "assigned",
+   "portrait_method": "attribute-assignment (faction/sex/age/hair)",
+   "portrait_evidence": [
+    "face-assignment.json slot oem_0151"
+   ]
+  },
+  {
+   "id": "lutz",
+   "name_ja": "ルッツ",
+   "name_romaji": "Lutz",
+   "name_kr": null,
+   "faction": "empire",
+   "branch": null,
+   "kind": "military",
+   "rank": null,
+   "post": null,
+   "unit": null,
+   "flagship": null,
+   "face_number": null,
+   "bio_ja": null,
+   "stats": {
+    "tochi": 81,
+    "seiji": 23,
+    "unei": 85,
+    "joho": 49,
+    "shiki": 89,
+    "kido": 86,
+    "kogeki": 85,
+    "bogyo": 92
+   },
+   "stats_known": true,
+   "source": [
+    "characters.json (IV EX real save-diff stats) iv_id=92"
+   ],
+   "portrait_file": "content/roster/canon-portraits/oem/0090.png",
+   "atlas_slot": "oem_0090",
+   "face_value": 90,
+   "portrait_confidence": "assigned",
+   "portrait_method": "attribute-assignment (faction/sex/age/hair)",
+   "portrait_evidence": [
+    "face-assignment.json slot oem_0090"
+   ]
+  },
+  {
+   "id": "wahlen",
+   "name_ja": "ワーレン",
+   "name_romaji": "Wahlen",
+   "name_kr": null,
+   "faction": "empire",
+   "branch": null,
+   "kind": "military",
+   "rank": null,
+   "post": null,
+   "unit": null,
+   "flagship": null,
+   "face_number": null,
+   "bio_ja": null,
+   "stats": {
+    "tochi": 84,
+    "seiji": 30,
+    "unei": 89,
+    "joho": 64,
+    "shiki": 87,
+    "kido": 82,
+    "kogeki": 80,
+    "bogyo": 90
+   },
+   "stats_known": true,
+   "source": [
+    "characters.json (IV EX real save-diff stats) iv_id=99"
+   ],
+   "portrait_file": "content/roster/canon-portraits/oem/0022.png",
+   "atlas_slot": "oem_0022",
+   "face_value": 22,
+   "portrait_confidence": "assigned",
+   "portrait_method": "attribute-assignment (faction/sex/age/hair)",
+   "portrait_evidence": [
+    "face-assignment.json slot oem_0022"
+   ]
+  },
+  {
+   "id": "von-musel",
+   "name_ja": "ミューゼル",
+   "name_romaji": "von Musel",
+   "name_kr": null,
+   "faction": "empire",
+   "branch": null,
+   "kind": "military",
+   "rank": null,
+   "post": null,
+   "unit": null,
+   "flagship": null,
+   "face_number": null,
+   "bio_ja": null,
+   "stats": {
+    "tochi": 120,
+    "seiji": 85,
+    "unei": 95,
+    "joho": 92,
+    "shiki": 120,
+    "kido": 110,
+    "kogeki": 118,
+    "bogyo": 105
+   },
+   "stats_known": true,
+   "source": [
+    "characters.json (canon-sourced stats)"
+   ],
+   "portrait_file": "content/roster/canon-portraits/oam/0230.png",
+   "atlas_slot": "o_0002",
+   "face_value": 10002,
+   "portrait_confidence": "proven_high",
+   "portrait_method": "official-image pixel-anchor + AI-vision named-hit + anime/wiki canon look",
+   "portrait_evidence": [
+    "OFFICIAL: gineiden.com/picture/chara/085.jpg (Wayback 20050407195502, the other of only 2 surviving official VII portraits) pixel-matched to decoded atlas slot oam/0230 at NCC=0.878 (face-name-map.json entry face_number 85; duplicates oam/0481, oam/0931).",
+    "OFFICIAL NAME: gineiden.com/st_char.html lists face_number 85 = シェーンコップ (Walter von Schenkopp), post 要塞守備隊指揮官 (official-roster.json).",
+    "AI-VISION (independent named hit): portrait-ai-classification.json oam_0230 named 'Walter von Schenkopp' conf 0.55 (anchor_validation result: 'independent hit').",
+    "ANIME/WIKI: Schenkopp = rugged roguish Rosen Ritter commander, matches slot's 'rugged roguish grinning warrior' look."
+   ]
+  },
+  {
+   "id": "yang-wen-li",
+   "name_ja": "ヤン",
+   "name_romaji": "Yang Wen-li",
+   "name_kr": null,
+   "faction": "alliance",
+   "branch": null,
+   "kind": "military",
+   "rank": null,
+   "post": null,
+   "unit": null,
+   "flagship": null,
+   "face_number": 206,
+   "bio_ja": "同盟軍最高の智将で、“魔術師ヤン”の異名をとる。希代の用兵家として、皇帝ラインハルトが自らの好敵手と認めた指揮官である。戦場心理学者とでも言うべき優れた洞察力能力を持ち、心理的な陥穽を用いて大敵をうち破った。また常に民主主義政府に属する軍人たらんとし、その理想を追うあまり“バーミリオン星域会戦”においてはローエングラム公を追いつめながらも最終的な勝利を逸した。統率能力に長け、個性的な部下を良く使いこなした。また、戦術指揮官としては攻防共に優れた手腕を見せた。",
+   "stats": {
+    "tochi": 100,
+    "seiji": 17,
+    "unei": 100,
+    "joho": 83,
+    "shiki": 97,
+    "kido": 63,
+    "kogeki": 37,
+    "bogyo": 74
+   },
+   "stats_known": true,
+   "source": [
+    "characters.json (IV EX real save-diff stats) iv_id=156",
+    "official-roster.json (gineiden.com st_char.html: face_index/bio)"
+   ],
+   "portrait_file": "content/roster/canon-portraits/oam/0274.png",
+   "atlas_slot": "oam_0274",
+   "face_value": 100095,
+   "portrait_confidence": "proven_high",
+   "portrait_method": "official-image pixel-anchor + AI-vision + anime/wiki canon look",
+   "portrait_evidence": [
+    "OFFICIAL: gineiden.com/picture/chara/206.jpg (Wayback 20041016162511, one of only 2 official VII portraits that survived archiving; CDX-confirmed) pixel-matched to decoded atlas slot oam/0274 at NCC=0.923 (face-name-map.json entry face_number 206).",
+    "OFFICIAL NAME: gineiden.com/st_char.html lists face_number 206 = ヤン (Yang Wen-li), post 艦隊司令官 (official-roster.json).",
+    "AI-VISION (independent corroboration): portrait-ai-classification.json oam_0274 described 'young dark-haired bereted soldier, alliance' (anchor_validation: signature described).",
+    "ANIME/WIKI: Yang's canonical look = black beret w/ alliance crest + unruly black hair (gineipaedia.com/wiki/Yang_Wen-li; legendofthegalacticheroes.fandom.com) matches the slot."
+   ]
+  },
+  {
+   "id": "negroponti",
+   "name_ja": "ネグロポンティ",
+   "name_romaji": "Negroponti",
+   "name_kr": null,
+   "faction": "alliance",
+   "branch": null,
+   "kind": "politician",
+   "rank": null,
+   "post": "最高評議会 国防委員長",
+   "unit": null,
+   "flagship": null,
+   "face_number": 268,
+   "bio_ja": "トリューニヒト派の政治家。トリューニヒト政権の国防委員長。ヤン大将の査問会の責を負って辞職するが、その後国営水素エネルギー公社総裁に就任した。",
+   "stats": {
+    "tochi": null,
+    "seiji": null,
+    "unei": null,
+    "joho": null,
+    "shiki": null,
+    "kido": null,
+    "kogeki": null,
+    "bogyo": null
+   },
+   "stats_known": false,
+   "source": [
+    "official-roster.json (gineiden.com st_char.html official VII sample; no numeric stats on page)"
+   ],
+   "note": "Real VII official character (国防委員長). No numeric stats exist on any source; stats null by rule.",
+   "portrait_file": null,
+   "atlas_slot": null,
+   "face_value": null,
+   "portrait_confidence": "none",
+   "portrait_method": "no assignment",
+   "portrait_evidence": []
+  },
+  {
+   "id": "otho-von-braunschweig",
+   "name_ja": "ブラウンシュヴァイク",
+   "name_romaji": "Otho von Braunschweig",
+   "name_kr": "폰 브라운슈바이크",
+   "faction": "empire",
+   "branch": null,
+   "kind": "military",
+   "rank": null,
+   "post": null,
+   "unit": null,
+   "flagship": null,
+   "face_number": null,
+   "bio_ja": null,
+   "stats": {
+    "tochi": null,
+    "seiji": null,
+    "unei": null,
+    "joho": null,
+    "shiki": null,
+    "kido": null,
+    "kogeki": null,
+    "bogyo": null
+   },
+   "stats_known": false,
+   "source": [
+    "community-roster.json (ruliweb KR CBT memoir 2022; attested playable canon admiral)"
+   ],
+   "note": "Korean CBT tester recalls Duke von Braunschweig was the dominant unlockable canon admiral ('우주 제일의 명장', solo-beat 3 Alliance fleets). Confirms a門閥貴族-era canon character was playable, consistent with our manual roster. Already a known LOGH character; NO face number attached. Not added to face-name-map (no NNN).",
+   "portrait_file": null,
+   "atlas_slot": null,
+   "face_value": null,
+   "portrait_confidence": "none",
+   "portrait_method": "no assignment",
+   "portrait_evidence": []
+  }
+ ],
+ "_portrait_merge": "logh7_roster_portraits_merge: every char has portrait_file + face_value; confidence proven_*/assigned/none"
+}

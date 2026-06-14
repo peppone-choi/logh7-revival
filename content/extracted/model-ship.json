@@ -1,0 +1,7415 @@
+[
+ {
+  "file": "data/model/Ship/e_unknown.mdx",
+  "name": "e_unknown",
+  "ext": "mdx",
+  "size": 7730,
+  "node_count": 1,
+  "nodes": [
+   "e_unknown:Layer1"
+  ],
+  "assets": [
+   "VII\\3D\\LW_objects\\e_unknown.lwo"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/FH047.mdx",
+  "name": "FH047",
+  "ext": "mdx",
+  "size": 103458,
+  "node_count": 8,
+  "nodes": [
+   "ENGINE_01",
+   "FF_01",
+   "FR_01",
+   "RR_01",
+   "FH047:Layer1",
+   "FF_02",
+   "FL_01",
+   "RL_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\",
+   "j\\objects\\FH047.lwo",
+   "j\\images\\FH047.bmp"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FH048.mdx",
+  "name": "FH048",
+  "ext": "mdx",
+  "size": 103458,
+  "node_count": 8,
+  "nodes": [
+   "ENGINE_01",
+   "FF_01",
+   "FR_01",
+   "RR_01",
+   "FH047:Layer1",
+   "FF_02",
+   "FL_01",
+   "RL_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\",
+   "j\\objects\\FH047.lwo",
+   "j\\images\\FH047.bmp"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FL024.mdx",
+  "name": "FL024",
+  "ext": "mdx",
+  "size": 7036,
+  "node_count": 2,
+  "nodes": [
+   "FL024:Layer1",
+   "ENGINE_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D2\\objects\\FL024.lwo"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FL025.mdx",
+  "name": "FL025",
+  "ext": "mdx",
+  "size": 7784,
+  "node_count": 2,
+  "nodes": [
+   "FL025:Layer1",
+   "ENGINE_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D2\\objects\\FL025.lwo"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FL031.mdx",
+  "name": "FL031",
+  "ext": "mdx",
+  "size": 7208,
+  "node_count": 2,
+  "nodes": [
+   "FL031:Layer1",
+   "ENGINE_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D2\\objects\\FL031.lwo"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FL032.mdx",
+  "name": "FL032",
+  "ext": "mdx",
+  "size": 8628,
+  "node_count": 2,
+  "nodes": [
+   "FL032:Layer1",
+   "ENGINE_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D2\\objects\\FL032.lwo"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FL047.mdx",
+  "name": "FL047",
+  "ext": "mdx",
+  "size": 103458,
+  "node_count": 8,
+  "nodes": [
+   "ENGINE_01",
+   "FF_01",
+   "FR_01",
+   "RR_01",
+   "FH047:Layer1",
+   "FF_02",
+   "FL_01",
+   "RL_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\",
+   "j\\objects\\FH047.lwo",
+   "j\\images\\FH047.bmp"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FL048.mdx",
+  "name": "FL048",
+  "ext": "mdx",
+  "size": 103458,
+  "node_count": 8,
+  "nodes": [
+   "ENGINE_01",
+   "FF_01",
+   "FR_01",
+   "RR_01",
+   "FH047:Layer1",
+   "FF_02",
+   "FL_01",
+   "RL_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\",
+   "j\\objects\\FH047.lwo",
+   "j\\images\\FH047.bmp"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FM047.mdx",
+  "name": "FM047",
+  "ext": "mdx",
+  "size": 103458,
+  "node_count": 8,
+  "nodes": [
+   "ENGINE_01",
+   "FF_01",
+   "FR_01",
+   "RR_01",
+   "FH047:Layer1",
+   "FF_02",
+   "FL_01",
+   "RL_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\",
+   "j\\objects\\FH047.lwo",
+   "j\\images\\FH047.bmp"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FM048.mdx",
+  "name": "FM048",
+  "ext": "mdx",
+  "size": 103458,
+  "node_count": 8,
+  "nodes": [
+   "ENGINE_01",
+   "FF_01",
+   "FR_01",
+   "RR_01",
+   "FH047:Layer1",
+   "FF_02",
+   "FL_01",
+   "RL_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\",
+   "j\\objects\\FH047.lwo",
+   "j\\images\\FH047.bmp"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/f_top.mdx",
+  "name": "f_top",
+  "ext": "mdx",
+  "size": 2682,
+  "node_count": 1,
+  "nodes": [
+   "box_fp:Layer1"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\2D\\p\\test\\box_fp.lwo"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/FH001.mdx",
+  "name": "FH001",
+  "ext": "mdx",
+  "size": 327428,
+  "node_count": 19,
+  "nodes": [
+   "FH001:Layer1",
+   "BEAM_01",
+   "LASER_01",
+   "GUN_01",
+   "GUN_02",
+   "MISSILE_01",
+   "ENGINE_01",
+   "FF_01",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_01",
+   "FR_02",
+   "FL_01",
+   "FL_02",
+   "RR_01",
+   "RL_01",
+   "RL_02",
+   "RR_02"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\FH001\\FH001.lwo",
+   "W:\\Gin7\\CG\\D\\images\\FH001.bmp",
+   "W:\\Gin7\\CG\\D\\images\\meca_tile1.bmp",
+   "W:\\Gin7\\CG\\D\\images\\FH001_bump.bmp"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/FH002.mdx",
+  "name": "FH002",
+  "ext": "mdx",
+  "size": 248856,
+  "node_count": 19,
+  "nodes": [
+   "FH002:Layer1",
+   "ENGINE_01",
+   "FF_01",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_01",
+   "FR_02",
+   "FL_01",
+   "FL_02",
+   "RR_01",
+   "RR_02",
+   "RL_01",
+   "RL_02",
+   "BEAM_01",
+   "MISSILE_01",
+   "GUN_01",
+   "GUN_02",
+   "LASER_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\FH002\\FH002.lwo",
+   "W:\\Gin7\\CG\\D\\images\\FH002.bmp",
+   "W:\\Gin7\\CG\\D\\images\\meca_tile1.bmp"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/FH003.mdx",
+  "name": "FH003",
+  "ext": "mdx",
+  "size": 346126,
+  "node_count": 19,
+  "nodes": [
+   "FH003:Layer1",
+   "ENGINE_01",
+   "FF_01",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_01",
+   "FR_02",
+   "FL_01",
+   "FL_02",
+   "RR_01",
+   "RR_02",
+   "RL_01",
+   "RL_02",
+   "BEAM_01",
+   "GUN_01",
+   "GUN_02",
+   "LASER_01",
+   "MISSILE_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\FH003\\FH003.lwo",
+   "W:\\Gin7\\CG\\D\\images\\FH003.bmp",
+   "W:\\Gin7\\CG\\D\\images\\meca_tile1.bmp",
+   "W:\\Gin7\\CG\\D\\images\\FH003_bump.bmp",
+   "W:\\Gin7\\CG\\D\\images\\FH005_bump.bmp",
+   "W:\\Gin7\\CG\\D\\images\\FH005.bmp"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/FH004.mdx",
+  "name": "FH004",
+  "ext": "mdx",
+  "size": 362038,
+  "node_count": 19,
+  "nodes": [
+   "FH004:Layer1",
+   "ENGINE_01",
+   "FF_01",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_01",
+   "FR_02",
+   "FL_01",
+   "FL_02",
+   "RR_01",
+   "RR_02",
+   "RL_01",
+   "RL_02",
+   "BEAM_01",
+   "MISSILE_01",
+   "GUN_01",
+   "GUN_02",
+   "LASER_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\FH004\\FH004.lwo",
+   "W:\\Gin7\\CG\\D\\images\\FH004.bmp",
+   "W:\\Gin7\\CG\\D\\images\\meca_tile1.bmp",
+   "W:\\Gin7\\CG\\D\\images\\FH004_bump.bmp",
+   "W:\\Gin7\\CG\\D\\images\\meca_tile.bmp"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/FH005.mdx",
+  "name": "FH005",
+  "ext": "mdx",
+  "size": 347906,
+  "node_count": 19,
+  "nodes": [
+   "FH005:Layer1",
+   "ENGINE_01",
+   "FF_01",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_01",
+   "FR_02",
+   "FL_01",
+   "FL_02",
+   "RR_01",
+   "RR_02",
+   "RL_01",
+   "RL_02",
+   "BEAM_01",
+   "MISSILE_01",
+   "GUN_01",
+   "GUN_02",
+   "LASER_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\FH005\\FH005.lwo",
+   "W:\\Gin7\\CG\\D\\images\\FH005.bmp",
+   "W:\\Gin7\\CG\\D\\images\\meca_tile1.bmp",
+   "W:\\Gin7\\CG\\D\\images\\FH005_bump.bmp",
+   "W:\\Gin7\\CG\\D\\images\\meca_tile.bmp"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/FH006.mdx",
+  "name": "FH006",
+  "ext": "mdx",
+  "size": 167592,
+  "node_count": 19,
+  "nodes": [
+   "FH006_old:Layer1",
+   "ENGINE_01",
+   "FF_01",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_01",
+   "FR_02",
+   "FL_01",
+   "FL_02",
+   "RR_01",
+   "RR_02",
+   "RL_01",
+   "RL_02",
+   "MISSILE_01",
+   "GUN_01",
+   "GUN_02",
+   "LASER_01",
+   "BEAM_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\FH006\\FH006_old.lwo",
+   "D\\images\\FH006\\fh006_fin_s2.bmp"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/FH007.mdx",
+  "name": "FH007",
+  "ext": "mdx",
+  "size": 189508,
+  "node_count": 19,
+  "nodes": [
+   "FH007_old:Layer1",
+   "ENGINE_01",
+   "FF_01",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_01",
+   "FR_02",
+   "FL_01",
+   "FL_02",
+   "RR_01",
+   "RR_02",
+   "RL_01",
+   "RL_02",
+   "BEAM_01",
+   "MISSILE_01",
+   "GUN_01",
+   "GUN_02",
+   "LASER_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\FH007\\FH007_old.lwo",
+   "D\\images\\FH007\\fh007_engine.bmp"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/FH008.mdx",
+  "name": "FH008",
+  "ext": "mdx",
+  "size": 306292,
+  "node_count": 20,
+  "nodes": [
+   "FH008:Layer1",
+   "ENGINE_01",
+   "FF_01",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_01",
+   "FR_02",
+   "FL_01",
+   "FL_02",
+   "RR_01",
+   "RR_02",
+   "RL_01",
+   "RL_02",
+   "MISSILE_01",
+   "GUN_01",
+   "GUN_02",
+   "LASER_01",
+   "BEAM_01",
+   "BEAM_02"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\FH008\\FH008.lwo",
+   "W:\\Gin7\\CG\\D\\images\\FH008.bmp",
+   "W:\\Gin7\\CG\\D\\images\\meca_tile1.bmp"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/FH009.mdx",
+  "name": "FH009",
+  "ext": "mdx",
+  "size": 161546,
+  "node_count": 19,
+  "nodes": [
+   "FH_009:Layer1",
+   "ENGINE_01",
+   "FF_01",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_01",
+   "FR_02",
+   "FL_01",
+   "FL_02",
+   "RR_01",
+   "RR_02",
+   "RL_01",
+   "RL_02",
+   "BEAM_01",
+   "GUN_01",
+   "GUN_02",
+   "LASER_01",
+   "MISSILE_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\FH009\\FH_009.lwo",
+   "D\\images\\FH009\\fh009_box3.bmp"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/FH010.mdx",
+  "name": "FH010",
+  "ext": "mdx",
+  "size": 146894,
+  "node_count": 19,
+  "nodes": [
+   "FH010:Layer1",
+   "ENGINE_01",
+   "FF_01",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_01",
+   "FR_02",
+   "FL_01",
+   "FL_02",
+   "RR_01",
+   "RR_02",
+   "RL_01",
+   "RL_02",
+   "BEAM_01",
+   "MISSILE_01",
+   "LASER_01",
+   "GUN_01",
+   "GUN_02"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\FH010\\FH010.lwo",
+   "D\\images\\FH010\\paramid_ita.bmp"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/FH011.mdx",
+  "name": "FH011",
+  "ext": "mdx",
+  "size": 143840,
+  "node_count": 19,
+  "nodes": [
+   "FH011:Layer1",
+   "ENGINE_01",
+   "FF_01",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_01",
+   "FR_02",
+   "FL_01",
+   "FL_02",
+   "RR_01",
+   "RR_02",
+   "RL_01",
+   "RL_02",
+   "BEAM_01",
+   "MISSILE_01",
+   "LASER_01",
+   "GUN_01",
+   "GUN_02"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\FH011\\FH011.lwo",
+   "D\\images\\FH011\\fh011_engine.bmp"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/FH012.mdx",
+  "name": "FH012",
+  "ext": "mdx",
+  "size": 306180,
+  "node_count": 14,
+  "nodes": [
+   "FH012:Layer1",
+   "BEAM_01",
+   "GUN_01",
+   "LASER_01",
+   "MISSILE_01",
+   "ENGINE_01",
+   "FF_01",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_01",
+   "FL_01",
+   "RR_01",
+   "RL_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\FH012\\FH012.lwo",
+   "W:\\Gin7\\CG\\D\\images\\FH012.bmp",
+   "W:\\Gin7\\CG\\D\\images\\meca_tile1.bmp",
+   "W:\\Gin7\\CG\\D\\images\\FH012_bump.bmp"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/FH013.mdx",
+  "name": "FH013",
+  "ext": "mdx",
+  "size": 310770,
+  "node_count": 14,
+  "nodes": [
+   "FH013:Layer1",
+   "BEAM_01",
+   "FF_01",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_01",
+   "FL_01",
+   "RR_01",
+   "RL_01",
+   "ENGINE_01",
+   "MISSILE_01",
+   "GUN_01",
+   "LASER_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\FH013\\FH013.lwo",
+   "W:\\Gin7\\CG\\D\\images\\FH013.bmp",
+   "W:\\Gin7\\CG\\D\\images\\meca_tile1.bmp",
+   "W:\\Gin7\\CG\\D\\images\\FH013_bump.bmp"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/FH014.mdx",
+  "name": "FH014",
+  "ext": "mdx",
+  "size": 264746,
+  "node_count": 12,
+  "nodes": [
+   "ENGINE_01",
+   "BEAM_01",
+   "FR_01",
+   "RR_01",
+   "FF_01",
+   "FF_02",
+   "FH_014:Layer1",
+   "FF_03",
+   "FF_04",
+   "MISSILE_01",
+   "LASER_01",
+   "GUN_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\FH014\\FH_014.lwo",
+   "W:\\Gin7\\CG\\D\\images\\FH014.bmp",
+   "W:\\Gin7\\CG\\D\\images\\meca_tile1.bmp",
+   "W:\\Gin7\\CG\\D\\images\\FH014_bump.bmp"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/FH015.mdx",
+  "name": "FH015",
+  "ext": "mdx",
+  "size": 163572,
+  "node_count": 2,
+  "nodes": [
+   "FH015:Layer1",
+   "FH015_gun:Layer1"
+  ],
+  "assets": [
+   "LW_objects\\FH015\\FH015.lwo",
+   "LW_objects\\FH015\\FH015_gun.lwo",
+   "\\spal_f_ball.bmp"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/FH016.mdx",
+  "name": "FH016",
+  "ext": "mdx",
+  "size": 325834,
+  "node_count": 18,
+  "nodes": [
+   "FH016:Layer1",
+   "ENGINE_01",
+   "BEAM_01",
+   "FF_01",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_01",
+   "FR_02",
+   "RR_01",
+   "RR_02",
+   "MISSILE_01",
+   "MISSILE_02",
+   "MISSILE_03",
+   "MISSILE_04",
+   "MISSILE_05",
+   "LASEA_01",
+   "GUN"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\FH016\\FH016.lwo",
+   "W:\\Gin7\\CG\\D\\images\\FH016.bmp",
+   "W:\\Gin7\\CG\\D\\images\\meca_tile1.bmp",
+   "W:\\Gin7\\CG\\D\\images\\FH016_bump.bmp"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/FH022.mdx",
+  "name": "FH022",
+  "ext": "mdx",
+  "size": 147888,
+  "node_count": 14,
+  "nodes": [
+   "FH022:Layer1",
+   "BEAM_01",
+   "GUN_01",
+   "LASER_01",
+   "MISSILE_01",
+   "ENGINE_01",
+   "FF_01",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_01",
+   "FL_01",
+   "RR_01",
+   "RL_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D2\\objects\\FH022\\FH022.lwo",
+   "W:\\Gin7\\CG\\D2\\images\\FH022\\FH022_yoko.bmp",
+   "W:\\Gin7\\CG\\D2\\images\\FH022\\FH022_yoko_01.bmp",
+   "W:\\Gin7\\CG\\D2\\images\\FH022\\FH022_yoko_04.bmp",
+   "W:\\Gin7\\CG\\D2\\images\\FH022\\yoko_R.bmp",
+   "W:\\Gin7\\CG\\D2\\images\\FH022\\FH022_t1.bmp",
+   "W:\\Gin7\\CG\\D2\\images\\FH022\\FH022_yoko_02.bmp",
+   "W:\\Gin7\\CG\\D2\\images\\FH022\\FH022_yoko_03.bmp",
+   "W:\\Gin7\\CG\\D2\\images\\FH022\\FH022_t2.bmp",
+   "W:\\Gin7\\CG\\D2\\images\\FH022\\FH022_engine.bmp",
+   "W:\\Gin7\\CG\\D2\\images\\FH022\\FH022_houmon.bmp",
+   "W:\\Gin7\\CG\\D2\\images\\FH022\\FH022_object2.bmp",
+   "W:\\Gin7\\CG\\D2\\images\\FH022\\FH022_tate.bmp",
+   "W:\\Gin7\\CG\\D2\\images\\FH022\\FH022_houmon_naka.bmp",
+   "W:\\Gin7\\CG\\D2\\images\\FH022\\FH022_syoumen.bmp",
+   "W:\\Gin7\\CG\\D2\\images\\FH022\\FH022_yoko_05.bmp",
+   "W:\\Gin7\\CG\\D2\\images\\FH022\\FH022_tate_01.bmp",
+   "W:\\Gin7\\CG\\D2\\images\\FH022\\FH022_tate_02.bmp"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/FH023.mdx",
+  "name": "FH023",
+  "ext": "mdx",
+  "size": 113950,
+  "node_count": 21,
+  "nodes": [
+   "FH_023:Layer1",
+   "ENGINE_01",
+   "FF_01",
+   "FF_02",
+   "FR_01",
+   "FR_02",
+   "RR_01",
+   "RR_02",
+   "BEAM_01",
+   "GUN_01",
+   "LASER_01",
+   "MISSILE_01",
+   "FF_03",
+   "FF_04",
+   "FL_01",
+   "FL_02",
+   "RL_01",
+   "RL_02",
+   "BEAM_02",
+   "BEAM_03",
+   "GUN_02"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D3\\objects\\FH023\\FH_023.lwo",
+   "D3\\images\\FH023\\FH023_tutu.bmp"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/FH024.mdx",
+  "name": "FH024",
+  "ext": "mdx",
+  "size": 276540,
+  "node_count": 14,
+  "nodes": [
+   "FH024:Layer1",
+   "BEAM_01",
+   "ENGINE_01",
+   "FF_01",
+   "FF_02",
+   "FR_01",
+   "RR_01",
+   "FF_03",
+   "FF_04",
+   "FL_01",
+   "RL01",
+   "MISSILE_01",
+   "LASER_01",
+   "GUN_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D2\\objects\\FH024\\FH024.lwo",
+   "W:\\Gin7\\CG\\D2\\images\\FH024.bmp",
+   "W:\\Gin7\\CG\\D2\\images\\meca_tile.bmp",
+   "W:\\Gin7\\CG\\D2\\images\\FH024_bump.bmp"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/FH025.mdx",
+  "name": "FH025",
+  "ext": "mdx",
+  "size": 325066,
+  "node_count": 14,
+  "nodes": [
+   "FH025:Layer1",
+   "BEAM_01",
+   "ENGINE_01",
+   "FF_01",
+   "FF_02",
+   "FR_01",
+   "RR_01",
+   "FL_01",
+   "RL_01",
+   "MISSILE_01",
+   "LASER_01",
+   "GUN_01",
+   "FF_03",
+   "FF_04"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D2\\objects\\FH025\\FH025.lwo",
+   "W:\\Gin7\\CG\\D2\\images\\FH025.bmp",
+   "W:\\Gin7\\CG\\D2\\images\\meca_tile.bmp",
+   "W:\\Gin7\\CG\\D2\\images\\FH025_bump.bmp"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/FH026.mdx",
+  "name": "FH026",
+  "ext": "mdx",
+  "size": 117648,
+  "node_count": 19,
+  "nodes": [
+   "FH_026:Layer1",
+   "ENGINE2_01",
+   "FF_01",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_01",
+   "FR_02",
+   "RR_01",
+   "RR_02",
+   "BEAM_01",
+   "GUN_01",
+   "GUN_02",
+   "LASER_01",
+   "MISSILE_01",
+   "FL_01",
+   "FL_02",
+   "RL_01",
+   "RL_02"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D3\\objects\\FH026\\FH_026.lwo",
+   "D3\\images\\FH026\\FH026_side2.bmp"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/FH029.mdx",
+  "name": "FH029",
+  "ext": "mdx",
+  "size": 128478,
+  "node_count": 19,
+  "nodes": [
+   "FH_029:Layer1",
+   "ENGINE2_01",
+   "FF_01",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_01",
+   "FR_02",
+   "FL_01",
+   "FL_02",
+   "RR_01",
+   "RR_02",
+   "RL_01",
+   "RL_02",
+   "BEAM_01",
+   "GUN_01",
+   "GUN_02",
+   "LASER_01",
+   "MISSILE_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D3\\objects\\FH029\\FH_029.lwo",
+   "D3\\images\\FH029\\FH029_body1_1.bmp"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/FH030.mdx",
+  "name": "FH030",
+  "ext": "mdx",
+  "size": 122774,
+  "node_count": 19,
+  "nodes": [
+   "FH_030:Layer1",
+   "ENGINE2_01",
+   "FF_01",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_01",
+   "FR_02",
+   "FL_01",
+   "FL_02",
+   "RR_01",
+   "RR_02",
+   "RL_01",
+   "RL_02",
+   "BEAM_01",
+   "GUN_01",
+   "GUN_02",
+   "LASER_01",
+   "MISSILE_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D3\\objects\\FH030\\FH_030.lwo",
+   "D3\\images\\FH030\\FH030_body1_1.bmp"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/FH031.mdx",
+  "name": "FH031",
+  "ext": "mdx",
+  "size": 287964,
+  "node_count": 14,
+  "nodes": [
+   "FH031:Layer1",
+   "BEAM_01",
+   "GUN_01",
+   "LASER_01",
+   "MISSILE_01",
+   "ENGINE_01",
+   "FF_01",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_01",
+   "FL_01",
+   "RR_01",
+   "RL_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D2\\objects\\FH031\\FH031.lwo",
+   "W:\\Gin7\\CG\\D2\\images\\FH031.bmp",
+   "W:\\Gin7\\CG\\D2\\images\\meca_tile.bmp",
+   "W:\\Gin7\\CG\\D2\\images\\FH031_bump.bmp"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/FH032.mdx",
+  "name": "FH032",
+  "ext": "mdx",
+  "size": 310770,
+  "node_count": 14,
+  "nodes": [
+   "FH013:Layer1",
+   "BEAM_01",
+   "FF_01",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_01",
+   "FL_01",
+   "RR_01",
+   "RL_01",
+   "ENGINE_01",
+   "MISSILE_01",
+   "GUN_01",
+   "LASER_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\FH013\\FH013.lwo",
+   "W:\\Gin7\\CG\\D\\images\\FH013.bmp",
+   "W:\\Gin7\\CG\\D\\images\\meca_tile1.bmp",
+   "W:\\Gin7\\CG\\D\\images\\FH013_bump.bmp"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/FH033.mdx",
+  "name": "FH033",
+  "ext": "mdx",
+  "size": 122694,
+  "node_count": 19,
+  "nodes": [
+   "FH_033:Layer1",
+   "ENGINE2_01",
+   "FF_01",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_01",
+   "FR_02",
+   "FL_01",
+   "FL_02",
+   "RR_01",
+   "RR_02",
+   "RL_01",
+   "RL_02",
+   "BEAM_01",
+   "GUN_01",
+   "GUN_02",
+   "LASER_01",
+   "MISSILE_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D3\\objects\\FH033\\FH_033.lwo",
+   "D3\\images\\FH033\\FH033_body1_2.bmp"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/FH034.mdx",
+  "name": "FH034",
+  "ext": "mdx",
+  "size": 130428,
+  "node_count": 19,
+  "nodes": [
+   "FH034:Layer1",
+   "ENGINE2_01",
+   "FF_01",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_01",
+   "FR_02",
+   "RR_01",
+   "RR_02",
+   "BEAM_01",
+   "GUN_01",
+   "GUN_02",
+   "LASER_01",
+   "MISSILE_01",
+   "FL_01",
+   "FL_02",
+   "RL_01",
+   "RL_02"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D3\\objects\\FH034\\FH034.lwo",
+   "D3\\images\\FH034\\FH034_side3.bmp"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/FH035.mdx",
+  "name": "FH035",
+  "ext": "mdx",
+  "size": 151722,
+  "node_count": 19,
+  "nodes": [
+   "FH_035:Layer1",
+   "ENGINE2_01",
+   "FF_01",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_01",
+   "FR_02",
+   "FL_01",
+   "FL_02",
+   "RR_01",
+   "RR_02",
+   "RL_01",
+   "RL_02",
+   "BEAM_01",
+   "GUN_01",
+   "GUN_02",
+   "LASER_01",
+   "MISSILE_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D3\\objects\\FH035\\FH_035.lwo",
+   "D3\\images\\FH035\\FH035_body1_1.bmp"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/FH037.mdx",
+  "name": "FH037",
+  "ext": "mdx",
+  "size": 104652,
+  "node_count": 19,
+  "nodes": [
+   "FH_037:Layer1",
+   "ENGINE2_01",
+   "FF_01",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_01",
+   "FR_02",
+   "FL_01",
+   "FL_02",
+   "RR_01",
+   "RR_02",
+   "RL_01",
+   "RL_02",
+   "BEAM_01",
+   "GUN_01",
+   "GUN_02",
+   "LASER_01",
+   "MISSILE_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D3\\objects\\FH037\\FH_037.lwo",
+   "D3\\images\\FH037\\FH037_body1_3.bmp"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/FH039.mdx",
+  "name": "FH039",
+  "ext": "mdx",
+  "size": 114512,
+  "node_count": 19,
+  "nodes": [
+   "FH_039:Layer1",
+   "ENGINE2_01",
+   "FF_01",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_01",
+   "FR_02",
+   "RR_01",
+   "RR_02",
+   "BEAM_01",
+   "GUN_01",
+   "GUN_02",
+   "LASER_01",
+   "MISSILE_01",
+   "FL_01",
+   "FL_02",
+   "RL_01",
+   "RL_02"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D3\\objects\\FH039\\FH_039.lwo",
+   "D3\\images\\FH039\\FH039_body1_1.bmp"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/FH040.mdx",
+  "name": "FH040",
+  "ext": "mdx",
+  "size": 339870,
+  "node_count": 15,
+  "nodes": [
+   "FH_040:Layer1",
+   "BEAM_01",
+   "GUN_01",
+   "LASER_01",
+   "MISSILE_01",
+   "ENGINE_01",
+   "ENGINE_02",
+   "FF_01",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_01",
+   "FL_01",
+   "RR_01",
+   "RL_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D2\\objects\\FH040\\FH_040.lwo",
+   "W:\\Gin7\\CG\\D2\\images\\FH040.bmp",
+   "W:\\Gin7\\CG\\D2\\images\\meca_tile.bmp",
+   "W:\\Gin7\\CG\\D2\\images\\FH040_bump.bmp"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/FH042.mdx",
+  "name": "FH042",
+  "ext": "mdx",
+  "size": 289732,
+  "node_count": 17,
+  "nodes": [
+   "FH042:Layer1",
+   "ENGINE_01",
+   "FF_01",
+   "FR_01",
+   "RR_01",
+   "BEAM_01",
+   "LASER_01",
+   "ENGINE_02",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_02",
+   "FL_01",
+   "FL_02",
+   "RR_02",
+   "RL_01",
+   "RL_02"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D2\\objects\\FH042\\FH042.lwo",
+   "W:\\Gin7\\CG\\D2\\images\\FH042.bmp",
+   "W:\\Gin7\\CG\\D2\\images\\meca_tile.bmp",
+   "W:\\Gin7\\CG\\D2\\images\\FH042_bump.bmp"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/FH043.mdx",
+  "name": "FH043",
+  "ext": "mdx",
+  "size": 279896,
+  "node_count": 16,
+  "nodes": [
+   "ENGINE_01",
+   "FF_01",
+   "FR_01",
+   "RR_01",
+   "LASER_01",
+   "FH043:Layer1",
+   "ENGINE_02",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_02",
+   "FL_01",
+   "FL_02",
+   "RR_02",
+   "RL_01",
+   "RL_02"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D2\\objects\\FH043\\FH043.lwo",
+   "W:\\Gin7\\CG\\D2\\images\\FH043.bmp",
+   "W:\\Gin7\\CG\\D2\\images\\meca_tile.bmp",
+   "W:\\Gin7\\CG\\D2\\images\\FH043_bump.bmp"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/FH044.mdx",
+  "name": "FH044",
+  "ext": "mdx",
+  "size": 339870,
+  "node_count": 15,
+  "nodes": [
+   "FH_040:Layer1",
+   "BEAM_01",
+   "GUN_01",
+   "LASER_01",
+   "MISSILE_01",
+   "ENGINE_01",
+   "ENGINE_02",
+   "FF_01",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_01",
+   "FL_01",
+   "RR_01",
+   "RL_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D2\\objects\\FH040\\FH_040.lwo",
+   "W:\\Gin7\\CG\\D2\\images\\FH040.bmp",
+   "W:\\Gin7\\CG\\D2\\images\\meca_tile.bmp",
+   "W:\\Gin7\\CG\\D2\\images\\FH040_bump.bmp"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/FH045.mdx",
+  "name": "FH045",
+  "ext": "mdx",
+  "size": 346472,
+  "node_count": 19,
+  "nodes": [
+   "FH045:Layer1",
+   "BEAM_01",
+   "FF_01",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_01",
+   "FR_02",
+   "FL_01",
+   "FL_02",
+   "RR_01",
+   "RR_02",
+   "RL_01",
+   "RL_02",
+   "ENGINE_01",
+   "MISSILE_01",
+   "GUN_01",
+   "LASER_01",
+   "MISSILE_02"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D3\\objects\\FH045\\FH045.lwo",
+   "W:\\Gin7\\CG\\D3\\images\\FH045.bmp",
+   "W:\\Gin7\\CG\\D1\\images\\meca_tile1.bmp",
+   "W:\\Gin7\\CG\\D3\\images\\FH045_bump.bmp",
+   "W:\\Gin7\\CG\\D1\\images\\FH013.bmp"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/FH046.mdx",
+  "name": "FH046",
+  "ext": "mdx",
+  "size": 306180,
+  "node_count": 14,
+  "nodes": [
+   "FH012:Layer1",
+   "BEAM_01",
+   "GUN_01",
+   "LASER_01",
+   "MISSILE_01",
+   "ENGINE_01",
+   "FF_01",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_01",
+   "FL_01",
+   "RR_01",
+   "RL_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\FH012\\FH012.lwo",
+   "W:\\Gin7\\CG\\D\\images\\FH012.bmp",
+   "W:\\Gin7\\CG\\D\\images\\meca_tile1.bmp",
+   "W:\\Gin7\\CG\\D\\images\\FH012_bump.bmp"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/FH047.mdx",
+  "name": "FH047",
+  "ext": "mdx",
+  "size": 289732,
+  "node_count": 17,
+  "nodes": [
+   "FH042:Layer1",
+   "ENGINE_01",
+   "FF_01",
+   "FR_01",
+   "RR_01",
+   "BEAM_01",
+   "LASER_01",
+   "ENGINE_02",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_02",
+   "FL_01",
+   "FL_02",
+   "RR_02",
+   "RL_01",
+   "RL_02"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D2\\objects\\FH042\\FH042.lwo",
+   "W:\\Gin7\\CG\\D2\\images\\FH042.bmp",
+   "W:\\Gin7\\CG\\D2\\images\\meca_tile.bmp",
+   "W:\\Gin7\\CG\\D2\\images\\FH042_bump.bmp"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/FL001.mdx",
+  "name": "FL001",
+  "ext": "mdx",
+  "size": 7788,
+  "node_count": 2,
+  "nodes": [
+   "FL001:Layer1",
+   "ENGINE_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\FL001.lwo"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/FL002.mdx",
+  "name": "FL002",
+  "ext": "mdx",
+  "size": 8308,
+  "node_count": 2,
+  "nodes": [
+   "FL002:Layer1",
+   "ENGINE_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\FL002.lwo"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/FL003.mdx",
+  "name": "FL003",
+  "ext": "mdx",
+  "size": 8308,
+  "node_count": 2,
+  "nodes": [
+   "FL003:Layer1",
+   "ENGINE_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\FL003.lwo"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/FL004.mdx",
+  "name": "FL004",
+  "ext": "mdx",
+  "size": 8308,
+  "node_count": 2,
+  "nodes": [
+   "FL003:Layer1",
+   "ENGINE_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\FL003.lwo"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/FL005.mdx",
+  "name": "FL005",
+  "ext": "mdx",
+  "size": 8308,
+  "node_count": 2,
+  "nodes": [
+   "FL003:Layer1",
+   "ENGINE_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\FL003.lwo"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/FL006.mdx",
+  "name": "FL006",
+  "ext": "mdx",
+  "size": 8308,
+  "node_count": 2,
+  "nodes": [
+   "FL003:Layer1",
+   "ENGINE_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\FL003.lwo"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/FL007.mdx",
+  "name": "FL007",
+  "ext": "mdx",
+  "size": 8308,
+  "node_count": 2,
+  "nodes": [
+   "FL003:Layer1",
+   "ENGINE_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\FL003.lwo"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/FL008.mdx",
+  "name": "FL008",
+  "ext": "mdx",
+  "size": 8308,
+  "node_count": 2,
+  "nodes": [
+   "FL003:Layer1",
+   "ENGINE_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\FL003.lwo"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/FL009.mdx",
+  "name": "FL009",
+  "ext": "mdx",
+  "size": 8308,
+  "node_count": 2,
+  "nodes": [
+   "FL003:Layer1",
+   "ENGINE_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\FL003.lwo"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/FL010.mdx",
+  "name": "FL010",
+  "ext": "mdx",
+  "size": 8308,
+  "node_count": 2,
+  "nodes": [
+   "FL003:Layer1",
+   "ENGINE_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\FL003.lwo"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/FL011.mdx",
+  "name": "FL011",
+  "ext": "mdx",
+  "size": 8308,
+  "node_count": 2,
+  "nodes": [
+   "FL003:Layer1",
+   "ENGINE_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\FL003.lwo"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/FL012.mdx",
+  "name": "FL012",
+  "ext": "mdx",
+  "size": 6564,
+  "node_count": 2,
+  "nodes": [
+   "FL012:Layer1",
+   "ENGINE_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\FL012.lwo"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/FL013.mdx",
+  "name": "FL013",
+  "ext": "mdx",
+  "size": 6612,
+  "node_count": 2,
+  "nodes": [
+   "FL013:Layer1",
+   "ENGINE_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\FL013.lwo"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/FL014.mdx",
+  "name": "FL014",
+  "ext": "mdx",
+  "size": 7272,
+  "node_count": 2,
+  "nodes": [
+   "ENGINE_01",
+   "FL014:Layer1"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\FL014.lwo"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/FL015.mdx",
+  "name": "FL015",
+  "ext": "mdx",
+  "size": 4754,
+  "node_count": 1,
+  "nodes": [
+   "FL015:Layer1"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\FL015\\FL015.lwo",
+   "W:\\Gin7\\CG\\D\\images\\FL015\\FL015.bmp"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/FL016.mdx",
+  "name": "FL016",
+  "ext": "mdx",
+  "size": 7760,
+  "node_count": 2,
+  "nodes": [
+   "FL016:Layer1",
+   "ENGINE_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\FL016.lwo"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/FL023.mdx",
+  "name": "FL023",
+  "ext": "mdx",
+  "size": 8308,
+  "node_count": 2,
+  "nodes": [
+   "FL003:Layer1",
+   "ENGINE_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\FL003.lwo"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/FL024.mdx",
+  "name": "FL024",
+  "ext": "mdx",
+  "size": 8308,
+  "node_count": 2,
+  "nodes": [
+   "FL003:Layer1",
+   "ENGINE_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\FL003.lwo"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/FL025.mdx",
+  "name": "FL025",
+  "ext": "mdx",
+  "size": 6564,
+  "node_count": 2,
+  "nodes": [
+   "FL012:Layer1",
+   "ENGINE_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\FL012.lwo"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/FL026.mdx",
+  "name": "FL026",
+  "ext": "mdx",
+  "size": 8308,
+  "node_count": 2,
+  "nodes": [
+   "FL003:Layer1",
+   "ENGINE_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\FL003.lwo"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/FL029.mdx",
+  "name": "FL029",
+  "ext": "mdx",
+  "size": 8308,
+  "node_count": 2,
+  "nodes": [
+   "FL003:Layer1",
+   "ENGINE_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\FL003.lwo"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/FL030.mdx",
+  "name": "FL030",
+  "ext": "mdx",
+  "size": 8308,
+  "node_count": 2,
+  "nodes": [
+   "FL003:Layer1",
+   "ENGINE_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\FL003.lwo"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/FL031.mdx",
+  "name": "FL031",
+  "ext": "mdx",
+  "size": 6564,
+  "node_count": 2,
+  "nodes": [
+   "FL012:Layer1",
+   "ENGINE_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\FL012.lwo"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/FL032.mdx",
+  "name": "FL032",
+  "ext": "mdx",
+  "size": 6612,
+  "node_count": 2,
+  "nodes": [
+   "FL013:Layer1",
+   "ENGINE_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\FL013.lwo"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/FL033.mdx",
+  "name": "FL033",
+  "ext": "mdx",
+  "size": 8308,
+  "node_count": 2,
+  "nodes": [
+   "FL003:Layer1",
+   "ENGINE_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\FL003.lwo"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/FL034.mdx",
+  "name": "FL034",
+  "ext": "mdx",
+  "size": 8308,
+  "node_count": 2,
+  "nodes": [
+   "FL003:Layer1",
+   "ENGINE_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\FL003.lwo"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/FL035.mdx",
+  "name": "FL035",
+  "ext": "mdx",
+  "size": 6564,
+  "node_count": 2,
+  "nodes": [
+   "FL012:Layer1",
+   "ENGINE_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\FL012.lwo"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/FL037.mdx",
+  "name": "FL037",
+  "ext": "mdx",
+  "size": 8308,
+  "node_count": 2,
+  "nodes": [
+   "FL003:Layer1",
+   "ENGINE_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\FL003.lwo"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/FL039.mdx",
+  "name": "FL039",
+  "ext": "mdx",
+  "size": 8308,
+  "node_count": 2,
+  "nodes": [
+   "FL003:Layer1",
+   "ENGINE_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\FL003.lwo"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/FL040.mdx",
+  "name": "FL040",
+  "ext": "mdx",
+  "size": 8702,
+  "node_count": 3,
+  "nodes": [
+   "FL040:Layer1",
+   "ENGINE_01",
+   "ENGINE_02"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\FL040.lwo"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/FL042.mdx",
+  "name": "FL042",
+  "ext": "mdx",
+  "size": 7218,
+  "node_count": 3,
+  "nodes": [
+   "FL042:Layer1",
+   "ENGINE_01",
+   "ENGINE_02"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\FL042.lwo"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/FL043.mdx",
+  "name": "FL043",
+  "ext": "mdx",
+  "size": 5190,
+  "node_count": 1,
+  "nodes": [
+   "FL043:Layer1"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\FL043.lwo"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/FL044.mdx",
+  "name": "FL044",
+  "ext": "mdx",
+  "size": 8702,
+  "node_count": 3,
+  "nodes": [
+   "FL040:Layer1",
+   "ENGINE_01",
+   "ENGINE_02"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\FL040.lwo"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/FL045.mdx",
+  "name": "FL045",
+  "ext": "mdx",
+  "size": 6612,
+  "node_count": 2,
+  "nodes": [
+   "FL013:Layer1",
+   "ENGINE_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\FL013.lwo"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/FL046.mdx",
+  "name": "FL046",
+  "ext": "mdx",
+  "size": 6564,
+  "node_count": 2,
+  "nodes": [
+   "FL012:Layer1",
+   "ENGINE_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\FL012.lwo"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/FL047.mdx",
+  "name": "FL047",
+  "ext": "mdx",
+  "size": 7218,
+  "node_count": 3,
+  "nodes": [
+   "FL042:Layer1",
+   "ENGINE_01",
+   "ENGINE_02"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\FL042.lwo"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/FM001.mdx",
+  "name": "FM001",
+  "ext": "mdx",
+  "size": 53974,
+  "node_count": 19,
+  "nodes": [
+   "FM001:Layer1",
+   "BEAM_01",
+   "LASER_01",
+   "GUN_01",
+   "GUN_02",
+   "MISSILE_01",
+   "ENGINE_01",
+   "FF_01",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_01",
+   "FR_02",
+   "FL_01",
+   "FL_02",
+   "RR_01",
+   "RL_01",
+   "RL_02",
+   "RR_02"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\FM001\\FM001.lwo",
+   "D\\images\\FM001\\hype_l_body_t2.bmp"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/fm002.mdx",
+  "name": "fm002",
+  "ext": "mdx",
+  "size": 54374,
+  "node_count": 19,
+  "nodes": [
+   "FM002:Layer1",
+   "ENGINE_01",
+   "FF_01",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_01",
+   "FR_02",
+   "FL_01",
+   "FL_02",
+   "RR_01",
+   "RR_02",
+   "RL_01",
+   "RL_02",
+   "BEAM_01",
+   "MISSILE_01",
+   "GUN_01",
+   "GUN_02",
+   "LASER_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\FM002\\FM002.lwo",
+   "D\\images\\FM002\\fl002_body_s1.bmp"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/fm003.mdx",
+  "name": "fm003",
+  "ext": "mdx",
+  "size": 52706,
+  "node_count": 19,
+  "nodes": [
+   "FM003:Layer1",
+   "ENGINE_01",
+   "FF_01",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_01",
+   "FR_02",
+   "FL_01",
+   "FL_02",
+   "RR_01",
+   "RR_02",
+   "RL_01",
+   "RL_02",
+   "BEAM_01",
+   "GUN_01",
+   "GUN_02",
+   "LASER_01",
+   "MISSILE_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\FM003\\FM003.lwo",
+   "D\\images\\FM003\\patro_body01s_l.bmp"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/fm004.mdx",
+  "name": "fm004",
+  "ext": "mdx",
+  "size": 54122,
+  "node_count": 19,
+  "nodes": [
+   "FM004:Layer1",
+   "ENGINE_01",
+   "FF_01",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_01",
+   "FR_02",
+   "FL_01",
+   "FL_02",
+   "RR_01",
+   "RR_02",
+   "RL_01",
+   "RL_02",
+   "BEAM_01",
+   "MISSILE_01",
+   "GUN_01",
+   "GUN_02",
+   "LASER_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\FM004\\FM004.lwo",
+   "D\\images\\FM004\\fl004_shuhou_f.bmp"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/fm005.mdx",
+  "name": "fm005",
+  "ext": "mdx",
+  "size": 56070,
+  "node_count": 19,
+  "nodes": [
+   "FM005:Layer1",
+   "ENGINE_01",
+   "FF_01",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_01",
+   "FR_02",
+   "FL_01",
+   "FL_02",
+   "RR_01",
+   "RR_02",
+   "RL_01",
+   "RL_02",
+   "BEAM_01",
+   "MISSILE_01",
+   "GUN_01",
+   "GUN_02",
+   "LASER_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\FM005\\FM005.lwo",
+   "D\\images\\FM005\\fl005_body_atama.bmp"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/fm006.mdx",
+  "name": "fm006",
+  "ext": "mdx",
+  "size": 55406,
+  "node_count": 19,
+  "nodes": [
+   "FM006:Layer1",
+   "ENGINE_01",
+   "FF_01",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_01",
+   "FR_02",
+   "FL_01",
+   "FL_02",
+   "RR_01",
+   "RR_02",
+   "RL_01",
+   "RL_02",
+   "MISSILE_01",
+   "GUN_01",
+   "GUN_02",
+   "LASER_01",
+   "BEAM_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\FM006\\FM006.lwo",
+   "D\\images\\FM006\\fl006_body_s1.bmp"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/fm007.mdx",
+  "name": "fm007",
+  "ext": "mdx",
+  "size": 54062,
+  "node_count": 19,
+  "nodes": [
+   "FM007:Layer1",
+   "ENGINE_01",
+   "FF_01",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_01",
+   "FR_02",
+   "FL_01",
+   "FL_02",
+   "RR_01",
+   "RR_02",
+   "RL_01",
+   "RL_02",
+   "BEAM_01",
+   "MISSILE_01",
+   "GUN_01",
+   "GUN_02",
+   "LASER_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\FM007\\FM007.lwo",
+   "D\\images\\FM007\\fl007_shuhou_f.bmp"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/fm008.mdx",
+  "name": "fm008",
+  "ext": "mdx",
+  "size": 55800,
+  "node_count": 20,
+  "nodes": [
+   "FM008:Layer1",
+   "ENGINE_01",
+   "FF_01",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_01",
+   "FR_02",
+   "FL_01",
+   "FL_02",
+   "RR_01",
+   "RR_02",
+   "RL_01",
+   "RL_02",
+   "MISSILE_01",
+   "GUN_01",
+   "GUN_02",
+   "LASER_01",
+   "BEAM_01",
+   "BEAM_02"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\FM008\\FM008.lwo",
+   "D\\images\\FM008\\fl008_shuhou_ALL.bmp"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/fm009.mdx",
+  "name": "fm009",
+  "ext": "mdx",
+  "size": 53874,
+  "node_count": 19,
+  "nodes": [
+   "FM009:Layer1",
+   "ENGINE_01",
+   "FF_01",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_01",
+   "FR_02",
+   "FL_01",
+   "FL_02",
+   "RR_01",
+   "RR_02",
+   "RL_01",
+   "RL_02",
+   "BEAM_01",
+   "GUN_01",
+   "GUN_02",
+   "LASER_01",
+   "MISSILE_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\FM009\\FM009.lwo",
+   "D\\images\\FM009\\fl009_shuhou_s2.bmp"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/fm010.mdx",
+  "name": "fm010",
+  "ext": "mdx",
+  "size": 53330,
+  "node_count": 19,
+  "nodes": [
+   "FM010:Layer1",
+   "ENGINE_01",
+   "FF_01",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_01",
+   "FR_02",
+   "FL_01",
+   "FL_02",
+   "RR_01",
+   "RR_02",
+   "RL_01",
+   "RL_02",
+   "BEAM_01",
+   "MISSILE_01",
+   "LASER_01",
+   "GUN_01",
+   "GUN_02"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\FM010\\FM010.lwo",
+   "D\\images\\FM010\\Paramid_l_Body_s.bmp"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/fm011.mdx",
+  "name": "fm011",
+  "ext": "mdx",
+  "size": 143840,
+  "node_count": 19,
+  "nodes": [
+   "FH011:Layer1",
+   "ENGINE_01",
+   "FF_01",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_01",
+   "FR_02",
+   "FL_01",
+   "FL_02",
+   "RR_01",
+   "RR_02",
+   "RL_01",
+   "RL_02",
+   "BEAM_01",
+   "MISSILE_01",
+   "LASER_01",
+   "GUN_01",
+   "GUN_02"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\FH011\\FH011.lwo",
+   "D\\images\\FH011\\fh011_engine.bmp"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/FM012.mdx",
+  "name": "FM012",
+  "ext": "mdx",
+  "size": 42892,
+  "node_count": 14,
+  "nodes": [
+   "FM012:Layer1",
+   "BEAM_01",
+   "GUN_01",
+   "LASER_01",
+   "MISSILE_01",
+   "ENGINE_01",
+   "FF_01",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_01",
+   "FL_01",
+   "RR_01",
+   "RL_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\FM012\\FM012.lwo",
+   "D\\images\\FM012\\houmon.bmp"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/fm013.mdx",
+  "name": "fm013",
+  "ext": "mdx",
+  "size": 310770,
+  "node_count": 14,
+  "nodes": [
+   "FH013:Layer1",
+   "BEAM_01",
+   "FF_01",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_01",
+   "FL_01",
+   "RR_01",
+   "RL_01",
+   "ENGINE_01",
+   "MISSILE_01",
+   "GUN_01",
+   "LASER_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\FH013\\FH013.lwo",
+   "W:\\Gin7\\CG\\D\\images\\FH013.bmp",
+   "W:\\Gin7\\CG\\D\\images\\meca_tile1.bmp",
+   "W:\\Gin7\\CG\\D\\images\\FH013_bump.bmp"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/fm014.mdx",
+  "name": "fm014",
+  "ext": "mdx",
+  "size": 38400,
+  "node_count": 12,
+  "nodes": [
+   "ENGINE_01",
+   "BEAM_01",
+   "FR_01",
+   "RR_01",
+   "FF_01",
+   "FF_02",
+   "FM_014:Layer1",
+   "FF_03",
+   "FF_04",
+   "MISSILE_01",
+   "LASER_01",
+   "GUN_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\FM014\\FM_014.lwo",
+   "D\\images\\FM014\\D_kutiku_l_body_bot.bmp"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/fm015.mdx",
+  "name": "fm015",
+  "ext": "mdx",
+  "size": 43778,
+  "node_count": 13,
+  "nodes": [
+   "fm015:Layer1",
+   "fm015_gun_L:Layer1",
+   "B1",
+   "B2_1",
+   "B2_2",
+   "B2_3",
+   "B2_4",
+   "B5a_1",
+   "B5a_2",
+   "B6a_1",
+   "B6a_2",
+   "C1",
+   "C2"
+  ],
+  "assets": [
+   "VII\\3D\\SHIP\\objects\\FM015\\fm015.lwo",
+   "VII\\3D\\SHIP\\objects\\FM015\\fm015_gun_L.lwo",
+   "VII\\3D\\SHIP\\images\\FM015\\spal_side_f_2.bmp"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/fm016.mdx",
+  "name": "fm016",
+  "ext": "mdx",
+  "size": 52712,
+  "node_count": 18,
+  "nodes": [
+   "FM016:Layer1",
+   "ENGINE_01",
+   "BEAM_01",
+   "FF_01",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_01",
+   "FR_02",
+   "RR_01",
+   "RR_02",
+   "MISSILE_01",
+   "MISSILE_02",
+   "MISSILE_03",
+   "MISSILE_04",
+   "MISSILE_05",
+   "LASEA_01",
+   "GUN"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\FM016\\FM016.lwo",
+   "D\\images\\FM016\\fl016_launcer_s.bmp"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/FM022.mdx",
+  "name": "FM022",
+  "ext": "mdx",
+  "size": 42892,
+  "node_count": 14,
+  "nodes": [
+   "FM022:Layer1",
+   "BEAM_01",
+   "GUN_01",
+   "LASER_01",
+   "MISSILE_01",
+   "ENGINE_01",
+   "FF_01",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_01",
+   "FL_01",
+   "RR_01",
+   "RL_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D2\\objects\\FM022\\FM022.lwo",
+   "D2\\images\\FM022\\FL022houmon.bmp"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/FM023.mdx",
+  "name": "FM023",
+  "ext": "mdx",
+  "size": 52706,
+  "node_count": 19,
+  "nodes": [
+   "FM003:Layer1",
+   "ENGINE_01",
+   "FF_01",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_01",
+   "FR_02",
+   "FL_01",
+   "FL_02",
+   "RR_01",
+   "RR_02",
+   "RL_01",
+   "RL_02",
+   "BEAM_01",
+   "GUN_01",
+   "GUN_02",
+   "LASER_01",
+   "MISSILE_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\FM003\\FM003.lwo",
+   "D\\images\\FM003\\patro_body01s_l.bmp"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/FM024.mdx",
+  "name": "FM024",
+  "ext": "mdx",
+  "size": 48278,
+  "node_count": 14,
+  "nodes": [
+   "FL024:Layer1",
+   "BEAM_01",
+   "ENGINE_01",
+   "FF_01",
+   "FF_02",
+   "FR_01",
+   "RR_01",
+   "FF_03",
+   "FF_04",
+   "FL_01",
+   "RL01",
+   "MISSILE_01",
+   "LASER_01",
+   "GUN_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D2\\objects\\FM024\\FL024.lwo",
+   "D2\\images\\FM024\\agat_l_body2_s2.bmp"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/FM025.mdx",
+  "name": "FM025",
+  "ext": "mdx",
+  "size": 44028,
+  "node_count": 14,
+  "nodes": [
+   "FM025:Layer1",
+   "BEAM_01",
+   "ENGINE_01",
+   "FF_01",
+   "FF_02",
+   "FR_01",
+   "RR_01",
+   "FL_01",
+   "RL_01",
+   "MISSILE_01",
+   "LASER_01",
+   "GUN_01",
+   "FF_03",
+   "FF_04"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D2\\objects\\FM025\\FM025.lwo",
+   "D2\\images\\FM025\\mufl_body_s02.bmp"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/FM026.mdx",
+  "name": "FM026",
+  "ext": "mdx",
+  "size": 52706,
+  "node_count": 19,
+  "nodes": [
+   "FM003:Layer1",
+   "ENGINE_01",
+   "FF_01",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_01",
+   "FR_02",
+   "FL_01",
+   "FL_02",
+   "RR_01",
+   "RR_02",
+   "RL_01",
+   "RL_02",
+   "BEAM_01",
+   "GUN_01",
+   "GUN_02",
+   "LASER_01",
+   "MISSILE_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\FM003\\FM003.lwo",
+   "D\\images\\FM003\\patro_body01s_l.bmp"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/FM029.mdx",
+  "name": "FM029",
+  "ext": "mdx",
+  "size": 52706,
+  "node_count": 19,
+  "nodes": [
+   "FM003:Layer1",
+   "ENGINE_01",
+   "FF_01",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_01",
+   "FR_02",
+   "FL_01",
+   "FL_02",
+   "RR_01",
+   "RR_02",
+   "RL_01",
+   "RL_02",
+   "BEAM_01",
+   "GUN_01",
+   "GUN_02",
+   "LASER_01",
+   "MISSILE_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\FM003\\FM003.lwo",
+   "D\\images\\FM003\\patro_body01s_l.bmp"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/FM030.mdx",
+  "name": "FM030",
+  "ext": "mdx",
+  "size": 52706,
+  "node_count": 19,
+  "nodes": [
+   "FM003:Layer1",
+   "ENGINE_01",
+   "FF_01",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_01",
+   "FR_02",
+   "FL_01",
+   "FL_02",
+   "RR_01",
+   "RR_02",
+   "RL_01",
+   "RL_02",
+   "BEAM_01",
+   "GUN_01",
+   "GUN_02",
+   "LASER_01",
+   "MISSILE_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\FM003\\FM003.lwo",
+   "D\\images\\FM003\\patro_body01s_l.bmp"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/FM031.mdx",
+  "name": "FM031",
+  "ext": "mdx",
+  "size": 287964,
+  "node_count": 14,
+  "nodes": [
+   "FH031:Layer1",
+   "BEAM_01",
+   "GUN_01",
+   "LASER_01",
+   "MISSILE_01",
+   "ENGINE_01",
+   "FF_01",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_01",
+   "FL_01",
+   "RR_01",
+   "RL_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D2\\objects\\FH031\\FH031.lwo",
+   "W:\\Gin7\\CG\\D2\\images\\FH031.bmp",
+   "W:\\Gin7\\CG\\D2\\images\\meca_tile.bmp",
+   "W:\\Gin7\\CG\\D2\\images\\FH031_bump.bmp"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/FM032.mdx",
+  "name": "FM032",
+  "ext": "mdx",
+  "size": 40242,
+  "node_count": 13,
+  "nodes": [
+   "FM032:Layer1",
+   "BEAM_01",
+   "ENGINE_01",
+   "FR_01",
+   "RR_01",
+   "FF_01",
+   "FF_02",
+   "FL_01",
+   "RL_01",
+   "MISSILE_01",
+   "LASER_01",
+   "GUN_01",
+   "GUN_02"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D2\\objects\\FM032\\FM032.lwo",
+   "D2\\images\\FM032\\FL032_body1_1.bmp"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/FM033.mdx",
+  "name": "FM033",
+  "ext": "mdx",
+  "size": 52706,
+  "node_count": 19,
+  "nodes": [
+   "FM003:Layer1",
+   "ENGINE_01",
+   "FF_01",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_01",
+   "FR_02",
+   "FL_01",
+   "FL_02",
+   "RR_01",
+   "RR_02",
+   "RL_01",
+   "RL_02",
+   "BEAM_01",
+   "GUN_01",
+   "GUN_02",
+   "LASER_01",
+   "MISSILE_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\FM003\\FM003.lwo",
+   "D\\images\\FM003\\patro_body01s_l.bmp"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/FM034.mdx",
+  "name": "FM034",
+  "ext": "mdx",
+  "size": 52706,
+  "node_count": 19,
+  "nodes": [
+   "FM003:Layer1",
+   "ENGINE_01",
+   "FF_01",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_01",
+   "FR_02",
+   "FL_01",
+   "FL_02",
+   "RR_01",
+   "RR_02",
+   "RL_01",
+   "RL_02",
+   "BEAM_01",
+   "GUN_01",
+   "GUN_02",
+   "LASER_01",
+   "MISSILE_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\FM003\\FM003.lwo",
+   "D\\images\\FM003\\patro_body01s_l.bmp"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/FM035.mdx",
+  "name": "FM035",
+  "ext": "mdx",
+  "size": 42892,
+  "node_count": 14,
+  "nodes": [
+   "FM012:Layer1",
+   "BEAM_01",
+   "GUN_01",
+   "LASER_01",
+   "MISSILE_01",
+   "ENGINE_01",
+   "FF_01",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_01",
+   "FL_01",
+   "RR_01",
+   "RL_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\FM012\\FM012.lwo",
+   "D\\images\\FM012\\houmon.bmp"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/FM037.mdx",
+  "name": "FM037",
+  "ext": "mdx",
+  "size": 52706,
+  "node_count": 19,
+  "nodes": [
+   "FM003:Layer1",
+   "ENGINE_01",
+   "FF_01",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_01",
+   "FR_02",
+   "FL_01",
+   "FL_02",
+   "RR_01",
+   "RR_02",
+   "RL_01",
+   "RL_02",
+   "BEAM_01",
+   "GUN_01",
+   "GUN_02",
+   "LASER_01",
+   "MISSILE_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\FM003\\FM003.lwo",
+   "D\\images\\FM003\\patro_body01s_l.bmp"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/FM039.mdx",
+  "name": "FM039",
+  "ext": "mdx",
+  "size": 52706,
+  "node_count": 19,
+  "nodes": [
+   "FM003:Layer1",
+   "ENGINE_01",
+   "FF_01",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_01",
+   "FR_02",
+   "FL_01",
+   "FL_02",
+   "RR_01",
+   "RR_02",
+   "RL_01",
+   "RL_02",
+   "BEAM_01",
+   "GUN_01",
+   "GUN_02",
+   "LASER_01",
+   "MISSILE_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\FM003\\FM003.lwo",
+   "D\\images\\FM003\\patro_body01s_l.bmp"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/FM040.mdx",
+  "name": "FM040",
+  "ext": "mdx",
+  "size": 51376,
+  "node_count": 16,
+  "nodes": [
+   "FM040:Layer1",
+   "BEAM_01",
+   "GUN_01",
+   "LASER_01",
+   "MISSILE_01",
+   "ENGINE_01",
+   "ENGINE_02",
+   "FF_01",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_01",
+   "FL_01",
+   "RR_01",
+   "RL_01",
+   "FM040_Cylinder03:Layer1"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D2\\objects\\FM040\\FM040.lwo",
+   "W:\\Gin7\\CG\\D2\\objects\\FM040\\FM040_Cylinder03.lwo",
+   "D2\\images\\FM040\\FL040_Body02.bmp"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/FM042.mdx",
+  "name": "FM042",
+  "ext": "mdx",
+  "size": 55686,
+  "node_count": 17,
+  "nodes": [
+   "FM042:Layer1",
+   "ENGINE_01",
+   "FF_01",
+   "FR_01",
+   "RR_01",
+   "BEAM_01",
+   "LASER_01",
+   "ENGINE_02",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_02",
+   "FL_01",
+   "FL_02",
+   "RR_02",
+   "RL_01",
+   "RL_02"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D2\\objects\\FM042\\FM042.lwo",
+   "W:\\Gin7\\CG\\D2\\images\\FM042.bmp",
+   "W:\\Gin7\\CG\\D2\\images\\meca_tile.bmp"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/FM043.mdx",
+  "name": "FM043",
+  "ext": "mdx",
+  "size": 50148,
+  "node_count": 16,
+  "nodes": [
+   "ENGINE_01",
+   "FF_01",
+   "FR_01",
+   "RR_01",
+   "LASER_01",
+   "FM043:Layer1",
+   "ENGINE_02",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_02",
+   "FL_01",
+   "FL_02",
+   "RR_02",
+   "RL_01",
+   "RL_02"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D2\\objects\\FM043\\FM043.lwo",
+   "W:\\Gin7\\CG\\D2\\images\\FM043.bmp",
+   "W:\\Gin7\\CG\\D2\\images\\meca_tile.bmp"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/FM044.mdx",
+  "name": "FM044",
+  "ext": "mdx",
+  "size": 51376,
+  "node_count": 16,
+  "nodes": [
+   "FM040:Layer1",
+   "BEAM_01",
+   "GUN_01",
+   "LASER_01",
+   "MISSILE_01",
+   "ENGINE_01",
+   "ENGINE_02",
+   "FF_01",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_01",
+   "FL_01",
+   "RR_01",
+   "RL_01",
+   "FM040_Cylinder03:Layer1"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D2\\objects\\FM040\\FM040.lwo",
+   "W:\\Gin7\\CG\\D2\\objects\\FM040\\FM040_Cylinder03.lwo",
+   "D2\\images\\FM040\\FL040_Body02.bmp"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/FM045.mdx",
+  "name": "FM045",
+  "ext": "mdx",
+  "size": 346472,
+  "node_count": 19,
+  "nodes": [
+   "FH045:Layer1",
+   "BEAM_01",
+   "FF_01",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_01",
+   "FR_02",
+   "FL_01",
+   "FL_02",
+   "RR_01",
+   "RR_02",
+   "RL_01",
+   "RL_02",
+   "ENGINE_01",
+   "MISSILE_01",
+   "GUN_01",
+   "LASER_01",
+   "MISSILE_02"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D3\\objects\\FH045\\FH045.lwo",
+   "W:\\Gin7\\CG\\D3\\images\\FH045.bmp",
+   "W:\\Gin7\\CG\\D1\\images\\meca_tile1.bmp",
+   "W:\\Gin7\\CG\\D3\\images\\FH045_bump.bmp",
+   "W:\\Gin7\\CG\\D1\\images\\FH013.bmp"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/FM046.mdx",
+  "name": "FM046",
+  "ext": "mdx",
+  "size": 42892,
+  "node_count": 14,
+  "nodes": [
+   "FM012:Layer1",
+   "BEAM_01",
+   "GUN_01",
+   "LASER_01",
+   "MISSILE_01",
+   "ENGINE_01",
+   "FF_01",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_01",
+   "FL_01",
+   "RR_01",
+   "RL_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\FM012\\FM012.lwo",
+   "D\\images\\FM012\\houmon.bmp"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/FM047.mdx",
+  "name": "FM047",
+  "ext": "mdx",
+  "size": 55686,
+  "node_count": 17,
+  "nodes": [
+   "FM042:Layer1",
+   "ENGINE_01",
+   "FF_01",
+   "FR_01",
+   "RR_01",
+   "BEAM_01",
+   "LASER_01",
+   "ENGINE_02",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_02",
+   "FL_01",
+   "FL_02",
+   "RR_02",
+   "RL_01",
+   "RL_02"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D2\\objects\\FM042\\FM042.lwo",
+   "W:\\Gin7\\CG\\D2\\images\\FM042.bmp",
+   "W:\\Gin7\\CG\\D2\\images\\meca_tile.bmp"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/GE/e_top.mdx",
+  "name": "e_top",
+  "ext": "mdx",
+  "size": 2682,
+  "node_count": 1,
+  "nodes": [
+   "box_ge:Layer1"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\2D\\p\\test\\box_ge.lwo"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/EH001.mdx",
+  "name": "EH001",
+  "ext": "mdx",
+  "size": 246026,
+  "node_count": 23,
+  "nodes": [
+   "EH001x:Layer1",
+   "ENGINE_01",
+   "ENGINE_02",
+   "ENGINE_03",
+   "ENGINE_04",
+   "FR_01",
+   "FR_02",
+   "FL_01",
+   "FL_02",
+   "RR_01",
+   "RR_02",
+   "RL_01",
+   "RL_02",
+   "FF_01",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "MISSILE_01",
+   "GUN_01",
+   "GUN_02",
+   "LASER_01",
+   "BEAM_01",
+   "BEAM_03"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\EH001\\EH001x.lwo",
+   "W:\\Gin7\\CG\\D\\images\\EH001.bmp",
+   "W:\\Gin7\\CG\\D\\images\\meca_tile2.bmp",
+   "W:\\Gin7\\CG\\D\\images\\EH001_bump.tga"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/EH002.mdx",
+  "name": "EH002",
+  "ext": "mdx",
+  "size": 224588,
+  "node_count": 21,
+  "nodes": [
+   "EH002:Layer1",
+   "ENGINE_01",
+   "ENGINE_02",
+   "ENGINE_03",
+   "FF_01",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_01",
+   "FR_02",
+   "FL_01",
+   "FL_02",
+   "RR_01",
+   "RR_02",
+   "RL_01",
+   "RL_02",
+   "BEAM_01",
+   "MISSILE_01",
+   "GUN_01",
+   "GUN_02",
+   "LASER_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\EH002\\EH002.lwo",
+   "W:\\Gin7\\CG\\D\\images\\EH002.bmp",
+   "W:\\Gin7\\CG\\D\\images\\meca_tile2.bmp"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/EH003.mdx",
+  "name": "EH003",
+  "ext": "mdx",
+  "size": 229262,
+  "node_count": 20,
+  "nodes": [
+   "EH003:Layer1",
+   "ENGINE_01",
+   "ENGINE_02",
+   "ENGINE_03",
+   "BEAM_01",
+   "FF_01",
+   "FF_02",
+   "FR_01",
+   "FR_02",
+   "FL_01",
+   "FL_02",
+   "MISSILE_01",
+   "GUN_01",
+   "GUN_02",
+   "LASER_01",
+   "null",
+   "RR_01",
+   "RR_02",
+   "RL_01",
+   "RL_02"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\EH003\\EH003.lwo",
+   "W:\\Gin7\\CG\\D\\images\\eh003.bmp",
+   "W:\\Gin7\\CG\\D\\images\\meca_tile.bmp",
+   "W:\\Gin7\\CG\\D\\images\\eh003_bump.bmp"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/EH004.mdx",
+  "name": "EH004",
+  "ext": "mdx",
+  "size": 234124,
+  "node_count": 19,
+  "nodes": [
+   "EH004:Layer1",
+   "BEAM_02",
+   "FR_01",
+   "FR_02",
+   "FL_01",
+   "FL_02",
+   "RR_01",
+   "RR_02",
+   "RL_01",
+   "RL_02",
+   "FF_01",
+   "FF_02",
+   "MISSILE_01",
+   "GUN_01",
+   "GUN_02",
+   "LASER_01",
+   "ENGINE_01",
+   "ENGINE_02",
+   "ENGINE_03"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\EH004\\EH004.lwo",
+   "W:\\Gin7\\CG\\D\\images\\EH004.bmp",
+   "W:\\Gin7\\CG\\D\\images\\meca_tile2.bmp",
+   "W:\\Gin7\\CG\\D\\images\\EH004_bump.bmp"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/EH005.mdx",
+  "name": "EH005",
+  "ext": "mdx",
+  "size": 249314,
+  "node_count": 22,
+  "nodes": [
+   "EH005:Layer1",
+   "ENGINE_01",
+   "ENGINE_02",
+   "ENGINE_03",
+   "ENGINE_04",
+   "BEAM_01",
+   "FF_01",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_01",
+   "FR_02",
+   "FL_01",
+   "FL_02",
+   "RR_01",
+   "RR_02",
+   "RL_01",
+   "RL_02",
+   "MISSILE_01",
+   "LASER_01",
+   "GUN_01",
+   "GUN_02"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\EH005\\EH005.lwo",
+   "W:\\Gin7\\CG\\D\\images\\eh005.bmp",
+   "W:\\Gin7\\CG\\D\\images\\meca_tile.bmp",
+   "W:\\Gin7\\CG\\D\\images\\eh005_bump.bmp"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/EH006.mdx",
+  "name": "EH006",
+  "ext": "mdx",
+  "size": 242132,
+  "node_count": 21,
+  "nodes": [
+   "EH006:Layer1",
+   "ENGINE_01",
+   "ENGINE_02",
+   "ENGINE_03",
+   "BEAM_01",
+   "FF_01",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_01",
+   "FR_02",
+   "FL_01",
+   "FL_02",
+   "LR_01",
+   "LR_02",
+   "LL_01",
+   "LL_02",
+   "MISSILE_01",
+   "GUN_01",
+   "GUN_02",
+   "LASER_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\EH006\\EH006.lwo",
+   "W:\\Gin7\\CG\\D\\images\\eh006.bmp",
+   "W:\\Gin7\\CG\\D\\images\\meca_tile.bmp",
+   "W:\\Gin7\\CG\\D\\images\\eh006_bump.bmp"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/EH007.mdx",
+  "name": "EH007",
+  "ext": "mdx",
+  "size": 203960,
+  "node_count": 24,
+  "nodes": [
+   "EH007:Layer1",
+   "ENGINE_01",
+   "ENGINE_02",
+   "ENGINE_03",
+   "ENGINE_04",
+   "ENGINE_05",
+   "ENGINE_06",
+   "BEAM_01",
+   "FF_01",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_01",
+   "FR_02",
+   "FL_01",
+   "FL_02",
+   "LR_01",
+   "LR_02",
+   "LL_01",
+   "LL_02",
+   "MISSILE_01",
+   "GUN_01",
+   "GUN_02",
+   "LASER_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\EH007\\EH007.lwo",
+   "W:\\Gin7\\CG\\D\\images\\eh007.bmp",
+   "W:\\Gin7\\CG\\D\\images\\meca_tile.bmp"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/EH008.mdx",
+  "name": "EH008",
+  "ext": "mdx",
+  "size": 169662,
+  "node_count": 22,
+  "nodes": [
+   "EH008:Layer1",
+   "ENGINE_01",
+   "ENGINE_02",
+   "ENGINE_03",
+   "ENGINE_04",
+   "BEAM_01",
+   "FF_01",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_01",
+   "FR_02",
+   "FL_01",
+   "FL_02",
+   "LR_01",
+   "LR_02",
+   "LL_01",
+   "LL_02",
+   "MISSILE_01",
+   "GUN_01",
+   "GUN_02",
+   "LASER_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\EH008\\EH008.lwo",
+   "W:\\Gin7\\CG\\D\\images\\EH008.bmp",
+   "W:\\Gin7\\CG\\D\\images\\meca_tile1.bmp"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/EH009.mdx",
+  "name": "EH009",
+  "ext": "mdx",
+  "size": 279312,
+  "node_count": 22,
+  "nodes": [
+   "EH009:Layer1",
+   "ENGINE_01",
+   "ENGINE_02",
+   "ENGINE_03",
+   "ENGINE_04",
+   "FF_02",
+   "FF_01",
+   "FF_04",
+   "FF_03",
+   "FR_01",
+   "FR_02",
+   "RR_01",
+   "RR_02",
+   "FR_03",
+   "FR_04",
+   "RR_03",
+   "RR_04",
+   "BEAM_01",
+   "GUN_01",
+   "GUN_02",
+   "LASER_01",
+   "MISSILE_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\EH009\\EH009.lwo",
+   "W:\\Gin7\\CG\\D\\images\\EH009.bmp",
+   "W:\\Gin7\\CG\\D\\images\\meca_tile1.bmp",
+   "W:\\Gin7\\CG\\D\\images\\EH009_bump.bmp"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/EH010.mdx",
+  "name": "EH010",
+  "ext": "mdx",
+  "size": 243120,
+  "node_count": 18,
+  "nodes": [
+   "ENGINE_01",
+   "ENGINE_02",
+   "BEAM_01",
+   "EH010:Layer1",
+   "FF_01",
+   "FF_02",
+   "GUN_01",
+   "GUN_02",
+   "FR_01",
+   "FR_02",
+   "FL_01",
+   "FL_02",
+   "RR_01",
+   "RR_02",
+   "RL_01",
+   "RL_02",
+   "MISSILE_01",
+   "LASER_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\EH010\\EH010.lwo",
+   "W:\\Gin7\\CG\\D\\images\\EH010.bmp",
+   "W:\\Gin7\\CG\\D\\images\\meca_tile1.bmp",
+   "W:\\Gin7\\CG\\D\\images\\EH010_bump.bmp"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/EH011.mdx",
+  "name": "EH011",
+  "ext": "mdx",
+  "size": 249582,
+  "node_count": 21,
+  "nodes": [
+   "EH011:Layer1",
+   "ENGINE_01",
+   "ENGINE_02",
+   "ENGINE_03",
+   "BEAM_01",
+   "FR_01",
+   "FR_02",
+   "FL_01",
+   "FL_02",
+   "RR_01",
+   "RR_02",
+   "RL_01",
+   "RL_02",
+   "FF_01",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "MISSILE_01",
+   "LASER_01",
+   "GUN_01",
+   "GUN_02"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\EH011\\EH011.lwo",
+   "W:\\Gin7\\CG\\D\\images\\EH011.bmp",
+   "W:\\Gin7\\CG\\D\\images\\meca_tile1.bmp",
+   "W:\\Gin7\\CG\\D\\images\\EH011_bump.bmp"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/EH012.mdx",
+  "name": "EH012",
+  "ext": "mdx",
+  "size": 259042,
+  "node_count": 21,
+  "nodes": [
+   "EH012:Layer1",
+   "ENGINE_01",
+   "ENGINE_02",
+   "ENGINE_03",
+   "BEAM_01",
+   "FF_01",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_01",
+   "FR_02",
+   "FL_01",
+   "FL_02",
+   "RR_01",
+   "RR_02",
+   "RL_01",
+   "RL_02",
+   "GUN_01",
+   "GUN_02",
+   "LASER_01",
+   "MISSILE_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\EH012\\EH012.lwo",
+   "W:\\Gin7\\CG\\D\\images\\eh012.bmp",
+   "W:\\Gin7\\CG\\D\\images\\meca_tile.bmp",
+   "W:\\Gin7\\CG\\D\\images\\EH012_bump.bmp"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/EH013.mdx",
+  "name": "EH013",
+  "ext": "mdx",
+  "size": 254162,
+  "node_count": 23,
+  "nodes": [
+   "EH013:Layer1",
+   "ENGINE_01",
+   "ENGINE_03",
+   "ENGINE_04",
+   "ENGINE_05",
+   "ENGINE_06",
+   "BEAM_01",
+   "FF_01",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_01",
+   "FR_02",
+   "FL_01",
+   "FL_02",
+   "LR_01",
+   "LR_02",
+   "LL_01",
+   "LL_02",
+   "MISSILE_01",
+   "GUN_01",
+   "GUN_02",
+   "LASER_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\EH013\\EH013.lwo",
+   "W:\\Gin7\\CG\\D\\images\\EH013.bmp",
+   "W:\\Gin7\\CG\\D\\images\\meca_tile.bmp",
+   "W:\\Gin7\\CG\\D\\images\\EH013_bump.bmp",
+   "W:`/}?6"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/EH014.mdx",
+  "name": "EH014",
+  "ext": "mdx",
+  "size": 219072,
+  "node_count": 21,
+  "nodes": [
+   "EH014:Layer1",
+   "ENGINE_01",
+   "ENGINE_02",
+   "ENGINE_03",
+   "ENGINE_04",
+   "BEAM_01",
+   "FF_01",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_01",
+   "FR_02",
+   "FL_01",
+   "FL_02",
+   "RR_01",
+   "RR_02",
+   "RL_01",
+   "RL_02",
+   "MISSILE_01",
+   "GUN_01",
+   "LASER_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\EH014\\EH014.lwo",
+   "W:\\Gin7\\CG\\D\\images\\EH014.bmp",
+   "W:\\Gin7\\CG\\D\\images\\meca_tile1.bmp",
+   "W:\\Gin7\\CG\\D\\images\\EH014_bump.tga"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/EH015.mdx",
+  "name": "EH015",
+  "ext": "mdx",
+  "size": 317918,
+  "node_count": 22,
+  "nodes": [
+   "EH015:Layer1",
+   "ENGINE_01",
+   "ENGINE_02",
+   "FR_01",
+   "FR_02",
+   "RR_01",
+   "RR_02",
+   "FL_01",
+   "FL_02",
+   "RL_01",
+   "RL_02",
+   "FF_01",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "RAILGUN_01",
+   "RAILGUN_02",
+   "RAILGUN_03",
+   "RAILGUN_04",
+   "MISSILE_01",
+   "BEAM_01",
+   "LASER_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\EH015\\EH015.lwo",
+   "W:\\Gin7\\CG\\D\\images\\EH015.bmp",
+   "W:\\Gin7\\CG\\D\\images\\meca_tile.bmp",
+   "W:\\Gin7\\CG\\D\\images\\EH015_bump.bmp"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/EH016.mdx",
+  "name": "EH016",
+  "ext": "mdx",
+  "size": 244368,
+  "node_count": 23,
+  "nodes": [
+   "EH016:Layer1",
+   "ENGINE_01",
+   "ENGINE_02",
+   "ENGINE_03",
+   "ENGINE_04",
+   "FF_01",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_01",
+   "FR_02",
+   "FL_01",
+   "FL_02",
+   "RR_01",
+   "RR_02",
+   "RR_03",
+   "RR_04",
+   "BEAM_01",
+   "MISSILE_01",
+   "MISSILE_02",
+   "GUN_01",
+   "GUN_02",
+   "LASER_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\EH016\\EH016.lwo",
+   "W:\\Gin7\\CG\\D\\images\\EH016.bmp",
+   "W:\\Gin7\\CG\\D\\images\\meca_tile1.bmp",
+   "W:\\Gin7\\CG\\D\\images\\EH016_bump.bmp"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/EH017.mdx",
+  "name": "EH017",
+  "ext": "mdx",
+  "size": 137178,
+  "node_count": 29,
+  "nodes": [
+   "EH017.lwo",
+   "B1_1",
+   "B1_2",
+   "B3b_1",
+   "B3b_2",
+   "B3a_1",
+   "B3a_2",
+   "B4b_1",
+   "B4b_2",
+   "B4a_1",
+   "B4a_2",
+   "B5a_1",
+   "B5a_2",
+   "B5b_1",
+   "B5b_2",
+   "B6a_1",
+   "B6a_2",
+   "B6b_1",
+   "B6b_2",
+   "B2_1",
+   "B2_2",
+   "B2_3",
+   "B2_4",
+   "C_1",
+   "C_2",
+   "C_3",
+   "C_4",
+   "B1_3",
+   "B1_4"
+  ],
+  "assets": [
+   "LW_objects\\EH017\\EH017.lwo",
+   "\\eh017_body_sa.bmp"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/EH018.mdx",
+  "name": "EH018",
+  "ext": "mdx",
+  "size": 107570,
+  "node_count": 8,
+  "nodes": [
+   "EH018_01.lwo",
+   "B2",
+   "B1",
+   "C4",
+   "C1",
+   "C2",
+   "C3",
+   "EH018_02.lwo"
+  ],
+  "assets": [
+   "LW_objects\\EH018\\EH018_01.lwo",
+   "LW_objects\\EH018\\EH018_02.lwo",
+   "\\eh018_body_s03.bmp"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/EH019.mdx",
+  "name": "EH019",
+  "ext": "mdx",
+  "size": 277914,
+  "node_count": 17,
+  "nodes": [
+   "EH019:Layer1",
+   "ENGINE_01",
+   "ENGINE_02",
+   "ENGINE_03",
+   "BEAM_01",
+   "FF_01",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_01",
+   "FL_01",
+   "RR_01",
+   "RL_01",
+   "GUN_01",
+   "GUN_02",
+   "LASER_01",
+   "MISSILE_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D2\\objects\\EH019\\EH019.lwo",
+   "W:\\Gin7\\CG\\D2\\images\\EH019.bmp",
+   "W:\\Gin7\\CG\\D2\\images\\meca_tile.bmp",
+   "W:\\Gin7\\CG\\D2\\images\\EH019_bump.bmp"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/EH020.mdx",
+  "name": "EH020",
+  "ext": "mdx",
+  "size": 290298,
+  "node_count": 4,
+  "nodes": [
+   "EH020:Layer1",
+   "BEAM_01",
+   "FF_01",
+   "FF_02"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D2\\objects\\EH020\\EH020.lwo",
+   "W:\\Gin7\\CG\\D2\\images\\EH020.bmp",
+   "W:\\Gin7\\CG\\D2\\images\\meca_tile.bmp",
+   "W:\\Gin7\\CG\\D2\\images\\EH020_bump.bmp"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/EH021.mdx",
+  "name": "EH021",
+  "ext": "mdx",
+  "size": 201852,
+  "node_count": 20,
+  "nodes": [
+   "EH021:Layer1",
+   "ENGINE_01",
+   "BEAM_01",
+   "FF_01",
+   "FF_02",
+   "GUN_01",
+   "FR_01",
+   "FR_02",
+   "RR_01",
+   "MISSILE_01",
+   "LASER_01",
+   "ENGINE_02",
+   "ENGINE_03",
+   "ENGINE_04",
+   "GUN_02",
+   "RR_02",
+   "FL_01",
+   "FL_02",
+   "RL_01",
+   "RL_02"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D3\\objects\\EH021\\EH021.lwo",
+   "W:\\Gin7\\CG\\D3\\images\\EH021.bmp",
+   "W:\\Gin7\\CG\\D3\\images\\meca_tile1.bmp",
+   "W:\\Gin7\\CG\\D3\\images\\EH021_bump.bmp"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/EH022.mdx",
+  "name": "EH022",
+  "ext": "mdx",
+  "size": 239272,
+  "node_count": 18,
+  "nodes": [
+   "EH022:Layer1",
+   "ENGINE_01",
+   "ENGINE_02",
+   "ENGINE_03",
+   "ENGINE_04",
+   "FF_01",
+   "FF_02",
+   "FR_01",
+   "FL_01",
+   "RR_01",
+   "RR_02",
+   "RL_01",
+   "RL_02",
+   "BEAM_01",
+   "BEAM_02",
+   "MISSILE_01",
+   "GUN_01",
+   "GUN_02"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D3\\objects\\EH022\\EH022.lwo",
+   "W:\\Gin7\\CG\\D3\\images\\EH022.bmp",
+   "W:\\Gin7\\CG\\D3\\images\\EH022_bump.bmp",
+   "W:\\Gin7\\CG\\D3\\images\\meca_tile1.bmp"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/EH023.mdx",
+  "name": "EH023",
+  "ext": "mdx",
+  "size": 281628,
+  "node_count": 18,
+  "nodes": [
+   "EH023:Layer1",
+   "ENGINE_01",
+   "ENGINE_02",
+   "ENGINE_03",
+   "ENGINE_04",
+   "FR_01",
+   "FL_01",
+   "RR_01",
+   "RL_01",
+   "FF_01",
+   "FF_03",
+   "FF_02",
+   "FF_04",
+   "BEAM_01",
+   "MISSILE_01",
+   "LASER_01",
+   "GUN_01",
+   "GUN_02"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D2\\objects\\EH023\\EH023.lwo",
+   "W:\\Gin7\\CG\\D2\\images\\EH023.bmp",
+   "W:\\Gin7\\CG\\D2\\images\\meca_tile.bmp",
+   "W:\\Gin7\\CG\\D2\\images\\EH023_bump.bmp"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/EH024.mdx",
+  "name": "EH024",
+  "ext": "mdx",
+  "size": 125342,
+  "node_count": 18,
+  "nodes": [
+   "EH024:Layer1",
+   "ENGINE_01",
+   "BEAM_01",
+   "FF_01",
+   "FR_01",
+   "FR_02",
+   "RR_01",
+   "RR_02",
+   "GUN_01",
+   "MISSILE_01",
+   "LASER_01",
+   "FF_02",
+   "FL_01",
+   "FL_02",
+   "RL_01",
+   "RL_02",
+   "GUN_02",
+   "ENGINE_02"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D3\\objects\\EH024\\EH024.lwo",
+   "D3\\images\\EH024\\EH024_Body_tana.bmp"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/EH025.mdx",
+  "name": "EH025",
+  "ext": "mdx",
+  "size": 178878,
+  "node_count": 20,
+  "nodes": [
+   "EH025:Layer1",
+   "ENGINE_01",
+   "ENGINE_02",
+   "ENGINE_03",
+   "FF_1",
+   "FF_2",
+   "FF_3",
+   "FF_4",
+   "FR_01",
+   "FR_02",
+   "RR_01",
+   "RR_02",
+   "FL_01",
+   "FL_02",
+   "RL_01",
+   "RL_02",
+   "MISSILE_01",
+   "GUN_01",
+   "GUN_02",
+   "LASER_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D2\\objects\\EH025\\EH025.lwo",
+   "W:\\Gin7\\CG\\D2\\images\\EH025.bmp",
+   "W:\\Gin7\\CG\\D2\\images\\meca_tile.bmp"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/EH027.mdx",
+  "name": "EH027",
+  "ext": "mdx",
+  "size": 391830,
+  "node_count": 29,
+  "nodes": [
+   "EH023:Layer1",
+   "ENGINE_01",
+   "ENGINE_02",
+   "ENGINE_03",
+   "ENGINE_04",
+   "FR_01",
+   "FL_01",
+   "RR_01",
+   "RL_01",
+   "FF_01",
+   "FF_03",
+   "FF_02",
+   "FF_04",
+   "BEAM_01",
+   "MISSILE_01",
+   "LASER_01",
+   "GUN_01",
+   "GUN_02",
+   "EH027L:Layer1",
+   "EH027R:Layer1",
+   "ENGINE_05",
+   "FF_05",
+   "FR_03",
+   "FR_04",
+   "RR_03",
+   "FF_06",
+   "FL_03",
+   "FL_04",
+   "RL_03"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D2\\objects\\EH023\\EH023.lwo",
+   "W:\\Gin7\\CG\\D3\\objects\\EH027L\\EH027L.lwo",
+   "W:\\Gin7\\CG\\D3\\objects\\EH027R\\EH027R.lwo",
+   "W:\\Gin7\\CG\\D2\\images\\EH023.bmp",
+   "W:\\Gin7\\CG\\D2\\images\\meca_tile.bmp",
+   "W:\\Gin7\\CG\\D2\\images\\EH023_bump.bmp",
+   "W:\\Gin7\\CG\\D3\\images\\EH027L\\EH027L_side.bmp",
+   "W:\\Gin7\\CG\\D3\\images\\EH027L\\EH027L_fire.bmp",
+   "W:\\Gin7\\CG\\D3\\images\\EH027L\\EL027L_ball.bmp",
+   "W:\\Gin7\\CG\\D3\\images\\EH027L\\EH027L_front_in.bmp",
+   "W:\\Gin7\\CG\\D3\\images\\EH027R\\EH027R_side.bmp",
+   "W:\\Gin7\\CG\\D3\\images\\EH027R\\EH027R_fire.bmp",
+   "W:\\Gin7\\CG\\D3\\images\\EH027R\\EL027R_ball.bmp",
+   "W:\\Gin7\\CG\\D3\\images\\EH027R\\EH027R_front_in.bmp"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/EH028.mdx",
+  "name": "EH028",
+  "ext": "mdx",
+  "size": 330266,
+  "node_count": 23,
+  "nodes": [
+   "EH012:Layer1",
+   "ENGINE_01",
+   "ENGINE_02",
+   "ENGINE_03",
+   "BEAM_01",
+   "FF_01",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_01",
+   "FR_02",
+   "FL_01",
+   "FL_02",
+   "RR_01",
+   "RR_02",
+   "RL_01",
+   "RL_02",
+   "GUN_01",
+   "GUN_02",
+   "LASER_01",
+   "MISSILE_01",
+   "EH028L:Layer1",
+   "EH028R:Layer1"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D1\\objects\\EH012\\EH012.lwo",
+   "W:\\Gin7\\CG\\D3\\objects\\EH028L\\EH028L.lwo",
+   "W:\\Gin7\\CG\\D3\\objects\\EH028R\\EH028R.lwo",
+   "W:\\Gin7\\CG\\D1\\images\\eh012.bmp",
+   "W:\\Gin7\\CG\\D1\\images\\meca_tile.bmp",
+   "W:\\Gin7\\CG\\D1\\images\\EH012_bump.bmp",
+   "W:\\Gin7\\CG\\D3\\images\\EH028L\\EH028L_basic.bmp",
+   "W:\\Gin7\\CG\\D3\\images\\EH028L\\EH028_side.bmp",
+   "W:\\Gin7\\CG\\D3\\images\\EH028L\\EH028L_ball.bmp",
+   "W:\\Gin7\\CG\\D3\\images\\EH028L\\EH028_L_fire.bmp",
+   "W:\\Gin7\\CG\\D3\\images\\EH028R\\EH028R_basic.bmp",
+   "W:\\Gin7\\CG\\D3\\images\\EH028R\\EH028R_side.bmp",
+   "W:\\Gin7\\CG\\D3\\images\\EH028R\\EH028R_ball.bmp",
+   "W:\\Gin7\\CG\\D3\\images\\EH028R\\EH028_R_fire.bmp"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/EH029.mdx",
+  "name": "EH029",
+  "ext": "mdx",
+  "size": 239198,
+  "node_count": 14,
+  "nodes": [
+   "EH029:Layer1",
+   "ENGINE_01",
+   "ENGINE_02",
+   "BEAM_01",
+   "FF_01",
+   "FF_02",
+   "FR_01",
+   "FL_01",
+   "RR_01",
+   "RL_01",
+   "MISSILE_01",
+   "GUN_01",
+   "GUN_02",
+   "LASER_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D2\\objects\\EH029\\EH029.lwo",
+   "W:\\Gin7\\CG\\D2\\images\\EH029.bmp",
+   "W:\\Gin7\\CG\\D2\\images\\meca_tile.bmp",
+   "W:\\Gin7\\CG\\D2\\images\\EH029_bump.bmp"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/EH030.mdx",
+  "name": "EH030",
+  "ext": "mdx",
+  "size": 207010,
+  "node_count": 13,
+  "nodes": [
+   "EH030:Layer1",
+   "ENGINE_01",
+   "ENGINE_02",
+   "BEAM_01",
+   "FF_01",
+   "FR_01",
+   "FL_01",
+   "RR_01",
+   "RL_01",
+   "MISSILE_01",
+   "GUN_01",
+   "GUN_02",
+   "LASER_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D2\\objects\\EH030\\EH030.lwo",
+   "W:\\Gin7\\CG\\D2\\images\\EH030.bmp",
+   "W:\\Gin7\\CG\\D2\\images\\meca_tile.bmp"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/EH032.mdx",
+  "name": "EH032",
+  "ext": "mdx",
+  "size": 200170,
+  "node_count": 13,
+  "nodes": [
+   "EH032:Layer1",
+   "ENGINE_01",
+   "ENGINE_02",
+   "BEAM_01",
+   "FF_01",
+   "FR_01",
+   "FL_01",
+   "RR_01",
+   "RL_01",
+   "MISSILE_01",
+   "GUN_01",
+   "GUN_02",
+   "LASER_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D2\\objects\\EH032\\EH032.lwo",
+   "W:\\Gin7\\CG\\D2\\images\\EH032.bmp",
+   "W:\\Gin7\\CG\\D2\\images\\meca_tile.bmp",
+   "W:\\Gin7\\CG\\D2\\images\\EH032_bump.bmp"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/EH036.mdx",
+  "name": "EH036",
+  "ext": "mdx",
+  "size": 266624,
+  "node_count": 14,
+  "nodes": [
+   "EH036:Layer1",
+   "ENGINE_01",
+   "ENGINE_02",
+   "BEAM_01",
+   "FF_01",
+   "FF_02",
+   "FR_01",
+   "FL_01",
+   "RR_01",
+   "RL_01",
+   "MISSILE_01",
+   "GUN_01",
+   "GUN_02",
+   "LASER_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D2\\objects\\EH036\\EH036.lwo",
+   "W:\\Gin7\\CG\\D2\\images\\EH036.bmp",
+   "W:\\Gin7\\CG\\D2\\images\\meca_tile.bmp",
+   "W:\\Gin7\\CG\\D2\\images\\EH036_bump.bmp"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/EH037.mdx",
+  "name": "EH037",
+  "ext": "mdx",
+  "size": 111716,
+  "node_count": 22,
+  "nodes": [
+   "EH_037:Layer1",
+   "BEAM_01",
+   "FF_01",
+   "FR_01",
+   "FR_02",
+   "RR_01",
+   "RR_02",
+   "GUN_01",
+   "MISSILE_01",
+   "LASER_01",
+   "ENGINE_01",
+   "ENGINE_02",
+   "ENGINE_03",
+   "ENGINE_04",
+   "ENGINE_05",
+   "ENGINE_06",
+   "FF_02",
+   "FL_01",
+   "FL_02",
+   "RL_01",
+   "RL_02",
+   "GUN_02"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D3\\objects\\EH037\\EH_037.lwo",
+   "D3\\images\\EH037\\cuH_op2.bmp"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/EH039.mdx",
+  "name": "EH039",
+  "ext": "mdx",
+  "size": 225700,
+  "node_count": 18,
+  "nodes": [
+   "ENGINE_01",
+   "ENGINE_02",
+   "ENGINE_03",
+   "ENGINE_04",
+   "FF_01",
+   "FF_02",
+   "FR_01",
+   "FR_02",
+   "RR_01",
+   "RR_02",
+   "LASER_01",
+   "FF_03",
+   "FF_04",
+   "FL_01",
+   "FL_02",
+   "RL_01",
+   "RL_02",
+   "EH039:Layer1"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D2\\objects\\EH039\\EH039.lwo",
+   "W:\\Gin7\\CG\\D2\\images\\EH039.bmp",
+   "W:\\Gin7\\CG\\D2\\images\\meca_tile.bmp"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/EH040.mdx",
+  "name": "EH040",
+  "ext": "mdx",
+  "size": 174142,
+  "node_count": 19,
+  "nodes": [
+   "EH040:Layer1",
+   "ENGINE_01",
+   "ENGINE_02",
+   "FF_01",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_01",
+   "FR_02",
+   "RR_01",
+   "RR_02",
+   "BEAM_01",
+   "LASER_01",
+   "FL_01",
+   "FL_02",
+   "RL_01",
+   "RL_02",
+   "ENGINE_03",
+   "ENGINE_04"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D2\\objects\\EH040\\EH040.lwo",
+   "W:\\Gin7\\CG\\D2\\images\\EH040.bmp",
+   "W:\\Gin7\\CG\\D2\\images\\meca_tile.bmp",
+   "W:\\Gin7\\CG\\D2\\images\\EH040_bump.bmp"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/EH041.mdx",
+  "name": "EH041",
+  "ext": "mdx",
+  "size": 398842,
+  "node_count": 13,
+  "nodes": [
+   "EH041:Layer1",
+   "ENGINE_01",
+   "ENGINE_02",
+   "FF_01",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_01",
+   "FL_01",
+   "RR_01",
+   "RL_01",
+   "LASER_01",
+   "MISSILE_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D2\\objects\\EH041\\EH041.lwo",
+   "W:\\Gin7\\CG\\D2\\images\\EH041.bmp",
+   "W:\\Gin7\\CG\\D2\\images\\meca_tile.bmp",
+   "W:\\Gin7\\CG\\D2\\images\\EH041_bump.bmp"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/EH042.mdx",
+  "name": "EH042",
+  "ext": "mdx",
+  "size": 400990,
+  "node_count": 13,
+  "nodes": [
+   "EH041_UV:Layer1",
+   "ENGINE_01",
+   "ENGINE_02",
+   "FF_01",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_01",
+   "FL_01",
+   "RR_01",
+   "RL_01",
+   "LASER_01",
+   "MISSILE_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D2\\objects\\EH041\\EH041_UV.lwo",
+   "W:\\Gin7\\CG\\D2\\images\\EH041.bmp",
+   "W:\\Gin7\\CG\\D2\\images\\meca_tile.bmp",
+   "W:\\Gin7\\CG\\D2\\images\\EH041_bump.bmp"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/EH043.mdx",
+  "name": "EH043",
+  "ext": "mdx",
+  "size": 400990,
+  "node_count": 13,
+  "nodes": [
+   "EH041_UV:Layer1",
+   "ENGINE_01",
+   "ENGINE_02",
+   "FF_01",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_01",
+   "FL_01",
+   "RR_01",
+   "RL_01",
+   "LASER_01",
+   "MISSILE_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D2\\objects\\EH041\\EH041_UV.lwo",
+   "W:\\Gin7\\CG\\D2\\images\\EH041.bmp",
+   "W:\\Gin7\\CG\\D2\\images\\meca_tile.bmp",
+   "W:\\Gin7\\CG\\D2\\images\\EH041_bump.bmp"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/EH044.mdx",
+  "name": "EH044",
+  "ext": "mdx",
+  "size": 87880,
+  "node_count": 1,
+  "nodes": [
+   "EH044:Layer1"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\",
+   "j\\objects\\EH044.lwo",
+   "j\\images\\EH044.bmp"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/EH045.mdx",
+  "name": "EH045",
+  "ext": "mdx",
+  "size": 87880,
+  "node_count": 1,
+  "nodes": [
+   "EH044:Layer1"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\",
+   "j\\objects\\EH044.lwo",
+   "j\\images\\EH044.bmp"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/EL001.mdx",
+  "name": "EL001",
+  "ext": "mdx",
+  "size": 12370,
+  "node_count": 5,
+  "nodes": [
+   "EL001:Layer1",
+   "ENGINE_01",
+   "ENGINE_02",
+   "ENGINE_03",
+   "ENGINE_04"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\EL001.lwo"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/EL002.mdx",
+  "name": "EL002",
+  "ext": "mdx",
+  "size": 11356,
+  "node_count": 4,
+  "nodes": [
+   "EL002:Layer1",
+   "ENGINE_01",
+   "ENGINE_02",
+   "ENGINE_03"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\EL002.lwo"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/EL003.mdx",
+  "name": "EL003",
+  "ext": "mdx",
+  "size": 10670,
+  "node_count": 5,
+  "nodes": [
+   "EL003:Layer1",
+   "ENGINE_01",
+   "ENGINE_02",
+   "ENGINE_03",
+   "null"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\EL003.lwo"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/EL004.mdx",
+  "name": "EL004",
+  "ext": "mdx",
+  "size": 9256,
+  "node_count": 4,
+  "nodes": [
+   "EL004:Layer1",
+   "ENGINE_01",
+   "ENGINE_02",
+   "ENGINE_03"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\EL004.lwo"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/EL005.mdx",
+  "name": "EL005",
+  "ext": "mdx",
+  "size": 13582,
+  "node_count": 5,
+  "nodes": [
+   "EL005:Layer1",
+   "ENGINE_01",
+   "ENGINE_02",
+   "ENGINE_03",
+   "ENGINE_04"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\EL005.lwo"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/EL006.mdx",
+  "name": "EL006",
+  "ext": "mdx",
+  "size": 9868,
+  "node_count": 4,
+  "nodes": [
+   "EL006:Layer1",
+   "ENGINE_01",
+   "ENGINE_02",
+   "ENGINE_03"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\EL006.lwo"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/EL007.mdx",
+  "name": "EL007",
+  "ext": "mdx",
+  "size": 14670,
+  "node_count": 7,
+  "nodes": [
+   "EL007:Layer1",
+   "ENGINE_01",
+   "ENGINE_02",
+   "ENGINE_03",
+   "ENGINE_04",
+   "ENGINE_05",
+   "ENGINE_06"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\EL007.lwo"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/EL008.mdx",
+  "name": "EL008",
+  "ext": "mdx",
+  "size": 10430,
+  "node_count": 5,
+  "nodes": [
+   "EL008:Layer1",
+   "ENGINE_01",
+   "ENGINE_02",
+   "ENGINE_03",
+   "ENGINE_04"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\EL008.lwo"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/EL009.mdx",
+  "name": "EL009",
+  "ext": "mdx",
+  "size": 10624,
+  "node_count": 5,
+  "nodes": [
+   "EL009:Layer1",
+   "ENGINE_01",
+   "ENGINE_02",
+   "ENGINE_03",
+   "ENGINE_04"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\EL009.lwo"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/EL010.mdx",
+  "name": "EL010",
+  "ext": "mdx",
+  "size": 8610,
+  "node_count": 3,
+  "nodes": [
+   "ENGINE_01",
+   "ENGINE_02",
+   "EL010:Layer1"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\EL010.lwo"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/EL011.mdx",
+  "name": "EL011",
+  "ext": "mdx",
+  "size": 9846,
+  "node_count": 4,
+  "nodes": [
+   "EL011:Layer1",
+   "ENGINE_01",
+   "ENGINE_02",
+   "ENGINE_03"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\EL011.lwo"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/EL012.mdx",
+  "name": "EL012",
+  "ext": "mdx",
+  "size": 8980,
+  "node_count": 4,
+  "nodes": [
+   "EL012:Layer1",
+   "ENGINE_01",
+   "ENGINE_02",
+   "ENGINE_03"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\EL012.lwo"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/EL013.mdx",
+  "name": "EL013",
+  "ext": "mdx",
+  "size": 12568,
+  "node_count": 6,
+  "nodes": [
+   "EL013:Layer1",
+   "ENGINE_01",
+   "ENGINE_03",
+   "ENGINE_04",
+   "ENGINE_05",
+   "ENGINE_06"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\EL013.lwo"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/EL014.mdx",
+  "name": "EL014",
+  "ext": "mdx",
+  "size": 10414,
+  "node_count": 5,
+  "nodes": [
+   "EL014:Layer1",
+   "ENGINE_01",
+   "ENGINE_02",
+   "ENGINE_03",
+   "ENGINE_04"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\EL014.lwo"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/EL015.mdx",
+  "name": "EL015",
+  "ext": "mdx",
+  "size": 8342,
+  "node_count": 3,
+  "nodes": [
+   "EL015:Layer1",
+   "ENGINE_01",
+   "ENGINE_02"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\EL015.lwo"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/EL016.mdx",
+  "name": "EL016",
+  "ext": "mdx",
+  "size": 10982,
+  "node_count": 5,
+  "nodes": [
+   "EL017:Layer1",
+   "ENGINE_01",
+   "ENGINE_02",
+   "ENGINE_03",
+   "ENGINE_04"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\EL017.lwo"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/EL018.mdx",
+  "name": "EL018",
+  "ext": "mdx",
+  "size": 5622,
+  "node_count": 1,
+  "nodes": [
+   "EL018:Layer1"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\EL018\\EL018.lwo",
+   "W:\\Gin7\\CG\\D\\images\\EL018\\EL018.bmp"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/EL019.mdx",
+  "name": "EL019",
+  "ext": "mdx",
+  "size": 8980,
+  "node_count": 4,
+  "nodes": [
+   "EL012:Layer1",
+   "ENGINE_01",
+   "ENGINE_02",
+   "ENGINE_03"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\EL012.lwo"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/EL020.mdx",
+  "name": "EL020",
+  "ext": "mdx",
+  "size": 8980,
+  "node_count": 4,
+  "nodes": [
+   "EL012:Layer1",
+   "ENGINE_01",
+   "ENGINE_02",
+   "ENGINE_03"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\EL012.lwo"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/EL021.mdx",
+  "name": "EL021",
+  "ext": "mdx",
+  "size": 8980,
+  "node_count": 4,
+  "nodes": [
+   "EL012:Layer1",
+   "ENGINE_01",
+   "ENGINE_02",
+   "ENGINE_03"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\EL012.lwo"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/EL022.mdx",
+  "name": "EL022",
+  "ext": "mdx",
+  "size": 8980,
+  "node_count": 4,
+  "nodes": [
+   "EL012:Layer1",
+   "ENGINE_01",
+   "ENGINE_02",
+   "ENGINE_03"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\EL012.lwo"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/EL023.mdx",
+  "name": "EL023",
+  "ext": "mdx",
+  "size": 11358,
+  "node_count": 5,
+  "nodes": [
+   "EL023:Layer1",
+   "ENGINE_01",
+   "ENGINE_02",
+   "ENGINE_03",
+   "ENGINE_04"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\EL023.lwo"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/EL024.mdx",
+  "name": "EL024",
+  "ext": "mdx",
+  "size": 8980,
+  "node_count": 4,
+  "nodes": [
+   "EL012:Layer1",
+   "ENGINE_01",
+   "ENGINE_02",
+   "ENGINE_03"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\EL012.lwo"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/EL025.mdx",
+  "name": "EL025",
+  "ext": "mdx",
+  "size": 8980,
+  "node_count": 4,
+  "nodes": [
+   "EL012:Layer1",
+   "ENGINE_01",
+   "ENGINE_02",
+   "ENGINE_03"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\EL012.lwo"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/EL027.mdx",
+  "name": "EL027",
+  "ext": "mdx",
+  "size": 11358,
+  "node_count": 5,
+  "nodes": [
+   "EL023:Layer1",
+   "ENGINE_01",
+   "ENGINE_02",
+   "ENGINE_03",
+   "ENGINE_04"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\EL023.lwo"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/EL028.mdx",
+  "name": "EL028",
+  "ext": "mdx",
+  "size": 8980,
+  "node_count": 4,
+  "nodes": [
+   "EL012:Layer1",
+   "ENGINE_01",
+   "ENGINE_02",
+   "ENGINE_03"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\EL012.lwo"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/EL029.mdx",
+  "name": "EL029",
+  "ext": "mdx",
+  "size": 8980,
+  "node_count": 4,
+  "nodes": [
+   "EL012:Layer1",
+   "ENGINE_01",
+   "ENGINE_02",
+   "ENGINE_03"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\EL012.lwo"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/EL030.mdx",
+  "name": "EL030",
+  "ext": "mdx",
+  "size": 8980,
+  "node_count": 4,
+  "nodes": [
+   "EL012:Layer1",
+   "ENGINE_01",
+   "ENGINE_02",
+   "ENGINE_03"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\EL012.lwo"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/EL032.mdx",
+  "name": "EL032",
+  "ext": "mdx",
+  "size": 8980,
+  "node_count": 4,
+  "nodes": [
+   "EL012:Layer1",
+   "ENGINE_01",
+   "ENGINE_02",
+   "ENGINE_03"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\EL012.lwo"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/EL036.mdx",
+  "name": "EL036",
+  "ext": "mdx",
+  "size": 8980,
+  "node_count": 4,
+  "nodes": [
+   "EL012:Layer1",
+   "ENGINE_01",
+   "ENGINE_02",
+   "ENGINE_03"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\EL012.lwo"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/EL037.mdx",
+  "name": "EL037",
+  "ext": "mdx",
+  "size": 8980,
+  "node_count": 4,
+  "nodes": [
+   "EL012:Layer1",
+   "ENGINE_01",
+   "ENGINE_02",
+   "ENGINE_03"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\EL012.lwo"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/EL039.mdx",
+  "name": "EL039",
+  "ext": "mdx",
+  "size": 11182,
+  "node_count": 5,
+  "nodes": [
+   "EL039:Layer1",
+   "ENGINE_01",
+   "ENGINE_02",
+   "ENGINE_03",
+   "ENGINE_04"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\EL039.lwo"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/EL040.mdx",
+  "name": "EL040",
+  "ext": "mdx",
+  "size": 12446,
+  "node_count": 5,
+  "nodes": [
+   "EL040:Layer1",
+   "ENGINE_01",
+   "ENGINE_02",
+   "ENGINE_03",
+   "ENGINE_04"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\EL040.lwo"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/EL041.mdx",
+  "name": "EL041",
+  "ext": "mdx",
+  "size": 7538,
+  "node_count": 3,
+  "nodes": [
+   "EL041:Layer1",
+   "ENGINE_01",
+   "ENGINE_02"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\EL041.lwo"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/EL042.mdx",
+  "name": "EL042",
+  "ext": "mdx",
+  "size": 7538,
+  "node_count": 3,
+  "nodes": [
+   "EL041:Layer1",
+   "ENGINE_01",
+   "ENGINE_02"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\EL041.lwo"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/EL043.mdx",
+  "name": "EL043",
+  "ext": "mdx",
+  "size": 7538,
+  "node_count": 3,
+  "nodes": [
+   "EL041:Layer1",
+   "ENGINE_01",
+   "ENGINE_02"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\EL041.lwo"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/EL044.mdx",
+  "name": "EL044",
+  "ext": "mdx",
+  "size": 87880,
+  "node_count": 1,
+  "nodes": [
+   "EH044:Layer1"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\",
+   "j\\objects\\EH044.lwo",
+   "j\\images\\EH044.bmp"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/EL045.mdx",
+  "name": "EL045",
+  "ext": "mdx",
+  "size": 87880,
+  "node_count": 1,
+  "nodes": [
+   "EH044:Layer1"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\",
+   "j\\objects\\EH044.lwo",
+   "j\\images\\EH044.bmp"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/EM001.mdx",
+  "name": "EM001",
+  "ext": "mdx",
+  "size": 57704,
+  "node_count": 23,
+  "nodes": [
+   "EM001:Layer1",
+   "ENGINE_01",
+   "ENGINE_02",
+   "ENGINE_03",
+   "ENGINE_04",
+   "FR_01",
+   "FR_02",
+   "FL_01",
+   "FL_02",
+   "RR_01",
+   "RR_02",
+   "RL_01",
+   "RL_02",
+   "FF_01",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "MISSILE_01",
+   "GUN_01",
+   "GUN_02",
+   "LASER_01",
+   "BEAM_01",
+   "BEAM_03"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\EM001\\EM001.lwo",
+   "D\\images\\EM001\\eh_001_body_t.bmp"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/em002.mdx",
+  "name": "em002",
+  "ext": "mdx",
+  "size": 54748,
+  "node_count": 21,
+  "nodes": [
+   "EM002:Layer1",
+   "ENGINE_01",
+   "ENGINE_02",
+   "ENGINE_03",
+   "FF_01",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_01",
+   "FR_02",
+   "FL_01",
+   "FL_02",
+   "RR_01",
+   "RR_02",
+   "RL_01",
+   "RL_02",
+   "BEAM_01",
+   "MISSILE_01",
+   "GUN_01",
+   "GUN_02",
+   "LASER_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\EM002\\EM002.lwo",
+   "D\\images\\EM002\\el002_body3_s.bmp"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/em003.mdx",
+  "name": "em003",
+  "ext": "mdx",
+  "size": 52030,
+  "node_count": 20,
+  "nodes": [
+   "EM003:Layer1",
+   "ENGINE_01",
+   "ENGINE_02",
+   "ENGINE_03",
+   "BEAM_01",
+   "FF_01",
+   "FF_02",
+   "FR_01",
+   "FR_02",
+   "FL_01",
+   "FL_02",
+   "MISSILE_01",
+   "GUN_01",
+   "GUN_02",
+   "LASER_01",
+   "null",
+   "RR_01",
+   "RR_02",
+   "RL_01",
+   "RL_02"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\EM003\\EM003.lwo",
+   "D\\images\\EM003\\el003_body_t2.bmp"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/em004.mdx",
+  "name": "em004",
+  "ext": "mdx",
+  "size": 53474,
+  "node_count": 19,
+  "nodes": [
+   "EM004:Layer1",
+   "BEAM_02",
+   "FR_01",
+   "FR_02",
+   "FL_01",
+   "FL_02",
+   "RR_01",
+   "RR_02",
+   "RL_01",
+   "RL_02",
+   "FF_01",
+   "FF_02",
+   "MISSILE_01",
+   "GUN_01",
+   "GUN_02",
+   "LASER_01",
+   "ENGINE_01",
+   "ENGINE_02",
+   "ENGINE_03"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\EM004\\EM004.lwo",
+   "D\\images\\EM004\\el004_body_t1.bmp"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/em005.mdx",
+  "name": "em005",
+  "ext": "mdx",
+  "size": 54540,
+  "node_count": 22,
+  "nodes": [
+   "EM005:Layer1",
+   "ENGINE_01",
+   "ENGINE_02",
+   "ENGINE_03",
+   "ENGINE_04",
+   "BEAM_01",
+   "FF_01",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_01",
+   "FR_02",
+   "FL_01",
+   "FL_02",
+   "RR_01",
+   "RR_02",
+   "RL_01",
+   "RL_02",
+   "MISSILE_01",
+   "LASER_01",
+   "GUN_01",
+   "GUN_02"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\EM005\\EM005.lwo",
+   "D\\images\\EM005\\el005_body_bot2.bmp"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/em006.mdx",
+  "name": "em006",
+  "ext": "mdx",
+  "size": 51900,
+  "node_count": 21,
+  "nodes": [
+   "EM006:Layer1",
+   "ENGINE_01",
+   "ENGINE_02",
+   "ENGINE_03",
+   "BEAM_01",
+   "FF_01",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_01",
+   "FR_02",
+   "FL_01",
+   "FL_02",
+   "LR_01",
+   "LR_02",
+   "LL_01",
+   "LL_02",
+   "MISSILE_01",
+   "GUN_01",
+   "GUN_02",
+   "LASER_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\EM006\\EM006.lwo",
+   "D\\images\\EM006\\el006_body_s02.bmp"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/em007.mdx",
+  "name": "em007",
+  "ext": "mdx",
+  "size": 67302,
+  "node_count": 25,
+  "nodes": [
+   "EM007:Layer1",
+   "EM007_fin:Layer1",
+   "ENGINE_01",
+   "ENGINE_02",
+   "ENGINE_03",
+   "ENGINE_04",
+   "ENGINE_05",
+   "ENGINE_06",
+   "BEAM_01",
+   "FF_01",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_01",
+   "FR_02",
+   "FL_01",
+   "FL_02",
+   "LR_01",
+   "LR_02",
+   "LL_01",
+   "LL_02",
+   "MISSILE_01",
+   "GUN_01",
+   "GUN_02",
+   "LASER_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\EM007\\EM007.lwo",
+   "W:\\Gin7\\CG\\D\\objects\\EM007\\EM007_fin.lwo",
+   "D\\images\\EM007\\el007_z1.bmp"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/em008.mdx",
+  "name": "em008",
+  "ext": "mdx",
+  "size": 54148,
+  "node_count": 22,
+  "nodes": [
+   "EM008:Layer1",
+   "ENGINE_01",
+   "ENGINE_02",
+   "ENGINE_03",
+   "ENGINE_04",
+   "BEAM_01",
+   "FF_01",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_01",
+   "FR_02",
+   "FL_01",
+   "FL_02",
+   "LR_01",
+   "LR_02",
+   "LL_01",
+   "LL_02",
+   "MISSILE_01",
+   "GUN_01",
+   "GUN_02",
+   "LASER_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\EM008\\EM008.lwo",
+   "D\\images\\EM008\\el008_sp_os.bmp"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/em009.mdx",
+  "name": "em009",
+  "ext": "mdx",
+  "size": 52656,
+  "node_count": 22,
+  "nodes": [
+   "EM009:Layer1",
+   "ENGINE_01",
+   "ENGINE_02",
+   "ENGINE_03",
+   "ENGINE_04",
+   "FF_02",
+   "FF_01",
+   "FF_04",
+   "FF_03",
+   "FR_01",
+   "FR_02",
+   "RR_01",
+   "RR_02",
+   "FR_03",
+   "FR_04",
+   "RR_03",
+   "RR_04",
+   "BEAM_01",
+   "GUN_01",
+   "GUN_02",
+   "LASER_01",
+   "MISSILE_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\EM009\\EM009.lwo",
+   "D\\images\\EM009\\el009_parts_04.bmp"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/em010.mdx",
+  "name": "em010",
+  "ext": "mdx",
+  "size": 50116,
+  "node_count": 18,
+  "nodes": [
+   "ENGINE_01",
+   "ENGINE_02",
+   "BEAM_01",
+   "EM010:Layer1",
+   "FF_01",
+   "FF_02",
+   "GUN_01",
+   "GUN_02",
+   "FR_01",
+   "FR_02",
+   "FL_01",
+   "FL_02",
+   "RR_01",
+   "RR_02",
+   "RL_01",
+   "RL_02",
+   "MISSILE_01",
+   "LASER_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\EM010\\EM010.lwo",
+   "D\\images\\EM010\\el010_body2_s.bmp"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/em011.mdx",
+  "name": "em011",
+  "ext": "mdx",
+  "size": 56034,
+  "node_count": 21,
+  "nodes": [
+   "EM011:Layer1",
+   "ENGINE_01",
+   "ENGINE_02",
+   "ENGINE_03",
+   "BEAM_01",
+   "FR_01",
+   "FR_02",
+   "FL_01",
+   "FL_02",
+   "RR_01",
+   "RR_02",
+   "RL_01",
+   "RL_02",
+   "FF_01",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "MISSILE_01",
+   "LASER_01",
+   "GUN_01",
+   "GUN_02"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\EM011\\EM011.lwo",
+   "D\\images\\EM011\\el011body_s1.bmp"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/EM012.mdx",
+  "name": "EM012",
+  "ext": "mdx",
+  "size": 51424,
+  "node_count": 21,
+  "nodes": [
+   "EM012:Layer1",
+   "ENGINE_01",
+   "ENGINE_02",
+   "ENGINE_03",
+   "BEAM_01",
+   "FF_01",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_01",
+   "FR_02",
+   "FL_01",
+   "FL_02",
+   "RR_01",
+   "RR_02",
+   "RL_01",
+   "RL_02",
+   "GUN_01",
+   "GUN_02",
+   "LASER_01",
+   "MISSILE_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\EM012\\EM012.lwo",
+   "D\\images\\EM012\\el012_body_as2.bmp"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/em013.mdx",
+  "name": "em013",
+  "ext": "mdx",
+  "size": 65530,
+  "node_count": 25,
+  "nodes": [
+   "EM013:Layer1",
+   "ENGINE_01",
+   "ENGINE_03",
+   "ENGINE_04",
+   "ENGINE_05",
+   "ENGINE_06",
+   "BEAM_01",
+   "FF_01",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_01",
+   "FR_02",
+   "FL_01",
+   "FL_02",
+   "LR_01",
+   "LR_02",
+   "LL_01",
+   "LL_02",
+   "MISSILE_01",
+   "GUN_01",
+   "GUN_02",
+   "LASER_01",
+   "EM013_fin1:Layer1",
+   "EM013_fin2:Layer1"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\EM013\\EM013.lwo",
+   "W:\\Gin7\\CG\\D\\objects\\EM013\\EM013_fin1.lwo",
+   "W:\\Gin7\\CG\\D\\objects\\EM013\\EM013_fin2.lwo",
+   "D\\images\\EM013\\el013_parts3_s.bmp"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/em014.mdx",
+  "name": "em014",
+  "ext": "mdx",
+  "size": 46312,
+  "node_count": 21,
+  "nodes": [
+   "EM014:Layer1",
+   "ENGINE_01",
+   "ENGINE_02",
+   "ENGINE_03",
+   "ENGINE_04",
+   "BEAM_01",
+   "FF_01",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_01",
+   "FR_02",
+   "FL_01",
+   "FL_02",
+   "RR_01",
+   "RR_02",
+   "RL_01",
+   "RL_02",
+   "MISSILE_01",
+   "GUN_01",
+   "LASER_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\EM014\\EM014.lwo",
+   "D\\images\\EM014\\EL014_side_1.bmp"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/em015.mdx",
+  "name": "em015",
+  "ext": "mdx",
+  "size": 54730,
+  "node_count": 22,
+  "nodes": [
+   "EM015:Layer1",
+   "ENGINE_01",
+   "ENGINE_02",
+   "FR_01",
+   "FR_02",
+   "RR_01",
+   "RR_02",
+   "FL_01",
+   "FL_02",
+   "RL_01",
+   "RL_02",
+   "FF_01",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "RAILGUN_01",
+   "RAILGUN_02",
+   "RAILGUN_03",
+   "RAILGUN_04",
+   "MISSILE_01",
+   "BEAM_01",
+   "LASER_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\EM015\\EM015.lwo",
+   "D\\images\\EM015\\el015_body_s1.bmp"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/em016.mdx",
+  "name": "em016",
+  "ext": "mdx",
+  "size": 57502,
+  "node_count": 23,
+  "nodes": [
+   "EM016:Layer1",
+   "ENGINE_01",
+   "ENGINE_02",
+   "ENGINE_03",
+   "ENGINE_04",
+   "FF_01",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_01",
+   "FR_02",
+   "FL_01",
+   "FL_02",
+   "RR_01",
+   "RR_02",
+   "RR_03",
+   "RR_04",
+   "BEAM_01",
+   "MISSILE_01",
+   "MISSILE_02",
+   "GUN_01",
+   "GUN_02",
+   "LASER_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\EM016\\EM016.lwo",
+   "D\\images\\EM016\\el016_parts_01.bmp"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/em017.mdx",
+  "name": "em017",
+  "ext": "mdx",
+  "size": 65660,
+  "node_count": 29,
+  "nodes": [
+   "EL017:Layer1",
+   "B1_1",
+   "B1_2",
+   "B3b_1",
+   "B3b_2",
+   "B3a_1",
+   "B3a_2",
+   "B4b_1",
+   "B4b_2",
+   "B4a_1",
+   "B4a_2",
+   "B5a_1",
+   "B5a_2",
+   "B5b_1",
+   "B5b_2",
+   "B6a_1",
+   "B6a_2",
+   "B6b_1",
+   "B6b_2",
+   "B2_1",
+   "B2_2",
+   "B2_3",
+   "B2_4",
+   "C_1",
+   "C_2",
+   "C_3",
+   "C_4",
+   "B1_3",
+   "B1_4"
+  ],
+  "assets": [
+   "VII\\3D\\SHIP\\objects\\EM017\\EL017.lwo"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/em018.mdx",
+  "name": "em018",
+  "ext": "mdx",
+  "size": 36634,
+  "node_count": 8,
+  "nodes": [
+   "EL018:Layer1",
+   "B2",
+   "B1",
+   "C4",
+   "C1",
+   "C2",
+   "C3",
+   "EL018_02"
+  ],
+  "assets": [
+   "VII\\3D\\SHIP\\objects\\EM018\\EL018.lwo"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/EM019.mdx",
+  "name": "EM019",
+  "ext": "mdx",
+  "size": 45398,
+  "node_count": 17,
+  "nodes": [
+   "EM019:Layer1",
+   "ENGINE_01",
+   "ENGINE_02",
+   "ENGINE_03",
+   "BEAM_01",
+   "FF_01",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_01",
+   "FL_01",
+   "RR_01",
+   "RL_01",
+   "GUN_01",
+   "GUN_02",
+   "LASER_01",
+   "MISSILE_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D2\\objects\\EM019\\EM019.lwo",
+   "D2\\images\\EM019\\EL019_body1.bmp"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/EM020.mdx",
+  "name": "EM020",
+  "ext": "mdx",
+  "size": 43188,
+  "node_count": 4,
+  "nodes": [
+   "EM_020:Layer1",
+   "BEAM_01",
+   "FF_01",
+   "FF_02"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D2\\objects\\EM020\\EM_020.lwo",
+   "D2\\images\\EM020\\EL020_front.bmp"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/EM021.mdx",
+  "name": "EM021",
+  "ext": "mdx",
+  "size": 51424,
+  "node_count": 21,
+  "nodes": [
+   "EM012:Layer1",
+   "ENGINE_01",
+   "ENGINE_02",
+   "ENGINE_03",
+   "BEAM_01",
+   "FF_01",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_01",
+   "FR_02",
+   "FL_01",
+   "FL_02",
+   "RR_01",
+   "RR_02",
+   "RL_01",
+   "RL_02",
+   "GUN_01",
+   "GUN_02",
+   "LASER_01",
+   "MISSILE_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\EM012\\EM012.lwo",
+   "D\\images\\EM012\\el012_body_as2.bmp"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/EM022.mdx",
+  "name": "EM022",
+  "ext": "mdx",
+  "size": 51424,
+  "node_count": 21,
+  "nodes": [
+   "EM012:Layer1",
+   "ENGINE_01",
+   "ENGINE_02",
+   "ENGINE_03",
+   "BEAM_01",
+   "FF_01",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_01",
+   "FR_02",
+   "FL_01",
+   "FL_02",
+   "RR_01",
+   "RR_02",
+   "RL_01",
+   "RL_02",
+   "GUN_01",
+   "GUN_02",
+   "LASER_01",
+   "MISSILE_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\EM012\\EM012.lwo",
+   "D\\images\\EM012\\el012_body_as2.bmp"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/EM023.mdx",
+  "name": "EM023",
+  "ext": "mdx",
+  "size": 48350,
+  "node_count": 18,
+  "nodes": [
+   "EM023:Layer1",
+   "ENGINE_01",
+   "ENGINE_02",
+   "ENGINE_03",
+   "ENGINE_04",
+   "FR_01",
+   "FL_01",
+   "RR_01",
+   "RL_01",
+   "FF_01",
+   "FF_03",
+   "FF_02",
+   "FF_04",
+   "BEAM_01",
+   "MISSILE_01",
+   "LASER_01",
+   "GUN_01",
+   "GUN_02"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D2\\objects\\EM023\\EM023.lwo",
+   "D2\\images\\EM023\\EL027_dark.bmp"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/EM024.mdx",
+  "name": "EM024",
+  "ext": "mdx",
+  "size": 49040,
+  "node_count": 18,
+  "nodes": [
+   "EM024:Layer1",
+   "ENGINE_01",
+   "BEAM_01",
+   "FF_01",
+   "FR_01",
+   "FR_02",
+   "RR_01",
+   "RR_02",
+   "GUN_01",
+   "MISSILE_01",
+   "LASER_01",
+   "FF_02",
+   "FL_01",
+   "FL_02",
+   "RL_01",
+   "RL_02",
+   "GUN_02",
+   "ENGINE_02"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D3\\objects\\EM024\\EM024.lwo",
+   "D3\\images\\EM024\\EL024_Body_t.bmp"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/EM025.mdx",
+  "name": "EM025",
+  "ext": "mdx",
+  "size": 48362,
+  "node_count": 20,
+  "nodes": [
+   "EM025:Layer1",
+   "ENGINE_01",
+   "ENGINE_02",
+   "ENGINE_03",
+   "FF_1",
+   "FF_2",
+   "FF_3",
+   "FF_4",
+   "FR_01",
+   "FR_02",
+   "RR_01",
+   "RR_02",
+   "FL_01",
+   "FL_02",
+   "RL_01",
+   "RL_02",
+   "MISSILE_01",
+   "GUN_01",
+   "GUN_02",
+   "LASER_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D2\\objects\\EM025\\EM025.lwo",
+   "D2\\images\\EM025\\EL025_parts1.bmp"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/EM027.mdx",
+  "name": "EM027",
+  "ext": "mdx",
+  "size": 79392,
+  "node_count": 29,
+  "nodes": [
+   "EM023:Layer1",
+   "ENGINE_01",
+   "ENGINE_02",
+   "ENGINE_03",
+   "ENGINE_04",
+   "FR_01",
+   "FL_01",
+   "RR_01",
+   "RL_01",
+   "FF_01",
+   "FF_03",
+   "FF_02",
+   "FF_04",
+   "BEAM_01",
+   "MISSILE_01",
+   "LASER_01",
+   "GUN_01",
+   "GUN_02",
+   "EM027L:Layer1",
+   "EM027R:Layer1",
+   "ENGINE_05",
+   "FF_05",
+   "FR_03",
+   "FR_04",
+   "RR_03",
+   "FF_06",
+   "FL_03",
+   "FL_04",
+   "RL_03"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D2\\objects\\EM023\\EM023.lwo",
+   "W:\\Gin7\\CG\\D3\\objects\\EM027L\\EM027L.lwo",
+   "W:\\Gin7\\CG\\D3\\objects\\EM027R\\EM027R.lwo",
+   "D2\\images\\EM023\\EL027_dark.bmp"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/EM028.mdx",
+  "name": "EM028",
+  "ext": "mdx",
+  "size": 51424,
+  "node_count": 21,
+  "nodes": [
+   "EM012:Layer1",
+   "ENGINE_01",
+   "ENGINE_02",
+   "ENGINE_03",
+   "BEAM_01",
+   "FF_01",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_01",
+   "FR_02",
+   "FL_01",
+   "FL_02",
+   "RR_01",
+   "RR_02",
+   "RL_01",
+   "RL_02",
+   "GUN_01",
+   "GUN_02",
+   "LASER_01",
+   "MISSILE_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\EM012\\EM012.lwo",
+   "D\\images\\EM012\\el012_body_as2.bmp"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/EM029.mdx",
+  "name": "EM029",
+  "ext": "mdx",
+  "size": 37136,
+  "node_count": 14,
+  "nodes": [
+   "EM029:Layer1",
+   "ENGINE_01",
+   "ENGINE_02",
+   "BEAM_01",
+   "FF_01",
+   "FF_02",
+   "FR_01",
+   "FL_01",
+   "RR_01",
+   "RL_01",
+   "MISSILE_01",
+   "GUN_01",
+   "GUN_02",
+   "LASER_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D2\\objects\\EM029\\EM029.lwo",
+   "D2\\images\\EM029\\EL029_top3.bmp"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/EM030.mdx",
+  "name": "EM030",
+  "ext": "mdx",
+  "size": 35306,
+  "node_count": 13,
+  "nodes": [
+   "EM030:Layer1",
+   "ENGINE_01",
+   "ENGINE_02",
+   "BEAM_01",
+   "FF_01",
+   "FR_01",
+   "FL_01",
+   "RR_01",
+   "RL_01",
+   "MISSILE_01",
+   "GUN_01",
+   "GUN_02",
+   "LASER_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D2\\objects\\EM030\\EM030.lwo",
+   "D2\\images\\EM030\\EL030_under_2.bmp"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/EM032.mdx",
+  "name": "EM032",
+  "ext": "mdx",
+  "size": 37430,
+  "node_count": 13,
+  "nodes": [
+   "EM032:Layer1",
+   "ENGINE_01",
+   "ENGINE_02",
+   "BEAM_01",
+   "FF_01",
+   "FR_01",
+   "FL_01",
+   "RR_01",
+   "RL_01",
+   "MISSILE_01",
+   "GUN_01",
+   "GUN_02",
+   "LASER_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D2\\objects\\EM032\\EM032.lwo",
+   "D2\\images\\EM032\\EL032_under_2.bmp"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/EM036.mdx",
+  "name": "EM036",
+  "ext": "mdx",
+  "size": 39770,
+  "node_count": 14,
+  "nodes": [
+   "EM036:Layer1",
+   "ENGINE_01",
+   "ENGINE_02",
+   "BEAM_01",
+   "FF_01",
+   "FF_02",
+   "FR_01",
+   "FL_01",
+   "RR_01",
+   "RL_01",
+   "MISSILE_01",
+   "GUN_01",
+   "GUN_02",
+   "LASER_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D2\\objects\\EM036\\EM036.lwo",
+   "D2\\images\\EM036\\EL036_top_1.bmp"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/EM037.mdx",
+  "name": "EM037",
+  "ext": "mdx",
+  "size": 51296,
+  "node_count": 22,
+  "nodes": [
+   "EM037:Layer1",
+   "BEAM_01",
+   "FF_01",
+   "FR_01",
+   "FR_02",
+   "RR_01",
+   "RR_02",
+   "GUN_01",
+   "MISSILE_01",
+   "LASER_01",
+   "ENGINE_01",
+   "ENGINE_02",
+   "ENGINE_03",
+   "ENGINE_04",
+   "ENGINE_05",
+   "ENGINE_06",
+   "FF_02",
+   "FL_01",
+   "FL_02",
+   "RL_01",
+   "RL_02",
+   "GUN_02"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D3\\objects\\EM037\\EM037.lwo",
+   "D3\\images\\EM037\\cuL_top_1.bmp"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/EM039.mdx",
+  "name": "EM039",
+  "ext": "mdx",
+  "size": 47308,
+  "node_count": 18,
+  "nodes": [
+   "ENGINE_01",
+   "ENGINE_02",
+   "ENGINE_03",
+   "ENGINE_04",
+   "FF_01",
+   "FF_02",
+   "FR_01",
+   "FR_02",
+   "RR_01",
+   "RR_02",
+   "LASER_01",
+   "FF_03",
+   "FF_04",
+   "FL_01",
+   "FL_02",
+   "RL_01",
+   "RL_02",
+   "EM039:Layer1"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D2\\objects\\EM039\\EM039.lwo",
+   "D2\\images\\EM039\\EL039_under.bmp"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/EM040.mdx",
+  "name": "EM040",
+  "ext": "mdx",
+  "size": 174142,
+  "node_count": 19,
+  "nodes": [
+   "EM040:Layer1",
+   "ENGINE_01",
+   "ENGINE_02",
+   "FF_01",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_01",
+   "FR_02",
+   "RR_01",
+   "RR_02",
+   "BEAM_01",
+   "LASER_01",
+   "FL_01",
+   "FL_02",
+   "RL_01",
+   "RL_02",
+   "ENGINE_03",
+   "ENGINE_04"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D2\\objects\\EM040\\EM040.lwo",
+   "W:\\Gin7\\CG\\D2\\images\\EH040.bmp",
+   "W:\\Gin7\\CG\\D2\\images\\meca_tile.bmp",
+   "W:\\Gin7\\CG\\D2\\images\\EH040_bump.bmp"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/EM041.mdx",
+  "name": "EM041",
+  "ext": "mdx",
+  "size": 400990,
+  "node_count": 13,
+  "nodes": [
+   "EH041_UV:Layer1",
+   "ENGINE_01",
+   "ENGINE_02",
+   "FF_01",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_01",
+   "FL_01",
+   "RR_01",
+   "RL_01",
+   "LASER_01",
+   "MISSILE_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D2\\objects\\EH041\\EH041_UV.lwo",
+   "W:\\Gin7\\CG\\D2\\images\\EH041.bmp",
+   "W:\\Gin7\\CG\\D2\\images\\meca_tile.bmp",
+   "W:\\Gin7\\CG\\D2\\images\\EH041_bump.bmp"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/EM042.mdx",
+  "name": "EM042",
+  "ext": "mdx",
+  "size": 400990,
+  "node_count": 13,
+  "nodes": [
+   "EH041_UV:Layer1",
+   "ENGINE_01",
+   "ENGINE_02",
+   "FF_01",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_01",
+   "FL_01",
+   "RR_01",
+   "RL_01",
+   "LASER_01",
+   "MISSILE_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D2\\objects\\EH041\\EH041_UV.lwo",
+   "W:\\Gin7\\CG\\D2\\images\\EH041.bmp",
+   "W:\\Gin7\\CG\\D2\\images\\meca_tile.bmp",
+   "W:\\Gin7\\CG\\D2\\images\\EH041_bump.bmp"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/EM043.mdx",
+  "name": "EM043",
+  "ext": "mdx",
+  "size": 400990,
+  "node_count": 13,
+  "nodes": [
+   "EH041_UV:Layer1",
+   "ENGINE_01",
+   "ENGINE_02",
+   "FF_01",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_01",
+   "FL_01",
+   "RR_01",
+   "RL_01",
+   "LASER_01",
+   "MISSILE_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D2\\objects\\EH041\\EH041_UV.lwo",
+   "W:\\Gin7\\CG\\D2\\images\\EH041.bmp",
+   "W:\\Gin7\\CG\\D2\\images\\meca_tile.bmp",
+   "W:\\Gin7\\CG\\D2\\images\\EH041_bump.bmp"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/EM044.mdx",
+  "name": "EM044",
+  "ext": "mdx",
+  "size": 87880,
+  "node_count": 1,
+  "nodes": [
+   "EH044:Layer1"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\",
+   "j\\objects\\EH044.lwo",
+   "j\\images\\EH044.bmp"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/EM045.mdx",
+  "name": "EM045",
+  "ext": "mdx",
+  "size": 87880,
+  "node_count": 1,
+  "nodes": [
+   "EH044:Layer1"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\",
+   "j\\objects\\EH044.lwo",
+   "j\\images\\EH044.bmp"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/PI/ph001.mdx",
+  "name": "ph001",
+  "ext": "mdx",
+  "size": 125652,
+  "node_count": 16,
+  "nodes": [
+   "ph001:Layer1",
+   "ENGINE_01",
+   "ENGINE_03",
+   "BEAM_01",
+   "FF_01",
+   "FF_02",
+   "FR_01",
+   "FL_01",
+   "RR_01",
+   "RR_02",
+   "RL_01",
+   "RL_02",
+   "GUN_01",
+   "GUN_02",
+   "LASER_01",
+   "MISSILE_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D3\\objects\\ph001.lwo",
+   "W:\\Gin7\\CG\\D3\\images\\meca_tile_p.bmp",
+   "W:\\Gin7\\CG\\D3\\images\\meca_tile.bmp"
+  ],
+  "faction": "phezzan"
+ },
+ {
+  "file": "data/model/Ship/PI/ph002.mdx",
+  "name": "ph002",
+  "ext": "mdx",
+  "size": 76428,
+  "node_count": 20,
+  "nodes": [
+   "ph002:Layer1",
+   "ENGINE_01",
+   "ENGINE_02",
+   "BEAM_01",
+   "FF_01",
+   "FF_02",
+   "FR_01",
+   "FR_02",
+   "FL_01",
+   "FL_02",
+   "RR_01",
+   "RR_02",
+   "RL_01",
+   "RL_02",
+   "LASER_01",
+   "MISSILE_01",
+   "GUN_01",
+   "GUN_02",
+   "FF_03",
+   "FF_04"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D3\\objects\\ph002.lwo",
+   "W:\\Gin7\\CG\\D3\\images\\meca_tile_p.bmp"
+  ],
+  "faction": "phezzan"
+ },
+ {
+  "file": "data/model/Ship/PI/ph003.mdx",
+  "name": "ph003",
+  "ext": "mdx",
+  "size": 118610,
+  "node_count": 21,
+  "nodes": [
+   "ph003:Layer1",
+   "ENGINE_01",
+   "ENGINE_02",
+   "ENGINE_03",
+   "BEAM_01",
+   "FF_01",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_01",
+   "FR_02",
+   "FL_01",
+   "FL_02",
+   "RR_01",
+   "RR_02",
+   "RL_01",
+   "RL_02",
+   "GUN_01",
+   "GUN_02",
+   "LASER_01",
+   "MISSILE_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D3\\objects\\ph003.lwo",
+   "W:\\Gin7\\CG\\D3\\images\\ph003.bmp",
+   "W:\\Gin7\\CG\\D3\\images\\meca_tile.bmp"
+  ],
+  "faction": "phezzan"
+ },
+ {
+  "file": "data/model/Ship/PI/ph004.mdx",
+  "name": "ph004",
+  "ext": "mdx",
+  "size": 125652,
+  "node_count": 16,
+  "nodes": [
+   "ph001:Layer1",
+   "ENGINE_01",
+   "ENGINE_03",
+   "BEAM_01",
+   "FF_01",
+   "FF_02",
+   "FR_01",
+   "FL_01",
+   "RR_01",
+   "RR_02",
+   "RL_01",
+   "RL_02",
+   "GUN_01",
+   "GUN_02",
+   "LASER_01",
+   "MISSILE_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D3\\objects\\ph001.lwo",
+   "W:\\Gin7\\CG\\D3\\images\\meca_tile_p.bmp",
+   "W:\\Gin7\\CG\\D3\\images\\meca_tile.bmp"
+  ],
+  "faction": "phezzan"
+ },
+ {
+  "file": "data/model/Ship/PI/ph005.mdx",
+  "name": "ph005",
+  "ext": "mdx",
+  "size": 76428,
+  "node_count": 20,
+  "nodes": [
+   "ph002:Layer1",
+   "ENGINE_01",
+   "ENGINE_02",
+   "BEAM_01",
+   "FF_01",
+   "FF_02",
+   "FR_01",
+   "FR_02",
+   "FL_01",
+   "FL_02",
+   "RR_01",
+   "RR_02",
+   "RL_01",
+   "RL_02",
+   "LASER_01",
+   "MISSILE_01",
+   "GUN_01",
+   "GUN_02",
+   "FF_03",
+   "FF_04"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D3\\objects\\ph002.lwo",
+   "W:\\Gin7\\CG\\D3\\images\\meca_tile_p.bmp"
+  ],
+  "faction": "phezzan"
+ },
+ {
+  "file": "data/model/Ship/PI/ph006.mdx",
+  "name": "ph006",
+  "ext": "mdx",
+  "size": 118610,
+  "node_count": 21,
+  "nodes": [
+   "ph003:Layer1",
+   "ENGINE_01",
+   "ENGINE_02",
+   "ENGINE_03",
+   "BEAM_01",
+   "FF_01",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_01",
+   "FR_02",
+   "FL_01",
+   "FL_02",
+   "RR_01",
+   "RR_02",
+   "RL_01",
+   "RL_02",
+   "GUN_01",
+   "GUN_02",
+   "LASER_01",
+   "MISSILE_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D3\\objects\\ph003.lwo",
+   "W:\\Gin7\\CG\\D3\\images\\ph003.bmp",
+   "W:\\Gin7\\CG\\D3\\images\\meca_tile.bmp"
+  ],
+  "faction": "phezzan"
+ },
+ {
+  "file": "data/model/Ship/PI/PL001.mdx",
+  "name": "PL001",
+  "ext": "mdx",
+  "size": 5150,
+  "node_count": 1,
+  "nodes": [
+   "FL012:Layer1"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\FL012.lwo"
+  ],
+  "faction": "phezzan"
+ },
+ {
+  "file": "data/model/Ship/PI/PL002.mdx",
+  "name": "PL002",
+  "ext": "mdx",
+  "size": 5150,
+  "node_count": 1,
+  "nodes": [
+   "FL012:Layer1"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\FL012.lwo"
+  ],
+  "faction": "phezzan"
+ },
+ {
+  "file": "data/model/Ship/PI/PL003.mdx",
+  "name": "PL003",
+  "ext": "mdx",
+  "size": 5150,
+  "node_count": 1,
+  "nodes": [
+   "FL012:Layer1"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\FL012.lwo"
+  ],
+  "faction": "phezzan"
+ },
+ {
+  "file": "data/model/Ship/PI/PL004.mdx",
+  "name": "PL004",
+  "ext": "mdx",
+  "size": 5150,
+  "node_count": 1,
+  "nodes": [
+   "FL012:Layer1"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\FL012.lwo"
+  ],
+  "faction": "phezzan"
+ },
+ {
+  "file": "data/model/Ship/PI/PL005.mdx",
+  "name": "PL005",
+  "ext": "mdx",
+  "size": 5150,
+  "node_count": 1,
+  "nodes": [
+   "FL012:Layer1"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\FL012.lwo"
+  ],
+  "faction": "phezzan"
+ },
+ {
+  "file": "data/model/Ship/PI/PL006.mdx",
+  "name": "PL006",
+  "ext": "mdx",
+  "size": 5150,
+  "node_count": 1,
+  "nodes": [
+   "FL012:Layer1"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\FL012.lwo"
+  ],
+  "faction": "phezzan"
+ },
+ {
+  "file": "data/model/Ship/PI/pm001.mdx",
+  "name": "pm001",
+  "ext": "mdx",
+  "size": 125652,
+  "node_count": 16,
+  "nodes": [
+   "ph001:Layer1",
+   "ENGINE_01",
+   "ENGINE_03",
+   "BEAM_01",
+   "FF_01",
+   "FF_02",
+   "FR_01",
+   "FL_01",
+   "RR_01",
+   "RR_02",
+   "RL_01",
+   "RL_02",
+   "GUN_01",
+   "GUN_02",
+   "LASER_01",
+   "MISSILE_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D3\\objects\\ph001.lwo",
+   "W:\\Gin7\\CG\\D3\\images\\meca_tile_p.bmp",
+   "W:\\Gin7\\CG\\D3\\images\\meca_tile.bmp"
+  ],
+  "faction": "phezzan"
+ },
+ {
+  "file": "data/model/Ship/PI/pm002.mdx",
+  "name": "pm002",
+  "ext": "mdx",
+  "size": 76428,
+  "node_count": 20,
+  "nodes": [
+   "ph002:Layer1",
+   "ENGINE_01",
+   "ENGINE_02",
+   "BEAM_01",
+   "FF_01",
+   "FF_02",
+   "FR_01",
+   "FR_02",
+   "FL_01",
+   "FL_02",
+   "RR_01",
+   "RR_02",
+   "RL_01",
+   "RL_02",
+   "LASER_01",
+   "MISSILE_01",
+   "GUN_01",
+   "GUN_02",
+   "FF_03",
+   "FF_04"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D3\\objects\\ph002.lwo",
+   "W:\\Gin7\\CG\\D3\\images\\meca_tile_p.bmp"
+  ],
+  "faction": "phezzan"
+ },
+ {
+  "file": "data/model/Ship/PI/pm003.mdx",
+  "name": "pm003",
+  "ext": "mdx",
+  "size": 118610,
+  "node_count": 21,
+  "nodes": [
+   "ph003:Layer1",
+   "ENGINE_01",
+   "ENGINE_02",
+   "ENGINE_03",
+   "BEAM_01",
+   "FF_01",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_01",
+   "FR_02",
+   "FL_01",
+   "FL_02",
+   "RR_01",
+   "RR_02",
+   "RL_01",
+   "RL_02",
+   "GUN_01",
+   "GUN_02",
+   "LASER_01",
+   "MISSILE_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D3\\objects\\ph003.lwo",
+   "W:\\Gin7\\CG\\D3\\images\\ph003.bmp",
+   "W:\\Gin7\\CG\\D3\\images\\meca_tile.bmp"
+  ],
+  "faction": "phezzan"
+ },
+ {
+  "file": "data/model/Ship/PI/pm004.mdx",
+  "name": "pm004",
+  "ext": "mdx",
+  "size": 125652,
+  "node_count": 16,
+  "nodes": [
+   "ph001:Layer1",
+   "ENGINE_01",
+   "ENGINE_03",
+   "BEAM_01",
+   "FF_01",
+   "FF_02",
+   "FR_01",
+   "FL_01",
+   "RR_01",
+   "RR_02",
+   "RL_01",
+   "RL_02",
+   "GUN_01",
+   "GUN_02",
+   "LASER_01",
+   "MISSILE_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D3\\objects\\ph001.lwo",
+   "W:\\Gin7\\CG\\D3\\images\\meca_tile_p.bmp",
+   "W:\\Gin7\\CG\\D3\\images\\meca_tile.bmp"
+  ],
+  "faction": "phezzan"
+ },
+ {
+  "file": "data/model/Ship/PI/pm005.mdx",
+  "name": "pm005",
+  "ext": "mdx",
+  "size": 76428,
+  "node_count": 20,
+  "nodes": [
+   "ph002:Layer1",
+   "ENGINE_01",
+   "ENGINE_02",
+   "BEAM_01",
+   "FF_01",
+   "FF_02",
+   "FR_01",
+   "FR_02",
+   "FL_01",
+   "FL_02",
+   "RR_01",
+   "RR_02",
+   "RL_01",
+   "RL_02",
+   "LASER_01",
+   "MISSILE_01",
+   "GUN_01",
+   "GUN_02",
+   "FF_03",
+   "FF_04"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D3\\objects\\ph002.lwo",
+   "W:\\Gin7\\CG\\D3\\images\\meca_tile_p.bmp"
+  ],
+  "faction": "phezzan"
+ },
+ {
+  "file": "data/model/Ship/PI/pm006.mdx",
+  "name": "pm006",
+  "ext": "mdx",
+  "size": 118610,
+  "node_count": 21,
+  "nodes": [
+   "ph003:Layer1",
+   "ENGINE_01",
+   "ENGINE_02",
+   "ENGINE_03",
+   "BEAM_01",
+   "FF_01",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_01",
+   "FR_02",
+   "FL_01",
+   "FL_02",
+   "RR_01",
+   "RR_02",
+   "RL_01",
+   "RL_02",
+   "GUN_01",
+   "GUN_02",
+   "LASER_01",
+   "MISSILE_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D3\\objects\\ph003.lwo",
+   "W:\\Gin7\\CG\\D3\\images\\ph003.bmp",
+   "W:\\Gin7\\CG\\D3\\images\\meca_tile.bmp"
+  ],
+  "faction": "phezzan"
+ },
+ {
+  "file": "data/model/Ship/PZ/ZH001.mdx",
+  "name": "ZH001",
+  "ext": "mdx",
+  "size": 289732,
+  "node_count": 17,
+  "nodes": [
+   "FH042:Layer1",
+   "ENGINE_01",
+   "FF_01",
+   "FR_01",
+   "RR_01",
+   "BEAM_01",
+   "LASER_01",
+   "ENGINE_02",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_02",
+   "FL_01",
+   "FL_02",
+   "RR_02",
+   "RL_01",
+   "RL_02"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D2\\objects\\FH042\\FH042.lwo",
+   "W:\\Gin7\\CG\\D2\\images\\FH042.bmp",
+   "W:\\Gin7\\CG\\D2\\images\\meca_tile.bmp",
+   "W:\\Gin7\\CG\\D2\\images\\FH042_bump.bmp"
+  ],
+  "faction": "phezzan_misc"
+ },
+ {
+  "file": "data/model/Ship/PZ/ZL001.mdx",
+  "name": "ZL001",
+  "ext": "mdx",
+  "size": 4158,
+  "node_count": 1,
+  "nodes": [
+   "FL042:Layer1"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\FL042.lwo"
+  ],
+  "faction": "phezzan_misc"
+ },
+ {
+  "file": "data/model/Ship/PZ/ZM001.mdx",
+  "name": "ZM001",
+  "ext": "mdx",
+  "size": 55686,
+  "node_count": 17,
+  "nodes": [
+   "FM042:Layer1",
+   "ENGINE_01",
+   "FF_01",
+   "FR_01",
+   "RR_01",
+   "BEAM_01",
+   "LASER_01",
+   "ENGINE_02",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_02",
+   "FL_01",
+   "FL_02",
+   "RR_02",
+   "RL_01",
+   "RL_02"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D2\\objects\\FM042\\FM042.lwo",
+   "W:\\Gin7\\CG\\D2\\images\\FM042.bmp",
+   "W:\\Gin7\\CG\\D2\\images\\meca_tile.bmp"
+  ],
+  "faction": "phezzan_misc"
+ },
+ {
+  "file": "data/model/Ship/unknown.mdx",
+  "name": "unknown",
+  "ext": "mdx",
+  "size": 25184,
+  "node_count": 12,
+  "nodes": [
+   "unknown:Layer1",
+   "ENGINE_01",
+   "ENGINE_02",
+   "BEAM_01",
+   "FF_01",
+   "FR_01",
+   "RR_01",
+   "MISSILE_01",
+   "MISSILE_02",
+   "GUN_01",
+   "GUN_02",
+   "LASER_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D\\objects\\unknown.lwo"
+  ],
+  "faction": "unknown"
+ },
+ {
+  "file": "data/model/Ship/FP/FM023.mds",
+  "name": "FM023",
+  "ext": "mds",
+  "size": 116296,
+  "node_count": 21,
+  "nodes": [
+   "FM023:Layer1",
+   "ENGINE_01",
+   "FF_01",
+   "FF_02",
+   "FR_01",
+   "FR_02",
+   "RR_01",
+   "RR_02",
+   "BEAM_01",
+   "GUN_01",
+   "LASER_01",
+   "MISSILE_01",
+   "FF_03",
+   "FF_04",
+   "FL_01",
+   "FL_02",
+   "RL_01",
+   "RL_02",
+   "BEAM_02",
+   "BEAM_03",
+   "GUN_02"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D3\\objects\\FM023\\FM023.lwo",
+   "D3\\images\\FM023\\FL023_under2.bmp"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/FM026.mds",
+  "name": "FM026",
+  "ext": "mds",
+  "size": 121106,
+  "node_count": 19,
+  "nodes": [
+   "FM026:Layer1",
+   "ENGINE2_01",
+   "FF_01",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_01",
+   "FR_02",
+   "RR_01",
+   "RR_02",
+   "BEAM_01",
+   "GUN_01",
+   "GUN_02",
+   "LASER_01",
+   "MISSILE_01",
+   "FL_01",
+   "FL_02",
+   "RL_01",
+   "RL_02"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D3\\objects\\FM026\\FM026.lwo",
+   "D3\\images\\FM026\\FL026_under_1.bmp"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/FM029.mds",
+  "name": "FM029",
+  "ext": "mds",
+  "size": 132078,
+  "node_count": 19,
+  "nodes": [
+   "FM029:Layer1",
+   "ENGINE2_01",
+   "FF_01",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_01",
+   "FR_02",
+   "FL_01",
+   "FL_02",
+   "RR_01",
+   "RR_02",
+   "RL_01",
+   "RL_02",
+   "BEAM_01",
+   "GUN_01",
+   "GUN_02",
+   "LASER_01",
+   "MISSILE_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D3\\objects\\FM029\\FM029.lwo",
+   "D3\\images\\FM029\\FL029_front.bmp"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/FM030.mds",
+  "name": "FM030",
+  "ext": "mds",
+  "size": 128738,
+  "node_count": 19,
+  "nodes": [
+   "FM030:Layer1",
+   "ENGINE2_01",
+   "FF_01",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_01",
+   "FR_02",
+   "FL_01",
+   "FL_02",
+   "RR_01",
+   "RR_02",
+   "RL_01",
+   "RL_02",
+   "BEAM_01",
+   "GUN_01",
+   "GUN_02",
+   "LASER_01",
+   "MISSILE_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D3\\objects\\FM030\\FM030.lwo",
+   "D3\\images\\FM030\\FL030_front.bmp"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/FM033.mds",
+  "name": "FM033",
+  "ext": "mds",
+  "size": 134528,
+  "node_count": 19,
+  "nodes": [
+   "FM033:Layer1",
+   "ENGINE2_01",
+   "FF_01",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_01",
+   "FR_02",
+   "FL_01",
+   "FL_02",
+   "RR_01",
+   "RR_02",
+   "RL_01",
+   "RL_02",
+   "BEAM_01",
+   "GUN_01",
+   "GUN_02",
+   "LASER_01",
+   "MISSILE_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D3\\objects\\FM033\\FM033.lwo",
+   "D3\\images\\FM033\\FL033_body1_1.bmp"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/FM034.mds",
+  "name": "FM034",
+  "ext": "mds",
+  "size": 140926,
+  "node_count": 19,
+  "nodes": [
+   "FM034:Layer1",
+   "ENGINE2_01",
+   "FF_01",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_01",
+   "FR_02",
+   "RR_01",
+   "RR_02",
+   "BEAM_01",
+   "GUN_01",
+   "GUN_02",
+   "LASER_01",
+   "MISSILE_01",
+   "FL_01",
+   "FL_02",
+   "RL_01",
+   "RL_02"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D3\\objects\\FM034\\FM034.lwo",
+   "D3\\images\\FM034\\FL034_top2.bmp"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/FM035.mds",
+  "name": "FM035",
+  "ext": "mds",
+  "size": 135066,
+  "node_count": 19,
+  "nodes": [
+   "FM035:Layer1",
+   "ENGINE2_01",
+   "FF_01",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_01",
+   "FR_02",
+   "FL_01",
+   "FL_02",
+   "RR_01",
+   "RR_02",
+   "RL_01",
+   "RL_02",
+   "BEAM_01",
+   "GUN_01",
+   "GUN_02",
+   "LASER_01",
+   "MISSILE_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D3\\objects\\FM035\\FM035.lwo",
+   "D3\\images\\FM035\\FL035_front.bmp"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/FM037.mds",
+  "name": "FM037",
+  "ext": "mds",
+  "size": 165838,
+  "node_count": 19,
+  "nodes": [
+   "FM037:Layer1",
+   "ENGINE2_01",
+   "FF_01",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_01",
+   "FR_02",
+   "FL_01",
+   "FL_02",
+   "RR_01",
+   "RR_02",
+   "RL_01",
+   "RL_02",
+   "BEAM_01",
+   "GUN_01",
+   "GUN_02",
+   "LASER_01",
+   "MISSILE_01"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D3\\objects\\FM037\\FM037.lwo",
+   "D3\\images\\FM037\\FL037_body1_2.bmp"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/FP/FM039.mds",
+  "name": "FM039",
+  "ext": "mds",
+  "size": 172338,
+  "node_count": 19,
+  "nodes": [
+   "FM039:Layer1",
+   "ENGINE2_01",
+   "FF_01",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_01",
+   "FR_02",
+   "RR_01",
+   "RR_02",
+   "BEAM_01",
+   "GUN_01",
+   "GUN_02",
+   "LASER_01",
+   "MISSILE_01",
+   "FL_01",
+   "FL_02",
+   "RL_01",
+   "RL_02"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D3\\objects\\FM039\\FM039.lwo",
+   "D3\\images\\FM039\\FL039_body1_2.bmp"
+  ],
+  "faction": "alliance"
+ },
+ {
+  "file": "data/model/Ship/GE/EM027.mds",
+  "name": "EM027",
+  "ext": "mds",
+  "size": 291926,
+  "node_count": 29,
+  "nodes": [
+   "EM023:Layer1",
+   "ENGINE_01",
+   "ENGINE_02",
+   "ENGINE_03",
+   "ENGINE_04",
+   "FR_01",
+   "FL_01",
+   "RR_01",
+   "RL_01",
+   "FF_01",
+   "FF_03",
+   "FF_02",
+   "FF_04",
+   "BEAM_01",
+   "MISSILE_01",
+   "LASER_01",
+   "GUN_01",
+   "GUN_02",
+   "EM027L:Layer1",
+   "EM027R:Layer1",
+   "ENGINE_05",
+   "FF_05",
+   "FR_03",
+   "FR_04",
+   "RR_03",
+   "FF_06",
+   "FL_03",
+   "FL_04",
+   "RL_03"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D2\\objects\\EM023\\EM023.lwo",
+   "W:\\Gin7\\CG\\D3\\objects\\EM027L\\EM027L.lwo",
+   "W:\\Gin7\\CG\\D3\\objects\\EM027R\\EM027R.lwo",
+   "D2\\images\\EM023\\EL027_dark.bmp",
+   "D2\\images\\EM023\\EL027_body_under1_2.bmp"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/EM028.mds",
+  "name": "EM028",
+  "ext": "mds",
+  "size": 349984,
+  "node_count": 23,
+  "nodes": [
+   "EM012:Layer1",
+   "ENGINE_01",
+   "ENGINE_02",
+   "ENGINE_03",
+   "BEAM_01",
+   "FF_01",
+   "FF_02",
+   "FF_03",
+   "FF_04",
+   "FR_01",
+   "FR_02",
+   "FL_01",
+   "FL_02",
+   "RR_01",
+   "RR_02",
+   "RL_01",
+   "RL_02",
+   "GUN_01",
+   "GUN_02",
+   "LASER_01",
+   "MISSILE_01",
+   "EL028L:Layer1",
+   "EL028R:Layer1"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D1\\objects\\EM012\\EM012.lwo",
+   "W:\\Gin7\\CG\\D3\\objects\\EM028L\\EL028L.lwo",
+   "W:\\Gin7\\CG\\D3\\objects\\EM028R\\EL028R.lwo",
+   "D1\\images\\EM012\\el012_body_as2.bmp"
+  ],
+  "faction": "empire"
+ },
+ {
+  "file": "data/model/Ship/GE/EM037.mds",
+  "name": "EM037",
+  "ext": "mds",
+  "size": 177640,
+  "node_count": 22,
+  "nodes": [
+   "EM037:Layer1",
+   "BEAM_01",
+   "FF_01",
+   "FR_01",
+   "FR_02",
+   "RR_01",
+   "RR_02",
+   "GUN_01",
+   "MISSILE_01",
+   "LASER_01",
+   "ENGINE_01",
+   "ENGINE_02",
+   "ENGINE_03",
+   "ENGINE_04",
+   "ENGINE_05",
+   "ENGINE_06",
+   "FF_02",
+   "FL_01",
+   "FL_02",
+   "RL_01",
+   "RL_02",
+   "GUN_02"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\D3\\objects\\EM037\\EM037.lwo",
+   "D3\\images\\EM037\\cuL_top_1.bmp",
+   "D3\\images\\EM037\\cuL_top_2.bmp"
+  ],
+  "faction": "empire"
+ }
+]

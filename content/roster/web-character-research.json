@@ -1,0 +1,333 @@
+{
+  "_source": "LANE D web research 2026-06-13: canonical 銀河英雄伝説 character set + appearance identity evidence for portrait matching. NO GUESSING — every appearance value cited to a source URL. Where a source does not state hair/eye colour, value is null with a note. ACDB hair/eye fields reflect the 1988 OVA anime render palette (stylised: e.g. Yang's near-black hair indexed 'Blue', Julian's light-brown indexed 'Gray', Annerose's eyes 'Red'). Gineipaedia gives canon hard facts (rank/birth/death/nickname/flagship) but sparse appearance prose.",
+  "_sources": {
+    "ja_wikipedia_chars": "https://ja.wikipedia.org/wiki/銀河英雄伝説の登場人物",
+    "ja_wikipedia_others": "https://ja.wikipedia.org/wiki/銀河英雄伝説の登場人物・その他",
+    "gineipaedia": "https://gineipaedia.com/",
+    "acdb": "https://www.animecharactersdatabase.com/ (source: Legend of the Galactic Heroes, allchars id=100167)"
+  },
+  "_roster_cross_check": {
+    "our_roster_size": 97,
+    "our_roster_nature": "VII in-game duty roster: fleet commanders / patrol-squadron commanders / cabinet officials. Civilians, non-officer canon principals and third-power figures are NOT present.",
+    "majors_present_in_our_roster": ["Reinhard (ローエングラム/ミューゼル)","Kircheis","Mittermeyer","Reuenthal","Oberstein","Bittenfeld","Fahrenheit","Mecklinger","Kessler","Müller","Wahlen","Lutz","Lennenkampf","Steinmetz","Kempf(ケンプ)","Eisenach(アイゼナッハ)","Merkatz","Yang","Attenborough","Bucock","Caselnes/Cazerne(キャゼルヌ)","Schönkopf","Poplan","Murai","Patrichev(パトリチェフ)","Fork(フォーク)","Fischer(フィッシャー)","Blumhart(ブルームハルト)","Chung(チュン)","Konev(コーネフ)","D.Greenhill(D.グリーンヒル)","Greenhill(グリーンヒル)"],
+    "majors_MISSING_from_our_roster": ["Wittenfeld — NOTE: 'Wittenfeld' in the Lane-D brief is the SAME person as Bittenfeld (ビッテンフェルト); both are romanizations of the one admiral. Bittenfeld IS present. There is no separate Wittenfeld.","Julian Mintz (ユリアン) — protagonist-tier, non-admiral aide; absent","Frederica Greenhill (フレデリカ) — Yang's aide/wife; absent (only her father D.Greenhill present)","Hildegard von Mariendorf (ヒルダ) — Reinhard's chief advisor/empress; absent","Annerose von Grünewald (アンネローゼ) — Reinhard's sister; absent","Rubinsky (ルビンスキー) — Phezzan Landesherr; absent (no Phezzan civilians in roster)","Boltik (ボルテック) — Phezzan; absent","de Villiers (ド・ヴィリエ) — Earth Cult; absent","Grand Bishop / 総大主教 — Earth Cult; absent","Kesselrink (ケッセルリンク), Dominique (ドミニク) — Phezzan; absent","Trünicht IS present (トリューニヒト) as politician"],
+    "note": "Gaps are entirely civilians / third-power (Phezzan, Earth Cult) / non-officer principals — consistent with the roster being a military+cabinet duty list. The Empire/Alliance ADMIRAL coverage is essentially complete."
+  },
+  "characters": [
+    {
+      "name_ja": "ラインハルト・フォン・ローエングラム",
+      "name_romaji": "Reinhard von Lohengramm",
+      "faction": "empire",
+      "role": "Imperial fleet commander -> Imperial Prime Minister -> Kaiser (founder of the Lohengramm/New Galactic Empire). Born Reinhard von Müsel.",
+      "appearance": "Hair: 'Blonde / Yellow', wavy, to-ears length. Eyes: Blue. Build: handsome young man. Nicknames 'Golden Lion' (allies) / 'blond brat' (enemies). Born 14 March 776 UC, died 26 July 801 UC at age 25.",
+      "source_url": "https://www.animecharactersdatabase.com/characters.php?id=17075 ; https://gineipaedia.com/wiki/Reinhard_von_Lohengramm",
+      "reliability": "high (ACDB structured field + Gineipaedia dates)"
+    },
+    {
+      "name_ja": "ジークフリート・キルヒアイス",
+      "name_romaji": "Siegfried Kircheis",
+      "faction": "empire",
+      "role": "Reinhard's childhood best friend and right hand; High Admiral (posthumously Fleet Admiral). Flagship Barbarossa.",
+      "appearance": "Hair: 'Red', to-ears length. Eyes: 'Blue'. Tall. Male teen/young adult. Born 14 Jan 467 IC (776 UC), died 9 Sep 488 IC (797 UC).",
+      "source_url": "https://www.animecharactersdatabase.com/characters.php?id=17076 ; https://gineipaedia.com/wiki/Siegfried_Kircheis",
+      "reliability": "high"
+    },
+    {
+      "name_ja": "ウォルフガング・ミッターマイヤー",
+      "name_romaji": "Wolfgang Mittermeyer",
+      "faction": "empire",
+      "role": "'Gale Wolf'; Fleet Admiral, Chief Commander of the Space Fleet. Flagship Beowulf. Born 30 Aug 768 UC; admiral in his twenties.",
+      "appearance": "Hair: 'Blonde / Yellow' with 'hair intakes'. Eyes: Blue.",
+      "source_url": "https://www.animecharactersdatabase.com/characters.php?id=17078 ; https://gineipaedia.com/wiki/Wolfgang_Mittermeyer",
+      "reliability": "high"
+    },
+    {
+      "name_ja": "オスカー・フォン・ロイエンタール",
+      "name_romaji": "Oskar von Reuenthal",
+      "faction": "empire",
+      "role": "Fleet Admiral, Chief of High Command Office, Governor-General of former Alliance worlds. Born 767 UC, died 800 UC (~33).",
+      "appearance": "Hair: 'Black'. Eyes: HETEROCHROMIA — left eye blue, right eye brown/red (ACDB: Blue (Red), tag 'heterochromia'). Nicknamed 'Bewitching Eyes'. This is his single strongest identity marker.",
+      "source_url": "https://www.animecharactersdatabase.com/characters.php?id=17073 ; https://gineipaedia.com/wiki/Oskar_von_Reuenthal",
+      "reliability": "high"
+    },
+    {
+      "name_ja": "パウル・フォン・オーベルシュタイン",
+      "name_romaji": "Paul von Oberstein",
+      "faction": "empire",
+      "role": "Reinhard's strategist; Minister of Military Affairs (Secretary of the Navy). Cold, calculating.",
+      "appearance": "Hair: 'Brown' with a 'hair streak'. Eyes: ACDB 'Black'; canon — ARTIFICIAL prosthetic eyes (clear/pale blue in the OVA; light brown in the novels). The artificial eyes are his identity marker.",
+      "source_url": "https://www.animecharactersdatabase.com/characters.php?id=17074 ; https://gineipaedia.com/wiki/Paul_von_Oberstein ; https://legendofthegalacticheroes.fandom.com/wiki/Artificial_eyes",
+      "reliability": "high (hair/eye ACDB; artificial-eye fact widely sourced)"
+    },
+    {
+      "name_ja": "フリッツ・ヨーゼフ・ビッテンフェルト",
+      "name_romaji": "Fritz Joseph Bittenfeld",
+      "faction": "empire",
+      "role": "High Admiral, commander of the 'Schwarz Lanzenreiter' (Black Lancers). Fiery temper, aggressive frontal tactics. Flagship Königs Tiger. Born 767 UC. ALSO romanized 'Wittenfeld'.",
+      "appearance": "Hair colour NOT stated in fetched sources (null). Canon/OVA: long orange-red hair tied back — widely depicted but not confirmed in a fetched citable field here. Personality 'fiery temper and aggressive battle tactics'.",
+      "source_url": "https://gineipaedia.com/wiki/Fritz_Joseph_Bittenfeld",
+      "reliability": "medium (role/temperament cited; hair colour unconfirmed — left null, OVA orange-red noted as unverified)"
+    },
+    {
+      "name_ja": "アダルベルト・フォン・ファーレンハイト",
+      "name_romaji": "Adalbert von Fahrenheit",
+      "faction": "empire",
+      "role": "Admiral; noble who joined the military to make a living despite noble status; defected to Reinhard. KIA at the Battle of the Corridor.",
+      "appearance": "Hair/eye colour NOT stated in fetched sources (null).",
+      "source_url": "https://gineipaedia.com/wiki/Adalbert_von_Fahrenheit (role from WebSearch snippet of allthetropes/tvtropes)",
+      "reliability": "low for appearance (role only; appearance unconfirmed -> null)"
+    },
+    {
+      "name_ja": "エルネスト・メックリンガー",
+      "name_romaji": "Ernest Mecklinger",
+      "faction": "empire",
+      "role": "'The Artist Admiral'; Fleet Admiral, rear-area commander; patron of the arts, painter/pianist; later writes the official history.",
+      "appearance": "Hair/eye colour NOT stated in fetched sources (null). Identity cue: associated with art (paintings/piano), moustache in OVA (unverified here).",
+      "source_url": "https://gineipaedia.com/wiki/Ernest_Mecklinger (Artist-Admiral fact from WebSearch snippet)",
+      "reliability": "low for appearance (role/epithet cited; colours -> null)"
+    },
+    {
+      "name_ja": "ウルリッヒ・ケスラー",
+      "name_romaji": "Ulrich Kessler",
+      "faction": "empire",
+      "role": "High Admiral; Chief of the Imperial Military Police, then Capital Defense Commander protecting the Imperial Capital. Born 762 UC.",
+      "appearance": "Hair/eye colour NOT stated in fetched sources (null).",
+      "source_url": "https://gineipaedia.com/wiki/Ulrich_Kessler",
+      "reliability": "low for appearance (role cited; colours -> null)"
+    },
+    {
+      "name_ja": "ナイトハルト・ミュラー",
+      "name_romaji": "Neidhart Müller",
+      "faction": "empire",
+      "role": "'Iron Wall' Müller; High Admiral, renowned for defensive resilience (survived Iserlohn, Vermilion). Born 771 UC — among the youngest of Reinhard's admirals.",
+      "appearance": "Hair/eye colour NOT stated in fetched sources (null).",
+      "source_url": "https://gineipaedia.com/wiki/Neidhart_Müller",
+      "reliability": "low for appearance (epithet/role cited; colours -> null)"
+    },
+    {
+      "name_ja": "アウグスト・ザムエル・ワーレン",
+      "name_romaji": "August Samuel Wahlen",
+      "faction": "empire",
+      "role": "Fleet Admiral; loyal, steady commander; loses an arm and continues to serve.",
+      "appearance": "Hair/eye colour NOT stated in fetched sources (null). Identity cue: prosthetic arm after injury (canon, unverified-field here).",
+      "source_url": "https://gineipaedia.com/wiki/August_Samuel_Wahlen",
+      "reliability": "low for appearance (role cited; colours -> null)"
+    },
+    {
+      "name_ja": "コルネリアス・ルッツ",
+      "name_romaji": "Cornelius Lutz",
+      "faction": "empire",
+      "role": "High Admiral; commander present at the defense of the Imperial capital / Reinhard's guard. KIA defending against Earth-Cult terrorists.",
+      "appearance": "Hair/eye colour NOT stated in fetched sources (null).",
+      "source_url": "https://gineipaedia.com/wiki/Cornelius_Lutz",
+      "reliability": "low for appearance (role cited; colours -> null)"
+    },
+    {
+      "name_ja": "ヘルムート・レンネンカンプ",
+      "name_romaji": "Helmut Lennenkampf",
+      "faction": "empire",
+      "role": "High Admiral; later High Commissioner to the occupied Alliance; commits suicide after a political blunder (Yang's arrest).",
+      "appearance": "Hair/eye colour NOT stated in fetched sources (null).",
+      "source_url": "https://gineipaedia.com/wiki/Helmut_Lennenkampf",
+      "reliability": "low for appearance (role cited; colours -> null)"
+    },
+    {
+      "name_ja": "カール・ロベルト・シュタインメッツ",
+      "name_romaji": "Karl Robert Steinmetz",
+      "faction": "empire",
+      "role": "High Admiral; front-line fleet commander; KIA at the Battle of the Corridor.",
+      "appearance": "Hair/eye colour NOT stated in fetched sources (null).",
+      "source_url": "https://gineipaedia.com/wiki/Karl_Robert_Steinmetz",
+      "reliability": "low for appearance (role cited; colours -> null)"
+    },
+    {
+      "name_ja": "カール・グスタフ・ケンプ",
+      "name_romaji": "Karl Gustav Kempf",
+      "faction": "empire",
+      "role": "Admiral; commander at the assault on Iserlohn (Geiersburg mobile fortress); KIA ramming Iserlohn.",
+      "appearance": "Hair/eye colour NOT stated in fetched sources (null).",
+      "source_url": "https://gineipaedia.com/wiki/Karl_Gustav_Kempf",
+      "reliability": "low for appearance (role cited; colours -> null)"
+    },
+    {
+      "name_ja": "エルンスト・フォン・アイゼナッハ",
+      "name_romaji": "Ernst von Eisenach",
+      "faction": "empire",
+      "role": "Fleet Admiral; 'the Silent Admiral' — famously commands almost entirely by hand-gesture, rarely speaks.",
+      "appearance": "Hair/eye colour NOT stated in fetched sources (null). Identity cue: silence / gesture-commands (behavioural, not visual).",
+      "source_url": "https://gineipaedia.com/wiki/Ernst_von_Eisenach",
+      "reliability": "low for appearance (epithet cited; colours -> null)"
+    },
+    {
+      "name_ja": "ウィリバルト・ヨアヒム・フォン・メルカッツ",
+      "name_romaji": "Willibald Joachim von Merkatz",
+      "faction": "empire->alliance(defector)",
+      "role": "Veteran Imperial High Admiral; defects to the Alliance after the Lippstadt War; serves the exiled legitimate Imperial government; chief of staff of the El Facil Revolutionary Reserve. Born 738 UC, KIA at the Battle of Shiva 801 UC aged 63.",
+      "appearance": "Described as elderly/aging — 'the only elderly commander who fought in the fleet battle'. Specific hair/eye colour NOT stated (null). Identity cue: oldest of the admirals, veteran bearing.",
+      "source_url": "https://gineipaedia.com/wiki/Willibald_Joachim_von_Merkatz",
+      "reliability": "medium (age/elderly cited; colours -> null)"
+    },
+    {
+      "name_ja": "ヒルデガルド・フォン・マリーンドルフ",
+      "name_romaji": "Hildegard von Mariendorf",
+      "faction": "empire",
+      "role": "'Fräulein Hilda'; Reinhard's chief advisor/aide, later his wife and Empress; daughter of Count Mariendorf. MISSING from our 97-roster.",
+      "appearance": "Hair: 'Blonde / Yellow' (short). Eyes: Blue. Tags: cravat, jewel. Wears a male-style aide uniform.",
+      "source_url": "https://www.animecharactersdatabase.com/characters.php?id=17069",
+      "reliability": "high"
+    },
+    {
+      "name_ja": "アンネローゼ・フォン・グリューネワルト",
+      "name_romaji": "Annerose von Grünewald",
+      "faction": "empire",
+      "role": "Reinhard's older sister; former concubine of Kaiser Friedrich IV (Countess von Grünewald); the cause of Reinhard's ambition. MISSING from our 97-roster.",
+      "appearance": "Hair: 'Blonde / Yellow', wavy, long. Eyes: 'Red' (OVA render). Tag: dress. Strong visual resemblance to Reinhard (golden hair).",
+      "source_url": "https://www.animecharactersdatabase.com/characters.php?id=17066",
+      "reliability": "high"
+    },
+    {
+      "name_ja": "ヤン・ウェンリー",
+      "name_romaji": "Yang Wen-li",
+      "faction": "alliance",
+      "role": "Alliance's foremost strategist; Fleet Admiral (youngest in Alliance history, age 32). 'Miracle Yang', 'Hero of El Facil', 'Magician'. Born 4 Apr 767 UC, died 1 Jun 800 UC at 33 (assassinated by Terraists).",
+      "appearance": "Hair: ACDB 'Blue' (i.e. the OVA's near-black dark hair rendered blue-black), messy. Eyes: 'Black'. Identity cues: black beret, perpetually rumpled uniform, young scruffy historian-soldier look.",
+      "source_url": "https://www.animecharactersdatabase.com/characters.php?id=17079 ; https://gineipaedia.com/wiki/Yang_Wen-li",
+      "reliability": "high"
+    },
+    {
+      "name_ja": "ユリアン・ミンツ",
+      "name_romaji": "Julian Mintz",
+      "faction": "alliance",
+      "role": "Yang's ward/adopted son and aide; later commander of the Yang Fleet and the Iserlohn Republic forces. MISSING from our 97-roster.",
+      "appearance": "Hair: 'Gray' (ACDB; light ash-brown in OVA) with 'cheek curls'. Eyes: 'Black'. Identity cues: beret, youthful (teens).",
+      "source_url": "https://www.animecharactersdatabase.com/characters.php?id=17070",
+      "reliability": "high"
+    },
+    {
+      "name_ja": "フレデリカ・グリーンヒル",
+      "name_romaji": "Frederica Greenhill",
+      "faction": "alliance",
+      "role": "Yang's aide-de-camp and later wife; salutatorian of the FPA officer academy; daughter of Admiral Dwight Greenhill. MISSING from our 97-roster (only her father is present).",
+      "appearance": "Hair: 'Brown' (shoulder-length). Eyes: 'Brown'. Wears glasses (canon, OVA). Female officer uniform.",
+      "source_url": "https://www.animecharactersdatabase.com/characters.php?id=17068",
+      "reliability": "high (hair/eye ACDB; glasses canon)"
+    },
+    {
+      "name_ja": "ワルター・フォン・シェーンコップ",
+      "name_romaji": "Walter von Schönkopf",
+      "faction": "alliance",
+      "role": "Vice Admiral; commander of the Rosen Ritter (armoured-grenadier regiment of Imperial defectors); ground-warfare expert; noted ladies' man.",
+      "appearance": "Hair: 'Brown' with 'sideburns'. Eyes: 'Brown'. Identity cues: rugged, sideburns, beret-and-cape Rosen Ritter look.",
+      "source_url": "https://www.animecharactersdatabase.com/characters.php?id=17077 ; https://gineipaedia.com/wiki/Walter_von_Schönkopf",
+      "reliability": "high"
+    },
+    {
+      "name_ja": "ダスティ・アッテンボロー",
+      "name_romaji": "Dusty Attenborough",
+      "faction": "alliance",
+      "role": "Rear Admiral in the Yang Fleet; Yang's academy junior; witty, journalist-minded.",
+      "appearance": "Hair: 'Gray'. Eyes: 'Black'. Tags: beret, 'freckles'. Identity cues: freckles + beret.",
+      "source_url": "https://www.animecharactersdatabase.com/characters.php?id=17067",
+      "reliability": "high"
+    },
+    {
+      "name_ja": "アレックス・キャゼルヌ",
+      "name_romaji": "Alex Caselnes",
+      "faction": "alliance",
+      "role": "Rear Admiral; Yang's logistics/administration genius and academy senior; quartermaster of the Yang Fleet. (Our roster: キャゼルヌ / Caselnes.)",
+      "appearance": "Hair: 'Brown'. Eyes: 'Blue'. Tag: uniform. Identity cue: moustache (canon OVA, unverified-field).",
+      "source_url": "https://www.animecharactersdatabase.com/characters.php?id=17065",
+      "reliability": "high (hair/eye ACDB)"
+    },
+    {
+      "name_ja": "オリビエ・ポプラン",
+      "name_romaji": "Olivier Poplan",
+      "faction": "alliance",
+      "role": "Ace fighter (spartanian) pilot of the Yang Fleet; womanizer; comic-relief skilled aviator.",
+      "appearance": "Hair: 'Orange'. Eyes: 'Green'. Tags: beret, scarf. Identity cues: orange hair + pilot scarf.",
+      "source_url": "https://www.animecharactersdatabase.com/characters.php?id=17072",
+      "reliability": "high"
+    },
+    {
+      "name_ja": "アレクサンドル・ビュコック",
+      "name_romaji": "Alexander Bucock",
+      "faction": "alliance",
+      "role": "Fleet Admiral, Commander-in-Chief of the Alliance Space Fleet; veteran of 40+ years; mentor to Yang. Born 726 UC, KIA 800 UC at age 74.",
+      "appearance": "Elderly veteran (74). Specific hair/eye colour NOT stated in fetched source (null). Identity cue: oldest Alliance commander, white-haired in OVA (unverified-field).",
+      "source_url": "https://gineipaedia.com/wiki/Alexandre_Bewcock",
+      "reliability": "medium (age cited; colours -> null)"
+    },
+    {
+      "name_ja": "アドリアン・ルビンスキー",
+      "name_romaji": "Adrian Rubinsky",
+      "faction": "phezzan",
+      "role": "Fifth Landesherr (ruler) of the Dominion of Fezzan; 'Black Fox of Fezzan'; master manipulator playing Empire and Alliance against each other; secretly entangled with the Earth Cult. MISSING from our 97-roster.",
+      "appearance": "Specific hair/eye colour NOT stated in fetched source (null). Identity cue: canonically BALD (OVA) — widely known but not in a fetched citable field; left as note, not asserted.",
+      "source_url": "https://gineipaedia.com/wiki/Adrian_Rubinsky",
+      "reliability": "medium (role/epithet cited; appearance -> null, bald noted unverified)"
+    },
+    {
+      "name_ja": "ニコラス・ボルテック",
+      "name_romaji": "Nikolas Boltik",
+      "faction": "phezzan",
+      "role": "Adjutant to the Landesherr; later Imperial-resident commissioner / acting Governor-General of Phezzan under the Empire. MISSING from our 97-roster.",
+      "appearance": "Hair/eye colour NOT stated in fetched source (null).",
+      "source_url": "https://ja.wikipedia.org/wiki/銀河英雄伝説の登場人物・その他",
+      "reliability": "low for appearance (role cited; colours -> null)"
+    },
+    {
+      "name_ja": "ルパート・ケッセルリンク",
+      "name_romaji": "Rupert Kesselrink",
+      "faction": "phezzan",
+      "role": "Adjutant to the Landesherr; Rubinsky's secret illegitimate son; schemes against his father. MISSING from our 97-roster.",
+      "appearance": "Hair/eye colour NOT stated in fetched source (null).",
+      "source_url": "https://ja.wikipedia.org/wiki/銀河英雄伝説の登場人物・その他",
+      "reliability": "low for appearance (role cited; colours -> null)"
+    },
+    {
+      "name_ja": "ドミニク・サンピエール",
+      "name_romaji": "Dominique Saint-Pierre",
+      "faction": "phezzan",
+      "role": "Rubinsky's mistress and a business operator; relays information; sets off Rubinsky's posthumous 'fire' trap. MISSING from our 97-roster.",
+      "appearance": "Hair/eye colour NOT stated in fetched source (null).",
+      "source_url": "https://ja.wikipedia.org/wiki/銀河英雄伝説の登場人物・その他",
+      "reliability": "low for appearance (role cited; colours -> null)"
+    },
+    {
+      "name_ja": "ド・ヴィリエ",
+      "name_romaji": "De Villier",
+      "faction": "earth_cult",
+      "role": "Archbishop / acting Secretary-General of the Earth Cult (Terraists); chief architect of the Cult's plots (Lennenkampf manipulation, Reinhard assassination attempt). MISSING from our 97-roster.",
+      "appearance": "Hair/eye colour NOT stated in fetched source (null).",
+      "source_url": "https://ja.wikipedia.org/wiki/銀河英雄伝説の登場人物・その他",
+      "reliability": "low for appearance (role cited; colours -> null)"
+    },
+    {
+      "name_ja": "総大主教",
+      "name_romaji": "Grand Bishop",
+      "faction": "earth_cult",
+      "role": "Supreme leader (Grand Bishop) of the Earth Cult, based beneath Mt Everest on Earth. MISSING from our 97-roster.",
+      "appearance": "Hair/eye colour NOT stated in fetched source (null).",
+      "source_url": "https://ja.wikipedia.org/wiki/銀河英雄伝説の登場人物・その他",
+      "reliability": "low for appearance (role cited; colours -> null)"
+    },
+    {
+      "name_ja": "デグスビイ",
+      "name_romaji": "Degsby",
+      "faction": "earth_cult",
+      "role": "Bishop of the Earth Cult; the Cult agent who interacts with Phezzan; later breaks under interrogation. MISSING from our 97-roster.",
+      "appearance": "Hair/eye colour NOT stated in fetched source (null).",
+      "source_url": "https://ja.wikipedia.org/wiki/銀河英雄伝説の登場人物・その他",
+      "reliability": "low for appearance (role cited; colours -> null)"
+    },
+    {
+      "name_ja": "ボリス・コーネフ",
+      "name_romaji": "Boris Konev",
+      "faction": "phezzan/independent",
+      "role": "Independent merchant captain; Yang's childhood friend; ferries information. (Our roster has コーネフ present.)",
+      "appearance": "Hair/eye colour NOT stated in fetched source (null).",
+      "source_url": "https://ja.wikipedia.org/wiki/銀河英雄伝説の登場人物・その他",
+      "reliability": "low for appearance (role cited; colours -> null)"
+    }
+  ]
+}

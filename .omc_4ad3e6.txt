@@ -1,0 +1,111 @@
+// CONTAINING (entry 0x004ad120)  0x004ad120  FUN_004ad120  undefined FUN_004ad120()
+
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
+
+undefined4 FUN_004ad120(int param_1,int param_2)
+
+{
+  int iVar1;
+  undefined4 uVar2;
+  DWORD DVar3;
+  ulonglong local_1c;
+  undefined1 *local_14;
+  void *local_10;
+  undefined1 *puStack_c;
+  int local_8;
+  
+  local_8 = 0xffffffff;
+  puStack_c = &LAB_00662248;
+  local_10 = ExceptionList;
+  local_14 = &stack0xffffffd8;
+  ExceptionList = &local_10;
+  FUN_004ad5f0();
+  if (param_1 < 5) {
+    FUN_004ad620();
+    ExceptionList = local_10;
+    return 0xffffffff;
+  }
+  DAT_007c2490 = *(undefined4 *)(param_2 + 4);
+  DAT_007c2494 = FUN_005ff09b(*(undefined4 *)(param_2 + 8));
+  _strncpy(&DAT_007c24a8,*(char **)(param_2 + 0x10),0x10);
+  DAT_007c24b8 = 0;
+  _DAT_007c2488 = FUN_00611ed0();
+  if (_DAT_007c2488 == 0) {
+    FUN_005fe742(&DAT_007b4078,s__ERR__mpsClientBaseSystem__creat_0076bce4);
+    ExceptionList = local_10;
+    return 0xffffffff;
+  }
+  if ((DAT_007c247c & 1) == 0) {
+    DAT_007c247c = DAT_007c247c | 1;
+    DAT_007c2498 = FUN_00403a80(0xf000);
+  }
+  iVar1 = *(int *)(DAT_007c2498 + 4);
+  uVar2 = FUN_0044e440();
+  (**(code **)(iVar1 + 4))(uVar2);
+  iVar1 = *(int *)(DAT_007c2498 + 4);
+  uVar2 = FUN_0040a700();
+  (**(code **)(iVar1 + 4))(uVar2);
+  iVar1 = *(int *)(DAT_007c2498 + 4);
+  uVar2 = FUN_004a49c0();
+  (**(code **)(iVar1 + 4))(uVar2);
+  iVar1 = *(int *)(DAT_007c2498 + 4);
+  uVar2 = FUN_00439130();
+  (**(code **)(iVar1 + 4))(uVar2);
+  iVar1 = *(int *)(DAT_007c2498 + 4);
+  uVar2 = FUN_00481d40();
+  (**(code **)(iVar1 + 4))(uVar2);
+  iVar1 = *(int *)(DAT_007c2498 + 4);
+  uVar2 = FUN_0044d8f0();
+  (**(code **)(iVar1 + 4))(uVar2);
+  iVar1 = *(int *)(DAT_007c2498 + 4);
+  uVar2 = FUN_0044b170();
+  (**(code **)(iVar1 + 4))(uVar2);
+  iVar1 = *(int *)(DAT_007c2498 + 4);
+  uVar2 = FUN_00491e10();
+  (**(code **)(iVar1 + 4))(uVar2);
+  iVar1 = *(int *)(DAT_007c2498 + 4);
+  uVar2 = FUN_0055a800();
+  (**(code **)(iVar1 + 4))(uVar2);
+  iVar1 = *(int *)(DAT_007c2498 + 4);
+  uVar2 = FUN_0055b790();
+  (**(code **)(iVar1 + 4))(uVar2);
+  iVar1 = *(int *)(DAT_007c2498 + 4);
+  uVar2 = FUN_0043e590();
+  (**(code **)(iVar1 + 4))(uVar2);
+  iVar1 = *(int *)(DAT_007c2498 + 4);
+  uVar2 = FUN_0043f0c0();
+  (**(code **)(iVar1 + 4))(uVar2);
+  iVar1 = *(int *)(DAT_007c2498 + 4);
+  uVar2 = FUN_00407600();
+  (**(code **)(iVar1 + 4))(uVar2);
+  iVar1 = *(int *)(DAT_007c2498 + 4);
+  uVar2 = FUN_00437e00();
+  (**(code **)(iVar1 + 4))(uVar2);
+  iVar1 = *(int *)(DAT_007c2498 + 4);
+  uVar2 = FUN_00447400();
+  (**(code **)(iVar1 + 4))(uVar2);
+  local_8 = 0;
+  DAT_007c248c = (int *)FUN_004aa990(0x800);
+  (**(code **)(*DAT_007c248c + 0x10))(1);
+  uVar2 = (**(code **)(*DAT_007c248c + 0x18))();
+  FUN_004ac900(&local_1c,DAT_007c248c,uVar2);
+  thunk_FUN_004ae700();
+  uVar2 = (**(code **)(*DAT_007c248c + 0x14))();
+  DAT_007c2478 = (int *)FUN_004ad710(uVar2,DAT_007c2490,DAT_007c2494,DAT_007c2498);
+  (**(code **)(*DAT_007c2478 + 0x10))(1);
+  uVar2 = (**(code **)(*DAT_007c2478 + 0x14))();
+  uVar2 = FUN_004ac900(&local_1c,DAT_007c2478,uVar2);
+  local_8._0_1_ = 1;
+  FUN_004ae670(uVar2);
+  local_8 = (uint)local_8._1_3_ << 8;
+  thunk_FUN_004ae700();
+  _DAT_007c2480 = _DAT_0066e0e8 / _DAT_0076bcd0;
+  DVar3 = timeGetTime();
+  local_1c = (ulonglong)DVar3;
+  _DAT_007c24d8 = 0;
+  _DAT_007c24c0 = (double)local_1c / _DAT_0066e0e0;
+  ExceptionList = local_10;
+  return 0;
+}
+
+

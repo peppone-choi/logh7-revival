@@ -1,0 +1,42 @@
+// EXACT  0x004ab5f0  FUN_004ab5f0  undefined FUN_004ab5f0()
+
+void __thiscall
+FUN_004ab5f0(undefined4 *param_1,undefined4 param_2,undefined4 param_3,undefined4 param_4,
+            undefined1 param_5)
+
+{
+  int *piVar1;
+  int *piVar2;
+  int *piVar3;
+  char cVar4;
+  
+  *(undefined1 *)(param_1 + 5) = param_5;
+  param_1[6] = param_2;
+  *(undefined1 *)(param_1 + 0xb) = 0;
+  cVar4 = FUN_00612270(param_3,param_4);
+  if (cVar4 == '\0') {
+    piVar1 = (int *)param_1[9];
+    piVar3 = (int *)*piVar1;
+    while (piVar3 != piVar1) {
+      if (((code *)piVar3[4] == (code *)0x0) ||
+         ((*(code *)piVar3[4])(piVar3[3],1,0xffffffff), piVar3[4] == 0)) {
+        piVar2 = (int *)*piVar3;
+        *(int **)piVar3[1] = piVar2;
+        *(int *)(*piVar3 + 4) = piVar3[1];
+        FUN_004ab310();
+        FUN_00648d6b(piVar3);
+        param_1[10] = param_1[10] + -1;
+        piVar3 = piVar2;
+      }
+      else {
+        piVar3 = (int *)*piVar3;
+      }
+    }
+    if ((*(char *)(param_1 + 5) != '\0') && (param_1 != (undefined4 *)0x0)) {
+      (**(code **)*param_1)(1);
+    }
+  }
+  return;
+}
+
+

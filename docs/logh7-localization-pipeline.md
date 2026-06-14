@@ -61,6 +61,77 @@ python tools/logh7_pipeline.py build-installed .omo/work/logh7-extracted --iso-r
 6. 한글 번역은 원본 바이트 길이, 종료 문자, 포인터/오프셋 테이블을 확인하기 전까지 원본 파일에 직접 쓰지 않는다.
 7. 패치 산출물은 원본 LFS 아티팩트가 아니라 `.omo/work/logh7-ko-overlay/` 또는 별도 패치 파일로 만든다.
 
+## 텍스트 인코딩과 폰트 방침
+
+원본 클라이언트는 Unicode 렌더링 경로가 아니라 GDI ANSI 함수(`CreateFontA` → `TextOutA`/`ExtTextOutA`/`DrawTextA`)를 사용한다. 따라서 최종 한글화는 UTF-8 파일을 클라이언트에 직접 넣는 방식으로 진행하지 않는다.
+
+- 번역 원문과 작업 카탈로그는 UTF-8로 관리한다.
+- 빌드 단계에서 클라이언트가 읽는 교체 파일(`exe/String.txt`, MsgDat 계열 등)은 대상별 레이아웃을 검증한 뒤 CP949 바이트로 산출한다.
+- 실행 EXE는 `tools/logh7_japanese_font_patch.py --charset hangeul`로 `CreateFontA` charset immediate 두 곳을 `HANGEUL_CHARSET`(`0x81`, `6A 81`)으로 바꾼다.
+- 원문 일본어를 읽어야 하는 RE/QA 세션은 `--charset shiftjis`를 사용한다. 이 경로는 실클라 스크린샷으로 검증됐다.
+- UTF-8/UTF-16 전환은 `TextOutA` 호출부 전체를 `W` 함수 계열로 바꾸는 별도 바이너리 포팅 작업이므로, 현재 한글화 1차 목표에서는 제외한다.
+
+검증 기준은 화면이다. CP949 산출물과 `HANGEUL_CHARSET` 패치를 적용한 클라이언트로 로그인/로비 화면을 띄워 한글 버튼, 본문, 줄바꿈, 잘림 여부를 스크린샷으로 확인한 뒤에만 한글 표시 완료로 본다.
+
+### UTF-8/Unicode 포팅 선택지
+
+ANSI를 완전히 제거하고 UTF-8 원문을 직접 쓰려면 단순 charset 패치로는 부족하다. 현재 클라이언트는 `char*`/ANSI 텍스트를 `TextOutA`/`ExtTextOutA`/`DrawTextA`에 넘긴다. UTF-8을 제품 기본으로 삼으려면 다음 중 하나를 선택해야 한다.
+
+1. **실험용: application manifest `activeCodePage=UTF-8`**
+   - Windows 10 1903+에서 legacy ANSI 코드 페이지를 UTF-8로 돌리는 빠른 실험이다.
+   - 장점: EXE 내부 호출부를 많이 건드리지 않고 UTF-8 `String.txt` 실험이 가능하다.
+   - 단점: 클라이언트 내부가 byte length, 고정 버퍼, 1바이트 문자 전제를 쓰면 UTF-8 다바이트 길이 때문에 잘림/오프셋/프로토콜 필드가 깨질 수 있다. OS 버전 의존성도 생긴다.
+   - 결론: 프로토타입 실험용이며, 최종 한글화 기본 경로로 승격하지 않는다.
+
+2. **권장 2차 목표: A→W 렌더링 shim**
+   - `TextOutA`, `ExtTextOutA`, `DrawTextA`, 필요 시 `CreateFontA` 호출을 후킹하거나 IAT 패치해 자체 wrapper로 보낸다.
+   - wrapper는 입력 `char*`를 `MultiByteToWideChar(CP_UTF8, ...)`로 UTF-16 버퍼에 변환한 뒤 `TextOutW`/`ExtTextOutW`/`DrawTextW`/`CreateFontW`를 호출한다.
+   - 길이 인자가 `-1`인지, byte count인지, rectangle clipping/ellipsis 처리인지 함수별로 보존해야 한다.
+   - 장점: 번역 파일을 UTF-8로 유지하고 Windows locale/codepage 영향에서 벗어날 수 있다.
+   - 단점: 모든 텍스트 출력 callsite와 문자열 입력/측정 함수(`GetTextExtentPoint*` 등)를 찾아야 하며, wrapper 코드 cave 또는 DLL injection/IAT thunk가 필요하다.
+
+3. **장기 목표: 문자열 로더부터 UTF-16 내부화**
+   - `String.txt`/MsgDat 로더에서 UTF-8을 읽어 UTF-16 캐시를 만들고, UI 객체가 wide pointer를 들고 다니게 바꾼다.
+   - 가장 깨끗하지만 구조체 레이아웃과 수명 관리까지 바꾸므로 현재 서버/플레이어블 복구와 병행하기엔 과하다.
+
+현재 방침은 **1차 제품 한글화는 CP949 + `HANGEUL_CHARSET`**, **2차 품질 개선은 A→W UTF-8 shim**이다. 이렇게 나누면 당장 한글 UI를 검증하면서도, 번역 원문은 UTF-8 카탈로그로 유지해 나중에 Unicode 포팅으로 갈 수 있다.
+
+## 병렬 포팅 진행 방침
+
+포팅은 서버/프로토콜 복구와 동시에 진행한다. 단, 두 트랙이 같은 실행 파일을 서로 다른 방식으로 패치하다가 결과를 오염시키지 않도록 산출물과 검증 게이트를 분리한다.
+
+### Track A: 플레이어블 서버/세션 복구
+
+- 목표: 원본 클라이언트가 로그인 후 세션/로비/월드 요청을 정상적으로 이어가게 한다.
+- 현재 다음 블로커: `0x2006` 응답은 message object input/handler까지 소비되지만, 아직 다음 요청(`0x2009` 등)이 나오지 않는다. 따라서 `0x2006` body의 의미 필드와 handler side effect를 먼저 확정한다.
+- 산출물: 서버 응답 구현, protocol fixture, real-client trace, `.debug-journal.md` G### 증거.
+- 검증: 실제 클라이언트로 로그인 후 다음 요청/화면 전환/세션 선택 동작을 확인한다. 화면이나 packet trace 없이 “로그인 성공”으로 문서화하지 않는다.
+
+### Track B: 1차 한글 표시 포팅
+
+- 목표: 게임 접속 복구를 기다리지 않고, 이미 도달 가능한 로그인/로비/메뉴 화면부터 한글 표시를 검증한다.
+- 입력: UTF-8 번역 카탈로그.
+- 산출: 클라이언트 교체 파일은 CP949 바이트로 생성하고, 실행 파일은 `tools/logh7_japanese_font_patch.py --charset hangeul`로 `HANGEUL_CHARSET` 패치를 적용한다.
+- 대상 순서: `exe/String.txt` → 설치/런처 문자열 → MsgDat 계열 텍스트 후보 순서로 진행한다.
+- 검증: 한글 버튼/본문/줄바꿈/잘림을 실제 클라이언트 스크린샷으로 확인한다. 이 트랙의 EXE는 Track A의 프로토콜 probe EXE와 섞지 않는다.
+
+### Track C: 2차 UTF-8/Unicode 포팅
+
+- 목표: CP949 산출물을 제품 기본으로 고정하지 않고, 나중에 UTF-8 원문을 클라이언트가 직접 읽고 표시할 수 있게 만든다.
+- 시작 조건: Track A에서 로비/세션 전환이 안정화되고, Track B에서 주요 UI 텍스트 위치와 폭 문제가 확인된 뒤 시작한다.
+- 1단계 실험: `activeCodePage=UTF-8` manifest로 UTF-8 `String.txt`가 어디까지 버티는지 확인한다. 실패해도 최종 경로로 승격하지 않는다.
+- 2단계 본 구현: `TextOutA`/`ExtTextOutA`/`DrawTextA`/텍스트 폭 측정 함수를 UTF-8→UTF-16 wrapper로 보내고 `W` API를 호출하는 A→W shim을 만든다.
+- 검증: 동일 UTF-8 카탈로그에서 CP949 산출물과 UTF-8 shim 산출물을 나란히 만들어 같은 화면 스크린샷을 비교한다.
+
+### 병렬 작업 규칙
+
+1. Track A는 순정 또는 프로토콜 probe EXE만 사용한다.
+2. Track B는 `HANGEUL_CHARSET` 표시 패치 EXE만 사용한다.
+3. Track C는 별도 UTF-8 실험 EXE를 사용한다.
+4. 각 트랙은 manifest에 base EXE SHA, 적용 패치, 입력 텍스트 해시, 출력 파일 해시를 기록한다.
+5. 한 트랙의 성공 화면을 다른 트랙의 성공 근거로 재사용하지 않는다.
+6. 최종 통합은 Track A 서버가 안정화된 뒤, Track B의 한글 오버레이를 같은 설치 트리에 적용해 다시 실클라 QA를 통과해야 한다.
+
 ## 아티팩트 반영 전략
 
 원본을 수정하지 않는다는 말은 최종 한글화 산출물을 만들지 않는다는 뜻이 아니다. CD/ISO 이미지는 분석 입력으로만 쓰고, 배포물은 이미지를 다시 요구하지 않는 설치 완료 상태의 파일 트리로 만든다.

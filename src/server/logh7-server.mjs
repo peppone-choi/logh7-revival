@@ -10,6 +10,13 @@ import {
   buildPhase3ResponseFromPhase1Request,
   extractChildCodecStaticTables,
 } from './logh7-codec.mjs';
+import { startLogh7AuthServer } from './logh7-auth-server.mjs';
+import { createAccountStore } from './logh7-login-session.mjs';
+import { createAccountRegistry } from './logh7-account-registry.mjs';
+
+const DEFAULT_TRANSPORT_KEY_HEX = '7b41344331333734382d303135392d346335342d414542332d3144363835373537363142337d';
+const DEFAULT_DECIPHER_KEY_HEX = '5859';
+const DEFAULT_CLIENT_EXE = '.omo/work/logh7-installed/exe/G7MTClient.exe';
 
 function jsonResponse(response, status, body) {
   response.writeHead(status, { 'content-type': 'application/json; charset=utf-8' });
@@ -33,6 +40,23 @@ function parseArgs(argv) {
     index += 1;
   }
   return values;
+}
+
+function parseCharacterRecords(args) {
+  const raw = args.get('character-ids') ?? args.get('character-id');
+  if (raw === undefined) {
+    return undefined;
+  }
+  const ids = String(raw)
+    .split(',')
+    .map((value) => Number(value.trim()));
+  if (ids.length === 0 || ids.some((id) => !Number.isInteger(id) || id <= 0 || id > 0xffff)) {
+    throw new Error(`--character-id/--character-ids must be one or two uint16 ids: ${raw}`);
+  }
+  if (ids.length > 2) {
+    throw new Error(`--character-id/--character-ids accepts at most two ids: ${raw}`);
+  }
+  return ids.map((id) => ({ id }));
 }
 
 async function readManifest(manifestPath) {
@@ -219,17 +243,25 @@ function takeGameplayFrames(buffer) {
   return { frames, remaining: buffer.subarray(offset) };
 }
 
-function traceGameplayPayload(traceStream, connectionId, chunk, frame) {
+function createGameplayConnectionState() {
+  return { phase1Key: null, lastPacket: null, sessionPhase: 'awaiting-login', sequence: 0 };
+}
+
+function traceGameplayPayload(traceStream, connectionId, chunk, frame, sync) {
   writeTrace(traceStream, {
     event: 'payload',
     connectionId,
     byteLength: chunk.length,
     hex: chunk.toString('hex'),
     frame,
+    sync,
   });
 }
 
 function responseForGameplayFrame(schema, frame, connectionState) {
+  if (frame.kind === 'observed-login-request' && connectionState.sessionPhase !== 'awaiting-login') {
+    return null;
+  }
   if (schema.dynamicProbe !== null && frame.kind === 'observed-login-request') {
     const result = buildPhase3ResponseFromPhase1Request({
       clientExe: schema.dynamicProbe.clientExePath,
@@ -299,6 +331,61 @@ function responseForGameplayFrame(schema, frame, connectionState) {
     }
   }
   return null;
+}
+
+function recordGameplaySync(frame, response, connectionState) {
+  const phaseBefore = connectionState.sessionPhase;
+  connectionState.sequence += 1;
+  const sync = {
+    sequence: connectionState.sequence,
+    phaseBefore,
+    phaseAfter: phaseBefore,
+    accepted: false,
+  };
+  if (response !== null) {
+    sync.responseKind = response.kind;
+  }
+  if (frame.kind === 'malformed') {
+    sync.reason = 'malformed frame';
+    return sync;
+  }
+  if (frame.kind === 'observed-login-request') {
+    if (phaseBefore !== 'awaiting-login') {
+      sync.reason = 'login request is only valid before phase3 response';
+      return sync;
+    }
+    if (response !== null) {
+      connectionState.sessionPhase = 'phase3-response-sent';
+      sync.phaseAfter = connectionState.sessionPhase;
+      sync.accepted = true;
+      return sync;
+    }
+    sync.accepted = true;
+    sync.reason = 'login request recorded without configured response';
+    return sync;
+  }
+  if (frame.kind === 'observed-post-phase3-client-packet') {
+    if (phaseBefore !== 'phase3-response-sent') {
+      sync.reason = 'post-phase3 packet is only valid after phase3 response';
+      return sync;
+    }
+    connectionState.sessionPhase = 'post-phase3-observed';
+    sync.phaseAfter = connectionState.sessionPhase;
+    sync.accepted = true;
+    return sync;
+  }
+  if (frame.kind === 'observed-post-handshake-client-packet') {
+    if (phaseBefore === 'awaiting-login' && response === null) {
+      sync.reason = 'post-handshake packet requires phase3 response on this connection';
+      return sync;
+    }
+    connectionState.sessionPhase = 'post-handshake-observed';
+    sync.phaseAfter = connectionState.sessionPhase;
+    sync.accepted = true;
+    return sync;
+  }
+  sync.reason = 'unknown frame recorded without session transition';
+  return sync;
 }
 
 function traceGameplaySchema(schema) {
@@ -435,9 +522,11 @@ export async function startLogh7GameplayServer({ host, port, manifestPath, trace
   const traceStream = tracePath === undefined ? null : createWriteStream(path.resolve(tracePath), { flags: 'a' });
   let nextConnectionId = 1;
   const server = createTcpServer((socket) => {
+    // Tiny request/response frames; Nagle batching only delays replies.
+    socket.setNoDelay(true);
     const connectionId = nextConnectionId;
     nextConnectionId += 1;
-    const connectionState = { phase1Key: null, lastPacket: null };
+    const connectionState = createGameplayConnectionState();
     let pendingBytes = Buffer.alloc(0);
     writeTrace(traceStream, {
       event: 'connection',
@@ -453,8 +542,9 @@ export async function startLogh7GameplayServer({ host, port, manifestPath, trace
       for (const packet of result.frames) {
         connectionState.lastPacket = Buffer.from(packet);
         const frame = parseGameplayFrame(packet);
-        traceGameplayPayload(traceStream, connectionId, packet, frame);
         const response = responseForGameplayFrame(schema, frame, connectionState);
+        const sync = recordGameplaySync(frame, response, connectionState);
+        traceGameplayPayload(traceStream, connectionId, packet, frame, sync);
         if (response !== null) {
           socket.write(response.frame);
           const { frame: _frame, ...traceResponse } = response;
@@ -467,7 +557,9 @@ export async function startLogh7GameplayServer({ host, port, manifestPath, trace
     });
     socket.on('close', () => {
       if (pendingBytes.length > 0) {
-        traceGameplayPayload(traceStream, connectionId, pendingBytes, parseGameplayFrame(pendingBytes));
+        const frame = parseGameplayFrame(pendingBytes);
+        const sync = recordGameplaySync(frame, null, connectionState);
+        traceGameplayPayload(traceStream, connectionId, pendingBytes, frame, sync);
         pendingBytes = Buffer.alloc(0);
       }
       writeTrace(traceStream, { event: 'close', connectionId });
@@ -543,6 +635,62 @@ async function serveGameplay(argv) {
   return new Promise(() => undefined);
 }
 
+async function serveAuth(argv) {
+  const args = parseArgs(argv);
+  const host = args.get('host') ?? '127.0.0.1';
+  const port = Number(args.get('port') ?? '47900');
+  const clientExe = path.resolve(args.get('client-exe') ?? DEFAULT_CLIENT_EXE);
+  const transportKey = Buffer.from(args.get('transport-key-hex') ?? DEFAULT_TRANSPORT_KEY_HEX, 'hex');
+  const decipherKey = Buffer.from(args.get('decipher-key-hex') ?? DEFAULT_DECIPHER_KEY_HEX, 'hex');
+  const lobby = {
+    ip: args.get('lobby-ip') ?? '127.0.0.1',
+    port: Number(args.get('lobby-port') ?? String(port)),
+    token: args.get('lobby-token') === undefined ? null : Number(args.get('lobby-token')),
+  };
+  // The lobby stage redirects to the world server (conn3). For the local e2e the world target
+  // defaults to the same host:port the harness already serves, so conn3 reconnects right back here.
+  const world = {
+    ip: args.get('world-ip') ?? lobby.ip,
+    port: Number(args.get('world-port') ?? String(lobby.port)),
+    token: args.get('world-token') === undefined ? null : Number(args.get('world-token')),
+  };
+  // Real signup (회원가입): pass --account-db <path> (or LOGH_ACCOUNT_DB) to enable a persistent
+  // account registry. First login with an account registers it; later logins must present the same
+  // credential (wrong password is rejected). Without it, the legacy accept-any-GIN7 skeleton is used.
+  const accountDbPath = args.get('account-db') ?? process.env.LOGH_ACCOUNT_DB ?? null;
+  const accountStore = accountDbPath
+    ? createAccountStore({
+        acceptAnyGin7: false,
+        allowRegister: true,
+        registry: createAccountRegistry({ persistPath: path.resolve(accountDbPath) }),
+      })
+    : createAccountStore({ acceptAnyGin7: true });
+  try {
+    const characters = parseCharacterRecords(args);
+    const server = await startLogh7AuthServer({
+      host,
+      port,
+      clientExe,
+      transportKey,
+      decipherKey,
+      lobby,
+      world,
+      characters,
+      accountStore,
+      tracePath: args.get('trace'),
+    });
+    console.log(
+      `LOGH7 authoritative login server listening on ${server.host}:${server.port} ` +
+        `(login->redirect to lobby ${lobby.ip}:${lobby.port}, lobby->redirect to world ${world.ip}:${world.port})` +
+        (accountDbPath ? ` [signup registry: ${path.resolve(accountDbPath)}]` : ' [accept-any-GIN7]'),
+    );
+  } catch (error) {
+    console.error(error instanceof Error ? error.message : error);
+    return 1;
+  }
+  return new Promise(() => undefined);
+}
+
 async function main() {
   const [command, ...argv] = process.argv.slice(2);
   if (command === 'serve') {
@@ -551,10 +699,13 @@ async function main() {
   if (command === 'serve-gameplay') {
     return serveGameplay(argv);
   }
+  if (command === 'serve-auth') {
+    return serveAuth(argv);
+  }
   if (command === 'health') {
     return health(argv);
   }
-  console.error('usage: logh7-server.mjs <serve|serve-gameplay|health>');
+  console.error('usage: logh7-server.mjs <serve|serve-gameplay|serve-auth|health>');
   return 1;
 }
 
