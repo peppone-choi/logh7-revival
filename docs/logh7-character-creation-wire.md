@@ -101,6 +101,27 @@ post-proc). Other create-family cases:
 | `0x1008` | **CommandGenerateCharacterCharge OK** | `+0x43243c` | `0x20` | `FUN_004be7a0` |
 | `0x2004` | LobbyResponseInformationCharacterCharge OK | `+0x35975c` | `0x1b7` | (card screen) |
 
+### 1.1 `0x1008 OK` result semantics corrected (2026-06-16)
+
+The `0x1008` S->C result payload is **not** `[characterId,status,...]`, and it is also not a raw
+fixed-memory record. Static RE plus live-memory QA show a two-step path:
+
+- The S->C object parser `FUN_004066f0` consumes a 128-byte **packed stream** and expands it into the
+  fixed 0x20-dword working record pointed to by `DAT_022283a8`.
+- `FUN_004ba2b0` case `0x1008` then copies/uses that parsed record and calls `FUN_004be7a0`.
+- `FUN_004be7a0` only queues event `0x16` through `FUN_00517cd0`; it does not parse a character id.
+- `FUN_00595d30` / `FUN_00595e00` consume event `0x16`/`0x17`. On success, `FUN_00595e00` copies the
+  parsed 128-byte working record into `DAT_02227f60`.
+- The final creation card renderer `FUN_00597b20` reads `DAT_02227f60` directly: faction at `+0x08`,
+  origin at `+0x09`, lastname at `+0x0c`, firstname at `+0x28`, birth at `+0x48/+0x49`, face at
+  `+0x4c`, abilities at `+0x50..+0x57`, title at `+0x5a`, rank suffix at `+0x5b`, and flagship name
+  at `+0x62`.
+
+Therefore the server must send the **128-byte packed OK stream that the client parser expands into the
+fixed create working record**. The server-assigned character id is kept in server/lobby/world state and
+becomes visible later through `0x2004`, `0x0204`, `0x0323`, and `0x0356`, not through the `0x1008 OK`
+body.
+
 ---
 
 ## 2. The CREATE request — `CommandGenerateCharacterCharge` (code 0x1008) byte layout
@@ -145,6 +166,100 @@ This is the packed SEND form. Two independent sources agree:
 immediately after the length byte. Romaji/ASCII names are identical under UCS-2; Japanese names are
 encoding-correct as UCS-2 (client converts to cp932 at GDI render via `WideCharToMultiByte`).
 `name.charCodeAt(i)` is the correct per-char u16.
+
+### 2.1 CORRECTED packed layout (live-capture ground truth, 2026-06-15)
+
+The fixed-offset table above is the **serializer's nominal field map**, but the real wire is **packed**:
+the client writes the names back-to-back as NUL-terminated UTF-16LE, so every field after a name is
+*shifted by that name's length* — the names do NOT sit at fixed slots (`0x0c`/`0x28`). The fixed header
+is also tighter than the nominal table (`power@0x05`, not `@0x08`). This was captured from the real
+unmodified client creating an English-named character (lastname "Reinhard", firstname "Lohengramm"):
+
+```
+inner = [u16 BE 1008] then body =
+  10 08 | 00 00 00 00 | 00 02 | 02 00 | 09 00 | 52 00 65 00 69 00 6e 00 68 00 61 00 72 00 64 00 |
+  00 | 0b 00 | 4c 00 6f 00 68 00 65 00 6e 00 67 00 72 00 61 00 6d 00 6d 00 | 00 … (zero tail)
+```
+
+Decoded in BODY (`= payload.subarray(2)`) coordinates:
+
+| body off | type | field | value in capture |
+|---|---|---|---|
+| 0x00 | u32 | request_category | 0 |
+| 0x04 | u8 | (pad / reserved) | 0 |
+| 0x05 | u8 | **power** (faction) | 2 |
+| 0x06 | u8 | **blood** (origin) | 2 |
+| 0x07 | u8 | **sex** | 0 |
+| 0x08 | u8 | lastname_len | 9 = 8 real chars **+ NUL terminator** |
+| 0x09 | u8 | (pad → chars u16-aligned) | 0 |
+| 0x0a | u16[len-1] | **lastname** (UTF-16LE) | "Reinhard" |
+| … | u8 | (NUL terminator low byte) | next len byte sits at `charsStart + (len-1)*2 + 1` |
+| 0x1b | u8 | firstname_len | 11 = 10 real chars + NUL |
+| 0x1d | u16[len-1] | **firstname** (UTF-16LE) | "Lohengramm" |
+| 0x32 | u32 | **face** | 0 (whole tail zero in this capture) |
+| 0x36 | u8[8] | ability_8 | 0… |
+| 0x3e | u8 | bonus_point | 0 |
+| 0x40 | u8 | title | 0 |
+| 0x41 | u8 | rank | 0 |
+
+> The `face`/`ability` tail offsets above are *relative to the packed firstname end* (`first.nextOff`),
+> not fixed — they move with the name lengths. `parseGenerateCharacterCharge` in
+> `src/server/logh7-login-protocol.mjs` reads names via a cursor (`len-1` real chars, length includes
+> the NUL) then reads the fixed tail from that cursor. The earlier fixed-slot parser read
+> `lastname_len` from `body[0x0b]` (= the high byte of 'R' = 0) → **empty lastname → create rejected**.
+> Regression locked in `tests/server/logh7-login-{protocol,session}.test.mjs` (the exact capture bytes).
+
+### 2.2 S->C create OK wire and expanded card record
+
+The C->S request is packed (§2.1). The S->C OK is also packed, but with the server-side result fields
+needed by the client input parser. `FUN_004066f0` expands this stream into the fixed working record
+that later lands in `DAT_02227f60`.
+
+Packed OK stream (`buildGenerateCharacterChargeOkInner`, payload after message32 `[u32 0][u16 0x1008]`):
+
+| OK wire off | type/endian | field | parser destination / use |
+|---|---|---|---|
+| 0x00 | u32 LE | request_category | fixed `+0x00`; echoed phase, final phase is 4 |
+| 0x04 | u8 | accepted/status | fixed `+0x04`; `1` on accepted draft |
+| 0x05 | u8 | create power | fixed `+0x08`; constmsg group 1: `2=제국`, `3=동맹` |
+| 0x06 | u8 | origin/blood | fixed `+0x09`; constmsg group 0xf: Empire `2=평민`, Alliance `3=시민` |
+| 0x07 | u8 | sex | fixed `+0x0a` |
+| 0x08 | pstr16 BE | lastname | fixed `+0x0b/+0x0c`; len includes NUL |
+| next | pstr16 BE | firstname | fixed `+0x26/+0x28`; len includes NUL |
+| next | u32 BE | createUnknown44 | fixed `+0x44` |
+| next | u8/u8 | birth month/day | fixed `+0x48/+0x49` |
+| next | u32 BE | face | fixed `+0x4c` |
+| next | u8[8] | abilities | fixed `+0x50..+0x57` |
+| next | u8 | bonus_point | fixed `+0x58` |
+| next | u8 | special_ability_num | fixed `+0x59` |
+| next | u8 | title/post | fixed `+0x5a`; nonzero selects constmsg group 3 text |
+| next | u8 | rank suffix | fixed `+0x5b`; server default is `0x0d=소위` |
+| next | u8/u16 BE | flagship type/kind | fixed `+0x5c/+0x5e` |
+| next | pstr16 BE | flagship name | fixed `+0x60/+0x62` |
+| next | u8 | check | fixed `+0x7c`; payload is padded to 128 bytes |
+
+Expanded fixed-memory record (the renderer sees this after parser expansion):
+
+| Fixed off | field |
+|---|---|
+| 0x00 | request_category |
+| 0x04 | accepted/status |
+| 0x08/0x09/0x0a | create power, origin, sex |
+| 0x0b/0x0c | lastname length/string |
+| 0x26/0x28 | firstname length/string |
+| 0x48/0x49 | birth month/day |
+| 0x4c | face |
+| 0x50..0x57 | abilities |
+| 0x58/0x59/0x5a/0x5b | bonus, special ability count, title/post, rank suffix |
+| 0x5c/0x5e | flagship type/kind |
+| 0x60/0x62 | flagship name |
+| 0x7c | check |
+
+This split matters because the 0x0323 character record uses a different rank id space: the server now
+stores new Empire characters as rank id `3` and Alliance characters as rank id `4` (both `소위` in
+`content/roster/ranks.json`), while the create-card suffix remains constmsg group-5 subid `0x0d`.
+Writing the 0x0323 rank id into OK offset `0x5b` would render the wrong title; leaving `0x5b=0` renders
+`황제`, which caused the bad `통일/황제` creation card seen in live QA.
 
 **`CommandExtensionCharacterCharge` (0x1007)** and **`CommandOriginalCharacterCharge` (0x1006)** are
 sibling commands over the same buffer family (`FUN_00595ce0` builds the Extension buffer
@@ -247,9 +362,10 @@ u8, `birthday_day` u8, a u32, `state` u8, `ability_8` u16[8], `lastname`/`firstn
 ## 6. Minimal server implementation checklist (make 新キャラクターの作成 work end-to-end)
 
 Server seam: `src/server/logh7-login-session.mjs` (lobby state machine) + `logh7-login-protocol.mjs`
-(builders) + `logh7-character-gen.mjs` (record fields). Existing: `0x2003→0x2004` card list and
-`0x2005→0x2006` session list are handled; **`0x2007/0x2008` and the `0x1000/0x1006/0x1007/0x1008`
-account/charge family are NOT yet handled** — that is the gap.
+(builders) + `logh7-character-gen.mjs` / content-pack shaping (record fields). Current status: the
+`0x2003→0x2004`, `0x2005→0x2006`, `0x1000`, `0x1002`, `0x1004`, `0x1006`, `0x1007`, `0x1008`,
+`0x2007`, and `0x2008` paths are implemented in the local server test surface. The remaining work is
+live-client QA and deeper recovery of original server defaults, not the basic handler presence.
 
 1. **Add code constants** (`logh7-login-protocol.mjs`): `REQ_INFO_ACCOUNT=0x1000`,
    `RESP_INFO_ACCOUNT=0x1001`, `REQ_UNCHARGE_CHARACTER=0x1002`, `RESP_UNCHARGE_CHARACTER=0x1003`,
@@ -257,10 +373,10 @@ account/charge family are NOT yet handled** — that is the gap.
    `CMD_ORIGINAL_CHARGE=0x1006`, `CMD_EXTENSION_CHARGE=0x1007`, `CMD_GENERATE_CHARGE=0x1008`,
    `LOBBY_CMD_EXTENSION_CHARGE=0x2007`, `LOBBY_CMD_DELETE_CHARACTER=0x2008`. (Cross-check against §1.)
 
-2. **Parse the CREATE request** (`CommandGenerateCharacterCharge` 0x1008, §2 layout). Decode:
-   request_category, power(@8), blood(@9), sex(@0xa), lastname/firstname (pascal-u16), birth m/d,
-   face(@0x4c), ability_8[8](@0x50), bonus_point(@0x58), title(@0x5a), rank(@0x5b),
-   flagship_type/kind/name. **Server-side re-validate:** name ≤13 UCS-2; ability budget (UI rule —
+2. **Parse the CREATE request** (`CommandGenerateCharacterCharge` 0x1008, §2.1 packed layout). Decode:
+   request_category, power(@0x05), blood(@0x06), sex(@0x07), packed lastname/firstname, packed-tail
+   face, ability_8[8], bonus_point, title, rank. Later live phases also carry birth/face and flagship
+   values that the server merges into the 128-byte packed OK stream before echoing. **Server-side re-validate:** name <=13 UCS-2; ability budget (UI rule —
    enforce a canonical total, e.g. sum(ability_8)+bonus_point == budget, per-stat min/max);
    account char count `< 5 entry + < 2 extension`.
 
@@ -270,8 +386,9 @@ account/charge family are NOT yet handled** — that is the gap.
 
 4. **Respond.** Echo the create as the dispatcher expects: `0x1008` (CommandGenerateCharacterCharge
    OK) wrapped `mpsClientMessage32` `[u32 0][u16 code][payload]`, payload sized to the `0x20`-dword
-   (128-byte) store the dispatcher copies to `+0x43243c` (drives `FUN_004be7a0`). For the simpler
-   path, also support **0x2007 LobbyCommandExtensionCharacterCharge** (lobby-side) and reply so the
+   (128-byte) stream the client parser expands to `+0x43243c` (drives `FUN_004be7a0`). The payload is the
+   packed OK stream in §2.2, not an id/status tuple and not a raw fixed-memory dump. For the simpler path, also support
+   **0x2007 LobbyCommandExtensionCharacterCharge** (lobby-side) and reply so the
    client re-issues `0x2003` → return the updated **0x2004** card list now including the new char
    (reuse `buildLobbyInformationCharacterChargeInner`, which already builds the compact card stream).
 
@@ -302,9 +419,9 @@ account/charge family are NOT yet handled** — that is the gap.
   point-allocation widget or a live observation (create a char in the real client and capture the
   0x1008 buffer) to pin the canonical total. Recommend sourcing the budget from the manual
   (`logh7-manual-game-design`: 8 abilities, allocation scheme) and re-validating server-side.
-- **`request_category` (@0x00) enum values** — distinguishes Generate vs the Original/Extension reuse
-  paths. Capture from a live create, or decomp the form-submit that writes it (the §3 kind-0xd call
-  site).
+- **`request_category` (@0x00) enum values** — live multi-phase creation has been observed as
+  `0,1,2,3,4`, with phase 4 committing the draft. The exact UI meaning of each intermediate phase still
+  needs more capture/decomp, but they are no longer treated as separate character ids or status words.
 - **0x2007 vs 0x1008 division of labour** — the lobby family (0x2007) appears to be the
   account-side register, the session family (0x1008) the in-session create. For our single-server
   topology either may suffice; implement 0x2007 + 0x2003-relist first (smallest path to a visible new

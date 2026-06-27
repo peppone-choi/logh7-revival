@@ -1,0 +1,4421 @@
+{
+ "_purpose": "Consolidated canon-character -> post/직위 mapping from all roster sources. P1/P2 reconstruction, NOT original server data.",
+ "_counts": {
+  "distinctCanonNames": 282,
+  "withRecoveredPost": 77,
+  "withPostByFaction": {
+   "empire": 34,
+   "alliance": 43
+  }
+ },
+ "_note": "IV-EX adds 181 names but no posts; manual gives 75 duty holders. Gap (named chars without a post) must be mined from the fuller manual org-chart / web wiki (tag P2) — see canon-extra-posts.",
+ "characters": [
+  {
+   "name_ja": "D.グリーンヒル",
+   "name_romaji": "D. Greenhill",
+   "name_kr": null,
+   "faction": "alliance",
+   "post_ja": "宇宙艦隊総参謀長",
+   "rank_ja": "大将",
+   "unit_ja": null,
+   "kind": "military",
+   "flagship": null,
+   "has_stats": true,
+   "sources": [
+    "characters.json",
+    "manual-roster.json",
+    "character-roster.json"
+   ]
+  },
+  {
+   "name_ja": "G.ミュッケンベルガー",
+   "name_romaji": "G. Muckenberger",
+   "name_kr": null,
+   "faction": "empire",
+   "post_ja": "宇宙艦隊司令長官",
+   "rank_ja": "元帥",
+   "unit_ja": "第１艦隊",
+   "kind": "military",
+   "flagship": null,
+   "has_stats": true,
+   "sources": [
+    "characters.json",
+    "manual-roster.json",
+    "character-roster.json"
+   ]
+  },
+  {
+   "name_ja": "アップルトン",
+   "name_romaji": "Appleton",
+   "name_kr": null,
+   "faction": "alliance",
+   "post_ja": "第８艦隊",
+   "rank_ja": "中将",
+   "unit_ja": "第８艦隊",
+   "kind": "military",
+   "flagship": null,
+   "has_stats": true,
+   "sources": [
+    "characters.json",
+    "manual-roster.json",
+    "character-roster.json"
+   ]
+  },
+  {
+   "name_ja": "アラルコン",
+   "name_romaji": "Alarcon",
+   "name_kr": null,
+   "faction": "alliance",
+   "post_ja": "第２１巡察隊",
+   "rank_ja": "少将",
+   "unit_ja": "第２１巡察隊",
+   "kind": "military",
+   "flagship": null,
+   "has_stats": true,
+   "sources": [
+    "characters.json",
+    "manual-roster.json",
+    "character-roster.json"
+   ]
+  },
+  {
+   "name_ja": "アル・サレム",
+   "name_romaji": "Al-Salem",
+   "name_kr": null,
+   "faction": "alliance",
+   "post_ja": "第９艦隊",
+   "rank_ja": "中将",
+   "unit_ja": "第９艦隊",
+   "kind": "military",
+   "flagship": null,
+   "has_stats": true,
+   "sources": [
+    "characters.json",
+    "manual-roster.json",
+    "character-roster.json"
+   ]
+  },
+  {
+   "name_ja": "アーベントロート",
+   "name_romaji": "Abendroth",
+   "name_kr": null,
+   "faction": "empire",
+   "post_ja": "統帥本部作戦二課課長",
+   "rank_ja": "中将",
+   "unit_ja": null,
+   "kind": "military",
+   "flagship": null,
+   "has_stats": true,
+   "sources": [
+    "characters.json",
+    "manual-roster.json",
+    "character-roster.json"
+   ]
+  },
+  {
+   "name_ja": "アーメド",
+   "name_romaji": "Ahmed",
+   "name_kr": null,
+   "faction": "alliance",
+   "post_ja": "第９艦隊",
+   "rank_ja": "少将",
+   "unit_ja": "第９艦隊",
+   "kind": "military",
+   "flagship": null,
+   "has_stats": true,
+   "sources": [
+    "characters.json",
+    "manual-roster.json",
+    "character-roster.json"
+   ]
+  },
+  {
+   "name_ja": "ウィンザー",
+   "name_romaji": "Winser",
+   "name_kr": null,
+   "faction": "alliance",
+   "post_ja": "情報交通委員長",
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": "politician",
+   "flagship": null,
+   "has_stats": true,
+   "sources": [
+    "characters.json",
+    "manual-roster.json",
+    "character-roster.json"
+   ]
+  },
+  {
+   "name_ja": "ウランフ",
+   "name_romaji": "Ulanhu",
+   "name_kr": null,
+   "faction": "alliance",
+   "post_ja": "第１０艦隊",
+   "rank_ja": "中将",
+   "unit_ja": "第１０艦隊",
+   "kind": "military",
+   "flagship": null,
+   "has_stats": true,
+   "sources": [
+    "characters.json",
+    "manual-roster.json",
+    "character-roster.json"
+   ]
+  },
+  {
+   "name_ja": "エーレンベルグ",
+   "name_romaji": "Ehrenberg",
+   "name_kr": null,
+   "faction": "empire",
+   "post_ja": "軍務尚書",
+   "rank_ja": "元帥",
+   "unit_ja": null,
+   "kind": "military",
+   "flagship": null,
+   "has_stats": true,
+   "sources": [
+    "characters.json",
+    "manual-roster.json",
+    "character-roster.json"
+   ]
+  },
+  {
+   "name_ja": "オッペンハイマー",
+   "name_romaji": "Oppenheimer",
+   "name_kr": null,
+   "faction": "empire",
+   "post_ja": "憲兵総監",
+   "rank_ja": "大将",
+   "unit_ja": null,
+   "kind": "military",
+   "flagship": null,
+   "has_stats": true,
+   "sources": [
+    "characters.json",
+    "manual-roster.json",
+    "character-roster.json"
+   ]
+  },
+  {
+   "name_ja": "オフレッサー",
+   "name_romaji": "Ofresser",
+   "name_kr": null,
+   "faction": "empire",
+   "post_ja": "装甲擲弾兵総監",
+   "rank_ja": "上級大将",
+   "unit_ja": null,
+   "kind": "military",
+   "flagship": null,
+   "has_stats": true,
+   "sources": [
+    "characters.json",
+    "manual-roster.json",
+    "character-roster.json",
+    "official-roster.json"
+   ]
+  },
+  {
+   "name_ja": "カールセン",
+   "name_romaji": "Carlsen",
+   "name_kr": null,
+   "faction": "alliance",
+   "post_ja": "第１１巡察隊",
+   "rank_ja": "少将",
+   "unit_ja": "第１１巡察隊",
+   "kind": "military",
+   "flagship": null,
+   "has_stats": true,
+   "sources": [
+    "characters.json",
+    "manual-roster.json",
+    "character-roster.json"
+   ]
+  },
+  {
+   "name_ja": "キャゼルヌ",
+   "name_romaji": "Caselnes",
+   "name_kr": null,
+   "faction": "alliance",
+   "post_ja": "宇宙艦隊参謀",
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": "military",
+   "flagship": null,
+   "has_stats": true,
+   "sources": [
+    "characters.json",
+    "character-roster.json",
+    "official-roster.json"
+   ]
+  },
+  {
+   "name_ja": "キルヒアイス",
+   "name_romaji": "Kircheis",
+   "name_kr": null,
+   "faction": "empire",
+   "post_ja": "司令官副官",
+   "rank_ja": "少佐",
+   "unit_ja": "第６艦隊",
+   "kind": "military",
+   "flagship": null,
+   "has_stats": true,
+   "sources": [
+    "characters.json",
+    "manual-roster.json",
+    "character-roster.json"
+   ]
+  },
+  {
+   "name_ja": "クブルスリー",
+   "name_romaji": "Kubersly",
+   "name_kr": null,
+   "faction": "alliance",
+   "post_ja": "第１艦隊",
+   "rank_ja": "中将",
+   "unit_ja": "第１艦隊",
+   "kind": "military",
+   "flagship": null,
+   "has_stats": true,
+   "sources": [
+    "characters.json",
+    "manual-roster.json",
+    "character-roster.json"
+   ]
+  },
+  {
+   "name_ja": "クラーゼン",
+   "name_romaji": "Klasen",
+   "name_kr": null,
+   "faction": "empire",
+   "post_ja": "幕僚総監",
+   "rank_ja": "元帥",
+   "unit_ja": null,
+   "kind": "military",
+   "flagship": null,
+   "has_stats": true,
+   "sources": [
+    "characters.json",
+    "manual-roster.json",
+    "character-roster.json"
+   ]
+  },
+  {
+   "name_ja": "グエン",
+   "name_romaji": "Nguyen",
+   "name_kr": null,
+   "faction": "alliance",
+   "post_ja": "第５６巡察隊",
+   "rank_ja": "准将",
+   "unit_ja": "第５６巡察隊",
+   "kind": "military",
+   "flagship": null,
+   "has_stats": true,
+   "sources": [
+    "characters.json",
+    "manual-roster.json",
+    "character-roster.json"
+   ]
+  },
+  {
+   "name_ja": "グライフス",
+   "name_romaji": "Greifs",
+   "name_kr": null,
+   "faction": "empire",
+   "post_ja": "宇宙艦隊総参謀長",
+   "rank_ja": "上級大将",
+   "unit_ja": null,
+   "kind": "military",
+   "flagship": null,
+   "has_stats": true,
+   "sources": [
+    "characters.json",
+    "manual-roster.json",
+    "character-roster.json"
+   ]
+  },
+  {
+   "name_ja": "グリューネマン",
+   "name_romaji": "Grunemann",
+   "name_kr": null,
+   "faction": "empire",
+   "post_ja": "第４巡察隊",
+   "rank_ja": "少将",
+   "unit_ja": "第４巡察隊",
+   "kind": "military",
+   "flagship": null,
+   "has_stats": true,
+   "sources": [
+    "characters.json",
+    "manual-roster.json",
+    "character-roster.json"
+   ]
+  },
+  {
+   "name_ja": "グルーゼンシュテルン",
+   "name_romaji": null,
+   "name_kr": null,
+   "faction": "empire",
+   "post_ja": "第４４巡察隊",
+   "rank_ja": "少将",
+   "unit_ja": "第４４巡察隊",
+   "kind": "military",
+   "flagship": null,
+   "has_stats": true,
+   "sources": [
+    "characters.json",
+    "manual-roster.json",
+    "character-roster.json"
+   ]
+  },
+  {
+   "name_ja": "グローブナー",
+   "name_romaji": "Grosvenor",
+   "name_kr": null,
+   "faction": "alliance",
+   "post_ja": "人事部長",
+   "rank_ja": "大将",
+   "unit_ja": null,
+   "kind": "military",
+   "flagship": null,
+   "has_stats": true,
+   "sources": [
+    "characters.json",
+    "manual-roster.json",
+    "character-roster.json"
+   ]
+  },
+  {
+   "name_ja": "ケスラー",
+   "name_romaji": "Kessler",
+   "name_kr": null,
+   "faction": "empire",
+   "post_ja": "憲兵総監",
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": "military",
+   "flagship": null,
+   "has_stats": true,
+   "sources": [
+    "characters.json",
+    "character-roster.json",
+    "official-roster.json"
+   ]
+  },
+  {
+   "name_ja": "ゲルラッハ",
+   "name_romaji": "Gerlach",
+   "name_kr": null,
+   "faction": "empire",
+   "post_ja": "財務尚書",
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": "politician",
+   "flagship": null,
+   "has_stats": true,
+   "sources": [
+    "characters.json",
+    "manual-roster.json",
+    "character-roster.json"
+   ]
+  },
+  {
+   "name_ja": "コナリー",
+   "name_romaji": "Connery",
+   "name_kr": null,
+   "faction": "alliance",
+   "post_ja": "第１６巡察隊",
+   "rank_ja": "少将",
+   "unit_ja": "第１６巡察隊",
+   "kind": "military",
+   "flagship": null,
+   "has_stats": true,
+   "sources": [
+    "characters.json",
+    "manual-roster.json",
+    "character-roster.json"
+   ]
+  },
+  {
+   "name_ja": "サンフォード",
+   "name_romaji": "Sanford",
+   "name_kr": null,
+   "faction": "alliance",
+   "post_ja": "議長",
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": "politician",
+   "flagship": null,
+   "has_stats": true,
+   "sources": [
+    "characters.json",
+    "manual-roster.json",
+    "character-roster.json"
+   ]
+  },
+  {
+   "name_ja": "ザーニアル",
+   "name_romaji": null,
+   "name_kr": null,
+   "faction": "alliance",
+   "post_ja": "第２６巡察隊",
+   "rank_ja": "准将",
+   "unit_ja": "第２６巡察隊",
+   "kind": "military",
+   "flagship": null,
+   "has_stats": true,
+   "sources": [
+    "characters.json",
+    "manual-roster.json",
+    "character-roster.json"
+   ]
+  },
+  {
+   "name_ja": "シェーンコップ",
+   "name_romaji": "Schonkopp",
+   "name_kr": null,
+   "faction": "alliance",
+   "post_ja": "要塞守備隊指揮官",
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": "military",
+   "flagship": null,
+   "has_stats": true,
+   "sources": [
+    "characters.json",
+    "character-roster.json",
+    "official-roster.json"
+   ]
+  },
+  {
+   "name_ja": "シトレ",
+   "name_romaji": "Sithole",
+   "name_kr": null,
+   "faction": "alliance",
+   "post_ja": "統合作戦本部長",
+   "rank_ja": "元帥",
+   "unit_ja": null,
+   "kind": "military",
+   "flagship": null,
+   "has_stats": true,
+   "sources": [
+    "characters.json",
+    "manual-roster.json",
+    "character-roster.json"
+   ]
+  },
+  {
+   "name_ja": "シャフト",
+   "name_romaji": "Schaft",
+   "name_kr": null,
+   "faction": "empire",
+   "post_ja": "科学技術総監",
+   "rank_ja": "大将",
+   "unit_ja": null,
+   "kind": "military",
+   "flagship": null,
+   "has_stats": true,
+   "sources": [
+    "characters.json",
+    "manual-roster.json",
+    "character-roster.json"
+   ]
+  },
+  {
+   "name_ja": "シュタインホフ",
+   "name_romaji": "Steinhof",
+   "name_kr": null,
+   "faction": "empire",
+   "post_ja": "統帥本部総長",
+   "rank_ja": "元帥",
+   "unit_ja": null,
+   "kind": "military",
+   "flagship": null,
+   "has_stats": true,
+   "sources": [
+    "characters.json",
+    "manual-roster.json",
+    "character-roster.json"
+   ]
+  },
+  {
+   "name_ja": "シュターデン",
+   "name_romaji": "Staden",
+   "name_kr": null,
+   "faction": "empire",
+   "post_ja": "第４艦隊",
+   "rank_ja": "中将",
+   "unit_ja": "第４艦隊",
+   "kind": "military",
+   "flagship": null,
+   "has_stats": true,
+   "sources": [
+    "characters.json",
+    "manual-roster.json",
+    "character-roster.json"
+   ]
+  },
+  {
+   "name_ja": "シュトックハウゼン",
+   "name_romaji": "Stockhausen",
+   "name_kr": null,
+   "faction": "empire",
+   "post_ja": "要塞司令官",
+   "rank_ja": "上級大将",
+   "unit_ja": "イゼルローン要塞",
+   "kind": "military",
+   "flagship": null,
+   "has_stats": true,
+   "sources": [
+    "characters.json",
+    "manual-roster.json",
+    "character-roster.json"
+   ]
+  },
+  {
+   "name_ja": "ゼークト",
+   "name_romaji": "Seeckt",
+   "name_kr": null,
+   "faction": "empire",
+   "post_ja": "第１２艦隊",
+   "rank_ja": "大将",
+   "unit_ja": "第１２艦隊",
+   "kind": "military",
+   "flagship": null,
+   "has_stats": true,
+   "sources": [
+    "characters.json",
+    "manual-roster.json",
+    "character-roster.json"
+   ]
+  },
+  {
+   "name_ja": "タナンチャイ",
+   "name_romaji": null,
+   "name_kr": null,
+   "faction": "alliance",
+   "post_ja": "第４艦隊",
+   "rank_ja": "少将",
+   "unit_ja": "第４艦隊",
+   "kind": "military",
+   "flagship": null,
+   "has_stats": true,
+   "sources": [
+    "characters.json",
+    "manual-roster.json",
+    "character-roster.json"
+   ]
+  },
+  {
+   "name_ja": "チェン",
+   "name_romaji": "Chen",
+   "name_kr": null,
+   "faction": "alliance",
+   "post_ja": "第１０艦隊",
+   "rank_ja": "少将",
+   "unit_ja": "第１０艦隊",
+   "kind": "military",
+   "flagship": null,
+   "has_stats": true,
+   "sources": [
+    "characters.json",
+    "manual-roster.json",
+    "character-roster.json"
+   ]
+  },
+  {
+   "name_ja": "ディッタースドルフ",
+   "name_romaji": "Dittersdorf",
+   "name_kr": null,
+   "faction": "empire",
+   "post_ja": "第５巡察隊",
+   "rank_ja": "少将",
+   "unit_ja": "第５巡察隊",
+   "kind": "military",
+   "flagship": null,
+   "has_stats": true,
+   "sources": [
+    "characters.json",
+    "manual-roster.json",
+    "character-roster.json"
+   ]
+  },
+  {
+   "name_ja": "デッシュ",
+   "name_romaji": "Desch",
+   "name_kr": null,
+   "faction": "alliance",
+   "post_ja": "第３６巡察隊",
+   "rank_ja": "准将",
+   "unit_ja": "第３６巡察隊",
+   "kind": "military",
+   "flagship": null,
+   "has_stats": true,
+   "sources": [
+    "characters.json",
+    "manual-roster.json",
+    "character-roster.json"
+   ]
+  },
+  {
+   "name_ja": "トリューニヒト",
+   "name_romaji": "Trunicht",
+   "name_kr": null,
+   "faction": "alliance",
+   "post_ja": "国防委員長",
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": "politician",
+   "flagship": null,
+   "has_stats": true,
+   "sources": [
+    "characters.json",
+    "manual-roster.json",
+    "character-roster.json",
+    "official-roster.json"
+   ]
+  },
+  {
+   "name_ja": "ドーソン",
+   "name_romaji": "Dawson",
+   "name_kr": null,
+   "faction": "alliance",
+   "post_ja": "統合作戦本部第一次長",
+   "rank_ja": "大将",
+   "unit_ja": null,
+   "kind": "military",
+   "flagship": null,
+   "has_stats": true,
+   "sources": [
+    "characters.json",
+    "manual-roster.json",
+    "character-roster.json"
+   ]
+  },
+  {
+   "name_ja": "ネグロポンティ",
+   "name_romaji": "Negroponti",
+   "name_kr": null,
+   "faction": "alliance",
+   "post_ja": "最高評議会 国防委員長",
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": "politician",
+   "flagship": null,
+   "has_stats": true,
+   "sources": [
+    "character-roster.json",
+    "official-roster.json"
+   ]
+  },
+  {
+   "name_ja": "ハウプト",
+   "name_romaji": "Haupt",
+   "name_kr": null,
+   "faction": "empire",
+   "post_ja": "軍務省人事局長",
+   "rank_ja": "大将",
+   "unit_ja": null,
+   "kind": "military",
+   "flagship": null,
+   "has_stats": true,
+   "sources": [
+    "characters.json",
+    "manual-roster.json",
+    "character-roster.json"
+   ]
+  },
+  {
+   "name_ja": "パエッタ",
+   "name_romaji": "Paetta",
+   "name_kr": null,
+   "faction": "alliance",
+   "post_ja": "第２艦隊",
+   "rank_ja": "中将",
+   "unit_ja": "第２艦隊",
+   "kind": "military",
+   "flagship": null,
+   "has_stats": true,
+   "sources": [
+    "characters.json",
+    "manual-roster.json",
+    "character-roster.json"
+   ]
+  },
+  {
+   "name_ja": "パストーレ",
+   "name_romaji": "Pastolle",
+   "name_kr": null,
+   "faction": "alliance",
+   "post_ja": "第４艦隊",
+   "rank_ja": "中将",
+   "unit_ja": "第４艦隊",
+   "kind": "military",
+   "flagship": null,
+   "has_stats": true,
+   "sources": [
+    "characters.json",
+    "manual-roster.json",
+    "character-roster.json"
+   ]
+  },
+  {
+   "name_ja": "ヒルデスハイム",
+   "name_romaji": "Hildesheim",
+   "name_kr": null,
+   "faction": "empire",
+   "post_ja": "第６艦隊",
+   "rank_ja": "中将",
+   "unit_ja": "第６艦隊",
+   "kind": "military",
+   "flagship": null,
+   "has_stats": true,
+   "sources": [
+    "characters.json",
+    "manual-roster.json",
+    "character-roster.json"
+   ]
+  },
+  {
+   "name_ja": "ビュコック",
+   "name_romaji": "Bucock",
+   "name_kr": null,
+   "faction": "alliance",
+   "post_ja": "第５艦隊",
+   "rank_ja": "中将",
+   "unit_ja": "第５艦隊",
+   "kind": "military",
+   "flagship": null,
+   "has_stats": true,
+   "sources": [
+    "characters.json",
+    "manual-roster.json",
+    "character-roster.json"
+   ]
+  },
+  {
+   "name_ja": "フォーゲル",
+   "name_romaji": "Vogel",
+   "name_kr": null,
+   "faction": "empire",
+   "post_ja": "第５艦隊",
+   "rank_ja": "中将",
+   "unit_ja": "第５艦隊",
+   "kind": "military",
+   "flagship": null,
+   "has_stats": true,
+   "sources": [
+    "characters.json",
+    "manual-roster.json",
+    "character-roster.json"
+   ]
+  },
+  {
+   "name_ja": "フリードリヒIV世",
+   "name_romaji": "Friedrich IV",
+   "name_kr": null,
+   "faction": "empire",
+   "post_ja": "皇帝",
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "official-roster.json"
+   ]
+  },
+  {
+   "name_ja": "フリードリヒⅣ世",
+   "name_romaji": "Friedrich IV",
+   "name_kr": null,
+   "faction": "empire",
+   "post_ja": "皇帝",
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": "emperor",
+   "flagship": null,
+   "has_stats": true,
+   "sources": [
+    "characters.json",
+    "manual-roster.json",
+    "character-roster.json"
+   ]
+  },
+  {
+   "name_ja": "フレーゲル",
+   "name_romaji": "Flegel",
+   "name_kr": null,
+   "faction": "empire",
+   "post_ja": "第１０艦隊",
+   "rank_ja": "中将",
+   "unit_ja": "第１０艦隊",
+   "kind": "military",
+   "flagship": null,
+   "has_stats": true,
+   "sources": [
+    "characters.json",
+    "manual-roster.json",
+    "character-roster.json"
+   ]
+  },
+  {
+   "name_ja": "ブロンズ",
+   "name_romaji": "Bronze",
+   "name_kr": null,
+   "faction": "alliance",
+   "post_ja": "情報部長",
+   "rank_ja": "中将",
+   "unit_ja": null,
+   "kind": "military",
+   "flagship": null,
+   "has_stats": true,
+   "sources": [
+    "characters.json",
+    "manual-roster.json",
+    "character-roster.json"
+   ]
+  },
+  {
+   "name_ja": "ヘンスロー",
+   "name_romaji": "Henslow",
+   "name_kr": null,
+   "faction": "alliance",
+   "post_ja": "フェザーン駐在弁務官",
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": "politician",
+   "flagship": null,
+   "has_stats": true,
+   "sources": [
+    "characters.json",
+    "manual-roster.json",
+    "character-roster.json"
+   ]
+  },
+  {
+   "name_ja": "ホフマイスター",
+   "name_romaji": "Hofmeister",
+   "name_kr": null,
+   "faction": "empire",
+   "post_ja": "第２９巡察隊",
+   "rank_ja": "少将",
+   "unit_ja": "第２９巡察隊",
+   "kind": "military",
+   "flagship": null,
+   "has_stats": true,
+   "sources": [
+    "characters.json",
+    "manual-roster.json",
+    "character-roster.json"
+   ]
+  },
+  {
+   "name_ja": "ホワン",
+   "name_romaji": "Huang",
+   "name_kr": null,
+   "faction": "alliance",
+   "post_ja": "人的資源委員長",
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": "politician",
+   "flagship": null,
+   "has_stats": true,
+   "sources": [
+    "characters.json",
+    "manual-roster.json",
+    "character-roster.json"
+   ]
+  },
+  {
+   "name_ja": "ホーウッド",
+   "name_romaji": "Hawood",
+   "name_kr": null,
+   "faction": "alliance",
+   "post_ja": "第７艦隊",
+   "rank_ja": "中将",
+   "unit_ja": "第７艦隊",
+   "kind": "military",
+   "flagship": null,
+   "has_stats": true,
+   "sources": [
+    "characters.json",
+    "manual-roster.json",
+    "character-roster.json"
+   ]
+  },
+  {
+   "name_ja": "ホーランド",
+   "name_romaji": "Holland",
+   "name_kr": null,
+   "faction": "alliance",
+   "post_ja": "第１１艦隊",
+   "rank_ja": "中将",
+   "unit_ja": "第１１艦隊",
+   "kind": "military",
+   "flagship": null,
+   "has_stats": true,
+   "sources": [
+    "characters.json",
+    "manual-roster.json",
+    "character-roster.json"
+   ]
+  },
+  {
+   "name_ja": "ボロディン",
+   "name_romaji": "Borodin",
+   "name_kr": null,
+   "faction": "alliance",
+   "post_ja": "第１２艦隊",
+   "rank_ja": "中将",
+   "unit_ja": "第１２艦隊",
+   "kind": "military",
+   "flagship": null,
+   "has_stats": true,
+   "sources": [
+    "characters.json",
+    "manual-roster.json",
+    "character-roster.json"
+   ]
+  },
+  {
+   "name_ja": "マスカーニ",
+   "name_romaji": "Mascagni",
+   "name_kr": null,
+   "faction": "alliance",
+   "post_ja": "第４６巡察隊",
+   "rank_ja": "准将",
+   "unit_ja": "第４６巡察隊",
+   "kind": "military",
+   "flagship": null,
+   "has_stats": true,
+   "sources": [
+    "characters.json",
+    "manual-roster.json",
+    "character-roster.json"
+   ]
+  },
+  {
+   "name_ja": "マリネッティ",
+   "name_romaji": "Marinetti",
+   "name_kr": null,
+   "faction": "alliance",
+   "post_ja": "第１６巡察隊",
+   "rank_ja": "准将",
+   "unit_ja": "第１６巡察隊",
+   "kind": "military",
+   "flagship": null,
+   "has_stats": true,
+   "sources": [
+    "characters.json",
+    "manual-roster.json",
+    "character-roster.json"
+   ]
+  },
+  {
+   "name_ja": "ミッターマイヤー",
+   "name_romaji": "Mittermeyer",
+   "name_kr": null,
+   "faction": "empire",
+   "post_ja": "第５３巡察隊",
+   "rank_ja": "少将",
+   "unit_ja": "第５３巡察隊",
+   "kind": "military",
+   "flagship": null,
+   "has_stats": true,
+   "sources": [
+    "characters.json",
+    "manual-roster.json",
+    "character-roster.json",
+    "official-roster.json"
+   ]
+  },
+  {
+   "name_ja": "ムーア",
+   "name_romaji": "Moore",
+   "name_kr": null,
+   "faction": "alliance",
+   "post_ja": "第６艦隊",
+   "rank_ja": "中将",
+   "unit_ja": "第６艦隊",
+   "kind": "military",
+   "flagship": null,
+   "has_stats": true,
+   "sources": [
+    "characters.json",
+    "manual-roster.json",
+    "character-roster.json"
+   ]
+  },
+  {
+   "name_ja": "メルカッツ",
+   "name_romaji": "Merkatz",
+   "name_kr": null,
+   "faction": "empire",
+   "post_ja": "第３艦隊",
+   "rank_ja": "大将",
+   "unit_ja": "第３艦隊",
+   "kind": "military",
+   "flagship": null,
+   "has_stats": true,
+   "sources": [
+    "characters.json",
+    "manual-roster.json",
+    "character-roster.json"
+   ]
+  },
+  {
+   "name_ja": "モンシャルマン",
+   "name_romaji": null,
+   "name_kr": null,
+   "faction": "alliance",
+   "post_ja": "第５艦隊",
+   "rank_ja": "少将",
+   "unit_ja": "第５艦隊",
+   "kind": "military",
+   "flagship": null,
+   "has_stats": true,
+   "sources": [
+    "characters.json",
+    "manual-roster.json",
+    "character-roster.json"
+   ]
+  },
+  {
+   "name_ja": "モートン",
+   "name_romaji": "Morton",
+   "name_kr": null,
+   "faction": "alliance",
+   "post_ja": "第１０艦隊",
+   "rank_ja": "少将",
+   "unit_ja": "第１０艦隊",
+   "kind": "military",
+   "flagship": null,
+   "has_stats": true,
+   "sources": [
+    "characters.json",
+    "manual-roster.json",
+    "character-roster.json"
+   ]
+  },
+  {
+   "name_ja": "ヤン",
+   "name_romaji": "Yang Wen-li",
+   "name_kr": null,
+   "faction": "alliance",
+   "post_ja": "艦隊司令官",
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": "military",
+   "flagship": null,
+   "has_stats": true,
+   "sources": [
+    "characters.json",
+    "character-roster.json",
+    "official-roster.json"
+   ]
+  },
+  {
+   "name_ja": "ラインハルト",
+   "name_romaji": "Reinhard von Lohengramm",
+   "name_kr": null,
+   "faction": "empire",
+   "post_ja": "帝国軍最高司令官",
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "official-roster.json"
+   ]
+  },
+  {
+   "name_ja": "ランズベルク",
+   "name_romaji": "Landsberg",
+   "name_kr": null,
+   "faction": "empire",
+   "post_ja": "第８艦隊",
+   "rank_ja": "中将",
+   "unit_ja": "第８艦隊",
+   "kind": "military",
+   "flagship": null,
+   "has_stats": true,
+   "sources": [
+    "characters.json",
+    "manual-roster.json",
+    "character-roster.json"
+   ]
+  },
+  {
+   "name_ja": "リヒテンラーデ",
+   "name_romaji": "Lichtenlade",
+   "name_kr": null,
+   "faction": "empire",
+   "post_ja": "帝国宰相",
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": "politician",
+   "flagship": null,
+   "has_stats": true,
+   "sources": [
+    "characters.json",
+    "manual-roster.json",
+    "character-roster.json"
+   ]
+  },
+  {
+   "name_ja": "ルグランジュ",
+   "name_romaji": "Lagrange",
+   "name_kr": null,
+   "faction": "alliance",
+   "post_ja": "第３１巡察隊",
+   "rank_ja": "少将",
+   "unit_ja": "第３１巡察隊",
+   "kind": "military",
+   "flagship": null,
+   "has_stats": true,
+   "sources": [
+    "characters.json",
+    "manual-roster.json",
+    "character-roster.json"
+   ]
+  },
+  {
+   "name_ja": "ルフェーブル",
+   "name_romaji": "Lefebvre",
+   "name_kr": null,
+   "faction": "alliance",
+   "post_ja": "第３艦隊",
+   "rank_ja": "中将",
+   "unit_ja": "第３艦隊",
+   "kind": "military",
+   "flagship": null,
+   "has_stats": true,
+   "sources": [
+    "characters.json",
+    "manual-roster.json",
+    "character-roster.json"
+   ]
+  },
+  {
+   "name_ja": "レベロ",
+   "name_romaji": "Lebello",
+   "name_kr": null,
+   "faction": "alliance",
+   "post_ja": "財政委員長",
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": "politician",
+   "flagship": null,
+   "has_stats": true,
+   "sources": [
+    "characters.json",
+    "manual-roster.json",
+    "character-roster.json",
+    "official-roster.json"
+   ]
+  },
+  {
+   "name_ja": "レムシャイト",
+   "name_romaji": "Remscheid",
+   "name_kr": null,
+   "faction": "empire",
+   "post_ja": "フェザーン駐在高等弁務官",
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": "politician",
+   "flagship": null,
+   "has_stats": true,
+   "sources": [
+    "characters.json",
+    "manual-roster.json",
+    "character-roster.json",
+    "official-roster.json"
+   ]
+  },
+  {
+   "name_ja": "レンネンカンプ",
+   "name_romaji": "Lennenkampf",
+   "name_kr": null,
+   "faction": "empire",
+   "post_ja": "第５５巡察隊",
+   "rank_ja": "少将",
+   "unit_ja": "第５５巡察隊",
+   "kind": "military",
+   "flagship": null,
+   "has_stats": true,
+   "sources": [
+    "characters.json",
+    "manual-roster.json",
+    "character-roster.json"
+   ]
+  },
+  {
+   "name_ja": "ロイエンタール",
+   "name_romaji": "Reuenthal",
+   "name_kr": null,
+   "faction": "empire",
+   "post_ja": "第５４巡察隊",
+   "rank_ja": "少将",
+   "unit_ja": "第５４巡察隊",
+   "kind": "military",
+   "flagship": null,
+   "has_stats": true,
+   "sources": [
+    "characters.json",
+    "manual-roster.json",
+    "character-roster.json"
+   ]
+  },
+  {
+   "name_ja": "ロックウェル",
+   "name_romaji": "Rockwell",
+   "name_kr": null,
+   "faction": "alliance",
+   "post_ja": "後方勤務本部長",
+   "rank_ja": "大将",
+   "unit_ja": null,
+   "kind": "military",
+   "flagship": null,
+   "has_stats": true,
+   "sources": [
+    "characters.json",
+    "manual-roster.json",
+    "character-roster.json"
+   ]
+  },
+  {
+   "name_ja": "ロボス",
+   "name_romaji": "Lobos",
+   "name_kr": null,
+   "faction": "alliance",
+   "post_ja": "宇宙艦隊司令長官",
+   "rank_ja": "元帥",
+   "unit_ja": null,
+   "kind": "military",
+   "flagship": null,
+   "has_stats": true,
+   "sources": [
+    "characters.json",
+    "manual-roster.json",
+    "character-roster.json"
+   ]
+  },
+  {
+   "name_ja": "ローエングラム",
+   "name_romaji": "Lohengramm",
+   "name_kr": null,
+   "faction": "empire",
+   "post_ja": "第２艦隊",
+   "rank_ja": "中将",
+   "unit_ja": "第２艦隊",
+   "kind": "military",
+   "flagship": null,
+   "has_stats": true,
+   "sources": [
+    "characters.json",
+    "manual-roster.json",
+    "character-roster.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "D.그린힐",
+   "faction": "alliance",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "F.그린힐",
+   "faction": "alliance",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": "アイゼナッハ",
+   "name_romaji": null,
+   "name_kr": null,
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": "military",
+   "flagship": null,
+   "has_stats": true,
+   "sources": [
+    "characters.json",
+    "character-roster.json"
+   ]
+  },
+  {
+   "name_ja": "アッテンボロー",
+   "name_romaji": "Attenborough",
+   "name_kr": null,
+   "faction": "alliance",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": "military",
+   "flagship": null,
+   "has_stats": true,
+   "sources": [
+    "characters.json",
+    "character-roster.json"
+   ]
+  },
+  {
+   "name_ja": "アンスバッハ",
+   "name_romaji": "Ansbach",
+   "name_kr": null,
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": "military",
+   "flagship": null,
+   "has_stats": true,
+   "sources": [
+    "characters.json",
+    "character-roster.json"
+   ]
+  },
+  {
+   "name_ja": "オーベルシュタイン",
+   "name_romaji": "Oberstein",
+   "name_kr": null,
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": "military",
+   "flagship": null,
+   "has_stats": true,
+   "sources": [
+    "characters.json",
+    "character-roster.json"
+   ]
+  },
+  {
+   "name_ja": "グリーンヒル",
+   "name_romaji": "Greenhill",
+   "name_kr": null,
+   "faction": "alliance",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": "military",
+   "flagship": null,
+   "has_stats": true,
+   "sources": [
+    "characters.json",
+    "character-roster.json"
+   ]
+  },
+  {
+   "name_ja": "ケンプ",
+   "name_romaji": "Kempff",
+   "name_kr": null,
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": "military",
+   "flagship": null,
+   "has_stats": true,
+   "sources": [
+    "characters.json",
+    "character-roster.json"
+   ]
+  },
+  {
+   "name_ja": "コーネフ",
+   "name_romaji": null,
+   "name_kr": null,
+   "faction": "alliance",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": "military",
+   "flagship": null,
+   "has_stats": true,
+   "sources": [
+    "characters.json",
+    "character-roster.json"
+   ]
+  },
+  {
+   "name_ja": "シュタインメッツ",
+   "name_romaji": "Steinmetz",
+   "name_kr": null,
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": "military",
+   "flagship": null,
+   "has_stats": true,
+   "sources": [
+    "characters.json",
+    "character-roster.json"
+   ]
+  },
+  {
+   "name_ja": "チュン",
+   "name_romaji": null,
+   "name_kr": null,
+   "faction": "alliance",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": "military",
+   "flagship": null,
+   "has_stats": true,
+   "sources": [
+    "characters.json",
+    "character-roster.json"
+   ]
+  },
+  {
+   "name_ja": "パトリチェフ",
+   "name_romaji": null,
+   "name_kr": null,
+   "faction": "alliance",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": "military",
+   "flagship": null,
+   "has_stats": true,
+   "sources": [
+    "characters.json",
+    "character-roster.json"
+   ]
+  },
+  {
+   "name_ja": "ビッテンフェルト",
+   "name_romaji": "Bittenfeld",
+   "name_kr": null,
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": "military",
+   "flagship": null,
+   "has_stats": true,
+   "sources": [
+    "characters.json",
+    "character-roster.json"
+   ]
+  },
+  {
+   "name_ja": "ファーレンハイト",
+   "name_romaji": "Fahrenheit",
+   "name_kr": null,
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": "military",
+   "flagship": null,
+   "has_stats": true,
+   "sources": [
+    "characters.json",
+    "character-roster.json"
+   ]
+  },
+  {
+   "name_ja": "フィッシャー",
+   "name_romaji": null,
+   "name_kr": null,
+   "faction": "alliance",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": "military",
+   "flagship": null,
+   "has_stats": true,
+   "sources": [
+    "characters.json",
+    "character-roster.json"
+   ]
+  },
+  {
+   "name_ja": "フォーク",
+   "name_romaji": null,
+   "name_kr": null,
+   "faction": "alliance",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": "military",
+   "flagship": null,
+   "has_stats": true,
+   "sources": [
+    "characters.json",
+    "character-roster.json"
+   ]
+  },
+  {
+   "name_ja": "ブラウンシュヴァイク",
+   "name_romaji": "Otho von Braunschweig",
+   "name_kr": "폰 브라운슈바이크",
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": "military",
+   "flagship": null,
+   "has_stats": true,
+   "sources": [
+    "character-roster.json"
+   ]
+  },
+  {
+   "name_ja": "ブルームハルト",
+   "name_romaji": null,
+   "name_kr": null,
+   "faction": "alliance",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": "military",
+   "flagship": null,
+   "has_stats": true,
+   "sources": [
+    "characters.json",
+    "character-roster.json"
+   ]
+  },
+  {
+   "name_ja": "ポプラン",
+   "name_romaji": "Poplan",
+   "name_kr": null,
+   "faction": "alliance",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": "military",
+   "flagship": null,
+   "has_stats": true,
+   "sources": [
+    "characters.json",
+    "character-roster.json"
+   ]
+  },
+  {
+   "name_ja": "ミュッケンベルガー",
+   "name_romaji": null,
+   "name_kr": null,
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": "military",
+   "flagship": null,
+   "has_stats": true,
+   "sources": [
+    "characters.json",
+    "character-roster.json"
+   ]
+  },
+  {
+   "name_ja": "ミュラー",
+   "name_romaji": "Muller",
+   "name_kr": null,
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": "military",
+   "flagship": null,
+   "has_stats": true,
+   "sources": [
+    "characters.json",
+    "character-roster.json"
+   ]
+  },
+  {
+   "name_ja": "ミューゼル",
+   "name_romaji": "von Musel",
+   "name_kr": null,
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": "military",
+   "flagship": null,
+   "has_stats": true,
+   "sources": [
+    "characters.json",
+    "character-roster.json"
+   ]
+  },
+  {
+   "name_ja": "ムライ",
+   "name_romaji": "Murai",
+   "name_kr": null,
+   "faction": "alliance",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": "military",
+   "flagship": null,
+   "has_stats": true,
+   "sources": [
+    "characters.json",
+    "character-roster.json"
+   ]
+  },
+  {
+   "name_ja": "メックリンガー",
+   "name_romaji": "Mecklinger",
+   "name_kr": null,
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": "military",
+   "flagship": null,
+   "has_stats": true,
+   "sources": [
+    "characters.json",
+    "character-roster.json"
+   ]
+  },
+  {
+   "name_ja": "ルッツ",
+   "name_romaji": "Lutz",
+   "name_kr": null,
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": "military",
+   "flagship": null,
+   "has_stats": true,
+   "sources": [
+    "characters.json",
+    "character-roster.json"
+   ]
+  },
+  {
+   "name_ja": "ワーレン",
+   "name_romaji": "Wahlen",
+   "name_kr": null,
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": "military",
+   "flagship": null,
+   "has_stats": true,
+   "sources": [
+    "characters.json",
+    "character-roster.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "구엔",
+   "faction": "alliance",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "구텐존",
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "그래저",
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "그로테볼",
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "그뢰브너",
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "그뤼네만",
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "그리스",
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "그릴팔처",
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "나이세바흐",
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "노르드하임",
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "닐슨",
+   "faction": "alliance",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "도손",
+   "faction": "alliance",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "드레벤츠",
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "드로이젠",
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "디르센",
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "디터스도르프",
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "딕켈",
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "라오",
+   "faction": "alliance",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "라이블",
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "라인하르트",
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "라첼",
+   "faction": "alliance",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "라프",
+   "faction": "alliance",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "란즈베르크",
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "레믈러",
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "레켄도르프",
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "레폴트",
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "렌넨칸프",
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "로보스",
+   "faction": "alliance",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "로이엔탈",
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "로크웰",
+   "faction": "alliance",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "루그랑쥐",
+   "faction": "alliance",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "루비치",
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "루츠",
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "루페브르",
+   "faction": "alliance",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "뤼케",
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "리텐하임",
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "리히텐라데",
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "린저",
+   "faction": "alliance",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "린츠",
+   "faction": "alliance",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "마리네티",
+   "faction": "alliance",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "마리노",
+   "faction": "alliance",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "마린도르프",
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "마쉰고",
+   "faction": "alliance",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "마스커니",
+   "faction": "alliance",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "마이포흐",
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "메르카츠",
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "메크링거",
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "모르트",
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "모톤",
+   "faction": "alliance",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "무라이",
+   "faction": "alliance",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "무어",
+   "faction": "alliance",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "뮈켄베르거",
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "뮐러",
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "미터마이어",
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "민츠",
+   "faction": "alliance",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "바그다쉬",
+   "faction": "alliance",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "바르트하우저",
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "바운스고르",
+   "faction": "alliance",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "바이에르라인",
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "발리먼트",
+   "faction": "alliance",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "버겐자일",
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "베라",
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "베르겐그륀",
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "베이",
+   "faction": "alliance",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "보로딘",
+   "faction": "alliance",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "봐렌",
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "북스테휘드",
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "뷔로",
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "뷔코크",
+   "faction": "alliance",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "뷰젠휘터",
+   "faction": "alliance",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "브라우히츠",
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "브라운슈배크",
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "브러드죠",
+   "faction": "alliance",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "브렌타노",
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "브론즈",
+   "faction": "alliance",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "브룸하르트",
+   "faction": "alliance",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "브르다흐",
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "비로라이넨",
+   "faction": "alliance",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "비올라",
+   "faction": "alliance",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "비텐펠트",
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "샤르티안",
+   "faction": "alliance",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "샤우덴",
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "샤프트",
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "세르벨",
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "술즈콰리터",
+   "faction": "alliance",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "쉔코프",
+   "faction": "alliance",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "쉬러",
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "슈나이더",
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "슈라이어",
+   "faction": "alliance",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "슈마허",
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "슈무데",
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "슈타덴",
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "슈타인메츠",
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "슈타인호프",
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "슈토크하우젠",
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "슈트라우스",
+   "faction": "alliance",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "슈트라이트",
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "스토크스",
+   "faction": "alliance",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "시토레",
+   "faction": "alliance",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "아랄콘",
+   "faction": "alliance",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "아이제나흐",
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "아이헨도르프",
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "아텐보로",
+   "faction": "alliance",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "안스바흐",
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "알.살렘",
+   "faction": "alliance",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "알트링겐",
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "암즈도르프",
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "애슈르",
+   "faction": "alliance",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "애플턴",
+   "faction": "alliance",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "얀.웬리",
+   "faction": "alliance",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "에다",
+   "faction": "alliance",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "에렌베르크",
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "에르라흐",
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "에만슨",
+   "faction": "alliance",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "에벤즈",
+   "faction": "alliance",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "오베르슈타인",
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "오이겐",
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "오프레서",
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "올라우",
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "우란푸",
+   "faction": "alliance",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "윗티",
+   "faction": "alliance",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "이반.코네프",
+   "faction": "alliance",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "자니얼",
+   "faction": "alliance",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "자므",
+   "faction": "alliance",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "자와프",
+   "faction": "alliance",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "자우켄",
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "잔데르즈",
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "제크트",
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "존넨페르스",
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "좀바르트",
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "진쳐",
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "첸",
+   "faction": "alliance",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "춘",
+   "faction": "alliance",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "카젤누",
+   "faction": "alliance",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "칼나프",
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "칼센",
+   "faction": "alliance",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "캄프버",
+   "faction": "alliance",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "케슬러",
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "켐프",
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "코날리",
+   "faction": "alliance",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "코네프",
+   "faction": "alliance",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "코크랜",
+   "faction": "alliance",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "콜드웰",
+   "faction": "alliance",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "쿠브리슬리",
+   "faction": "alliance",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "크냅슈타인",
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "크라이버",
+   "faction": "alliance",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "크라젠",
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "크라프",
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "크로이첼",
+   "faction": "alliance",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "크루젠슈테른",
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "크리스티안",
+   "faction": "alliance",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "크리히",
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "키르히아이스",
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "키슬링",
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "테슈",
+   "faction": "alliance",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "토다",
+   "faction": "alliance",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "투르나이젠",
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "트류니히트",
+   "faction": "alliance",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "파렌하이트",
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "파스톨",
+   "faction": "alliance",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "파에타",
+   "faction": "alliance",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "파이펠",
+   "faction": "alliance",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "파토리체프",
+   "faction": "alliance",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "파토리켄",
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "페르너",
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "포겔",
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "포크",
+   "faction": "alliance",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "포프란",
+   "faction": "alliance",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "푸세네거",
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "프레겔",
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "피셔",
+   "faction": "alliance",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "필즈",
+   "faction": "alliance",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "하르바슈타트",
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "하우프트만",
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "하우흐",
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "호우드",
+   "faction": "alliance",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "호프마이스터",
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "홀츠바우어",
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  },
+  {
+   "name_ja": null,
+   "name_romaji": null,
+   "name_kr": "힐데스하임",
+   "faction": "empire",
+   "post_ja": null,
+   "rank_ja": null,
+   "unit_ja": null,
+   "kind": null,
+   "flagship": null,
+   "has_stats": false,
+   "sources": [
+    "ivex-reference.json"
+   ]
+  }
+ ]
+}

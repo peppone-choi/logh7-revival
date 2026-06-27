@@ -20,7 +20,7 @@ offset. Field types are recovered from the binary parser's stream vtable: `*(+0x
 | Message | Code | Record base global | Size | Confidence |
 |---|---|---|---|---|
 | ResponseInformationCharacter | 0x0323 | `clientBase+0x36a5e0` (scratch) / `clientBase+0x36a8b4 + count*0x2d4` (array, count@`+0x36a5dc`) | 724 (0x2d4) | 0.93 |
-| ResponseInformationBase (system/基地 拠点) | 0x031f (case 799) | `clientBase+0x3facf4` (count) / `+0x3facf8` (array, stride 0x180, max 4) | 384 (0x180)/elem | 0.60 |
+| ResponseInformationBase (system/基地 拠点) | 0x031f (case 799) | `clientBase+0x3facf4` (count) / `+0x3facf8` (array, stride 0x180, max 4) | 384 (0x180)/elem; **fixed body 0x604 = 4 + 4×0x180** | 0.70 (arrays HIGH, scalars provisional) |
 | NotifyBaseParameter (planet/惑星 economy) | — (no dispatcher case) | none — server/debug-side serializer only | 74 (0x4a) | 0.82 |
 
 ---
@@ -91,8 +91,8 @@ offset. Field types are recovered from the binary parser's stream vtable: `*(+0x
 | 0x1a9 | u8 | stamina | `FUN_00419300` `*(u8)((int)param_1+0x1a9)` `s_stamina_` 0x761088 |
 | 0x1aa | u8 | special_ability_len | `FUN_00419300` `*(u8)((int)param_1+0x1aa)` `s_special_ability__d__` 0x761070 (max 80, cap @0x7636e8) |
 | 0x1ac | u16[80] | special_ability[80] | `FUN_00419300` reads `(param_1+0x6b)`=0x1ac as u16 × len; region [0x1ac,0x24c) = 160B |
-| 0x24c | u8 | card_len | `FUN_00419300` `*(u8)(param_1+0x93)`=0x24c `s_card__d__` 0x761064 |
-| 0x250 | u8[128] | card[16] {kind u16, spot u16} | `FUN_00419300` `puVar9=(param_1+0x95)`=0x254, kind@`puVar9[-1]`=0x250 (`s_kind_` 0x760748), spot@`*puVar9`=0x252, 16 × 8B; region [0x250,0x2d0) |
+| 0x24c | u8 | card_len | count, ≤16. `FUN_00417390` reads it at +0x24c (gate `<0x11`); `FUN_00419300` `*(u8)(param_1+0x93)`=0x24c. **The array is at +0x254 (stride 8), NOT +0x250 — 0x250 is a 4-byte gap between count and array.** (docs/logh7-data-structures-re.md §4) |
+| 0x254 | u32×2 ×16 | card[16] {id/kind u32 @+0, value/role u32 @+4} | `FUN_00417390` array loop from +0x254 stride 8, two u32 per entry. CORRECTION: the per-row second field is **u32 @+0x04**, not `spot u16 @0x252`; region [0x254,0x2d4) |
 | 0x2d0 | u8 | together | `FUN_00419300` `*(u8)(param_1+0xb4)`=0x2d0 `s_together_` 0x761058; record padded to 0x2d4 = 724 |
 
 ### parentage[] sub-record (entry base 0x80 / 0x104, stride 0x84)
@@ -179,8 +179,28 @@ static parser `FUN_004142e0` (stride 0x3c), text-parse `FUN_004145b0`; `_INF` ma
 `class_` (0x760e0c), `grid` (0x760e14, the map-cell id this system sits in),
 `diameter` (0x760da8), `revolution_radius` (0x760df8), `revolution_cycle` (0x760de4),
 `revolution_direction` (0x760dcc), `revolution_init_angle` (0x760db4).
-Layout from `FUN_004145b0`: id, 3 numeric, `name[13]` count<=0xd, `class_` at `puVar8+0x11`,
-a float at `puVar8+0x12`.
+
+Live parser probes on 2026-06-16 proved the **wire body is a parser-helper stream**, not the
+already-expanded 0x3c destination stride. The body starts with a helper-swapped `u16be count`; records
+then stream fields sequentially. `FUN_004142e0` expands them into the 0x3c-byte destination layout below.
+Evidence: `postcreate-031d-parser-fixed-ring.json` (count-only fix reached `nameOverPath`) and
+`postcreate-031d-parser-stream-ring.json` (80 records reached `normalReturn`; live client continued to
+`0x0308/0x030c/0x0f00/0x0f02/0x0f06` and displayed the in-world HUD).
+
+| dest offset | wire helper | current server source | confidence |
+|---|---|---|---|
+| +0x00 | u32be | `id` | HIGH |
+| +0x04 | u16be | `grid` | HIGH |
+| +0x06 | u16be | `w06`/`field06` (default 0) | offset HIGH, name unresolved |
+| +0x08 | u16be | `w08`/`field08` (default 0) | offset HIGH, name unresolved |
+| +0x0a | u8 | `name.length` (<=13) | HIGH |
+| +0x0c | u16be[name_len] | `name` / gated `name_ko` | HIGH |
+| +0x26 | raw u8 | `class_` / `klass` | HIGH |
+| +0x28 | f32be | `diameter` | MEDIUM |
+| +0x2c | u32be | `u2c` or truncated `revolutionRadius` | offset HIGH, name unresolved |
+| +0x30 | raw u8 | `revolutionDirection` | MEDIUM |
+| +0x34 | f32be | `revolutionCycle` | MEDIUM |
+| +0x38 | f32be | `revolutionInitAngle` | MEDIUM |
 
 **ResponseInformationBase (0x031f, dynamic economy/defense/ownership)** — `_INF` marker 0x760fe0:
 
@@ -194,6 +214,42 @@ a float at `puVar8+0x12`.
 `price_index` (0x760fc0), `defense_outfit` (0x760fd0).
 Array caps from `FUN_00414c70`: commodity<=3, budget<=5, budgeting<=6,
 transport_supplies/outfit_supplies<=30.
+
+### Array-cap cross-mapping (RESOLVED — server builder `logh7-base-record.mjs`)
+
+The parser raw offsets and the named field set share a **unique array-size anchor**: each cap value
+(30/30/6/5/3) appears exactly once in BOTH the parser walk and the named-field list, so the five arrays
+map name↔offset at HIGH confidence (the only ambiguity, the two `[30]`s, is broken by list order —
+`transport_supplies` is listed before `outfit_supplies`, matching the parser's read order +0x24 then +0xa0):
+
+| named field | elem offset | type/cap | cnt offset | confidence | evidence |
+|---|---|---|---|---|---|
+| transport_supplies | +0x24 | u32[≤30] | +0x20 (u8) | **HIGH** | parser `if (0x1e < cnt)` @+0x20; listed 1st of two `[30]` |
+| outfit_supplies | +0xa0 | u32[≤30] | +0x9c (u8) | **HIGH** | parser `if (0x1e < cnt)` @+0x9c; listed 2nd of two `[30]` |
+| budgeting | +0x130 | u16[≤6] | +0x12e (u8) | **HIGH** | parser `if (6 < cnt)` @+0x12e; unique `[6]` (and only u16 array) |
+| budget | +0x140 | u32[≤5] | +0x13c (u8) | **HIGH** | parser `if (5 < cnt)` @+0x13c; unique `[5]` |
+| commodity | +0x168 | u32[≤3] | +0x164 (u8) | **HIGH** | parser `if (3 < cnt)` @+0x164; unique `[3]` |
+
+Confirmed by direct re-decompile of `FUN_00414c70` (`.omo/f_414c70.txt`): the four over-limit guard sites
+(`0x1e<`, `0x1e<`, `6<`, `5<`, `3<`) sit at exactly these cnt offsets, and the over-limit error string is
+`Input_ResponseInformationBase information_size over than 4` (4-element max).
+
+**Fixed body size — RESOLVED.** Dispatcher `FUN_004ba2b0` case 799 (`.omo/f_4ba2b0.txt` L419-428) copies a
+**fixed 0x181 dwords (= 0x604 = 1540 bytes)** from `param_3` into `clientBase+0x3facf4` REGARDLESS of the
+live count. World-import `FUN_004c32a0` reads count at `*(byte*)(param_1+0x3facf4)` (= body+0) and
+element[0] at `param_1+0x3facf8` (= body+4), advancing `iVar16*0x180`. So the on-wire body is:
+`count dword @ body+0` (low byte = u8 count, max 4) + `4 element slots of stride 0x180 @ body+4` (unused
+zeroed) = **0x604 bytes**. `element+0x00` is the u32 id used as the match key (`FUN_004c32a0`
+`*puVar7 == uVar12`); `element+0x04`/`+0x05` are read as owner/state candidate bytes (`local_34d`/
+`local_34e`). The server builder `src/server/logh7-base-record.mjs` (`buildResponseInformationBaseInner`)
+emits this fixed 0x604 body byte-accurately.
+
+**Scalars still PROVISIONAL** (RE-pinned byte offset + type, but the name↔offset is NOT confirmed because
+the labeled `_INF` serializer is server-side and its absolute offsets are unresolved in the client export):
+elem `+0x04` (owner/state candidate), `+0x08`, `+0x09`, `+0x0c`, `+0x10`, `+0x14` (float; availability_ratio
+candidate), `+0x18`, `+0x1c`, `+0x118`, `+0x11c`, `+0x120`, `+0x124`, `+0x128`, `+0x12c`, `+0x154`, `+0x156`,
+`+0x158`, `+0x15a`, `+0x15c`, `+0x160`, `+0x174` (float; price_index candidate), `+0x178`, `+0x179`, `+0x17a`,
+`+0x17c`. These are written byte-correct by the builder under `fieldNN` parameter names (values P3, default 0).
 
 ### Owner / ruler / garrison-commander (陣営名 / 統治者名 / 守備隊長)
 
@@ -215,7 +271,7 @@ count u16 @`+0x41a364`), not from the Base record.
 | ResponseInformationGrid | 0x0317 | `+0x35f358` | single dword = current grid index |
 | ResponseStaticInformationBase | 0x031d | `+0x3f5ae8` | 0x1483 dw |
 | ResponseInformationBase | 0x031f | `+0x3facf4` | 0x181 dw |
-| ResponseInformationInstitution | 0x0321 | `+0x3fb2f8` | 0x2379 dw (防衛/造兵/対空/衛星 facilities) |
+| ResponseInformationInstitution | 0x0321 | `+0x3fb2f8` | 0x2379 dw = 0x8DE4 fixed body (防衛/造兵/対空/衛星 facilities); 3-level nested, see §2a |
 | ResponseInformationCharacter | 0x0323 | `+0x36a5e0` / `+0x36a8b4` | record 0x2d4 |
 | ResponseInformationUnit | 0x0325 | `+0x41a368` | count u16 @`+0x41a364` |
 | NotifySimpleInformationBase | 0x1204 | `+0x49ebac` -> table `+0x4c4b60` | stride 0x24 (36B), max 400, count @`+0x4c4b5c`, post-proc `FUN_004c2040`; carries `name[<=13]` + owner |
@@ -223,6 +279,96 @@ count u16 @`+0x41a364`), not from the Base record.
 
 > To fully pin offsets: trace `FUN_004c32a0` StaticBase decode (stride 0x3c) and the dynamic-base
 > consumer that reads `+0x3facf8` elements field-by-field. **Live test recommended.**
+
+---
+
+## 2a. Base facilities record — `ResponseInformationInstitution` (0x0321, case 0x321)
+
+- **Confidence: 0.85.** The full **nested LAYOUT is byte-exact (P0)** — both the binary parser
+  `FUN_004167f0` AND the text parser `FUN_00416bd0` write identical offsets (independent
+  cross-validation), the dispatcher + world-import agree on total size, and all three array caps come
+  from over-limit error strings. The **scalar field NAMES inside institution/spot are not resolvable**
+  (the labeled `_INF` serializer is server-side: `_INF:ResponseInformationInstitution#` @0x761030 has
+  NO referencing function in the export, exactly like the 0x031f base scalars) → those stay PROVISIONAL.
+- **This is the FACILITIES (施設) panel of the 「基地管理」 base-management screen** (UI-read pair req
+  0x0320 → resp 0x0321). Per §3 scope note, the 防衛/造兵/対空/衛星 facilities are the `institution[]`
+  sub-records carried here — the SISTER of `ResponseInformationBase` 0x031f (§2, the
+  defense/development/ownership half).
+- **Record base:** `clientBase+0x3fb2f8`. Dispatcher `FUN_004ba2b0` case 0x321
+  (`.omo/f_4ba2b0.txt` L430-440) copies a **FIXED 0x2379 dwords (= 0x8DE4 = 36324 bytes)** from the
+  inbound record into `+0x3fb2f8`, REGARDLESS of count, with **NO post-store proc**. World-import
+  `FUN_004c4170` (`.omo/f_4c4170.txt` L36-42) bulk-copies the same 0x2379 dwords into the in-world
+  strategy buffer (`+0x2b7078`) — confirms size.
+- **Parsers:** `FUN_004167f0` (binary), `FUN_00416bd0` (text). Raw dumps `.omo/f_4167f0.txt`,
+  `.omo/f_416bd0.txt`, `.omo/f_4c4170.txt`.
+
+### Three-level nested layout (all offsets P0; ZERO padding — sizes reconcile to the byte)
+
+**Body (the fixed 0x8DE4 region):**
+
+| offset | type | field | evidence |
+|---|---|---|---|
+| body+0x00 | u8 (in dword) | count (outer elements, max 4) | dispatcher copies 0x2379 dw; parser `*param_1`, guard `bVar1 < 5`; error `Input_ResponseInformationInstitution ... information_size ... over than 4` (0x763504) |
+| body+0x04 | — | element[i] base `B = body + 0x04 + i*0x2378` | parser `pbVar9 = param_1 + 8`, reads `pbVar9-4` (= body+0x04) as the element id; outer stride `pbVar9 + 0x2378` (L191) |
+
+**Outer element (InformationInstitution), stride 0x2378 = 9080B:**
+
+| rel. offset | type | field | confidence | evidence |
+|---|---|---|---|---|
+| B+0x00 | u32 | id (base/spot id) | offset HIGH, name MEDIUM | parser reads `pbVar9-4` first; serializer label `base=` (0x761028) is the lone scalar before the `_INF` marker |
+| B+0x04 | u8 | institution_count (≤36) | HIGH | parser `*pbVar9`, guard `0x24 < cnt`; error `Input_InformationInstitution ... institution_size ... over than 36` (0x7634a8) |
+| B+0x08 | — | institution[j] base `J = B + 0x08 + j*0xfc` | HIGH | parser `pbVar14 = pbVar9 + 0xc` (= body+0x14 = B+0x10 for the count; institution element physically begins at its u16 header 8B earlier = B+0x08); institution stride `pbVar14 + 0xfc` (L182); `institution[%d]={` (0x761014), unique ≤36 array |
+
+**Institution sub-record, stride 0xfc = 252B (J-relative):**
+
+| rel. offset | type | field | confidence | evidence |
+|---|---|---|---|---|
+| J+0x00 | u16 | field00 | offset/type HIGH, name PROVISIONAL | parser writes `(pbVar14-8)` (binary `*(+0x20)`) |
+| J+0x04 | u32 | field04 | offset/type HIGH, name PROVISIONAL | parser writes `(pbVar14-4)` (binary `*(+0x1c)`) |
+| J+0x08 | u8 | spot_count (≤20) | HIGH | parser `*pbVar14`, guard `0x14 < cnt`; error `Input_Institution ... spot_size ... over than 20` (0x763460) |
+| J+0x0c | — | spot[k] base `S = J + 0x0c + k*0xc` | HIGH | parser spot index `*0xc` (L154/L162); `spot[%d]={` (0x761008), unique ≤20 array |
+
+**Spot sub-record, stride 0xc = 12B (S-relative):**
+
+| rel. offset | type | field | confidence | evidence |
+|---|---|---|---|---|
+| S+0x00 | u16 | field00 | offset/type HIGH, name PROVISIONAL | parser L154 `*(u16)` (binary `*(+0x20)`) |
+| S+0x04 | u32 | field04 | offset/type HIGH, name PROVISIONAL | parser L165 `*(u32)` (binary `*(+0x1c)`) |
+| S+0x08 | u16 | field08 | offset/type HIGH, name PROVISIONAL | parser L174 `*(u16)` (binary `*(+0x20)`) |
+
+**Size reconciliation (byte-exact, no padding):** `36 * 0xfc = 0x2370` fills `B+0x08 .. B+0x2378`
+(element stride); `20 * 0xc = 0xf0` fills `J+0x0c .. J+0xfc` (institution stride); body =
+`4 + 4*0x2378 = 0x8DE4` = dispatcher copy. The server builder
+`src/server/logh7-institution-record.mjs` (`buildResponseInformationInstitutionInner`) emits this
+fixed body byte-accurately (verified field-for-field against the raw parser offsets).
+
+### Name↔offset cross-map (RESOLVED via the array-cap uniqueness anchor — same technique as §2)
+
+The serializer label block ends at `_INF:ResponseInformationInstitution#` (0x761030) and is immediately
+preceded, in address order, by `file=` (0x761000), `spot[%d]={` (0x761008), `institution[%d]={`
+(0x761014), `base=` (0x761028). Each of the three caps (4/36/20) is UNIQUE in BOTH the parser walk and
+the label block, so the array STRUCTURE maps **HIGH**: element id ↔ `base=`, institution[] ↔
+`institution[%d]={` (≤36), spot[] ↔ `spot[%d]={` (≤20). The element-id NAME is **MEDIUM** (server-side
+serializer). The institution/spot SCALAR fields (J+0x00/J+0x04, S+0x00/S+0x04/S+0x08) have **no
+resolvable labels** → written byte-correct under `fieldNN` PROVISIONAL names (values P3, default 0).
+
+### Unresolved / provisional
+
+- **Institution/spot scalar NAMES** (J+0x00 u16, J+0x04 u32, S+0x00 u16, S+0x04 u32, S+0x08 u16): the
+  facility kind (造兵工廠/防衛施設/対空砲/戦闘衛星) and per-facility level/hp/production numbers almost
+  certainly live in these scalars, but the labeled serializer is server-side and absolute offsets are
+  not derivable from the client export. Marked PROVISIONAL `fieldNN`; pin via live A/B once the
+  fragmentation fix lands (this ~36KB frame cannot be sent until then).
+
+### ⚠ Discrepancy with the pre-existing `buildInformationInstitutionInner` (logh7-info-records.mjs)
+
+There is a SEPARATE, already-wired builder `buildInformationInstitutionInner` in
+`src/server/logh7-info-records.mjs` (L222) that places `institution_count` at `baseOff+0x08`
+(= body+0x0c) and `institution[0]` at `baseOff+0x0c` (= body+0x10). The parser-pinned positions are
+`institution_count` @body+0x08 and `institution[0]` @body+0x14 — so that older builder is **+4 / -4
+off** for the nested fields (its outer `id` @body+0x04 is correct). The new
+`logh7-institution-record.mjs` builder matches the parser exactly (verified field-for-field). See the
+integration note in the §"Wiring" below before swapping the wired call.
 
 ---
 

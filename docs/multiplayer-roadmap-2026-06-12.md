@@ -4,6 +4,19 @@ Self-contained summary of the multiplayer effort driven by the autonomous loop. 
 **a real authoritative server that drives the original Windows client (G7MTClient.exe) into actual
 multiplayer.**
 
+## 2026-06-20 correction: do not resume from the old G4/G5-only blocker
+
+This document is a historical milestone summary. The current C002/G006 source of truth is
+`docs/logh7-strategic-input-wire.md` §1.2.1, `docs/SESSION-HANDOFF-2026-06-20.md`, and
+`.omo/ulw-loop/evidence/g006-c002-command-admission-re-20260620.md`.
+
+The old "place a fleet object through `0x0313`/`0x0315` and then SelectGrid should open" framing is
+now incomplete. `0x0325` post-load unit import, PLAYER_INFO linkage, and focus/current-cell
+promotion have all been proven far enough that the next blocker is upstream HUD command admission:
+the live client must expose and hit a selection-list row, resolve a command category, build a command
+row, and dispatch the `FUN_00581c80` SelectGrid factory. Next live work should start with
+`tools/logh7_selectgrid_snapshot.py`, not with another generic sector-object or terrain retry.
+
 ## ★★ G200 (2026-06-12, ulw): strategic fleet data + authoritative movement + character creation
 
 This ultrawork pass reverse-engineered and implemented four wire formats end-to-end (server fully
@@ -39,10 +52,10 @@ delivered at the 0x0f02 timing alongside 0x0204/0x0323/0x0325, full 0x0f00–0x0
 0x0f06/0x0f07 idle — **client stayed alive (no crash)**, proving the strategic fleet push is safe and
 the G164 world-load is non-regressed. EXE restored + SHA-verified after each session.
 
-**Remaining (needs interactive RE, not server work):** whether the placed object is actually clickable
-to emit 0x0b01 (the click→command enablement gates G4/G5 in `docs/logh7-strategic-input-wire.md`); and
-driving the character-creation FORM live (blocked by the unpatched-Japanese-font invisible UI / likely
-separate dialog window — the 0x1008 server path is unit-test-proven, the live card list renders).
+**Historical remaining note:** the 2026-06-12 blocker was written as "is the placed object clickable
+enough to emit `0x0b01`?" That is now superseded: G4/G5 are still prerequisites, but C002 is currently
+blocked at HUD selection/category/command-row admission before SelectGrid construction. Character
+creation FORM work is separate from this strategic-command blocker.
 
 ## ★ Headline achievement — G164: unpatched world load
 

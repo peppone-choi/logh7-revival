@@ -1,0 +1,368 @@
+{
+  "_purpose": "server canon face codes (O-group composite face values) for registerCanon; calibrated subset only — uncalibrated canon faces pending per-atlas hed-range RE",
+  "_count": 45,
+  "records": [
+    {
+      "name_ja": "フリードリヒⅣ世",
+      "name_kr": null,
+      "faction": "empire",
+      "atlas": "oem",
+      "group": "O",
+      "faceCode": 2
+    },
+    {
+      "name_ja": "クラーゼン",
+      "name_kr": null,
+      "faction": "empire",
+      "atlas": "oem",
+      "group": "O",
+      "faceCode": 114
+    },
+    {
+      "name_ja": "リヒテンラーデ",
+      "name_kr": null,
+      "faction": "empire",
+      "atlas": "oem",
+      "group": "O",
+      "faceCode": 142
+    },
+    {
+      "name_ja": "ゲルラッハ",
+      "name_kr": null,
+      "faction": "empire",
+      "atlas": "oem",
+      "group": "O",
+      "faceCode": 130
+    },
+    {
+      "name_ja": "レムシャイト",
+      "name_kr": null,
+      "faction": "empire",
+      "atlas": "oem",
+      "group": "O",
+      "faceCode": 98
+    },
+    {
+      "name_ja": "エーレンベルグ",
+      "name_kr": null,
+      "faction": "empire",
+      "atlas": "oem",
+      "group": "O",
+      "faceCode": 21
+    },
+    {
+      "name_ja": "ハウプト",
+      "name_kr": null,
+      "faction": "empire",
+      "atlas": "oem",
+      "group": "O",
+      "faceCode": 8
+    },
+    {
+      "name_ja": "シュタインホフ",
+      "name_kr": null,
+      "faction": "empire",
+      "atlas": "oem",
+      "group": "O",
+      "faceCode": 157
+    },
+    {
+      "name_ja": "アーベントロート",
+      "name_kr": null,
+      "faction": "empire",
+      "atlas": "oem",
+      "group": "O",
+      "faceCode": 37
+    },
+    {
+      "name_ja": "G.ミュッケンベルガー",
+      "name_kr": null,
+      "faction": "empire",
+      "atlas": "oem",
+      "group": "O",
+      "faceCode": 13
+    },
+    {
+      "name_ja": "グライフス",
+      "name_kr": null,
+      "faction": "empire",
+      "atlas": "oem",
+      "group": "O",
+      "faceCode": 103
+    },
+    {
+      "name_ja": "オッペンハイマー",
+      "name_kr": null,
+      "faction": "empire",
+      "atlas": "oem",
+      "group": "O",
+      "faceCode": 158
+    },
+    {
+      "name_ja": "オフレッサー",
+      "name_kr": null,
+      "faction": "empire",
+      "atlas": "oem",
+      "group": "O",
+      "faceCode": 45
+    },
+    {
+      "name_ja": "シャフト",
+      "name_kr": null,
+      "faction": "empire",
+      "atlas": "oem",
+      "group": "O",
+      "faceCode": 150
+    },
+    {
+      "name_ja": "ローエングラム",
+      "name_kr": null,
+      "faction": "empire",
+      "atlas": "oem",
+      "group": "O",
+      "faceCode": 112
+    },
+    {
+      "name_ja": "メルカッツ",
+      "name_kr": null,
+      "faction": "empire",
+      "atlas": "oem",
+      "group": "O",
+      "faceCode": 127
+    },
+    {
+      "name_ja": "シュターデン",
+      "name_kr": null,
+      "faction": "empire",
+      "atlas": "oem",
+      "group": "O",
+      "faceCode": 129
+    },
+    {
+      "name_ja": "フォーゲル",
+      "name_kr": null,
+      "faction": "empire",
+      "atlas": "oem",
+      "group": "O",
+      "faceCode": 38
+    },
+    {
+      "name_ja": "ヒルデスハイム",
+      "name_kr": null,
+      "faction": "empire",
+      "atlas": "oem",
+      "group": "O",
+      "faceCode": 134
+    },
+    {
+      "name_ja": "キルヒアイス",
+      "name_kr": null,
+      "faction": "empire",
+      "atlas": "oem",
+      "group": "O",
+      "faceCode": 25
+    },
+    {
+      "name_ja": "ランズベルク",
+      "name_kr": null,
+      "faction": "empire",
+      "atlas": "oem",
+      "group": "O",
+      "faceCode": 42
+    },
+    {
+      "name_ja": "フレーゲル",
+      "name_kr": null,
+      "faction": "empire",
+      "atlas": "oem",
+      "group": "O",
+      "faceCode": 141
+    },
+    {
+      "name_ja": "ゼークト",
+      "name_kr": null,
+      "faction": "empire",
+      "atlas": "oem",
+      "group": "O",
+      "faceCode": 122
+    },
+    {
+      "name_ja": "グリューネマン",
+      "name_kr": null,
+      "faction": "empire",
+      "atlas": "oem",
+      "group": "O",
+      "faceCode": 88
+    },
+    {
+      "name_ja": "ディッタースドルフ",
+      "name_kr": null,
+      "faction": "empire",
+      "atlas": "oem",
+      "group": "O",
+      "faceCode": 145
+    },
+    {
+      "name_ja": "ホフマイスター",
+      "name_kr": null,
+      "faction": "empire",
+      "atlas": "oem",
+      "group": "O",
+      "faceCode": 18
+    },
+    {
+      "name_ja": "ミッターマイヤー",
+      "name_kr": null,
+      "faction": "empire",
+      "atlas": "oem",
+      "group": "O",
+      "faceCode": 106
+    },
+    {
+      "name_ja": "ロイエンタール",
+      "name_kr": null,
+      "faction": "empire",
+      "atlas": "oem",
+      "group": "O",
+      "faceCode": 72
+    },
+    {
+      "name_ja": "レンネンカンプ",
+      "name_kr": null,
+      "faction": "empire",
+      "atlas": "oem",
+      "group": "O",
+      "faceCode": 81
+    },
+    {
+      "name_ja": "シュトックハウゼン",
+      "name_kr": null,
+      "faction": "empire",
+      "atlas": "oem",
+      "group": "O",
+      "faceCode": 140
+    },
+    {
+      "name_ja": "ホワン",
+      "name_kr": null,
+      "faction": "alliance",
+      "atlas": "oam",
+      "group": "O",
+      "faceCode": 100003
+    },
+    {
+      "name_ja": "ブロンズ",
+      "name_kr": null,
+      "faction": "alliance",
+      "atlas": "oam",
+      "group": "O",
+      "faceCode": 100006
+    },
+    {
+      "name_ja": "ホーウッド",
+      "name_kr": null,
+      "faction": "alliance",
+      "atlas": "oam",
+      "group": "O",
+      "faceCode": 100001
+    },
+    {
+      "name_ja": "アンスバッハ",
+      "name_kr": null,
+      "faction": "empire",
+      "atlas": "oem",
+      "group": "O",
+      "faceCode": 138
+    },
+    {
+      "name_ja": "オーベルシュタイン",
+      "name_kr": null,
+      "faction": "empire",
+      "atlas": "oem",
+      "group": "O",
+      "faceCode": 132
+    },
+    {
+      "name_ja": "ケスラー",
+      "name_kr": null,
+      "faction": "empire",
+      "atlas": "oem",
+      "group": "O",
+      "faceCode": 55
+    },
+    {
+      "name_ja": "ケンプ",
+      "name_kr": null,
+      "faction": "empire",
+      "atlas": "oem",
+      "group": "O",
+      "faceCode": 31
+    },
+    {
+      "name_ja": "シュタインメッツ",
+      "name_kr": null,
+      "faction": "empire",
+      "atlas": "oem",
+      "group": "O",
+      "faceCode": 144
+    },
+    {
+      "name_ja": "ビッテンフェルト",
+      "name_kr": null,
+      "faction": "empire",
+      "atlas": "oem",
+      "group": "O",
+      "faceCode": 119
+    },
+    {
+      "name_ja": "ファーレンハイト",
+      "name_kr": null,
+      "faction": "empire",
+      "atlas": "oem",
+      "group": "O",
+      "faceCode": 107
+    },
+    {
+      "name_ja": "ミュラー",
+      "name_kr": null,
+      "faction": "empire",
+      "atlas": "oem",
+      "group": "O",
+      "faceCode": 56
+    },
+    {
+      "name_ja": "メックリンガー",
+      "name_kr": null,
+      "faction": "empire",
+      "atlas": "oem",
+      "group": "O",
+      "faceCode": 151
+    },
+    {
+      "name_ja": "ルッツ",
+      "name_kr": null,
+      "faction": "empire",
+      "atlas": "oem",
+      "group": "O",
+      "faceCode": 90
+    },
+    {
+      "name_ja": "ワーレン",
+      "name_kr": null,
+      "faction": "empire",
+      "atlas": "oem",
+      "group": "O",
+      "faceCode": 22
+    },
+    {
+      "name_ja": "ミューゼル",
+      "name_kr": null,
+      "faction": "empire",
+      "atlas": "o",
+      "group": "O",
+      "faceCode": 10002
+    }
+  ],
+  "_WARNING": "UNVERIFIED/UNRELIABLE. atlas_slot index = GLOBAL tcf.hed slot used AS a per-atlas LOCAL index; the client (FUN_00592c30/FUN_005924c0) expects per-atlas LOCAL index, and global!=local is NOT calibrated. So these faceCode values are mostly WRONG. Only the 12 gineiden.com official anchors are real. Also unresolved: flat chara/NNN (face-name-map) vs digit-composite (face_id_decode) face-value scheme conflict. Pending: workflow #12 (client face-decode) resolves the scheme; #11 (in-game data) finds the real mapping; live-client render calibration locks per-atlas index. DO NOT feed to the server as truth yet.",
+  "_reliable_subset": "only the 12 gineiden.com anchors (Reinhard/Yang/Schenkopp/Mittermeyer/...) per content/roster/face-name-map.json"
+}

@@ -1,0 +1,522 @@
+{
+  "_source": "gin7 manual",
+  "unitTypes": [
+    {
+      "category_ja": "艦艇ユニット種別",
+      "name_ja": "戦艦Ⅰ",
+      "notes": "Battleship I; appears repeatedly in Imperial deployment rosters"
+    },
+    {
+      "category_ja": "艦艇ユニット種別",
+      "name_ja": "戦艦Ⅱ",
+      "notes": "line 6222"
+    },
+    {
+      "category_ja": "艦艇ユニット種別",
+      "name_ja": "戦艦Ⅵ",
+      "notes": "line 6396 (Alliance auto-production header section)"
+    },
+    {
+      "category_ja": "艦艇ユニット種別",
+      "name_ja": "戦艦Ⅶ",
+      "notes": "line 6297"
+    },
+    {
+      "category_ja": "艦艇ユニット種別",
+      "name_ja": "戦艦Ⅷ",
+      "notes": "line 6344"
+    },
+    {
+      "category_ja": "艦艇ユニット種別",
+      "name_ja": "高速戦艦Ⅰ",
+      "notes": "Fast Battleship I; recurring in Imperial rosters"
+    },
+    {
+      "category_ja": "艦艇ユニット種別",
+      "name_ja": "高速戦艦Ⅱ",
+      "notes": "line 6191"
+    },
+    {
+      "category_ja": "艦艇ユニット種別",
+      "name_ja": "高速戦艦Ⅲ",
+      "notes": "line 6201"
+    },
+    {
+      "category_ja": "艦艇ユニット種別",
+      "name_ja": "高速戦艦Ⅳ",
+      "notes": "line 6053"
+    },
+    {
+      "category_ja": "艦艇ユニット種別",
+      "name_ja": "高速戦艦Ⅴ",
+      "notes": "line 6155"
+    },
+    {
+      "category_ja": "艦艇ユニット種別",
+      "name_ja": "巡航艦Ⅰ",
+      "notes": "Cruiser I; recurring"
+    },
+    {
+      "category_ja": "艦艇ユニット種別",
+      "name_ja": "巡航艦Ⅱ",
+      "notes": "line 6348"
+    },
+    {
+      "category_ja": "艦艇ユニット種別",
+      "name_ja": "巡航艦Ⅲ",
+      "notes": "line 6356"
+    },
+    {
+      "category_ja": "艦艇ユニット種別",
+      "name_ja": "巡航艦Ⅳ",
+      "notes": "line 6447"
+    },
+    {
+      "category_ja": "艦艇ユニット種別",
+      "name_ja": "巡航艦Ⅵ",
+      "notes": "line 6019 (first艦艇 header)"
+    },
+    {
+      "category_ja": "艦艇ユニット種別",
+      "name_ja": "巡航艦Ⅶ",
+      "notes": "line 6070"
+    },
+    {
+      "category_ja": "艦艇ユニット種別",
+      "name_ja": "巡航艦Ⅷ",
+      "notes": "line 6111"
+    },
+    {
+      "category_ja": "艦艇ユニット種別",
+      "name_ja": "打撃巡航艦Ⅰ",
+      "notes": "Strike Cruiser I; Alliance rosters lines 6303/6328/6362"
+    },
+    {
+      "category_ja": "艦艇ユニット種別",
+      "name_ja": "駆逐艦Ⅰ",
+      "notes": "Destroyer I; recurring (often listed twice in a row)"
+    },
+    {
+      "category_ja": "艦艇ユニット種別",
+      "name_ja": "駆逐艦Ⅱ",
+      "notes": "Destroyer II; lines 6129/6169/6200/6232"
+    },
+    {
+      "category_ja": "艦艇ユニット種別",
+      "name_ja": "雷撃艇母艦Ⅰ",
+      "notes": "Torpedo-boat carrier I; line 6036"
+    },
+    {
+      "category_ja": "艦艇ユニット種別",
+      "name_ja": "雷撃艇母艦Ⅱ",
+      "notes": "line 6062"
+    },
+    {
+      "category_ja": "艦艇ユニット種別",
+      "name_ja": "雷撃艇母艦Ⅲ",
+      "notes": "line 6066"
+    },
+    {
+      "category_ja": "艦艇ユニット種別",
+      "name_ja": "雷撃艇母艦Ⅳ",
+      "notes": "line 6164"
+    },
+    {
+      "category_ja": "艦艇ユニット種別",
+      "name_ja": "戦闘艇母艦Ⅰ",
+      "notes": "Fighter-boat carrier I; lines 6210/6305/6330/6364"
+    },
+    {
+      "category_ja": "艦艇ユニット種別",
+      "name_ja": "戦闘艇母艦Ⅱ",
+      "notes": "line 6331"
+    },
+    {
+      "category_ja": "艦艇ユニット種別",
+      "name_ja": "工作艦Ⅰ",
+      "notes": "Repair/工作 ship I; line 6226"
+    },
+    {
+      "category_ja": "艦艇ユニット種別",
+      "name_ja": "揚陸艇Ⅱ",
+      "notes": "Landing craft II; line 6049"
+    },
+    {
+      "category_ja": "艦艇ユニット種別",
+      "name_ja": "揚陸艇Ⅳ",
+      "notes": "line 6322"
+    },
+    {
+      "category_ja": "艦艇ユニット種別",
+      "name_ja": "揚陸艦Ⅰ",
+      "notes": "Landing ship I; line 6293"
+    },
+    {
+      "category_ja": "艦艇ユニット種別",
+      "name_ja": "揚陸艦Ⅱ",
+      "notes": "line 6340"
+    },
+    {
+      "category_ja": "艦艇ユニット種別",
+      "name_ja": "揚陸艦Ⅲ",
+      "notes": "line 6352"
+    },
+    {
+      "category_ja": "艦艇ユニット種別",
+      "name_ja": "兵員輸送艦Ⅲ",
+      "notes": "Troop transport III; line 6285"
+    },
+    {
+      "category_ja": "艦艇ユニット種別",
+      "name_ja": "兵員輸送艦Ⅳ",
+      "notes": "line 6289"
+    },
+    {
+      "category_ja": "乗組員ユニット種別",
+      "name_ja": "艦隊乗組員",
+      "notes": "Fleet crew; the sole crew unit type, listed once per ship throughout"
+    },
+    {
+      "category_ja": "陸戦兵ユニット種別",
+      "name_ja": "軽装陸戦兵",
+      "notes": "Light infantry / lightly-armed ground trooper; dominant ground unit (Alliance & Empire)"
+    },
+    {
+      "category_ja": "陸戦兵ユニット種別",
+      "name_ja": "装甲擲弾兵",
+      "notes": "Armored grenadier; lines 6029/6260/6273/6276"
+    },
+    {
+      "category_ja": "陸戦兵ユニット種別",
+      "name_ja": "装甲兵",
+      "notes": "Armored trooper; line 6030"
+    }
+  ],
+  "deployments": [
+    {
+      "system_ja": "ヴァルハラ",
+      "planet_ja": "オーディン",
+      "detail": "Imperial unit deployment (帝国軍艦隊/巡察隊 placement table, lines 5633-5635); also Imperial ground-force table 5781-5783"
+    },
+    {
+      "system_ja": "アルテナ",
+      "planet_ja": "ナッハロート",
+      "detail": "第６巡察隊 area (lines 5637-5641)"
+    },
+    {
+      "system_ja": "ニブルヘイム",
+      "planet_ja": "エリューズニル",
+      "detail": "第７巡察隊 (lines 5643-5647)"
+    },
+    {
+      "system_ja": "ヴェルラ",
+      "planet_ja": "シュテファニ",
+      "detail": "第８巡察隊 (lines 5649-5653)"
+    },
+    {
+      "system_ja": "シャンタウ",
+      "planet_ja": "クネスドルフ",
+      "detail": "第９巡察隊 (lines 5655-5659)"
+    },
+    {
+      "system_ja": "アスガルド",
+      "planet_ja": "トイトブルク",
+      "detail": "第10巡察隊 (lines 5661-5665)"
+    },
+    {
+      "system_ja": "ルイトボルディング",
+      "planet_ja": "ルイトポルト",
+      "detail": "第11巡察隊〜 (lines 5667-5671)"
+    },
+    {
+      "system_ja": "ヴィレンンシュタイン",
+      "planet_ja": "ヴァイセンホルン",
+      "detail": "line 5696 (paired)"
+    },
+    {
+      "system_ja": "リンダーホーフ",
+      "planet_ja": "ホーエンシュヴァンガウ",
+      "detail": "lines 5697-5699"
+    },
+    {
+      "system_ja": "ヴァナヘイム",
+      "planet_ja": "フレイ",
+      "detail": "lines 5701-5703"
+    },
+    {
+      "system_ja": "ヴィテルスバッハ",
+      "planet_ja": "ニュンフェンブルク",
+      "detail": "lines 5705-5707"
+    },
+    {
+      "system_ja": "ウォームスガウ",
+      "planet_ja": "コンラート",
+      "detail": "lines 5709-5711"
+    },
+    {
+      "system_ja": "バルドレ",
+      "planet_ja": "フリングホルニ",
+      "detail": "lines 5713-5715"
+    },
+    {
+      "system_ja": "アムリッツァ",
+      "planet_ja": "ハーフェン",
+      "detail": "lines 5717-5719; also auto-production table line 6076/6080"
+    },
+    {
+      "system_ja": "ビルロスト",
+      "planet_ja": "ヘイムダル",
+      "detail": "lines 5721-5723"
+    },
+    {
+      "system_ja": "ヴァンステイド",
+      "planet_ja": "ファルドガルデ",
+      "detail": "lines 5725-5727; ファルドガルデ also appears as deployment row at 6230"
+    },
+    {
+      "system_ja": "ドヴェルグ",
+      "planet_ja": "グレイプニル",
+      "detail": "lines 5729-5731"
+    },
+    {
+      "system_ja": "フレイア",
+      "planet_ja": "レンテンベルク",
+      "detail": "lines 5733-5735"
+    },
+    {
+      "system_ja": "アイゼンヘルツ",
+      "planet_ja": "ガイエスブルク",
+      "detail": "lines 5737-5739; also auto-production lines 6025-6027 (ヒンターヴィルド/アイゼンヘルツ/ガイエスブルク)"
+    },
+    {
+      "system_ja": "フォルゲン",
+      "planet_ja": "シュヴァンガウ",
+      "detail": "第47巡察隊 (lines 5743-5745)"
+    },
+    {
+      "system_ja": "キフォイザー",
+      "planet_ja": "ガルミッシュ",
+      "detail": "第49巡察隊 (lines 5749-5751)"
+    },
+    {
+      "system_ja": "イゼルローン",
+      "planet_ja": "イゼルローン",
+      "detail": "Iserlohn fortress (lines 5753-5755 / 5801-5803); recurs as both system and planet/fortress"
+    },
+    {
+      "system_ja": "ヴァルハラ",
+      "planet_ja": "オーディン",
+      "detail": "帝国軍地上部隊 deployment table (lines 5781-5783)"
+    },
+    {
+      "system_ja": "ヴィレンシュタイン",
+      "planet_ja": "ヴァイセンホルン",
+      "detail": "Imperial ground-force table (lines 5785-5787)"
+    },
+    {
+      "system_ja": "ヴィッテルスバッハ",
+      "planet_ja": "ニュンフェンブルク",
+      "detail": "Imperial ground-force table (lines 5789-5791)"
+    },
+    {
+      "system_ja": "アムリッツァ",
+      "planet_ja": "ハーフェン",
+      "detail": "Imperial ground-force table (lines 5793-5795)"
+    },
+    {
+      "system_ja": "アイゼンヘルツ",
+      "planet_ja": "ガイエスブルグ",
+      "detail": "Imperial ground-force table (lines 5797-5799)"
+    },
+    {
+      "system_ja": "バーラト",
+      "planet_ja": "ハイネセン",
+      "detail": "Alliance system/planet table; head of 同盟軍 list (lines 5850-5853 / 5880-5882 / 5932-5934)"
+    },
+    {
+      "system_ja": "ポレヴィト",
+      "planet_ja": "ドーリア",
+      "detail": "Alliance (lines 5854-5855); pairing also listed reversed at 5857-5858"
+    },
+    {
+      "system_ja": "エル・ファシル",
+      "planet_ja": "ドーリア",
+      "detail": "Alliance (lines 5856-5857)"
+    },
+    {
+      "system_ja": "シュパーラ",
+      "planet_ja": "エル・ファシル",
+      "detail": "Alliance (lines 5859-5860); シュパーラ also auto-production row 6000/6418"
+    },
+    {
+      "system_ja": "ケリム",
+      "planet_ja": "シュパーラ",
+      "detail": "Alliance (lines 5861-5862); ケリム also at 5896/5948/6398"
+    },
+    {
+      "system_ja": "ルジアーナ",
+      "planet_ja": "ボルゲーゼ",
+      "detail": "Alliance (lines 5865-5866)"
+    },
+    {
+      "system_ja": "サンタ・アナ",
+      "planet_ja": "ボルゲーゼ",
+      "detail": "Alliance (lines 5867-5868)"
+    },
+    {
+      "system_ja": "シウダ・ロドリゴ",
+      "planet_ja": "サンタ・アナ",
+      "detail": "Alliance (lines 5870-5871); シウダ・ロドリゴ recurs 5922/6002/6419"
+    },
+    {
+      "system_ja": "カッシナ",
+      "planet_ja": "シウダ・ロドリゴ",
+      "detail": "Alliance (lines 5872-5873); カッシナ also planet at 5898/5950/6375"
+    },
+    {
+      "system_ja": "バーラト",
+      "planet_ja": "ハイネセン",
+      "detail": "Alliance ユニット配置 table head (lines 5876-5882)"
+    },
+    {
+      "system_ja": "リューカス",
+      "planet_ja": "ヴァルミー",
+      "detail": "Alliance deployment (lines 5884-5886 / 5936-5938)"
+    },
+    {
+      "system_ja": "ドーリア",
+      "planet_ja": "ボルゲーゼ",
+      "detail": "Alliance deployment (lines 5888-5890); spelled ボルケーゼ at 5942"
+    },
+    {
+      "system_ja": "ジャムシード",
+      "planet_ja": "カッファー",
+      "detail": "Alliance deployment (lines 5892-5894 / 5944-5946); ジャムシード/カッファー also at 6404-6406"
+    },
+    {
+      "system_ja": "ケリム",
+      "planet_ja": "カッシナ",
+      "detail": "Alliance deployment (lines 5896-5898 / 5948-5950)"
+    },
+    {
+      "system_ja": "ロフォーテン",
+      "planet_ja": "ルドミラ",
+      "detail": "Alliance deployment (lines 5900-5902); spelled ロフォーデン at 5952"
+    },
+    {
+      "system_ja": "エル・ファシル",
+      "planet_ja": "サンタ・アナ",
+      "detail": "Alliance deployment (lines 5904-5906 / 5956-5958, サンア・アナ typo)"
+    },
+    {
+      "system_ja": "ポレヴィト",
+      "planet_ja": "ルジアーナ",
+      "detail": "Alliance deployment (lines 5908-5910 / 5960-5962)"
+    },
+    {
+      "system_ja": "メルカルト",
+      "planet_ja": "ネルガル",
+      "detail": "Alliance deployment (lines 5912-5914 / 5964-5966)"
+    },
+    {
+      "system_ja": "リオ・ヴェルデ",
+      "planet_ja": "サン・カルロス",
+      "detail": "Alliance deployment (lines 5916-5918 / 5968-5970)"
+    },
+    {
+      "system_ja": "シュバーラ",
+      "planet_ja": "シウダ・ロドリゴ",
+      "detail": "Alliance deployment (lines 5920-5922)"
+    },
+    {
+      "system_ja": "ファラーファラ",
+      "planet_ja": "ミセヌム",
+      "detail": "Alliance deployment (lines 5924-5926); also auto-production rows 6008-6010"
+    },
+    {
+      "system_ja": "シュパーラ",
+      "planet_ja": "シウダ・ロドリゴ",
+      "detail": "Alliance 同盟軍地上部隊 deployment (lines 6000-6002)"
+    },
+    {
+      "system_ja": "エル・ファシル",
+      "planet_ja": "サンタ・アナ",
+      "detail": "Alliance 地上部隊 deployment (lines 6004-6006)"
+    },
+    {
+      "system_ja": "ファラーファラ",
+      "planet_ja": "ミセヌム",
+      "detail": "Alliance 地上部隊 deployment (lines 6008-6010)"
+    },
+    {
+      "system_ja": "アムリッツァ",
+      "planet_ja": "クラインゲルト/モールゲン/ダンク",
+      "detail": "Imperial auto-production roster: 巡航艦Ⅶ etc.; planets クラインゲルト・モールゲン (6074-6076), ダンク (6078), system ハーフェン (6080-6081)"
+    },
+    {
+      "system_ja": "アルテナ",
+      "planet_ja": "ノイエンラーデ",
+      "detail": "Imperial roster (lines 6108-6109); 巡航艦Ⅷ section with planets カタラウヌム/アンティノウス/テルモピュレー/アルタイル/ヴェセルデ/ナッハロート (6101-6107)"
+    },
+    {
+      "system_ja": "イゼルローン",
+      "planet_ja": "イゼルローン",
+      "detail": "Imperial roster, エインヘリヤル section (lines 6144-6148); fortress garrison with 戦艦Ⅰ/高速戦艦Ⅰ/巡航艦Ⅰ/駆逐艦Ⅰ×2/高速戦艦Ⅴ"
+    },
+    {
+      "system_ja": "オーディン",
+      "planet_ja": "ヴァルハラ",
+      "detail": "Imperial roster (lines 6188-6189); 高速戦艦Ⅱ section, planets ノーアトゥーン/ヴァナヘイム/ニョルド/フレイ + ウーファー/ヴァルデマール/パウル/リンケ/ゾースト (6177-6187)"
+    },
+    {
+      "system_ja": "ヴァンステイド",
+      "planet_ja": "トゥール/レグステッド",
+      "detail": "Imperial roster 戦闘艇母艦Ⅰ section (lines 6210-6221); planets ヴァルグリンド/ラヴンストラップ/ヴァンステイド (6216-6218), レグステッド (6220)"
+    },
+    {
+      "system_ja": "ヴィッテルスバッハ",
+      "planet_ja": "レジデンツ",
+      "detail": "Imperial roster 戦艦Ⅱ/工作艦Ⅰ/ファルドガルデ section (lines 6222-6235); planets レジデンツ/ヴィッテルスバッハ (6234-6235)"
+    },
+    {
+      "system_ja": "コルテラッツォ",
+      "planet_ja": "ポンテ・クレパルド",
+      "detail": "Alliance ground/auto-production roster (lines 6251-6252, 軽装陸戦兵 group)"
+    },
+    {
+      "system_ja": "エリューセラ",
+      "planet_ja": "クルッキド/アンドロス",
+      "detail": "Alliance roster (lines 6254-6256, 軽装陸戦兵/装甲擲弾兵 mix)"
+    },
+    {
+      "system_ja": "カルタヘナ",
+      "planet_ja": "ラス・カシタス/サルバドル/カモロク/ブタンディガ/エルゴン",
+      "detail": "Alliance roster (lines 6281-6320); transports 兵員輸送艦Ⅲ/Ⅳ, 揚陸艦Ⅰ, 戦艦Ⅶ; systems ラス・カシタス/エル・ファシル/サンタ・アナ (6313-6315)"
+    },
+    {
+      "system_ja": "ムバレ",
+      "planet_ja": "カンパラ",
+      "detail": "Alliance roster (lines 6372-6373); near カッシナ (6375) with 巡航艦Ⅲ/揚陸艦Ⅲ group, large 軽装陸戦兵 block (6377-6393)"
+    },
+    {
+      "system_ja": "ケリム",
+      "planet_ja": "バフラ/アユディン/パラス/タフテ・ジャムシード",
+      "detail": "Alliance roster, 戦艦Ⅵ section (lines 6396-6404); system ケリム (6398), planets 6400-6403; カッファー (6404)"
+    },
+    {
+      "system_ja": "ジャムシード",
+      "planet_ja": "ムハバット/アパダナ/アルンキパ",
+      "detail": "Alliance roster (lines 6406-6411, 軽装陸戦兵×4 at 6412-6415)"
+    },
+    {
+      "system_ja": "ヴィスカ・グランデ",
+      "planet_ja": "シュパーラ/シウダ・ロドリゴ",
+      "detail": "Alliance roster (lines 6417-6427, 軽装陸戦兵 block)"
+    },
+    {
+      "system_ja": "ヴィシュコフ",
+      "planet_ja": "ネプティス/シロン/アヌビス",
+      "detail": "Alliance roster (lines 6429-6443, 軽装陸戦兵 block); followed by 巡航艦Ⅳ (6447)"
+    }
+  ]
+}

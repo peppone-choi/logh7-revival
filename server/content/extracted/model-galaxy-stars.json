@@ -1,0 +1,339 @@
+{
+ "_source": "data/model/strategy/Null_galaxy.mdx star_<NN>_<spectralClass> scene-graph nodes",
+ "_note": "79 star nodes each tagged with a Morgan-Keenan spectral class letter (O/B/A/F/G/K/M) + 3 black holes (bh_NN) + 3 neutron stars (ns_NN); these are the 3D-map stellar bodies. Index is map node order, NOT necessarily galaxy.json system order.",
+ "spectral_histogram": {
+  "G": 19,
+  "O": 2,
+  "F": 8,
+  "A": 7,
+  "B": 5,
+  "M": 21,
+  "K": 17
+ },
+ "stars": [
+  {
+   "index": 1,
+   "spectral_class": "G"
+  },
+  {
+   "index": 2,
+   "spectral_class": "O"
+  },
+  {
+   "index": 3,
+   "spectral_class": "F"
+  },
+  {
+   "index": 4,
+   "spectral_class": "A"
+  },
+  {
+   "index": 5,
+   "spectral_class": "A"
+  },
+  {
+   "index": 6,
+   "spectral_class": "G"
+  },
+  {
+   "index": 7,
+   "spectral_class": "B"
+  },
+  {
+   "index": 8,
+   "spectral_class": "M"
+  },
+  {
+   "index": 9,
+   "spectral_class": "G"
+  },
+  {
+   "index": 10,
+   "spectral_class": "B"
+  },
+  {
+   "index": 11,
+   "spectral_class": "G"
+  },
+  {
+   "index": 12,
+   "spectral_class": "G"
+  },
+  {
+   "index": 13,
+   "spectral_class": "K"
+  },
+  {
+   "index": 14,
+   "spectral_class": "F"
+  },
+  {
+   "index": 15,
+   "spectral_class": "M"
+  },
+  {
+   "index": 16,
+   "spectral_class": "K"
+  },
+  {
+   "index": 17,
+   "spectral_class": "K"
+  },
+  {
+   "index": 18,
+   "spectral_class": "A"
+  },
+  {
+   "index": 19,
+   "spectral_class": "K"
+  },
+  {
+   "index": 20,
+   "spectral_class": "G"
+  },
+  {
+   "index": 21,
+   "spectral_class": "M"
+  },
+  {
+   "index": 22,
+   "spectral_class": "M"
+  },
+  {
+   "index": 23,
+   "spectral_class": "M"
+  },
+  {
+   "index": 24,
+   "spectral_class": "F"
+  },
+  {
+   "index": 25,
+   "spectral_class": "M"
+  },
+  {
+   "index": 26,
+   "spectral_class": "K"
+  },
+  {
+   "index": 27,
+   "spectral_class": "G"
+  },
+  {
+   "index": 28,
+   "spectral_class": "G"
+  },
+  {
+   "index": 29,
+   "spectral_class": "K"
+  },
+  {
+   "index": 30,
+   "spectral_class": "M"
+  },
+  {
+   "index": 31,
+   "spectral_class": "M"
+  },
+  {
+   "index": 32,
+   "spectral_class": "K"
+  },
+  {
+   "index": 33,
+   "spectral_class": "G"
+  },
+  {
+   "index": 34,
+   "spectral_class": "G"
+  },
+  {
+   "index": 35,
+   "spectral_class": "M"
+  },
+  {
+   "index": 36,
+   "spectral_class": "M"
+  },
+  {
+   "index": 37,
+   "spectral_class": "K"
+  },
+  {
+   "index": 38,
+   "spectral_class": "K"
+  },
+  {
+   "index": 39,
+   "spectral_class": "B"
+  },
+  {
+   "index": 40,
+   "spectral_class": "G"
+  },
+  {
+   "index": 41,
+   "spectral_class": "G"
+  },
+  {
+   "index": 42,
+   "spectral_class": "G"
+  },
+  {
+   "index": 43,
+   "spectral_class": "G"
+  },
+  {
+   "index": 44,
+   "spectral_class": "M"
+  },
+  {
+   "index": 45,
+   "spectral_class": "G"
+  },
+  {
+   "index": 46,
+   "spectral_class": "G"
+  },
+  {
+   "index": 47,
+   "spectral_class": "M"
+  },
+  {
+   "index": 48,
+   "spectral_class": "M"
+  },
+  {
+   "index": 49,
+   "spectral_class": "M"
+  },
+  {
+   "index": 50,
+   "spectral_class": "K"
+  },
+  {
+   "index": 51,
+   "spectral_class": "K"
+  },
+  {
+   "index": 52,
+   "spectral_class": "M"
+  },
+  {
+   "index": 53,
+   "spectral_class": "M"
+  },
+  {
+   "index": 54,
+   "spectral_class": "M"
+  },
+  {
+   "index": 55,
+   "spectral_class": "M"
+  },
+  {
+   "index": 56,
+   "spectral_class": "G"
+  },
+  {
+   "index": 57,
+   "spectral_class": "K"
+  },
+  {
+   "index": 58,
+   "spectral_class": "F"
+  },
+  {
+   "index": 59,
+   "spectral_class": "K"
+  },
+  {
+   "index": 60,
+   "spectral_class": "K"
+  },
+  {
+   "index": 61,
+   "spectral_class": "G"
+  },
+  {
+   "index": 62,
+   "spectral_class": "K"
+  },
+  {
+   "index": 63,
+   "spectral_class": "A"
+  },
+  {
+   "index": 64,
+   "spectral_class": "F"
+  },
+  {
+   "index": 65,
+   "spectral_class": "M"
+  },
+  {
+   "index": 66,
+   "spectral_class": "K"
+  },
+  {
+   "index": 67,
+   "spectral_class": "A"
+  },
+  {
+   "index": 68,
+   "spectral_class": "M"
+  },
+  {
+   "index": 69,
+   "spectral_class": "F"
+  },
+  {
+   "index": 70,
+   "spectral_class": "B"
+  },
+  {
+   "index": 71,
+   "spectral_class": "F"
+  },
+  {
+   "index": 72,
+   "spectral_class": "A"
+  },
+  {
+   "index": 73,
+   "spectral_class": "F"
+  },
+  {
+   "index": 74,
+   "spectral_class": "M"
+  },
+  {
+   "index": 75,
+   "spectral_class": "O"
+  },
+  {
+   "index": 76,
+   "spectral_class": "B"
+  },
+  {
+   "index": 77,
+   "spectral_class": "A"
+  },
+  {
+   "index": 78,
+   "spectral_class": "K"
+  },
+  {
+   "index": 79,
+   "spectral_class": "G"
+  }
+ ],
+ "special_bodies": [
+  "bh_01",
+  "bh_02",
+  "bh_03",
+  "ns_01",
+  "ns_02",
+  "ns_03"
+ ]
+}

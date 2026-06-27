@@ -1,0 +1,1 @@
+{"patches":[{"va":"0x006003f3","originalHex":"6a09","patchedHex":"6a01","note":"size pass drop MB_ERR_INVALID_CHARS"},{"va":"0x0060047c","originalHex":"6a09","patchedHex":"6a01","note":"restore pass drop MB_ERR_INVALID_CHARS"}]}

@@ -1,0 +1,65 @@
+{
+  "name": "window-dialog-native-layout",
+  "desc": "윈도우/다이얼로그 패널(data/image/window/window_par)(FUN_0051f8b0)을 1024x768 캔버스 좌표에서 1920x1080 네이티브 캔버스로 재배치. 레지스터-캐시/직접저장 좌표 즉치값을 X는 width 비율, Y는 height 비율로 정수 스케일. 캔버스 기준: 1024x768 lobby canvas. lobby-native-layout 계열의 네이티브 좌표 패치(스케일러 패치/레터박스 아님).",
+  "verified": "RE-CONFIRMED 사이트 + BYTE-검증 originalHex(pristine .omo/ghidra/bin/G7MTClient.exe). 좌표 즉치값 분배는 disasm으로 추적 확정. patchedHex는 1920x1080 후보(정수 truncation). originalVerified=True. verified=false: 위젯 X/Y 최종분류와 1920x1080 시각은 라이브 검증(메인 직렬) 필요.",
+  "verifiedFlag": false,
+  "canvasBasis": "1024x768 lobby canvas",
+  "patches": [
+    {
+      "va": "0x0051f8b9",
+      "fileOffsetHex": "0x11f8b9",
+      "originalHex": "b915000000",
+      "patchedHex": "b91d000000",
+      "axis": "Y",
+      "note": "라벨 y 21: 21 -> 29 (Y 1080/768)"
+    },
+    {
+      "va": "0x0051f8be",
+      "fileOffsetHex": "0x11f8be",
+      "originalHex": "be8e030000",
+      "patchedHex": "beaa060000",
+      "axis": "X",
+      "note": "x 910 (우측 끝): 910 -> 1706 (X 1920/1024)"
+    },
+    {
+      "va": "0x0051f8c3",
+      "fileOffsetHex": "0x11f8c3",
+      "originalHex": "baac000000",
+      "patchedHex": "ba42010000",
+      "axis": "X",
+      "note": "x 172: 172 -> 322 (X 1920/1024)"
+    },
+    {
+      "va": "0x0051f8c8",
+      "fileOffsetHex": "0x11f8c8",
+      "originalHex": "b845000000",
+      "patchedHex": "b861000000",
+      "axis": "Y",
+      "note": "y 69: 69 -> 97 (Y 1080/768)"
+    },
+    {
+      "va": "0x0051f8e9",
+      "fileOffsetHex": "0x11f8e9",
+      "originalHex": "b996010000",
+      "patchedHex": "b9f9020000",
+      "axis": "X",
+      "note": "x 406: 406 -> 761 (X 1920/1024)"
+    },
+    {
+      "va": "0x0051f90a",
+      "fileOffsetHex": "0x11f90a",
+      "originalHex": "be3e020000",
+      "patchedHex": "be34040000",
+      "axis": "X",
+      "note": "x 574: 574 -> 1076 (X 1920/1024)"
+    },
+    {
+      "va": "0x0051f917",
+      "fileOffsetHex": "0x11f917",
+      "originalHex": "bfd2000000",
+      "patchedHex": "bf27010000",
+      "axis": "Y",
+      "note": "y 210: 210 -> 295 (Y 1080/768)"
+    }
+  ]
+}

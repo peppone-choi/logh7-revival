@@ -1,0 +1,503 @@
+{
+  "_source": "gin7manual.pdf p75 部隊初期配置一覧表 (idx74, rotation=0). 좌표 재추출(PyMuPDF words 셀 빈닝, 좌x<300=帝国 우x>=300=同盟; fleet 병합셀=cell offset +3.8 페어 전파; range=～第N 연속행). 적대적검증 5/5 confirm-high (docs/logh7-content-verify-adversarial.md §B).",
+  "_extracted": "2026-06-19",
+  "_note": [
+    "구조: {imperial,alliance}.{fleet[],patrol[],ground[]}. fleet=unit키(병합셀은 페어 두 함대 모두 동일 system/planet). patrol/ground={from,to} 범위.",
+    "유닛카운트: 제국 fleet12/patrol59/ground60, 동맹 fleet12/patrol60/ground60.",
+    "제국 patrol 第48 = 매뉴얼 source gap(47→49 직행). 보존: 47-47 다음 49-49.",
+    "제국 patrol 第53~60 = 매뉴얼 system/planet 공란(note:blank in manual).",
+    "galaxy.json으로 system명 정규화, 매뉴얼 상이 표기는 system_raw/planet_raw로 보존.",
+    "요새(イゼルローン/ガイエスブルク/レンテンベルク/ガルミッシュ/ルドミラ)는 planet_type:fortress (content/fortresses.json 정합).",
+    "KNOWN MISMATCH: 제국 fleet/patrol에 フレイア/レンテンベルク 명시되나 galaxy.json フレイア 행성목록엔 レンテンベルク 부재 — 인쇄 그대로 기록(docs/logh7-manual-canon.md known cross-source mismatch)."
+  ],
+  "imperial": {
+    "fleet": [
+      {
+        "unit": 1,
+        "system": "ヴァルハラ",
+        "planet": "オーディン"
+      },
+      {
+        "unit": 2,
+        "system": "ヴァルハラ",
+        "planet": "オーディン"
+      },
+      {
+        "unit": 3,
+        "system": "アルテナ",
+        "planet": "ノイエンラーデ"
+      },
+      {
+        "unit": 4,
+        "system": "アムリッツァ",
+        "planet": "ハーフェン"
+      },
+      {
+        "unit": 5,
+        "system": "アムリッツァ",
+        "planet": "ハーフェン"
+      },
+      {
+        "unit": 6,
+        "system": "フレイア",
+        "planet": "レンテンベルク",
+        "planet_raw": "レンテンベルグ",
+        "planet_type": "fortress"
+      },
+      {
+        "unit": 7,
+        "system": "フレイア",
+        "planet": "レンテンベルク",
+        "planet_raw": "レンテンベルグ",
+        "planet_type": "fortress"
+      },
+      {
+        "unit": 8,
+        "system": "キフォイザー",
+        "planet": "ガルミッシュ",
+        "planet_type": "fortress"
+      },
+      {
+        "unit": 9,
+        "system": "キフォイザー",
+        "planet": "ガルミッシュ",
+        "planet_type": "fortress"
+      },
+      {
+        "unit": 10,
+        "system": "アイゼンヘルツ",
+        "planet": "ガイエスブルク",
+        "planet_raw": "ガイエスブルグ",
+        "planet_type": "fortress"
+      },
+      {
+        "unit": 11,
+        "system": "アイゼンヘルツ",
+        "planet": "ガイエスブルク",
+        "planet_raw": "ガイエスブルグ",
+        "planet_type": "fortress"
+      },
+      {
+        "unit": 12,
+        "system": "イゼルローン",
+        "planet": "イゼルローン",
+        "planet_type": "fortress"
+      }
+    ],
+    "patrol": [
+      {
+        "from": 1,
+        "to": 3,
+        "system": "ヴァルハラ",
+        "planet": "オーディン"
+      },
+      {
+        "from": 4,
+        "to": 5,
+        "system": "アルテナ",
+        "planet": "ナッハロート"
+      },
+      {
+        "from": 6,
+        "to": 6,
+        "system": "ニヴルヘイム",
+        "planet": "エリューズニル",
+        "system_raw": "ニブルヘイム"
+      },
+      {
+        "from": 7,
+        "to": 7,
+        "system": "ヴェルラ",
+        "planet": "シュテファニ"
+      },
+      {
+        "from": 8,
+        "to": 8,
+        "system": "シャンタウ",
+        "planet": "クネスドルフ"
+      },
+      {
+        "from": 9,
+        "to": 9,
+        "system": "アスガルド",
+        "planet": "トイトブルク"
+      },
+      {
+        "from": 10,
+        "to": 10,
+        "system": "ルイトポルディング",
+        "planet": "ルイトポルト",
+        "system_raw": "ルイトボルディング"
+      },
+      {
+        "from": 11,
+        "to": 13,
+        "system": "ヴィレンシュタイン",
+        "planet": "ヴァイセンホルン",
+        "system_raw": "ヴィレンンシュタイン"
+      },
+      {
+        "from": 14,
+        "to": 16,
+        "system": "リンダーホーフ",
+        "planet": "ホーエンシュヴァンガウ"
+      },
+      {
+        "from": 17,
+        "to": 19,
+        "system": "ヴァナヘイム",
+        "planet": "フレイ"
+      },
+      {
+        "from": 20,
+        "to": 22,
+        "system": "ヴィッテルスバッハ",
+        "planet": "ニュンフェンブルク",
+        "system_raw": "ヴィテルスバッハ"
+      },
+      {
+        "from": 23,
+        "to": 25,
+        "system": "ウォームスガウ",
+        "planet": "コンラート"
+      },
+      {
+        "from": 26,
+        "to": 28,
+        "system": "バルドル",
+        "planet": "フリングホルニ",
+        "system_raw": "バルドレ"
+      },
+      {
+        "from": 29,
+        "to": 31,
+        "system": "アムリッツァ",
+        "planet": "ハーフェン"
+      },
+      {
+        "from": 32,
+        "to": 34,
+        "system": "ビルロスト",
+        "planet": "ヘイムダル"
+      },
+      {
+        "from": 35,
+        "to": 37,
+        "system": "ヴァンステイド",
+        "planet": "ファルドガルデ"
+      },
+      {
+        "from": 38,
+        "to": 40,
+        "system": "ドヴェルグ",
+        "planet": "グレイプニル"
+      },
+      {
+        "from": 41,
+        "to": 43,
+        "system": "フレイア",
+        "planet": "レンテンベルク",
+        "planet_type": "fortress"
+      },
+      {
+        "from": 44,
+        "to": 46,
+        "system": "アイゼンヘルツ",
+        "planet": "ガイエスブルク",
+        "planet_type": "fortress"
+      },
+      {
+        "from": 47,
+        "to": 47,
+        "system": "フォルゲン",
+        "planet": "シュヴァンガウ"
+      },
+      {
+        "from": 49,
+        "to": 49,
+        "system": "キフォイザー",
+        "planet": "ガルミッシュ",
+        "planet_type": "fortress"
+      },
+      {
+        "from": 50,
+        "to": 52,
+        "system": "イゼルローン",
+        "planet": "イゼルローン",
+        "planet_type": "fortress"
+      },
+      {
+        "from": 53,
+        "to": 60,
+        "system": null,
+        "planet": null,
+        "note": "blank in manual"
+      }
+    ],
+    "ground": [
+      {
+        "from": 1,
+        "to": 10,
+        "system": "ヴァルハラ",
+        "planet": "オーディン"
+      },
+      {
+        "from": 11,
+        "to": 20,
+        "system": "ヴィレンシュタイン",
+        "planet": "ヴァイセンホルン"
+      },
+      {
+        "from": 21,
+        "to": 30,
+        "system": "ヴィッテルスバッハ",
+        "planet": "ニュンフェンブルク"
+      },
+      {
+        "from": 31,
+        "to": 40,
+        "system": "アムリッツァ",
+        "planet": "ハーフェン"
+      },
+      {
+        "from": 41,
+        "to": 50,
+        "system": "アイゼンヘルツ",
+        "planet": "ガイエスブルク",
+        "planet_raw": "ガイエスブルグ",
+        "planet_type": "fortress"
+      },
+      {
+        "from": 51,
+        "to": 60,
+        "system": "イゼルローン",
+        "planet": "イゼルローン",
+        "planet_type": "fortress"
+      }
+    ]
+  },
+  "alliance": {
+    "fleet": [
+      {
+        "unit": 1,
+        "system": "バーラト",
+        "planet": "ハイネセン"
+      },
+      {
+        "unit": 2,
+        "system": "バーラト",
+        "planet": "ハイネセン"
+      },
+      {
+        "unit": 3,
+        "system": "ポレヴィト",
+        "planet": "ルジアーナ"
+      },
+      {
+        "unit": 4,
+        "system": "ドーリア",
+        "planet": "ボルゲーゼ"
+      },
+      {
+        "unit": 5,
+        "system": "エル・ファシル",
+        "planet": "サンタ・アナ"
+      },
+      {
+        "unit": 6,
+        "system": "ドーリア",
+        "planet": "ボルゲーゼ"
+      },
+      {
+        "unit": 7,
+        "system": "ポレヴィト",
+        "planet": "ルジアーナ"
+      },
+      {
+        "unit": 8,
+        "system": "シュパーラ",
+        "planet": "シウダ・ロドリゴ"
+      },
+      {
+        "unit": 9,
+        "system": "エル・ファシル",
+        "planet": "サンタ・アナ"
+      },
+      {
+        "unit": 10,
+        "system": "ケリム",
+        "planet": "カッシナ"
+      },
+      {
+        "unit": 11,
+        "system": "シュパーラ",
+        "planet": "シウダ・ロドリゴ"
+      },
+      {
+        "unit": 12,
+        "system": "ケリム",
+        "planet": "カッシナ"
+      }
+    ],
+    "patrol": [
+      {
+        "from": 1,
+        "to": 5,
+        "system": "バーラト",
+        "planet": "ハイネセン"
+      },
+      {
+        "from": 6,
+        "to": 10,
+        "system": "リューカス",
+        "planet": "ヴァルミー"
+      },
+      {
+        "from": 11,
+        "to": 15,
+        "system": "ドーリア",
+        "planet": "ボルゲーゼ",
+        "planet_raw": "ボルゲーゼ"
+      },
+      {
+        "from": 16,
+        "to": 20,
+        "system": "ジャムシード",
+        "planet": "カッファー"
+      },
+      {
+        "from": 21,
+        "to": 25,
+        "system": "ケリム",
+        "planet": "カッシナ"
+      },
+      {
+        "from": 26,
+        "to": 30,
+        "system": "ロフォーテン",
+        "planet": "ルドミラ",
+        "planet_type": "fortress"
+      },
+      {
+        "from": 31,
+        "to": 35,
+        "system": "エル・ファシル",
+        "planet": "サンタ・アナ"
+      },
+      {
+        "from": 36,
+        "to": 40,
+        "system": "ポレヴィト",
+        "planet": "ルジアーナ"
+      },
+      {
+        "from": 41,
+        "to": 45,
+        "system": "メルカルト",
+        "planet": "ネルガル"
+      },
+      {
+        "from": 46,
+        "to": 49,
+        "system": "リオ・ヴェルデ",
+        "planet": "サン・カルロス"
+      },
+      {
+        "from": 50,
+        "to": 55,
+        "system": "シュパーラ",
+        "planet": "シウダ・ロドリゴ",
+        "system_raw": "シュバーラ"
+      },
+      {
+        "from": 56,
+        "to": 60,
+        "system": "ファラーファラ",
+        "planet": "ミセヌム"
+      }
+    ],
+    "ground": [
+      {
+        "from": 1,
+        "to": 5,
+        "system": "バーラト",
+        "planet": "ハイネセン"
+      },
+      {
+        "from": 6,
+        "to": 10,
+        "system": "リューカス",
+        "planet": "ヴァルミー"
+      },
+      {
+        "from": 11,
+        "to": 15,
+        "system": "ドーリア",
+        "planet": "ボルゲーゼ"
+      },
+      {
+        "from": 16,
+        "to": 20,
+        "system": "ジャムシード",
+        "planet": "カッファー"
+      },
+      {
+        "from": 21,
+        "to": 25,
+        "system": "ケリム",
+        "planet": "カッシナ"
+      },
+      {
+        "from": 26,
+        "to": 30,
+        "system": "ロフォーテン",
+        "planet": "ルドミラ",
+        "system_raw": "ロフォーデン",
+        "planet_type": "fortress"
+      },
+      {
+        "from": 31,
+        "to": 35,
+        "system": "エル・ファシル",
+        "planet": "サンタ・アナ",
+        "planet_raw": "サンア・アナ"
+      },
+      {
+        "from": 36,
+        "to": 40,
+        "system": "ポレヴィト",
+        "planet": "ルジアーナ"
+      },
+      {
+        "from": 41,
+        "to": 45,
+        "system": "メルカルト",
+        "planet": "ネルガル"
+      },
+      {
+        "from": 46,
+        "to": 50,
+        "system": "リオ・ヴェルデ",
+        "planet": "サン・カルロス"
+      },
+      {
+        "from": 51,
+        "to": 51,
+        "system": "シュパーラ",
+        "planet": "シウダ・ロドリゴ"
+      },
+      {
+        "from": 52,
+        "to": 55,
+        "system": "エル・ファシル",
+        "planet": "サンタ・アナ"
+      },
+      {
+        "from": 56,
+        "to": 60,
+        "system": "ファラーファラ",
+        "planet": "ミセヌム"
+      }
+    ]
+  }
+}

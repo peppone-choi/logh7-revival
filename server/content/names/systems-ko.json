@@ -1,0 +1,562 @@
+[
+  {
+    "jp": "ルンビーニ",
+    "romaji": "runbiini",
+    "ko": "룬비니",
+    "source": "db",
+    "confidence": 1.0
+  },
+  {
+    "jp": "シロン",
+    "romaji": "shiron",
+    "ko": "시론",
+    "source": "translit",
+    "confidence": 0.5
+  },
+  {
+    "jp": "エリューセラ",
+    "romaji": "eryuusera",
+    "ko": "에뤼세라",
+    "source": "db",
+    "confidence": 0.95
+  },
+  {
+    "jp": "タナトス",
+    "romaji": "tanatosu",
+    "ko": "타나투스",
+    "source": "db",
+    "confidence": 0.95
+  },
+  {
+    "jp": "リオ・ヴェルデ",
+    "romaji": "rio verude",
+    "ko": "리오.베르데",
+    "source": "db",
+    "confidence": 1.0
+  },
+  {
+    "jp": "ロフォーテン",
+    "romaji": "rofooten",
+    "ko": "로포덴",
+    "source": "db",
+    "confidence": 0.95
+  },
+  {
+    "jp": "バーラト",
+    "romaji": "baarato",
+    "ko": "바라트",
+    "source": "db",
+    "confidence": 0.95
+  },
+  {
+    "jp": "ファラーファラ",
+    "romaji": "faraafara",
+    "ko": "팔라팔라",
+    "source": "translit",
+    "confidence": 0.7
+  },
+  {
+    "jp": "ケリム",
+    "romaji": "kerimu",
+    "ko": "케림",
+    "source": "db",
+    "confidence": 0.95
+  },
+  {
+    "jp": "ポリスーン",
+    "romaji": "porisuun",
+    "ko": "폴리순",
+    "source": "translit",
+    "confidence": 0.7
+  },
+  {
+    "jp": "ライガール",
+    "romaji": "raigaaru",
+    "ko": "라이갈",
+    "source": "db",
+    "confidence": 0.95
+  },
+  {
+    "jp": "バーミリオン",
+    "romaji": "baamirion",
+    "ko": "버밀리언",
+    "source": "db",
+    "confidence": 0.923
+  },
+  {
+    "jp": "リューカス",
+    "romaji": "ryuukasu",
+    "ko": "뤼카스",
+    "source": "db",
+    "confidence": 0.95
+  },
+  {
+    "jp": "マローヴィア",
+    "romaji": "maroovia",
+    "ko": "마로비아",
+    "source": "translit",
+    "confidence": 0.7
+  },
+  {
+    "jp": "ハダト",
+    "romaji": "hadato",
+    "ko": "하다트",
+    "source": "translit",
+    "confidence": 0.7
+  },
+  {
+    "jp": "ジャムシード",
+    "romaji": "jamushiido",
+    "ko": "잠시드",
+    "source": "db",
+    "confidence": 0.95
+  },
+  {
+    "jp": "トリプラ",
+    "romaji": "toripura",
+    "ko": "트리플라",
+    "source": "db",
+    "confidence": 0.897
+  },
+  {
+    "jp": "タッシリ",
+    "romaji": "tasshiri",
+    "ko": "타시리",
+    "source": "db",
+    "confidence": 1.0
+  },
+  {
+    "jp": "シュパーラ",
+    "romaji": "shupaara",
+    "ko": "슈파라",
+    "source": "db",
+    "confidence": 1.0
+  },
+  {
+    "jp": "ドーリア",
+    "romaji": "dooria",
+    "ko": "도리아",
+    "source": "db",
+    "confidence": 1.0
+  },
+  {
+    "jp": "シヴァ",
+    "romaji": "shiva",
+    "ko": "시바",
+    "source": "db",
+    "confidence": 1.0
+  },
+  {
+    "jp": "エル・ファシル",
+    "romaji": "eru fashiru",
+    "ko": "엘.파실",
+    "source": "db",
+    "confidence": 0.95
+  },
+  {
+    "jp": "ガンダルヴァ",
+    "romaji": "gandaruva",
+    "ko": "간달바",
+    "source": "db",
+    "confidence": 0.95
+  },
+  {
+    "jp": "ランテマリオ",
+    "romaji": "rantemario",
+    "ko": "란테마리오",
+    "source": "db",
+    "confidence": 1.0
+  },
+  {
+    "jp": "メルカルト",
+    "romaji": "merukaruto",
+    "ko": "메르카르트",
+    "source": "translit",
+    "confidence": 0.7
+  },
+  {
+    "jp": "エルゴン",
+    "romaji": "erugon",
+    "ko": "엘곤",
+    "source": "db",
+    "confidence": 0.95
+  },
+  {
+    "jp": "マル・アデッタ",
+    "romaji": "maru adetta",
+    "ko": "말.아뎃타",
+    "source": "db",
+    "confidence": 0.95
+  },
+  {
+    "jp": "バラトループ",
+    "romaji": "baratoruupu",
+    "ko": "바라투르프",
+    "source": "db",
+    "confidence": 0.95
+  },
+  {
+    "jp": "シャンダルーア",
+    "romaji": "shandaruua",
+    "ko": "샨다르아",
+    "source": "db",
+    "confidence": 1.0
+  },
+  {
+    "jp": "ダゴン",
+    "romaji": "dagon",
+    "ko": "다곤",
+    "source": "db",
+    "confidence": 1.0
+  },
+  {
+    "jp": "ティアマト",
+    "romaji": "tiamato",
+    "ko": "티아매트",
+    "source": "db",
+    "confidence": 0.95
+  },
+  {
+    "jp": "ドラゴニア",
+    "romaji": "doragonia",
+    "ko": "드라고니아",
+    "source": "translit",
+    "confidence": 0.7
+  },
+  {
+    "jp": "フォルセティ",
+    "romaji": "foruseti",
+    "ko": "폴세티",
+    "source": "db",
+    "confidence": 0.95
+  },
+  {
+    "jp": "アスターテ",
+    "romaji": "asutaate",
+    "ko": "아스타테",
+    "source": "db",
+    "confidence": 1.0
+  },
+  {
+    "jp": "ファイアザード",
+    "romaji": "faiazaado",
+    "ko": "파이어저드",
+    "source": "db",
+    "confidence": 0.95
+  },
+  {
+    "jp": "ポレヴィト",
+    "romaji": "porevito",
+    "ko": "포레비트",
+    "source": "db",
+    "confidence": 0.95
+  },
+  {
+    "jp": "アルレスハイム",
+    "romaji": "aruresuhaimu",
+    "ko": "아레스하임",
+    "source": "db",
+    "confidence": 0.95
+  },
+  {
+    "jp": "パランティア",
+    "romaji": "parantia",
+    "ko": "팔란티아",
+    "source": "db",
+    "confidence": 1.0
+  },
+  {
+    "jp": "アルトミュール",
+    "romaji": "arutomyuuru",
+    "ko": "아루토뮤루",
+    "source": "translit",
+    "confidence": 0.5
+  },
+  {
+    "jp": "ヴァンフリート",
+    "romaji": "vanfuriito",
+    "ko": "밴플리트",
+    "source": "db",
+    "confidence": 0.95
+  },
+  {
+    "jp": "フェザーン",
+    "romaji": "fezaan",
+    "ko": "페잔",
+    "source": "db",
+    "confidence": 1.0
+  },
+  {
+    "jp": "イゼルローン",
+    "romaji": "izeruroon",
+    "ko": "이제르론",
+    "source": "db",
+    "confidence": 1.0
+  },
+  {
+    "jp": "アイゼンヘルツ",
+    "romaji": "aizenherutsu",
+    "ko": "아이젠헤르츠",
+    "source": "db",
+    "confidence": 0.95
+  },
+  {
+    "jp": "アムリッツァ",
+    "romaji": "amurittsa",
+    "ko": "암릿처",
+    "source": "db",
+    "confidence": 0.919
+  },
+  {
+    "jp": "フォルゲン",
+    "romaji": "forugen",
+    "ko": "포르겐",
+    "source": "db",
+    "confidence": 1.0
+  },
+  {
+    "jp": "ヨーツンヘイム",
+    "romaji": "yootsunheimu",
+    "ko": "요툰하임",
+    "source": "db",
+    "confidence": 0.95
+  },
+  {
+    "jp": "ヴァンステイド",
+    "romaji": "vansuteido",
+    "ko": "반스테이도",
+    "source": "translit",
+    "confidence": 0.5
+  },
+  {
+    "jp": "ビルロスト",
+    "romaji": "birurosuto",
+    "ko": "비루로스토",
+    "source": "translit",
+    "confidence": 0.5
+  },
+  {
+    "jp": "アルメントフベール",
+    "romaji": "arumentofubeeru",
+    "ko": "알멘트푸벨",
+    "source": "db",
+    "confidence": 0.93
+  },
+  {
+    "jp": "トラーバッハ",
+    "romaji": "toraabahha",
+    "ko": "트라바흐",
+    "source": "db",
+    "confidence": 0.95
+  },
+  {
+    "jp": "ブラウンシュヴァイク",
+    "romaji": "buraunshuvaiku",
+    "ko": "브라운슈배크",
+    "source": "db",
+    "confidence": 0.924
+  },
+  {
+    "jp": "ボルソルン",
+    "romaji": "borusorun",
+    "ko": "보르소른",
+    "source": "db",
+    "confidence": 0.98
+  },
+  {
+    "jp": "ドヴェルグ",
+    "romaji": "doverugu",
+    "ko": "드벨그",
+    "source": "db",
+    "confidence": 0.95
+  },
+  {
+    "jp": "アルタイル",
+    "romaji": "arutairu",
+    "ko": "알타이르",
+    "source": "translit",
+    "confidence": 0.7
+  },
+  {
+    "jp": "フレイア",
+    "romaji": "fureia",
+    "ko": "프레이아",
+    "source": "db",
+    "confidence": 1.0
+  },
+  {
+    "jp": "ヤヴァンハール",
+    "romaji": "yavanhaaru",
+    "ko": "야반하르",
+    "source": "db",
+    "confidence": 0.98
+  },
+  {
+    "jp": "キフォイザー",
+    "romaji": "kifoizaa",
+    "ko": "키포이저",
+    "source": "db",
+    "confidence": 0.95
+  },
+  {
+    "jp": "アルヴィース",
+    "romaji": "aruviisu",
+    "ko": "아르비스",
+    "source": "db",
+    "confidence": 0.98
+  },
+  {
+    "jp": "太陽系",
+    "romaji": "太陽系",
+    "ko": "태양계",
+    "source": "translit",
+    "confidence": 0.7
+  },
+  {
+    "jp": "バルドル",
+    "romaji": "barudoru",
+    "ko": "발드르",
+    "source": "translit",
+    "confidence": 0.7
+  },
+  {
+    "jp": "リンダーホーフ",
+    "romaji": "rindaahoofu",
+    "ko": "린더호프",
+    "source": "translit",
+    "confidence": 0.7
+  },
+  {
+    "jp": "シリウス",
+    "romaji": "shiriusu",
+    "ko": "시리우스",
+    "source": "translit",
+    "confidence": 0.7
+  },
+  {
+    "jp": "ヴェガ",
+    "romaji": "vega",
+    "ko": "베가",
+    "source": "translit",
+    "confidence": 0.7
+  },
+  {
+    "jp": "アルテナ",
+    "romaji": "arutena",
+    "ko": "알테너",
+    "source": "db",
+    "confidence": 0.95
+  },
+  {
+    "jp": "リッテンハイム",
+    "romaji": "rittenhaimu",
+    "ko": "리텐하임",
+    "source": "db",
+    "confidence": 0.95
+  },
+  {
+    "jp": "ヴェルラ",
+    "romaji": "verura",
+    "ko": "베루라",
+    "source": "translit",
+    "confidence": 0.5
+  },
+  {
+    "jp": "ヴィレンシュタイン",
+    "romaji": "virenshutain",
+    "ko": "빌렌슈타인",
+    "source": "db",
+    "confidence": 1.0
+  },
+  {
+    "jp": "ハインスベルク",
+    "romaji": "hainsuberuku",
+    "ko": "하인스베루쿠",
+    "source": "translit",
+    "confidence": 0.5
+  },
+  {
+    "jp": "ヴァルデマール",
+    "romaji": "varudemaaru",
+    "ko": "발데마르",
+    "source": "translit",
+    "confidence": 0.7
+  },
+  {
+    "jp": "ヴァルハラ",
+    "romaji": "varuhara",
+    "ko": "발할라",
+    "source": "db",
+    "confidence": 0.95
+  },
+  {
+    "jp": "シャンタウ",
+    "romaji": "shantau",
+    "ko": "샨타우",
+    "source": "db",
+    "confidence": 1.0
+  },
+  {
+    "jp": "ニヴルヘイム",
+    "romaji": "nivuruheimu",
+    "ko": "니플헤임",
+    "source": "translit",
+    "confidence": 0.7
+  },
+  {
+    "jp": "ランメルスベルク",
+    "romaji": "ranmerusuberuku",
+    "ko": "람멜스베르크",
+    "source": "translit",
+    "confidence": 0.7
+  },
+  {
+    "jp": "カストロプ",
+    "romaji": "kasutoropu",
+    "ko": "카스트로프",
+    "source": "db",
+    "confidence": 0.95
+  },
+  {
+    "jp": "アスガルド",
+    "romaji": "asugarudo",
+    "ko": "아스가르드",
+    "source": "translit",
+    "confidence": 0.7
+  },
+  {
+    "jp": "ヴァナヘイム",
+    "romaji": "vanaheimu",
+    "ko": "바나헤임",
+    "source": "translit",
+    "confidence": 0.7
+  },
+  {
+    "jp": "ヴィッテルスバッハ",
+    "romaji": "vitterusubahha",
+    "ko": "비텔스바흐",
+    "source": "translit",
+    "confidence": 0.7
+  },
+  {
+    "jp": "ルイトポルディング",
+    "romaji": "ruitoporudingu",
+    "ko": "루이트폴딩",
+    "source": "translit",
+    "confidence": 0.7
+  },
+  {
+    "jp": "ヴィンスティンゲン",
+    "romaji": "vinsutingen",
+    "ko": "빈스팅겐",
+    "source": "translit",
+    "confidence": 0.7
+  },
+  {
+    "jp": "ウォームスガウ",
+    "romaji": "woomusugau",
+    "ko": "웜스가우",
+    "source": "translit",
+    "confidence": 0.7
+  }
+]

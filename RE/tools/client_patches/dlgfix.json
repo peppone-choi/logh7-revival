@@ -1,0 +1,9 @@
+{
+  "name": "dlgfix",
+  "desc": "Repoint the two generic-dialog confirm-button labels in FUN_0056ebf0 away from constmsg group 103 (login-error strings '로그인에 실패했습니다.'/'버전이 다릅니다.') to group 98 ('결정'/'취소'). Same-length imm8 0x67->0x62. Index pushes already match. No constmsg/data change.",
+  "verified": "applied; not yet live-verified",
+  "patches": [
+    { "va": "0x0056f304", "originalHex": "6a67", "patchedHex": "6a62", "note": "button6 group 0x67->0x62: login-fail (g103/0) -> 결정 (g98/0)" },
+    { "va": "0x0056f39a", "originalHex": "6a67", "patchedHex": "6a62", "note": "button7 group 0x67->0x62: version-diff (g103/1) -> 취소 (g98/1)" }
+  ]
+}

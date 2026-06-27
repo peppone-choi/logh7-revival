@@ -2,28 +2,36 @@
 
 Tool: `tools/logh7_string_txt_index.py`
 Output: `content/extracted/strings-index.json` + `content/extracted/strings-names.json`
-Source: `.omo/work/logh7-installed/exe/String.txt` (cp932 / Shift-JIS; client renders via GDI ANSI)
-Date: 2026-06-14
+Source: `.omo/work/logh7-installed/exe/String.txt` (active runtime fragment: CP949)
+Date: 2026-06-16
 
 ## Key finding
 
 The `String.txt` present in the installed tree (`exe/String.txt`) is **NOT** the
 ~43,000-string master name/string table referenced in project memory
-(`logh7-client-data-map`). It is a **927-byte, 127-line UI-string fragment** —
-a developer data-dump file whose first line is the literal marker `吸出し start`
+(`logh7-client-data-map`). The current active file is an **873-byte localized
+runtime fragment**; the original reference backup is a **927-byte, 127-line
+CP932 UI-string fragment** whose first line is the literal marker `吸出し start`
 (JP *suidashi* = "extract/dump start").
 
-- `String.txt` is **byte-identical** to `String.txt.original` (927 B each). No
-  Korean localization has been applied to this file yet; both are cp932 JP.
+- Active runtime file: `.omo/work/logh7-installed/exe/String.txt`, CP949,
+  `_runtimeStringKind = localized-runtime-fragment`, 873 bytes.
+- Backup parity: active file is byte-identical to the current installed backup
+  (`_diff_vs_backup.byte_identical = true`, installed/backup 873 B each).
+- Original reference: `.omo/work/logh7-installed/exe/String.txt.jpbak`, CP932,
+  927 bytes, 127 decoded records, first record `吸出し start`.
 - The ~43K figure in memory came from a survey across *many* client data files
   (`String.txt` + `constmsg.dat` + MsgDat + model rosters), and/or a fuller
   original `String.txt` that is **not present** in this installed tree. The
   honest content of the file we have is enumerated below.
+- This file is **not** a character naming table. `strings-names.json` is
+  intentionally empty (`names = 0`).
 
 ## Structure of the fragment
 
-128 newline-separated entries (127 kept; trailing newline dropped). Only **13
-unique** string values. Layout = a 40-entry UI block repeated 3× plus a header:
+The CP932 original reference has 128 newline-separated entries (127 kept;
+trailing newline dropped). Only **13 unique** string values. Layout = a 40-entry
+UI block repeated 3x plus a header:
 
 | Line(s) | Content | Category |
 |---|---|---|
@@ -42,7 +50,7 @@ unique** string values. Layout = a 40-entry UI block repeated 3× plus a header:
 
 ## Counts (returned to orchestrator)
 
-- `records` (all strings) = **127**
+- `records` (original reference strings) = **127**
 - `names` (character/ship/system/planet/faction/rank/post) = **0**
 - unique texts = 13
 - by category: `other` 84, `ui_label` 37, `message_template` 6

@@ -28,14 +28,19 @@ a family doc, not yet coded; **todo** = code/size confirmed, body layout inferre
 | 0x201 | SSLoginOK | S→C | 0x102 | done | login-protocol |
 | 0x202 | SSLoginNG | S→C | — | done | login-protocol |
 | 0x204 | SSCharacterIDResponce | S→C | — | done | login-protocol |
-| 0x206 | SSGameLoginOK | S→C | 0x108 | done | login-protocol |
-| 0x207 | GlobalChat | bidir | — | spec'd | social-account |
+| 0x206 | SSGameLoginOK | S→C | 1 | done | login-protocol |
+| 0x207 | GlobalChat | bidir | 0x108 | spec'd | social-account |
 | 0x2000–0x200b | Lobby* | bidir | — | done | login-protocol |
 | 0x7001 | LGLoginOK | S→C | — | done | login-protocol |
 | 0x7002 | LGLoginNG | S→C | — | done | login-protocol |
 | 0x301 | ResponseTime | S→C | — | done | login-protocol |
 
 ### Static / read-model info records (internal-affairs data — §4)
+
+> Live-client note (2026-06-17): `0x305/0x307` below are static read-model candidates. The active
+> conn3 world-login `0x0304->0x0305` / `0x0306->0x0307` bodies observed by `FUN_004ba2b0` are
+> InformationSession/InformationCharacter-style data, not the duty-card command table. Do not bind
+> the static builders to that walker path without fresh runtime evidence.
 
 | Code | Class | Dir | Size | Status | Doc |
 |---|---|---|---|---|---|

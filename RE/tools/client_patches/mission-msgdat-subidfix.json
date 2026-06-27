@@ -1,0 +1,19 @@
+{
+  "name": "mission-msgdat-subidfix",
+  "desc": "Fix FUN_0054f680 mission-selection UI lookups that request constmsg group 0x6a with enum-biased subIds 0x09..0x15. Group 0x6a is source-backed as six mission labels only, so the UI must render subIds 0..5 and only build six rows.",
+  "verified": "RE: FUN_0054f680 fills DAT_02221e14 for the mission selector, FUN_00550a00 consumes that local text array for two selected mission labels, and FUN_004afd90 bounds mission selection to values <7. MsgDat source: original JP constmsg group 0x6a has 防衛任務/占領任務/迎撃任務/偵察任務/遊撃任務/撤退任務 and KO overlay has 방위 임무/점령 임무/요격 임무/정찰 임무/유격 임무/철퇴 임무. Live trace g006-msgdat-lookup-final-v2 showed the invalid 0x6a subIds 0x09..0x15 as the visible left mission-list NO DATA path.",
+  "patches": [
+    { "va": "0x0054f843", "originalHex": "09", "patchedHex": "00", "note": "FUN_0054f680 mission row fill: use subId i, not i+9" },
+    { "va": "0x0054f868", "originalHex": "81fe14252202", "patchedHex": "81fe14242202", "note": "FUN_0054f680 mission row fill: stop after six source-backed labels" },
+    { "va": "0x0054f922", "originalHex": "6a10", "patchedHex": "6a00", "note": "FUN_0054f680 mission label 0x10 -> group 0x6a subId 0" },
+    { "va": "0x0054f9c4", "originalHex": "6a11", "patchedHex": "6a01", "note": "FUN_0054f680 mission label 0x11 -> group 0x6a subId 1" },
+    { "va": "0x0054fa66", "originalHex": "6a12", "patchedHex": "6a02", "note": "FUN_0054f680 mission label 0x12 -> group 0x6a subId 2" },
+    { "va": "0x0054fb15", "originalHex": "6a13", "patchedHex": "6a03", "note": "FUN_0054f680 mission label 0x13 -> group 0x6a subId 3" },
+    { "va": "0x0054fbb7", "originalHex": "6a14", "patchedHex": "6a04", "note": "FUN_0054f680 mission label 0x14 -> group 0x6a subId 4" },
+    { "va": "0x0054fc55", "originalHex": "6a15", "patchedHex": "6a05", "note": "FUN_0054f680 mission label 0x15 -> group 0x6a subId 5" },
+    { "va": "0x0054fec0", "originalHex": "3d14252202", "patchedHex": "3d14242202", "note": "FUN_0054f680 first mission list: add six rows only" },
+    { "va": "0x0054ffa1", "originalHex": "6a09", "patchedHex": "6a00", "note": "FUN_0054f680 first mission selector initial label -> group 0x6a subId 0" },
+    { "va": "0x00550101", "originalHex": "3d14252202", "patchedHex": "3d14242202", "note": "FUN_0054f680 second mission list: add six rows only" },
+    { "va": "0x005501e2", "originalHex": "6a09", "patchedHex": "6a00", "note": "FUN_0054f680 second mission selector initial label -> group 0x6a subId 0" }
+  ]
+}

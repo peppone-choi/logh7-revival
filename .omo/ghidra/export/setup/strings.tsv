@@ -1,0 +1,923 @@
+0x00410517	QLocalServer32
+0x00410528	ThreadingModel
+0x00410538	Apartment
+0x0041054c	InprocServer32
+0x0041055c	AUTPRX32.DLL
+0x0041056c	VersionIndependentProgID
+0x00410588	ProgID
+0x00410abe	VerInstallFileA
+0x00410ad0	VerQueryValueA
+0x00410ae2	GetFileVersionInfoA
+0x00410af8	GetFileVersionInfoSizeA
+0x00410b10	VERSION.dll
+0x00410b1e	CreateDirectoryA
+0x00410b32	GetModuleFileNameA
+0x00410b48	CreateFileA
+0x00410b56	InterlockedIncrement
+0x00410b6e	InterlockedDecrement
+0x00410b86	QueryPerformanceFrequency
+0x00410ba2	CreateEventA
+0x00410bb2	CloseHandle
+0x00410bc0	WriteFile
+0x00410bcc	Sleep
+0x00410bd4	ReadFile
+0x00410be0	MultiByteToWideChar
+0x00410bf6	GetPrivateProfileStringA
+0x00410c12	GetPrivateProfileIntA
+0x00410c2a	WideCharToMultiByte
+0x00410c40	lstrlenW
+0x00410c4c	lstrcmpiA
+0x00410c58	SetLastError
+0x00410c68	GetLastError
+0x00410c78	lstrlenA
+0x00410c84	CompareStringA
+0x00410c96	CompareStringW
+0x00410ca8	GetVersionExA
+0x00410cb8	DeleteFileA
+0x00410cc6	GetTempPathA
+0x00410cd6	GetWindowsDirectoryA
+0x00410cee	GetTickCount
+0x00410cfe	GetFileAttributesA
+0x00410d14	GetTempFileNameA
+0x00410d28	GlobalUnlock
+0x00410d38	GlobalLock
+0x00410d46	GlobalAlloc
+0x00410d54	GlobalFree
+0x00410d62	lstrcpyA
+0x00410d6e	LockResource
+0x00410d7e	LoadResource
+0x00410d8e	FindResourceA
+0x00410d9e	GetModuleHandleA
+0x00410db2	SetErrorMode
+0x00410dc2	FreeLibrary
+0x00410dd0	RemoveDirectoryA
+0x00410de4	LeaveCriticalSection
+0x00410dfc	EnterCriticalSection
+0x00410e14	CreateThread
+0x00410e24	CreateMutexA
+0x00410e34	WaitForSingleObject
+0x00410e4a	ReleaseMutex
+0x00410e5a	InitializeCriticalSection
+0x00410e76	DeleteCriticalSection
+0x00410e8e	SetEvent
+0x00410e9a	OpenEventA
+0x00410ea8	CreateProcessA
+0x00410eba	GetCurrentThreadId
+0x00410ed0	HeapAlloc
+0x00410edc	GetSystemInfo
+0x00410eec	HeapCreate
+0x00410efa	lstrcpynA
+0x00410f06	lstrcatA
+0x00410f12	WritePrivateProfileStringA
+0x00410f30	FindClose
+0x00410f3c	FindFirstFileA
+0x00410f4e	SetFilePointer
+0x00410f60	GetProcAddress
+0x00410f72	LoadLibraryA
+0x00410f82	GetShortPathNameA
+0x00410f96	GetSystemDefaultLangID
+0x00410fb0	MoveFileA
+0x00410fbc	FindResourceExA
+0x00410fce	GetFileSize
+0x00410fdc	HeapDestroy
+0x00410fea	UnmapViewOfFile
+0x00410ffc	MapViewOfFile
+0x0041100c	CreateFileMappingA
+0x00411022	SizeofResource
+0x00411034	GetStartupInfoA
+0x00411046	ExitProcess
+0x00411054	GetCommandLineA
+0x00411066	DebugBreak
+0x00411074	HeapReAlloc
+0x00411082	HeapFree
+0x0041108e	VirtualQuery
+0x0041109e	VirtualProtect
+0x004110b0	SearchPathA
+0x004110be	ResetEvent
+0x004110cc	QueryPerformanceCounter
+0x004110e6	SystemTimeToFileTime
+0x004110fe	lstrcmpA
+0x0041110a	GetCurrentProcess
+0x0041111e	GetCurrentThread
+0x00411132	GetVersion
+0x00411140	IsBadReadPtr
+0x0041114e	KERNEL32.dll
+0x0041115e	GetDesktopWindow
+0x00411172	wsprintfA
+0x0041117e	CharLowerA
+0x0041118c	SetWindowPos
+0x0041119c	SystemParametersInfoA
+0x004111b4	GetWindowRect
+0x004111c4	LoadIconA
+0x004111d0	SetDlgItemTextA
+0x004111e2	SendMessageA
+0x004111f2	GetDlgItem
+0x00411200	SetWindowTextA
+0x00411212	EndDialog
+0x0041121e	ShowWindow
+0x0041122c	SetActiveWindow
+0x0041123e	DialogBoxIndirectParamA
+0x00411258	SetWindowRgn
+0x00411268	SetTimer
+0x00411274	GetWindowTextA
+0x00411286	DestroyWindow
+0x00411296	KillTimer
+0x004112a2	MoveWindow
+0x004112b0	ScreenToClient
+0x004112c2	ReleaseDC
+0x004112ce	GetDC
+0x004112d6	DispatchMessageA
+0x004112ea	TranslateMessage
+0x004112fe	IsDialogMessageA
+0x00411312	GetMessageA
+0x00411320	CreateDialogIndirectParamA
+0x0041133e	PostThreadMessageA
+0x00411354	CharUpperA
+0x00411362	PeekMessageA
+0x00411372	MsgWaitForMultipleObjects
+0x0041138e	LoadStringA
+0x0041139c	CharNextA
+0x004113a8	CharLowerBuffA
+0x004113b8	USER32.dll
+0x004113c6	CreateFontIndirectA
+0x004113dc	GetObjectA
+0x004113ea	DeleteObject
+0x004113fa	LPtoDP
+0x00411404	GetTextExtentPoint32A
+0x0041141a	GDI32.dll
+0x00411426	RegCloseKey
+0x00411434	RegOpenKeyExA
+0x00411444	RegSetValueExA
+0x00411456	RegCreateKeyExA
+0x00411468	RegQueryValueExA
+0x0041147c	RegDeleteKeyA
+0x0041148c	RegEnumKeyExA
+0x0041149c	RegOpenKeyA
+0x004114aa	RegQueryValueA
+0x004114bc	FreeSid
+0x004114c6	EqualSid
+0x004114d2	AllocateAndInitializeSid
+0x004114ee	GetTokenInformation
+0x00411504	OpenProcessToken
+0x00411518	OpenThreadToken
+0x00411528	ADVAPI32.dll
+0x00411538	CoUninitialize
+0x0041154a	CoGetInterfaceAndReleaseStream
+0x0041156c	CoInitialize
+0x0041157c	CoReleaseMarshalData
+0x00411594	CoMarshalInterThreadInterfaceInStream
+0x004115bc	CoTaskMemAlloc
+0x004115ce	GetRunningObjectTable
+0x004115e6	StringFromGUID2
+0x004115f8	CoTaskMemFree
+0x00411608	StringFromCLSID
+0x0041161a	CoRegisterClassObject
+0x00411632	CoRevokeClassObject
+0x00411648	CoCreateInstance
+0x0041165c	CoCreateGuid
+0x0041166a	ole32.dll
+0x00411674	OLEAUT32.dll
+0x00411684	LZClose
+0x0041168e	LZCopy
+0x00411698	LZOpenFileA
+0x004116a4	LZ32.dll
+0x00412000	ispro7
+0x00412010	setup.ini
+0x00412024	toys::file_lite
+0x00412034	https://
+0x00412048	http://
+0x0041205c	Startup
+0x00412064	cmdline
+0x0041206c	RequireExactLangMatch
+0x00412084	Default
+0x0041208c	0x0009
+0x00412094	key%d
+0x0041209c	count
+0x004120a4	Languages
+0x004120b0	DontUseManifest
+0x004120d8	HideWaitDlg
+0x004120ec	temp
+0x004120f8	123.tmp
+0x00412110	file://
+0x00412120	ftp://
+0x00412130	%s%d.tmp
+0x0041213c	InstallShield Wizard
+0x0041215c	MS UI Gothic
+0x0041217c	is::CmdLine
+0x00412194	%s\_isdelet.ini
+0x004121a4	setup.ethermk:
+0x004121cc	What are the odds that some idiot will name his mutex ether-rot-mutex!
+0x00412270	http://www.installengine.com/oci_range_check.txt
+0x004122a4	proxy
+0x00412368	SetupEx.dll
+0x0041238e	\r\rSetup.Player.2K2
+0x004123a4	Setup.Player
+0x004123b4	Apartment
+0x004123c0	ThreadingModel
+0x004123d0	InprocServer32
+0x004123e0	CLSID
+0x004123f0	installfromweb:
+0x00412410	clone_of
+0x00412424	delayedstart:
+0x00412440	clone_nowait
+0x0041245c	unregserver
+0x00412474	regserver
+0x00412488	embedding
+0x0041249c	deleter
+0x004124ac	MediaEngineDir
+0x004124bc	EngineDir
+0x004124c8	Folder%d
+0x004124d4	FolderCount
+0x004124e0	Files
+0x004124e8	File%d
+0x004124f0	INSTALLSHIELD
+0x0041250c	INSTAL~
+0x0041251c	 -deleter %s
+0x0041252c	setup.boot
+0x00412544	engine32.cab
+0x00412560	Disk1
+0x00412568	%s -package
+0x00412574	byeP
+0x00412580	ISPackFiles.ini
+0x00412594	extract_all:
+0x004125b8	data1.cab
+0x004125d4	Start
+0x004125dc	SetThemeAppProperties
+0x004125f4	uxtheme.dll
+0x00412600	UseXPTheme
+0x0041260c	Locale
+0x00412614	.DEFAULT\Control Panel\International
+0x0041263c	.Default\Control Panel\desktop\ResourceLocale
+0x0041266c	FindCorrectLauncher
+0x00412680	PUBLICKEY
+0x0041268c	ResponseResult
+0x0041269c	ResultCode
+0x004126b0	Log File
+0x004126bc	Version
+0x004126c8	InstallShield Silent
+0x004126e4	setupexe.log
+0x004126f4	UnRegisterTypeLib
+0x00412708	oleaut32.dll
+0x0041278f	zDelete
+0x00412798	NoRemove
+0x004127a4	ForceRemove
+0x004127c0	InternetSetStatusCallback
+0x004127dc	InternetSetStatusCallbackA
+0x004127f8	InternetSetCookieA
+0x0041280c	InternetGetCookieA
+0x00412820	InternetCanonicalizeUrlA
+0x0041283c	InternetQueryDataAvailable
+0x00412858	InternetQueryOptionA
+0x00412870	HttpEndRequestA
+0x00412880	HttpSendRequestExA
+0x00412894	HttpSendRequestA
+0x004128a8	HttpOpenRequestA
+0x004128bc	InternetErrorDlg
+0x004128d0	InternetAutodial
+0x004128e4	InternetGetConnectedState
+0x00412900	InternetSetOptionA
+0x00412914	InternetGetLastResponseInfoA
+0x00412934	FtpFindFirstFileA
+0x00412948	HttpQueryInfoA
+0x00412958	InternetReadFile
+0x0041296c	InternetCloseHandle
+0x00412980	InternetCreateUrlA
+0x00412994	InternetCrackUrlA
+0x004129a8	InternetConnectA
+0x004129bc	InternetOpenUrlA
+0x004129d0	InternetOpenA
+0x004129e0	wininet.dll
+0x004129ec	RPAWINET.DLL
+0x004129fc	AutoConfigURL
+0x00412a0c	ProxyEnable
+0x00412a18	Software\Microsoft\Windows\CurrentVersion\Internet Settings
+0x00412a54	%d.%d.%d.%d
+0x00412a60	iexplore.exe
+0x00412a78	Browser
+0x00412a80	PackageName
+0x00412a8c	\mozver.dat
+0x00412a98	netscp6.exe
+0x00412aa4	netscape.exe
+0x00412ab4	\shell\open\command
+0x00412ad8	FTP_ProxyPort
+0x00412ae8	FTP_Proxy
+0x00412afc	HTTPS_ProxyPort
+0x00412b0c	HTTPS_Proxy
+0x00412b18	https=
+0x00412b20	HTTP_ProxyPort
+0x00412b30	HTTP_Proxy
+0x00412b3c	http=
+0x00412b44	Proxy Type
+0x00412b50	SOFTWARE\Netscape\Netscape Navigator\Proxy Information
+0x00412b88	\prefs.js
+0x00412b94	ProfileLocation
+0x00412ba4	ProfileManager
+0x00412bb8	SOFTWARE\Netscape\Netscape Navigator\biff
+0x00412be4	\nsreg.dat
+0x00412bf0	DirRoot
+0x00412bf8	CurrentUser
+0x00412c04	SOFTWARE\Netscape\Netscape Navigator\Users\
+0x00412c30	directory
+0x00412c3c	CurrentProfile
+0x00412c4c	\Mozilla\registry.dat
+0x00412c64	AppData
+0x00412c6c	Software\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders
+0x00412cb0	"network.proxy.autoconfig_url"
+0x00412cd0	"network.proxy.no_proxies_on"
+0x00412cf0	"network.proxy.ftp_port"
+0x00412d0c	"network.proxy.ftp"
+0x00412d20	"network.proxy.ssl_port"
+0x00412d3c	"network.proxy.ssl"
+0x00412d50	"network.proxy.http_port"
+0x00412d6c	"network.proxy.http"
+0x00412d84	network.proxy.type
+0x00412d98	Range: bytes=%d-
+0x00412dac	Range: bytes=%d-\r\n
+0x00412dc8	CertAddCertificateContextToStore
+0x00412dec	CertFindCertificateInStore
+0x00412e08	CertCloseStore
+0x00412e18	CertNameToStrA
+0x00412e28	CertOpenSystemStoreA
+0x00412e40	CertSaveStore
+0x00412e50	CertOpenStore
+0x00412e60	CertGetIssuerCertificateFromStore
+0x00412e84	CertDuplicateCertificateContext
+0x00412ea4	CertEnumCertificatesInStore
+0x00412ec0	CertFreeCertificateContext
+0x00412edc	CryptImportPublicKeyInfo
+0x00412ef8	CertCompareCertificate
+0x00412f10	Crypt32.dll
+0x00412f1c	CryptDestroyHash
+0x00412f30	CryptDestroyKey
+0x00412f40	CryptReleaseContext
+0x00412f54	CryptGetHashParam
+0x00412f68	CryptSetHashParam
+0x00412f7c	CryptVerifySignatureA
+0x00412f94	CryptSignHashA
+0x00412fa4	CryptExportKey
+0x00412fb4	CryptImportKey
+0x00412fc4	CryptHashData
+0x00412fd4	CryptDeriveKey
+0x00412fe4	CryptCreateHash
+0x00412ff4	CryptAcquireContextA
+0x0041300c	Advapi32.dll
+0x0041301c	.text
+0x00413024	.rdata
+0x0041302c	.debug
+0x00413034	\VarFileInfo\Translation
+0x00415860	GroupIcon
+0x004158a0	Dialog
+0x00415928	Dialog
+0x00416500	<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\r\n<assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0">\r\n<assemblyIdentity\r\n    version="1.0.0.0"\r\n    processorArchitecture="X86"\r\n    name="InstallShield.Setup"\r\n    type="win32"\r\n/>\r\n<description>InstallShield.Setup</description>\r\n<dependency>\r\n    <dependentAssembly>\r\n        <assemblyIdentity\r\n            type="win32"\r\n            name="Microsoft.Windows.Common-Controls"\r\n            version="6.0.0.0"\r\n            processorArchitecture="X86"\r\n            publicKeyToken="6595b64144ccf1df"\r\n            language="*"\r\n        />\r\n    </dependentAssembly>\r\n</dependency>\r\n</assembly>\r\n\r\n
+0x00416802	StringFileInfo
+0x00416826	040904b0
+0x0041683e	CompanyName
+0x00416858	InstallShield Software Corporation
+0x004168a6	FileDescription
+0x004168c8	InstallShield (R) Setup Launcher
+0x00416912	InternalName
+0x0041692c	ISPNickel
+0x00416946	OriginalFilename
+0x00416968	Setup.exe
+0x00416982	FileVersion
+0x0041699c	7, 01, 100, 1248
+0x004169c6	LegalCopyright
+0x004169e4	Copyright (C) 1990-2002 InstallShield Software Corporation
+0x00416a62	ProductName
+0x00416a7c	InstallShield (R)
+0x00416aa6	ProductVersion
+0x00416ac4	7, 01
+0x00416ad6	OLESelfRegister
+0x00416afe	VarFileInfo
+0x00416b1e	Translation
+0x00416b40	
+0x00416b42	
+0x00416b44	
+0x00416b46	การเริ่มต้นการทำงานของ InstallShield Wizard
+0x00416b9e	โปรดปฏิบัติตามขั้นตอนต่อไปนี้:\n    - ปิดโปรแกรมทั้งหมดที่กำลังทำงานอยู่\n    - ทำโฟลเดอร์ชั่วคราวให้ว่าง\n    - ตรวจสอบการเชื่อมต่ออินเตอร์เน็ตของท่าน (การติดตั้งผ่านทางอินเตอร์เน็ต)\n\nจากนั้น ลองเรียกใช้โปรแกรมติดตั้งอีกครั้ง
+0x00416d5e	มีความผิดพลาดเกิดขึ้นในโปรแกรมติดตั้งที่เคยเรียกใช้
+0x00416dc6	
+0x00416dc8	รหัสความผิดพลาด: %li
+0x00416df2	&ตกลง
+0x00416dfe	
+0x00416e00	
+0x00416e02	
+0x00416e04	
+0x00416e06	
+0x00416e08	
+0x00416e0a	
+0x00416e10	
+0x00416e12	
+0x00416e14	
+0x00416e16	InstallShield Wizard の開始
+0x00416e48	次のことを実行してください。\n    - 実行しているすべてのﾌﾟﾛｸﾞﾗﾑを閉じます。\n    - 一時ﾌｫﾙﾀﾞ(temp)を空にします。\n    - ｲﾝﾀｰﾈｯﾄ接続を確認します(ｲﾝﾀｰﾈｯﾄ ﾍﾞｰｽのｾｯﾄｱｯﾌﾟ)。\n\nそれから、ｾｯﾄｱｯﾌﾟを再度実行してください。
+0x00416f66	ｾｯﾄｱｯﾌﾟでｴﾗｰが発生しました。
+0x00416f8e	
+0x00416f90	エラーコード:  %li
+0x00416faa	OK(&O)
+0x00416fb8	
+0x00416fba	
+0x00416fbc	
+0x00416fbe	
+0x00416fc0	
+0x00416fc2	
+0x00416fc4	
+0x00416fc8	
+0x00416fca	
+0x00416fcc	
+0x00416fce	启动 InstallShield Wizard
+0x00416ffe	请执行以下操作:\n    - 关闭任何运行的程序\n    - 清空临时文件夹\n    - 检查因特网连接 (基于因特网的安装)\n\n然后再次运行该安装程序。
+0x0041709a	安装程序发生错误。
+0x004170ae	
+0x004170b0	错误代码:  %li
+0x004170c6	确定(&O)
+0x004170d4	
+0x004170d6	
+0x004170d8	
+0x004170da	
+0x004170dc	
+0x004170de	
+0x004170e0	
+0x004170e8	
+0x004170ea	
+0x004170ec	
+0x004170ee	InstallShield Wizard 시작
+0x0041711e	다음 작업을 수행하십시오.\n    - 실행 중인 프로그램을 종료합니다\n    - 임시 폴더를 비웁니다\n    - 인터넷 접속을 선택합니다(인터넷 기반 설치)\n\n그런 다음 설치 프로그램을 다시 실행하십시오. 
+0x00417206	설치 프로그램에 오류가 발생했습니다.
+0x00417230	
+0x00417232	오류 코드:   %li
+0x0041724c	확인(&O)
+0x0041725a	
+0x0041725c	
+0x0041725e	
+0x00417260	
+0x00417262	
+0x00417264	
+0x00417266	
+0x00417268	
+0x0041726a	
+0x0041726c	
+0x0041726e	啟動 InstallShield Wizard
+0x0041729e	請執行以下操作：\n    - 關閉任何執行的程式\n    - 清空暫存資料夾\n    - 檢查網際網路連線（基於網際網路的安裝）\n\n然後再次執行該安裝程式。
+0x0041733c	安裝程式發生錯誤。
+0x00417350	
+0x00417352	錯誤代碼：  %li
+0x00417368	確定(&O)
+0x00417376	
+0x00417378	
+0x0041737a	
+0x0041737c	
+0x0041737e	
+0x00417380	
+0x00417382	
+0x00417388	
+0x0041738a	
+0x0041738c	
+0x0041738e	Spouští se průvodce InstallShield Wizard
+0x004173e0	Proveďte následující:\n    - Ukončete spuštěné programy\n    - Vyprázdněte složku pro dočasné soubory\n    - Zkontrolujte připojení k Internetu (týká se instalace založené na připojení k Internetu)\n\nPotom zkuste spustit instalaci znovu.
+0x004175b4	Během instalace došlo k chybě.
+0x004175f2	
+0x004175f4	Kód chyby:  %li
+0x00417614	&OK
+0x0041761c	
+0x0041761e	
+0x00417620	
+0x00417622	
+0x00417624	
+0x00417626	
+0x00417628	
+0x00417630	
+0x00417632	
+0x00417634	
+0x00417636	Az InstallShield Wizard indítása
+0x00417678	Tegye a következőket:\n    - Zárjon be minden futó programot\n    - Ürítse ki az átmeneti mappát\n    - Ellenőrizze internetkapcsolatát (Internet-alapú telepítések)\n\nMajd próbálja meg újra futtatni a Telepítőt.
+0x00417818	A Telepítő hibát észlelt.
+0x0041784c	
+0x0041784e	Hibakód:  %li
+0x0041786a	&OK
+0x00417872	
+0x00417874	
+0x00417876	
+0x00417878	
+0x0041787a	
+0x0041787c	
+0x0041787e	
+0x00417880	
+0x00417882	
+0x00417884	
+0x00417886	Uruchamianie InstallShield Wizard
+0x004178ca	Wykonaj następujące czynności:\n    - Zamknij wszystkie uruchomione programy.\n    - Opróżnij folder tymczasowy.\n    - Sprawdź połączenie z Internetem (instalacje oparte na Internecie.)\n\nNastępnie spróbuj ponownie uruchomić Instalatora.
+0x00417aa0	Instalator napotkał błąd.
+0x00417ad4	
+0x00417ad6	Kod błędu:  %li
+0x00417af6	&OK
+0x00417afe	
+0x00417b00	
+0x00417b02	
+0x00417b04	
+0x00417b06	
+0x00417b08	
+0x00417b0a	
+0x00417b10	
+0x00417b12	
+0x00417b14	
+0x00417b16	Lansarea InstallShield Wizard
+0x00417b52	Vă rugăm să faceţi următoarele:\n    - Închideţi toate programele care rulează\n    - Goliţi folderul de fişiere temporare\n    - Verificaţi-vă conectarea la Internet (la instalări bazate pe Internet)\n\nDupă aceea încercaţi să rulaţi încă o dată instalarea.
+0x00417d4e	Instalarea a suferit o eroare.
+0x00417d8c	
+0x00417d8e	Cod de eroare:  %li
+0x00417db6	&OK
+0x00417dbe	
+0x00417dc0	
+0x00417dc2	
+0x00417dc4	
+0x00417dc6	
+0x00417dc8	
+0x00417dca	
+0x00417dd0	
+0x00417dd2	
+0x00417dd4	
+0x00417dd6	Početak InstallShield Wizard
+0x00417e10	Molim načinite slijedeće:\n    - Zatvorite sve otvorene programe\n    - Ispraznite privremenu mapu\n    - Provjerite svoju Internet vezu (Instalacije sa Interneta)\n\nZatim pokušajte ponovo pokrenuti instalaciju.
+0x00417fb0	Došlo je do greške u instalaciji.
+0x00417ff4	
+0x00417ff6	Kod greške:  %li
+0x00418018	&OK
+0x00418020	
+0x00418022	
+0x00418024	
+0x00418026	
+0x00418028	
+0x0041802a	
+0x0041802c	
+0x00418030	
+0x00418032	
+0x00418034	
+0x00418036	Spustí sa sprievodca InstallShield Wizard
+0x0041808a	Preveďte nasledujúce:\n    - Ukončite spustené programy\n    - Vyprázdnite priečinok pre dočasné súbory\n    - Skontrolujte pripojenie k Internetu (týka sa inštalácie založenej na pripojení k Internetu)\n\nPotom skúste spustiť inštaláciu znovu.
+0x0041826a	Počas inštalácie sa stala chyba.
+0x004182ac	
+0x004182ae	Kód chyby:  %li
+0x004182ce	&OK
+0x004182d6	
+0x004182d8	
+0x004182da	
+0x004182dc	
+0x004182de	
+0x004182e0	
+0x004182e2	
+0x004182e8	
+0x004182ea	
+0x004182ec	
+0x004182ee	Zagon čarovnika za namestitev InstallShield Wizard
+0x00418354	Postopajte po naslednjih navodilih:\n    - Zaprite vse odprte programe\n    - Izpraznite vašo začasno mapo\n    - Preverite vašo povezavo z Internetom (nastavitve na podlagi Interneta)\n\nNato ponovno poskusite pognati namestitev.
+0x00418518	Pri izvajanju namestitve je prišlo do napake.
+0x00418574	
+0x00418576	Koda napake:  %li
+0x0041859a	&OK
+0x004185a2	
+0x004185a4	
+0x004185a6	
+0x004185a8	
+0x004185aa	
+0x004185ac	
+0x004185ae	
+0x004185b0	
+0x004185b2	
+0x004185b4	
+0x004185b6	Стартиране на InstallShield Wizard
+0x004185fc	Моля, направете следното:\n    - Затворете всички работещи програми\n    - Изпразнете вашата временна папка\n    - Проверете вашата Интернет връзка (Интернет базирано инсталиране)\n\nТогава се опитайте да изпълните инсталиращата програма отново.
+0x004187de	Инсталиращата програма се натъкна на грешка.
+0x00418838	
+0x0041883a	Код на грешката:  %li
+0x00418866	&OK
+0x0041886e	
+0x00418870	
+0x00418872	
+0x00418874	
+0x00418876	
+0x00418878	
+0x0041887a	
+0x00418880	
+0x00418882	
+0x00418884	
+0x00418886	Начало работы InstallShield Wizard
+0x004188cc	Пожалуйста выполните следующее:\n    - Закройте все работающие программы\n    - Удалите содержимое временной папки\n    - Проверьте подключение к Интернету (для установки через Интернет)\n\nЗатем снова запустите установку.
+0x00418a80	Программа установки обнаружила ошибку.
+0x00418ace	
+0x00418ad0	Код ошибки:%li
+0x00418aee	&OK
+0x00418af6	
+0x00418af8	
+0x00418afa	
+0x00418afc	
+0x00418afe	
+0x00418b00	
+0x00418b02	
+0x00418b08	
+0x00418b0a	
+0x00418b0c	
+0x00418b0e	Pocetak InstallShield Wizard
+0x00418b48	Egin urrats hauek:\n    - Itxi irekita dituzun programa guztiak\n    - Hustu aldi baterako karpeta\n    - Begiratu Interneteko konexioa ongi dagoen (Interneten oinarritutako instalazioa bada)\n\nOndoren, saiatu Instalazioa berriro exekutatzen.
+0x00418d26	Instalazioak errorea izan du.
+0x00418d62	
+0x00418d64	Errore-kodea:  %li
+0x00418d8a	Ad&os
+0x00418d96	
+0x00418d98	
+0x00418d9a	
+0x00418d9c	
+0x00418d9e	
+0x00418da0	
+0x00418da2	
+0x00418da8	
+0x00418daa	
+0x00418dac	
+0x00418dae	Iniciant InstallShield Wizard
+0x00418dea	Realitzeu aquestes accions:\n    - Tanqueu els programes en execució\n    - Buideu la carpeta temporal\n    - Verifiqueu la connexió a Internet (instal·lacions basades en Internet)\n\nA continuació, proveu d'executar novament la Configuració.
+0x00418fc6	La Configuració ha experimentat un error.
+0x0041901a	
+0x0041901c	Codi d'error:  %li
+0x00419042	D'ac&ord
+0x00419054	
+0x00419056	
+0x00419058	
+0x0041905a	
+0x0041905c	
+0x0041905e	
+0x00419060	
+0x00419068	
+0x0041906a	
+0x0041906c	
+0x0041906e	Starter InstallShield Wizard
+0x004190a8	Gør følgende:\n    - Luk alle aktive programmer\n    - Tøm din midlertidlige mappe (Temp)\n    - Kontrollér din internetforbindelse (internetbaserede installationer)\n\nPrøv derefter at starte installationsprogrammet igen.
+0x0041925c	Der opstod en fejl under installationen.
+0x004192ae	
+0x004192b0	Fejlkode:  %li
+0x004192ce	&OK
+0x004192d6	
+0x004192d8	
+0x004192da	
+0x004192dc	
+0x004192de	
+0x004192e0	
+0x004192e2	
+0x004192e8	
+0x004192ea	
+0x004192ec	
+0x004192ee	InstallShield Wizard wird gestartet
+0x00419336	Gehen Sie folgendermaßen vor:\n    - Schließen Sie alle laufenden Programme.\n    - Löschen Sie den Inhalt des temporären Ordners.\n    - Überprüfen Sie Ihre Internetverbindung (bei internetbasiertem Setup).\n\nVersuchen Sie anschließend erneut, das Setup auszuführen.
+0x00419546	Beim Setup ist ein Fehler aufgetreten.
+0x00419594	
+0x00419596	Fehlercode:  %li
+0x004195b8	&OK
+0x004195c0	
+0x004195c2	
+0x004195c4	
+0x004195c6	
+0x004195c8	
+0x004195ca	
+0x004195cc	
+0x004195d0	
+0x004195d2	
+0x004195d4	
+0x004195d6	Starting InstallShield Wizard
+0x00419612	Please do the following:\n    - Close any running programs\n    - Empty your temporary folder\n    - Check your Internet connection (Internet-based Setups)\n\nThen try to run the Setup again.
+0x00419788	Setup has experienced an error.
+0x004197c8	InstallShield Setup Player 2K2
+0x00419806	Error code:  %li
+0x00419828	&OK
+0x00419830	
+0x00419832	
+0x00419834	
+0x00419836	
+0x00419838	
+0x0041983a	
+0x0041983c	
+0x00419840	
+0x00419842	
+0x00419844	
+0x00419846	Iniciando InstallShield Wizard
+0x00419884	Haga lo siguiente:\n    - Cierre todos los programas que se encuentren en ejecución\n    - Vacíe la carpeta temporal\n    - Compruebe su conexión de Internet (instalaciones basadas en Internet)\n\nA continuación, vuelva a ejecutar la instalación.
+0x00419a68	Se ha producido un error en la instalación.
+0x00419ac0	
+0x00419ac2	Código de error :  %li
+0x00419af0	&Aceptar
+0x00419b02	
+0x00419b04	
+0x00419b06	
+0x00419b08	
+0x00419b0a	
+0x00419b0c	
+0x00419b0e	
+0x00419b10	
+0x00419b12	
+0x00419b14	
+0x00419b16	InstallShield Wizard ohjattu asennus
+0x00419b60	Toimi seuraavalla tavalla:\n    - sulje käynnissä olevat ohjelmat\n    - tyhjennä väliaikainen kansio\n    - tarkista Internet-yhteyden toimivuus (asennus Internetistä)\n\nYritä sitten suorittaa asennus uudelleen.
+0x00419d02	Asennuksessa tapahtui virhe.
+0x00419d3c	
+0x00419d3e	Virhekoodi:  %li
+0x00419d60	&OK
+0x00419d68	
+0x00419d6a	
+0x00419d6c	
+0x00419d6e	
+0x00419d70	
+0x00419d72	
+0x00419d74	
+0x00419d78	
+0x00419d7a	
+0x00419d7c	
+0x00419d7e	Lancement de InstallShield Wizard
+0x00419dc2	Veuillez exécuter les étapes suivantes :\n    -Fermez les programmes en cours d'exécution\n    - Videz vos fichiers temporaires\n    - Vérifiez votre connexion Internet (Configuration basée Internet)\n\nPuis essayez de relancer le programme d'installation.
+0x00419fba	Le programme d'installation a détecté une erreur.
+0x0041a01e	
+0x0041a020	Code d'erreur :  %li
+0x0041a04a	&OK
+0x0041a052	
+0x0041a054	
+0x0041a056	
+0x0041a058	
+0x0041a05a	
+0x0041a05c	
+0x0041a05e	
+0x0041a060	
+0x0041a062	
+0x0041a064	
+0x0041a066	Avvio di InstallShield Wizard
+0x0041a0a2	Effettuare la seguente procedura.\n    - Chiudere i programmi in esecuzione\n    - Svuotare la cartella temporanea\n    - Controllare il collegamento a Internet (installazioni da Internet)\n\nQuindi, provare a ripetere l'installazione.
+0x0041a270	Si è verificato un errore durante l'installazione.
+0x0041a2d6	
+0x0041a2d8	Codice di errore:  %li
+0x0041a306	&OK
+0x0041a30e	
+0x0041a310	
+0x0041a312	
+0x0041a314	
+0x0041a316	
+0x0041a318	
+0x0041a31a	
+0x0041a320	
+0x0041a322	
+0x0041a324	
+0x0041a326	Bezig met starten van InstallShield Wizard
+0x0041a37c	Doe het volgende:\n    - Sluit alle programma's\n    - Maak de tijdelijke map leeg\n    - Controleer uw internetverbinding (installatie via internet)\n\nProbeer Setup vervolgens opnieuw uit te voeren.
+0x0041a504	Er is een fout opgetreden in Setup.
+0x0041a54c	
+0x0041a54e	Foutcode:  %li
+0x0041a56c	&OK
+0x0041a574	
+0x0041a576	
+0x0041a578	
+0x0041a57a	
+0x0041a57c	
+0x0041a57e	
+0x0041a580	
+0x0041a588	
+0x0041a58a	
+0x0041a58c	
+0x0041a58e	Starte InstallShield Wizard
+0x0041a5c6	Gjør dette:\n    - Lukk alle åpne programmer\n    - Tøm den midlertidige mappen du bruker\n    - Sjekk Internett-tilkoblingen (Internettbaserte installasjonsprogrammer)\n\nDeretter forsøker du å kjøre Installasjonsprogrammet igjen.
+0x0041a78c	Installasjonsprogrammet har oppdaget en feil.
+0x0041a7e8	
+0x0041a7ea	Feilkode:  %li
+0x0041a808	&OK
+0x0041a810	
+0x0041a812	
+0x0041a814	
+0x0041a816	
+0x0041a818	
+0x0041a81a	
+0x0041a81c	
+0x0041a820	
+0x0041a822	
+0x0041a824	
+0x0041a826	Iniciando o InstallShield Wizard
+0x0041a868	Faça o seguinte:\n    - Feche todos os programas em execução\n    - Esvazie sua pasta temporária\n    - Verifique sua conexão de Internet (Instalações com base na Internet)\n\nTente executar o programa de instalação novamente.
+0x0041aa24	O programa de instalação sofreu um erro.
+0x0041aa76	
+0x0041aa78	Código de erro:  %li
+0x0041aaa2	&OK
+0x0041aaaa	
+0x0041aaac	
+0x0041aaae	
+0x0041aab0	
+0x0041aab2	
+0x0041aab4	
+0x0041aab6	
+0x0041aab8	
+0x0041aaba	
+0x0041aabc	
+0x0041aabe	Starta InstallShield Wizard
+0x0041aaf6	Gör så här:\n    - Stäng alla öppna program\n    - Rensa temp-mappen\n    - Kontrollera din Internetanslutning (Internetbaserade installationsprogram)\n\nFörsök sedan att köra installationsprogrammet igen.
+0x0041ac88	Ett fel har uppstått i installationsprogrammet.
+0x0041ace8	
+0x0041acea	Felkod:  %li
+0x0041ad04	&OK
+0x0041ad0c	
+0x0041ad0e	
+0x0041ad10	
+0x0041ad12	
+0x0041ad14	
+0x0041ad16	
+0x0041ad18	
+0x0041ad20	
+0x0041ad22	
+0x0041ad24	
+0x0041ad26	Mulai InstallShield Wizard
+0x0041ad5c	Silakan lakukan hal-hal sebagai berikut:\n    - Tutup apa saja program yang sedang berjalan\n    - Kosongkan folder sementara \n    - Mengecek koneksi Internet Anda (Setup berdasarkan Internet)\n\nKemudian coba jalankan kembali Setup.
+0x0041af28	Setup telah menemui kesalahan.
+0x0041af66	
+0x0041af68	Kode Kesalahan:  %li
+0x0041af92	&OK
+0x0041af9a	
+0x0041af9c	
+0x0041af9e	
+0x0041afa0	
+0x0041afa2	
+0x0041afa4	
+0x0041afa6	
+0x0041afa8	
+0x0041afaa	
+0x0041afac	
+0x0041afae	InstallShield Wizard hasten
+0x0041afe6	Egin urrats hauek:\n    - Itxi irekita dituzun programa guztiak\n    - Hustu aldi baterako karpeta\n    - Begiratu Interneteko konexioa ongi dagoen (Interneten oinarritutako instalazioa bada)\n\nOndoren, saiatu Instalazioa berriro exekutatzen.
+0x0041b1c4	Instalazioak errorea izan du.
+0x0041b200	
+0x0041b202	Errore-kodea:  %li
+0x0041b228	Ad&os
+0x0041b234	
+0x0041b236	
+0x0041b238	
+0x0041b23a	
+0x0041b23c	
+0x0041b23e	
+0x0041b240	
+0x0041b248	
+0x0041b24a	
+0x0041b24c	
+0x0041b24e	A iniciar o InstallShield Wizard
+0x0041b290	Faça o seguinte:\n    - Feche todos os programas que estão a ser executados\n    - Esvazie a pasta temporária\n    - Verifique a sua ligação à Internet (Instalações baseadas na Internet)\n\nEm seguida, tente executar novamente o programa de instalação.
+0x0041b480	O programa de instalação sofreu um erro.
+0x0041b4d2	
+0x0041b4d4	Código de erro:  %li
+0x0041b4fe	&OK
+0x0041b506	
+0x0041b508	
+0x0041b50a	
+0x0041b50c	
+0x0041b50e	
+0x0041b510	
+0x0041b512	
+0x0041b518	
+0x0041b51a	
+0x0041b51c	
+0x0041b51e	Démarrage d'InstallShield Wizard
+0x0041b560	Veuillez effectuer les étapes suivantes :\n    - Fermez tous les programmes ouverts\n    - Supprimez le contenu du dossier temporaire \n    - Vérifiez votre connexion à l'Internet (Paramètres relatifs à l'Internet)\n\nEnsuite, relancez l'installation.
+0x0041b74e	Le programme d'installation a rencontré une erreur.
+0x0041b7b6	
+0x0041b7b8	Code d'erreur :  %li
+0x0041b7e2	&OK
+0x0041b7ea	
+0x0041b7ec	
+0x0041b7ee	
+0x0041b7f0	
+0x0041b7f2	
+0x0041b7f4	
+0x0041b7f6	
+0x0041b7f8	
+0x0041b7fa	
+0x0041b7fc	
+0x0041b7fe	Εκκίνηση InstallShield Wizard
+0x0041b83a	Παρακαλούμε προβείτε στις ακόλουθες ενέργειες:\n    - Κλείστε όλα τα προγράμματα\n   - Αδειάστε τον προσωρινό φάκελο\n    - Ελέγξτε τη σύνδεση του Διαδικύου (Εγκαταστάσεις με βάση το Διαδίκτυο)\n\nΤότε προσπαθήστε να εκτελέσετε το πρόγραμμα Εγκατάστασης πάλι.
+0x0041ba38	Το πρόγραμμα εγκατάστασης  έχει εντοπίσει ένα σφάλμα.
+0x0041baa4	
+0x0041baa6	Κωδικός σφάλματος:  %li
+0x0041bad6	&OK
+0x0041bade	
+0x0041bae0	
+0x0041bae2	
+0x0041bae4	
+0x0041bae6	
+0x0041bae8	
+0x0041baea	
+0x0041baf0	
+0x0041baf2	
+0x0041baf4	
+0x0041baf6	InstallShield Wizard Başlıyor
+0x0041bb32	Lütfen aşağıdakileri yapın:\n    - Çalışan tüm programları kapatın\n    - Geçici klasörünüzü boşaltın\n    - Internet bağlantınızı denetleyin (Internet tabanlı kurulumlarda)\n\nDaha sonra Kur'u yeniden çalıştırın.
+0x0041bcd4	Kur bir hatayla karşılaştı.
+0x0041bd0c	
+0x0041bd0e	Hata kodu:  %li
+0x0041bd2e	&Tamam
+0x0041bd3c	
+0x0041bd3e	
+0x0041bd40	
+0x0041bd42	
+0x0041bd44	
+0x0041bd46	
+0x0041bd48	
+0xffdff1ac	
+0xffdffc00	
+0xffdfff50	00000000-0000-0000-0000-000000000000

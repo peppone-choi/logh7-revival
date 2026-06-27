@@ -1,0 +1,205 @@
+{
+  "name": "login-native-layout",
+  "desc": "Retarget the initial login scene from the legacy 640x480 window to a native 1920x1080 canvas and reposition the login text, fields, and buttons. This is a real layout patch, not a letterbox or post-render stretch.",
+  "verified": "Generated from RE-confirmed FUN_0051a370 initial display pushes and FUN_0051cda0 login object rectangles. The layout is centered on the system canvas with explicit field/button coordinates; live visual confirmation is required after each target resolution refresh.",
+  "patches": [
+    {
+      "va": "0x0051a50a",
+      "originalHex": "68e0010000",
+      "patchedHex": "6838040000",
+      "note": "login initial display height 480 -> 1080"
+    },
+    {
+      "va": "0x0051a51c",
+      "originalHex": "6880020000",
+      "patchedHex": "6880070000",
+      "note": "login initial display width 640 -> 1920"
+    },
+    {
+      "va": "0x0051cf92",
+      "originalHex": "c744242880020000",
+      "patchedHex": "c744242880070000",
+      "note": "login root layer width"
+    },
+    {
+      "va": "0x0051cf9a",
+      "originalHex": "c744242ce0010000",
+      "patchedHex": "c744242c38040000",
+      "note": "login root layer height"
+    },
+    {
+      "va": "0x0051cff1",
+      "originalHex": "c7442418aa000000",
+      "patchedHex": "c74424181c020000",
+      "note": "login top text x"
+    },
+    {
+      "va": "0x0051cff9",
+      "originalHex": "c744241ce2000000",
+      "patchedHex": "c744241cd5010000",
+      "note": "login top text y"
+    },
+    {
+      "va": "0x0051d001",
+      "originalHex": "c74424242c010000",
+      "patchedHex": "c744242448030000",
+      "note": "login top text width"
+    },
+    {
+      "va": "0x0051d009",
+      "originalHex": "c744242820000000",
+      "patchedHex": "c744242827000000",
+      "note": "login top text height"
+    },
+    {
+      "va": "0x0051d08b",
+      "originalHex": "c7442418aa000000",
+      "patchedHex": "c74424181c020000",
+      "note": "login hint text x"
+    },
+    {
+      "va": "0x0051d093",
+      "originalHex": "c744241cf2000000",
+      "patchedHex": "c744241c00020000",
+      "note": "login hint text y"
+    },
+    {
+      "va": "0x0051d09b",
+      "originalHex": "c74424242c010000",
+      "patchedHex": "c744242448030000",
+      "note": "login hint text width"
+    },
+    {
+      "va": "0x0051d0a3",
+      "originalHex": "c744242820000000",
+      "patchedHex": "c744242827000000",
+      "note": "login hint text height"
+    },
+    {
+      "va": "0x0051d126",
+      "originalHex": "c7442418a0000000",
+      "patchedHex": "c74424181c020000",
+      "note": "login account label x"
+    },
+    {
+      "va": "0x0051d12e",
+      "originalHex": "c744241c16010000",
+      "patchedHex": "c744241c49020000",
+      "note": "login account label y"
+    },
+    {
+      "va": "0x0051d136",
+      "originalHex": "c74424242c010000",
+      "patchedHex": "c7442424b8000000",
+      "note": "login account label width"
+    },
+    {
+      "va": "0x0051d13e",
+      "originalHex": "c744242820000000",
+      "patchedHex": "c744242824000000",
+      "note": "login account label height"
+    },
+    {
+      "va": "0x0051d1b7",
+      "originalHex": "c7442418a0000000",
+      "patchedHex": "c74424181c020000",
+      "note": "login password label x"
+    },
+    {
+      "va": "0x0051d1bf",
+      "originalHex": "c744241c31010000",
+      "patchedHex": "c744241c7d020000",
+      "note": "login password label y"
+    },
+    {
+      "va": "0x0051d1c7",
+      "originalHex": "c74424242c010000",
+      "patchedHex": "c7442424b8000000",
+      "note": "login password label width"
+    },
+    {
+      "va": "0x0051d1cf",
+      "originalHex": "c744242820000000",
+      "patchedHex": "c744242824000000",
+      "note": "login password label height"
+    },
+    {
+      "va": "0x0051d243",
+      "originalHex": "c74424181a010000",
+      "patchedHex": "c74424180c030000",
+      "note": "login submit button x"
+    },
+    {
+      "va": "0x0051d24b",
+      "originalHex": "c744241c4b010000",
+      "patchedHex": "c744241cc4020000",
+      "note": "login submit button y"
+    },
+    {
+      "va": "0x0051d253",
+      "originalHex": "c744242445000000",
+      "patchedHex": "c74424249f000000",
+      "note": "login submit button width"
+    },
+    {
+      "va": "0x0051d33d",
+      "originalHex": "c74424181a010000",
+      "patchedHex": "c7442418d5030000",
+      "note": "login exit button x"
+    },
+    {
+      "va": "0x0051d345",
+      "originalHex": "c744241c8d010000",
+      "patchedHex": "c744241cc4020000",
+      "note": "login exit button y"
+    },
+    {
+      "va": "0x0051d34d",
+      "originalHex": "c744242445000000",
+      "patchedHex": "c74424249f000000",
+      "note": "login exit button width"
+    },
+    {
+      "va": "0x0051d440",
+      "originalHex": "bb18000000",
+      "patchedHex": "bb24000000",
+      "note": "login input field height 24 -> 36"
+    },
+    {
+      "va": "0x0051d448",
+      "originalHex": "c7442418fe000000",
+      "patchedHex": "c7442418f1020000",
+      "note": "login account field x"
+    },
+    {
+      "va": "0x0051d450",
+      "originalHex": "c744241c17010000",
+      "patchedHex": "c744241c47020000",
+      "note": "login account field y"
+    },
+    {
+      "va": "0x0051d458",
+      "originalHex": "c7442424c8000000",
+      "patchedHex": "c744242473020000",
+      "note": "login account field width"
+    },
+    {
+      "va": "0x0051d4de",
+      "originalHex": "c7442418fe000000",
+      "patchedHex": "c7442418f1020000",
+      "note": "login password field x"
+    },
+    {
+      "va": "0x0051d4e6",
+      "originalHex": "c744241c33010000",
+      "patchedHex": "c744241c7b020000",
+      "note": "login password field y"
+    },
+    {
+      "va": "0x0051d4ee",
+      "originalHex": "c7442424c8000000",
+      "patchedHex": "c744242473020000",
+      "note": "login password field width"
+    }
+  ]
+}

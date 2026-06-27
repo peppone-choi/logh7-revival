@@ -1,0 +1,111 @@
+{
+  "_source": "gin7 manual pp.56-67 via logh7-manual-canon.md §11 (PDF-verified against .omo/work/gin7manual/manual-text.md pages 60-61 Empire / 66-67 Alliance)",
+  "_grade": "P1",
+  "_confidence_notes": [
+    "Per-character initial job-card/post holder list for BOTH factions. This is the canon NPC seed: who starts holding Emperor / supreme command / cabinet / fleet commands.",
+    "High-confidence (clear OCR prose): faction heads, cabinet ministers, three-office military chiefs, named admirals with explicit rank.",
+    "Medium-confidence (_uncertain=true): fleet/squadron-to-commander pairings derived from the manual's multi-column card-table layout (pp60-61, 66-67). The OCR linearizes fleet headers and commander names into SEPARATE blocks, so the fleet<->commander binding is inferred by column order and is approximate. The commander identities and ranks themselves are reliable; only which numbered fleet each commands may be off.",
+    "Empire fleet commanders printed on p60-61 in two blocks: (第1..第6 / 第8,10,12) headers, commanders incl. ローエングラム中将 & 副官 キルヒアイス少佐. Some commanders (メルカッツ, シュターデン, フォーゲル, ヒルデスハイム, ホフマイスター, グルーゼンシュテルン, ミッターマイヤー, ロイエンタール, レンネンカンプ, フレーゲル, ゼークト, グリューネマン, ディッタースドルフ) are listed without a 1:1 fleet binding in the linear OCR.",
+    "Alliance fleet commanders p66-67: explicit deputy(副司令官) pairs are clearly OCR-aligned (e.g. 第1 パエッタ中将, 第2 アーメド少将). Other fleets (第3..第12, squadrons) commanders listed in a block.",
+    "Friedrich IV holds Emperor AND Supreme Cmdr concurrently (listed twice as フリードリヒⅣ世). リヒテンラーデ listed twice = 帝国宰相 + 国務尚書 concurrently.",
+    "Cross-faction appointer divergence and unit caps are documented in canon-org-posts data, not duplicated here."
+  ],
+
+  "empire": {
+    "_faction": "銀河帝国 (Galactic Empire)",
+    "_factionHead": "フリードリヒⅣ世",
+    "cardHolders": [
+      { "post": "皇帝", "postEn": "Emperor", "postKo": "황제", "dept": "皇宮", "holder": "フリードリヒⅣ世", "holderEn": "Friedrich IV", "rank": null, "note": "Goldenbaum dynasty; concurrently Supreme Commander" },
+      { "post": "帝国軍最高司令官", "postEn": "Supreme Commander", "postKo": "제국군 최고사령관", "dept": "皇宮", "holder": "フリードリヒⅣ世", "holderEn": "Friedrich IV", "rank": null, "note": "Held concurrently by the Emperor" },
+      { "post": "帝国宰相", "postEn": "Imperial Chancellor", "postKo": "제국 재상", "dept": "皇宮/内閣", "holder": "リヒテンラーデ", "holderEn": "Lichtenlade", "rank": null, "note": "政治家; also acts as 国務尚書" },
+      { "post": "国務尚書", "postEn": "Minister of State", "postKo": "국무상서", "dept": "内閣", "holder": "リヒテンラーデ", "holderEn": "Lichtenlade", "rank": null, "class": "政治家" },
+      { "post": "財務尚書", "postEn": "Minister of Finance", "postKo": "재무상서", "dept": "内閣", "holder": "ゲルラッハ", "holderEn": "Gerlach", "rank": null, "class": "政治家" },
+      { "post": "フェザーン高等弁務官", "postEn": "Phezzan High Commissioner", "postKo": "페잔 고등판무관", "dept": "駐フェザーン弁務官事務所", "holder": "レムシャイト", "holderEn": "Remscheid", "rank": null, "class": "政治家" },
+      { "post": "軍務尚書", "postEn": "Minister of Military Affairs", "postKo": "군무상서", "dept": "軍務省", "holder": "エーレンベルグ", "holderEn": "Ehrenberg", "rank": "元帥" },
+      { "post": "統帥本部総長", "postEn": "Chief of Supreme Command HQ", "postKo": "통수본부 총장", "dept": "統帥本部", "holder": "シュタインホフ", "holderEn": "Steinhof", "rank": "元帥", "note": "Usually concurrently holds 作戦一課課長 (Ops-1)" },
+      { "post": "統帥本部作戦一課課長", "postEn": "Ops-1 Chief", "postKo": "작전1과 과장", "dept": "統帥本部", "holder": "シュタインホフ", "holderEn": "Steinhof", "rank": "元帥", "_uncertain": true, "note": "Inferred from concurrent-hold convention + duplicate listing" },
+      { "post": "宇宙艦隊司令長官", "postEn": "Space Fleet Commander-in-Chief", "postKo": "우주함대 사령장관", "dept": "宇宙艦隊司令部", "holder": "G.ミュッケンベルガー", "holderEn": "G. Muckenberger", "rank": "元帥" },
+      { "post": "宇宙艦隊総参謀長", "postEn": "Chief of General Staff (Space Fleet)", "postKo": "우주함대 총참모장", "dept": "宇宙艦隊司令部", "holder": "G.ミュッケンベルガー", "holderEn": "G. Muckenberger", "rank": "元帥", "_uncertain": true, "note": "Listed twice; may instead be a separate CoS" },
+      { "post": "幕僚総監", "postEn": "Chief of the Imperial HQ Staff", "postKo": "막료총감", "dept": "皇宮", "holder": "クラーゼン", "holderEn": "Klasen", "rank": "元帥" },
+      { "post": "憲兵総監", "postEn": "Provost Marshal General", "postKo": "헌병총감", "dept": "憲兵本部", "holder": "オフレッサー", "holderEn": "Offresser", "rank": "上級大将", "note": "Also 装甲擲弾兵総監; arrests all soldiers except 元帥" },
+      { "post": "装甲擲弾兵総監", "postEn": "Inspector General of Armored Grenadiers", "postKo": "장갑척탄병총감", "dept": "装甲擲弾兵総監部", "holder": "オフレッサー", "holderEn": "Offresser", "rank": "上級大将" },
+      { "post": "科学技術総監", "postEn": "Inspector General of Science & Technology", "postKo": "과학기술총감", "dept": "科学技術総監部", "holder": "シャフト", "holderEn": "Schaft", "rank": "大将" },
+      { "post": "軍務省人事局長", "postEn": "Personnel Director (Military Affairs)", "postKo": "군무성 인사국장", "dept": "軍務省", "holder": "アーベントロート", "holderEn": "Abendroth", "rank": "中将" }
+    ],
+    "fleetCommanders": [
+      { "unit": "第2艦隊", "unitEn": "2nd Fleet", "commander": "ローエングラム", "commanderEn": "Reinhard von Lohengramm", "rank": "中将", "adjutant": "キルヒアイス", "adjutantEn": "Kircheis", "adjutantRank": "少佐", "adjutantPost": "司令官副官", "_uncertain": true, "note": "PLAYER-START canon: Reinhard begins as a 中将 fleet commander with Kircheis as his adjutant. Exact fleet number (2nd) is column-inferred from OCR layout." }
+    ],
+    "_namedAdmiralsUnboundFleet": [
+      { "name": "メルカッツ", "nameEn": "Mercatz", "rank": "大将", "_uncertain": true },
+      { "name": "グライフス", "nameEn": "Greifs", "rank": "上級大将", "_uncertain": true },
+      { "name": "オッペンハイマー", "nameEn": "Oppenheimer", "rank": "大将", "_uncertain": true },
+      { "name": "ハウプト", "nameEn": "Haupt", "rank": "大将", "_uncertain": true },
+      { "name": "シュターデン", "nameEn": "Staden", "rank": "中将", "_uncertain": true },
+      { "name": "フォーゲル", "nameEn": "Vogel", "rank": "中将", "_uncertain": true },
+      { "name": "ヒルデスハイム", "nameEn": "Hildesheim", "rank": "中将", "_uncertain": true },
+      { "name": "ホフマイスター", "nameEn": "Hofmeister", "rank": "少将", "_uncertain": true },
+      { "name": "グルーゼンシュテルン", "nameEn": "Grusenstern", "rank": "少将", "_uncertain": true },
+      { "name": "ミッターマイヤー", "nameEn": "Mittermeyer", "rank": "少将", "_uncertain": true },
+      { "name": "ロイエンタール", "nameEn": "Reuental", "rank": "少将", "_uncertain": true },
+      { "name": "レンネンカンプ", "nameEn": "Lennenkamp", "rank": "少将", "_uncertain": true },
+      { "name": "フレーゲル", "nameEn": "Flegel", "rank": "中将", "_uncertain": true },
+      { "name": "ゼークト", "nameEn": "Seeckt", "rank": "大将", "_uncertain": true },
+      { "name": "グリューネマン", "nameEn": "Grunemann", "rank": "少将", "_uncertain": true },
+      { "name": "ディッタースドルフ", "nameEn": "Dittersdorf", "rank": "少将", "_uncertain": true }
+    ],
+    "fortressCommanders": [
+      { "fortress": "イゼルローン要塞", "fortressEn": "Iserlohn Fortress", "post": "要塞司令官", "commander": "シュトックハウゼン", "commanderEn": "Stockhausen", "rank": "上級大将", "_uncertain": true, "note": "Stockhausen named in roster block on p60-61; fortress binding column-inferred" },
+      { "fortress": null, "post": "巡察隊司令", "commander": "ランズベルク", "commanderEn": "Landsberg", "rank": "中将", "_uncertain": true }
+    ],
+    "_initialFleets": ["第1", "第2", "第3", "第4", "第5", "第6", "第8", "第10", "第12"],
+    "_initialPatrolSquadrons": ["第4", "第5", "第29", "第44", "第53", "第54", "第55"]
+  },
+
+  "alliance": {
+    "_faction": "自由惑星同盟 (Free Planets Alliance)",
+    "_factionHead": "サンフォード",
+    "cardHolders": [
+      { "post": "議長", "postEn": "Chairman (Supreme Council)", "postKo": "의장", "dept": "最高評議会", "holder": "サンフォード", "holderEn": "Sanford", "rank": null, "class": "政治家", "note": "Highest authority of the FPA; head of state" },
+      { "post": "国防委員長", "postEn": "Chairman of National Defense Committee", "postKo": "국방위원장", "dept": "最高評議会", "holder": "トリューニヒト", "holderEn": "Trunicht", "rank": null, "class": "政治家", "_uncertain": true, "note": "Committee-chair holders (国防/財政/人的資源/情報交通) printed as a politician block 政治家サンフォード/トリューニヒト/レベロ/ホワン/ウィンザー/ヘンスロー; chair->person binding column-inferred" },
+      { "post": "財政委員長", "postEn": "Chairman of Finance Committee", "postKo": "재정위원장", "dept": "最高評議会", "holder": "レベロ", "holderEn": "Lebello", "rank": null, "class": "政治家", "_uncertain": true },
+      { "post": "人的資源委員長", "postEn": "Chairman of Human Resources Committee", "postKo": "인적자원위원장", "dept": "最高評議会", "holder": "ホワン", "holderEn": "Huang", "rank": null, "class": "政治家", "_uncertain": true },
+      { "post": "情報交通委員長", "postEn": "Chairman of Information & Transport Committee", "postKo": "정보교통위원장", "dept": "最高評議会", "holder": "ウィンザー", "holderEn": "Windsor", "rank": null, "class": "政治家", "_uncertain": true },
+      { "post": "フェザーン駐在弁務官", "postEn": "Phezzan Resident Commissioner", "postKo": "페잔 주재판무관", "dept": "駐フェザーン弁務官事務所", "holder": "ヘンスロー", "holderEn": "Henslow", "rank": null, "class": "政治家", "_uncertain": true },
+      { "post": "統合作戦本部長", "postEn": "Director of Joint Operations HQ", "postKo": "통합작전본부장", "dept": "統合作戦本部", "holder": "シトレ", "holderEn": "Sithole", "rank": "元帥", "note": "Highest uniformed officer; appointed by 国防委員長" },
+      { "post": "宇宙艦隊司令長官", "postEn": "Space Fleet Commander-in-Chief", "postKo": "우주함대 사령장관", "dept": "宇宙艦隊司令部", "holder": "ロボス", "holderEn": "Lobos", "rank": "元帥", "_uncertain": true, "note": "ロボス元帥 listed in the senior-officer block; CinC binding inferred" },
+      { "post": "後方勤務本部長", "postEn": "Director of Rear Service HQ", "postKo": "후방근무본부장", "dept": "後方勤務本部", "holder": "ドーソン", "holderEn": "Dawson", "rank": "大将", "_uncertain": true },
+      { "post": "人事部長", "postEn": "Personnel Director", "postKo": "인사부장", "dept": "国防委員会", "holder": "D.グリーンヒル", "holderEn": "D. Greenhill", "rank": "大将", "_uncertain": true },
+      { "post": "情報部長", "postEn": "Intelligence Director", "postKo": "정보부장", "dept": "国防委員会", "holder": "クブルスリー", "holderEn": "Cubresly", "rank": "中将", "_uncertain": true }
+    ],
+    "fleetCommanders": [
+      { "unit": "第1艦隊", "unitEn": "1st Fleet", "commander": "パエッタ", "commanderEn": "Paetta", "rank": "中将", "deputy": "アーメド", "deputyEn": "Ahmed", "deputyRank": "少将", "deputyPost": "副司令官", "_uncertain": false, "note": "Deputy pair clearly OCR-aligned on p66" },
+      { "unit": "第3艦隊", "unitEn": "3rd Fleet", "commander": "パストーレ", "commanderEn": "Pastolle", "rank": "中将", "deputy": "タナンチャイ", "deputyEn": "Tananchai", "deputyRank": "少将", "deputyPost": "副司令官", "_uncertain": false },
+      { "unit": "第5艦隊", "unitEn": "5th Fleet", "commander": "ビュコック", "commanderEn": "Bewcock", "rank": "中将", "deputy": "モンシャルマン", "deputyEn": "Moncharmin", "deputyRank": "少将", "deputyPost": "副司令官", "_uncertain": false },
+      { "unit": "第9艦隊", "unitEn": "9th Fleet", "commander": "アル・サレム", "commanderEn": "Al-Salem", "rank": "中将", "deputy": "モートン", "deputyEn": "Morton", "deputyRank": "少将", "deputyPost": "副司令官", "_uncertain": false },
+      { "unit": "第10艦隊", "unitEn": "10th Fleet", "commander": "ウランフ", "commanderEn": "Ulanhu", "rank": "中将", "deputy": "チェン", "deputyEn": "Chen", "deputyRank": "少将", "deputyPost": "副司令官", "_uncertain": false },
+      { "unit": "第12艦隊", "unitEn": "12th Fleet", "commander": "ボロディン", "commanderEn": "Borodin", "rank": "中将", "deputy": "コナリー", "deputyEn": "Connery", "deputyRank": "少将", "deputyPost": "副司令官", "_uncertain": false }
+    ],
+    "_namedAdmiralsUnboundFleet": [
+      { "name": "ロックウェル", "nameEn": "Rockwell", "rank": "大将", "_uncertain": true },
+      { "name": "グローブナー", "nameEn": "Grovner", "rank": "大将", "_uncertain": true },
+      { "name": "ブロンズ", "nameEn": "Bronze", "rank": "中将", "_uncertain": true },
+      { "name": "アップルトン", "nameEn": "Appleton", "rank": "中将", "_uncertain": true },
+      { "name": "ホーランド", "nameEn": "Holland", "rank": "中将", "_uncertain": true },
+      { "name": "ルフェーブル", "nameEn": "Lefebvre", "rank": "中将", "_uncertain": true },
+      { "name": "ムーア", "nameEn": "Moore", "rank": "中将", "_uncertain": true },
+      { "name": "マリネッティ", "nameEn": "Marinetti", "rank": "准将", "_uncertain": true },
+      { "name": "カールセン", "nameEn": "Carlsen", "rank": "少将", "_uncertain": true },
+      { "name": "ホーウッド", "nameEn": "Hawood", "rank": "中将", "_uncertain": true }
+    ],
+    "patrolSquadronCommanders": [
+      { "name": "アラルコン", "nameEn": "Alarcon", "rank": "少将", "post": "巡察隊司令", "_uncertain": true },
+      { "name": "デッシュ", "nameEn": "Dasch", "rank": "准将", "post": "巡察隊司令", "_uncertain": true },
+      { "name": "ルグランジュ", "nameEn": "Lagrange", "rank": "少将", "post": "巡察隊司令", "_uncertain": true },
+      { "name": "マスカーニ", "nameEn": "Mascagni", "rank": "准将", "post": "巡察隊司令", "_uncertain": true },
+      { "name": "ザーニアル", "nameEn": "Zarnial", "rank": "准将", "post": "巡察隊司令", "_uncertain": true },
+      { "name": "グエン", "nameEn": "Gwen", "rank": "准将", "post": "巡察隊司令", "_uncertain": true }
+    ],
+    "_initialFleets": ["第1", "第2", "第3", "第4", "第5", "第6", "第7", "第8", "第9", "第10", "第11", "第12"],
+    "_initialPatrolSquadrons": ["第11", "第16", "第21", "第26", "第31", "第36", "第46", "第56"]
+  }
+}

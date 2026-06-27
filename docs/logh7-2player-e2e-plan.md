@@ -29,9 +29,9 @@ Goal (user, 2026-06-14): one server, two players sign up, get the distribution, 
 
 ## Test ladder (run as far as possible, record the stop point)
 
-1. **Two accounts sign up** — `LOGH_ACCOUNT_DB=.omo/work/e2e-accounts.json LOGH_RELAY=1
+1. **Two accounts sign up** — `LOGH_ACCOUNT_DB=.omo/work/e2e-accounts.sqlite LOGH_RELAY=1
    LOGH_AUTHORITATIVE=1 LOGH_CONTENT_DB=1 npm run server:auth`; drive 2 logins with distinct GIN7
-   labels; assert both register (registry file has 2 accounts).
+   labels; assert both register (SQLite registry has 2 accounts).
 2. **Download/install** — build the ko zip, unzip to two separate client trees.
 3. **Both reach world** — launch client A and client B (two `logh7_ui_explorer` sessions on distinct
    `--session` dirs, ONE shared external server on :47900); screenshot both at WORLD.

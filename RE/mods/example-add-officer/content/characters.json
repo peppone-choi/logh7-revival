@@ -1,0 +1,20 @@
+[
+  {
+    "id": 20001,
+    "name": "M1",
+    "nameRomaji": "Mod Officer 1",
+    "nameKo": null,
+    "nationId": 1280,
+    "rank": "Admiral",
+    "command": 75,
+    "tactics": 80,
+    "operations": 70,
+    "abilities": [75, 60, 70, 65, 80, 78, 72, 74],
+    "portraitIndex": 50,
+    "isOriginal": true,
+    "provenance": {
+      "name": { "authority": "mod", "originalServerData": false, "tier": "P3" },
+      "stats": { "authority": "mod", "originalServerData": false, "tier": "P3" }
+    }
+  }
+]

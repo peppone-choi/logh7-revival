@@ -1,0 +1,1698 @@
+{
+  "_source": "galaxy.json cx/cy + is_corridor",
+  "_generated": "tools/logh7_galaxy_adjacency.py",
+  "_params": {
+    "radius": 45.0,
+    "corridorRadius": 60.0,
+    "kMin": 3
+  },
+  "meta": {
+    "radius": 45.0,
+    "corridorRadius": 60.0,
+    "kMin": 3,
+    "generated": true,
+    "nodes": 80
+  },
+  "adjacency": {
+    "ルンビーニ": [
+      {
+        "system": "シロン",
+        "dist": 42.0,
+        "corridor": false
+      },
+      {
+        "system": "タナトス",
+        "dist": 51.3,
+        "corridor": false
+      },
+      {
+        "system": "バーラト",
+        "dist": 64.0,
+        "corridor": false
+      },
+      {
+        "system": "エリューセラ",
+        "dist": 93.6,
+        "corridor": false
+      }
+    ],
+    "シロン": [
+      {
+        "system": "ルンビーニ",
+        "dist": 42.0,
+        "corridor": false
+      },
+      {
+        "system": "ロフォーテン",
+        "dist": 55.2,
+        "corridor": false
+      },
+      {
+        "system": "バーラト",
+        "dist": 71.8,
+        "corridor": false
+      }
+    ],
+    "エリューセラ": [
+      {
+        "system": "リオ・ヴェルデ",
+        "dist": 27.6,
+        "corridor": false
+      },
+      {
+        "system": "タナトス",
+        "dist": 50.8,
+        "corridor": false
+      },
+      {
+        "system": "ルンビーニ",
+        "dist": 93.6,
+        "corridor": false
+      }
+    ],
+    "タナトス": [
+      {
+        "system": "リオ・ヴェルデ",
+        "dist": 47.2,
+        "corridor": false
+      },
+      {
+        "system": "エリューセラ",
+        "dist": 50.8,
+        "corridor": false
+      },
+      {
+        "system": "ルンビーニ",
+        "dist": 51.3,
+        "corridor": false
+      },
+      {
+        "system": "バーラト",
+        "dist": 55.0,
+        "corridor": false
+      }
+    ],
+    "リオ・ヴェルデ": [
+      {
+        "system": "エリューセラ",
+        "dist": 27.6,
+        "corridor": false
+      },
+      {
+        "system": "タナトス",
+        "dist": 47.2,
+        "corridor": false
+      },
+      {
+        "system": "ライガール",
+        "dist": 74.0,
+        "corridor": false
+      }
+    ],
+    "ロフォーテン": [
+      {
+        "system": "ケリム",
+        "dist": 41.0,
+        "corridor": false
+      },
+      {
+        "system": "ファラーファラ",
+        "dist": 46.9,
+        "corridor": false
+      },
+      {
+        "system": "シロン",
+        "dist": 55.2,
+        "corridor": false
+      },
+      {
+        "system": "バーラト",
+        "dist": 63.7,
+        "corridor": false
+      }
+    ],
+    "バーラト": [
+      {
+        "system": "ケリム",
+        "dist": 52.2,
+        "corridor": false
+      },
+      {
+        "system": "タナトス",
+        "dist": 55.0,
+        "corridor": false
+      },
+      {
+        "system": "ロフォーテン",
+        "dist": 63.7,
+        "corridor": false
+      },
+      {
+        "system": "ルンビーニ",
+        "dist": 64.0,
+        "corridor": false
+      },
+      {
+        "system": "シロン",
+        "dist": 71.8,
+        "corridor": false
+      }
+    ],
+    "ファラーファラ": [
+      {
+        "system": "ハダト",
+        "dist": 43.5,
+        "corridor": false
+      },
+      {
+        "system": "ロフォーテン",
+        "dist": 46.9,
+        "corridor": false
+      },
+      {
+        "system": "ケリム",
+        "dist": 50.9,
+        "corridor": false
+      },
+      {
+        "system": "マローヴィア",
+        "dist": 51.0,
+        "corridor": false
+      }
+    ],
+    "ケリム": [
+      {
+        "system": "ロフォーテン",
+        "dist": 41.0,
+        "corridor": false
+      },
+      {
+        "system": "ジャムシード",
+        "dist": 45.9,
+        "corridor": false
+      },
+      {
+        "system": "ファラーファラ",
+        "dist": 50.9,
+        "corridor": false
+      },
+      {
+        "system": "バーラト",
+        "dist": 52.2,
+        "corridor": false
+      }
+    ],
+    "ポリスーン": [
+      {
+        "system": "シュパーラ",
+        "dist": 55.7,
+        "corridor": false
+      },
+      {
+        "system": "トリプラ",
+        "dist": 70.3,
+        "corridor": false
+      },
+      {
+        "system": "ライガール",
+        "dist": 81.3,
+        "corridor": false
+      }
+    ],
+    "ライガール": [
+      {
+        "system": "トリプラ",
+        "dist": 39.8,
+        "corridor": false
+      },
+      {
+        "system": "タッシリ",
+        "dist": 50.6,
+        "corridor": false
+      },
+      {
+        "system": "バーミリオン",
+        "dist": 51.3,
+        "corridor": false
+      },
+      {
+        "system": "リオ・ヴェルデ",
+        "dist": 74.0,
+        "corridor": false
+      },
+      {
+        "system": "ポリスーン",
+        "dist": 81.3,
+        "corridor": false
+      }
+    ],
+    "バーミリオン": [
+      {
+        "system": "リューカス",
+        "dist": 31.6,
+        "corridor": false
+      },
+      {
+        "system": "タッシリ",
+        "dist": 38.1,
+        "corridor": false
+      },
+      {
+        "system": "ライガール",
+        "dist": 51.3,
+        "corridor": false
+      }
+    ],
+    "リューカス": [
+      {
+        "system": "バーミリオン",
+        "dist": 31.6,
+        "corridor": false
+      },
+      {
+        "system": "タッシリ",
+        "dist": 48.7,
+        "corridor": false
+      },
+      {
+        "system": "ジャムシード",
+        "dist": 51.5,
+        "corridor": false
+      }
+    ],
+    "マローヴィア": [
+      {
+        "system": "ハダト",
+        "dist": 30.2,
+        "corridor": false
+      },
+      {
+        "system": "ファラーファラ",
+        "dist": 51.0,
+        "corridor": false
+      },
+      {
+        "system": "シヴァ",
+        "dist": 52.5,
+        "corridor": false
+      }
+    ],
+    "ハダト": [
+      {
+        "system": "マローヴィア",
+        "dist": 30.2,
+        "corridor": false
+      },
+      {
+        "system": "ファラーファラ",
+        "dist": 43.5,
+        "corridor": false
+      },
+      {
+        "system": "シヴァ",
+        "dist": 45.9,
+        "corridor": false
+      }
+    ],
+    "ジャムシード": [
+      {
+        "system": "ドーリア",
+        "dist": 44.5,
+        "corridor": false
+      },
+      {
+        "system": "ケリム",
+        "dist": 45.9,
+        "corridor": false
+      },
+      {
+        "system": "リューカス",
+        "dist": 51.5,
+        "corridor": false
+      },
+      {
+        "system": "エル・ファシル",
+        "dist": 52.1,
+        "corridor": false
+      }
+    ],
+    "トリプラ": [
+      {
+        "system": "ライガール",
+        "dist": 39.8,
+        "corridor": false
+      },
+      {
+        "system": "シュパーラ",
+        "dist": 52.4,
+        "corridor": false
+      },
+      {
+        "system": "ガンダルヴァ",
+        "dist": 62.6,
+        "corridor": false
+      },
+      {
+        "system": "ポリスーン",
+        "dist": 70.3,
+        "corridor": false
+      },
+      {
+        "system": "メルカルト",
+        "dist": 73.8,
+        "corridor": false
+      }
+    ],
+    "タッシリ": [
+      {
+        "system": "バーミリオン",
+        "dist": 38.1,
+        "corridor": false
+      },
+      {
+        "system": "リューカス",
+        "dist": 48.7,
+        "corridor": false
+      },
+      {
+        "system": "ライガール",
+        "dist": 50.6,
+        "corridor": false
+      },
+      {
+        "system": "ガンダルヴァ",
+        "dist": 53.3,
+        "corridor": false
+      }
+    ],
+    "シュパーラ": [
+      {
+        "system": "トリプラ",
+        "dist": 52.4,
+        "corridor": false
+      },
+      {
+        "system": "メルカルト",
+        "dist": 52.5,
+        "corridor": false
+      },
+      {
+        "system": "ポリスーン",
+        "dist": 55.7,
+        "corridor": false
+      }
+    ],
+    "ドーリア": [
+      {
+        "system": "エル・ファシル",
+        "dist": 39.0,
+        "corridor": false
+      },
+      {
+        "system": "ジャムシード",
+        "dist": 44.5,
+        "corridor": false
+      },
+      {
+        "system": "エルゴン",
+        "dist": 45.8,
+        "corridor": false
+      }
+    ],
+    "シヴァ": [
+      {
+        "system": "エルゴン",
+        "dist": 39.0,
+        "corridor": false
+      },
+      {
+        "system": "ハダト",
+        "dist": 45.9,
+        "corridor": false
+      },
+      {
+        "system": "マローヴィア",
+        "dist": 52.5,
+        "corridor": false
+      }
+    ],
+    "エル・ファシル": [
+      {
+        "system": "ドーリア",
+        "dist": 39.0,
+        "corridor": false
+      },
+      {
+        "system": "ランテマリオ",
+        "dist": 51.9,
+        "corridor": false
+      },
+      {
+        "system": "ジャムシード",
+        "dist": 52.1,
+        "corridor": false
+      }
+    ],
+    "ガンダルヴァ": [
+      {
+        "system": "シャンダルーア",
+        "dist": 42.8,
+        "corridor": false
+      },
+      {
+        "system": "マル・アデッタ",
+        "dist": 49.9,
+        "corridor": false
+      },
+      {
+        "system": "タッシリ",
+        "dist": 53.3,
+        "corridor": false
+      },
+      {
+        "system": "トリプラ",
+        "dist": 62.6,
+        "corridor": false
+      }
+    ],
+    "ランテマリオ": [
+      {
+        "system": "マル・アデッタ",
+        "dist": 39.9,
+        "corridor": false
+      },
+      {
+        "system": "フォルセティ",
+        "dist": 50.3,
+        "corridor": false
+      },
+      {
+        "system": "エル・ファシル",
+        "dist": 51.9,
+        "corridor": false
+      }
+    ],
+    "メルカルト": [
+      {
+        "system": "バラトループ",
+        "dist": 45.5,
+        "corridor": false
+      },
+      {
+        "system": "シュパーラ",
+        "dist": 52.5,
+        "corridor": false
+      },
+      {
+        "system": "トリプラ",
+        "dist": 73.8,
+        "corridor": false
+      }
+    ],
+    "エルゴン": [
+      {
+        "system": "シヴァ",
+        "dist": 39.0,
+        "corridor": false
+      },
+      {
+        "system": "ダゴン",
+        "dist": 39.1,
+        "corridor": false
+      },
+      {
+        "system": "ドーリア",
+        "dist": 45.8,
+        "corridor": false
+      }
+    ],
+    "マル・アデッタ": [
+      {
+        "system": "シャンダルーア",
+        "dist": 29.4,
+        "corridor": false
+      },
+      {
+        "system": "ファイアザード",
+        "dist": 35.5,
+        "corridor": false
+      },
+      {
+        "system": "フォルセティ",
+        "dist": 36.2,
+        "corridor": false
+      },
+      {
+        "system": "ランテマリオ",
+        "dist": 39.9,
+        "corridor": false
+      },
+      {
+        "system": "ガンダルヴァ",
+        "dist": 49.9,
+        "corridor": false
+      }
+    ],
+    "バラトループ": [
+      {
+        "system": "ポレヴィト",
+        "dist": 40.0,
+        "corridor": false
+      },
+      {
+        "system": "メルカルト",
+        "dist": 45.5,
+        "corridor": false
+      },
+      {
+        "system": "シャンダルーア",
+        "dist": 57.3,
+        "corridor": false
+      }
+    ],
+    "シャンダルーア": [
+      {
+        "system": "マル・アデッタ",
+        "dist": 29.4,
+        "corridor": false
+      },
+      {
+        "system": "ファイアザード",
+        "dist": 39.1,
+        "corridor": false
+      },
+      {
+        "system": "ガンダルヴァ",
+        "dist": 42.8,
+        "corridor": false
+      },
+      {
+        "system": "ポレヴィト",
+        "dist": 51.0,
+        "corridor": false
+      },
+      {
+        "system": "バラトループ",
+        "dist": 57.3,
+        "corridor": false
+      }
+    ],
+    "ダゴン": [
+      {
+        "system": "エルゴン",
+        "dist": 39.1,
+        "corridor": false
+      },
+      {
+        "system": "アスターテ",
+        "dist": 39.5,
+        "corridor": false
+      },
+      {
+        "system": "ヴァンフリート",
+        "dist": 59.9,
+        "corridor": true
+      }
+    ],
+    "ティアマト": [
+      {
+        "system": "ドラゴニア",
+        "dist": 30.6,
+        "corridor": false
+      },
+      {
+        "system": "アスターテ",
+        "dist": 34.4,
+        "corridor": false
+      },
+      {
+        "system": "アルトミュール",
+        "dist": 39.4,
+        "corridor": false
+      },
+      {
+        "system": "アルレスハイム",
+        "dist": 40.9,
+        "corridor": false
+      },
+      {
+        "system": "ヴァンフリート",
+        "dist": 48.4,
+        "corridor": true
+      }
+    ],
+    "ドラゴニア": [
+      {
+        "system": "アルレスハイム",
+        "dist": 22.4,
+        "corridor": false
+      },
+      {
+        "system": "ティアマト",
+        "dist": 30.6,
+        "corridor": false
+      },
+      {
+        "system": "フォルセティ",
+        "dist": 35.5,
+        "corridor": false
+      },
+      {
+        "system": "パランティア",
+        "dist": 41.7,
+        "corridor": false
+      }
+    ],
+    "フォルセティ": [
+      {
+        "system": "パランティア",
+        "dist": 22.4,
+        "corridor": false
+      },
+      {
+        "system": "ファイアザード",
+        "dist": 32.3,
+        "corridor": false
+      },
+      {
+        "system": "ドラゴニア",
+        "dist": 35.5,
+        "corridor": false
+      },
+      {
+        "system": "マル・アデッタ",
+        "dist": 36.2,
+        "corridor": false
+      },
+      {
+        "system": "アルレスハイム",
+        "dist": 41.8,
+        "corridor": false
+      },
+      {
+        "system": "ランテマリオ",
+        "dist": 50.3,
+        "corridor": false
+      }
+    ],
+    "アスターテ": [
+      {
+        "system": "ヴァンフリート",
+        "dist": 24.5,
+        "corridor": true
+      },
+      {
+        "system": "アルトミュール",
+        "dist": 31.5,
+        "corridor": false
+      },
+      {
+        "system": "ティアマト",
+        "dist": 34.4,
+        "corridor": false
+      },
+      {
+        "system": "ダゴン",
+        "dist": 39.5,
+        "corridor": false
+      }
+    ],
+    "ファイアザード": [
+      {
+        "system": "パランティア",
+        "dist": 32.0,
+        "corridor": false
+      },
+      {
+        "system": "フォルセティ",
+        "dist": 32.3,
+        "corridor": false
+      },
+      {
+        "system": "マル・アデッタ",
+        "dist": 35.5,
+        "corridor": false
+      },
+      {
+        "system": "シャンダルーア",
+        "dist": 39.1,
+        "corridor": false
+      },
+      {
+        "system": "ポレヴィト",
+        "dist": 65.4,
+        "corridor": false
+      }
+    ],
+    "ポレヴィト": [
+      {
+        "system": "バラトループ",
+        "dist": 40.0,
+        "corridor": false
+      },
+      {
+        "system": "シャンダルーア",
+        "dist": 51.0,
+        "corridor": false
+      },
+      {
+        "system": "フェザーン",
+        "dist": 52.6,
+        "corridor": true
+      },
+      {
+        "system": "ファイアザード",
+        "dist": 65.4,
+        "corridor": false
+      }
+    ],
+    "アルレスハイム": [
+      {
+        "system": "ドラゴニア",
+        "dist": 22.4,
+        "corridor": false
+      },
+      {
+        "system": "アルトミュール",
+        "dist": 34.1,
+        "corridor": false
+      },
+      {
+        "system": "パランティア",
+        "dist": 34.9,
+        "corridor": false
+      },
+      {
+        "system": "ティアマト",
+        "dist": 40.9,
+        "corridor": false
+      },
+      {
+        "system": "フォルセティ",
+        "dist": 41.8,
+        "corridor": false
+      },
+      {
+        "system": "ヴァンフリート",
+        "dist": 52.6,
+        "corridor": true
+      }
+    ],
+    "パランティア": [
+      {
+        "system": "フォルセティ",
+        "dist": 22.4,
+        "corridor": false
+      },
+      {
+        "system": "ファイアザード",
+        "dist": 32.0,
+        "corridor": false
+      },
+      {
+        "system": "アルレスハイム",
+        "dist": 34.9,
+        "corridor": false
+      },
+      {
+        "system": "ドラゴニア",
+        "dist": 41.7,
+        "corridor": false
+      }
+    ],
+    "アルトミュール": [
+      {
+        "system": "ヴァンフリート",
+        "dist": 18.5,
+        "corridor": true
+      },
+      {
+        "system": "アスターテ",
+        "dist": 31.5,
+        "corridor": false
+      },
+      {
+        "system": "アルレスハイム",
+        "dist": 34.1,
+        "corridor": false
+      },
+      {
+        "system": "ティアマト",
+        "dist": 39.4,
+        "corridor": false
+      },
+      {
+        "system": "イゼルローン",
+        "dist": 55.5,
+        "corridor": true
+      }
+    ],
+    "ヴァンフリート": [
+      {
+        "system": "アルトミュール",
+        "dist": 18.5,
+        "corridor": true
+      },
+      {
+        "system": "アスターテ",
+        "dist": 24.5,
+        "corridor": true
+      },
+      {
+        "system": "イゼルローン",
+        "dist": 48.1,
+        "corridor": true
+      },
+      {
+        "system": "ティアマト",
+        "dist": 48.4,
+        "corridor": true
+      },
+      {
+        "system": "アルレスハイム",
+        "dist": 52.6,
+        "corridor": true
+      },
+      {
+        "system": "ダゴン",
+        "dist": 59.9,
+        "corridor": true
+      }
+    ],
+    "フェザーン": [
+      {
+        "system": "アイゼンヘルツ",
+        "dist": 42.2,
+        "corridor": true
+      },
+      {
+        "system": "ポレヴィト",
+        "dist": 52.6,
+        "corridor": true
+      }
+    ],
+    "イゼルローン": [
+      {
+        "system": "ヴァンフリート",
+        "dist": 48.1,
+        "corridor": true
+      },
+      {
+        "system": "アムリッツァ",
+        "dist": 51.3,
+        "corridor": true
+      },
+      {
+        "system": "アルトミュール",
+        "dist": 55.5,
+        "corridor": true
+      },
+      {
+        "system": "ヴァンステイド",
+        "dist": 79.6,
+        "corridor": true
+      },
+      {
+        "system": "ビルロスト",
+        "dist": 87.8,
+        "corridor": true
+      }
+    ],
+    "アイゼンヘルツ": [
+      {
+        "system": "ヨーツンヘイム",
+        "dist": 38.7,
+        "corridor": true
+      },
+      {
+        "system": "フェザーン",
+        "dist": 42.2,
+        "corridor": true
+      },
+      {
+        "system": "アルメントフベール",
+        "dist": 57.0,
+        "corridor": true
+      },
+      {
+        "system": "フォルゲン",
+        "dist": 67.6,
+        "corridor": true
+      }
+    ],
+    "アムリッツァ": [
+      {
+        "system": "ヴァンステイド",
+        "dist": 46.7,
+        "corridor": true
+      },
+      {
+        "system": "ドヴェルグ",
+        "dist": 50.9,
+        "corridor": true
+      },
+      {
+        "system": "イゼルローン",
+        "dist": 51.3,
+        "corridor": true
+      },
+      {
+        "system": "ビルロスト",
+        "dist": 54.7,
+        "corridor": true
+      },
+      {
+        "system": "ボルソルン",
+        "dist": 61.2,
+        "corridor": true
+      }
+    ],
+    "フォルゲン": [
+      {
+        "system": "ブラウンシュヴァイク",
+        "dist": 48.2,
+        "corridor": true
+      },
+      {
+        "system": "ヨーツンヘイム",
+        "dist": 51.8,
+        "corridor": true
+      },
+      {
+        "system": "アイゼンヘルツ",
+        "dist": 67.6,
+        "corridor": true
+      }
+    ],
+    "ヨーツンヘイム": [
+      {
+        "system": "アイゼンヘルツ",
+        "dist": 38.7,
+        "corridor": true
+      },
+      {
+        "system": "ブラウンシュヴァイク",
+        "dist": 39.5,
+        "corridor": false
+      },
+      {
+        "system": "アルメントフベール",
+        "dist": 51.4,
+        "corridor": false
+      },
+      {
+        "system": "フォルゲン",
+        "dist": 51.8,
+        "corridor": true
+      },
+      {
+        "system": "フレイア",
+        "dist": 69.0,
+        "corridor": false
+      }
+    ],
+    "ヴァンステイド": [
+      {
+        "system": "アムリッツァ",
+        "dist": 46.7,
+        "corridor": true
+      },
+      {
+        "system": "トラーバッハ",
+        "dist": 49.2,
+        "corridor": false
+      },
+      {
+        "system": "アルタイル",
+        "dist": 54.7,
+        "corridor": false
+      },
+      {
+        "system": "イゼルローン",
+        "dist": 79.6,
+        "corridor": true
+      }
+    ],
+    "ビルロスト": [
+      {
+        "system": "ボルソルン",
+        "dist": 33.2,
+        "corridor": false
+      },
+      {
+        "system": "アムリッツァ",
+        "dist": 54.7,
+        "corridor": true
+      },
+      {
+        "system": "ドヴェルグ",
+        "dist": 59.3,
+        "corridor": false
+      },
+      {
+        "system": "イゼルローン",
+        "dist": 87.8,
+        "corridor": true
+      }
+    ],
+    "アルメントフベール": [
+      {
+        "system": "フレイア",
+        "dist": 44.6,
+        "corridor": false
+      },
+      {
+        "system": "トラーバッハ",
+        "dist": 50.8,
+        "corridor": false
+      },
+      {
+        "system": "ヨーツンヘイム",
+        "dist": 51.4,
+        "corridor": false
+      },
+      {
+        "system": "アイゼンヘルツ",
+        "dist": 57.0,
+        "corridor": true
+      }
+    ],
+    "トラーバッハ": [
+      {
+        "system": "ヴァンステイド",
+        "dist": 49.2,
+        "corridor": false
+      },
+      {
+        "system": "アルメントフベール",
+        "dist": 50.8,
+        "corridor": false
+      },
+      {
+        "system": "アルタイル",
+        "dist": 51.7,
+        "corridor": false
+      }
+    ],
+    "ブラウンシュヴァイク": [
+      {
+        "system": "ヨーツンヘイム",
+        "dist": 39.5,
+        "corridor": false
+      },
+      {
+        "system": "キフォイザー",
+        "dist": 43.4,
+        "corridor": false
+      },
+      {
+        "system": "フォルゲン",
+        "dist": 48.2,
+        "corridor": true
+      },
+      {
+        "system": "バルドル",
+        "dist": 75.8,
+        "corridor": false
+      }
+    ],
+    "ボルソルン": [
+      {
+        "system": "ビルロスト",
+        "dist": 33.2,
+        "corridor": false
+      },
+      {
+        "system": "ドヴェルグ",
+        "dist": 35.5,
+        "corridor": false
+      },
+      {
+        "system": "アムリッツァ",
+        "dist": 61.2,
+        "corridor": true
+      }
+    ],
+    "ドヴェルグ": [
+      {
+        "system": "ヤヴァンハール",
+        "dist": 30.9,
+        "corridor": false
+      },
+      {
+        "system": "ボルソルン",
+        "dist": 35.5,
+        "corridor": false
+      },
+      {
+        "system": "アムリッツァ",
+        "dist": 50.9,
+        "corridor": true
+      },
+      {
+        "system": "ビルロスト",
+        "dist": 59.3,
+        "corridor": false
+      }
+    ],
+    "アルタイル": [
+      {
+        "system": "ヤヴァンハール",
+        "dist": 42.6,
+        "corridor": false
+      },
+      {
+        "system": "トラーバッハ",
+        "dist": 51.7,
+        "corridor": false
+      },
+      {
+        "system": "ヴァンステイド",
+        "dist": 54.7,
+        "corridor": false
+      },
+      {
+        "system": "アルヴィース",
+        "dist": 59.1,
+        "corridor": false
+      }
+    ],
+    "フレイア": [
+      {
+        "system": "アルメントフベール",
+        "dist": 44.6,
+        "corridor": false
+      },
+      {
+        "system": "アルヴィース",
+        "dist": 59.1,
+        "corridor": false
+      },
+      {
+        "system": "ヨーツンヘイム",
+        "dist": 69.0,
+        "corridor": false
+      }
+    ],
+    "ヤヴァンハール": [
+      {
+        "system": "ドヴェルグ",
+        "dist": 30.9,
+        "corridor": false
+      },
+      {
+        "system": "アルタイル",
+        "dist": 42.6,
+        "corridor": false
+      },
+      {
+        "system": "リンダーホーフ",
+        "dist": 57.8,
+        "corridor": false
+      }
+    ],
+    "キフォイザー": [
+      {
+        "system": "バルドル",
+        "dist": 32.9,
+        "corridor": false
+      },
+      {
+        "system": "ブラウンシュヴァイク",
+        "dist": 43.4,
+        "corridor": false
+      },
+      {
+        "system": "リッテンハイム",
+        "dist": 66.1,
+        "corridor": false
+      }
+    ],
+    "アルヴィース": [
+      {
+        "system": "アルテナ",
+        "dist": 52.2,
+        "corridor": false
+      },
+      {
+        "system": "アルタイル",
+        "dist": 59.1,
+        "corridor": false
+      },
+      {
+        "system": "フレイア",
+        "dist": 59.1,
+        "corridor": false
+      }
+    ],
+    "太陽系": [
+      {
+        "system": "ヴェガ",
+        "dist": 30.1,
+        "corridor": false
+      },
+      {
+        "system": "シリウス",
+        "dist": 30.4,
+        "corridor": false
+      },
+      {
+        "system": "リンダーホーフ",
+        "dist": 60.6,
+        "corridor": false
+      }
+    ],
+    "バルドル": [
+      {
+        "system": "キフォイザー",
+        "dist": 32.9,
+        "corridor": false
+      },
+      {
+        "system": "リッテンハイム",
+        "dist": 41.7,
+        "corridor": false
+      },
+      {
+        "system": "ブラウンシュヴァイク",
+        "dist": 75.8,
+        "corridor": false
+      }
+    ],
+    "リンダーホーフ": [
+      {
+        "system": "ヴィレンシュタイン",
+        "dist": 52.5,
+        "corridor": false
+      },
+      {
+        "system": "ヴェガ",
+        "dist": 53.1,
+        "corridor": false
+      },
+      {
+        "system": "ヤヴァンハール",
+        "dist": 57.8,
+        "corridor": false
+      },
+      {
+        "system": "太陽系",
+        "dist": 60.6,
+        "corridor": false
+      }
+    ],
+    "シリウス": [
+      {
+        "system": "ヴェガ",
+        "dist": 21.4,
+        "corridor": false
+      },
+      {
+        "system": "太陽系",
+        "dist": 30.4,
+        "corridor": false
+      },
+      {
+        "system": "ヴィレンシュタイン",
+        "dist": 69.7,
+        "corridor": false
+      }
+    ],
+    "ヴェガ": [
+      {
+        "system": "シリウス",
+        "dist": 21.4,
+        "corridor": false
+      },
+      {
+        "system": "太陽系",
+        "dist": 30.1,
+        "corridor": false
+      },
+      {
+        "system": "ヴィレンシュタイン",
+        "dist": 51.8,
+        "corridor": false
+      },
+      {
+        "system": "リンダーホーフ",
+        "dist": 53.1,
+        "corridor": false
+      }
+    ],
+    "アルテナ": [
+      {
+        "system": "アルヴィース",
+        "dist": 52.2,
+        "corridor": false
+      },
+      {
+        "system": "シャンタウ",
+        "dist": 52.4,
+        "corridor": false
+      },
+      {
+        "system": "ヴァルデマール",
+        "dist": 61.5,
+        "corridor": false
+      }
+    ],
+    "リッテンハイム": [
+      {
+        "system": "バルドル",
+        "dist": 41.7,
+        "corridor": false
+      },
+      {
+        "system": "ランメルスベルク",
+        "dist": 51.2,
+        "corridor": false
+      },
+      {
+        "system": "ヴァルデマール",
+        "dist": 61.9,
+        "corridor": false
+      },
+      {
+        "system": "キフォイザー",
+        "dist": 66.1,
+        "corridor": false
+      }
+    ],
+    "ヴェルラ": [
+      {
+        "system": "ヴァルハラ",
+        "dist": 39.3,
+        "corridor": false
+      },
+      {
+        "system": "ニヴルヘイム",
+        "dist": 50.2,
+        "corridor": false
+      },
+      {
+        "system": "ハインスベルク",
+        "dist": 60.6,
+        "corridor": false
+      }
+    ],
+    "ヴィレンシュタイン": [
+      {
+        "system": "ハインスベルク",
+        "dist": 47.2,
+        "corridor": false
+      },
+      {
+        "system": "カストロプ",
+        "dist": 51.2,
+        "corridor": false
+      },
+      {
+        "system": "ヴェガ",
+        "dist": 51.8,
+        "corridor": false
+      },
+      {
+        "system": "リンダーホーフ",
+        "dist": 52.5,
+        "corridor": false
+      },
+      {
+        "system": "シリウス",
+        "dist": 69.7,
+        "corridor": false
+      }
+    ],
+    "ハインスベルク": [
+      {
+        "system": "ニヴルヘイム",
+        "dist": 22.8,
+        "corridor": false
+      },
+      {
+        "system": "ヴァナヘイム",
+        "dist": 36.1,
+        "corridor": false
+      },
+      {
+        "system": "ヴィレンシュタイン",
+        "dist": 47.2,
+        "corridor": false
+      },
+      {
+        "system": "カストロプ",
+        "dist": 59.0,
+        "corridor": false
+      },
+      {
+        "system": "ヴェルラ",
+        "dist": 60.6,
+        "corridor": false
+      }
+    ],
+    "ヴァルデマール": [
+      {
+        "system": "ヴィッテルスバッハ",
+        "dist": 37.1,
+        "corridor": false
+      },
+      {
+        "system": "ランメルスベルク",
+        "dist": 38.4,
+        "corridor": false
+      },
+      {
+        "system": "シャンタウ",
+        "dist": 40.9,
+        "corridor": false
+      },
+      {
+        "system": "アルテナ",
+        "dist": 61.5,
+        "corridor": false
+      },
+      {
+        "system": "リッテンハイム",
+        "dist": 61.9,
+        "corridor": false
+      }
+    ],
+    "ヴァルハラ": [
+      {
+        "system": "ヴェルラ",
+        "dist": 39.3,
+        "corridor": false
+      },
+      {
+        "system": "ニヴルヘイム",
+        "dist": 41.9,
+        "corridor": false
+      },
+      {
+        "system": "アスガルド",
+        "dist": 46.3,
+        "corridor": false
+      },
+      {
+        "system": "ルイトポルディング",
+        "dist": 49.9,
+        "corridor": false
+      },
+      {
+        "system": "シャンタウ",
+        "dist": 52.0,
+        "corridor": false
+      }
+    ],
+    "シャンタウ": [
+      {
+        "system": "アスガルド",
+        "dist": 33.1,
+        "corridor": false
+      },
+      {
+        "system": "ヴァルデマール",
+        "dist": 40.9,
+        "corridor": false
+      },
+      {
+        "system": "ヴァルハラ",
+        "dist": 52.0,
+        "corridor": false
+      },
+      {
+        "system": "アルテナ",
+        "dist": 52.4,
+        "corridor": false
+      }
+    ],
+    "ニヴルヘイム": [
+      {
+        "system": "ハインスベルク",
+        "dist": 22.8,
+        "corridor": false
+      },
+      {
+        "system": "ヴァナヘイム",
+        "dist": 36.7,
+        "corridor": false
+      },
+      {
+        "system": "ヴァルハラ",
+        "dist": 41.9,
+        "corridor": false
+      },
+      {
+        "system": "ヴェルラ",
+        "dist": 50.2,
+        "corridor": false
+      }
+    ],
+    "ランメルスベルク": [
+      {
+        "system": "ヴァルデマール",
+        "dist": 38.4,
+        "corridor": false
+      },
+      {
+        "system": "ヴィッテルスバッハ",
+        "dist": 47.7,
+        "corridor": false
+      },
+      {
+        "system": "リッテンハイム",
+        "dist": 51.2,
+        "corridor": false
+      }
+    ],
+    "カストロプ": [
+      {
+        "system": "ヴィレンシュタイン",
+        "dist": 51.2,
+        "corridor": false
+      },
+      {
+        "system": "ヴァナヘイム",
+        "dist": 51.9,
+        "corridor": false
+      },
+      {
+        "system": "ハインスベルク",
+        "dist": 59.0,
+        "corridor": false
+      }
+    ],
+    "アスガルド": [
+      {
+        "system": "シャンタウ",
+        "dist": 33.1,
+        "corridor": false
+      },
+      {
+        "system": "ウォームスガウ",
+        "dist": 43.2,
+        "corridor": false
+      },
+      {
+        "system": "ルイトポルディング",
+        "dist": 45.9,
+        "corridor": false
+      },
+      {
+        "system": "ヴァルハラ",
+        "dist": 46.3,
+        "corridor": false
+      },
+      {
+        "system": "ヴィンスティンゲン",
+        "dist": 52.6,
+        "corridor": false
+      }
+    ],
+    "ヴァナヘイム": [
+      {
+        "system": "ハインスベルク",
+        "dist": 36.1,
+        "corridor": false
+      },
+      {
+        "system": "ニヴルヘイム",
+        "dist": 36.7,
+        "corridor": false
+      },
+      {
+        "system": "カストロプ",
+        "dist": 51.9,
+        "corridor": false
+      }
+    ],
+    "ヴィッテルスバッハ": [
+      {
+        "system": "ヴィンスティンゲン",
+        "dist": 34.3,
+        "corridor": false
+      },
+      {
+        "system": "ヴァルデマール",
+        "dist": 37.1,
+        "corridor": false
+      },
+      {
+        "system": "ランメルスベルク",
+        "dist": 47.7,
+        "corridor": false
+      }
+    ],
+    "ルイトポルディング": [
+      {
+        "system": "アスガルド",
+        "dist": 45.9,
+        "corridor": false
+      },
+      {
+        "system": "ウォームスガウ",
+        "dist": 48.2,
+        "corridor": false
+      },
+      {
+        "system": "ヴァルハラ",
+        "dist": 49.9,
+        "corridor": false
+      }
+    ],
+    "ヴィンスティンゲン": [
+      {
+        "system": "ヴィッテルスバッハ",
+        "dist": 34.3,
+        "corridor": false
+      },
+      {
+        "system": "ウォームスガウ",
+        "dist": 37.4,
+        "corridor": false
+      },
+      {
+        "system": "アスガルド",
+        "dist": 52.6,
+        "corridor": false
+      }
+    ],
+    "ウォームスガウ": [
+      {
+        "system": "ヴィンスティンゲン",
+        "dist": 37.4,
+        "corridor": false
+      },
+      {
+        "system": "アスガルド",
+        "dist": 43.2,
+        "corridor": false
+      },
+      {
+        "system": "ルイトポルディング",
+        "dist": 48.2,
+        "corridor": false
+      }
+    ]
+  }
+}

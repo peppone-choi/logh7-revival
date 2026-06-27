@@ -1,0 +1,11 @@
+{
+  "name": "menufix",
+  "desc": "Enable the four lobby menu buttons (NewChar/Lottery/Delete/Session) that scene 0x16 (FUN_0051a370) hardcodes disabled via the enable array [1,0,0,0,0,1,0,1]. Same-length imm8 00->01 at the four `mov byte [esp+disp],0` sites. Verified live (Task 1): clicking advances the new-character flow.",
+  "verified": "live (clickable)",
+  "patches": [
+    { "va": "0x0051ab3a", "originalHex": "c644241500", "patchedHex": "c644241501", "note": "btn1 NewChar enable 0->1" },
+    { "va": "0x0051ab3f", "originalHex": "c644241600", "patchedHex": "c644241601", "note": "btn2 Lottery enable 0->1" },
+    { "va": "0x0051ab44", "originalHex": "c644241700", "patchedHex": "c644241701", "note": "btn3 Delete enable 0->1" },
+    { "va": "0x0051ab49", "originalHex": "c644241800", "patchedHex": "c644241801", "note": "btn4 Session enable 0->1" }
+  ]
+}

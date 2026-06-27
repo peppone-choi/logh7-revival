@@ -65,8 +65,12 @@ class letter**, NEW data not present in `content/galaxy.json` (which sourced sys
 the manual PDF). Plus 3 black holes (`bh_01..03`) and 3 neutron stars (`ns_01..03`).
 
 Spectral histogram (79 stars): **M 21, G 19, K 17, F 8, A 7, B 5, O 2** — a plausible cool-dwarf-heavy
-population. Index = map node order (NOT guaranteed to equal galaxy.json system order; not cross-linked
-here because no byte links them).
+population. O/B hot-blue classes total 7, not 1. Index = map node order (NOT guaranteed to equal
+galaxy.json system order; no byte link to a named system has been recovered).
+
+Server use: the live strategic marker path may use this indexed list as `model_node_order_provisional`
+render metadata for `0x0313.byte2` only. Do not present it as original server-authoritative per-name
+stellar class data until a direct `star_<NN>` ↔ named-system link is recovered.
 
 ### C. Planet / space / effect / strategy meshes
 
@@ -101,4 +105,5 @@ its structure under `tcf_hed_index` but does not re-derive it.
 - **Vertex/material binary** (the bulk of each file: float vertex arrays, UVs, surface params) is left
   unparsed; it is render geometry, not game data, and the task targets DATA tables.
 - **Star↔system linkage**: `Null_galaxy` star node order is not byte-linked to `galaxy.json` system
-  order, so the spectral classes are published as an indexed list, not joined to system names.
+  order. The content pack carries a `model_node_order_provisional` render join so the client no longer
+  collapses star markers to faction tint, but this is not an original-server per-name claim.

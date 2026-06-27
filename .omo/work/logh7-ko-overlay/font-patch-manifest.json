@@ -1,0 +1,18 @@
+{
+  "charset": "HANGEUL_CHARSET",
+  "charsetValue": 129,
+  "sites": [
+    {
+      "virtualAddressHex": "0x004aedeb",
+      "fileOffsetHex": "0x000aedeb",
+      "originalHex": "6a01",
+      "patchedHex": "6a81"
+    },
+    {
+      "virtualAddressHex": "0x004b0b97",
+      "fileOffsetHex": "0x000b0b97",
+      "originalHex": "6a01",
+      "patchedHex": "6a81"
+    }
+  ]
+}

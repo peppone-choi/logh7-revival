@@ -1,0 +1,4197 @@
+{
+  "_source": "gin7manualsaved.pdf 星系図 special Text annotations (80 system labels; cx/cy only); canonCol/canonRow are zero-indexed wire cells from page-101 raster star-dot centers (.omo/work/galaxy-extract/page101-bg.jpg; labels/annotations identify names only; black inner line markers rejected; game grid coordinates are 1-indexed in canonGameCol/canonGameRow)",
+  "_extracted": "2026-06-12",
+  "_specialBodies": {
+    "_grade": "P1 (existence/count) — Null_galaxy.mdx scene-graph named nodes (content/extracted/model-galaxy-stars.json special_bodies)",
+    "_provenance": "data/model/strategy/Null_galaxy.mdx 노드명: bh_01..bh_03 (블랙홀 3) + ns_01..ns_03 (중성자별 3). 3D-맵 천체이며 노드 인덱스는 galaxy.json 성계 순서가 아님(매핑 캐논 부재).",
+    "blackHoleCount": 3,
+    "neutronStarCount": 3,
+    "_cellPlacement": "UNVERIFIED (P3): 어느 성계/그리드 셀에 속하는지 캐논 매핑이 없다. 추측 좌표를 P0로 승격하지 않는다 — 0x0315 빌더는 blackHoleCells/neutronStarCells를 호출자가 명시할 때만 進入不可 장애물(값 90/91)로 인코딩한다.",
+    "_impassable": "진입불가(프라즈마/사르가소와 동일 class blocked). 캐논 group-0x18 전용 라벨 부재 → 航行不能(2) 라벨 재사용."
+  },
+  "systems": [
+    {
+      "system": "ルンビーニ",
+      "planets": [
+        {
+          "name": "バクタプール",
+          "orbit": 1
+        },
+        {
+          "name": "カライヤ",
+          "orbit": 2
+        },
+        {
+          "name": "バドガオン",
+          "orbit": 3
+        }
+      ],
+      "fortresses": [],
+      "rect": [
+        249.18018,
+        52.316888,
+        269.18019,
+        74.31689
+      ],
+      "page": 101,
+      "faction": "alliance",
+      "cx": 259.2,
+      "cy": 63.3,
+      "in_iv_ex": true,
+      "is_corridor": 0,
+      "canonCol": 5,
+      "canonRow": 20,
+      "canonDotX": 257.856,
+      "canonDotY": 759.725,
+      "canonLineMarkerX": 259.201,
+      "canonLineMarkerY": 776.414,
+      "canonLineMarkerCol": 3,
+      "canonLineMarkerRow": 22,
+      "canonGameCol": 6,
+      "canonGameRow": 21,
+      "canonPixelX": 82.275,
+      "canonPixelY": 257.856,
+      "canonColorRgb": [
+        168,
+        62,
+        11
+      ],
+      "canonColorHue": 19.5,
+      "spectralClass": "K",
+      "spectralClassSource": "page101-bg actual star disk color after local background subtraction; center pixel alone is not used"
+    },
+    {
+      "system": "シロン",
+      "planets": [
+        {
+          "name": "ネプティス",
+          "orbit": 1
+        },
+        {
+          "name": "ジャライン",
+          "orbit": 2
+        },
+        {
+          "name": "アヌビス",
+          "orbit": 3
+        },
+        {
+          "name": "オシリス",
+          "orbit": 4
+        }
+      ],
+      "fortresses": [],
+      "rect": [
+        207.65015,
+        58.874269,
+        227.65015,
+        80.87427
+      ],
+      "page": 101,
+      "faction": "alliance",
+      "cx": 217.7,
+      "cy": 69.9,
+      "in_iv_ex": false,
+      "is_corridor": 0,
+      "canonCol": 6,
+      "canonRow": 14,
+      "canonDotX": 214.45,
+      "canonDotY": 752.428,
+      "canonLineMarkerX": 217.671,
+      "canonLineMarkerY": 769.857,
+      "canonLineMarkerCol": 4,
+      "canonLineMarkerRow": 16,
+      "canonGameCol": 7,
+      "canonGameRow": 15,
+      "canonPixelX": 89.572,
+      "canonPixelY": 214.45,
+      "canonColorRgb": [
+        171,
+        118,
+        46
+      ],
+      "canonColorHue": 34.6,
+      "spectralClass": "G",
+      "spectralClassSource": "page101-bg actual star disk color after local background subtraction; center pixel alone is not used"
+    },
+    {
+      "system": "エリューセラ",
+      "planets": [
+        {
+          "name": "コルテラッツォ",
+          "orbit": 1
+        },
+        {
+          "name": "ポンテ・クレパルド",
+          "orbit": 2
+        },
+        {
+          "name": "クルッキド",
+          "orbit": 3
+        },
+        {
+          "name": "アンドロス",
+          "orbit": 4
+        }
+      ],
+      "fortresses": [],
+      "rect": [
+        341.52986,
+        67.61743,
+        361.52986,
+        89.617427
+      ],
+      "page": 101,
+      "faction": "alliance",
+      "cx": 351.5,
+      "cy": 78.6,
+      "in_iv_ex": true,
+      "is_corridor": 0,
+      "canonCol": 7,
+      "canonRow": 34,
+      "canonDotX": 351.15,
+      "canonDotY": 745.038,
+      "canonLineMarkerX": 351.551,
+      "canonLineMarkerY": 761.114,
+      "canonLineMarkerCol": 5,
+      "canonLineMarkerRow": 35,
+      "canonGameCol": 8,
+      "canonGameRow": 35,
+      "canonPixelX": 96.962,
+      "canonPixelY": 351.15,
+      "canonColorRgb": [
+        179,
+        107,
+        40
+      ],
+      "canonColorHue": 28.9,
+      "spectralClass": "G",
+      "spectralClassSource": "page101-bg actual star disk color after local background subtraction; center pixel alone is not used"
+    },
+    {
+      "system": "タナトス",
+      "planets": [
+        {
+          "name": "エコニア",
+          "orbit": 1
+        },
+        {
+          "name": "プロスキナス",
+          "orbit": 2
+        },
+        {
+          "name": "マスジット",
+          "orbit": 3
+        },
+        {
+          "name": "ケール",
+          "orbit": 4
+        }
+      ],
+      "fortresses": [],
+      "rect": [
+        292.34956,
+        80.18573,
+        312.34956,
+        102.18573
+      ],
+      "page": 101,
+      "faction": "alliance",
+      "cx": 302.3,
+      "cy": 91.2,
+      "in_iv_ex": true,
+      "is_corridor": 0,
+      "canonCol": 9,
+      "canonRow": 27,
+      "canonDotX": 300.967,
+      "canonDotY": 730.644,
+      "canonLineMarkerX": 302.371,
+      "canonLineMarkerY": 748.546,
+      "canonLineMarkerCol": 7,
+      "canonLineMarkerRow": 28,
+      "canonGameCol": 10,
+      "canonGameRow": 28,
+      "canonPixelX": 111.356,
+      "canonPixelY": 300.967,
+      "canonColorRgb": [
+        180,
+        116,
+        43
+      ],
+      "canonColorHue": 32.0,
+      "spectralClass": "G",
+      "spectralClassSource": "page101-bg actual star disk color after local background subtraction; center pixel alone is not used"
+    },
+    {
+      "system": "リオ・ヴェルデ",
+      "planets": [
+        {
+          "name": "メサ・デル・アグア",
+          "orbit": 1
+        },
+        {
+          "name": "サン・カルロス",
+          "orbit": 2
+        },
+        {
+          "name": "リアノ・ブランコ",
+          "orbit": 3
+        },
+        {
+          "name": "イスラ・ブランカ",
+          "orbit": 4
+        }
+      ],
+      "fortresses": [],
+      "rect": [
+        337.15827,
+        94.93982,
+        357.15827,
+        116.93982
+      ],
+      "page": 101,
+      "faction": "alliance",
+      "cx": 347.2,
+      "cy": 105.9,
+      "in_iv_ex": true,
+      "is_corridor": 0,
+      "canonCol": 11,
+      "canonRow": 33,
+      "canonDotX": 344.121,
+      "canonDotY": 716.132,
+      "canonLineMarkerX": 347.179,
+      "canonLineMarkerY": 733.792,
+      "canonLineMarkerCol": 9,
+      "canonLineMarkerRow": 34,
+      "canonGameCol": 12,
+      "canonGameRow": 34,
+      "canonPixelX": 125.868,
+      "canonPixelY": 344.121,
+      "canonColorRgb": [
+        173,
+        61,
+        21
+      ],
+      "canonColorHue": 15.8,
+      "spectralClass": "K",
+      "spectralClassSource": "page101-bg actual star disk color after local background subtraction; center pixel alone is not used"
+    },
+    {
+      "system": "ロフォーテン",
+      "planets": [
+        {
+          "name": "アルスタッド",
+          "orbit": 1
+        },
+        {
+          "name": "バルスタッド",
+          "orbit": 2
+        },
+        {
+          "name": "スヴォルヴェア",
+          "orbit": 3
+        }
+      ],
+      "fortresses": [
+        "ルドミラ"
+      ],
+      "rect": [
+        187.43158,
+        110.24036,
+        207.43158,
+        132.24036
+      ],
+      "page": 101,
+      "faction": "alliance",
+      "cx": 197.4,
+      "cy": 121.2,
+      "in_iv_ex": true,
+      "is_corridor": 0,
+      "canonCol": 13,
+      "canonRow": 11,
+      "canonDotX": 192.615,
+      "canonDotY": 701.846,
+      "canonLineMarkerX": 197.453,
+      "canonLineMarkerY": 718.491,
+      "canonLineMarkerCol": 11,
+      "canonLineMarkerRow": 13,
+      "canonGameCol": 14,
+      "canonGameRow": 12,
+      "canonPixelX": 140.154,
+      "canonPixelY": 192.615,
+      "canonColorRgb": [
+        166,
+        116,
+        32
+      ],
+      "canonColorHue": 37.6,
+      "spectralClass": "G",
+      "spectralClassSource": "page101-bg actual star disk color after local background subtraction; center pixel alone is not used"
+    },
+    {
+      "system": "バーラト",
+      "planets": [
+        {
+          "name": "テルヌーゼン",
+          "orbit": 1
+        },
+        {
+          "name": "カスバ・ナグム",
+          "orbit": 2
+        },
+        {
+          "name": "ハイネセン",
+          "orbit": 3
+        },
+        {
+          "name": "シリューナガル",
+          "orbit": 4
+        }
+      ],
+      "fortresses": [],
+      "rect": [
+        250.81952,
+        116.251277,
+        270.81953,
+        138.25128
+      ],
+      "page": 101,
+      "faction": "alliance",
+      "cx": 260.8,
+      "cy": 127.3,
+      "in_iv_ex": true,
+      "is_corridor": 0,
+      "canonCol": 14,
+      "canonRow": 20,
+      "canonDotX": 257.676,
+      "canonDotY": 694.704,
+      "canonLineMarkerX": 260.841,
+      "canonLineMarkerY": 712.48,
+      "canonLineMarkerCol": 12,
+      "canonLineMarkerRow": 22,
+      "canonGameCol": 15,
+      "canonGameRow": 21,
+      "canonPixelX": 147.296,
+      "canonPixelY": 257.676,
+      "canonColorRgb": [
+        173,
+        111,
+        43
+      ],
+      "canonColorHue": 31.4,
+      "spectralClass": "G",
+      "spectralClassSource": "page101-bg actual star disk color after local background subtraction; center pixel alone is not used"
+    },
+    {
+      "system": "ファラーファラ",
+      "planets": [
+        {
+          "name": "アラム・バダー",
+          "orbit": 1
+        },
+        {
+          "name": "ラムル",
+          "orbit": 2
+        },
+        {
+          "name": "ミセヌム",
+          "orbit": 3
+        },
+        {
+          "name": "アスワン",
+          "orbit": 4
+        }
+      ],
+      "fortresses": [],
+      "rect": [
+        156.8305,
+        145.75946,
+        176.8305,
+        167.75946
+      ],
+      "page": 101,
+      "faction": "alliance",
+      "cx": 166.8,
+      "cy": 156.8,
+      "in_iv_ex": false,
+      "is_corridor": 0,
+      "canonCol": 18,
+      "canonRow": 7,
+      "canonDotX": 164.008,
+      "canonDotY": 665.987,
+      "canonLineMarkerX": 166.852,
+      "canonLineMarkerY": 682.972,
+      "canonLineMarkerCol": 16,
+      "canonLineMarkerRow": 8,
+      "canonGameCol": 19,
+      "canonGameRow": 8,
+      "canonPixelX": 176.013,
+      "canonPixelY": 164.008,
+      "canonColorRgb": [
+        169,
+        124,
+        32
+      ],
+      "canonColorHue": 40.3,
+      "spectralClass": "G",
+      "spectralClassSource": "page101-bg actual star disk color after local background subtraction; center pixel alone is not used"
+    },
+    {
+      "system": "ケリム",
+      "planets": [
+        {
+          "name": "カッシナ",
+          "orbit": 1
+        },
+        {
+          "name": "バフラ",
+          "orbit": 2
+        },
+        {
+          "name": "アユディン",
+          "orbit": 3
+        },
+        {
+          "name": "パラス",
+          "orbit": 4
+        }
+      ],
+      "fortresses": [],
+      "rect": [
+        207.65015,
+        145.75946,
+        227.65015,
+        167.75946
+      ],
+      "page": 101,
+      "faction": "alliance",
+      "cx": 217.7,
+      "cy": 156.8,
+      "in_iv_ex": true,
+      "is_corridor": 0,
+      "canonCol": 18,
+      "canonRow": 14,
+      "canonDotX": 214.624,
+      "canonDotY": 666.069,
+      "canonLineMarkerX": 217.671,
+      "canonLineMarkerY": 682.972,
+      "canonLineMarkerCol": 16,
+      "canonLineMarkerRow": 16,
+      "canonGameCol": 19,
+      "canonGameRow": 15,
+      "canonPixelX": 175.931,
+      "canonPixelY": 214.624,
+      "canonColorRgb": [
+        163,
+        114,
+        38
+      ],
+      "canonColorHue": 36.5,
+      "spectralClass": "G",
+      "spectralClassSource": "page101-bg actual star disk color after local background subtraction; center pixel alone is not used"
+    },
+    {
+      "system": "ポリスーン",
+      "planets": [
+        {
+          "name": "エルデン",
+          "orbit": 1
+        },
+        {
+          "name": "ベレケト",
+          "orbit": 2
+        },
+        {
+          "name": "キルニス",
+          "orbit": 3
+        }
+      ],
+      "fortresses": [
+        "ダヤン・ハーン"
+      ],
+      "rect": [
+        429.5079,
+        147.3988,
+        449.5079,
+        169.39879
+      ],
+      "page": 101,
+      "faction": "alliance",
+      "cx": 439.5,
+      "cy": 158.4,
+      "in_iv_ex": false,
+      "is_corridor": 0,
+      "canonCol": 18,
+      "canonRow": 46,
+      "canonDotX": 437.782,
+      "canonDotY": 665.836,
+      "canonLineMarkerX": 439.529,
+      "canonLineMarkerY": 681.333,
+      "canonLineMarkerCol": 16,
+      "canonLineMarkerRow": 47,
+      "canonGameCol": 19,
+      "canonGameRow": 47,
+      "canonPixelX": 176.164,
+      "canonPixelY": 437.782,
+      "canonColorRgb": [
+        172,
+        64,
+        23
+      ],
+      "canonColorHue": 16.5,
+      "spectralClass": "K",
+      "spectralClassSource": "page101-bg actual star disk color after local background subtraction; center pixel alone is not used"
+    },
+    {
+      "system": "ライガール",
+      "planets": [
+        {
+          "name": "シンガラ",
+          "orbit": 1
+        },
+        {
+          "name": "ミルパラ",
+          "orbit": 2
+        },
+        {
+          "name": "アユアラ",
+          "orbit": 3
+        }
+      ],
+      "fortresses": [],
+      "rect": [
+        350.81947,
+        167.61737,
+        370.81947,
+        189.61737
+      ],
+      "page": 101,
+      "faction": "alliance",
+      "cx": 360.8,
+      "cy": 178.6,
+      "in_iv_ex": true,
+      "is_corridor": 0,
+      "canonCol": 21,
+      "canonRow": 35,
+      "canonDotX": 358.346,
+      "canonDotY": 644.128,
+      "canonLineMarkerX": 360.84,
+      "canonLineMarkerY": 661.114,
+      "canonLineMarkerCol": 19,
+      "canonLineMarkerRow": 36,
+      "canonGameCol": 22,
+      "canonGameRow": 36,
+      "canonPixelX": 197.872,
+      "canonPixelY": 358.346,
+      "canonColorRgb": [
+        148,
+        32,
+        11
+      ],
+      "canonColorHue": 9.2,
+      "spectralClass": "M",
+      "spectralClassSource": "page101-bg actual star disk color after local background subtraction; center pixel alone is not used"
+    },
+    {
+      "system": "バーミリオン",
+      "planets": [
+        {
+          "name": "エイクロン",
+          "orbit": 1
+        },
+        {
+          "name": "ロートン",
+          "orbit": 2
+        },
+        {
+          "name": "カスケード",
+          "orbit": 3
+        }
+      ],
+      "fortresses": [],
+      "rect": [
+        299.45338,
+        168.16382,
+        319.45338,
+        190.16382
+      ],
+      "page": 101,
+      "faction": "alliance",
+      "cx": 309.5,
+      "cy": 179.2,
+      "in_iv_ex": true,
+      "is_corridor": 0,
+      "canonCol": 22,
+      "canonRow": 28,
+      "canonDotX": 308.103,
+      "canonDotY": 643.965,
+      "canonLineMarkerX": 309.474,
+      "canonLineMarkerY": 660.568,
+      "canonLineMarkerCol": 19,
+      "canonLineMarkerRow": 29,
+      "canonGameCol": 23,
+      "canonGameRow": 29,
+      "canonPixelX": 198.035,
+      "canonPixelY": 308.103,
+      "canonColorRgb": [
+        145,
+        28,
+        4
+      ],
+      "canonColorHue": 10.2,
+      "spectralClass": "M",
+      "spectralClassSource": "page101-bg actual star disk color after local background subtraction; center pixel alone is not used"
+    },
+    {
+      "system": "リューカス",
+      "planets": [
+        {
+          "name": "ザカリアス",
+          "orbit": 1
+        },
+        {
+          "name": "インコバネ",
+          "orbit": 2
+        },
+        {
+          "name": "ヴァルミー",
+          "orbit": 3
+        }
+      ],
+      "fortresses": [],
+      "rect": [
+        271.0381,
+        181.82501,
+        291.0381,
+        203.82501
+      ],
+      "page": 101,
+      "faction": "alliance",
+      "cx": 281.0,
+      "cy": 192.8,
+      "in_iv_ex": true,
+      "is_corridor": 0,
+      "canonCol": 24,
+      "canonRow": 24,
+      "canonDotX": 279.21,
+      "canonDotY": 629.706,
+      "canonLineMarkerX": 281.059,
+      "canonLineMarkerY": 646.906,
+      "canonLineMarkerCol": 21,
+      "canonLineMarkerRow": 25,
+      "canonGameCol": 25,
+      "canonGameRow": 25,
+      "canonPixelX": 212.294,
+      "canonPixelY": 279.21,
+      "canonColorRgb": [
+        178,
+        100,
+        39
+      ],
+      "canonColorHue": 26.3,
+      "spectralClass": "G",
+      "spectralClassSource": "page101-bg actual star disk color after local background subtraction; center pixel alone is not used"
+    },
+    {
+      "system": "マローヴィア",
+      "planets": [],
+      "fortresses": [],
+      "rect": [
+        121.31139,
+        182.37146,
+        141.3114,
+        204.37146
+      ],
+      "page": 101,
+      "faction": "alliance",
+      "cx": 131.3,
+      "cy": 193.4,
+      "in_iv_ex": false,
+      "is_corridor": 0,
+      "canonCol": 24,
+      "canonRow": 2,
+      "canonDotX": 127.929,
+      "canonDotY": 629.916,
+      "canonLineMarkerX": 131.332,
+      "canonLineMarkerY": 646.36,
+      "canonLineMarkerCol": 21,
+      "canonLineMarkerRow": 3,
+      "canonGameCol": 25,
+      "canonGameRow": 3,
+      "canonPixelX": 212.084,
+      "canonPixelY": 127.929,
+      "canonColorRgb": [
+        183,
+        95,
+        34
+      ],
+      "canonColorHue": 24.6,
+      "spectralClass": "K",
+      "spectralClassSource": "page101-bg actual star disk color after local background subtraction; center pixel alone is not used"
+    },
+    {
+      "system": "ハダト",
+      "planets": [
+        {
+          "name": "シャンプール",
+          "orbit": 1
+        },
+        {
+          "name": "ベラスィ",
+          "orbit": 2
+        },
+        {
+          "name": "アンジャル",
+          "orbit": 3
+        }
+      ],
+      "fortresses": [],
+      "rect": [
+        150.81958,
+        188.92882,
+        170.81958,
+        210.92882
+      ],
+      "page": 101,
+      "faction": "alliance",
+      "cx": 160.8,
+      "cy": 199.9,
+      "in_iv_ex": false,
+      "is_corridor": 0,
+      "canonCol": 25,
+      "canonRow": 6,
+      "canonDotX": 156.794,
+      "canonDotY": 622.815,
+      "canonLineMarkerX": 160.841,
+      "canonLineMarkerY": 639.803,
+      "canonLineMarkerCol": 22,
+      "canonLineMarkerRow": 8,
+      "canonGameCol": 26,
+      "canonGameRow": 7,
+      "canonPixelX": 219.185,
+      "canonPixelY": 156.794,
+      "canonColorRgb": [
+        125,
+        13,
+        1
+      ],
+      "canonColorHue": 5.8,
+      "spectralClass": "M",
+      "spectralClassSource": "page101-bg actual star disk color after local background subtraction; center pixel alone is not used"
+    },
+    {
+      "system": "ジャムシード",
+      "planets": [
+        {
+          "name": "タフテ・ジャムシード",
+          "orbit": 1
+        },
+        {
+          "name": "カッファー",
+          "orbit": 2
+        },
+        {
+          "name": "ムハバット",
+          "orbit": 3
+        },
+        {
+          "name": "アパダナ",
+          "orbit": 4
+        }
+      ],
+      "fortresses": [],
+      "rect": [
+        220.21843,
+        190.02173,
+        240.21843,
+        212.02173
+      ],
+      "page": 101,
+      "faction": "alliance",
+      "cx": 230.2,
+      "cy": 201.0,
+      "in_iv_ex": true,
+      "is_corridor": 0,
+      "canonCol": 25,
+      "canonRow": 16,
+      "canonDotX": 228.757,
+      "canonDotY": 622.603,
+      "canonLineMarkerX": 230.239,
+      "canonLineMarkerY": 638.71,
+      "canonLineMarkerCol": 22,
+      "canonLineMarkerRow": 18,
+      "canonGameCol": 26,
+      "canonGameRow": 17,
+      "canonPixelX": 219.397,
+      "canonPixelY": 228.757,
+      "canonColorRgb": [
+        169,
+        112,
+        32
+      ],
+      "canonColorHue": 35.0,
+      "spectralClass": "G",
+      "spectralClassSource": "page101-bg actual star disk color after local background subtraction; center pixel alone is not used"
+    },
+    {
+      "system": "トリプラ",
+      "planets": [
+        {
+          "name": "パルメレンド",
+          "orbit": 1
+        },
+        {
+          "name": "アガタラ",
+          "orbit": 2
+        },
+        {
+          "name": "カリャンプール",
+          "orbit": 3
+        },
+        {
+          "name": "イスファハン",
+          "orbit": 4
+        }
+      ],
+      "fortresses": [],
+      "rect": [
+        378.6883,
+        196.03264,
+        398.6883,
+        218.03264
+      ],
+      "page": 101,
+      "faction": "alliance",
+      "cx": 388.7,
+      "cy": 207.0,
+      "in_iv_ex": true,
+      "is_corridor": 0,
+      "canonCol": 26,
+      "canonRow": 39,
+      "canonDotX": 387.177,
+      "canonDotY": 615.234,
+      "canonLineMarkerX": 388.709,
+      "canonLineMarkerY": 632.699,
+      "canonLineMarkerCol": 23,
+      "canonLineMarkerRow": 40,
+      "canonGameCol": 27,
+      "canonGameRow": 40,
+      "canonPixelX": 226.766,
+      "canonPixelY": 387.177,
+      "canonColorRgb": [
+        174,
+        68,
+        25
+      ],
+      "canonColorHue": 17.3,
+      "spectralClass": "K",
+      "spectralClassSource": "page101-bg actual star disk color after local background subtraction; center pixel alone is not used"
+    },
+    {
+      "system": "タッシリ",
+      "planets": [
+        {
+          "name": "タッシリ・ナジェール",
+          "orbit": 1
+        },
+        {
+          "name": "アドラル・ソアフ",
+          "orbit": 2
+        },
+        {
+          "name": "トゥアレグ",
+          "orbit": 3
+        }
+      ],
+      "fortresses": [],
+      "rect": [
+        314.7539,
+        203.13646,
+        334.7539,
+        225.13646
+      ],
+      "page": 101,
+      "faction": "alliance",
+      "cx": 324.8,
+      "cy": 214.1,
+      "in_iv_ex": true,
+      "is_corridor": 0,
+      "canonCol": 27,
+      "canonRow": 30,
+      "canonDotX": 322.67,
+      "canonDotY": 608.035,
+      "canonLineMarkerX": 324.775,
+      "canonLineMarkerY": 625.595,
+      "canonLineMarkerCol": 24,
+      "canonLineMarkerRow": 31,
+      "canonGameCol": 28,
+      "canonGameRow": 31,
+      "canonPixelX": 233.965,
+      "canonPixelY": 322.67,
+      "canonColorRgb": [
+        142,
+        27,
+        6
+      ],
+      "canonColorHue": 9.3,
+      "spectralClass": "M",
+      "spectralClassSource": "page101-bg actual star disk color after local background subtraction; center pixel alone is not used"
+    },
+    {
+      "system": "シュパーラ",
+      "planets": [
+        {
+          "name": "アルンキパ",
+          "orbit": 1
+        },
+        {
+          "name": "ヴィスカ・グランデ",
+          "orbit": 2
+        },
+        {
+          "name": "シウダ・ロドリゴ",
+          "orbit": 3
+        },
+        {
+          "name": "ヴィシュコフ",
+          "orbit": 4
+        }
+      ],
+      "fortresses": [],
+      "rect": [
+        430.60084,
+        203.13646,
+        450.60084,
+        225.13646
+      ],
+      "page": 101,
+      "faction": "alliance",
+      "cx": 440.6,
+      "cy": 214.1,
+      "in_iv_ex": true,
+      "is_corridor": 0,
+      "canonCol": 27,
+      "canonRow": 46,
+      "canonDotX": 437.72,
+      "canonDotY": 608.01,
+      "canonLineMarkerX": 440.622,
+      "canonLineMarkerY": 625.595,
+      "canonLineMarkerCol": 24,
+      "canonLineMarkerRow": 48,
+      "canonGameCol": 28,
+      "canonGameRow": 47,
+      "canonPixelX": 233.99,
+      "canonPixelY": 437.72,
+      "canonColorRgb": [
+        164,
+        83,
+        51
+      ],
+      "canonColorHue": 17.0,
+      "spectralClass": "K",
+      "spectralClassSource": "page101-bg actual star disk color after local background subtraction; center pixel alone is not used"
+    },
+    {
+      "system": "ドーリア",
+      "planets": [
+        {
+          "name": "モンテカプラロ",
+          "orbit": 1
+        },
+        {
+          "name": "カスタノーラ",
+          "orbit": 2
+        },
+        {
+          "name": "ピエヴェッタ",
+          "orbit": 3
+        },
+        {
+          "name": "ボルゲーゼ",
+          "orbit": 4
+        }
+      ],
+      "fortresses": [],
+      "rect": [
+        193.44249,
+        225.54082,
+        213.44249,
+        247.54082
+      ],
+      "page": 101,
+      "faction": "alliance",
+      "cx": 203.4,
+      "cy": 236.5,
+      "in_iv_ex": true,
+      "is_corridor": 0,
+      "canonCol": 30,
+      "canonRow": 12,
+      "canonDotX": 200.461,
+      "canonDotY": 586.319,
+      "canonLineMarkerX": 203.463,
+      "canonLineMarkerY": 603.191,
+      "canonLineMarkerCol": 27,
+      "canonLineMarkerRow": 14,
+      "canonGameCol": 31,
+      "canonGameRow": 13,
+      "canonPixelX": 255.681,
+      "canonPixelY": 200.461,
+      "canonColorRgb": [
+        163,
+        92,
+        25
+      ],
+      "canonColorHue": 29.1,
+      "spectralClass": "G",
+      "spectralClassSource": "page101-bg actual star disk color after local background subtraction; center pixel alone is not used"
+    },
+    {
+      "system": "シヴァ",
+      "planets": [
+        {
+          "name": "パールヴァティ",
+          "orbit": 1
+        },
+        {
+          "name": "ガンガー",
+          "orbit": 2
+        },
+        {
+          "name": "ナンディ",
+          "orbit": 3
+        },
+        {
+          "name": "アナンタ",
+          "orbit": 4
+        }
+      ],
+      "fortresses": [],
+      "rect": [
+        136.61194,
+        232.64464,
+        156.61194,
+        254.64464
+      ],
+      "page": 101,
+      "faction": "alliance",
+      "cx": 146.6,
+      "cy": 243.6,
+      "in_iv_ex": true,
+      "is_corridor": 0,
+      "canonCol": 31,
+      "canonRow": 4,
+      "canonDotX": 142.373,
+      "canonDotY": 579.363,
+      "canonLineMarkerX": 146.633,
+      "canonLineMarkerY": 596.087,
+      "canonLineMarkerCol": 28,
+      "canonLineMarkerRow": 6,
+      "canonGameCol": 32,
+      "canonGameRow": 5,
+      "canonPixelX": 262.637,
+      "canonPixelY": 142.373,
+      "canonColorRgb": [
+        187,
+        163,
+        95
+      ],
+      "canonColorHue": 44.3,
+      "spectralClass": "F",
+      "spectralClassSource": "page101-bg actual star disk color after local background subtraction; center pixel alone is not used"
+    },
+    {
+      "system": "エル・ファシル",
+      "planets": [
+        {
+          "name": "カルタヘナ",
+          "orbit": 1
+        },
+        {
+          "name": "ラス・カシタス",
+          "orbit": 2
+        },
+        {
+          "name": "サンタ・アナ",
+          "orbit": 3
+        },
+        {
+          "name": "サルバドル",
+          "orbit": 4
+        }
+      ],
+      "fortresses": [],
+      "rect": [
+        228.96161,
+        241.38782,
+        248.96161,
+        263.38783
+      ],
+      "page": 101,
+      "faction": "alliance",
+      "cx": 239.0,
+      "cy": 252.4,
+      "in_iv_ex": true,
+      "is_corridor": 0,
+      "canonCol": 32,
+      "canonRow": 17,
+      "canonDotX": 236.233,
+      "canonDotY": 572.347,
+      "canonLineMarkerX": 238.983,
+      "canonLineMarkerY": 587.344,
+      "canonLineMarkerCol": 30,
+      "canonLineMarkerRow": 19,
+      "canonGameCol": 33,
+      "canonGameRow": 18,
+      "canonPixelX": 269.653,
+      "canonPixelY": 236.233,
+      "canonColorRgb": [
+        167,
+        112,
+        43
+      ],
+      "canonColorHue": 33.4,
+      "spectralClass": "G",
+      "spectralClassSource": "page101-bg actual star disk color after local background subtraction; center pixel alone is not used"
+    },
+    {
+      "system": "ガンダルヴァ",
+      "planets": [
+        {
+          "name": "ウルヴァシー",
+          "orbit": 1
+        },
+        {
+          "name": "カルティケーヤ",
+          "orbit": 2
+        },
+        {
+          "name": "アガスティア",
+          "orbit": 3
+        },
+        {
+          "name": "ヴァルナ",
+          "orbit": 4
+        }
+      ],
+      "fortresses": [],
+      "rect": [
+        343.71565,
+        247.94519,
+        363.71565,
+        269.9452
+      ],
+      "page": 101,
+      "faction": "alliance",
+      "cx": 353.7,
+      "cy": 258.9,
+      "in_iv_ex": true,
+      "is_corridor": 0,
+      "canonCol": 33,
+      "canonRow": 34,
+      "canonDotX": 351.191,
+      "canonDotY": 565.005,
+      "canonLineMarkerX": 353.737,
+      "canonLineMarkerY": 580.786,
+      "canonLineMarkerCol": 31,
+      "canonLineMarkerRow": 35,
+      "canonGameCol": 34,
+      "canonGameRow": 35,
+      "canonPixelX": 276.995,
+      "canonPixelY": 351.191,
+      "canonColorRgb": [
+        174,
+        66,
+        20
+      ],
+      "canonColorHue": 17.9,
+      "spectralClass": "K",
+      "spectralClassSource": "page101-bg actual star disk color after local background subtraction; center pixel alone is not used"
+    },
+    {
+      "system": "ランテマリオ",
+      "planets": [
+        {
+          "name": "ルエヴィト",
+          "orbit": 1
+        },
+        {
+          "name": "スヴェン・ヴィト",
+          "orbit": 2
+        },
+        {
+          "name": "ヤロヴィト",
+          "orbit": 3
+        }
+      ],
+      "fortresses": [],
+      "rect": [
+        279.2348,
+        254.50255,
+        299.2348,
+        276.50257
+      ],
+      "page": 101,
+      "faction": "alliance",
+      "cx": 289.2,
+      "cy": 265.5,
+      "in_iv_ex": true,
+      "is_corridor": 0,
+      "canonCol": 34,
+      "canonRow": 25,
+      "canonDotX": 286.504,
+      "canonDotY": 557.69,
+      "canonLineMarkerX": 289.256,
+      "canonLineMarkerY": 574.229,
+      "canonLineMarkerCol": 31,
+      "canonLineMarkerRow": 26,
+      "canonGameCol": 35,
+      "canonGameRow": 26,
+      "canonPixelX": 284.31,
+      "canonPixelY": 286.504,
+      "canonColorRgb": [
+        169,
+        62,
+        14
+      ],
+      "canonColorHue": 18.6,
+      "spectralClass": "K",
+      "spectralClassSource": "page101-bg actual star disk color after local background subtraction; center pixel alone is not used"
+    },
+    {
+      "system": "メルカルト",
+      "planets": [
+        {
+          "name": "アシュール",
+          "orbit": 1
+        },
+        {
+          "name": "ネルガル",
+          "orbit": 2
+        },
+        {
+          "name": "バール・ザフォン",
+          "orbit": 3
+        }
+      ],
+      "fortresses": [],
+      "rect": [
+        422.95057,
+        255.049,
+        442.95057,
+        277.049
+      ],
+      "page": 101,
+      "faction": "alliance",
+      "cx": 433.0,
+      "cy": 266.0,
+      "in_iv_ex": false,
+      "is_corridor": 0,
+      "canonCol": 34,
+      "canonRow": 45,
+      "canonDotX": 430.617,
+      "canonDotY": 557.79,
+      "canonLineMarkerX": 432.972,
+      "canonLineMarkerY": 573.682,
+      "canonLineMarkerCol": 32,
+      "canonLineMarkerRow": 46,
+      "canonGameCol": 35,
+      "canonGameRow": 46,
+      "canonPixelX": 284.21,
+      "canonPixelY": 430.617,
+      "canonColorRgb": [
+        185,
+        109,
+        25
+      ],
+      "canonColorHue": 31.5,
+      "spectralClass": "G",
+      "spectralClassSource": "page101-bg actual star disk color after local background subtraction; center pixel alone is not used"
+    },
+    {
+      "system": "エルゴン",
+      "planets": [
+        {
+          "name": "カモロク",
+          "orbit": 1
+        },
+        {
+          "name": "ブタンディガ",
+          "orbit": 2
+        },
+        {
+          "name": "ムバレ",
+          "orbit": 3
+        },
+        {
+          "name": "カンパラ",
+          "orbit": 4
+        }
+      ],
+      "fortresses": [],
+      "rect": [
+        163.93433,
+        260.5135,
+        183.93433,
+        282.5135
+      ],
+      "page": 101,
+      "faction": "alliance",
+      "cx": 173.9,
+      "cy": 271.5,
+      "in_iv_ex": true,
+      "is_corridor": 0,
+      "canonCol": 35,
+      "canonRow": 8,
+      "canonDotX": 171.19,
+      "canonDotY": 550.51,
+      "canonLineMarkerX": 173.955,
+      "canonLineMarkerY": 568.218,
+      "canonLineMarkerCol": 32,
+      "canonLineMarkerRow": 9,
+      "canonGameCol": 36,
+      "canonGameRow": 9,
+      "canonPixelX": 291.49,
+      "canonPixelY": 171.19,
+      "canonColorRgb": [
+        166,
+        84,
+        35
+      ],
+      "canonColorHue": 22.4,
+      "spectralClass": "K",
+      "spectralClassSource": "page101-bg actual star disk color after local background subtraction; center pixel alone is not used"
+    },
+    {
+      "system": "マル・アデッタ",
+      "planets": [
+        {
+          "name": "バラセット",
+          "orbit": 1
+        },
+        {
+          "name": "アヴェラノス",
+          "orbit": 2
+        },
+        {
+          "name": "ファルネーゼ",
+          "orbit": 3
+        },
+        {
+          "name": "マントヴァ",
+          "orbit": 4
+        }
+      ],
+      "fortresses": [],
+      "rect": [
+        307.6501,
+        282.3714,
+        327.6501,
+        304.3714
+      ],
+      "page": 101,
+      "faction": "alliance",
+      "cx": 317.7,
+      "cy": 293.4,
+      "in_iv_ex": true,
+      "is_corridor": 0,
+      "canonCol": 38,
+      "canonRow": 29,
+      "canonDotX": 315.442,
+      "canonDotY": 528.994,
+      "canonLineMarkerX": 317.671,
+      "canonLineMarkerY": 546.36,
+      "canonLineMarkerCol": 35,
+      "canonLineMarkerRow": 30,
+      "canonGameCol": 39,
+      "canonGameRow": 30,
+      "canonPixelX": 313.006,
+      "canonPixelY": 315.442,
+      "canonColorRgb": [
+        167,
+        83,
+        44
+      ],
+      "canonColorHue": 19.0,
+      "spectralClass": "K",
+      "spectralClassSource": "page101-bg actual star disk color after local background subtraction; center pixel alone is not used"
+    },
+    {
+      "system": "バラトループ",
+      "planets": [
+        {
+          "name": "バラトループ1",
+          "orbit": 1
+        },
+        {
+          "name": "バラトループ2",
+          "orbit": 2
+        },
+        {
+          "name": "バラトループ3",
+          "orbit": 3
+        }
+      ],
+      "fortresses": [],
+      "rect": [
+        393.44239,
+        289.47523,
+        413.44239,
+        311.47523
+      ],
+      "page": 101,
+      "faction": "alliance",
+      "cx": 403.4,
+      "cy": 300.5,
+      "in_iv_ex": true,
+      "is_corridor": 0,
+      "canonCol": 39,
+      "canonRow": 41,
+      "canonDotX": 401.673,
+      "canonDotY": 521.88,
+      "canonLineMarkerX": 403.463,
+      "canonLineMarkerY": 539.256,
+      "canonLineMarkerCol": 36,
+      "canonLineMarkerRow": 42,
+      "canonGameCol": 40,
+      "canonGameRow": 42,
+      "canonPixelX": 320.12,
+      "canonPixelY": 401.673,
+      "canonColorRgb": [
+        166,
+        61,
+        25
+      ],
+      "canonColorHue": 15.3,
+      "spectralClass": "K",
+      "spectralClassSource": "page101-bg actual star disk color after local background subtraction; center pixel alone is not used"
+    },
+    {
+      "system": "シャンダルーア",
+      "planets": [
+        {
+          "name": "シャンダルーア1",
+          "orbit": 1
+        },
+        {
+          "name": "シャンダルーア2",
+          "orbit": 2
+        },
+        {
+          "name": "シャンダルーア3",
+          "orbit": 3
+        }
+      ],
+      "fortresses": [],
+      "rect": [
+        336.06538,
+        290.02168,
+        356.06538,
+        312.02168
+      ],
+      "page": 101,
+      "faction": "alliance",
+      "cx": 346.1,
+      "cy": 301.0,
+      "in_iv_ex": true,
+      "is_corridor": 0,
+      "canonCol": 39,
+      "canonRow": 33,
+      "canonDotX": 343.867,
+      "canonDotY": 521.533,
+      "canonLineMarkerX": 346.086,
+      "canonLineMarkerY": 538.71,
+      "canonLineMarkerCol": 37,
+      "canonLineMarkerRow": 34,
+      "canonGameCol": 40,
+      "canonGameRow": 34,
+      "canonPixelX": 320.467,
+      "canonPixelY": 343.867,
+      "canonColorRgb": [
+        40,
+        35,
+        80
+      ],
+      "canonColorHue": 246.7,
+      "spectralClass": "B",
+      "spectralClassSource": "page101-bg actual star disk color after local background subtraction; center pixel alone is not used"
+    },
+    {
+      "system": "ダゴン",
+      "planets": [
+        {
+          "name": "ダゴン1",
+          "orbit": 1
+        },
+        {
+          "name": "ダゴン2",
+          "orbit": 2
+        },
+        {
+          "name": "ダゴン3",
+          "orbit": 3
+        },
+        {
+          "name": "ダゴン4",
+          "orbit": 4
+        }
+      ],
+      "fortresses": [],
+      "rect": [
+        151.91248,
+        297.67195,
+        171.91248,
+        319.67195
+      ],
+      "page": 101,
+      "faction": "alliance",
+      "cx": 161.9,
+      "cy": 308.7,
+      "in_iv_ex": true,
+      "is_corridor": 0,
+      "canonCol": 40,
+      "canonRow": 6,
+      "canonDotX": 156.959,
+      "canonDotY": 514.554,
+      "canonLineMarkerX": 161.933,
+      "canonLineMarkerY": 531.059,
+      "canonLineMarkerCol": 38,
+      "canonLineMarkerRow": 8,
+      "canonGameCol": 41,
+      "canonGameRow": 7,
+      "canonPixelX": 327.446,
+      "canonPixelY": 156.959,
+      "canonColorRgb": [
+        170,
+        84,
+        32
+      ],
+      "canonColorHue": 22.6,
+      "spectralClass": "K",
+      "spectralClassSource": "page101-bg actual star disk color after local background subtraction; center pixel alone is not used"
+    },
+    {
+      "system": "ティアマト",
+      "planets": [
+        {
+          "name": "ティアマト1",
+          "orbit": 1
+        },
+        {
+          "name": "ティアマト2",
+          "orbit": 2
+        },
+        {
+          "name": "ティアマト3",
+          "orbit": 3
+        },
+        {
+          "name": "ティアマト4",
+          "orbit": 4
+        }
+      ],
+      "fortresses": [],
+      "rect": [
+        213.66107,
+        297.67195,
+        233.66106,
+        319.67195
+      ],
+      "page": 101,
+      "faction": "alliance",
+      "cx": 223.7,
+      "cy": 308.7,
+      "in_iv_ex": true,
+      "is_corridor": 0,
+      "canonCol": 40,
+      "canonRow": 15,
+      "canonDotX": 221.527,
+      "canonDotY": 514.689,
+      "canonLineMarkerX": 223.682,
+      "canonLineMarkerY": 531.059,
+      "canonLineMarkerCol": 38,
+      "canonLineMarkerRow": 17,
+      "canonGameCol": 41,
+      "canonGameRow": 16,
+      "canonPixelX": 327.311,
+      "canonPixelY": 221.527,
+      "canonColorRgb": [
+        122,
+        14,
+        1
+      ],
+      "canonColorHue": 6.4,
+      "spectralClass": "M",
+      "spectralClassSource": "page101-bg actual star disk color after local background subtraction; center pixel alone is not used"
+    },
+    {
+      "system": "ドラゴニア",
+      "planets": [
+        {
+          "name": "ドラゴニア1",
+          "orbit": 1
+        },
+        {
+          "name": "ドラゴニア2",
+          "orbit": 2
+        },
+        {
+          "name": "ドラゴニア3",
+          "orbit": 3
+        }
+      ],
+      "fortresses": [],
+      "rect": [
+        243.7157,
+        303.68287,
+        263.7157,
+        325.68287
+      ],
+      "page": 101,
+      "faction": "alliance",
+      "cx": 253.7,
+      "cy": 314.7,
+      "in_iv_ex": false,
+      "is_corridor": 0,
+      "canonCol": 41,
+      "canonRow": 19,
+      "canonDotX": 250.491,
+      "canonDotY": 507.269,
+      "canonLineMarkerX": 253.737,
+      "canonLineMarkerY": 525.049,
+      "canonLineMarkerCol": 38,
+      "canonLineMarkerRow": 21,
+      "canonGameCol": 42,
+      "canonGameRow": 20,
+      "canonPixelX": 334.731,
+      "canonPixelY": 250.491,
+      "canonColorRgb": [
+        188,
+        188,
+        136
+      ],
+      "canonColorHue": 60.0,
+      "spectralClass": "A",
+      "spectralClassSource": "page101-bg actual star disk color after local background subtraction; center pixel alone is not used"
+    },
+    {
+      "system": "フォルセティ",
+      "planets": [],
+      "fortresses": [],
+      "rect": [
+        279.2348,
+        304.77577,
+        299.2348,
+        326.77577
+      ],
+      "page": 101,
+      "faction": "alliance",
+      "cx": 289.2,
+      "cy": 315.8,
+      "in_iv_ex": true,
+      "is_corridor": 0,
+      "canonCol": 41,
+      "canonRow": 25,
+      "canonDotX": 286.451,
+      "canonDotY": 507.392,
+      "canonLineMarkerX": 289.256,
+      "canonLineMarkerY": 523.956,
+      "canonLineMarkerCol": 39,
+      "canonLineMarkerRow": 26,
+      "canonGameCol": 42,
+      "canonGameRow": 26,
+      "canonPixelX": 334.608,
+      "canonPixelY": 286.451,
+      "canonColorRgb": [
+        51,
+        73,
+        69
+      ],
+      "canonColorHue": 169.1,
+      "spectralClass": "A",
+      "spectralClassSource": "page101-bg actual star disk color after local background subtraction; center pixel alone is not used"
+    },
+    {
+      "system": "アスターテ",
+      "planets": [
+        {
+          "name": "アスターテ1",
+          "orbit": 1
+        },
+        {
+          "name": "アスターテ2",
+          "orbit": 2
+        },
+        {
+          "name": "アスターテ3",
+          "orbit": 3
+        },
+        {
+          "name": "アスターテ4",
+          "orbit": 4
+        }
+      ],
+      "fortresses": [],
+      "rect": [
+        185.79224,
+        317.8905,
+        205.79224,
+        339.8905
+      ],
+      "page": 101,
+      "faction": "alliance",
+      "cx": 195.8,
+      "cy": 328.9,
+      "in_iv_ex": true,
+      "is_corridor": 0,
+      "canonCol": 43,
+      "canonRow": 11,
+      "canonDotX": 192.9,
+      "canonDotY": 492.934,
+      "canonLineMarkerX": 195.813,
+      "canonLineMarkerY": 510.841,
+      "canonLineMarkerCol": 41,
+      "canonLineMarkerRow": 13,
+      "canonGameCol": 44,
+      "canonGameRow": 12,
+      "canonPixelX": 349.066,
+      "canonPixelY": 192.9,
+      "canonColorRgb": [
+        167,
+        121,
+        35
+      ],
+      "canonColorHue": 39.1,
+      "spectralClass": "G",
+      "spectralClassSource": "page101-bg actual star disk color after local background subtraction; center pixel alone is not used"
+    },
+    {
+      "system": "ファイアザード",
+      "planets": [
+        {
+          "name": "ファイアザード1",
+          "orbit": 1
+        },
+        {
+          "name": "ファイアザード2",
+          "orbit": 2
+        },
+        {
+          "name": "ファイアザード3",
+          "orbit": 3
+        }
+      ],
+      "fortresses": [],
+      "rect": [
+        308.74299,
+        317.8905,
+        328.74299,
+        339.8905
+      ],
+      "page": 101,
+      "faction": "alliance",
+      "cx": 318.7,
+      "cy": 328.9,
+      "in_iv_ex": true,
+      "is_corridor": 0,
+      "canonCol": 43,
+      "canonRow": 29,
+      "canonDotX": 315.417,
+      "canonDotY": 492.945,
+      "canonLineMarkerX": 318.764,
+      "canonLineMarkerY": 510.841,
+      "canonLineMarkerCol": 41,
+      "canonLineMarkerRow": 30,
+      "canonGameCol": 44,
+      "canonGameRow": 30,
+      "canonPixelX": 349.055,
+      "canonPixelY": 315.417,
+      "canonColorRgb": [
+        171,
+        128,
+        47
+      ],
+      "canonColorHue": 39.2,
+      "spectralClass": "G",
+      "spectralClassSource": "page101-bg actual star disk color after local background subtraction; center pixel alone is not used"
+    },
+    {
+      "system": "ポレヴィト",
+      "planets": [
+        {
+          "name": "ルジアーナ",
+          "orbit": 1
+        },
+        {
+          "name": "チェルノボーグ",
+          "orbit": 2
+        },
+        {
+          "name": "スヴァローグ",
+          "orbit": 3
+        },
+        {
+          "name": "ポレヴィーク",
+          "orbit": 4
+        }
+      ],
+      "fortresses": [],
+      "rect": [
+        373.77027,
+        324.44789,
+        393.77027,
+        346.44789
+      ],
+      "page": 101,
+      "faction": "alliance",
+      "cx": 383.8,
+      "cy": 335.4,
+      "in_iv_ex": true,
+      "is_corridor": 0,
+      "canonCol": 44,
+      "canonRow": 38,
+      "canonDotX": 380.087,
+      "canonDotY": 485.913,
+      "canonLineMarkerX": 383.791,
+      "canonLineMarkerY": 504.284,
+      "canonLineMarkerCol": 41,
+      "canonLineMarkerRow": 39,
+      "canonGameCol": 45,
+      "canonGameRow": 39,
+      "canonPixelX": 356.087,
+      "canonPixelY": 380.087,
+      "canonColorRgb": [
+        32,
+        62,
+        75
+      ],
+      "canonColorHue": 198.1,
+      "spectralClass": "B",
+      "spectralClassSource": "page101-bg actual star disk color after local background subtraction; center pixel alone is not used"
+    },
+    {
+      "system": "アルレスハイム",
+      "planets": [
+        {
+          "name": "アルレスハイム1",
+          "orbit": 1
+        },
+        {
+          "name": "アルレスハイム2",
+          "orbit": 2
+        },
+        {
+          "name": "アルレスハイム3",
+          "orbit": 3
+        },
+        {
+          "name": "アルレスハイム4",
+          "orbit": 4
+        }
+      ],
+      "fortresses": [],
+      "rect": [
+        243.16925,
+        326.08723,
+        263.16926,
+        348.08723
+      ],
+      "page": 101,
+      "faction": "alliance",
+      "cx": 253.2,
+      "cy": 337.1,
+      "in_iv_ex": true,
+      "is_corridor": 0,
+      "canonCol": 44,
+      "canonRow": 19,
+      "canonDotX": 250.428,
+      "canonDotY": 485.606,
+      "canonLineMarkerX": 253.19,
+      "canonLineMarkerY": 502.644,
+      "canonLineMarkerCol": 42,
+      "canonLineMarkerRow": 21,
+      "canonGameCol": 45,
+      "canonGameRow": 20,
+      "canonPixelX": 356.394,
+      "canonPixelY": 250.428,
+      "canonColorRgb": [
+        178,
+        136,
+        39
+      ],
+      "canonColorHue": 41.9,
+      "spectralClass": "G",
+      "spectralClassSource": "page101-bg actual star disk color after local background subtraction; center pixel alone is not used"
+    },
+    {
+      "system": "パランティア",
+      "planets": [
+        {
+          "name": "パランティア1",
+          "orbit": 1
+        },
+        {
+          "name": "パランティア2",
+          "orbit": 2
+        },
+        {
+          "name": "パランティア3",
+          "orbit": 3
+        },
+        {
+          "name": "パランティア4",
+          "orbit": 4
+        }
+      ],
+      "fortresses": [],
+      "rect": [
+        278.1419,
+        327.1801,
+        298.1419,
+        349.1801
+      ],
+      "page": 101,
+      "faction": "alliance",
+      "cx": 288.1,
+      "cy": 338.2,
+      "in_iv_ex": true,
+      "is_corridor": 0,
+      "canonCol": 44,
+      "canonRow": 25,
+      "canonDotX": 286.509,
+      "canonDotY": 485.791,
+      "canonLineMarkerX": 288.163,
+      "canonLineMarkerY": 501.551,
+      "canonLineMarkerCol": 42,
+      "canonLineMarkerRow": 26,
+      "canonGameCol": 45,
+      "canonGameRow": 26,
+      "canonPixelX": 356.209,
+      "canonPixelY": 286.509,
+      "canonColorRgb": [
+        40,
+        66,
+        61
+      ],
+      "canonColorHue": 168.5,
+      "spectralClass": "A",
+      "spectralClassSource": "page101-bg actual star disk color after local background subtraction; center pixel alone is not used"
+    },
+    {
+      "system": "アルトミュール",
+      "planets": [
+        {
+          "name": "カプチェランカ",
+          "orbit": 1
+        },
+        {
+          "name": "ヴァウブジフ",
+          "orbit": 2
+        },
+        {
+          "name": "エディルネ",
+          "orbit": 3
+        },
+        {
+          "name": "レグニッツァ",
+          "orbit": 4
+        }
+      ],
+      "fortresses": [],
+      "rect": [
+        210.92882,
+        337.01618,
+        230.92882,
+        359.01618
+      ],
+      "page": 101,
+      "faction": "alliance",
+      "cx": 220.9,
+      "cy": 348.0,
+      "in_iv_ex": false,
+      "is_corridor": 0,
+      "canonCol": 46,
+      "canonRow": 14,
+      "canonDotX": 214.537,
+      "canonDotY": 471.313,
+      "canonLineMarkerX": 220.95,
+      "canonLineMarkerY": 491.715,
+      "canonLineMarkerCol": 43,
+      "canonLineMarkerRow": 16,
+      "canonGameCol": 47,
+      "canonGameRow": 15,
+      "canonPixelX": 370.687,
+      "canonPixelY": 214.537,
+      "canonColorRgb": [
+        187,
+        175,
+        115
+      ],
+      "canonColorHue": 50.0,
+      "spectralClass": "F",
+      "spectralClassSource": "page101-bg actual star disk color after local background subtraction; center pixel alone is not used"
+    },
+    {
+      "system": "ヴァンフリート",
+      "planets": [
+        {
+          "name": "ヴァンフリート1",
+          "orbit": 1
+        },
+        {
+          "name": "ヴァンフリート2",
+          "orbit": 2
+        },
+        {
+          "name": "ヴァンフリート3",
+          "orbit": 3
+        },
+        {
+          "name": "ヴァンフリート4",
+          "orbit": 4
+        }
+      ],
+      "fortresses": [],
+      "rect": [
+        192.89606,
+        341.38777,
+        212.89606,
+        363.38777
+      ],
+      "page": 101,
+      "faction": "alliance",
+      "cx": 202.9,
+      "cy": 352.4,
+      "in_iv_ex": true,
+      "is_corridor": 1,
+      "canonCol": 46,
+      "canonRow": 12,
+      "canonDotX": 199.901,
+      "canonDotY": 471.472,
+      "canonLineMarkerX": 202.917,
+      "canonLineMarkerY": 487.344,
+      "canonLineMarkerCol": 44,
+      "canonLineMarkerRow": 14,
+      "canonGameCol": 47,
+      "canonGameRow": 13,
+      "canonPixelX": 370.528,
+      "canonPixelY": 199.901,
+      "canonColorRgb": [
+        160,
+        154,
+        92
+      ],
+      "canonColorHue": 54.7,
+      "spectralClass": "F",
+      "spectralClassSource": "page101-bg actual star disk color after local background subtraction; center pixel alone is not used"
+    },
+    {
+      "system": "フェザーン",
+      "planets": [
+        {
+          "name": "ジラー",
+          "orbit": 1
+        },
+        {
+          "name": "リウドルフィンク",
+          "orbit": 2
+        },
+        {
+          "name": "ザリエル",
+          "orbit": 3
+        },
+        {
+          "name": "フェザーン",
+          "orbit": 4
+        }
+      ],
+      "fortresses": [],
+      "rect": [
+        371.03804,
+        376.90687,
+        391.03804,
+        398.90687
+      ],
+      "page": 101,
+      "faction": "neutral",
+      "cx": 381.0,
+      "cy": 387.9,
+      "in_iv_ex": true,
+      "is_corridor": 1,
+      "canonCol": 51,
+      "canonRow": 37,
+      "canonDotX": 380.015,
+      "canonDotY": 434.752,
+      "canonLineMarkerX": 381.059,
+      "canonLineMarkerY": 451.825,
+      "canonLineMarkerCol": 49,
+      "canonLineMarkerRow": 39,
+      "canonGameCol": 52,
+      "canonGameRow": 38,
+      "canonPixelX": 407.248,
+      "canonPixelY": 380.015,
+      "canonColorRgb": [
+        213,
+        163,
+        110
+      ],
+      "canonColorHue": 30.9,
+      "spectralClass": "G",
+      "spectralClassSource": "page101-bg actual star disk color after local background subtraction; center pixel alone is not used"
+    },
+    {
+      "system": "イゼルローン",
+      "planets": [],
+      "fortresses": [
+        "イゼルローン"
+      ],
+      "rect": [
+        192.89606,
+        389.47517,
+        212.89606,
+        411.47517
+      ],
+      "page": 101,
+      "faction": "empire",
+      "cx": 202.9,
+      "cy": 400.5,
+      "in_iv_ex": true,
+      "is_corridor": 1,
+      "canonCol": 53,
+      "canonRow": 12,
+      "canonDotX": 199.236,
+      "canonDotY": 421.399,
+      "canonLineMarkerX": 202.917,
+      "canonLineMarkerY": 439.256,
+      "canonLineMarkerCol": 51,
+      "canonLineMarkerRow": 14,
+      "canonPixelX": 420.601,
+      "canonPixelY": 199.236,
+      "canonColorRgb": [
+        184,
+        92,
+        55
+      ],
+      "canonColorHue": 17.2,
+      "spectralClass": "K",
+      "spectralClassSource": "page101-bg actual star disk color after local background subtraction; center pixel alone is not used",
+      "canonGameCol": 54,
+      "canonGameRow": 13
+    },
+    {
+      "system": "アイゼンヘルツ",
+      "planets": [
+        {
+          "name": "ヒンターヴィルド",
+          "orbit": 1
+        },
+        {
+          "name": "ラドメール",
+          "orbit": 2
+        },
+        {
+          "name": "ゴータ",
+          "orbit": 3
+        }
+      ],
+      "fortresses": [
+        "ガイエスブルク"
+      ],
+      "rect": [
+        373.22383,
+        418.98335,
+        393.22383,
+        440.98335
+      ],
+      "page": 101,
+      "faction": "empire",
+      "cx": 383.2,
+      "cy": 430.0,
+      "in_iv_ex": true,
+      "is_corridor": 1,
+      "canonCol": 57,
+      "canonRow": 38,
+      "canonDotX": 380.149,
+      "canonDotY": 392.019,
+      "canonLineMarkerX": 383.245,
+      "canonLineMarkerY": 409.748,
+      "canonLineMarkerCol": 55,
+      "canonLineMarkerRow": 39,
+      "canonGameCol": 58,
+      "canonGameRow": 39,
+      "canonPixelX": 449.981,
+      "canonPixelY": 380.149,
+      "canonColorRgb": [
+        171,
+        85,
+        38
+      ],
+      "canonColorHue": 21.2,
+      "spectralClass": "K",
+      "spectralClassSource": "page101-bg actual star disk color after local background subtraction; center pixel alone is not used"
+    },
+    {
+      "system": "アムリッツァ",
+      "planets": [
+        {
+          "name": "クラインゲルト",
+          "orbit": 1
+        },
+        {
+          "name": "モールゲン",
+          "orbit": 2
+        },
+        {
+          "name": "ダンク",
+          "orbit": 3
+        },
+        {
+          "name": "ハーフェン",
+          "orbit": 4
+        }
+      ],
+      "fortresses": [],
+      "rect": [
+        192.89606,
+        440.84126,
+        212.89606,
+        462.84126
+      ],
+      "page": 101,
+      "faction": "empire",
+      "cx": 202.9,
+      "cy": 451.8,
+      "in_iv_ex": true,
+      "is_corridor": 1,
+      "canonCol": 61,
+      "canonRow": 12,
+      "canonDotX": 200.125,
+      "canonDotY": 370.461,
+      "canonLineMarkerX": 202.917,
+      "canonLineMarkerY": 387.89,
+      "canonLineMarkerCol": 58,
+      "canonLineMarkerRow": 14,
+      "canonGameCol": 62,
+      "canonGameRow": 13,
+      "canonPixelX": 471.539,
+      "canonPixelY": 200.125,
+      "canonColorRgb": [
+        134,
+        16,
+        2
+      ],
+      "canonColorHue": 6.4,
+      "spectralClass": "M",
+      "spectralClassSource": "page101-bg actual star disk color after local background subtraction; center pixel alone is not used"
+    },
+    {
+      "system": "フォルゲン",
+      "planets": [
+        {
+          "name": "シュヴァンガウ",
+          "orbit": 1
+        },
+        {
+          "name": "フュッセン",
+          "orbit": 2
+        },
+        {
+          "name": "ボーデルスベルク",
+          "orbit": 3
+        }
+      ],
+      "fortresses": [],
+      "rect": [
+        437.1582,
+        440.84126,
+        457.1582,
+        462.84126
+      ],
+      "page": 101,
+      "faction": "empire",
+      "cx": 447.2,
+      "cy": 451.8,
+      "in_iv_ex": true,
+      "is_corridor": 1,
+      "canonCol": 61,
+      "canonRow": 47,
+      "canonDotX": 444.784,
+      "canonDotY": 370.699,
+      "canonLineMarkerX": 447.179,
+      "canonLineMarkerY": 387.89,
+      "canonLineMarkerCol": 58,
+      "canonLineMarkerRow": 49,
+      "canonGameCol": 62,
+      "canonGameRow": 48,
+      "canonPixelX": 471.301,
+      "canonPixelY": 444.784,
+      "canonColorRgb": [
+        177,
+        61,
+        20
+      ],
+      "canonColorHue": 15.7,
+      "spectralClass": "K",
+      "spectralClassSource": "page101-bg actual star disk color after local background subtraction; center pixel alone is not used"
+    },
+    {
+      "system": "ヨーツンヘイム",
+      "planets": [
+        {
+          "name": "ウトガルド",
+          "orbit": 1
+        },
+        {
+          "name": "ヨーツンヘイム",
+          "orbit": 2
+        },
+        {
+          "name": "エーリヴァーガル",
+          "orbit": 3
+        }
+      ],
+      "fortresses": [],
+      "rect": [
+        387.43147,
+        455.0489,
+        407.43147,
+        477.0489
+      ],
+      "page": 101,
+      "faction": "empire",
+      "cx": 397.4,
+      "cy": 466.0,
+      "in_iv_ex": false,
+      "is_corridor": 0,
+      "canonCol": 63,
+      "canonRow": 40,
+      "canonDotX": 394.475,
+      "canonDotY": 356.008,
+      "canonLineMarkerX": 397.452,
+      "canonLineMarkerY": 373.682,
+      "canonLineMarkerCol": 60,
+      "canonLineMarkerRow": 41,
+      "canonGameCol": 64,
+      "canonGameRow": 41,
+      "canonPixelX": 485.992,
+      "canonPixelY": 394.475,
+      "canonColorRgb": [
+        179,
+        140,
+        55
+      ],
+      "canonColorHue": 41.1,
+      "spectralClass": "G",
+      "spectralClassSource": "page101-bg actual star disk color after local background subtraction; center pixel alone is not used"
+    },
+    {
+      "system": "ヴァンステイド",
+      "planets": [
+        {
+          "name": "ラヴンストラップ",
+          "orbit": 1
+        },
+        {
+          "name": "レグステッド",
+          "orbit": 2
+        },
+        {
+          "name": "ファルドガルデ",
+          "orbit": 3
+        }
+      ],
+      "fortresses": [],
+      "rect": [
+        237.15833,
+        455.59535,
+        257.15834,
+        477.59535
+      ],
+      "page": 101,
+      "faction": "empire",
+      "cx": 247.2,
+      "cy": 466.6,
+      "in_iv_ex": true,
+      "is_corridor": 0,
+      "canonCol": 63,
+      "canonRow": 18,
+      "canonDotX": 242.879,
+      "canonDotY": 355.855,
+      "canonLineMarkerX": 247.179,
+      "canonLineMarkerY": 373.136,
+      "canonLineMarkerCol": 60,
+      "canonLineMarkerRow": 20,
+      "canonGameCol": 64,
+      "canonGameRow": 19,
+      "canonPixelX": 486.145,
+      "canonPixelY": 242.879,
+      "canonColorRgb": [
+        180,
+        76,
+        5
+      ],
+      "canonColorHue": 24.3,
+      "spectralClass": "K",
+      "spectralClassSource": "page101-bg actual star disk color after local background subtraction; center pixel alone is not used"
+    },
+    {
+      "system": "ビルロスト",
+      "planets": [
+        {
+          "name": "ヘイムダル",
+          "orbit": 1
+        },
+        {
+          "name": "ヒミンビョルグ",
+          "orbit": 2
+        },
+        {
+          "name": "ブルトガング",
+          "orbit": 3
+        },
+        {
+          "name": "ギャラルホルン",
+          "orbit": 4
+        }
+      ],
+      "fortresses": [],
+      "rect": [
+        142.07642,
+        461.05979,
+        162.07642,
+        483.05979
+      ],
+      "page": 101,
+      "faction": "empire",
+      "cx": 152.1,
+      "cy": 472.1,
+      "in_iv_ex": true,
+      "is_corridor": 0,
+      "canonCol": 64,
+      "canonRow": 5,
+      "canonDotX": 149.495,
+      "canonDotY": 348.722,
+      "canonLineMarkerX": 152.097,
+      "canonLineMarkerY": 367.672,
+      "canonLineMarkerCol": 61,
+      "canonLineMarkerRow": 6,
+      "canonGameCol": 65,
+      "canonGameRow": 6,
+      "canonPixelX": 493.278,
+      "canonPixelY": 149.495,
+      "canonColorRgb": [
+        139,
+        23,
+        3
+      ],
+      "canonColorHue": 8.8,
+      "spectralClass": "M",
+      "spectralClassSource": "page101-bg actual star disk color after local background subtraction; center pixel alone is not used"
+    },
+    {
+      "system": "アルメントフベール",
+      "planets": [
+        {
+          "name": "ビッケンバッハ",
+          "orbit": 1
+        },
+        {
+          "name": "ゲルンスハイム",
+          "orbit": 2
+        },
+        {
+          "name": "アルスバッハ",
+          "orbit": 3
+        },
+        {
+          "name": "クレーベルク",
+          "orbit": 4
+        }
+      ],
+      "fortresses": [],
+      "rect": [
+        336.61183,
+        462.69917,
+        356.61183,
+        484.69917
+      ],
+      "page": 101,
+      "faction": "empire",
+      "cx": 346.6,
+      "cy": 473.7,
+      "in_iv_ex": true,
+      "is_corridor": 0,
+      "canonCol": 64,
+      "canonRow": 33,
+      "canonDotX": 344.116,
+      "canonDotY": 348.89,
+      "canonLineMarkerX": 346.633,
+      "canonLineMarkerY": 366.032,
+      "canonLineMarkerCol": 61,
+      "canonLineMarkerRow": 34,
+      "canonGameCol": 65,
+      "canonGameRow": 34,
+      "canonPixelX": 493.11,
+      "canonPixelY": 344.116,
+      "canonColorRgb": [
+        174,
+        64,
+        24
+      ],
+      "canonColorHue": 16.0,
+      "spectralClass": "K",
+      "spectralClassSource": "page101-bg actual star disk color after local background subtraction; center pixel alone is not used"
+    },
+    {
+      "system": "トラーバッハ",
+      "planets": [
+        {
+          "name": "ヴォルフェルスドルフ",
+          "orbit": 1
+        },
+        {
+          "name": "ファルクヴィーラー",
+          "orbit": 2
+        },
+        {
+          "name": "シュテルネンベルク",
+          "orbit": 3
+        },
+        {
+          "name": "トラーベン",
+          "orbit": 4
+        }
+      ],
+      "fortresses": [],
+      "rect": [
+        285.79219,
+        463.2456,
+        305.79219,
+        485.2456
+      ],
+      "page": 101,
+      "faction": "empire",
+      "cx": 295.8,
+      "cy": 474.2,
+      "in_iv_ex": true,
+      "is_corridor": 0,
+      "canonCol": 64,
+      "canonRow": 26,
+      "canonDotX": 293.657,
+      "canonDotY": 348.664,
+      "canonLineMarkerX": 295.813,
+      "canonLineMarkerY": 365.486,
+      "canonLineMarkerCol": 61,
+      "canonLineMarkerRow": 27,
+      "canonGameCol": 65,
+      "canonGameRow": 27,
+      "canonPixelX": 493.336,
+      "canonPixelY": 293.657,
+      "canonColorRgb": [
+        167,
+        116,
+        41
+      ],
+      "canonColorHue": 35.7,
+      "spectralClass": "G",
+      "spectralClassSource": "page101-bg actual star disk color after local background subtraction; center pixel alone is not used"
+    },
+    {
+      "system": "ブラウンシュヴァイク",
+      "planets": [
+        {
+          "name": "ヴェスターラント",
+          "orbit": 1
+        },
+        {
+          "name": "ヴェーデル",
+          "orbit": 2
+        },
+        {
+          "name": "ショーペンシュタット",
+          "orbit": 3
+        },
+        {
+          "name": "フォルケンローデ",
+          "orbit": 4
+        }
+      ],
+      "fortresses": [],
+      "rect": [
+        414.75386,
+        483.46418,
+        434.75386,
+        505.46418
+      ],
+      "page": 101,
+      "faction": "empire",
+      "cx": 424.8,
+      "cy": 494.5,
+      "in_iv_ex": true,
+      "is_corridor": 0,
+      "canonCol": 67,
+      "canonRow": 44,
+      "canonDotX": 423.269,
+      "canonDotY": 327.226,
+      "canonLineMarkerX": 424.775,
+      "canonLineMarkerY": 345.267,
+      "canonLineMarkerCol": 64,
+      "canonLineMarkerRow": 45,
+      "canonGameCol": 68,
+      "canonGameRow": 45,
+      "canonPixelX": 514.774,
+      "canonPixelY": 423.269,
+      "canonColorRgb": [
+        178,
+        122,
+        61
+      ],
+      "canonColorHue": 31.3,
+      "spectralClass": "G",
+      "spectralClassSource": "page101-bg actual star disk color after local background subtraction; center pixel alone is not used"
+    },
+    {
+      "system": "ボルソルン",
+      "planets": [
+        {
+          "name": "ベストラ",
+          "orbit": 1
+        },
+        {
+          "name": "ボルソルン",
+          "orbit": 2
+        },
+        {
+          "name": "ヴァイセンバッハ",
+          "orbit": 3
+        },
+        {
+          "name": "ボル",
+          "orbit": 4
+        }
+      ],
+      "fortresses": [],
+      "rect": [
+        157.37696,
+        490.56797,
+        177.37696,
+        512.568
+      ],
+      "page": 101,
+      "faction": "empire",
+      "cx": 167.4,
+      "cy": 501.6,
+      "in_iv_ex": true,
+      "is_corridor": 0,
+      "canonCol": 68,
+      "canonRow": 7,
+      "canonDotX": 164.015,
+      "canonDotY": 319.73,
+      "canonLineMarkerX": 167.398,
+      "canonLineMarkerY": 338.163,
+      "canonLineMarkerCol": 65,
+      "canonLineMarkerRow": 9,
+      "canonGameCol": 69,
+      "canonGameRow": 8,
+      "canonPixelX": 522.27,
+      "canonPixelY": 164.015,
+      "canonColorRgb": [
+        180,
+        99,
+        38
+      ],
+      "canonColorHue": 25.8,
+      "spectralClass": "G",
+      "spectralClassSource": "page101-bg actual star disk color after local background subtraction; center pixel alone is not used"
+    },
+    {
+      "system": "ドヴェルグ",
+      "planets": [
+        {
+          "name": "グレイプニル",
+          "orbit": 1
+        },
+        {
+          "name": "イーヴァルディ",
+          "orbit": 2
+        },
+        {
+          "name": "レージング",
+          "orbit": 3
+        },
+        {
+          "name": "カパール",
+          "orbit": 4
+        }
+      ],
+      "fortresses": [],
+      "rect": [
+        192.89606,
+        491.6609,
+        212.89606,
+        513.6609
+      ],
+      "page": 101,
+      "faction": "empire",
+      "cx": 202.9,
+      "cy": 502.7,
+      "in_iv_ex": true,
+      "is_corridor": 0,
+      "canonCol": 68,
+      "canonRow": 12,
+      "canonDotX": 200.17,
+      "canonDotY": 319.829,
+      "canonLineMarkerX": 202.917,
+      "canonLineMarkerY": 337.07,
+      "canonLineMarkerCol": 65,
+      "canonLineMarkerRow": 14,
+      "canonGameCol": 69,
+      "canonGameRow": 13,
+      "canonPixelX": 522.171,
+      "canonPixelY": 200.17,
+      "canonColorRgb": [
+        173,
+        95,
+        38
+      ],
+      "canonColorHue": 25.3,
+      "spectralClass": "G",
+      "spectralClassSource": "page101-bg actual star disk color after local background subtraction; center pixel alone is not used"
+    },
+    {
+      "system": "アルタイル",
+      "planets": [
+        {
+          "name": "カタラウヌム",
+          "orbit": 1
+        },
+        {
+          "name": "アンティノウス",
+          "orbit": 2
+        },
+        {
+          "name": "テルモピュレー",
+          "orbit": 3
+        },
+        {
+          "name": "アルタイル",
+          "orbit": 4
+        }
+      ],
+      "fortresses": [],
+      "rect": [
+        257.3769,
+        506.41499,
+        277.3769,
+        528.415
+      ],
+      "page": 101,
+      "faction": "empire",
+      "cx": 267.4,
+      "cy": 517.4,
+      "in_iv_ex": false,
+      "is_corridor": 0,
+      "canonCol": 70,
+      "canonRow": 21,
+      "canonDotX": 264.967,
+      "canonDotY": 305.67,
+      "canonLineMarkerX": 267.398,
+      "canonLineMarkerY": 322.316,
+      "canonLineMarkerCol": 67,
+      "canonLineMarkerRow": 23,
+      "canonGameCol": 71,
+      "canonGameRow": 22,
+      "canonPixelX": 536.33,
+      "canonPixelY": 264.967,
+      "canonColorRgb": [
+        139,
+        26,
+        3
+      ],
+      "canonColorHue": 10.1,
+      "spectralClass": "M",
+      "spectralClassSource": "page101-bg actual star disk color after local background subtraction; center pixel alone is not used"
+    },
+    {
+      "system": "フレイア",
+      "planets": [
+        {
+          "name": "フォールクヴァング",
+          "orbit": 1
+        },
+        {
+          "name": "フェンサリル",
+          "orbit": 2
+        },
+        {
+          "name": "ブリシンガメン",
+          "orbit": 3
+        }
+      ],
+      "fortresses": [
+        "レンテンベルグ"
+      ],
+      "rect": [
+        342.0763,
+        506.96144,
+        362.0763,
+        528.9614
+      ],
+      "page": 101,
+      "faction": "empire",
+      "cx": 352.1,
+      "cy": 518.0,
+      "in_iv_ex": true,
+      "is_corridor": 0,
+      "canonCol": 70,
+      "canonRow": 34,
+      "canonDotX": 351.211,
+      "canonDotY": 305.377,
+      "canonLineMarkerX": 352.097,
+      "canonLineMarkerY": 321.77,
+      "canonLineMarkerCol": 68,
+      "canonLineMarkerRow": 35,
+      "canonGameCol": 71,
+      "canonGameRow": 35,
+      "canonPixelX": 536.623,
+      "canonPixelY": 351.211,
+      "canonColorRgb": [
+        37,
+        59,
+        81
+      ],
+      "canonColorHue": 210.0,
+      "spectralClass": "B",
+      "spectralClassSource": "page101-bg actual star disk color after local background subtraction; center pixel alone is not used"
+    },
+    {
+      "system": "ヤヴァンハール",
+      "planets": [
+        {
+          "name": "ハールバルド",
+          "orbit": 1
+        },
+        {
+          "name": "リューゲン",
+          "orbit": 2
+        },
+        {
+          "name": "ヴィスマール",
+          "orbit": 3
+        },
+        {
+          "name": "シュヴェリーン",
+          "orbit": 4
+        }
+      ],
+      "fortresses": [],
+      "rect": [
+        215.30042,
+        512.97238,
+        235.30042,
+        534.97238
+      ],
+      "page": 101,
+      "faction": "empire",
+      "cx": 225.3,
+      "cy": 524.0,
+      "in_iv_ex": true,
+      "is_corridor": 0,
+      "canonCol": 71,
+      "canonRow": 15,
+      "canonDotX": 221.718,
+      "canonDotY": 298.207,
+      "canonLineMarkerX": 225.321,
+      "canonLineMarkerY": 315.759,
+      "canonLineMarkerCol": 68,
+      "canonLineMarkerRow": 17,
+      "canonGameCol": 72,
+      "canonGameRow": 16,
+      "canonPixelX": 543.793,
+      "canonPixelY": 221.718,
+      "canonColorRgb": [
+        166,
+        93,
+        41
+      ],
+      "canonColorHue": 25.0,
+      "spectralClass": "G",
+      "spectralClassSource": "page101-bg actual star disk color after local background subtraction; center pixel alone is not used"
+    },
+    {
+      "system": "キフォイザー",
+      "planets": [
+        {
+          "name": "ロールバッハ",
+          "orbit": 1
+        },
+        {
+          "name": "ヴァーゲンバッハ",
+          "orbit": 2
+        },
+        {
+          "name": "パルテンキルヒェン",
+          "orbit": 3
+        }
+      ],
+      "fortresses": [
+        "ガルミッシュ"
+      ],
+      "rect": [
+        422.95057,
+        526.0871,
+        442.95057,
+        548.0871
+      ],
+      "page": 101,
+      "faction": "empire",
+      "cx": 433.0,
+      "cy": 537.1,
+      "in_iv_ex": true,
+      "is_corridor": 0,
+      "canonCol": 73,
+      "canonRow": 45,
+      "canonDotX": 430.185,
+      "canonDotY": 283.995,
+      "canonLineMarkerX": 432.972,
+      "canonLineMarkerY": 302.644,
+      "canonLineMarkerCol": 70,
+      "canonLineMarkerRow": 46,
+      "canonGameCol": 74,
+      "canonGameRow": 46,
+      "canonPixelX": 558.005,
+      "canonPixelY": 430.185,
+      "canonColorRgb": [
+        39,
+        71,
+        83
+      ],
+      "canonColorHue": 196.4,
+      "spectralClass": "B",
+      "spectralClassSource": "page101-bg actual star disk color after local background subtraction; center pixel alone is not used"
+    },
+    {
+      "system": "アルヴィース",
+      "planets": [
+        {
+          "name": "ビルスキルニル",
+          "orbit": 1
+        },
+        {
+          "name": "スルード",
+          "orbit": 2
+        },
+        {
+          "name": "ウンターグリューン",
+          "orbit": 3
+        },
+        {
+          "name": "ヴァンガル",
+          "orbit": 4
+        }
+      ],
+      "fortresses": [],
+      "rect": [
+        299.45338,
+        547.945,
+        319.45338,
+        569.945
+      ],
+      "page": 101,
+      "faction": "empire",
+      "cx": 309.5,
+      "cy": 558.9,
+      "in_iv_ex": true,
+      "is_corridor": 0,
+      "canonCol": 76,
+      "canonRow": 28,
+      "canonDotX": 308.204,
+      "canonDotY": 262.143,
+      "canonLineMarkerX": 309.474,
+      "canonLineMarkerY": 280.786,
+      "canonLineMarkerCol": 73,
+      "canonLineMarkerRow": 29,
+      "canonGameCol": 77,
+      "canonGameRow": 29,
+      "canonPixelX": 579.857,
+      "canonPixelY": 308.204,
+      "canonColorRgb": [
+        178,
+        132,
+        42
+      ],
+      "canonColorHue": 39.7,
+      "spectralClass": "G",
+      "spectralClassSource": "page101-bg actual star disk color after local background subtraction; center pixel alone is not used"
+    },
+    {
+      "system": "太陽系",
+      "planets": [
+        {
+          "name": "○水星",
+          "orbit": 1
+        },
+        {
+          "name": "○金星",
+          "orbit": 2
+        },
+        {
+          "name": "○地球",
+          "orbit": 3
+        },
+        {
+          "name": "○火星",
+          "orbit": 4
+        }
+      ],
+      "fortresses": [],
+      "rect": [
+        126.77588,
+        549.0379,
+        146.77588,
+        571.0379
+      ],
+      "page": 101,
+      "faction": "empire",
+      "cx": 136.8,
+      "cy": 560.0,
+      "in_iv_ex": false,
+      "is_corridor": 0,
+      "canonCol": 76,
+      "canonRow": 3,
+      "canonDotX": 135.021,
+      "canonDotY": 262.5,
+      "canonLineMarkerX": 136.797,
+      "canonLineMarkerY": 279.693,
+      "canonLineMarkerCol": 74,
+      "canonLineMarkerRow": 4,
+      "canonGameCol": 77,
+      "canonGameRow": 4,
+      "canonPixelX": 579.5,
+      "canonPixelY": 135.021,
+      "canonColorRgb": [
+        177,
+        112,
+        37
+      ],
+      "canonColorHue": 32.1,
+      "spectralClass": "G",
+      "spectralClassSource": "page101-bg actual star disk color after local background subtraction; center pixel alone is not used"
+    },
+    {
+      "system": "バルドル",
+      "planets": [
+        {
+          "name": "ブレイザブリク",
+          "orbit": 1
+        },
+        {
+          "name": "フリングホルニ",
+          "orbit": 2
+        },
+        {
+          "name": "グリトニル",
+          "orbit": 3
+        },
+        {
+          "name": "ホズ",
+          "orbit": 4
+        }
+      ],
+      "fortresses": [],
+      "rect": [
+        436.61177,
+        556.1417,
+        456.61177,
+        578.1417
+      ],
+      "page": 101,
+      "faction": "empire",
+      "cx": 446.6,
+      "cy": 567.1,
+      "in_iv_ex": false,
+      "is_corridor": 0,
+      "canonCol": 77,
+      "canonRow": 47,
+      "canonDotX": 444.825,
+      "canonDotY": 255.005,
+      "canonLineMarkerX": 446.633,
+      "canonLineMarkerY": 272.59,
+      "canonLineMarkerCol": 75,
+      "canonLineMarkerRow": 48,
+      "canonGameCol": 78,
+      "canonGameRow": 48,
+      "canonPixelX": 586.995,
+      "canonPixelY": 444.825,
+      "canonColorRgb": [
+        166,
+        90,
+        52
+      ],
+      "canonColorHue": 20.0,
+      "spectralClass": "K",
+      "spectralClassSource": "page101-bg actual star disk color after local background subtraction; center pixel alone is not used"
+    },
+    {
+      "system": "リンダーホーフ",
+      "planets": [
+        {
+          "name": "ノイシュヴァンシュタイン",
+          "orbit": 1
+        },
+        {
+          "name": "キームゼー",
+          "orbit": 2
+        },
+        {
+          "name": "ホーエンシュヴァンガウ",
+          "orbit": 3
+        },
+        {
+          "name": "オーバーアマガウ",
+          "orbit": 4
+        }
+      ],
+      "fortresses": [],
+      "rect": [
+        185.79224,
+        562.6991,
+        205.79224,
+        584.6991
+      ],
+      "page": 101,
+      "faction": "empire",
+      "cx": 195.8,
+      "cy": 573.7,
+      "in_iv_ex": false,
+      "is_corridor": 0,
+      "canonCol": 78,
+      "canonRow": 11,
+      "canonDotX": 192.797,
+      "canonDotY": 248.035,
+      "canonLineMarkerX": 195.813,
+      "canonLineMarkerY": 266.032,
+      "canonLineMarkerCol": 75,
+      "canonLineMarkerRow": 13,
+      "canonGameCol": 79,
+      "canonGameRow": 12,
+      "canonPixelX": 593.965,
+      "canonPixelY": 192.797,
+      "canonColorRgb": [
+        168,
+        111,
+        34
+      ],
+      "canonColorHue": 34.5,
+      "spectralClass": "G",
+      "spectralClassSource": "page101-bg actual star disk color after local background subtraction; center pixel alone is not used"
+    },
+    {
+      "system": "シリウス",
+      "planets": [
+        {
+          "name": "ポ・トロ",
+          "orbit": 1
+        },
+        {
+          "name": "エンメ・ヤ",
+          "orbit": 2
+        },
+        {
+          "name": "ノンモ",
+          "orbit": 3
+        },
+        {
+          "name": "ロンドリーナ",
+          "orbit": 4
+        }
+      ],
+      "fortresses": [],
+      "rect": [
+        113.661128,
+        576.3603,
+        133.66114,
+        598.3603
+      ],
+      "page": 101,
+      "faction": "empire",
+      "cx": 123.7,
+      "cy": 587.4,
+      "in_iv_ex": false,
+      "is_corridor": 0,
+      "canonCol": 80,
+      "canonRow": 1,
+      "canonDotX": 120.824,
+      "canonDotY": 233.621,
+      "canonLineMarkerX": 123.682,
+      "canonLineMarkerY": 252.371,
+      "canonLineMarkerCol": 77,
+      "canonLineMarkerRow": 2,
+      "canonGameCol": 81,
+      "canonGameRow": 2,
+      "canonPixelX": 608.379,
+      "canonPixelY": 120.824,
+      "canonColorRgb": [
+        178,
+        90,
+        31
+      ],
+      "canonColorHue": 24.1,
+      "spectralClass": "K",
+      "spectralClassSource": "page101-bg actual star disk color after local background subtraction; center pixel alone is not used"
+    },
+    {
+      "system": "ヴェガ",
+      "planets": [
+        {
+          "name": "オルフェウス",
+          "orbit": 1
+        },
+        {
+          "name": "エウリュディケ",
+          "orbit": 2
+        },
+        {
+          "name": "アクリシオス",
+          "orbit": 3
+        },
+        {
+          "name": "ベルセボネー",
+          "orbit": 4
+        }
+      ],
+      "fortresses": [],
+      "rect": [
+        134.9726,
+        577.99966,
+        154.9726,
+        599.99966
+      ],
+      "page": 101,
+      "faction": "empire",
+      "cx": 145.0,
+      "cy": 589.0,
+      "in_iv_ex": false,
+      "is_corridor": 0,
+      "canonCol": 80,
+      "canonRow": 4,
+      "canonDotX": 142.406,
+      "canonDotY": 233.647,
+      "canonLineMarkerX": 144.994,
+      "canonLineMarkerY": 250.732,
+      "canonLineMarkerCol": 78,
+      "canonLineMarkerRow": 5,
+      "canonGameCol": 81,
+      "canonGameRow": 5,
+      "canonPixelX": 608.353,
+      "canonPixelY": 142.406,
+      "canonColorRgb": [
+        167,
+        55,
+        9
+      ],
+      "canonColorHue": 17.5,
+      "spectralClass": "K",
+      "spectralClassSource": "page101-bg actual star disk color after local background subtraction; center pixel alone is not used"
+    },
+    {
+      "system": "アルテナ",
+      "planets": [
+        {
+          "name": "ヴェセルデ",
+          "orbit": 1
+        },
+        {
+          "name": "ナッハロート",
+          "orbit": 2
+        },
+        {
+          "name": "ノイエンラーデ",
+          "orbit": 3
+        },
+        {
+          "name": "ヘートフェルト",
+          "orbit": 4
+        }
+      ],
+      "fortresses": [],
+      "rect": [
+        337.15827,
+        584.01058,
+        357.15827,
+        606.01058
+      ],
+      "page": 101,
+      "faction": "empire",
+      "cx": 347.2,
+      "cy": 595.0,
+      "in_iv_ex": true,
+      "is_corridor": 0,
+      "canonCol": 81,
+      "canonRow": 33,
+      "canonDotX": 344.083,
+      "canonDotY": 226.309,
+      "canonLineMarkerX": 347.179,
+      "canonLineMarkerY": 244.721,
+      "canonLineMarkerCol": 79,
+      "canonLineMarkerRow": 34,
+      "canonGameCol": 82,
+      "canonGameRow": 34,
+      "canonPixelX": 615.691,
+      "canonPixelY": 344.083,
+      "canonColorRgb": [
+        36,
+        39,
+        89
+      ],
+      "canonColorHue": 236.6,
+      "spectralClass": "B",
+      "spectralClassSource": "page101-bg actual star disk color after local background subtraction; center pixel alone is not used"
+    },
+    {
+      "system": "リッテンハイム",
+      "planets": [
+        {
+          "name": "インゲンハイム",
+          "orbit": 1
+        },
+        {
+          "name": "デュンツェンハイム",
+          "orbit": 2
+        },
+        {
+          "name": "アルテンハイム",
+          "orbit": 3
+        },
+        {
+          "name": "ローゲンドルフ",
+          "orbit": 4
+        }
+      ],
+      "fortresses": [],
+      "rect": [
+        414.75386,
+        591.6608,
+        434.75386,
+        613.6608
+      ],
+      "page": 101,
+      "faction": "empire",
+      "cx": 424.8,
+      "cy": 602.7,
+      "in_iv_ex": true,
+      "is_corridor": 0,
+      "canonCol": 82,
+      "canonRow": 44,
+      "canonDotX": 423.269,
+      "canonDotY": 218.989,
+      "canonLineMarkerX": 424.775,
+      "canonLineMarkerY": 237.071,
+      "canonLineMarkerCol": 80,
+      "canonLineMarkerRow": 45,
+      "canonGameCol": 83,
+      "canonGameRow": 45,
+      "canonPixelX": 623.011,
+      "canonPixelY": 423.269,
+      "canonColorRgb": [
+        174,
+        119,
+        64
+      ],
+      "canonColorHue": 30.0,
+      "spectralClass": "G",
+      "spectralClassSource": "page101-bg actual star disk color after local background subtraction; center pixel alone is not used"
+    },
+    {
+      "system": "ヴェルラ",
+      "planets": [
+        {
+          "name": "マルクト",
+          "orbit": 1
+        },
+        {
+          "name": "ヤコビ",
+          "orbit": 2
+        },
+        {
+          "name": "シュテファニ",
+          "orbit": 3
+        }
+      ],
+      "fortresses": [],
+      "rect": [
+        263.93428,
+        599.3111,
+        283.93428,
+        621.3111
+      ],
+      "page": 101,
+      "faction": "empire",
+      "cx": 273.9,
+      "cy": 610.3,
+      "in_iv_ex": false,
+      "is_corridor": 0,
+      "canonCol": 83,
+      "canonRow": 23,
+      "canonDotX": 272.205,
+      "canonDotY": 211.509,
+      "canonLineMarkerX": 273.955,
+      "canonLineMarkerY": 229.42,
+      "canonLineMarkerCol": 81,
+      "canonLineMarkerRow": 24,
+      "canonGameCol": 84,
+      "canonGameRow": 24,
+      "canonPixelX": 630.491,
+      "canonPixelY": 272.205,
+      "canonColorRgb": [
+        161,
+        165,
+        102
+      ],
+      "canonColorHue": 63.8,
+      "spectralClass": "A",
+      "spectralClassSource": "page101-bg actual star disk color after local background subtraction; center pixel alone is not used"
+    },
+    {
+      "system": "ヴィレンシュタイン",
+      "planets": [
+        {
+          "name": "ウイツィッヒハウゼン",
+          "orbit": 1
+        },
+        {
+          "name": "ヴァイセンホルン",
+          "orbit": 2
+        },
+        {
+          "name": "グラフェルツホーフェン",
+          "orbit": 3
+        },
+        {
+          "name": "オーベンハウゼン",
+          "orbit": 4
+        }
+      ],
+      "fortresses": [],
+      "rect": [
+        172.67749,
+        613.51876,
+        192.67749,
+        635.51876
+      ],
+      "page": 101,
+      "faction": "empire",
+      "cx": 182.7,
+      "cy": 624.5,
+      "in_iv_ex": true,
+      "is_corridor": 0,
+      "canonCol": 85,
+      "canonRow": 9,
+      "canonDotX": 178.374,
+      "canonDotY": 197.61,
+      "canonLineMarkerX": 182.698,
+      "canonLineMarkerY": 215.213,
+      "canonLineMarkerCol": 83,
+      "canonLineMarkerRow": 11,
+      "canonGameCol": 86,
+      "canonGameRow": 10,
+      "canonPixelX": 644.39,
+      "canonPixelY": 178.374,
+      "canonColorRgb": [
+        178,
+        122,
+        42
+      ],
+      "canonColorHue": 35.3,
+      "spectralClass": "G",
+      "spectralClassSource": "page101-bg actual star disk color after local background subtraction; center pixel alone is not used"
+    },
+    {
+      "system": "ハインスベルク",
+      "planets": [
+        {
+          "name": "ランデラート",
+          "orbit": 1
+        },
+        {
+          "name": "ダッセル",
+          "orbit": 2
+        },
+        {
+          "name": "ミュレンアルク",
+          "orbit": 3
+        }
+      ],
+      "fortresses": [],
+      "rect": [
+        214.75397,
+        634.8302,
+        234.75397,
+        656.8302
+      ],
+      "page": 101,
+      "faction": "empire",
+      "cx": 224.8,
+      "cy": 645.8,
+      "in_iv_ex": false,
+      "is_corridor": 0,
+      "canonCol": 88,
+      "canonRow": 15,
+      "canonDotX": 221.728,
+      "canonDotY": 175.671,
+      "canonLineMarkerX": 224.775,
+      "canonLineMarkerY": 193.901,
+      "canonLineMarkerCol": 86,
+      "canonLineMarkerRow": 17,
+      "canonGameCol": 89,
+      "canonGameRow": 16,
+      "canonPixelX": 666.329,
+      "canonPixelY": 221.728,
+      "canonColorRgb": [
+        138,
+        24,
+        4
+      ],
+      "canonColorHue": 9.0,
+      "spectralClass": "M",
+      "spectralClassSource": "page101-bg actual star disk color after local background subtraction; center pixel alone is not used"
+    },
+    {
+      "system": "ヴァルデマール",
+      "planets": [
+        {
+          "name": "ウーファー",
+          "orbit": 1
+        },
+        {
+          "name": "パウル",
+          "orbit": 2
+        },
+        {
+          "name": "リンケ",
+          "orbit": 3
+        }
+      ],
+      "fortresses": [],
+      "rect": [
+        371.03804,
+        635.37667,
+        391.03804,
+        657.37667
+      ],
+      "page": 101,
+      "faction": "empire",
+      "cx": 381.0,
+      "cy": 646.4,
+      "in_iv_ex": false,
+      "is_corridor": 0,
+      "canonCol": 88,
+      "canonRow": 38,
+      "canonDotX": 380.011,
+      "canonDotY": 175.71,
+      "canonLineMarkerX": 381.059,
+      "canonLineMarkerY": 193.355,
+      "canonLineMarkerCol": 86,
+      "canonLineMarkerRow": 39,
+      "canonGameCol": 89,
+      "canonGameRow": 39,
+      "canonPixelX": 666.29,
+      "canonPixelY": 380.011,
+      "canonColorRgb": [
+        169,
+        93,
+        51
+      ],
+      "canonColorHue": 21.4,
+      "spectralClass": "K",
+      "spectralClassSource": "page101-bg actual star disk color after local background subtraction; center pixel alone is not used"
+    },
+    {
+      "system": "ヴァルハラ",
+      "planets": [
+        {
+          "name": "ゾースト",
+          "orbit": 1
+        },
+        {
+          "name": "オーディン",
+          "orbit": 2
+        },
+        {
+          "name": "トゥール",
+          "orbit": 3
+        },
+        {
+          "name": "ヴァルグリンド",
+          "orbit": 4
+        }
+      ],
+      "fortresses": [],
+      "rect": [
+        278.1419,
+        635.9231,
+        298.1419,
+        657.9231
+      ],
+      "page": 101,
+      "faction": "empire",
+      "cx": 288.1,
+      "cy": 646.9,
+      "in_iv_ex": true,
+      "is_corridor": 0,
+      "canonCol": 88,
+      "canonRow": 25,
+      "canonDotX": 286.568,
+      "canonDotY": 175.711,
+      "canonLineMarkerX": 288.163,
+      "canonLineMarkerY": 192.808,
+      "canonLineMarkerCol": 86,
+      "canonLineMarkerRow": 26,
+      "canonGameCol": 89,
+      "canonGameRow": 26,
+      "canonPixelX": 666.289,
+      "canonPixelY": 286.568,
+      "canonColorRgb": [
+        179,
+        123,
+        46
+      ],
+      "canonColorHue": 34.7,
+      "spectralClass": "G",
+      "spectralClassSource": "page101-bg actual star disk color after local background subtraction; center pixel alone is not used"
+    },
+    {
+      "system": "シャンタウ",
+      "planets": [
+        {
+          "name": "クネスドルフ",
+          "orbit": 1
+        },
+        {
+          "name": "ハーケンドルフ",
+          "orbit": 2
+        },
+        {
+          "name": "ノイエンキルヒェン",
+          "orbit": 3
+        },
+        {
+          "name": "ゼードルフ",
+          "orbit": 4
+        }
+      ],
+      "fortresses": [],
+      "rect": [
+        330.05445,
+        635.9231,
+        350.05445,
+        657.9231
+      ],
+      "page": 101,
+      "faction": "empire",
+      "cx": 340.1,
+      "cy": 646.9,
+      "in_iv_ex": true,
+      "is_corridor": 0,
+      "canonCol": 88,
+      "canonRow": 32,
+      "canonDotX": 336.909,
+      "canonDotY": 175.898,
+      "canonLineMarkerX": 340.075,
+      "canonLineMarkerY": 192.808,
+      "canonLineMarkerCol": 86,
+      "canonLineMarkerRow": 33,
+      "canonGameCol": 89,
+      "canonGameRow": 33,
+      "canonPixelX": 666.102,
+      "canonPixelY": 336.909,
+      "canonColorRgb": [
+        34,
+        55,
+        74
+      ],
+      "canonColorHue": 208.5,
+      "spectralClass": "B",
+      "spectralClassSource": "page101-bg actual star disk color after local background subtraction; center pixel alone is not used"
+    },
+    {
+      "system": "ニヴルヘイム",
+      "planets": [
+        {
+          "name": "エリューズニル",
+          "orbit": 1
+        },
+        {
+          "name": "ギョッル",
+          "orbit": 2
+        },
+        {
+          "name": "フヴェルゲルミル",
+          "orbit": 3
+        }
+      ],
+      "fortresses": [],
+      "rect": [
+        236.61188,
+        641.3876,
+        256.61189,
+        663.3876
+      ],
+      "page": 101,
+      "faction": "empire",
+      "cx": 246.6,
+      "cy": 652.4,
+      "in_iv_ex": false,
+      "is_corridor": 0,
+      "canonCol": 89,
+      "canonRow": 18,
+      "canonDotX": 243.241,
+      "canonDotY": 168.617,
+      "canonLineMarkerX": 246.633,
+      "canonLineMarkerY": 187.344,
+      "canonLineMarkerCol": 87,
+      "canonLineMarkerRow": 20,
+      "canonGameCol": 90,
+      "canonGameRow": 19,
+      "canonPixelX": 673.383,
+      "canonPixelY": 243.241,
+      "canonColorRgb": [
+        26,
+        61,
+        69
+      ],
+      "canonColorHue": 191.2,
+      "spectralClass": "B",
+      "spectralClassSource": "page101-bg actual star disk color after local background subtraction; center pixel alone is not used"
+    },
+    {
+      "system": "ランメルスベルク",
+      "planets": [
+        {
+          "name": "ハルスブリュッケ",
+          "orbit": 1
+        },
+        {
+          "name": "ハルテンシュタイン",
+          "orbit": 2
+        },
+        {
+          "name": "ヒンメルスフュルスト",
+          "orbit": 3
+        },
+        {
+          "name": "シュレマ",
+          "orbit": 4
+        }
+      ],
+      "fortresses": [],
+      "rect": [
+        408.74293,
+        642.48049,
+        428.74293,
+        664.48049
+      ],
+      "page": 101,
+      "faction": "empire",
+      "cx": 418.7,
+      "cy": 653.5,
+      "in_iv_ex": false,
+      "is_corridor": 0,
+      "canonCol": 89,
+      "canonRow": 43,
+      "canonDotX": 416.039,
+      "canonDotY": 168.418,
+      "canonLineMarkerX": 418.764,
+      "canonLineMarkerY": 186.251,
+      "canonLineMarkerCol": 87,
+      "canonLineMarkerRow": 44,
+      "canonGameCol": 90,
+      "canonGameRow": 44,
+      "canonPixelX": 673.582,
+      "canonPixelY": 416.039,
+      "canonColorRgb": [
+        163,
+        85,
+        52
+      ],
+      "canonColorHue": 17.8,
+      "spectralClass": "K",
+      "spectralClassSource": "page101-bg actual star disk color after local background subtraction; center pixel alone is not used"
+    },
+    {
+      "system": "カストロプ",
+      "planets": [
+        {
+          "name": "カストロプ",
+          "orbit": 1
+        },
+        {
+          "name": "ニーダー・ヴィンディンゲ",
+          "orbit": 2
+        },
+        {
+          "name": "ヴォルディングボルグ",
+          "orbit": 3
+        },
+        {
+          "name": "マリーンドルフ",
+          "orbit": 4
+        }
+      ],
+      "fortresses": [],
+      "rect": [
+        163.38788,
+        663.79196,
+        183.38788,
+        685.79196
+      ],
+      "page": 101,
+      "faction": "empire",
+      "cx": 173.4,
+      "cy": 674.8,
+      "in_iv_ex": true,
+      "is_corridor": 0,
+      "canonCol": 92,
+      "canonRow": 8,
+      "canonDotX": 171.263,
+      "canonDotY": 147.016,
+      "canonLineMarkerX": 173.409,
+      "canonLineMarkerY": 164.939,
+      "canonLineMarkerCol": 90,
+      "canonLineMarkerRow": 9,
+      "canonGameCol": 93,
+      "canonGameRow": 9,
+      "canonPixelX": 694.984,
+      "canonPixelY": 171.263,
+      "canonColorRgb": [
+        175,
+        120,
+        61
+      ],
+      "canonColorHue": 31.1,
+      "spectralClass": "G",
+      "spectralClassSource": "page101-bg actual star disk color after local background subtraction; center pixel alone is not used"
+    },
+    {
+      "system": "アスガルド",
+      "planets": [
+        {
+          "name": "ミーミル",
+          "orbit": 1
+        },
+        {
+          "name": "ギンヌンガガプ",
+          "orbit": 2
+        },
+        {
+          "name": "トイトブルク",
+          "orbit": 3
+        },
+        {
+          "name": "イーダリル",
+          "orbit": 4
+        }
+      ],
+      "fortresses": [],
+      "rect": [
+        314.20747,
+        664.8848,
+        334.20747,
+        686.8848
+      ],
+      "page": 101,
+      "faction": "empire",
+      "cx": 324.2,
+      "cy": 675.9,
+      "in_iv_ex": false,
+      "is_corridor": 0,
+      "canonCol": 93,
+      "canonRow": 30,
+      "canonDotX": 322.511,
+      "canonDotY": 146.921,
+      "canonLineMarkerX": 324.228,
+      "canonLineMarkerY": 163.847,
+      "canonLineMarkerCol": 90,
+      "canonLineMarkerRow": 31,
+      "canonGameCol": 94,
+      "canonGameRow": 31,
+      "canonPixelX": 695.079,
+      "canonPixelY": 322.511,
+      "canonColorRgb": [
+        39,
+        75,
+        91
+      ],
+      "canonColorHue": 198.5,
+      "spectralClass": "B",
+      "spectralClassSource": "page101-bg actual star disk color after local background subtraction; center pixel alone is not used"
+    },
+    {
+      "system": "ヴァナヘイム",
+      "planets": [
+        {
+          "name": "エインヘリヤル",
+          "orbit": 1
+        },
+        {
+          "name": "ノーアトゥーン",
+          "orbit": 2
+        },
+        {
+          "name": "ニョルド",
+          "orbit": 3
+        },
+        {
+          "name": "フレイ",
+          "orbit": 4
+        }
+      ],
+      "fortresses": [],
+      "rect": [
+        214.75397,
+        670.89578,
+        234.75397,
+        692.89578
+      ],
+      "page": 101,
+      "faction": "empire",
+      "cx": 224.8,
+      "cy": 681.9,
+      "in_iv_ex": false,
+      "is_corridor": 0,
+      "canonCol": 94,
+      "canonRow": 15,
+      "canonDotX": 221.648,
+      "canonDotY": 139.939,
+      "canonLineMarkerX": 224.775,
+      "canonLineMarkerY": 157.836,
+      "canonLineMarkerCol": 91,
+      "canonLineMarkerRow": 17,
+      "canonGameCol": 95,
+      "canonGameRow": 16,
+      "canonPixelX": 702.061,
+      "canonPixelY": 221.648,
+      "canonColorRgb": [
+        177,
+        140,
+        56
+      ],
+      "canonColorHue": 41.7,
+      "spectralClass": "G",
+      "spectralClassSource": "page101-bg actual star disk color after local background subtraction; center pixel alone is not used"
+    },
+    {
+      "system": "ヴィッテルスバッハ",
+      "planets": [
+        {
+          "name": "レジデンツ",
+          "orbit": 1
+        },
+        {
+          "name": "ニュンフェンブルク",
+          "orbit": 2
+        },
+        {
+          "name": "ヴィクトアーリエン",
+          "orbit": 3
+        }
+      ],
+      "fortresses": [],
+      "rect": [
+        371.58448,
+        672.5351,
+        391.58448,
+        694.5351
+      ],
+      "page": 101,
+      "faction": "empire",
+      "cx": 381.6,
+      "cy": 683.5,
+      "in_iv_ex": false,
+      "is_corridor": 0,
+      "canonCol": 94,
+      "canonRow": 38,
+      "canonDotX": 380.011,
+      "canonDotY": 139.521,
+      "canonLineMarkerX": 381.605,
+      "canonLineMarkerY": 156.196,
+      "canonLineMarkerCol": 91,
+      "canonLineMarkerRow": 39,
+      "canonGameCol": 95,
+      "canonGameRow": 39,
+      "canonPixelX": 702.479,
+      "canonPixelY": 380.011,
+      "canonColorRgb": [
+        185,
+        123,
+        45
+      ],
+      "canonColorHue": 33.4,
+      "spectralClass": "G",
+      "spectralClassSource": "page101-bg actual star disk color after local background subtraction; center pixel alone is not used"
+    },
+    {
+      "system": "ルイトポルディング",
+      "planets": [
+        {
+          "name": "ルイトポルト",
+          "orbit": 1
+        },
+        {
+          "name": "ベルトホルト",
+          "orbit": 2
+        },
+        {
+          "name": "アルヌルフ",
+          "orbit": 3
+        }
+      ],
+      "fortresses": [],
+      "rect": [
+        273.22389,
+        685.64987,
+        293.22389,
+        707.64987
+      ],
+      "page": 101,
+      "faction": "empire",
+      "cx": 283.2,
+      "cy": 696.6,
+      "in_iv_ex": false,
+      "is_corridor": 0,
+      "canonCol": 96,
+      "canonRow": 24,
+      "canonDotX": 279.107,
+      "canonDotY": 125.119,
+      "canonLineMarkerX": 283.245,
+      "canonLineMarkerY": 143.082,
+      "canonLineMarkerCol": 93,
+      "canonLineMarkerRow": 25,
+      "canonGameCol": 97,
+      "canonGameRow": 25,
+      "canonPixelX": 716.881,
+      "canonPixelY": 279.107,
+      "canonColorRgb": [
+        148,
+        29,
+        10
+      ],
+      "canonColorHue": 8.3,
+      "spectralClass": "M",
+      "spectralClassSource": "page101-bg actual star disk color after local background subtraction; center pixel alone is not used"
+    },
+    {
+      "system": "ヴィンスティンゲン",
+      "planets": [
+        {
+          "name": "フォルマール",
+          "orbit": 1
+        },
+        {
+          "name": "ヴィート",
+          "orbit": 2
+        },
+        {
+          "name": "イーゼンブルク",
+          "orbit": 3
+        }
+      ],
+      "fortresses": [],
+      "rect": [
+        352.4588,
+        700.9504,
+        372.4588,
+        722.9504
+      ],
+      "page": 101,
+      "faction": "empire",
+      "cx": 362.5,
+      "cy": 712.0,
+      "in_iv_ex": false,
+      "is_corridor": 0,
+      "canonCol": 98,
+      "canonRow": 35,
+      "canonDotX": 358.494,
+      "canonDotY": 111.005,
+      "canonLineMarkerX": 362.48,
+      "canonLineMarkerY": 127.781,
+      "canonLineMarkerCol": 95,
+      "canonLineMarkerRow": 36,
+      "canonGameCol": 99,
+      "canonGameRow": 36,
+      "canonPixelX": 730.995,
+      "canonPixelY": 358.494,
+      "canonColorRgb": [
+        189,
+        113,
+        28
+      ],
+      "canonColorHue": 31.7,
+      "spectralClass": "G",
+      "spectralClassSource": "page101-bg actual star disk color after local background subtraction; center pixel alone is not used"
+    },
+    {
+      "system": "ウォームスガウ",
+      "planets": [
+        {
+          "name": "ヴェルナー",
+          "orbit": 1
+        },
+        {
+          "name": "コンラート",
+          "orbit": 2
+        },
+        {
+          "name": "ブルーノ",
+          "orbit": 3
+        },
+        {
+          "name": "リウドルフ",
+          "orbit": 4
+        }
+      ],
+      "fortresses": [],
+      "rect": [
+        315.8468,
+        708.0542,
+        335.8468,
+        730.0542
+      ],
+      "page": 101,
+      "faction": "empire",
+      "cx": 325.8,
+      "cy": 719.1,
+      "in_iv_ex": false,
+      "is_corridor": 0,
+      "canonCol": 99,
+      "canonRow": 30,
+      "canonDotX": 322.511,
+      "canonDotY": 103.747,
+      "canonLineMarkerX": 325.868,
+      "canonLineMarkerY": 120.677,
+      "canonLineMarkerCol": 96,
+      "canonLineMarkerRow": 31,
+      "canonGameCol": 100,
+      "canonGameRow": 31,
+      "canonPixelX": 738.253,
+      "canonPixelY": 322.511,
+      "canonColorRgb": [
+        180,
+        87,
+        32
+      ],
+      "canonColorHue": 22.3,
+      "spectralClass": "K",
+      "spectralClassSource": "page101-bg actual star disk color after local background subtraction; center pixel alone is not used"
+    }
+  ],
+  "_planet_order": "orbital inner->outer (orbit index 1-based); evidenced by numbered systems + capital orbit variance (Odin=2,Heinessen=3,Fezzan=4)",
+  "_canon_grid": {
+    "width": 100,
+    "height": 50,
+    "coordinateBase": {
+      "canonColRow": 0,
+      "canonGameColRow": 1
+    },
+    "note": "canonCol/canonRow feed the 0x0315 zero-indexed wire array; canonGameCol/canonGameRow are the 1-indexed in-game grid coordinates"
+  }
+}

@@ -1,0 +1,193 @@
+import { test } from 'node:test';
+import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
+import { openContentSource } from '../../src/server/logh7-content-source.mjs';
+import { buildContentPackDataFromSource } from '../../src/server/logh7-content-adapter.mjs';
+import { createContentPack } from '../../src/server/logh7-content-pack.mjs';
+import { buildStrategicGalaxyGrid, SS_RESP_STATIC_GRID_BYTES } from '../../src/server/logh7-login-protocol.mjs';
+
+const readJson = (path) => JSON.parse(readFileSync(path, 'utf8'));
+
+function decodeCellGrid(cellInner) {
+  const body = cellInner.subarray(6);
+  const decoded = new Uint8Array(100 * 50);
+  const rleBytes = body.readUInt16BE(2);
+  let pos = 0;
+  for (let offset = 0; offset < rleBytes; offset += 2) {
+    const run = body.readUInt8(4 + offset);
+    const value = body.readUInt8(5 + offset);
+    decoded.fill(value, pos, pos + run);
+    pos += run;
+  }
+  return { decoded, pos };
+}
+
+test('strategic grid provenance keeps system marker byte0 on recovered constmsg group 0x18 ids', () => {
+  // Given: the recovered content pack that feeds the current strategic galaxy grid.
+  const source = openContentSource({ build: true });
+  try {
+    const pack = createContentPack(buildContentPackDataFromSource(source));
+    const systems = pack.systems.map((system) => ({
+      cx: system.map.cx,
+      cy: system.map.cy,
+      canonCol: system.map.canonCol,
+      canonRow: system.map.canonRow,
+      page: system.map.page,
+      faction: system.faction,
+      contentId: system.contentId,
+      spectralClass: system.spectralClass,
+    }));
+
+    // When: the server builds the 0x0313 object table and 0x0315 cell grid.
+    const { objectInner, cellInner } = buildStrategicGalaxyGrid({
+      systems,
+      fleetCell: { col: 50, row: 25 },
+      fleetValue: 3,
+      fleetContentId: 1,
+    });
+    const objectBody = objectInner.subarray(6);
+    const { decoded, pos } = decodeCellGrid(cellInner);
+
+    // Then: no system falls back to index&0xff and every emitted marker resolves through byte0.
+    const missing = pack.systems.filter((system) => !Number.isInteger(system.contentId));
+    assert.deepEqual(missing.map((system) => system.name), []);
+    assert.equal(pack.systems.length, 80);
+    assert.equal(objectInner.length, 6 + SS_RESP_STATIC_GRID_BYTES);
+    assert.equal(cellInner.length, 6 + SS_RESP_STATIC_GRID_BYTES);
+    assert.equal(objectBody.readUInt8(0), 84); // records 0..83: systems 4..83 (값 3 함대 마커는 기본 미배치)
+    assert.equal(pos, 100 * 50);
+    // FR(2026-06-19): 함대를 klass-3 마커로 박지 않으므로 마커 셀 = 80 성계뿐(이전 81 = 80+함대).
+    assert.equal([...decoded].filter((value) => value >= 3 && value <= 88).length, 80);
+
+    pack.systems.forEach((system, index) => {
+      const value = 4 + index;
+      const cellIndex = decoded.indexOf(value);
+      assert.notEqual(cellIndex, -1, `${system.name} value ${value} is present in 0x0315`);
+      const objectOffset = 1 + value * 3;
+      assert.equal(objectBody.readUInt8(objectOffset), system.contentId, `${system.name} byte0`);
+      assert.equal(objectBody.readUInt8(objectOffset + 1), 3, `${system.name} class gate`);
+    });
+    const variantHistogram = {};
+    pack.systems.forEach((system, index) => {
+      const variant = objectBody.readUInt8(1 + (4 + index) * 3 + 2);
+      variantHistogram[variant] = (variantHistogram[variant] ?? 0) + 1;
+      assert.equal(system.provenance.spectralClass.authority, 'manual_star_chart_pixel_color');
+      if (system.name === 'イゼルローン') {
+        assert.equal(system.spectralClass, 'K');
+      }
+    });
+    assert.deepEqual(variantHistogram, { 1: 8, 2: 4, 3: 3, 4: 32, 5: 23, 6: 10 });
+
+    const assertSystemCell = (name, expected) => {
+      const index = pack.systems.findIndex((system) => system.name === name);
+      assert.notEqual(index, -1, `${name} exists in content pack`);
+      const value = 4 + index;
+      const cellIndex = decoded.indexOf(value);
+      assert.equal(cellIndex, expected.row * 100 + expected.col, `${name} projected cell`);
+    };
+
+    assertSystemCell('イゼルローン', { col: 53, row: 12 });
+    assertSystemCell('ルンビーニ', { col: 5, row: 20 });
+    assertSystemCell('シロン', { col: 6, row: 14 });
+    assertSystemCell('フェザーン', { col: 51, row: 37 }); // 페잔 마커 한 칸 위로(2026-06-23 사용자 결정); 회랑 통항은 row38 유지
+
+    const lumbini = pack.systemByName('ルンビーニ');
+    const iserlohn = pack.systemByName('イゼルローン');
+    const valhalla = pack.systemByName('ヴァルハラ');
+    assert.equal(lumbini.contentId, 86);
+    assert.equal(lumbini.nameKo, '룬비니');
+    assert.equal(valhalla.nameKo, '발할라');
+    assert.equal(valhalla.spectralClass, 'G');
+    assert.equal(valhalla.provenance.spectralClass.authority, 'manual_star_chart_pixel_color');
+    assert.deepEqual(
+      lumbini.planets.map((planet) => [planet.name, planet.nameKo, planet.orbit]),
+      [
+        ['バクタプール', '바구타푸루', 1],
+        ['カライヤ', '카라이야', 2],
+        ['バドガオン', '바도가온', 3],
+      ],
+    );
+    assert.equal(iserlohn.contentId, 14);
+    assert.ok(iserlohn.fortresses.includes('イゼルローン'));
+  } finally {
+    source.close();
+  }
+});
+
+test('strategic coordinate provenance stays marked as manual projection, not original server state', () => {
+  // Given: the content pack keeps source labels for map and planet positions.
+  const source = openContentSource({ build: true });
+  try {
+    const pack = createContentPack(buildContentPackDataFromSource(source));
+    const firstSystem = pack.systems[0];
+
+    // When: callers inspect the coordinate source used for the strategic grid.
+    const sourceLabels = new Set(pack.systems.map((system) => system.map.source));
+
+    // Then: the coordinate contract remains explicit about provenance.
+    assert.deepEqual([...sourceLabels], ['content/galaxy.json manual star-chart annotations']);
+    assert.equal(firstSystem.planets[0].inferredPosition.source, 'content/galaxy.json orbit order, deterministic local polar slots');
+  } finally {
+    source.close();
+  }
+});
+
+test('world data mining shape keeps star classes provenance-marked, not authoritative', () => {
+  const galaxy = readJson('content/galaxy.json');
+  const stars = readJson('content/extracted/model-galaxy-stars.json');
+  const modelPlanets = readJson('content/extracted/model-planets.json');
+  const schema = readJson('content/client/schema.json');
+  const economy = readJson('content/planet-economy.json');
+  const source = openContentSource({ build: true });
+
+  try {
+    const pack = createContentPack(buildContentPackDataFromSource(source));
+    const systems = galaxy.systems ?? [];
+    const planetCount = systems.reduce((count, system) => count + (system.planets ?? []).length, 0);
+    const fortressCount = systems.reduce((count, system) => count + (system.fortresses ?? []).length, 0);
+
+    assert.match(galaxy._source, /special Text annotations \(80 system labels; cx\/cy only\)/);
+    // Canon cell provenance: cx/cy stay manual annotations; canonCol/canonRow come from raster dot centers.
+    assert.match(galaxy._source, /raster star-dot centers/);
+    assert.equal(systems.length, 80);
+    assert.equal(planetCount, 281);
+    assert.equal(fortressCount, 6);
+    // Every system carries an in-bounds canon cell with no duplicates (the navigable 100x50 sector cell).
+    const canonCells = systems.map((s) => [s.canonCol, s.canonRow]);
+    for (const [col, row] of canonCells) {
+      assert.ok(Number.isInteger(col) && col >= 0 && col < 100, `canonCol ${col} in 0..99`);
+      assert.ok(Number.isInteger(row) && row >= 0 && row < 50, `canonRow ${row} in 0..49`);
+    }
+    assert.equal(new Set(canonCells.map(([c, r]) => `${c},${r}`)).size, 80, 'no duplicate canon cells');
+
+    assert.equal(stars._source, 'data/model/strategy/Null_galaxy.mdx star_<NN>_<spectralClass> scene-graph nodes');
+    assert.match(stars._note, /NOT necessarily galaxy\.json system order/);
+    assert.equal(stars.stars.length, 79);
+    assert.deepEqual(stars.spectral_histogram, { G: 19, O: 2, F: 8, A: 7, B: 5, M: 21, K: 17 });
+    assert.deepEqual(stars.special_bodies, ['bh_01', 'bh_02', 'bh_03', 'ns_01', 'ns_02', 'ns_03']);
+
+    const spectralHistogram = pack.systems.reduce((histogram, system) => {
+      const key = system.spectralClass ?? 'unassigned';
+      histogram[key] = (histogram[key] ?? 0) + 1;
+      return histogram;
+    }, {});
+    assert.deepEqual(spectralHistogram, { K: 23, G: 32, M: 10, F: 3, B: 8, A: 4 });
+    assert.equal(pack.systems.filter((system) => ['A', 'B'].includes(system.spectralClass)).length, 12);
+    assert.equal(pack.systems.at(-1).spectralClass, 'K');
+    assert.equal(pack.systems[0].provenance.spectralClass.originalServerData, false);
+    assert.equal(pack.systems[0].provenance.spectralClass.authority, 'manual_star_chart_pixel_color');
+    assert.match(pack.systems[0].provenance.spectralClass.note, /exact original server stellar class is still unrecovered/);
+
+    assert.equal(modelPlanets.length, 107);
+    assert.equal(schema.facilities.length, 152);
+    assert.equal(schema.planet_record.length, 221);
+    assert.equal(schema.nation_record.length, 92);
+    assert.ok(schema.nation_record.includes('Gクラス恒星'));
+    assert.ok(schema.facilities.includes('宇宙艦隊司令部'));
+
+    assert.match(economy._purpose, /procedural planet economy/);
+    assert.match(economy._method, /deterministic per-planet seed/);
+  } finally {
+    source.close();
+  }
+});

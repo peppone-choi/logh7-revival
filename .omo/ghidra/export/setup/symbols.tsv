@@ -1,0 +1,503 @@
+import	VERSION.DLL	VerInstallFileA	0xEXTERNAL:00000001
+import	VERSION.DLL	GetFileVersionInfoSizeA	0xEXTERNAL:00000002
+import	VERSION.DLL	GetFileVersionInfoA	0xEXTERNAL:00000003
+import	VERSION.DLL	VerQueryValueA	0xEXTERNAL:00000004
+import	KERNEL32.DLL	GetLastError	0xEXTERNAL:00000005
+import	KERNEL32.DLL	SetLastError	0xEXTERNAL:00000006
+import	KERNEL32.DLL	lstrcmpiA	0xEXTERNAL:00000007
+import	KERNEL32.DLL	lstrlenA	0xEXTERNAL:00000008
+import	KERNEL32.DLL	CompareStringW	0xEXTERNAL:00000009
+import	KERNEL32.DLL	GetVersionExA	0xEXTERNAL:0000000a
+import	KERNEL32.DLL	DeleteFileA	0xEXTERNAL:0000000b
+import	KERNEL32.DLL	CompareStringA	0xEXTERNAL:0000000c
+import	KERNEL32.DLL	GetWindowsDirectoryA	0xEXTERNAL:0000000d
+import	KERNEL32.DLL	GetTempPathA	0xEXTERNAL:0000000e
+import	KERNEL32.DLL	GetFileAttributesA	0xEXTERNAL:0000000f
+import	KERNEL32.DLL	GetTempFileNameA	0xEXTERNAL:00000010
+import	KERNEL32.DLL	GlobalUnlock	0xEXTERNAL:00000011
+import	KERNEL32.DLL	GlobalLock	0xEXTERNAL:00000012
+import	KERNEL32.DLL	GlobalAlloc	0xEXTERNAL:00000013
+import	KERNEL32.DLL	GlobalFree	0xEXTERNAL:00000014
+import	KERNEL32.DLL	GetTickCount	0xEXTERNAL:00000015
+import	KERNEL32.DLL	LockResource	0xEXTERNAL:00000016
+import	KERNEL32.DLL	LoadResource	0xEXTERNAL:00000017
+import	KERNEL32.DLL	FindResourceA	0xEXTERNAL:00000018
+import	KERNEL32.DLL	lstrcpyA	0xEXTERNAL:00000019
+import	KERNEL32.DLL	SetErrorMode	0xEXTERNAL:0000001a
+import	KERNEL32.DLL	FreeLibrary	0xEXTERNAL:0000001b
+import	KERNEL32.DLL	RemoveDirectoryA	0xEXTERNAL:0000001c
+import	KERNEL32.DLL	LeaveCriticalSection	0xEXTERNAL:0000001d
+import	KERNEL32.DLL	EnterCriticalSection	0xEXTERNAL:0000001e
+import	KERNEL32.DLL	CreateThread	0xEXTERNAL:0000001f
+import	KERNEL32.DLL	CreateMutexA	0xEXTERNAL:00000020
+import	KERNEL32.DLL	WaitForSingleObject	0xEXTERNAL:00000021
+import	KERNEL32.DLL	ReleaseMutex	0xEXTERNAL:00000022
+import	KERNEL32.DLL	InitializeCriticalSection	0xEXTERNAL:00000023
+import	KERNEL32.DLL	DeleteCriticalSection	0xEXTERNAL:00000024
+import	KERNEL32.DLL	SetEvent	0xEXTERNAL:00000025
+import	KERNEL32.DLL	OpenEventA	0xEXTERNAL:00000026
+import	KERNEL32.DLL	GetModuleHandleA	0xEXTERNAL:00000027
+import	KERNEL32.DLL	GetCurrentThreadId	0xEXTERNAL:00000028
+import	KERNEL32.DLL	HeapAlloc	0xEXTERNAL:00000029
+import	KERNEL32.DLL	GetSystemInfo	0xEXTERNAL:0000002a
+import	KERNEL32.DLL	HeapCreate	0xEXTERNAL:0000002b
+import	KERNEL32.DLL	lstrcpynA	0xEXTERNAL:0000002c
+import	KERNEL32.DLL	lstrcatA	0xEXTERNAL:0000002d
+import	KERNEL32.DLL	GetPrivateProfileIntA	0xEXTERNAL:0000002e
+import	KERNEL32.DLL	lstrlenW	0xEXTERNAL:0000002f
+import	KERNEL32.DLL	FindFirstFileA	0xEXTERNAL:00000030
+import	KERNEL32.DLL	SetFilePointer	0xEXTERNAL:00000031
+import	KERNEL32.DLL	GetProcAddress	0xEXTERNAL:00000032
+import	KERNEL32.DLL	LoadLibraryA	0xEXTERNAL:00000033
+import	KERNEL32.DLL	GetShortPathNameA	0xEXTERNAL:00000034
+import	KERNEL32.DLL	GetSystemDefaultLangID	0xEXTERNAL:00000035
+import	KERNEL32.DLL	MoveFileA	0xEXTERNAL:00000036
+import	KERNEL32.DLL	FindResourceExA	0xEXTERNAL:00000037
+import	KERNEL32.DLL	GetFileSize	0xEXTERNAL:00000038
+import	KERNEL32.DLL	HeapDestroy	0xEXTERNAL:00000039
+import	KERNEL32.DLL	UnmapViewOfFile	0xEXTERNAL:0000003a
+import	KERNEL32.DLL	MapViewOfFile	0xEXTERNAL:0000003b
+import	KERNEL32.DLL	CreateFileMappingA	0xEXTERNAL:0000003c
+import	KERNEL32.DLL	SizeofResource	0xEXTERNAL:0000003d
+import	KERNEL32.DLL	GetStartupInfoA	0xEXTERNAL:0000003e
+import	KERNEL32.DLL	ExitProcess	0xEXTERNAL:0000003f
+import	KERNEL32.DLL	GetCommandLineA	0xEXTERNAL:00000040
+import	KERNEL32.DLL	DebugBreak	0xEXTERNAL:00000041
+import	KERNEL32.DLL	HeapReAlloc	0xEXTERNAL:00000042
+import	KERNEL32.DLL	HeapFree	0xEXTERNAL:00000043
+import	KERNEL32.DLL	VirtualQuery	0xEXTERNAL:00000044
+import	KERNEL32.DLL	VirtualProtect	0xEXTERNAL:00000045
+import	KERNEL32.DLL	SearchPathA	0xEXTERNAL:00000046
+import	KERNEL32.DLL	ResetEvent	0xEXTERNAL:00000047
+import	KERNEL32.DLL	QueryPerformanceCounter	0xEXTERNAL:00000048
+import	KERNEL32.DLL	SystemTimeToFileTime	0xEXTERNAL:00000049
+import	KERNEL32.DLL	lstrcmpA	0xEXTERNAL:0000004a
+import	KERNEL32.DLL	MultiByteToWideChar	0xEXTERNAL:0000004b
+import	KERNEL32.DLL	GetCurrentThread	0xEXTERNAL:0000004c
+import	KERNEL32.DLL	GetVersion	0xEXTERNAL:0000004d
+import	KERNEL32.DLL	IsBadReadPtr	0xEXTERNAL:0000004e
+import	KERNEL32.DLL	ReadFile	0xEXTERNAL:0000004f
+import	KERNEL32.DLL	Sleep	0xEXTERNAL:00000050
+import	KERNEL32.DLL	WriteFile	0xEXTERNAL:00000051
+import	KERNEL32.DLL	CloseHandle	0xEXTERNAL:00000052
+import	KERNEL32.DLL	CreateEventA	0xEXTERNAL:00000053
+import	KERNEL32.DLL	QueryPerformanceFrequency	0xEXTERNAL:00000054
+import	KERNEL32.DLL	InterlockedDecrement	0xEXTERNAL:00000055
+import	KERNEL32.DLL	InterlockedIncrement	0xEXTERNAL:00000056
+import	KERNEL32.DLL	CreateFileA	0xEXTERNAL:00000057
+import	KERNEL32.DLL	GetModuleFileNameA	0xEXTERNAL:00000058
+import	KERNEL32.DLL	CreateDirectoryA	0xEXTERNAL:00000059
+import	KERNEL32.DLL	WideCharToMultiByte	0xEXTERNAL:0000005a
+import	KERNEL32.DLL	WritePrivateProfileStringA	0xEXTERNAL:0000005b
+import	KERNEL32.DLL	GetPrivateProfileStringA	0xEXTERNAL:0000005c
+import	KERNEL32.DLL	FindClose	0xEXTERNAL:0000005d
+import	KERNEL32.DLL	CreateProcessA	0xEXTERNAL:0000005e
+import	KERNEL32.DLL	GetCurrentProcess	0xEXTERNAL:0000005f
+import	USER32.DLL	MsgWaitForMultipleObjects	0xEXTERNAL:00000060
+import	USER32.DLL	LoadStringA	0xEXTERNAL:00000061
+import	USER32.DLL	CharNextA	0xEXTERNAL:00000062
+import	USER32.DLL	PeekMessageA	0xEXTERNAL:00000063
+import	USER32.DLL	PostThreadMessageA	0xEXTERNAL:00000064
+import	USER32.DLL	CharUpperA	0xEXTERNAL:00000065
+import	USER32.DLL	SetTimer	0xEXTERNAL:00000066
+import	USER32.DLL	SetWindowRgn	0xEXTERNAL:00000067
+import	USER32.DLL	DialogBoxIndirectParamA	0xEXTERNAL:00000068
+import	USER32.DLL	SetActiveWindow	0xEXTERNAL:00000069
+import	USER32.DLL	CharLowerBuffA	0xEXTERNAL:0000006a
+import	USER32.DLL	CreateDialogIndirectParamA	0xEXTERNAL:0000006b
+import	USER32.DLL	GetDlgItem	0xEXTERNAL:0000006c
+import	USER32.DLL	SendMessageA	0xEXTERNAL:0000006d
+import	USER32.DLL	SetDlgItemTextA	0xEXTERNAL:0000006e
+import	USER32.DLL	LoadIconA	0xEXTERNAL:0000006f
+import	USER32.DLL	GetWindowRect	0xEXTERNAL:00000070
+import	USER32.DLL	SystemParametersInfoA	0xEXTERNAL:00000071
+import	USER32.DLL	SetWindowPos	0xEXTERNAL:00000072
+import	USER32.DLL	CharLowerA	0xEXTERNAL:00000073
+import	USER32.DLL	GetWindowTextA	0xEXTERNAL:00000074
+import	USER32.DLL	GetDesktopWindow	0xEXTERNAL:00000075
+import	USER32.DLL	ScreenToClient	0xEXTERNAL:00000076
+import	USER32.DLL	MoveWindow	0xEXTERNAL:00000077
+import	USER32.DLL	KillTimer	0xEXTERNAL:00000078
+import	USER32.DLL	DestroyWindow	0xEXTERNAL:00000079
+import	USER32.DLL	GetMessageA	0xEXTERNAL:0000007a
+import	USER32.DLL	IsDialogMessageA	0xEXTERNAL:0000007b
+import	USER32.DLL	TranslateMessage	0xEXTERNAL:0000007c
+import	USER32.DLL	DispatchMessageA	0xEXTERNAL:0000007d
+import	USER32.DLL	GetDC	0xEXTERNAL:0000007e
+import	USER32.DLL	ReleaseDC	0xEXTERNAL:0000007f
+import	USER32.DLL	SetWindowTextA	0xEXTERNAL:00000080
+import	USER32.DLL	ShowWindow	0xEXTERNAL:00000081
+import	USER32.DLL	EndDialog	0xEXTERNAL:00000082
+import	USER32.DLL	wsprintfA	0xEXTERNAL:00000083
+import	GDI32.DLL	CreateFontIndirectA	0xEXTERNAL:00000084
+import	GDI32.DLL	LPtoDP	0xEXTERNAL:00000085
+import	GDI32.DLL	GetTextExtentPoint32A	0xEXTERNAL:00000086
+import	GDI32.DLL	DeleteObject	0xEXTERNAL:00000087
+import	GDI32.DLL	GetObjectA	0xEXTERNAL:00000088
+import	ADVAPI32.DLL	RegCreateKeyExA	0xEXTERNAL:00000089
+import	ADVAPI32.DLL	OpenThreadToken	0xEXTERNAL:0000008a
+import	ADVAPI32.DLL	OpenProcessToken	0xEXTERNAL:0000008b
+import	ADVAPI32.DLL	GetTokenInformation	0xEXTERNAL:0000008c
+import	ADVAPI32.DLL	RegCloseKey	0xEXTERNAL:0000008d
+import	ADVAPI32.DLL	RegOpenKeyExA	0xEXTERNAL:0000008e
+import	ADVAPI32.DLL	RegSetValueExA	0xEXTERNAL:0000008f
+import	ADVAPI32.DLL	AllocateAndInitializeSid	0xEXTERNAL:00000090
+import	ADVAPI32.DLL	RegQueryValueExA	0xEXTERNAL:00000091
+import	ADVAPI32.DLL	RegDeleteKeyA	0xEXTERNAL:00000092
+import	ADVAPI32.DLL	RegEnumKeyExA	0xEXTERNAL:00000093
+import	ADVAPI32.DLL	RegOpenKeyA	0xEXTERNAL:00000094
+import	ADVAPI32.DLL	RegQueryValueA	0xEXTERNAL:00000095
+import	ADVAPI32.DLL	FreeSid	0xEXTERNAL:00000096
+import	ADVAPI32.DLL	EqualSid	0xEXTERNAL:00000097
+import	OLE32.DLL	CoTaskMemFree	0xEXTERNAL:00000098
+import	OLE32.DLL	StringFromGUID2	0xEXTERNAL:00000099
+import	OLE32.DLL	GetRunningObjectTable	0xEXTERNAL:0000009a
+import	OLE32.DLL	CoCreateInstance	0xEXTERNAL:0000009b
+import	OLE32.DLL	CoCreateGuid	0xEXTERNAL:0000009c
+import	OLE32.DLL	CoReleaseMarshalData	0xEXTERNAL:0000009d
+import	OLE32.DLL	CoInitialize	0xEXTERNAL:0000009e
+import	OLE32.DLL	CoGetInterfaceAndReleaseStream	0xEXTERNAL:0000009f
+import	OLE32.DLL	CoUninitialize	0xEXTERNAL:000000a0
+import	OLE32.DLL	CoRevokeClassObject	0xEXTERNAL:000000a1
+import	OLE32.DLL	CoRegisterClassObject	0xEXTERNAL:000000a2
+import	OLE32.DLL	StringFromCLSID	0xEXTERNAL:000000a3
+import	OLE32.DLL	CoTaskMemAlloc	0xEXTERNAL:000000a4
+import	OLE32.DLL	CoMarshalInterThreadInterfaceInStream	0xEXTERNAL:000000a5
+import	OLEAUT32.DLL	SysStringLen	0xEXTERNAL:000000a6
+import	OLEAUT32.DLL	SysFreeString	0xEXTERNAL:000000a7
+import	OLEAUT32.DLL	SysAllocStringLen	0xEXTERNAL:000000a8
+import	OLEAUT32.DLL	VariantCopy	0xEXTERNAL:000000a9
+import	OLEAUT32.DLL	VariantClear	0xEXTERNAL:000000aa
+import	OLEAUT32.DLL	LoadRegTypeLib	0xEXTERNAL:000000ab
+import	OLEAUT32.DLL	LoadTypeLib	0xEXTERNAL:000000ac
+import	OLEAUT32.DLL	RegisterTypeLib	0xEXTERNAL:000000ad
+import	OLEAUT32.DLL	SysAllocString	0xEXTERNAL:000000ae
+import	LZ32.DLL	LZClose	0xEXTERNAL:000000af
+import	LZ32.DLL	LZCopy	0xEXTERNAL:000000b0
+import	LZ32.DLL	LZOpenFileA	0xEXTERNAL:000000b1
+symbol	entry	0x0040b1cc
+symbol	_memset	0x0040e7e0
+symbol	switchD	0x0040e8f5
+symbol	default	0x0040e908
+symbol	switchD	0x0040e90d
+symbol	switchD	0x0040e914
+symbol	switchD	0x0040e91c
+symbol	switchdataD_0040e924	0x0040e924
+symbol	caseD_1	0x0040e930
+symbol	switchD	0x0040e952
+symbol	caseD_2	0x0040e95c
+symbol	switchD	0x0040e978
+symbol	caseD_3	0x0040e980
+symbol	switchD	0x0040e992
+symbol	switchdataD_0040e99c	0x0040e99c
+symbol	caseD_7	0x0040e9bc
+symbol	caseD_6	0x0040e9c4
+symbol	caseD_5	0x0040e9cc
+symbol	caseD_4	0x0040e9d4
+symbol	caseD_3	0x0040e9dc
+symbol	caseD_2	0x0040e9e4
+symbol	caseD_1	0x0040e9ec
+symbol	caseD_0	0x0040e9ff
+symbol	switchD	0x0040e9ff
+symbol	switchdataD_0040ea08	0x0040ea08
+symbol	caseD_0	0x0040ea18
+symbol	caseD_0	0x0040ea18
+symbol	caseD_0	0x0040ea18
+symbol	caseD_0	0x0040ea18
+symbol	caseD_0	0x0040ea18
+symbol	caseD_0	0x0040ea18
+symbol	caseD_1	0x0040ea20
+symbol	caseD_1	0x0040ea20
+symbol	caseD_1	0x0040ea20
+symbol	caseD_1	0x0040ea20
+symbol	caseD_1	0x0040ea20
+symbol	caseD_1	0x0040ea20
+symbol	caseD_2	0x0040ea2c
+symbol	caseD_2	0x0040ea2c
+symbol	caseD_2	0x0040ea2c
+symbol	caseD_2	0x0040ea2c
+symbol	caseD_2	0x0040ea2c
+symbol	caseD_2	0x0040ea2c
+symbol	caseD_3	0x0040ea40
+symbol	caseD_3	0x0040ea40
+symbol	caseD_3	0x0040ea40
+symbol	caseD_3	0x0040ea40
+symbol	caseD_3	0x0040ea40
+symbol	caseD_3	0x0040ea40
+symbol	switchD	0x0040ea77
+symbol	switchD	0x0040ea82
+symbol	default	0x0040ea98
+symbol	switchD	0x0040ea9d
+symbol	switchD	0x0040eaa4
+symbol	switchdataD_0040eaac	0x0040eaac
+symbol	caseD_1	0x0040eab8
+symbol	switchD	0x0040eace
+symbol	caseD_2	0x0040ead8
+symbol	switchD	0x0040eaf8
+symbol	caseD_3	0x0040eb00
+symbol	switchD	0x0040eb2a
+symbol	switchdataD_0040eb34	0x0040eb34
+symbol	caseD_7	0x0040eb54
+symbol	caseD_6	0x0040eb5c
+symbol	caseD_5	0x0040eb64
+symbol	caseD_4	0x0040eb6c
+symbol	caseD_3	0x0040eb74
+symbol	caseD_2	0x0040eb7c
+symbol	caseD_1	0x0040eb84
+symbol	caseD_0	0x0040eb97
+symbol	switchD	0x0040eb97
+symbol	switchdataD_0040eba0	0x0040eba0
+symbol	caseD_0	0x0040ebb0
+symbol	caseD_0	0x0040ebb0
+symbol	caseD_0	0x0040ebb0
+symbol	caseD_0	0x0040ebb0
+symbol	caseD_0	0x0040ebb0
+symbol	caseD_0	0x0040ebb0
+symbol	caseD_1	0x0040ebb8
+symbol	caseD_1	0x0040ebb8
+symbol	caseD_1	0x0040ebb8
+symbol	caseD_1	0x0040ebb8
+symbol	caseD_1	0x0040ebb8
+symbol	caseD_1	0x0040ebb8
+symbol	caseD_2	0x0040ebc8
+symbol	caseD_2	0x0040ebc8
+symbol	caseD_2	0x0040ebc8
+symbol	caseD_2	0x0040ebc8
+symbol	caseD_2	0x0040ebc8
+symbol	caseD_2	0x0040ebc8
+symbol	caseD_3	0x0040ebdc
+symbol	caseD_3	0x0040ebdc
+symbol	caseD_3	0x0040ebdc
+symbol	caseD_3	0x0040ebdc
+symbol	caseD_3	0x0040ebdc
+symbol	caseD_3	0x0040ebdc
+symbol	switchD	0x0040ec35
+symbol	default	0x0040ec48
+symbol	switchD	0x0040ec4d
+symbol	switchD	0x0040ec54
+symbol	switchD	0x0040ec5c
+symbol	switchdataD_0040ec64	0x0040ec64
+symbol	caseD_1	0x0040ec70
+symbol	switchD	0x0040ec92
+symbol	caseD_2	0x0040ec9c
+symbol	switchD	0x0040ecb8
+symbol	caseD_3	0x0040ecc0
+symbol	switchD	0x0040ecd2
+symbol	switchdataD_0040ecdc	0x0040ecdc
+symbol	caseD_7	0x0040ecfc
+symbol	caseD_6	0x0040ed04
+symbol	caseD_5	0x0040ed0c
+symbol	caseD_4	0x0040ed14
+symbol	caseD_3	0x0040ed1c
+symbol	caseD_2	0x0040ed24
+symbol	caseD_1	0x0040ed2c
+symbol	caseD_0	0x0040ed3f
+symbol	switchD	0x0040ed3f
+symbol	switchdataD_0040ed48	0x0040ed48
+symbol	caseD_0	0x0040ed58
+symbol	caseD_0	0x0040ed58
+symbol	caseD_0	0x0040ed58
+symbol	caseD_0	0x0040ed58
+symbol	caseD_0	0x0040ed58
+symbol	caseD_0	0x0040ed58
+symbol	caseD_1	0x0040ed60
+symbol	caseD_1	0x0040ed60
+symbol	caseD_1	0x0040ed60
+symbol	caseD_1	0x0040ed60
+symbol	caseD_1	0x0040ed60
+symbol	caseD_1	0x0040ed60
+symbol	caseD_2	0x0040ed6c
+symbol	caseD_2	0x0040ed6c
+symbol	caseD_2	0x0040ed6c
+symbol	caseD_2	0x0040ed6c
+symbol	caseD_2	0x0040ed6c
+symbol	caseD_2	0x0040ed6c
+symbol	caseD_3	0x0040ed80
+symbol	caseD_3	0x0040ed80
+symbol	caseD_3	0x0040ed80
+symbol	caseD_3	0x0040ed80
+symbol	caseD_3	0x0040ed80
+symbol	caseD_3	0x0040ed80
+symbol	switchD	0x0040edb7
+symbol	switchD	0x0040edc2
+symbol	default	0x0040edd8
+symbol	switchD	0x0040eddd
+symbol	switchD	0x0040ede4
+symbol	switchdataD_0040edec	0x0040edec
+symbol	caseD_1	0x0040edf8
+symbol	switchD	0x0040ee0e
+symbol	caseD_2	0x0040ee18
+symbol	switchD	0x0040ee38
+symbol	caseD_3	0x0040ee40
+symbol	switchD	0x0040ee6a
+symbol	switchdataD_0040ee74	0x0040ee74
+symbol	caseD_7	0x0040ee94
+symbol	caseD_6	0x0040ee9c
+symbol	caseD_5	0x0040eea4
+symbol	caseD_4	0x0040eeac
+symbol	caseD_3	0x0040eeb4
+symbol	caseD_2	0x0040eebc
+symbol	caseD_1	0x0040eec4
+symbol	caseD_0	0x0040eed7
+symbol	switchD	0x0040eed7
+symbol	switchdataD_0040eee0	0x0040eee0
+symbol	caseD_0	0x0040eef0
+symbol	caseD_0	0x0040eef0
+symbol	caseD_0	0x0040eef0
+symbol	caseD_0	0x0040eef0
+symbol	caseD_0	0x0040eef0
+symbol	caseD_0	0x0040eef0
+symbol	caseD_1	0x0040eef8
+symbol	caseD_1	0x0040eef8
+symbol	caseD_1	0x0040eef8
+symbol	caseD_1	0x0040eef8
+symbol	caseD_1	0x0040eef8
+symbol	caseD_1	0x0040eef8
+symbol	caseD_2	0x0040ef08
+symbol	caseD_2	0x0040ef08
+symbol	caseD_2	0x0040ef08
+symbol	caseD_2	0x0040ef08
+symbol	caseD_2	0x0040ef08
+symbol	caseD_2	0x0040ef08
+symbol	caseD_3	0x0040ef1c
+symbol	caseD_3	0x0040ef1c
+symbol	caseD_3	0x0040ef1c
+symbol	caseD_3	0x0040ef1c
+symbol	caseD_3	0x0040ef1c
+symbol	caseD_3	0x0040ef1c
+symbol	_memcmp	0x0040ef40
+symbol	__allshl	0x0040eff0
+symbol	_strncat	0x0040f090
+symbol	__allrem	0x0040f1c0
+symbol	__alldiv	0x0040f280
+symbol	__allmul	0x0040f330
+symbol	Rsrc_Icon_1_0	0x00414640
+symbol	Rsrc_Icon_2_0	0x00414768
+symbol	Rsrc_Icon_3_0	0x00414cd0
+symbol	Rsrc_Icon_4_0	0x00414fb8
+symbol	Rsrc_GroupIcon_64_0	0x00415860
+symbol	Rsrc_Dialog_6b_409	0x004158a0
+symbol	Rsrc_Dialog_75_409	0x00415928
+symbol	Rsrc_PUBLICKEY_74_409	0x00415a08
+symbol	Rsrc_TYPELIB_1_41f	0x00415aa0
+symbol	Rsrc_Manifest_1_41f	0x00416500
+symbol	Rsrc_Version_1_41f	0x004167a0
+symbol	Rsrc_StringTable_901_41e	0x00416b40
+symbol	Rsrc_StringTable_901_411	0x00416e10
+symbol	Rsrc_StringTable_901_804	0x00416fc8
+symbol	Rsrc_StringTable_901_412	0x004170e8
+symbol	Rsrc_StringTable_901_404	0x00417268
+symbol	Rsrc_StringTable_901_405	0x00417388
+symbol	Rsrc_StringTable_901_40e	0x00417630
+symbol	Rsrc_StringTable_901_415	0x00417880
+symbol	Rsrc_StringTable_901_418	0x00417b10
+symbol	Rsrc_StringTable_901_41a	0x00417dd0
+symbol	Rsrc_StringTable_901_41b	0x00418030
+symbol	Rsrc_StringTable_901_424	0x004182e8
+symbol	Rsrc_StringTable_901_402	0x004185b0
+symbol	Rsrc_StringTable_901_419	0x00418880
+symbol	Rsrc_StringTable_901_c1a	0x00418b08
+symbol	Rsrc_StringTable_901_403	0x00418da8
+symbol	Rsrc_StringTable_901_406	0x00419068
+symbol	Rsrc_StringTable_901_407	0x004192e8
+symbol	Rsrc_StringTable_901_409	0x004195d0
+symbol	Rsrc_StringTable_901_40a	0x00419840
+symbol	Rsrc_StringTable_901_40b	0x00419b10
+symbol	Rsrc_StringTable_901_40c	0x00419d78
+symbol	Rsrc_StringTable_901_410	0x0041a060
+symbol	Rsrc_StringTable_901_413	0x0041a320
+symbol	Rsrc_StringTable_901_414	0x0041a588
+symbol	Rsrc_StringTable_901_416	0x0041a820
+symbol	Rsrc_StringTable_901_41d	0x0041aab8
+symbol	Rsrc_StringTable_901_421	0x0041ad20
+symbol	Rsrc_StringTable_901_42d	0x0041afa8
+symbol	Rsrc_StringTable_901_816	0x0041b248
+symbol	Rsrc_StringTable_901_c0c	0x0041b518
+symbol	Rsrc_StringTable_901_408	0x0041b7f8
+symbol	Rsrc_StringTable_901_41f	0x0041baf0
+symbol	ExceptionList	0xffdff000
+symbol	StackBase	0xffdff004
+symbol	StackLimit	0xffdff008
+symbol	SubSystemTib	0xffdff00c
+symbol	FiberData	0xffdff010
+symbol	ArbitraryUserPointer	0xffdff014
+symbol	Self	0xffdff018
+symbol	EnvironmentPointer	0xffdff01c
+symbol	ClientId	0xffdff020
+symbol	ActiveRpcHandle	0xffdff028
+symbol	ThreadLocalStoragePointer	0xffdff02c
+symbol	ProcessEnvironmentBlock	0xffdff030
+symbol	LastErrorValue	0xffdff034
+symbol	CountOfOwnedCriticalSections	0xffdff038
+symbol	CsrClientThread	0xffdff03c
+symbol	Win32ThreadInfo	0xffdff040
+symbol	User32Reserved	0xffdff044
+symbol	UserReserved	0xffdff0ac
+symbol	WOW32Reserved	0xffdff0c0
+symbol	CurrentLocale	0xffdff0c4
+symbol	FpSoftwareStatusRegister	0xffdff0c8
+symbol	SystemReserved1	0xffdff0cc
+symbol	ExceptionCode	0xffdff1a4
+symbol	ActivationContextStackPointer	0xffdff1a8
+symbol	SpareBytes	0xffdff1ac
+symbol	TxFsContext	0xffdff1d0
+symbol	GdiTebBatch	0xffdff1d4
+symbol	RealClientId	0xffdff6b4
+symbol	GdiCachedProcessHandle	0xffdff6bc
+symbol	GdiClientPID	0xffdff6c0
+symbol	GdiCLientTID	0xffdff6c4
+symbol	GdiThreadLocalInfo	0xffdff6c8
+symbol	Win32ClientInfo	0xffdff6cc
+symbol	glDispatchTable	0xffdff7c4
+symbol	glReserved1	0xffdffb68
+symbol	glReserved2	0xffdffbdc
+symbol	glSectionInfo	0xffdffbe0
+symbol	glSection	0xffdffbe4
+symbol	glTable	0xffdffbe8
+symbol	glCurrentRC	0xffdffbec
+symbol	glContext	0xffdffbf0
+symbol	LastStatusValue	0xffdffbf4
+symbol	StaticUnicodeBuffer	0xffdffc00
+symbol	DeallocationStack	0xffdffe0c
+symbol	TlsSlots	0xffdffe10
+symbol	TlsLinks.Flink	0xffdfff10
+symbol	TlsLinks.Blink	0xffdfff14
+symbol	Vdm	0xffdfff18
+symbol	ReservedForNtRpc	0xffdfff1c
+symbol	DbgSsReserved	0xffdfff20
+symbol	HardErrorMode	0xffdfff28
+symbol	Instrumentation	0xffdfff2c
+symbol	ActivityId	0xffdfff50
+symbol	SubProcessTag	0xffdfff60
+symbol	EtwLocalData	0xffdfff64
+symbol	EtwTraceData	0xffdfff68
+symbol	WinSockData	0xffdfff6c
+symbol	GdiBatchCount	0xffdfff70
+symbol	IdealProcessorValue	0xffdfff74
+symbol	GuaranteedStackBytes	0xffdfff78
+symbol	ReservedForPerf	0xffdfff7c
+symbol	ReservedForOle	0xffdfff80
+symbol	WaitingOnLoaderLock	0xffdfff84
+symbol	SavedPriorityState	0xffdfff88
+symbol	SoftPatchPtr1	0xffdfff8c
+symbol	ThreadPoolData	0xffdfff90
+symbol	TlsExpansionSlots	0xffdfff94
+symbol	MuiGeneration	0xffdfff98
+symbol	IsImpersonating	0xffdfff9c
+symbol	NlsCache	0xffdfffa0
+symbol	pShimData	0xffdfffa4
+symbol	HeapVirtualAffinity	0xffdfffa8
+symbol	CurrentTransactionHandle	0xffdfffac
+symbol	ActiveFrame	0xffdfffb0
+symbol	FlsData	0xffdfffb4
+symbol	PreferredLanguages	0xffdfffb8
+symbol	UserPrefLanguages	0xffdfffbc
+symbol	MergedPrefLanguages	0xffdfffc0
+symbol	MuiImpersonation	0xffdfffc4
+symbol	CrossTebFlags	0xffdfffc8
+symbol	SameTebFlags	0xffdfffca
+symbol	TxnScopeEnterCallback	0xffdfffcc
+symbol	TxnScopeExitCallback	0xffdfffd0
+symbol	TxnScopeContext	0xffdfffd4
+symbol	LockCount	0xffdfffd8
+symbol	ResourceRetValue	0xffdfffe0

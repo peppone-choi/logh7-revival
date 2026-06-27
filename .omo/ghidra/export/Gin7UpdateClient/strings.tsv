@@ -1,0 +1,952 @@
+0x00440c00	CTempWnd
+0x00440ed8	AfxOldWndProc423
+0x00440eec	AfxWnd42s
+0x00440ef8	AfxControlBar42s
+0x00440f0c	AfxMDIFrame42s
+0x00440f1c	AfxFrameOrView42s
+0x00440f30	AfxOleControl42s
+0x00440f44	GetMonitorInfoA
+0x00440f54	EnumDisplayMonitors
+0x00440f68	MonitorFromPoint
+0x00440f7c	MonitorFromRect
+0x00440f8c	MonitorFromWindow
+0x00440fa0	GetSystemMetrics
+0x00440fb4	USER32
+0x00440fbc	DISPLAY
+0x00440fc4	commctrl_DragListMsg
+0x0044109c	Afx:%x:%x:%x:%x:%x
+0x004410b0	Afx:%x:%x
+0x004410d0	InitCommonControlsEx
+0x004410e8	COMCTL32.DLL
+0x004411d8	CButton
+0x004412b8	CCmdTarget
+0x004413c0	CTempGdiObject
+0x004413e8	CTempDC
+0x00441408	CPalette
+0x00441430	CBitmap
+0x00441450	CFont
+0x00441470	CBrush
+0x004414b0	CGdiObject
+0x004414d8	CPaintDC
+0x00441500	CClientDC
+0x00441548	CUserException
+0x00441570	CResourceException
+0x004417f0	CWinThread
+0x004418a0	CNotSupportedException
+0x004418d0	CMemoryException
+0x00441900	CException
+0x00441958	CFileException
+0x00441998	CFile
+0x00441a10	CObject
+0x00441a50	CWinApp
+0x00441ac0	PreviewPages
+0x00441ad0	Settings
+0x00441ba0	CDialog
+0x00441d6c	MS Sans Serif
+0x00441d7c	MS Shell Dlg
+0x00441d8c	%*.*f
+0x00441d98	CStringList
+0x00441dd0	CStdioFile
+0x00441e50	combobox
+0x00441e78	CMapPtrToPtr
+0x00441eb0	CTempMenu
+0x00441ed8	CMenu
+0x00441f20	software
+0x00441f2c	System
+0x00441f50	CArchiveException
+0x00441f7c	MSWHEEL_ROLLMSG
+0x00442004	H:mm:ss
+0x0044200c	dddd, MMMM dd, yyyy
+0x00442020	M/d/yy
+0x00442030	December
+0x0044203c	November
+0x00442048	October
+0x00442050	September
+0x0044205c	August
+0x00442074	April
+0x0044207c	March
+0x00442084	February
+0x00442090	January
+0x004420c8	Saturday
+0x004420d4	Friday
+0x004420dc	Thursday
+0x004420e8	Wednesday
+0x004420f4	Tuesday
+0x004420fc	Monday
+0x00442104	Sunday
+0x0044212c	am/pm
+0x004421f8	__GLOBAL_HEAP_SELECTED
+0x00442210	__MSVCRT_HEAP_SELECT
+0x0044229e	null)
+0x004422ad	null)
+0x004422ce	GAIsProcessorFeaturePresent
+0x004422ec	KERNEL32
+0x00442300	e+000
+0x00442308	runtime error 
+0x0044231c	TLOSS error\r\n
+0x0044232c	SING error\r\n
+0x0044233c	DOMAIN error\r\n
+0x0044234c	R6028\r\n- unable to initialize heap\r\n
+0x00442374	R6027\r\n- not enough space for lowio initialization\r\n
+0x004423ac	R6026\r\n- not enough space for stdio initialization\r\n
+0x004423e4	R6025\r\n- pure virtual function call\r\n
+0x0044240c	R6024\r\n- not enough space for _onexit/atexit table\r\n
+0x00442444	R6019\r\n- unable to open console device\r\n
+0x00442470	R6018\r\n- unexpected heap error\r\n
+0x00442494	R6017\r\n- unexpected multithread lock error\r\n
+0x004424c4	R6016\r\n- not enough space for thread data\r\n
+0x004424f0	\r\nabnormal program termination\r\n
+0x00442514	R6009\r\n- not enough space for environment\r\n
+0x00442540	R6008\r\n- not enough space for arguments\r\n
+0x0044256c	R6002\r\n- floating point not loaded\r\n
+0x00442594	Microsoft Visual C++ Runtime Library
+0x004425c0	Runtime Error!\n\nProgram: 
+0x004425e0	<program name unknown>
+0x00442618	SunMonTueWedThuFriSat
+0x00442630	JanFebMarAprMayJunJulAugSepOctNovDec
+0x00442670	GetLastActivePopup
+0x00442684	GetActiveWindow
+0x00442694	MessageBoxA
+0x004426a0	user32.dll
+0x004426ac	1#QNAN
+0x004426b4	1#INF
+0x004426bc	1#IND
+0x004426c4	1#SNAN
+0x00442728	string too long
+0x0044275c	invalid string position
+0x00442828	ios::eofbit set
+0x00442838	ios::failbit set
+0x0044284c	ios::badbit set
+0x00442ae8	Button
+0x00442b08	ListBox
+0x00442b48	ComboBox
+0x00442b68	Static
+0x00442b88	ComboLBox
+0x00442bc4	Unknown exception
+0x00447b92	lstrcpyA
+0x00447b9e	DosDateTimeToFileTime
+0x00447bb6	SetFileAttributesA
+0x00447bcc	CloseHandle
+0x00447bda	SetFileTime
+0x00447be8	CreateFileA
+0x00447bf6	ResumeThread
+0x00447c06	DuplicateHandle
+0x00447c18	GetCurrentProcess
+0x00447c2c	WaitForSingleObject
+0x00447c42	SuspendThread
+0x00447c52	Sleep
+0x00447c5a	GetDiskFreeSpaceExA
+0x00447c70	GlobalUnlock
+0x00447c80	GlobalLock
+0x00447c8e	GlobalFree
+0x00447c9c	GlobalAlloc
+0x00447caa	GlobalReAlloc
+0x00447cba	LockResource
+0x00447cca	LoadResource
+0x00447cda	FindResourceA
+0x00447cea	MulDiv
+0x00447cf4	DeleteFileA
+0x00447d02	GetModuleFileNameA
+0x00447d18	GetLastError
+0x00447d28	CreateMutexA
+0x00447d38	GetPrivateProfileIntA
+0x00447d50	GetPrivateProfileStringA
+0x00447d6c	WritePrivateProfileStringA
+0x00447d8a	GetPrivateProfileSectionNamesA
+0x00447dac	CreateProcessA
+0x00447dbe	GetFileAttributesA
+0x00447dd4	GetProcAddress
+0x00447de6	GetModuleHandleA
+0x00447dfa	GlobalDeleteAtom
+0x00447e0e	GlobalFindAtomA
+0x00447e20	GlobalAddAtomA
+0x00447e32	lstrcmpiA
+0x00447e3e	GlobalGetAtomNameA
+0x00447e54	GetCurrentThreadId
+0x00447e6a	lstrcatA
+0x00447e76	GetVersion
+0x00447e84	FreeLibrary
+0x00447e92	LoadLibraryA
+0x00447ea2	InterlockedIncrement
+0x00447eba	InterlockedDecrement
+0x00447ed2	lstrlenA
+0x00447ede	WideCharToMultiByte
+0x00447ef4	MultiByteToWideChar
+0x00447f0a	SetLastError
+0x00447f1a	SetEvent
+0x00447f26	SetThreadPriority
+0x00447f3a	CreateEventA
+0x00447f4a	FileTimeToSystemTime
+0x00447f62	FileTimeToLocalFileTime
+0x00447f7c	lstrcpynA
+0x00447f88	ReadFile
+0x00447f94	WriteFile
+0x00447fa0	SetFilePointer
+0x00447fb2	FlushFileBuffers
+0x00447fc6	LockFile
+0x00447fd2	UnlockFile
+0x00447fe0	SetEndOfFile
+0x00447ff0	MoveFileA
+0x00447ffc	FindClose
+0x00448008	FindFirstFileA
+0x0044801a	GetVolumeInformationA
+0x00448032	GetFullPathNameA
+0x00448046	GetCurrentThread
+0x0044805a	lstrcmpA
+0x00448066	LocalFree
+0x00448072	FormatMessageA
+0x00448084	GetFileSize
+0x00448092	GetFileTime
+0x004480a0	LocalFileTimeToFileTime
+0x004480ba	SystemTimeToFileTime
+0x004480d2	LocalAlloc
+0x004480e0	InitializeCriticalSection
+0x004480fc	TlsAlloc
+0x00448108	DeleteCriticalSection
+0x00448120	GlobalHandle
+0x00448130	TlsFree
+0x0044813a	LeaveCriticalSection
+0x00448152	EnterCriticalSection
+0x0044816a	TlsSetValue
+0x00448178	LocalReAlloc
+0x00448188	TlsGetValue
+0x00448196	GlobalFlags
+0x004481a4	GetProcessVersion
+0x004481b8	GetCPInfo
+0x004481c4	GetOEMCP
+0x004481d0	SetErrorMode
+0x004481e0	GetCurrentDirectoryA
+0x004481f8	SizeofResource
+0x0044820a	RtlUnwind
+0x00448216	GetFileType
+0x00448224	HeapAlloc
+0x00448230	HeapFree
+0x0044823c	RaiseException
+0x0044824e	GetStartupInfoA
+0x00448260	GetCommandLineA
+0x00448272	ExitProcess
+0x00448280	CreateThread
+0x00448290	ExitThread
+0x0044829e	GetTimeZoneInformation
+0x004482b8	GetSystemTime
+0x004482c8	GetLocalTime
+0x004482d8	GetACP
+0x004482e2	TerminateProcess
+0x004482f6	SetStdHandle
+0x00448306	HeapSize
+0x00448312	HeapReAlloc
+0x00448320	SetHandleCount
+0x00448332	GetStdHandle
+0x00448342	GetEnvironmentVariableA
+0x0044835c	GetVersionExA
+0x0044836c	HeapDestroy
+0x0044837a	HeapCreate
+0x00448388	VirtualFree
+0x00448396	VirtualAlloc
+0x004483a6	IsBadWritePtr
+0x004483b6	SetUnhandledExceptionFilter
+0x004483d4	GetDriveTypeA
+0x004483e4	UnhandledExceptionFilter
+0x00448400	FreeEnvironmentStringsA
+0x0044841a	FreeEnvironmentStringsW
+0x00448434	GetEnvironmentStrings
+0x0044844c	GetEnvironmentStringsW
+0x00448466	LCMapStringA
+0x00448476	LCMapStringW
+0x00448486	GetStringTypeA
+0x00448498	GetStringTypeW
+0x004484aa	IsBadReadPtr
+0x004484ba	IsBadCodePtr
+0x004484ca	CompareStringA
+0x004484dc	CompareStringW
+0x004484ee	SetEnvironmentVariableA
+0x00448506	KERNEL32.dll
+0x00448516	GetSysColor
+0x00448524	CopyRect
+0x00448530	InvalidateRect
+0x00448542	OffsetRect
+0x00448550	SetRect
+0x0044855a	SendMessageA
+0x0044856a	GetAsyncKeyState
+0x0044857e	GetParent
+0x0044858a	EnableWindow
+0x0044859a	wsprintfA
+0x004485a6	PostMessageA
+0x004485b6	ReleaseDC
+0x004485c2	GetDC
+0x004485ca	GetClientRect
+0x004485da	LoadCursorA
+0x004485e8	FillRect
+0x004485f4	SetForegroundWindow
+0x0044860a	FindWindowA
+0x00448618	DestroyIcon
+0x00448626	SetTimer
+0x00448632	GetDialogBaseUnits
+0x00448648	GetSystemMetrics
+0x0044865c	LoadIconA
+0x00448668	KillTimer
+0x00448674	DrawIcon
+0x00448680	IsIconic
+0x0044868c	GetWindowRect
+0x0044869c	GetWindowPlacement
+0x004486b2	SystemParametersInfoA
+0x004486ca	IntersectRect
+0x004486da	RegisterWindowMessageA
+0x004486f4	SetWindowPos
+0x00448704	SetWindowLongA
+0x00448716	GetWindowLongA
+0x00448728	GetWindow
+0x00448734	GetForegroundWindow
+0x0044874a	GetLastActivePopup
+0x00448760	GetMessagePos
+0x00448770	GetMessageTime
+0x00448782	RemovePropA
+0x00448790	CallWindowProcA
+0x004487a2	GetPropA
+0x004487ae	UnhookWindowsHookEx
+0x004487c4	SetPropA
+0x004487d0	GetClassLongA
+0x004487e0	CallNextHookEx
+0x004487f2	SetWindowsHookExA
+0x00448806	CreateWindowExA
+0x00448818	DestroyWindow
+0x00448828	DefWindowProcA
+0x0044883a	GetKeyState
+0x00448848	GetDlgCtrlID
+0x00448858	GetWindowTextA
+0x0044886a	GetWindowTextLengthA
+0x00448882	GetDlgItem
+0x00448890	GetMenuItemID
+0x004488a0	GetSubMenu
+0x004488ae	GetMenuItemCount
+0x004488c2	GetMenu
+0x004488cc	RegisterClassA
+0x004488de	GetClassInfoA
+0x004488ee	WinHelpA
+0x004488fa	GetCapture
+0x00448908	MessageBoxA
+0x00448916	GetTopWindow
+0x00448926	IsWindowVisible
+0x00448938	ScreenToClient
+0x0044894a	AdjustWindowRectEx
+0x00448960	SetFocus
+0x0044896c	IsWindow
+0x00448978	SetActiveWindow
+0x0044898a	GetFocus
+0x00448996	DispatchMessageA
+0x004489aa	PeekMessageA
+0x004489ba	MapWindowPoints
+0x004489cc	SendDlgItemMessageA
+0x004489e2	UpdateWindow
+0x004489f2	IsDialogMessageA
+0x00448a06	SetWindowTextA
+0x00448a18	MoveWindow
+0x00448a26	ShowWindow
+0x00448a34	IsWindowEnabled
+0x00448a46	GetNextDlgTabItem
+0x00448a5a	EnableMenuItem
+0x00448a6c	CheckMenuItem
+0x00448a7c	SetMenuItemBitmaps
+0x00448a92	ModifyMenuA
+0x00448aa0	GetMenuState
+0x00448ab0	LoadBitmapA
+0x00448abe	GetMenuCheckMarkDimensions
+0x00448adc	ClientToScreen
+0x00448aee	GetWindowDC
+0x00448afc	BeginPaint
+0x00448b0a	EndPaint
+0x00448b16	TabbedTextOutA
+0x00448b28	DrawTextA
+0x00448b34	GrayStringA
+0x00448b42	GetCursorPos
+0x00448b52	ValidateRect
+0x00448b62	GetActiveWindow
+0x00448b74	TranslateMessage
+0x00448b88	GetMessageA
+0x00448b96	CharUpperA
+0x00448ba4	InflateRect
+0x00448bb2	PostQuitMessage
+0x00448bc4	SetCursor
+0x00448bd0	CreateDialogIndirectParamA
+0x00448bee	EndDialog
+0x00448bfa	LoadStringA
+0x00448c08	GetClassNameA
+0x00448c18	PtInRect
+0x00448c24	GetSysColorBrush
+0x00448c38	DestroyMenu
+0x00448c44	USER32.dll
+0x00448c52	GetTextMetricsA
+0x00448c64	SelectPalette
+0x00448c74	CreatePalette
+0x00448c84	RealizePalette
+0x00448c96	GetObjectA
+0x00448ca4	CreateCompatibleBitmap
+0x00448cbe	CreateDIBitmap
+0x00448cd0	CreateCompatibleDC
+0x00448ce6	BitBlt
+0x00448cf0	GetTextExtentPoint32A
+0x00448d08	CreateFontA
+0x00448d16	CreateSolidBrush
+0x00448d2a	GetClipBox
+0x00448d38	SetTextColor
+0x00448d48	SetBkColor
+0x00448d56	CreateBitmap
+0x00448d66	DeleteDC
+0x00448d72	SaveDC
+0x00448d7c	RestoreDC
+0x00448d88	SelectObject
+0x00448d98	GetStockObject
+0x00448daa	SetBkMode
+0x00448db6	SetMapMode
+0x00448dc4	SetViewportOrgEx
+0x00448dd8	OffsetViewportOrgEx
+0x00448dee	SetViewportExtEx
+0x00448e02	ScaleViewportExtEx
+0x00448e18	SetWindowExtEx
+0x00448e2a	ScaleWindowExtEx
+0x00448e3e	IntersectClipRect
+0x00448e52	MoveToEx
+0x00448e5e	LineTo
+0x00448e68	SetTextAlign
+0x00448e78	DeleteObject
+0x00448e88	GetDeviceCaps
+0x00448e98	CreatePen
+0x00448ea4	PtVisible
+0x00448eb0	RectVisible
+0x00448ebe	TextOutA
+0x00448eca	ExtTextOutA
+0x00448ed8	Escape
+0x00448ee2	PatBlt
+0x00448eea	GDI32.dll
+0x00448ef6	GetFileTitleA
+0x00448f04	comdlg32.dll
+0x00448f14	ClosePrinter
+0x00448f24	DocumentPropertiesA
+0x00448f3a	OpenPrinterA
+0x00448f48	WINSPOOL.DRV
+0x00448f58	RegQueryValueExA
+0x00448f6c	RegCloseKey
+0x00448f7a	RegCreateKeyExA
+0x00448f8c	RegOpenKeyExA
+0x00448f9c	RegSetValueExA
+0x00448fac	ADVAPI32.dll
+0x00448fbc	SHGetFileInfoA
+0x00448fcc	SHELL32.dll
+0x00448fda	_TrackMouseEvent
+0x00448fec	COMCTL32.dll
+0x00448ffc	CoInitialize
+0x0044900c	CoUninitialize
+0x0044901c	ole32.dll
+0x00449028	InterlockedExchange
+0x0044903e	CreateDirectoryA
+0x00449052	GetTempPathA
+0x00449062	RemoveDirectoryA
+0x00449076	FindNextFileA
+0x00449086	GetProfileStringA
+0x0044909a	IsWindowUnicode
+0x004490ac	CharNextA
+0x004490b8	DefDlgProcA
+0x004490c6	DrawFocusRect
+0x004490d6	ExcludeUpdateRgn
+0x004490ea	ShowCaret
+0x004490f6	HideCaret
+0x00449102	UnregisterClassA
+0x00449116	GetTextExtentPointA
+0x0044912a	WSOCK32.dll
+0x00449138	timeBeginPeriod
+0x0044914a	timeGetTime
+0x00449158	timeGetDevCaps
+0x0044916a	timeEndPeriod
+0x00449178	WINMM.dll
+0x00449184	TerminateThread
+0x0044a240	.?AVCSE@@
+0x0044a250	  ESP:%08x EBP:%08x ESI:%08x EDI:%08x\n
+0x0044a278	  EAX:%08x EBX:%08x ECX:%08x EDX:%08x\n
+0x0044a2a0	  GS:%08x SS:%08x EFlags:%08x\n
+0x0044a2c0	  CS:%08x DS:%08x ES:%08x FS:%08x\n
+0x0044a2e4	  Information[%d]  :%08x\n
+0x0044a300	  ExceptionAddress:%08x\n
+0x0044a31c	  ExceptionFlags  :%08x\n
+0x0044a338	  ExceptionCode   :%08x\n
+0x0044a354	%s - EXCEPTION ERROR\n
+0x0044a36c	%Y/%m/%d %H:%M:%S
+0x0044a380	\n[mpsUniMessageFactory] out of memory ...\n\n
+0x0044a3ac	Finished!\n\n
+0x0044a3b8	[mpsUniMessageFactory] creating message objects...  
+0x0044a3f0	[mpsUniMessageFactory] produce_message: unsupported message format\n\n
+0x0044a438	[mpsUniMessageFactory] recycle_message: unsupported message format\n\n
+0x0044a488	.PAVCFileException@@
+0x0044a4a8	.PAVCException@@
+0x0044a4bc	BITMAP is NULL.
+0x0044a4d8	.PAVCResourceException@@
+0x0044a4f4	UpdateClient.err
+0x0044a50c	#32770
+0x0044a514	.\exe\
+0x0044a51c	.\exe\G7MTClient.exe
+0x0044a538	47902
+0x0044a540	202.8.80.179
+0x0044a550	WORK_DIR
+0x0044a55c	STARTUP_APPNAME
+0x0044a56c	TEMP_DIR
+0x0044a578	BASE_DIR
+0x0044a584	PROXY_PORT
+0x0044a590	PROXY_ADDRESS
+0x0044a5a0	SERVER_PORT
+0x0044a5ac	SERVER_ADDRESS
+0x0044a5bc	UPDATE
+0x0044a5c4	VERSION
+0x0044a5e8	%sSERVER.INI
+0x0044a5f8	(000/000) 
+0x0044a604	TITLE_BG
+0x0044a610	(%3d/%3d)\t%s:%s\r\n
+0x0044a624	%.1f%s
+0x0044a63c	Gin7UpdateClient.new
+0x0044a654	LAST_ERROR
+0x0044a660	0x%08x
+0x0044a668	UPDATE.LOG
+0x0044a688	.?AVCObject@@
+0x0044a6a0	.?AVCCmdTarget@@
+0x0044a6c0	.?AVCWnd@@
+0x0044a6d8	.?AVCCmdUI@@
+0x0044a6f0	.?AVCTestCmdUI@@
+0x0044a710	.PAVCUserException@@
+0x0044a730	.?AVCTempWnd@@
+0x0044a748	.?AVCNoTrackObject@@
+0x0044a768	.?AV_AFX_CTL3D_STATE@@
+0x0044a788	.?AVCButton@@
+0x0044a7c8	.?AVCDC@@
+0x0044a7e0	.?AVCClientDC@@
+0x0044a7f8	.?AVCPaintDC@@
+0x0044a810	.?AVCGdiObject@@
+0x0044a830	.?AVCPen@@
+0x0044a848	.?AVCBrush@@
+0x0044a860	.?AVCTempDC@@
+0x0044a878	.?AVCTempGdiObject@@
+0x0044a898	.PAX
+0x0044a8a8	.PAVCObject@@
+0x0044a8c0	.PAVCSimpleException@@
+0x0044a8e0	.?AVCException@@
+0x0044a900	.?AVCSimpleException@@
+0x0044a920	.?AVCResourceException@@
+0x0044a948	.?AVCUserException@@
+0x0044a968	.?AVCWinThread@@
+0x0044a988	.?AV_AFX_CTL3D_THREAD@@
+0x0044a9a8	.PAVCMemoryException@@
+0x0044a9c8	.PAVCNotSupportedException@@
+0x0044a9f0	.?AVCMemoryException@@
+0x0044aa10	.?AVCNotSupportedException@@
+0x0044aa38	.?AVCFileException@@
+0x0044aa58	.?AVCFile@@
+0x0044aa70	.?AV_AFX_THREAD_STATE@@
+0x0044aa90	.?AVAFX_MODULE_STATE@@
+0x0044aab0	.?AVAFX_MODULE_THREAD_STATE@@
+0x0044aad8	.?AV_AFX_BASE_MODULE_STATE@@
+0x0044ab08	.?AV_AFX_WIN_STATE@@
+0x0044ab28	.?AVCWinApp@@
+0x0044ab40	.?AVCDialog@@
+0x0044ab58	.PAVCArchiveException@@
+0x0044ab90	.?AVCStringList@@
+0x0044abb0	.?AVCStdioFile@@
+0x0044abd0	.?AUCThreadData@@
+0x0044abf0	.?AVCHandleMap@@
+0x0044ac10	.?AVCMapPtrToPtr@@
+0x0044ac30	.?AVCMenu@@
+0x0044ac48	.?AVCTempMenu@@
+0x0044ac60	.?AVCArchiveException@@
+0x0044ac90	.?AVtype_info@@
+0x0044dc58	.?AVexception@@
+0x0044dc70	.?AVlogic_error@std@@
+0x0044dc90	.?AVlength_error@std@@
+0x0044dcb0	.?AVout_of_range@std@@
+0x0044dcd8	.?AVios_base@std@@
+0x0044dcf8	.?AV?$basic_ios@DU?$char_traits@D@std@@@std@@
+0x0044dd30	.?AV?$basic_istream@DU?$char_traits@D@std@@@std@@
+0x0044dd70	.?AV?$basic_ostream@DU?$char_traits@D@std@@@std@@
+0x0044ddb0	.?AV?$basic_streambuf@DU?$char_traits@D@std@@@std@@
+0x0044ddf0	.?AV?$basic_filebuf@DU?$char_traits@D@std@@@std@@
+0x0044de30	.?AVruntime_error@std@@
+0x0044de50	.?AVfailure@ios_base@std@@
+0x0044de78	.?AV?$basic_ios@GU?$char_traits@G@std@@@std@@
+0x0044deb0	.?AV?$basic_istream@GU?$char_traits@G@std@@@std@@
+0x0044def0	.?AV?$basic_ostream@GU?$char_traits@G@std@@@std@@
+0x0044df30	.?AV?$basic_filebuf@GU?$char_traits@G@std@@@std@@
+0x0044df70	.?AV?$basic_streambuf@GU?$char_traits@G@std@@@std@@
+0x0044dfb0	.?AVfacet@locale@std@@
+0x0044dfd0	.?AV_Locimp@locale@std@@
+0x0044e280	[mtStack] Overflow!!\n
+0x0044e298	[mtStack] expand: out of memory\n\n
+0x0044e2bc	[mpsMessage] mpsMessage: out of memory\n\n
+0x0044e2e8	[mpsMessage] initialize: lock remained\n
+0x0044e310	[mpsMessage] input: out of memory\n\n
+0x0044e334	[mpsMessage] lock_parameter_input_buffer: multiply locked\n
+0x0044e370	[mpsMessage] lock_parameter_output_buffer: multiply locked\n
+0x0044e3ac	[mpsMessage] clear_parameter_buffer: cannot clear, now locking\n
+0x0044e3ec	[mpsClientConnection] mpsMessageFactory: failed initialized\n
+0x0044e42c	size over [%d] (max msg size:[%d])\n\n
+0x0044e454	%s.%03d
+0x0044e45c	%supd_temp_%08d
+0x0044e46c	[mpsUpdateClientProcessor] msg_get_update_info_ok: bad update info\n\n
+0x0044e4b8	out of memory\n\n
+0x0044e4e0	.PAVmtStreamInputException@@
+0x0044e508	.PAVmtStreamOutputException@@
+0x0044e530	hangeul
+0x0044e538	kanji
+0x0044e540	english
+0x0044e548	roman
+0x0044e550	hangeulmenu
+0x0044e55c	kanjimenu
+0x0044e568	windows
+0x0044e570	C3dHNew
+0x0044e578	C3dLNew
+0x0044e580	C3dNew
+0x0044e5a8	DisableThreadLibraryCalls
+0x0044e5c4	KERNEL32.DLL
+0x0044e5d4	[mtNetStreamOutputBuffer] operator << (uint8_t): buffer overflow\n
+0x0044e618	[mtNetStreamOutputBuffer] operator << (uint16_t): buffer overflow\n
+0x0044e65c	[mtNetStreamOutputBuffer] operator << (uint32_t): buffer overflow\n
+0x0044e6a0	[mtNetStreamOutputBuffer] operator << (int8_t): buffer overflow\n
+0x0044e6e4	[mtNetStreamOutputBuffer] operator << (int16_t): buffer overflow\n
+0x0044e728	[mtNetStreamOutputBuffer] operator << (int32_t): buffer overflow\n
+0x0044e76c	[mtNetStreamOutputBuffer] operator << (float): buffer overflow\n
+0x0044e7ac	[mtNetStreamOutputBuffer] operator << (double): buffer overflow\n
+0x0044e7f0	[mtNetStreamOutputBuffer] operator << (string): buffer overflow\n
+0x0044e834	[mtNetStreamInputBuffer] operator >> (uint8_t): no data to input\n
+0x0044e878	[mtNetStreamInputBuffer] operator >> (uint16_t): no data to input\n
+0x0044e8bc	[mtNetStreamInputBuffer] operator >> (uint32_t): no data to input\n
+0x0044e900	[mtNetStreamInputBuffer] operator >> (int8_t): no data to input\n
+0x0044e944	[mtNetStreamInputBuffer] operator >> (int16_t): no data to input\n
+0x0044e988	[mtNetStreamInputBuffer] operator >> (int32_t): no data to input\n
+0x0044e9cc	[mtNetStreamInputBuffer] operator >> (float): no data to input\n
+0x0044ea0c	[mtNetStreamInputBuffer] operator >> (double): no data to input\n
+0x0044ea50	[mpNetStreamInputBuffer] operator >> (string): not string data\n
+0x0044ea90	[mtNetStreamInputBuffer] operator >> (string): no data to input\n
+0x0044ead4	[mtStreamOutputBuffer] allocation: out of memory\n\n
+0x0044eb08	[mtStreamOutputBuffer] resize: out of memory\n\n
+0x0044eb38	[mtStreamOutputBuffer] resize: illegal size\n
+0x0044eb68	[mtStreamOutputBuffer] attach: illegal memory\n
+0x0044eb98	[mtStreamOutputBuffer] write: illegal position\n
+0x0044ebc8	[mtStreamOutputBuffer] write: illegal size\n
+0x0044ebf4	[mtStreamOutputBuffer] write: illegal memory\n
+0x0044ec24	[mtStreamOutputBuffer] calculate_position: illegal position\n
+0x0044ec70	.PAVexception@@
+0x0044ec80	[mtStreamOutputBuffer] operator << (uint8_t): buffer overflow\n
+0x0044ecc0	[mtStreamOutputBuffer] operator << (uint16_t): buffer overflow\n
+0x0044ed00	[mtStreamOutputBuffer] operator << (uint32_t): buffer overflow\n
+0x0044ed40	[mtStreamOutputBuffer] operator << (int8_t): buffer overflow\n
+0x0044ed80	[mtStreamOutputBuffer] operator << (int16_t): buffer overflow\n
+0x0044edc0	[mtStreamOutputBuffer] operator << (int32_t): buffer overflow\n
+0x0044ee00	[mtStreamOutputBuffer] operator << (float): buffer overflow\n
+0x0044ee40	[mtStreamOutputBuffer] operator << (double): buffer overflow\n
+0x0044ee80	[mtStreamOutputBuffer] operator << (string): buffer overflow\n
+0x0044eec0	[mtStreamInputBuffer] attach: illegal memory\n
+0x0044eef0	[mtStreamInputBuffer] read: illegal position\n
+0x0044ef20	[mtStreamInputBuffer] read: illegal size\n
+0x0044ef4c	[mtStreamInputBuffer] read: illegal memory\n
+0x0044ef78	[mtStreamInputBuffer] calculate_position: illegal position\n
+0x0044efb4	[mtStreamInputBuffer] operator >> (uint8_t): no data to input\n
+0x0044eff4	[mtStreamInputBuffer] operator >> (uint16_t): no data to input\n
+0x0044f034	[mtStreamInputBuffer] operator >> (uint32_t): no data to input\n
+0x0044f074	[mtStreamInputBuffer] operator >> (int8_t): no data to input\n
+0x0044f0b4	[mtStreamInputBuffer] operator >> (int16_t): no data to input\n
+0x0044f0f4	[mtStreamInputBuffer] operator >> (int32_t): no data to input\n
+0x0044f134	[mtStreamInputBuffer] operator >> (float): no data to input\n
+0x0044f174	[mtStreamInputBuffer] operator >> (double): no data to input\n
+0x0044f1b4	[mpStreamInputBuffer] operator >> (string): not string data\n
+0x0044f1f4	[mtStreamInputBuffer] operator >> (string): no data to input\n
+0x0044f23c	ProxyServer
+0x0044f248	ProxyEnable
+0x0044f254	Software\Microsoft\Windows\CurrentVersion\Internet Settings
+0x0044f290	Referer
+0x0044f298	Range
+0x0044f2a0	bytes=%d-
+0x0044f2ac	User-Agent
+0x0044f2b8	Multiterm Http Library ver.1.0
+0x0044f2e0	Accept-Encoding
+0x0044f2f0	identity
+0x0044f2fc	Accept
+0x0044f308	Connection
+0x0044f314	close
+0x0044f31c	Location
+0x0044f398	Transfer-Encoding
+0x0044f3ac	chunked
+0x0044f3b4	Content-Length
+0x0044f3c4	Last-Modified
+0x0044f3dc	unsupported timezone [
+0x0044f400	[mtHttpMessage] out of memory\n\n
+0x0044f440	CONNECT
+0x0044f448	TRACE
+0x0044f450	DELETE
+0x0044f470	OPTIONS
+0x0044f478	HTTP/%d.%d
+0x0044f488	[mtTCPModule_win32] connect_wait: connect error\n\n
+0x0044f4bc	[mtTCPModule_win32] connect_wait: socket error [
+0x0044f4f0	[mtTCPModule_win32] connect: connection already exists\n\n
+0x0044f52c	[mtTCPModule_win32] listen: listen error [
+0x0044f558	[mtTCPModule_win32] listen: bind error [
+0x0044f584	[mtTCPModule_win32] listen: socket error [
+0x0044f5b0	[mtTCPModule_win32] listen: connection already exists\n\n
+0x0044f5e8	[mtTCPModule_win32] _listen: accept error [
+0x0044f61c	ftp://
+0x0044f624	http:
+0x0044f62c	http://
+0x0044f634	[mtSendBuffer] write_lock: multiply locked\n\n
+0x0044f664	[mtSendBuffer] write_unlock: not locked\n\n
+0x0044f690	[mtSendBuffer] read_lock: multiply locked\n\n
+0x0044f6bc	[mtSendBuffer] read_unlock: not locked\n\n
+0x0044f6e8	[mtReceiveBuffer] write_lock: multiply locked\n\n
+0x0044f718	[mtReceiveBuffer] write_unlock: not locked\n\n
+0x0044f748	[mtReceiveBuffer] read_lock: multiply locked\n\n
+0x0044f778	[mtReceiveBuffer] read_unlock: not locked\n\n
+0x0044f7b0	 \t-\r]
+0x00507260	Dialog
+0x005073e2	StringFileInfo
+0x00507406	041104b0
+0x0050741e	Comments
+0x00507436	CompanyName
+0x00507450	ボーステック株式会社／株式会社マイクロビジョン
+0x00507486	FileDescription
+0x005074a8	銀英伝VIIアップデートクライアント
+0x005074d6	FileVersion
+0x005074f0	1, 0, 0, 0
+0x0050750e	InternalName
+0x0050752e	LegalCopyright
+0x0050754c	(C) 2004 MicroVision,Inc.
+0x00507586	LegalTrademarks
+0x005075ae	OriginalFilename
+0x005075d6	PrivateBuild
+0x005075f6	ProductName
+0x00507610	銀河英雄伝説VIIアップデートクライアント
+0x00507642	ProductVersion
+0x00507660	1, 0, 0, 0
+0x0050767e	SpecialBuild
+0x0050769e	VarFileInfo
+0x005076be	Translation
+0x00507f88	GroupIcon
+0x005087a0	Dialog
+0x00508c00	
+0x00508c02	銀河英雄伝説VIIアップデータ
+0x00508c22	GIN7 UPDATE CLIENT
+0x00508c48	%supdate.ini
+0x00508c62	閉じる
+0x00508c6a	ｷｬﾝｾﾙ
+0x00508c76	ＭＳ Ｐゴシック
+0x00508c88	サーバー接続中
+0x00508c98	ファイルダウンロード
+0x00508cae	ダウンロード完了
+0x00508cc0	\r\n\r\nダウンロードが終了しました
+0x00508ce4	アップデート失敗
+0x00508cf6	\r\n\r\nアップデートに失敗しました
+0x00508d1a	作業が中断されました
+0x00508d30	\r\n\r\n作業が中断されました
+0x00508d4e	バージョン確認終了
+0x00508d68	\r\n\r\nダウンロードの必要はありません
+0x00508d90	ディスク容量が足りません
+0x00508daa	\r\n\r\n更新ファイルをダウンロードするのに必要な\r\n空きディスク容量が不足しています。
+0x00508e02	サーバーにログインできません
+0x00508e20	\r\n\r\nサーバーは現在メンテナンス中です。
+0x00508e4c	\r\n\r\nバージョンが異常です。
+0x00508e6c	\r\n\r\n更新情報が取得できません。
+0x00508e90	\r\n\r\nファイルのダウンロードに失敗しました。
+0x00508ec0	\r\n\r\nファイルのダウンロードが中断されました。
+0x00508ef2	\r\n\r\n圧縮ファイルの展開に失敗しました。
+0x00508f1e	G7MTClient.exe
+0x00508f3c	アップデート処理を中止しますか？
+0x00508f5e	確認
+0x00508f64	Updater Version %d.%02d
+0x00508f94	体験版 Updater Ver. %d.%02d
+0x00508fc6	Debug Updater Ver. %d.%02d
+0x00509000	Gin7UpdateClient.exe
+0x0050902a	
+0x0050902c	
+0x0050902e	
+0x00509030	
+0x00509032	
+0x00509034	
+0x00509036	
+0x00509038	
+0x0050903a	
+0x0050903c	
+0x0050903e	
+0x00509040	
+0x00509042	
+0x00509044	
+0x00509046	
+0x00509048	開く
+0x0050904e	名前を付けて保存
+0x00509060	すべてのﾌｧｲﾙ (*.*)
+0x0050907e	無題
+0x00509084	
+0x00509086	
+0x00509088	無題のﾌｧｲﾙ
+0x00509098	
+0x0050909a	
+0x0050909c	
+0x0050909e	
+0x005090a0	
+0x005090a2	
+0x005090a4	
+0x005090a6	
+0x005090a8	
+0x005090b0	
+0x005090b2	非表示(&H)
+0x005090c2	
+0x005090c4	
+0x005090c6	
+0x005090c8	
+0x005090ca	
+0x005090cc	
+0x005090ce	
+0x005090d0	
+0x005090d2	
+0x005090d4	
+0x005090d6	
+0x005090d8	
+0x005090da	
+0x005090dc	
+0x005090e0	ｴﾗｰ ﾒｯｾｰｼﾞはありません。
+0x00509104	ｻﾎﾟｰﾄされていない操作を実行しました。
+0x00509130	必要なﾘｿｰｽを利用できませんでした。
+0x00509158	ﾒﾓﾘが不足しています。
+0x00509172	不明なｴﾗｰが発生しました。
+0x00509190	
+0x00509192	
+0x00509194	
+0x00509196	
+0x00509198	
+0x0050919a	
+0x0050919c	
+0x0050919e	
+0x005091a0	
+0x005091a2	
+0x005091a4	
+0x005091a8	無効なﾌｧｲﾙ名です。
+0x005091c0	ﾄﾞｷｭﾒﾝﾄを開くことに失敗しました。
+0x005091ea	ﾄﾞｷｭﾒﾝﾄの保存に失敗しました。
+0x00509210	%1 への変更を保存しますか?
+0x00509230	空のﾄﾞｷｭﾒﾝﾄの作成に失敗しました。
+0x0050925a	ﾌｧｲﾙが大きすぎて開けません。
+0x0050927c	印刷ｼﾞｮﾌﾞを開始できませんでした。
+0x005092a4	ﾍﾙﾌﾟの起動に失敗しました。
+0x005092c4	ｱﾌﾟﾘｹｰｼｮﾝの内部ｴﾗｰです。
+0x005092ea	ｺﾏﾝﾄﾞの実行に失敗しました。
+0x0050930c	ﾒﾓﾘ不足のため実行できません。
+0x0050932e	ｼｽﾃﾑ ﾚｼﾞｽﾄﾘ ｴﾝﾄﾘは削除されています。また、INI ﾌｧｲﾙがある場合は、INI ﾌｧｲﾙも削除されました。
+0x005093aa	一部のｼｽﾃﾑ ﾚｼﾞｽﾄﾘ ｴﾝﾄﾘ (または INI ﾌｧｲﾙ) は削除されませんでした。
+0x0050940a	このﾌﾟﾛｸﾞﾗﾑにはﾌｧｲﾙ %s が必要ですがこのｼｽﾃﾑ上に見つかりませんでした。
+0x00509464	このﾌﾟﾛｸﾞﾗﾑは欠落ｴｸｽﾎﾟｰﾄ %s にﾌｧｲﾙ %s 内でﾘﾝｸされています。このｺﾝﾋﾟｭｰﾀは互換性のないﾊﾞｰｼﾞｮﾝの %s を含んでいる可能性があります。
+0x00509514	
+0x00509518	
+0x0050951a	
+0x0050951c	
+0x0050951e	
+0x00509520	
+0x00509522	
+0x00509524	
+0x00509526	
+0x00509528	
+0x0050952a	
+0x0050952c	
+0x0050952e	
+0x00509530	書き込み専用ﾌﾟﾛﾊﾟﾃｨからは読み取れません。
+0x00509562	読み取り専用ﾌﾟﾛﾊﾟﾃｨには書き込めません。
+0x00509592	
+0x00509594	
+0x00509598	予期しないﾌｧｲﾙ形式です。
+0x005095b6	%1\nこのﾌｧｲﾙが見つかりません。\nﾊﾟｽとﾌｧｲﾙ名が正しいかどうか確認してださい。
+0x00509610	出力先のﾃﾞｨｽｸ ﾄﾞﾗｲﾌﾞの空き容量が不足しています。
+0x0050964e	%1 は使用中のため、読み取れません。
+0x00509676	%1 は使用中または読み取り専用のため、書き込めません。
+0x005096b0	%1 の読み取り中に予期しないｴﾗｰが発生しました。
+0x005096e6	%1 の書き込み中に予期しないｴﾗｰが発生しました。
+0x0050971c	
+0x0050971e	
+0x00509720	
+0x00509722	
+0x00509724	
+0x00509726	
+0x00509728	
+0x0050972a	
+0x0050972c	
+0x00509730	整数を入力してください。
+0x0050974a	数字を入力してください。
+0x00509764	%1 から %2 までの整数を入力してください。
+0x00509796	%1 から %2 までの数字を入力してください。
+0x005097c8	%1 文字以内で入力してください。
+0x005097ec	ﾎﾞﾀﾝを選択してください。
+0x0050980a	0 から 255 までの整数を入力してください。
+0x0050983c	正の整数を入力してください。
+0x0050985a	日付/時刻を入力してください。
+0x0050987a	通貨型を入力してください。
+0x00509896	
+0x00509898	
+0x0050989a	
+0x0050989c	
+0x0050989e	
+0x005098a0	
+0x005098a8	ｴﾗｰはありませんでした。
+0x005098c4	%1 へのｱｸｾｽ中に不明なｴﾗｰが発生しました。
+0x005098f8	%1 が見つかりませんでした。
+0x00509918	%1 には無効なﾊﾟｽが含まれています。
+0x00509942	開いているﾌｧｲﾙが多すぎるため、%1 を開けませんでした。
+0x00509980	%1 へのｱｸｾｽは拒否されました。
+0x005099a6	%1 へ無効なﾌｧｲﾙ ﾊﾝﾄﾞﾙが関連付けられていました。
+0x005099e4	現在のﾃﾞｨﾚｸﾄﾘ %1 は削除できませんでした。
+0x00509a1a	%1 を作成できませんでした。そのﾃﾞｨﾚｸﾄﾘはいっぱいです。
+0x00509a5c	%1 のｼｰｸに失敗しました。
+0x00509a7c	%1 へのｱｸｾｽ中にﾊｰﾄﾞｳｪｱ I/O ｴﾗｰが報告されました。
+0x00509ac4	%1 へのｱｸｾｽ中に共有違反が発生しました。
+0x00509af4	%1 へのｱｸｾｽ中にﾛｯｸ違反が発生しました。
+0x00509b26	%1 へのｱｸｾｽ中にﾃﾞｨｽｸがいっぱいになりました。
+0x00509b60	%1 の末尾以降にｱｸｾｽしようとしました。
+0x00509b8e	
+0x00509b90	ｴﾗｰはありませんでした。
+0x00509bac	%1 へのｱｸｾｽ中に不明なｴﾗｰが発生しました。
+0x00509be0	%1 の読み取り中に書き込もうとしました。
+0x00509c0c	%1 の末尾以降にｱｸｾｽしようとしました。
+0x00509c3a	%1 へ書き込み中に読み取ろうとしました。
+0x00509c66	%1 の形式が正しくありません。
+0x00509c88	%1 は予期しないｵﾌﾞｼﾞｪｸﾄを含んでいます。
+0x00509cbc	%1 は不正なｽｷｰﾏを含んでいます。
+0x00509ce4	
+0x00509ce6	
+0x00509ce8	
+0x00509cea	
+0x00509cec	
+0x00509cee	
+0x00509cf0	
+0x00509cf2	
+0x00509cf8	ﾒｰﾙ ｼｽﾃﾑ ｻﾎﾟｰﾄを読み込めません。
+0x00509d28	ﾒｰﾙ ｼｽﾃﾑ DLL が無効です。
+0x00509d50	ﾒｰﾙの送信に失敗しました。
+0x00509d6e	
+0x00509d70	
+0x00509d72	
+0x00509d74	
+0x00509d76	
+0x00509d78	
+0x00509d7a	
+0x00509d7c	
+0x00509d7e	
+0x00509d80	
+0x00509d82	
+0x00509d84	
+0x00509d86	
+0x00509d88	ﾋﾟｸｾﾙ
+0x00509d94	
+0x00509d96	
+0x00509d98	
+0x00509d9a	
+0x00509d9c	
+0x00509d9e	
+0x00509da0	
+0x00509da2	
+0x00509da4	
+0x00509da6	
+0x00509da8	
+0x00509daa	
+0x00509dac	
+0x00509dae	
+0x00509db0	
+0xffdff1ac	
+0xffdffc00	
+0xffdfff50	00000000-0000-0000-0000-000000000000

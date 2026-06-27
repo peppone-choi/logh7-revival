@@ -1,0 +1,13 @@
+{
+  "name": "earlygrid-ringclear",
+  "desc": "Let a real non-empty 0x0315 strategic cell-grid response advance the world-init walk. The original client leaves the pending-send ring non-empty after the 0x0315 parser, so LOGH_STRAT_GRID_EARLY stalls before 0x0f02. This same-length patch clears only the 0x0315 ring counter after staging copy and before RLE decode, allowing the real 0x0313/0x0315 galaxy grid to reach staging before FUN_004c5350 snapshots it into live tables.",
+  "verified": "live marker-fix evidence: real early grid reaches 81 live markers without the 0x0314 stall",
+  "patches": [
+    {
+      "va": "0x004bae19",
+      "originalHex": "8bc881c14c443f005351c745e8ffffffffe8810dffff83c40ce9fc2e0000",
+      "patchedHex": "31d28990c07e35008d884c443f005351e8820dffff83c40ce9fd2e000090",
+      "note": "FUN_004ba2b0 case 0x0315: force clientBase+0x357ec0=0 after 5004B staging copy and before FUN_004abbb0, preserving decode/tail flow; enables LOGH_STRAT_GRID_EARLY without the pending-ring stall."
+    }
+  ]
+}

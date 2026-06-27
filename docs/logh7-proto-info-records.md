@@ -10,6 +10,13 @@ All field offsets are **into the inner body** (the bytes AFTER the `[u16 BE code
 S→C records arrive wrapped in a conn3 message32 `[u32 0][u16 code][body]`). Bodies are
 **little-endian** (Intel client). The 2-byte inner code prefix is the only big-endian field.
 
+> **2026-06-17 live-client correction:** the `0x0305/0x0307` static-card rows below are a static
+> parser/builder candidate and must not be treated as the active conn3 world-login `0x0304->0x0305`,
+> `0x0306->0x0307` path. Corrected `FUN_004ba2b0` thiscall hooks saw those live bodies carry
+> InformationSession/InformationCharacter-style data such as `Friedrich IV`; injecting the static-card
+> builder bytes on that path did not populate the runtime command table. Keep these layouts documented,
+> but do not bind them to the default server world-login walker without new runtime evidence.
+
 > Template: this doc follows `docs/logh7-moveship-wire.md` and extends
 > `docs/logh7-info-records-wire.md` (which already covers 0x0323 character, 0x031f base,
 > NotifyBaseParameter). Those three are NOT re-derived here; this doc adds the rest of the family.
@@ -102,39 +109,45 @@ into a fixed global the screens read from.
 > personnel roster / available-officer pool) in one message. Reuse the existing 0x0323 builder
 > per element. Server store global `clientBase+0x4271a8`.
 
-### 1b. ResponseStaticInformationCard `0x305` (0x520a) — card master / command-grant table
+### 1b. ResponseStaticInformationCard `0x305` (0x520a) — static-card candidate, not the live world-login `0x0305`
 
 - **Confidence: structure high, field semantics medium** (no dump-label serializer is compiled in;
   names inferred from class + parser shape). Parser `FUN_0040ee80`; outer **count u16 @0x00**,
   cap `< 0x12d` (300); **element stride 0x46 = 70 bytes** (`param_1 += 0x23` ushorts).
-- Per element the parser reads, then a **variable u16 list** (the per-card "command" / grant list)
+- Per element the parser reads, then a **variable u16 list** (the per-card command factory list)
   whose length is a u8 capped at 24 (`Input_StaticInformationCard … command_size over than 24`).
+  2026-06-17 live G006 correction: the command list is at **record+0x14/+0x16**, not the older
+  `+0x24/+0x26` note. `FUN_004f5cb0` reads the runtime table row count at `record+0x14` and factory
+  ids at `record+0x16`; rendered widget ids are `factory + 0x43` (so widgets `110/112` correspond to
+  factories `0x2b/0x2d`). A direct memory positive control at runtime `table+0x1e/+0x20` made
+  `FUN_004f5cb0(0)` produce two menu rows, while the old offsets left category 0 empty.
 
 Element layout (offsets relative to element base, LE):
 
 | off | type | field (inferred) | evidence |
 |---|---|---|---|
-| 0x00 | u16 | card_id / index | `(*+0x20)(elem-? )` first u16 read |
+| 0x00 | u32 | card_id / index | first id slot; server writes the full dword even when ids fit u16 |
 | 0x02 | u8 | b02 (kind?) | `FUN_00610420(+2,1)` byte |
 | 0x03 | u8 | b03 (category?) | `FUN_00610420(+3,1)` byte |
 | 0x04 | u8 | b04 | `FUN_00610420(+0?,1)` packed byte |
 | 0x05 | u8 | b05 | `FUN_00610420(+1,1)` packed byte |
+| 0x06 | u16 | w06 | generic packed short |
 | 0x08 | u16 | w08 (achievement?) | `(*+0x20)(+2 ushort)` |
-| 0x0c | u16 | w0c | `(*+0x20)(+3 ushort)` |
+| 0x0a | u8 | b0a | generic packed byte |
+| 0x0b | u8 | b0b | generic packed byte |
+| 0x0c | u8 | b0c | generic packed byte |
+| 0x0e | u16 | w0e | generic packed short |
 | 0x10 | u8 | b10 | `FUN_00610420(+4 ushort,1)` |
-| 0x12 | u8 | b12 | `FUN_00610420(+9,1)` |
-| 0x14 | u8 | b14 | `(*+0x24)(+5 ushort)` |
-| 0x18 | u16 | w18 | `(*+0x20)(+6 ushort)` |
-| 0x1c | u8 | b1c | `FUN_00610420(+7 ushort,1)` |
-| 0x20 | u16 | w20 | `(*+0x20)(+8 ushort)` |
-| 0x24 | u8 | command_count | `(*+0x24)(+9 ushort)`, cap ≤ 24 |
-| 0x26 | u16[command_count] | commands[] | loop `(*+0x20)`, ≤24 entries (the grants this card confers) |
+| 0x12 | u16 | w12 | generic packed short |
+| 0x14 | u8 | command_count | live `FUN_004f5cb0` row count, cap ≤ 24 |
+| 0x16 | u16[command_count] | command_factories[] | live `FUN_004f5cb0` factory ids; widget id = factory + 0x43 |
 
-> ushort-index→byte-offset mapping is exact from the parser; the byte-precise names for the small
-> fields need either the server-side label dump or a live capture (marked medium). The **shape**
-> (id + small packed header + a ≤24 u16 command list, 70 B/record) is solid.
+> Field names for the small packed header are still medium/low confidence, but the 70-byte stride and
+> the command-list offsets above are now live-pinned. Do not reintroduce `+0x24/+0x26` without a newer
+> client trace that proves the old interpretation. Also do not route this builder through the current
+> conn3 `0x0304->0x0305` world-login walker; P56 live evidence says that code-family collision is wrong.
 
-### 1c. ResponseStaticInformationCardCommand `0x307` (0xe5b2) — card→command sub-records
+### 1c. ResponseStaticInformationCardCommand `0x307` (0xe5b2) — static-card command candidate
 
 - **Confidence: structure high.** Parser `FUN_0040f9f0`; outer **count u16 @0x00**, cap `< 0x12d`
   (300); **element stride 0xc4 = 196 bytes** (`puVar5 += 0x62` ushorts). Each element has an inner
@@ -320,6 +333,30 @@ outer:  count u8 @0x00, cap < 5 (max 4 bases)            element stride 0x2378 (
 > The in-transit logistics package (what's being shipped base→base). Store global
 > `clientBase+0x36a488`.
 
+### 4c. Implementation confirmation (2026-06-16) — `src/server/logh7-warehouse-record.mjs`
+
+Both records were implemented (`buildResponseInformationWarehouseInner` / `buildResponseInformationPackageInner`,
+wired req 0x0326→0x0327 and 0x0328→0x0329 in `logh7-login-session.mjs`) after re-pinning the offsets directly
+against the Ghidra export (`tools/logh7_redex.py func …`). Three-way agreement per record:
+
+- **Body sizes pinned by the dispatcher copy count** (`FUN_004ba2b0`): case 0x327 copies `iVar16 = 0xc0`
+  (192) dwords = **0x300 (768B)**; case 0x329 copies `iVar16 = 0x55` (85) dwords = **0x154 (340B)**.
+- **`supplies/food/mineral` doc contradiction RESOLVED — there was none.** §4a's `param_1[0xbd]/[0xbe]/[0xbf]`
+  (the dump serializer `FUN_0041aff0` uses a `u32*` cursor) and `docs/logh7-implementation-roadmap.md` L198's
+  `0x2f4/0x2f8/0x2fc` are the **same bytes**: 0xbd*4 = 0x2f4, 0xbe*4 = 0x2f8, 0xbf*4 = 0x2fc. The binary parser
+  `FUN_0041a870` reads them as `(*+0x1c)(iStack_10 + 0x2f4 / +0x2f8 / +0x2fc)` — byte offsets — confirming
+  **0x2f4/0x2f8/0x2fc** is the canonical layout. `record ends 0x300`. Both notations are kept in the §4a table.
+- **Array-entry base nuance.** Each entry's `kind` sits 2 bytes BEFORE the parser's loop cursor (the cursor
+  `iVar6`/`puVar6` starts past the kind). So warehouse `ships[0].kind` is at **0x0e** (cursor 0x10 − 2),
+  `troops[0].kind` at **0x262** (cursor 0x264 − 2); package `other_package[0].kind` at **0x0c** (cursor 0x0e − 2),
+  `troop_package[0].kind` at **0x34** (cursor 0x36 − 2). The §4a/§4b tables' "ships[] @0x10 / troops[] @0x264"
+  point at the cursor (= unit_number byte for warehouse / unit_kind for package), not the entry base — the
+  builder writes from the entry base so kind/unit_number/boat_number land at +0/+2/+4.
+- **Caps** (parser guards, hard client-side reject on overflow): ships ≤ 99 (`< 100`), warehouse troops ≤ 24
+  (`< 0x19`), other_package ≤ 3 (`< 4`), troop_package ≤ 24 (`< 0x19`). The builder clamps each.
+- **Names are HIGH** for every field (both records have a compiled-in dump-label serializer), so no `fieldNN`
+  provisionals are needed here — unlike the unlabeled 0x031f/0x0321 scalars.
+
 ---
 
 ## 5. Fleet / outfit organisation (the 艦隊編成 records)
@@ -440,8 +477,9 @@ then trigger the server to re-broadcast the relevant Notify/Information record).
       are immutable; emit them in the world-init handshake (the client stores them at the globals in
       §0 and the tactical sim reads the curves directly). Stride/caps per the tables above.
 - [ ] **Personnel cards:** `0x305 StaticInformationCard` + `0x307 StaticInformationCardCommand`
-      define which appointments exist and which orders each grants (drives the 人事/card UI). Build
-      from the card catalog; respect caps (300 cards, ≤24 commands each).
+      remain parser/builder candidates for the 人事/card UI, but their live request/trigger path is not
+      the conn3 world-login `0x0304/0x0306` walker. Find the real trigger before emitting them by default.
+      Build from the card catalog only behind explicit RE evidence; respect caps (300 cards, ≤24 commands each).
       `0x34f ResponseCardCharacter` = batch of full 724-byte character sheets — reuse the existing
       0x0323 character builder per element, ≤64 per message; page if more.
 - [ ] **Per-base economy/org (send on enter-base / on change):**

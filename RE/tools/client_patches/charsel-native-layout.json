@@ -1,0 +1,49 @@
+{
+  "name": "charsel-native-layout",
+  "desc": "캐릭터 선택/세션 진입 패널(FUN_0051e580)을 640x480 캔버스 좌표에서 1920x1080 네이티브 캔버스로 재배치. 레지스터-캐시/직접저장 좌표 즉치값을 X는 width 비율, Y는 height 비율로 정수 스케일. 캔버스 기준: 640x480 menu canvas (FUN_00401760(0x280,0x1e0)). lobby-native-layout 계열의 네이티브 좌표 패치(스케일러 패치/레터박스 아님).",
+  "verified": "RE-CONFIRMED 사이트 + BYTE-검증 originalHex(pristine .omo/ghidra/bin/G7MTClient.exe). 좌표 즉치값 분배는 disasm으로 추적 확정. patchedHex는 1920x1080 후보(정수 truncation). originalVerified=True. verified=false: 위젯 X/Y 최종분류와 1920x1080 시각은 라이브 검증(메인 직렬) 필요.",
+  "verifiedFlag": false,
+  "canvasBasis": "640x480 menu canvas (FUN_00401760(0x280,0x1e0))",
+  "patches": [
+    {
+      "va": "0x0051e589",
+      "fileOffsetHex": "0x11e589",
+      "originalHex": "b932000000",
+      "patchedHex": "b970000000",
+      "axis": "Y",
+      "note": "행 y-base 50 (+0x130/144/158/16c 분배): 50 -> 112 (Y 1080/480)"
+    },
+    {
+      "va": "0x0051e594",
+      "fileOffsetHex": "0x11e594",
+      "originalHex": "bad1000000",
+      "patchedHex": "ba73020000",
+      "axis": "X",
+      "note": "열 x 209 (+0x12c/140/154/168 분배): 209 -> 627 (X 1920/640)"
+    },
+    {
+      "va": "0x0051e599",
+      "fileOffsetHex": "0x11e599",
+      "originalHex": "bd4c010000",
+      "patchedHex": "bde4030000",
+      "axis": "X",
+      "note": "열 x 332 (+0x178/18c/1a0/1b4): 332 -> 996 (X 1920/640)"
+    },
+    {
+      "va": "0x0051e59f",
+      "fileOffsetHex": "0x11e59f",
+      "originalHex": "be3e020000",
+      "patchedHex": "beba060000",
+      "axis": "X",
+      "note": "열 x 574 (+0x17c/190/1a4/1b8): 574 -> 1722 (X 1920/640)"
+    },
+    {
+      "va": "0x0051e5c0",
+      "fileOffsetHex": "0x11e5c0",
+      "originalHex": "b950000000",
+      "patchedHex": "b9b4000000",
+      "axis": "Y",
+      "note": "행간격 y 80 분배: 80 -> 180 (Y 1080/480)"
+    }
+  ]
+}

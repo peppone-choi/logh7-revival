@@ -1,0 +1,105 @@
+{
+  "base": "E:\\logh7-revival\\.omo\\work\\logh7-ko-overlay\\exe\\G7MTClient.korean.exe",
+  "baseSha256": "466725e2220726a4b5274b99e7b85fbdbef222cb424386638405d2cc7e23aa66",
+  "out": ".omo\\work\\logh7-ko-overlay\\exe\\G7MTClient.movetest.exe",
+  "outSha256": "60b90c36ec1535e0b95ca888d6218d20d684b1275953701fed1679355318de2a",
+  "stack": [
+    "menufix",
+    "dlgfix",
+    "earlygrid-ringclear",
+    "strat-camera-focus"
+  ],
+  "patches": [
+    {
+      "name": "menufix",
+      "desc": "Enable the four lobby menu buttons (NewChar/Lottery/Delete/Session) that scene 0x16 (FUN_0051a370) hardcodes disabled via the enable array [1,0,0,0,0,1,0,1]. Same-length imm8 00->01 at the four `mov byte [esp+disp],0` sites. Verified live (Task 1): clicking advances the new-character flow.",
+      "verified": "live (clickable)",
+      "sites": [
+        {
+          "virtualAddressHex": "0x0051ab3a",
+          "fileOffsetHex": "0x0011ab3a",
+          "originalHex": "c644241500",
+          "patchedHex": "c644241501",
+          "note": "btn1 NewChar enable 0->1"
+        },
+        {
+          "virtualAddressHex": "0x0051ab3f",
+          "fileOffsetHex": "0x0011ab3f",
+          "originalHex": "c644241600",
+          "patchedHex": "c644241601",
+          "note": "btn2 Lottery enable 0->1"
+        },
+        {
+          "virtualAddressHex": "0x0051ab44",
+          "fileOffsetHex": "0x0011ab44",
+          "originalHex": "c644241700",
+          "patchedHex": "c644241701",
+          "note": "btn3 Delete enable 0->1"
+        },
+        {
+          "virtualAddressHex": "0x0051ab49",
+          "fileOffsetHex": "0x0011ab49",
+          "originalHex": "c644241800",
+          "patchedHex": "c644241801",
+          "note": "btn4 Session enable 0->1"
+        }
+      ]
+    },
+    {
+      "name": "dlgfix",
+      "desc": "Repoint the two generic-dialog confirm-button labels in FUN_0056ebf0 away from constmsg group 103 (login-error strings '로그인에 실패했습니다.'/'버전이 다릅니다.') to group 98 ('결정'/'취소'). Same-length imm8 0x67->0x62. Index pushes already match. No constmsg/data change.",
+      "verified": "applied; not yet live-verified",
+      "sites": [
+        {
+          "virtualAddressHex": "0x0056f304",
+          "fileOffsetHex": "0x0016f304",
+          "originalHex": "6a67",
+          "patchedHex": "6a62",
+          "note": "button6 group 0x67->0x62: login-fail (g103/0) -> 결정 (g98/0)"
+        },
+        {
+          "virtualAddressHex": "0x0056f39a",
+          "fileOffsetHex": "0x0016f39a",
+          "originalHex": "6a67",
+          "patchedHex": "6a62",
+          "note": "button7 group 0x67->0x62: version-diff (g103/1) -> 취소 (g98/1)"
+        }
+      ]
+    },
+    {
+      "name": "earlygrid-ringclear",
+      "desc": "Let a real non-empty 0x0315 strategic cell-grid response advance the world-init walk. The original client leaves the pending-send ring non-empty after the 0x0315 parser, so LOGH_STRAT_GRID_EARLY stalls before 0x0f02. This same-length patch clears only the 0x0315 ring counter after staging copy and before RLE decode, allowing the real 0x0313/0x0315 galaxy grid to reach staging before FUN_004c5350 snapshots it into live tables.",
+      "verified": "live marker-fix evidence: real early grid reaches 81 live markers without the 0x0314 stall",
+      "sites": [
+        {
+          "virtualAddressHex": "0x004bae19",
+          "fileOffsetHex": "0x000bae19",
+          "originalHex": "8bc881c14c443f005351c745e8ffffffffe8810dffff83c40ce9fc2e0000",
+          "patchedHex": "31d28990c07e35008d884c443f005351e8820dffff83c40ce9fd2e000090",
+          "note": "FUN_004ba2b0 case 0x0315: force clientBase+0x357ec0=0 after 5004B staging copy and before FUN_004abbb0, preserving decode/tail flow; enables LOGH_STRAT_GRID_EARLY without the pending-ring stall."
+        }
+      ]
+    },
+    {
+      "name": "strat-camera-focus",
+      "desc": "P0-02 SURGICAL code-cave (M1-1, T07). Detour FUN_004c4170 prologue into the interior 0xCC int3 cave at VA 0x5d5290; when *(source+0x320)==0 (source=*(mainState+8)) write the player home cell so the strategic current cell *(DAT_007cd04c+0x11178) populates -> FUN_004d6310 passes (0x0b01 enabled) AND the camera centers on the home cell (Front 3). cell source=0x9f6.",
+      "verified": "ENCODED + byte-verified against G7MTClient.playable.exe: prologue A0 54 A5 7C 00 @fileoff 0x0c4170; interior 0xCC int3 cave @VA 0x5d5290 (fileoff 0x1d5290), measured 48 B, 0 inbound refs. cave body 38 B (fits 48). Cell source: 0x9f6. Frida positive-control PROVEN the same source+0x320 write closes the chain (validator->pass, camera centers). NOT yet end-to-end live-confirmed with the STATIC detour — needsLive: apply for one ui_explorer run, drive to world, click home cell, observe 0x0b01 + camera center.",
+      "sites": [
+        {
+          "virtualAddressHex": "0x004c4170",
+          "fileOffsetHex": "0x000c4170",
+          "originalHex": "a054a57c00",
+          "patchedHex": "e91b111100",
+          "note": "jmp cave (overwrites displaced mov al,[0x7ca554])"
+        },
+        {
+          "virtualAddressHex": "0x005d5290",
+          "fileOffsetHex": "0x001d5290",
+          "originalHex": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+          "patchedHex": "508b410885c0741383b82003000000750ac78020030000f609000058a054a57c00e9bfeeeeff",
+          "note": "cave body (interior int3 pad): if src320==0 set home cell, then displaced mov al, jmp 0x4c4175"
+        }
+      ]
+    }
+  ]
+}

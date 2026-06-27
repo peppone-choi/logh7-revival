@@ -1,0 +1,13 @@
+{
+  "name": "hud-hardcoded-stat-labels-ko",
+  "description": "Replace remaining hardcoded CP932 HUD stat labels that bypass MsgDat and reach the GDI ANSI text path.",
+  "verified": "GDI trace g013-gdi-after-login.json showed bytes 8d7191b1 rendered as CP949 mojibake 뛮뫏 in the character stat area. CP932 decodes it as 航続, and binary scan found the literal only once in G7MTClient.exe at file offset 0x38d59c / VA 0x0078d59c.",
+  "patches": [
+    {
+      "va": "0x0078d59c",
+      "originalHex": "8d7191b1",
+      "patchedHex": "c7d7bcd3",
+      "note": "CP932 航続 -> CP949 항속 (same 4-byte length)"
+    }
+  ]
+}

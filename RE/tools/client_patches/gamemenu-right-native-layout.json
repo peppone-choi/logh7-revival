@@ -1,0 +1,65 @@
+{
+  "name": "gamemenu-right-native-layout",
+  "desc": "게임메뉴 우측 패널(세션/캐릭터 리스트 컬럼)(FUN_0051dc00+FUN_0051dd80)을 1024x768 캔버스 좌표에서 1920x1080 네이티브 캔버스로 재배치. 레지스터-캐시/직접저장 좌표 즉치값을 X는 width 비율, Y는 height 비율로 정수 스케일. 캔버스 기준: 1024x768 lobby canvas (FUN_00401760(0x400,0x300)). lobby-native-layout 계열의 네이티브 좌표 패치(스케일러 패치/레터박스 아님).",
+  "verified": "RE-CONFIRMED 사이트 + BYTE-검증 originalHex(pristine .omo/ghidra/bin/G7MTClient.exe). 좌표 즉치값 분배는 disasm으로 추적 확정. patchedHex는 1920x1080 후보(정수 truncation). originalVerified=True. verified=false: 위젯 X/Y 최종분류와 1920x1080 시각은 라이브 검증(메인 직렬) 필요.",
+  "verifiedFlag": false,
+  "canvasBasis": "1024x768 lobby canvas (FUN_00401760(0x400,0x300))",
+  "patches": [
+    {
+      "va": "0x0051dc08",
+      "fileOffsetHex": "0x11dc08",
+      "originalHex": "b91e010000",
+      "patchedHex": "b918020000",
+      "axis": "X",
+      "note": "[dc00] 우패널 x 286: 286 -> 536 (X 1920/1024)"
+    },
+    {
+      "va": "0x0051dc0f",
+      "fileOffsetHex": "0x11dc0f",
+      "originalHex": "b8c7020000",
+      "patchedHex": "b835050000",
+      "axis": "X",
+      "note": "[dc00] 우패널 x 711 (우측 끝): 711 -> 1333 (X 1920/1024)"
+    },
+    {
+      "va": "0x0051dc1a",
+      "fileOffsetHex": "0x11dc1a",
+      "originalHex": "bd08020000",
+      "patchedHex": "bddb020000",
+      "axis": "Y",
+      "note": "[dc00] 패널 y 520: 520 -> 731 (Y 1080/768)"
+    },
+    {
+      "va": "0x0051dd8a",
+      "fileOffsetHex": "0x11dd8a",
+      "originalHex": "b9d2000000",
+      "patchedHex": "b927010000",
+      "axis": "Y",
+      "note": "[dd80] 행 y 210: 210 -> 295 (Y 1080/768)"
+    },
+    {
+      "va": "0x0051dd8f",
+      "fileOffsetHex": "0x11dd8f",
+      "originalHex": "ba80020000",
+      "patchedHex": "bab0040000",
+      "axis": "X",
+      "note": "[dd80] x 640: 640 -> 1200 (X 1920/1024)"
+    },
+    {
+      "va": "0x0051dda9",
+      "fileOffsetHex": "0x11dda9",
+      "originalHex": "ba9a020000",
+      "patchedHex": "bae0040000",
+      "axis": "X",
+      "note": "[dd80] x 666: 666 -> 1248 (X 1920/1024)"
+    },
+    {
+      "va": "0x0051ddd4",
+      "fileOffsetHex": "0x11ddd4",
+      "originalHex": "baa3020000",
+      "patchedHex": "baf1040000",
+      "axis": "X",
+      "note": "[dd80] x 675 (우측 끝): 675 -> 1265 (X 1920/1024)"
+    }
+  ]
+}

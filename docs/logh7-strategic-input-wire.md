@@ -28,12 +28,10 @@ make a player's fleet controllable and propagate moves to all clients.
    which the server broadcasts. Its consumer chain is
    `FUN_004ba2b0`(case 0xb07, copy 0x91 dw → `clientBase+0x437714`) → `FUN_004bee20` →
    `FUN_00517cd0` (enqueues deferred event `0x16`) → applied to the unit position table + PLAYER_INFO.
-3. **The blocker is enablement, not the wire.** A click only issues `0x0b01` when the SelectGrid
-   dialog (`FUN_00581c80`) can be opened, which requires (a) the strategic field is live
-   (`clientBase+0x126710!=0` gridActive, `clientBase+0x126711==2` strategic mode,
-   `clientBase+0x2a58f8!=0` world-active), and (b) a **selectable fleet object** the player owns
-   exists on the sector grid and is linked into PLAYER_INFO. Today the server sends the sector map
-   EMPTY, so there is nothing to select. See §1.
+3. **The blocker is enablement, not the wire.** A click only issues `0x0b01` after the SelectGrid
+   dialog (`FUN_00581c80`) is constructed. G1-G5 below are still prerequisites for a strategic
+   fleet to be meaningful, but the 2026-06-20 rerun proves they are not sufficient: the current
+   blocker is the HUD selection/category/command-row admission path in §1.2.1.
 4. **`0x0b09/0x0b0a` grid-enter** on the strategic map calls `FUN_004c2a80(1)` (PLAYER_INFO rebuild,
    no world reset). It is the mechanism that links a character record to its grid-unit. After a
    `0x0b07` you do **not** need a `0x0b0a` to re-place a fleet — `0x0b07` mutates positions directly
@@ -70,16 +68,43 @@ requires BOTH the `0x0b01` echo and the `0x0b07` notify.
 | G4 | **a selectable fleet object on the sector grid** the player owns | cell grid `clientBase+0x2c03cc` (100×50) → object table `clientBase+0x2c1755` via `FUN_004c8b70(col,row)=cell*3+0x2c1755` | `0x0313` ResponseStaticInformationGridType (`+0x3f57d4`) + `0x0315` ResponseStaticInformationGrid (`+0x3f4448`) — **server sends EMPTY today** |
 | G5 | **PLAYER_INFO ↔ unit linkage** for the player's own fleet | `FUN_004c2a80`: char array `clientBase+0x36a8b4` (count `+0x36a5dc`, stride `0xb5*4=0x2d4`); own char = `record[0]==*(clientBase+0x3584a0)`; flagship `char+0x24` matched against grid-unit list `clientBase+0x41a368` (count u16 `+0x41a364`, **stride 0x58=88B**) | char from `0x0323`; selected-char id from `0x0204`; units from `0x0325`; linkage pushed by `FUN_004c2c80` on `0x0b0a` (`FUN_004c2a80(1)`) |
 
+### 1.2.1 HUD command-admission gates (2026-06-20 RE addendum)
+
+G1-G5 are still necessary, but the 2026-06-20 C002 rerun proved they are not sufficient. With
+`LOGH_POSTLOAD_UNIT_STREAM_WIRE=1` and `LOGH_PLAYER_FOCUS_CELL=1`, the live client had
+`unitCount=1`, `PLAYER_INFO` linkage, and `DAT_007cd04c+0x11178=2550` (`x=50,y=25`), yet natural
+clicks still emitted no `0x0b01` and no `0x0b07`. Static RE narrows the remaining blocker to the
+native HUD selection/action admission path:
+
+| # | Gate (client state) | RE evidence | What to capture next |
+|---|---|---|---|
+| H1 | Current player/action payload is imported into the selection list | `FUN_004f68f0(selectionList,payload)` stores `payload` at `selectionList+0x628`, reads `payload+0x270`, and copies that count to `selectionList+0x620` (`listCount188`) | `payloadCount270`, `listCount188`, `listPayload18a` |
+| H2 | A visible selection-list row is actually hit-tested | `FUN_004f6600` loops `i < listCount188`, tests row object pointers at `selectionList+(0x22+i)*4` and `selectionList+(0x32+i)*4` via `FUN_005015f0`, then writes `selectionList+0x624` (`listSelected189`) | row object gates, rects, `listSelected189` |
+| H3 | HUD mode is the category-apply mode | `FUN_004fd100` only applies the category when `HUD+0xf4 == 2` and `HUD+0xab0` changed since the start of the tick | `hudModeF4`, `hudAb0`, `hudState14e0` |
+| H4 | Category resolves from the selected payload slot | `FUN_004f6b00` returns `*(u16 *)(payload + 0x26c + (listCount - selectedIndex) * 8)` if `0 <= selectedIndex < 0x10`; otherwise `-1` | category value and payload slot bytes |
+| H5 | Command menu row hit dispatches a factory | `FUN_004f5cb0` reads the static command table at `clientBase+0x3416d8`, builds command rows, and `FUN_004f58c0` maps a row hit to a factory id before calling `FUN_004f93c0(factory,category)` | command `rowCountD4`, `categoryD6`, row rects, selected row |
+
+The SelectGrid factory is still `FUN_00581c80` (`factoryIndex=0x2b`), and its `ReceiveResult`
+object still burns in the `0x0b01` send / `0x0b07` receive pair. The new conclusion is that C002 is
+blocked *upstream of SelectGrid construction*: the client must first expose and hit a selection-list
+row, resolve a command category, and dispatch a command row.
+
+`tools/logh7_selectgrid_snapshot.py` now captures the H1-H5 fields without installing hooks:
+`hudModeF4`, `hudState14e0`, `listSelected189`, selection row primary/secondary object gates and
+rects, command row rects, and the runtime command table header. Use it immediately after a world
+session click before trying new server records.
+
 **Why the live probe saw `gridActive(0x126718)=0`:** `0x126718` is the **tactical** pool, built only
 in `mode==0` by `FieldMake FUN_004b64c0`. In strategic `mode==2` that pool is intentionally empty
 (`FUN_004c2a80(0)` zeroes `0x5fc77` dwords there). The strategic field lives in the **cell/object
-tables** (`0x2c03cc`/`0x2c1755`) + the **grid-unit list** (`0x41a368`), NOT `0x126718`. So the real
-missing piece (G4+G5) is: the server has never placed the player's fleet as an object in
-`0x2c1755`/`0x2c03cc` nor delivered the `0x0313`/`0x0315` map content with that fleet.
+tables** (`0x2c03cc`/`0x2c1755`) + the **grid-unit list** (`0x41a368`), NOT `0x126718`. This explains
+the stale tactical-pool false lead; it is not the current primary blocker. The latest blocker is H1-H5
+above: HUD selection-list import, row hit-test, category resolve, command row construction, and
+factory dispatch.
 
 ### 1.3 Server-actionable enablement sequence
 
-To make a player's fleet clickable & movable:
+Historical prerequisite sequence, still required for data correctness but no longer enough by itself:
 1. Deliver real `0x0313` (grid-type/object table) + `0x0315` (cell grid, RLE) that include the
    player's fleet as an object at a cell. (Note G187: `0x0315` has a content-specific dispatch quirk
    — track separately; the cell grid can also arrive via the already-working bulk world content.)
@@ -89,6 +114,9 @@ To make a player's fleet clickable & movable:
    `0x0204` selects that character — so `FUN_004c2a80` links PLAYER_INFO to the unit (G5).
 4. Drive a `0x0b0a NotifyEnterGridEnd` (1B) at strategic entry so `FUN_004c2a80(1)` runs the linkage
    while `clientBase+0x126711==2` (the `==2` branch in the `0xb0a` dispatcher).
+
+After this sequence, do not claim SelectGrid readiness until §1.2.1 H1-H5 are captured live. The
+next evidence pass should snapshot HUD mode/category state and selection/command row objects.
 
 ---
 
@@ -210,7 +238,8 @@ strategic **entry** (to make the fleet selectable, gate G5) and after structural
 
 Pre-req (one-time per player at strategic entry; see §1.3): sector map with the player's fleet as a
 grid object (`0x0313`+`0x0315`), the unit (`0x0325`), char linkage (`0x0323`+`0x0204`), and a
-`0x0b0a` so `FUN_004c2a80(1)` links PLAYER_INFO↔unit (gates G1–G5 satisfied → SelectGrid opens).
+`0x0b0a` so `FUN_004c2a80(1)` links PLAYER_INFO↔unit. These satisfy G1-G5 only; SelectGrid still
+requires the H1-H5 HUD command-admission gates.
 
 Then per move:
 
@@ -245,12 +274,16 @@ Then per move:
    index into `0x2c03cc` or a packed (col,row)/float position needs a live `0x0b07` capture to
    disambiguate from the PLAYER_INFO `+0x40/+0x44` float pair written by `FUN_004beaa0`.
 3. **Sector-object record format (gate G4):** the per-object record in `0x2c1755` (3B/object) plus the
-   `0x0313`/`0x0315` content that places the player's fleet as a selectable object is still TBD —
-   this is the remaining data-model reconstruction blocking controllability (best done with a live
-   client). `0x0315` also has the unresolved content-specific dispatch quirk (roadmap G187).
+   `0x0313`/`0x0315` content that places the player's fleet as a selectable object is still useful
+   data-model work, but it is not the current primary C002 blocker. `0x0315` also has the unresolved
+   content-specific dispatch quirk (roadmap G187).
 4. **`half@0x10` and `dword3` in `0x0b07`:** named "route scalar" / "dest spot" by position; the
    labeled `_INF:NotifyMovedGrid#` dump serializer (string @0x00766a64) is **not compiled** into the
    client (server-side only), so field names are not recoverable from this binary.
+5. **HUD command-admission source:** after G4/G5 are true, identify which server record or native
+   UI action changes `HUD+0xf4` to `2`, updates `HUD+0xab0`, and makes a selection row hit-test pass.
+   `0x0356` can populate `payload+0x270`, but it does not by itself prove row visibility or command
+   category dispatch.
 
 ---
 

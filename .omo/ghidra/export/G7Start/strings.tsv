@@ -1,0 +1,856 @@
+0x00427810	Gineiden7 Starter 1.00
+0x00427d80	CDialog
+0x00427f4c	MS Sans Serif
+0x00427f5c	MS Shell Dlg
+0x00427f88	CTempWnd
+0x00428260	AfxOldWndProc423
+0x00428274	AfxWnd42s
+0x00428280	AfxControlBar42s
+0x00428294	AfxMDIFrame42s
+0x004282a4	AfxFrameOrView42s
+0x004282b8	AfxOleControl42s
+0x004282cc	GetMonitorInfoA
+0x004282dc	EnumDisplayMonitors
+0x004282f0	MonitorFromPoint
+0x00428304	MonitorFromRect
+0x00428314	MonitorFromWindow
+0x00428328	GetSystemMetrics
+0x0042833c	USER32
+0x00428344	DISPLAY
+0x0042834c	commctrl_DragListMsg
+0x00428438	InitCommonControlsEx
+0x00428450	COMCTL32.DLL
+0x00428540	CCmdTarget
+0x00428650	CButton
+0x00428730	CTempGdiObject
+0x00428758	CTempDC
+0x00428778	CPalette
+0x004287a0	CBitmap
+0x004287c0	CFont
+0x00428800	CGdiObject
+0x00428828	CPaintDC
+0x00428850	CWindowDC
+0x00428878	CClientDC
+0x004288c0	CUserException
+0x004288e8	CResourceException
+0x00428bd0	CNotSupportedException
+0x00428c00	CMemoryException
+0x00428c30	CException
+0x00428c88	CFileException
+0x00428cc8	CFile
+0x00428d40	CObject
+0x00428d68	%*.*f
+0x00428d74	CStringList
+0x00428da8	CWinApp
+0x00428e18	PreviewPages
+0x00428e28	Settings
+0x00428ef8	CWinThread
+0x00428fd0	CTempMenu
+0x00428ff8	CMenu
+0x00429030	combobox
+0x0042903c	System
+0x00429070	CMapPtrToPtr
+0x004290b8	CPtrList
+0x004290d4	software
+0x004295b0	CMemFile
+0x00429640	CArchiveException
+0x0042966c	MSWHEEL_ROLLMSG
+0x00429698	COleDispatchException
+0x00429814	RichEdit Text and Objects
+0x00429830	Rich Text Format
+0x00429844	FileNameW
+0x00429850	FileName
+0x0042985c	Link Source Descriptor
+0x00429874	Object Descriptor
+0x00429888	Link Source
+0x00429894	Embed Source
+0x004298a4	Embedded Object
+0x004298b4	ObjectLink
+0x004298c0	OwnerLink
+0x004298cc	Native
+0x00429928	COleException
+0x00429a48	COleBusyDialog
+0x00429a70	COleDialog
+0x00429b58	%2\CLSID
+0x00429b64	%2\Insertable
+0x00429b74	%2\protocol\StdFileEditing\verb\0
+0x00429b9c	%2\protocol\StdFileEditing\server
+0x00429bc4	CLSID\%1
+0x00429bd0	CLSID\%1\ProgID
+0x00429be4	CLSID\%1\InprocHandler32
+0x00429bfd	ole32.dll
+0x00429c08	CLSID\%1\LocalServer32
+0x00429c24	CLSID\%1\Verb\0
+0x00429c40	CLSID\%1\Verb\1
+0x00429c5c	CLSID\%1\Insertable
+0x00429c74	CLSID\%1\AuxUserType\2
+0x00429c90	CLSID\%1\AuxUserType\3
+0x00429cac	CLSID\%1\DefaultIcon
+0x00429cc8	CLSID\%1\MiscStatus
+0x00429ce0	CLSID\%1\InProcServer32
+0x00429cfc	CLSID\%1\DocObject
+0x00429d14	%2\DocObject
+0x00429d24	CLSID\%1\Printable
+0x00429d38	CLSID\%1\DefaultExtension
+0x00429fb4	H:mm:ss
+0x00429fbc	dddd, MMMM dd, yyyy
+0x00429fd0	M/d/yy
+0x00429fe0	December
+0x00429fec	November
+0x00429ff8	October
+0x0042a000	September
+0x0042a00c	August
+0x0042a024	April
+0x0042a02c	March
+0x0042a034	February
+0x0042a040	January
+0x0042a078	Saturday
+0x0042a084	Friday
+0x0042a08c	Thursday
+0x0042a098	Wednesday
+0x0042a0a4	Tuesday
+0x0042a0ac	Monday
+0x0042a0b4	Sunday
+0x0042a1ae	GAIsProcessorFeaturePresent
+0x0042a1cc	KERNEL32
+0x0042a1d8	e+000
+0x0042a23e	null)
+0x0042a24d	null)
+0x0042a254	__GLOBAL_HEAP_SELECTED
+0x0042a26c	__MSVCRT_HEAP_SELECT
+0x0042a2b4	runtime error 
+0x0042a2c8	TLOSS error\r\n
+0x0042a2d8	SING error\r\n
+0x0042a2e8	DOMAIN error\r\n
+0x0042a2f8	R6028\r\n- unable to initialize heap\r\n
+0x0042a320	R6027\r\n- not enough space for lowio initialization\r\n
+0x0042a358	R6026\r\n- not enough space for stdio initialization\r\n
+0x0042a390	R6025\r\n- pure virtual function call\r\n
+0x0042a3b8	R6024\r\n- not enough space for _onexit/atexit table\r\n
+0x0042a3f0	R6019\r\n- unable to open console device\r\n
+0x0042a41c	R6018\r\n- unexpected heap error\r\n
+0x0042a440	R6017\r\n- unexpected multithread lock error\r\n
+0x0042a470	R6016\r\n- not enough space for thread data\r\n
+0x0042a49c	\r\nabnormal program termination\r\n
+0x0042a4c0	R6009\r\n- not enough space for environment\r\n
+0x0042a4ec	R6008\r\n- not enough space for arguments\r\n
+0x0042a518	R6002\r\n- floating point not loaded\r\n
+0x0042a540	Microsoft Visual C++ Runtime Library
+0x0042a56c	Runtime Error!\n\nProgram: 
+0x0042a58c	<program name unknown>
+0x0042a5a4	SunMonTueWedThuFriSat
+0x0042a5bc	JanFebMarAprMayJunJulAugSepOctNovDec
+0x0042a644	floor
+0x0042a6b4	GetLastActivePopup
+0x0042a6c8	GetActiveWindow
+0x0042a6d8	MessageBoxA
+0x0042a6e4	user32.dll
+0x0042a6f0	1#QNAN
+0x0042a6f8	1#INF
+0x0042a700	1#IND
+0x0042a708	1#SNAN
+0x0042adbf	FButton
+0x0042ade0	ListBox
+0x0042ae20	ComboBox
+0x0042ae40	Static
+0x0042ae60	ComboLBox
+0x0042f284	DSETUP.dll
+0x0042f292	GlobalUnlock
+0x0042f2a2	GlobalLock
+0x0042f2b0	GlobalFree
+0x0042f2be	GlobalAlloc
+0x0042f2cc	GlobalReAlloc
+0x0042f2dc	LockResource
+0x0042f2ec	LoadResource
+0x0042f2fc	FindResourceA
+0x0042f30c	GetCurrentDirectoryA
+0x0042f324	FormatMessageA
+0x0042f336	GetLastError
+0x0042f346	CloseHandle
+0x0042f354	CreateProcessA
+0x0042f366	ReadFile
+0x0042f372	GetFileSize
+0x0042f380	CreateFileA
+0x0042f38e	GetModuleFileNameA
+0x0042f3a4	CreateMutexA
+0x0042f3b4	ReleaseMutex
+0x0042f3c4	WinExec
+0x0042f3ce	WaitForSingleObject
+0x0042f3e4	GetProcAddress
+0x0042f3f6	GetModuleHandleA
+0x0042f40a	lstrcpyA
+0x0042f416	GlobalDeleteAtom
+0x0042f42a	GlobalFindAtomA
+0x0042f43c	GlobalAddAtomA
+0x0042f44e	lstrcmpiA
+0x0042f45a	GlobalGetAtomNameA
+0x0042f470	GetCurrentThreadId
+0x0042f486	lstrcatA
+0x0042f492	GetVersion
+0x0042f4a0	FreeLibrary
+0x0042f4ae	LoadLibraryA
+0x0042f4be	InterlockedIncrement
+0x0042f4d6	InterlockedDecrement
+0x0042f4ee	lstrlenA
+0x0042f4fa	WideCharToMultiByte
+0x0042f510	MultiByteToWideChar
+0x0042f526	SetLastError
+0x0042f536	MulDiv
+0x0042f540	lstrcpynA
+0x0042f54c	DuplicateHandle
+0x0042f55e	GetCurrentProcess
+0x0042f572	WriteFile
+0x0042f57e	SetFilePointer
+0x0042f590	FlushFileBuffers
+0x0042f5a4	LockFile
+0x0042f5b0	UnlockFile
+0x0042f5be	SetEndOfFile
+0x0042f5ce	FindClose
+0x0042f5da	FindFirstFileA
+0x0042f5ec	GetVolumeInformationA
+0x0042f604	GetFullPathNameA
+0x0042f618	GetThreadLocale
+0x0042f62a	LocalFree
+0x0042f636	GetFileAttributesA
+0x0042f64c	GetFileTime
+0x0042f65a	FileTimeToSystemTime
+0x0042f672	FileTimeToLocalFileTime
+0x0042f68c	GetCurrentThread
+0x0042f6a0	lstrcmpA
+0x0042f6ac	GlobalFlags
+0x0042f6ba	SizeofResource
+0x0042f6cc	LocalAlloc
+0x0042f6da	InitializeCriticalSection
+0x0042f6f6	TlsAlloc
+0x0042f702	DeleteCriticalSection
+0x0042f71a	GlobalHandle
+0x0042f72a	TlsFree
+0x0042f734	LeaveCriticalSection
+0x0042f74c	EnterCriticalSection
+0x0042f764	TlsSetValue
+0x0042f772	LocalReAlloc
+0x0042f782	TlsGetValue
+0x0042f790	GetProcessVersion
+0x0042f7a4	GetCPInfo
+0x0042f7b0	GetOEMCP
+0x0042f7bc	SetErrorMode
+0x0042f7cc	WritePrivateProfileStringA
+0x0042f7ea	GetTickCount
+0x0042f7fa	RtlUnwind
+0x0042f806	RaiseException
+0x0042f818	HeapFree
+0x0042f824	HeapAlloc
+0x0042f830	GetACP
+0x0042f83a	GetStartupInfoA
+0x0042f84c	GetCommandLineA
+0x0042f85e	ExitProcess
+0x0042f86c	SetStdHandle
+0x0042f87c	GetFileType
+0x0042f88a	GetTimeZoneInformation
+0x0042f8a4	TerminateProcess
+0x0042f8b8	HeapReAlloc
+0x0042f8c6	HeapSize
+0x0042f8d2	SetUnhandledExceptionFilter
+0x0042f8f0	GetEnvironmentVariableA
+0x0042f90a	GetVersionExA
+0x0042f91a	HeapDestroy
+0x0042f928	HeapCreate
+0x0042f936	VirtualFree
+0x0042f944	VirtualAlloc
+0x0042f954	IsBadWritePtr
+0x0042f964	LCMapStringA
+0x0042f974	LCMapStringW
+0x0042f984	GetStringTypeA
+0x0042f996	GetStringTypeW
+0x0042f9a8	UnhandledExceptionFilter
+0x0042f9c4	FreeEnvironmentStringsA
+0x0042f9de	FreeEnvironmentStringsW
+0x0042f9f8	GetEnvironmentStrings
+0x0042fa10	GetEnvironmentStringsW
+0x0042fa2a	SetHandleCount
+0x0042fa3c	GetStdHandle
+0x0042fa4c	IsBadReadPtr
+0x0042fa5c	IsBadCodePtr
+0x0042fa6c	CompareStringA
+0x0042fa7e	CompareStringW
+0x0042fa90	SetEnvironmentVariableA
+0x0042faa8	KERNEL32.dll
+0x0042fab8	EnableWindow
+0x0042fac8	GetSysColor
+0x0042fad6	CopyRect
+0x0042fae2	InvalidateRect
+0x0042faf4	OffsetRect
+0x0042fb02	SetRect
+0x0042fb0c	SendMessageA
+0x0042fb1c	GetAsyncKeyState
+0x0042fb30	GetParent
+0x0042fb3c	ReleaseDC
+0x0042fb48	GetDC
+0x0042fb50	LoadIconA
+0x0042fb5c	GetSystemMetrics
+0x0042fb70	AppendMenuA
+0x0042fb7e	GetSystemMenu
+0x0042fb8e	DrawIcon
+0x0042fb9a	GetClientRect
+0x0042fbaa	IsIconic
+0x0042fbb6	MessageBoxExA
+0x0042fbc6	ExitWindowsEx
+0x0042fbd6	IsWindowEnabled
+0x0042fbe8	GetDlgItem
+0x0042fbf6	GetWindowLongA
+0x0042fc08	DestroyWindow
+0x0042fc18	CreateDialogIndirectParamA
+0x0042fc36	IsWindow
+0x0042fc42	SetActiveWindow
+0x0042fc54	GetActiveWindow
+0x0042fc66	EndDialog
+0x0042fc72	GetNextDlgTabItem
+0x0042fc86	GetWindowRect
+0x0042fc96	GetWindowPlacement
+0x0042fcac	SystemParametersInfoA
+0x0042fcc4	IntersectRect
+0x0042fcd4	RegisterWindowMessageA
+0x0042fcee	SetWindowPos
+0x0042fcfe	SetWindowLongA
+0x0042fd10	GetWindow
+0x0042fd1c	SetForegroundWindow
+0x0042fd32	GetForegroundWindow
+0x0042fd48	GetLastActivePopup
+0x0042fd5e	GetMessagePos
+0x0042fd6e	GetMessageTime
+0x0042fd80	RemovePropA
+0x0042fd8e	CallWindowProcA
+0x0042fda0	GetPropA
+0x0042fdac	UnhookWindowsHookEx
+0x0042fdc2	SetPropA
+0x0042fdce	GetClassLongA
+0x0042fdde	CallNextHookEx
+0x0042fdf0	SetWindowsHookExA
+0x0042fe04	CreateWindowExA
+0x0042fe16	DefWindowProcA
+0x0042fe28	GetKeyState
+0x0042fe36	GetDlgCtrlID
+0x0042fe46	GetWindowTextA
+0x0042fe58	GetWindowTextLengthA
+0x0042fe70	GetMenuItemID
+0x0042fe80	GetSubMenu
+0x0042fe8e	GetMenuItemCount
+0x0042fea2	GetMenu
+0x0042feac	RegisterClassA
+0x0042febe	GetClassInfoA
+0x0042fece	wsprintfA
+0x0042feda	WinHelpA
+0x0042fee6	GetCapture
+0x0042fef4	IsChild
+0x0042fefe	MessageBoxA
+0x0042ff0c	GetTopWindow
+0x0042ff1c	IsWindowVisible
+0x0042ff2e	ScreenToClient
+0x0042ff40	AdjustWindowRectEx
+0x0042ff56	SetFocus
+0x0042ff62	GetFocus
+0x0042ff6e	DispatchMessageA
+0x0042ff82	PeekMessageA
+0x0042ff92	MapWindowPoints
+0x0042ffa4	SendDlgItemMessageA
+0x0042ffba	UpdateWindow
+0x0042ffca	PostMessageA
+0x0042ffda	IsDialogMessageA
+0x0042ffee	SetWindowTextA
+0x00430000	MoveWindow
+0x0043000e	ShowWindow
+0x0043001c	EnableMenuItem
+0x0043002e	CheckMenuItem
+0x0043003e	SetMenuItemBitmaps
+0x00430054	ModifyMenuA
+0x00430062	GetMenuState
+0x00430072	LoadBitmapA
+0x00430080	GetMenuCheckMarkDimensions
+0x0043009e	ClientToScreen
+0x004300b0	GetWindowDC
+0x004300be	BeginPaint
+0x004300cc	EndPaint
+0x004300d8	TabbedTextOutA
+0x004300ea	DrawTextA
+0x004300f6	GrayStringA
+0x00430104	CharUpperA
+0x00430112	PostQuitMessage
+0x00430124	SetCursor
+0x00430130	GetCursorPos
+0x00430140	ValidateRect
+0x00430150	TranslateMessage
+0x00430164	GetMessageA
+0x00430172	SetWindowContextHelpId
+0x0043018c	MapDialogRect
+0x0043019c	LoadStringA
+0x004301aa	DestroyMenu
+0x004301b8	GetClassNameA
+0x004301c8	PtInRect
+0x004301d4	GetDesktopWindow
+0x004301e8	LoadCursorA
+0x004301f6	GetSysColorBrush
+0x0043020a	CharNextA
+0x00430216	CopyAcceleratorTableA
+0x0043022e	GetNextDlgGroupItem
+0x00430244	MessageBeep
+0x00430252	InflateRect
+0x00430260	RegisterClipboardFormatA
+0x0043027c	PostThreadMessageA
+0x00430290	USER32.dll
+0x0043029e	GetTextMetricsA
+0x004302b0	SelectPalette
+0x004302c0	CreatePalette
+0x004302d0	RealizePalette
+0x004302e2	GetObjectA
+0x004302f0	CreateDIBitmap
+0x00430302	CreateCompatibleDC
+0x00430318	BitBlt
+0x00430322	CreateFontA
+0x00430330	GetClipBox
+0x0043033e	SetTextColor
+0x0043034e	SetBkColor
+0x0043035c	CreateBitmap
+0x0043036c	DeleteDC
+0x00430378	SaveDC
+0x00430382	RestoreDC
+0x0043038e	SelectObject
+0x0043039e	GetStockObject
+0x004303b0	SetBkMode
+0x004303bc	SetMapMode
+0x004303ca	SetViewportOrgEx
+0x004303de	OffsetViewportOrgEx
+0x004303f4	SetViewportExtEx
+0x00430408	ScaleViewportExtEx
+0x0043041e	SetWindowExtEx
+0x00430430	ScaleWindowExtEx
+0x00430444	IntersectClipRect
+0x00430458	MoveToEx
+0x00430464	LineTo
+0x0043046e	SetTextAlign
+0x0043047e	DeleteObject
+0x0043048e	GetDeviceCaps
+0x0043049e	GetViewportExtEx
+0x004304b2	GetWindowExtEx
+0x004304c4	CreatePen
+0x004304d0	CreateSolidBrush
+0x004304e4	PtVisible
+0x004304f0	RectVisible
+0x004304fe	TextOutA
+0x0043050a	ExtTextOutA
+0x00430518	Escape
+0x00430522	GetTextColor
+0x00430532	GetBkColor
+0x00430540	DPtoLP
+0x0043054a	LPtoDP
+0x00430554	GetMapMode
+0x00430562	PatBlt
+0x0043056a	GDI32.dll
+0x00430576	GetFileTitleA
+0x00430584	comdlg32.dll
+0x00430594	ClosePrinter
+0x004305a4	DocumentPropertiesA
+0x004305ba	OpenPrinterA
+0x004305c8	WINSPOOL.DRV
+0x004305d8	RegCloseKey
+0x004305e6	RegQueryValueExA
+0x004305fa	RegOpenKeyExA
+0x0043060a	RegCreateKeyExA
+0x0043061c	RegSetValueExA
+0x0043062c	ADVAPI32.dll
+0x0043063c	ShellExecuteA
+0x0043064a	SHELL32.dll
+0x00430658	_TrackMouseEvent
+0x0043066a	COMCTL32.dll
+0x00430678	oledlg.dll
+0x00430686	CLSIDFromProgID
+0x00430698	CLSIDFromString
+0x004306aa	CoGetClassObject
+0x004306be	StgOpenStorageOnILockBytes
+0x004306dc	StgCreateDocfileOnILockBytes
+0x004306fc	CreateILockBytesOnHGlobal
+0x00430718	CoTaskMemFree
+0x00430728	CoTaskMemAlloc
+0x0043073a	OleInitialize
+0x0043074a	OleUninitialize
+0x0043075c	CoFreeUnusedLibraries
+0x00430774	CoRegisterMessageFilter
+0x0043078e	CoRevokeClassObject
+0x004307a4	OleFlushClipboard
+0x004307b8	OleIsCurrentClipboard
+0x004307ce	ole32.dll
+0x004307d8	OLEPRO32.DLL
+0x004307e6	OLEAUT32.dll
+0x004307f4	VERSION.dll
+0x00430802	GetProfileStringA
+0x00430816	IsWindowUnicode
+0x00430828	DefDlgProcA
+0x00430836	DrawFocusRect
+0x00430846	ExcludeUpdateRgn
+0x0043085a	ShowCaret
+0x00430866	HideCaret
+0x00430872	UnregisterClassA
+0x00430886	GetTextExtentPointA
+0x004310d8	.PAVCFileException@@
+0x004310f8	.PAVCException@@
+0x0043110c	BITMAP is NULL.
+0x0043158c	exe\G7MTClient.exe
+0x004315a0	Install
+0x00431660	TITLE_BG
+0x0043166c	SETUP.EXE
+0x0043168c	%s\n%s
+0x00431694	\DirectX9
+0x004316a8	.?AVCObject@@
+0x004316c0	.?AVCCmdTarget@@
+0x004316e0	.?AVCWnd@@
+0x004316f8	.?AVCDialog@@
+0x00431710	.?AVCCmdUI@@
+0x00431728	.?AVCTestCmdUI@@
+0x00431748	.PAVCUserException@@
+0x00431768	.?AVCTempWnd@@
+0x00431780	.?AVCNoTrackObject@@
+0x004317a0	.?AV_AFX_CTL3D_STATE@@
+0x004317e8	.?AVCButton@@
+0x00431800	.?AVCDC@@
+0x00431818	.?AVCClientDC@@
+0x00431830	.?AVCWindowDC@@
+0x00431848	.?AVCPaintDC@@
+0x00431860	.?AVCGdiObject@@
+0x00431880	.?AVCPen@@
+0x00431898	.?AVCTempDC@@
+0x004318b0	.?AVCTempGdiObject@@
+0x004318d0	.PAX
+0x004318e0	.PAVCObject@@
+0x004318f8	.PAVCSimpleException@@
+0x00431918	.PAVCResourceException@@
+0x00431940	.?AVCException@@
+0x00431960	.?AVCSimpleException@@
+0x00431980	.?AVCResourceException@@
+0x004319a8	.?AVCUserException@@
+0x004319c8	.PAVCMemoryException@@
+0x004319e8	.PAVCNotSupportedException@@
+0x00431a10	.?AVCMemoryException@@
+0x00431a30	.?AVCNotSupportedException@@
+0x00431a58	.?AVCFileException@@
+0x00431a78	.?AVCFile@@
+0x00431a90	.?AV_AFX_THREAD_STATE@@
+0x00431ab0	.?AVAFX_MODULE_STATE@@
+0x00431ad0	.?AVAFX_MODULE_THREAD_STATE@@
+0x00431af8	.?AV_AFX_BASE_MODULE_STATE@@
+0x00431b38	.?AVCStringList@@
+0x00431b58	.?AV_AFX_WIN_STATE@@
+0x00431b78	.?AVCWinThread@@
+0x00431b98	.?AVCWinApp@@
+0x00431bb0	.?AV_AFX_CTL3D_THREAD@@
+0x00431bd0	.?AVCOccManager@@
+0x00431bf0	.?AVCMenu@@
+0x00431c08	.?AVCTempMenu@@
+0x00431c20	.?AUCThreadData@@
+0x00431c40	.?AVCHandleMap@@
+0x00431c60	.?AVCMapPtrToPtr@@
+0x00431c80	.?AVCPtrList@@
+0x00431c98	.PAVCArchiveException@@
+0x00431cc0	.?AUIOleWindow@@
+0x00431ce0	.?AUIOleInPlaceUIWindow@@
+0x00431d08	.?AUIOleInPlaceFrame@@
+0x00431d28	.?AVXOleIPFrame@COleControlContainer@@
+0x00431d58	.?AVCOleControlContainer@@
+0x00431d80	.?AUIUnknown@@
+0x00431d98	.?AUIParseDisplayName@@
+0x00431db8	.?AUIOleContainer@@
+0x00431dd8	.?AVXOleContainer@COleControlContainer@@
+0x00431e10	.?AVCFont@@
+0x00431e28	.?AVCEnumArray@@
+0x00431e48	.?AVCEnumUnknown@@
+0x00431e68	.?AVXAmbientProps@COleControlSite@@
+0x00431e98	.?AUIOleControlSite@@
+0x00431eb8	.?AVXOleControlSite@COleControlSite@@
+0x00431ee8	.?AUIOleInPlaceSite@@
+0x00431f08	.?AVXOleIPSite@COleControlSite@@
+0x00431f38	.?AUIOleClientSite@@
+0x00431f58	.?AVXOleClientSite@COleControlSite@@
+0x00431f88	.?AUIRowsetNotify@@
+0x00431fa8	.?AVXRowsetNotify@COleControlSite@@
+0x00431fd8	.?AUINotifyDBEvents@@
+0x00431ff8	.?AVXNotifyDBEvents@COleControlSite@@
+0x00432028	.?AUIBoundObjectSite@@
+0x00432048	.?AVXBoundObjectSite@COleControlSite@@
+0x00432078	.?AUIDispatch@@
+0x00432090	.?AVXEventSink@COleControlSite@@
+0x004320c0	.?AVCOleControlSite@@
+0x004320e0	.?AUIPropertyNotifySink@@
+0x00432108	.?AVXPropertyNotifySink@COleControlSite@@
+0x00432140	.?AVCDataSourceControl@@
+0x00432198	.?AVCMemFile@@
+0x004321b0	.?AVCArchiveException@@
+0x004321d0	.PAVCOleException@@
+0x004321f0	.?AVCOleDispatchException@@
+0x00432218	.PAVCOleDispatchException@@
+0x00432270	.?AUIEnumVOID@@
+0x00432288	.?AVXEnumVOID@CEnumArray@@
+0x004322b0	.?AUISequentialStream@@
+0x004322d0	.?AUIStream@@
+0x004322e8	.?AVCArchiveStream@@
+0x00432308	.?AVCOleException@@
+0x00432328	.?AVCOleMessageFilter@@
+0x00432348	.?AUIMessageFilter@@
+0x00432368	.?AVXMessageFilter@COleMessageFilter@@
+0x00432398	.?AVCCommonDialog@@
+0x004323b8	.?AVCOleDialog@@
+0x004323d8	.?AVCOleBusyDialog@@
+0x004323f8	.?AV_AFX_OLE_STATE@@
+0x00432428	.?AVtype_info@@
+0x00435534	hangeul
+0x0043553c	kanji
+0x00435544	english
+0x0043554c	roman
+0x00435554	hangeulmenu
+0x00435560	kanjimenu
+0x0043556c	windows
+0x00435574	C3dHNew
+0x0043557c	C3dLNew
+0x00435584	C3dNew
+0x004355a8	#32770
+0x004355b4	DisableThreadLibraryCalls
+0x004355d0	KERNEL32.DLL
+0x0043b048	GroupIcon
+0x0046a910	Dialog
+0x0046aa70	Dialog
+0x0046ab78	Dialog
+0x0046ae50	Dialog
+0x0046afb0	Dialog
+0x0046b11a	StringFileInfo
+0x0046b13e	041104b0
+0x0046b156	Comments
+0x0046b16e	CompanyName
+0x0046b188	ボーステック株式会社
+0x0046b1a6	FileDescription
+0x0046b1c8	銀河英雄伝説VIIゲームスタータ
+0x0046b1f2	FileVersion
+0x0046b20c	1, 0, 0, 1
+0x0046b22a	InternalName
+0x0046b244	G7Start
+0x0046b25a	LegalCopyright
+0x0046b278	Copyright (C) 2004 BOTHTEC All rights reserved.
+0x0046b2de	LegalTrademarks
+0x0046b306	OriginalFilename
+0x0046b328	G7Start.EXE
+0x0046b346	PrivateBuild
+0x0046b366	ProductName
+0x0046b380	銀河英雄伝説VIIゲームスタータ
+0x0046b3aa	ProductVersion
+0x0046b3c8	1, 0, 0, 1
+0x0046b3e6	SpecialBuild
+0x0046b406	VarFileInfo
+0x0046b426	Translation
+0x0046bc48	Dialog
+0x0046c0a8	
+0x0046c0aa	
+0x0046c0ac	
+0x0046c0ae	
+0x0046c0b0	
+0x0046c0b2	銀河英雄伝説VIIスタータ のﾊﾞｰｼﾞｮﾝ情報(&A)...
+0x0046c0f2	インストール
+0x0046c100	アンインストール
+0x0046c112	PDFマニュアル
+0x0046c124	終了
+0x0046c12a	Version 1.00
+0x0046c144	Tahoma
+0x0046c152	オンラインマニュアルの表示に失敗しました。
+0x0046c17e	オンラインマニュアルの表示に失敗しました。\n『Adobe Acrobat Reader』が正しくインストールされているかご確認ください。
+0x0046c208	現在インストールされているDirectXは、
+0x0046c236	『銀河英雄伝説VII』のインストールが正常に終了しました。
+0x0046c278	銀河英雄伝説VIIのインストール確認
+0x0046c29e	Windowsの再起動
+0x0046c2b6	Windowsの再起動に失敗しました。\n「スタート」メニューから「シャットダウン」を選んで、Windowsを再起動してください。
+0x0046c338	ご使用のWindowsのバージョンが、DirectX9に適合していません。\nそのため、DirectX9のインストールに失敗しました。
+0x0046c3be	DirectXがすでにインストールされているか、\nまたはDirectXのインストールに失敗しました。
+0x0046c424	
+0x0046c426	
+0x0046c428	
+0x0046c42a	
+0x0046c42c	
+0x0046c42e	
+0x0046c430	
+0x0046c432	
+0x0046c434	
+0x0046c436	
+0x0046c438	
+0x0046c440	開く
+0x0046c446	名前を付けて保存
+0x0046c458	すべてのﾌｧｲﾙ (*.*)
+0x0046c476	無題
+0x0046c47c	
+0x0046c47e	
+0x0046c480	無題のﾌｧｲﾙ
+0x0046c490	
+0x0046c492	
+0x0046c494	
+0x0046c496	
+0x0046c498	
+0x0046c49a	
+0x0046c49c	
+0x0046c49e	
+0x0046c4a0	
+0x0046c4a8	
+0x0046c4aa	非表示(&H)
+0x0046c4ba	
+0x0046c4bc	
+0x0046c4be	
+0x0046c4c0	
+0x0046c4c2	
+0x0046c4c4	
+0x0046c4c6	
+0x0046c4c8	
+0x0046c4ca	
+0x0046c4cc	
+0x0046c4ce	
+0x0046c4d0	
+0x0046c4d2	
+0x0046c4d4	
+0x0046c4d8	ｴﾗｰ ﾒｯｾｰｼﾞはありません。
+0x0046c4fc	ｻﾎﾟｰﾄされていない操作を実行しました。
+0x0046c528	必要なﾘｿｰｽを利用できませんでした。
+0x0046c550	ﾒﾓﾘが不足しています。
+0x0046c56a	不明なｴﾗｰが発生しました。
+0x0046c588	
+0x0046c58a	
+0x0046c58c	
+0x0046c58e	
+0x0046c590	
+0x0046c592	
+0x0046c594	
+0x0046c596	
+0x0046c598	
+0x0046c59a	
+0x0046c59c	
+0x0046c5a0	無効なﾌｧｲﾙ名です。
+0x0046c5b8	ﾄﾞｷｭﾒﾝﾄを開くことに失敗しました。
+0x0046c5e2	ﾄﾞｷｭﾒﾝﾄの保存に失敗しました。
+0x0046c608	%1 への変更を保存しますか?
+0x0046c628	空のﾄﾞｷｭﾒﾝﾄの作成に失敗しました。
+0x0046c652	ﾌｧｲﾙが大きすぎて開けません。
+0x0046c674	印刷ｼﾞｮﾌﾞを開始できませんでした。
+0x0046c69c	ﾍﾙﾌﾟの起動に失敗しました。
+0x0046c6bc	ｱﾌﾟﾘｹｰｼｮﾝの内部ｴﾗｰです。
+0x0046c6e2	ｺﾏﾝﾄﾞの実行に失敗しました。
+0x0046c704	ﾒﾓﾘ不足のため実行できません。
+0x0046c726	ｼｽﾃﾑ ﾚｼﾞｽﾄﾘ ｴﾝﾄﾘは削除されています。また、INI ﾌｧｲﾙがある場合は、INI ﾌｧｲﾙも削除されました。
+0x0046c7a2	一部のｼｽﾃﾑ ﾚｼﾞｽﾄﾘ ｴﾝﾄﾘ (または INI ﾌｧｲﾙ) は削除されませんでした。
+0x0046c802	このﾌﾟﾛｸﾞﾗﾑにはﾌｧｲﾙ %s が必要ですがこのｼｽﾃﾑ上に見つかりませんでした。
+0x0046c85c	このﾌﾟﾛｸﾞﾗﾑは欠落ｴｸｽﾎﾟｰﾄ %s にﾌｧｲﾙ %s 内でﾘﾝｸされています。このｺﾝﾋﾟｭｰﾀは互換性のないﾊﾞｰｼﾞｮﾝの %s を含んでいる可能性があります。
+0x0046c90c	
+0x0046c910	
+0x0046c912	
+0x0046c914	
+0x0046c916	
+0x0046c918	
+0x0046c91a	
+0x0046c91c	
+0x0046c91e	
+0x0046c920	
+0x0046c922	
+0x0046c924	
+0x0046c926	
+0x0046c928	書き込み専用ﾌﾟﾛﾊﾟﾃｨからは読み取れません。
+0x0046c95a	読み取り専用ﾌﾟﾛﾊﾟﾃｨには書き込めません。
+0x0046c98a	
+0x0046c98c	
+0x0046c990	予期しないﾌｧｲﾙ形式です。
+0x0046c9ae	%1\nこのﾌｧｲﾙが見つかりません。\nﾊﾟｽとﾌｧｲﾙ名が正しいかどうか確認してださい。
+0x0046ca08	出力先のﾃﾞｨｽｸ ﾄﾞﾗｲﾌﾞの空き容量が不足しています。
+0x0046ca46	%1 は使用中のため、読み取れません。
+0x0046ca6e	%1 は使用中または読み取り専用のため、書き込めません。
+0x0046caa8	%1 の読み取り中に予期しないｴﾗｰが発生しました。
+0x0046cade	%1 の書き込み中に予期しないｴﾗｰが発生しました。
+0x0046cb14	
+0x0046cb16	
+0x0046cb18	
+0x0046cb1a	
+0x0046cb1c	
+0x0046cb1e	
+0x0046cb20	
+0x0046cb22	
+0x0046cb24	
+0x0046cb28	整数を入力してください。
+0x0046cb42	数字を入力してください。
+0x0046cb5c	%1 から %2 までの整数を入力してください。
+0x0046cb8e	%1 から %2 までの数字を入力してください。
+0x0046cbc0	%1 文字以内で入力してください。
+0x0046cbe4	ﾎﾞﾀﾝを選択してください。
+0x0046cc02	0 から 255 までの整数を入力してください。
+0x0046cc34	正の整数を入力してください。
+0x0046cc52	日付/時刻を入力してください。
+0x0046cc72	通貨型を入力してください。
+0x0046cc8e	
+0x0046cc90	
+0x0046cc92	
+0x0046cc94	
+0x0046cc96	
+0x0046cc98	
+0x0046cca0	ｴﾗｰはありませんでした。
+0x0046ccbc	%1 へのｱｸｾｽ中に不明なｴﾗｰが発生しました。
+0x0046ccf0	%1 が見つかりませんでした。
+0x0046cd10	%1 には無効なﾊﾟｽが含まれています。
+0x0046cd3a	開いているﾌｧｲﾙが多すぎるため、%1 を開けませんでした。
+0x0046cd78	%1 へのｱｸｾｽは拒否されました。
+0x0046cd9e	%1 へ無効なﾌｧｲﾙ ﾊﾝﾄﾞﾙが関連付けられていました。
+0x0046cddc	現在のﾃﾞｨﾚｸﾄﾘ %1 は削除できませんでした。
+0x0046ce12	%1 を作成できませんでした。そのﾃﾞｨﾚｸﾄﾘはいっぱいです。
+0x0046ce54	%1 のｼｰｸに失敗しました。
+0x0046ce74	%1 へのｱｸｾｽ中にﾊｰﾄﾞｳｪｱ I/O ｴﾗｰが報告されました。
+0x0046cebc	%1 へのｱｸｾｽ中に共有違反が発生しました。
+0x0046ceec	%1 へのｱｸｾｽ中にﾛｯｸ違反が発生しました。
+0x0046cf1e	%1 へのｱｸｾｽ中にﾃﾞｨｽｸがいっぱいになりました。
+0x0046cf58	%1 の末尾以降にｱｸｾｽしようとしました。
+0x0046cf86	
+0x0046cf88	ｴﾗｰはありませんでした。
+0x0046cfa4	%1 へのｱｸｾｽ中に不明なｴﾗｰが発生しました。
+0x0046cfd8	%1 の読み取り中に書き込もうとしました。
+0x0046d004	%1 の末尾以降にｱｸｾｽしようとしました。
+0x0046d032	%1 へ書き込み中に読み取ろうとしました。
+0x0046d05e	%1 の形式が正しくありません。
+0x0046d080	%1 は予期しないｵﾌﾞｼﾞｪｸﾄを含んでいます。
+0x0046d0b4	%1 は不正なｽｷｰﾏを含んでいます。
+0x0046d0dc	
+0x0046d0de	
+0x0046d0e0	
+0x0046d0e2	
+0x0046d0e4	
+0x0046d0e6	
+0x0046d0e8	
+0x0046d0ea	
+0x0046d0f0	ﾒｰﾙ ｼｽﾃﾑ ｻﾎﾟｰﾄを読み込めません。
+0x0046d120	ﾒｰﾙ ｼｽﾃﾑ DLL が無効です。
+0x0046d148	ﾒｰﾙの送信に失敗しました。
+0x0046d166	
+0x0046d168	
+0x0046d16a	
+0x0046d16c	
+0x0046d16e	
+0x0046d170	
+0x0046d172	
+0x0046d174	
+0x0046d176	
+0x0046d178	
+0x0046d17a	
+0x0046d17c	
+0x0046d17e	
+0x0046d180	ﾋﾟｸｾﾙ
+0x0046d18c	
+0x0046d18e	
+0x0046d190	
+0x0046d192	
+0x0046d194	
+0x0046d196	
+0x0046d198	
+0x0046d19a	
+0x0046d19c	
+0x0046d19e	
+0x0046d1a0	
+0x0046d1a2	
+0x0046d1a4	
+0x0046d1a6	
+0x0046d1a8	
+0xffdff1ac	
+0xffdffc00	
+0xffdfff50	00000000-0000-0000-0000-000000000000

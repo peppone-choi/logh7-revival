@@ -1,0 +1,20 @@
+{
+  "note": "force CP949 (0x3b5) at FUN_00600394 MultiByteToWideChar codepage pushes; defeats UTF-8 ACP",
+  "patches": [
+    {
+      "fileOffset": "0x2003f5",
+      "orig": "ff3574063503",
+      "patched": "68b503000090"
+    },
+    {
+      "fileOffset": "0x200454",
+      "orig": "ff3574063503",
+      "patched": "68b503000090"
+    },
+    {
+      "fileOffset": "0x20047e",
+      "orig": "ff3574063503",
+      "patched": "68b503000090"
+    }
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "_note": "G7Start.exe (게임 스타터/설치 런처) .rsrc 한글화 매핑. va_off=client/vendor·dist의 G7Start.exe 파일오프셋(byte). 원문 일본어 확정(docs/logh7-localize-re-G7Start-2026-06-26.md 표면). 폰트 face ＭＳ Ｐゴシック→한글 face 동반 교체(폰트 함정). 코드 참조 리터럴(컨트롤ID/INI키/파일명/포맷)·MFC 표준(30721,3841+)은 미포함=원문 유지. 추측 번역 없음.",
+  "fontFaceJa": "ＭＳ Ｐゴシック",
+  "fontFaceKo": "맑은 고딕",
+  "strings": [
+    { "va_off": 420134, "restype": "rsrc.dialog", "id": 100, "text_ja": "銀河英雄伝説VIIスタータのﾊﾞｰｼﾞｮﾝ情報", "text_ko": "은하영웅전설 VII 스타터 버전 정보" },
+    { "va_off": 420184, "restype": "rsrc.dialog", "id": 100, "text_ja": "ＭＳ Ｐゴシック", "text_ko": "맑은 고딕" },
+    { "va_off": 420254, "restype": "rsrc.dialog", "id": 100, "text_ja": "銀河英雄伝説VIIスタータ Version 1.0", "text_ko": "은하영웅전설 VII 스타터 Version 1.0" },
+    { "va_off": 420330, "restype": "rsrc.dialog", "id": 100, "text_ja": "Copyright (C) 2004 BOTHTEC All rights reserverd.", "text_ko": "Copyright (C) 2004 BOTHTEC All rights reserverd." },
+    { "va_off": 420454, "restype": "rsrc.dialog", "id": 100, "text_ja": "OK", "text_ko": "확인" },
+
+    { "va_off": 420750, "restype": "rsrc.dialog", "id": 129, "text_ja": "DirectXインストール確認", "text_ko": "DirectX 설치 확인" },
+    { "va_off": 420784, "restype": "rsrc.dialog", "id": 129, "text_ja": "ＭＳ Ｐゴシック", "text_ko": "맑은 고딕" },
+    { "va_off": 420826, "restype": "rsrc.dialog", "id": 129, "text_ja": "インストール続行", "text_ko": "설치 계속" },
+    { "va_off": 420870, "restype": "rsrc.dialog", "id": 129, "text_ja": "ｷｬﾝｾﾙ", "text_ko": "취소" },
+    { "va_off": 420906, "restype": "rsrc.dialog", "id": 129, "text_ja": "『銀河英雄伝説VII』をプレイされる場合は、お使いのパソコンに「DirectX8」以降がインストールされている必要があります。\nここでは、DirectX9をインストールすることができます。\n\nお使いのパソコンが「DirectX8」以降に対応しているかどうかご確認の上でインストールを実行してください。", "text_ko": "『은하영웅전설 VII』을(를) 플레이하려면 사용 중인 PC에 「DirectX8」 이상이 설치되어 있어야 합니다.\n여기에서 DirectX9를 설치할 수 있습니다.\n\n사용 중인 PC가 「DirectX8」 이상을 지원하는지 확인한 뒤 설치를 진행하십시오." },
+    { "va_off": 421234, "restype": "rsrc.dialog", "id": 129, "text_ja": "DirectX9.0b をインストール", "text_ko": "DirectX9.0b 설치" },
+    { "va_off": 421298, "restype": "rsrc.dialog", "id": 129, "text_ja": "DirectX9.0b をインストールせずに続行", "text_ko": "DirectX9.0b 설치 없이 계속" },
+    { "va_off": 421402, "restype": "rsrc.dialog", "id": 129, "text_ja": "現在ｲﾝｽﾄｰﾙされているDirectXは、", "text_ko": "현재 설치된 DirectX는" },
+
+    { "va_off": 421478, "restype": "rsrc.dialog", "id": 130, "text_ja": "再起動の確認", "text_ko": "다시 시작 확인" },
+    { "va_off": 421494, "restype": "rsrc.dialog", "id": 130, "text_ja": "ＭＳ Ｐゴシック", "text_ko": "맑은 고딕" },
+    { "va_off": 421534, "restype": "rsrc.dialog", "id": 130, "text_ja": "再起動", "text_ko": "다시 시작" },
+    { "va_off": 421566, "restype": "rsrc.dialog", "id": 130, "text_ja": "Windowsへ戻る", "text_ko": "Windows로 돌아가기" },
+    { "va_off": 421614, "restype": "rsrc.dialog", "id": 130, "text_ja": "DirectX9をインストールしました。\nDirectX9を有効にするためには、Windowsを再起動する必要があります。\n【再起動】ボタンをクリックすると、Windowsを再起動します。", "text_ko": "DirectX9를 설치했습니다.\nDirectX9를 사용하려면 Windows를 다시 시작해야 합니다.\n【다시 시작】 버튼을 누르면 Windows가 다시 시작됩니다." },
+
+    { "va_off": 421830, "restype": "rsrc.dialog", "id": 131, "text_ja": "アンインストール確認", "text_ko": "제거 확인" },
+    { "va_off": 421854, "restype": "rsrc.dialog", "id": 131, "text_ja": "ＭＳ Ｐゴシック", "text_ko": "맑은 고딕" },
+    { "va_off": 421894, "restype": "rsrc.dialog", "id": 131, "text_ja": "OK", "text_ko": "확인" },
+    { "va_off": 421926, "restype": "rsrc.dialog", "id": 131, "text_ja": "ｷｬﾝｾﾙ", "text_ko": "취소" },
+    { "va_off": 421962, "restype": "rsrc.dialog", "id": 131, "text_ja": "コンピュータのハードディスク上から、『銀河英雄伝説VII』をアンインストールします。\n\nよろしいですか？", "text_ko": "이 컴퓨터의 하드 디스크에서 『은하영웅전설 VII』을(를) 제거합니다.\n\n계속하시겠습니까?" },
+
+    { "va_off": 426164, "restype": "rsrc.stringtable", "id": 101, "text_ja": "銀河英雄伝説VIIスタータ のﾊﾞｰｼﾞｮﾝ情報(&A)...", "text_ko": "은하영웅전설 VII 스타터 버전 정보(&A)..." },
+    { "va_off": 426228, "restype": "rsrc.stringtable", "id": 102, "text_ja": "インストール", "text_ko": "설치" },
+    { "va_off": 426242, "restype": "rsrc.stringtable", "id": 103, "text_ja": "アンインストール", "text_ko": "제거" },
+    { "va_off": 426260, "restype": "rsrc.stringtable", "id": 104, "text_ja": "PDFマニュアル", "text_ko": "PDF 설명서" },
+    { "va_off": 426278, "restype": "rsrc.stringtable", "id": 105, "text_ja": "終了", "text_ko": "종료" },
+    { "va_off": 426324, "restype": "rsrc.stringtable", "id": 108, "text_ja": "オンラインマニュアルの表示に失敗しました。", "text_ko": "온라인 설명서를 열지 못했습니다." },
+    { "va_off": 426368, "restype": "rsrc.stringtable", "id": 109, "text_ja": "オンラインマニュアルの表示に失敗しました。\n『Adobe Acrobat Reader』が正しくインストールされているかご確認ください。", "text_ko": "온라인 설명서를 열지 못했습니다.\n『Adobe Acrobat Reader』가 올바르게 설치되어 있는지 확인하십시오." },
+    { "va_off": 426506, "restype": "rsrc.stringtable", "id": 110, "text_ja": "現在インストールされているDirectXは、", "text_ko": "현재 설치된 DirectX는" },
+    { "va_off": 426552, "restype": "rsrc.stringtable", "id": 111, "text_ja": "『銀河英雄伝説VII』のインストールが正常に終了しました。", "text_ko": "『은하영웅전설 VII』 설치가 정상적으로 완료되었습니다." },
+    { "va_off": 426618, "restype": "rsrc.stringtable", "id": 112, "text_ja": "銀河英雄伝説VIIのインストール確認", "text_ko": "은하영웅전설 VII 설치 확인" },
+    { "va_off": 426656, "restype": "rsrc.stringtable", "id": 113, "text_ja": "Windowsの再起動", "text_ko": "Windows 다시 시작" },
+    { "va_off": 426680, "restype": "rsrc.stringtable", "id": 114, "text_ja": "Windowsの再起動に失敗しました。\n「スタート」メニューから「シャットダウン」を選んで、Windowsを再起動してください。", "text_ko": "Windows 다시 시작에 실패했습니다.\n「시작」 메뉴에서 「시스템 종료」를 선택하여 Windows를 다시 시작하십시오." },
+    { "va_off": 426810, "restype": "rsrc.stringtable", "id": 115, "text_ja": "ご使用のWindowsのバージョンが、DirectX9に適合していません。\nそのため、DirectX9のインストールに失敗しました。", "text_ko": "사용 중인 Windows 버전이 DirectX9에 적합하지 않습니다.\n그래서 DirectX9 설치에 실패했습니다." },
+    { "va_off": 426944, "restype": "rsrc.stringtable", "id": 116, "text_ja": "DirectXがすでにインストールされているか、\nまたはDirectXのインストールに失敗しました。", "text_ko": "DirectX가 이미 설치되어 있거나\nDirectX 설치에 실패했습니다." }
+  ]
+}

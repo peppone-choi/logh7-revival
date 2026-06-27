@@ -1,0 +1,13 @@
+{
+  "source": ".omo\\work\\logh7-installed\\exe\\G7MTClient.autologin.emp1.exe",
+  "destination": ".omo\\work\\logh7-installed\\exe\\G7MTClient.autologin.emp1.c002-setup-v2.exe",
+  "patches": [
+    {
+      "virtualAddressHex": "0x004b6b53",
+      "fileOffsetHex": "0x000b6b53",
+      "originalHex": "7419",
+      "patchedHex": "eb00",
+      "note": "je +0x19 (skip setup if gate==2) -> jmp +0 (always run setup+cleanup). 2-byte same-length patch."
+    }
+  ]
+}

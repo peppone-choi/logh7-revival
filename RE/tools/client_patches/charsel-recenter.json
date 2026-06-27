@@ -1,0 +1,119 @@
+{
+  "name": "charsel-recenter",
+  "desc": "캐릭터 생성/선택 패널(FUN_0051e580, 진영선택·초상화·이름·능력치 8단계 폼 컨테이너)을 1920x1080에서 시각적 중앙으로 이동. ★로비(lobby-native-layout) 방식과 동일: 패널 컨테이너 앵커 1점만 이동(자식 위젯은 패널-로컬 좌표라 자동 따라옴). 절대 3x 스케일 아님(=640트랩 회피). 패널 크기 711x520(0x2c7 x 0x208)은 불변, 앵커 (300,134)->(604,280)=중앙정렬. same-length 즉치값 교체.",
+  "verified": "RE-CONFIRMED FUN_0051e580: 앵커는 FUN_00507a50(&local_2c8)에 전달되는 local_2c8=300(0x12c)/local_2c4=134(0x86), foff 0x11e94e/0x11e956. 패널 크기 local_2d8=0x2c7(711)/local_2d4=0x208(520) foff 0x11e928/0x11e930. 자식 위젯 rect는 FUN_00502940가 widget+0x20에 그대로 복사(부모오프셋 미가산)=패널-로컬 좌표 -> 앵커 1점 이동이 전체 패널을 옮김. originalHex는 canon playable 992dc7e2 + pristine 둘 다 BYTE-검증 일치. 중앙=(1920-711)/2=604(정수 trunc), (1080-520)/2=280.",
+  "verifiedFlag": false,
+  "canvasBasis": "native display canvas (NOT 640x480; panel 711x520 > 640 width proves native). 동일 scene-anchor 계열 lobby/login native-layout.",
+  "patches": [
+    {
+      "va": "0x0051e94e",
+      "fileOffsetHex": "0x11e94e",
+      "originalHex": "c74424302c010000",
+      "patchedHex": "c74424305c020000",
+      "axis": "X",
+      "note": "panel container anchor X 300 -> 604 (center of 1920: (1920-711)/2). FUN_00507a50 local_2c8."
+    },
+    {
+      "va": "0x0051e956",
+      "fileOffsetHex": "0x11e956",
+      "originalHex": "c744243486000000",
+      "patchedHex": "c744243418010000",
+      "axis": "Y",
+      "note": "panel container anchor Y 134 -> 280 (center of 1080: (1080-520)/2). FUN_00507a50 local_2c4."
+    },
+    {
+      "va": "0x0051dcb4",
+      "fileOffsetHex": "0x11dcb4",
+      "originalHex": "c74424282c010000",
+      "patchedHex": "c74424285c020000",
+      "axis": "X",
+      "note": "content panel FUN_0051dc00 anchor X 300->604 (+304). 507a50 setter 직전 확증."
+    },
+    {
+      "va": "0x0051dcbc",
+      "fileOffsetHex": "0x11dcbc",
+      "originalHex": "c744242c86000000",
+      "patchedHex": "c744242c18010000",
+      "axis": "Y",
+      "note": "content panel FUN_0051dc00 anchor Y 134->280 (+146)."
+    },
+    {
+      "va": "0x0051e131",
+      "fileOffsetHex": "0x11e131",
+      "originalHex": "c744242c2c010000",
+      "patchedHex": "c744242c5c020000",
+      "axis": "X",
+      "note": "content panel FUN_0051dd80 anchor X 300->604 (+304)."
+    },
+    {
+      "va": "0x0051e139",
+      "fileOffsetHex": "0x11e139",
+      "originalHex": "c744243086000000",
+      "patchedHex": "c744243018010000",
+      "axis": "Y",
+      "note": "content panel FUN_0051dd80 anchor Y 134->280 (+146)."
+    },
+    {
+      "va": "0x0051fcc7",
+      "fileOffsetHex": "0x11fcc7",
+      "originalHex": "c744242c2c010000",
+      "patchedHex": "c744242c5c020000",
+      "axis": "X",
+      "note": "8단계 폼 내용 패널 FUN_0051f8b0 MAIN anchor X 300->604 (+304). 진영/이름/값슬롯 origin."
+    },
+    {
+      "va": "0x0051fccf",
+      "fileOffsetHex": "0x11fccf",
+      "originalHex": "c744243086000000",
+      "patchedHex": "c744243018010000",
+      "axis": "Y",
+      "note": "8단계 폼 내용 패널 FUN_0051f8b0 MAIN anchor Y 134->280 (+146)."
+    },
+    {
+      "va": "0x00520cf0",
+      "fileOffsetHex": "0x120cf0",
+      "originalHex": "81c12c010000",
+      "patchedHex": "81c15c020000",
+      "axis": "X",
+      "note": "FUN_0051f8b0 행 레이아웃 상대베이스 add ecx,0x12c(300)->0x25c(604). 값슬롯 row origin X."
+    },
+    {
+      "va": "0x00520cfe",
+      "fileOffsetHex": "0x120cfe",
+      "originalHex": "0586000000",
+      "patchedHex": "0518010000",
+      "axis": "Y",
+      "note": "FUN_0051f8b0 행 레이아웃 상대베이스 add eax,0x86(134)->0x118(280). 값슬롯 row origin Y."
+    },
+    { "va": "0x00598bd2", "fileOffsetHex": "0x198bd2", "originalHex": "c74424282c010000", "patchedHex": "c74424285c020000", "axis": "X", "note": "FUN_005989f0 step-panel X +304" },
+    { "va": "0x00598bda", "fileOffsetHex": "0x198bda", "originalHex": "c744242c86000000", "patchedHex": "c744242cf2000000", "axis": "Y", "note": "FUN_005989f0 step-panel Y 134->242 (+108). PIL측정: 콘텐츠가 프레임중심보다 38px 아래 → 위로 38 보정(280→242) center-to-center." },
+    { "va": "0x005991d2", "fileOffsetHex": "0x1991d2", "originalHex": "c74424282c010000", "patchedHex": "c74424285c020000", "axis": "X", "note": "FUN_00598ff0 step-panel X +304" },
+    { "va": "0x005991da", "fileOffsetHex": "0x1991da", "originalHex": "c744242c86000000", "patchedHex": "c744242c18010000", "axis": "Y", "note": "FUN_00598ff0 step-panel Y +146" },
+    { "va": "0x005997d2", "fileOffsetHex": "0x1997d2", "originalHex": "c74424282c010000", "patchedHex": "c74424285c020000", "axis": "X", "note": "FUN_005995f0 step-panel X +304" },
+    { "va": "0x005997da", "fileOffsetHex": "0x1997da", "originalHex": "c744242c86000000", "patchedHex": "c744242c18010000", "axis": "Y", "note": "FUN_005995f0 step-panel Y +146" },
+    { "va": "0x00599f70", "fileOffsetHex": "0x199f70", "originalHex": "c74424282c010000", "patchedHex": "c74424285c020000", "axis": "X", "note": "FUN_00599e10 step-panel X +304" },
+    { "va": "0x00599f78", "fileOffsetHex": "0x199f78", "originalHex": "c744242c86000000", "patchedHex": "c744242c18010000", "axis": "Y", "note": "FUN_00599e10 step-panel Y +146" },
+    { "va": "0x0059a861", "fileOffsetHex": "0x19a861", "originalHex": "c74424642c010000", "patchedHex": "c74424645c020000", "axis": "X", "note": "FUN_0059a5e0 step-panel X +304 (disp 0x64)" },
+    { "va": "0x0059a869", "fileOffsetHex": "0x19a869", "originalHex": "c744246886000000", "patchedHex": "c744246818010000", "axis": "Y", "note": "FUN_0059a5e0 step-panel Y +146 (disp 0x68)" },
+    { "va": "0x0059b457", "fileOffsetHex": "0x19b457", "originalHex": "c744242c2c010000", "patchedHex": "c744242c5c020000", "axis": "X", "note": "FUN_0059b090 초상화 패널 X +304" },
+    { "va": "0x0059b45f", "fileOffsetHex": "0x19b45f", "originalHex": "c744243086000000", "patchedHex": "c744243018010000", "axis": "Y", "note": "FUN_0059b090 초상화 패널 Y +146" },
+    { "va": "0x0059bc41", "fileOffsetHex": "0x19bc41", "originalHex": "c74424342c010000", "patchedHex": "c74424345c020000", "axis": "X", "note": "FUN_0059b970 step-panel X +304 (disp 0x34)" },
+    { "va": "0x0059bc49", "fileOffsetHex": "0x19bc49", "originalHex": "c744243886000000", "patchedHex": "c744243818010000", "axis": "Y", "note": "FUN_0059b970 step-panel Y +146 (disp 0x38)" },
+    { "va": "0x0059ca9f", "fileOffsetHex": "0x19ca9f", "originalHex": "c74424282c010000", "patchedHex": "c74424285c020000", "axis": "X", "note": "FUN_0059c940 step-panel X +304" },
+    { "va": "0x0059caa7", "fileOffsetHex": "0x19caa7", "originalHex": "c744242c86000000", "patchedHex": "c744242c18010000", "axis": "Y", "note": "FUN_0059c940 step-panel Y +146" },
+    { "va": "0x0059cfa4", "fileOffsetHex": "0x19cfa4", "originalHex": "c74424282c010000", "patchedHex": "c74424285c020000", "axis": "X", "note": "FUN_0059cee0 step-panel X +304" },
+    { "va": "0x0059cfac", "fileOffsetHex": "0x19cfac", "originalHex": "c744242c86000000", "patchedHex": "c744242c18010000", "axis": "Y", "note": "FUN_0059cee0 step-panel Y +146" },
+    { "va": "0x0059d2c3", "fileOffsetHex": "0x19d2c3", "originalHex": "c74424282c010000", "patchedHex": "c74424285c020000", "axis": "X", "note": "FUN_0059d200 step-panel X +304" },
+    { "va": "0x0059d2cb", "fileOffsetHex": "0x19d2cb", "originalHex": "c744242c86000000", "patchedHex": "c744242c18010000", "axis": "Y", "note": "FUN_0059d200 step-panel Y +146" },
+    { "va": "0x0059d71a", "fileOffsetHex": "0x19d71a", "originalHex": "c74424302c010000", "patchedHex": "c74424305c020000", "axis": "X", "note": "FUN_0059d520 취소/다음 버튼 패널 X +304 (disp 0x30)" },
+    { "va": "0x0059d722", "fileOffsetHex": "0x19d722", "originalHex": "c744243486000000", "patchedHex": "c744243418010000", "axis": "Y", "note": "FUN_0059d520 취소/다음 버튼 패널 Y +146 (disp 0x34)" },
+    { "va": "0x0059e66c", "fileOffsetHex": "0x19e66c", "originalHex": "c74424302c010000", "patchedHex": "c74424305c020000", "axis": "X", "note": "FUN_0059df00 step-panel X +304 (disp 0x30)" },
+    { "va": "0x0059e674", "fileOffsetHex": "0x19e674", "originalHex": "c744243486000000", "patchedHex": "c744243418010000", "axis": "Y", "note": "FUN_0059df00 step-panel Y +146 (disp 0x34)" },
+    { "va": "0x00520a92", "fileOffsetHex": "0x120a92", "originalHex": "c744242c5d020000", "patchedHex": "c744242c8d030000", "axis": "X", "note": "FUN_0051f8b0 SUB(능력치 우측 group0x47) X 605->909 (+304)" },
+    { "va": "0x00520a9a", "fileOffsetHex": "0x120a9a", "originalHex": "c7442430ce000000", "patchedHex": "c744243060010000", "axis": "Y", "note": "FUN_0051f8b0 SUB(group0x47) Y 206->352 (+146)" },
+    { "va": "0x00595e83", "fileOffsetHex": "0x195e83", "originalHex": "c74424082c010000", "patchedHex": "c74424085c020000", "axis": "X", "note": "진영 라디오/엠블렘 패널 (FUN_00595e70) X 300->604 (+304, 프레임과 uniform). over-move 676은 우측 과도라 되돌림 — 정확 센터링은 블록 bbox 라이브 측정 후 결정(center-to-center)." },
+    { "va": "0x00595e8b", "fileOffsetHex": "0x195e8b", "originalHex": "c744240c86000000", "patchedHex": "c744240cf2000000", "axis": "Y", "note": "진영 라디오/엠블렘 패널 Y 134->242 (+108). 콘텐츠 위로 38 보정(center-to-center, FUN_005989f0과 동일)." }
+  ],
+  "deltaKnob": "라이브 미세조정: X 신값 = (1920-711)/2 + dx, Y 신값 = (1080-520)/2 + dy. dx/dy는 ±정수. patchedHex 마지막 4바이트(little-endian uint32)만 교체. 예) 약간 위로=Y 280->260: c74424343c010000. 약간 왼쪽=X 604->584: c744243048020000.",
+  "supersedes": "charsel-native-layout.json (그 패치는 폼 frame-rect 필드/OK버튼 W·H 즉치값을 X/Y 행좌표로 오인해 3x 스케일=640트랩. 적용 금지)."
+}

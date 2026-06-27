@@ -1,0 +1,25 @@
+{
+  "name": "strat-camera-focus",
+  "desc": "P0-02 SURGICAL code-cave (M1-1, T07). Detour FUN_004c4170 prologue into the interior 0xCC int3 cave at VA 0x5d5290; when *(source+0x320)==0 (source=*(mainState+8)) write the player home cell so the strategic current cell *(DAT_007cd04c+0x11178) populates -> FUN_004d6310 passes (0x0b01 enabled) AND the camera centers on the home cell (Front 3). cell source=0xa1c (2588 = row25*100+col88 = 제국 수도 ヴァルハラ/オーディン page-101 canon dot; matches server FACTION_CAPITAL.empire + LOGH_PLAYER_FOCUS_CELL seed). 2026-06-21 정정: 이전 0x9f6(2550=중립역 50,25)은 재추출 전 stale 셀이었다.",
+  "verified": "ENCODED + byte-verified against G7MTClient.playable.exe: prologue A0 54 A5 7C 00 @fileoff 0x0c4170; interior 0xCC int3 cave @VA 0x5d5290 (fileoff 0x1d5290), measured 48 B, 0 inbound refs. cave body 38 B (fits 48). Cell source: 0xa1c (2588 = empire capital ヴァルハラ canon). Frida positive-control PROVEN the same source+0x320 write closes the chain (validator->pass, camera centers). NOT yet end-to-end live-confirmed with the STATIC detour — needsLive: apply for one ui_explorer run, drive to world, click home cell, observe 0x0b01 + camera center.",
+  "patches": [
+    {
+      "va": "0x4c4170",
+      "fileOffsetHex": "0xc4170",
+      "originalHex": "a054a57c00",
+      "patchedHex": "e91b111100",
+      "note": "jmp cave (overwrites displaced mov al,[0x7ca554])"
+    },
+    {
+      "va": "0x5d5290",
+      "fileOffsetHex": "0x1d5290",
+      "originalHex": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "patchedHex": "508b410885c0741383b82003000000750ac780200300001c0a000058a054a57c00e9bfeeeeff",
+      "note": "cave body (interior int3 pad): if src320==0 set home cell, then displaced mov al, jmp 0x4c4175"
+    }
+  ],
+  "returnVa": "0x4c4175",
+  "caveLen": 38,
+  "caveCapacity": 48,
+  "fitsCave": true
+}

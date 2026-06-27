@@ -1,0 +1,26 @@
+{
+  "base": ".omo\\work\\logh7-installed\\exe\\G7MTClient.autologin.emp1.exe",
+  "baseSha256": "8a2a2c338e4712a9b2700c217551268776bdc91436ea7357488914479835e6f9",
+  "out": ".omo\\work\\logh7-installed\\exe\\G7MTClient.autologin.emp1.c002-setup.exe",
+  "outSha256": "eb8d89e303da9e797d8b92ffcf4a1555258cbb39daf0f865d1dd96d64e19cf74",
+  "stack": [
+    "c002-force-scene-setup"
+  ],
+  "rsrcMap": "E:\\logh7-revival\\content\\localization\\hardcoded-ui-ko.json",
+  "patches": [
+    {
+      "name": "c002-force-scene-setup",
+      "desc": "C002 layer 1: force strategy scene setup (FUN_0054e570 mode 2) even when scene-state gate 0x358382 is already 2. Without this, autologin world entry skips unit-list panel widget 0x67 creation because the gate is pre-set to 2.",
+      "verified": "live probe 2026-06-23: gate_358382=2, scene_mode=2, cmdRowCount=0, catGate=0, 0x0b01 absent. Disasm confirms 0x4b6b53 je 0x4b6b6e skips FUN_0054e570 when gate==2.",
+      "sites": [
+        {
+          "virtualAddressHex": "0x004b6b53",
+          "fileOffsetHex": "0x000b6b53",
+          "originalHex": "7419",
+          "patchedHex": "eb00",
+          "note": "je +0x19 (skip setup if gate==2) -> jmp +0 (always run setup+cleanup). 2-byte same-length patch."
+        }
+      ]
+    }
+  ]
+}

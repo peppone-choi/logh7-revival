@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<assembly manifestVersion="1.0" xmlns="urn:schemas-microsoft-com:asm.v1">
+  <assemblyIdentity type="win32" name="Bothtec.GineidenVII.G7MTClient" version="1.0.0.0" processorArchitecture="x86"/>
+  <application xmlns="urn:schemas-microsoft-com:asm.v3">
+    <windowsSettings>
+      <!-- Force this process's ANSI code page to Korean (CP949) regardless of the system
+           "language for non-Unicode programs" setting. This machine runs in UTF-8 ACP (65001),
+           which breaks the client's ANSI (CreateFontA/ExtTextOutA + CRT mbcs) text path for any
+           legacy code page. ko-KR pins CP_ACP=949 so the CP949 String.txt/MsgDat + HANGEUL_CHARSET
+           font render Korean correctly. Requires Windows 10 1903+. -->
+      <activeCodePage xmlns="http://schemas.microsoft.com/SMI/2019/WindowsSettings">ko-KR</activeCodePage>
+    </windowsSettings>
+  </application>
+</assembly>

@@ -1,0 +1,199 @@
+{
+  "_source": "gin7 manual pp.38-40 via logh7-manual-canon.md §7 (lines 342-379)",
+  "_grade": "P1",
+  "_confidence_notes": [
+    "PDF-verified against gin7manual_djvu.txt OCR (lines 1820-1962), the verbatim text layer of .omo/work/gin7manual/gin7manual.pdf.",
+    "OCR printed-page numbers run one behind the manual's stated page: 占領/防衛 results sit on OCR p38-39 (printed footer '38','39') = manual pp.39-40 region; consistent with digest §7 pp.38-40.",
+    "掃討 distance '400 ly' (400光年): OCR renders it as '400 兆 年' which is an OCR misread of 光年 (kōnen / light-years). Digest §7 line 376 confirms '400 ly'. Treated as 400 light-years.",
+    "占領/防衛 evaluated AFTER game-internal 30 days ('30日後'); 掃討 accrues DURING the 30-day window ('30日の間に'). Both confirmed verbatim in OCR.",
+    "CP cost of an operation-plan command varies by 発動予定時期 (scheduled activation timing); no numeric CP table appears on these pages — digest §10 gives an overall 10–1280 CP range. Marked _uncertain on the cost field.",
+    "Bonus point values: full = plan's base bonus; partial occupation/defense = approx 50% ('約50%'). Verbatim 'ボーナスポイント'."
+  ],
+
+  "operationPurposes": [
+    {
+      "ja": "占領",
+      "en": "Occupation",
+      "ko": "점령",
+      "description": "Capture an enemy system.",
+      "targetConstraint": "Target system must contain ONLY other-faction-controlled planets/fortresses at the time of planning (敵星系).",
+      "targetMustBeEnemyOnly": true
+    },
+    {
+      "ja": "防衛",
+      "en": "Defense",
+      "ko": "방위",
+      "description": "Hold one of your own systems in its current state for a fixed period.",
+      "targetConstraint": "Target system must contain at least 1 own-faction-controlled planet/fortress at the time of planning (自陣営の支配する惑星/要塞が最低1つ).",
+      "targetMustHaveOwnHolding": true
+    },
+    {
+      "ja": "掃討",
+      "en": "Sweep",
+      "ko": "소탕",
+      "description": "Destroy/sweep enemy units present in a grid.",
+      "targetConstraint": "Any system may be set as the target (全ての星系が目標に設定できます), BUT this purpose can only be offered when the target is 独行艦 (lone ships).",
+      "targetAnySystem": true,
+      "targetOnlyLoneShips": true
+    }
+  ],
+
+  "planningEffect": {
+    "ja": "作戦計画の効果",
+    "en": "Operation plan effect",
+    "description": "An operation plan broadly publicizes the faction's strategic objective. Acting in accordance with the plan grants a BONUS point on top of the normal kill-merit (撃破功績) points; acting otherwise does not.",
+    "bonusOnTopOfNormalMerit": true
+  },
+
+  "planFields": [
+    {
+      "ja": "作戦目的",
+      "en": "Operation purpose",
+      "ko": "작전 목적",
+      "note": "One of the 3 operationPurposes (占領 / 防衛 / 掃討)."
+    },
+    {
+      "ja": "目標星系",
+      "en": "Target system",
+      "ko": "목표 성계",
+      "note": "Select the target system grid; allowed grids are restricted per purpose (see targetConstraint)."
+    },
+    {
+      "ja": "作戦参加艦艇ユニット数",
+      "en": "Participating ship-unit count",
+      "ko": "작전 참가 함정 유닛 수",
+      "note": "Ship-unit count is capped per unit category, so in practice this decides how many fleets/units join the operation."
+    },
+    {
+      "ja": "発動予定時期",
+      "en": "Scheduled activation timing",
+      "ko": "발동 예정 시기",
+      "note": "Decides when the plan actually activates/takes effect. The Command Point (CP) cost of the operation-plan command varies by this timing.",
+      "affectsCommandPointCost": true
+    }
+  ],
+
+  "commandPointCost": {
+    "ja": "作戦計画コマンドの要するコマンドポイント",
+    "en": "CP cost of one operation-plan command",
+    "variesBy": "発動予定時期 (scheduled activation timing)",
+    "numericTable": null,
+    "overallRangeFromSection10": "10-1280 CP",
+    "_uncertain": true,
+    "note": "No numeric CP table on pp.38-40; range sourced from digest §10."
+  },
+
+  "planningRestrictions": [
+    {
+      "ja": "自動撤回",
+      "en": "Auto-withdrawal",
+      "rule": "If the target system's conditions can no longer be met for any reason, the plan is automatically and immediately withdrawn and deleted (the plan itself disappears)."
+    },
+    {
+      "ja": "目標星系の重複禁止",
+      "en": "No duplicate target system per card",
+      "rule": "A single job-authority card (職務権限カード) cannot issue two plans against the same target system, even if the operation purpose or activation timing differ."
+    },
+    {
+      "ja": "有効艦艇ユニット総数の上限",
+      "en": "Global ship-unit cap",
+      "rule": "The sum of 作戦参加艦艇ユニット数 across ALL operations (pending + active) cannot exceed the faction's total effective ship-unit count (有効艦艇ユニット総数)."
+    },
+    {
+      "ja": "新規策定ロック",
+      "en": "New-plan lockout on infeasibility",
+      "rule": "If tactical-game defeats reduce total unit count so that an already-executing plan becomes infeasible, no new operation plan can be drafted until that situation is corrected."
+    }
+  ],
+
+  "issuingOrders": {
+    "ja": "発令",
+    "en": "Issuing orders",
+    "ko": "발령",
+    "departmentSeparation": {
+      "rule": "In both Empire and Alliance, the post (department) that drafts operation plans is SEPARATE from the post that issues (発令) them.",
+      "draftingAndIssuingAreSeparateDepartments": true,
+      "appliesToBothFactions": true
+    },
+    "meaningOfIssuing": {
+      "ja": "発令の意味",
+      "en": "Meaning of issuing",
+      "rule": "Issuing decides specifically WHICH units take part, based on the participating-unit count fixed by the operation plan. Units cannot be assigned to an operation whose scheduled activation timing has not yet been met."
+    },
+    "operationStartTiming": {
+      "ja": "作戦の開始時期",
+      "en": "Operation start timing",
+      "rule": "An issued operation is regarded as actually STARTED at the moment a portion of the issued units or lone ships reaches the target system. From this start point onward, actions consistent with the operation earn merit (功績) points."
+    },
+    "duration": {
+      "ja": "発令された計画の継続期間",
+      "en": "Duration of an issued plan",
+      "rule": "An issued operation plan is regarded as ENDED once 30 game-internal days have elapsed from that point. It also ends immediately if the planner executes the 作戦撤回 (operation withdrawal) command.",
+      "durationDays": 30,
+      "earlyWithdrawalCommand": { "ja": "作戦撤回", "en": "Operation withdrawal" }
+    }
+  },
+
+  "operationResults": [
+    {
+      "ja": "占領",
+      "en": "Occupation",
+      "evaluationTiming": "After 30 game-internal days from operation start (30日後)",
+      "outcomes": [
+        {
+          "condition": "All planets/fortresses in the target system brought under control.",
+          "conditionJa": "作戦目標となっている星系内の全ての惑星/要塞を支配下にした",
+          "bonus": "Full",
+          "bonusNote": "The operation plan's original (base) bonus points go to all issued units.",
+          "bonusFraction": 1.0
+        },
+        {
+          "condition": "At least 1 planet/fortress in the target system brought under control.",
+          "conditionJa": "作戦目標となっている星系内の惑星/要塞を最低1つ支配下にした",
+          "bonus": "Partial (~50%)",
+          "bonusNote": "Approximately 50% of the base bonus goes to all issued units.",
+          "bonusFraction": 0.5,
+          "_uncertain": true
+        }
+      ]
+    },
+    {
+      "ja": "防衛",
+      "en": "Defense",
+      "evaluationTiming": "After 30 game-internal days from operation start (30日後)",
+      "outcomes": [
+        {
+          "condition": "All planets/fortresses in the target system kept in own-faction state, none captured by the enemy.",
+          "conditionJa": "星系内の全ての惑星/要塞が敵に占領されることなく自陣営の状態を維持できた",
+          "bonus": "Full",
+          "bonusNote": "The operation plan's original (base) bonus points go to all issued units.",
+          "bonusFraction": 1.0
+        },
+        {
+          "condition": "At least 1 planet/fortress in the target system was captured by the enemy.",
+          "conditionJa": "星系内の惑星/要塞を最低1つが敵に占領された",
+          "bonus": "Partial (~50%)",
+          "bonusNote": "Approximately 50% of the base bonus goes to all issued units.",
+          "bonusFraction": 0.5,
+          "_uncertain": true
+        }
+      ]
+    },
+    {
+      "ja": "掃討",
+      "en": "Sweep",
+      "evaluationTiming": "Accrues DURING the 30-day window from operation start (30日の間に)",
+      "outcomes": [
+        {
+          "condition": "Each enemy ship sunk within 400 light-years of the designated target system.",
+          "conditionJa": "指定された星系から400光年以内で敵艦船を1隻撃沈するごとにボーナスポイントを得ます",
+          "bonus": "+1 bonus point per enemy ship sunk",
+          "bonusPerShipSunk": 1,
+          "rangeLightYears": 400,
+          "_uncertain": true,
+          "uncertainNote": "OCR rendered 光年 (light-years) as '兆年'; value 400 ly per digest §7. Per-ship bonus increment ('+1') per digest table; OCR states 'ボーナスポイントを得ます' (gains bonus point) without the explicit numeral."
+        }
+      ]
+    }
+  ]
+}

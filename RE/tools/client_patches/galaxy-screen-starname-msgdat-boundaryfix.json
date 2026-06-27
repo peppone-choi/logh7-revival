@@ -1,0 +1,19 @@
+{
+  "name": "galaxy-screen-starname-msgdat-boundaryfix",
+  "description": "Fix an RE-confirmed in-world screen ConstMsg lookup that crosses from group 0x16 into the group 0x18 star-name table.",
+  "verified": "ENCODED 2026-06-21: FUN_0053f2d0 static screen construction pushes g0x16/s0x86, but constmsg group 0x16 ends at sub0x7a. The original flat index is 1410, which is group 0x18/sub7 (알비스). Same-length call-site immediate patches only; does not add speculative records.",
+  "patches": [
+    {
+      "va": "0x00541622",
+      "originalHex": "6886000000",
+      "patchedHex": "6a07909090",
+      "note": "FUN_0053f2d0 static screen text: subId 0x86 -> 0x07 (flat constmsg 1410: 알비스)"
+    },
+    {
+      "va": "0x00541629",
+      "originalHex": "6a16",
+      "patchedHex": "6a18",
+      "note": "FUN_0053f2d0 static screen text: group 0x16 -> 0x18 for the star-name table"
+    }
+  ]
+}

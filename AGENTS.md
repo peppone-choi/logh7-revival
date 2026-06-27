@@ -2,6 +2,10 @@
 
 # logh7-revival
 
+> ★ 2026-06-26 재구조화: 루트 = **`server/`**(서버 레포) + **`client/`**(클라 레포) + **`docs/`** + **`RE/`**(dev/RE 워크스페이스: tools·.omo).
+> **작업 결과물은 캐논 레포 두 곳에 반영한다** — 서버/와이어/콘텐츠 → `server/src/server`(검증 `cd server && node --test tests/server/*.test.mjs`),
+> 클라/런처/한글화/에셋 → `client/`. **루트 src/tools/tests·RE/src는 이주 dup(캐논 아님, 편집 금지).** 아래 본문은 재구조화 이전 레이아웃 설명이라 경로는 server/·client/ 기준으로 읽을 것. 상세 `docs/logh7-repo-restructure-2026-06-26.md`.
+
 ## Purpose
 Revival project for the 1990s Japanese strategy game "Legend of the Galactic Heroes VII" / 은하영웅전설 VII (BOTHTEC; registry key `SOFTWARE\BOTHTEC\銀河英雄伝説VII\1.0`). Package name is `logh-7-rework` (v0.1.0, private ESM). Work spans three intertwined streams: (1) reverse-engineering the legacy Windows PE client (`G7MTClient.exe`, `G7Start.exe` launcher, `Gin7UpdateClient.exe`) and its TCP network protocol; (2) building a dependency-free Node.js replacement game/resource server (`src/server/logh7-server.mjs`, run via `npm run server:*`); (3) Python tooling under `tools/` for ISO/InstallShield extraction, cipher reconstruction, PE patch/log trampolines, and localization/packaging. The repo root is also a Vite + React 18 SPA (`index.html` -> `src/main.jsx`) but is currently only a demo sign-in/dashboard placeholder, not real game UI. The hard technical core (login handshake: cipher transport codes `0x0034`/`0x0035`/`0x0036` -> internal queued IDs `0x0405`/`0x0406`, multi-phase key exchange around a Blowfish-like 16-round Feistel "child codec", static tables de-obfuscated by XOR `0x91`) is recorded in `.debug-journal.md`. Per the journal, the cipher handshake is solved but no real client has yet been advanced into a playable session (criteria C001/C002 pending). Intended deployment (per `docs/logh7-server-setup.md`): Windows PC runs the legacy client/capture, Linux/macOS does protocol analysis and regression tests, AWS Docker hosts the real server.
 

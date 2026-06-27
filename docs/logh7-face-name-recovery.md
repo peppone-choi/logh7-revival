@@ -172,6 +172,28 @@ extracted client data for a name/portrait table (e.g. a record keyed by face NNN
 exists, is the only place the full name↔NNN mapping could still live now that the live server
 and Korean site are gone.
 
+### 2026-06-16 installed-game rescan update
+
+The actual installed tree was re-mined from
+`E:\logh7-revival\.omo\work\logh7-installed` during G244. This did **not** find the character
+name/portrait table.
+
+- A CP932/CP949/UTF-16LE scan for 195 known Japanese/romaji character names across non-image and
+  non-audio installed files found no dense roster/name table.
+- Sparse hits only:
+  - `constmsg.dat.jpbak`: `グエン`, `ブラウンシュヴァイク`, `ローエングラム` in medal/ship description text.
+  - `messages_3.dat.jpbak`: `グエン` in one quote.
+  - `G7MTClient.exe` / `_probe*.exe`: one sample order string
+    `帝国軍巡査隊（ラインハルト元帥）`.
+- Active installed `data/MsgDat/*.dat` is a localized/patch overlay and must not be used as a
+  base VII naming source. The base Japanese `*.dat.jpbak` extraction matched
+  `content/client/msgdat.json` exactly for 20 files / 9493 records, but it still contains only
+  contextual names, not a full character-name table.
+
+Therefore the current hard ceiling remains: the installed client ships portrait atlases and
+string catalogs, but no recovered full character naming table. The 12 `st_char.html` official
+name↔face-number pairs are still the only confirmed VII name↔face-number mapping.
+
 ## Files
 
 - `content/roster/face-name-map.json` — 12 recovered entries (face_number, name_ja, romaji,

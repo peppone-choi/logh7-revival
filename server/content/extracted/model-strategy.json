@@ -1,0 +1,189 @@
+[
+ {
+  "file": "data/model/strategy/06.mdx",
+  "name": "06",
+  "ext": "mdx",
+  "size": 24172,
+  "node_count": 0,
+  "nodes": [],
+  "assets": [
+   "W:\\Gin7\\CG\\g\\Effect\\etc\\warp\\objects\\warp_flash.lwo",
+   "W:\\Gin7\\CG\\g\\Effect\\etc\\warp\\objects\\warp_line.lwo",
+   "W:\\Gin7\\CG\\g\\Effect\\etc\\warp\\images\\warp_flash.bmp",
+   "W:\\Gin7\\CG\\g\\Effect\\etc\\warp\\images\\warp_line.bmp"
+  ]
+ },
+ {
+  "file": "data/model/strategy/bh_core.mdx",
+  "name": "bh_core",
+  "ext": "mdx",
+  "size": 44938,
+  "node_count": 1,
+  "nodes": [
+   "bh_core:Layer1"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\g\\Efect\\etc\\black_hole\\objects\\bh_core.lwo",
+   "W:\\Gin7\\CG\\g\\Efect\\etc\\black_hole\\images\\bh_core.bmp"
+  ]
+ },
+ {
+  "file": "data/model/strategy/bh_wave.mdx",
+  "name": "bh_wave",
+  "ext": "mdx",
+  "size": 58642,
+  "node_count": 1,
+  "nodes": [
+   "bh_foundation:Layer1"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\g\\Effect\\etc\\black_hole\\objects\\bh_foundation.lwo",
+   "W:\\Gin7\\CG\\g\\Effect\\etc\\black_hole\\objects\\",
+   "W:\\Gin7\\CG\\g\\Effect\\etc\\black_hole\\images\\bh_a.tga",
+   "W:\\Gin7\\CG\\g\\Effect\\etc\\black_hole\\images\\",
+   "W:\\Gin7\\CG\\g\\Effect\\etc\\black_hole\\images\\bh_a02.bmp"
+  ]
+ },
+ {
+  "file": "data/model/strategy/galaxy.mdx",
+  "name": "galaxy",
+  "ext": "mdx",
+  "size": 16508,
+  "node_count": 2,
+  "nodes": [
+   "galaxy:Layer1",
+   "galaxy:Layer2"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\g\\galaxy_map\\objects\\galaxy.lwo",
+   "W:\\Gin7\\CG\\g\\galaxy_map\\images\\galaxy00.bmp",
+   "W:\\Gin7\\CG\\g\\Stage\\Space\\images\\star000.bmp",
+   "W:\\Gin7\\CG\\g\\Stage\\Space\\images\\neb000_a.bmp"
+  ]
+ },
+ {
+  "file": "data/model/strategy/grid.mdx",
+  "name": "grid",
+  "ext": "mdx",
+  "size": 44140,
+  "node_count": 1,
+  "nodes": [
+   "grid:Layer1"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\g\\galaxy_map\\objects\\grid.lwo",
+   "W:\\Gin7\\CG\\g\\galaxy_map\\images\\grid01.bmp",
+   "W:\\Gin7\\CG\\g\\galaxy_map\\images\\grid02.bmp"
+  ]
+ },
+ {
+  "file": "data/model/strategy/Null_galaxy.mdx",
+  "name": "Null_galaxy",
+  "ext": "mdx",
+  "size": 120558,
+  "node_count": 85,
+  "nodes": [
+   "star_01_G",
+   "star_02_O",
+   "star_03_F",
+   "star_04_A",
+   "star_05_A",
+   "star_06_G",
+   "star_07_B",
+   "star_08_M",
+   "star_09_G",
+   "star_10_B",
+   "star_11_G",
+   "star_12_G",
+   "star_13_K",
+   "star_14_F",
+   "star_15_M",
+   "star_16_K",
+   "star_17_K",
+   "star_18_A",
+   "star_19_K",
+   "star_20_G",
+   "star_21_M",
+   "star_22_M",
+   "star_23_M",
+   "star_24_F",
+   "star_25_M",
+   "star_26_K",
+   "star_27_G",
+   "star_28_G",
+   "star_29_K",
+   "star_30_M",
+   "star_31_M",
+   "star_32_K",
+   "star_33_G",
+   "star_34_G",
+   "star_35_M",
+   "star_36_M",
+   "star_37_K",
+   "star_38_K",
+   "star_39_B",
+   "star_40_G",
+   "star_41_G",
+   "star_42_G",
+   "star_43_G",
+   "star_44_M",
+   "star_45_G",
+   "star_46_G",
+   "star_47_M",
+   "star_48_M",
+   "star_49_M",
+   "star_50_K",
+   "star_51_K",
+   "star_52_M",
+   "star_53_M",
+   "star_54_M",
+   "star_55_M",
+   "star_56_G",
+   "star_57_K",
+   "star_58_F",
+   "star_59_K",
+   "star_60_K",
+   "star_61_G",
+   "star_62_K",
+   "star_63_A",
+   "star_64_F",
+   "star_65_M",
+   "star_66_K",
+   "star_67_A",
+   "star_68_M",
+   "star_69_F",
+   "star_70_B",
+   "star_71_F",
+   "star_72_A",
+   "star_73_F",
+   "star_74_M",
+   "star_75_O",
+   "star_76_B",
+   "star_77_A",
+   "star_78_K",
+   "star_79_G",
+   "bh_01",
+   "bh_02",
+   "bh_03",
+   "ns_01",
+   "ns_02",
+   "ns_03"
+  ],
+  "assets": []
+ },
+ {
+  "file": "data/model/strategy/test_warp.mdx",
+  "name": "test_warp",
+  "ext": "mdx",
+  "size": 7268,
+  "node_count": 1,
+  "nodes": [
+   "p_item"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\g\\Effect\\etc\\warp\\images\\warp_a.bmp",
+   "W:\\Gin7\\CG\\g\\Effect\\etc\\warp\\images\\warp_b.bmp",
+   "W:\\Gin7\\CG\\g\\Effect\\etc\\warp\\images\\warp_c.bmp"
+  ]
+ }
+]

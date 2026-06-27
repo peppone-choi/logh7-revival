@@ -1,0 +1,63 @@
+{
+  "name": "lobby-res",
+  "desc": "Retarget the lobby's hardcoded 1024x768 to a real 1920x1080 native canvas. FUN_0051a370 pushes 0x400/0x300 to FUN_00401760 (D3D+UI scaler FUN_004ea460) and FUN_004e7570 (window) in 4 sub-states; this patches all 8 same-length push immediates. Pair with lobby-native-layout.json so scene anchors are moved for the wider canvas instead of letterboxing. RE: docs/logh7-graphics-remaster.md.",
+  "verified": "ENCODED + originalHex-checked against G7MTClient.playable.exe. Live native-1920 probe 2026-06-20 confirmed this removes display stretching; without lobby-native-layout the authored 1024-era UI remains left-heavy.",
+  "patches": [
+    {
+      "va": "0x51a740",
+      "fileOffsetHex": "0x11a740",
+      "originalHex": "6800040000",
+      "patchedHex": "6880070000",
+      "note": "lobby width push 0x400(1024) -> 1920"
+    },
+    {
+      "va": "0x51a755",
+      "fileOffsetHex": "0x11a755",
+      "originalHex": "6800040000",
+      "patchedHex": "6880070000",
+      "note": "lobby width push 0x400(1024) -> 1920"
+    },
+    {
+      "va": "0x51a8ef",
+      "fileOffsetHex": "0x11a8ef",
+      "originalHex": "6800040000",
+      "patchedHex": "6880070000",
+      "note": "lobby width push 0x400(1024) -> 1920"
+    },
+    {
+      "va": "0x51a904",
+      "fileOffsetHex": "0x11a904",
+      "originalHex": "6800040000",
+      "patchedHex": "6880070000",
+      "note": "lobby width push 0x400(1024) -> 1920"
+    },
+    {
+      "va": "0x51a73b",
+      "fileOffsetHex": "0x11a73b",
+      "originalHex": "6800030000",
+      "patchedHex": "6838040000",
+      "note": "lobby height push 0x300(768) -> 1080"
+    },
+    {
+      "va": "0x51a750",
+      "fileOffsetHex": "0x11a750",
+      "originalHex": "6800030000",
+      "patchedHex": "6838040000",
+      "note": "lobby height push 0x300(768) -> 1080"
+    },
+    {
+      "va": "0x51a8ea",
+      "fileOffsetHex": "0x11a8ea",
+      "originalHex": "6800030000",
+      "patchedHex": "6838040000",
+      "note": "lobby height push 0x300(768) -> 1080"
+    },
+    {
+      "va": "0x51a8ff",
+      "fileOffsetHex": "0x11a8ff",
+      "originalHex": "6800030000",
+      "patchedHex": "6838040000",
+      "note": "lobby height push 0x300(768) -> 1080"
+    }
+  ]
+}

@@ -1,0 +1,96 @@
+{
+  "_source": "gin7 manual pp.79-99 via logh7-manual-canon.md §12 (Empire pp79-89, Alliance pp90-99); PDF-verified against .omo/work/gin7manual/gin7manual.pdf pages 89-93 (Alliance text layer)",
+  "_grade": "P1",
+  "_purpose": "Verification / delta file over content/manual/ship-units.json. Does NOT overwrite ship-units.json. Records which ship classes have complete stats, which Alliance numbers are extraction-uncertain, and corrections found during PDF verification.",
+  "_confidence_notes": [
+    "PDF page offset: manual page P ≈ PDF page (P-1) for the ship-unit section (manual p90 Alliance battleship = PDF page 89).",
+    "Empire stat tables (pp79-89) were recovered by spatial PDF clustering and reconcile with content/ship-stats.json _raw; per-cell mapping is partially reliable.",
+    "Alliance stat tables (pp90-99) print as an UNORDERED LINEAR TEXT STREAM in the PDF text layer (verified pages 89-93). The numeric values are present and correct as-seen, but per-cell column mapping is NOT recoverable from the text layer alone. All Alliance numeric cells are therefore extraction-uncertain unless cross-checked against the rendered table image or content/ship-stats.json.",
+    "Lore / variant descriptions are high confidence for BOTH factions (full prose present in PDF text layer).",
+    "'-' = canonical absence; '·' = no token in PDF text layer (missing, NOT zero).",
+    "Maps to wire record ResponseStaticInformationUnitShip 0x030b / content/ship-stats.json."
+  ],
+
+  "classCompleteness": {
+    "_legend": {
+      "lore": "variant descriptions / design intent",
+      "stats": "numeric performance cells",
+      "complete": "all schema columns recoverable for the flagship/standard row",
+      "partial": "some cells recoverable, others OCR-lost or stream-flattened",
+      "stream": "numbers present but unordered linear stream — per-cell mapping not recoverable from text layer"
+    },
+    "empire": [
+      { "class_ja": "標準戦艦 SS75", "page": 79, "lore": "complete", "stats": "partial", "note": "flagship armor/speed cells OCR-lost (digest §12.2); pool 390, shield 70/30, beam 48, gun 100, missile 80, AA 80 recovered.", "_uncertain": true },
+      { "class_ja": "高速戦艦 PK86", "page": 80, "lore": "complete", "stats": "partial", "note": "pool 410, speed 23,000, shield 70/28, missile 100; max armor 48 interpolated.", "_uncertain": true },
+      { "class_ja": "巡航艦 SK80", "page": 81, "lore": "complete", "stats": "partial", "note": "pool 260, speed 23,000, shield 50/25, missile 60." },
+      { "class_ja": "駆逐艦 Z82", "page": 82, "lore": "complete", "stats": "complete", "note": "pool 200, speed 30,000, armor 2/4/8, shield 30/19, gun 104, missile 50, AA 50, sensor 2,400, repair 40." },
+      { "class_ja": "高速艇 K86", "page": 80, "lore": "complete", "stats": "complete", "note": "pool 170, speed 27,000, armor 2/5/7, shield 20/19, gun 24, missile 40, AA 40, sensor 4,000, repair 20." },
+      { "class_ja": "戦闘艇母艦 FR88", "page": 83, "lore": "complete", "stats": "partial", "note": "GIS12 refit; carries 10-12 fighters; Ⅳ low-output engine speed 10,000." },
+      { "class_ja": "雷撃艇母艦 TR88", "page": 84, "lore": "complete", "stats": "partial", "note": "GIS12 refit + torpedo hangar; Ⅳ fast 20,000." },
+      { "class_ja": "工作艦 A76", "page": 85, "lore": "complete", "stats": "partial", "note": "unarmed repair; Ⅱ repair material 1,600." },
+      { "class_ja": "輸送艦 A74", "page": 86, "lore": "complete", "stats": "partial", "note": "cargo ≤500,000 t, loadage 20,000." },
+      { "class_ja": "兵員輸送艦 A72", "page": 87, "lore": "complete", "stats": "partial", "note": "carries ~500 armed troops." },
+      { "class_ja": "揚陸艦 A78", "page": 88, "lore": "complete", "stats": "partial", "note": "flagship = landing command ship." },
+      { "class_ja": "民間船 / 商船", "page": 89, "lore": "complete", "stats": "partial", "note": "merchant modular hauler, loadage 4,000, unarmed; flagship speed 10,000, armor 4/8/20, shield 20/16, missile 10, AA 30, sensor 2,400." }
+    ],
+    "alliance": [
+      { "class_ja": "標準戦艦 787年型", "page": 90, "pdfPage": 89, "lore": "complete", "stats": "stream", "pdfVerified": true, "note": "flagship pool 400, shield 70/20, recurring tuple armor 30/18/10, beam 5,600, speed 22,000 all present in text stream but unordered. Counterpart to SS75. Ⅷ=無人艦 (25% crew, no fighters, ramming/blockade).", "_uncertain": true },
+      { "class_ja": "巡航艦 795年型", "page": 91, "pdfPage": 90, "lore": "complete", "stats": "stream", "pdfVerified": true, "note": "flagship pool 250, shield 60/22, speed 23,000 standard. ≈SK80 except missiles. Ⅷ=フリゲート艦 escort, Ⅶ cost ≈ battleship.", "_uncertain": true },
+      { "class_ja": "打撃巡航艦 794年型", "page": 92, "pdfPage": 91, "lore": "complete", "stats": "stream", "pdfVerified": true, "note": "Alliance-only. 3× missile output of 795-cruiser (confirmed PDF line: '795年型標準巡航艦の3倍のミサイル投射能力'), no beam/fighters. Missile 150/8. レダ級 (Leda-class) recon variant. Two flagship rows: crew 230 (pool 4,000?, speed 24,000, armor 16/10/6, shield 50/22) and crew 300 (speed 28,000, armor 24/14/8, shield 70/25, beam 32).", "_uncertain": true },
+      { "class_ja": "駆逐艦 796年型", "page": 93, "pdfPage": 92, "lore": "complete", "stats": "stream", "pdfVerified": true, "note": "6 photon pulse cannons (confirmed PDF line: '6門の光子パルス砲'), no fighters. Flagship pool 220, speed 30,000, armor 40/19, shield guard 30. Ⅷ wartime: 4-shot external missiles, ~½ build time (confirmed '約半数の工期').", "_uncertain": true },
+      { "class_ja": "戦闘艇母艦 796年型", "page": 94, "pdfPage": 93, "lore": "complete", "stats": "stream", "pdfVerified": true, "note": "carries 100 Spartanian fighters (confirmed '単座戦闘艇スパルタニアンを100隻搭載'), gunnery ≈787 battleship. AA 64, missile 70/3, beam 6,400, speeds 18,000/16,000/14,000. Ⅱ disguised (no bow cannon).", "_uncertain": true },
+      { "class_ja": "工作艦 793年型", "page": 95, "pdfPage": 94, "lore": "complete", "stats": "stream", "pdfVerified": false, "note": "field repair of all Alliance ships. Ⅳ=more repair material.", "_uncertain": true },
+      { "class_ja": "輸送艦 792年型", "page": 96, "pdfPage": 95, "lore": "complete", "stats": "stream", "pdfVerified": false, "note": "~2× flagship length; cargo ≤500,000 t. Ⅲ convoy-only, Ⅳ fast/cargo↓.", "_uncertain": true },
+      { "class_ja": "兵員輸送艦 788年型", "page": 97, "pdfPage": 96, "lore": "complete", "stats": "stream", "pdfVerified": false, "note": "requisitioned high-speed merchants; carries ~600 armed troops.", "_uncertain": true },
+      { "class_ja": "揚陸艦 795年型", "page": 98, "pdfPage": 97, "lore": "complete", "stats": "stream", "pdfVerified": false, "note": "flagship = landing command ship. Ⅳ anti-fortress (carries 装甲擲弾兵 only, cannot carry 装甲兵 vehicles). YEAR DISCREPANCY below.", "_uncertain": true },
+      { "class_ja": "民間船 / 商船", "page": 99, "pdfPage": 98, "lore": "complete", "stats": "stream", "pdfVerified": false, "note": "weakest class; merchant modular hauler.", "_uncertain": true }
+    ]
+  },
+
+  "pdfVerifiedSample": {
+    "_method": "Extracted PDF text layer pages 89-93 with PyMuPDF; compared claims/numbers against rendered table prose.",
+    "confirmedClaims": [
+      { "page": 92, "claim_en": "Alliance destroyer 796 mounts 6 photon pulse cannons", "pdf_ja": "6門の光子パルス砲を装備する重武装艦", "status": "CONFIRMED" },
+      { "page": 91, "claim_en": "Strike cruiser 794 has 3× missile output of 795 cruiser", "pdf_ja": "795年型標準巡航艦の3倍のミサイル投射能力", "status": "CONFIRMED" },
+      { "page": 93, "claim_en": "Carrier 796 carries 100 Spartanian fighters", "pdf_ja": "単座戦闘艇スパルタニアンを100隻搭載", "status": "CONFIRMED" },
+      { "page": 93, "claim_en": "Carrier 796 gunnery ≈ 787 battleship", "pdf_ja": "787年型戦艦に匹敵する砲戦能力", "status": "CONFIRMED" },
+      { "page": 92, "claim_en": "Destroyer Ⅷ completes in ~half build time", "pdf_ja": "約半数の工期で完成させる事が可能", "status": "CONFIRMED" },
+      { "page": 90, "claim_en": "Battleship 787 flagship pool 400, shield 70/20", "pdf_tokens": "400, 70, 20 (present in stream)", "status": "PRESENT_BUT_UNORDERED" },
+      { "page": 90, "claim_en": "Cruiser 795 flagship pool 250, shield 60/22", "pdf_tokens": "250, 60, 22 (present in stream)", "status": "PRESENT_BUT_UNORDERED" }
+    ],
+    "structuralFinding": "Alliance table cells are emitted by the PDF text layer as a flat, unordered list of numbers interleaved with column headers (e.g. PDF page 89 emits '400 70 20 80 90' then later '23,000 28 16 8' with no row binding). Per-cell mapping requires the rendered table image or content/ship-stats.json _raw, NOT the text layer."
+  },
+
+  "corrections": [
+    {
+      "field": "Alliance battleship 787 shield",
+      "digest": "§12.4 says 'shield 70' (guard only)",
+      "pdf": "PDF page 89 stream shows 70 and 20 adjacent in the shield (防護値/容量) column block",
+      "correction": "shield = 70 guard / 20 cap (capacity 20, not the SS75 value of 30).",
+      "_uncertain": true
+    },
+    {
+      "field": "揚陸艦 (Alliance assault ship) year code",
+      "digest": "§12.4 p98 flags 'base says 795-type, variants Ⅱ–Ⅳ say 786-type'",
+      "pdf": "not re-extracted (PDF page 97); digest discrepancy retained",
+      "correction": "Year discrepancy is genuine per digest; treat base=795年型, variant lore mentions 786-type — keep both, flagged uncertain.",
+      "_uncertain": true
+    },
+    {
+      "field": "Empire SS75 standard battleship — ship-units.json stats blob",
+      "digest": "ship-units.json line 8 packs a very long mixed 'stats' string that interleaves SS75 and SK80-era values",
+      "pdf": "n/a (Empire, not re-extracted this pass)",
+      "correction": "ship-units.json SS75 'stats' field is a concatenated multi-class OCR blob and should NOT be parsed as SS75-only numbers; use content/ship-stats.json _raw for authoritative SS75 cells.",
+      "_uncertain": true
+    }
+  ],
+
+  "summary": {
+    "empireClasses": 12,
+    "allianceClasses": 10,
+    "empireFullyComplete": ["駆逐艦 Z82", "高速艇 K86"],
+    "alliancePdfVerifiedPages": [89, 90, 91, 92, 93],
+    "allianceStreamFlattened": true,
+    "recommendation": "For server encoding (0x030b / ship-stats.json), use content/ship-stats.json _raw as the numeric authority. Use this verify file's lore + confirmed-claim fields and the digest §12 for design intent. Do NOT trust Alliance per-cell numbers parsed from the PDF text layer or from ship-units.json packed 'stats' strings."
+  }
+}

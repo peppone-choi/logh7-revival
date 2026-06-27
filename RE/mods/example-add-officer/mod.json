@@ -1,0 +1,9 @@
+{
+  "name": "example-add-officer",
+  "version": "1.0.0",
+  "loadOrder": 10,
+  "enabled": true,
+  "description": "Example mod: adds one original officer to the Empire. Demonstrates Layer-A content modding (server-side, no client patch). Drop in content/characters.json; the mod loader merges by id and validates against the RE'd client caps.",
+  "author": "logh7-revival",
+  "supportedClientSHA": "any (server content only)"
+}

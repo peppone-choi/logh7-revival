@@ -61,7 +61,7 @@ python tools/logh7_pipeline.py build-installed .omo/work/logh7-extracted --iso-r
 
 - `.omo/work/logh7-iso-root/data1.hdr`, `.omo/work/logh7-iso-root/data1.cab`, `.omo/work/logh7-iso-root/data2.cab`가 추출 입력에 있는지 확인한다.
 - `unshield` 추출 결과에서 `update.ini`, `Gin7UpdateClient.exe`, `exe/G7MTClient.exe`, `data/MsgDat/constmsg.dat`가 있는 설치 루트를 확인한다.
-- `build-installed` 명령으로 `.omo/work/logh7-installed/`를 만든다. 이 명령은 ISO 루트의 `g7start.exe`를 설치 트리 루트의 `G7Start.exe`로 추가하고, `setup-local.ps1`, `launch-client.ps1`, `WINDOWS-COMPATIBILITY.txt`를 생성한다.
+- `build-installed` 명령으로 `.omo/work/logh7-installed/`를 만든다. 이 명령은 ISO 루트의 `g7start.exe`를 설치 트리 루트의 `G7Start.exe`로 추가하고, `setup-local.ps1`, `launch-client.ps1`, `WINDOWS-COMPATIBILITY.txt`를 생성한다. 최종 `exe/G7MTClient.exe`는 기본 canonical playable 또는 `--playable-client`로 지정한 EXE를 쓰며, 옆 `.playable-manifest.json`의 stack에 `menufix`, `dlgfix`, `earlygrid-ringclear`가 모두 있어야 한다.
 - 한글화 교체 파일은 `.omo/work/logh7-ko-overlay/`에 같은 상대 경로로 둔다.
 
 예시 구조:

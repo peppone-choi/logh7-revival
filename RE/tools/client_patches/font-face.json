@@ -1,0 +1,14 @@
+{
+  "name": "font-face",
+  "desc": "Replace the client's SOLE global GDI font face string 'MS UI Gothic' (VA 0x0077402c) with 'Pretendard'. RE: both CreateFontA sites (FUN_004aec70 @0x4aedd6 lpszFace=struct+0, FUN_004b0960 @0x4b0bb7 lpszFace=struct+8) read the face from a cache struct whose name is set in ONE place — FUN_004ea180 -> FUN_004aec10(s_MS_UI_Gothic_0077402c,...). Both sites already pass HANGEUL_CHARSET (0x81, encoded as `push -0x7f`); text quality is handled by the separate default-stack `font-cleartype` patch. Same-length 16-byte in-place region replace (face ≤15 chars + NUL, bounded by the following 'mkCreateVertexBuffer'); NO code cave. RE/docs: docs/logh7-font-remaster.md.",
+  "verified": "ENCODED + originalHex guarded for vanilla references; current playable/installed trees may already contain the patched face. Same-length region patch (no cave). Requires 'Pretendard' present on the host; for the shipped Pretendard face, launcher/ui_explorer must register the bundled fonts before client start.",
+  "patches": [
+    {
+      "va": "0x0077402c",
+      "originalHex": "4d5320554920476f7468696300000000",
+      "patchedHex": "50726574656e64617264000000000000",
+      "note": "global GDI font face 'MS UI Gothic' -> 'Pretendard' (16-byte slot, NUL-padded)",
+      "fileOffsetHex": "0x0037402c"
+    }
+  ]
+}

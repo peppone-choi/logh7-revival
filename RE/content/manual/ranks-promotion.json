@@ -1,0 +1,170 @@
+{
+  "_source": "gin7 manual pp.33-37,46 via logh7-manual-canon.md §5 (PDF-verified pp.33/34/35 = PDF idx 33/34/35)",
+  "_grade": "P1",
+  "_confidence_notes": [
+    "Mechanics, the five ladder-ordering laws, personnel-authority tiers, promotion/demotion rules, and the two point systems are all verbatim from the manual and PDF-verified against gin7manual.pdf page-index 33/34/35.",
+    "Headcount caps (5.4) are from the manual digest table (p35); the cap numbers themselves were NOT re-read off the PDF table cells (the p35 PDF idx page rendered the authority table but not the cap table cells), so the six cap counts carry _uncertain on the count value only — the rank names are P1.",
+    "Full 14-rank ladder: the manual digest only names 元帥/上級大将/大将/中将/少将/准将 + '大佐以下'. The rank strings 大佐..曹長 are P1 shipped (org-posts.json 別表 min/max_rank_ja). The lowest enlisted ranks (軍曹/兵長 etc.) below 曹長 are NOT attested in the manual digest and are marked _uncertain; the ladder here lists the 13 manual-attested rank names. The '14 階級' count from the task spec is treated as approximate.",
+    "Fame-point COST of selecting an original character: manual states it is consumed (消費する, p34) but gives NO numeric amount — cost value marked _uncertain/null.",
+    "Flagship-change (5.7) is manual-stated as a provisional spec.",
+    "Alliance does NOT use 上級大将 (rank absent on alliance side per caps table).",
+    "Complements imperial-titles.json (peerage/作位) and org-posts.json (post capacity & min/max rank); does NOT duplicate them — this file holds the RANK ladder, caps, point systems, and promotion mechanics."
+  ],
+
+  "rankLadder": {
+    "_desc": "階級ラダー (rank ladder). Within a single rank, characters are always ordered by descending 功績 (merit). Military (軍人) and politician (政治家) maintain SEPARATE ladders. Higher rank = eligibility for higher posts (see org-posts.json min_rank_ja).",
+    "separateLadders": ["軍人 (military)", "政治家 (politician)"],
+    "ranks": [
+      { "tier": 1,  "rank_ja": "元帥",     "rank_en": "Marshal",        "rank_ko": "원수" },
+      { "tier": 2,  "rank_ja": "上級大将", "rank_en": "Senior Admiral", "rank_ko": "상급대장", "empireOnly": true, "_note": "Alliance does not use this rank." },
+      { "tier": 3,  "rank_ja": "大将",     "rank_en": "Admiral",        "rank_ko": "대장" },
+      { "tier": 4,  "rank_ja": "中将",     "rank_en": "Vice Admiral",   "rank_ko": "중장" },
+      { "tier": 5,  "rank_ja": "少将",     "rank_en": "Rear Admiral",   "rank_ko": "소장" },
+      { "tier": 6,  "rank_ja": "准将",     "rank_en": "Brigadier",      "rank_ko": "준장" },
+      { "tier": 7,  "rank_ja": "大佐",     "rank_en": "Colonel",        "rank_ko": "대령", "autoPromoteTier": true },
+      { "tier": 8,  "rank_ja": "中佐",     "rank_en": "Lt. Colonel",    "rank_ko": "중령", "autoPromoteTier": true },
+      { "tier": 9,  "rank_ja": "少佐",     "rank_en": "Major",          "rank_ko": "소령", "autoPromoteTier": true },
+      { "tier": 10, "rank_ja": "大尉",     "rank_en": "Captain",        "rank_ko": "대위", "autoPromoteTier": true },
+      { "tier": 11, "rank_ja": "中尉",     "rank_en": "1st Lieutenant", "rank_ko": "중위", "autoPromoteTier": true },
+      { "tier": 12, "rank_ja": "少尉",     "rank_en": "2nd Lieutenant", "rank_ko": "소위", "autoPromoteTier": true },
+      { "tier": 13, "rank_ja": "曹長",     "rank_en": "Sergeant Major", "rank_ko": "상사", "autoPromoteTier": true, "_note": "Lowest manual-attested rank (org-posts 士官学校教官 min_rank)." }
+    ],
+    "_unattestedLowerRanks": {
+      "_uncertain": true,
+      "note": "Task spec cites '14 階級'. Ranks below 曹長 (e.g. 軍曹/兵長/兵) are NOT enumerated in the manual digest; one additional enlisted tier likely exists to reach 14. Not included as data until attested."
+    }
+  },
+
+  "ladderOrdering": {
+    "_desc": "階級ラダー内の順位 — five laws (p35). Recomputed whenever any character's 功績 changes. Applied in order; each law is a tiebreaker for the prior.",
+    "recalcTrigger": "any character's 功績 (merit) point value changes",
+    "laws": [
+      { "law": 1, "rule_ja": "功績ポイントの多い順",        "rule_en": "More 功績 (merit) first." },
+      { "law": 2, "rule_ja": "爵位の高い順（銀河帝国軍のみ）", "rule_en": "Higher 爵位 (noble title) first — Galactic Empire military ONLY.", "empireMilitaryOnly": true },
+      { "law": 3, "rule_ja": "勲章順位の高い順",            "rule_en": "Highest decoration order first.", "_note": "Decorations currently unimplemented in the revival — skip this law for now.", "skipForNow": true },
+      { "law": 4, "rule_ja": "影響力の高い順",              "rule_en": "Higher 影響力 (influence) first." },
+      { "law": 5, "rule_ja": "全パラメータ値の合計",        "rule_en": "Sum of all parameter values (highest first)." }
+    ]
+  },
+
+  "headcountCaps": {
+    "_desc": "階級ごとの定員 (per-rank headcount cap), p35. 大佐 and below are UNLIMITED. Caps differ slightly between factions because Alliance lacks 上級大将.",
+    "_uncertain": true,
+    "_capUncertaintyNote": "Rank names P1; cap COUNT values from digest table only (not re-read off PDF table cells).",
+    "caps": [
+      { "rank_ja": "元帥",     "empire": 5,  "alliance": 5 },
+      { "rank_ja": "上級大将", "empire": 5,  "alliance": null, "_note": "Rank not used by Alliance." },
+      { "rank_ja": "大将",     "empire": 10, "alliance": 10 },
+      { "rank_ja": "中将",     "empire": 20, "alliance": 20 },
+      { "rank_ja": "少将",     "empire": 40, "alliance": 40 },
+      { "rank_ja": "准将",     "empire": 80, "alliance": 80 },
+      { "rank_ja": "大佐以下", "empire": "unlimited", "alliance": "unlimited", "rank_en": "Colonel & below" }
+    ]
+  },
+
+  "personnelAuthority": {
+    "_desc": "人事権 (personnel authority) by rank tier, p35/p36. The post listed holds the appoint/promote/demote authority over characters in that rank band. PDF-verified (idx 35).",
+    "selfRankChange": "A character may request a change to their own rank via 提案 (proposal) — promotion/demotion is itself a personnel command.",
+    "tiers": [
+      { "rankBand_ja": "元帥",            "empireAuthority_ja": "皇帝",           "empireAuthority_en": "Emperor",                          "allianceAuthority_ja": "国防委員長",         "allianceAuthority_en": "National Defense Committee Chair", "_uncertain": true, "_note": "Alliance 元帥-tier authority holder is extraction-uncertain in the digest." },
+      { "rankBand_ja": "上級大将～准将", "empireAuthority_ja": "軍務尚書",       "empireAuthority_en": "Minister of Military Affairs",     "allianceAuthority_ja": "国防委員長",         "allianceAuthority_en": "National Defense Committee Chair" },
+      { "rankBand_ja": "大佐以下",        "empireAuthority_ja": "軍務省人事局長", "empireAuthority_en": "Military Affairs Ministry Personnel Bureau Director", "allianceAuthority_ja": "国防委員会人事局長", "allianceAuthority_en": "National Defense Committee Personnel Bureau Director" }
+    ]
+  },
+
+  "promotionDemotion": {
+    "_desc": "昇進と降等 (promotion/demotion mechanics), p36. PDF-verified verbatim (idx 35).",
+    "promotion": {
+      "name_ja": "昇進",
+      "name_en": "Promotion",
+      "command": "人事コマンド「昇進」 (personnel command 'Promote')",
+      "effects": [
+        "Character is inserted at the BOTTOM (最下位) of the next-rank-up ladder.",
+        "功績 (merit) automatically resets to 0.",
+        "Loses ALL 職務権限カード (post/authority cards) EXCEPT 個人 (personal) / 艦長 (captain) / 封土 (fief)."
+      ]
+    },
+    "demotion": {
+      "name_ja": "降等",
+      "name_en": "Demotion",
+      "altName_ja": "降格",
+      "command": "人事コマンド「降等」 (personnel command 'Demote')",
+      "effects": [
+        "Character is inserted at the BOTTOM (最下位) of the next-rank-down ladder.",
+        "功績 (merit) automatically set to 100.",
+        "Loses ALL 職務権限カード EXCEPT 個人 / 艦長 / 封土."
+      ]
+    },
+    "autoPromotionMonthly": {
+      "_desc": "Real-time monthly auto-promotion (大佐以下 only), p34.",
+      "scope": "大佐以下 (Colonel and below)",
+      "trigger": "1st day of each REAL-WORLD month",
+      "rule": "The #1-ranked character on each affected rank ladder is automatically promoted (no command input required)."
+    },
+    "auto30GameDayCheck": {
+      "_desc": "In-game 30-day auto promote/demote check (大佐以下 only), p35.",
+      "scope": "大佐以下 (Colonel and below)",
+      "interval": "every 30 in-game days",
+      "rule": "Characters meeting promotion conditions are auto-promoted, and those violating retention conditions are auto-demoted — no command input required.",
+      "autoPromotedMeritSeed": "A character promoted by the auto-check (specifically) is granted the AVERAGE 功績 of characters already in the target ladder (instead of 0)."
+    }
+  },
+
+  "pointSystems": {
+    "_desc": "The two point systems, p33-34,46. PDF-verified (idx 33/34).",
+    "evaluationPoints": {
+      "name_ja": "評価ポイント",
+      "name_en": "Evaluation points",
+      "scope": "per-session (このセッション内におけるキャラクターの評価)",
+      "increaseSources": [
+        { "source_ja": "戦術ゲームで敵ユニット撃破 / 敵惑星・要塞占領", "source_en": "Tactical game: destroy an enemy unit OR occupy an enemy planet/fortress." },
+        { "source_ja": "所属勢力がゲームに勝利（最終階級に応じて、要生存）", "source_en": "Faction wins the game — scaled by FINAL rank; character must be ALIVE." },
+        { "source_ja": "准将以上は死亡時の階級に応じた固定値（陣営の勝敗無関係）", "source_en": "准将 (Brigadier) and above: on death, a fixed value by rank-at-death is assigned, INDEPENDENT of win/loss." }
+      ],
+      "tacticalTally": {
+        "_desc": "p46: tactical achievement points are tallied every 30 in-game days, ranked, and converted into evaluation points by ranking.",
+        "interval": "every 30 in-game days",
+        "process": "tally tactical achievement points -> rank characters -> convert to evaluation points by ranking position"
+      }
+    },
+    "famePoints": {
+      "name_ja": "名声ポイント",
+      "name_en": "Fame points",
+      "scope": "persistent / player-level (継続的なゲーム全体に対するプレイヤーの評価)",
+      "increase": "At session end, the character's evaluation points are converted and ADDED to fame points.",
+      "decrease": {
+        "trigger": "Selecting an ORIGINAL character (オリジナルキャラクターを選択する場合) consumes fame points.",
+        "cost": null,
+        "_uncertain": true,
+        "_note": "Manual states fame points are consumed but gives NO numeric cost. Cost value unknown from the manual."
+      }
+    }
+  },
+
+  "flagshipChange": {
+    "_desc": "旗艦変更 (flagship change), p36-37. Provisional spec.",
+    "_uncertain": true,
+    "rules": [
+      "A character's flagship TYPE is set at character creation, tied to their rank at that time.",
+      "On any rank change (promote/demote), the flagship is swapped for one matching the NEW rank."
+    ],
+    "_note": "Marked provisional in the manual digest."
+  },
+
+  "appointmentAuthority": {
+    "_desc": "任命と罷免 (appointment & dismissal), p37. Complements org-posts.json (which holds each post's capacity and min/max rank).",
+    "rules": [
+      "Authority flows TOP-DOWN through the post hierarchy; a higher post holds both 任命 (appoint) and 罷免 (dismiss) over lower posts.",
+      "Every post except the apex is dismissable — even a post held by an original character.",
+      "Appointment validation: the target's rank must be WITHIN the post's allowed rank range (org-posts min_rank_ja..max_rank_ja) AND STRICTLY LOWER than the appointer's own rank."
+    ],
+    "appointCommand_ja": "任命",
+    "dismissCommand_ja": "罷免"
+  },
+
+  "serverImplementationNotes": {
+    "status": "NOT implemented in the revival server (gap). Data-drivable / rules-layer.",
+    "wireHooks": "Character rank lives on the 0x0323 character record; 功績/評価/名声 are character-level scalars. Promotion/demotion/appoint/dismiss are 人事 (personnel) commands in the same group as the 0x070x personnel opcodes (see imperial-titles.json group 0x12).",
+    "caps": "Per-rank caps gate promotion eligibility; respect existing content caps (logh7-content-caps.mjs)."
+  }
+}

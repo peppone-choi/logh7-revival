@@ -1,0 +1,68 @@
+[
+ {
+  "file": "data/model/light/l001.mdx",
+  "name": "l001",
+  "ext": "mdx",
+  "size": 1548,
+  "node_count": 1,
+  "nodes": [
+   "Light"
+  ],
+  "assets": []
+ },
+ {
+  "file": "data/model/light/l002.mdx",
+  "name": "l002",
+  "ext": "mdx",
+  "size": 1548,
+  "node_count": 1,
+  "nodes": [
+   "Light"
+  ],
+  "assets": []
+ },
+ {
+  "file": "data/model/light/l003.mdx",
+  "name": "l003",
+  "ext": "mdx",
+  "size": 1548,
+  "node_count": 1,
+  "nodes": [
+   "Light"
+  ],
+  "assets": []
+ },
+ {
+  "file": "data/model/light/l004.mdx",
+  "name": "l004",
+  "ext": "mdx",
+  "size": 1548,
+  "node_count": 1,
+  "nodes": [
+   "Light"
+  ],
+  "assets": []
+ },
+ {
+  "file": "data/model/light/l005.mdx",
+  "name": "l005",
+  "ext": "mdx",
+  "size": 1548,
+  "node_count": 1,
+  "nodes": [
+   "Light"
+  ],
+  "assets": []
+ },
+ {
+  "file": "data/model/light/l006.mdx",
+  "name": "l006",
+  "ext": "mdx",
+  "size": 1548,
+  "node_count": 1,
+  "nodes": [
+   "Light"
+  ],
+  "assets": []
+ }
+]

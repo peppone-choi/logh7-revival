@@ -1,0 +1,256 @@
+{
+  "_source": "gin7 manual pp.14-18 via logh7-manual-canon.md §2",
+  "_grade": "P1",
+  "_confidence_notes": [
+    "PDF-verified against .omo/work/gin7manual/gin7manual.pdf (manual page P = PDF page P+1). CJK glyphs are CID-encoded with no ToUnicode map so Japanese text did not extract, but the numeric tokens did and confirm the digest values.",
+    "Confirmed numerics on the page: peerage '5' label, address-book cap 100, mailbox in/out caps 120/120, XP threshold sequence '100 / 100→+1 / reset 0' for the experience mechanic.",
+    "Peerage (爵位) has a count/list mismatch IN THE SOURCE: manual text says '5 kinds' but enumerates six entries. Preserved verbatim and flagged _uncertain.",
+    "Character growth (§2.3) is explicitly a provisional spec (現在暫定的な仕様). Exact age cutoffs, per-month probabilities, ability caps/floors, and the per-command CP-type table are NOT printed in the manual; flagged _uncertain where present.",
+    "8 ability stats map to the 0x0323 character record (ability_8 block @0x188 per docs/logh7-info-records-wire.md). Per-ability numeric ranges (e.g. 0-100) are NOT given on these pages; only PCP/MCP family grouping is canonical here."
+  ],
+
+  "descriptive_fields": [
+    {
+      "ja": "氏名",
+      "en": "name",
+      "ko": "성명",
+      "notes": "Created characters choose freely; global name uniqueness is enforced.",
+      "maps_0x0323": true
+    },
+    {
+      "ja": "性別",
+      "en": "sex",
+      "ko": "성별",
+      "notes": "Purely cosmetic — no post-creation ability difference between male/female.",
+      "maps_0x0323": true
+    },
+    {
+      "ja": "生年月日",
+      "en": "birthdate",
+      "ko": "생년월일",
+      "notes": "Stored once at creation; displayed in 帝国歴 (Empire calendar) or 宇宙歴 (Alliance/Universal calendar) depending on faction.",
+      "maps_0x0323": true
+    },
+    {
+      "ja": "分類",
+      "en": "classification",
+      "ko": "분류",
+      "enum": [
+        { "ja": "政治家", "en": "politician", "ko": "정치가" },
+        { "ja": "軍人", "en": "military", "ko": "군인" }
+      ],
+      "notes": "Auto-updates on 転身 (role conversion).",
+      "maps_0x0323": true
+    },
+    {
+      "ja": "階級",
+      "en": "rank",
+      "ko": "계급",
+      "notes": "Ladder from 二等兵 (Private 2nd Class) up to 元帥 (Marshal). See peerage table for the Empire-only nobility axis.",
+      "maps_0x0323": true
+    },
+    {
+      "ja": "爵位",
+      "en": "peerage",
+      "ko": "작위",
+      "scope": "Empire only",
+      "_uncertain": true,
+      "uncertain_reason": "Manual text says '5 kinds' but the enumeration lists six entries (the sixth, 帝国騎士 Imperial Knight, may be a distinct standing rather than a peerage). Count/list mismatch is in the source.",
+      "claimed_count": 5,
+      "listed": [
+        { "ja": "公爵", "en": "Duke", "ko": "공작" },
+        { "ja": "侯爵", "en": "Marquis", "ko": "후작" },
+        { "ja": "伯爵", "en": "Count", "ko": "백작" },
+        { "ja": "子爵", "en": "Viscount", "ko": "자작" },
+        { "ja": "男爵", "en": "Baron", "ko": "남작" },
+        { "ja": "帝国騎士", "en": "Imperial Knight", "ko": "제국기사", "note": "Possibly a distinct standing, not a peerage proper." }
+      ],
+      "maps_0x0323": true
+    },
+    {
+      "ja": "出自",
+      "en": "origin",
+      "ko": "출자",
+      "faction_gated": true,
+      "values": {
+        "empire": [
+          { "ja": "貴族", "en": "noble", "ko": "귀족" },
+          { "ja": "帝国騎士", "en": "imperial knight", "ko": "제국기사" },
+          { "ja": "平民", "en": "commoner", "ko": "평민" },
+          { "ja": "亡命者", "en": "defector/exile", "ko": "망명자" }
+        ],
+        "alliance": [
+          { "ja": "市民", "en": "citizen", "ko": "시민" },
+          { "ja": "亡命者", "en": "defector/exile", "ko": "망명자" }
+        ]
+      },
+      "maps_0x0323": true
+    },
+    {
+      "ja": "出身地",
+      "en": "birthplace",
+      "ko": "출신지",
+      "notes": "Default respawn location; if the birthplace is sunk/lost, no return point is set.",
+      "maps_0x0323": true
+    }
+  ],
+
+  "progression_fields": [
+    {
+      "ja": "功績",
+      "en": "achievement points",
+      "ko": "공적",
+      "notes": "Tracked per-current-rank. Promotion/demotion is decided by RELATIVE ranking among same-rank peers, not an absolute threshold."
+    }
+  ],
+
+  "abilities": {
+    "_note": "Eight ability stats, split into the PCP family (政治指令 / strategic-command, planet-side) and the MCP family (軍事指令 / military-command, fleet-side). Numeric ranges per stat are not given on these pages. Maps to the ability_8 block of the 0x0323 record.",
+    "_maps_0x0323": true,
+    "PCP": [
+      {
+        "ja": "統率",
+        "en": "Leadership",
+        "ko": "통솔",
+        "family": "PCP",
+        "effect": "Easier to gather citizen support (p15)."
+      },
+      {
+        "ja": "政治",
+        "en": "Politics",
+        "ko": "정치",
+        "family": "PCP",
+        "effect": "Political/administrative influence (p15)."
+      },
+      {
+        "ja": "運用",
+        "en": "Administration",
+        "ko": "운용",
+        "family": "PCP",
+        "effect": "Affects planet governance (惑星の統治) (p15)."
+      },
+      {
+        "ja": "情報",
+        "en": "Intelligence",
+        "ko": "정보",
+        "family": "PCP",
+        "effect": "Affects spy activity (スパイ活動) and tactical detection ability (索敵能力) (p15)."
+      }
+    ],
+    "MCP": [
+      {
+        "ja": "指揮",
+        "en": "Command",
+        "ko": "지휘",
+        "family": "MCP",
+        "effect": "Higher → subordinate ships respond/redeploy more quickly; governs command-range-circle regrowth (p15, p48)."
+      },
+      {
+        "ja": "機動",
+        "en": "Mobility",
+        "ko": "기동",
+        "family": "MCP",
+        "effect": "Higher → more agile ship-handling (操艦); governs Reverse-command speed (p15, p53)."
+      },
+      {
+        "ja": "攻撃",
+        "en": "Attack",
+        "ko": "공격",
+        "family": "MCP",
+        "effect": "As commander/staff → fleet attack power; as defense commander → planet anti-ship (対艦) defense (p15)."
+      },
+      {
+        "ja": "防御",
+        "en": "Defense",
+        "ko": "방어",
+        "family": "MCP",
+        "effect": "As commander/staff → fleet defense; as defense commander → planet anti-occupation defense (p15)."
+      }
+    ]
+  },
+
+  "growth_mechanics": {
+    "_provisional": true,
+    "_provisional_note": "現在暫定的な仕様 — manual states this is a provisional spec.",
+    "age_effect": {
+      "ja": "年齢効果",
+      "en": "Age effect",
+      "ko": "연령 효과",
+      "description": "Each month, young characters (若年) have a chance of a POSITIVE ability change; mature characters (壮年) have a chance of a NEGATIVE change. Both bounded by a fixed cap/floor.",
+      "_uncertain": true,
+      "uncertain_reason": "Exact age cutoffs, monthly probabilities, and the ability cap/floor values are not printed on the manual pages.",
+      "age_cutoffs": null,
+      "monthly_probability": null,
+      "cap": null,
+      "floor": null
+    },
+    "experience_via_cp": {
+      "ja": "経験 (CP)",
+      "en": "Experience via Command Points",
+      "ko": "경험 (CP)",
+      "description": "Each strategic command spends CP. CP used is accumulated; per fixed quantum of accumulated CP, +1 XP is granted to one ability (gated by whether the command is PCP-type or MCP-type). At 100 XP an ability rises +1 and XP resets to 0.",
+      "xp_threshold": 100,
+      "ability_gain_per_threshold": 1,
+      "xp_reset_to": 0,
+      "substitution_excluded": true,
+      "substitution_note": "CP consumed via substitution (代用) is NOT counted toward XP.",
+      "_uncertain": true,
+      "uncertain_reason": "The per-command CP-type (PCP vs MCP) mapping table and the fixed CP-per-XP quantum are not printed on these pages; only the PCP/MCP family grouping is canonical."
+    }
+  },
+
+  "communications": {
+    "_source_pages": "pp.16-18",
+    "address_book": {
+      "ja": "アドレス帳",
+      "en": "address book",
+      "ko": "주소록",
+      "capacity": 100,
+      "note": "Stores personal mail addresses; exchanged via [名刺交換] (business-card exchange)."
+    },
+    "mailbox": {
+      "ja": "メールボックス",
+      "en": "mailbox",
+      "ko": "메일박스",
+      "inbox_capacity": 120,
+      "outbox_capacity": 120
+    },
+    "call": {
+      "ja": "通話",
+      "en": "call",
+      "ko": "통화",
+      "fsm_states": ["idle", "calling", "connected"],
+      "rules": [
+        "Only 1 outstanding call (calling state) at a time.",
+        "A new call cancels the prior outstanding call.",
+        "Calling while connected drops the existing connection.",
+        "Accepting one incoming call auto-cancels all other incoming calls."
+      ]
+    },
+    "chat": {
+      "ja": "チャット",
+      "en": "chat",
+      "ko": "채팅",
+      "_source_pages": "pp.17-18",
+      "default_audience": "Same スポット (spot) zone — home (自宅), conference room (会議室), tavern (酒場).",
+      "same_unit_rule": "Same-部隊 (unit) members can chat across spots if they are in the same grid.",
+      "tactical_mode_rule": "In tactical mode only, chat broadcasts to all friendly (自陣営) characters in the same grid.",
+      "commands": [
+        {
+          "ja": "名刺交換",
+          "en": "exchange business card",
+          "ko": "명함 교환",
+          "effect": "Pushes the player's personal mail address to the partner (adds to their address book)."
+        },
+        {
+          "ja": "キャラクター情報取得",
+          "en": "get character info",
+          "ko": "캐릭터 정보 취득",
+          "effect": "Views the partner's character info.",
+          "maps_0x0323": true,
+          "maps_note": "Maps to a 0x0323-style character record view."
+        }
+      ]
+    }
+  }
+}
