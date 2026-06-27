@@ -17,8 +17,15 @@
 /.bkit/
 /artifacts/
 /client/
-/.codex/
 RE/artifacts/
+
+# .codex: 프로젝트 agents/skills는 추적, 로컬 인증/설정/캐시만 제외
+.codex/config.toml
+.codex/auth.json
+.codex/*.lock
+.codex/.tmp/
+.codex/log/
+.codex/history.jsonl
 
 # 원본 게임 CD 덤프 (GitHub 100MB 한도 초과, 작업 지속에 불필요 — 별도 전송)
 *.iso
