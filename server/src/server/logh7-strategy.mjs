@@ -350,7 +350,7 @@ export function buildNotifyFinishStrategyPlanInner({ planId = 0, result = 0, ext
  * `nextOutfitId` allocates fresh outfit ids (defaults to 0x1000 to avoid colliding with low world ids).
  * @param {{ nextOutfitId?: number }} [options]
  */
-export function createStrategyState({ nextOutfitId = 0x1000, operationDurationDays = OPERATION_DURATION_DAYS } = {}) {
+export function createStrategyState({ nextOutfitId = 0x1000, operationDurationDays = OPERATION_DURATION_DAYS, targetPool = null } = {}) {
   return {
     /** @type {Map<number, { id:number, base:number, power:number, camp:number, owner:number, ships:object[], troops:object[], practice:object|null, achievement:number }>} */
     outfits: new Map(),
@@ -362,6 +362,11 @@ export function createStrategyState({ nextOutfitId = 0x1000, operationDurationDa
      * @type {Map<number, Array<{ plan:object, issuedAt:(number|null) }>>} power -> Array<entry>
      */
     operationPlans: new Map(),
+    /** 발령/명령(0x0902 Announcement) 이력. Wire shape는 유지하고 서버 상태로 추적한다. */
+    orders: [],
+    /** 작전계획 lifecycle event log: make/issue/withdraw/expire 등 상태관리 관측용. */
+    operationEvents: [],
+    targets: targetPool,
     _operationDurationDays: operationDurationDays,
     _nextOutfitId: nextOutfitId >>> 0,
 
@@ -377,12 +382,15 @@ export function createStrategyState({ nextOutfitId = 0x1000, operationDurationDa
       const id = record.id ?? this.allocOutfitId();
       const outfit = { ...record, id }; // resolved id overrides any record.id
       this.outfits.set(id, outfit);
+      this.targets?.registerOutfit?.(outfit, 'strategy:create-outfit');
       return outfit;
     },
 
     /** Remove an outfit by id; returns true if it existed. */
     deleteOutfit(id) {
-      return this.outfits.delete(id);
+      const deleted = this.outfits.delete(id);
+      if (deleted) this.targets?.removeOutfit?.(id, 'strategy:delete-outfit');
+      return deleted;
     },
 
     /** Enqueue a strategy plan under its owning faction/power. Returns the queued plan. */
@@ -433,6 +441,44 @@ export function createStrategyState({ nextOutfitId = 0x1000, operationDurationDa
       if (idx >= 0) list[idx] = entry;
       else list.push(entry);
       return entry;
+    },
+
+    recordOrder(power, order = {}) {
+      const record = {
+        seq: this.orders.length + 1,
+        power: power >>> 0,
+        planId: Number(order.planId ?? order.target) || 0,
+        target: Number(order.target ?? order.planId) || 0,
+        message: Number(order.message) || 0,
+        owner: Number(order.owner) || 0,
+        gameDay: order.gameDay ?? null,
+      };
+      this.orders.push(record);
+      if (this.orders.length > 200) this.orders.splice(0, this.orders.length - 200);
+      return record;
+    },
+
+    markOperationWithdrawn(power, planId, { gameDay = null, connectionId = 0, target = 0 } = {}) {
+      const key = power >>> 0;
+      const id = Number(planId) || 0;
+      const list = this.operationPlans.get(key) ?? [];
+      const entry = list.find((candidate) => Number(candidate?.plan?.id) === id) ?? null;
+      if (entry?.plan) {
+        entry.plan = { ...entry.plan, status: 'withdrawn' };
+        entry.withdrawnAt = gameDay;
+      }
+      const event = {
+        seq: this.operationEvents.length + 1,
+        type: 'withdraw',
+        power: key,
+        planId: id,
+        target: Number(target) || Number(entry?.plan?.target) || 0,
+        connectionId: Number(connectionId) || 0,
+        gameDay,
+      };
+      this.operationEvents.push(event);
+      if (this.operationEvents.length > 200) this.operationEvents.splice(0, this.operationEvents.length - 200);
+      return entry ?? event;
     },
 
     /**
@@ -494,6 +540,90 @@ export function createStrategyState({ nextOutfitId = 0x1000, operationDurationDa
         else this.operationPlans.delete(power);
       }
       return expired;
+    },
+
+    toSnapshot() {
+      const clonePlan = (plan = {}) => ({
+        ...plan,
+        payload: Array.isArray(plan?.payload) ? [...plan.payload] : plan?.payload,
+        dwords: Array.isArray(plan?.dwords) ? [...plan.dwords] : plan?.dwords,
+        units: Array.isArray(plan?.units) ? [...plan.units] : plan?.units,
+      });
+      const cloneOutfit = (outfit = {}) => ({
+        ...outfit,
+        ships: Array.isArray(outfit?.ships) ? outfit.ships.map((ship) => ({ ...ship })) : [],
+        troops: Array.isArray(outfit?.troops) ? outfit.troops.map((troop) => ({ ...troop })) : [],
+        practice: outfit?.practice && typeof outfit.practice === 'object' ? { ...outfit.practice } : outfit?.practice ?? null,
+      });
+      return {
+        nextOutfitId: this._nextOutfitId >>> 0,
+        operationDurationDays: this._operationDurationDays,
+        plans: [...this.plans.entries()].map(([power, plans]) => ({
+          power,
+          plans: (Array.isArray(plans) ? plans : []).map(clonePlan),
+        })),
+        operationPlans: [...this.operationPlans.entries()].map(([power, entries]) => ({
+          power,
+          entries: (Array.isArray(entries) ? entries : []).map((entry = {}) => ({
+            ...entry,
+            plan: clonePlan(entry?.plan ?? entry),
+            outcome: entry?.outcome && typeof entry.outcome === 'object' ? { ...entry.outcome } : entry?.outcome ?? null,
+          })),
+        })),
+        outfits: [...this.outfits.values()].map(cloneOutfit),
+        orders: this.orders.map((order) => ({ ...order })),
+        operationEvents: this.operationEvents.map((event) => ({ ...event })),
+      };
+    },
+
+    restore(snapshot = {}) {
+      const clonePlan = (plan = {}) => ({
+        ...plan,
+        payload: Array.isArray(plan?.payload) ? [...plan.payload] : plan?.payload,
+        dwords: Array.isArray(plan?.dwords) ? [...plan.dwords] : plan?.dwords,
+        units: Array.isArray(plan?.units) ? [...plan.units] : plan?.units,
+      });
+      const cloneOutfit = (outfit = {}) => ({
+        ...outfit,
+        id: Number(outfit?.id) || 0,
+        ships: Array.isArray(outfit?.ships) ? outfit.ships.map((ship) => ({ ...ship })) : [],
+        troops: Array.isArray(outfit?.troops) ? outfit.troops.map((troop) => ({ ...troop })) : [],
+        practice: outfit?.practice && typeof outfit.practice === 'object' ? { ...outfit.practice } : outfit?.practice ?? null,
+      });
+
+      this._nextOutfitId = Number(snapshot.nextOutfitId ?? this._nextOutfitId) >>> 0;
+      if (snapshot.operationDurationDays != null) {
+        this._operationDurationDays = Number(snapshot.operationDurationDays) || this._operationDurationDays;
+      }
+
+      this.outfits.clear();
+      this.plans.clear();
+      this.operationPlans.clear();
+      this.orders.length = 0;
+      this.operationEvents.length = 0;
+
+      for (const row of snapshot.plans ?? []) {
+        const power = Number(row?.power) >>> 0;
+        const plans = Array.isArray(row?.plans) ? row.plans.map(clonePlan) : [];
+        this.plans.set(power, plans);
+      }
+      for (const row of snapshot.operationPlans ?? []) {
+        const power = Number(row?.power) >>> 0;
+        const entries = (Array.isArray(row?.entries) ? row.entries : []).map((entry = {}) => ({
+          ...entry,
+          plan: clonePlan(entry?.plan ?? entry),
+          outcome: entry?.outcome && typeof entry.outcome === 'object' ? { ...entry.outcome } : entry?.outcome ?? null,
+        }));
+        this.operationPlans.set(power, entries);
+      }
+      for (const outfit of snapshot.outfits ?? []) {
+        const restored = cloneOutfit(outfit);
+        this.outfits.set(restored.id, restored);
+        this.targets?.registerOutfit?.(restored, 'strategy:restore-outfit');
+      }
+      for (const order of snapshot.orders ?? []) this.orders.push({ ...order });
+      for (const event of snapshot.operationEvents ?? []) this.operationEvents.push({ ...event });
+      return this;
     },
   };
 }
@@ -559,6 +689,9 @@ export function processStrategy({ state, connectionId = 0, innerCode, inner, pow
       if (!parsed) {
         return { accept: false, reject: 'invalid-make-plan', notifies: [] };
       }
+      state.targets?.ensure?.('base', { id: parsed.target || operationCtx?.baseId || 1 }, 'strategy:make-plan:base');
+      state.targets?.ensure?.('outfit', { id: operationCtx?.unitId ?? parsed.planId, power }, 'strategy:make-plan:outfit');
+      state.targets?.ensure?.('resources', {}, 'strategy:make-plan:resources');
       // 입안(draft)→검증(validate) 게이트(작전계획 캐논 §B3): operationCtx가 주입된 경우에만 타깃 유효성
       // ·유닛 1+개·전역 유닛상한을 enqueue 전에 건다. 미주입(레거시 경로)이면 maxUnits=Infinity·validTargets
       // =null로 게이트가 통과해 기존 단순 큐잉 동작을 그대로 보존한다(회귀 0). units는 호출자가 부대 유닛
@@ -612,6 +745,11 @@ export function processStrategy({ state, connectionId = 0, innerCode, inner, pow
         return { accept: false, reject: 'no-such-plan', notifies: [] };
       }
       // A withdrawal resolves the plan with a cancelled result (result=1) so all trays drop it.
+      state.markOperationWithdrawn?.(power, parsed.planId, {
+        gameDay: operationCtx?.gameDay ?? null,
+        connectionId,
+        target: removed.target,
+      });
       const notify = buildNotifyFinishStrategyPlanInner({ planId: parsed.planId, result: 1 });
       return { accept: true, planId: parsed.planId, notifies: [{ inner: notify, target: 'all' }] };
     }
@@ -622,6 +760,14 @@ export function processStrategy({ state, connectionId = 0, innerCode, inner, pow
         return { accept: false, reject: 'invalid-announcement', notifies: [] };
       }
       // An announcement posts an order to everyone; surfaced as a resolved plan carrying the message.
+      state.targets?.ensure?.('base', { id: parsed.target || operationCtx?.baseId || 1 }, 'strategy:announcement:base');
+      state.recordOrder?.(power, {
+        planId: parsed.target,
+        target: parsed.target,
+        message: parsed.message,
+        owner: connectionId,
+        gameDay: operationCtx?.gameDay ?? null,
+      });
       const notify = buildNotifyFinishStrategyPlanInner({ planId: parsed.target, result: 0, extra: parsed.message });
       return { accept: true, target: parsed.target, notifies: [{ inner: notify, target: 'all' }] };
     }

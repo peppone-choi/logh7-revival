@@ -1,0 +1,15 @@
+{
+  "name": "input-edit-char-movzx",
+  "desc": "Diagnostic-only patch for the LOGH VII MBCS edit-widget character validator. FUN_004fff60 sign-extends the single input byte before CRT/MBCS classification (`movsx eax, byte ptr [esi]`). Change it to zero-extension to test whether CP949 high bytes are being rejected before insertion. This does not solve DBCS pair assembly or WM_IME_CHAR routing by itself and must not enter DEFAULT_STACK without live proof.",
+  "verified": "Raw bytes verified against canonical playable 98ca installed EXE: VA 0x004fff65/file 0x000fff65 = 0fbe06. Same-length 3-byte diagnostic replacement only.",
+  "verifiedFlag": false,
+  "patches": [
+    {
+      "va": "0x004fff65",
+      "fileOffsetHex": "0x000fff65",
+      "originalHex": "0fbe06",
+      "patchedHex": "0fb606",
+      "note": "FUN_004fff60: `movsx eax, byte ptr [esi]` -> `movzx eax, byte ptr [esi]` for high-byte character validation diagnostics."
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "name": "font-atlas-face",
+  "desc": "Patch the separate D3D texture-glyph atlas face slot used by FUN_004b07c0/FUN_004b0960 from CP949 Gulim (DAT_0076e240) to Pretendard. Raw-byte proof: FUN_004b07c0 contains `bf 40 e2 76 00` (mov edi,0x0076e240) and copies that 16-byte string into the atlas object at +8; FUN_004b0960 then passes +8 to CreateFontA. This is not the global GDI face slot at 0x0077402c, so both slots must be patched for a true all-Pretendard client.",
+  "verified": "ENCODED + raw bytes verified against G7MTClient.korean.exe: file 0x0036e240 is b1bcb8b2000000000000000000000000. Same-length 16-byte data patch, no code cave. GDI spawn probe 2026-06-27 previously proved this path created faceHex=b1bcb8b200 while the other GDI path created Pretendard.",
+  "patches": [
+    {
+      "va": "0x0076e240",
+      "fileOffsetHex": "0x0036e240",
+      "originalHex": "b1bcb8b2000000000000000000000000",
+      "patchedHex": "50726574656e64617264000000000000",
+      "note": "D3D glyph-atlas face DAT_0076e240: CP949 Gulim -> Pretendard (16-byte slot)"
+    }
+  ]
+}

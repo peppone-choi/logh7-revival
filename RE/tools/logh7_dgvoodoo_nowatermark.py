@@ -33,6 +33,7 @@ ROOT = Path(__file__).resolve().parents[1]
 # 이 DLL(2.87.2)과 동봉돼 배포된 정식 stock conf — 구조적으로 보장된 파서 호환 템플릿.
 STOCK_CONF = ROOT / ".omo/work/dgVoodoo2_87_2/dgVoodoo.conf"
 INSTALLED_CONF = ROOT / ".omo/work/logh7-installed/exe/dgVoodoo.conf"
+INSTALLED_CONF_ORIGINAL = ROOT / ".omo/work/logh7-installed/exe/dgVoodoo.conf.original"
 
 # 키 → 강제할 값. 같은 줄의 들여쓰기/정렬은 유지하고 = 우측 값만 교체한다.
 # (워터마크 2종 OFF + 설치본이 쓰던 LOGH 리마스터 화질값. 정적 RE/라이브로 확인된 기존 설치 conf와 동일.)
@@ -40,14 +41,19 @@ OVERRIDES: dict[str, str] = {
     # --- 워터마크 제거(핵심) ---
     "dgVoodooWatermark": "false",  # [DirectX] D3D8/9 우하단 "dgVoodoo" 워터마크
     "3DfxWatermark": "false",      # [Glide] Glide 워터마크(이 게임은 D3D8이라 무관하나 함께 off)
-    "WatermarkDisplayDuration": "0",  # 워터마크가 켜질 경우의 표시 시간(off라 무의미하나 명시 유지)
+    "3DfxSplashScreen": "false",
+    "WatermarkDisplayDuration": "1",  # off가 무시되는 모드에서도 우하단 로고가 무한 지속되지 않게 한다.
     # --- LOGH 리마스터 화질(기존 설치 conf 유지) ---
-    "ScalingMode": "stretched",
-    "Resampling": "lanczos-3",
-    "FullscreenAttributes": "fullscreensize",
-    "Filtering": "16",
-    # Antialiasing은 [Glide]/[DirectX] 양쪽에 같은 키로 존재 → 둘 다 4x로(아래에서 전 occurrence 교체)
-    "Antialiasing": "4x",
+    "FullScreenMode": "false",
+    "ScalingMode": "centered",
+    "Resampling": "pointsampled",
+    "WindowedAttributes": "borderless",
+    "FullscreenAttributes": "fake",
+    "Filtering": "appdriven",
+    # Antialiasing can appear in multiple sections, so every occurrence is set.
+    "Antialiasing": "off",
+    "RTTexturesForceScaleAndMSAA": "false",
+    "SmoothedDepthSampling": "false",
 }
 
 
@@ -112,14 +118,37 @@ def verify(conf_bytes: bytes) -> dict[str, str]:
     checks["Version"] = get("Version") or "MISSING"
     checks["dgVoodooWatermark"] = get("dgVoodooWatermark") or "MISSING"
     checks["3DfxWatermark"] = get("3DfxWatermark") or "MISSING"
+    checks["3DfxSplashScreen"] = get("3DfxSplashScreen") or "MISSING"
+    checks["WatermarkDisplayDuration"] = get("WatermarkDisplayDuration") or "MISSING"
+    checks["FullScreenMode"] = get("FullScreenMode") or "MISSING"
     checks["ScalingMode"] = get("ScalingMode") or "MISSING"
     checks["Resampling"] = get("Resampling") or "MISSING"
-    ok = (
+    checks["WindowedAttributes"] = get("WindowedAttributes") or "MISSING"
+    checks["FullscreenAttributes"] = get("FullscreenAttributes") or "MISSING"
+    checks["Filtering"] = get("Filtering") or "MISSING"
+    checks["Antialiasing"] = get("Antialiasing") or "MISSING"
+    checks["RTTexturesForceScaleAndMSAA"] = get("RTTexturesForceScaleAndMSAA") or "MISSING"
+    checks["SmoothedDepthSampling"] = get("SmoothedDepthSampling") or "MISSING"
+    watermark_ok = (
         checks["Version"] == "0x287"
         and checks["dgVoodooWatermark"] == "false"
         and checks["3DfxWatermark"] == "false"
+        and checks["3DfxSplashScreen"] == "false"
+        and checks["WatermarkDisplayDuration"] == "1"
     )
-    checks["watermarkOff"] = "PASS" if ok else "FAIL"
+    sharp_ok = (
+        checks["FullScreenMode"] == "false"
+        and checks["ScalingMode"] == "centered"
+        and checks["Resampling"] == "pointsampled"
+        and checks["WindowedAttributes"] == "borderless"
+        and checks["FullscreenAttributes"] == "fake"
+        and checks["Filtering"] == "appdriven"
+        and checks["Antialiasing"] == "off"
+        and checks["RTTexturesForceScaleAndMSAA"] == "false"
+        and checks["SmoothedDepthSampling"] == "false"
+    )
+    checks["watermarkOff"] = "PASS" if watermark_ok else "FAIL"
+    checks["sharpBorderless"] = "PASS" if sharp_ok else "FAIL"
     checks["sha256"] = hashlib.sha256(conf_bytes).hexdigest()
     return checks
 
@@ -132,8 +161,12 @@ def main() -> int:
     args = parser.parse_args()
 
     if not args.stock.exists():
-        print(f"stock conf not found: {args.stock}", file=sys.stderr)
-        return 1
+        fallback = INSTALLED_CONF_ORIGINAL if INSTALLED_CONF_ORIGINAL.exists() else INSTALLED_CONF
+        if args.stock == STOCK_CONF and fallback.exists():
+            args.stock = fallback
+        else:
+            print(f"stock conf not found: {args.stock}", file=sys.stderr)
+            return 1
 
     conf_bytes = build_conf(args.stock)
     checks = verify(conf_bytes)
@@ -152,7 +185,7 @@ def main() -> int:
 
     import json
     print(json.dumps(checks, ensure_ascii=False, indent=2))
-    return 0 if checks["watermarkOff"] == "PASS" else 2
+    return 0 if checks["watermarkOff"] == "PASS" and checks["sharpBorderless"] == "PASS" else 2
 
 
 if __name__ == "__main__":

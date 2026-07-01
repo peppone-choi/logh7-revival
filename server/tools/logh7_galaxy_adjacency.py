@@ -46,6 +46,15 @@ def _dist(a: dict, b: dict) -> float:
     return math.hypot(a["cx"] - b["cx"], a["cy"] - b["cy"])
 
 
+def _has_position(s: dict) -> bool:
+    if s.get("cx") is None or s.get("cy") is None:
+        return False
+    try:
+        return math.isfinite(float(s["cx"])) and math.isfinite(float(s["cy"]))
+    except (TypeError, ValueError):
+        return False
+
+
 def build_adjacency(
     systems: list[dict],
     radius: float = RADIUS,
@@ -53,7 +62,7 @@ def build_adjacency(
     kmin: int = KMIN,
     navigable_key: str = NAVIGABLE_KEY,
 ) -> dict:
-    nodes = [s for s in systems if s.get(navigable_key, True) is not False]
+    nodes = [s for s in systems if s.get(navigable_key, True) is not False and _has_position(s)]
 
     adjacency: dict[str, dict[str, dict]] = {}
     for s in nodes:

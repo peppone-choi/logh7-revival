@@ -226,7 +226,7 @@ export function buildInformationCharacterRecordInner({
   camp = null, state = null, fame = null, pcp = null, mcp = null, money = null, influence = null, stamina = null,
   officerCount = null,
   lastname = null, firstname = null, displayName = null, rank = null, title = null, face = null,
-  seatEntries = null, spotResolverBase = null,
+  seatEntries = null, spotResolverBase = null, together = null,
   wireEndian = 'le',
 } = {}) {
   const inner = buildLobbyResponseInner(SS_RESP_INFO_CHARACTER_RECORD_CODE, SS_RESP_INFO_CHARACTER_RECORD_BYTES);
@@ -317,6 +317,9 @@ export function buildInformationCharacterRecordInner({
   if (title != null && String(title).length > 0) writePstr16(String(title), P0 + 0x58, P0 + 0x5a);
   if (Number.isInteger(face)) writeRecordU32(face, P0 + 0x74); // face @0xf4
   if (Number.isInteger(spotResolverBase)) writeRecordU32(spotResolverBase, P0 + 0x80); // source +0x100 -> PLAYER_INFO +0x120
+  // FUN_00419300 prints this final scalar as `together=`; FUN_004c2c80 copies
+  // it to PLAYER_INFO+0x2f4 for HUD/party-state consumers.
+  if (Number.isInteger(together)) payload.writeUInt8(together & 0xff, 0x2d0);
   return inner;
 }
 
@@ -986,9 +989,17 @@ export function strategicMarkerVariantForSystem(system = {}) {
 
 export function buildStrategicGalaxyGrid({ systems = [], fleetCell = null, fleetValue = 3, fleetContentId = 0, fleetAsMarker = false, passableCells = null, terrain = false, plasmaCells = null, sargassoCells = null, blackHoleCells = null, neutronStarCells = null } = {}) {
   // Cap to ≤85 systems so the assigned object values (4 + index) stay ≤88 (the placeable cell range).
+  // 로스터는 85개 캐논 성계를 담을 수 있으나 좌표를 가진 건 80개뿐 — 좌표 미확정 성계(constmsg group-0x18
+  // sub 13/32/34/52/75: 이름은 권위지만 매뉴얼 dot 부재)는 grid 마커를 받지 않는다. canon 셀이 없으면 선형
+  // min-max 폴백으로 항행불능 셀에 떨어지므로, 좌표를 절대 지어내지 않고 grid 마커에서 제외해 roster=85,
+  // grid 마커=80을 유지한다.
   const list = systems.slice(0, 85)
     .map((system) => ({ system, canon: strategicGalaxyCanonCell(system), point: strategicGalaxyProjectionPoint(system) }))
-    .filter(({ canon, point }) => canon != null || point != null);
+    .filter(({ system, canon, point }) => {
+      // coordinatePending 성계는 우연히 cx/cy가 생기더라도 canon 셀이 없으면 grid 밖에 둔다(선형 폴백 차단).
+      if (system?.coordinatePending === true) return canon != null;
+      return canon != null || point != null;
+    });
   const contentIdFor = (system, index) => {
     const raw = system?.contentId
       ?? system?.markerContentId
@@ -1346,9 +1357,9 @@ export const NOTIFY_MOVED_GRID_BYTES = 0x244; // 580
 export const NOTIFY_MOVED_GRID_MAX_UNITS = 70;
 
 /**
- * 0x0b07 NotifyMovedGrid: authoritative strategic move. `units` = [{ unitId, cell }] (≤70). The
- * client writes each unit's new cell into PLAYER_INFO (FUN_00517cd0). Evidence:
- * docs/logh7-strategic-input-wire.md §3 (FUN_0044b460/FUN_0044b600 parsers, 0x14 header + stride-8 array).
+ * 0x0b07 NotifyMovedGrid: authoritative strategic move candidate. `units` = [{ unitId, cell }] (≤70).
+ * The real client accepts the record through FUN_004bee20 -> FUN_00517cd0 -> event 0x16; persistent
+ * unit/PLAYER_INFO/cell mutation is still live-RE gated. Evidence: docs/logh7-strategic-input-wire.md §3.
  */
 export function buildNotifyMovedGridInner({ units = [], header = {} } = {}) {
   const inner = buildLobbyResponseInner(NOTIFY_MOVED_GRID_CODE, NOTIFY_MOVED_GRID_BYTES);
@@ -1540,8 +1551,9 @@ export function buildCommandGridChatInner({ text = '', channel = 0, time = 0, ca
 }
 
 export const SS_RESP_TACTICS_INFO_CODE = 0x033b; // S->C ResponseTacticsInformationUnitSh
-export const SS_RESP_TACTICS_INFO_BYTES = 0x79e4; // 31204 — dispatcher memcpy copies a fixed 0x1e79 dwords
-export const TACTICS_UNIT_ENTRY_STRIDE = 52; // 13 dwords; entry[0] starts at body+4 (clientBase+0x4271ac)
+export const SS_RESP_TACTICS_INFO_BYTES = 0x79e4; // 31204 dispatcher receive-buffer cap, not wire body length.
+export const TACTICS_UNIT_ENTRY_HEADER_BYTES = 2; // wire count u16 only; parser adds resident padding.
+export const TACTICS_UNIT_ENTRY_STRIDE = 0x34; // FUN_00421f80 advances each UnitShip record by 52 bytes.
 
 /**
  * 0x033b ResponseTacticsInformationUnitSh — the tactical encounter unit table (G196, workflow
@@ -1559,23 +1571,41 @@ export const TACTICS_UNIT_ENTRY_STRIDE = 52; // 13 dwords; entry[0] starts at bo
  * must poke 0x126711=0 before the grid-enter (0xb09/0xb0a) that triggers the populate path.
  */
 export function buildResponseTacticsInformationInner({ units = [] } = {}) {
-  const inner = buildLobbyResponseInner(SS_RESP_TACTICS_INFO_CODE, SS_RESP_TACTICS_INFO_BYTES);
-  const body = inner.subarray(6);
-  const list = units.length ? units : [{}];
-  body.writeUInt16LE(list.length & 0xffff, 0); // clientBase+0x4271a8 unit count
-  for (let i = 0; i < list.length; i += 1) {
-    const { unitId = 1, controllable = 1, mapSection, x = 0, y = 0, z = 0, heading = 0 } = list[i];
-    const base = 4 + i * TACTICS_UNIT_ENTRY_STRIDE;
-    if (base + TACTICS_UNIT_ENTRY_STRIDE > body.length) break; // never overflow the fixed buffer
-    body.writeUInt32LE(unitId >>> 0, base + 0);
-    body.writeUInt32LE(controllable >>> 0, base + 4);
-    body.writeUInt32LE((mapSection ?? unitId) >>> 0, base + 8);
-    body.writeFloatLE(x, base + 12);
-    body.writeFloatLE(y, base + 16);
-    body.writeFloatLE(z, base + 20);
-    body.writeFloatLE(heading, base + 24);
-  }
-  return inner;
+const list = units.length ? units : [{}];
+const count = Math.min(list.length, 600);
+const inner = buildLobbyResponseInner(SS_RESP_TACTICS_INFO_CODE, SS_RESP_TACTICS_INFO_BYTES);
+const body = inner.subarray(6);
+  body.writeUInt16BE(count & 0xffff, 0); // clientBase+0x4271a8 unit count
+for (let i = 0; i < count; i += 1) {
+const {
+  unitId = 1, id, shipId, controllable = 1, morale, confusion = 0, mapSection,
+x = 0, y = 0, z = 0, heading = 0, direction,
+    anchorId, anchorUnitId, currentId, currentUnitId,
+    detachmentLeader, detachmentLeaderId, detachmentX, detachmentY, detachmentZ,
+detachmentDirection, detachmentHeading, search = 0,
+} = list[i];
+const unit = (id ?? shipId ?? unitId) >>> 0;
+const base = TACTICS_UNIT_ENTRY_HEADER_BYTES + i * TACTICS_UNIT_ENTRY_STRIDE;
+if (base + TACTICS_UNIT_ENTRY_STRIDE > body.length) break;
+    body.writeUInt32BE(unit, base + 0x00);
+body.writeUInt8(Math.max(0, Math.min(0xff, Math.round(controllable ?? morale ?? 1))) & 0xff, base + 0x04);
+body.writeUInt8(Math.max(0, Math.min(0xff, Math.round(confusion))) & 0xff, base + 0x05);
+    body.writeUInt32BE((mapSection ?? unit) >>> 0, base + 0x06);
+    body.writeFloatBE(Number.isFinite(x) ? x : 0, base + 0x0a);
+    body.writeFloatBE(Number.isFinite(y) ? y : 0, base + 0x0e);
+    body.writeFloatBE(Number.isFinite(z) ? z : 0, base + 0x12);
+    // FUN_004c32a0 passes dword[6] to FUN_004c1d20 param_4, which becomes tacticalEntry+0x24 current link id.
+    body.writeUInt32BE((anchorId ?? anchorUnitId ?? currentId ?? currentUnitId ?? unit) >>> 0, base + 0x16);
+    body.writeUInt32BE((detachmentLeader ?? detachmentLeaderId ?? 0) >>> 0, base + 0x1a);
+    body.writeFloatBE(Number.isFinite(detachmentX) ? detachmentX : 0, base + 0x1e);
+    body.writeFloatBE(Number.isFinite(detachmentY) ? detachmentY : 0, base + 0x22);
+    body.writeFloatBE(Number.isFinite(detachmentZ) ? detachmentZ : 0, base + 0x26);
+    const dir = Number.isFinite(direction) ? direction : heading;
+    const detDir = Number.isFinite(detachmentDirection) ? detachmentDirection : Number.isFinite(detachmentHeading) ? detachmentHeading : dir;
+    body.writeFloatBE(Number.isFinite(detDir) ? detDir : 0, base + 0x2a);
+    body.writeUInt8(Math.max(0, Math.min(0xff, Math.round(search))) & 0xff, base + 0x2e);
+}
+return inner;
 }
 
 /**
@@ -1631,7 +1661,7 @@ export const WORLD_RESPONSE_OBJECT_SIZES = Object.freeze({
  * carry status byte 1 (OK); an empty 0 byte latches the flag to "not initialized".
  * (Unlike the data objects whose first byte is a record COUNT, which stays 0 = empty.)
  */
-export const WORLD_OK_STATUS_CODES = new Set([0x0f01, 0x0f03, 0x0317]);
+export const WORLD_OK_STATUS_CODES = new Set([0x0f01, 0x0f03, 0x0317, 0x0f09]);
 
 /**
  * Build the message32 reply for a conn3 world-data RESPONSE code, or null when the
@@ -1801,6 +1831,8 @@ const LOBBY_CHARACTER_CHARGE_GATE_PREFIX_STREAM_BYTES = 0x22;
 const LOBBY_CHARACTER_CHARGE_DETAIL_NAME_UNITS = 0x0d;
 const LOBBY_CHARACTER_CHARGE_CARD_KIND = 2;
 const LOBBY_CHARACTER_CHARGE_SELECTABLE_DETAIL_COUNT = 1;
+const LOBBY_CHARACTER_CHARGE_DISPLAY_AGE_SECONDS_PER_YEAR = 0x01e13380;
+const DEFAULT_LOBBY_CHARACTER_DISPLAY_AGE_YEARS = 18;
 
 /**
  * Build a minimal 0x2004 character-charge response from account/session characters.
@@ -1884,9 +1916,19 @@ function normalizeLobbyCharacterRecords(characters) {
     const description = record.characterDescription ?? record.description ?? `Character ${id} ready`;
     const power = lobbyPowerByte(record.power ?? record.nationId ?? record.nation_id ?? record.faction) ?? 1;
     const camp = lobbyPowerByte(record.camp ?? record.campId ?? record.camp_id) ?? power;
-    const lastname = record.lastname ?? record.lastName ?? record.familyName ?? name;
-    const firstname = record.firstname ?? record.firstName ?? '';
-    const displayName = record.displayName ?? record.display_name ?? record.characterName ?? name;
+    const lastname = lobbyDetailFieldText(
+      record.cardHeaderName
+      ?? record.headerName
+      ?? record.displayName
+      ?? record.display_name
+      ?? record.fullName
+      ?? record.lastname
+      ?? record.lastName
+      ?? record.familyName
+      ?? name,
+    );
+    const firstname = lobbyDetailFieldText(record.firstname ?? record.firstName ?? '');
+    const displayName = lobbyDetailFieldText(record.displayName ?? record.display_name ?? record.characterName ?? name);
     return {
       id,
       status,
@@ -1896,9 +1938,9 @@ function normalizeLobbyCharacterRecords(characters) {
       camp,
       generated: lobbyByte(record.generated ?? record.isGenerated ?? 1),
       sex: lobbyByte(record.sex ?? 0),
-      birthdayMonth: lobbyByte(record.birthdayMonth ?? record.birthday_month ?? 0),
-      birthdayDay: lobbyByte(record.birthdayDay ?? record.birthday_day ?? 0),
-      reserved: lobbyU32(record.reserved ?? record.unknownDword ?? 0),
+      birthdayMonth: lobbyByte(record.birthdayMonth ?? record.birthday_month ?? record.birthMonth ?? 1),
+      birthdayDay: lobbyByte(record.birthdayDay ?? record.birthday_day ?? record.birthDay ?? 1),
+      displayAgeSeconds: lobbyCardDisplayAgeSeconds(record),
       state: lobbyByte(record.state ?? 1),
       abilities: lobbyAbility8(record.abilities),
       lastname,
@@ -1908,8 +1950,12 @@ function normalizeLobbyCharacterRecords(characters) {
   });
 }
 
+function lobbyDetailFieldText(value) {
+  return [...String(value ?? '')].slice(0, LOBBY_CHARACTER_CHARGE_DETAIL_NAME_UNITS - 1).join('');
+}
+
 function writeLobbyChargedCharacterDetail(payload, cursor, record) {
-  payload.writeUInt32LE(record.id, cursor);
+  payload.writeUInt32BE(record.id, cursor);
   cursor += 4;
   payload.writeUInt8(record.power, cursor);
   cursor += 1;
@@ -1923,12 +1969,12 @@ function writeLobbyChargedCharacterDetail(payload, cursor, record) {
   cursor += 1;
   payload.writeUInt8(record.birthdayDay, cursor);
   cursor += 1;
-  payload.writeUInt32LE(record.reserved, cursor);
+  payload.writeUInt32BE(record.displayAgeSeconds, cursor);
   cursor += 4;
   payload.writeUInt8(record.state, cursor);
   cursor += 1;
   for (const ability of record.abilities) {
-    payload.writeUInt16LE(ability, cursor);
+    payload.writeUInt16BE(ability, cursor);
     cursor += 2;
   }
   cursor = writeLobbyUtf16FieldBE(payload, cursor, record.lastname, LOBBY_CHARACTER_CHARGE_DETAIL_NAME_UNITS);
@@ -1950,6 +1996,19 @@ function lobbyByte(value) {
 function lobbyU32(value) {
   const n = lobbyInt(value);
   return n == null ? 0 : n >>> 0;
+}
+
+function lobbyCardDisplayAgeSeconds(record) {
+  const explicitSeconds = record.ageSeconds ?? record.age_seconds;
+  if (explicitSeconds != null) return lobbyU32(explicitSeconds);
+  const years = record.ageYears ?? record.age;
+  if (years != null) {
+    return Math.min(
+      0xffffffff,
+      Math.max(0, lobbyU32(years)) * LOBBY_CHARACTER_CHARGE_DISPLAY_AGE_SECONDS_PER_YEAR,
+    ) >>> 0;
+  }
+  return lobbyU32(record.reserved ?? record.unknownDword ?? DEFAULT_LOBBY_CHARACTER_DISPLAY_AGE_YEARS * LOBBY_CHARACTER_CHARGE_DISPLAY_AGE_SECONDS_PER_YEAR);
 }
 
 function lobbyPowerByte(value) {
@@ -1991,10 +2050,8 @@ function writeLobbyUtf16Field(target, cursor, value, maxUnits) {
 
 function writeLobbyUtf16FieldBE(target, cursor, value, maxUnits) {
   const text = String(value ?? '');
-  const units = [...text, '\0'];
-  if (units.length > maxUnits) {
-    throw new Error(`lobby session string is too long: ${text}`);
-  }
+  const bodyUnits = [...text].slice(0, Math.max(0, maxUnits - 1));
+  const units = [...bodyUnits, '\0'];
   target.writeUInt8(units.length, cursor);
   let next = cursor + 1;
   for (const unit of units) {
@@ -2097,6 +2154,15 @@ export function isLoginCredentialInner(innerPayload) {
   );
 }
 
+export function isGin7CredentialInner(innerPayload) {
+  const code = readInnerCode(innerPayload);
+  return (
+    (code === LOGIN_INNER_CODE || code === LOBBY_LOGIN_REQUEST_CODE || code === SS_LOGIN_REQUEST_CODE) &&
+    innerPayload.length >= 6 &&
+    innerPayload.toString('ascii', 2, 6) === GIN7_MAGIC
+  );
+}
+
 /**
  * Best-effort parse of the GIN7 credential blob. The account is the first
  * length-prefixed UTF-16BE string (count u16 BE @offset 10, chars from @12).
@@ -2106,14 +2172,15 @@ export function isLoginCredentialInner(innerPayload) {
  * @returns {{ code: number, accountLabel: string, rawHex: string }}
  */
 export function parseGin7Credential(innerPayload) {
-  if (!isLoginCredentialInner(innerPayload)) {
+  if (!isGin7CredentialInner(innerPayload)) {
     throw new Error('inner payload is not a GIN7 login credential');
   }
   let accountLabel = '';
   if (innerPayload.length >= 12) {
-    const count = innerPayload.readUInt16BE(10);
+    const compactLobbyCredential = readInnerCode(innerPayload) !== LOGIN_INNER_CODE && innerPayload.readUInt16BE(6) === 0x0057;
+    const count = compactLobbyCredential ? innerPayload.readUInt16BE(8) : innerPayload.readUInt16BE(10);
     const chars = [];
-    let cursor = 12;
+    let cursor = compactLobbyCredential ? 10 : 12;
     for (let index = 0; index < count && cursor + 2 <= innerPayload.length; index += 1) {
       const unit = innerPayload.readUInt16BE(cursor);
       cursor += 2;
@@ -2126,7 +2193,7 @@ export function parseGin7Credential(innerPayload) {
     }
     accountLabel = chars.join('');
   }
-  return { code: LOGIN_INNER_CODE, accountLabel, rawHex: innerPayload.toString('hex') };
+  return { code: readInnerCode(innerPayload), accountLabel, rawHex: innerPayload.toString('hex') };
 }
 
 // The GIN7 credential ENCODER (inverse of parseGin7Credential) lives in a sibling module so the

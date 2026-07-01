@@ -552,6 +552,47 @@ export function createSocialState() {
     getContacts(connectionId) {
       return [...(players.get(connectionId)?.contacts ?? [])];
     },
+    toSnapshot() {
+      const serializeMail = (mail) => ({
+        ...mail,
+        rawHex: Buffer.isBuffer(mail?.raw) ? mail.raw.toString('hex') : mail?.rawHex ?? null,
+        raw: undefined,
+      });
+      return {
+        nextMailId,
+        players: [...players.values()].map((p) => ({
+          connectionId: p.connectionId,
+          charId: p.charId,
+          inbox: p.inbox.map(serializeMail),
+          settings: { ...p.settings },
+          presence: p.presence,
+          contacts: [...p.contacts],
+        })),
+      };
+    },
+    restore(snapshot = {}) {
+      players.clear();
+      charIndex.clear();
+      nextMailId = Number(snapshot.nextMailId) || 1;
+      let maxMailId = 0;
+      for (const row of snapshot.players ?? []) {
+        const p = ensure(Number(row.connectionId) || 0);
+        p.charId = Number(row.charId) || 0;
+        if (p.charId) charIndex.set(p.charId, p.connectionId);
+        p.inbox = (Array.isArray(row.inbox) ? row.inbox : []).map((mail) => {
+          const raw = typeof mail?.rawHex === 'string' ? Buffer.from(mail.rawHex, 'hex') : mail?.raw;
+          const restored = { ...mail, raw };
+          delete restored.rawHex;
+          maxMailId = Math.max(maxMailId, Number(restored.id) || 0);
+          return restored;
+        });
+        p.settings = row.settings && typeof row.settings === 'object' ? { ...row.settings } : {};
+        p.presence = Number(row.presence) || 0;
+        p.contacts = new Set(Array.isArray(row.contacts) ? row.contacts.map((id) => Number(id) >>> 0) : []);
+      }
+      nextMailId = Math.max(nextMailId, maxMailId + 1);
+      return this;
+    },
     size() {
       return players.size;
     },

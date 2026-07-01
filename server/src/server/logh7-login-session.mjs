@@ -70,6 +70,7 @@ import {
   buildStaticInformationBaseInner,
   buildInformationOutfitInner,
   buildStaticInformationCardInner,
+  STATIC_BASE_MAX,
 } from './logh7-info-records.mjs';
 import {
   buildResponseInformationBaseInner,
@@ -84,12 +85,27 @@ import {
 import { buildInformationSessionInner } from './logh7-scenario-session.mjs';
 import {
   buildCardCharacterInner,
+  buildGridInformationOutfitInner,
   buildInformationGridInner,
   buildInformationOutfitPartyInner,
+  buildStaticInformationArmsInner,
   buildStaticInformationUnitShipInner,
+  buildStaticInformationUnitTroopInner,
+  buildStaticInformationFightersInner,
+  buildStaticInformationPowerDistributionInner,
   buildStaticInformationCardCommandInner,
   createInfoRecordsStaticState,
 } from './logh7-info-records-static.mjs';
+import {
+  buildPlayableCommandTargets,
+  devCommandDescriptorRecords,
+  devCommandSeatEntries,
+  devCommandStaticCardRecords,
+} from './logh7-dev-command-cards.mjs';
+import {
+  createCommandTargetPool,
+  ensureCommandExecutionTargets,
+} from './logh7-command-targets.mjs';
 import { buildCardAppointmentInner, buildNotifyInformationCharacterInner } from './logh7-personnel.mjs';
 import { buildSimpleInfoTransaction } from './logh7-simple-info.mjs';
 import {
@@ -99,10 +115,30 @@ import {
 import { validateCreateFace } from './logh7-face-codec.mjs';
 import { resolveCreatedAbilities } from './logh7-ability-seed.mjs';
 import { isValidAccountLabel } from './logh7-account-registry.mjs';
+import {
+  DEFAULT_PLAYER_CHARACTER_PROFILE,
+  cloneAccountCharacterProfile,
+  normalizeAccountCharacterProfile,
+  profileCharacterId,
+} from './logh7-account-profile.mjs';
 import { buildInstitutionSeedElements, characterDisplayName, constmsgGroupSubIdsByText } from './logh7-inferred-content.mjs';
 import { normalizeFaction, rankId, clampRankId } from './logh7-rank-table.mjs';
 import { titleName } from './logh7-imperial-titles.mjs';
-import { openBattleField, buildNotifyTacticsInner, buildBattleEntryParticipants } from './logh7-battle-engine.mjs';
+import {
+  openBattleField,
+  buildNotifyTacticsInner,
+  buildBattleEntryParticipants,
+  NOTIFY_CHANGE_MODE_CODE,
+  NOTIFY_TACTICS_CODE,
+  RESPONSE_POSITION_UNIT_CODE,
+  RESPONSE_TACTICS_UNIT_SHIP_CODE,
+  RESPONSE_TACTICS_FILL_SHIELD_CODE,
+  RESPONSE_TACTICS_CHARACTER_CODE,
+  RESPONSE_TACTICS_CORPS_CODE,
+  RESPONSE_TACTICS_BASE_CODE,
+  RESPONSE_INFORMATION_OBSTACLE_CODE,
+  RESPONSE_POSITION_BASE_CODE,
+} from './logh7-battle-engine.mjs';
 import { readFileSync } from 'node:fs';
 
 // conn3 world-build crash fix (G145): the client never requests 0x0203/0x0322 before it
@@ -114,6 +150,7 @@ const SS_REQ_GRID_INITIALIZE_CODE = 0x0f02; // C->S RequestGridInitialize, answe
 // 만체력(滿体力): 생성 캐릭이 체력 0으로 표시되던 버그 수정용 기본값(P3 서버설계). 0x0323 레코드
 // 0x1a9 u8 = 体力(stamina). 캐릭터가 명시 stamina를 안 가지면 만체력으로 시드해 게이지가 0이 아니게 한다.
 const STAMINA_FULL = 100;
+const STRATEGIC_SYSTEM_MARKER_MAX = 85;
 const worldCharId = () => Number(process.env.LOGH_WORLD_CHAR_ID ?? '1');
 const worldUnitId = () => positiveIntegerEnv(process.env.LOGH_WORLD_UNIT_ID, 1);
 // 멀티플레이 2:2 테스트(LOGH_MP_ACCOUNT_ROSTER): 계정 라벨 → 월드 정체성 매핑을 파싱한다.
@@ -156,10 +193,18 @@ const positiveIntegerEnv = (value, fallback) => {
 // through post-load at 19 rows but stalls at 20+, so normal play uses a 19-row cap while LIMIT/ONLY stay
 // uncapped for RE bisection.
 const LIVE_SAFE_STATIC_SHIP_CAP = 19;
-let staticShipState = null;
+const staticShipStateBySeedMode = new Map();
+const staticPlayableSeedsEnabled = () => process.env.LOGH_STATIC_MASTER_PLAYABLE_SEED === '1';
+const staticMasterState = () => {
+ const seedMode = staticPlayableSeedsEnabled() ? 'playable' : 'canonical';
+ if (!staticShipStateBySeedMode.has(seedMode)) {
+ staticShipStateBySeedMode.set(seedMode, createInfoRecordsStaticState({ load: true, playableSeeds: staticPlayableSeedsEnabled() }));
+ }
+ return staticShipStateBySeedMode.get(seedMode);
+};
 const shipMasterClasses = () => {
-  if (staticShipState === null) staticShipState = createInfoRecordsStaticState({ load: true });
-  return Array.isArray(staticShipState.shipClasses) ? staticShipState.shipClasses : [];
+  const staticState = staticMasterState();
+  return Array.isArray(staticState.shipClasses) ? staticState.shipClasses : [];
 };
 const parsePositiveIntegerListEnv = (value) => {
   if (value === undefined || value === null || value === '') return [];
@@ -216,6 +261,9 @@ const worldImportBaseRecordsEnabled = () => process.env.LOGH_WORLD_IMPORT_BASES 
 // 남기고, 그 6종은 별개 레코드 NotifyBaseParameter 0x0337(logh7-base-economy.mjs, population@0x28/food@0x40
 // CONFIRMED)가 담당한다(역할 분리, 충돌 금지). 0x604 프레임 자체는 P84 라이브 트레이스가 정상 처리 확인.
 const baseEconomyEnabled = () => process.env.LOGH_BASE_ECONOMY !== '0';
+// RE 2026-06-28: opcode 0x0337 is ResponseTacticsCharacter (size 0x964), not a free
+// NotifyBaseParameter slot. Keep this provisional scalar record off unless explicitly requested.
+const baseParameterNotifyEnabled = () => process.env.LOGH_PROVISIONAL_BASE_PARAMETER_NOTIFY === '1';
 const earlyWorldLocationEnabled = () => process.env.LOGH_EARLY_WORLD_LOCATION === '1';
 const actionListSeatsEnabled = () => process.env.LOGH_ACTION_LIST_SEATS === '1';
 const postloadActionListSeatsEnabled = () => process.env.LOGH_POSTLOAD_ACTION_LIST_SEATS === '1';
@@ -235,6 +283,7 @@ const unitWireLayout = () => (process.env.LOGH_UNIT_STREAM_WIRE === '1' ? 'parse
 const postloadUnitWireLayout = () => (
   process.env.LOGH_POSTLOAD_UNIT_STREAM_WIRE === '1' ? 'parser-stream' : unitWireLayout()
 );
+const tacticalUnitWireOptions = () => ({ wireLayout: 'native', wireEndian: 'le' });
 
 // In-world character-roster push (RE-corrected lobby-button gate). The lobby buttons 새 캐릭터 작성 /
 // 오리지널 추첨 / 캐릭터 삭제 gate on the client's roster count at clientBase+0x554da4, filled EXCLUSIVELY by
@@ -264,31 +313,128 @@ const stratSeqStartEnabled = () => process.env.LOGH_STRAT_SEQ_START === '1';
 // ★주의: 0x35f35a가 실제 mode 분기인지 라이브 미확정(객체 식별오인 2회 전례) — byte-correct emit만 보장하고
 // 실제 mode2 유발은 라이브 probe로 확인. 기본 OFF, 기존 deferred probe(battle/fleet-move/state-transition)와
 // 무충돌(postloadExtras에만 추가, deferredBattleInners 필드 미사용).
-const gridSelectorProbeEnabled = () => process.env.LOGH_GRID_SELECTOR_PROBE === '1';
+const gridSelectorProbeEnabled = () =>
+  process.env.LOGH_GRID_SELECTOR_PROBE === '1'
+  || battleEntryProbeEnabled()
+  || battleEntryNotifyTacticsEnabled();
 // 푸시할 grid dword 값(u32). byte[2]=(value>>16)&0xff 가 0x35f35a 셀렉터로 들어간다. 예: 0x00010000 → byte[2]=1.
-const gridSelectorValue = () => (Number(process.env.LOGH_GRID_SELECTOR_VALUE ?? '0') >>> 0);
+const gridSelectorValue = () => (Number(process.env.LOGH_GRID_SELECTOR_VALUE ?? '0x00010000') >>> 0);
 // C002-인접 실험(서버-주도 전술맵 진입 probe). 클라가 0x0411 CommandChangeMode를 보내지 않아도(인-월드
 // 입력 레이어 미해결: 0x0b01과 동일 블로커) 서버가 grid-enter 직후 openBattleField 시퀀스
-// (0x349 위치→0x33b/0x341/0x343 전술상태→0x42f NotifyChangeMode[modeKind=0]→0x0f1f NotifyTactics)를
-// 푸시해 클라를 전술 풀로 전환시키는지 라이브로 검증한다. 0x42f는 Notify(서버→클라)라 클라 입력 없이
+// (0x349 위치→0x33b/0x341/0x343 전술상태→0x42f NotifyChangeMode[modeKind=0])를
+// 푸시해 클라를 전술 풀로 전환시키는지 라이브로 검증한다. 0x0f1f NotifyTactics는 현재 crash/RE opt-in.
+// 0x42f는 Notify(서버→클라)라 클라 입력 없이
 // 강제 가능 → 0x0b01 입력블로커를 우회. 기본 OFF(월드로드 회귀 방지). 캐논 시퀀싱·정확 전술좌표는 P2(라이브 튜닝).
 const battleEntryProbeEnabled = () => process.env.LOGH_BATTLE_ENTRY_PROBE === '1';
 // 지연(ms): grid-enter 즉시 푸시는 전략 씬 렌더 전에 0x42f가 들어가 렌더를 깨뜨림이 라이브로 확정(control
 // 대조). 따라서 배틀 시퀀스를 deferredBattleInners로 넘겨 서버가 전략맵 렌더 후 이 지연만큼 뒤 푸시한다.
 const battleEntryProbeDelayMs = () => Math.max(0, Number(process.env.LOGH_BATTLE_ENTRY_DELAY_MS ?? '8000'));
+const battleEntryStepLimit = () => {
+  const raw = process.env.LOGH_BATTLE_ENTRY_STEP_LIMIT;
+  if (raw == null || String(raw).trim() === '') return null;
+  const value = Number(raw);
+  return Number.isFinite(value) ? Math.max(0, Math.trunc(value)) : null;
+};
+const battleEntryStepCodes = () => {
+  const raw = process.env.LOGH_BATTLE_ENTRY_CODES ?? process.env.LOGH_BATTLE_ENTRY_STEP_CODES;
+  if (raw == null || String(raw).trim() === '') return null;
+  const codes = [];
+  const seen = new Set();
+  for (const part of String(raw).split(/[,\s]+/u)) {
+    const code = Number(part.trim());
+    if (!Number.isFinite(code) || seen.has(code)) continue;
+    seen.add(code);
+    codes.push(code);
+  }
+  return codes.length > 0 ? codes : null;
+};
+const battleEntryNotifyTacticsEnabled = () => process.env.LOGH_BATTLE_ENTRY_NOTIFY_TACTICS === '1';
+const battleEntryRepeatGridReseedEnabled = () => process.env.LOGH_BATTLE_ENTRY_REPEAT_GRID_RESEED === '1';
+const filterBattleEntrySteps = (steps) => {
+  const codes = battleEntryStepCodes();
+  const limit = battleEntryStepLimit();
+  let filtered = steps;
+  if (codes) {
+    const stepByCode = new Map(steps.map((step) => [step.code, step]));
+    const expandedCodes = [];
+    const appendCode = (code) => {
+      if (!expandedCodes.includes(code)) expandedCodes.push(code);
+    };
+    for (const code of codes) {
+      if (code === RESPONSE_TACTICS_UNIT_SHIP_CODE) appendCode(RESPONSE_TACTICS_BASE_CODE);
+      appendCode(code);
+    }
+    filtered = expandedCodes.map((code) => stepByCode.get(code)).filter(Boolean);
+  }
+  if (!codes && !battleEntryNotifyTacticsEnabled()) {
+    filtered = filtered.filter((step) => step.code !== NOTIFY_TACTICS_CODE);
+  }
+  if (limit !== null) filtered = filtered.slice(0, limit);
+  return filtered;
+};
+const battleEntryModeFlipCodes = new Set([NOTIFY_CHANGE_MODE_CODE, NOTIFY_TACTICS_CODE]);
+const battleEntrySetupTableCodes = new Set([
+  RESPONSE_POSITION_UNIT_CODE,
+  RESPONSE_TACTICS_UNIT_SHIP_CODE,
+  RESPONSE_TACTICS_FILL_SHIELD_CODE,
+  RESPONSE_TACTICS_CHARACTER_CODE,
+  RESPONSE_TACTICS_CORPS_CODE,
+  RESPONSE_TACTICS_BASE_CODE,
+  RESPONSE_INFORMATION_OBSTACLE_CODE,
+  RESPONSE_POSITION_BASE_CODE,
+]);
+const battleEntrySetupPreseedOrder = new Map([
+  [RESPONSE_TACTICS_UNIT_SHIP_CODE, 0],
+  [RESPONSE_TACTICS_FILL_SHIELD_CODE, 1],
+  [RESPONSE_TACTICS_CHARACTER_CODE, 2],
+  [RESPONSE_TACTICS_CORPS_CODE, 3],
+  [RESPONSE_TACTICS_BASE_CODE, 4],
+  [RESPONSE_POSITION_BASE_CODE, 5],
+  [RESPONSE_INFORMATION_OBSTACLE_CODE, 6],
+  [RESPONSE_POSITION_UNIT_CODE, 7],
+]);
+const orderBattleEntrySetupPreseedSteps = (steps) => {
+  const explicitCodes = battleEntryStepCodes();
+  if (explicitCodes) return [...steps];
+  return [...steps].sort((a, b) => (
+    (battleEntrySetupPreseedOrder.get(a.code) ?? 99)
+    - (battleEntrySetupPreseedOrder.get(b.code) ?? 99)
+  ));
+};
+const battleEntryDeferTablesEnabled = () => process.env.LOGH_BATTLE_ENTRY_DEFER_TABLES === '1';
+const battleEntryDeferredCodesForRun = () => (
+  battleEntryDeferTablesEnabled()
+    ? new Set([...battleEntryModeFlipCodes, ...battleEntrySetupTableCodes])
+    : battleEntryModeFlipCodes
+);
+const message32InnerCode = (inner) => (Buffer.isBuffer(inner) && inner.length >= 6 ? inner.readUInt16BE(4) : null);
+const insertBeforeMessage32Code = (inners, code, additions) => {
+  if (!Array.isArray(additions) || additions.length === 0) return;
+  const index = inners.findIndex((inner) => message32InnerCode(inner) === code);
+  if (index < 0) inners.push(...additions);
+  else inners.splice(index, 0, ...additions);
+};
+const takeFirstMessage32Code = (inners, code) => {
+  const index = inners.findIndex((inner) => message32InnerCode(inner) === code);
+  if (index < 0) return null;
+  return inners.splice(index, 1)[0];
+};
+const battleEntryDeferGridEndEnabled = () => process.env.LOGH_BATTLE_ENTRY_DEFER_GRID_END === '1';
 // 서버 권위적 함대 이동 probe(LOGH_FLEET_MOVE_PROBE=1, 기본 OFF): 인바운드 0x0b01(클라 command-UI,
 // C002로 미작동) 없이 서버가 0x0b07 NotifyMovedGrid를 grid-enter 후 지연 푸시해 플레이어 함대를 인접
 // 셀로 권위적 이동시킨다. 클라 command-UI 우회한 "맵 이동" 라이브 검증용. 코어 무영향(게이트 OFF 기본).
 const fleetMoveProbeEnabled = () => process.env.LOGH_FLEET_MOVE_PROBE === '1';
 const fleetMoveProbeDelayMs = () => Math.max(0, Number(process.env.LOGH_FLEET_MOVE_DELAY_MS ?? '10000'));
 const fleetMoveProbeDestDelta = () => Number(process.env.LOGH_FLEET_MOVE_DELTA ?? '1');
-// 상태전환(전략↔전술) arm probe(LOGH_STATE_TRANSITION_PROBE=1, 기본 OFF). docs/logh7-game-state-change-re-2026-06-25.md
-// AXIS2(로드-트리거, 서버푸시 가능). 서버가 월드 도달 후 0x0f1f NotifyTactics(arg0 byte0=1)를 1회 지연 푸시한다.
+const fleetMoveRebuildProbeEnabled = () => process.env.LOGH_FLEET_MOVE_REBUILD_PROBE === '1';
+// 상태전환(전략↔전술) arm probe(LOGH_STATE_TRANSITION_PROBE=1, 기본 OFF). 2026-06-30 live bisection:
+// 0x0f1f NotifyTactics(arg0 byte0=1)는 현재 FUN_0058ee70 crash/RE 전용이며 기본 플레이 루트가 아니다.
 // 클라 파서 FUN_004c1b20: param_2(=arg0 payload)의 *param_2=='\x01'이면 전략맵 활성(+0x2a58f8≠0) 위에서
 //   +0x357e8c=2(전술 arm)·+0x357e88=0x3f800000(1.0f)·*param_1=1·+4=1 = 클릭/패치/Frida 없이 상태전환 시작.
 //   byte0≠1이면 +0x357e8c=0(전략 복귀). RE 확정 레이아웃만 사용(추측 데이터 P0 승격 금지).
 // ★battleEntryProbe/fleetMoveProbe와 같은 deferredBattleInners 필드를 쓰므로 동시 활성 시 충돌 — 이 레버는
 //   그 둘이 모두 OFF일 때만 적용한다(상호배타). 코어 무영향(게이트 OFF 기본).
+// Live-safe path is battle-entry default up to 0x042f; this switch is for 0x0f1f crash/RE bisection only.
 const stateTransitionProbeEnabled = () => process.env.LOGH_STATE_TRANSITION_PROBE === '1';
 const stateTransitionProbeDelayMs = () => Math.max(0, Number(process.env.LOGH_STATE_TRANSITION_DELAY_MS ?? '9000'));
 // arg0 byte0: 1=전술 arm(기본), 0=전략 복귀. arg1은 LOW(side/phase), 기본 0.
@@ -506,7 +652,11 @@ const tacticsUnitEnabled = () => process.env.LOGH_TACTICS_UNIT === '1';
 // walker, which is not the personnel static-card command table. request = response - 1.
 const REQ_CARD_CHARACTER_CODE = 0x034e; // C->S, answer 0x034f ResponseCardCharacter (≤64 × 724B records)
 const REQ_INFO_SESSION_CODE = 0x0304; // C->S, answer 0x0305 InformationSession (world/session list)
+const REQ_STATIC_INFORMATION_POWER_DISTRIBUTION_CODE = 0x0308; // C->S, answer 0x0309 power/fill curves
 const REQ_STATIC_INFORMATION_UNIT_SHIP_CODE = 0x030a; // C->S, answer 0x030b ResponseStaticInformationUnitShip (함선마스터)
+const REQ_STATIC_INFORMATION_UNIT_TROOP_CODE = 0x030c; // C->S, answer 0x030d ResponseStaticInformationUnitTroop
+const REQ_STATIC_INFORMATION_FIGHTERS_CODE = 0x030e; // C->S, answer 0x030f ResponseStaticInformationFighters
+const REQ_STATIC_INFORMATION_ARMS_CODE = 0x0310; // C->S, answer 0x0311 ResponseStaticInformationArms
 const REQ_STATIC_INFORMATION_BASE_CODE = 0x031c; // C->S, answer 0x031d ResponseStaticInformationBase
 const REQ_INFORMATION_BASE_CODE = 0x031e;
 const REQ_INFORMATION_OUTFIT_CODE = 0x032a; // C->S, answer 0x032b ResponseInformationOutfit
@@ -515,10 +665,14 @@ const REQ_INFORMATION_UNIT_CODE = 0x0324; // C->S, answer 0x0325 ResponseInforma
 const REQ_INFORMATION_INSTITUTION_CODE = 0x0320; // C->S, answer 0x0321 ResponseInformationInstitution
 const REQ_INFORMATION_WAREHOUSE_CODE = 0x0326; // C->S, answer 0x0327 ResponseInformationWarehouse (보급창고)
 const REQ_INFORMATION_PACKAGE_CODE = 0x0328; // C->S, answer 0x0329 ResponseInformationPackage (수송)
+const REQ_TACTICS_INFORMATION_UNIT_SHIP_CODE = 0x033a; // C->S, answer 0x033b ResponseTacticsInformationUnitShip
+const REQ_TACTICS_FILL_SHIELD_CODE = 0x0340; // C->S, answer 0x0341 ResponseTacticsInformationFillShield
+const REQ_POSITION_UNIT_CODE = 0x0348; // C->S, answer 0x0349 ResponsePositionUnit
+const REQ_POSITION_BASE_CODE = 0x034a; // C->S, answer 0x034b ResponsePositionBase
 const REQ_WORLD_INFO_CHARACTER_CODE = 0x0306; // C->S walker slot, answer 0x0307.
-const COMMAND_TABLE_PRELOAD_CARD_ID = 0;
-const COMMAND_TABLE_PRELOAD_COMMAND_IDS = Object.freeze([0x002b, 0x0041]);
+const REQ_INFO_PANEL_CODE = 0x0f08; // C->S in-world info/HUD panel, answer 0x0f09 + data pushes.
 const commandTablePreloadProbeEnabled = () => process.env.LOGH_COMMAND_TABLE_PRELOAD_PROBE === '1';
+const devCommandGrantAllEnabled = () => process.env.LOGH_DEV_COMMAND_GRANT_ALL === '1';
 // 0x305 카드 마스터 = 전략 명령 메뉴 행의 출처. 클라 FUN_004f5cb0가 record+0x14(command_count u8)/
 // +0x16(factory ids u16, LE)을 읽어 행을 렌더한다(렌더 widget id = factory+0x43). canonical 빌더
 // (RE확정 LE 포맷, 단위테스트 보유)로 카드 1장 + 명령 factory id를 emit한다.
@@ -527,15 +681,12 @@ const commandTablePreloadProbeEnabled = () => process.env.LOGH_COMMAND_TABLE_PRE
 // 기본 world-load는 불변.
 const buildCommandTablePreloadCardInner = () =>
   buildStaticInformationCardInner({
-    cards: [{ id: COMMAND_TABLE_PRELOAD_CARD_ID, commands: [...COMMAND_TABLE_PRELOAD_COMMAND_IDS] }],
+    cards: devCommandStaticCardRecords(),
   });
 // 0x307 per-card command descriptor 테이블(보조). canonical 빌더로 동일 카드의 명령 디스크립터를 emit.
 const buildCommandTablePreloadCommandInner = () =>
   buildStaticInformationCardCommandInner({
-    cards: [{
-      cardId: COMMAND_TABLE_PRELOAD_CARD_ID,
-      commands: COMMAND_TABLE_PRELOAD_COMMAND_IDS.map((id) => ({ id })),
-    }],
+    cards: devCommandDescriptorRecords(),
   });
 
 /** @typedef {'connected'|'handshake-complete'|'authenticated'|'redirected'|'rejected'|'closed'} LoginPhase */
@@ -565,9 +716,31 @@ export const LOGIN_PHASES = Object.freeze({
 export function createAccountStore({ accounts = [], acceptAnyGin7 = false, registry = null, allowRegister = false } = {}) {
   const byCredential = new Map();
   const byAccount = new Map();
+  const selectedSessions = new Map();
+  const localProfiles = new Map();
+  const localProfileRecords = (record) => {
+    const profiles = [record?.characters, record?.profileSummaries, record?.characterSummaries]
+      .find(Array.isArray) ?? [];
+    return profiles.map((profile) => {
+      try {
+        return normalizeAccountCharacterProfile(profile, { createdAt: profile?.createdAt });
+      } catch {
+        return null;
+      }
+    }).filter(Boolean);
+  };
+  const ensureLocalAccount = (account) => {
+    if (typeof account !== 'string' || account.length === 0) return null;
+    if (!byAccount.has(account)) byAccount.set(account, { account, credentialHex: null });
+    if (!selectedSessions.has(account)) selectedSessions.set(account, 1);
+    if (!localProfiles.has(account)) localProfiles.set(account, []);
+    return localProfiles.get(account);
+  };
   for (const record of accounts) {
     const normalized = { account: record.account, credentialHex: record.credentialHex ?? null };
     byAccount.set(record.account, normalized);
+    selectedSessions.set(record.account, selectedSessionIdOf(record.selectedSessionId));
+    localProfiles.set(record.account, localProfileRecords(record));
     if (normalized.credentialHex !== null) {
       byCredential.set(normalized.credentialHex.toLowerCase(), normalized);
     }
@@ -580,27 +753,61 @@ export function createAccountStore({ accounts = [], acceptAnyGin7 = false, regis
       return byAccount.get(account) ?? null;
     },
     getProfileCharacters(account) {
-      if (typeof registry?.getProfileCharacters !== 'function') return [];
+      if (typeof registry?.getProfileCharacters === 'function') {
       return registry.getProfileCharacters(account).map((profile) => ({
         ...profile,
         id: profile.characterId,
-        status: 1,
-        worldPower: profile.power,
-        check: 1,
+        status: profile.status ?? 1,
+        worldPower: profile.worldPower ?? profile.power,
+        check: profile.check ?? 1,
       }));
+      }
+      const records = localProfiles.get(account) ?? [];
+      return records.map((profile) => ({
+      ...cloneAccountCharacterProfile(profile),
+      id: profile.characterId,
+      status: profile.status ?? 1,
+      worldPower: profile.worldPower ?? profile.power,
+      check: profile.check ?? 1,
+    }));
     },
     addProfileCharacter(account, character) {
-      if (typeof registry?.addProfileCharacter !== 'function') return null;
-      return registry.addProfileCharacter(account, character);
+      if (typeof registry?.addProfileCharacter === 'function') return registry.addProfileCharacter(account, character);
+      if (!acceptAnyGin7 && !byAccount.has(account)) return null;
+      const profiles = ensureLocalAccount(account);
+      if (!profiles) return null;
+      const existing = profiles.find((entry) => entry.characterId === profileCharacterId(character));
+      const profile = normalizeAccountCharacterProfile(character, {
+        createdAt: character?.createdAt ?? existing?.createdAt ?? new Date().toISOString(),
+      });
+      localProfiles.set(account, [
+        ...profiles.filter((entry) => entry.characterId !== profile.characterId),
+        profile,
+      ]);
+      return cloneAccountCharacterProfile(profile);
     },
     removeProfileCharacter(account, characterId) {
-      if (typeof registry?.removeProfileCharacter !== 'function') return false;
-      return registry.removeProfileCharacter(account, characterId);
+      if (typeof registry?.removeProfileCharacter === 'function') return registry.removeProfileCharacter(account, characterId);
+      const profiles = localProfiles.get(account);
+      if (!profiles) return false;
+      const targetId = profileCharacterId({ characterId });
+      const next = profiles.filter((entry) => entry.characterId !== targetId);
+      if (next.length === profiles.length) return false;
+      localProfiles.set(account, next);
+      return true;
     },
-    /**
-     * @param {Buffer} innerPayload GIN7 credential inner (code 0x7000)
-     * @returns {{ ok: true, account: string, matchedBy: 'credential'|'gin7-any'|'password'|'registered' } | { ok: false, reason: string }}
-     */
+    getSelectedSession(account) {
+      if (typeof registry?.getSelectedSession === 'function') return registry.getSelectedSession(account);
+      return selectedSessions.get(account) ?? 1;
+    },
+    setSelectedSession(account, sessionId) {
+      const selected = selectedSessionIdOf(sessionId);
+      if (typeof registry?.setSelectedSession === 'function') return registry.setSelectedSession(account, selected);
+      if (!byAccount.has(account) && !acceptAnyGin7) return 1;
+      selectedSessions.set(account, selected);
+      if (acceptAnyGin7) ensureLocalAccount(account);
+      return selected;
+    },
     authenticate(innerPayload) {
       if (!isLoginCredentialInner(innerPayload)) {
         return { ok: false, reason: 'not a GIN7 login credential' };
@@ -609,14 +816,9 @@ export function createAccountStore({ accounts = [], acceptAnyGin7 = false, regis
       if (exact !== undefined) {
         return { ok: true, account: exact.account, matchedBy: 'credential' };
       }
-      // Real signup (회원가입): when a persistent registry is wired, the account label governs.
-      // Strict mode requires an out-of-band registry record; the optional allowRegister path keeps
-      // legacy Trust-On-First-Use capture compatibility.
       if (registry) {
         const parsed = parseGin7Credential(innerPayload);
         const account = parsed.accountLabel;
-        // A single generic reason for every failure (+ equal-cost hashing) so a caller cannot tell a
-        // missing account from a wrong password from a malformed label (anti-enumeration; review 2026-06-14).
         const GENERIC_FAIL = 'authentication failed';
         if (!isValidAccountLabel(account)) {
           registry.dummyVerify(innerPayload);
@@ -630,7 +832,6 @@ export function createAccountStore({ accounts = [], acceptAnyGin7 = false, regis
           return { ok: false, reason: GENERIC_FAIL };
         }
         if (allowRegister) {
-          // Trust-On-First-Use registration (no separate signup opcode exists). LAN-trusted only.
           registry.register(account, innerPayload, { createdAt: new Date().toISOString() });
           return { ok: true, account, matchedBy: 'registered' };
         }
@@ -640,10 +841,63 @@ export function createAccountStore({ accounts = [], acceptAnyGin7 = false, regis
       if (acceptAnyGin7) {
         const parsed = parseGin7Credential(innerPayload);
         const account = parsed.accountLabel.length > 0 ? parsed.accountLabel : 'unknown';
+        ensureLocalAccount(account);
         return { ok: true, account, matchedBy: 'gin7-any' };
       }
       return { ok: false, reason: 'credential not registered' };
     },
+  };
+}
+
+function selectedSessionIdOf(value) {
+  const n = Number(value);
+  return Number.isInteger(n) && n > 0 && n <= 0xffff ? n : 1;
+}
+function sessionRecordId(record, index = 0) {
+  return selectedSessionIdOf(record?.sessionId ?? record?.id ?? index + 1);
+}
+
+function isOpenSessionRecord(record) {
+  return Number(record?.status ?? 1) !== 0;
+}
+
+function findSessionRecord(records, sessionId) {
+  return records.find((s, index) => sessionRecordId(s, index) === sessionId) ?? null;
+}
+
+function resolveLobbySessionSelection({ requestedSessionId, records, account, accountStore }) {
+  if (!Array.isArray(records) || records.length === 0) {
+    return {
+      requestedSessionId,
+      resolvedSessionId: requestedSessionId,
+      selectedRecord: null,
+      accepted: true,
+      reject: null,
+    };
+  }
+  const requestedRecord = findSessionRecord(records, requestedSessionId);
+  if (requestedRecord && isOpenSessionRecord(requestedRecord)) {
+    return {
+      requestedSessionId,
+      resolvedSessionId: requestedSessionId,
+      selectedRecord: requestedRecord,
+      accepted: true,
+      reject: null,
+    };
+  }
+  const persistedId = account && typeof accountStore?.getSelectedSession === 'function'
+    ? selectedSessionIdOf(accountStore.getSelectedSession(account))
+    : 1;
+  const persistedRecord = findSessionRecord(records, persistedId);
+  const fallbackRecord = (persistedRecord && isOpenSessionRecord(persistedRecord))
+    ? persistedRecord
+    : records.find((record) => isOpenSessionRecord(record)) ?? null;
+  return {
+    requestedSessionId,
+    resolvedSessionId: fallbackRecord ? sessionRecordId(fallbackRecord) : 1,
+    selectedRecord: fallbackRecord,
+    accepted: false,
+    reject: requestedRecord ? 'closed-session' : 'missing-session',
   };
 }
 
@@ -675,6 +929,12 @@ export function createLoginSession({
   connectionId = 0, // (옵션) 이 연결의 유일 키 — 멀티플레이에서 connection별 distinct in-world 함대 id 파생에 쓴다.
 }) {
   let phase = LOGIN_PHASES.CONNECTED;
+  const commandTargetPool = typeof worldState?._commandTargets?.merge === 'function'
+    ? worldState._commandTargets
+    : createCommandTargetPool();
+  if (worldState && !worldState._commandTargets) {
+    worldState._commandTargets = commandTargetPool;
+  }
   let account = typeof boundAccount === 'string' && boundAccount.length > 0 ? boundAccount : null;
   let announcementSent = false;
   // 멀티플레이 2:2 계정 로스터(LOGH_MP_ACCOUNT_ROSTER): 이 연결의 계정 라벨로 월드 정체성{char,unit,power}을
@@ -732,6 +992,13 @@ export function createLoginSession({
       profileKeys,
     };
   };
+  const currentSessionRecords = () => {
+    const source = typeof sessions === 'function' ? sessions({ account }) : sessions;
+    return Array.isArray(source) ? source : [];
+  };
+  const currentWorldBySession = (sessionId) => (
+    typeof worldBySession === 'function' ? worldBySession({ account, sessionId }) : worldBySession
+  );
   let nextCharId = lobbyCharacters.reduce((max, c) => Math.max(max, charIdOf(c)), 0) + 1;
   const refreshNextCharId = () => {
     nextCharId = lobbyCharacters.reduce((max, c) => Math.max(max, charIdOf(c)), 0) + 1;
@@ -772,6 +1039,12 @@ export function createLoginSession({
   let chargedCharacterId = 0;
   let generatedCharacterId = 0;
   let generateCharacterDraft = null;
+let postloadCommandCardsSent = false;
+let worldGridInitializeExtrasSent = false;
+let worldGridInitializeTacticsReseedSent = false;
+let tacticalSetupTablesPrimed = false;
+let tacticalReadModelBundleSent = false;
+let battleEntryProbeSent = false;
   if (account) {
     loadAccountProfileCharacters();
   }
@@ -789,6 +1062,61 @@ export function createLoginSession({
   // 월드진입 0x0325 그리드-유닛 id(char+0x24 바인딩)와 戦死 판정 flagship 링크에 동일 적용해 클라 자기바인딩과
   // 어긋나지 않게 한다(세 사용처 1247·1413·worldPlayerInfo 모두 이 함수 경유→일관).
   const sessionWorldUnitId = () => accountIdentity()?.unit ?? mpDistinctUnitId() ?? worldUnitId();
+  const currentBattleReadModel = () => {
+    const charId = activeCharacterId();
+  const unitId = sessionWorldUnitId();
+  seedPlayerCharacter(charId, unitId);
+  const { participants, characters } = buildBattleEntryParticipants(worldState, {
+    unitId,
+    character: charId,
+    cap: 12,
+    center: 100,
+    scale: 8,
+  });
+  const baseId = fleetHomeContentId();
+  const bases = [{
+    id: baseId,
+    x: 84,
+    y: 0,
+    z: 116,
+    u32a: 0,
+    u16a: 0,
+    u32b: 0,
+    u16b: 0,
+  }];
+  const battleSteps = openBattleField({
+    participants,
+    characters,
+    bases,
+    anchorId: baseId,
+    fieldId: baseId,
+    modeKind: 0,
+    tacticsArg0: 1,
+  });
+  return { charId, unitId, participants, characters, bases, battleSteps };
+};
+  const currentBattleStepInner = (code) => currentBattleReadModel().battleSteps.find((step) => step.code === code)?.inner ?? null;
+  const commandTargetSeed = ({
+    baseId = fleetHomeContentId(),
+    unitId = sessionWorldUnitId(),
+    reason = 'login-session',
+  } = {}) => {
+    const charId = activeCharacterId();
+    return commandTargetPool.merge(buildPlayableCommandTargets({
+      activeCharacterId: charId,
+      activeUnitId: unitId,
+      baseId,
+      characterName: characterDisplayName(activeCharacterRecord(charId) ?? {}),
+      staticState: staticMasterState(),
+    }), reason);
+  };
+  const ensureSessionCommandTargets = (reason, extra = {}) => ensureCommandExecutionTargets(commandTargetPool, {
+    baseId: extra.baseId ?? fleetHomeContentId(),
+    characterId: activeCharacterId(),
+    unitId: sessionWorldUnitId(),
+    characterName: characterDisplayName(activeCharacterRecord(activeCharacterId()) ?? {}),
+    ...extra,
+  }, reason);
   const actionListCategoryDword = () => {
     const category = actionListCategory();
     if (category == null) return null;
@@ -800,9 +1128,14 @@ export function createLoginSession({
     if (officerCount != null && officerCount > 0) {
       return Array.from({ length: officerCount }, () => ({ character: characterId, role: 0 }));
     }
+    if (commandTablePreloadProbeEnabled() && devCommandGrantAllEnabled()) {
+      ensureSessionCommandTargets('dev-command-grant-all');
+      return devCommandSeatEntries({ all: true });
+    }
     const categoryDword = actionListCategoryDword();
     if (categoryDword != null) {
-      return [{ character: categoryDword, role: 0 }];
+      ensureSessionCommandTargets('dev-command-category-seat');
+      return devCommandSeatEntries({ all: false, category: actionListCategory() });
     }
     const postload = options?.postload === true;
     const enabled = actionListSeatsEnabled() || (postload && postloadActionListSeatsEnabled());
@@ -898,6 +1231,29 @@ export function createLoginSession({
     const n = integerOrNull(value);
     return n != null && n >= 0 ? n & 0xff : null;
   };
+  // 0x0323 parentage rank is not the rank-table ladder id. The client feeds this
+  // value directly to constmsg group 5 (0=황제, 2=원수, 13=소위, ...).
+  const rankConstmsgSubIds = Object.freeze({
+    empire: Object.freeze({
+      14: 2, 13: 3, 12: 4, 11: 5, 10: 6, 9: 7, 8: 8,
+      7: 9, 6: 10, 5: 11, 4: 12, 3: 13, 2: 14, 1: 18,
+    }),
+    alliance: Object.freeze({
+      14: 2, 13: 4, 12: 5, 11: 6, 10: 7, 9: 8, 8: 9,
+      7: 10, 6: 11, 5: 12, 4: 13, 3: 14, 2: 15, 1: 16,
+    }),
+  });
+  const rankSubIdOrNull = (value) => {
+    const n = integerOrNull(value);
+    return n != null && n >= 0 && n <= 20 ? n : null;
+  };
+  const rankSubIdFromRankId = (value, faction) => {
+    const n = integerOrNull(value);
+    if (n == null || n <= 0) return null;
+    const rank = clampRankId(n);
+    const key = normalizeFaction(faction) ?? 'empire';
+    return rankConstmsgSubIds[key]?.[rank] ?? rankConstmsgSubIds.empire[rank] ?? null;
+  };
   const clientPowerByte = (value) => {
     if (value == null) return null;
     const n = integerOrNull(value);
@@ -916,15 +1272,22 @@ export function createLoginSession({
   };
   // 기지/성계 0x031f elem+0x04 owner 바이트: 클라 기지 패널이 ==2 동맹, ==3 제국으로 읽는다(RE). 제국=3,
   // 동맹=2, 그 외(중립/페잔/미상)=1. 이는 캐릭터 power 바이트(제국=1)와 다륾으로 별도 매핑한다.
-  const baseOwnerByteFromFaction = (value) => {
-    const f = normalizeFaction(value);
-    if (f === 'empire') return 3;
-    if (f === 'alliance') return 2;
-    return 1;
-  };
-  const characterPowerByte = (character = null) => (
-    clientPowerByte(
-      character?.worldPower ?? character?.clientPower ?? character?.faction ?? character?.power
+const baseOwnerByteFromFaction = (value) => {
+  const f = normalizeFaction(value);
+  if (f === 'empire') return 3;
+  if (f === 'alliance') return 2;
+  return 1;
+};
+const gridFactionKey = (value, fallback = null) => {
+  const power = clientPowerByte(value);
+  if (power === 1) return 'empire';
+  if (power === 2) return 'alliance';
+  const f = normalizeFaction(value);
+  return f ?? fallback;
+};
+const characterPowerByte = (character = null) => (
+  clientPowerByte(
+    character?.worldPower ?? character?.clientPower ?? character?.faction ?? character?.power
         ?? character?.nationId ?? character?.nation_id,
     )
   );
@@ -952,10 +1315,17 @@ export function createLoginSession({
   };
   const playerFleetCell = () => fleetCell(activePlayerFactionKey());
   const characterRankId = (character = null) => {
-    const direct = integerOrNull(character?.rank);
-    if (direct != null && direct > 0) return direct;
-    const resolved = rankId(character?.rank, { faction: characterFactionKey(character) });
-    return resolved?.id ?? null;
+    const explicitSubId = rankSubIdOrNull(
+      character?.createRankSubId ?? character?.rankSubId ?? character?.rankSuffix ?? character?.rank_suffix,
+    );
+    if (explicitSubId != null) return explicitSubId;
+    const faction = characterFactionKey(character);
+    const resolved = rankId(character?.rank, { faction });
+    if (resolved?.id != null) return rankSubIdFromRankId(resolved.id, resolved.faction ?? faction);
+    const direct = integerOrNull(character?.wireRank ?? character?.rank);
+    if (direct == null || direct <= 0) return null;
+    if (direct > 14 && direct <= 20) return direct;
+    return rankSubIdFromRankId(direct, faction);
   };
   // Resolve a character's held peerage title (작위) to the 작위명 string written to the 0x0323/0x0356
   // record's titlename field. `character.title` is the 0x1008 create-form ladder id (0=untitled ..
@@ -984,7 +1354,7 @@ export function createLoginSession({
     contentPack?.characterById?.(id) ?? lobbyCharacters.find((c) => charIdOf(c) === id) ?? null
   );
   // 자동황제 폴백 차단: real-login 신규생성/계정/charged/명시 LOGH_WORLD_CHAR_ID가 하나도 없으면
-  // activeCharacterId()가 worldCharId()(=1)로 폴백해 캐논 최상위 인물(황제 스탬프 대상)을 그대로 입는다
+// activeCharacterId()가 worldCharId()(=1)로 폴백해 캐논 최상위 인물(황제 스탬프 대상)을 그대로 입는다
   // ("억지 dummy 캐릭"이 황제로 연결되는 근본). 그 경우 플레이어 표시 레코드를 합성 하급사관으로 대체한다.
   // id는 불변(grid/unit/base/seed-id 전부 worldCharId 그대로 → 광역 회귀 없음), 플레이어 0x0323의
   // name/rank/faction/abilities만 신참으로. 진짜 생성/계정/명시 경로는 hasRealPlayerChar()=true라 불변.
@@ -995,36 +1365,37 @@ export function createLoginSession({
     process.env.LOGH_WORLD_CHAR_ID != null;
   const synthFallbackPlayer = (id) => ({
     id,
-    status: 1,
-    name: '신임 사관',
-    fullName: '신임 사관',
-    lastname: '신임 사관',
-    firstname: '',
-    faction: 'empire',
-    power: 1,
-    worldPower: 1,
-    sex: 0,
-    blood: 0,
-    abilities: resolveCreatedAbilities({ abilities: [], power: 1, blood: 0 }),
+    ...DEFAULT_PLAYER_CHARACTER_PROFILE,
+    syntheticPlayer: true,
+    fullName: DEFAULT_PLAYER_CHARACTER_PROFILE.displayName,
+    abilities: resolveCreatedAbilities({
+      abilities: DEFAULT_PLAYER_CHARACTER_PROFILE.abilities,
+      power: DEFAULT_PLAYER_CHARACTER_PROFILE.power,
+      blood: DEFAULT_PLAYER_CHARACTER_PROFILE.blood,
+    }),
     stamina: STAMINA_FULL,
     title: 0, // 작위 없음(평민) — 절대 고위작위/황제 아님
-    rank: initialCharacterRankId(1), // 제국 신참 계급
+    rank: initialCharacterRankId(DEFAULT_PLAYER_CHARACTER_PROFILE.power), // 제국 신참 계급
     createRankSubId: initialCreateRankSubId(),
-    check: 1,
   });
   // 플레이어 char 레코드 단일 소스. real-char면 실레코드.
   // 폴백(real-char 없음)일 때: activeCharacterRecord가 **캐논 레코드를 반환할 때만**(=contentPack 로드 →
   // char 1 = sovereign(황제) 위험) 합성 하급사관으로 대체. null(contentPack 미로드)이면 기존 동작 유지
   // (상위에서 "Character N" 중립 placeholder = 황제 아님)이라 건드리지 않는다.
   const playerRecord = (id) => {
-    if (hasRealPlayerChar()) return activeCharacterRecord(id);
-    // 실제 생성/로비 캐릭이 있으면 그대로(생성 흐름 보호 — 이게 우선).
+    // DEFECT 1 (player=황제) 근본: 생성 캐릭 id는 세션-로컬 lobby max+1이라 낮은 값(신규 계정이면 2 등)이고
+    // 캐논 contentPack char id와 충돌한다. activeCharacterRecord()는 contentPack 우선이라, 충돌 시 생성한
+    // 플레이어(예: Lohengram Reinhard, id 2)가 캐논 char 2(예: 황제)에 가려져 HUD가 캐논 인물 + 월드진입의
+    // 지연(0) 능력치로 그려진다. 플레이어 본인 레코드는 생성/로비/프로필(lobbyCharacters)을 같은 id의 캐논
+    // contentPack보다 우선한다 — 이 우선순위 역전은 playerRecord에만 적용(전역 activeCharacterRecord/NPC 조회 불변).
     const lobbyRec = lobbyCharacters.find((c) => charIdOf(c) === id) ?? null;
+    if (hasRealPlayerChar()) return lobbyRec ?? activeCharacterRecord(id);
+    // 실제 생성/로비 캐릭이 있으면 그대로(생성 흐름 보호 — 이게 우선).
     if (lobbyRec) return lobbyRec;
-    // 로비 캐릭 없이 contentPack 캐논 레코드(=char 1 sovereign/황제 위험)로만 떨어질 때만 합성 하급사관.
-    const canonRec = (typeof contentPack?.characterById === 'function' ? contentPack.characterById(id) : null) ?? null;
-    return canonRec ? synthFallbackPlayer(id) : null;
-  };
+  // 로비 캐릭 없이 contentPack 캐논 레코드(=char 1 sovereign/황제 위험)로만 떨어질 때만 합성 하급사관.
+  const canonRec = (typeof contentPack?.characterById === 'function' ? contentPack.characterById(id) : null) ?? null;
+  return canonRec ? synthFallbackPlayer(id) : null;
+};
   // 시드 가능한 캐논 NPC 목록을 구한다(플레이어 charId 제외). 제국·동맹 양 진영(nationId 0x500/0x501)에서
   // 가져와 distinct id별로 모으고, 직위(post_ja)가 있는 인물을 우선해 위계가 의미를 갖게 한다. 상한(cap)으로
   // 프레임 예산을 지킨다. 최상위 군주(제국 元帥/사령장관급 1명)에 "황제"(최상위 칭호)를 스탬프해 클라 HUD가
@@ -1044,19 +1415,15 @@ export function createLoginSession({
       if (ap !== bp) return ap - bp;
       return (b.wireRank ?? 0) - (a.wireRank ?? 0);
     });
-    const picked = all.slice(0, Math.max(0, cap | 0));
-    // 최상위 군주: 가장 계급 높은 제국 인물 1명에게 "황제"(작위 사다리 밖 최상위 칭호) 스탬프.
-    const sovereign = picked.find((c) => c.nationId === EMPIRE_NATION_ID && (c.wireRank ?? 0) >= 1)
-      ?? picked.find((c) => c.nationId === EMPIRE_NATION_ID)
-      ?? null;
-    return picked.map((c) => (c === sovereign ? { ...c, sovereignTitle: '황제' } : c));
+    return all.slice(0, Math.max(0, cap | 0));
   };
-  // 캐논 NPC 와이어 계급 클램프: wireRank(콘텐츠팩이 rank_ja→id 해석)를 우선 쓰되, 유효 사다리 범위
-  // (1..14=RANK_MAX)로 클램프한다. 미해석이면 characterRankId(npc) 폴백도 동일 클램프. 사다리 밖
-  // 값(0/음수/14 초과)이 와이어 rank 필드(@0xd6)에 새어 HUD가 빈/엉뚱 계급을 그리는 것을 막는다.
+  // 캐논 NPC 와이어 계급: content wireRank/rank_ja는 rank-table ladder id(1..14)이므로
+  // 0x0323 rank field가 실제로 소비하는 constmsg group-5 subId로 변환한다.
   const clampedNpcRank = (npc) => {
-    const raw = Number.isInteger(npc.wireRank) ? npc.wireRank : characterRankId(npc);
-    return raw != null && raw > 0 ? clampRankId(raw) : 0; // 0=미설정(계급 없음)은 그대로 둔다.
+    const raw = Number.isInteger(npc.wireRank) ? npc.wireRank : null;
+    return raw != null && raw > 0
+      ? rankSubIdFromRankId(raw, characterFactionKey(npc))
+      : (characterRankId(npc) ?? 0);
   };
   // 캐논 NPC 표시명 unmask 게이트: 매뉴얼이 직접 문서화한 인물(manualDocumented=P1)만 캐논명을
   // 권위적으로 노출(P0 승격)한다. 그 외(DB 추측명 포함)는 추측 데이터를 권위적으로 드러내지 않도록
@@ -1161,13 +1528,33 @@ export function createLoginSession({
       firstname: character.firstname,
       faction: character.faction,
       power: characterPowerByte(character),
+      worldPower: character.worldPower,
+      createPower: character.createPower,
+      camp: character.camp,
       blood: character.blood,
       sex: character.sex,
       face: character.face,
       abilities: character.abilities,
-      rank: characterRankId(character),
+        rank: character.rank,
+      createRankSubId: character.createRankSubId,
+      state: character.state,
+      fame: character.fame,
+      pcp: character.pcp,
+      mcp: character.mcp,
+      money: character.money,
+      influence: character.influence,
+      stamina: character.stamina,
+      title: character.title,
+      bonusPoint: character.bonusPoint,
+      specialAbilityNum: character.specialAbilityNum,
+      birthMonth: character.birthMonth,
+      birthDay: character.birthDay,
+      birthYear: character.birthYear,
       spot: character.spot,
       spotOwner: character.spotOwner,
+      status: character.status,
+      generated: character.generated,
+      check: character.check,
       createdAt: character.createdAt,
     });
   };
@@ -1221,6 +1608,7 @@ export function createLoginSession({
     const power = Number(process.env.LOGH_PRESEED_POWER || 2) === 3 ? 3 : 2; // 2=제국 / 3=동맹
     const wp = createWorldPowerByte(power);
     const seeded = {
+      ...DEFAULT_PLAYER_CHARACTER_PROFILE,
       id: 1, status: 1, name: 'Reinhard', fullName: 'Reinhard von Lohengram',
       lastname: 'Lohengram', firstname: 'Reinhard', power, createPower: power,
       worldPower: wp, faction: createFactionKey(power),
@@ -1229,7 +1617,10 @@ export function createLoginSession({
       stamina: STAMINA_FULL, bonusPoint: 0,
       title: clampPlayerTitle(0), rank: initialCharacterRankId(power),
       createRankSubId: initialCreateRankSubId(),
-      birthMonth: 0, birthDay: 0, flagshipName: '', flagshipType: 0, flagshipKind: 0, check: 1,
+      birthMonth: DEFAULT_PLAYER_CHARACTER_PROFILE.birthMonth,
+      birthDay: DEFAULT_PLAYER_CHARACTER_PROFILE.birthDay,
+      birthYear: DEFAULT_PLAYER_CHARACTER_PROFILE.birthYear,
+      flagshipName: '', flagshipType: 0, flagshipKind: 0, check: 1,
     };
     const loc = currentLocationFields({ worldPower: wp });
     seeded.spot = loc.spot;
@@ -1255,7 +1646,9 @@ export function createLoginSession({
     if (boats.length === 0 && commander == null) return null;
     return { boats, commander };
   };
-  const localFleetRecord = ({ unitId, characterId, location }) => {
+  const localFleetRecord = ({ unitId, characterId, location, cell = null }) => {
+    const explicitCell = cell !== null && cell !== undefined ? Number(cell) : NaN;
+    const cellId = Number.isFinite(explicitCell) ? Math.max(0, Math.trunc(explicitCell)) : fleetCellId();
     // worldState 함대 엔티티가 있으면 실제 배속 사관(boats)·사령관을 officer 필드로 투영한다.
     const officer = fleetOfficerProjection(unitId);
     return [{
@@ -1268,9 +1661,9 @@ export function createLoginSession({
       // to make the current cell non-empty. OFF keeps the proven world-entry bytes (commander=charId).
       // 우선순위: focus-cell 게이트 > worldState 사령관 > 기본 characterId. docs/logh7-implementation-specs.md §6.
       commander: process.env.LOGH_PLAYER_FOCUS_CELL === '1'
-        ? fleetCellId()
+        ? cellId
         : (officer?.commander ?? characterId),
-      cell: fleetCellId(),
+      cell: cellId,
       owner: location.spotOwner,
       // officer(troop_units) 배속 사관 ids — worldState 엔티티에 있을 때만(없으면 빈 배열, 날조 금지).
       boats: officer?.boats ?? [],
@@ -1280,8 +1673,8 @@ export function createLoginSession({
       mapSection: location.spot,
     }];
   };
-  const unitFleetsForLocation = ({ unitId, characterId, location }) => (
-    fullUnitLocationEnabled() ? localFleetRecord({ unitId, characterId, location }) : null
+  const unitFleetsForLocation = ({ unitId, characterId, location, cell = null, forceFull = false }) => (
+    (forceFull || fullUnitLocationEnabled()) ? localFleetRecord({ unitId, characterId, location, cell }) : null
   );
   const characterHudFields = (character = null) => ({
     camp: byteOrNull(character?.camp ?? characterPowerByte(character)),
@@ -1294,12 +1687,79 @@ export function createLoginSession({
     // 体力(stamina) @0x1a9: 미지정이면 만체력으로 시드(생성 캐릭 체력 0 게이지 버그 수정). 캐릭터가
     // stamina를 명시하면 그 값(0 포함)을 쓰되, 기본은 0이 아닌 만체력이라 HUD 게이지가 정상 표시된다.
     stamina: positiveIntOr(character?.stamina, STAMINA_FULL) & 0xff,
+    together: Number.isInteger(character?.together) ? positiveIntOr(character.together, 0) & 0xff : null,
   });
-  // 행성/요새를 기지 레코드에 추가하는 실험 게이트. 기본 OFF — 라이브 검증 전까지 기존 동작 불변.
-  const planetBaseRecordsEnabled = () => process.env.LOGH_PLANET_BASE_RECORDS === '1';
+  const numericPlaceholderName = (value) => (
+    typeof value === 'string' && /^\s*\d+\s*$/u.test(value)
+  );
+  const cardCharacterDisplayName = (character = null) => {
+    const id = Number(character?.id ?? character?.characterId ?? 0);
+    const displayName = characterDisplayName(character ?? {});
+    if (displayName && !numericPlaceholderName(displayName)) return displayName;
+    if (id === activeCharacterId()) return '신참사관';
+    return Number.isInteger(id) && id > 0 ? `Officer ${id}` : 'Officer';
+  };
+  const cardCharacterRecords = () => {
+    const roster = Array.isArray(contentPack?.characters) ? contentPack.characters : [];
+    const toCardCharacter = (ch) => {
+      const displayName = cardCharacterDisplayName(ch);
+      return {
+        characterId: Number(ch?.characterId ?? ch?.id) || 0,
+        gridUnitId: Number(ch?.gridUnitId ?? ch?.characterId ?? ch?.id) || 0,
+        power: characterPowerByte(ch),
+        abilities: ch?.abilities ?? null,
+        ...characterHudFields(ch),
+        lastname: ch?.lastname ?? displayName,
+        firstname: ch?.firstname ?? '',
+        displayName,
+        blood: byteOrNull(ch?.blood ?? ch?.origin),
+        rank: characterRankId(ch),
+        title: characterTitleName(ch),
+        face: Number.isInteger(ch?.portraitIndex)
+          ? ch.portraitIndex
+          : Number.isInteger(ch?.face) ? ch.face : null,
+      };
+    };
+    const player = playerRecord(activeCharacterId());
+    const characters = [];
+    if (player) characters.push(toCardCharacter(player));
+    for (const ch of roster) {
+      if (characters.length >= 64) break;
+      if (charIdOf(ch) === activeCharacterId()) continue;
+      characters.push(toCardCharacter(ch));
+    }
+    if (characters.length === 0) {
+      const name = cardCharacterDisplayName({ id: worldCharId() });
+      characters.push({
+        characterId: worldCharId(),
+        gridUnitId: worldCharId(),
+        lastname: DEFAULT_PLAYER_CHARACTER_PROFILE.lastname,
+        firstname: DEFAULT_PLAYER_CHARACTER_PROFILE.firstname,
+        displayName: name,
+        abilities: DEFAULT_PLAYER_CHARACTER_PROFILE.abilities,
+        rank: DEFAULT_PLAYER_CHARACTER_PROFILE.rank,
+        blood: DEFAULT_PLAYER_CHARACTER_PROFILE.blood,
+        ...characterHudFields(),
+      });
+    }
+    commandTargetPool.merge({
+      characters: characters
+        .filter((entry) => Number(entry?.characterId) > 0)
+        .map((entry) => ({
+          id: Number(entry.characterId),
+          rank: Number(entry.rank) || 0,
+          name: entry.displayName ?? entry.lastname ?? 'Character',
+        })),
+    }, '0x034f-card-character');
+    return characters;
+  };
+  // 행성/요새를 기지 레코드에 추가하는 플레이어블 게이트. serve-auth/playable 기본값은 ON,
+  // 운영자가 LOGH_PLANET_BASE_RECORDS=0 을 명시하면 성계-only 레거시 경로로 되돌린다.
+  const planetBaseRecordsEnabled = () => process.env.LOGH_PLANET_BASE_RECORDS !== '0';
   const staticBaseRecords = () => {
     const systems = Array.isArray(contentPack?.systems) ? contentPack.systems : [];
-    return systems.slice(0, 80).map((system, index) => {
+    const systemLimit = Math.min(STRATEGIC_SYSTEM_MARKER_MAX, STATIC_BASE_MAX);
+    return systems.slice(0, systemLimit).map((system, index) => {
       const id = positiveIntOr(system?.id, index + 1);
       return {
         id,
@@ -1314,9 +1774,9 @@ export function createLoginSession({
   };
   // 성계 객체(system)에서 행성/요새 기지 시드를 펼친다. id 공간은 성계와 충돌하지 않게
   // systemId*1000 + orbit(행성) / systemId*1000 + 900 + idx(요새)로 할당.
-  const planetBaseSeeds = (system) => {
+  const planetBaseSeeds = (system, runtimeSystemId = null) => {
     if (!system) return [];
-    const sysId = positiveIntOr(system?.id, 0);
+    const sysId = positiveIntOr(system?.id, positiveIntOr(runtimeSystemId, 0));
     const sysName = system?.name ?? '';
     const sysGrid = positiveIntOr(system?.grid ?? system?.gridId, sysId);
     const owner = baseOwnerByteFromFaction(system?.faction);
@@ -1329,7 +1789,7 @@ export function createLoginSession({
         id: sysId * 1000 + orbit,
         grid: sysGrid,
         name: p?.name_ja ?? p?.name ?? `Planet ${i + 1}`,
-        name_ko: p?.name_ko ?? null,
+        name_ko: p?.name_ko ?? p?.nameKo ?? null,
         economySystemName: sysName,
         class_: 3, // P3 guess: planet; RE 라이브 검증 필요
         isPlanet: true,
@@ -1343,7 +1803,7 @@ export function createLoginSession({
         id: sysId * 1000 + 900 + i,
         grid: sysGrid,
         name: typeof f === 'string' ? f : (f?.name_ja ?? f?.name ?? `Fortress ${i + 1}`),
-        name_ko: f?.name_ko ?? null,
+        name_ko: f?.name_ko ?? f?.nameKo ?? null,
         economySystemName: sysName,
         class_: 2, // fortress
         isPlanet: false,
@@ -1351,6 +1811,14 @@ export function createLoginSession({
       });
     }
     return seeds;
+  };
+  const parentSystemIdFromBaseId = (baseId) => {
+    const id = positiveIntOr(baseId, 0);
+    return id >= 1000 ? Math.trunc(id / 1000) : id;
+  };
+  const rawSystemById = (systemId) => {
+    const systems = Array.isArray(contentPack?.systems) ? contentPack.systems : [];
+    return systems.find((system, index) => positiveIntOr(system?.id, index + 1) === systemId) ?? null;
   };
   // RE: 0x031f elem+0x175 class/type — 0=성계, 1=요새, 2=행성, 3=기지.
   // contentPack class_는 1=성계/2=요새/3=행성이므로 -1 매핑한다.
@@ -1371,7 +1839,11 @@ export function createLoginSession({
     economySystemName: base.economySystemName ?? base.name,
     isPlanet: base.isPlanet ?? false,
   });
-  const currentSpotId = () => currentLocationFields(activeCharacterRecord(activeCharacterId())).spot;
+  // Use playerRecord (created/lobby precedence) so the base-record spot key matches the 0x0323 player
+  // location (line ~1706 also uses playerRecord). With activeCharacterRecord (contentPack-first) a created
+  // player whose id collides with a canon char resolved the spot from the canon char, so the base/planet
+  // panel's spot.field04 never matched PLAYER_INFO+0x40/+0x44 → "스폿 불명" (DEFECT 2, downstream of DEFECT 1).
+  const currentSpotId = () => currentLocationFields(playerRecord(activeCharacterId())).spot;
   const defaultSelectedBaseId = (systems) => (
     positiveIntOr(process.env.LOGH_SELECTED_BASE_ID, systems[systems.length - 1]?.id ?? null)
   );
@@ -1387,17 +1859,19 @@ export function createLoginSession({
       seen.add(base.id);
       ordered.push(base);
     };
-    const wantedSystem = systems.find((base) => base.id === wanted) ?? null;
-    add(wantedSystem);
+    const wantedSystemId = parentSystemIdFromBaseId(wanted);
+    const wantedSystem = systems.find((base) => base.id === wantedSystemId) ?? systems.find((base) => base.id === wanted) ?? null;
+    const wantedDerivedBase = planetBaseRecordsEnabled() && wanted >= 1000
+      ? planetBaseSeeds(rawSystemById(wantedSystemId), wantedSystemId).find((base) => base.id === wanted)
+      : null;
+    add(wantedDerivedBase ?? wantedSystem);
+    if (wantedDerivedBase) add(wantedSystem);
+    add(systems.find((base) => base.id === selected) ?? null);
     // LOGH_PLANET_BASE_RECORDS=1: 현재 성계에 속한 행성/요새도 기지 목록에 노출해
     // 拠点選択 패널에서 행성을 선택할 수 있게 한다. 기본 OFF.
     if (planetBaseRecordsEnabled() && wantedSystem) {
-      const rawSystem = Array.isArray(contentPack?.systems)
-        ? contentPack.systems.find((s) => positiveIntOr(s?.id, 0) === wantedSystem.id)
-        : null;
-      for (const p of planetBaseSeeds(rawSystem)) add(p);
+      for (const p of planetBaseSeeds(rawSystemById(wantedSystem.id), wantedSystem.id)) add(p);
     }
-    add(systems.find((base) => base.id === selected) ?? null);
     for (const base of systems) add(base);
     return ordered.slice(0, 4).map(informationBaseSeed);
   };
@@ -1421,8 +1895,8 @@ export function createLoginSession({
     const enriched = economyBaseRecord(planets, owner);
     return enriched ?? owner;
   };
-  const firstPlanetSeedOfSystem = (rawSystem) => {
-    for (const seed of planetBaseSeeds(rawSystem)) {
+  const firstPlanetSeedOfSystem = (rawSystem, runtimeSystemId = null) => {
+    for (const seed of planetBaseSeeds(rawSystem, runtimeSystemId)) {
       if (seed.isPlanet) return seed;
     }
     return null;
@@ -1430,14 +1904,16 @@ export function createLoginSession({
   // 현재 spot(성계)의 첫 행성으로 0x0337 NotifyBaseParameter를 빌드. 행성 기지 시드가 활성화돼 있으면
   // 행성 ID를 base로 사용하고, 아니면 기존처럼 성계의 첫 행성을 사용한다.
   const baseParamForSpot = (spotId, gridOverride = null) => {
-    if (!baseEconomyEnabled()) return null;
+    if (!baseEconomyEnabled() || !baseParameterNotifyEnabled()) return null;
     const baseRecs = staticBaseRecords();
-    const systemRec = baseRecs.find((b) => b.id === spotId);
+    const systemId = parentSystemIdFromBaseId(spotId);
+    const systemRec = baseRecs.find((b) => b.id === systemId) ?? baseRecs.find((b) => b.id === spotId);
     if (!systemRec) return null;
-    const rawSystem = Array.isArray(contentPack?.systems)
-      ? contentPack.systems.find((s) => positiveIntOr(s?.id, 0) === systemRec.id)
+    const rawSystem = rawSystemById(systemRec.id);
+    const derivedPlanetSeed = spotId >= 1000
+      ? planetBaseSeeds(rawSystem, systemRec.id).find((seed) => seed.id === spotId && seed.isPlanet)
       : null;
-    const planetSeed = firstPlanetSeedOfSystem(rawSystem);
+    const planetSeed = derivedPlanetSeed ?? firstPlanetSeedOfSystem(rawSystem, systemRec.id);
     const economyName = planetSeed?.economySystemName ?? systemRec.name;
     const planets = economyName ? baseEconomy().get(economyName) : null;
     if (!planets?.length) return null;
@@ -1450,6 +1926,33 @@ export function createLoginSession({
     }));
   };
   const informationBaseBuilderRecords = (primaryId = null) => informationBaseRecords(primaryId).map(baseRecordForBuilder);
+  // 0x031d 정적 기지(이름) 마스터 목록을 spot 기준으로 구성. PULL(0x031c)과 월드-임포트 PUSH가 공유한다.
+  // planetBaseRecordsEnabled면 대상 성계 + 그 행성/요새 시드를 앞에 담아 이름 조회가 가능하게 하고, 그 뒤에
+  // 전체 성계 마스터를 잇는다(중복 제거, ≤350). planetless 성계는 planetBaseSeeds가 빈 배열이라 성계 행만 담긴다.
+  const staticBaseListForSpot = (wantId) => {
+    if (!planetBaseRecordsEnabled()) return staticBaseRecords();
+    const targetSpot = wantId > 0 ? wantId : currentSpotId();
+    const targetSystemId = parentSystemIdFromBaseId(targetSpot);
+    const targetSystem = staticBaseRecords().find((b) => b.id === targetSystemId)
+      ?? staticBaseRecords().find((b) => b.id === targetSpot);
+    const rawTarget = targetSystem ? rawSystemById(targetSystem.id) : null;
+    const expanded = [];
+    const seen = new Set();
+    const add = (b) => { if (b && !seen.has(b.id)) { seen.add(b.id); expanded.push(b); } };
+    if (targetSystem) {
+      add(targetSystem);
+      for (const p of planetBaseSeeds(rawTarget, targetSystem.id)) add(p);
+    }
+    for (const b of staticBaseRecords()) add(b);
+    return expanded.slice(0, 350);
+  };
+  // DEFECT 2 (행성/기지 패널 "스폿 불명"): 패널 FUN_0057aa90(panelKind 3)은 기지 이름을 정적 테이블
+  // (clientBase+0x2eb800)에서 읽는데, 그 테이블은 0x031d(ResponseStaticInformationBase) dispatcher로만
+  // 채워진다. 그러나 0x031d는 on-demand PULL(0x031c)에서만 나가고 월드-임포트 PUSH에는 빠져 있어, 패널이
+  // 0x031c 전에 읽히면 이름 테이블이 비어 "스폿 불명"이 된다. 이 게이트는 월드 진입 시 0x031d를 함께 푸시해
+  // 패널이 즉시 이름을 그리게 한다. 비-빈 0x031d가 월드-init 워크 stall(G210b류)을 재유발할 위험이 있어 기본
+  // OFF로 두고 라이브 검증(no-stall + 패널 paint + 0x031c trace) 후 PLAYABLE_ENV_DEFAULTS로 승격한다.
+  const worldImportStaticBaseEnabled = () => process.env.LOGH_WORLD_IMPORT_STATIC_BASE === '1';
   const worldImportBaseSourceInners = () => {
     const bases = informationBaseBuilderRecords(currentSpotId());
     if (bases.length === 0) {
@@ -1471,6 +1974,10 @@ export function createLoginSession({
       buildResponseInformationBaseInner({ bases }),
       buildResponseInformationInstitutionInner({ institutions: institutionSeeds }),
     ];
+    // 0x031d 정적 기지(이름) 마스터를 가장 먼저 푸시(게이트 ON일 때만) — 이름 테이블 선행 채움으로 "스폿 불명" 해소.
+    if (worldImportStaticBaseEnabled()) {
+      inners.unshift(buildStaticInformationBaseInner({ bases: staticBaseListForSpot(currentSpotId()) }));
+    }
     if (baseParamInner) inners.push(baseParamInner);
     return inners;
   };
@@ -1524,6 +2031,15 @@ export function createLoginSession({
       }
       if (innerCode === LOBBY_LOGIN_REQUEST_CODE) {
         phase = LOGIN_PHASES.LOBBY_AUTHENTICATED;
+        try {
+          const parsedCredential = parseGin7Credential(innerPayload);
+          if (isValidAccountLabel(parsedCredential.accountLabel)) {
+            account = parsedCredential.accountLabel;
+            loadAccountProfileCharacters();
+          }
+        } catch {
+          // Some probes use a minimal 0x2000 body; keep the already-bound login account.
+        }
         // Workflow wicdkooh5 (high conf, byte-verified): inner 0x7001 is INERT on the lobby session
         // (case 0x4bdca6 just stores a blob, no redirect). The advance is gated solely on success
         // flag *(0x7ccffc)+0x35837b, set ONLY by the inner-0x2001 consumer 0x4bdb70. So the reply to
@@ -1538,6 +2054,15 @@ export function createLoginSession({
       }
       if (innerCode === SS_LOGIN_REQUEST_CODE) {
         phase = LOGIN_PHASES.SS_AUTHENTICATED;
+        try {
+          const parsedCredential = parseGin7Credential(innerPayload);
+          if (isValidAccountLabel(parsedCredential.accountLabel)) {
+            account = parsedCredential.accountLabel;
+            loadAccountProfileCharacters();
+          }
+        } catch {
+          // Keep the loopback binding if the SS request is the short legacy probe form.
+        }
         return { kind: 'ss-response', okInner: buildSsLoginOkInner({ status: 1 }) };
       }
       if (innerCode === SS_GAME_LOGIN_REQUEST_CODE) {
@@ -1577,10 +2102,36 @@ export function createLoginSession({
         // returns non-null and the [0x80] crash is skipped. (The 2nd-0x0300 inject was one frame
         // too late: the HUD renders before the network reply is drained.)
         if (worldPlayerEnabled()) {
+      if (worldGridInitializeExtrasSent) {
+        if (!battleEntryRepeatGridReseedEnabled() || worldGridInitializeTacticsReseedSent) {
+          return { kind: 'lobby-response', okInner: buildWorldDataResponseInner(0x0f03) };
+        }
+        worldGridInitializeTacticsReseedSent = true;
+      } else {
+        worldGridInitializeExtrasSent = true;
+      }
           // Prefer the lottery-charged candidate (오리지널 추첨 0x1006) so the chosen canon character
           // renders in-world; otherwise the env/default world char id.
           const charId = activeCharacterId();
           const unitId = sessionWorldUnitId();
+          // DEFECT 1 황제 진단(opt-in LOGH_DIAG_PLAYER): conn3 월드진입 플레이어 레코드 해석 1회 덤프.
+          const diagPlayerRecord = process.env.LOGH_DIAG_PLAYER === '1' ? (playerRecord(charId) ?? {}) : null;
+          const diagPlayerRecordTrace = diagPlayerRecord ? {
+            event: 'diag-player-record',
+            charId,
+            generatedCharacterId,
+            chargedCharacterId,
+            accountChar: accountIdentity()?.char ?? null,
+            hasRealPlayerChar: hasRealPlayerChar(),
+            account: account ?? null,
+            lobbyChars: lobbyCharacters.map((c) => ({
+              id: charIdOf(c),
+              last: c?.lastname ?? c?.name ?? null,
+              first: c?.firstname ?? null,
+            })),
+            playerName: characterDisplayName(diagPlayerRecord) ?? null,
+            playerLast: diagPlayerRecord?.lastname ?? null,
+          } : null;
           seedPlayerCharacter(charId, unitId); // 戦死 판정용 플레이어 사령관 시드(flagship=unitId 링크)
           const location = currentLocationFields(playerRecord(charId));
           // G184: large frames are NOT dropped by size — the 52KB 0x0325 sent HERE (0x0f02) processes
@@ -1629,6 +2180,19 @@ export function createLoginSession({
             fleets: unitFleetsForLocation({ unitId, characterId: charId, location }),
           }));
           const displayName = characterDisplayName(activeRecord ?? {}) ?? `Character ${charId}`;
+          const activePlayerProfileRecord = lobbyCharacters.find((c) => charIdOf(c) === charId) ?? null;
+          const earlyPlayerStatsRecord = activePlayerProfileRecord
+            ?? (activeRecord?.syntheticPlayer === true ? activeRecord : null);
+          const earlyPlayerHudFields = earlyPlayerStatsRecord
+            ? {
+                abilities: resolveCreatedAbilities({
+                  abilities: earlyPlayerStatsRecord.abilities ?? null,
+                  power: characterPowerByte(earlyPlayerStatsRecord) ?? 0,
+                  blood: earlyPlayerStatsRecord.blood ?? earlyPlayerStatsRecord.origin ?? 0,
+                }),
+                ...characterHudFields(earlyPlayerStatsRecord),
+              }
+            : {};
           // Keep this world-init record minimal, but do send a valid parentage display name; otherwise
           // the lower-left HUD can fall through to stale client strings. Rich fields remain post-load only.
           // The experimental action-list/card slots at +0x250/+0x254 are opt-in only.
@@ -1637,9 +2201,11 @@ export function createLoginSession({
             gridUnitId: unitId,
             power: characterPowerByte(activeRecord),
             camp: byteOrNull(activeRecord?.camp ?? characterPowerByte(activeRecord)),
+            ...earlyPlayerHudFields,
             officerCount: 5, // C002 unit-list 패널 행 수 (PLAYER_INFO+0x270) — G001 사이클 5
-            lastname: displayName,
-            displayName,
+    lastname: activeRecord?.lastname ?? displayName,
+    firstname: activeRecord?.firstname ?? '',
+    displayName,
             spotResolverBase: location.spot,
             spot: earlyWorldLocationEnabled() ? location.spot : null,
             spotOwner: earlyWorldLocationEnabled() ? location.spotOwner : null,
@@ -1670,11 +2236,11 @@ export function createLoginSession({
                 spotResolverBase: npcLoc.spot,
                 spot: earlyWorldLocationEnabled() ? npcLoc.spot : null,
                 spotOwner: earlyWorldLocationEnabled() ? npcLoc.spotOwner : null,
-                // 캐논 NPC는 콘텐츠팩이 해석한 와이어 계급 id(wireRank)를 우선 사용(rank_ja→id) + 유효
-                // 사다리 범위(1..14)로 클램프. 없으면 characterRankId 폴백(역시 클램프).
+                // 캐논 NPC는 콘텐츠팩이 해석한 rank-table id(wireRank/rank_ja)를 클라 표시용
+                // constmsg group-5 subId로 변환해 넣는다.
                 rank: clampedNpcRank(npc),
-                // info/personnel 레인용 작위명(정보 패널에서만): 군주는 "황제"(최상위 칭호)를, 그 외엔 미해석.
-                title: npc.sovereignTitle ?? characterTitleName(npc),
+                // info/personnel 레인용 작위명(정보 패널에서만). 합성 "황제" 타이틀은 넣지 않는다.
+                title: characterTitleName(npc),
                 face: Number.isInteger(npc.faceCode) ? npc.faceCode : undefined,
                 wireEndian: 'be',
               }));
@@ -1684,20 +2250,53 @@ export function createLoginSession({
           // once mode==0. Driven by the authored server-data content pack when present (so spawned
           // units = the scenario's fleets); falls back to a single player-controllable unit matching
           // the unit table above.
-          if (tacticsUnitEnabled()) {
-            extraInners.push(
-              contentPack
-                ? contentPack.buildTacticsUnitTableInner()
-                : buildResponseTacticsInformationInner({
-                    units: [{ unitId, controllable: 1, mapSection: unitId }],
-                  }),
-            );
-          }
-          extraInners.push(buildWorldDataResponseInner(0x0f03));
+    if (tacticsUnitEnabled()) {
+      extraInners.push(
+        contentPack
+          ? contentPack.buildTacticsUnitTableInner()
+          : buildResponseTacticsInformationInner({
+            units: [{ unitId, controllable: 1, mapSection: unitId }],
+          }),
+      );
+    }
+    if (battleEntryProbeEnabled() && battleEntryDeferTablesEnabled() && !tacticalSetupTablesPrimed) {
+      tacticalSetupTablesPrimed = true;
+      const battleReadModel = currentBattleReadModel();
+      const toU32 = (v) => (Number.isFinite(v) ? (v >>> 0) : 0);
+      const battleFleetCell = fleetCellId();
+      const rosterFleets = battleReadModel.participants.map((p) => ({
+        id: toU32(p.shipId),
+        characterId: toU32(p.character) || charId,
+        faction: location.spotOwner,
+        commander: process.env.LOGH_PLAYER_FOCUS_CELL === '1'
+          ? battleFleetCell
+          : (toU32(p.character) || charId),
+        cell: battleFleetCell,
+        owner: location.spotOwner,
+        boats: [],
+        spotResolverBase: location.spot,
+        mapSection: location.spot,
+      }));
+      const setupTableInners = [
+      buildInformationUnitRecordInner({
+        unitId,
+        unitCount: rosterFleets.length,
+        ...tacticalUnitWireOptions(),
+        fleets: rosterFleets,
+      }),
+        ...orderBattleEntrySetupPreseedSteps(
+          filterBattleEntrySteps(battleReadModel.battleSteps)
+          .filter((step) => battleEntrySetupTableCodes.has(step.code))
+        ).map((step) => step.inner),
+      ];
+      insertBeforeMessage32Code(extraInners, 0x0f03, setupTableInners);
+    }
+    extraInners.push(buildWorldDataResponseInner(0x0f03));
           return withTrace({
             kind: 'lobby-response',
             okInner: buildSsCharacterIdResponseInner({ characterId: charId, wireEndian: 'be' }),
             extraInners,
+            ...(diagPlayerRecordTrace ? { traceEvents: [diagPlayerRecordTrace] } : {}),
           }, characterTrace(charId));
         }
         // Answer 0x0f03 GridInitialize_OK (status 1). LOGH_WORLD_PUSH=1 also pushes the 724-byte
@@ -1764,10 +2363,11 @@ export function createLoginSession({
         // exact shape the generic empty walker used (which never stalled) — just with the real grid. The
         // client requests BOTH 0x0312 and 0x0314 in the walk, so both staging buffers fill across the two
         // single-frame replies, before the scene-timed snapshot (FUN_004c5350) freezes staging->live.
-        if (innerCode === SS_REQ_STATIC_GRID_TYPE_CODE) {
-          return { kind: 'lobby-response', okInner: objectInner }; // 0x0312 -> real 0x0313 object table
-        }
-        return { kind: 'lobby-response', okInner: cellInner }; // 0x0314 -> real 0x0315 cell grid
+if (innerCode === SS_REQ_STATIC_GRID_TYPE_CODE) {
+return { kind: 'lobby-response', okInner: objectInner }; // 0x0312 -> real 0x0313 object table
+}
+commandTargetSeed({ reason: '0x0314-grid' });
+return { kind: 'lobby-response', okInner: cellInner }; // 0x0314 -> real 0x0315 cell grid
       }
       if (innerCode === SS_REQ_MESSENGER_STAT_CODE && gridEnterEnabled()) {
         // G173 grid-enter: answer 0x0f07 then push 0xb09 + 0xb0a so the client places the player's
@@ -1807,8 +2407,9 @@ export function createLoginSession({
                 blood: worldChar?.blood ?? worldChar?.origin ?? 0,
               }),
               ...characterHudFields(worldChar),
-              lastname: displayName,
-              displayName,
+    lastname: worldChar?.lastname ?? displayName,
+    firstname: worldChar?.firstname ?? '',
+    displayName,
               rank: characterRankId(worldChar),
               // See the early 0x0f02 record: post-load HUD refreshes should not overwrite the
               // visible character name with peerage/post text.
@@ -1823,7 +2424,7 @@ export function createLoginSession({
           // the strategic fleet marker clickable so a click emits CommandMoveGrid 0x0b01.
           buildNotifyEnterGridBeginInner({ value: 0 }),
         ];
-        if (postloadPlayerRecordEnabled()) {
+    if (postloadPlayerRecordEnabled()) {
           postloadExtras.push(
             // FIX (G211 / inworld-operation-re 2026-06-19): 0xb09가 char-record count(+0x36a5dc)를 0으로
             // 리셋하므로, 0xb0a의 FUN_004c2a80(1) PLAYER_INFO↔unit linkage가 record[0]==client+0x3584a0
@@ -1831,26 +2432,31 @@ export function createLoginSession({
             // 워크플로 유력원인 = 이 selectedChar 미재전송(0x0325/0x0323은 이미 재전송 중). 검증된 world-entry
             // 순서(0x0204→0x0325→0x0323)대로 먼저 push. 4바이트 char id라 HUD garbage 위험 없음.
             buildSsCharacterIdResponseInner({ characterId: charId, wireEndian: 'be' }),
-            buildInformationUnitRecordInner({
-              unitId,
-              unitCount: 1,
-              wireEndian: postloadUnitWireEndian(),
-              wireLayout: postloadUnitWireLayout(),
-              fleets: unitFleetsForLocation({ unitId, characterId: charId, location }),
-            }),
+      ...(tacticalSetupTablesPrimed ? [] : [buildInformationUnitRecordInner({
+        unitId,
+        unitCount: 1,
+        ...tacticalUnitWireOptions(),
+        fleets: unitFleetsForLocation({ unitId, characterId: charId, location }),
+      })]),
             buildInformationCharacterRecordInner(characterRecord),
           );
         }
         postloadExtras.push(buildNotifyEnterGridEndInner({ value: 0 }));
-        if (stratSeqStartEnabled()) {
-          // 순차 2단계: value=1 재-grid-enter → 0xb0a end가 +0x4376ec!=0 else분기 → StrategySequence(+4=1)
-          // 시작 → FUN_004fef90 state machine → event-9 자동 enqueue → 클릭확정(0x0b01) 가능. value=0
-          // 함대 linkage는 위 end(value:0)에서 이미 적용됨(배타적 두 분기를 순차로 둘 다).
-          postloadExtras.push(
-            buildNotifyEnterGridBeginInner({ value: 1 }),
-            buildNotifyEnterGridEndInner({ value: 1 }),
-          );
-        }
+if (stratSeqStartEnabled()) {
+// 순차 2단계: value=1 재-grid-enter → 0xb0a end가 +0x4376ec!=0 else분기 → StrategySequence(+4=1)
+// 시작 → FUN_004fef90 state machine → event-9 자동 enqueue → 클릭확정(0x0b01) 가능. value=0
+// 함대 linkage는 위 end(value:0)에서 이미 적용됨(배타적 두 분기를 순차로 둘 다).
+postloadExtras.push(
+buildNotifyEnterGridBeginInner({ value: 1 }),
+buildNotifyEnterGridEndInner({ value: 1 }),
+);
+if (postloadPlayerRecordEnabled()) {
+postloadExtras.push(
+buildSsCharacterIdResponseInner({ characterId: charId, wireEndian: 'be' }),
+buildInformationCharacterRecordInner(characterRecord),
+);
+}
+}
         if (gridSelectorProbeEnabled()) {
           // 0x0317 셀렉터 레버: byte[2]=(value>>16)&0xff = clientBase+0x35f35a 셀렉터 → FUN_004b68f0 mode 분기
           // 라이브 관측용(1회). deferred 아닌 postloadExtras(즉시) — single-dword라 렌더 stall 위험 없음.
@@ -1882,12 +2488,16 @@ export function createLoginSession({
             );
           }
         }
-        const gridEnterAction = withTrace({
+    if (!postloadCommandCardsSent) {
+      postloadExtras.push(buildCommandTablePreloadCardInner());
+      postloadCommandCardsSent = true;
+    }
+    const gridEnterAction = withTrace({
           kind: 'lobby-response',
           okInner: buildActiveMessengerStatusInner(activeCharacterId()),
           extraInners: postloadExtras,
         }, characterTrace(charId));
-        if (battleEntryProbeEnabled()) {
+if (battleEntryProbeEnabled() && !battleEntryProbeSent) {
           // 서버-주도 전술맵 진입 probe: 자기 유닛 1기를 전술 필드 기본 중심에 배치하고 0x42f
           // NotifyChangeMode(modeKind=0)로 전술 풀을 켠다. unitId는 0x0325로 이미 클라에 알려진 자기 유닛.
           // ★라이브 확정: 이 시퀀스를 grid-enter extraInners(즉시)에 넣으면 전략 씬 렌더 전에 0x42f가 들어가
@@ -1898,16 +2508,7 @@ export function createLoginSession({
           // 완전 전술 데이터(좌표 + 6방향 실드/빔건 비-제로 + 함장 로스터)를 구성한다(buildBattleEntryParticipants).
           // ★tacticsArg0=1: 0x0f1f 소비처 FUN_004c1b20가 *param_2==1일 때만 전술 engage(+0x357e8c=2)로 분기.
           //   기본(0)은 strategic-return(else) 분기라 전술 풀이 켜지지 않음(RE-확정).
-          const { participants, characters } = buildBattleEntryParticipants(worldState, {
-            unitId, character: charId, cap: 12, center: 100, scale: 8,
-          });
-          const battleSteps = openBattleField({
-            participants,
-            characters,
-            anchorId: unitId,
-            modeKind: 0,
-            tacticsArg0: 1,
-          });
+    const { participants, characters, battleSteps } = currentBattleReadModel();
           // ★갭2 해소: 전술 0x33b 유닛테이블(buildTacticsInformationUnitShipInner)을 클라
           // populator FUN_004c32a0가 해석하려면, 각 0x33b 유닛이 0x325 유닛테이블(+0x41a368, id로
           // stride 0x58 매칭)·0x323 캐릭레코드(+0x36a5dc count 게이트)와 cross-match돼야 한다.
@@ -1915,56 +2516,102 @@ export function createLoginSession({
           // 따라서 배틀 참가 전원의 0x325 유닛 + 0x323 캐릭 레코드를 battleSteps 앞에 prepend한다.
           // 매칭 키: participant.shipId == 0x33b ships[].id == 0x325 fleets[].id == 0x323 characterId(함장).
           // 0x325 fleets[].id를 participant.shipId로 두어 0x33b id와 동일하게 정렬(cross-match 보장).
-          const toU32 = (v) => (Number.isFinite(v) ? (v >>> 0) : 0);
+    const toU32 = (v) => (Number.isFinite(v) ? (v >>> 0) : 0);
+    const battleFleetCell = fleetCellId();
           const rosterFleets = participants.map((p) => ({
             id: toU32(p.shipId),
             characterId: toU32(p.character) || charId,
             // 함장 char id가 0x323 count 게이트에 맞물리도록 commander로도 노출.
-            commander: toU32(p.character) || charId,
-            spotResolverBase: location.spot,
+      faction: location.spotOwner,
+      commander: process.env.LOGH_PLAYER_FOCUS_CELL === '1'
+        ? battleFleetCell
+        : (toU32(p.character) || charId),
+      cell: battleFleetCell,
+      owner: location.spotOwner,
+      boats: [],
+      spotResolverBase: location.spot,
             mapSection: location.spot,
           }));
           // 0x325 유닛테이블 1개(참가 전원). 기존 world-entry 0x0f02 호출과 같은 빌더·인자 형태 미러링.
-          const rosterUnitInner = buildInformationUnitRecordInner({
-            unitId,
-            unitCount: rosterFleets.length,
-            wireLayout: postloadUnitWireLayout(),
-            wireEndian: postloadUnitWireEndian(),
-            fleets: rosterFleets,
-          });
+  const rosterUnitInner = buildInformationUnitRecordInner({
+    unitId,
+    unitCount: rosterFleets.length,
+    ...tacticalUnitWireOptions(),
+    fleets: rosterFleets,
+  });
           // 0x323 캐릭 레코드들(참가 함장 전원 + 플레이어). characters[]가 비어 있으면 최소 플레이어
           // 함장 1명은 보장(0x36a5dc count>0). 데이터 값(power/camp 등)은 worldState 산출 그대로 — 승격 금지.
-          const rosterCharIds = characters.length ? characters : [charId];
-          const rosterCharInners = rosterCharIds.map((cid) => {
-            const worldChar = (typeof worldState?.getCharacter === 'function')
-              ? worldState.getCharacter(cid)
-              : null;
-            return buildInformationCharacterRecordInner({
-              characterId: cid,
-              gridUnitId: unitId,
-              power: characterPowerByte(worldChar),
-              camp: byteOrNull(worldChar?.camp ?? characterPowerByte(worldChar)),
-              rank: characterRankId(worldChar),
-              wireEndian: 'be',
-            });
-          });
-          gridEnterAction.deferredBattleInners = [
-            rosterUnitInner,
-            ...rosterCharInners,
-            ...battleSteps.map((step) => step.inner),
-          ];
-          gridEnterAction.deferredBattleDelayMs = battleEntryProbeDelayMs();
-        }
+    const rosterCharIds = characters.length ? characters : [charId];
+    const rosterCharInners = rosterCharIds.map((cid) => {
+      const worldChar = (typeof worldState?.getCharacter === 'function')
+        ? worldState.getCharacter(cid)
+        : null;
+      const character = worldChar ?? activeCharacterRecord(cid);
+      return buildInformationCharacterRecordInner({
+        characterId: cid,
+        gridUnitId: unitId,
+        power: characterPowerByte(character),
+        camp: byteOrNull(character?.camp ?? characterPowerByte(character)),
+        rank: characterRankId(character),
+        wireEndian: 'be',
+      });
+    });
+      const filteredBattleSteps = filterBattleEntrySteps(battleSteps);
+      const battleEntryDeferredCodes = battleEntryDeferredCodesForRun();
+      const preGridBattleInners = [
+        ...(tacticalSetupTablesPrimed ? [] : [rosterUnitInner]),
+        ...rosterCharInners,
+        ...filteredBattleSteps
+          .filter((step) => !battleEntryDeferredCodes.has(step.code))
+    .map((step) => step.inner),
+];
+insertBeforeMessage32Code(postloadExtras, 0x0b0a, preGridBattleInners);
+const deferredGridEndInner = battleEntryDeferGridEndEnabled()
+  ? takeFirstMessage32Code(postloadExtras, 0x0b0a)
+  : null;
+const deferredBattleInners = filteredBattleSteps
+.filter((step) => battleEntryDeferredCodes.has(step.code))
+.filter((step) => !(tacticalSetupTablesPrimed && battleEntrySetupTableCodes.has(step.code)))
+.map((step) => step.inner);
+const delayedBattleInners = [
+  ...deferredBattleInners,
+  ...(deferredGridEndInner ? [deferredGridEndInner] : []),
+];
+if (delayedBattleInners.length > 0) {
+gridEnterAction.deferredBattleInners = delayedBattleInners;
+gridEnterAction.deferredBattleDelayMs = battleEntryProbeDelayMs();
+}
+battleEntryProbeSent = true;
+}
         if (fleetMoveProbeEnabled()) {
           // 서버 권위적 함대 이동: own 셀 → 인접 셀로 0x0b07 지연 푸시(클라 command-UI 우회).
           const destCell = (fleetCellId() + fleetMoveProbeDestDelta()) >>> 0;
-          gridEnterAction.deferredBattleInners = [
+          const deferredFleetMoveInners = [
             buildNotifyMovedGridInner({ units: [{ unitId, cell: destCell }] }),
           ];
+          if (fleetMoveRebuildProbeEnabled()) {
+            deferredFleetMoveInners.push(
+      buildInformationUnitRecordInner({
+        unitId,
+        unitCount: 1,
+        ...tacticalUnitWireOptions(),
+        fleets: unitFleetsForLocation({
+          unitId,
+          characterId: charId,
+                  location,
+                  cell: destCell,
+                  forceFull: true,
+                }),
+              }),
+              buildNotifyEnterGridEndInner({ value: 0 }),
+            );
+          }
+          gridEnterAction.deferredBattleInners = deferredFleetMoveInners;
           gridEnterAction.deferredBattleDelayMs = fleetMoveProbeDelayMs();
         }
         // 상태전환 arm probe: battle/fleet-move probe가 모두 OFF일 때만(같은 deferredBattleInners 필드 공유).
-        // 서버가 월드 도달 후 0x0f1f NotifyTactics(arg0 byte0=1)를 1회 지연 푸시 → 전략맵 위에서 전술 arm.
+        // 서버가 월드 도달 후 0x0f1f NotifyTactics(arg0 byte0=1)를 1회 지연 푸시한다.
+        // 현재는 FUN_0058ee70 crash/RE bisection용이며 플레이 기본 루트가 아니다.
         if (stateTransitionProbeEnabled() && !battleEntryProbeEnabled() && !fleetMoveProbeEnabled()) {
           gridEnterAction.deferredBattleInners = [
             buildNotifyTacticsInner({ arg0: stateTransitionProbeArg0(), arg1: stateTransitionProbeArg1() }),
@@ -2078,10 +2725,17 @@ export function createLoginSession({
         // Fall back to a player-CREATED character (lobbyCharacters): the content pack only knows canon
         // characters, so a freshly created char's house-rule-seeded abilities (0x1008 handler) surface
         // on its 0x0323 record only via this fallback — otherwise the panel would read all-zero stats.
-        const created = ch ? null : lobbyCharacters.find((c) => charIdOf(c) === reqId) ?? null;
-        const location = currentLocationFields(ch ?? created);
-        const displayName = characterDisplayName(ch ?? created ?? {}) ?? created?.lastname ?? null;
-        return withTrace({
+const created = ch ? null : lobbyCharacters.find((c) => charIdOf(c) === reqId) ?? null;
+const location = currentLocationFields(ch ?? created);
+const displayName = characterDisplayName(ch ?? created ?? {}) ?? created?.lastname ?? null;
+commandTargetPool.merge({
+characters: [{
+id: reqId,
+rank: characterRankId(ch ?? created),
+name: displayName ?? 'Character',
+}],
+}, '0x0322-character');
+return withTrace({
           kind: 'lobby-response',
           okInner: buildInformationCharacterRecordInner({
             characterId: reqId,
@@ -2117,35 +2771,17 @@ export function createLoginSession({
       if (innerCode === REQ_STATIC_INFORMATION_BASE_CODE) {
         // 0x031d 정적 기지 마스터: 기본적으로 성계 전체를 날리되, LOGH_PLANET_BASE_RECORDS=1이면
         // 요청된 성계(또는 현재 spot 성계)의 행성/요새도 같이 담아 이름 조회가 가능하게 한다.
-        const wantId = firstReqId();
-        const baseList = (() => {
-          if (!planetBaseRecordsEnabled()) return staticBaseRecords();
-          const systems = Array.isArray(contentPack?.systems) ? contentPack.systems : [];
-          const targetSpot = wantId > 0 ? wantId : currentSpotId();
-          const targetSystem = staticBaseRecords().find((b) => b.id === targetSpot)
-            ?? staticBaseRecords().find((b) => Math.trunc(b.id / 1000) === Math.trunc(targetSpot / 1000));
-          const rawTarget = targetSystem
-            ? systems.find((s) => positiveIntOr(s?.id, 0) === targetSystem.id)
-            : null;
-          const expanded = [];
-          const seen = new Set();
-          const add = (b) => { if (b && !seen.has(b.id)) { seen.add(b.id); expanded.push(b); } };
-          if (targetSystem) {
-            add(targetSystem);
-            for (const p of planetBaseSeeds(rawTarget)) add(p);
-          }
-          for (const b of staticBaseRecords()) add(b);
-          return expanded.slice(0, 350);
-        })();
+        const baseList = staticBaseListForSpot(firstReqId());
         return { kind: 'lobby-response', okInner: buildStaticInformationBaseInner({ bases: baseList }) };
       }
       if (innerCode === REQ_INFORMATION_BASE_CODE) {
         // RE-confirmed byte-exact builder (logh7-base-record.mjs): id@elem+0x00, field04@elem+0x04.
         // baseRecordForBuilder maps the legacy seed ({ id, name, b04, ... }) to the builder input
         // ({ id, field04 }) and, under LOGH_BASE_ECONOMY=1, enriches it with the five P0 supply/budget
-        // arrays from content/planet-economy.json (scalars stay 0 — PROVISIONAL offsets).
-        const wantId = firstReqId();
-        const seed = informationBaseBuilderRecords(wantId > 0 ? wantId : null);
+      // arrays from content/planet-economy.json (scalars stay 0 — PROVISIONAL offsets).
+      const wantId = firstReqId();
+      commandTargetSeed({ baseId: wantId > 0 ? wantId : fleetHomeContentId(), reason: '0x031e-base' });
+      const seed = informationBaseBuilderRecords(wantId > 0 ? wantId : null);
         // Request-id matching: 0x031e body is a length-prefixed id list ([u16 count][u32 id...]); when the
         // client asks for a specific base, surface that record first so elem[0] keys to the requested id.
         const bases = wantId > 0
@@ -2166,8 +2802,9 @@ export function createLoginSession({
       }
       // 직무카드 personnel roster: a batch of up to 64 full 724-byte character sheets (a faction's officer
       // pool). Seeded from the content pack's canon characters so the duty card paints real names/abilities.
-      if (innerCode === REQ_CARD_CHARACTER_CODE) {
-        const roster = Array.isArray(contentPack?.characters) ? contentPack.characters : [];
+    if (innerCode === REQ_CARD_CHARACTER_CODE) {
+      return { kind: 'lobby-response', okInner: buildCardCharacterInner({ characters: cardCharacterRecords() }) };
+      const roster = Array.isArray(contentPack?.characters) ? contentPack.characters : [];
         const characters = roster.slice(0, 64).map((ch) => ({
           characterId: Number(ch?.id) || 0,
           gridUnitId: Number(ch?.id) || 0,
@@ -2182,14 +2819,23 @@ export function createLoginSession({
         }));
         // Always answer non-empty: when the pack has no characters, seed one minimal card so the duty
         // screen paints (count >= 1) instead of bouncing on the empty walker object.
-        if (characters.length === 0) {
-          characters.push({
-            characterId: worldCharId(),
-            gridUnitId: worldCharId(),
-            ...characterHudFields(),
-          });
-        }
-        return { kind: 'lobby-response', okInner: buildCardCharacterInner({ characters }) };
+if (characters.length === 0) {
+characters.push({
+characterId: worldCharId(),
+gridUnitId: worldCharId(),
+...characterHudFields(),
+});
+}
+commandTargetPool.merge({
+characters: characters
+.filter((entry) => Number(entry?.characterId) > 0)
+.map((entry) => ({
+id: Number(entry.characterId),
+rank: Number(entry.rank) || 0,
+name: entry.displayName ?? entry.lastname ?? 'Character',
+})),
+}, '0x034e-card-character');
+return { kind: 'lobby-response', okInner: buildCardCharacterInner({ characters }) };
       }
       // 0x0304 -> 0x0305 is the world/session-list walker slot. The generic reply intentionally stays
       // zero-filled; 2026-06-17 wire tracing showed the earlier "Friedrich IV" dispatcher tail came from
@@ -2236,28 +2882,47 @@ export function createLoginSession({
           id: Number(u?.id) || i + 1,
           power: clientPowerByte(u?.power ?? u?.faction ?? u?.nationId) ?? 0,
           index: i,
-        }));
-        if (outfits.length === 0) outfits.push({ id: worldCharId(), index: 0 });
-        return { kind: 'lobby-response', okInner: buildInformationOutfitInner({ outfits }) };
+      }));
+      if (outfits.length === 0) outfits.push({ id: worldCharId(), index: 0 });
+      commandTargetSeed({ unitId: Number(outfits[0]?.id) || sessionWorldUnitId(), reason: '0x032a-outfit' });
+      commandTargetPool.merge({ baseId: fleetHomeContentId(), outfits }, '0x032a-outfit-list');
+      return { kind: 'lobby-response', okInner: buildInformationOutfitInner({ outfits }) };
       }
       // 0x032e → 0x032f ResponseInformationOutfitParty (full fleet composition). Keyed to the requested
       // outfit id; seeds the player's character as the commanding officer so the party panel is non-empty.
-      if (innerCode === REQ_INFORMATION_OUTFIT_PARTY_CODE) {
-        const outfitId = firstReqId() || worldCharId();
-        const ch = contentPack?.characterById?.(outfitId) ?? null;
-        return {
-          kind: 'lobby-response',
-          okInner: buildInformationOutfitPartyInner({
-            outfit: outfitId,
-            characters: [{ id: outfitId, kind: 0, rank: 0, name: characterDisplayName(ch) }],
-          }),
-        };
-      }
+if (innerCode === REQ_INFORMATION_OUTFIT_PARTY_CODE) {
+const outfitId = firstReqId() || worldCharId();
+const ch = contentPack?.characterById?.(outfitId) ?? null;
+        const targets = commandTargetPool.merge(buildPlayableCommandTargets({
+          activeCharacterId: activeCharacterId(),
+          activeUnitId: outfitId,
+          baseId: firstReqId() || fleetHomeContentId(),
+          characterName: characterDisplayName(ch ?? activeCharacterRecord(activeCharacterId()) ?? {}),
+          power: clientPowerByte(ch?.power ?? ch?.faction ?? ch?.nationId) ?? 0,
+          staticState: staticMasterState(),
+        }), '0x032e-outfit-party');
+return {
+kind: 'lobby-response',
+okInner: buildInformationOutfitPartyInner({
+outfit: outfitId,
+base: targets.baseId,
+power: targets.outfits[0]?.power ?? 0,
+characters: targets.characters,
+ships: targets.ships,
+troops: targets.troops,
+supplies: targets.supplies,
+maxSupplies: targets.supplies,
+otherPackages: targets.otherPackages,
+troopPackages: targets.troopPackages,
+}),
+};
+}
       // 0x0324 → 0x0325 ResponseInformationUnit (world unit table). The requested unit (or the world char)
       // as a single placeable unit, matching the proven 0x0f02 spawn unit-table shape.
       if (innerCode === REQ_INFORMATION_UNIT_CODE) {
         const unitId = firstReqId() || worldCharId();
         const location = currentLocationFields(activeCharacterRecord(activeCharacterId()));
+        commandTargetSeed({ unitId, reason: '0x0324-unit' });
         return {
           kind: 'lobby-response',
           okInner: buildInformationUnitRecordInner({
@@ -2276,8 +2941,9 @@ export function createLoginSession({
         // institution field00(u16)@+0x00/field04(u32)@+0x04/spot_count@+0x08/spot[0]@+0x0c, each spot
         // field00(u16)@+0x00/field04(u32)@+0x04/field08(u16)@+0x08. Map the legacy seed: kind→field00,
         // d04→field04; spot w00→field00, w04→field04, d08→field08. Keep one minimal seeded element.
-        const baseId = firstReqId() || worldCharId();
-        const institutionSeeds = buildInstitutionSeedElements({
+const baseId = firstReqId() || worldCharId();
+commandTargetSeed({ baseId, reason: '0x0320-institution' });
+const institutionSeeds = buildInstitutionSeedElements({
           baseId,
           institutions: Array.isArray(contentPack?.institutions) ? contentPack.institutions : [],
           rooms: Array.isArray(contentPack?.rooms) ? contentPack.rooms : [],
@@ -2295,22 +2961,67 @@ export function createLoginSession({
       // (case 0x327) copies a FIXED 0xc0 dwords = 0x300 body, so this is a small frame with no client
       // factory drop → live-safe. Keyed to the requested base id (P0 offset 0x00); economy values stay 0
       // (P3 — no fabrication) until the world-state seeds them through the builder's named fields.
-      if (innerCode === REQ_INFORMATION_WAREHOUSE_CODE) {
-        const baseId = firstReqId() || worldCharId();
-        return {
-          kind: 'lobby-response',
-          okInner: buildResponseInformationWarehouseInner({ base: baseId }),
-        };
-      }
+if (innerCode === REQ_INFORMATION_WAREHOUSE_CODE) {
+const baseId = firstReqId() || worldCharId();
+        const targets = commandTargetSeed({ baseId, reason: '0x0326-warehouse' });
+return {
+kind: 'lobby-response',
+okInner: buildResponseInformationWarehouseInner({
+base: baseId,
+outfit: worldUnitId(),
+ships: targets.ships,
+troops: targets.troops,
+supplies: targets.supplies,
+food: targets.food,
+mineral: targets.mineral,
+}),
+};
+}
       // 0x0328 → 0x0329 ResponseInformationPackage (in-transit TRANSFER manifest: other_package[]/
       // troop_package[]). RE-confirmed byte-exact builder (logh7-warehouse-record.mjs): the dispatcher
       // (case 0x329) copies a FIXED 0x55 dwords = 0x154 body → small frame, live-safe. Keyed to the
       // requested source base id (P0 offset 0x00); the package arrays stay empty (P3) until seeded.
-      if (innerCode === REQ_INFORMATION_PACKAGE_CODE) {
-        const baseId = firstReqId() || worldCharId();
+if (innerCode === REQ_INFORMATION_PACKAGE_CODE) {
+const baseId = firstReqId() || worldCharId();
+        const targets = commandTargetSeed({ baseId, reason: '0x0328-package' });
+return {
+kind: 'lobby-response',
+okInner: buildResponseInformationPackageInner({
+base: baseId,
+targetBase: fleetHomeContentId(),
+otherPackages: targets.otherPackages,
+troopPackages: targets.troopPackages,
+}),
+};
+}
+      // Static tactical/object masters. These must answer before the generic fixed-size walker so the
+      // client panels do not cache empty 0x0309/0x030d/0x030f/0x0311 records for the whole session.
+      if (innerCode === REQ_STATIC_INFORMATION_POWER_DISTRIBUTION_CODE && process.env.LOGH_STATIC_POWER_DISTRIBUTION === '1') {
+        const staticState = staticMasterState();
         return {
           kind: 'lobby-response',
-          okInner: buildResponseInformationPackageInner({ base: baseId }),
+          okInner: buildStaticInformationPowerDistributionInner(staticState.powerDistribution ?? {}),
+        };
+      }
+      if (innerCode === REQ_STATIC_INFORMATION_UNIT_TROOP_CODE && process.env.LOGH_STATIC_TROOPS === '1') {
+        const staticState = staticMasterState();
+        return {
+          kind: 'lobby-response',
+          okInner: buildStaticInformationUnitTroopInner({ troops: staticState.troops ?? [] }),
+        };
+      }
+      if (innerCode === REQ_STATIC_INFORMATION_FIGHTERS_CODE && process.env.LOGH_STATIC_FIGHTERS === '1') {
+        const staticState = staticMasterState();
+        return {
+          kind: 'lobby-response',
+          okInner: buildStaticInformationFightersInner({ fighters: staticState.fighters ?? [] }),
+        };
+      }
+      if (innerCode === REQ_STATIC_INFORMATION_ARMS_CODE && process.env.LOGH_STATIC_ARMS === '1') {
+        const staticState = staticMasterState();
+        return {
+          kind: 'lobby-response',
+          okInner: buildStaticInformationArmsInner({ arms: staticState.arms ?? [] }),
         };
       }
       // 0x030a → 0x030b ResponseStaticInformationUnitShip (함선마스터, M2-2). RE-confirmed P0 chain:
@@ -2320,8 +3031,170 @@ export function createLoginSession({
       // byte-exact (logh7-info-records-static.test.mjs). Gated by LOGH_STATIC_SHIPS=1: ON → populated
       // master; OFF (default) → fall through to the generic walker's size-correct zero-fill 0x30b
       // (count=0), preserving the proven world-init path. This branch MUST precede the generic walker.
-      if (innerCode === REQ_STATIC_INFORMATION_UNIT_SHIP_CODE && process.env.LOGH_STATIC_SHIPS === '1') {
-        return { kind: 'lobby-response', okInner: buildStaticInformationUnitShipInner({ ships: staticShipMasterClasses() }) };
+if (innerCode === REQ_STATIC_INFORMATION_UNIT_SHIP_CODE && process.env.LOGH_STATIC_SHIPS === '1') {
+return { kind: 'lobby-response', okInner: buildStaticInformationUnitShipInner({ ships: staticShipMasterClasses() }) };
+}
+    if (
+  innerCode === REQ_POSITION_UNIT_CODE
+  || innerCode === REQ_TACTICS_INFORMATION_UNIT_SHIP_CODE
+  || innerCode === REQ_TACTICS_FILL_SHIELD_CODE
+  || innerCode === REQ_POSITION_BASE_CODE
+) {
+  const responseCodeByRequest = new Map([
+    [REQ_POSITION_UNIT_CODE, RESPONSE_POSITION_UNIT_CODE],
+    [REQ_TACTICS_INFORMATION_UNIT_SHIP_CODE, RESPONSE_TACTICS_UNIT_SHIP_CODE],
+    [REQ_TACTICS_FILL_SHIELD_CODE, RESPONSE_TACTICS_FILL_SHIELD_CODE],
+    [REQ_POSITION_BASE_CODE, RESPONSE_POSITION_BASE_CODE],
+  ]);
+      const responseCode = responseCodeByRequest.get(innerCode);
+      const { charId, unitId, participants, battleSteps } = currentBattleReadModel();
+      const filteredBattleSteps = filterBattleEntrySteps(battleSteps);
+      const okInner = battleSteps.find((step) => step.code === responseCode)?.inner
+        ?? buildLobbyResponseInner(responseCode, 0);
+      const extraInners = [];
+      if (battleEntryProbeEnabled() && battleEntryDeferTablesEnabled() && !tacticalReadModelBundleSent) {
+      tacticalReadModelBundleSent = true;
+      extraInners.push(
+        ...orderBattleEntrySetupPreseedSteps(filteredBattleSteps)
+          .filter((step) => step.code !== responseCode)
+          .map((step) => step.inner),
+      );
+      }
+      return withTrace({
+        kind: 'lobby-response',
+        okInner,
+        ...(extraInners.length > 0 ? { extraInners } : {}),
+      }, {
+        tacticsDataRequest: {
+          requestCode: `0x${innerCode.toString(16).padStart(4, '0')}`,
+          responseCode: `0x${responseCode.toString(16).padStart(4, '0')}`,
+          unitId,
+          characterId: charId,
+          participants: participants.length,
+        },
+      });
+    }
+if (innerCode === REQ_INFO_PANEL_CODE) {
+const body = innerPayload.subarray(2);
+const requestWordsBe = [];
+        for (let off = 0; off + 2 <= body.length; off += 2) {
+          const value = body.readUInt16BE(off);
+          if (value !== 0) requestWordsBe.push({ offset: off, value });
+        }
+        const unitId = sessionWorldUnitId();
+        const location = currentLocationFields(activeCharacterRecord(activeCharacterId()));
+        const targetBaseId = positiveIntOr(location.spot, currentSpotId());
+        const targets = commandTargetSeed({ baseId: targetBaseId, unitId, reason: '0x0f08-info-panel' });
+        const bases = informationBaseRecords(targetBaseId);
+        const institutionSeeds = buildInstitutionSeedElements({
+          baseId: targetBaseId,
+          institutions: Array.isArray(contentPack?.institutions) ? contentPack.institutions : [],
+          rooms: Array.isArray(contentPack?.rooms) ? contentPack.rooms : [],
+          spotKey: targetBaseId,
+        });
+        const outfit = targets.outfits[0] ?? { id: unitId, power: location.spotOwner ?? 0, index: 0 };
+        const runtimeFleets = typeof worldState?.listFleets === 'function' ? worldState.listFleets() : [];
+        const gridCell = fleetCellId();
+        const fleetsAtCell = runtimeFleets.filter((fleet) => Number(fleet?.cell) === gridCell);
+        const gridShipCount = fleetsAtCell.reduce(
+          (sum, fleet) => sum + (Array.isArray(fleet?.boats) && fleet.boats.length > 0 ? fleet.boats.length : 1),
+          0,
+        ) || Math.max(1, targets.ships.length);
+        const rawSystem = rawSystemById(parentSystemIdFromBaseId(targetBaseId));
+        const systemFaction = normalizeFaction(rawSystem?.faction)
+          ?? gridFactionKey(rawSystem?.owner)
+          ?? characterFactionKey(activeCharacterRecord(activeCharacterId()))
+          ?? 'neutral';
+        const systemOwner = baseOwnerByteFromFaction(systemFaction);
+        const gridFaction = fleetsAtCell.length > 0
+          ? (gridFactionKey(fleetsAtCell[0]?.faction, gridFactionKey(fleetsAtCell[0]?.owner, systemFaction)) ?? systemFaction)
+          : systemFaction;
+        const gridOwner = baseOwnerByteFromFaction(gridFaction);
+        const gridOutfits = (fleetsAtCell.length > 0 ? fleetsAtCell : [{
+          id: unitId,
+          faction: location.spotOwner ?? gridOwner,
+          owner: gridOwner,
+          supply: targets.supplies,
+        }]).map((fleet, index) => ({
+          id: Number(fleet?.id ?? unitId) || unitId,
+          kind: 1,
+          power: baseOwnerByteFromFaction(gridFactionKey(fleet?.faction, gridFactionKey(fleet?.owner, gridFaction)) ?? gridFaction),
+          camp: baseOwnerByteFromFaction(gridFactionKey(fleet?.faction, gridFactionKey(fleet?.owner, gridFaction)) ?? gridFaction),
+          index,
+          supplies: Number(fleet?.supply ?? fleet?.supplies ?? targets.supplies) || 0,
+        }));
+        const panelUnitFleets = fleetsAtCell.length > 0
+          ? fleetsAtCell
+          : unitFleetsForLocation({ unitId, characterId: activeCharacterId(), location });
+        const baseParamInner = baseParamForSpot(targetBaseId, gridCell);
+    const extraInners = [
+      buildStaticInformationBaseInner({ bases: staticBaseListForSpot(targetBaseId) }),
+      buildResponseInformationBaseInner({ bases }),
+      buildResponseInformationInstitutionInner({ institutions: institutionSeeds }),
+          buildResponseInformationWarehouseInner({
+            base: targetBaseId,
+            outfit: unitId,
+            ships: targets.ships,
+            troops: targets.troops,
+            supplies: targets.supplies,
+            food: targets.food,
+            mineral: targets.mineral,
+          }),
+          buildResponseInformationPackageInner({
+            base: targetBaseId,
+            targetBase: fleetHomeContentId(),
+            otherPackages: targets.otherPackages,
+            troopPackages: targets.troopPackages,
+          }),
+        buildInformationUnitRecordInner({
+          unitId,
+          unitCount: 1,
+          wireLayout: unitWireLayout(),
+          fleets: panelUnitFleets,
+        }),
+        buildCardCharacterInner({ characters: cardCharacterRecords() }),
+        buildGridInformationOutfitInner({ outfits: gridOutfits }),
+          buildInformationOutfitInner({ outfits: [outfit] }),
+          buildInformationOutfitPartyInner({
+            outfit: unitId,
+            base: targetBaseId,
+            power: outfit.power ?? gridOwner,
+            characters: targets.characters,
+            ships: targets.ships,
+            troops: targets.troops,
+            supplies: targets.supplies,
+            maxSupplies: targets.supplies,
+            otherPackages: targets.otherPackages,
+            troopPackages: targets.troopPackages,
+      }),
+      baseParamInner,
+    ].filter(Boolean);
+    if (!postloadCommandCardsSent) {
+      extraInners.unshift(buildCommandTablePreloadCardInner());
+      postloadCommandCardsSent = true;
+    }
+    return withTrace({
+          kind: 'lobby-response',
+          okInner: buildWorldDataResponseInner(0x0f09),
+          extraInners,
+        }, {
+          infoPanel: {
+            requestCode: '0x0f08',
+            responseCode: '0x0f09',
+            requestBodyHex: body.toString('hex'),
+            requestWordsBe,
+            targetBaseId,
+            systemId: parentSystemIdFromBaseId(targetBaseId),
+            systemOwner,
+            systemFaction,
+            gridCell,
+            gridOwner,
+            gridFaction,
+            gridShipCount,
+            gridOutfitCount: gridOutfits.length,
+            extraCodes: extraInners.map((inner) => `0x${inner.readUInt16BE(4).toString(16).padStart(4, '0')}`),
+          },
+        });
       }
       // Conn3 world-init walk (G139/G140). At "NOW LOADING" the client drives a long
       // sequence of Information/Notify request/response pairs across families 0x03/0x04/
@@ -2415,10 +3288,11 @@ export function createLoginSession({
         const location = currentLocationFields({ worldPower });
         const createdCharacter = {
           id: characterId,
-          status: 1,
-          name: cardName,
-          fullName,
-          lastname: req.lastname,
+    status: 1,
+    name: cardName,
+    fullName,
+    displayName: fullName,
+    lastname: req.lastname,
           firstname: req.firstname,
           power: req.power,
           createPower: req.power,
@@ -2426,9 +3300,16 @@ export function createLoginSession({
           faction,
           blood: req.blood,
           sex: req.sex,
-          face: req.face,
-          abilities,
-          // 만체력 시드: 생성 폼은 체력 기본값을 클라가 서버로 보내지 않아 생성 캐릭이 체력 0 게이지로
+    face: req.face,
+    abilities,
+    camp: req.power,
+    state: DEFAULT_PLAYER_CHARACTER_PROFILE.state,
+    fame: DEFAULT_PLAYER_CHARACTER_PROFILE.fame,
+    pcp: DEFAULT_PLAYER_CHARACTER_PROFILE.pcp,
+    mcp: DEFAULT_PLAYER_CHARACTER_PROFILE.mcp,
+    money: DEFAULT_PLAYER_CHARACTER_PROFILE.money,
+    influence: DEFAULT_PLAYER_CHARACTER_PROFILE.influence,
+    // 만체력 시드: 생성 폼은 체력 기본값을 클라가 서버로 보내지 않아 생성 캐릭이 체력 0 게이지로
           // 표시됐다(라이브 QA 버그). 권위적 레코드(0x0323 0x1a9 / 0x0356)에 만체력을 박아 0이 아니게 한다.
           stamina: STAMINA_FULL,
           bonusPoint: req.bonusPoint,
@@ -2438,13 +3319,15 @@ export function createLoginSession({
           // 절대 부여되지 않는다(서버 권위적 클램프). 이것이 채워진 NPC 위계와 함께 클라 HUD가 플레이어를
           // "황제"로 폴백하지 못하게 한다.
           title: clampPlayerTitle(req.title),
-          rank: req.rank > 0 ? req.rank : initialCharacterRankId(req.power),
-          createRankSubId: initialCreateRankSubId(),
+          rank: initialCharacterRankId(req.power),
+        createRankSubId: initialCreateRankSubId(),
           spot: location.spot,
           spotOwner: location.spotOwner,
-          birthMonth: 0,
-          birthDay: 0,
-          flagshipName: '',
+          together: DEFAULT_PLAYER_CHARACTER_PROFILE.together,
+    birthMonth: DEFAULT_PLAYER_CHARACTER_PROFILE.birthMonth,
+    birthDay: DEFAULT_PLAYER_CHARACTER_PROFILE.birthDay,
+    birthYear: DEFAULT_PLAYER_CHARACTER_PROFILE.birthYear,
+    flagshipName: '',
           flagshipType: 0,
           flagshipKind: 0,
           check: 1,
@@ -2507,8 +3390,9 @@ export function createLoginSession({
         // 세션 변경 (session list, workflow wndew4jop): return the configured session catalog so the picker
         // shows real choices (each status 1|2 to be selectable per FUN_00593d90). Defaults to a single
         // session to preserve today's behavior; pass >= 2 via the `sessions` option to enable changing.
-        const sessionRecords = Array.isArray(sessions) && sessions.length > 0
-          ? sessions.map((s, i) => ({
+        const configuredSessions = currentSessionRecords();
+        const sessionRecords = configuredSessions.length > 0
+          ? configuredSessions.map((s, i) => ({
             sessionId: s?.sessionId ?? s?.id ?? i + 1,
             sessionName: s?.sessionName ?? s?.name ?? `Session ${i + 1}`,
             status: s?.status ?? 1,
@@ -2516,6 +3400,7 @@ export function createLoginSession({
             term: s?.term ?? 0,
             ending: s?.ending ?? 0,
             powers: s?.powers,
+            world: s?.world,
           }))
           : [{ sessionId: 1, sessionName: 'LOGH VII', status: 1, beginDay: 'UC 796' }];
         const requestVariant = innerPayload.length >= 3 ? innerPayload.readUInt8(2) : null;
@@ -2562,10 +3447,30 @@ export function createLoginSession({
         // consumer 0x4bdc2e populates [base+0x35f144 IP/+0x35f148 port/+0x35f14c token] and sets the
         // world-ready flag 0x35837c; the lobby FSM then opens conn3 to that endpoint. The world target
         // defaults to the lobby (same host:port) so the local e2e reconnects right back to this server.
-        // 세션 변경: when a `worldBySession` map is supplied, the selected session id (request body
-        // [u32 LE @+2]) routes to that session's distinct world endpoint; otherwise the single `world`.
-        const sessionId = innerPayload.length >= 6 ? innerPayload.readUInt32LE(2) : 0;
-        const target = (worldBySession && worldBySession[sessionId]) || world || lobby || {};
+        // RE sweep 2026-06-28: 0x2009 fixed body size is 2, so the selected session id is u16 LE @+2.
+        // Older tests used a 4-byte LE body; reading the low u16 keeps them compatible.
+        const requestedSessionId = innerPayload.length >= 4
+          ? selectedSessionIdOf(innerPayload.readUInt16LE(2))
+          : (account && typeof accountStore?.getSelectedSession === 'function'
+            ? accountStore.getSelectedSession(account)
+            : 1);
+        const selection = resolveLobbySessionSelection({
+          requestedSessionId: selectedSessionIdOf(requestedSessionId),
+          records: currentSessionRecords(),
+          account,
+          accountStore,
+        });
+        const sessionId = selection.resolvedSessionId;
+        const routeMap = currentWorldBySession(sessionId);
+        const selectedRecord = selection.selectedRecord;
+        if (selection.accepted && account && typeof accountStore?.setSelectedSession === 'function') {
+          accountStore.setSelectedSession(account, sessionId);
+        }
+        const target = (routeMap && (routeMap[sessionId] ?? routeMap[String(sessionId)])) ||
+          selectedRecord?.world ||
+          world ||
+          lobby ||
+          {};
         return {
           kind: 'lobby-response',
           okInner: buildLobbySessionLoginOkMessage32Inner({
@@ -2573,6 +3478,13 @@ export function createLoginSession({
             port: target.port ?? lobby?.port ?? 47900,
             token: target.token ?? 0,
           }),
+          trace: {
+            account: account ?? null,
+            selectedSessionId: selection.requestedSessionId,
+            resolvedSessionId: sessionId,
+            sessionAccepted: selection.accepted,
+            sessionReject: selection.reject,
+          },
         };
       }
       if (phase === LOGIN_PHASES.REDIRECTED) {
@@ -2613,6 +3525,9 @@ export function createLoginSession({
         owner: acctPower ?? location.spotOwner,
         mapSection: location.spot,
       };
+    },
+    commandTargetSnapshot() {
+      return commandTargetPool.snapshot();
     },
     close() {
       phase = LOGIN_PHASES.CLOSED;

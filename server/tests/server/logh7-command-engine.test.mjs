@@ -56,16 +56,19 @@ function makeInboundMoveShip(unitIds, poses = []) {
   return inner;
 }
 
-// Build an inbound CommandGridChat in the client SEND form: [u16 BE code][u32 0][u32 time][u8 cast][u8 len][wchars].
+// Build an inbound CommandGridChat in the client SEND form: [u16 BE code][u32 0][u32 LE time][u8 cast][u8 len][LE wchars].
+// Body multibyte fields are LITTLE-endian to match the real client (FUN_004be6f0 LE memcpy) and the server's
+// own receive-form builder buildCommandGridChatInner — a prior BE fixture hid the GridChat byte-swap bug
+// because low-ASCII chars round-trip under either endianness; Korean (≥0x100) only round-trips under LE.
 function makeInboundChat(text, { time = 0, cast = 0 } = {}) {
   const chars = [...String(text)];
   const inner = Buffer.alloc(2 + 0x8c);
-  inner.writeUInt16BE(COMMAND_GRID_CHAT_CODE, 0);
+  inner.writeUInt16BE(COMMAND_GRID_CHAT_CODE, 0); // code header is BE transport
   const body = inner.subarray(2);
-  body.writeUInt32BE(time >>> 0, 4);
+  body.writeUInt32LE(time >>> 0, 4);
   body.writeUInt8(cast & 0xff, 8);
   body.writeUInt8(chars.length, 9);
-  chars.forEach((c, i) => body.writeUInt16BE(c.charCodeAt(0) & 0xffff, 10 + i * 2));
+  chars.forEach((c, i) => body.writeUInt16LE(c.charCodeAt(0) & 0xffff, 10 + i * 2));
   return inner;
 }
 
@@ -75,6 +78,18 @@ test('parseInboundChat decodes client send-form chat', () => {
   assert.equal(parsed.time, 123);
   assert.equal(parsed.castType, 2);
   assert.equal(parsed.msgLen, 5);
+});
+
+test('parseInboundChat decodes Korean (UTF-16LE wire) without mojibake — GridChat endianness fix (audit 2026-06-28)', () => {
+  // The client serializes the message as UTF-16LE; a BE read byte-swaps every char (e.g. 안 0xC548 -> 0x48C5).
+  // This test fails under the prior readUInt16BE parser and passes only with the LE fix, matching the SpotChat
+  // sibling and the server's own buildCommandGridChatInner (LE). time/cast also LE.
+  const msg = '안녕하세요 은하제국';
+  const parsed = parseInboundChat(makeInboundChat(msg, { time: 0x12345678, cast: 1 }));
+  assert.equal(parsed.text, msg, '한글 메시지가 깨지지 않고 왕복');
+  assert.equal(parsed.time, 0x12345678, 'time도 LE로 일관');
+  assert.equal(parsed.castType, 1);
+  assert.equal(parsed.msgLen, [...msg].length);
 });
 
 test('processCommand chat: accepts, logs, and notifies others with a canonical chat', () => {
@@ -92,6 +107,16 @@ test('processCommand chat: accepts, logs, and notifies others with a canonical c
   assert.equal(result.notifies[0].inner.readUInt16BE(4), COMMAND_GRID_CHAT_CODE);
   assert.equal(state.chatCount(), 1);
   assert.equal(state.listChat()[0].text, 'GG');
+  assert.equal(state.commandLogCount(), 1);
+  const commandLog = state.listCommandLog()[0];
+  assert.equal(commandLog.seq, 1);
+  assert.equal(commandLog.connectionId, 6);
+  assert.equal(commandLog.innerCode, COMMAND_GRID_CHAT_CODE);
+  assert.equal(commandLog.accept, true);
+  assert.equal(commandLog.reject, null);
+  assert.deepEqual(commandLog.units, []);
+  assert.equal(commandLog.effect, 'grid-chat');
+  assert.equal(commandLog.debug.text, 'GG');
 });
 
 test('processCommand /grid chat fallback moves fleet and emits 0x0b07 NotifyMovedGrid', () => {
@@ -114,6 +139,17 @@ test('processCommand /grid chat fallback moves fleet and emits 0x0b07 NotifyMove
   assert.equal(result.notifies[0].target, 'all');
   assert.equal(result.notifies[0].inner.readUInt16BE(4), NOTIFY_MOVED_GRID_CODE);
   assert.equal(state.getFleet(charId).cell, 2700);
+  assert.equal(state.commandLogCount(), 1);
+  assert.deepEqual(state.listCommandLog()[0], {
+    seq: 1,
+    connectionId: 6,
+    innerCode: COMMAND_GRID_CHAT_CODE,
+    accept: true,
+    reject: null,
+    units: [charId],
+    effect: 'grid-chat-fleet-move',
+    debug: { destCell: 2700, source: 'chat-fallback' },
+  });
 });
 
 test('processCommand /grid chat fallback falls back to only fleet when char id mismatch', () => {
@@ -168,7 +204,18 @@ test('processCommand rejects empty chat and unknown commands', () => {
   assert.equal(processCommand({ state, connectionId: 6, innerCode: COMMAND_GRID_CHAT_CODE, inner: makeInboundChat('') }).reject, 'empty-chat');
   const unknown = Buffer.alloc(4);
   unknown.writeUInt16BE(0x1234, 0);
-  assert.equal(processCommand({ state, connectionId: 6, innerCode: 0x1234, inner: unknown }).reject, 'unknown-command');
+  const result = processCommand({ state, connectionId: 6, innerCode: 0x1234, inner: unknown });
+  assert.equal(result.reject, 'unknown-command');
+  assert.equal(state.commandLogCount(), 2);
+  assert.deepEqual(state.listCommandLog()[1], {
+    seq: 2,
+    connectionId: 6,
+    innerCode: 0x1234,
+    accept: false,
+    reject: 'unknown-command',
+    units: [],
+    effect: null,
+  });
 });
 
 test('parseInboundMoveShip extracts count, ship ids, and per-unit target poses', () => {
@@ -266,14 +313,82 @@ test('processCommand move: allows commanding your own (or neutral) ship', () => 
 
 test('parseInboundMoveGrid extracts unitId and destination cell', () => {
   const move = parseInboundMoveGrid(makeInboundMoveGrid(0x01000005, 1234));
+  assert.equal(move.format, 'legacy-grid-dwords');
   assert.equal(move.unitId, 0x01000005);
   assert.equal(move.destCell, 1234);
+});
+
+test('parseInboundMoveGrid classifies live SendWarp coordinate payload diagnostic-only', () => {
+  const move = parseInboundMoveGrid(
+    Buffer.from('0b01033500880335008800000001000003350098ffffffff09b95d000000000005', 'hex'),
+  );
+
+  assert.equal(move.format, 'sendwarp-live-v1');
+  assert.equal(move.unresolved, true);
+  assert.equal(move.unitId, null);
+  assert.equal(move.destCell, null);
+  assert.deepEqual(move.fields.coord0, { x: 0x0335, y: 0x0088 });
+  assert.deepEqual(move.fields.coord1, { x: 0x0335, y: 0x0088 });
+  assert.equal(move.fields.actorOrSequence, 1);
+  assert.deepEqual(move.fields.commandCoord, { x: 0x0335, y: 0x0098 });
+  assert.equal(move.fields.routeCellCandidate, 0x09b9);
+  assert.equal(move.fields.routeCellCandidateHex, '0x09b9');
+  assert.equal(move.fields.routeTailWord, 0x5d00);
+  assert.equal(move.fields.terminalByte, 5);
+});
+
+test('parseInboundMoveGrid keeps current live SendWarp candidate fields without promoting them', () => {
+  const move = parseInboundMoveGrid(
+    Buffer.from('0b01033500880335008800000001000003350098ffffffff09b977000000000005', 'hex'),
+  );
+
+  assert.equal(move.format, 'sendwarp-live-v1');
+  assert.equal(move.unresolved, true);
+  assert.equal(move.unitId, null);
+  assert.equal(move.destCell, null);
+  assert.equal(move.fields.routeCellCandidate, 0x09b9);
+  assert.equal(move.fields.routeTailWord, 0x7700);
+  assert.equal(move.fields.terminalByte, 5);
+});
+
+test('parseInboundMoveGrid exposes target-dependent live SendWarp candidates', () => {
+  const samples = [
+    {
+      target: [1100, 455],
+      raw: '0b01033500880335008800000001000003350098ffffffff09b977000000000005',
+      routeCellCandidate: 0x09b9,
+      routeTailWord: 0x7700,
+    },
+    {
+      target: [1300, 500],
+      raw: '0b01033500880335008800000001000003350098ffffffff0a1f79000000000005',
+      routeCellCandidate: 0x0a1f,
+      routeTailWord: 0x7900,
+    },
+    {
+      target: [900, 600],
+      raw: '0b01033500880335008800000001000003350098ffffffff0a1b82000000000005',
+      routeCellCandidate: 0x0a1b,
+      routeTailWord: 0x8200,
+    },
+  ];
+
+  for (const sample of samples) {
+    const move = parseInboundMoveGrid(Buffer.from(sample.raw, 'hex'));
+    assert.equal(move.format, 'sendwarp-live-v1', `target ${sample.target.join(',')}`);
+    assert.equal(move.unitId, null);
+    assert.equal(move.destCell, null);
+    assert.equal(move.unresolved, true);
+    assert.equal(move.fields.routeCellCandidate, sample.routeCellCandidate);
+    assert.equal(move.fields.routeTailWord, sample.routeTailWord);
+  }
 });
 
 test('processCommand grid-move: ACKs 0x0b01 to self and broadcasts NotifyMovedGrid 0x0b07 to ALL clients', () => {
   const state = createWorldState();
   state.addPlayer({ connectionId: 6, charId: 1 });
   state.upsertShip({ id: 0x01000005, owner: 6 });
+  state.upsertFleet({ id: 0x01000005, owner: 1, cell: 1000 });
   const rawMove = makeInboundMoveGrid(0x01000005, 2550);
   const result = processCommand({
     state,
@@ -295,6 +410,65 @@ test('processCommand grid-move: ACKs 0x0b01 to self and broadcasts NotifyMovedGr
   assert.equal(result.notifies[1].inner.readUInt8(6 + 0x12), 1);
   assert.equal(result.notifies[1].inner.readUInt32LE(6 + 0x14), 0x01000005);
   assert.equal(result.notifies[1].inner.readUInt32LE(6 + 0x14 + 4), 2550);
+  assert.equal(state.getFleet(0x01000005).cell, 2550);
+  assert.equal(state.commandLogCount(), 1);
+  assert.deepEqual(state.listCommandLog()[0], {
+    seq: 1,
+    connectionId: 6,
+    innerCode: COMMAND_MOVE_GRID_CODE,
+    accept: true,
+    reject: null,
+    units: [0x01000005],
+    effect: 'fleet-grid-move',
+    debug: {
+      unitId: 0x01000005,
+      unitIdHex: '0x01000005',
+      destCell: 2550,
+      destCellHex: '0x000009f6',
+      hadFleet: true,
+      parsed: result.debug.parsed,
+    },
+  });
+  assert.deepEqual(result.debug, state.listCommandLog()[0].debug);
+});
+
+test('processCommand grid-move: dev fallback maps live coordinate payload to player-side fleet', () => {
+  const prev = process.env.LOGH_DEV_GRID_MOVE_FALLBACK_CELL;
+  process.env.LOGH_DEV_GRID_MOVE_FALLBACK_CELL = '2115';
+  try {
+    const state = createWorldState();
+    state.addPlayer({ connectionId: 3, charId: 3, powerId: 0x501 });
+    state.upsertFleet({ id: 1001, owner: 1, faction: 1, commander: 4097, cell: 2686 });
+    const liveInner = Buffer.from(
+      '0b01033500880335008800000001000003350098ffffffff09b95d000000000005',
+      'hex',
+    );
+
+    const result = processCommand({
+      state,
+      connectionId: 3,
+      innerCode: COMMAND_MOVE_GRID_CODE,
+      inner: liveInner,
+    });
+
+    assert.equal(result.accept, true);
+    assert.deepEqual(result.units, [1001]);
+assert.equal(state.getFleet(1001).cell, 0x09b9);
+assert.equal(result.notifies[1].inner.readUInt32LE(6 + 0x14), 1001);
+assert.equal(result.notifies[1].inner.readUInt32LE(6 + 0x14 + 4), 0x09b9);
+assert.equal(result.debug.hadFleet, true);
+assert.equal(result.debug.destCell, 0x09b9);
+assert.equal(result.debug.fallback.source, 'LOGH_DEV_GRID_MOVE_FALLBACK_CELL:routeCellCandidate');
+assert.equal(result.debug.fallback.configuredFallbackCell, 2115);
+assert.equal(result.debug.parsed.format, 'sendwarp-live-v1');
+    assert.equal(result.debug.parsed.unresolved, true);
+    assert.equal(result.debug.fallback.originalUnitId, null);
+    assert.equal(result.debug.fallback.originalDestCell, null);
+    assert.equal(result.debug.fallback.parsed.format, 'sendwarp-live-v1');
+  } finally {
+    if (prev === undefined) delete process.env.LOGH_DEV_GRID_MOVE_FALLBACK_CELL;
+    else process.env.LOGH_DEV_GRID_MOVE_FALLBACK_CELL = prev;
+  }
 });
 
 test('processCommand grid-move: rejects moving a fleet owned by another player', () => {
@@ -544,3 +718,31 @@ test('seedPersonnelFromWorldState: 플레이어 없으면 false', () => {
   assert.equal(seeded, false, '플레이어 없음');
 });
 
+test('processCommand strategy route creates shared command target pool', () => {
+  const state = createWorldState();
+  state.addPlayer({ connectionId: 6, charId: 11, powerId: 4 });
+  const inner = Buffer.alloc(2 + 0x1c);
+  inner.writeUInt16BE(0x0900, 0);
+  const body = inner.subarray(2);
+  body.writeUInt32LE(0x50, 8);
+  body.writeUInt32LE(0x07, 12);
+
+  const result = processCommand({ state, connectionId: 6, innerCode: 0x0900, inner });
+
+  assert.equal(result.accept, true);
+  assert.ok(state._commandTargets);
+  assert.equal(state._strategy.targets, state._commandTargets);
+  const snapshot = state._commandTargets.snapshot();
+  assert.equal(snapshot.characters[0].id, 11);
+  assert.ok(snapshot.outfits.length > 0);
+  assert.equal(state.commandLogCount(), 1);
+  assert.deepEqual(state.listCommandLog()[0], {
+    seq: 1,
+    connectionId: 6,
+    innerCode: 0x0900,
+    accept: true,
+    reject: null,
+    units: [],
+    effect: 'strategy-command',
+  });
+});

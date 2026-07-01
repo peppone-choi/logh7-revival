@@ -7,15 +7,40 @@ from typing import Final
 
 
 REPO_ROOT: Final = Path(__file__).resolve().parents[1]
+PROJECT_ROOT: Final = REPO_ROOT.parent
 LAUNCHER_SOURCE: Final = REPO_ROOT / "tools" / "launcher" / "LOGH7Launcher.cs"
 FONT_INSTALLER_SOURCE: Final = REPO_ROOT / "tools" / "packaging" / "install-pretendard.ps1"
 FONT_SOURCE_DIR: Final = REPO_ROOT / "fonts"
-SERVER_SOURCE_DIR: Final = REPO_ROOT / "src" / "server"
-CONTENT_SOURCE_DIR: Final = REPO_ROOT / "content"
+CANON_SERVER_ROOT: Final = PROJECT_ROOT / "server"
+SERVER_SOURCE_DIR: Final = (
+    CANON_SERVER_ROOT / "src" / "server"
+    if (CANON_SERVER_ROOT / "src" / "server").exists()
+    else REPO_ROOT / "src" / "server"
+)
+CONTENT_SOURCE_DIR: Final = (
+    CANON_SERVER_ROOT / "content"
+    if (CANON_SERVER_ROOT / "content").exists()
+    else REPO_ROOT / "content"
+)
 DGVOODOO_EXTRACTED_DIR: Final = REPO_ROOT / ".omo" / "work" / "dgVoodoo2_87_2"
 INSTALLED_EXE_DIR: Final = REPO_ROOT / ".omo" / "work" / "logh7-installed" / "exe"
 PLAYER_LAUNCHER_EXE: Final = "LOGH7Launcher.exe"
 RUNTIME_ROOT: Final = "logh7-runtime"
+DGVOODOO_WINDOWED_DEFAULTS: Final[dict[str, str]] = {
+    "FullScreenMode": "false",
+    "ScalingMode": "centered",
+    "Resampling": "pointsampled",
+    "WindowedAttributes": "",
+    "FullscreenAttributes": "fullscreensize",
+    "WatermarkDisplayDuration": "1",
+    "3DfxWatermark": "false",
+    "3DfxSplashScreen": "false",
+    "dgVoodooWatermark": "false",
+    "Filtering": "appdriven",
+    "Antialiasing": "off",
+    "RTTexturesForceScaleAndMSAA": "false",
+    "SmoothedDepthSampling": "false",
+}
 RUNTIME_CONTENT_FILES: Final[tuple[str, ...]] = (
     "content/logh7-content.db",
     "content/galaxy.json",
@@ -93,7 +118,7 @@ def _copy_content(runtime: Path) -> list[dict[str, str]]:
 
     written: list[dict[str, str]] = []
     for rel in RUNTIME_CONTENT_FILES:
-        source = REPO_ROOT / rel
+        source = _content_source(rel)
         if not source.exists():
             raise PlayerRuntimeError(f"required runtime content is missing: {source}")
         target = runtime / rel
@@ -101,6 +126,14 @@ def _copy_content(runtime: Path) -> list[dict[str, str]]:
         shutil.copy2(source, target)
         written.append({"path": _archive_path(target, runtime), "reason": "server content runtime"})
     return written
+
+
+def _content_source(rel: str) -> Path:
+    path = Path(rel)
+    parts = path.parts
+    if not parts or parts[0] != "content":
+        raise PlayerRuntimeError(f"runtime content path must be under content/: {rel}")
+    return CONTENT_SOURCE_DIR.joinpath(*parts[1:])
 
 
 def _copy_launcher_source(runtime: Path) -> list[dict[str, str]]:
@@ -156,15 +189,46 @@ def _copy_dgvoodoo_runtime(destination: Path) -> list[dict[str, str]]:
         target = exe_target / source.name
         if source.resolve() != target.resolve():
             shutil.copy2(source, target)
+        if target.name.casefold() == "dgvoodoo.conf":
+            _patch_dgvoodoo_windowed_defaults(target)
         written.append({"path": target.relative_to(destination).as_posix(), "reason": "dgVoodoo D3D8 fullscreen/remaster runtime"})
     return written
+
+
+def _patch_dgvoodoo_windowed_defaults(conf: Path) -> None:
+    lines = conf.read_text(encoding="utf-8", errors="replace").splitlines()
+    seen: set[str] = set()
+    patched: list[str] = []
+    for line in lines:
+        stripped = line.lstrip()
+        matched = next(
+            (
+                key
+                for key in DGVOODOO_WINDOWED_DEFAULTS
+                if stripped.startswith(key) and "=" in stripped
+            ),
+            None,
+        )
+        if matched is None:
+            patched.append(line)
+            continue
+        prefix = line[: len(line) - len(stripped)]
+        patched.append(f"{prefix}{matched:<36} = {DGVOODOO_WINDOWED_DEFAULTS[matched]}")
+        seen.add(matched)
+    for key, value in DGVOODOO_WINDOWED_DEFAULTS.items():
+        if key not in seen:
+            patched.append(f"{key:<36} = {value}")
+    conf.write_text("\n".join(patched) + "\n", encoding="utf-8")
 
 
 def _write_runtime_note(runtime: Path) -> list[dict[str, str]]:
     target = runtime / "LOGH7-RUNTIME.txt"
     target.write_text(
         "LOGH VII local runtime\n\n"
-        "LOGH7Launcher.exe starts this Node.js server runtime and then launches exe/G7MTClient.exe.\n"
+        "LOGH7Launcher.exe preflights exe/G7MTClient.exe, starts this Node.js server runtime, "
+        "and then launches the game client.\n"
+        "Run LOGH7Launcher.exe --client-preflight to check Windows Application Control / "
+        "Smart App Control before starting the server.\n"
         "Server state and traces are written under logh7-runtime/state, logs, and traces.\n",
         encoding="utf-8",
         newline="\r\n",
@@ -178,6 +242,8 @@ def _write_file_layout_note(destination: Path) -> list[dict[str, str]]:
         "LOGH VII distribution layout\n\n"
         "Client package:\n"
         "- LOGH7Launcher.exe\n"
+        "- LOGH7Launcher.exe --client-preflight for fast Windows Application Control checks\n"
+        "- diagnose-appcontrol.ps1 for SHA/signature/CodeIntegrity evidence collection\n"
         "- exe/G7MTClient.exe and legacy client data\n"
         "- exe/D3D8.dll and exe/dgVoodoo.conf\n"
         "- fonts/ and tools/packaging/install-pretendard.ps1\n\n"

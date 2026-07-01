@@ -328,7 +328,7 @@ export function systemToBaseRecord(system = {}, ctx = {}) {
  *   - commodity[0] = # habitable planets — habitability roll-up.                       [P3]
  *   - budgeting[0] = # planets in the system.                                          [P3]
  *   The source magnitudes (industry/habitable/orbit) come from content/planet-economy.json which is itself
- *   procedural [P3] (281 planets, not IV-EX/manual canon). No scalar economy field is fabricated.
+ *   procedural [P3] (300 planets: 281 reconstructed + 19 P3 virtual overlay). No scalar economy field is fabricated.
  *
  * Returns null when there is no economy context (no planets), so callers can fall back to the plain
  * id+owner seed unchanged.

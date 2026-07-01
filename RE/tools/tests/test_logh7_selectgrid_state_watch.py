@@ -23,6 +23,11 @@ class Logh7SelectGridStateWatchTests(unittest.TestCase):
         self.assertIn("0x004b48d0", script)
         self.assertIn("selectGridSnapshot", script)
         self.assertIn("projectionWriter", script)
+        self.assertIn("dispatchCaseInfo", script)
+        self.assertIn("case3a-non-c002-selector", script)
+        self.assertIn("case3b-grid-move", script)
+        self.assertIn("0x0412", script)
+        self.assertIn("0x0b01", script)
         self.assertNotIn("writeU32(", script)
         self.assertNotIn("writeS32(", script)
 

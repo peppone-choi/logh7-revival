@@ -34,6 +34,7 @@ import {
   buildLobbyResponseInner,
   buildNotifyMovedShipInner,
   buildNotifyTurnedShipInner,
+  wrapRawInnerAsMessage32,
 } from './logh7-login-protocol.mjs';
 // 戦闘艇 공중전 순수 규칙엔진(AU-1, opcode-wiring B-1). 0x040e 핸들러의 result:1 플랫 emit을 대체한다.
 import { computeAirCombat, canLaunchFighters, FIGHTER_SUPPLY_COST } from './logh7-air-combat.mjs';
@@ -1034,10 +1035,19 @@ export function processBattleOps({ state, connectionId, innerCode, inner }) {
           return reject('not-owner');
         }
       }
-      const notifies = cmd.unitIds.map((unitId) => ({
-        inner: buildNotifyMissionResultInner({ unitId, missionId: cmd.missionTarget, result: 1 }),
-        target: 'all',
-      }));
+      // RE: client sends CommandMission (0x421, body 0x98) via FUN_004b78a0 and BLOCKS on the
+      // 0x421 CommandMission_OK echo (client receive dispatcher FUN_004ba2b0 case 0x421 =
+      // "CommandMission_OK"; size table FUN_004b8b00 case 0x421 = 0x98). The handler previously
+      // emitted only the 0x43c/0x442 result notifies and never echoed the OK, so the mission send
+      // could hang. Echo the inbound frame byte-faithfully to the sender (same convention as the
+      // command-engine move ACK, logh7-command-engine.mjs:477) BEFORE the broadcast result notifies.
+      const notifies = [{ inner: wrapRawInnerAsMessage32(inner), target: 'self' }];
+      for (const unitId of cmd.unitIds) {
+        notifies.push({
+          inner: buildNotifyMissionResultInner({ unitId, missionId: cmd.missionTarget, result: 1 }),
+          target: 'all',
+        });
+      }
       // An occupation-type mission (flagA marks it) finishing transfers the target base's ownership.
       if (cmd.flagA && cmd.missionTarget) {
         const base = state.getBase(cmd.missionTarget);

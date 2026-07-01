@@ -548,7 +548,7 @@ export function buildNotifyInformationCharacterInner({
   characterId = 1, gridUnitId = 0, power = null, spot = null, spotOwner = null, abilities = null,
   online = false, camp = null, state = null, fame = null, pcp = null, mcp = null, money = null,
   influence = null, stamina = null, blood = null, lastname = null, firstname = null, displayName = null, rank = null, title = null, face = null,
-  seatEntries = null, coupConduct = null, spotResolverBase = null, wireEndian = 'be',
+  seatEntries = null, coupConduct = null, spotResolverBase = null, together = null, wireEndian = 'be',
 } = {}) {
   const parts = [];
   const nativeDisplayName = displayName ?? (lastname != null && firstname != null ? `${lastname} ${firstname}` : lastname ?? firstname);
@@ -631,7 +631,9 @@ export function buildNotifyInformationCharacterInner({
     streamU16(parts, Number.isInteger(character) ? character : 0, wireEndian);
     streamU32(parts, Number.isInteger(role) ? role : 0, wireEndian);
   }
-  streamU8(parts, 0);
+  // Compact 0x0356 expands this final byte to native +0x2d4; FUN_004c0400
+  // copies it into PLAYER_INFO+0x2f4, matching 0x0323's together @+0x2d0.
+  streamU8(parts, Number.isInteger(together) ? together : 0);
   return buildMpsClientMessage32Inner({ code: NOTIFY_INFORMATION_CHARACTER_CODE, payload: Buffer.concat(parts) });
 }
 

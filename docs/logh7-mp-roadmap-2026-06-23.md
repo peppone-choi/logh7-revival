@@ -1,200 +1,211 @@
-# LOGH VII 리바이벌 — 멀티플레이 서버 오픈 로드맵 & 현황
+﻿# LOGH VII 由щ컮?대쾶 ??硫?고뵆?덉씠 ?쒕쾭 ?ㅽ뵂 濡쒕뱶留?& ?꾪솴
 
-> **업데이트(2026-06-24):** `/grid <cell>` 채팅 명령 폼백 구현(`logh7-command-engine.mjs`). 클라이언트가 `0x0f1c CommandGridChat`로 `/grid 8700`을 본냉하면 서버가 권위적으로 함대를 이동시키고 `0x0b07`을 전체(자신+peer)에 브로드캐스트. **서버 코드/테스트 완료(1058 PASS).** 실제 클라 채팅 UI 입력은 여전히 C002와 동일한 입력 레이어 한계로 미확정. 이 폼백이 작동하면 C002 없이도 cross-client 유저-기원 이동이 가능하므로 M2의 (b) relay-경유 originate 경로 후보가 됨.
+> **?낅뜲?댄듃(2026-06-24):** `/grid <cell>` 梨꾪똿 紐낅졊 ?쇰갚 援ы쁽(`logh7-command-engine.mjs`). ?대씪?댁뼵?멸? `0x0f1c CommandGridChat`濡?`/grid 8700`??蹂몃깋?섎㈃ ?쒕쾭媛 沅뚯쐞?곸쑝濡??⑤?瑜??대룞?쒗궎怨?`0x0b07`???꾩껜(?먯떊+peer)??釉뚮줈?쒖틦?ㅽ듃. **?쒕쾭 肄붾뱶/?뚯뒪???꾨즺(1058 PASS).** ?ㅼ젣 ?대씪 梨꾪똿 UI ?낅젰? ?ъ쟾??C002? ?숈씪???낅젰 ?덉씠???쒓퀎濡?誘명솗?? ???쇰갚???묐룞?섎㈃ C002 ?놁씠??cross-client ?좎?-湲곗썝 ?대룞??媛?ν븯誘濡?M2??(b) relay-寃쎌쑀 originate 寃쎈줈 ?꾨낫媛 ??
 
-**목표 정의(한 줄):** "MP 서버 오픈" = **다수 플레이어가 strict 인증으로 가입·로그인하여 제국/동맹 진영으로 나뉘어 월드에 진입하고, 함대 이동·전투·내정·커맨드를 (유저 자기 의사로) 보내며, 그 결과가 서버 권위로 처리되어 영속화되는 상태가 실클라 4클라 컨텍스트에서 end-to-end로 도는 것**(현재 서버 앵커 `npm run test:server` = 1137 pass/0 fail, canonical playable SHA `c1523a5e`).
+**紐⑺몴 ?뺤쓽(??以?:** "MP ?쒕쾭 ?ㅽ뵂" = **?ㅼ닔 ?뚮젅?댁뼱媛 strict ?몄쬆?쇰줈 媛?끒룸줈洹몄씤?섏뿬 ?쒓뎅/?숇㏏ 吏꾩쁺?쇰줈 ?섎돇???붾뱶??吏꾩엯?섍퀬, ?⑤? ?대룞쨌?꾪닾쨌?댁젙쨌而ㅻ㎤?쒕? (?좎? ?먭린 ?섏궗濡? 蹂대궡硫? 洹?寃곌낵媛 ?쒕쾭 沅뚯쐞濡?泥섎━?섏뼱 ?곸냽?붾릺???곹깭媛 ?ㅽ겢??4?대씪 而⑦뀓?ㅽ듃?먯꽌 end-to-end濡??꾨뒗 寃?*(?꾩옱 ?쒕쾭 ?듭빱 `npm run test:server` = 1137 pass/0 fail, canonical playable SHA `c1523a5e`).
 
-> **목표 정의에 관한 정직 단서(검증 반영):** 위 정의의 핵심 동사 "(유저가) 보내며"는 실클라가 마우스로 직접 0x0b01 등 in-world 명령을 originate함을 뜻한다. 후술하듯 **유저 기원 in-world 명령(0x0b01 직접 송신)은 현재 C002로 봉쇄**되어 있다. 서버 권위 우회(probe/relay)는 이 동사를 **부분적으로만** 대체하며(서버가 명령을 만들어 push), "데모/관전 수준 MP"와 "유저 기원 인터랙티브 MP"를 이 문서 전반에서 분리해 표기한다.
+> **紐⑺몴 ?뺤쓽??愿???뺤쭅 ?⑥꽌(寃利?諛섏쁺):** ???뺤쓽???듭떖 ?숈궗 "(?좎?媛) 蹂대궡硫????ㅽ겢?쇨? 留덉슦?ㅻ줈 吏곸젒 0x0b01 ??in-world 紐낅졊??originate?⑥쓣 ?삵븳?? ?꾩닠?섎벏 **?좎? 湲곗썝 in-world 紐낅졊(0x0b01 吏곸젒 ?≪떊)? ?꾩옱 C002濡?遊됱뇙**?섏뼱 ?덈떎. ?쒕쾭 沅뚯쐞 ?고쉶(probe/relay)?????숈궗瑜?**遺遺꾩쟻?쇰줈留?* ?泥댄븯硫??쒕쾭媛 紐낅졊??留뚮뱾??push), "?곕え/愿???섏? MP"? "?좎? 湲곗썝 ?명꽣?숉떚釉?MP"瑜???臾몄꽌 ?꾨컲?먯꽌 遺꾨━???쒓린?쒕떎.
 
 ---
 
-## 현황 요약 매트릭스
+## ?꾪솴 ?붿빟 留ㅽ듃由?뒪
 
-상태 범례: ✓완료(라이브 입증) · ◐부분 · ✗블로커 · ○미착수
+?곹깭 踰붾?: ?볦셿猷??쇱씠釉??낆쬆) 쨌 ?먮?遺?쨌 ?쀫툝濡쒖빱 쨌 ?뗫?李⑹닔
 
-| 영역(도메인) | 상태 | 핵심 증거 | MP 필수 |
+| ?곸뿭(?꾨찓?? | ?곹깭 | ?듭떖 利앷굅 | MP ?꾩닔 |
 |---|:---:|---|:---:|
-| **클라 RE 커버리지 (P0-06)** | ◐ | **coverage-report 산출 문서(`docs/logh7-function-re-coverage-matrix.md`)는 deep-RE 277/945/10.6%** (게임본체 G7MTClient 277/6089=4.5%). ledger는 294까지 갔으나 wave3 +17이 **coverage 도구로 미재산출**(매트릭스 셀과 ledger 불일치). lightdoc 18,485/18,485(100%). file-RE 9패밀리 중 7 P0 | 부분(핵심경로만) |
-| **와이어 프로토콜** | ◐ | 옵코드 양방향맵 P0(recv FUN_004ba2b0 169행+send FUN_004b78a0). 0x0323/0x0b07/0x0313/0x0315/0x0b09/0x0b0a/0x0423 = byte-correct(크기 일치 검증). 0x0325 슬롯시맨틱·0x031f/0x0321 스칼라명 PROVISIONAL. **0x0b01→0x0b07 왕복은 서버측 코드/테스트만**(4클라 라이브 trace 부재) | 예 |
-| **서버 권위 게임 엔진 (P0-04)** | ◐ | command-engine processCommand 완성(0x0b01→self-ACK+0x0b07 all-broadcast, `logh7-command-engine.mjs:397-422`). world-state/combat/battle/economy/personnel done. **test:server 1137 pass**. coup/intel/espionage/relations는 인바운드 라우팅 미배선(클라 명령 opcode 미확정) | 예 |
-| **콘텐츠/데이터 (P0-02)** | ◐ | content DB(80성계/281행성/6요새/97인물/64함급)+canon-801-07(2:2 진영 24함대) 배선. **소속(faction) 80/80 보유하나 맵·패널 어디에도 미표시**(맵 byte2=spectralClass 우선, 패널 owner=class_ 파생; 소비처 미확정 deep-RE). 천체 0/80·rooms 0·institutions 0 미보유(안전 degrade) | 부분(시나리오만) |
-| **멀티플레이 (MP 메커니즘)** | ◐ | 동시세션가드·distinct-unit·교차가시성(0x0325 broadcast)=done+라이브확정(단 0x0325 빌더 88B vs 네이티브 756B 불일치—officer 필드 누락이 가시성 품질에 무영향인지 미검증). 진영 reconcile=partial(node 재현 정상, 라이브 미실증·좌표 빗나감). strict 동일성=partial(기본 acceptAnyGin7=true). **유저 기원 in-world 명령(C002)=blocked** | 예 |
-| **라이브 클라/월드진입/렌더 (P0-04)** | ◐ | autologin 월드진입 done(0x7000→…→0x0f02). **0x0b07 서버푸시: 와이어 크기 일치(580B)+디스패치 경로 정적 RE+무크래시 생존만 입증; 클라측 소비/적용은 라이브 미측정**(프로젝트 자체 maker≠checker 검증자가 강등, `loop-state.md` 2026-06-23). C002 유저 송신=blocked. 리마스터/전술맵=partial | 부분 |
-| **현지화(한글화)** | ◐ | 이름IME=done(라이브 RESOLVED, 게임 네이티브). 폰트 Pretendard=done. rsrc/MsgDat=partial(라이브 큐). 채팅 cp932 송신=partial(code-cave 미인코딩). **MP 코어에 한글화 비필수(mpBlockers 없음)** | 아니오 |
-| **build-ops-deploy-harness** | ◐ | multiclient harness·playable build SHA parity=done. 패키징 단일커맨드 부재·서버 localhost 바인드·exact-cred 로그인 미검증·**리포 non-git**(`git rev-parse` fatal 확인) | 부분 |
+| **?대씪 RE 而ㅻ쾭由ъ? (P0-06)** | ??| **coverage-report ?곗텧 臾몄꽌(`docs/logh7-function-re-coverage-matrix.md`)??deep-RE 277/945/10.6%** (寃뚯엫蹂몄껜 G7MTClient 277/6089=4.5%). ledger??294源뚯? 媛붿쑝??wave3 +17??**coverage ?꾧뎄濡?誘몄옱?곗텧**(留ㅽ듃由?뒪 ?怨?ledger 遺덉씪移?. lightdoc 18,485/18,485(100%). file-RE 9?⑤?由?以?7 P0 | 遺遺??듭떖寃쎈줈留? |
+| **??댁뼱 ?꾨줈?좎퐳** | ??| ?듭퐫???묐갑?λ㏊ P0(recv FUN_004ba2b0 169??send FUN_004b78a0). 0x0323/0x0b07/0x0313/0x0315/0x0b09/0x0b0a/0x0423 = byte-correct(?ш린 ?쇱튂 寃利?. 0x0325 ?щ’?쒕㎤?굿?x031f/0x0321 ?ㅼ뭡?쇰챸 PROVISIONAL. **0x0b01??x0b07 ?뺣났? ?쒕쾭痢?肄붾뱶/?뚯뒪?몃쭔**(4?대씪 ?쇱씠釉?trace 遺?? | ??|
+| **?쒕쾭 沅뚯쐞 寃뚯엫 ?붿쭊 (P0-04)** | ??| command-engine processCommand ?꾩꽦(0x0b01?뭩elf-ACK+0x0b07 all-broadcast, `logh7-command-engine.mjs:397-422`). world-state/combat/battle/economy/personnel done. **test:server 1137 pass**. coup/intel/espionage/relations???몃컮?대뱶 ?쇱슦??誘몃같???대씪 紐낅졊 opcode 誘명솗?? | ??|
+| **肄섑뀗痢??곗씠??(P0-02)** | ??| content DB(80?깃퀎/281?됱꽦/6?붿깉/97?몃Ъ/64?④툒)+canon-801-07(2:2 吏꾩쁺 24?⑤?) 諛곗꽑. **?뚯냽(faction) 80/80 蹂댁쑀?섎굹 留돠룻뙣???대뵒?먮룄 誘명몴??*(留?byte2=spectralClass ?곗꽑, ?⑤꼸 owner=class_ ?뚯깮; ?뚮퉬泥?誘명솗??deep-RE). 泥쒖껜 0/80쨌rooms 0쨌institutions 0 誘몃낫???덉쟾 degrade) | 遺遺??쒕굹由ъ삤留? |
+| **硫?고뵆?덉씠 (MP 硫붿빱?덉쬁)** | ??| ?숈떆?몄뀡媛?쑣톎istinct-unit쨌援먯감媛?쒖꽦(0x0325 broadcast)=done+?쇱씠釉뚰솗????0x0325 鍮뚮뜑 88B vs ?ㅼ씠?곕툕 756B 遺덉씪移섃봮fficer ?꾨뱶 ?꾨씫??媛?쒖꽦 ?덉쭏??臾댁쁺?μ씤吏 誘멸?利?. 吏꾩쁺 reconcile=partial(node ?ы쁽 ?뺤긽, ?쇱씠釉?誘몄떎利씲룹쥖??鍮쀫굹媛?. strict ?숈씪??partial(湲곕낯 acceptAnyGin7=true). **?좎? 湲곗썝 in-world 紐낅졊(C002)=blocked** | ??|
+| **?쇱씠釉??대씪/?붾뱶吏꾩엯/?뚮뜑 (P0-04)** | ??| autologin ?붾뱶吏꾩엯 done(0x7000?믠╈넂0x0f02). **0x0b07 ?쒕쾭?몄떆: ??댁뼱 ?ш린 ?쇱튂(580B)+?붿뒪?⑥튂 寃쎈줈 ?뺤쟻 RE+臾댄겕?섏떆 ?앹〈留??낆쬆; ?대씪痢??뚮퉬/?곸슜? ?쇱씠釉?誘몄륫??*(?꾨줈?앺듃 ?먯껜 maker?쟠hecker 寃利앹옄媛 媛뺣벑, `loop-state.md` 2026-06-23). C002 ?좎? ?≪떊=blocked. 由щ쭏?ㅽ꽣/?꾩닠留?partial | 遺遺?|
+| **?꾩????쒓???** | ??| ?대쫫IME=done(?쇱씠釉?RESOLVED, 寃뚯엫 ?ㅼ씠?곕툕). ?고듃 Pretendard=done. rsrc/MsgDat=partial(?쇱씠釉???. 梨꾪똿 cp932 ?≪떊=partial(code-cave 誘몄씤肄붾뵫). **MP 肄붿뼱???쒓???鍮꾪븘??mpBlockers ?놁쓬)** | ?꾨땲??|
+| **build-ops-deploy-harness** | ??| multiclient harness쨌playable build SHA parity=done. ?⑦궎吏??⑥씪而ㅻ㎤??遺??룹꽌踰?localhost 諛붿씤?쑣톏xact-cred 濡쒓렇??誘멸?利씲?*由ы룷 non-git**(`git rev-parse` fatal ?뺤씤) | 遺遺?|
 
 ---
 
-## 멀티플레이 서버 오픈 로드맵
+## 硫?고뵆?덉씠 ?쒕쾭 ?ㅽ뵂 濡쒕뱶留?
 
-조사 evidence 기반. **MP critical-path가 아닌 트랙(전수 deep-RE·천체/장소 복구·전술맵 풀렌더·C002 유저송신·리마스터)은 "MP 오픈 후/병행" 트랙으로 분리**한다. 단, 검증 결과를 반영해 **C002는 "데모/관전 MP"의 게이트는 아니나 "유저 기원 인터랙티브 MP"의 게이트임**을 명시한다.
+議곗궗 evidence 湲곕컲. **MP critical-path媛 ?꾨땶 ?몃옓(?꾩닔 deep-RE쨌泥쒖껜/?μ냼 蹂듦뎄쨌?꾩닠留???뚮뜑쨌C002 ?좎??≪떊쨌由щ쭏?ㅽ꽣)? "MP ?ㅽ뵂 ??蹂묓뻾" ?몃옓?쇰줈 遺꾨━**?쒕떎. ?? 寃利?寃곌낵瑜?諛섏쁺??**C002??"?곕え/愿??MP"??寃뚯씠?몃뒗 ?꾨땲??"?좎? 湲곗썝 ?명꽣?숉떚釉?MP"??寃뚯씠?몄엫**??紐낆떆?쒕떎.
 
-### M0 — 현재 (확정된 기반) ✓
+### M0 ???꾩옱 (?뺤젙??湲곕컲) ??
 
-**라이브/테스트로 입증된 상태만 ✓로 기재**(검증 반영, 0x0b07 "클라 소비 입증"은 ✓에서 제외):
-- 서버 권위 엔진 코드 완성 + **test:server 1137 pass/0 fail**(앵커).
-- autologin 월드진입 풀체인 라이브(`0x7000→0x0020→0x2009→0x0200→0x0313/0x0315→0x0323/0x0325→0x0b09/0x0b0a→0x0f02`). *단, 실행 EXE는 `G7MTClient.autologin.emp1.exe` 부트스트랩 변종(`runClientSha=8a2a2c33`); `c1523a5e`는 expectedSha로, stop 시 복원 검증됨.*
-- MP 메커니즘 라이브 확정: 동시세션가드 / connection별 distinct 함대 / 함대 교차 가시성(0x0325 broadcast).
-- canon-801-07 2:2 진영 시나리오 기본 배선(loadScenarioInto).
-- **0x0b07 서버푸시(부분 입증, ✓ 아님):** 와이어 크기 일치(서버 580B=클라 0x91 dword) + 소비 디스패치 경로 정적 RE(FUN_004ba2b0 case 0xb07→FUN_004bee20→`+0x2a58f8` grid-active 게이트→FUN_00517cd0→FUN_00501e30(0x16) ring enqueue) + 전략맵 무크래시 생존. **클라측 실제 소비/적용·시각 반영은 라이브 미측정.**
+**?쇱씠釉??뚯뒪?몃줈 ?낆쬆???곹깭留??볥줈 湲곗옱**(寃利?諛섏쁺, 0x0b07 "?대씪 ?뚮퉬 ?낆쬆"? ?볦뿉???쒖쇅):
+- ?쒕쾭 沅뚯쐞 ?붿쭊 肄붾뱶 ?꾩꽦 + **test:server 1137 pass/0 fail**(?듭빱).
+- autologin ?붾뱶吏꾩엯 ?泥댁씤 ?쇱씠釉?`0x7000??x0020??x2009??x0200??x0313/0x0315??x0323/0x0325??x0b09/0x0b0a??x0f02`). *?? ?ㅽ뻾 EXE??`G7MTClient.autologin.emp1.exe` 遺?몄뒪?몃옪 蹂醫?`runClientSha=8a2a2c33`); `c1523a5e`??expectedSha濡? stop ??蹂듭썝 寃利앸맖.*
+- MP 硫붿빱?덉쬁 ?쇱씠釉??뺤젙: ?숈떆?몄뀡媛??/ connection蹂?distinct ?⑤? / ?⑤? 援먯감 媛?쒖꽦(0x0325 broadcast).
+- canon-801-07 2:2 吏꾩쁺 ?쒕굹由ъ삤 湲곕낯 諛곗꽑(loadScenarioInto).
+- **0x0b07 ?쒕쾭?몄떆(遺遺??낆쬆, ???꾨떂):** ??댁뼱 ?ш린 ?쇱튂(?쒕쾭 580B=?대씪 0x91 dword) + ?뚮퉬 ?붿뒪?⑥튂 寃쎈줈 ?뺤쟻 RE(FUN_004ba2b0 case 0xb07?묯UN_004bee20??+0x2a58f8` grid-active 寃뚯씠?멤넂FUN_00517cd0?묯UN_00501e30(0x16) ring enqueue) + ?꾨왂留?臾댄겕?섏떆 ?앹〈. **?대씪痢??ㅼ젣 ?뚮퉬/?곸슜쨌?쒓컖 諛섏쁺? ?쇱씠釉?誘몄륫??**
 
-**잔여 effort 합:** 0 (단, "0x0b07 클라 적용 라이브 측정"은 M0 완료 항목이 아니라 **M1 critical-path의 실제 선결로 이관** — 아래 의존성 정정 참조).
-
----
-
-### M1 — 서버 권위 MP "관전/데모 이동" 오픈 (C002 불필요 경로) — effort ≈ M+L
-
-**핵심 통찰(Critical Path 판정 참조): server-authoritative 이동/전투/내정 처리 *코드*는 C002 없이 성립한다.** command-engine이 0x0b01 인바운드를 self-ACK+0x0b07 all-broadcast로 처리하고(완성, test 검증), relay가 0x0b01을 fanout 코드로 보유한다. **다만 현 우회 probe는 own 연결에 self-push할 뿐 진짜 유저-기원/peer-가시 이동을 만들지 못한다**(아래 정직 고지·gap). M1은 **서버푸시 데모/관전 루프를 라이브 입증**하는 단계로 한정한다.
-
-포함 작업:
-- **strict 인증 운영 표준화** (멀티플레이/계정등록, *partial→done*, effort M): `acceptAnyGin7=false` + `--account-db` + registry scrypt verify를 운영 기본으로 고정. 4클라 E2E에서 strict 라이브 검증. *선결: 없음(서버 코드 존재).*
-- **서버 멀티계정 ops + 비-localhost 바인드** (build-ops, *partial→done*, effort M): exact-credential 폼 로그인 라이브 검증, LAN 바인드(현 localhost only). *선결: strict 인증.*
-- **★0x0b07 클라 적용 라이브 측정** (서버엔진/라이브, *미측정→측정*, effort M): **M0에서 강등된 항목.** canonical SHA 컨텍스트 + 4점 메모리 probe(버퍼 도착 / `+0x2a58f8` 게이트값 / 0x16 ring enqueue / 유닛테이블 셀 또는 own-cell A·B)로 "0x0b07이 실제 클라 상태에 적용되는가"를 라이브 측정. *선결: 없음(probe 도구 필요).*
-- **0x0b07 서버푸시 데모 가시화 라이브** (라이브, effort S+M): self-push probe로 "서버가 푸시한 이동이 클라에 적용·반영되는지" 데모 검증. **fleet-render own-fleet 마커 case0 1회성 타이밍**이 시각 반영의 추가 조건임을 명시. *선결: 0x0b07 클라 적용 측정.*
-- **live20/21 문서화** (라이브, effort S): `loop-state.md`에 정식 등록(현재 cycle 기록은 있으나 evidence 앵커로 미정리), trace.jsonl이 **서버 SEND만** 기록함을 함께 명기.
-
-**M1 산출물 = "다수 플레이어가 strict로 로그인 → 진영 월드진입 → 서버가 푸시하는 이동/전투/내정이 클라에 적용·관전되는 데모 MP"** (유저가 마우스로 직접 명령하는 인터랙티브 입력 및 peer-가시 유저 이동은 미포함 — M2/병행 트랙).
-
-선결 의존성: strict 인증 → 멀티계정 ops/LAN 바인드. 0x0b07 클라 적용 측정은 인증과 병행 가능.
-**잔여 effort 합 ≈ M(인증)+M(ops)+M(0x0b07 측정)+S(데모)+S(문서) ≈ 중대 규모.**
+**?붿뿬 effort ??** 0 (?? "0x0b07 ?대씪 ?곸슜 ?쇱씠釉?痢≪젙"? M0 ?꾨즺 ??ぉ???꾨땲??**M1 critical-path???ㅼ젣 ?좉껐濡??닿?** ???꾨옒 ?섏〈???뺤젙 李몄“).
 
 ---
 
-### M2 — 진영 분리(2:2) + cross-client 이동 가시화 라이브 실증 — effort ≈ L+XL
+### M1 ???쒕쾭 沅뚯쐞 MP "愿???곕え ?대룞" ?ㅽ뵂 (C002 遺덊븘??寃쎈줈) ??effort ??M+L
 
-포함 작업:
-- **진영 reconcile 라이브 실증** (MP, *partial→done*, effort M): 서버 `reconcileWorldNation`/`createFactionKey(power===3→alliance)`는 node 재현으로 정상(no-op 확정). 블로커=**하네스 진영클릭 좌표(598,429)가 1920×1080 캐릭생성 라디오를 빗나감**(P3 절차). → 진영선택 화면 캡처 → alliance 좌표 재교정 → `conn powerId 1281` + `world-nation-reconciled` trace 수집.
-- **소속(faction) 맵/패널 투영** (콘텐츠/MP UX, *blocked→done*, effort M): **MP의 "진영 나뉘어"가 화면에 보이려면 필수.** 현재 맵 마커 색(0x0313 byte2)은 spectralClass 우선이라 faction 폴백 미발동, 패널 owner는 class_ 파생. 소비처(byte2가 spectral·faction 겸용인지, iVar9+0xa faction-색 해석 여부) **deep-RE 확정 후** 투영. 데이터(faction 80/80)는 보유, 소비처만 미확정 → 추측 승격 금지. *이 항목은 검증이 지적한 "병행 분리가 사용자 체감 진영성과 상충" 갭의 해소로, 병행이 아닌 M2 코어로 승격.*
-- **★cross-client 유저-가시 이동 라이브** (MP/라이브, effort XL): "유저 A가 이동 → 유저 B가 봄"은 **A가 실제 0x0b01을 originate해야** 하며 이는 C002로 봉쇄. 따라서 이 항목은 (a) C002 해결 또는 (b) per-connection probe→relay fanout→peer 경로 신설 중 하나를 **새 선결**로 가진다(현 self-target probe는 relay를 경유하지 않음). **순수 self-push probe로는 충족 불가**(검증 dependency 정정).
-- **라이브 4클라 2:2 E2E** (MP/라이브, *partial→done*, effort L): 진영분리 + 월드진입 + (서버권위)이동 + 전투 + 영속이 end-to-end로 도는 trace.
-- **더티체킹 영속 long-run round-trip** (서버/MP, effort S): 4클라 재시작 후 국고/세수/위치 복구 라이브 E2E.
+**?듭떖 ?듭같(Critical Path ?먯젙 李몄“): server-authoritative ?대룞/?꾪닾/?댁젙 泥섎━ *肄붾뱶*??C002 ?놁씠 ?깅┰?쒕떎.** command-engine??0x0b01 ?몃컮?대뱶瑜?self-ACK+0x0b07 all-broadcast濡?泥섎━?섍퀬(?꾩꽦, test 寃利?, relay媛 0x0b01??fanout 肄붾뱶濡?蹂댁쑀?쒕떎. **?ㅻ쭔 ???고쉶 probe??own ?곌껐??self-push??肉?吏꾩쭨 ?좎?-湲곗썝/peer-媛???대룞??留뚮뱾吏 紐삵븳??*(?꾨옒 ?뺤쭅 怨좎?쨌gap). M1? **?쒕쾭?몄떆 ?곕え/愿??猷⑦봽瑜??쇱씠釉??낆쬆**?섎뒗 ?④퀎濡??쒖젙?쒕떎.
 
-선결 의존성: M1(strict 인증·관전 데모) → 진영좌표 재교정·소속 투영. cross-client 유저 이동은 C002 또는 relay-경유 probe 신설에 의존.
-**잔여 effort 합 ≈ M(reconcile)+M(소속투영)+XL(cross-client 유저이동)+L(2:2 E2E)+S(영속) ≈ 최대 규모.**
+?ы븿 ?묒뾽:
+- **strict ?몄쬆 ?댁쁺 ?쒖???* (硫?고뵆?덉씠/怨꾩젙?깅줉, *partial?뭗one*, effort M): `acceptAnyGin7=false` + `--account-db` + registry scrypt verify瑜??댁쁺 湲곕낯?쇰줈 怨좎젙. 4?대씪 E2E?먯꽌 strict ?쇱씠釉?寃利? *?좉껐: ?놁쓬(?쒕쾭 肄붾뱶 議댁옱).*
+- **?쒕쾭 硫?곌퀎??ops + 鍮?localhost 諛붿씤??* (build-ops, *partial?뭗one*, effort M): exact-credential ??濡쒓렇???쇱씠釉?寃利? LAN 諛붿씤????localhost only). *?좉껐: strict ?몄쬆.*
+- **??x0b07 ?대씪 ?곸슜 ?쇱씠釉?痢≪젙** (?쒕쾭?붿쭊/?쇱씠釉? *誘몄륫?뺚넂痢≪젙*, effort M): **M0?먯꽌 媛뺣벑????ぉ.** canonical SHA 而⑦뀓?ㅽ듃 + 4??硫붾え由?probe(踰꾪띁 ?꾩갑 / `+0x2a58f8` 寃뚯씠?멸컪 / 0x16 ring enqueue / ?좊떅?뚯씠釉?? ?먮뒗 own-cell A쨌B)濡?"0x0b07???ㅼ젣 ?대씪 ?곹깭???곸슜?섎뒗媛"瑜??쇱씠釉?痢≪젙. *?좉껐: ?놁쓬(probe ?꾧뎄 ?꾩슂).*
+- **0x0b07 ?쒕쾭?몄떆 ?곕え 媛?쒗솕 ?쇱씠釉?* (?쇱씠釉? effort S+M): self-push probe濡?"?쒕쾭媛 ?몄떆???대룞???대씪???곸슜쨌諛섏쁺?섎뒗吏" ?곕え 寃利? **fleet-render own-fleet 留덉빱 case0 1?뚯꽦 ??대컢**???쒓컖 諛섏쁺??異붽? 議곌굔?꾩쓣 紐낆떆. *?좉껐: 0x0b07 ?대씪 ?곸슜 痢≪젙.*
+- **live20/21 臾몄꽌??* (?쇱씠釉? effort S): `loop-state.md`???뺤떇 ?깅줉(?꾩옱 cycle 湲곕줉? ?덉쑝??evidence ?듭빱濡?誘몄젙由?, trace.jsonl??**?쒕쾭 SEND留?* 湲곕줉?⑥쓣 ?④퍡 紐낃린.
 
----
+**M1 ?곗텧臾?= "?ㅼ닔 ?뚮젅?댁뼱媛 strict濡?濡쒓렇????吏꾩쁺 ?붾뱶吏꾩엯 ???쒕쾭媛 ?몄떆?섎뒗 ?대룞/?꾪닾/?댁젙???대씪???곸슜쨌愿?꾨릺???곕え MP"** (?좎?媛 留덉슦?ㅻ줈 吏곸젒 紐낅졊?섎뒗 ?명꽣?숉떚釉??낅젰 諛?peer-媛???좎? ?대룞? 誘명룷????M2/蹂묓뻾 ?몃옓).
 
-### M-final — MP 서버 오픈 (배포) — effort ≈ L
-
-> **게이트 정직 단서:** M-final "오픈"이 목표 정의의 "(유저가) 이동·전투·커맨드를 보내며"를 충족하려면 M2의 **cross-client 유저-가시 이동(=C002 또는 relay-경유 originate)** 이 통과해야 한다. 그것 없이 배포하면 "서버 권위 관전/데모 MP"로 범위가 한정됨을 배포물 문서에 명기한다.
-
-포함 작업:
-- **패키징 단일 커맨드** (build-ops, *partial→done*, effort L): `player_runtime.py` CLI/main 부재 해소, D3D8.dll+Pretendard TTF+install-pretendard.ps1 동봉 단일 배포물.
-- **git 버전관리 복구** (build-ops, *blocked→done*, effort S): `git init`(현 `.git` 비어 있어 non-git; 사용자 지시 시).
-- **(선택) P0-05 필러박스 dgVoodoo** (build-ops, effort M): `stretched_4_3` + 와이드 스크린샷 라이브.
-
-선결 의존성: M2(진영분리 E2E + cross-client 가시화 또는 범위 한정 명시).
-**잔여 effort 합 ≈ L(패키징)+S(git) ≈ 중간 규모.**
+?좉껐 ?섏〈?? strict ?몄쬆 ??硫?곌퀎??ops/LAN 諛붿씤?? 0x0b07 ?대씪 ?곸슜 痢≪젙? ?몄쬆怨?蹂묓뻾 媛??
+**?붿뿬 effort ????M(?몄쬆)+M(ops)+M(0x0b07 痢≪젙)+S(?곕え)+S(臾몄꽌) ??以묐? 洹쒕え.**
 
 ---
 
-### "MP 오픈 후 / 병행" 트랙 (Critical Path 아님)
+### M2 ??吏꾩쁺 遺꾨━(2:2) + cross-client ?대룞 媛?쒗솕 ?쇱씠釉??ㅼ쬆 ??effort ??L+XL
 
-이들은 **데모/관전 MP의 게이트가 아니다.** 단 C002는 "유저 기원 인터랙티브 MP"의 게이트이므로 병행이되 **목표 정의의 핵심 동사를 닫는 트랙**으로 별표.
+?ы븿 ?묒뾽:
+- **吏꾩쁺 reconcile ?쇱씠釉??ㅼ쬆** (MP, *partial?뭗one*, effort M): ?쒕쾭 `reconcileWorldNation`/`createFactionKey(power===3?뭓lliance)`??node ?ы쁽?쇰줈 ?뺤긽(no-op ?뺤젙). 釉붾줈而?**?섎꽕??吏꾩쁺?대┃ 醫뚰몴(598,429)媛 1920횞1080 罹먮┃?앹꽦 ?쇰뵒?ㅻ? 鍮쀫굹媛?*(P3 ?덉감). ??吏꾩쁺?좏깮 ?붾㈃ 罹≪쿂 ??alliance 醫뚰몴 ?ш탳????`conn powerId 1281` + `world-nation-reconciled` trace ?섏쭛.
+- **?뚯냽(faction) 留??⑤꼸 ?ъ쁺** (肄섑뀗痢?MP UX, *blocked?뭗one*, effort M): **MP??"吏꾩쁺 ?섎돇??媛 ?붾㈃??蹂댁씠?ㅻ㈃ ?꾩닔.** ?꾩옱 留?留덉빱 ??0x0313 byte2)? spectralClass ?곗꽑?대씪 faction ?대갚 誘몃컻?? ?⑤꼸 owner??class_ ?뚯깮. ?뚮퉬泥?byte2媛 spectral쨌faction 寃몄슜?몄?, iVar9+0xa faction-???댁꽍 ?щ?) **deep-RE ?뺤젙 ??* ?ъ쁺. ?곗씠??faction 80/80)??蹂댁쑀, ?뚮퉬泥섎쭔 誘명솗????異붿륫 ?밴꺽 湲덉?. *????ぉ? 寃利앹씠 吏?곹븳 "蹂묓뻾 遺꾨━媛 ?ъ슜??泥닿컧 吏꾩쁺?깃낵 ?곸땐" 媛?쓽 ?댁냼濡? 蹂묓뻾???꾨땶 M2 肄붿뼱濡??밴꺽.*
+- **?꿤ross-client ?좎?-媛???대룞 ?쇱씠釉?* (MP/?쇱씠釉? effort XL): "?좎? A媛 ?대룞 ???좎? B媛 遊?? **A媛 ?ㅼ젣 0x0b01??originate?댁빞** ?섎ŉ ?대뒗 C002濡?遊됱뇙. ?곕씪??????ぉ? (a) C002 ?닿껐 ?먮뒗 (b) per-connection probe?뭨elay fanout?뭦eer 寃쎈줈 ?좎꽕 以??섎굹瑜?**???좉껐**濡?媛吏꾨떎(??self-target probe??relay瑜?寃쎌쑀?섏? ?딆쓬). **?쒖닔 self-push probe濡쒕뒗 異⑹” 遺덇?**(寃利?dependency ?뺤젙).
+- **?쇱씠釉?4?대씪 2:2 E2E** (MP/?쇱씠釉? *partial?뭗one*, effort L): 吏꾩쁺遺꾨━ + ?붾뱶吏꾩엯 + (?쒕쾭沅뚯쐞)?대룞 + ?꾪닾 + ?곸냽??end-to-end濡??꾨뒗 trace.
+- **?뷀떚泥댄궧 ?곸냽 long-run round-trip** (?쒕쾭/MP, effort S): 4?대씪 ?ъ떆????援?퀬/?몄닔/?꾩튂 蹂듦뎄 ?쇱씠釉?E2E.
 
-- **★C002 유저 기원 0x0b01 직접 송신** (라이브/MP, *blocked*, effort XL): **검증 반영 — "함수RE 100% 완결·순수 구현만 잔존"은 과대 표기였다.** 최신 저널(`.debug-journal.md:4540`)의 C002 결론은 **"근본 블로커는 command send 이전·0x0b07 이전 단계이며, 다음 판별자는 selectable player-owned fleet / command-state population 경로"**로 **근본원인이 아직 열려 있다.** 6-레이어 전략-명령 서브시스템(씬-셋업 패널구성 → catGate → 0x0325 officer 데이터 → 함대선택 hit-test → 명령 카탈로그 빌더 → dispatch)에서 입력 5~8종 우회는 read-only로 광범위 배제됐으나, **command-table category record count=0(`FUN_004f5cb0`가 읽는 `record+0x14` 정렬·원샷 promote 타이밍 미충족)이 현 frontier**(loop-state 2026-06-23). = 실클라 마우스로 직접 명령하는 인터랙티브 UX 및 cross-client 유저 이동의 게이트.
-- **전수 deep-RE 8896 전부** (클라RE, effort XL): 사용자 "비트 하나도 빠뜨리지 마" 충족용 장기 캠페인. 데모 MP 게이트 아님.
-- **커버리지 행렬 동기화** (클라RE, effort S): 277→ledger 294(wave3 +17 미반영), `tools.logh7_func_coverage_report` 재실행으로 매트릭스 셀 재산출.
-- **wave3 verifier partial 16건 정정** (클라RE, effort M): 라벨 swap/throw 주소/opcode tier(0x0323 코어는 별도 확정).
-- **천체 astronomy 0/80 · rooms 0 · institutions 0 복구** (콘텐츠, effort M×3): 정보패널/내정 깊이용. 빌더가 []/zero-padded로 안전 degrade. (소속 투영은 검증 반영으로 M2 코어로 이관됨.)
-- **전술맵 풀렌더** (라이브/배틀, effort XL): 완전 전술시드 + 클라 mode-render 게이트 deep-RE.
-- **생성형 리마스터 / 채팅 cp932 code-cave / constmsg mojibake 5종** (리마스터/현지화, effort L): 표시 레이어, MP 직교.
-- **coup/intel/espionage/relations 인바운드 배선** (서버, effort M×4): 클라 명령 opcode 미확정이라 배선 불가(전략 플레이 깊이용).
-
----
-
-## Critical Path (최단 경로)
-
-MP 서버 오픈에 **반드시** 필요한 항목만 의존성 순서로. **"데모/관전 MP"와 "유저 기원 인터랙티브 MP"를 분기 표기**(검증 반영).
-
-1. **strict 인증 운영 고정** (`acceptAnyGin7=false` + `--account-db` + scrypt verify) → 4클라 strict 라이브 검증. *선결: 없음.*
-2. **서버 멀티계정 ops + LAN 바인드** (exact-cred 로그인 검증, localhost→LAN). *선결: 1.*
-3. **0x0b07 클라 적용 라이브 측정** (4점 메모리 probe: 버퍼도착/`+0x2a58f8` 게이트값/0x16 enqueue/유닛셀 A·B, canonical SHA). **— M0의 self-push "입증"은 라이브 미측정이라 이 측정이 실제 선결이다(순환 제거).** *선결: probe 도구.*
-4. **진영 분리 좌표 재교정 + reconcile 라이브 실증 + 소속 투영** (alliance 라디오 좌표 핀 → power3→alliance trace; faction 소비처 RE→맵/패널 투영). *선결: 1, 2.*
-5. **(데모 MP 게이트) 라이브 4클라 2:2 E2E** (진영분리+월드진입+서버권위 이동 적용+전투+영속 round-trip). *선결: 3, 4.*
-6. **(유저 기원 MP 게이트) cross-client 유저-가시 이동** = C002 해결 **또는** per-connection probe→relay→peer 경로 신설. **순수 self-push probe로는 불가.** *선결: 5 + (C002 또는 relay-originate 신설).*
-7. **단일 커맨드 패키징** (player_runtime CLI + 의존성 동봉). *선결: 5(데모 오픈) / 6(유저 기원 오픈).*
-
-> **C002는 데모/관전 MP critical path(1–5,7)에는 포함되지 않으나, 유저 기원 인터랙티브 MP(6)의 critical path에는 포함된다**(아래 판정).
+?좉껐 ?섏〈?? M1(strict ?몄쬆쨌愿???곕え) ??吏꾩쁺醫뚰몴 ?ш탳?빧룹냼???ъ쁺. cross-client ?좎? ?대룞? C002 ?먮뒗 relay-寃쎌쑀 probe ?좎꽕???섏〈.
+**?붿뿬 effort ????M(reconcile)+M(?뚯냽?ъ쁺)+XL(cross-client ?좎??대룞)+L(2:2 E2E)+S(?곸냽) ??理쒕? 洹쒕え.**
 
 ---
 
-## 알려진 블로커 + 정직 고지
+### M-final ??MP ?쒕쾭 ?ㅽ뵂 (諛고룷) ??effort ??L
 
-### C002 critical-path 판정 (명시 요청 사항 — 검증 결론 반영)
+> **寃뚯씠???뺤쭅 ?⑥꽌:** M-final "?ㅽ뵂"??紐⑺몴 ?뺤쓽??"(?좎?媛) ?대룞쨌?꾪닾쨌而ㅻ㎤?쒕? 蹂대궡硫?瑜?異⑹”?섎젮硫?M2??**cross-client ?좎?-媛???대룞(=C002 ?먮뒗 relay-寃쎌쑀 originate)** ???듦낵?댁빞 ?쒕떎. 洹멸쾬 ?놁씠 諛고룷?섎㈃ "?쒕쾭 沅뚯쐞 愿???곕え MP"濡?踰붿쐞媛 ?쒖젙?⑥쓣 諛고룷臾?臾몄꽌??紐낃린?쒕떎.
 
-**판정(이중):**
-- **데모/관전 수준 MP** (서버가 명령을 만들어 push, 타 플레이어 함대를 관전): **C002 불필요** — 서버푸시/relay 코드로 우회 가능(방향 타당, 반증 못 함).
-- **유저 기원 인터랙티브 MP** (유저가 자기 의사로 이동/전투를 보냄 = 목표 정의의 핵심 동사): **C002 필요** — critical path에 포함.
+?ы븿 ?묒뾽:
+- **?⑦궎吏??⑥씪 而ㅻ㎤??* (build-ops, *partial?뭗one*, effort L): `player_runtime.py` CLI/main 遺???댁냼, D3D8.dll+Pretendard TTF+install-pretendard.ps1 ?숇큺 ?⑥씪 諛고룷臾?
+- **git 踰꾩쟾愿由?蹂듦뎄** (build-ops, *blocked?뭗one*, effort S): `git init`(??`.git` 鍮꾩뼱 ?덉뼱 non-git; ?ъ슜??吏????.
+- **(?좏깮) P0-05 ?꾨윭諛뺤뒪 dgVoodoo** (build-ops, effort M): `stretched_4_3` + ??대뱶 ?ㅽ겕由곗꺑 ?쇱씠釉?
 
-근거(코드, 강함):
-- command-engine이 0x0b01 인바운드를 받으면 `parseInboundMoveGrid → ownership → self-ACK + NotifyMovedGrid 0x0b07(all-broadcast)`로 완전 처리(`logh7-command-engine.mjs:397-422`, test:server 1137 pass).
-- world-relay `RELAY_COMMAND_CODES`가 0x0b01 포함(`logh7-world-relay.mjs:21`) — 단 **originating connection이 0x0b01을 보낼 때만** fanout; 클라가 안 보내면 relay 입력이 빔.
-- `FLEET_MOVE_PROBE`(`login-session.mjs:1557-1564`)는 C002 없이 서버가 0x0b07을 push할 수 있음을 보임 — **단 own 연결에 self-push(deferredBattleInners)일 뿐, peer relay가 아님.**
-
-근거(라이브, 검증으로 하향됨):
-- **0x0b07 "클라 소비/적용"은 라이브 미측정.** 프로젝트 자체 maker≠checker 검증자 패스(`loop-state.md` 2026-06-23): (1)와이어 크기 일치 PASS (2)소비 경로 디스패치 PASS는 **정적 RE뿐** (3)**"클라측 소비/적용은 라이브 미측정(trace는 서버 송신만)"**. 즉 입증된 것은 *디스패치 경로 존재 + 무크래시 생존*이며, "C002 없이 이동이 화면에 반영된다"는 **라이브 미증명**이다.
-
-**정직 고지(우회 경로의 한계):**
-- **probe = 데모일 뿐 진짜 유저-기원 MP 이동을 못 만든다.** 현 우회는 own fleet에 server self-push만 한다. "A가 이동→B가 봄"은 A가 0x0b01을 originate해야 하고 그게 C002로 막혀 있다 → **C002는 "인터랙티브 유저 이동"의 critical path가 맞다.**
-- own-fleet 마커의 실제 시각 이동은 미확정(fleet-render case0 1회성 타이밍; own-cell +0x11178은 8함수에서 read-only라 0x0b07로 안 바뀜 — 불변은 정합이나 시각 반영 입증은 아님).
-- **결론:** C002는 "서버권위 관전/데모 MP"의 게이트는 아니나 "유저가 자기 의사로 이동/전투를 보내는 인터랙티브 MP"의 게이트다. **C002 함수RE 100%·순수 구현만이라는 이전 진술은 철회**(저널 최신 결론=근본원인 열림, 다음 판별자=selectable player-owned fleet/command-state population).
-
-### 통합 mpBlockers
-
-- **C002 (XL, blocked):** in-world 전략 명령 emit 봉쇄. 입력 5~8종 우회 read-only 배제(live8 enqueue 프리미티브 FUN_00501e30 0회, live19 직접구동 시 패널 0x67 미생성 access violation). **현 frontier = command-table category record count=0**(`FUN_004f5cb0` `record+0x14` 정렬·원샷 promote 미충족). 근본원인 미종결. → 데모 MP critical path 아님 / 유저 기원 MP critical path 맞음.
-- **0x0b07 클라 적용 라이브 미측정 (M):** 와이어·디스패치·생존만 입증, 실제 상태 적용·시각 반영 미측정. critical path 3번.
-- **진영 분리 라이브 미실증 (M, P3):** 서버 로직 정상(node 재현), 하네스 진영클릭(598,429) 빗나감 → 4클라 전부 제국 → reconcile 정상 no-op → 동맹 2명 라이브 미실증. critical path 4번.
-- **소속(faction) 맵/패널 미표시 (M):** 데이터 80/80 보유하나 맵 byte2=spectral 우선·패널 owner=class_; 소비처 미확정. "진영 나뉘어"의 체감 게이트. critical path 4번(검증 반영 승격).
-- **동일성/인증 운영기본 미고정 (M):** 현 기본 `acceptAnyGin7=true`는 라벨을 비번검증 없이 통과 → 동일성 미보장. strict 표준화 미라이브검증. critical path 1번.
-- **cross-client 유저 이동 부재 (XL):** relay 0x0b01 fanout은 코드/단위테스트(`tests/server/logh7-world-relay.test.mjs` 4 tests, stub sendInner)만. 2클라+ 실클라 동시 in-world relay 라이브 trace 부재. self-push probe로 충족 불가. critical path 6번.
-- **패키징 단일 커맨드 부재 / 서버 localhost-only 바인드 / exact-cred 로그인 미검증 / non-git (build-ops):** M-final/critical path 2·7번.
-- **0x0325 unit record 88B builder vs 756B 네이티브 불일치:** officer 필드(0x24c/0x250) 미기록. **C002 레이어3·직무패널 데이터 소스이면서 동시에 MP 함대 교차가시성(mpVisibility C1)의 와이어이기도 함** — officer 누락이 가시성 레코드 품질에 영향 없는지 미검증(교차가시성 "done+라이브확정"과 0x0325 불완전 사이 검증 공백).
-
-### 라이브 미검증 / 추측 / 미확정 항목 (정직 고지)
-
-(문서 말미 "정직성 고지"에 재집계)
+?좉껐 ?섏〈?? M2(吏꾩쁺遺꾨━ E2E + cross-client 媛?쒗솕 ?먮뒗 踰붿쐞 ?쒖젙 紐낆떆).
+**?붿뿬 effort ????L(?⑦궎吏?+S(git) ??以묎컙 洹쒕え.**
 
 ---
 
-## 즉시 다음 작업
+### "MP ?ㅽ뵂 ??/ 蹂묓뻾" ?몃옓 (Critical Path ?꾨떂)
 
-1. **strict 인증 운영 표준화 + 4클라 라이브 검증** (critical path 1, effort M): `acceptAnyGin7=false` + `--account-db` + scrypt verify를 운영 기본으로 고정하고, exact-credential 폼 로그인을 4클라로 라이브 검증(현재 미검증). 동시에 서버 LAN 바인드(현 localhost only) 확인.
+?대뱾? **?곕え/愿??MP??寃뚯씠?멸? ?꾨땲??** ??C002??"?좎? 湲곗썝 ?명꽣?숉떚釉?MP"??寃뚯씠?몄씠誘濡?蹂묓뻾?대릺 **紐⑺몴 ?뺤쓽???듭떖 ?숈궗瑜??ル뒗 ?몃옓**?쇰줈 蹂꾪몴.
 
-2. **0x0b07 클라 적용 라이브 측정 probe 구축** (critical path 3, effort M): canonical SHA 컨텍스트에서 4점 메모리 probe(버퍼 도착 / `+0x2a58f8` 게이트값 / 0x16 ring enqueue / 유닛테이블 셀 또는 own-cell A·B)로 "0x0b07이 실제 클라 상태에 적용되는지"를 라이브 측정. **이전 self-push '소비 입증'은 라이브 미측정이므로 이 측정이 데모 MP의 실제 선결.** live20/21을 `loop-state.md`에 정식 등록하되 trace.jsonl이 서버 SEND만 기록함을 명기.
-
-3. **진영선택 화면 캡처 → alliance 라디오 좌표 재교정 + 소속 투영 RE** (critical path 4, effort M): 캐릭생성 진영선택 화면을 1920×1080에서 캡처해 동맹 라디오 좌표를 핀하고(현 598,429 빗나감), 재교정 좌표로 4클라 2:2 생성 → `conn powerId 1281` + `world-nation-reconciled` trace 수집(reconcile 로직 자체는 정상, 좌표만 블로커). 병행으로 faction 색 소비처(맵 byte2 / 패널 iVar9+0xa) deep-RE를 진행해 "진영 나뉘어"의 맵 표시를 확정.
-
----
-
-## 정직성 고지
-
-검증이 지적한 과대주장·갭·미확정을 한곳에 재집계한다. **라이브 미검증은 "구현됨(라이브 미검증)", 추측은 추측으로 표기.**
-
-**과대주장 정정(이 문서에서 하향한 항목):**
-- **0x0b07 "클라 소비 입증"** → *와이어 크기 일치 + 디스패치 경로 정적 RE + 무크래시 생존*으로 하향. **클라측 실제 소비/적용·시각 반영은 라이브 미측정**(프로젝트 자체 maker≠checker 검증자가 강등, `loop-state.md` 2026-06-23; trace.jsonl은 서버 SEND만 기록). 따라서 M0 "확정 기반"에서 제외하고 critical path 3번(라이브 측정)으로 이관.
-- **C002 "함수RE 100% 완결·입력 우회 전수 배제·순수 구현만 잔존"** → 철회. 최신 저널(`.debug-journal.md:4540`) 결론은 **근본 블로커가 command send 이전·0x0b07 이전이며 다음 판별자=selectable player-owned fleet/command-state population**으로 **근본원인 열림**. 현 frontier=command-table category record count=0.
-- **canonical SHA c1523a5e 라이브 증거 맥락** → 실행 EXE는 `runClientSha=8a2a2c33`(autologin emp1 부트스트랩 변종); `c1523a5e`는 expectedSha이며 stop 시 복원 검증. 변종은 무클릭 월드진입 vehicle(치명적 아님)이나 "canonical SHA가 실행됐다"로 읽히지 않게 명시.
-- **클라 RE 커버리지** → coverage-report 산출 문서 기준 **277/945/10.6%**(G7MTClient 277/6089=4.5%). ledger 294는 wave3 +17이 coverage 도구로 **미재산출**이라 매트릭스 셀과 불일치(추정/전방투영 수치를 현재값처럼 쓰지 않음).
-
-**라이브 미검증(코드/테스트만 존재):**
-- 0x0b07 클라 적용/시각 반영(4점 메모리 probe 미실행), 0x0b01→0x0b07 4클라 왕복 trace, strict 모드 4클라 E2E, exact-cred 폼 로그인, 진영 분리(동맹 2명 실현), 소속(faction) 맵/패널 표시, cross-client 유저-가시 이동(2클라+ relay 라이브), 더티체킹 long-run 영속 round-trip, NPC 함대전 4클라 재검증, P0-05 필러박스, 서버 LAN 바인드.
-- **probe ≠ 유저 기원 MP:** FLEET_MOVE_PROBE는 own 연결 self-push(`login-session.mjs:1557`)일 뿐 peer relay가 아니다. relay 0x0b01 fanout은 stub sendInner 단위테스트(4 tests)만. "A가 이동→B가 봄"은 라이브로 한 번도 입증된 적 없다.
-
-**추측 / P3(원본 서버데이터 아님 — 과장 금지):**
-- 전투/피해/지상전 공식(SERVER DESIGN; 클라는 current=max-wire 렌더만이라 RE 불가), planet-economy 전체(절차생성), canon-801-07 fleet.commander 대부분 0(캐논 char-id 매핑 부재)·supply=100·troop 수치, plasma storm 셀(의도적 랜덤), command-range 상한/충전속도, 0x0325 슬롯 시맨틱(commander/owner/cell/faction), NotifyMovedGrid header dword0-3(서버 기본 0).
-
-**PROVISIONAL(라이브 핀 권장):**
-- 0x031f base 스칼라 ~25개 NAME↔offset, 0x0321 institution/spot 스칼라명, 분광형 이름별 등급(model_node_order_provisional), 0x0325 officer 필드(0x24c/0x250) 누락의 교차가시성 영향, `+0x2a58f8` grid-active 게이트가 autologin 자연 세션서 set되는 조건.
-
-**미확정(deep-RE 필요):**
-- faction 색 소비처(맵 0x0313 byte2가 spectral·faction 겸용인지 / 패널 owner iVar9+0xa faction-색 해석), C002 command-table `record+0x14` 정렬·원샷 promote 타이밍, fleet-render own-fleet case0 1회성 타이밍, cross-client relay-originate 경로(C002 외 대안 존재 여부).
-
-**문서/리포 상태:**
-- 커버리지 행렬 G7MTClient 277 stale(ledger 294, wave3 +17 미반영) — `tools.logh7_func_coverage_report` 재실행 필요.
-- live20/21은 `loop-state.md` 2026-06-23 사이클에 기록되어 있으나 evidence 앵커로 미정리(trace는 서버 SEND만).
-- **리포가 non-git 상태**(`.git`에 `info/`만, `git rev-parse --git-dir` = fatal). 버전관리 복구는 `git init` 사용자 지시 대기.
+- **?꿂002 ?좎? 湲곗썝 0x0b01 吏곸젒 ?≪떊** (?쇱씠釉?MP, *blocked*, effort XL): **寃利?諛섏쁺 ??"?⑥닔RE 100% ?꾧껐쨌?쒖닔 援ы쁽留??붿〈"? 怨쇰? ?쒓린???** 理쒖떊 ???`.debug-journal.md:4540`)??C002 寃곕줎? **"洹쇰낯 釉붾줈而ㅻ뒗 command send ?댁쟾쨌0x0b07 ?댁쟾 ?④퀎?대ŉ, ?ㅼ쓬 ?먮퀎?먮뒗 selectable player-owned fleet / command-state population 寃쎈줈"**濡?**洹쇰낯?먯씤???꾩쭅 ?대젮 ?덈떎.** 6-?덉씠???꾨왂-紐낅졊 ?쒕툕?쒖뒪?????뗭뾽 ?⑤꼸援ъ꽦 ??catGate ??0x0325 officer ?곗씠?????⑤??좏깮 hit-test ??紐낅졊 移댄깉濡쒓렇 鍮뚮뜑 ??dispatch)?먯꽌 ?낅젰 5~8醫??고쉶??read-only濡?愿묐쾾??諛곗젣?먯쑝?? **command-table category record count=0(`FUN_004f5cb0`媛 ?쎈뒗 `record+0x14` ?뺣젹쨌?먯꺑 promote ??대컢 誘몄땐議?????frontier**(loop-state 2026-06-23). = ?ㅽ겢??留덉슦?ㅻ줈 吏곸젒 紐낅졊?섎뒗 ?명꽣?숉떚釉?UX 諛?cross-client ?좎? ?대룞??寃뚯씠??
+- **?꾩닔 deep-RE 8896 ?꾨?** (?대씪RE, effort XL): ?ъ슜??"鍮꾪듃 ?섎굹??鍮좊쑉由ъ? 留? 異⑹”???κ린 罹좏럹?? ?곕え MP 寃뚯씠???꾨떂.
+- **而ㅻ쾭由ъ? ?됰젹 ?숆린??* (?대씪RE, effort S): 277?뭠edger 294(wave3 +17 誘몃컲??, `tools.logh7_func_coverage_report` ?ъ떎?됱쑝濡?留ㅽ듃由?뒪 ? ?ъ궛異?
+- **wave3 verifier partial 16嫄??뺤젙** (?대씪RE, effort M): ?쇰꺼 swap/throw 二쇱냼/opcode tier(0x0323 肄붿뼱??蹂꾨룄 ?뺤젙).
+- **泥쒖껜 astronomy 0/80 쨌 rooms 0 쨌 institutions 0 蹂듦뎄** (肄섑뀗痢? effort M횞3): ?뺣낫?⑤꼸/?댁젙 源딆씠?? 鍮뚮뜑媛 []/zero-padded濡??덉쟾 degrade. (?뚯냽 ?ъ쁺? 寃利?諛섏쁺?쇰줈 M2 肄붿뼱濡??닿???)
+- **?꾩닠留???뚮뜑** (?쇱씠釉?諛고?, effort XL): ?꾩쟾 ?꾩닠?쒕뱶 + ?대씪 mode-render 寃뚯씠??deep-RE.
+- **?앹꽦??由щ쭏?ㅽ꽣 / 梨꾪똿 cp932 code-cave / constmsg mojibake 5醫?* (由щ쭏?ㅽ꽣/?꾩??? effort L): ?쒖떆 ?덉씠?? MP 吏곴탳.
+- **coup/intel/espionage/relations ?몃컮?대뱶 諛곗꽑** (?쒕쾭, effort M횞4): ?대씪 紐낅졊 opcode 誘명솗?뺤씠??諛곗꽑 遺덇?(?꾨왂 ?뚮젅??源딆씠??.
 
 ---
 
-> 생성: Workflow `logh7-mp-roadmap`(8도메인 병렬조사→합성→적대검증→최종, 11 에이전트). 현황 앵커는 2026-06-23. 검증자 정정 반영(0x0b07 라이브 미측정·C002 근본 미종결·self-push≠peer-relay·coverage stale). 이어가기 시작점=이 문서 + `docs/logh7-loop-state.md` 최신 사이클 + `docs/SESSION-HANDOFF-2026-06-23.md`.
+## Critical Path (理쒕떒 寃쎈줈)
+
+MP ?쒕쾭 ?ㅽ뵂??**諛섎뱶??* ?꾩슂????ぉ留??섏〈???쒖꽌濡? **"?곕え/愿??MP"? "?좎? 湲곗썝 ?명꽣?숉떚釉?MP"瑜?遺꾧린 ?쒓린**(寃利?諛섏쁺).
+
+1. **strict ?몄쬆 ?댁쁺 怨좎젙** (`acceptAnyGin7=false` + `--account-db` + scrypt verify) ??4?대씪 strict ?쇱씠釉?寃利? *?좉껐: ?놁쓬.*
+2. **?쒕쾭 硫?곌퀎??ops + LAN 諛붿씤??* (exact-cred 濡쒓렇??寃利? localhost?묹AN). *?좉껐: 1.*
+3. **0x0b07 ?대씪 ?곸슜 ?쇱씠釉?痢≪젙** (4??硫붾え由?probe: 踰꾪띁?꾩갑/`+0x2a58f8` 寃뚯씠?멸컪/0x16 enqueue/?좊떅? A쨌B, canonical SHA). **??M0??self-push "?낆쬆"? ?쇱씠釉?誘몄륫?뺤씠????痢≪젙???ㅼ젣 ?좉껐?대떎(?쒗솚 ?쒓굅).** *?좉껐: probe ?꾧뎄.*
+4. **吏꾩쁺 遺꾨━ 醫뚰몴 ?ш탳??+ reconcile ?쇱씠釉??ㅼ쬆 + ?뚯냽 ?ъ쁺** (alliance ?쇰뵒??醫뚰몴 ? ??power3?뭓lliance trace; faction ?뚮퉬泥?RE?믩㏊/?⑤꼸 ?ъ쁺). *?좉껐: 1, 2.*
+5. **(?곕え MP 寃뚯씠?? ?쇱씠釉?4?대씪 2:2 E2E** (吏꾩쁺遺꾨━+?붾뱶吏꾩엯+?쒕쾭沅뚯쐞 ?대룞 ?곸슜+?꾪닾+?곸냽 round-trip). *?좉껐: 3, 4.*
+6. **(?좎? 湲곗썝 MP 寃뚯씠?? cross-client ?좎?-媛???대룞** = C002 ?닿껐 **?먮뒗** per-connection probe?뭨elay?뭦eer 寃쎈줈 ?좎꽕. **?쒖닔 self-push probe濡쒕뒗 遺덇?.** *?좉껐: 5 + (C002 ?먮뒗 relay-originate ?좎꽕).*
+7. **?⑥씪 而ㅻ㎤???⑦궎吏?* (player_runtime CLI + ?섏〈???숇큺). *?좉껐: 5(?곕え ?ㅽ뵂) / 6(?좎? 湲곗썝 ?ㅽ뵂).*
+
+> **C002???곕え/愿??MP critical path(1??,7)?먮뒗 ?ы븿?섏? ?딆쑝?? ?좎? 湲곗썝 ?명꽣?숉떚釉?MP(6)??critical path?먮뒗 ?ы븿?쒕떎**(?꾨옒 ?먯젙).
+
+---
+
+## ?뚮젮吏?釉붾줈而?+ ?뺤쭅 怨좎?
+
+### C002 critical-path ?먯젙 (紐낆떆 ?붿껌 ?ы빆 ??寃利?寃곕줎 諛섏쁺)
+
+**?먯젙(?댁쨷):**
+- **?곕え/愿???섏? MP** (?쒕쾭媛 紐낅졊??留뚮뱾??push, ? ?뚮젅?댁뼱 ?⑤?瑜?愿??: **C002 遺덊븘??* ???쒕쾭?몄떆/relay 肄붾뱶濡??고쉶 媛??諛⑺뼢 ??? 諛섏쬆 紐???.
+- **?좎? 湲곗썝 ?명꽣?숉떚釉?MP** (?좎?媛 ?먭린 ?섏궗濡??대룞/?꾪닾瑜?蹂대깂 = 紐⑺몴 ?뺤쓽???듭떖 ?숈궗): **C002 ?꾩슂** ??critical path???ы븿.
+
+洹쇨굅(肄붾뱶, 媛뺥븿):
+- command-engine??0x0b01 ?몃컮?대뱶瑜?諛쏆쑝硫?`parseInboundMoveGrid ??ownership ??self-ACK + NotifyMovedGrid 0x0b07(all-broadcast)`濡??꾩쟾 泥섎━(`logh7-command-engine.mjs:397-422`, test:server 1137 pass).
+- world-relay `RELAY_COMMAND_CODES`媛 0x0b01 ?ы븿(`logh7-world-relay.mjs:21`) ????**originating connection??0x0b01??蹂대궪 ?뚮쭔** fanout; ?대씪媛 ??蹂대궡硫?relay ?낅젰??鍮?
+- `FLEET_MOVE_PROBE`(`login-session.mjs:1557-1564`)??C002 ?놁씠 ?쒕쾭媛 0x0b07??push?????덉쓬??蹂댁엫 ??**??own ?곌껐??self-push(deferredBattleInners)??肉? peer relay媛 ?꾨떂.**
+
+洹쇨굅(?쇱씠釉? 寃利앹쑝濡??섑뼢??:
+- **0x0b07 "?대씪 ?뚮퉬/?곸슜"? ?쇱씠釉?誘몄륫??** ?꾨줈?앺듃 ?먯껜 maker?쟠hecker 寃利앹옄 ?⑥뒪(`loop-state.md` 2026-06-23): (1)??댁뼱 ?ш린 ?쇱튂 PASS (2)?뚮퉬 寃쎈줈 ?붿뒪?⑥튂 PASS??**?뺤쟻 RE肉?* (3)**"?대씪痢??뚮퉬/?곸슜? ?쇱씠釉?誘몄륫??trace???쒕쾭 ?≪떊留?"**. 利??낆쬆??寃껋? *?붿뒪?⑥튂 寃쎈줈 議댁옱 + 臾댄겕?섏떆 ?앹〈*?대ŉ, "C002 ?놁씠 ?대룞???붾㈃??諛섏쁺?쒕떎"??**?쇱씠釉?誘몄쬆紐?*?대떎.
+
+**?뺤쭅 怨좎?(?고쉶 寃쎈줈???쒓퀎):**
+- **probe = ?곕え??肉?吏꾩쭨 ?좎?-湲곗썝 MP ?대룞??紐?留뚮뱺??** ???고쉶??own fleet??server self-push留??쒕떎. "A媛 ?대룞?묪媛 遊?? A媛 0x0b01??originate?댁빞 ?섍퀬 洹멸쾶 C002濡?留됲? ?덈떎 ??**C002??"?명꽣?숉떚釉??좎? ?대룞"??critical path媛 留욌떎.**
+- own-fleet 留덉빱???ㅼ젣 ?쒓컖 ?대룞? 誘명솗??fleet-render case0 1?뚯꽦 ??대컢; own-cell +0x11178? 8?⑥닔?먯꽌 read-only??0x0b07濡???諛붾???遺덈?? ?뺥빀?대굹 ?쒓컖 諛섏쁺 ?낆쬆? ?꾨떂).
+- **寃곕줎:** C002??"?쒕쾭沅뚯쐞 愿???곕え MP"??寃뚯씠?몃뒗 ?꾨땲??"?좎?媛 ?먭린 ?섏궗濡??대룞/?꾪닾瑜?蹂대궡???명꽣?숉떚釉?MP"??寃뚯씠?몃떎. **C002 ?⑥닔RE 100%쨌?쒖닔 援ы쁽留뚯씠?쇰뒗 ?댁쟾 吏꾩닠? 泥좏쉶**(???理쒖떊 寃곕줎=洹쇰낯?먯씤 ?대┝, ?ㅼ쓬 ?먮퀎??selectable player-owned fleet/command-state population).
+
+### ?듯빀 mpBlockers
+
+- **C002 (XL, blocked):** in-world ?꾨왂 紐낅졊 emit 遊됱뇙. ?낅젰 5~8醫??고쉶 read-only 諛곗젣(live8 enqueue ?꾨━誘명떚釉?FUN_00501e30 0?? live19 吏곸젒援щ룞 ???⑤꼸 0x67 誘몄깮??access violation). **??frontier = command-table category record count=0**(`FUN_004f5cb0` `record+0x14` ?뺣젹쨌?먯꺑 promote 誘몄땐議?. 洹쇰낯?먯씤 誘몄쥌寃? ???곕え MP critical path ?꾨떂 / ?좎? 湲곗썝 MP critical path 留욎쓬.
+- **0x0b07 ?대씪 ?곸슜 ?쇱씠釉?誘몄륫??(M):** ??댁뼱쨌?붿뒪?⑥튂쨌?앹〈留??낆쬆, ?ㅼ젣 ?곹깭 ?곸슜쨌?쒓컖 諛섏쁺 誘몄륫?? critical path 3踰?
+- **吏꾩쁺 遺꾨━ ?쇱씠釉?誘몄떎利?(M, P3):** ?쒕쾭 濡쒖쭅 ?뺤긽(node ?ы쁽), ?섎꽕??吏꾩쁺?대┃(598,429) 鍮쀫굹媛???4?대씪 ?꾨? ?쒓뎅 ??reconcile ?뺤긽 no-op ???숇㏏ 2紐??쇱씠釉?誘몄떎利? critical path 4踰?
+- **?뚯냽(faction) 留??⑤꼸 誘명몴??(M):** ?곗씠??80/80 蹂댁쑀?섎굹 留?byte2=spectral ?곗꽑쨌?⑤꼸 owner=class_; ?뚮퉬泥?誘명솗?? "吏꾩쁺 ?섎돇????泥닿컧 寃뚯씠?? critical path 4踰?寃利?諛섏쁺 ?밴꺽).
+- **?숈씪???몄쬆 ?댁쁺湲곕낯 誘멸퀬??(M):** ??湲곕낯 `acceptAnyGin7=true`???쇰꺼??鍮꾨쾲寃利??놁씠 ?듦낵 ???숈씪??誘몃낫?? strict ?쒖???誘몃씪?대툕寃利? critical path 1踰?
+- **cross-client ?좎? ?대룞 遺??(XL):** relay 0x0b01 fanout? 肄붾뱶/?⑥쐞?뚯뒪??`tests/server/logh7-world-relay.test.mjs` 4 tests, stub sendInner)留? 2?대씪+ ?ㅽ겢???숈떆 in-world relay ?쇱씠釉?trace 遺?? self-push probe濡?異⑹” 遺덇?. critical path 6踰?
+- **?⑦궎吏??⑥씪 而ㅻ㎤??遺??/ ?쒕쾭 localhost-only 諛붿씤??/ exact-cred 濡쒓렇??誘멸?利?/ non-git (build-ops):** M-final/critical path 2쨌7踰?
+- **0x0325 unit record 88B builder vs 756B ?ㅼ씠?곕툕 遺덉씪移?** officer ?꾨뱶(0x24c/0x250) 誘멸린濡? **C002 ?덉씠??쨌吏곷Т?⑤꼸 ?곗씠???뚯뒪?대㈃???숈떆??MP ?⑤? 援먯감媛?쒖꽦(mpVisibility C1)????댁뼱?닿린????* ??officer ?꾨씫??媛?쒖꽦 ?덉퐫???덉쭏???곹뼢 ?녿뒗吏 誘멸?利?援먯감媛?쒖꽦 "done+?쇱씠釉뚰솗??怨?0x0325 遺덉셿???ъ씠 寃利?怨듬갚).
+
+### ?쇱씠釉?誘멸?利?/ 異붿륫 / 誘명솗????ぉ (?뺤쭅 怨좎?)
+
+(臾몄꽌 留먮? "?뺤쭅??怨좎?"???ъ쭛怨?
+
+---
+
+## 利됱떆 ?ㅼ쓬 ?묒뾽
+
+1. **strict ?몄쬆 ?댁쁺 ?쒖???+ 4?대씪 ?쇱씠釉?寃利?* (critical path 1, effort M): `acceptAnyGin7=false` + `--account-db` + scrypt verify瑜??댁쁺 湲곕낯?쇰줈 怨좎젙?섍퀬, exact-credential ??濡쒓렇?몄쓣 4?대씪濡??쇱씠釉?寃利??꾩옱 誘멸?利?. ?숈떆???쒕쾭 LAN 諛붿씤????localhost only) ?뺤씤.
+
+2. **0x0b07 ?대씪 ?곸슜 ?쇱씠釉?痢≪젙 probe 援ъ텞** (critical path 3, effort M): canonical SHA 而⑦뀓?ㅽ듃?먯꽌 4??硫붾え由?probe(踰꾪띁 ?꾩갑 / `+0x2a58f8` 寃뚯씠?멸컪 / 0x16 ring enqueue / ?좊떅?뚯씠釉?? ?먮뒗 own-cell A쨌B)濡?"0x0b07???ㅼ젣 ?대씪 ?곹깭???곸슜?섎뒗吏"瑜??쇱씠釉?痢≪젙. **?댁쟾 self-push '?뚮퉬 ?낆쬆'? ?쇱씠釉?誘몄륫?뺤씠誘濡???痢≪젙???곕え MP???ㅼ젣 ?좉껐.** live20/21??`loop-state.md`???뺤떇 ?깅줉?섎릺 trace.jsonl???쒕쾭 SEND留?湲곕줉?⑥쓣 紐낃린.
+
+3. **吏꾩쁺?좏깮 ?붾㈃ 罹≪쿂 ??alliance ?쇰뵒??醫뚰몴 ?ш탳??+ ?뚯냽 ?ъ쁺 RE** (critical path 4, effort M): 罹먮┃?앹꽦 吏꾩쁺?좏깮 ?붾㈃??1920횞1080?먯꽌 罹≪쿂???숇㏏ ?쇰뵒??醫뚰몴瑜???섍퀬(??598,429 鍮쀫굹媛?, ?ш탳??醫뚰몴濡?4?대씪 2:2 ?앹꽦 ??`conn powerId 1281` + `world-nation-reconciled` trace ?섏쭛(reconcile 濡쒖쭅 ?먯껜???뺤긽, 醫뚰몴留?釉붾줈而?. 蹂묓뻾?쇰줈 faction ???뚮퉬泥?留?byte2 / ?⑤꼸 iVar9+0xa) deep-RE瑜?吏꾪뻾??"吏꾩쁺 ?섎돇????留??쒖떆瑜??뺤젙.
+
+---
+
+## ?뺤쭅??怨좎?
+
+寃利앹씠 吏?곹븳 怨쇰?二쇱옣쨌媛?룸??뺤젙???쒓납???ъ쭛怨꾪븳?? **?쇱씠釉?誘멸?利앹? "援ы쁽???쇱씠釉?誘멸?利?", 異붿륫? 異붿륫?쇰줈 ?쒓린.**
+
+**怨쇰?二쇱옣 ?뺤젙(??臾몄꽌?먯꽌 ?섑뼢????ぉ):**
+- **0x0b07 "?대씪 ?뚮퉬 ?낆쬆"** ??*??댁뼱 ?ш린 ?쇱튂 + ?붿뒪?⑥튂 寃쎈줈 ?뺤쟻 RE + 臾댄겕?섏떆 ?앹〈*?쇰줈 ?섑뼢. **?대씪痢??ㅼ젣 ?뚮퉬/?곸슜쨌?쒓컖 諛섏쁺? ?쇱씠釉?誘몄륫??*(?꾨줈?앺듃 ?먯껜 maker?쟠hecker 寃利앹옄媛 媛뺣벑, `loop-state.md` 2026-06-23; trace.jsonl? ?쒕쾭 SEND留?湲곕줉). ?곕씪??M0 "?뺤젙 湲곕컲"?먯꽌 ?쒖쇅?섍퀬 critical path 3踰??쇱씠釉?痢≪젙)?쇰줈 ?닿?.
+- **C002 "?⑥닔RE 100% ?꾧껐쨌?낅젰 ?고쉶 ?꾩닔 諛곗젣쨌?쒖닔 援ы쁽留??붿〈"** ??泥좏쉶. 理쒖떊 ???`.debug-journal.md:4540`) 寃곕줎? **洹쇰낯 釉붾줈而ㅺ? command send ?댁쟾쨌0x0b07 ?댁쟾?대ŉ ?ㅼ쓬 ?먮퀎??selectable player-owned fleet/command-state population**?쇰줈 **洹쇰낯?먯씤 ?대┝**. ??frontier=command-table category record count=0.
+- **canonical SHA c1523a5e ?쇱씠釉?利앷굅 留λ씫** ???ㅽ뻾 EXE??`runClientSha=8a2a2c33`(autologin emp1 遺?몄뒪?몃옪 蹂醫?; `c1523a5e`??expectedSha?대ŉ stop ??蹂듭썝 寃利? 蹂醫낆? 臾댄겢由??붾뱶吏꾩엯 vehicle(移섎챸???꾨떂)?대굹 "canonical SHA媛 ?ㅽ뻾?먮떎"濡??쏀엳吏 ?딄쾶 紐낆떆.
+- **?대씪 RE 而ㅻ쾭由ъ?** ??coverage-report ?곗텧 臾몄꽌 湲곗? **277/945/10.6%**(G7MTClient 277/6089=4.5%). ledger 294??wave3 +17??coverage ?꾧뎄濡?**誘몄옱?곗텧**?대씪 留ㅽ듃由?뒪 ?怨?遺덉씪移?異붿젙/?꾨갑?ъ쁺 ?섏튂瑜??꾩옱媛믪쿂???곗? ?딆쓬).
+
+**?쇱씠釉?誘멸?利?肄붾뱶/?뚯뒪?몃쭔 議댁옱):**
+- 0x0b07 ?대씪 ?곸슜/?쒓컖 諛섏쁺(4??硫붾え由?probe 誘몄떎??, 0x0b01??x0b07 4?대씪 ?뺣났 trace, strict 紐⑤뱶 4?대씪 E2E, exact-cred ??濡쒓렇?? 吏꾩쁺 遺꾨━(?숇㏏ 2紐??ㅽ쁽), ?뚯냽(faction) 留??⑤꼸 ?쒖떆, cross-client ?좎?-媛???대룞(2?대씪+ relay ?쇱씠釉?, ?뷀떚泥댄궧 long-run ?곸냽 round-trip, NPC ?⑤???4?대씪 ?ш?利? P0-05 ?꾨윭諛뺤뒪, ?쒕쾭 LAN 諛붿씤??
+- **probe ???좎? 湲곗썝 MP:** FLEET_MOVE_PROBE??own ?곌껐 self-push(`login-session.mjs:1557`)??肉?peer relay媛 ?꾨땲?? relay 0x0b01 fanout? stub sendInner ?⑥쐞?뚯뒪??4 tests)留? "A媛 ?대룞?묪媛 遊?? ?쇱씠釉뚮줈 ??踰덈룄 ?낆쬆?????녿떎.
+
+**異붿륫 / P3(?먮낯 ?쒕쾭?곗씠???꾨떂 ??怨쇱옣 湲덉?):**
+- ?꾪닾/?쇳빐/吏?곸쟾 怨듭떇(SERVER DESIGN; ?대씪??current=max-wire ?뚮뜑留뚯씠??RE 遺덇?), planet-economy ?꾩껜(?덉감?앹꽦), canon-801-07 fleet.commander ?遺遺?0(罹먮끉 char-id 留ㅽ븨 遺??쨌supply=100쨌troop ?섏튂, plasma storm ?(?섎룄???쒕뜡), command-range ?곹븳/異⑹쟾?띾룄, 0x0325 ?щ’ ?쒕㎤??commander/owner/cell/faction), NotifyMovedGrid header dword0-3(?쒕쾭 湲곕낯 0).
+
+**PROVISIONAL(?쇱씠釉?? 沅뚯옣):**
+- 0x031f base ?ㅼ뭡??~25媛?NAME?봮ffset, 0x0321 institution/spot ?ㅼ뭡?쇰챸, 遺꾧킅???대쫫蹂??깃툒(model_node_order_provisional), 0x0325 officer ?꾨뱶(0x24c/0x250) ?꾨씫??援먯감媛?쒖꽦 ?곹뼢, `+0x2a58f8` grid-active 寃뚯씠?멸? autologin ?먯뿰 ?몄뀡??set?섎뒗 議곌굔.
+
+**誘명솗??deep-RE ?꾩슂):**
+- faction ???뚮퉬泥?留?0x0313 byte2媛 spectral쨌faction 寃몄슜?몄? / ?⑤꼸 owner iVar9+0xa faction-???댁꽍), C002 command-table `record+0x14` ?뺣젹쨌?먯꺑 promote ??대컢, fleet-render own-fleet case0 1?뚯꽦 ??대컢, cross-client relay-originate 寃쎈줈(C002 ?????議댁옱 ?щ?).
+
+**臾몄꽌/由ы룷 ?곹깭:**
+- 而ㅻ쾭由ъ? ?됰젹 G7MTClient 277 stale(ledger 294, wave3 +17 誘몃컲?? ??`tools.logh7_func_coverage_report` ?ъ떎???꾩슂.
+- live20/21? `loop-state.md` 2026-06-23 ?ъ씠?댁뿉 湲곕줉?섏뼱 ?덉쑝??evidence ?듭빱濡?誘몄젙由?trace???쒕쾭 SEND留?.
+- **由ы룷媛 non-git ?곹깭**(`.git`??`info/`留? `git rev-parse --git-dir` = fatal). 踰꾩쟾愿由?蹂듦뎄??`git init` ?ъ슜??吏???湲?
+
+---
+
+> ?앹꽦: Workflow `logh7-mp-roadmap`(8?꾨찓??蹂묐젹議곗궗?믫빀?기넂?곷?寃利앪넂理쒖쥌, 11 ?먯씠?꾪듃). ?꾪솴 ?듭빱??2026-06-23. 寃利앹옄 ?뺤젙 諛섏쁺(0x0b07 ?쇱씠釉?誘몄륫?빧텰002 洹쇰낯 誘몄쥌寃걔톝elf-push?쟰eer-relay쨌coverage stale). ?댁뼱媛湲??쒖옉????臾몄꽌 + `docs/logh7-loop-state.md` 理쒖떊 ?ъ씠??+ `docs/SESSION-HANDOFF-2026-06-23.md`.
+## Current Authority Note (2026-06-29)
+
+This roadmap predates the latest canonical playable run. Use these updates when choosing the next MP task:
+
+- Canonical playable SHA is `bc5e932212e790981c648c7b60acfbba06c0fdd5b8d7f583ef123fac71b098ad`.
+- Split MP into two tracks:
+  - **observer/server-push MP**: server-authoritative movement/broadcast can be tested without a natural user-originated `0x0b01`.
+  - **interactive user-originated MP**: still depends on C002, because a real client must send `0x0b01`.
+- Current C002 facts: `0x0356`, slot `0x67`, and `PLAYER_INFO+0x270` are proven; the live wall is selection/command UI admission (`FUN_005015f0` false for selection rows, command root `+4` closed).
+- The next useful MP smoke is a canonical two-client or four-client run with strict auth/LAN settings plus explicit evidence that peer clients consume/apply/render `0x0b07`, not just that the server can build bytes.
+

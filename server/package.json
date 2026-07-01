@@ -4,8 +4,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "start": "node src/server/logh7-server.mjs serve-auth --account-db state/accounts.sqlite",
-    "serve:auth": "node src/server/logh7-server.mjs serve-auth --account-db state/accounts.sqlite",
+    "start": "node src/server/logh7-server.mjs serve-auth",
+    "serve:auth": "node src/server/logh7-server.mjs serve-auth",
     "serve:update": "node src/server/logh7-server.mjs serve",
     "serve:gameplay": "node src/server/logh7-server.mjs serve-gameplay",
     "health": "node src/server/logh7-server.mjs health",

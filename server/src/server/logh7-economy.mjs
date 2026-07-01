@@ -213,6 +213,23 @@ export function seedEconomyFromSystems(economyState, systems = [], taxBaseOf = d
   return count;
 }
 
+export function ensureEconomyPlanetsFromSystems(economyState, systems = [], taxBaseOf = defaultTaxBaseOf) {
+  let total = 0;
+  let added = 0;
+  for (const system of systems) {
+    const faction = String(system.faction ?? system.owner ?? 'neutral');
+    const systemName = system.name ?? null;
+    for (const planet of Array.isArray(system.planets) ? system.planets : []) {
+      const id = planet.id ?? planet.name ?? `${faction}:${total}`;
+      total += 1;
+      if (economyState.getPlanet(id)) continue;
+      economyState.registerPlanet(id, { faction, taxBase: taxBaseOf(planet), system: systemName });
+      added += 1;
+    }
+  }
+  return { total, added };
+}
+
 // P3 세원 산출: 인구(백만) + 산업*4. 캐논 공식 없음(매뉴얼 정성서술만) → 튜닝 가능.
 function defaultTaxBaseOf(planet) {
   const pop = Number(planet.population_M ?? planet.population ?? planet.pop ?? 0) || 0;

@@ -32,6 +32,16 @@ class Logh7InboundResponseDispatchTests(unittest.TestCase):
         self.assertEqual(by_internal["0x0f01"]["stateWrites"], ["client+0x35f356"])
         self.assertEqual(by_internal["0x0f03"]["handlerVirtualAddressHex"], "0x004bd121")
         self.assertEqual(by_internal["0x0f03"]["stateWrites"], ["client+0x35f357"])
+        self.assertEqual(index["stateBlockRange"]["startVa"], "0x009d2a30")
+        state_block_writers = index["stateBlockWriterCandidates"]
+        self.assertTrue(
+            any(
+                row["functionName"] == "FUN_005751b0"
+                and row["address"] == "0x00575248"
+                and row["targetVa"] == "0x009d2a7c"
+                for row in state_block_writers
+            )
+        )
         self.assertEqual(
             index["nextTracePoint"],
             "hook decoded-response dispatch entry 0x004ba316 or its caller with accepted internal code and body pointer",

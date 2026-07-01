@@ -20,16 +20,24 @@ DEFAULT_OUT: Final = ROOT / ".omo/ulw-loop/evidence/g006-c002-hud-hit-test-gate-
 DESCRIPTION: Final = "Attach a read-only LOGH VII HUD hit-test gate watcher."
 
 
-def build_js(*, poll_ms: int = 250) -> str:
+def build_js(*, poll_ms: int = 250, max_events: int = 30000, lifecycle_only: bool = False) -> str:
     return (
         r"""
 const IMAGE_BASE = ptr('0x400000');
 const moduleBase = Process.getModuleByName('G7MTClient.exe').base;
 const POLL_MS = __POLL_MS__;
-const MAX_EVENTS = 30000;
+const MAX_EVENTS = __MAX_EVENTS__;
+const INCLUDE_HIT_TESTS = __INCLUDE_HIT_TESTS__;
+const INCLUDE_LATCH = __INCLUDE_LATCH__;
 let seq = 0;
 let hitSeq = 0;
 let gateWriteSamples = 0;
+let activeWriteSamples = 0;
+let targetGateWriteSamples = 0;
+let latchLoopSamples = 0;
+let layoutUpdateSamples = 0;
+let eventQueueEnqueueSamples = 0;
+let lastHudFrameConsumerKey = null;
 let lastPollKey = null;
 const hitStack = [];
 const knownControllers = {};
@@ -41,6 +49,13 @@ function gh(value) { return safe(() => '0x' + ptr(value).sub(moduleBase).add(IMA
 function readPtr(address) { return safe(() => ptr(address).readPointer(), ptr('0x0')); }
 function readU8(address) { return safe(() => ptr(address).readU8(), null); }
 function readS32(address) { return safe(() => ptr(address).readS32(), null); }
+function readBytesHex(address, length) {
+  return safe(() => {
+    const bytes = ptr(address).readByteArray(length);
+    if (bytes === null) return null;
+    return Array.from(new Uint8Array(bytes)).map((b) => b.toString(16).padStart(2, '0')).join('');
+  }, null);
+}
 function stackU32(context, index) { return safe(() => context.esp.add(index * 4).readU32(), null); }
 function stackPtr(context, index) { return safe(() => context.esp.add(index * 4).readPointer(), ptr('0x0')); }
 function retvalLow8(retval) { return safe(() => retval.toInt32() & 0xff, null); }
@@ -49,8 +64,19 @@ function emit(tag, payload) {
   seq += 1;
   send({ tag, seq, t: Date.now(), moduleBase: hex(moduleBase), ...(payload || {}) });
 }
+function eventQueueKeys(row) {
+  const count = readS32(row.add(0x3f4));
+  const keys = [];
+  if (typeof count === 'number' && count > 0) {
+    const n = Math.min(count, 0x1c);
+    for (let i = 0; i < n; i += 1) keys.push(readS32(row.add(0x470 + i * 4)));
+  }
+  return keys;
+}
 
 const hud = abs('0x00c9e638');
+const selectionList = abs('0x00c9eac4');
+const commandMenu = abs('0x00c9e768');
 const DAT = {
   DAT_022142b0: abs('0x022142b0'), DAT_022142b4: abs('0x022142b4'),
   DAT_022142c0: abs('0x022142c0'), DAT_022142c4: abs('0x022142c4'),
@@ -81,11 +107,28 @@ function point(value) {
 }
 function uiObjectState(value) {
   const row = ptr(value || 0);
+  const eventKeys = eventQueueKeys(row);
   return {
     ptr: hex(row), gate04: readU8(row.add(4)), gate05: readU8(row.add(5)),
     valid08: readU8(row.add(8)), flag15: readU8(row.add(0x15)),
     visible18: readU8(row.add(0x18)), enabled1b: readU8(row.add(0x1b)),
     gateB00: readU8(row.add(0xb00)), gateB01: readU8(row.add(0xb01)), gateB02: readU8(row.add(0xb02)),
+    eventQueueCount3f4: readS32(row.add(0x3f4)), eventKeys470: eventKeys,
+    hasEvent2: eventKeys.indexOf(2) !== -1, hasEvent9: eventKeys.indexOf(9) !== -1,
+    hasEvent0b: eventKeys.indexOf(0x0b) !== -1,
+    rectX20: readS32(row.add(0x20)), rectY24: readS32(row.add(0x24)),
+    rectW2c: readS32(row.add(0x2c)), rectH30: readS32(row.add(0x30)),
+  };
+}
+function playerInfoState(value) {
+  const payload = ptr(value || 0);
+  return {
+    ptr: hex(payload),
+    count270S32: readS32(payload.add(0x270)),
+    count270U8: readU8(payload.add(0x270)),
+    seatKind254U8: readU8(payload.add(0x254)),
+    seatChar254S32: readS32(payload.add(0x254)),
+    seatRole258S32: readS32(payload.add(0x258)),
   };
 }
 function controllerState(value) {
@@ -108,10 +151,64 @@ function modeTargets() {
 }
 function targetRoles(target) {
   const roles = [];
+  const selectionRoot = readPtr(selectionList);
+  if (!selectionRoot.isNull() && samePtr(target, selectionRoot)) roles.push('selection-root');
   for (const candidate of modeTargets()) {
     if (!candidate.ptr.isNull() && samePtr(target, candidate.ptr)) roles.push(candidate.role);
   }
+  const selectionCount = Math.max(0, Math.min(readS32(selectionList.add(0x188 * 4)) || 0, 8));
+  for (let i = 0; i < selectionCount; i += 1) {
+    const primary = readPtr(selectionList.add((0x22 + i) * 4));
+    const secondary = readPtr(selectionList.add((0x32 + i) * 4));
+    if (!primary.isNull() && samePtr(target, primary)) roles.push('selection-primary-' + i);
+    if (!secondary.isNull() && samePtr(target, secondary)) roles.push('selection-secondary-' + i);
+  }
+  const activeCommandRoot = readPtr(commandMenu);
+  if (!activeCommandRoot.isNull() && samePtr(target, activeCommandRoot)) roles.push('command-root');
+  const commandCount = Math.max(0, Math.min(readS32(commandMenu.add(0xd4 * 4)) || 0, 24));
+  for (let i = 0; i < commandCount; i += 1) {
+    const row = readPtr(commandMenu.add((0x0c + i) * 4));
+    if (!row.isNull() && samePtr(target, row)) roles.push('command-row-' + i);
+  }
   return roles;
+}
+function isWatchedTarget(target) {
+  return targetRoles(target).length > 0;
+}
+function isInterestingEnqueue(eventCode, target) {
+  const roles = targetRoles(target);
+  return roles.length > 0 || [2, 9, 0x0b, 0x16, 0x17, 0x18, 0x22].indexOf(eventCode) !== -1;
+}
+function modeTargetSummary() {
+  return {
+    hudModeF4: readS32(hud.add(0xf4)),
+    modeTargets: modeTargets().map((candidate) => ({
+      role: candidate.role,
+      state: uiObjectState(candidate.ptr),
+    })),
+  };
+}
+function selectionSummary() {
+  const root = readPtr(selectionList);
+  return {
+    root: hex(root),
+    rootState: uiObjectState(root),
+    currentTab187: readS32(selectionList.add(0x187 * 4)),
+    listCount188: readS32(selectionList.add(0x188 * 4)),
+    listSelected189: readS32(selectionList.add(0x189 * 4)),
+    payload: hex(readPtr(selectionList.add(0x18a * 4))),
+  };
+}
+function commandSummary() {
+  const root = readPtr(commandMenu);
+  return {
+    activePtr: hex(root), activeGate04: readU8(root.add(4)),
+    activeGate05: readU8(root.add(5)),
+    currentTabD3: readS32(commandMenu.add(0xd3 * 4)),
+    rowCountD4: readS32(commandMenu.add(0xd4 * 4)),
+    selectedD5: readS32(commandMenu.add(0xd5 * 4)),
+    categoryD6: readS32(commandMenu.add(0xd6 * 4)),
+  };
 }
 function currentHit() { return hitStack.length === 0 ? null : hitStack[hitStack.length - 1]; }
 function install(vaText, name, callbacks) {
@@ -119,6 +216,43 @@ function install(vaText, name, callbacks) {
   catch (error) { emit('hook-failed', { name, va: vaText, error: String(error) }); }
 }
 
+install('0x00501e30', 'eventQueueEnqueue', {
+  onEnter() {
+    const target = stackPtr(this.context, 2);
+    const eventCode = stackU32(this.context, 1);
+    const payload = stackPtr(this.context, 3);
+    const roles = targetRoles(target);
+    this.target = target;
+    this.interesting = isInterestingEnqueue(eventCode, target) || eventQueueEnqueueSamples < 64;
+    if (!this.interesting) return;
+    eventQueueEnqueueSamples += 1;
+    this.info = {
+      returnVa: gh(stackPtr(this.context, 0)),
+      eventCode,
+      target: hex(target),
+      targetRoles: roles,
+      payload: hex(payload),
+      payloadBytes34: readBytesHex(payload, 0x34),
+      beforeState: uiObjectState(target),
+      modeBefore: modeTargetSummary(),
+      selectionBefore: selectionSummary(),
+      commandBefore: commandSummary(),
+      eventQueueEnqueueSamples,
+    };
+    emit('eventQueueEnqueue-enter-00501e30', this.info);
+  },
+  onLeave() {
+    if (!this.info) return;
+    emit('eventQueueEnqueue-leave-00501e30', {
+      ...this.info,
+      afterState: uiObjectState(this.target),
+      modeAfter: modeTargetSummary(),
+      selectionAfter: selectionSummary(),
+      commandAfter: commandSummary(),
+    });
+  },
+});
+if (INCLUDE_HIT_TESTS) {
 install('0x005015f0', 'inputHitTest', {
   onEnter() {
     const target = stackPtr(this.context, 2);
@@ -132,14 +266,48 @@ install('0x005015f0', 'inputHitTest', {
       hitId: hitSeq, returnVa: gh(stackPtr(this.context, 0)), eventKind: stackU32(this.context, 1),
       target: hex(target), targetRoles: roles, param5: stackU32(this.context, 4),
       controller: hex(controller), controllerBefore: controllerState(controller),
-      targetBefore: uiObjectState(target), globalsBefore: inputGlobals(),
+      targetBefore: uiObjectState(target), selectionBefore: selectionSummary(),
+      commandBefore: commandSummary(), globalsBefore: inputGlobals(),
     };
     hitStack.push(this.hit);
   },
   onLeave(retval) {
     if (!this.active) return;
     const top = hitStack.pop();
-    emit('inputHitTest-gate-005015f0', { ...this.hit, stackMatched: top && top.hitId === this.hit.hitId, retvalLow8: retvalLow8(retval), controllerAfter: controllerState(this.context.ecx), globalsAfter: inputGlobals() });
+    emit('inputHitTest-gate-005015f0', { ...this.hit, stackMatched: top && top.hitId === this.hit.hitId, retvalLow8: retvalLow8(retval), controllerAfter: controllerState(this.context.ecx), selectionAfter: selectionSummary(), commandAfter: commandSummary(), globalsAfter: inputGlobals() });
+  },
+});
+install('0x00501ed0', 'eventQueueDequeue', {
+  onEnter() {
+    const target = stackPtr(this.context, 1);
+    const roles = targetRoles(target);
+    this.target = target;
+    this.interesting = roles.length > 0;
+    if (!this.interesting) return;
+    this.info = {
+      returnVa: gh(stackPtr(this.context, 0)),
+      eventCode: stackU32(this.context, 2),
+      target: hex(target),
+      targetRoles: roles,
+      outInfo: hex(stackPtr(this.context, 3)),
+      consumeFlag: stackU32(this.context, 4),
+      beforeState: uiObjectState(target),
+      modeBefore: modeTargetSummary(),
+      selectionBefore: selectionSummary(),
+      commandBefore: commandSummary(),
+    };
+    emit('eventQueueDequeue-enter-00501ed0', this.info);
+  },
+  onLeave(retval) {
+    if (!this.info) return;
+    emit('eventQueueDequeue-leave-00501ed0', {
+      ...this.info,
+      retvalLow8: retvalLow8(retval),
+      afterState: uiObjectState(this.target),
+      modeAfter: modeTargetSummary(),
+      selectionAfter: selectionSummary(),
+      commandAfter: commandSummary(),
+    });
   },
 });
 install('0x005025f0', 'pointRectHit', {
@@ -184,6 +352,7 @@ install('0x00501d60', 'occlusionPeer', {
     emit('occlusionPeer-gate-00501d60', { ...this.info, retvalLow8: retvalLow8(retval) });
   },
 });
+}
 install('0x005024b0', 'controllerGateWrite', {
   onEnter() {
     const target = this.context.ecx;
@@ -195,8 +364,201 @@ install('0x005024b0', 'controllerGateWrite', {
     emit('controllerGateWrite-005024b0', { returnVa: gh(stackPtr(this.context, 0)), target: targetHex, targetRoles: roles, value: stackU32(this.context, 1), beforeState: controllerState(target), gateWriteSamples });
   },
 });
+install('0x004fc4a0', 'hudInformationRefresh', {
+  onEnter() {
+    this.info = {
+      returnVa: gh(stackPtr(this.context, 0)), thisEcx: hex(this.context.ecx),
+      beforeSelection: selectionSummary(), beforeCommand: commandSummary(),
+    };
+    emit('hudInformationRefresh-enter-004fc4a0', this.info);
+  },
+  onLeave(retval) {
+    emit('hudInformationRefresh-leave-004fc4a0', { ...this.info, retvalLow8: retvalLow8(retval), afterSelection: selectionSummary(), afterCommand: commandSummary() });
+  },
+});
+install('0x004f68f0', 'selectionImportApply', {
+  onEnter() {
+    this.selection = this.context.ecx;
+    const payload = stackPtr(this.context, 1);
+    this.info = {
+      returnVa: gh(stackPtr(this.context, 0)), thisEcx: hex(this.selection),
+      payloadArg: hex(payload), payloadArgState: playerInfoState(payload),
+      oldTab187: readS32(this.selection.add(0x187 * 4)),
+      oldListCount188: readS32(this.selection.add(0x188 * 4)),
+      beforeSelection: selectionSummary(), beforeCommand: commandSummary(),
+    };
+    emit('selectionImportApply-enter-004f68f0', this.info);
+  },
+  onLeave(retval) {
+    emit('selectionImportApply-leave-004f68f0', { ...this.info, retvalLow8: retvalLow8(retval), afterSelection: selectionSummary(), afterCommand: commandSummary() });
+  },
+});
+install('0x004f6680', 'selectionTabApply', {
+  onEnter() {
+    this.selection = this.context.ecx;
+    this.info = {
+      returnVa: gh(stackPtr(this.context, 0)), thisEcx: hex(this.selection),
+      requestedTab: stackU32(this.context, 1),
+      beforeSelection: selectionSummary(), beforeCommand: commandSummary(),
+    };
+    emit('selectionTabApply-enter-004f6680', this.info);
+  },
+  onLeave(retval) {
+    emit('selectionTabApply-leave-004f6680', { ...this.info, retvalLow8: retvalLow8(retval), afterSelection: selectionSummary(), afterCommand: commandSummary() });
+  },
+});
+install('0x004f59e0', 'commandTabApply', {
+  onEnter() {
+    this.command = this.context.ecx;
+    this.info = {
+      returnVa: gh(stackPtr(this.context, 0)), thisEcx: hex(this.command),
+      requestedTab: stackU32(this.context, 1),
+      beforeSelection: selectionSummary(), beforeCommand: commandSummary(),
+    };
+    emit('commandTabApply-enter-004f59e0', this.info);
+  },
+  onLeave(retval) {
+    emit('commandTabApply-leave-004f59e0', { ...this.info, retvalLow8: retvalLow8(retval), afterSelection: selectionSummary(), afterCommand: commandSummary() });
+  },
+});
+install('0x004fd7a0', 'hudModeSet', {
+  onEnter() {
+    this.info = {
+      returnVa: gh(stackPtr(this.context, 0)), thisEcx: hex(this.context.ecx),
+      requestedMode: stackU32(this.context, 1), pushHistory: stackU32(this.context, 2),
+      beforeSelection: selectionSummary(), beforeCommand: commandSummary(),
+    };
+    emit('hudModeSet-enter-004fd7a0', this.info);
+  },
+  onLeave(retval) {
+    emit('hudModeSet-leave-004fd7a0', { ...this.info, retvalLow8: retvalLow8(retval), afterSelection: selectionSummary(), afterCommand: commandSummary() });
+  },
+});
+install('0x004fd100', 'hudFrameConsumer', {
+  onEnter() {
+    this.info = {
+      returnVa: gh(stackPtr(this.context, 0)), thisEcx: hex(this.context.ecx),
+      beforeSelection: selectionSummary(), beforeCommand: commandSummary(),
+    };
+  },
+  onLeave(retval) {
+    const afterSelection = selectionSummary();
+    const afterCommand = commandSummary();
+    const state = {
+      selectionTab: afterSelection.currentTab187,
+      selectionCount: afterSelection.listCount188,
+      selectionSelected: afterSelection.listSelected189,
+      selectionGate04: afterSelection.rootState && afterSelection.rootState.gate04,
+      selectionGate05: afterSelection.rootState && afterSelection.rootState.gate05,
+      commandGate04: afterCommand.activeGate04,
+      commandGate05: afterCommand.activeGate05,
+      commandCount: afterCommand.rowCountD4,
+      commandSelected: afterCommand.selectedD5,
+      commandCategory: afterCommand.categoryD6,
+    };
+    const key = JSON.stringify(state);
+    if (key === lastHudFrameConsumerKey) return;
+    lastHudFrameConsumerKey = key;
+    emit('hudFrameConsumer-change-004fd100', { ...this.info, retvalLow8: retvalLow8(retval), afterSelection, afterCommand, state });
+  },
+});
+install('0x00502ea0', 'activeGateWrite', {
+  onEnter() {
+    const target = this.context.ecx;
+    const roles = targetRoles(target);
+    const interesting = roles.length > 0 || activeWriteSamples < 96;
+    if (!interesting) return;
+    activeWriteSamples += 1;
+    this.target = target;
+    this.info = {
+      returnVa: gh(stackPtr(this.context, 0)), target: hex(target), targetRoles: roles,
+      value: stackU32(this.context, 1), beforeState: uiObjectState(target),
+      selectionBefore: selectionSummary(), commandBefore: commandSummary(),
+      activeWriteSamples,
+    };
+    emit('activeGateWrite-enter-00502ea0', this.info);
+  },
+  onLeave() {
+    if (!this.info) return;
+    emit('activeGateWrite-leave-00502ea0', { ...this.info, afterState: uiObjectState(this.target), selectionAfter: selectionSummary(), commandAfter: commandSummary() });
+  },
+});
+install('0x005024e0', 'targetGate15Write', {
+  onEnter() {
+    const target = stackPtr(this.context, 1);
+    const roles = targetRoles(target);
+    const interesting = isWatchedTarget(target) || targetGateWriteSamples < 96;
+    if (!interesting) return;
+    targetGateWriteSamples += 1;
+    this.target = target;
+    this.info = {
+      returnVa: gh(stackPtr(this.context, 0)), target: hex(target), targetRoles: roles,
+      value: stackU32(this.context, 2), beforeState: uiObjectState(target),
+      selectionBefore: selectionSummary(), commandBefore: commandSummary(),
+      targetGateWriteSamples,
+    };
+    emit('targetGate15Write-enter-005024e0', this.info);
+  },
+  onLeave() {
+    if (!this.info) return;
+    emit('targetGate15Write-leave-005024e0', { ...this.info, afterState: uiObjectState(this.target), selectionAfter: selectionSummary(), commandAfter: commandSummary() });
+  },
+});
+install('0x00506280', 'layoutOpenUpdate', {
+  onEnter() {
+    const target = this.context.ecx;
+    const roles = targetRoles(target);
+    const interesting = roles.length > 0 || layoutUpdateSamples < 128;
+    if (!interesting) return;
+    layoutUpdateSamples += 1;
+    this.target = target;
+    this.info = {
+      returnVa: gh(stackPtr(this.context, 0)), thisEcx: hex(target),
+      targetRoles: roles, beforeState: uiObjectState(target),
+      selectionBefore: selectionSummary(), commandBefore: commandSummary(),
+      layoutUpdateSamples,
+    };
+    emit('layoutOpenUpdate-enter-00506280', this.info);
+  },
+  onLeave(retval) {
+    if (!this.info) return;
+    emit('layoutOpenUpdate-leave-00506280', { ...this.info, retvalLow8: retvalLow8(retval), afterState: uiObjectState(this.target), selectionAfter: selectionSummary(), commandAfter: commandSummary() });
+  },
+});
+if (INCLUDE_LATCH) {
+install('0x00507f20', 'interactionLatchLoop', {
+  onEnter() {
+    const target = stackPtr(this.context, 1);
+    const roles = targetRoles(target);
+    const interesting = roles.length > 0 || latchLoopSamples < 256;
+    if (!interesting) return;
+    latchLoopSamples += 1;
+    this.target = target;
+    this.info = {
+      returnVa: gh(stackPtr(this.context, 0)), thisEcx: hex(this.context.ecx),
+      controllerBefore: controllerState(this.context.ecx),
+      target: hex(target), targetRoles: roles, targetBefore: uiObjectState(target),
+      selectionBefore: selectionSummary(), commandBefore: commandSummary(),
+      globalsBefore: inputGlobals(), latchLoopSamples,
+    };
+    emit('interactionLatchLoop-enter-00507f20', this.info);
+  },
+  onLeave() {
+    if (!this.info) return;
+    emit('interactionLatchLoop-leave-00507f20', { ...this.info, controllerAfter: controllerState(this.context.ecx), targetAfter: uiObjectState(this.target), selectionAfter: selectionSummary(), commandAfter: commandSummary(), globalsAfter: inputGlobals() });
+  },
+});
+}
 
-emit('watch-ready', { pollMs: POLL_MS, globals: inputGlobals(), modeTargets: modeTargets().map((candidate) => ({ role: candidate.role, state: uiObjectState(candidate.ptr) })) });
+const readyMode = modeTargetSummary();
+emit('watch-ready', {
+  pollMs: POLL_MS,
+  globals: inputGlobals(),
+  mode: readyMode,
+  modeTargets: readyMode.modeTargets,
+  selection: selectionSummary(),
+  command: commandSummary(),
+});
 setInterval(function pollKnownControllers() {
   const controllers = Object.keys(knownControllers).map((key) => controllerState(ptr(key)));
   const state = { globals: inputGlobals(), controllers };
@@ -208,6 +570,9 @@ setInterval(function pollKnownControllers() {
 }, POLL_MS);
 """
         .replace("__POLL_MS__", str(max(1, int(poll_ms))))
+        .replace("__MAX_EVENTS__", str(max(1, int(max_events))))
+        .replace("__INCLUDE_HIT_TESTS__", "false" if lifecycle_only else "true")
+        .replace("__INCLUDE_LATCH__", "false" if lifecycle_only else "true")
     )
 
 
@@ -232,7 +597,9 @@ def run(args: argparse.Namespace) -> int:
 
         try:
             session = frida.attach(pid)
-            script = session.create_script(build_js(poll_ms=args.poll_ms))
+            script = session.create_script(
+                build_js(poll_ms=args.poll_ms, max_events=args.max_events, lifecycle_only=args.lifecycle_only)
+            )
             script.on("message", on_message)
             script.load()
             time.sleep(args.seconds)
@@ -249,6 +616,12 @@ def main() -> int:
     parser.add_argument("--out", type=Path, default=DEFAULT_OUT)
     parser.add_argument("--seconds", type=float, default=30.0)
     parser.add_argument("--poll-ms", type=int, default=250)
+    parser.add_argument("--max-events", type=int, default=30000)
+    parser.add_argument(
+        "--lifecycle-only",
+        action="store_true",
+        help="skip noisy hit-test/latch hooks; keep import/tab/root writer hooks for long early attaches",
+    )
     return run(parser.parse_args())
 
 

@@ -147,6 +147,7 @@ function selectionState() {
     listSelected189: readS32(selectionList.add(0x189 * 4)),
     payload: hex(payload),
     payloadCount270: readS32(payload.add(0x270)),
+    payloadCount270U8: readU8(payload.add(0x270)),
     payloadWord26c: readU16(payload.add(0x26c)),
     payloadWord274: readU16(payload.add(0x274)),
     payloadBytes260: bytesHex(payload.add(0x260), 64),
@@ -188,7 +189,7 @@ function pollKey() {
   const state = admissionState();
   return JSON.stringify([
     state.hud.hudModeF4, state.hud.hudAb0, state.selection.listCount188,
-    state.selection.listSelected189, state.selection.payloadCount270,
+    state.selection.listSelected189, state.selection.payloadCount270, state.selection.payloadCount270U8,
     state.command.rowCountD4, state.command.selectedD5, state.command.categoryD6,
   ]);
 }

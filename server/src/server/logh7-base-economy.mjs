@@ -2,7 +2,7 @@
  * PLANET / BASE ECONOMY builder — `NotifyBaseParameter` (惑星/基地 経済パラメータ).
  *
  * This is the in-world base-detail economy panel (人口/食料/生活/治安/思想/宗教/支持率) that currently
- * shows NO DATA because the server never emits the record. content/planet-economy.json carries 281
+ * shows NO DATA because the server never emits the record. content/planet-economy.json carries 300
  * procedural planets (population_M / food / industry / habitable) that are orphaned today — this module
  * turns one planet into the on-wire `NotifyBaseParameter` record so the panel populates.
  *
@@ -58,12 +58,15 @@ const CONTENT_DIR = join(HERE, '..', '..', 'content');
 // CODE confidence: MEDIUM. docs/logh7-info-records-wire.md §3 (lines 236-241) states NotifyBaseParameter
 // is NOT routed by the client dispatcher FUN_004ba2b0 (no `NotifyBaseParameter OK` case) and has no
 // client-side authoritative store — the serializers are server/debug-side. The record therefore has no
-// dispatcher-pinned opcode in the export. We place it at 0x0337 — the next free even Notify slot in the
+// dispatcher-pinned opcode in the export. Earlier work placed it at 0x0337 as a candidate Notify slot in the
 // 0x03xx info-records family between ResponseOutfitInformationUnit (0x0331) and ResponseCardCharacter
 // (0x034f) — and gate emission on a live A/B check before claiming it wired (see integration note).
 // The OFFSETS below are HIGH-confidence (triple-validated); only the opcode is provisional.
+// RE correction 2026-06-28: 0x0337 is not free in the live dispatcher. FUN_004b8b00 sizes it as
+// 0x964, FUN_004ba2b0 logs ResponseTacticsCharacter_OK and copies 0x259 dwords to client+0x431ab4,
+// and FUN_00421740 parses Input_ResponseTacticsCharacter. Do not emit this record by default.
 // ===================================================================================================
-export const NOTIFY_BASE_PARAMETER_CODE = 0x0337; // provisional (no dispatcher case in client export)
+export const NOTIFY_BASE_PARAMETER_CODE = 0x0337; // provisional diagnostic only; live dispatcher collision
 export const NOTIFY_BASE_PARAMETER_BYTES = 0x4a; // 74 = fixed record with full budget[6] (wire doc §3)
 
 // ===================================================================================================

@@ -155,13 +155,13 @@ test('planetToBaseParameter: maps population_M (millions)→people, food direct,
   assert.equal(body.readUInt32LE(NBP_OFF_BUDGET), 308, 'industry at budget[0] 0x10 via planet map');
 });
 
-test('loadPlanetEconomy: builds systemName→planets map from content (281 planets / 80 systems)', () => {
+test('loadPlanetEconomy: builds systemName→planets map from content (300 planets / 85 systems)', () => {
   const map = loadPlanetEconomy();
   assert.ok(map instanceof Map, 'returns a Map');
-  assert.equal(map.size, 80, '80 systems loaded');
+  assert.equal(map.size, 85, '85 systems loaded');
   let planetCount = 0;
   for (const planets of map.values()) planetCount += planets.length;
-  assert.equal(planetCount, 281, '281 planets total');
+  assert.equal(planetCount, 300, '300 planets total');
 
   const lunbini = map.get('ルンビーニ');
   assert.ok(Array.isArray(lunbini), 'ルンビーニ system present');

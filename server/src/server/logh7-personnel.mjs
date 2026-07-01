@@ -266,6 +266,44 @@ export function createPersonnelState() {
       return base;
     },
 
+    toSnapshot() {
+      return {
+        characters: [...characters.values()].map((ch) => ({
+          ...ch,
+          fiefs: Array.isArray(ch.fiefs) ? [...ch.fiefs] : [],
+        })),
+        outfits: [...outfits.values()].map((outfit) => ({
+          ...outfit,
+          seats: Array.isArray(outfit.seats) ? outfit.seats.map((seat) => ({ ...seat })) : [],
+        })),
+        bases: [...bases.values()].map((base) => ({ ...base })),
+      };
+    },
+
+    restore(snapshot = {}) {
+      characters.clear();
+      outfits.clear();
+      bases.clear();
+      for (const ch of snapshot.characters ?? []) {
+        characters.set(Number(ch.id) >>> 0, {
+          ...ch,
+          id: Number(ch.id) >>> 0,
+          fiefs: Array.isArray(ch.fiefs) ? [...ch.fiefs] : [],
+        });
+      }
+      for (const outfit of snapshot.outfits ?? []) {
+        outfits.set(Number(outfit.id) >>> 0, {
+          ...outfit,
+          id: Number(outfit.id) >>> 0,
+          seats: Array.isArray(outfit.seats) ? outfit.seats.map((seat) => ({ ...seat })) : [],
+        });
+      }
+      for (const base of snapshot.bases ?? []) {
+        bases.set(Number(base.id) >>> 0, { ...base, id: Number(base.id) >>> 0 });
+      }
+      return this;
+    },
+
     /** Move a character to a spot. Returns the char or null. */
     moveSpot(characterId, spot) {
       const ch = characters.get(characterId >>> 0);

@@ -68,7 +68,7 @@ const impl = await agent(
 
 // ---------- 검증 ----------
 phase('검증')
-const test = await agent(COMMON + '\n\n너는 tester다. `npm run test:server` 실행, 결과 보고(passed/total/failed + 실패요약).',
+const test = await agent(COMMON + '\n\n너는 tester다. `cd server && node --test tests/server/*.test.mjs` 실행, 결과 보고(passed/total/failed + 실패요약).',
   { label: '테스트', phase: '검증', schema: { type:'object', additionalProperties:false, properties:{ passed:{type:'boolean'}, total:{type:'number'}, failed:{type:'number'}, output:{type:'string'} }, required:['passed'] } })
 const verdict = await agent(
   COMMON + '\n\n너는 verifier다. 캐논 위치 복구+투영보정을 적대검증:\n구현:' + JSON.stringify(impl) + '\n테스트:' + JSON.stringify(test)

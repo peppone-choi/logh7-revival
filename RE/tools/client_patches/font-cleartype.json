@@ -1,6 +1,6 @@
 {
   "name": "font-cleartype",
-  "desc": "Upgrade the two LOGH VII CreateFontA call sites from ANTIALIASED_QUALITY (4) to CLEARTYPE_QUALITY (5). This keeps the existing global face patch ('Pretendard' at VA 0x0077402c) but makes the rendered GDI glyphs noticeably less like the old system fallback at small UI sizes. RE: FUN_004aec70 and FUN_004b0960 both pass quality via `push 4`; GDI probe on 2026-06-20 confirmed CreateFontA(face='Pretendard', charset=0x81) resolves to Pretendard, while Pretendard JP falls back to Gulim under HANGEUL_CHARSET.",
+  "desc": "Upgrade the two LOGH VII CreateFontA call sites from ANTIALIASED_QUALITY (4) to CLEARTYPE_QUALITY (5). This pairs with font-face.json for the primary UI cache and font-atlas-face.json for the D3D texture-glyph atlas, so both CreateFontA paths use Pretendard before quality is raised. RE: FUN_004aec70 and FUN_004b0960 both pass quality via `push 4`; GDI probes confirmed HANGEUL_CHARSET face resolution is runtime-dependent and must be verified live.",
   "verified": "ENCODED (two 2-byte same-length immediate patches). originalHex byte-verified against the current canonical playable/client EXE before writing. Needs live visual confirmation in the real client after rebuilding/deploying.",
   "patches": [
     {

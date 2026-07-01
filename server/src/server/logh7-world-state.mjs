@@ -21,6 +21,12 @@ import { applyAgeDrift } from './logh7-age-drift.mjs';
 import { autoPromoteLadders } from './logh7-rank-ladder.mjs';
 import { createIntelState } from './logh7-intel.mjs';
 import { createCoupState } from './logh7-coup.mjs';
+import { createStrategyState } from './logh7-strategy.mjs';
+import { createLogisticsState } from './logh7-logistics.mjs';
+import { createPersonnelState } from './logh7-personnel.mjs';
+import { createSocialState } from './logh7-social.mjs';
+import { createAccountState } from './logh7-account.mjs';
+import { createEspionageState } from './logh7-espionage.mjs';
 
 /** @typedef {{ connectionId: number, charId: number, powerId: number, mode: number }} Player */
 /**
@@ -64,10 +70,13 @@ export function createWorldState({ clockStartMs = 0, seed = null } = {}) {
   const ships = new Map();
   /** @type {Map<number, object>} troopId -> ground unit (地上戦 sortied troops) */
   const troops = new Map();
-  /** @type {{ connectionId: number, charId: number, text: string, channel: number, time: number }[]} */
-  const chatLog = [];
-  /** @type {Map<string, object>} systemName -> strategic system state (owner/planets) */
-  const systems = new Map();
+/** @type {{ connectionId: number, charId: number, text: string, channel: number, time: number }[]} */
+const chatLog = [];
+/** @type {Array<{seq:number, connectionId:number, innerCode:number, accept:boolean, reject:string|null, units:number[], effect:string|null, debug?:object|null}>} */
+const commandLog = [];
+let commandSeq = 0;
+/** @type {Map<string, object>} systemName -> strategic system state (owner/planets) */
+const systems = new Map();
   /** @type {Map<number, Fleet>} fleetId -> strategic fleet entity (feeds 0x0325 unit table, A1/A2) */
   const fleets = new Map();
   /**
@@ -735,12 +744,38 @@ export function createWorldState({ clockStartMs = 0, seed = null } = {}) {
     chatCount() {
       return chatLog.length;
     },
-    listChat() {
-      return [...chatLog];
-    },
+listChat() {
+return [...chatLog];
+},
+recordCommand(entry = {}) {
+commandSeq += 1;
+const record = {
+seq: commandSeq,
+connectionId: Number(entry.connectionId) || 0,
+innerCode: Number(entry.innerCode) >>> 0,
+accept: Boolean(entry.accept),
+reject: entry.reject == null ? null : String(entry.reject),
+units: Array.isArray(entry.units) ? entry.units.map((id) => Number(id) >>> 0) : [],
+effect: entry.effect == null ? null : String(entry.effect),
+...(entry.debug !== undefined ? { debug: entry.debug } : {}),
+};
+commandLog.push(record);
+if (commandLog.length > 512) commandLog.splice(0, commandLog.length - 512);
+return record;
+},
+commandLogCount() {
+return commandLog.length;
+},
+listCommandLog() {
+return commandLog.map((entry) => ({
+...entry,
+units: [...entry.units],
+...(entry.debug && typeof entry.debug === 'object' ? { debug: { ...entry.debug } } : {}),
+}));
+},
 
-    // --- 게임 클록 (24× 공용 인프라) ---
-    gameClock() {
+// --- 게임 클록 (24× 공용 인프라) ---
+gameClock() {
       return clock;
     },
     gameDayOf(nowMs) {
@@ -770,8 +805,22 @@ export function createWorldState({ clockStartMs = 0, seed = null } = {}) {
           planets: (state.planets ?? []).map((p) => ({ ...p })),
           fortresses: [...(state.fortresses ?? [])],
         })),
-        chatLog: [...chatLog],
+chatLog: [...chatLog],
+        commandLog: commandLog.map((entry) => ({
+          ...entry,
+          units: [...entry.units],
+          ...(entry.debug && typeof entry.debug === 'object' ? { debug: { ...entry.debug } } : {}),
+        })),
+        commandSeq,
         battle: { active: battle.active, mode: battle.mode, participants: [...battle.participants], log: [...battle.log] },
+        personnel: typeof api._personnel?.toSnapshot === 'function' ? api._personnel.toSnapshot() : null,
+        social: typeof api._social?.toSnapshot === 'function' ? api._social.toSnapshot() : null,
+        account: typeof api._account?.toSnapshot === 'function' ? api._account.toSnapshot() : null,
+        espionage: typeof api._espionage?.toSnapshot === 'function' ? api._espionage.toSnapshot() : null,
+        intel: typeof intelState.toSnapshot === 'function' ? intelState.toSnapshot() : null,
+        coup: typeof coupState.toSnapshot === 'function' ? coupState.toSnapshot() : null,
+        strategy: typeof api._strategy?.toSnapshot === 'function' ? api._strategy.toSnapshot() : null,
+        logistics: typeof api._logistics?.toSnapshot === 'function' ? api._logistics.toSnapshot() : null,
         scenario: { ...scenario, powers: scenario.powers.map((p) => ({ ...p })) }, // A7 세션/턴 메타
       };
     },
@@ -779,8 +828,9 @@ export function createWorldState({ clockStartMs = 0, seed = null } = {}) {
     restore(snapshot = {}) {
       if (snapshot.clockStartMs != null) clock = createGameClock({ startMs: snapshot.clockStartMs });
       if (snapshot.rngState != null) rngState = snapshot.rngState >>> 0; // 결정론 난수열 연속성 복원
-      players.clear(); ships.clear(); troops.clear(); fleets.clear(); systems.clear(); characters.clear();
-      chatLog.length = 0;
+players.clear(); ships.clear(); troops.clear(); fleets.clear(); systems.clear(); characters.clear();
+chatLog.length = 0;
+commandLog.length = 0;
       // 스냅샷 객체를 복제해 저장 — 복원된 월드의 in-place 변이가 원본 스냅샷/다른 월드를 오염시키지 않게 한다.
       for (const p of snapshot.players ?? []) players.set(p.connectionId, { ...p });
       for (const s of snapshot.ships ?? []) ships.set(s.id, { ...s });
@@ -791,12 +841,58 @@ export function createWorldState({ clockStartMs = 0, seed = null } = {}) {
         const { name, ...state } = sys;
         systems.set(name, { ...state, planets: (state.planets ?? []).map((p) => ({ ...p })), fortresses: [...(state.fortresses ?? [])] });
       }
-      for (const c of snapshot.chatLog ?? []) chatLog.push(c);
-      const b = snapshot.battle ?? {};
+for (const c of snapshot.chatLog ?? []) chatLog.push(c);
+for (const c of snapshot.commandLog ?? []) {
+commandLog.push({
+...c,
+units: Array.isArray(c.units) ? [...c.units] : [],
+...(c.debug && typeof c.debug === 'object' ? { debug: { ...c.debug } } : {}),
+});
+}
+commandSeq = Number(snapshot.commandSeq) || commandLog.reduce((max, entry) => Math.max(max, Number(entry.seq) || 0), 0);
+const b = snapshot.battle ?? {};
       battle.active = Boolean(b.active);
       battle.mode = b.mode ?? 0;
       battle.participants = new Set(b.participants ?? []);
       battle.log = [...(b.log ?? [])];
+      if (snapshot.personnel) {
+        api._personnel = createPersonnelState();
+        api._personnel.restore?.(snapshot.personnel);
+      } else {
+        delete api._personnel;
+      }
+      if (snapshot.social) {
+        api._social = createSocialState();
+        api._social.restore?.(snapshot.social);
+      } else {
+        delete api._social;
+      }
+      if (snapshot.account) {
+        api._account = createAccountState();
+        api._account.restore?.(snapshot.account);
+      } else {
+        delete api._account;
+      }
+      if (snapshot.espionage) {
+        api._espionage = createEspionageState();
+        api._espionage.restore?.(snapshot.espionage);
+      } else {
+        delete api._espionage;
+      }
+      intelState.restore?.(snapshot.intel ?? {});
+      coupState.restore?.(snapshot.coup ?? {});
+      if (snapshot.strategy) {
+        api._strategy = createStrategyState({ targetPool: api._commandTargets ?? null });
+        api._strategy.restore?.(snapshot.strategy);
+      } else {
+        delete api._strategy;
+      }
+      if (snapshot.logistics) {
+        api._logistics = createLogisticsState();
+        api._logistics.restore?.(snapshot.logistics);
+      } else {
+        delete api._logistics;
+      }
       const sc = snapshot.scenario ?? {};
       scenario = {
         sessionName: sc.sessionName ?? '',
@@ -825,7 +921,7 @@ export function createWorldState({ clockStartMs = 0, seed = null } = {}) {
     'getIntelState', 'getCoupState',
     'isBattleActive', 'battleLog',
     'getScenarioInfo',
-    'chatCount', 'listChat',
+    'chatCount', 'listChat', 'commandLogCount', 'listCommandLog',
     'gameClock', 'gameDayOf', 'gameMonthOf',
     'toSnapshot',
   ]);

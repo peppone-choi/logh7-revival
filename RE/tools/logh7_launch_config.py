@@ -1,14 +1,19 @@
-"""LOGH VII 라이브 접속 단일 표준(SINGLE SOURCE OF TRUTH).
+﻿"""LOGH VII live harness launch defaults.
 
-테스트 하네스(ui_explorer / logh7_live_env.sh)와 사용자 런처(play-logh7.bat /
-play_logh7.py)가 **모두** 이 한 파일에서 포트·서버 ENV·canonical playable EXE 경로를
-읽는다. 이로써 "테스트 접속 루트"와 "유저가 실제로 켜서 노는 루트"가 완전히 동일해진다.
+The test harness (`ui_explorer` / `logh7_live_env.sh`) reads the port, standard
+server environment, and canonical playable EXE from this module. The C# player
+launcher keeps a mirrored core config and adds player-runtime-only settings
+such as the SQLite account DB, admin API, and client path. Keep the core flags
+aligned, and document intentional launcher-only deltas.
 
-표준 근거: docs/logh7-live-test-standard.md
-- PORT=47900 은 클라 리다이렉트 패치(login-commandline-bootstrap)에 하드코딩됨.
-  다른 포트면 클라가 빈 47900을 보고 "NO DATA"/미접속.
-- canonical playable EXE = SHA 992dc7e2 (설치/빌드된 playable). autologin 변종 아님.
-- 표준 ENV 는 테스트와 플레이가 동일하게 쓰는 게임플레이 활성 플래그.
+Current authority is recorded in docs/logh7-live-test-standard.md:
+- PORT=47900 is fixed by the client bootstrap route. Other ports make the
+  client look at an empty 47900 and show NO DATA.
+- Canonical playable EXE SHA is
+  e0b3fcf29adf799005ce28ede165a9344807e042a3197618852dbc733770c54c.
+- Standard ENV contains proven gameplay-enable flags only. Diagnostic-only
+  flags such as LOGH_PRESEED_PLAYER_CHAR
+  must be passed explicitly per run.
 """
 from __future__ import annotations
 
@@ -23,36 +28,88 @@ from tools.logh7_client_exe import (
     canonical_playable_sha256,
 )
 
-# ── 고정 표준(절대 불변; 바꾸면 일원화가 깨진다) ──
+# Fixed live standard. Changing this breaks client/server parity.
 PORT: Final[int] = 47900
 
-# 표준 서버 ENV(게임플레이 활성화). 테스트와 플레이가 동일. 순서 보존을 위해 OrderedDict.
-# accept-any 라서 사람이 직접 ID/PW 아무거나로 로그인 가능.
+# Standard server ENV. Keep this aligned with the playable path while leaving
+# intrusive C002 diagnostic flags opt-in.
 STANDARD_SERVER_ENV: Final["OrderedDict[str, str]"] = OrderedDict(
     (
         ("LOGH_ACCEPT_ANY_GIN7", "1"),
         ("LOGH_LOBBY_OK_FORMAT", "message32"),
         ("LOGH_LOBBY_EARLY_OK", "1"),
-        ("LOGH_SS_FORMAT", "message32"),
-        ("LOGH_STRAT_GALAXY", "1"),
-        ("LOGH_STRAT_GRID_EARLY", "1"),
-        ("LOGH_STRAT_TERRAIN", "1"),
-        ("LOGH_WORLD_PLAYER", "1"),
-        ("LOGH_POSTLOAD_PLAYER_RECORD", "1"),
-        ("LOGH_FULL_UNIT_LOCATION", "1"),
-        ("LOGH_GRID_ENTER", "1"),
-        ("LOGH_SEED_CANON_NPCS", "1"),  # 캐논 NPC 위계(자동황제 픽스)
-    )
+    ("LOGH_SS_FORMAT", "message32"),
+    ("LOGH_STRAT_GALAXY", "1"),
+    ("LOGH_STRAT_GRID", "1"),
+    ("LOGH_STRAT_GRID_EARLY", "1"),
+    ("LOGH_STRAT_TERRAIN", "1"),
+    ("LOGH_STRAT_FLEET", "1"),
+    ("LOGH_WORLD_PLAYER", "1"),
+    ("LOGH_POSTLOAD_PLAYER_RECORD", "1"),
+    ("LOGH_POSTLOAD_RICH_CHARACTER", "1"),
+    ("LOGH_POSTLOAD_ACTION_LIST_SEATS", "1"),
+("LOGH_ACTION_LIST_CATEGORY", "0"),
+# 2026-06-29 live: generic 0x0305 card preload stalls NOW LOADING and leaves the
+# native command table empty. Keep the dev-card path explicit/diagnostic-only.
+("LOGH_COMMAND_TABLE_PRELOAD_PROBE", "0"),
+("LOGH_DEV_COMMAND_GRANT_ALL", "0"),
+("LOGH_FULL_UNIT_LOCATION", "1"),
+    ("LOGH_GRID_ENTER", "1"),
+    ("LOGH_PLANET_BASE_RECORDS", "1"),
+    # 2026-06-29 live: ship master passes world entry. Keep troop/P3 seed
+    # tables off; ship+troop and seed+ships exit before 0x0f02.
+("LOGH_STATIC_SHIPS", "1"),
+("LOGH_STATIC_SHIPS_LIMIT", "1"),
+("LOGH_STATIC_TROOPS", "0"),
+    ("LOGH_STATIC_FIGHTERS", "0"),
+    ("LOGH_STATIC_ARMS", "0"),
+    ("LOGH_STATIC_POWER_DISTRIBUTION", "0"),
+    ("LOGH_STATIC_MASTER_PLAYABLE_SEED", "0"),
+    ("LOGH_SEED_CANON_NPCS", "1"),
+)
+)
+
+HARNESS_ONLY_SERVER_ENV_KEYS: Final[tuple[str, ...]] = (
+    # The harness uses this to bypass account setup during RE/live diagnostics.
+    # The player launcher provisions and uses its SQLite account DB instead.
+    "LOGH_ACCEPT_ANY_GIN7",
+)
+
+LAUNCHER_ONLY_SERVER_ENV_KEYS: Final[tuple[str, ...]] = (
+    "NODE_NO_WARNINGS",
+    "LOGH_ACCOUNT_DB",
+    "LOGH_SESSION_DB",
+    "LOGH_LOBBY_RICH_CHARACTERS",
+    "LOGH_WORLD_IMPORT_BASES",
+    "LOGH_STRAT_GRID",
+    "LOGH_STRAT_FLEET",
+    "LOGH_TACTICS_UNIT",
+    "LOGH_POSTLOAD_UNIT_STREAM_WIRE",
+    "LOGH_PLAYER_FOCUS_CELL",
+    "LOGH_BASE_ECONOMY",
+    "LOGH_STATIC_SHIPS",
+    "LOGH_CONTENT_DB",
+    "LOGH_KO_NAMES",
+    "LOGH_SCENARIO",
+    "LOGH_REPOSITORY_BACKEND",
+    "LOGH_SQLITE_PATH",
+    "LOGH_ADMIN_HOST",
+    "LOGH_ADMIN_PORT",
+    "LOGH_ADMIN_TOKEN",
+)
+
+SHARED_LAUNCHER_ENV_KEYS: Final[tuple[str, ...]] = tuple(
+    key for key in STANDARD_SERVER_ENV if key not in HARNESS_ONLY_SERVER_ENV_KEYS
 )
 
 
 def standard_server_env() -> "OrderedDict[str, str]":
-    """표준 ENV의 복사본(호출자가 변형해도 원본 불변)."""
+    """Return a mutable copy of the standard ENV."""
     return OrderedDict(STANDARD_SERVER_ENV)
 
 
 def standard_env_cli_args() -> list[str]:
-    """`--env KEY=VAL` 형태의 ui_explorer CLI 인자 리스트(테스트 sh/bat 공용)."""
+    """Return ui_explorer `--env KEY=VAL` arguments."""
     args: list[str] = []
     for key, value in STANDARD_SERVER_ENV.items():
         args.extend(("--env", f"{key}={value}"))
@@ -60,11 +117,7 @@ def standard_env_cli_args() -> list[str]:
 
 
 def resolve_playable_client_exe() -> Path:
-    """접속에 쓸 canonical playable EXE(설치된 playable). autologin 변종 아님.
-
-    빌드 산출물(.omo/.../G7MTClient.playable.exe)이 있으면 그것을, 없으면 설치본을 반환.
-    ui_explorer 와 동일한 선택 로직(choose_ui_explorer_launch 의 CANONICAL_PLAYABLE 경로).
-    """
+    """Return the canonical playable EXE used for live sessions."""
     if CANONICAL_PLAYABLE_EXE.exists():
         return CANONICAL_PLAYABLE_EXE
     return INSTALLED_CLIENT_EXE
@@ -78,6 +131,9 @@ __all__ = [
     "PORT",
     "REPO_ROOT",
     "STANDARD_SERVER_ENV",
+    "HARNESS_ONLY_SERVER_ENV_KEYS",
+    "LAUNCHER_ONLY_SERVER_ENV_KEYS",
+    "SHARED_LAUNCHER_ENV_KEYS",
     "standard_server_env",
     "standard_env_cli_args",
     "resolve_playable_client_exe",

@@ -38,9 +38,11 @@ def login(win32api: Any, win32con: Any, win32gui: Any, hwnd: int) -> None:
     time.sleep(0.3)
     # 좌표 정정(2026-06-25): 창모드 client 영역 644x484 기준 로그인 폼 위치.
     # 이전 (325,333)/(325,360)/(323,389)는 어긋나 ID칸을 빗나갔다(라이브 격자 측정).
-    # ID 필드 (374,290) / 비밀번호 (376,318) / 로그인 버튼 (352,347).
+    # The playable client can open with a "NO DATA" confirm panel above the login fields.
+    # Close it first, then type the legacy default account without the old first-key duplicate.
+    _click(win32api, win32con, win32gui, hwnd, 452, 293)
     _click(win32api, win32con, win32gui, hwnd, 374, 290)
-    _type_text(win32con, win32gui, hwnd, "ginei00", win32api, compensate_first=True)
+    _type_text(win32con, win32gui, hwnd, "ginei00", win32api, compensate_first=False)
     _click(win32api, win32con, win32gui, hwnd, 376, 318)
     _type_text(win32con, win32gui, hwnd, "dummy", win32api)
     _click(win32api, win32con, win32gui, hwnd, 352, 347)

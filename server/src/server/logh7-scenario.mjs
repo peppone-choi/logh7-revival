@@ -1,4 +1,21 @@
 import { existsSync, readFileSync } from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const SERVER_ROOT = fileURLToPath(new URL('../..', import.meta.url));
+
+function resolveScenarioPath(inputPath) {
+  if (!inputPath) return null;
+  const raw = String(inputPath);
+  const candidates = path.isAbsolute(raw)
+    ? [raw]
+    : [
+      raw,
+      path.resolve(process.cwd(), raw),
+      path.resolve(SERVER_ROOT, raw),
+    ];
+  return candidates.find((candidate) => existsSync(candidate)) ?? null;
+}
 
 // 시나리오 정의/로더 — Phase C(커스텀 시스템 확장성).
 // 캐논 801-07 시작이든 커스텀 시작이든, "월드 시작 상태"(게임클록 기준점 + 성계/함선/함대/지상부대 배치 +
@@ -127,12 +144,13 @@ export function loadScenarioInto(world, scenario = {}) {
  * @param {string} path 시나리오 JSON 경로
  */
 export function loadScenarioFile(path) {
-  if (!path || !existsSync(path)) {
+  const resolvedPath = resolveScenarioPath(path);
+  if (!resolvedPath) {
     return { scenario: null, errors: ['file-not-found'] };
   }
   let parsed;
   try {
-    parsed = JSON.parse(readFileSync(path, 'utf8'));
+    parsed = JSON.parse(readFileSync(resolvedPath, 'utf8'));
   } catch {
     return { scenario: null, errors: ['parse-error'] };
   }

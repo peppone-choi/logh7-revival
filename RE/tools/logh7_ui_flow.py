@@ -76,6 +76,16 @@ class FlowRun:
         return payload
 
 
+CREATE_MENU_NEW_CHARACTER_POINT = (574, 407)
+CREATE_STEP_NEXT_POINT = (1184, 731)
+CREATE_NAME_LASTNAME_POINT = (1080, 462)
+CREATE_NAME_FIRSTNAME_POINT = (1080, 543)
+CREATE_PORTRAIT_FIRST_SLOT_POINT = (444, 344)
+CREATE_FLAGSHIP_NAME_POINT = (781, 506)
+CREATE_REGISTER_POINT = (1184, 731)
+CREATE_REGISTER_CONFIRM_POINT = (1015, 596)
+
+
 def parse_trace_code(value: str) -> int:
     try:
         code = int(value, 0)
@@ -109,11 +119,12 @@ def matching_trace_events(events: Iterable[Mapping[str, JsonValue]], code: int) 
 
 def run_login_flow(driver: UiFlowDriver, spec: LoginSpec, *, settle: float) -> FlowRun:
     reports = (
-        driver.click(325, 333, label="login-account-field", settle=0.2),
+        driver.click(452, 293, label="login-close-no-data", settle=0.2),
+        driver.click(374, 290, label="login-account-field", settle=0.2),
         driver.text(spec.account, label="login-account-text", settle=0.2),
-        driver.click(325, 360, label="login-password-field", settle=0.2),
+        driver.click(376, 318, label="login-password-field", settle=0.2),
         driver.text(spec.password, label="login-password-text", settle=0.2),
-        driver.click(323, 389, label="login-submit", settle=settle),
+        driver.click(352, 347, label="login-submit", settle=settle),
     )
     return FlowRun(name="login", account=spec.account, reports=reports)
 
@@ -123,13 +134,13 @@ def run_create_character_flow(driver: UiFlowDriver, spec: CharacterFlowSpec, *, 
     #   기존 좌표는 ~1024×768 기준이라 1920 창에서 전부 빗나갔다. 핵심 두 군데:
     #   ① 첫 클릭은 "새 캐릭터 작성"(155,305)이다 — 이전 (128,258)은 "게임 시작" 버튼이라
     #      디폴트 캐릭터(char1)로 월드 직행해 0x1008 이 안 떴다(=4클라 "같은 캐릭터" 근본원인).
-    #   ② 등록 확인 다이얼로그의 "결정" 버튼=(1015,591). 이전 (571,438)은 버튼 밖이라
+    #   ② 등록 확인 다이얼로그의 "결정" 버튼=(1015,596). 이전 (571,438)은 버튼 밖이라
     #      8단계 폼 완주가 영영 막혔다(메모리 "예/아니오 다이얼로그 버그"의 실체=좌표 오차).
     #   화면 순서: 세션선택 → 진영 → 성별(기본 남) → 출신(기본) → 이름 → 나이/생일(기본)
     #            → 얼굴(좌상단) → 능력치(기본) → 기함 → 확인 → "결정" 다이얼로그.
     row_x, row_y = _session_row_point(spec.session_row)
     reports: list[JsonObject] = [
-        driver.click(155, 305, label="create-menu-new-character", settle=settle),
+        driver.click(*CREATE_MENU_NEW_CHARACTER_POINT, label="create-menu-new-character", settle=settle),
         driver.click(row_x, row_y, label=f"session-row-{spec.session_row}-first-click", settle=0.4),
         driver.click(row_x, row_y, label=f"session-row-{spec.session_row}-second-click", settle=max(settle, 2.0)),
     ]
@@ -137,23 +148,23 @@ def run_create_character_flow(driver: UiFlowDriver, spec: CharacterFlowSpec, *, 
     reports.extend(
         [
             driver.click(faction_x, faction_y, label=f"faction-{spec.faction.value}", settle=settle),
-            driver.click(766, 581, label="faction-next", settle=settle),
-            driver.click(766, 581, label="gender-next", settle=settle),
-            driver.click(766, 581, label="origin-next", settle=settle),
-            driver.click(640, 313, label="lastname-click", settle=0.3),
+            driver.click(*CREATE_STEP_NEXT_POINT, label="faction-next", settle=settle),
+            driver.click(*CREATE_STEP_NEXT_POINT, label="gender-next", settle=settle),
+            driver.click(*CREATE_STEP_NEXT_POINT, label="origin-next", settle=settle),
+            driver.click(*CREATE_NAME_LASTNAME_POINT, label="lastname-click", settle=0.3),
             driver.text(spec.lastname, label="lastname-text", settle=settle),
-            driver.click(640, 393, label="firstname-click", settle=0.3),
+            driver.click(*CREATE_NAME_FIRSTNAME_POINT, label="firstname-click", settle=0.3),
             driver.text(spec.firstname, label="firstname-text", settle=settle),
-            driver.click(766, 581, label="name-next", settle=settle),
-            driver.click(766, 581, label="birth-next", settle=settle),
-            driver.click(431, 297, label="portrait-pick", settle=0.3),
-            driver.click(766, 581, label="portrait-next", settle=settle),
-            driver.click(766, 581, label="abilities-next", settle=settle),
-            driver.click(665, 468, label="flagship-click", settle=0.3),
+            driver.click(*CREATE_STEP_NEXT_POINT, label="name-next", settle=settle),
+            driver.click(*CREATE_STEP_NEXT_POINT, label="birth-next", settle=settle),
+            driver.click(*CREATE_PORTRAIT_FIRST_SLOT_POINT, label="portrait-pick", settle=0.3),
+            driver.click(*CREATE_STEP_NEXT_POINT, label="portrait-next", settle=settle),
+            driver.click(*CREATE_STEP_NEXT_POINT, label="abilities-next", settle=settle),
+            driver.click(*CREATE_FLAGSHIP_NAME_POINT, label="flagship-click", settle=0.3),
             driver.text(spec.flagship, label="flagship-text", settle=settle),
-            driver.click(766, 581, label="flagship-next", settle=settle),
-            driver.click(783, 602, label="register", settle=max(settle, 2.0)),
-            driver.click(1015, 591, label="confirm-register-decide", settle=max(settle, 8.0)),
+            driver.click(*CREATE_STEP_NEXT_POINT, label="flagship-next", settle=settle),
+            driver.click(*CREATE_REGISTER_POINT, label="register", settle=max(settle, 2.0)),
+            driver.click(*CREATE_REGISTER_CONFIRM_POINT, label="confirm-register-decide", settle=max(settle, 8.0)),
         ]
     )
     return FlowRun(name="create-character", character=spec, reports=tuple(reports))
@@ -163,15 +174,16 @@ def _session_row_point(row: int) -> tuple[int, int]:
     if row < 1 or row > 5:
         raise InvalidSessionRowError(row)
     # 1920×1080 세션선택 박스: row1 중심 (880,343), 행 간격 ~100px.
-    return 880, 343 + ((row - 1) * 100)
+    # Native lobby layout v2 live calibration: row1 center (1090,425).
+    return 1090, 425 + ((row - 1) * 115)
 
 
 def _faction_point(faction: CharacterFaction) -> tuple[int, int]:
     match faction:
         case CharacterFaction.EMPIRE:
-            return 598, 313
+            return 1021, 464
         case CharacterFaction.ALLIANCE:
-            return 598, 429
+            return 1021, 580
         case unreachable:
             assert_never(unreachable)
 

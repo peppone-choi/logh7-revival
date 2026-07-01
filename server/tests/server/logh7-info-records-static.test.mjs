@@ -63,6 +63,7 @@ import {
   ARMS_ROWS,
   ARMS_COLS,
   ARMS_ROW_STRIDE,
+  POWER_DIST_BEAM_ROWS,
   GRID_OUTFIT_STRIDE,
   GRID_OUTFIT_MAX,
   OUTFIT_UNIT_STRIDE,
@@ -473,9 +474,22 @@ test('createInfoRecordsStaticState seeds ship classes from content/ship-stats.js
   assert.equal(body.readUInt16LE(4 + 0x32), 20000, 'ship[0] shieldCapacity slot @R+0x32 (client-correct U16_SLOTS)');
 });
 
+test('createInfoRecordsStaticState seeds manual troop master and playable tactical masters', () => {
+  const state = createInfoRecordsStaticState({ playableSeeds: true });
+  assert.ok(state.troops.length >= 6, 'manual troop-unit master is populated');
+  assert.equal(state.troops[0].practiceCost, 60, 'light infantry training cost from manual');
+  assert.equal(state.troops[0].offence, 10, 'light infantry ground attack from manual');
+  assert.equal(state.troops[0].defence, 10, 'light infantry ground defense from manual');
+  assert.equal(state.fighters.length, 4, 'playable fighter master exposes all four client slots');
+  assert.equal(state.arms.length, ARMS_ROWS, 'playable arms table exposes all weapon rows');
+  assert.equal(state.arms[0].length, ARMS_COLS, 'playable arms table exposes all range columns');
+  assert.equal(state.powerDistribution.beam.length, POWER_DIST_BEAM_ROWS, 'playable power curve exposes beam rows');
+});
+
 test('createInfoRecordsStaticState(load:false) is empty (pure)', () => {
   const state = createInfoRecordsStaticState({ load: false });
   assert.equal(state.shipClasses.length, 0, 'no content read when load:false');
+  assert.equal(state.troops.length, 0, 'no troop content read when load:false');
   assert.equal(state.currentGrid, 0);
 });
 

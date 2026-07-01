@@ -68,7 +68,12 @@ def apply_byte_patches(source: Path, destination: Path, patches: list[dict], man
         applied.append(PatchSite(va, offset, original.hex(), patched.hex(), str(spec.get("note", ""))))
 
     destination.parent.mkdir(parents=True, exist_ok=True)
-    destination.write_bytes(bytes(raw))
+    if source.resolve() == destination.resolve():
+        swap = destination.with_name(destination.name + ".patchwrite")
+        swap.write_bytes(bytes(raw))
+        swap.replace(destination)
+    else:
+        destination.write_bytes(bytes(raw))
     manifest = {"source": str(source), "destination": str(destination), "patches": [p.to_json() for p in applied]}
     if manifest_out is not None:
         manifest_out.parent.mkdir(parents=True, exist_ok=True)

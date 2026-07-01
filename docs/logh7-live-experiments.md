@@ -1,5 +1,11 @@
 # LOGH VII 라이브 클라이언트 실험 런북 (G201)
 
+> 2026-06-30 update: split tactical-entry experiments into a safe default probe and a crash/RE probe.
+> Default `LOGH_BATTLE_ENTRY_PROBE=1` now omits `0x0f1f` and stops at `0x042f NotifyChangeMode`.
+> `0x0f1f NotifyTactics` must be enabled explicitly with `LOGH_BATTLE_ENTRY_NOTIFY_TACTICS=1`
+> or `LOGH_BATTLE_ENTRY_CODES=0x0f1f`; current live result is APPCRASH `c0000005`
+> at VA `0x0058f83a` (`FUN_0058ee70`), not a playable tactical GUI.
+
 작성: 2026-06-14. 서버측은 테스트로 검증됐으나 **두 가지는 실클라 라이브 확인이 필요**하다. 인터랙티브
 Win32 GUI는 헤드리스로 자동화가 깨지므로(foreground-steal가 클릭을 막음, 멀티플레이 로드맵 boundary 참조),
 이 문서는 **사용자/라이브 QA 세션이 직접 실행**하는 절차다. 각 실험은 가설·절차·성공판정·계측을 명시한다.

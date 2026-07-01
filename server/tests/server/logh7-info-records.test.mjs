@@ -11,6 +11,7 @@ import assert from 'node:assert/strict';
 import { openContentSource } from '../../src/server/logh7-content-source.mjs';
 import {
   buildStaticInformationCardInner,
+  decodeStaticInformationCardMenuFields,
   buildStaticInformationBaseInner,
   buildInformationBaseInner,
   buildInformationInstitutionInner,
@@ -36,6 +37,14 @@ import {
   CARD_STRIDE,
   CARD_MAX,
   CARD_COMMAND_MAX,
+  CARD_MENU_COMMAND_COUNT_OFFSET,
+  CARD_MENU_FACTORY_IDS_OFFSET,
+  CARD_MENU_RECORD_START_TABLE_OFFSET,
+  CARD_MENU_SELECTED_FACTORY_RECORD_OFFSET,
+  CARD_MENU_SELECTED_FACTORY_TABLE_OFFSET,
+  CARD_MENU_SPECIAL_FACTORY_ACTIONS,
+  CARD_MENU_WIDGET_ID_DELTA,
+  staticInformationCardSpecialFactoryAction,
   INFORMATION_BASE_STRIDE,
   INFORMATION_BASE_MAX,
   INSTITUTION_BASE_STRIDE,
@@ -78,12 +87,44 @@ test('Card: exact 0x520a body, count u16 @0, stride 0x46, fields + command list'
   assert.equal(body.readUInt8(c0 + 0x14), 3, 'command_count');
   assert.equal(body.readUInt16LE(c0 + 0x16), 0x11, 'commands[0]');
   assert.equal(body.readUInt16LE(c0 + 0x16 + 4), 0x33, 'commands[2]');
+  const menu = decodeStaticInformationCardMenuFields(inner, 0);
+  assert.equal(menu.consumer, 'FUN_004f5cb0');
+  assert.equal(menu.recordCommandCountOffset, CARD_MENU_COMMAND_COUNT_OFFSET);
+  assert.equal(menu.recordFactoryIdsOffset, CARD_MENU_FACTORY_IDS_OFFSET);
+  assert.equal(menu.bodyCommandCountOffset, c0 + 0x14);
+  assert.equal(menu.bodyFactoryIdsOffset, c0 + 0x16);
+  assert.equal(menu.recordSelectedFactoryOffset, CARD_MENU_SELECTED_FACTORY_RECORD_OFFSET);
+  assert.equal(menu.tableRecordStartOffset, CARD_MENU_RECORD_START_TABLE_OFFSET);
+  assert.equal(menu.tableSelectedFactoryOffset, CARD_MENU_SELECTED_FACTORY_TABLE_OFFSET);
+  assert.equal(menu.bodySelectedFactoryOffset, c0 + 0x16);
+  assert.deepEqual(menu.factoryIds, [0x11, 0x22, 0x33]);
+  assert.deepEqual(menu.widgetIds, [0x11, 0x22, 0x33].map((factoryId) => factoryId + CARD_MENU_WIDGET_ID_DELTA));
+  assert.deepEqual(menu.specialFactoryActions, []);
 
   // card[1] at the next stride
   const c1 = 2 + CARD_STRIDE;
   assert.equal(body.readUInt16LE(c1 + 0x00), 0x4321, 'card[1] id at stride 0x46');
   assert.equal(body.readUInt8(c1 + 0x04), 1, 'card[1] b04');
   assert.equal(body.readUInt8(c1 + 0x05), 2, 'card[1] b05');
+});
+
+test('Card: selected factory ids expose native FUN_005312b0 follow-up command branches', () => {
+  const inner = buildStaticInformationCardInner({
+    cards: [{ id: 7, commands: [0x19, 0x3f, 0x40, 0x002b] }],
+  });
+  const menu = decodeStaticInformationCardMenuFields(inner, 0);
+  assert.deepEqual(menu.factoryIds, [0x19, 0x3f, 0x40, 0x002b]);
+  assert.deepEqual(menu.specialFactoryActions.map((entry) => entry.followupInnerCodeHex), [
+    '0x0903',
+    '0x0c02',
+    '0x0c05',
+  ]);
+  assert.equal(menu.specialFactoryActions[0].index, 0);
+  assert.equal(menu.specialFactoryActions[0].factoryIdHex, '0x0019');
+  assert.equal(menu.specialFactoryActions[0].consumer, 'FUN_005312b0');
+  assert.equal(staticInformationCardSpecialFactoryAction(0x3f).followupInnerCode, 0x0c02);
+  assert.equal(staticInformationCardSpecialFactoryAction(0x2b), null);
+  assert.equal(CARD_MENU_SPECIAL_FACTORY_ACTIONS[0x0040].followupInnerCodeHex, '0x0c05');
 });
 
 test('Card: command list and card count are capped to 24 / 300', () => {

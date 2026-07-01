@@ -1,16 +1,15 @@
 #!/usr/bin/env python3
-"""T14 — replace the LOGH VII client's single global GDI font FACE NAME (data-driven).
+"""T14 — replace the LOGH VII client's primary GDI UI font FACE NAME (data-driven).
 
 RE (redex on G7MTClient; docs/logh7-font-localization.md):
-  The whole text subsystem renders glyphs through exactly TWO CreateFontA call sites, and
-  BOTH read their face name from a struct field rather than a literal at the call:
-    * FUN_004aec70  @0x004aedd6..  -> CreateFontA(..., lpszFace = struct+0x00)   [import 0x66b08c]
-    * FUN_004b0960  @0x004b0bb7    -> CreateFontA(..., lpszFace = struct+0x08)   [import 0x66b08c]
-  The struct's face name is initialized in ONE place only: FUN_004ea180 calls the font-cache
-  constructor FUN_004aec10(s_MS_UI_Gothic_0077402c, 0xc, 1), whose body strcpy's that source
-  string into the cache object. `grep` confirms `s_MS_UI_Gothic` (VA 0x0077402c) and the
-  constructor each have exactly ONE xref — so "MS UI Gothic" is the SOLE font face string the
-  client ever feeds GDI. Replacing that one global string retargets every rendered glyph.
+  The primary UI CFont cache reads its face from a struct field rather than a literal
+  at the call. FUN_004ea180 initializes that cache by calling FUN_004aec10
+  (s_MS_UI_Gothic_0077402c, 0xc, 1), whose body strcpy's that source string into the
+  cache object used by FUN_004aec70.
+
+  2026-06-27 raw-byte correction: this is NOT the only font face slot. The D3D
+  texture-glyph atlas path is initialized separately by FUN_004b07c0 from DAT_0076e240
+  and consumed by FUN_004b0960. Keep this patch paired with font-atlas-face.json.
 
   Charset is correct in both call sites (decoded from machine code, not the
   Ghidra C which mis-renders the sign-extended imm8):
@@ -131,14 +130,14 @@ def build_descriptor(font: str) -> tuple[dict, list[str]]:
     desc = {
         "name": "font-face",
         "desc": (
-            f"Replace the client's SOLE global GDI font face string 'MS UI Gothic' (VA 0x{FACE_VA:08x}) "
-            f"with '{font}'. RE: both CreateFontA sites (FUN_004aec70 @0x4aedd6 lpszFace=struct+0, "
-            f"FUN_004b0960 @0x4b0bb7 lpszFace=struct+8) read the face from a cache struct whose name is "
-            f"set in ONE place — FUN_004ea180 -> FUN_004aec10(s_MS_UI_Gothic_0077402c,...). Both sites "
-            f"already pass HANGEUL_CHARSET (0x81, encoded as `push -0x7f`); text quality is handled by "
-            f"the separate default-stack `font-cleartype` patch. Same-length 16-byte in-place region "
-            f"replace (face ≤15 chars + NUL, bounded by the following 'mkCreateVertexBuffer'); NO code "
-            f"cave. RE/docs: docs/logh7-font-remaster.md."
+            f"Replace the primary GDI UI font face string 'MS UI Gothic' (VA 0x{FACE_VA:08x}) "
+            f"with '{font}'. RE: FUN_004ea180 calls FUN_004aec10(s_MS_UI_Gothic_0077402c,...) "
+            f"for the UI CFont cache used by FUN_004aec70. The D3D texture-glyph atlas has a "
+            f"separate face slot at DAT_0076e240 handled by font-atlas-face.json. Both CreateFontA "
+            f"sites already pass HANGEUL_CHARSET (0x81, encoded as `push -0x7f`); text quality is "
+            f"handled by the separate default-stack `font-cleartype` patch. Same-length 16-byte "
+            f"in-place region replace (face <=15 chars + NUL, bounded by the following "
+            f"'mkCreateVertexBuffer'); NO code cave. RE/docs: docs/logh7-font-remaster.md."
         ),
         "verified": (
             f"ENCODED + originalHex guarded for vanilla references; current playable/installed trees may "

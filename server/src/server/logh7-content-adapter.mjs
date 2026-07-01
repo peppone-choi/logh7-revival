@@ -232,6 +232,34 @@ function loadInferredCatalogs() {
   });
 }
 
+function loadManualPlaceFacilityCatalog() {
+  const data = readContentJson('manual/place-facilities.json') ?? {};
+  const facilities = Array.isArray(data.facilities) ? data.facilities : [];
+  const source = [data._source ?? 'content/manual/place-facilities.json'];
+  const institutions = facilities.map((facility, index) => ({
+    id: 0x7000 + index + 1,
+    stableId: facility.id ?? null,
+    name: facility.ja ?? facility.nameJa ?? `Facility ${index + 1}`,
+    nameKo: facility.ko ?? null,
+    commandDomains: Array.isArray(facility.commandDomains) ? facility.commandDomains.slice() : [],
+    source,
+  }));
+  const rooms = facilities.flatMap((facility, facilityIndex) => {
+    const facilityNumericId = 0x7000 + facilityIndex + 1;
+    const spots = Array.isArray(facility.spots) ? facility.spots : [];
+    return spots.map((spot, spotIndex) => ({
+      id: 0x8000 + facilityIndex * 0x20 + spotIndex + 1,
+      stableId: spot.id ?? null,
+      facilityId: facilityNumericId,
+      facilityStableId: facility.id ?? null,
+      name: spot.ja ?? spot.nameJa ?? `Spot ${spotIndex + 1}`,
+      spotType: spot.type ?? spot.spotTypeId ?? null,
+      source: source[0],
+    }));
+  });
+  return { institutions, rooms };
+}
+
 function loadGalaxyStellarTypes() {
   const data = readContentJson('extracted/model-galaxy-stars.json') ?? {};
   if (!Array.isArray(data.stars)) return [];
@@ -243,6 +271,31 @@ function loadGalaxyStellarTypes() {
 
 function normalizeSpectralClass(value) {
   return typeof value === 'string' && /^[OBAFGKM]$/u.test(value.toUpperCase()) ? value.toUpperCase() : null;
+}
+
+function parseJsonObject(value) {
+  if (value == null) return null;
+  if (typeof value === 'object' && !Array.isArray(value)) return value;
+  if (typeof value !== 'string' || value.trim() === '') return null;
+  try {
+    const parsed = JSON.parse(value);
+    return parsed && typeof parsed === 'object' && !Array.isArray(parsed) ? parsed : null;
+  } catch {
+    return null;
+  }
+}
+
+function positionProvenance(system) {
+  if (!system?.position_authority) return null;
+  const authority = String(system.position_authority);
+  return {
+    authority,
+    source: sourceList(system.coordinate_source),
+    method: authority.includes('P3') ? 'playable minimap overlay placement' : 'projected strategic grid placement',
+    originalServerData: false,
+    confidence: authority.includes('P3') ? 'low' : 'medium',
+    note: system.note ?? null,
+  };
 }
 
 function stellarClassProvenance(star, systemIndex, chartSpectralClass = null) {
@@ -435,12 +488,21 @@ export function buildContentPackDataFromSource(source, { name = 'logh-vii-recove
   const systems = source.listSystems().map((s, index) => {
     const star = stellarTypes[index] ?? null;
     const chartSpectralClass = normalizeSpectralClass(s.spectral_class ?? s.spectralClass ?? null);
+    const spectralProvenance = parseJsonObject(s.spectral_class_provenance_json)
+      ?? stellarClassProvenance(star, index, chartSpectralClass);
+    const position = positionProvenance(s);
     return {
       name_ja: s.name_ja,
       name_ko: s.name_ko ?? null,
       contentId: markerIdsByName.get(s.name_ja) ?? null,
       faction: s.faction,
       is_corridor: s.is_corridor,
+      positionAuthority: s.position_authority ?? null,
+      coordinatePending: Boolean(s.coordinate_pending),
+      nameAuthority: s.name_authority ?? null,
+      coordinateSource: s.coordinate_source ?? null,
+      planetAuthority: s.planet_authority ?? null,
+      note: s.note ?? null,
       cx: s.cx,
       cy: s.cy,
       canonCol: s.canon_col,
@@ -452,12 +514,32 @@ export function buildContentPackDataFromSource(source, { name = 'logh-vii-recove
       rect: [s.rect_x0, s.rect_y0, s.rect_x1, s.rect_y1],
       page: s.map_page,
       spectralClass: chartSpectralClass ?? star?.spectralClass ?? null,
-      provenance: { spectralClass: stellarClassProvenance(star, index, chartSpectralClass) },
+      provenance: {
+        ...(position ? { position } : {}),
+        spectralClass: spectralProvenance,
+      },
       planets: s.planets,
       fortresses: s.fortresses,
     };
   });
 
   const inferred = loadInferredCatalogs();
-  return { name, nations, shipClasses, characters: allCharacters, units, systems, ...inferred };
+  const placeFacilities = loadManualPlaceFacilityCatalog();
+  return {
+    name,
+    nations,
+    shipClasses,
+    characters: allCharacters,
+    units,
+    systems,
+    ...inferred,
+    institutions: [
+      ...(Array.isArray(inferred.institutions) ? inferred.institutions : []),
+      ...placeFacilities.institutions,
+    ],
+    rooms: [
+      ...(Array.isArray(inferred.rooms) ? inferred.rooms : []),
+      ...placeFacilities.rooms,
+    ],
+  };
 }

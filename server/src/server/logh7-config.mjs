@@ -41,6 +41,8 @@ const isSqlitePath = (value) => typeof value === 'string' && /\.(sqlite|sqlite3|
  * 환경변수로 명시하면 override 된다. 여기 없는 것(실험·프로브·튜닝)은 보수적 off/최소 기본값을 유지한다.
  */
 export const PLAYABLE_ENV_DEFAULTS = Object.freeze({
+  // User-facing zero-config defaults: npm start creates/uses these without CLI args or env.
+  LOGH_ACCOUNT_DB: 'state/accounts.sqlite',
   // --- 로비/월드 핸드셰이크 포맷 + 타이밍 (라이브 검증) ---
   LOGH_LOBBY_OK_FORMAT: 'message32',
   LOGH_SS_FORMAT: 'message32',
@@ -49,12 +51,31 @@ export const PLAYABLE_ENV_DEFAULTS = Object.freeze({
   LOGH_WORLD_PLAYER: '1',
   LOGH_POSTLOAD_PLAYER_RECORD: '1',
   LOGH_POSTLOAD_RICH_CHARACTER: '1',
-  // Experimental command-admission seed. Keep opt-in only: when enabled by default it opens the
-  // strategic duty-command panel over the bottom-right system buttons on world entry.
-  LOGH_POSTLOAD_UNIT_STREAM_WIRE: '1',
+  // Proven command-admission seed: imports the player's action-list seat so
+  // SelectGrid has at least one actionable row after world entry.
+  LOGH_POSTLOAD_ACTION_LIST_SEATS: '1',
+  // Playable shim: bind seats to the temporary command card table below.
+  // Replace these with recovered canon card/factory mappings later.
+LOGH_ACTION_LIST_CATEGORY: '0',
+// 2026-06-29 live: nonzero generic 0x0305 command-card preload stalls at NOW LOADING
+// and does not populate the native command table. Keep this diagnostic opt-in only.
+LOGH_COMMAND_TABLE_PRELOAD_PROBE: '0',
+LOGH_DEV_COMMAND_GRANT_ALL: '0',
   LOGH_PLAYER_FOCUS_CELL: '1',
   LOGH_FULL_UNIT_LOCATION: '1',
   LOGH_GRID_ENTER: '1',
+  // Surface planet/fortress base records alongside the parent star-system records.
+  // This keeps the playable path from degenerating into a stars-only strategic read model.
+  LOGH_PLANET_BASE_RECORDS: '1',
+// 2026-06-29 live: static master ON bundle reaches 0x0f01 then the client exits
+// before 0x0f02. Keep each master opt-in until isolated by live bisection.
+LOGH_STATIC_SHIPS: '1',
+LOGH_STATIC_SHIPS_LIMIT: '1',
+LOGH_STATIC_TROOPS: '0',
+LOGH_STATIC_FIGHTERS: '0',
+LOGH_STATIC_ARMS: '0',
+LOGH_STATIC_POWER_DISTRIBUTION: '0',
+LOGH_STATIC_MASTER_PLAYABLE_SEED: '0',
   // --- 전략맵: 캐논 갤럭시 + 섹터 그리드 + 지형 (RE+매뉴얼 확정) ---
   LOGH_STRAT_GALAXY: '1',
   LOGH_STRAT_GRID: '1',
@@ -166,7 +187,9 @@ export function loadConfig(env = process.env) {
       postloadRichCharacter: asBool(env.LOGH_POSTLOAD_RICH_CHARACTER),
       postloadActionListSeats: asBool(env.LOGH_POSTLOAD_ACTION_LIST_SEATS),
       importBases: asBool(env.LOGH_WORLD_IMPORT_BASES),
+      planetBaseRecords: asBool(env.LOGH_PLANET_BASE_RECORDS),
       baseEconomy: asBool(env.LOGH_BASE_ECONOMY),
+      baseParameterNotify: asBool(env.LOGH_PROVISIONAL_BASE_PARAMETER_NOTIFY),
       staticShips: asBool(env.LOGH_STATIC_SHIPS),
     },
     comms: {

@@ -21,8 +21,14 @@ $CompatFlags = '~ DISABLEDXMAXIMIZEDWINDOWEDMODE HIGHDPIAWARE'
 New-ItemProperty -Path $LayersKey -Name $Client -Value $CompatFlags -PropertyType String -Force | Out-Null
 New-ItemProperty -Path $LayersKey -Name $Launcher -Value $CompatFlags -PropertyType String -Force | Out-Null
 
+Add-Type -Namespace Logh7Win -Name ProfileApi -MemberDefinition '[DllImport("kernel32.dll", CharSet=CharSet.Unicode, SetLastError=true)] public static extern bool WriteProfileString(string section, string key, string value);'
+[Logh7Win.ProfileApi]::WriteProfileString('windows', 'hangeulmenu', 'hangeul') | Out-Null
+[Logh7Win.ProfileApi]::WriteProfileString('windows', 'kanjimenu', 'roman') | Out-Null
+
 if (-not $Quiet) {
   Write-Host 'LOGH VII local Windows settings are ready.'
+  Write-Host 'Run .\LOGH7Launcher.exe --client-preflight to check Windows Application Control before starting the server.'
+  Write-Host 'Run .\diagnose-appcontrol.ps1 to collect SHA/signature/CodeIntegrity evidence.'
   Write-Host 'Run .\launch-client.ps1 to start the game client from the correct working directory.'
   Write-Host 'If Japanese text is garbled, run under Japanese system locale or Locale Emulator.'
 }

@@ -41,8 +41,18 @@ PLAYABLE_CLIENT_STACK: Final = (
     "dlgfix",
     "earlygrid-ringclear",
     "strat-camera-focus",
+    "session-select-hardcoded-ko",
     "font-face",
+    "font-atlas-face",
     "font-cleartype",
+    "font-atlas-antialias",
+    "font-readable-size",
+    "lobby-res",
+    "lobby-native-layout-v2",
+    "charsel-recenter",
+    "charsel-content-inset",
+    "charsel-content-y-inset",
+    "charsel-confirm-dialog-inset",
 )
 
 

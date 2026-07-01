@@ -1,0 +1,21 @@
+{
+  "name": "font-readable-size",
+  "desc": "Increase the two LOGH VII UI font size sources after the Pretendard face patches. Primary GDI UI cache: FUN_004ea180 passes size 0x0c to FUN_004aec10, later consumed by FUN_004aec70 -> CreateFontA(-MulDiv(size,dpi,72)). Patch 12 -> 18. D3D texture-glyph atlas: FUN_004b07c0 computes uVar4=(LOGPIXELSY*10)/72 & 0xfffe, which is 12 at 96 DPI, stores it at atlas+0x60/+0x64, and derives the glyph cell from it. Patch the 5-byte even-mask to add 5 instead, yielding 18 at 96 DPI while keeping the existing atlas cell rounding path. Same-length immediate/code replacement only; needs live screenshot verification for clipping in compact edit boxes and buttons.",
+  "verified": "Raw bytes verified against G7MTClient.korean.exe, vanilla ghidra reference, and canonical playable references: primary site file 0x000ea1c6 = 6a0c; atlas site file 0x000b0869 = 25feff0000. Same-length immediate/code replacement only. The 18px-ish bytes supersede the prior 16px-ish default after the user reported the font still looked too small.",
+  "patches": [
+    {
+      "va": "0x004ea1c6",
+      "fileOffsetHex": "0x000ea1c6",
+      "originalHex": "6a0c",
+      "patchedHex": "6a12",
+      "note": "FUN_004ea180 -> FUN_004aec10 primary GDI UI font size: 12 -> 18."
+    },
+    {
+      "va": "0x004b0869",
+      "fileOffsetHex": "0x000b0869",
+      "originalHex": "25feff0000",
+      "patchedHex": "83c0059090",
+      "note": "FUN_004b07c0 atlas size result: replace `and eax,0xfffe` with `add eax,5; nop; nop`, so 96DPI atlas height becomes 18 instead of 12 and the existing cell rounding path remains intact."
+    }
+  ]
+}

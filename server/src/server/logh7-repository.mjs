@@ -137,8 +137,10 @@ export function createRepository({ backend = 'sqlite', path = undefined, seedPat
 
 /**
  * 월드 스냅샷을 합성한다(버전/타임스탬프 포함). 포트가 다룰 불투명 객체.
- * @param {{ world?: object, entities?: object, savedAt?: number }} parts
+ * 기본(session 1) 런타임은 최상위 world/entities로 직렬화해 기존 스냅샷·복원 경로와 호환을 유지하고,
+ * session 2+ 런타임은 sessions 배열([{ sessionId, world, entities }])로 추가한다(per-session 영속화).
+ * @param {{ world?: object, entities?: object, sessions?: object[]|null, savedAt?: number }} parts
  */
-export function composeSnapshot({ world = null, entities = null, savedAt = 0 } = {}) {
-  return { version: SNAPSHOT_VERSION, savedAt, world, entities };
+export function composeSnapshot({ world = null, entities = null, sessions = null, savedAt = 0 } = {}) {
+  return { version: SNAPSHOT_VERSION, savedAt, world, entities, sessions };
 }

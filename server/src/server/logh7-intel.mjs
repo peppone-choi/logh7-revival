@@ -122,5 +122,27 @@ export function createIntelState() {
     getRebellion(unitId) {
       return rebellion.get(unitId >>> 0) ?? 0;
     },
+    toSnapshot() {
+      return {
+        coupLoyalty: [...coupLoyalty.entries()],
+        unitLoyalty: [...unitLoyalty.entries()],
+        rebellion: [...rebellion.entries()],
+      };
+    },
+    restore(snapshot = {}) {
+      coupLoyalty.clear();
+      unitLoyalty.clear();
+      rebellion.clear();
+      for (const [id, value] of snapshot.coupLoyalty ?? []) {
+        coupLoyalty.set(Number(id) >>> 0, clamp(Number(value) || 0, 0, COUP_LOYALTY_MAX));
+      }
+      for (const [id, value] of snapshot.unitLoyalty ?? []) {
+        unitLoyalty.set(Number(id) >>> 0, clamp(Number(value) || 0, 0, COUP_LOYALTY_MAX));
+      }
+      for (const [id, value] of snapshot.rebellion ?? []) {
+        rebellion.set(Number(id) >>> 0, clamp(Number(value) || 0, 0, 0xff));
+      }
+      return this;
+    },
   };
 }

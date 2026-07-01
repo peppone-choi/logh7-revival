@@ -64,8 +64,8 @@ class Logh7RealClientProbeTests(unittest.TestCase):
         login(fake_api, FakeWin32Con, fake_gui, 1234)
 
         key_downs = [vk for vk, flags in fake_api.key_events if flags == 0 and vk != FakeWin32Con.VK_SHIFT]
-        self.assertEqual("".join(chr(vk).lower() for vk in key_downs), "gginei00dummy")
-        self.assertEqual(len(fake_api.cursor_positions), 3)
+        self.assertEqual("".join(chr(vk).lower() for vk in key_downs), "ginei00dummy")
+        self.assertEqual(len(fake_api.cursor_positions), 4)
 
     def test_builds_dynamic_probe_manifest(self) -> None:
         manifest = build_dynamic_probe_manifest(

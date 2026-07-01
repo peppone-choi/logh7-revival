@@ -29,6 +29,45 @@ function loadPlanetEconomyMap(contentDir) {
   return map;
 }
 
+function expectedGalaxyCounts(contentDir) {
+  const galaxy = JSON.parse(readFileSync(join(contentDir, 'galaxy.json'), 'utf8'));
+  const systems = Array.isArray(galaxy?.systems) ? galaxy.systems : [];
+  return {
+    star_systems: systems.length,
+    planets: systems.reduce((count, system) => (
+      count + (Array.isArray(system?.planets) ? system.planets.length : 0)
+    ), 0),
+  };
+}
+
+function tableHasColumns(db, table, requiredColumns) {
+  const columns = new Set(db.prepare(`PRAGMA table_info(${table})`).all().map((row) => row.name));
+  return requiredColumns.every((column) => columns.has(column));
+}
+
+function contentDbMatchesSources(db, contentDir) {
+  try {
+    const expected = expectedGalaxyCounts(contentDir);
+    const actual = {
+      star_systems: db.prepare('SELECT COUNT(*) AS c FROM star_systems').get().c,
+      planets: db.prepare('SELECT COUNT(*) AS c FROM planets').get().c,
+    };
+    if (actual.star_systems !== expected.star_systems || actual.planets !== expected.planets) return false;
+    return tableHasColumns(db, 'star_systems', [
+      'spectral_class_source',
+      'spectral_class_provenance_json',
+      'position_authority',
+      'coordinate_pending',
+      'name_authority',
+      'coordinate_source',
+      'planet_authority',
+      'note',
+    ]);
+  } catch {
+    return false;
+  }
+}
+
 function populationFromMillions(value) {
   const populationM = Number(value);
   return Number.isFinite(populationM) ? Math.max(0, Math.trunc(populationM * 1_000_000)) : 0;
@@ -55,7 +94,7 @@ function planetEconomyByName(rows) {
  * uses Japanese (name_ja) as its key everywhere (galaxy.json `system`/planet `name` → DB name_ja); these
  * sidecar files (content/names/systems-ko.json + planets-ko.json) carry the Korean rendering keyed by the
  * exact same jp string, so the lookup is a raw-string match (the two files are byte-identical in the jp
- * column — verified 80/80 systems + 281/281 planets). Missing/garbled file degrades to an empty map.
+ * column — verified 85/85 systems + 300/300 planets). Missing/garbled file degrades to an empty map.
  * @returns {Map<string,string>} jp → ko
  */
 function loadKoNameMap(file) {
@@ -84,6 +123,10 @@ export function openContentSource({ dbPath = DEFAULT_DB_PATH, contentDir = DEFAU
     ({ db } = buildContentDb({ contentDir, dbPath: ':memory:' }));
   } else {
     db = loadContentDb(dbPath);
+    if (!contentDbMatchesSources(db, contentDir)) {
+      db.close();
+      ({ db } = buildContentDb({ contentDir, dbPath: ':memory:' }));
+    }
   }
   const all = (sql, ...p) => db.prepare(sql).all(...p);
   const one = (sql, ...p) => db.prepare(sql).get(...p);

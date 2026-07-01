@@ -1,9 +1,9 @@
-import { createReadStream, createWriteStream } from 'node:fs';
+import { createReadStream, createWriteStream, realpathSync } from 'node:fs';
 import { readFile, stat } from 'node:fs/promises';
 import { createServer } from 'node:http';
 import { createServer as createTcpServer } from 'node:net';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 import {
   buildCommandOkResponseCandidate,
@@ -13,6 +13,8 @@ import {
 import { startLogh7AuthServer } from './logh7-auth-server.mjs';
 import { createAccountStore } from './logh7-login-session.mjs';
 import { createAccountRegistry } from './logh7-account-registry.mjs';
+import { createSessionRegistry, DEFAULT_SESSION_SQLITE_PATH } from './logh7-session-registry.mjs';
+import { startPublicAccountWeb } from './logh7-public-account-web.mjs';
 import { runAdminCommand } from './logh7-admin.mjs';
 import { parseBool } from './logh7-config.mjs';
 import { applyEnvDefaults, loadDotEnv } from './logh7-config.mjs';
@@ -125,10 +127,22 @@ function isEnabled(value) {
   return parseBool(value);
 }
 
+export function createServeAuthAccountRegistry({
+  accountDbPath = null,
+  accountSeedPath = null,
+} = {}) {
+  if (!accountDbPath) return null;
+  return createAccountRegistry({
+    persistPath: path.resolve(accountDbPath),
+    seedPath: accountSeedPath === null ? null : path.resolve(accountSeedPath),
+  });
+}
+
 export function createServeAuthAccountStore({
   accountDbPath = null,
   accountSeedPath = null,
   allowFirstLoginRegistration = false,
+  registry = null,
 } = {}) {
   if (!accountDbPath) {
     // Strict by default: without an account DB, only pre-seeded credentials match.
@@ -139,11 +153,25 @@ export function createServeAuthAccountStore({
   return createAccountStore({
     acceptAnyGin7: false,
     allowRegister: allowFirstLoginRegistration,
-    registry: createAccountRegistry({
-      persistPath: path.resolve(accountDbPath),
-      seedPath: accountSeedPath === null ? null : path.resolve(accountSeedPath),
-    }),
+    registry: registry ?? createServeAuthAccountRegistry({ accountDbPath, accountSeedPath }),
   });
+}
+
+function resolveSessionDbPath(rawValue = undefined) {
+  const value = rawValue ?? DEFAULT_SESSION_SQLITE_PATH;
+  if (value === null || value === undefined || value === '') return null;
+  const normalized = String(value).trim().toLowerCase();
+  if (
+    normalized === '0' ||
+    normalized === 'false' ||
+    normalized === 'off' ||
+    normalized === 'none' ||
+    normalized === 'memory' ||
+    normalized === ':memory:'
+  ) {
+    return null;
+  }
+  return path.resolve(String(value));
 }
 
 function parseCharacterRecords(args) {
@@ -835,15 +863,48 @@ export async function bootServeAuthServer({ argv = [], env = process.env } = {})
   const allowFirstLoginRegistration =
     isEnabled(args.get('allow-first-login-registration')) ||
     isEnabled(env.LOGH_ACCOUNT_DB_ALLOW_REGISTER);
+  let accountRegistry = null;
   let accountStore;
   try {
     if (isEnabled(env.LOGH_ACCEPT_ANY_GIN7)) {
       accountStore = createAccountStore({ acceptAnyGin7: true });
     } else {
-      accountStore = createServeAuthAccountStore({ accountDbPath, accountSeedPath, allowFirstLoginRegistration });
+      accountRegistry = createServeAuthAccountRegistry({ accountDbPath, accountSeedPath });
+      accountStore = createServeAuthAccountStore({
+        accountDbPath,
+        accountSeedPath,
+        allowFirstLoginRegistration,
+        registry: accountRegistry,
+      });
     }
   } catch (error) {
     throw new Error(`LOGH7 account store: ${error instanceof Error ? error.message : error}`);
+  }
+  const sessionDbPath = resolveSessionDbPath(args.get('session-db') ?? env.LOGH_SESSION_DB);
+  let sessionRegistry;
+  try {
+    sessionRegistry = createSessionRegistry({ persistPath: sessionDbPath });
+  } catch (error) {
+    throw new Error(`LOGH7 session catalog: ${error instanceof Error ? error.message : error}`);
+  }
+  const publicPortText = args.get('public-port') ?? env.LOGH_PUBLIC_PORT ?? (accountRegistry ? '47901' : null);
+  let publicAccount = null;
+  if (
+    publicPortText !== null &&
+    publicPortText !== '' &&
+    !['false', 'off', 'none'].includes(String(publicPortText).trim().toLowerCase())
+  ) {
+    if (!accountRegistry) {
+      throw new Error('public signup requires an account DB');
+    }
+    const publicPort = Number(publicPortText);
+    if (!Number.isInteger(publicPort) || publicPort < 0 || publicPort > 65535) {
+      throw new Error(`invalid --public-port: ${publicPortText}`);
+    }
+    publicAccount = {
+      host: args.get('public-host') ?? env.LOGH_PUBLIC_HOST ?? '127.0.0.1',
+      port: publicPort,
+    };
   }
   // 암호 테이블 해결(커밋된 JSON 기본, --client-exe 주면 재추출). 실패 시 조치 가능한 메시지로 종료.
   let tables;
@@ -886,17 +947,36 @@ export async function bootServeAuthServer({ argv = [], env = process.env } = {})
     world,
     characters,
     accountStore,
+    sessionRegistry,
     announcementText,
     admin,
     tracePath: args.get('trace'),
   });
+  const publicServer = publicAccount
+    ? await startPublicAccountWeb({
+      ...publicAccount,
+      registry: accountRegistry,
+      sessionRegistry,
+      serverName: '이제르론 서버',
+    })
+    : null;
+  const authClose = server.close.bind(server);
+  server.public = publicServer
+    ? { host: publicServer.host, port: publicServer.port, url: publicServer.url }
+    : null;
+  server.close = async () => {
+    await publicServer?.close();
+    await authClose();
+  };
   console.log(
     `LOGH7 authoritative login server listening on ${server.host}:${server.port} ` +
       `(login->redirect to lobby ${lobby.ip}:${lobby.port}, lobby->redirect to world ${world.ip}:${world.port})` +
       (accountDbPath
         ? ` [signup registry: ${path.resolve(accountDbPath)}${allowFirstLoginRegistration ? ', first-login registration enabled' : ''}]`
         : ' [accept-any-GIN7]') +
-      (server.admin ? ` [admin: ${server.admin.url}]` : ''),
+    ` [session catalog: ${sessionDbPath ?? 'memory'}]` +
+    (server.public ? ` [signup: ${server.public.url}]` : '') +
+    (server.admin ? ` [admin: ${server.admin.consoleUrl ?? server.admin.url}]` : ''),
   );
   return server;
 }
@@ -936,7 +1016,34 @@ async function main() {
   return 1;
 }
 
-const isCli = process.argv[1] === fileURLToPath(import.meta.url);
-if (isCli) {
+function canonicalFilePath(value) {
+  const text = String(value);
+  const filePath = text.startsWith('file:')
+    ? fileURLToPath(text)
+    : path.resolve(text);
+  try {
+    return realpathSync.native(filePath);
+  } catch {
+    return filePath;
+  }
+}
+
+function fileHref(value) {
+  return pathToFileURL(canonicalFilePath(value)).href;
+}
+
+export function isCliEntrypoint(argvPath, modulePathOrUrl) {
+  const candidatePath = argvPath ?? process.argv[1];
+  if (!candidatePath) {
+    return false;
+  }
+  const candidate = fileHref(candidatePath);
+  const expected = fileHref(modulePathOrUrl ?? import.meta.url);
+  return process.platform === 'win32'
+    ? candidate.toLowerCase() === expected.toLowerCase()
+    : candidate === expected;
+}
+
+if (isCliEntrypoint(process.argv[1], import.meta.url)) {
   process.exitCode = await main();
 }

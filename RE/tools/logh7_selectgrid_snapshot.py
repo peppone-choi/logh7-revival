@@ -132,11 +132,13 @@ function selectionState() {{
     listSelected189: readS32(selectionList.add(0x189 * 4)),
     listPayload18a: hex(payload),
     payloadCount270: readS32(payload.add(0x270)),
+    payloadCount270U8: readU8(payload.add(0x270)),
     payloadWord26c: readU16(payload.add(0x26c)),
     payloadWord274: readU16(payload.add(0x274)),
     payloadBytes260: bytesHex(payload.add(0x260), 64),
     currentPayload: hex(currentPayload),
     currentPayloadCount270: readS32(currentPayload.add(0x270)),
+    currentPayloadCount270U8: readU8(currentPayload.add(0x270)),
     currentPayloadWord274: readU16(currentPayload.add(0x274)),
     rows: selectionRows(),
   }};

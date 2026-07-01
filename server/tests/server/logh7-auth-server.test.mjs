@@ -30,6 +30,11 @@ import { createAccountRegistry, loadAccountRecords } from '../../src/server/logh
 import { createContentPack } from '../../src/server/logh7-content-pack.mjs';
 import { createAccountStore } from '../../src/server/logh7-login-session.mjs';
 import { loadConfig } from '../../src/server/logh7-config.mjs';
+import { processCommand } from '../../src/server/logh7-command-engine.mjs';
+import { createPersonnelState } from '../../src/server/logh7-personnel.mjs';
+import { createSocialState } from '../../src/server/logh7-social.mjs';
+import { createAccountState } from '../../src/server/logh7-account.mjs';
+import { createEspionageState } from '../../src/server/logh7-espionage.mjs';
 import {
   CMD_GENERATE_CHARGE_CODE,
   LOGIN_INNER_CODE,
@@ -149,6 +154,20 @@ test('in-world information trace keeps the 0x0f08 diagnostic payload hex', () =>
   assert.equal(Object.hasOwn(event, 'credentialPayloadRedacted'), false);
 });
 
+test('in-world grid move trace keeps 0x0b01 diagnostic payload hex', () => {
+ const gridMove = Buffer.from('0b0100000000000000000000000005000001f609000000000000', 'hex');
+ const event = buildLoginMessageTraceFields({
+ connectionId: 3,
+ parsed: { id: 24, innerPayload: gridMove },
+ action: { kind: 'lobby-response', trace: { account: 'ginei00' } },
+ });
+
+ assert.equal(event.innerCodeHex, '0x0b01');
+ assert.equal(event.innerPayloadLength, gridMove.length);
+ assert.equal(event.innerPayloadHex, gridMove.toString('hex'));
+ assert.equal(Object.hasOwn(event, 'credentialPayloadRedacted'), false);
+});
+
 test('in-world information trace summarizes the 0x0f08 diagnostic payload words', () => {
   const informationRequest = Buffer.from('0f080000000100000000000000000000000000000000000000000101', 'hex');
   const event = buildLoginMessageTraceFields({
@@ -216,7 +235,11 @@ test('auth server aligns the default lobby card with LOGH_WORLD_CHAR_ID when no 
     });
 
     const defaultResolved = resolveLobbyCharacters({ contentPack, worldCharacterId: undefined });
-    assert.deepEqual(defaultResolved, [{ id: 1, status: 1, name: 'Friedrich IV' }]);
+    assert.equal(defaultResolved.length, 1);
+    assert.equal(defaultResolved[0].id, 1);
+    assert.equal(defaultResolved[0].status, 1);
+    assert.equal(defaultResolved[0].name, '신참사관');
+    assert.equal(defaultResolved[0].faction, 'empire');
 
     const minimalForced = resolveLobbyCharacters({ contentPack, worldCharacterId: '209' });
     assert.deepEqual(minimalForced, [{ id: 209, status: 1, name: 'Reinhard' }]);
@@ -226,8 +249,8 @@ test('auth server aligns the default lobby card with LOGH_WORLD_CHAR_ID when no 
     assert.equal(richDefaultResolved.length, 1);
     assert.equal(richDefaultResolved[0].id, 1);
     assert.equal(richDefaultResolved[0].status, 1);
-    assert.equal(richDefaultResolved[0].name, 'Friedrich IV');
-    assert.deepEqual(richDefaultResolved[0].abilities, [72, 95, 93, 92, 111, 101, 105, 81]);
+    assert.equal(richDefaultResolved[0].name, '신참사관');
+    assert.deepEqual(richDefaultResolved[0].abilities, [50, 50, 50, 50, 50, 50, 50, 50]);
 
     const resolved = resolveLobbyCharacters({ contentPack, worldCharacterId: '209' });
     assert.equal(resolved.length, 1);
@@ -254,11 +277,10 @@ test('auth server aligns the default lobby card with LOGH_WORLD_CHAR_ID when no 
   }
 });
 
-test('auth server defaults to a multi-session lobby catalog and resolves announcement text', () => {
+test('auth server defaults to a single-session lobby catalog and resolves announcement text', () => {
   const sessions = resolveLobbySessions();
-  assert.equal(sessions.length >= 2, true);
+  assert.equal(sessions.length, 1);
   assert.equal(sessions[0].status, 1);
-  assert.equal(sessions[1].status, 1);
   assert.deepEqual(resolveLobbySessions({ sessions: [{ sessionId: 9 }] }), [{ sessionId: 9 }]);
   assert.deepEqual(resolveLobbySessions({ lobby: { sessions: [{ sessionId: 8 }] } }), [{ sessionId: 8 }]);
 
@@ -269,6 +291,176 @@ test('auth server defaults to a multi-session lobby catalog and resolves announc
   assert.equal(Buffer.isBuffer(cp949), true);
   assert.equal(cp949.toString('hex'), 'bcadb9f6');
   assert.equal(resolveLobbyAnnouncementText({ env: {} }), null);
+});
+
+test('auth server keeps authoritative world runtimes isolated per lobby session id', async () => {
+  const accountStore = createAccountStore({ acceptAnyGin7: true });
+  accountStore.setSelectedSession('p002flow', 2);
+  const server = await startLogh7AuthServer({
+    host: '127.0.0.1',
+    port: 0,
+    transportKey: TRANSPORT_KEY,
+    decipherKey: DECIPHER_KEY,
+    lobby: { ip: '127.0.0.1', port: 47900 },
+    accountStore,
+    sessions: [
+      { sessionId: 1, name: 'Alpha', status: 1 },
+      { sessionId: 2, name: 'Beta', status: 1 },
+    ],
+    config: loadConfig({
+      LOGH_RELAY: '1',
+      LOGH_AUTHORITATIVE: '1',
+      LOGH_ECONOMY: '1',
+    }),
+  });
+  try {
+    const alpha = server.runtimeForSession(1);
+    const beta = server.runtimeForSession(2);
+    assert.notEqual(alpha, beta);
+    assert.notEqual(alpha.worldState, beta.worldState);
+    assert.notEqual(alpha.worldRelay, beta.worldRelay);
+    assert.notEqual(alpha.economyState, beta.economyState);
+    assert.equal(server.runtimeForAccount('p002flow'), beta);
+
+    beta.worldState.upsertFleet({ id: 0x2002, owner: 2, faction: 'alliance', cell: 22 });
+    assert.equal(alpha.worldState.getFleet(0x2002), null);
+    assert.equal(beta.worldState.getFleet(0x2002).cell, 22);
+  } finally {
+    await server.close();
+  }
+});
+
+test('per-session timers + snapshot persistence: economy ticks every session runtime and persist/restore round-trips session rows', async () => {
+  // journal #59가 sessionId->runtime 레지스트리를 만들었고, 이 테스트는 그 다음 패치(타이머/스냅샷이 더 이상
+  // 기본 런타임만 진행/저장하지 않음)를 결정론으로 검증한다. 인메모리 repository(스냅샷 1개 보관)를 두 부팅이
+  // 공유 → 부팅A persist 후 부팅B가 같은 스냅샷에서 세션2 런타임을 복원하는 per-session 영속 왕복을 본다.
+  let held = null;
+  const repo = { backend: 'mem', load() { return held; }, save(s) { held = s; }, close() {} };
+  const cfg = () => loadConfig({ LOGH_RELAY: '1', LOGH_AUTHORITATIVE: '1', LOGH_ECONOMY: '1' });
+  const sessions = [
+    { sessionId: 1, name: 'Alpha', status: 1 },
+    { sessionId: 2, name: 'Beta', status: 1 },
+  ];
+  const boot = () => startLogh7AuthServer({
+    host: '127.0.0.1', port: 0,
+    transportKey: TRANSPORT_KEY, decipherKey: DECIPHER_KEY,
+    lobby: { ip: '127.0.0.1', port: 47900 },
+    accountStore: createAccountStore({ acceptAnyGin7: true }),
+    sessions,
+    repository: repo,
+    persistIntervalMs: 0, // 주기 인터벌 off → persist()/tick* 호출만이 동작을 구동(결정론).
+    config: cfg(),
+  });
+
+  const serverA = await boot();
+  try {
+    const a = serverA.runtimeForSession(1);
+    const b = serverA.runtimeForSession(2);
+    const turnA0 = a.worldState.getScenarioInfo().currentTurn;
+    const turnB0 = b.worldState.getScenarioInfo().currentTurn;
+
+    // per-session 타이머: 전 세션 런타임 경제 틱 1회 → 두 세션 모두 턴 +1(부팅 직후 gameDay≈0, 주기0 진입).
+    // 이전 동작은 기본(session 1)만 진행했다.
+    serverA.tickAllEconomyRuntimes();
+    assert.equal(a.worldState.getScenarioInfo().currentTurn, turnA0 + 1, 'session1 경제 틱 진행');
+    assert.equal(b.worldState.getScenarioInfo().currentTurn, turnB0 + 1, 'session2도 경제 틱 진행(기본 런타임 한정 아님)');
+
+    // 세션별 격리: 같은 게임일 재틱은 중복 적립 방지(null).
+    assert.equal(serverA.economyTickOnceForSession(2), null, '같은 게임일 재틱은 중복 적립 방지');
+
+    // 세션2에만 식별 가능한 함대를 넣어 스냅샷 분리를 본다.
+    b.worldState.upsertFleet({ id: 0x2bee, owner: 2, faction: 'alliance', cell: 33 });
+
+    // persist(): 기본(session 1)은 최상위, session 2는 sessions 행으로 직렬화된다.
+    serverA.persist();
+    assert.ok(held && Array.isArray(held.sessions), 'persist가 per-session sessions 행을 기록');
+    const row2 = held.sessions.find((s) => s.sessionId === 2);
+    assert.ok(row2, '세션2 스냅샷 행 존재');
+    assert.equal(row2.world.fleets.some((f) => f.id === 0x2bee), true, '세션2 함대가 세션 행에 영속화');
+    assert.equal(held.world.fleets.some((f) => f.id === 0x2bee), false, '세션2 함대는 기본(최상위) 행에 없음');
+  } finally {
+    await serverA.close();
+  }
+
+  // 재부팅: 같은 repository → 세션2 런타임이 영속 sessions에서 즉시 생성·복원되어야 한다(per-session 영속 왕복).
+  const serverB = await boot();
+  try {
+    assert.equal(serverB.sessionRuntimes.has(2), true, '재부팅이 영속 sessions에서 세션2 런타임을 복원');
+    assert.ok(serverB.runtimeForSession(2).worldState.getFleet(0x2bee), '세션2 함대가 재부팅 후 복원됨');
+    assert.equal(serverB.runtimeForSession(1).worldState.getFleet(0x2bee), null, '기본 런타임엔 세션2 함대 없음');
+  } finally {
+    await serverB.close();
+  }
+});
+
+test('per-session strategic persistence: strat fleets + tick survive a restart for default AND session 2 (journal #62, EXE-free)', async () => {
+  // journal #62의 EXE-gated 검증 경계를 닫는다 — strat 시뮬은 실제 클라 EXE 없이도 부팅되므로(코덱 테이블은
+  // 커밋 JSON, 갤럭시는 content DB) auth-server 레벨 strat 영속 왕복을 런타임으로 검증할 수 있다. stratSimEnabled은
+  // 아직 process.env 직접 의존이라 여기서만 설정/복원한다(relay/auth/db는 config로 주입).
+  const prevStrat = process.env.LOGH_STRAT_SIM;
+  process.env.LOGH_STRAT_SIM = '1';
+  let held = null;
+  const repo = { backend: 'mem', load() { return held; }, save(s) { held = s; }, close() {} };
+  const cfg = () => loadConfig({ LOGH_RELAY: '1', LOGH_AUTHORITATIVE: '1', LOGH_STRAT_SIM: '1', LOGH_CONTENT_DB: '1' });
+  const sessions = [
+    { sessionId: 1, name: 'Alpha', status: 1 },
+    { sessionId: 2, name: 'Beta', status: 1 },
+  ];
+  const boot = () => startLogh7AuthServer({
+    host: '127.0.0.1', port: 0,
+    transportKey: TRANSPORT_KEY, decipherKey: DECIPHER_KEY,
+    lobby: { ip: '127.0.0.1', port: 47900 },
+    accountStore: createAccountStore({ acceptAnyGin7: true }),
+    sessions, repository: repo, persistIntervalMs: 0, config: cfg(),
+  });
+  const movedAwayFromHome = (runtime) =>
+    [...runtime.strat.simState.fleetsById.values()].find((f) => f.system !== f.homeSystem) ?? null;
+
+  try {
+    const serverA = await boot();
+    let movedDef, movedBeta;
+    try {
+      assert.equal(serverA.stratSimEnabled, true, 'strat sim must boot without the client EXE');
+      const def = serverA.runtimeForSession(1);
+      const beta = serverA.runtimeForSession(2); // lazily create session-2 runtime (its own seeded strat)
+      assert.ok(def.strat && beta.strat, '두 런타임 모두 독립 strat 시뮬을 가진다');
+      // advance BOTH runtimes via the all-runtimes scheduler until each has a fleet off home.
+      for (let t = 1; t <= 20; t += 1) serverA.tickAllStrategicRuntimes();
+      movedDef = movedAwayFromHome(def);
+      movedBeta = movedAwayFromHome(beta);
+      assert.ok(movedDef, '기본 런타임에서 함대가 홈을 떠났다(전쟁 진행 전제)');
+      assert.ok(movedBeta, '세션2 런타임에서도 함대가 홈을 떠났다');
+
+      serverA.persist();
+      assert.ok(Array.isArray(held?.entities?.strat?.fleets), '기본 strat는 최상위 entities.strat로 영속');
+      assert.equal(typeof held.entities.strat.tickNo, 'number', '기본 strat tickNo 영속');
+      const betaRow = held.sessions?.find((s) => s.sessionId === 2);
+      assert.ok(Array.isArray(betaRow?.entities?.strat?.fleets), '세션2 strat는 sessions 행 entities.strat로 영속');
+    } finally {
+      await serverA.close();
+    }
+
+    // restart from the same repository: both runtimes' strat fleets/tick must resume (not reset to home).
+    const serverB = await boot();
+    try {
+      const def2 = serverB.runtimeForSession(1);
+      const defFleet = def2.strat.simState.fleetsById.get(movedDef.id);
+      assert.ok(defFleet, '기본 이동 함대가 재부팅 후 id로 복원');
+      assert.equal(defFleet.system, movedDef.system, '기본 함대는 전시 위치 유지(홈 리셋 아님)');
+      assert.notEqual(defFleet.system, defFleet.homeSystem, '기본 함대는 여전히 홈이 아니다');
+      assert.equal(def2.stratTickNo, held.entities.strat.tickNo, '기본 stratTickNo 복원');
+
+      assert.equal(serverB.sessionRuntimes.has(2), true, '세션2 런타임이 영속에서 복원됨');
+      const beta2 = serverB.runtimeForSession(2);
+      const betaFleet = beta2.strat.simState.fleetsById.get(movedBeta.id);
+      assert.ok(betaFleet, '세션2 이동 함대가 재부팅 후 복원');
+      assert.equal(betaFleet.system, movedBeta.system, '세션2 함대는 전시 위치 유지(홈 리셋 아님)');
+    } finally {
+      await serverB.close();
+    }
+  } finally {
+    if (prevStrat === undefined) delete process.env.LOGH_STRAT_SIM; else process.env.LOGH_STRAT_SIM = prevStrat;
+  }
 });
 
 test('auth server exposes an opt-in local admin session-state snapshot', async () => {
@@ -291,7 +483,35 @@ test('auth server exposes an opt-in local admin session-state snapshot', async (
   });
   try {
     assert.ok(server.admin);
-    const denied = await fetch(server.admin.url);
+    server.worldState.addPlayer({ connectionId: 6, charId: 11, powerId: 2 });
+    const strategyInner = Buffer.alloc(2 + 0x1c);
+    strategyInner.writeUInt16BE(0x0900, 0);
+    strategyInner.subarray(2).writeUInt32LE(0x50, 8);
+    strategyInner.subarray(2).writeUInt32LE(0x07, 12);
+    const strategyDecision = processCommand({
+      state: server.worldState,
+      connectionId: 6,
+      innerCode: 0x0900,
+      inner: strategyInner,
+ });
+ assert.equal(strategyDecision.accept, true);
+ server.worldState._personnel = createPersonnelState();
+ server.worldState._personnel.addCharacter({ id: 11, owner: 6, rank: 4, spot: 3, title: 2 });
+ server.worldState._personnel.addOutfit({ id: 11, owner: 6, chief: 11 });
+ server.worldState._personnel.appointCard(11, { character: 11, role: 1 });
+ server.worldState._social = createSocialState();
+ server.worldState._social.join(6, 11);
+ server.worldState._social.setPresence(6, 2);
+ server.worldState._social.addContact(6, 12);
+ server.worldState._account = createAccountState();
+ server.worldState._account.join(6, { accountId: 6, name: 'admin-test', owned: [11], available: [12], maxExtensionSlots: 1 });
+ server.worldState._account.chargeExtension(6, 12);
+ server.worldState.getIntelState().addCoupLoyalty(11, 20);
+ server.worldState.getCoupState().declareRingleader(11, 2);
+ server.worldState._espionage = createEspionageState();
+ server.worldState._espionage.authorizeArrest(2, 11);
+
+ const denied = await fetch(server.admin.url);
     assert.equal(denied.status, 401);
 
     const response = await fetch(server.admin.url, {
@@ -306,13 +526,345 @@ test('auth server exposes an opt-in local admin session-state snapshot', async (
     assert.equal(body.flags.authoritative, true);
     assert.equal(body.flags.relay, true);
     assert.equal(body.persistence.enabled, false);
-    assert.equal(body.counts.players, 0);
+    assert.equal(body.counts.players, 1);
     assert.equal(body.counts.systems > 0, true);
     assert.equal(body.counts.economyPlanets > 0, true);
+    assert.equal(body.counts.commandRecords, 1);
+ assert.equal(body.world.recentCommands[0].innerCode, 0x0900);
+ assert.equal(body.world.recentCommands[0].effect, 'strategy-command');
+ assert.equal(body.world.personnelState.counts.characters, 1);
+ assert.equal(body.world.personnelState.outfits[0].seats[0].character, 11);
+ assert.equal(body.world.socialState.counts.contacts, 1);
+ assert.equal(body.world.accountState.accounts[0].extensionSlots, 1);
+ assert.equal(body.world.intelState.counts.coupLoyalty, 1);
+ assert.equal(body.world.coupState.counts.conspiracies, 1);
+ assert.equal(body.world.espionageState.counts.arrestList, 1);
+ assert.equal(body.world.commandTargets.characters[0].id, 11);
+    assert.equal(body.world.commandTargets.outfits[0].id, 11);
+    assert.equal(body.world.commandTargetHistory.some((entry) => entry.reason === 'strategy-route:base'), true);
+    assert.equal(body.world.commandTargetHistory.some((entry) => entry.reason === 'strategy-route:outfit'), true);
+    assert.equal(body.world.devCommandCatalog.cards[0].commands[0].missingTargetKinds.length, 0);
+    assert.equal(body.world.devCommandCatalog.cards[0].commands[0].targetSlots.some((slot) => slot.kind === 'gridCell'), true);
+assert.equal(body.world.devCommandCatalog.cards[0].commands[0].targetSlots.find((slot) => slot.kind === 'gridCell').samples[0].cell, 2588);
+assert.equal(body.world.devCommandCatalog.cards[0].commands[0].executionPreview.innerCodeHex, '0x0b01');
+assert.equal(body.world.devCommandCatalog.cards[0].commands[0].executionPreview.executable, true);
+assert.equal(body.world.devCommandCatalog.factoryAnchors.find((anchor) => anchor.factoryId === 0x002b).function, 'FUN_00581c80');
+assert.equal(body.world.devCommandCatalog.factoryAnchors.find((anchor) => anchor.factoryId === 0x0019).selectedFactoryBranch.followupInnerCodeHex, '0x0903');
+assert.equal(body.world.devCommandCatalog.factoryAnchors.find((anchor) => anchor.factoryId === 0x003f).selectedFactoryBranch.followupInnerCodeHex, '0x0c02');
+assert.equal(body.world.devCommandCatalog.factoryAnchors.find((anchor) => anchor.factoryId === 0x0040).selectedFactoryBranch.followupInnerCodeHex, '0x0c05');
+assert.equal(body.world.devCommandCatalog.cards[0].commands[0].factoryAnchor.requestHex, '0x0b01');
+assert.equal(body.world.devCommandCatalog.mappingAudit.recovered.some((entry) => entry.includes('0x19/0x3f/0x40')), true);
+assert.equal(body.world.devCommandCatalog.mappingAudit.status, 'dev-compat-static-anchor-only');
+assert.equal(body.world.devCommandCatalog.mappingAudit.canonicalAuthorityCardMappingRecovered, false);
+assert.equal(body.world.devCommandCatalog.cards[0].commands[0].targetSlots.some((slot) => (
+  slot.kind === 'planet' && slot.available
+)), true);
+assert.equal(body.world.commandTargets.planets.length > 0, true);
+assert.equal(body.world.interactionExposure.objectKinds.planet.slot.available, true);
+assert.equal(body.world.interactionExposure.objectKinds.planet.producers.some((entry) => (
+  entry.requestHex === '0x031e'
+)), true);
+assert.equal(body.world.interactionExposure.objectKinds.operationPlan.interactionKinds.includes('order'), true);
+assert.equal(body.world.interactionExposure.playability.objectKindsWithCommands > 0, true);
+assert.equal(body.world.playabilityAudit.devPlayable, true);
+assert.equal(body.world.playabilityAudit.canonicalAuthorityCardMappingRecovered, false);
+assert.equal(body.world.playabilityAudit.commandTotals.executableCommands, body.world.devCommandReadiness.executableCommands);
+assert.equal(body.world.playabilityAudit.commandBuckets.transports.opcode.commandCount > 0, true);
+assert.equal(body.world.playabilityAudit.canonicalGates.some((gate) => (
+  gate.gate.includes('authority-card')
+)), true);
+assert.deepEqual(body.world.devCommandReadiness, body.world.devCommandCatalog.readiness);
+assert.equal(body.world.devCommandReadiness.totalCommands > 0, true);
+assert.equal(body.world.devCommandReadiness.executableCommands > 0, true);
+assert.deepEqual(body.world.contentExposure.opcodeContract.map((entry) => [entry.request, entry.response]), [
+  [0x0304, 0x0305],
+  [0x0306, 0x0307],
+  [0x0312, 0x0313],
+  [0x0314, 0x0315],
+[0x031e, 0x031f],
+[0x0320, 0x0321],
+[0x0322, 0x0323],
+[0x0324, 0x0325],
+[0x0326, 0x0327],
+[0x0328, 0x0329],
+[0x032a, 0x032b],
+[0x032e, 0x032f],
+  [0x034e, 0x034f],
+]);
+assert.equal(body.world.contentExposure.opcodeContract.find((entry) => entry.response === 0x0307).status, 'known-builder-not-default');
+assert.deepEqual(body.world.contentExposure.consumersByDataset.planets.map((entry) => entry.response), [
+      0x031f,
+      0x0321,
+      0x0327,
+      0x0329,
+    ]);
+assert.deepEqual(body.world.contentExposure.consumersByDataset.specialBodies.map((entry) => entry.response), [
+0x0313,
+0x0315,
+]);
+assert.deepEqual(body.world.contentExposure.consumersByDataset.characters.map((entry) => entry.response), [
+0x0323,
+0x032f,
+0x034f,
+]);
+assert.deepEqual(body.world.contentExposure.targetProducersByKind.character.map((entry) => entry.request), [
+0x0322,
+0x032e,
+0x034e,
+]);
+    assert.equal(body.world.contentExposure.systems.packCount, 85);
+    assert.equal(body.world.contentExposure.systems.coordinateConfirmedCount, 80);
+    assert.equal(body.world.contentExposure.planets.economyCount, 300);
+    assert.equal(body.world.contentExposure.specialBodies.blackHoleCount, 3);
+ assert.equal(body.world.contentExposure.specialBodies.neutronStarCount, 3);
+ assert.equal(body.sessions[0].commandRecords, 1);
+ assert.equal(body.sessions[0].personnelState.counts.characters, 1);
+ assert.equal(body.sessions[0].socialState.counts.contacts, 1);
+ assert.equal(body.sessions[0].accountState.accounts[0].extensionSlots, 1);
+assert.equal(body.sessions[0].intelState.counts.coupLoyalty, 1);
+assert.equal(body.sessions[0].coupState.counts.conspiracies, 1);
+assert.equal(body.sessions[0].espionageState.counts.arrestList, 1);
+assert.equal(body.sessions[0].commandTargets.characters[0].id, 11);
+assert.equal(body.sessions[0].devCommandCatalog.cards.length > 0, true);
+assert.equal(body.sessions[0].interactionExposure.objectKinds.character.slot.available, true);
+assert.equal(body.sessions[0].playabilityAudit.devPlayable, true);
+assert.equal(body.sessions[0].devCommandReadiness.executableCommands > 0, true);
 
-    const health = await fetch(`http://${server.admin.host}:${server.admin.port}/health`);
+const health = await fetch(`http://${server.admin.host}:${server.admin.port}/health`);
     assert.equal(health.status, 200);
     assert.equal((await health.json()).service, 'logh7-admin');
+  } finally {
+    await server.close();
+  }
+});
+
+test('admin dev-command execute endpoint routes a dev card into authoritative command state', async () => {
+  const server = await startLogh7AuthServer({
+    host: '127.0.0.1',
+    port: 0,
+    transportKey: TRANSPORT_KEY,
+    decipherKey: DECIPHER_KEY,
+    lobby: { ip: '127.0.0.1', port: 47900 },
+    admin: { host: '127.0.0.1', port: 0, token: ADMIN_TOKEN },
+    accountStore: createAccountStore({ acceptAnyGin7: true }),
+    config: loadConfig({
+      LOGH_RELAY: '1',
+      LOGH_AUTHORITATIVE: '1',
+    }),
+  });
+  const base = `http://${server.admin.host}:${server.admin.port}`;
+  const adminHeaders = {
+    authorization: `Bearer ${ADMIN_TOKEN}`,
+    'content-type': 'application/json',
+  };
+  try {
+    const denied = await fetch(`${base}/admin/dev-command/execute`, {
+      method: 'POST',
+      body: JSON.stringify({ factoryId: 0x002b }),
+    });
+    assert.equal(denied.status, 401);
+
+    const initialState = await (await fetch(server.admin.url, { headers: adminHeaders })).json();
+    assert.equal(initialState.world.devCommandCatalog.cards[0].categoryName, '作戦コマンド');
+    assert.equal(initialState.world.devCommandCatalog.cards[0].commands[0].executionPreview.executable, true);
+    assert.equal(initialState.world.commandTargets.characters[0].id, 1001);
+
+    const dryRun = await (await fetch(`${base}/admin/dev-command/execute`, {
+      method: 'POST',
+      headers: adminHeaders,
+      body: JSON.stringify({ categoryIndex: 0, commandIndex: 1, dryRun: true }),
+    })).json();
+    assert.equal(dryRun.ok, true);
+    assert.equal(dryRun.dryRun, true);
+    assert.equal(dryRun.preview.innerCodeHex, '0x0b02');
+
+    const executedResponse = await fetch(`${base}/admin/dev-command/execute`, {
+      method: 'POST',
+      headers: adminHeaders,
+      body: JSON.stringify({ factoryId: 0x002b }),
+    });
+    assert.equal(executedResponse.status, 200);
+    const executed = await executedResponse.json();
+    assert.equal(executed.ok, true);
+    assert.equal(executed.command.factoryId, 0x002b);
+    assert.equal(executed.decision.devExecution.innerCodeHex, '0x0b01');
+    assert.equal(executed.commandRecordsBefore, 0);
+    assert.equal(executed.commandRecordsAfter, 1);
+    assert.equal(executed.recentCommand.effect, 'fleet-grid-move');
+    assert.equal(server.worldState.getPlayer(executed.connectionId).charId, 1001);
+    assert.equal(server.worldState.getFleet(1001).cell, 2599);
+
+    const supplied = await (await fetch(`${base}/admin/dev-command/execute`, {
+      method: 'POST',
+      headers: adminHeaders,
+      body: JSON.stringify({ categoryIndex: 0, commandIndex: 1 }),
+    })).json();
+    assert.equal(supplied.ok, true);
+    assert.equal(supplied.decision.devExecution.innerCodeHex, '0x0b02');
+    assert.equal(supplied.recentCommand.effect, 'logistics-command');
+
+    const carried = await (await fetch(`${base}/admin/dev-command/execute`, {
+      method: 'POST',
+      headers: adminHeaders,
+      body: JSON.stringify({ categoryIndex: 3, commandIndex: 4 }),
+    })).json();
+    assert.equal(carried.ok, true);
+    assert.equal(carried.decision.devExecution.innerCodeHex, '0x0c08');
+    assert.equal(carried.recentCommand.effect, 'logistics-command');
+
+    const manifested = await (await fetch(`${base}/admin/dev-command/execute`, {
+      method: 'POST',
+      headers: adminHeaders,
+      body: JSON.stringify({ categoryIndex: 0, commandIndex: 3 }),
+    })).json();
+    assert.equal(manifested.ok, true);
+    assert.equal(manifested.decision.devExecution.innerCodeHex, '0x0902');
+
+    const sortie = await (await fetch(`${base}/admin/dev-command/execute`, {
+      method: 'POST',
+      headers: adminHeaders,
+      body: JSON.stringify({
+        categoryIndex: 0,
+        commandIndex: 14,
+        targets: { troop: { id: 100150, kind: 1, unitId: 1001 } },
+      }),
+    })).json();
+    assert.equal(sortie.ok, true);
+    assert.equal(sortie.decision.devExecution.semantic, 'ground-sortie');
+    assert.equal(sortie.decision.devExecution.transport, 'server-direct');
+    assert.equal(sortie.recentCommand.effect, 'ground-command');
+
+    const operationTargets = {
+      operationPlan: { id: 77, target: 2599, units: [1001] },
+      outfit: { id: 1001 },
+      gridCells: [{ cell: 2588 }, { cell: 2599 }],
+    };
+    const makePlan = await (await fetch(`${base}/admin/dev-command/execute`, {
+      method: 'POST',
+      headers: adminHeaders,
+      body: JSON.stringify({ categoryIndex: 2, commandIndex: 0, targets: operationTargets }),
+    })).json();
+    assert.equal(makePlan.ok, true);
+    assert.equal(makePlan.decision.devExecution.innerCodeHex, '0x0900');
+    assert.equal(makePlan.recentCommand.effect, 'strategy-command');
+
+    const issueOrder = await (await fetch(`${base}/admin/dev-command/execute`, {
+      method: 'POST',
+      headers: adminHeaders,
+      body: JSON.stringify({ categoryIndex: 2, commandIndex: 2, targets: operationTargets }),
+    })).json();
+    assert.equal(issueOrder.ok, true);
+    assert.equal(issueOrder.decision.devExecution.innerCodeHex, '0x0902');
+    assert.equal(issueOrder.recentCommand.effect, 'strategy-command');
+
+    const stateAfterCommands = await (await fetch(server.admin.url, { headers: adminHeaders })).json();
+    assert.equal(stateAfterCommands.world.ships.some((ship) => ship.id === 100101), true);
+    assert.equal(stateAfterCommands.world.troops.some((troop) => troop.id === 100150 && troop.landed === true), true);
+    const manifest = stateAfterCommands.world.combatAssets.fleetManifests.find((entry) => entry.fleetId === 1001);
+    assert.equal(manifest.shipCount > 0, true);
+    assert.equal(manifest.troopCount > 0, true);
+    assert.equal(manifest.fighterCount > 0, true);
+    assert.equal(manifest.weaponCount > 0, true);
+    assert.equal(stateAfterCommands.world.logisticsState.enabled, true);
+    assert.equal(stateAfterCommands.world.logisticsState.fleets.some((fleet) => (
+      fleet.id === 1001 && fleet.fuel === 5000 && fleet.supply === 3000
+    )), true);
+    assert.equal(stateAfterCommands.world.logisticsState.bases.some((base) => base.id === 1), true);
+    assert.equal(stateAfterCommands.world.logisticsState.recentLog.some((entry) => entry.event === 'supply-fuel'), true);
+    assert.equal(stateAfterCommands.world.logisticsState.recentLog.some((entry) => entry.event === 'carry'), true);
+    assert.equal(stateAfterCommands.world.strategyState.enabled, true);
+    assert.equal(stateAfterCommands.world.strategyState.counts.queuedPlans > 0, true);
+    assert.equal(stateAfterCommands.world.strategyState.counts.operationPlans > 0, true);
+    const queuedPlan = stateAfterCommands.world.strategyState.queuedPlans.find((plan) => plan.planId === 77);
+    assert.equal(queuedPlan.target, 2599);
+    assert.equal(stateAfterCommands.world.strategyState.operationPlans.some((plan) => (
+      plan.planId === queuedPlan.planId && plan.queued === true
+    )), true);
+    assert.equal(stateAfterCommands.world.strategyState.orders.some((order) => (
+      order.planId === 77 && order.message === 2599
+    )), true);
+    assert.equal(stateAfterCommands.world.strategyState.recentCommands.some((entry) => entry.innerCode === 0x0900), true);
+
+    const withdrawal = await (await fetch(`${base}/admin/dev-command/execute`, {
+      method: 'POST',
+      headers: adminHeaders,
+      body: JSON.stringify({ categoryIndex: 2, commandIndex: 1, targets: operationTargets }),
+    })).json();
+    assert.equal(withdrawal.ok, true);
+    assert.equal(withdrawal.decision.devExecution.innerCodeHex, '0x0901');
+
+    const stateAfterWithdrawal = await (await fetch(server.admin.url, { headers: adminHeaders })).json();
+    assert.equal(stateAfterWithdrawal.world.strategyState.queuedPlans.some((plan) => plan.planId === 77), false);
+    assert.equal(stateAfterWithdrawal.world.strategyState.operationPlans.some((plan) => (
+      plan.planId === 77 && plan.status === 'withdrawn' && plan.queued === false
+    )), true);
+    assert.equal(stateAfterWithdrawal.world.strategyState.operationEvents.some((event) => (
+      event.type === 'withdraw' && event.planId === 77
+    )), true);
+  } finally {
+    await server.close();
+  }
+});
+
+test('admin sessions API and console manage the lobby session catalog', async () => {
+  const server = await startLogh7AuthServer({
+    host: '127.0.0.1',
+    port: 0,
+    transportKey: TRANSPORT_KEY,
+    decipherKey: DECIPHER_KEY,
+    lobby: { ip: '127.0.0.1', port: 47900 },
+    admin: { host: '127.0.0.1', port: 0, token: ADMIN_TOKEN },
+    accountStore: createAccountStore({ acceptAnyGin7: true }),
+  });
+  const base = `http://${server.admin.host}:${server.admin.port}`;
+  const adminHeaders = {
+    authorization: `Bearer ${ADMIN_TOKEN}`,
+    'content-type': 'application/json',
+  };
+  try {
+    const consolePage = await fetch(`${base}/admin`);
+    assert.equal(consolePage.status, 200);
+    const consoleHtml = await consolePage.text();
+    assert.match(consoleHtml, /LOGH VII Admin/);
+    assert.match(consoleHtml, /Dev Commands/);
+    assert.match(consoleHtml, /\/admin\/dev-command\/execute/);
+
+    const denied = await fetch(`${base}/admin/sessions`);
+    assert.equal(denied.status, 401);
+
+    const initial = await (await fetch(`${base}/admin/sessions`, { headers: adminHeaders })).json();
+    assert.equal(initial.ok, true);
+    assert.equal(initial.sessions.length, 1);
+
+    const upserted = await (await fetch(`${base}/admin/sessions`, {
+      method: 'PUT',
+      headers: adminHeaders,
+      body: JSON.stringify({
+        sessionId: 7,
+        sessionName: 'Ops Test',
+        status: 1,
+        beginDay: 'UC 802',
+        world: { ip: '10.9.0.7', port: 48007, token: 77 },
+      }),
+    })).json();
+    assert.equal(upserted.session.sessionName, 'Ops Test');
+    assert.equal(upserted.session.world.port, 48007);
+
+    const closed = await (await fetch(`${base}/admin/sessions/7/close`, {
+      method: 'POST',
+      headers: adminHeaders,
+    })).json();
+    assert.equal(closed.session.status, 0);
+
+    const snapshot = await (await fetch(server.admin.url, { headers: adminHeaders })).json();
+    const session7 = snapshot.lobby.sessionCatalog.find((session) => session.sessionId === 7);
+    assert.equal(session7.sessionName, 'Ops Test');
+    assert.equal(session7.status, 0);
+
+    const deleted = await fetch(`${base}/admin/sessions/7`, { method: 'DELETE', headers: adminHeaders });
+    assert.equal(deleted.status, 200);
+    const afterDelete = await (await fetch(`${base}/admin/sessions`, { headers: adminHeaders })).json();
+    assert.equal(afterDelete.sessions.some((session) => session.sessionId === 7), false);
   } finally {
     await server.close();
   }
@@ -1496,13 +2048,21 @@ test('scenario: LOGH_SCENARIO 설정 시 부팅이 시나리오를 월드에 시
   }
 });
 
-test('scenario: 캐논 801-07 기본 출하 — 부팅이 80성계+24함대+A7 세션메타를 월드에 시드(Phase D 제로설정)', async () => {
+test('scenario: 캐논 801-07 기본 출하 — 85/300 콘텐츠 월드 위에 80성계 시나리오 배치를 레이어한다', async () => {
   // PLAYABLE_ENV_DEFAULTS의 LOGH_SCENARIO 기본값(content/scenarios/canon-801-07.json)이 npm start 부팅에
   // 캐논 월드를 채우는지 고정. 여기선 명시 설정해 검증(테스트는 applyEnvDefaults를 거치지 않으므로).
-  const saved = { scen: process.env.LOGH_SCENARIO, relay: process.env.LOGH_RELAY, auth: process.env.LOGH_AUTHORITATIVE };
+  const saved = {
+    scen: process.env.LOGH_SCENARIO,
+    relay: process.env.LOGH_RELAY,
+    auth: process.env.LOGH_AUTHORITATIVE,
+    contentDb: process.env.LOGH_CONTENT_DB,
+  };
+  const dir = mkdtempSync(path.join(tmpdir(), 'logh7-scenario-trace-'));
+  const tracePath = path.join(dir, 'trace.jsonl');
   process.env.LOGH_SCENARIO = 'content/scenarios/canon-801-07.json';
   process.env.LOGH_RELAY = '1';
   process.env.LOGH_AUTHORITATIVE = '1';
+  process.env.LOGH_CONTENT_DB = '1';
   let server;
   try {
     server = await startLogh7AuthServer({
@@ -1510,10 +2070,13 @@ test('scenario: 캐논 801-07 기본 출하 — 부팅이 80성계+24함대+A7 �
       transportKey: TRANSPORT_KEY, decipherKey: DECIPHER_KEY,
       lobby: { ip: '127.0.0.1', port: 47900 },
       accountStore: createAccountStore({ acceptAnyGin7: true }),
+      tracePath,
     });
     assert.equal(server.bootScenarioName, 'canon-801-07', '캐논 시나리오 적용됨');
-    // 캐논 규모: 80성계 + 양진영 12+12 함대.
-    assert.equal(server.worldState.listSystems().length >= 80, true, '80성계 시드');
+    // 콘텐츠 규모: 85성계/300행성, 그 위에 시나리오 배치 80성계 + 양진영 12+12 함대.
+    const worldSystems = server.worldState.listSystems();
+    assert.equal(worldSystems.length, 85, '85성계 콘텐츠 월드 유지');
+    assert.equal(worldSystems.reduce((count, system) => count + system.planets.length, 0), 300, '300행성 콘텐츠 월드 유지');
     assert.equal(server.worldState.fleetCount(), 24, '제국12+동맹12 함대 시드');
     // A7 시나리오 메타가 부팅 후 채워졌는지(loadScenarioInto → setScenarioInfo 배선).
     const info = server.worldState.getScenarioInfo();
@@ -1529,23 +2092,41 @@ test('scenario: 캐논 801-07 기본 출하 — 부팅이 80성계+24함대+A7 �
     // 大佐이하 低officer가 시드되어 자동진급 사다리가 즉시 발화 가능(이전엔 大佐이하 ≤1명 = dormant).
     const lowSeeded = server.worldState.listCharacters().filter((c) => c.rank >= 1 && c.rank <= 8).length;
     assert.ok(lowSeeded >= 10, `大佐이하 자동진급 풀 시드: ${lowSeeded}`);
+    await server.close();
+    server = null;
+    const scenarioTrace = readFileSync(tracePath, 'utf8')
+      .split(/\r?\n/)
+      .filter(Boolean)
+      .map((line) => JSON.parse(line))
+      .find((entry) => entry.event === 'scenario-seed');
+    assert.equal(scenarioTrace.systems, 85, 'trace systems는 실제 월드 총량');
+    assert.equal(scenarioTrace.worldSystems, 85);
+    assert.equal(scenarioTrace.worldPlanets, 300);
+    assert.equal(scenarioTrace.scenarioSystems, 80, '시나리오 배치량은 별도 필드');
   } finally {
-    for (const [k, v] of [['LOGH_SCENARIO', saved.scen], ['LOGH_RELAY', saved.relay], ['LOGH_AUTHORITATIVE', saved.auth]]) {
+    for (const [k, v] of [
+      ['LOGH_SCENARIO', saved.scen],
+      ['LOGH_RELAY', saved.relay],
+      ['LOGH_AUTHORITATIVE', saved.auth],
+      ['LOGH_CONTENT_DB', saved.contentDb],
+    ]) {
       if (v === undefined) delete process.env[k]; else process.env[k] = v;
     }
     if (server) await server.close();
+    rmSync(dir, { recursive: true, force: true });
   }
 });
 
 test('production boot 합성: 캐논+경제+권위 전부 켜고 부팅→서빙→경제틱→clean close (제로설정 런타임 합성)', async () => {
   // "npm start" 제로설정 부팅이 전 기능을 함께 켜도 런타임에 합성·동작하는지 검증(부팅 통합 버그 포착).
-  const keys = ['LOGH_SCENARIO', 'LOGH_RELAY', 'LOGH_AUTHORITATIVE', 'LOGH_ECONOMY', 'LOGH_WORLD_PLAYER'];
+  const keys = ['LOGH_SCENARIO', 'LOGH_RELAY', 'LOGH_AUTHORITATIVE', 'LOGH_ECONOMY', 'LOGH_WORLD_PLAYER', 'LOGH_CONTENT_DB'];
   const saved = Object.fromEntries(keys.map((k) => [k, process.env[k]]));
   process.env.LOGH_SCENARIO = 'content/scenarios/canon-801-07.json';
   process.env.LOGH_RELAY = '1';
   process.env.LOGH_AUTHORITATIVE = '1';
   process.env.LOGH_ECONOMY = '1';
   process.env.LOGH_WORLD_PLAYER = '1';
+  process.env.LOGH_CONTENT_DB = '1';
   let server;
   try {
     server = await startLogh7AuthServer({
@@ -1561,6 +2142,7 @@ test('production boot 합성: 캐논+경제+권위 전부 켜고 부팅→서빙
     assert.equal(server.worldState.characterCount(), 31);
     // (3) 경제 + 권위적 턴틱 합성: 경제틱 1회 → 적립 + 턴 진행(S5) 동시 동작.
     assert.equal(server.economyEnabled, true);
+    assert.equal(server.economyState.listPlanets().length, 300, '경제도 300행성 콘텐츠로 시드');
     const turn0 = server.worldState.getScenarioInfo().currentTurn;
     const tick = server.economyTickOnce();
     assert.notEqual(tick, null, '부팅 직후 경제틱 적립');

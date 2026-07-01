@@ -1,239 +1,249 @@
-# 은영전 VII 리마스터 마스터 로드맵 — 2026-06-26
+﻿# ??곸쟾 VII 由щ쭏?ㅽ꽣 留덉뒪??濡쒕뱶留???2026-06-26
 
-13개 도메인 병렬 감사(flow-happy-path / wire-received / server-emit / consumption-trace /
+## Current Authority Note (2026-06-29)
+
+This roadmap is still useful as a broad map, but several details are superseded by the current loop state.
+
+- Canonical playable SHA is now `bc5e932212e790981c648c7b60acfbba06c0fdd5b8d7f583ef123fac71b098ad`, not the older `365b7e98` / `992dc7e2` / `c1523a5e` / `98ca4acd` / `5aa1e00a` / `0ceee9aa` / `bf1584d6` references.
+- Current C002 blocker is not missing rich data, slot `0x67`, or `PLAYER_INFO+0x270`: `LOGH_POSTLOAD_ACTION_LIST_SEATS=1` proved those live.
+- Current C002 blocker is UI admission: `FUN_005015f0(2)` returns false for the populated selection row and command root `+4` remains closed (`activeGate04=0`), preventing `FUN_004f93c0` / `FUN_00581c80` / `FUN_005737d0`.
+- Current live baseline: use the installed canonical EXE path through `RE/tools/logh7_ui_explorer.py`; start/login in windowed mode, switch later with `display --mode borderless` when needed, keep preseed off by default, and always stop/SHA-verify.
+
+13媛??꾨찓??蹂묐젹 媛먯궗(flow-happy-path / wire-received / server-emit / consumption-trace /
 map-switch / in-planet-jobcards / npc-ai / strategic-map / tactical-map / fleet-battle /
-remaster-hud-ui / mdx-galaxy / references-catalog)를 종합한 **단일 권위 로드맵**.
+remaster-hud-ui / mdx-galaxy / references-catalog)瑜?醫낇빀??**?⑥씪 沅뚯쐞 濡쒕뱶留?*.
 
-이 문서는 `docs/logh7-completion-matrix-2026-06-26-v2.md`(완성도)와
-`docs/logh7-remaster-roadmap-2026-06-26.md`(리마스터)를 **대체가 아니라 통합·갱신**한다.
-캐논: 서버=`server/src/server`, 위치권위=`server/content/galaxy.json`, RE=`.omo/ghidra/export/`,
-라이브 도구=`RE/tools`. 라이브 검증은 메인 직렬(수동 로그인, stop 시 SHA `992dc7e2` 복원).
-
----
-
-## (a) 목표 요약
-
-은영전 VII(`G7MTClient.exe`)를 **실유저가 수동 로그인 → 별개 캐릭터 생성 → 월드 진입 →
-전략맵/전술맵/함대전/직무·기지 패널을 상호작용**하는, 캐논 NPC 위계가 자율로 살아 움직이는
-리마스터 멀티플레이 게임으로 복원한다. 5대 합격 기준(메모리 logh7-real-game-behavior-2026-06-25):
-①autologin 금지=실로그인 ②로그인만 창모드→이후 풀스크린 ③별개 캐릭(초상화·이름 다름)
-④캐논 NPC 시드→플레이어 하급사관(자동황제 금지) ⑤매 라이브 테스트 저널 기록.
-
-**핵심 판정(13도메인 종합)**: 서버/시뮬/와이어/콘텐츠 층(pillar A ~80%)은 라이브 무관하게
-거의 완성(server 1198 tests / 1180 pass / 0 fail / 18 skip). 미달의 압도적 대부분은 **두 게이트**로 수렴:
-- **G0 = 라이브 월드진입 환경 신뢰화**(코드 아닌 환경, 단일 최대 게이트) — 저널 #6에서 1세션 극복 입증.
-- **C002 = 클라-로컬 mode byte(`0x35f35a` → `FUN_004b68f0`) 단일 게이트** — 맵전환·전술맵·함대전·
-  직무카드·커맨드윈도우·기지패널이 전부 이 라우터에 funnel. 진짜 블로커=own-fleet selectable 렌더
-  (case0 `FUN_0058d140` 6-AND 게이트). 9~12 라이브 run으로 force/lever/click/own-cell 전경로 배제.
-
-리마스터(pillar D)는 문서가 "~9% 무변동"으로 stale; 실제는 6-26 전수 스윕으로 텍스처 ~420개+
-ESRGAN+GFPGAN 초상화 416 배포·라이브 무손상 렌더 확정(저널 #6 7차 run). MDX 좌표 하드코딩
-의심은 **바이트 증거로 기각**((d)·(e) 참조).
+??臾몄꽌??`docs/logh7-completion-matrix-2026-06-26-v2.md`(?꾩꽦???
+`docs/logh7-remaster-roadmap-2026-06-26.md`(由щ쭏?ㅽ꽣)瑜?**?泥닿? ?꾨땲???듯빀쨌媛깆떊**?쒕떎.
+罹먮끉: ?쒕쾭=`server/src/server`, ?꾩튂沅뚯쐞=`server/content/galaxy.json`, RE=`.omo/ghidra/export/`,
+?쇱씠釉??꾧뎄=`RE/tools`. ?쇱씠釉?寃利앹? 硫붿씤 吏곷젹(?섎룞 濡쒓렇?? stop ??SHA `992dc7e2` 蹂듭썝).
 
 ---
 
-## (b) 현재 라이브 확정 동작 (저널 #1~#7, shot 인용)
+## (a) 紐⑺몴 ?붿빟
 
-- **수동 로그인**: 640 창모드 프레임+ID/PW칸 → 0x7000 발신 → 0x0020 로비 → 0x2005, 창모드→풀스크린
-  자동전환 (저널 #1/#10).
-- **로비 진입**: 블루 HUD 로비메뉴 (shot 027).
-- **캐릭생성 picker**: charsel-recenter 후 picker 카드 렌더 (저널 #7, shot 357/363).
-- **월드 진입 풀플로우**: 0x7000→0x0020→0x1008→0x0f02→0x0313 그리드→0x0323×26 NPC 위계 시드→
-  0x0325 (저널 #6, shot 049). 자동황제 아닌 캐논 NPC 시드 라이브 작동.
-- **전략맵 렌더(골격)**: 다색 항성(청/주황/적 분광형)·전략그리드·성운배경·하단 HUD(초상화+스탯·미니맵·
-  커맨드패널 프레임). strategy.jpg 레퍼런스와 골격 1:1 일치 (shot 049).
-- **리마스터 렌더**: HUD20+패널40+AI텍스처16+초상화416 배포, 무손상 렌더, 크래시 0 (shot 174).
-- **L2 상태전환 부분**: `LOGH_STATE_TRANSITION_PROBE`→0x0f1f 푸시→중앙 모드전환 UI 패널 출현
-  (shot 075→076). 서버푸시 상태전환 arm 라이브 작동(완전 전술렌더는 추가데이터 필요).
-- **C002 라이브 입증**: in-world 클릭 닿으나 0x0b01 미발생 = 마우스 아닌 mode2 게이트(RE 결론 정확).
+??곸쟾 VII(`G7MTClient.exe`)瑜?**?ㅼ쑀?媛 ?섎룞 濡쒓렇????蹂꾧컻 罹먮┃???앹꽦 ???붾뱶 吏꾩엯 ??
+?꾨왂留??꾩닠留??⑤???吏곷Т쨌湲곗? ?⑤꼸???곹샇?묒슜**?섎뒗, 罹먮끉 NPC ?꾧퀎媛 ?먯쑉濡??댁븘 ?吏곸씠??
+由щ쭏?ㅽ꽣 硫?고뵆?덉씠 寃뚯엫?쇰줈 蹂듭썝?쒕떎. 5? ?⑷꺽 湲곗?(硫붾え由?logh7-real-game-behavior-2026-06-25):
+?쟞utologin 湲덉?=?ㅻ줈洹몄씤 ?〓줈洹몄씤留?李쎈え?쒋넂?댄썑 ??ㅽ겕由???퀎媛?罹먮┃(珥덉긽?붋룹씠由??ㅻ쫫)
+?ｌ틦??NPC ?쒕뱶?믫뵆?덉씠???섍툒?ш?(?먮룞?⑹젣 湲덉?) ?ㅻℓ ?쇱씠釉??뚯뒪?????湲곕줉.
 
-**라이브 미실증(전부 G0/C002 종속)**: faction 함대색·own-fleet 마커·완전 전술맵·함대전 피해바/격침·
-拠点패널·직무카드·커맨드윈도우·집무실·인물 스테이터스·strict 로그인·별개 캐릭 2카드.
+**?듭떖 ?먯젙(13?꾨찓??醫낇빀)**: ?쒕쾭/?쒕?/??댁뼱/肄섑뀗痢?痢?pillar A ~80%)? ?쇱씠釉?臾닿??섍쾶
+嫄곗쓽 ?꾩꽦(server 1198 tests / 1180 pass / 0 fail / 18 skip). 誘몃떖???뺣룄???遺遺꾩? **??寃뚯씠??*濡??섎졃:
+- **G0 = ?쇱씠釉??붾뱶吏꾩엯 ?섍꼍 ?좊ː??*(肄붾뱶 ?꾨땶 ?섍꼍, ?⑥씪 理쒕? 寃뚯씠?? ?????#6?먯꽌 1?몄뀡 洹밸났 ?낆쬆.
+- **C002 = ?대씪-濡쒖뺄 mode byte(`0x35f35a` ??`FUN_004b68f0`) ?⑥씪 寃뚯씠??* ??留듭쟾?샕룹쟾?좊㏊쨌?⑤??꽷?
+  吏곷Т移대뱶쨌而ㅻ㎤?쒖쐢?꾩슦쨌湲곗??⑤꼸???꾨? ???쇱슦?곗뿉 funnel. 吏꾩쭨 釉붾줈而?own-fleet selectable ?뚮뜑
+  (case0 `FUN_0058d140` 6-AND 寃뚯씠??. 9~12 ?쇱씠釉?run?쇰줈 force/lever/click/own-cell ?꾧꼍濡?諛곗젣.
+
+由щ쭏?ㅽ꽣(pillar D)??臾몄꽌媛 "~9% 臾대????쇰줈 stale; ?ㅼ젣??6-26 ?꾩닔 ?ㅼ쐲?쇰줈 ?띿뒪泥?~420媛?
+ESRGAN+GFPGAN 珥덉긽??416 諛고룷쨌?쇱씠釉?臾댁넀???뚮뜑 ?뺤젙(???#6 7李?run). MDX 醫뚰몴 ?섎뱶肄붾뵫
+?섏떖? **諛붿씠??利앷굅濡?湲곌컖**((d)쨌(e) 李몄“).
 
 ---
 
-## (c) 마일스톤 (범위=전체: 리마스터+컨텐츠+플레이가능)
+## (b) ?꾩옱 ?쇱씠釉??뺤젙 ?숈옉 (???#1~#7, shot ?몄슜)
 
-| MS | 이름 | 범위 | 게이트/완료조건 |
+- **?섎룞 濡쒓렇??*: 640 李쎈え???꾨젅??ID/PW移???0x7000 諛쒖떊 ??0x0020 濡쒕퉬 ??0x2005, 李쎈え?쒋넂??ㅽ겕由?
+  ?먮룞?꾪솚 (???#1/#10).
+- **濡쒕퉬 吏꾩엯**: 釉붾（ HUD 濡쒕퉬硫붾돱 (shot 027).
+- **罹먮┃?앹꽦 picker**: charsel-recenter ??picker 移대뱶 ?뚮뜑 (???#7, shot 357/363).
+- **?붾뱶 吏꾩엯 ??뚮줈??*: 0x7000??x0020??x1008??x0f02??x0313 洹몃━?쒋넂0x0323횞26 NPC ?꾧퀎 ?쒕뱶??
+  0x0325 (???#6, shot 049). ?먮룞?⑹젣 ?꾨땶 罹먮끉 NPC ?쒕뱶 ?쇱씠釉??묐룞.
+- **?꾨왂留??뚮뜑(怨④꺽)**: ?ㅼ깋 ??꽦(泥?二쇳솴/??遺꾧킅??쨌?꾨왂洹몃━?쑣룹꽦?대같寃승룻븯??HUD(珥덉긽???ㅽ꺈쨌誘몃땲留돠?
+  而ㅻ㎤?쒗뙣???꾨젅??. strategy.jpg ?덊띁?곗뒪? 怨④꺽 1:1 ?쇱튂 (shot 049).
+- **由щ쭏?ㅽ꽣 ?뚮뜑**: HUD20+?⑤꼸40+AI?띿뒪泥?6+珥덉긽??16 諛고룷, 臾댁넀???뚮뜑, ?щ옒??0 (shot 174).
+- **L2 ?곹깭?꾪솚 遺遺?*: `LOGH_STATE_TRANSITION_PROBE`??x0f1f ?몄떆?믪쨷??紐⑤뱶?꾪솚 UI ?⑤꼸 異쒗쁽
+  (shot 075??76). ?쒕쾭?몄떆 ?곹깭?꾪솚 arm ?쇱씠釉??묐룞(?꾩쟾 ?꾩닠?뚮뜑??異붽??곗씠???꾩슂).
+- **C002 ?쇱씠釉??낆쬆**: in-world ?대┃ ?우쑝??0x0b01 誘몃컻??= 留덉슦???꾨땶 mode2 寃뚯씠??RE 寃곕줎 ?뺥솗).
+
+**?쇱씠釉?誘몄떎利??꾨? G0/C002 醫낆냽)**: faction ?⑤??됀톙wn-fleet 留덉빱쨌?꾩쟾 ?꾩닠留돠룻븿????쇳빐諛?寃⑹묠쨌
+?좂궧?⑤꼸쨌吏곷Т移대뱶쨌而ㅻ㎤?쒖쐢?꾩슦쨌吏묐Т?ㅒ룹씤臾??ㅽ뀒?댄꽣?ㅒ톝trict 濡쒓렇?맞룸퀎媛?罹먮┃ 2移대뱶.
+
+---
+
+## (c) 留덉씪?ㅽ넠 (踰붿쐞=?꾩껜: 由щ쭏?ㅽ꽣+而⑦뀗痢??뚮젅?닿???
+
+| MS | ?대쫫 | 踰붿쐞 | 寃뚯씠???꾨즺議곌굔 |
 |---|---|---|---|
-| **M0** | 기반/재구조화 | server/+client/ 자가완결 별도 레포, RE/.omo 정션, server 1198/0fail | ✅ done |
-| **M1** | 실플레이 게이트(현 집중) | §(a) 5조건: 실 credential·별개캐릭·캐릭생성 확인 다이얼로그·charsel 정합 | 라이브 직렬 (P0 백로그 1~6) |
-| **M2** | 상태전환/맵전환(AXIS2) | 0x0f1f/0x0b09·0x0b0a 서버푸시로 전략↔전술 시각전환 | L2 부분 확정, 완전 전술렌더 잔여 |
-| **M3** | 인월드 상호작용(C002) | own-fleet selectable 렌더→fleet-click→명령메뉴→0x0b01 | 깊은 프런티어 (P0 백로그 7~9) |
-| **M4** | 전투/전술 렌더 | 완전 전술 시드→배틀필드 렌더, 0x426 피해바/격침 시각 | M3 종속 |
-| **M5** | 콘텐츠/캐논 | 시설/장소 데이터·직무카드 배선·officer 명부·작전 수치·NPC 조인 | 병렬, 일부 라이브 |
-| **M6** | 리마스터/한글화/배포 | UI 아틀라스 내성·1920 패널·신규 SR 타겟·dgVoodoo 프리셋·런처 한글 | 병렬, 일부 라이브 |
-| **M7** | 전수 RE | G7MTClient ~5.7%→임계경로(C002 case0·credential 빌드·post-handler) | 병렬 |
-| **M-final** | 패키징 | play-logh7.exe·풀스크린 필러·전 화면 라이브 회귀·릴리스 | 전 MS 종속 |
+| **M0** | 湲곕컲/?ш뎄議고솕 | server/+client/ ?먭??꾧껐 蹂꾨룄 ?덊룷, RE/.omo ?뺤뀡, server 1198/0fail | ??done |
+| **M1** | ?ㅽ뵆?덉씠 寃뚯씠????吏묒쨷) | 짠(a) 5議곌굔: ??credential쨌蹂꾧컻罹먮┃쨌罹먮┃?앹꽦 ?뺤씤 ?ㅼ씠?쇰줈洹맞톍harsel ?뺥빀 | ?쇱씠釉?吏곷젹 (P0 諛깅줈洹?1~6) |
+| **M2** | ?곹깭?꾪솚/留듭쟾??AXIS2) | 0x0f1f/0x0b09쨌0x0b0a ?쒕쾭?몄떆濡??꾨왂?붿쟾???쒓컖?꾪솚 | L2 遺遺??뺤젙, ?꾩쟾 ?꾩닠?뚮뜑 ?붿뿬 |
+| **M3** | ?몄썡???곹샇?묒슜(C002) | own-fleet selectable ?뚮뜑?뭚leet-click?믩챸?밸찓?닳넂0x0b01 | 源딆? ?꾨윴?곗뼱 (P0 諛깅줈洹?7~9) |
+| **M4** | ?꾪닾/?꾩닠 ?뚮뜑 | ?꾩쟾 ?꾩닠 ?쒕뱶?믩같??꾨뱶 ?뚮뜑, 0x426 ?쇳빐諛?寃⑹묠 ?쒓컖 | M3 醫낆냽 |
+| **M5** | 肄섑뀗痢?罹먮끉 | ?쒖꽕/?μ냼 ?곗씠?걔룹쭅臾댁뭅??諛곗꽑쨌officer 紐낅?쨌?묒쟾 ?섏튂쨌NPC 議곗씤 | 蹂묐젹, ?쇰? ?쇱씠釉?|
+| **M6** | 由щ쭏?ㅽ꽣/?쒓???諛고룷 | UI ?꾪??쇱뒪 ?댁꽦쨌1920 ?⑤꼸쨌?좉퇋 SR ?寃읐톎gVoodoo ?꾨━?떷룸윴泥??쒓? | 蹂묐젹, ?쇰? ?쇱씠釉?|
+| **M7** | ?꾩닔 RE | G7MTClient ~5.7%?믪엫怨꾧꼍濡?C002 case0쨌credential 鍮뚮뱶쨌post-handler) | 蹂묐젹 |
+| **M-final** | ?⑦궎吏?| play-logh7.exe쨌??ㅽ겕由??꾨윭쨌???붾㈃ ?쇱씠釉??뚭?쨌由대━??| ??MS 醫낆냽 |
 
-**Critical path(직렬)**: G0(월드진입 신뢰화) → 캐릭생성 확인 다이얼로그+strict credential →
-own-fleet 렌더 진단(C002) → M2 완전 전술 → M4 함대전 시각. M2(상태전환)는 C002와 decoupled라
-먼저 시각 진전을 만든다.
+**Critical path(吏곷젹)**: G0(?붾뱶吏꾩엯 ?좊ː?? ??罹먮┃?앹꽦 ?뺤씤 ?ㅼ씠?쇰줈洹?strict credential ??
+own-fleet ?뚮뜑 吏꾨떒(C002) ??M2 ?꾩쟾 ?꾩닠 ??M4 ?⑤????쒓컖. M2(?곹깭?꾪솚)??C002? decoupled??
+癒쇱? ?쒓컖 吏꾩쟾??留뚮뱺??
 
 ---
 
-## (d) 도메인별 갭 → 다음스텝 표
+## (d) ?꾨찓?몃퀎 媛????ㅼ쓬?ㅽ뀦 ??
 
-| 도메인 | 핵심 갭 | 다음스텝 | grade | liveNeeded |
+| ?꾨찓??| ?듭떖 媛?| ?ㅼ쓬?ㅽ뀦 | grade | liveNeeded |
 |---|---|---|---|---|
-| flow-happy-path | 캐릭생성 확인 다이얼로그(예/아니오) EXE버그(FUN_0056f960 +0xde0) | dialog-inputgate.json 후보A 별도빌드→real-login 진단 | P0 | yes |
-| flow-happy-path | strict 0x7000 account 라벨 빈값 전송 | 클라 credential 빌드 경로 RE→strict 라이브 | P0 | yes |
-| flow-happy-path | **charsel 배경(1920)↔내용(640 anchor) 어긋남** | charsel-recenter 전 패널 recenter→DEFAULT_STACK→라이브 정렬 | **P0** | yes |
-| flow-happy-path | ui_flow.py stale 640 좌표 | 644×484 기준 좌표로 교정 | P1 | no |
-| wire-received | 와이어 레코드 시각 실증 0건(layout만 닫힘) | G0 후 0x0325+0x0323 push→마커·색 trace | P0 | yes |
-| wire-received | 0x0325 중간필드 value semantics(commander/cell/owner) | 라이브 1슬롯 변조→HUD 반응 | P1 | yes |
-| wire-received | DEPRECATED 0x031f/0x0321 빌더 잔존 | @deprecated throw로 단일화 | P3 | no |
-| server-emit | 0x0317 grid emit mode 전환 라이브 미확정 | LOGH_GRID_SELECTOR_PROBE→0x35f35a watch | P0 | yes |
-| server-emit | 0x0f1f 상태전환 push 라이브 미실증 | LOGH_STATE_TRANSITION_PROBE→load-arm watch | P0 | yes |
-| server-emit | faction 색 mpVisibility 게이트 뒤에만 | 단일/관전 경로에도 동반 0x0323 또는 2클라 실증 | P1 | yes |
-| consumption-trace | 수신되나 효과 미실증(0x0f1f/0x0323/0x0325) | 서버푸시 시각 실증 | P1 | yes |
-| consumption-trace | 송신 FUN_004b78a0 응답쌍 일부 추론 | 라이브 trace로 요청→응답 캡처 | P2 | yes |
-| map-switch | C002 0x0b01 클릭확정 라이브 0건 | own-fleet 6게이트 read-only Frida 진단 | P0 | yes |
-| map-switch | own_cell 진영 불일치(패치 하드코딩 2588) | LOGH_PLAYER_FOCUS_CELL write-watch | P1 | yes |
-| in-planet-jobcards | **시설/장소 콘텐츠 데이터 부재(더미 1개 폴백)** | facility-spots.json 신설→content-pack 로드 | P0 | yes |
-| in-planet-jobcards | 직무카드 0x0305 기본 비활성 | canon-initial-cards+strategy-commands 배선 | P0 | yes |
-| in-planet-jobcards | 한글 시설명↔nameCatalogId 미매핑 | 매핑 테이블→정확 nameCatalogId 주입 | P1 | yes |
-| npc-ai | 쿠데타 상태머신 라이브 미연결(누적만) | 전략틱 임계초과→자동 declareRingleader→execute | P2 | no |
-| npc-ai | 전략층 함대↔전술 NPC AI 분리 | 전략 함대를 전술 ship 엔티티로 브리지 | P1 | no |
-| npc-ai | 전략 사령관 charId↔위계 시드 NPC 미조인 | 동일 캐논 charId 통일 | P1 | no |
-| strategic-map | own-fleet 스프라이트 미출현(case0/own_cell) | LOGH_PLAYER_FOCUS_CELL 시드→스폿 차분 | P0 | yes |
-| strategic-map | 항성 NAME 라벨·전력숫자·셀렉션/커맨드 리스트 빔 | 0x0313 성계명 라벨+0x0325 마커 라이브 캡처 | P1 | yes |
-| strategic-map | 특수천체 셀 배치 캐논 매핑 부재 | (추측금지) 미주입 유지 | P3 | no |
-| tactical-map | **mode byte 시각전환 게이트(0x35f35a client-local)** | moderoute 패치 재빌드→라이브 mode0 강제 | P0 | yes |
-| tactical-map | moderoute 패치 EXE 디스크 부재 | VA 0x4b6afd 02→01 재빌드 | P0 | yes |
-| tactical-map | 전술 좌표/스케일 휴리스틱 | 전술 필드 좌표공간 소비처 RE | P2 | no |
-| fleet-battle | 전 전투 도메인 라이브 시각 0건 | G0 후 0x426 피해바/격침 캡처(LOGH_NPC_AI) | P0 | yes |
-| fleet-battle | 배틀진입 전략→전술 전환 미실증 | 0x42f+0x0f1f openBattleField 라이브 | P0 | yes |
-| fleet-battle | computeDamage 밸런스 P3 추정치 | 매뉴얼 캐논 대조 or design 명시 | P3 | no |
-| remaster-hud-ui | **문서 stale(~9% 무변동)** | 6-26 전수 스윕 실적으로 재산정 | P2 | no |
-| remaster-hud-ui | UI 아틀라스 rect-math 업스케일 내성 미실증 | 2x 단일자산 spot-check 라이브 | P1 | yes |
-| remaster-hud-ui | 1920 네이티브 패널 정렬 실패(8차 run) | 패널별 정밀 recenter 재시도 | P2 | yes |
-| remaster-hud-ui | 모델/MDX 메시 지오메트리 0% | 폴리곤 배열 매핑(고난도) | P3 | no |
-| remaster-hud-ui | 고해상 셀확대 EXE 아틀라스 deep-RE 미착수 | FUN_005b51fa 호출원·셀 rect RE | P2 | no |
-| mdx-galaxy | **메모리가 부재 파일(Null_galaxy.mdx) 인용** | 실존 strategy/4 MDX 바이트로 근거 교체 | P3 | no |
-| mdx-galaxy | spectralClass 권위 이원화(80 vs 79) | galaxy.json 단일 권위 확정 | P2 | no |
-| references-catalog | 미재현 화면 다수(拠点/직무카드/커맨드/전술/우주전/집무실/스테이터스) | C002·G0 종속, 데이터 충진은 와이어로 | P0/P1 | yes |
+| flow-happy-path | 罹먮┃?앹꽦 ?뺤씤 ?ㅼ씠?쇰줈洹????꾨땲?? EXE踰꾧렇(FUN_0056f960 +0xde0) | dialog-inputgate.json ?꾨낫A 蹂꾨룄鍮뚮뱶?뭨eal-login 吏꾨떒 | P0 | yes |
+| flow-happy-path | strict 0x7000 account ?쇰꺼 鍮덇컪 ?꾩넚 | ?대씪 credential 鍮뚮뱶 寃쎈줈 RE?뭩trict ?쇱씠釉?| P0 | yes |
+| flow-happy-path | **charsel 諛곌꼍(1920)?붾궡??640 anchor) ?닿툔??* | charsel-recenter ???⑤꼸 recenter?묭EFAULT_STACK?믩씪?대툕 ?뺣젹 | **P0** | yes |
+| flow-happy-path | ui_flow.py stale 640 醫뚰몴 | 644횞484 湲곗? 醫뚰몴濡?援먯젙 | P1 | no |
+| wire-received | ??댁뼱 ?덉퐫???쒓컖 ?ㅼ쬆 0嫄?layout留??ロ옒) | G0 ??0x0325+0x0323 push?믩쭏而ㅒ룹깋 trace | P0 | yes |
+| wire-received | 0x0325 以묎컙?꾨뱶 value semantics(commander/cell/owner) | ?쇱씠釉?1?щ’ 蹂議겸넂HUD 諛섏쓳 | P1 | yes |
+| wire-received | DEPRECATED 0x031f/0x0321 鍮뚮뜑 ?붿〈 | @deprecated throw濡??⑥씪??| P3 | no |
+| server-emit | 0x0317 grid emit mode ?꾪솚 ?쇱씠釉?誘명솗??| LOGH_GRID_SELECTOR_PROBE??x35f35a watch | P0 | yes |
+| server-emit | 0x0f1f ?곹깭?꾪솚 push ?쇱씠釉?誘몄떎利?| LOGH_STATE_TRANSITION_PROBE?뭠oad-arm watch | P0 | yes |
+| server-emit | faction ??mpVisibility 寃뚯씠???ㅼ뿉留?| ?⑥씪/愿??寃쎈줈?먮룄 ?숇컲 0x0323 ?먮뒗 2?대씪 ?ㅼ쬆 | P1 | yes |
+| consumption-trace | ?섏떊?섎굹 ?④낵 誘몄떎利?0x0f1f/0x0323/0x0325) | ?쒕쾭?몄떆 ?쒓컖 ?ㅼ쬆 | P1 | yes |
+| consumption-trace | ?≪떊 FUN_004b78a0 ?묐떟???쇰? 異붾줎 | ?쇱씠釉?trace濡??붿껌?믪쓳??罹≪쿂 | P2 | yes |
+| map-switch | C002 0x0b01 ?대┃?뺤젙 ?쇱씠釉?0嫄?| own-fleet 6寃뚯씠??read-only Frida 吏꾨떒 | P0 | yes |
+| map-switch | own_cell 吏꾩쁺 遺덉씪移??⑥튂 ?섎뱶肄붾뵫 2588) | LOGH_PLAYER_FOCUS_CELL write-watch | P1 | yes |
+| in-planet-jobcards | **?쒖꽕/?μ냼 肄섑뀗痢??곗씠??遺???붾? 1媛??대갚)** | facility-spots.json ?좎꽕?뭖ontent-pack 濡쒕뱶 | P0 | yes |
+| in-planet-jobcards | 吏곷Т移대뱶 0x0305 湲곕낯 鍮꾪솢??| canon-initial-cards+strategy-commands 諛곗꽑 | P0 | yes |
+| in-planet-jobcards | ?쒓? ?쒖꽕紐끸넄nameCatalogId 誘몃ℓ??| 留ㅽ븨 ?뚯씠釉붴넂?뺥솗 nameCatalogId 二쇱엯 | P1 | yes |
+| npc-ai | 荑좊뜲? ?곹깭癒몄떊 ?쇱씠釉?誘몄뿰寃??꾩쟻留? | ?꾨왂???꾧퀎珥덇낵?믪옄??declareRingleader?뭙xecute | P2 | no |
+| npc-ai | ?꾨왂痢??⑤??붿쟾??NPC AI 遺꾨━ | ?꾨왂 ?⑤?瑜??꾩닠 ship ?뷀떚?곕줈 釉뚮━吏 | P1 | no |
+| npc-ai | ?꾨왂 ?щ졊愿 charId?붿쐞怨??쒕뱶 NPC 誘몄“??| ?숈씪 罹먮끉 charId ?듭씪 | P1 | no |
+| strategic-map | own-fleet ?ㅽ봽?쇱씠??誘몄텧??case0/own_cell) | LOGH_PLAYER_FOCUS_CELL ?쒕뱶?믪뒪??李⑤텇 | P0 | yes |
+| strategic-map | ??꽦 NAME ?쇰꺼쨌?꾨젰?レ옄쨌??됱뀡/而ㅻ㎤??由ъ뒪??鍮?| 0x0313 ?깃퀎紐??쇰꺼+0x0325 留덉빱 ?쇱씠釉?罹≪쿂 | P1 | yes |
+| strategic-map | ?뱀닔泥쒖껜 ? 諛곗튂 罹먮끉 留ㅽ븨 遺??| (異붿륫湲덉?) 誘몄＜???좎? | P3 | no |
+| tactical-map | **mode byte ?쒓컖?꾪솚 寃뚯씠??0x35f35a client-local)** | moderoute ?⑥튂 ?щ퉴?쒋넂?쇱씠釉?mode0 媛뺤젣 | P0 | yes |
+| tactical-map | moderoute ?⑥튂 EXE ?붿뒪??遺??| VA 0x4b6afd 02??1 ?щ퉴??| P0 | yes |
+| tactical-map | ?꾩닠 醫뚰몴/?ㅼ????대━?ㅽ떛 | ?꾩닠 ?꾨뱶 醫뚰몴怨듦컙 ?뚮퉬泥?RE | P2 | no |
+| fleet-battle | ???꾪닾 ?꾨찓???쇱씠釉??쒓컖 0嫄?| G0 ??0x426 ?쇳빐諛?寃⑹묠 罹≪쿂(LOGH_NPC_AI) | P0 | yes |
+| fleet-battle | 諛고?吏꾩엯 ?꾨왂?믪쟾???꾪솚 誘몄떎利?| 0x42f+0x0f1f openBattleField ?쇱씠釉?| P0 | yes |
+| fleet-battle | computeDamage 諛몃윴??P3 異붿젙移?| 留ㅻ돱??罹먮끉 ?議?or design 紐낆떆 | P3 | no |
+| remaster-hud-ui | **臾몄꽌 stale(~9% 臾대???** | 6-26 ?꾩닔 ?ㅼ쐲 ?ㅼ쟻?쇰줈 ?ъ궛??| P2 | no |
+| remaster-hud-ui | UI ?꾪??쇱뒪 rect-math ?낆뒪耳???댁꽦 誘몄떎利?| 2x ?⑥씪?먯궛 spot-check ?쇱씠釉?| P1 | yes |
+| remaster-hud-ui | 1920 ?ㅼ씠?곕툕 ?⑤꼸 ?뺣젹 ?ㅽ뙣(8李?run) | ?⑤꼸蹂??뺣? recenter ?ъ떆??| P2 | yes |
+| remaster-hud-ui | 紐⑤뜽/MDX 硫붿떆 吏?ㅻ찓?몃━ 0% | ?대━怨?諛곗뿴 留ㅽ븨(怨좊궃?? | P3 | no |
+| remaster-hud-ui | 怨좏빐????뺣? EXE ?꾪??쇱뒪 deep-RE 誘몄갑??| FUN_005b51fa ?몄텧?먃룹? rect RE | P2 | no |
+| mdx-galaxy | **硫붾え由ш? 遺???뚯씪(Null_galaxy.mdx) ?몄슜** | ?ㅼ〈 strategy/4 MDX 諛붿씠?몃줈 洹쇨굅 援먯껜 | P3 | no |
+| mdx-galaxy | spectralClass 沅뚯쐞 ?댁썝??80 vs 79) | galaxy.json ?⑥씪 沅뚯쐞 ?뺤젙 | P2 | no |
+| references-catalog | 誘몄옱???붾㈃ ?ㅼ닔(?좂궧/吏곷Т移대뱶/而ㅻ㎤???꾩닠/?곗＜??吏묐Т???ㅽ뀒?댄꽣?? | C002쨌G0 醫낆냽, ?곗씠??異⑹쭊? ??댁뼱濡?| P0/P1 | yes |
 
 ---
 
-## (e) 우선순위 백로그 (loop 소비 순서)
+## (e) ?곗꽑?쒖쐞 諛깅줈洹?(loop ?뚮퉬 ?쒖꽌)
 
-각 항목: `grade` · `liveNeeded` · `증거` · `담당도메인`. P0은 위→아래 순으로 소비.
+媛???ぉ: `grade` 쨌 `liveNeeded` 쨌 `利앷굅` 쨌 `?대떦?꾨찓??. P0? ?꾟넂?꾨옒 ?쒖쑝濡??뚮퉬.
 
-### P0 (플레이가능 필수)
+### P0 (?뚮젅?닿????꾩닔)
 
-1. **★charsel 패널 전수 recenter(배경↔내용 정합)** — `liveNeeded:yes` · 증거: `RE/tools/client_patches/charsel-recenter.json`
-   (앵커 0x51e94e 300→604/0x51e956 134→280, byte-verify PASS), `logh7_build_playable_client.py:159`
-   (DEFAULT_STACK lobby-native-layout 포함·charsel-recenter 미포함), 저널 #7. · 담당: flow-happy-path.
-   → charsel-recenter를 DEFAULT_STACK 편입(또는 별도 후보빌드), real-login→세션picker/캐릭생성 진입→
-   진영라디오/초상화4슬롯/이름칸/능력치행이 1920 배경과 시각 중앙정렬·잘림0 라이브 확인. 로비/login
-   다이얼로그 회귀 동시 점검.
+1. **?꿤harsel ?⑤꼸 ?꾩닔 recenter(諛곌꼍?붾궡???뺥빀)** ??`liveNeeded:yes` 쨌 利앷굅: `RE/tools/client_patches/charsel-recenter.json`
+   (?듭빱 0x51e94e 300??04/0x51e956 134??80, byte-verify PASS), `logh7_build_playable_client.py:159`
+   (DEFAULT_STACK lobby-native-layout ?ы븿쨌charsel-recenter 誘명룷??, ???#7. 쨌 ?대떦: flow-happy-path.
+   ??charsel-recenter瑜?DEFAULT_STACK ?몄엯(?먮뒗 蹂꾨룄 ?꾨낫鍮뚮뱶), real-login?믪꽭?쁯icker/罹먮┃?앹꽦 吏꾩엯??
+   吏꾩쁺?쇰뵒??珥덉긽???щ’/?대쫫移??λ젰移섑뻾??1920 諛곌꼍怨??쒓컖 以묒븰?뺣젹쨌?섎┝0 ?쇱씠釉??뺤씤. 濡쒕퉬/login
+   ?ㅼ씠?쇰줈洹??뚭? ?숈떆 ?먭?.
 
-2. **캐릭생성 확인 다이얼로그(예/아니오) EXE버그** — `liveNeeded:yes` · 증거: `docs/logh7-dialog-bug-2026-06-26.md:37-67`
-   (FUN_0056f960 +0xde0 게이트), 저널 #10/#11. · 담당: flow-happy-path.
-   → dialog-inputgate.json 후보A(VA 0x56f9ac 0f85→90×6, same-length, originalHex 가드) 별도빌드→
-   real-login 캐릭생성 완주→버튼 살아나는지 진단. 무반응이면 패치전선을 FUN_004b68f0 mode게이트로 이동.
+2. **罹먮┃?앹꽦 ?뺤씤 ?ㅼ씠?쇰줈洹????꾨땲?? EXE踰꾧렇** ??`liveNeeded:yes` 쨌 利앷굅: `docs/logh7-dialog-bug-2026-06-26.md:37-67`
+   (FUN_0056f960 +0xde0 寃뚯씠??, ???#10/#11. 쨌 ?대떦: flow-happy-path.
+   ??dialog-inputgate.json ?꾨낫A(VA 0x56f9ac 0f85??0횞6, same-length, originalHex 媛?? 蹂꾨룄鍮뚮뱶??
+   real-login 罹먮┃?앹꽦 ?꾩＜?믩쾭???댁븘?섎뒗吏 吏꾨떒. 臾대컲?묒씠硫??⑥튂?꾩꽑??FUN_004b68f0 mode寃뚯씠?몃줈 ?대룞.
 
-3. **strict 0x7000 credential 빈값 픽스** — `liveNeeded:yes` · 증거: `server/src/server/logh7-login-session.mjs:604-647`,
-   저널 #3. · 담당: flow-happy-path. → 클라 0x7000 credential 빌드 경로 RE(FUN_0051bc20 인근)→
-   빈 라벨 원인 확정→strict `--account-db` 로그인 trace account≠null.
+3. **strict 0x7000 credential 鍮덇컪 ?쎌뒪** ??`liveNeeded:yes` 쨌 利앷굅: `server/src/server/logh7-login-session.mjs:604-647`,
+   ???#3. 쨌 ?대떦: flow-happy-path. ???대씪 0x7000 credential 鍮뚮뱶 寃쎈줈 RE(FUN_0051bc20 ?멸렐)??
+   鍮??쇰꺼 ?먯씤 ?뺤젙?뭩trict `--account-db` 濡쒓렇??trace account?쟮ull.
 
-4. **own-fleet selectable 렌더 case0 6-AND 게이트 read-only Frida 진단** — `liveNeeded:yes` · 증거:
-   `docs/logh7-ownfleet-render-fix-2026-06-26.md:14-44`(FUN_0058d140 G1~G6), loop-state:121. · 담당: map-switch/strategic-map.
-   → case0(FUN_004fef90) 호출 여부 우선→own_cell *(DAT_007cd04c+0x11178) 실값→FUN_004c7290 miss 확인.
-   화면 안 깨짐(read-only). **C002 단일 정밀블로커.**
+4. **own-fleet selectable ?뚮뜑 case0 6-AND 寃뚯씠??read-only Frida 吏꾨떒** ??`liveNeeded:yes` 쨌 利앷굅:
+   `docs/logh7-ownfleet-render-fix-2026-06-26.md:14-44`(FUN_0058d140 G1~G6), loop-state:121. 쨌 ?대떦: map-switch/strategic-map.
+   ??case0(FUN_004fef90) ?몄텧 ?щ? ?곗꽑?뭥wn_cell *(DAT_007cd04c+0x11178) ?ㅺ컪?묯UN_004c7290 miss ?뺤씤.
+   ?붾㈃ ??源⑥쭚(read-only). **C002 ?⑥씪 ?뺣?釉붾줈而?**
 
-5. **own_cell 진영별 시드(LOGH_PLAYER_FOCUS_CELL)** — `liveNeeded:yes` · 증거: ownfleet-render-fix:50-59
-   (동맹2014/제국2588 불일치), `RE/tools/logh7_launch_config.py:37`(PLAYER_FOCUS_CELL 미포함). · 담당: strategic-map.
-   → LOGH_PLAYER_FOCUS_CELL=1 write-watchpoint으로 own_cell이 COMMANDER 슬롯(source+0x320)에서 흐르는지 확정.
+5. **own_cell 吏꾩쁺蹂??쒕뱶(LOGH_PLAYER_FOCUS_CELL)** ??`liveNeeded:yes` 쨌 利앷굅: ownfleet-render-fix:50-59
+   (?숇㏏2014/?쒓뎅2588 遺덉씪移?, `RE/tools/logh7_launch_config.py:37`(PLAYER_FOCUS_CELL 誘명룷??. 쨌 ?대떦: strategic-map.
+   ??LOGH_PLAYER_FOCUS_CELL=1 write-watchpoint?쇰줈 own_cell??COMMANDER ?щ’(source+0x320)?먯꽌 ?먮Ⅴ?붿? ?뺤젙.
 
-6. **시설/장소 콘텐츠 + 직무카드 0x0305 배선** — `liveNeeded:yes` · 증거: `logh7-inferred-content.mjs`
-   buildInstitutionSeedElements(더미 폴백), grep institutions=0건, `login-session.mjs:2102`(0x0305 probe off),
-   `canon-initial-cards.json`·`strategy-commands.json`(72명령). · 담당: in-planet-jobcards.
-   → facility-spots.json 신설(nameCatalogId↔constmsg-ko 83 집무실 매핑)→content-pack 로드, 직무카드 기본 배선→
-   월드진입→0x0320 req→0x0321/0x0305 패널 렌더 캡처.
+6. **?쒖꽕/?μ냼 肄섑뀗痢?+ 吏곷Т移대뱶 0x0305 諛곗꽑** ??`liveNeeded:yes` 쨌 利앷굅: `logh7-inferred-content.mjs`
+   buildInstitutionSeedElements(?붾? ?대갚), grep institutions=0嫄? `login-session.mjs:2102`(0x0305 probe off),
+   `canon-initial-cards.json`쨌`strategy-commands.json`(72紐낅졊). 쨌 ?대떦: in-planet-jobcards.
+   ??facility-spots.json ?좎꽕(nameCatalogId?봠onstmsg-ko 83 吏묐Т??留ㅽ븨)?뭖ontent-pack 濡쒕뱶, 吏곷Т移대뱶 湲곕낯 諛곗꽑??
+   ?붾뱶吏꾩엯??x0320 req??x0321/0x0305 ?⑤꼸 ?뚮뜑 罹≪쿂.
 
-7. **moderoute 패치 재빌드 + mode byte 라이브 측정** — `liveNeeded:yes` · 증거: `docs/logh7-mode-routing-patch-2026-06-26.md:14-32`
-   (VA 0x4b6afd 02→01, EXE sha 0fda544e 디스크 부재). · 담당: tactical-map/map-switch.
-   → 패치 재빌드→월드 도달 시 [esi+0x126711]·[esi+0x35f35a] 실값 캡처→own-fleet·전술전환 shot.
-   **⚠ EXE force는 화면 깨뜨림 전례(12 run mode0 강제=렌더 깨짐) → 사용자 동의 전제, read-only 우선.**
+7. **moderoute ?⑥튂 ?щ퉴??+ mode byte ?쇱씠釉?痢≪젙** ??`liveNeeded:yes` 쨌 利앷굅: `docs/logh7-mode-routing-patch-2026-06-26.md:14-32`
+   (VA 0x4b6afd 02??1, EXE sha 0fda544e ?붿뒪??遺??. 쨌 ?대떦: tactical-map/map-switch.
+   ???⑥튂 ?щ퉴?쒋넂?붾뱶 ?꾨떖 ??[esi+0x126711]쨌[esi+0x35f35a] ?ㅺ컪 罹≪쿂?뭥wn-fleet쨌?꾩닠?꾪솚 shot.
+   **??EXE force???붾㈃ 源⑤쑉由??꾨?(12 run mode0 媛뺤젣=?뚮뜑 源⑥쭚) ???ъ슜???숈쓽 ?꾩젣, read-only ?곗꽑.**
 
-8. **0x0317/0x0f1f 서버푸시 시각 실증** — `liveNeeded:yes` · 증거: `login-session.mjs:260-269`(GRID_SELECTOR_PROBE),
-   `:292,1859`(STATE_TRANSITION_PROBE), 저널 #6 L2 부분확정. · 담당: server-emit/consumption-trace.
-   → LOGH_GRID_SELECTOR_PROBE→0x35f35a watch로 mode 분기 측정, LOGH_STATE_TRANSITION_PROBE→
-   +0x357e88=0x3f800000 load-arm watch. 객체 식별오인 2회 전례라 단정 금지.
+8. **0x0317/0x0f1f ?쒕쾭?몄떆 ?쒓컖 ?ㅼ쬆** ??`liveNeeded:yes` 쨌 利앷굅: `login-session.mjs:260-269`(GRID_SELECTOR_PROBE),
+   `:292,1859`(STATE_TRANSITION_PROBE), ???#6 L2 遺遺꾪솗?? 쨌 ?대떦: server-emit/consumption-trace.
+   ??LOGH_GRID_SELECTOR_PROBE??x35f35a watch濡?mode 遺꾧린 痢≪젙, LOGH_STATE_TRANSITION_PROBE??
+   +0x357e88=0x3f800000 load-arm watch. 媛앹껜 ?앸퀎?ㅼ씤 2???꾨????⑥젙 湲덉?.
 
-9. **함대전/배틀진입 라이브 시각** — `liveNeeded:yes` · 증거: `logh7-login-protocol.mjs:1219-1239`(0x426 28B),
-   `battle-engine.mjs:561-665`(openBattleField), 저널 전투항목 0건. · 담당: fleet-battle.
-   → G0+LOGH_NPC_AI 후 우주전 사격→0x426 피해바/격침 캡처, 0x42f+0x0f1f 전략→전술 전환·스폰포즈 렌더.
+9. **?⑤???諛고?吏꾩엯 ?쇱씠釉??쒓컖** ??`liveNeeded:yes` 쨌 利앷굅: `logh7-login-protocol.mjs:1219-1239`(0x426 28B),
+   `battle-engine.mjs:561-665`(openBattleField), ????꾪닾??ぉ 0嫄? 쨌 ?대떦: fleet-battle.
+   ??G0+LOGH_NPC_AI ???곗＜???ш꺽??x426 ?쇳빐諛?寃⑹묠 罹≪쿂, 0x42f+0x0f1f ?꾨왂?믪쟾???꾪솚쨌?ㅽ룿?ъ쫰 ?뚮뜑.
 
-10. **와이어 레코드 클라 실파싱 라이브 실증** — `liveNeeded:yes` · 증거: server 1198 단위테스트뿐, 클라 파싱 0건.
-    · 담당: wire-received. → 0x0325+동반 0x0323 push→마커 렌더·아/적 색분기(+0x800/+0x1000) trace.
+10. **??댁뼱 ?덉퐫???대씪 ?ㅽ뙆???쇱씠釉??ㅼ쬆** ??`liveNeeded:yes` 쨌 利앷굅: server 1198 ?⑥쐞?뚯뒪?몃퓧, ?대씪 ?뚯떛 0嫄?
+    쨌 ?대떦: wire-received. ??0x0325+?숇컲 0x0323 push?믩쭏而??뚮뜑쨌?????됰텇湲?+0x800/+0x1000) trace.
 
-### P1 (중요, 비필수)
+### P1 (以묒슂, 鍮꾪븘??
 
-- **항성 NAME 라벨·전력숫자·셀렉션/커맨드 리스트 데이터 충진** — `yes` · strategy.jpg 대비 빔(shot 049) · references-catalog/strategic-map. **mode게이트에 안 막히는 유일 저비용 시각 전진.**
-- **faction 색을 단일/관전 경로에도 적용** — `yes` · `faction-projection.mjs:35-90` · server-emit.
-- **UI 아틀라스 2x rect-math 내성 spot-check** — `yes` · graphics-remaster §3.1 verifier hedge · remaster-hud-ui.
-- **0x0325 중간필드 value-to-slot 라이브 변조** — `yes` · B+0x44~0x54 미심볼 · wire-received.
-- **전략층 함대↔전술 NPC AI 브리지 + charId 조인** — `no` · strategic-sim.mjs:212 vs login-session seedableCanonNpcs · npc-ai.
-- **ui_flow.py 640 stale 좌표 교정** — `no` · `logh7_ui_flow.py:114-117` vs ui-coordinate-map.md · flow-happy-path.
-- **한글 시설명↔nameCatalogId 매핑** — `yes` · constmsg-ko.json 83 집무실 · in-planet-jobcards.
-- **拠点패널/직무카드/커맨드윈도우/전술맵 화면 재현** — `yes` · toshichan stay/card/compnel/tactics · references-catalog (C002 종속).
+- **??꽦 NAME ?쇰꺼쨌?꾨젰?レ옄쨌??됱뀡/而ㅻ㎤??由ъ뒪???곗씠??異⑹쭊** ??`yes` 쨌 strategy.jpg ?鍮?鍮?shot 049) 쨌 references-catalog/strategic-map. **mode寃뚯씠?몄뿉 ??留됲엳???좎씪 ?鍮꾩슜 ?쒓컖 ?꾩쭊.**
+- **faction ?됱쓣 ?⑥씪/愿??寃쎈줈?먮룄 ?곸슜** ??`yes` 쨌 `faction-projection.mjs:35-90` 쨌 server-emit.
+- **UI ?꾪??쇱뒪 2x rect-math ?댁꽦 spot-check** ??`yes` 쨌 graphics-remaster 짠3.1 verifier hedge 쨌 remaster-hud-ui.
+- **0x0325 以묎컙?꾨뱶 value-to-slot ?쇱씠釉?蹂議?* ??`yes` 쨌 B+0x44~0x54 誘몄떖蹂?쨌 wire-received.
+- **?꾨왂痢??⑤??붿쟾??NPC AI 釉뚮━吏 + charId 議곗씤** ??`no` 쨌 strategic-sim.mjs:212 vs login-session seedableCanonNpcs 쨌 npc-ai.
+- **ui_flow.py 640 stale 醫뚰몴 援먯젙** ??`no` 쨌 `logh7_ui_flow.py:114-117` vs ui-coordinate-map.md 쨌 flow-happy-path.
+- **?쒓? ?쒖꽕紐끸넄nameCatalogId 留ㅽ븨** ??`yes` 쨌 constmsg-ko.json 83 吏묐Т??쨌 in-planet-jobcards.
+- **?좂궧?⑤꼸/吏곷Т移대뱶/而ㅻ㎤?쒖쐢?꾩슦/?꾩닠留??붾㈃ ?ы쁽** ??`yes` 쨌 toshichan stay/card/compnel/tactics 쨌 references-catalog (C002 醫낆냽).
 
-### P2 (보강)
+### P2 (蹂닿컯)
 
-- 리마스터 문서 stale 재산정(9%→실적) — `no` · completion-matrix-v2:37 · remaster-hud-ui.
-- 1920 네이티브 패널 정렬 재시도 — `yes` · 저널 8차 run shot 176 · remaster-hud-ui.
-- 신규 SR 타겟(스플래시/성계글로우/미니맵/직무카드배경/한글타이틀) — `no` · 로더 무게이트 · remaster-hud-ui.
-- 고해상 셀확대 EXE 아틀라스 deep-RE — `no` · FUN_005b51fa · remaster-hud-ui.
-- 0x2006 per-power d0/d1/d2·ending body 의미 — `yes` · scenario-session.mjs · wire-received.
-- 쿠데타 자율 트리거 라이브 배선 — `no` · coup.mjs(클라 opcode 미확정) · npc-ai.
-- 송신 응답쌍 trace 검증 / post-handler RE 웨이브 — `yes/no` · consumption-trace.
-- 0x42a/0x0425 warp 레이아웃·spectralClass 정렬 — `no` · fleet-battle/mdx-galaxy.
-- 행성내장소 로비·집무실·인물 스테이터스 화면 — `yes` · gamemeca uu3/lobby · references-catalog.
+- 由щ쭏?ㅽ꽣 臾몄꽌 stale ?ъ궛??9%?믪떎?? ??`no` 쨌 completion-matrix-v2:37 쨌 remaster-hud-ui.
+- 1920 ?ㅼ씠?곕툕 ?⑤꼸 ?뺣젹 ?ъ떆????`yes` 쨌 ???8李?run shot 176 쨌 remaster-hud-ui.
+- ?좉퇋 SR ?寃??ㅽ뵆?섏떆/?깃퀎湲濡쒖슦/誘몃땲留?吏곷Т移대뱶諛곌꼍/?쒓???댄?) ??`no` 쨌 濡쒕뜑 臾닿쾶?댄듃 쨌 remaster-hud-ui.
+- 怨좏빐????뺣? EXE ?꾪??쇱뒪 deep-RE ??`no` 쨌 FUN_005b51fa 쨌 remaster-hud-ui.
+- 0x2006 per-power d0/d1/d2쨌ending body ?섎? ??`yes` 쨌 scenario-session.mjs 쨌 wire-received.
+- 荑좊뜲? ?먯쑉 ?몃━嫄??쇱씠釉?諛곗꽑 ??`no` 쨌 coup.mjs(?대씪 opcode 誘명솗?? 쨌 npc-ai.
+- ?≪떊 ?묐떟??trace 寃利?/ post-handler RE ?⑥씠釉???`yes/no` 쨌 consumption-trace.
+- 0x42a/0x0425 warp ?덉씠?꾩썐쨌spectralClass ?뺣젹 ??`no` 쨌 fleet-battle/mdx-galaxy.
+- ?됱꽦?댁옣??濡쒕퉬쨌吏묐Т?ㅒ룹씤臾??ㅽ뀒?댄꽣???붾㈃ ??`yes` 쨌 gamemeca uu3/lobby 쨌 references-catalog.
 
-### P3 (정리/낮은 우선순위)
+### P3 (?뺣━/??? ?곗꽑?쒖쐞)
 
-- DEPRECATED 0x031f/0x0321 빌더 @deprecated throw — `no` · info-records.mjs:212 · wire-received.
-- 메모리 mdx-no-hardcoded-coords 근거 교체(부재파일→실존 4 MDX) — `no` · mdx-galaxy.
-- computeDamage 밸런스 캐논 대조 / officer 명부 결정론 생성 — `no` · fleet-battle/npc-ai.
-- 모델/MDX 메시 지오메트리 리마스터 / dgVoodoo 프리셋 — `no/yes` · remaster-hud-ui.
-- 특수천체 셀 배치(추측금지 미주입 유지) — `no` · strategic-map.
-
----
-
-## (f) MDX-galaxy 감사 결론 (하드코딩 확정/반증)
-
-**반증 확정**: 메모리 [[logh7-mdx-no-hardcoded-coords]]의 결론(성계/행성 좌표 MDX 하드코딩 없음)은
-**바이트 증거로 옳다**. 단 인용 소스 `Null_galaxy.mdx`는 저장소에 **물리적으로 부재**(find /e 0건).
-실존 MDX는 `RE/content/original-data/patch-2004-05-14/strategy/`의 4개(galaxy.mdx 16508B/grid.mdx/
-grids.mdx/g_board.mdx)뿐이며 전부 **Lightwave(.lwo) 3D 렌더 래퍼**(메시 float 정점/UV/행렬+BMP/TGA 참조).
-g_board.mdx에는 star_01·star_02 빌보드 프로토타입 2종만 있고 80성계 노드 부재 → **좌표 인코딩 물리적 불가**.
-어느 MDX에도 ~80쌍 연속 좌표 float 런 없음.
-
-**권위 확정**: 좌표/타입 권위 = `server/content/galaxy.json`(80성계, cx/cy+canon* 픽셀좌표+spectralClass,
-_source=PDF p101 星系図). MDX 파생 유일 산출물 = `model-galaxy-stars.json`(79노드, spectral_class만, 좌표 0,
-node order≠system order). **spectralClass 이원화 미해소**(galaxy.json 픽셀색 80 vs MDX 노드 79)는 P2.
-→ 리마스터/3D복원 시 **메시=MDX, 전략좌표=galaxy.json** 별개 취급(혼동 방지). 성계수=**80 확정**(메모리 86=오기).
+- DEPRECATED 0x031f/0x0321 鍮뚮뜑 @deprecated throw ??`no` 쨌 info-records.mjs:212 쨌 wire-received.
+- 硫붾え由?mdx-no-hardcoded-coords 洹쇨굅 援먯껜(遺?ы뙆?쇄넂?ㅼ〈 4 MDX) ??`no` 쨌 mdx-galaxy.
+- computeDamage 諛몃윴??罹먮끉 ?議?/ officer 紐낅? 寃곗젙濡??앹꽦 ??`no` 쨌 fleet-battle/npc-ai.
+- 紐⑤뜽/MDX 硫붿떆 吏?ㅻ찓?몃━ 由щ쭏?ㅽ꽣 / dgVoodoo ?꾨━????`no/yes` 쨌 remaster-hud-ui.
+- ?뱀닔泥쒖껜 ? 諛곗튂(異붿륫湲덉? 誘몄＜???좎?) ??`no` 쨌 strategic-map.
 
 ---
 
-## 막힘 시 우회 경로
+## (f) MDX-galaxy 媛먯궗 寃곕줎 (?섎뱶肄붾뵫 ?뺤젙/諛섏쬆)
 
-- **G0 라이브가 플래키**(포그라운드 락) → 서버/콘텐츠/리마스터 병렬 트랙(P1/P2 no-live)으로 전진.
-  데이터 경로는 이미 동작, 라이브 무관. 환경 리셋 후 keep_foreground 1회 홀드(연속 SetForeground 금지).
-- **C002(P0 4·7)가 깊으면** → M2(0x0f1f 서버푸시 상태전환, P0 8)으로 시각 진전 확보(클릭 불요, decoupled).
-  그래도 막히면 own-fleet 렌더 deep-RE 또는 (사용자 동의 시) moderoute 패치.
-- **EXE force가 화면 깨면**(12 run 전례) → read-only Frida probe + 자연경로(실유저 수동 로그인이 case0
-  렌더 살리는지)만 허용. EXE 무변경(canonical 992dc7e2 보존).
-- **strict credential RE가 깊으면** → accept-any로 라이브 진행하되 strict는 별도 RE 웨이브로 격리.
-- **시설/직무카드 캐논 명부 부족** → 매뉴얼 조직도(post)는 있으나 시설 스폿 물리배치는 원본 클라
-  데이터(MDX/constmsg) 추가 추출 필요(추측금지). 추출 전까지 nameCatalogId 매핑 가능분만 채움.
-- **라이브 자체가 막히면** → 서버 테스트(1198/1180 pass/0 fail)로 회귀 가드하며 데이터/와이어/콘텐츠
-  완성도 끌어올림.
+**諛섏쬆 ?뺤젙**: 硫붾え由?[[logh7-mdx-no-hardcoded-coords]]??寃곕줎(?깃퀎/?됱꽦 醫뚰몴 MDX ?섎뱶肄붾뵫 ?놁쓬)?
+**諛붿씠??利앷굅濡??노떎**. ???몄슜 ?뚯뒪 `Null_galaxy.mdx`????μ냼??**臾쇰━?곸쑝濡?遺??*(find /e 0嫄?.
+?ㅼ〈 MDX??`RE/content/original-data/patch-2004-05-14/strategy/`??4媛?galaxy.mdx 16508B/grid.mdx/
+grids.mdx/g_board.mdx)肉먯씠硫??꾨? **Lightwave(.lwo) 3D ?뚮뜑 ?섑띁**(硫붿떆 float ?뺤젏/UV/?됰젹+BMP/TGA 李몄“).
+g_board.mdx?먮뒗 star_01쨌star_02 鍮뚮낫???꾨줈?좏???2醫낅쭔 ?덇퀬 80?깃퀎 ?몃뱶 遺????**醫뚰몴 ?몄퐫??臾쇰━??遺덇?**.
+?대뒓 MDX?먮룄 ~80???곗냽 醫뚰몴 float ???놁쓬.
+
+**沅뚯쐞 ?뺤젙**: 醫뚰몴/???沅뚯쐞 = `server/content/galaxy.json`(80?깃퀎, cx/cy+canon* ?쎌?醫뚰몴+spectralClass,
+_source=PDF p101 ?잏내??. MDX ?뚯깮 ?좎씪 ?곗텧臾?= `model-galaxy-stars.json`(79?몃뱶, spectral_class留? 醫뚰몴 0,
+node order?쟳ystem order). **spectralClass ?댁썝??誘명빐??*(galaxy.json ?쎌???80 vs MDX ?몃뱶 79)??P2.
+??由щ쭏?ㅽ꽣/3D蹂듭썝 ??**硫붿떆=MDX, ?꾨왂醫뚰몴=galaxy.json** 蹂꾧컻 痍④툒(?쇰룞 諛⑹?). ?깃퀎??**80 ?뺤젙**(硫붾え由?86=?ㅺ린).
 
 ---
 
-최종 갱신: 2026-06-26 KST. 통합 대상: completion-matrix-v2, remaster-roadmap-2026-06-26, loop-state.
-이 문서가 캠페인 단일 권위 로드맵. 다음 갱신은 라이브 1세션(G0→P0 백로그) 결과 반영.
+## 留됲옒 ???고쉶 寃쎈줈
+
+- **G0 ?쇱씠釉뚭? ?뚮옒??*(?ш렇?쇱슫???? ???쒕쾭/肄섑뀗痢?由щ쭏?ㅽ꽣 蹂묐젹 ?몃옓(P1/P2 no-live)?쇰줈 ?꾩쭊.
+  ?곗씠??寃쎈줈???대? ?숈옉, ?쇱씠釉?臾닿?. ?섍꼍 由ъ뀑 ??keep_foreground 1??????곗냽 SetForeground 湲덉?).
+- **C002(P0 4쨌7)媛 源딆쑝硫?* ??M2(0x0f1f ?쒕쾭?몄떆 ?곹깭?꾪솚, P0 8)?쇰줈 ?쒓컖 吏꾩쟾 ?뺣낫(?대┃ 遺덉슂, decoupled).
+  洹몃옒??留됲엳硫?own-fleet ?뚮뜑 deep-RE ?먮뒗 (?ъ슜???숈쓽 ?? moderoute ?⑥튂.
+- **EXE force媛 ?붾㈃ 源⑤㈃**(12 run ?꾨?) ??read-only Frida probe + ?먯뿰寃쎈줈(?ㅼ쑀? ?섎룞 濡쒓렇?몄씠 case0
+  ?뚮뜑 ?대━?붿?)留??덉슜. EXE 臾대?寃?historical canonical 992dc7e2 蹂댁〈).
+- **strict credential RE媛 源딆쑝硫?* ??accept-any濡??쇱씠釉?吏꾪뻾?섎릺 strict??蹂꾨룄 RE ?⑥씠釉뚮줈 寃⑸━.
+- **?쒖꽕/吏곷Т移대뱶 罹먮끉 紐낅? 遺議?* ??留ㅻ돱??議곗쭅??post)???덉쑝???쒖꽕 ?ㅽ뤏 臾쇰━諛곗튂???먮낯 ?대씪
+  ?곗씠??MDX/constmsg) 異붽? 異붿텧 ?꾩슂(異붿륫湲덉?). 異붿텧 ?꾧퉴吏 nameCatalogId 留ㅽ븨 媛?λ텇留?梨꾩?.
+- **?쇱씠釉??먯껜媛 留됲엳硫?* ???쒕쾭 ?뚯뒪??1198/1180 pass/0 fail)濡??뚭? 媛?쒗븯硫??곗씠????댁뼱/肄섑뀗痢?
+  ?꾩꽦???뚯뼱?щ┝.
+
+---
+
+理쒖쥌 媛깆떊: 2026-06-26 KST. ?듯빀 ??? completion-matrix-v2, remaster-roadmap-2026-06-26, loop-state.
+??臾몄꽌媛 罹좏럹???⑥씪 沅뚯쐞 濡쒕뱶留? ?ㅼ쓬 媛깆떊? ?쇱씠釉?1?몄뀡(G0?뭁0 諛깅줈洹? 寃곌낵 諛섏쁺.
+

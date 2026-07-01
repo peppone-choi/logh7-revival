@@ -86,13 +86,12 @@ export const NOTIFY_TACTICS_CHIEF_COMMANDER_BYTES = 8; // 0x431 consumes 8 bytes
 // ---------------------------------------------------------------------------
 // Packed wire record strides (the bytes the server actually serializes per record).
 // ---------------------------------------------------------------------------
-export const UNIT_SHIP_RECORD_BYTES = 52; // 13 dword; 클라 reader FUN_004c32a0 stride(=login-protocol TACTICS_UNIT_ENTRY_STRIDE). entry@body+4(4B헤더). 구 47B는 헤더/stride/레이아웃 오류로 NOW LOADING 정체(저널 #12)
-export const UNIT_SHIP_FIXED_BODY = 0x79e4; // 31204 — 클라 고정 receive object(dispatcher memcpy 0x1e79 dword); over-read 방지 위해 고정크기 zero-pad(login-protocol SS_RESP_TACTICS_INFO_BYTES 동일)
+export const UNIT_SHIP_RECORD_BYTES = 0x34; // FUN_00421f80 wire stride; records start at payload+4 after count+pad.
 export const CORPS_RECORD_BYTES = 55; // §5: u32 id, u8 morale, u8 confusion, u32 character, f32 dir, u8 flag, u8[6], u16[2], u16[6], u16[6]
 export const FILL_SHIELD_RECORD_BYTES = 40; // §3: u32 id, u32[6] shield, u16[6] fill
 export const FILL_BEAMGUN_RECORD_BYTES = 16; // §4: u32 id, (u32 val,u16 fill)×2
 export const TACTICS_CHARACTER_RECORD_BYTES = 4; // §2: u32 character_id
-export const BASE_RECORD_BYTES = 28; // §6: u32 id, f32 x/y/z, u32, u16, u32, u16
+export const BASE_RECORD_BYTES = 0x20; // FUN_00424330 stride: u32 id, f32 x/y/z, u32, u16, u32, u16, pad
 export const POSITION_UNIT_RECORD_BYTES = 20; // §7a: u32 id, f32 x/y/z, f32 heading
 export const POSITION_BASE_RECORD_BYTES = 16; // §7b: u32 id, f32 x/y/z
 
@@ -112,6 +111,9 @@ const u32 = (v) => (v >>> 0) & 0xffffffff;
 const u16 = (v) => Math.max(0, Math.min(0xffff, Math.round(v))) & 0xffff;
 const u8 = (v) => Math.max(0, Math.min(0xff, Math.round(v))) & 0xff;
 const f32 = (v) => (Number.isFinite(v) ? v : 0);
+const writeStreamU16 = (buffer, value, offset) => buffer.writeUInt16BE(u16(value), offset);
+const writeStreamU32 = (buffer, value, offset) => buffer.writeUInt32BE(u32(value), offset);
+const writeStreamF32 = (buffer, value, offset) => buffer.writeFloatBE(f32(value), offset);
 
 /**
  * Build a PACKED record-array message: a fresh message32 inner whose LE payload is
@@ -119,14 +121,27 @@ const f32 = (v) => (Number.isFinite(v) ? v : 0);
  * payload view at `off`. We size the payload exactly (2 + count×recordBytes) — NOT the dispatch cap —
  * because the client deserializes only `count` packed records (docs §0).
  */
+const FIXED_U16_TABLE_BYTES_BY_CODE = new Map([
+  [RESPONSE_POSITION_UNIT_CODE, POSITION_UNIT_DISPATCH_BYTES],
+  [RESPONSE_TACTICS_CORPS_CODE, CORPS_DISPATCH_BYTES],
+  [RESPONSE_TACTICS_FILL_SHIELD_CODE, FILL_SHIELD_DISPATCH_BYTES],
+]);
+
+const FIXED_U8_TABLE_BYTES_BY_CODE = new Map([
+  [RESPONSE_TACTICS_BASE_CODE, BASE_DISPATCH_BYTES],
+  [RESPONSE_POSITION_BASE_CODE, POSITION_BASE_DISPATCH_BYTES],
+]);
+
 function buildPackedU16Count(code, records, recordBytes, writeRecord, maxCount) {
-  const count = Math.min(records.length, maxCount);
-  const payload = Buffer.alloc(2 + count * recordBytes);
-  payload.writeUInt16LE(count, 0);
-  for (let i = 0; i < count; i += 1) {
-    writeRecord(payload, 2 + i * recordBytes, records[i], i);
-  }
-  return buildMpsClientMessage32Inner({ code, payload });
+const count = Math.min(records.length, maxCount);
+const fixedBytes = FIXED_U16_TABLE_BYTES_BY_CODE.get(code);
+const payload = Buffer.alloc(fixedBytes ?? (2 + count * recordBytes));
+const recordOffset = fixedBytes ? 4 : 2;
+  writeStreamU16(payload, count, 0);
+for (let i = 0; i < count; i += 1) {
+writeRecord(payload, recordOffset + i * recordBytes, records[i], i);
+}
+return buildMpsClientMessage32Inner({ code, payload });
 }
 
 /**
@@ -135,13 +150,15 @@ function buildPackedU16Count(code, records, recordBytes, writeRecord, maxCount) 
  * The records begin at offset 8 (the parser reads the struct base at param_1+8).
  */
 function buildPackedU8CountBase(code, records, recordBytes, writeRecord, maxCount) {
-  const count = Math.min(records.length, maxCount);
-  const payload = Buffer.alloc(8 + count * recordBytes);
-  payload.writeUInt8(count, 0); // [u8 count][3 pad][4 pad] = 8-byte header
-  for (let i = 0; i < count; i += 1) {
-    writeRecord(payload, 8 + i * recordBytes, records[i], i);
-  }
-  return buildMpsClientMessage32Inner({ code, payload });
+const count = Math.min(records.length, maxCount);
+const fixedBytes = FIXED_U8_TABLE_BYTES_BY_CODE.get(code);
+const payload = Buffer.alloc(fixedBytes ?? (8 + count * recordBytes));
+const recordOffset = fixedBytes ? 4 : 8;
+payload.writeUInt8(count, 0); // [u8 count][3 pad][4 pad] = 8-byte header
+for (let i = 0; i < count; i += 1) {
+writeRecord(payload, recordOffset + i * recordBytes, records[i], i);
+}
+return buildMpsClientMessage32Inner({ code, payload });
 }
 
 // ===========================================================================
@@ -160,11 +177,11 @@ export function buildResponsePositionUnitInner({ units = [] } = {}) {
     units,
     POSITION_UNIT_RECORD_BYTES,
     (p, off, u) => {
-      p.writeUInt32LE(u32(u.id ?? u.shipId ?? 0), off);
-      p.writeFloatLE(f32(u.x ?? 0), off + 4);
-      p.writeFloatLE(f32(u.y ?? 0), off + 8);
-      p.writeFloatLE(f32(u.z ?? 0), off + 0xc);
-      p.writeFloatLE(f32(u.heading ?? 0), off + 0x10);
+    writeStreamU32(p, u.id ?? u.shipId ?? 0, off);
+    writeStreamF32(p, u.x ?? 0, off + 4);
+    writeStreamF32(p, u.y ?? 0, off + 8);
+    writeStreamF32(p, u.z ?? 0, off + 0xc);
+    writeStreamF32(p, u.heading ?? 0, off + 0x10);
     },
     MAX_TACTICS_UNITS,
   );
@@ -175,34 +192,42 @@ export function buildResponsePositionUnitInner({ units = [] } = {}) {
  * character/direction/detachment_leader/detachment_direction/search; MED on the three f32 vec3 groups
  * (inferred position vs other vec3). Static combat scalars (durability/beam/shield-cap) live in 0x30b /
  * content/ship-stats.json — NOT here; this carries live per-instance state.
- * Record (47B): u32 id @0, u8 morale @4, u8 confusion @5, u32 character @6, f32 x @0xa, f32 y @0xe,
- *   f32 z @0x12, f32 direction @0x16, u32 detachment_leader @0x1a, f32 det_x @0x1e, f32 det_y @0x22,
- *   f32 det_z @0x26, f32 detachment_direction @0x2a, u8 search @0x2e.
+ * Record (52B): u32 id @0, u8 morale @4, u8 confusion @5, u32 character/mapSection @8,
+ *   f32 x @0x0c, f32 y @0x10, f32 z @0x14, f32 direction @0x18,
+ *   u32 detachment_leader @0x1c, f32 det_x @0x20, f32 det_y @0x24, f32 det_z @0x28,
+ *   f32 detachment_direction @0x2c, u8 search @0x30.
  * `ships` = [{ id|shipId, morale, confusion, character, x, y, z, direction|heading, detachmentLeader,
  *   detX, detY, detZ, detachmentDirection, search }].
  */
 export function buildTacticsInformationUnitShipInner({ ships = [] } = {}) {
-  // 클라 reader FUN_004c32a0 정합 레이아웃(저널 #12 NOW LOADING 정체 픽스): 4B 헤더(count u16@0)
-  // + 52B 레코드(entry@body+4), 고정버퍼 31204B zero-pad(over-read 방지).
-  // 레코드: @0 unitId / @4 controllable / @8 mapSection(기본 unitId) / @0xc x / @0x10 y / @0x14 z /
-  // @0x18 heading / @0x1c..0x33 reserved(6 dword 0). 구 47B의 morale/confusion/character/detachment는
-  // 클라가 미소비(오독 원인)라 드롭. (login-protocol buildResponseTacticsInformationInner와 byte-동일 레이아웃.)
   const count = Math.min(ships.length, MAX_TACTICS_UNITS);
-  const payload = Buffer.alloc(UNIT_SHIP_FIXED_BODY);
-  payload.writeUInt16LE(count & 0xffff, 0);
+  const payload = Buffer.alloc(UNIT_SHIP_DISPATCH_BYTES);
+  writeStreamU16(payload, count, 0);
   for (let i = 0; i < count; i += 1) {
-    const s = ships[i] ?? {};
-    const base = 4 + i * UNIT_SHIP_RECORD_BYTES;
-    if (base + UNIT_SHIP_RECORD_BYTES > payload.length) break;
+    const s = ships[i];
     const id = u32(s.id ?? s.shipId ?? s.unitId ?? 0);
-    payload.writeUInt32LE(id, base + 0x00);
-    payload.writeUInt32LE(u32(s.controllable ?? 1), base + 0x04);
-    payload.writeUInt32LE(u32(s.mapSection ?? id), base + 0x08);
-    payload.writeFloatLE(f32(s.x ?? 0), base + 0x0c);
-    payload.writeFloatLE(f32(s.y ?? 0), base + 0x10);
-    payload.writeFloatLE(f32(s.z ?? 0), base + 0x14);
-    payload.writeFloatLE(f32(s.direction ?? s.heading ?? 0), base + 0x18);
-    // base+0x1c..0x33 reserved (zero-filled)
+    const x = f32(s.x ?? 0);
+    const y = f32(s.y ?? 0);
+    const z = f32(s.z ?? 0);
+const direction = f32(s.direction ?? s.heading ?? 0);
+const anchorId = u32(s.anchorId ?? s.anchorUnitId ?? s.currentId ?? s.currentUnitId ?? id);
+    const off = 4 + i * UNIT_SHIP_RECORD_BYTES;
+    writeStreamU32(payload, id, off + 0x00);
+    payload.writeUInt8(u8(s.controllable ?? s.morale ?? 1), off + 0x04);
+    payload.writeUInt8(u8(s.confusion ?? 0), off + 0x05);
+    const characterKey = u32(s.character ?? s.characterId ?? s.commander ?? s.commanderId ?? 0);
+writeStreamU32(payload, characterKey || (s.mapSection ?? id), off + 0x08);
+writeStreamF32(payload, x, off + 0x0c);
+writeStreamF32(payload, y, off + 0x10);
+writeStreamF32(payload, z, off + 0x14);
+// FUN_004c32a0 passes dword[6] to FUN_004c1d20 param_4, which becomes tacticalEntry+0x24 current link id.
+writeStreamU32(payload, anchorId, off + 0x18);
+writeStreamU32(payload, s.detachmentLeader ?? s.detachmentLeaderId ?? 0, off + 0x1c);
+writeStreamF32(payload, s.detachmentX ?? 0, off + 0x20);
+writeStreamF32(payload, s.detachmentY ?? 0, off + 0x24);
+writeStreamF32(payload, s.detachmentZ ?? 0, off + 0x28);
+writeStreamF32(payload, s.detachmentDirection ?? s.detachmentHeading ?? direction, off + 0x2c);
+payload.writeUInt8(u8(s.search ?? 0), off + 0x30);
   }
   return buildMpsClientMessage32Inner({ code: RESPONSE_TACTICS_UNIT_SHIP_CODE, payload });
 }
@@ -220,14 +245,14 @@ export function buildTacticsInformationFillShieldInner({ ships = [] } = {}) {
     ships,
     FILL_SHIELD_RECORD_BYTES,
     (p, off, s) => {
-      p.writeUInt32LE(u32(s.id ?? s.shipId ?? 0), off);
+    writeStreamU32(p, s.id ?? s.shipId ?? 0, off);
       const shield = s.shield ?? [];
       for (let k = 0; k < 6; k += 1) {
-        p.writeUInt32LE(u32(shield[k] ?? 0), off + 4 + k * 4);
+      writeStreamU32(p, shield[k] ?? 0, off + 4 + k * 4);
       }
       const fill = s.fill ?? [];
       for (let k = 0; k < 6; k += 1) {
-        p.writeUInt16LE(u16(fill[k] ?? 0), off + 0x1c + k * 2);
+      writeStreamU16(p, fill[k] ?? 0, off + 0x1c + k * 2);
       }
     },
     MAX_TACTICS_UNITS,
@@ -246,11 +271,11 @@ export function buildTacticsInformationFillBeamGunInner({ ships = [] } = {}) {
     ships,
     FILL_BEAMGUN_RECORD_BYTES,
     (p, off, s) => {
-      p.writeUInt32LE(u32(s.id ?? s.shipId ?? 0), off);
-      p.writeUInt32LE(u32(s.beamgunA ?? 0), off + 4);
-      p.writeUInt16LE(u16(s.fillA ?? 0), off + 8);
-      p.writeUInt32LE(u32(s.beamgunB ?? 0), off + 0xa);
-      p.writeUInt16LE(u16(s.fillB ?? 0), off + 0xe);
+    writeStreamU32(p, s.id ?? s.shipId ?? 0, off);
+    writeStreamU32(p, s.beamgunA ?? 0, off + 4);
+    writeStreamU16(p, s.fillA ?? 0, off + 8);
+    writeStreamU32(p, s.beamgunB ?? 0, off + 0xa);
+    writeStreamU16(p, s.fillB ?? 0, off + 0xe);
     },
     MAX_TACTICS_UNITS,
   );
@@ -263,13 +288,13 @@ export function buildTacticsInformationFillBeamGunInner({ ships = [] } = {}) {
  */
 export function buildTacticsCharacterInner({ characters = [], field0 = 0 } = {}) {
   const count = Math.min(characters.length, MAX_TACTICS_UNITS);
-  const payload = Buffer.alloc(4 + count * TACTICS_CHARACTER_RECORD_BYTES);
-  payload.writeUInt16LE(u16(field0), 0);
-  payload.writeUInt16LE(count, 2);
+  const payload = Buffer.alloc(TACTICS_CHARACTER_DISPATCH_BYTES);
+  writeStreamU16(payload, field0, 0);
+  writeStreamU16(payload, count, 2);
   for (let i = 0; i < count; i += 1) {
     const c = characters[i];
     const id = typeof c === 'number' ? c : (c?.id ?? c?.characterId ?? 0);
-    payload.writeUInt32LE(u32(id), 4 + i * TACTICS_CHARACTER_RECORD_BYTES);
+    writeStreamU32(payload, id, 4 + i * TACTICS_CHARACTER_RECORD_BYTES);
   }
   return buildMpsClientMessage32Inner({ code: RESPONSE_TACTICS_CHARACTER_CODE, payload });
 }
@@ -288,11 +313,11 @@ export function buildTacticsInformationCorpsInner({ corps = [] } = {}) {
     corps,
     CORPS_RECORD_BYTES,
     (p, off, c) => {
-      p.writeUInt32LE(u32(c.id ?? 0), off);
+    writeStreamU32(p, c.id ?? 0, off);
       p.writeUInt8(u8(c.morale ?? 100), off + 4);
       p.writeUInt8(u8(c.confusion ?? 0), off + 5);
-      p.writeUInt32LE(u32(c.character ?? 0), off + 6);
-      p.writeFloatLE(f32(c.direction ?? 0), off + 0xa);
+    writeStreamU32(p, c.character ?? 0, off + 6);
+    writeStreamF32(p, c.direction ?? 0, off + 0xa);
       p.writeUInt8(u8(c.flag ?? 0), off + 0xe);
       const byte6a = c.byte6a ?? [];
       for (let k = 0; k < 6; k += 1) {
@@ -300,15 +325,15 @@ export function buildTacticsInformationCorpsInner({ corps = [] } = {}) {
       }
       const word2 = c.word2 ?? [];
       for (let k = 0; k < 2; k += 1) {
-        p.writeUInt16LE(u16(word2[k] ?? 0), off + 0x15 + k * 2);
+      writeStreamU16(p, word2[k] ?? 0, off + 0x15 + k * 2);
       }
       const wordA = c.wordA ?? [];
       for (let k = 0; k < 6; k += 1) {
-        p.writeUInt16LE(u16(wordA[k] ?? 0), off + 0x19 + k * 2);
+      writeStreamU16(p, wordA[k] ?? 0, off + 0x19 + k * 2);
       }
       const wordB = c.wordB ?? [];
       for (let k = 0; k < 6; k += 1) {
-        p.writeUInt16LE(u16(wordB[k] ?? 0), off + 0x25 + k * 2);
+      writeStreamU16(p, wordB[k] ?? 0, off + 0x25 + k * 2);
       }
     },
     MAX_TACTICS_UNITS,
@@ -319,7 +344,7 @@ export function buildTacticsInformationCorpsInner({ corps = [] } = {}) {
  * 0x345 ResponseTacticsInformationBase — fortress/base battle entries (§6). Count is a u8 (max 16); the
  * 8-byte header precedes the records. HIGH on id/xyz; MED/LOW on the four trailing params.
  * Record (28B): u32 id @0, f32 x @4, f32 y @8, f32 z @0xc, u32 u32a @0x10, u16 u16a @0x14,
- *   u32 u32b @0x16, u16 u16b @0x1a.
+ *   u32 u32b @0x18, u16 u16b @0x1c.
  * `bases` = [{ id, x, y, z, u32a, u16a, u32b, u16b }].
  */
 export function buildTacticsInformationBaseInner({ bases = [] } = {}) {
@@ -328,14 +353,14 @@ export function buildTacticsInformationBaseInner({ bases = [] } = {}) {
     bases,
     BASE_RECORD_BYTES,
     (p, off, b) => {
-      p.writeUInt32LE(u32(b.id ?? 0), off);
-      p.writeFloatLE(f32(b.x ?? 0), off + 4);
-      p.writeFloatLE(f32(b.y ?? 0), off + 8);
-      p.writeFloatLE(f32(b.z ?? 0), off + 0xc);
-      p.writeUInt32LE(u32(b.u32a ?? 0), off + 0x10);
-      p.writeUInt16LE(u16(b.u16a ?? 0), off + 0x14);
-      p.writeUInt32LE(u32(b.u32b ?? 0), off + 0x16);
-      p.writeUInt16LE(u16(b.u16b ?? 0), off + 0x1a);
+    writeStreamU32(p, b.id ?? 0, off);
+    writeStreamF32(p, b.x ?? 0, off + 4);
+    writeStreamF32(p, b.y ?? 0, off + 8);
+    writeStreamF32(p, b.z ?? 0, off + 0xc);
+    writeStreamU32(p, b.u32a ?? 0, off + 0x10);
+    writeStreamU16(p, b.u16a ?? 0, off + 0x14);
+    writeStreamU32(p, b.u32b ?? 0, off + 0x18);
+    writeStreamU16(p, b.u16b ?? 0, off + 0x1c);
     },
     MAX_TACTICS_BASES,
   );
@@ -352,10 +377,10 @@ export function buildResponsePositionBaseInner({ bases = [] } = {}) {
     bases,
     POSITION_BASE_RECORD_BYTES,
     (p, off, b) => {
-      p.writeUInt32LE(u32(b.id ?? 0), off);
-      p.writeFloatLE(f32(b.x ?? 0), off + 4);
-      p.writeFloatLE(f32(b.y ?? 0), off + 8);
-      p.writeFloatLE(f32(b.z ?? 0), off + 0xc);
+    writeStreamU32(p, b.id ?? 0, off);
+    writeStreamF32(p, b.x ?? 0, off + 4);
+    writeStreamF32(p, b.y ?? 0, off + 8);
+    writeStreamF32(p, b.z ?? 0, off + 0xc);
     },
     MAX_POSITION_BASES,
   );
@@ -393,11 +418,11 @@ export function buildInformationObstacleInner(obstacles = {}) {
   let o = 0;
 
   const writeSmall = (rec) => {
-    payload.writeUInt32LE(u32(rec.id ?? 0), o);
+    writeStreamU32(payload, rec.id ?? 0, o);
     payload.writeUInt8(u8(rec.flag ?? 0), o + 4);
-    payload.writeUInt16LE(u16(rec.word ?? 0), o + 5);
-    payload.writeFloatLE(f32(rec.a ?? 0), o + 7);
-    payload.writeFloatLE(f32(rec.b ?? 0), o + 11);
+    writeStreamU16(payload, rec.word ?? 0, o + 5);
+    writeStreamF32(payload, rec.a ?? 0, o + 7);
+    writeStreamF32(payload, rec.b ?? 0, o + 11);
     o += SMALL;
   };
   const writeSection = (arr, writer) => {
@@ -409,25 +434,25 @@ export function buildInformationObstacleInner(obstacles = {}) {
   writeSection(circle, writeSmall);
   writeSection(grav, writeSmall);
   writeSection(gas, (rec) => {
-    payload.writeUInt32LE(u32(rec.id ?? 0), o);
+    writeStreamU32(payload, rec.id ?? 0, o);
     payload.writeUInt8(u8(rec.flag ?? 0), o + 4);
-    payload.writeUInt16LE(u16(rec.word ?? 0), o + 5);
-    payload.writeFloatLE(f32(rec.a ?? 0), o + 7);
-    payload.writeUInt32LE(u32(rec.id2 ?? 0), o + 11);
+    writeStreamU16(payload, rec.word ?? 0, o + 5);
+    writeStreamF32(payload, rec.a ?? 0, o + 7);
+    writeStreamU32(payload, rec.id2 ?? 0, o + 11);
     payload.writeUInt8(u8(rec.flag2 ?? 0), o + 15);
-    payload.writeFloatLE(f32(rec.c ?? 0), o + 16);
-    payload.writeFloatLE(f32(rec.d ?? 0), o + 20);
+    writeStreamF32(payload, rec.c ?? 0, o + 16);
+    writeStreamF32(payload, rec.d ?? 0, o + 20);
     o += GAS;
   });
   writeSection(belt, writeSmall);
   writeSection(bh, (rec) => {
-    payload.writeUInt32LE(u32(rec.id ?? 0), o);
+    writeStreamU32(payload, rec.id ?? 0, o);
     payload.writeUInt8(u8(rec.flag ?? 0), o + 4);
-    payload.writeUInt16LE(u16(rec.word ?? 0), o + 5);
-    payload.writeFloatLE(f32(rec.x ?? 0), o + 7);
-    payload.writeFloatLE(f32(rec.y ?? 0), o + 11);
-    payload.writeFloatLE(f32(rec.z ?? 0), o + 15);
-    payload.writeFloatLE(f32(rec.r ?? 0), o + 19);
+    writeStreamU16(payload, rec.word ?? 0, o + 5);
+    writeStreamF32(payload, rec.x ?? 0, o + 7);
+    writeStreamF32(payload, rec.y ?? 0, o + 11);
+    writeStreamF32(payload, rec.z ?? 0, o + 15);
+    writeStreamF32(payload, rec.r ?? 0, o + 19);
     o += BH;
   });
 
@@ -613,15 +638,9 @@ export function openBattleField({
     RESPONSE_TACTICS_FILL_SHIELD_CODE,
   );
 
-  // 4. beam-gun banks — beamgunA/fillA/beamgunB/fillB are set by upsertShip (0x343 FillBeamGun).
-  push(
-    buildTacticsInformationFillBeamGunInner({
-      ships: participants.map((p) => ({
-        id: p.shipId, beamgunA: p.beamgunA, fillA: p.fillA, beamgunB: p.beamgunB, fillB: p.fillB,
-      })),
-    }),
-    RESPONSE_TACTICS_FILL_BEAMGUN_CODE,
-  );
+// 4. Beam-gun fill is intentionally not pushed here yet. `0x0343` is not in
+// FUN_004b8b00's receive-size table, so live battle-entry must not emit it
+// until the canonical response opcode is RE-confirmed.
 
   // 5-9. optional read-model tables (only when present).
   if (characters.length > 0) {
@@ -919,12 +938,11 @@ export function concludeBattle({
 
 /** The S->C codes this domain emits (for the lead's routing/registration). */
 export const BATTLE_SETUP_CODES = Object.freeze([
-  RESPONSE_POSITION_UNIT_CODE,
-  RESPONSE_TACTICS_UNIT_SHIP_CODE,
-  RESPONSE_TACTICS_FILL_SHIELD_CODE,
-  RESPONSE_TACTICS_FILL_BEAMGUN_CODE,
-  RESPONSE_TACTICS_CHARACTER_CODE,
-  RESPONSE_TACTICS_CORPS_CODE,
+RESPONSE_POSITION_UNIT_CODE,
+RESPONSE_TACTICS_UNIT_SHIP_CODE,
+RESPONSE_TACTICS_FILL_SHIELD_CODE,
+RESPONSE_TACTICS_CHARACTER_CODE,
+RESPONSE_TACTICS_CORPS_CODE,
   RESPONSE_TACTICS_BASE_CODE,
   RESPONSE_INFORMATION_OBSTACLE_CODE,
   RESPONSE_POSITION_BASE_CODE,

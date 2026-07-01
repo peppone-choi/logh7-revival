@@ -2,6 +2,8 @@ LOGH VII distribution layout
 
 Client package:
 - LOGH7Launcher.exe
+- LOGH7Launcher.exe --client-preflight for fast Windows Application Control checks
+- diagnose-appcontrol.ps1 for SHA/signature/CodeIntegrity evidence collection
 - exe/G7MTClient.exe and legacy client data
 - exe/D3D8.dll and exe/dgVoodoo.conf
 - fonts/ and tools/packaging/install-pretendard.ps1

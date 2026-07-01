@@ -6,6 +6,7 @@ from typing import Final
 WINDOWS_RUNTIME_FILES: Final[tuple[str, ...]] = (
     "setup-local.ps1",
     "launch-client.ps1",
+    "diagnose-appcontrol.ps1",
     "WINDOWS-COMPATIBILITY.txt",
 )
 
@@ -14,6 +15,7 @@ def write_windows_runtime_files(destination: Path) -> list[dict[str, str]]:
     files = {
         "setup-local.ps1": _setup_local_script(),
         "launch-client.ps1": _launch_client_script(),
+        "diagnose-appcontrol.ps1": _diagnose_appcontrol_script(),
         "WINDOWS-COMPATIBILITY.txt": _compatibility_note(),
     }
     written: list[dict[str, str]] = []
@@ -49,8 +51,14 @@ def _setup_local_script() -> str:
             "New-ItemProperty -Path $LayersKey -Name $Client -Value $CompatFlags -PropertyType String -Force | Out-Null",
             "New-ItemProperty -Path $LayersKey -Name $Launcher -Value $CompatFlags -PropertyType String -Force | Out-Null",
             "",
+            "Add-Type -Namespace Logh7Win -Name ProfileApi -MemberDefinition '[DllImport(\"kernel32.dll\", CharSet=CharSet.Unicode, SetLastError=true)] public static extern bool WriteProfileString(string section, string key, string value);'",
+            "[Logh7Win.ProfileApi]::WriteProfileString('windows', 'hangeulmenu', 'hangeul') | Out-Null",
+            "[Logh7Win.ProfileApi]::WriteProfileString('windows', 'kanjimenu', 'roman') | Out-Null",
+            "",
             "if (-not $Quiet) {",
             "  Write-Host 'LOGH VII local Windows settings are ready.'",
+            "  Write-Host 'Run .\\LOGH7Launcher.exe --client-preflight to check Windows Application Control before starting the server.'",
+            "  Write-Host 'Run .\\diagnose-appcontrol.ps1 to collect SHA/signature/CodeIntegrity evidence.'",
             "  Write-Host 'Run .\\launch-client.ps1 to start the game client from the correct working directory.'",
             "  Write-Host 'If Japanese text is garbled, run under Japanese system locale or Locale Emulator.'",
             "}",
@@ -75,6 +83,63 @@ def _launch_client_script() -> str:
     )
 
 
+def _diagnose_appcontrol_script() -> str:
+    return _lines(
+        [
+            "param([int]$LastMinutes = 15)",
+            "$ErrorActionPreference = 'Continue'",
+            "$Root = Split-Path -Parent $MyInvocation.MyCommand.Path",
+            "$Client = Join-Path $Root 'exe\\G7MTClient.exe'",
+            "$Launcher = Join-Path $Root 'LOGH7Launcher.exe'",
+            "$Log = Join-Path $Root 'logh7-runtime\\logs\\launcher.log'",
+            "",
+            "Write-Host 'LOGH VII Windows Application Control diagnostic'",
+            "Write-Host ('Root: ' + $Root)",
+            "",
+            "if (Test-Path -LiteralPath $Client) {",
+            "  $Hash = Get-FileHash -Algorithm SHA256 -LiteralPath $Client",
+            "  Write-Host ('Client SHA256: ' + $Hash.Hash)",
+            "  $Sig = Get-AuthenticodeSignature -LiteralPath $Client",
+            "  Write-Host ('Client signature status: ' + $Sig.Status)",
+            "  $Zone = Get-Item -LiteralPath $Client -Stream Zone.Identifier -ErrorAction SilentlyContinue",
+            "  if ($Zone) { Write-Host 'Client Zone.Identifier stream: present' } else { Write-Host 'Client Zone.Identifier stream: absent' }",
+            "} else {",
+            "  Write-Host ('Client missing: ' + $Client)",
+            "}",
+            "",
+            "if (Test-Path -LiteralPath $Launcher) {",
+            "  $LauncherHash = Get-FileHash -Algorithm SHA256 -LiteralPath $Launcher",
+            "  Write-Host ('Launcher SHA256: ' + $LauncherHash.Hash)",
+            "  Write-Host 'Running LOGH7Launcher.exe --client-preflight ...'",
+            "  $Process = Start-Process -FilePath $Launcher -ArgumentList @('--client-preflight') -WorkingDirectory $Root -Wait -PassThru -WindowStyle Hidden",
+            "  Write-Host ('Preflight exit code: ' + $Process.ExitCode)",
+            "} else {",
+            "  Write-Host ('Launcher missing: ' + $Launcher)",
+            "}",
+            "",
+            "Write-Host ''",
+            "Write-Host ('Recent CodeIntegrity events from the last ' + $LastMinutes + ' minute(s):')",
+            "try {",
+            "  $Events = Get-WinEvent -FilterHashtable @{LogName='Microsoft-Windows-CodeIntegrity/Operational'; StartTime=(Get-Date).AddMinutes(-$LastMinutes)} -ErrorAction Stop",
+            "  $Filtered = $Events | Where-Object { $_.Message -like '*G7MTClient.exe*' -or $_.Message -like '*LOGH7Launcher.exe*' } | Select-Object -First 12",
+            "  if ($Filtered) {",
+            "    $Filtered | Select-Object TimeCreated, Id, Message | Format-List",
+            "  } else {",
+            "    Write-Host 'No matching G7MTClient.exe/LOGH7Launcher.exe CodeIntegrity events found in the time window.'",
+            "  }",
+            "} catch {",
+            "  Write-Host ('Could not read CodeIntegrity Operational log: ' + $_.Exception.Message)",
+            "}",
+            "",
+            "if (Test-Path -LiteralPath $Log) {",
+            "  Write-Host ''",
+            "  Write-Host ('Launcher log tail: ' + $Log)",
+            "  Get-Content -LiteralPath $Log -Tail 20",
+            "}",
+        ]
+    )
+
+
 def _compatibility_note() -> str:
     return _lines(
         [
@@ -82,9 +147,20 @@ def _compatibility_note() -> str:
             "",
             "Double-click LOGH7Launcher.exe to start the local server and then exe/G7MTClient.exe.",
             "launch-client.ps1 is kept as a PowerShell wrapper around the same launcher.",
+            "LOGH7Launcher.exe runs a client preflight before server startup; use --no-client-preflight only",
+            "for reproducing the old launch path.",
+            "",
+            "Fast launch check:",
+            "  .\\LOGH7Launcher.exe --client-preflight",
+            "Evidence collection:",
+            "  powershell -ExecutionPolicy Bypass -File .\\diagnose-appcontrol.ps1",
+            "If this reports Windows Application Control / Smart App Control, check Event Viewer:",
+            "  Applications and Services Logs > Microsoft > Windows > CodeIntegrity > Operational",
+            "Look for events 3033 and 3077 naming exe\\G7MTClient.exe.",
             "",
             "What LOGH7Launcher.exe does:",
             "- verifies Node.js, logh7-runtime/src/server/logh7-server.mjs, and exe/G7MTClient.exe;",
+            "- preflights exe/G7MTClient.exe before starting the local server;",
             "- writes the per-user BOTHTEC Install registry key used by the legacy launcher path;",
             "- sets conservative per-user AppCompatFlags for G7Start.exe and exe/G7MTClient.exe;",
             "- starts the local authoritative server on 127.0.0.1:47900;",

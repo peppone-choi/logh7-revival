@@ -1,6 +1,8 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 
+const LOBBY_CARD_DISPLAY_AGE_SECONDS_PER_YEAR = 0x01e13380;
+
 import {
   GIN7_MAGIC,
   LOGIN_INNER_CODE,
@@ -54,10 +56,11 @@ import {
   buildNotifyEnterGridBeginInner,
   buildNotifyEnterGridEndInner,
   buildCommandGridChatInner,
-  buildResponseTacticsInformationInner,
-  SS_RESP_TACTICS_INFO_CODE,
-  SS_RESP_TACTICS_INFO_BYTES,
-  TACTICS_UNIT_ENTRY_STRIDE,
+buildResponseTacticsInformationInner,
+SS_RESP_TACTICS_INFO_CODE,
+SS_RESP_TACTICS_INFO_BYTES,
+TACTICS_UNIT_ENTRY_HEADER_BYTES,
+TACTICS_UNIT_ENTRY_STRIDE,
   COMMAND_GRID_CHAT_CODE,
   NOTIFY_MOVED_SHIP_CODE,
   NOTIFY_TURNED_SHIP_CODE,
@@ -221,12 +224,15 @@ test('buildLobbyInformationCharacterChargeInner emits selectable character recor
   assert.throws(() => buildLobbyInformationCharacterChargeInner({ characters: [{ id: 1 }, { id: 2 }, { id: 3 }] }));
   assert.throws(() => buildLobbyInformationCharacterChargeInner({ characters: [{ id: 0 }] }));
   assert.throws(() => buildLobbyInformationCharacterChargeInner({ characters: [{ id: 1, status: 3 }] }));
-  assert.throws(() =>
-    buildLobbyInformationCharacterChargeInner({ characters: [{ id: 1, name: 'NameThatIsTooLong' }] }),
-  );
-  assert.throws(() =>
-    buildLobbyInformationCharacterChargeInner({ characters: [{ id: 1, description: 'x'.repeat(65) }] }),
-  );
+  const longNamePayload = buildLobbyInformationCharacterChargeInner({
+    characters: [{ id: 1, name: 'NameThatIsTooLong' }],
+  }).subarray(6);
+  assert.equal(readExpectedUtf16FieldBE(longNamePayload, 4).value, 'NameThatIsTo');
+  const longDescriptionPayload = buildLobbyInformationCharacterChargeInner({
+    characters: [{ id: 1, description: 'x'.repeat(65) }],
+  }).subarray(6);
+  const longDescriptionName = readExpectedUtf16FieldBE(longDescriptionPayload, 4);
+  assert.equal(readExpectedUtf16FieldBE(longDescriptionPayload, longDescriptionName.next).value, 'x'.repeat(64));
   assert.throws(() => buildLobbyInformationCharacterChargeInner({ characters: '1' }));
 });
 
@@ -243,6 +249,7 @@ test('buildLobbyInformationCharacterChargeInner emits charged-character detail f
       sex: 1,
       birthdayMonth: 1,
       birthdayDay: 10,
+      ageYears: 24,
       state: 2,
       abilities: [72, 95, 93, 92, 111, 101, 105, 81],
       lastname: 'Friedrich IV',
@@ -259,17 +266,17 @@ test('buildLobbyInformationCharacterChargeInner emits charged-character detail f
   });
 
   assert.equal(payload.readUInt8(0), 1);
-  assert.equal(payload.readUInt32LE(detail), 42);
+  assert.equal(payload.readUInt32BE(detail), 42);
   assert.equal(payload.readUInt8(detail + 4), 1); // content nation 0x500 -> client power byte
   assert.equal(payload.readUInt8(detail + 5), 1);
   assert.equal(payload.readUInt8(detail + 6), 1);
   assert.equal(payload.readUInt8(detail + 7), 1);
   assert.equal(payload.readUInt8(detail + 8), 1);
   assert.equal(payload.readUInt8(detail + 9), 10);
-  assert.equal(payload.readUInt32LE(detail + 10), 0);
+  assert.equal(payload.readUInt32BE(detail + 10), 24 * LOBBY_CARD_DISPLAY_AGE_SECONDS_PER_YEAR);
   assert.equal(payload.readUInt8(detail + 14), 2);
   for (let i = 0; i < 8; i += 1) {
-    assert.equal(payload.readUInt16LE(detail + 15 + i * 2), [72, 95, 93, 92, 111, 101, 105, 81][i]);
+    assert.equal(payload.readUInt16BE(detail + 15 + i * 2), [72, 95, 93, 92, 111, 101, 105, 81][i]);
   }
   let stringCursor = detail + 31;
   let parsed = readExpectedUtf16FieldBE(payload, stringCursor);
@@ -280,6 +287,31 @@ test('buildLobbyInformationCharacterChargeInner emits charged-character detail f
   stringCursor = parsed.next;
   parsed = readExpectedUtf16FieldBE(payload, stringCursor);
   assert.equal(parsed.value, 'Friedrich IV');
+});
+
+test('buildLobbyInformationCharacterChargeInner uses display name for the card header slot', () => {
+  const inner = buildLobbyInformationCharacterChargeInner({
+    characters: [{
+      id: 43,
+      status: 1,
+      name: '신참사관',
+      description: 'Ready',
+      lastname: '신참',
+      firstname: '사관',
+      displayName: '신참사관',
+      ageYears: 18,
+    }],
+  });
+  const payload = inner.subarray(6);
+  const detail = writeExpectedChargePrefix(Buffer.alloc(256), 1, {
+    id: 43,
+    status: 1,
+    name: '신참사관',
+    description: 'Ready',
+  });
+
+  const parsed = readExpectedUtf16FieldBE(payload, detail + 31);
+  assert.equal(parsed.value, '신참사관');
 });
 
 function writeExpectedChargeRecord(target, cursor, { id, status, name, description }) {
@@ -310,7 +342,7 @@ function writeExpectedChargePrefix(target, cursor, { id, status, name, descripti
 }
 
 function writeExpectedChargedCharacterDetail(target, cursor, { id, name }) {
-  target.writeUInt32LE(id, cursor);
+  target.writeUInt32BE(id, cursor);
   cursor += 4;
   target.writeUInt8(1, cursor);
   cursor += 1; // power
@@ -320,16 +352,16 @@ function writeExpectedChargedCharacterDetail(target, cursor, { id, name }) {
   cursor += 1; // generated
   target.writeUInt8(0, cursor);
   cursor += 1; // sex unknown
-  target.writeUInt8(0, cursor);
-  cursor += 1; // birthday month unknown
-  target.writeUInt8(0, cursor);
-  cursor += 1; // birthday day unknown
-  target.writeUInt32LE(0, cursor);
+  target.writeUInt8(1, cursor);
+  cursor += 1; // birthday month default
+  target.writeUInt8(1, cursor);
+  cursor += 1; // birthday day default
+  target.writeUInt32BE(18 * LOBBY_CARD_DISPLAY_AGE_SECONDS_PER_YEAR, cursor);
   cursor += 4;
   target.writeUInt8(1, cursor);
   cursor += 1; // state
   for (let i = 0; i < 8; i += 1) {
-    target.writeUInt16LE(0, cursor);
+    target.writeUInt16BE(0, cursor);
     cursor += 2;
   }
   cursor = writeExpectedUtf16FieldBE(target, cursor, name);
@@ -439,7 +471,7 @@ test('G145 world-build crash-fix builders carry the matching char id', () => {
   // enriched record: real fields at the binary-evidenced 0x0323 offsets (docs/logh7-info-records-wire.md)
   const rec2 = buildInformationCharacterRecordInner({
     characterId: 9, gridUnitId: 0x1234, power: 1, spot: 42, spotOwner: 1, online: true,
-    state: 2, pcp: 1200, mcp: 3400, fame: 77, money: 50000, influence: 88, stamina: 100,
+    state: 2, pcp: 1200, mcp: 3400, fame: 77, money: 50000, influence: 88, stamina: 100, together: 1,
     abilities: [101, 32, 93, 70, 93, 96, 74, 95], // Reinhard's recovered IV EX 8-stat block
   });
   const p2 = rec2.subarray(6);
@@ -457,6 +489,7 @@ test('G145 world-build crash-fix builders carry the matching char id', () => {
   assert.equal(p2.readUInt16LE(0x188 + 7 * 4), 95); // ability_8[7].point = 防御
   assert.equal(p2.readUInt8(0x1a8), 88); // influence
   assert.equal(p2.readUInt8(0x1a9), 100); // 体力(stamina) @0x1a9 — 만체력 시드
+  assert.equal(p2.readUInt8(0x2d0), 1); // together @0x2d0 -> PLAYER_INFO+0x2f4
   // stamina 미지정 시 0x1a9는 0(코덱은 명시값만 기록; 만체력 기본은 session 계층이 주입)
   assert.equal(buildInformationCharacterRecordInner({ characterId: 1 }).subarray(6).readUInt8(0x1a9), 0);
 
@@ -791,7 +824,11 @@ test('canon galaxy oracle: capitals + corridors land on canon cells, none in non
   assert.ok(passableCells.size > 3000, 'passable mask recovered (~3771 cells)');
 
   const systems = galaxy.systems;
-  assert.equal(systems.length, 80);
+  // 로스터 = 85 캐논 성계; 좌표확정(plotted dot) 부분집합 = 80. canon-cell 단언은 plotted에만 적용한다
+  // (좌표 미확정 5개는 canonCol/canonRow가 null이며 grid 마커도 받지 않는다 — 좌표 추측 금지).
+  assert.equal(systems.length, 85);
+  const plotted = systems.filter((s) => s.positionAuthority !== 'MINIMAP_P3_VIRTUAL_OVERLAY');
+  assert.equal(plotted.length, 80);
   // Known canon identities (P1, manual star-chart): Odin/Valhalla empire, Heinessen/Barlat alliance,
   // Fezzan neutral corridor, Iserlohn empire corridor.
   const byName = new Map(systems.map((s) => [s.system, s]));
@@ -801,8 +838,8 @@ test('canon galaxy oracle: capitals + corridors land on canon cells, none in non
   assert.equal(byName.get('フェザーン').is_corridor, 1, 'Fezzan flagged as corridor');
   assert.equal(byName.get('イゼルローン').is_corridor, 1, 'Iserlohn flagged as corridor');
 
-  // Every canon cell is navigable.
-  for (const s of systems) {
+  // Every coordinate-confirmed canon cell is navigable (좌표 미확정 5개는 canon cell이 없어 대상 외).
+  for (const s of plotted) {
     assert.ok(passableCells.has(`${s.canonCol},${s.canonRow}`), `${s.system} canon cell is passable`);
   }
 
@@ -812,9 +849,9 @@ test('canon galaxy oracle: capitals + corridors land on canon cells, none in non
   const { decoded, pos } = decodeCellGrid(cellInner);
   assert.equal(pos, STRATEGIC_GRID_WIDTH * STRATEGIC_GRID_HEIGHT); // 5000 cells
 
-  // The capital markers sit on their canon cells (first 80 systems take values 4..83 in array order).
-  systems.forEach((s, index) => {
-    if (index >= 85) return;
+  // The capital markers sit on their canon cells. grid에 들어간 좌표확정 80개만 마커를 받으며, 이들은
+  // galaxy.json 앞쪽 80개라 filtered-list 인덱스 = plotted 인덱스(value = 4 + index)가 그대로 성립한다.
+  plotted.forEach((s, index) => {
     const value = 4 + index;
     const cellIdx = s.canonRow * STRATEGIC_GRID_WIDTH + s.canonCol;
     // With the full canon mask there are no collisions, so each marker is exactly on its canon cell.
@@ -1231,35 +1268,46 @@ test('buildCommandGridChatInner builds a 140-byte 0x0f1c chat (msgLen + wide cha
   assert.equal(payload.readUInt16LE(12), 'I'.charCodeAt(0)); // wide char I
 });
 
-test('buildResponseTacticsInformationInner builds a 0x33b tactical unit table (count + 52B entries)', () => {
+test('buildResponseTacticsInformationInner builds a 0x33b packed tactical unit table', () => {
   const inner = buildResponseTacticsInformationInner({
-    units: [{ unitId: 0x01000000, controllable: 1, mapSection: 0x01000000, x: 1.5, y: 2.5, z: 3.5, heading: 0.25 }],
+units: [{
+unitId: 0x01000000, controllable: 1, confusion: 2, mapSection: 0x01000000,
+x: 1.5, y: 2.5, z: 3.5, heading: 0.25, detachmentLeader: 0x01000001, search: 1,
+}],
   });
   assert.equal(inner.readUInt16BE(4), SS_RESP_TACTICS_INFO_CODE);
   const body = inner.subarray(6);
-  assert.equal(body.length, SS_RESP_TACTICS_INFO_BYTES); // fixed 0x79e4 = 31204
-  assert.equal(body.readUInt16LE(0), 1); // count
-  const base = 4; // entry[0] at body+4 (clientBase+0x4271ac)
-  assert.equal(body.readUInt32LE(base + 0), 0x01000000); // unitId
-  assert.equal(body.readUInt32LE(base + 4), 1); // controllable
-  assert.equal(body.readUInt32LE(base + 8), 0x01000000); // mapSection
-  assert.equal(body.readFloatLE(base + 12), 1.5); // x
-  assert.equal(body.readFloatLE(base + 16), 2.5); // y
-  assert.equal(body.readFloatLE(base + 20), 3.5); // z
-  assert.equal(body.readFloatLE(base + 24), 0.25); // heading
+assert.equal(SS_RESP_TACTICS_INFO_BYTES, 0x79e4);
+assert.equal(TACTICS_UNIT_ENTRY_HEADER_BYTES, 2);
+assert.equal(TACTICS_UNIT_ENTRY_STRIDE, 0x34);
+assert.equal(body.length, SS_RESP_TACTICS_INFO_BYTES); // fixed receive object prevents parser over-read.
+assert.equal(body.readUInt16BE(0), 1); // count
+ const base = TACTICS_UNIT_ENTRY_HEADER_BYTES;
+assert.equal(body.readUInt32BE(base + 0), 0x01000000); // unitId
+assert.equal(body.readUInt8(base + 4), 1); // controllable
+assert.equal(body.readUInt8(base + 5), 2);
+assert.equal(body.readUInt32BE(base + 0x06), 0x01000000); // mapSection
+assert.equal(body.readFloatBE(base + 0x0a), 1.5); // x
+assert.equal(body.readFloatBE(base + 0x0e), 2.5); // y
+assert.equal(body.readFloatBE(base + 0x12), 3.5); // z
+assert.equal(body.readUInt32BE(base + 0x16), 0x01000000); // current/anchor unit id
+assert.equal(body.readUInt32BE(base + 0x1a), 0x01000001);
+assert.equal(body.readFloatBE(base + 0x2a), 0.25); // heading/direction fallback
+assert.equal(body.readUInt8(base + 0x2e), 1);
 });
 
-test('buildResponseTacticsInformationInner defaults mapSection to unitId and emits one entry by default', () => {
+test('buildResponseTacticsInformationInner defaults mapSection and supports multiple 52B entries', () => {
   const inner = buildResponseTacticsInformationInner({ units: [{ unitId: 7 }] });
   const body = inner.subarray(6);
-  assert.equal(body.readUInt16LE(0), 1);
-  assert.equal(body.readUInt32LE(4 + 0), 7); // unitId
-  assert.equal(body.readUInt32LE(4 + 4), 1); // controllable default 1
-  assert.equal(body.readUInt32LE(4 + 8), 7); // mapSection defaults to unitId
+assert.equal(body.readUInt16BE(0), 1);
+assert.equal(body.readUInt32BE(TACTICS_UNIT_ENTRY_HEADER_BYTES + 0), 7); // unitId
+assert.equal(body.readUInt8(TACTICS_UNIT_ENTRY_HEADER_BYTES + 4), 1); // controllable default
+assert.equal(body.readUInt32BE(TACTICS_UNIT_ENTRY_HEADER_BYTES + 0x06), 7); // mapSection defaults unitId
+assert.equal(body.readUInt32BE(TACTICS_UNIT_ENTRY_HEADER_BYTES + 0x16), 7); // anchor defaults unitId
   // a second entry sits exactly one stride later
   const two = buildResponseTacticsInformationInner({ units: [{ unitId: 7 }, { unitId: 9 }] });
-  assert.equal(two.subarray(6).readUInt16LE(0), 2);
-  assert.equal(two.subarray(6).readUInt32LE(4 + TACTICS_UNIT_ENTRY_STRIDE), 9); // entry[1].unitId
+assert.equal(two.subarray(6).readUInt16BE(0), 2);
+assert.equal(two.subarray(6).readUInt32BE(TACTICS_UNIT_ENTRY_HEADER_BYTES + TACTICS_UNIT_ENTRY_STRIDE), 9); // entry[1].unitId
 });
 
 test('buildNotifyEnterGridBegin/End build 1-byte 0xb09/0xb0a notifies', () => {

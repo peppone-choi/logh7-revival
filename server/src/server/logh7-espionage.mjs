@@ -241,9 +241,45 @@ export function createEspionageState() {
       if (!infiltrations.has(a) && !intrusions.has(a)) return { success: false, detected: false, chance: 0, reason: 'not-deployed' };
       const chance = espionageChance(intel, security);
       const success = roll < chance;
-      infiltrations.delete(a);
-      intrusions.delete(a);
-      return { success, detected: !success, chance };
-    },
-  };
+ infiltrations.delete(a);
+ intrusions.delete(a);
+ return { success, detected: !success, chance };
+ },
+ toSnapshot() {
+ const setsByFaction = (map) => [...map.entries()].map(([faction, values]) => ({
+ faction,
+ values: [...values],
+ }));
+ return {
+ arrestList: setsByFaction(arrestList),
+ enforcers: setsByFaction(enforcers),
+ detained: [...detained.entries()].map(([id, value]) => ({ id, ...value })),
+ infiltrations: [...infiltrations.entries()].map(([id, value]) => ({ id, ...value })),
+ surveillance: [...surveillance.entries()],
+ located: [...located],
+ intrusions: [...intrusions.entries()].map(([id, value]) => ({ id, ...value })),
+ };
+ },
+ restore(snapshot = {}) {
+ const restoreSetMap = (map, rows = []) => {
+ map.clear();
+ for (const row of rows) {
+ map.set(row?.faction, new Set((Array.isArray(row?.values) ? row.values : []).map(norm)));
+ }
+ };
+ restoreSetMap(arrestList, snapshot.arrestList);
+ restoreSetMap(enforcers, snapshot.enforcers);
+ detained.clear();
+ for (const row of snapshot.detained ?? []) detained.set(norm(row.id), { faction: row.faction });
+ infiltrations.clear();
+ for (const row of snapshot.infiltrations ?? []) infiltrations.set(norm(row.id), { facility: row.facility, planted: Boolean(row.planted) });
+ surveillance.clear();
+ for (const [watcher, target] of snapshot.surveillance ?? []) surveillance.set(norm(watcher), norm(target));
+ located.clear();
+ for (const id of snapshot.located ?? []) located.add(norm(id));
+ intrusions.clear();
+ for (const row of snapshot.intrusions ?? []) intrusions.set(norm(row.id), { body: row.body });
+ return this;
+ },
+ };
 }

@@ -12,8 +12,10 @@ from capstone import CS_ARCH_X86, CS_MODE_32, Cs
 
 if __package__:
     from .logh7_child_codec import PeImage, _parse_pe_image, _virtual_address_to_offset
+    from .logh7_disasm_range import VirtualRange, find_memory_range_references, load_function_ranges
 else:
     from logh7_child_codec import PeImage, _parse_pe_image, _virtual_address_to_offset
+    from logh7_disasm_range import VirtualRange, find_memory_range_references, load_function_ranges
 
 DISPATCH_ENTRY_VA: Final[int] = 0x004BA316
 DISPATCH_TAIL_VA: Final[int] = 0x004BDD33
@@ -24,6 +26,8 @@ LARGE_INDEX_TABLE_VA: Final[int] = 0x004BDFD4
 LARGE_TARGET_TABLE_VA: Final[int] = 0x004BDF28
 LARGE_BASE_CODE: Final[int] = 0x033F
 RANGE_0F_DISPATCH_VA: Final[int] = 0x004BCFEE
+STATE_BLOCK_RANGE: Final[VirtualRange] = VirtualRange(0x009D2A30, 0x50)
+DEFAULT_REDEX_EXPORT: Final[Path] = Path(__file__).resolve().parents[1] / ".omo" / "ghidra" / "export" / "G7MTClient"
 CLIENT_STATE_WRITE_RE: Final[re.Pattern[str]] = re.compile(
     r"(?:byte|word|dword) ptr \[(?:esi|ecx|edx) \+ 0x([0-9a-f]+)\]"
 )
@@ -80,6 +84,8 @@ def build_inbound_response_dispatch_index(source: Path) -> dict[str, object]:
         "unhandledVirtualAddress": UNHANDLED_VA,
         "unhandledVirtualAddressHex": f"0x{UNHANDLED_VA:08x}",
         "trackedResponses": [response.to_json() for response in responses],
+        "stateBlockRange": STATE_BLOCK_RANGE.to_json(),
+        "stateBlockWriterCandidates": _state_block_writer_candidates(source),
         "negativeRuntimeEvidence": (
             "G075 proved 0x004b78a0/0x004b78ef did not record inbound server responses "
             "for the current 0x0001/0x0003/0x0013/0x0014 probe route"
@@ -136,6 +142,18 @@ def _state_writes(data: bytes, image: PeImage, handler_va: int) -> tuple[str, ..
             continue
         writes.append(f"client+0x{int(match.group(1), 16):06x}")
     return tuple(dict.fromkeys(writes))
+
+
+def _state_block_writer_candidates(source: Path) -> list[dict[str, str]]:
+    if not DEFAULT_REDEX_EXPORT.exists():
+        return []
+    references = find_memory_range_references(
+        source,
+        scan_ranges=load_function_ranges(DEFAULT_REDEX_EXPORT),
+        target_range=STATE_BLOCK_RANGE,
+        access="write",
+    )
+    return [reference.to_json() for reference in references]
 
 
 def _small_table_response(data: bytes, image: PeImage, internal_code: int, message_name: str) -> TrackedResponse:

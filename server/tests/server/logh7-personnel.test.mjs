@@ -256,7 +256,7 @@ test('buildNotifyInformationCharacterInner: compact message32 0x356 expands to t
     characterId: 1001, gridUnitId: 222, power: 1, spot: 80, spotOwner: 7,
     abilities: [90, 80, 70, 60, 50, 40, 30, 20], rank: 9, title: '공작', face: 0x0323,
     lastname: 'Reinhard', firstname: 'Lohengramm', spotResolverBase: 80,
-    seatEntries: [{ character: 1001, role: 2 }], influence: 88, stamina: 100,
+    seatEntries: [{ character: 1001, role: 2 }], influence: 88, stamina: 100, together: 1,
   });
   const { code, payload } = decodeMessage32(inner);
   assert.equal(code, NOTIFY_INFORMATION_CHARACTER_CODE);
@@ -280,6 +280,7 @@ test('buildNotifyInformationCharacterInner: compact message32 0x356 expands to t
   assert.equal(object.readUInt16LE(0x18c + 7 * 4), 20); // ability[7] = 防御
   assert.equal(object.readUInt8(0x1ac), 88); // influence(影響力)
   assert.equal(object.readUInt8(0x1ad), 100); // 体力(stamina) — 만체력 시드
+  assert.equal(object.readUInt8(0x2d4), 1); // together compact tail -> PLAYER_INFO+0x2f4
   assert.equal(object.readUInt8(0x81), 1); // parentage count
   assert.equal(object.readUInt8(0x85), 'Reinhard'.length);
   assert.equal(object.readUInt16LE(0x85 + 0x55), 9); // rank

@@ -66,14 +66,26 @@ import { createWorldState } from './logh7-world-state.mjs';
 import { loadScenarioFile, loadScenarioInto } from './logh7-scenario.mjs';
 import { loadConfig } from './logh7-config.mjs';
 import { composeSnapshot } from './logh7-repository.mjs';
-import { createEconomyState, seedEconomyFromSystems } from './logh7-economy.mjs';
+import { createEconomyState, ensureEconomyPlanetsFromSystems, seedEconomyFromSystems } from './logh7-economy.mjs';
 import { operationIssueEnabled, OPERATION_PURPOSE, creditOperationMerit } from './logh7-strategy.mjs'; // 작전계획 발령 게이트(30일 lifecycle, opt-in) + 결과정산 功績 적립 배선
 import { processCommand, seedPersonnelFromWorldState } from './logh7-command-engine.mjs';
+import {
+  buildDevInteractionExposure,
+  buildDevPlayabilityAudit,
+  buildPlayableCommandTargets,
+  devCommandCategoryCards,
+  devCommandExposureCatalog,
+} from './logh7-dev-command-cards.mjs';
+import { executeDevCommand, previewDevCommandExecution } from './logh7-dev-command-executor.mjs';
 import { createContentPack } from './logh7-content-pack.mjs';
 import { CANON_CONTENT } from './logh7-canon-content.mjs';
+import { DEFAULT_CONTENT_DIR } from './logh7-content-db.mjs';
 import { openContentSource } from './logh7-content-source.mjs';
 import { buildContentPackDataFromSource } from './logh7-content-adapter.mjs';
 import { loadMods } from './logh7-mod-loader.mjs';
+import { createSessionRegistry, DEFAULT_SESSION_RECORDS } from './logh7-session-registry.mjs';
+import { buildWorldContentExposure } from './logh7-world-content-exposure.mjs';
+import { DEFAULT_PLAYER_CHARACTER_PROFILE } from './logh7-account-profile.mjs';
 
 /**
  * Opt-in mod application (LOGH_MODS_DIR). Layers mods/<name>/content over the base content data and
@@ -99,11 +111,12 @@ import { decodeNotifyInformationCharacterStream } from './logh7-personnel.mjs';
 const PHASE1_CODE = 0x0034;
 const TRANSPORT_0030 = 0x0030;
 const KEYSETUP_INNER_CODE = 0x0031;
-const DEFAULT_LOBBY_CHARACTERS = Object.freeze([{ id: 1 }]);
-const DEFAULT_SESSIONS = Object.freeze([
-  { sessionId: 1, name: 'Amritsar', status: 1, beginDay: 'UC 796', powers: [{ id: 1, superMan: 'Reinhard' }] },
-  { sessionId: 2, name: 'Vermilion', status: 1, beginDay: 'UC 799', powers: [{ id: 2, superMan: 'Yang' }] },
-]);
+const DEFAULT_LOBBY_CHARACTER = Object.freeze({
+  id: 1,
+  ...DEFAULT_PLAYER_CHARACTER_PROFILE,
+});
+const DEFAULT_LOBBY_CHARACTERS = Object.freeze([DEFAULT_LOBBY_CHARACTER]);
+const DEFAULT_SESSIONS = DEFAULT_SESSION_RECORDS;
 
 export function resolveLobbyCharacters({
   characters = undefined,
@@ -123,8 +136,11 @@ export function resolveLobbyCharacters({
     if (displayName) record.name = displayName;
     return [record];
   }
-  const defaultId = DEFAULT_LOBBY_CHARACTERS[0]?.id ?? 1;
-  const ch = contentPack?.characterById?.(defaultId) ?? null;
+  const defaultRecord = DEFAULT_LOBBY_CHARACTERS[0] ?? { id: 1, status: 1 };
+  const defaultId = defaultRecord.id ?? 1;
+  const ch = process.env.LOGH_LOBBY_CANON_DEFAULT === '1'
+    ? contentPack?.characterById?.(defaultId) ?? null
+    : null;
   if (ch && !richContentCards) return [minimalLobbyCharacterRecord(defaultId, ch)];
   if (ch && richContentCards) {
     const record = { ...ch, id: defaultId, status: 1 };
@@ -132,7 +148,7 @@ export function resolveLobbyCharacters({
     if (displayName) record.name = displayName;
     return [record];
   }
-  return DEFAULT_LOBBY_CHARACTERS;
+  return DEFAULT_LOBBY_CHARACTERS.map((record) => ({ ...record }));
 }
 
 function minimalLobbyCharacterRecord(id, character = null) {
@@ -349,6 +365,9 @@ function recordTraceFields(innerPayload) {
   return {
     characterId,
     recordWire: 'fixed-0323',
+    // 0x0323 uses the raw parser's card/seat count at +0x24c; 0x0356 expands
+    // into a native object where the analogous action-list count lives at +0x250.
+    recordSeatCount24c: payload.readUInt8(0x24c),
     recordSeatCount250: payload.readUInt8(0x250),
     recordSeatChar254: readU32(0x254),
     recordSeatRole258: readU32(0x258),
@@ -378,7 +397,7 @@ export function buildResponseRecordTraceFields(innerPayload) {
   return recordTraceFields(innerPayload);
 }
 
-const DIAGNOSTIC_INNER_PAYLOAD_CODES = new Set([0x0f08]);
+const DIAGNOSTIC_INNER_PAYLOAD_CODES = new Set([0x0f08, 0x0b01]);
 
 function diagnosticInnerPayloadTraceFields(innerPayload) {
   const wordsBeHex = [];
@@ -559,6 +578,268 @@ function countBy(values, field) {
   return out;
 }
 
+function fleetAssetManifests(fleets = []) {
+  return fleets
+    .filter((fleet) => fleet?.assetManifest && typeof fleet.assetManifest === 'object')
+    .map((fleet) => {
+      const manifest = fleet.assetManifest;
+      const ships = Array.isArray(manifest.ships) ? manifest.ships : [];
+      const troops = Array.isArray(manifest.troops) ? manifest.troops : [];
+      const fighters = Array.isArray(manifest.fighters) ? manifest.fighters : [];
+      const weapons = Array.isArray(manifest.weapons) ? manifest.weapons : [];
+      return {
+        fleetId: fleet.id,
+        commander: fleet.commander ?? null,
+        cell: fleet.cell ?? null,
+        shipCount: ships.length,
+        troopCount: troops.length,
+        fighterCount: fighters.length,
+        weaponCount: weapons.length,
+        ships: tail(ships, 8),
+        troops: tail(troops, 8),
+        fighters: tail(fighters, 8),
+        weapons: tail(weapons, 8),
+      };
+    });
+}
+
+function summarizeStrategyState(strategy = null, commandLog = []) {
+  const queuedPlans = [];
+  const queuedKeys = new Set();
+  if (strategy?.plans instanceof Map) {
+    for (const [power, plans] of strategy.plans.entries()) {
+      for (const plan of Array.isArray(plans) ? plans : []) {
+        const planId = Number(plan?.planId ?? plan?.id) || 0;
+        queuedKeys.add(`${Number(power) || 0}:${planId}`);
+        queuedPlans.push({
+          power: Number(power) || 0,
+          planId,
+          target: Number(plan?.target) || 0,
+          owner: Number(plan?.owner) || 0,
+        });
+      }
+    }
+  }
+
+  const operationPlans = [];
+  if (strategy?.operationPlans instanceof Map) {
+    for (const [power, entries] of strategy.operationPlans.entries()) {
+      for (const entry of Array.isArray(entries) ? entries : []) {
+        const plan = entry?.plan ?? entry;
+        const planId = Number(plan?.id ?? plan?.planId) || 0;
+        const status = plan?.status ?? (entry?.issuedAt == null ? 'draft' : 'issued');
+        operationPlans.push({
+          power: Number(power) || 0,
+          planId,
+          target: Number(plan?.target) || 0,
+          status,
+          issuedAt: entry?.issuedAt ?? null,
+          queued: queuedKeys.has(`${Number(power) || 0}:${planId}`),
+          units: Array.isArray(plan?.units) ? plan.units.slice(0, 16) : [],
+          purpose: plan?.purpose ?? null,
+          commander: plan?.commander ?? null,
+          baseBonus: plan?.baseBonus ?? null,
+          outcome: entry?.outcome ?? null,
+        });
+      }
+    }
+  }
+
+  const outfits = strategy?.outfits instanceof Map
+    ? [...strategy.outfits.values()].map((outfit) => ({
+      ...outfit,
+      ships: Array.isArray(outfit?.ships) ? outfit.ships.slice(0, 16) : [],
+      troops: Array.isArray(outfit?.troops) ? outfit.troops.slice(0, 16) : [],
+    }))
+    : [];
+  const orders = Array.isArray(strategy?.orders) ? strategy.orders.slice(-40).map((order) => ({ ...order })) : [];
+  const operationEvents = Array.isArray(strategy?.operationEvents)
+    ? strategy.operationEvents.slice(-40).map((event) => ({ ...event }))
+    : [];
+  const recentCommands = (Array.isArray(commandLog) ? commandLog : [])
+    .filter((entry) => entry?.effect === 'strategy-command'
+      || (Number(entry?.innerCode) >= 0x0900 && Number(entry?.innerCode) <= 0x0906))
+    .slice(-40);
+
+  return {
+    enabled: strategy != null,
+    counts: {
+      queuedPlans: queuedPlans.length,
+      operationPlans: operationPlans.length,
+      issuedOperationPlans: operationPlans.filter((plan) => plan.issuedAt != null || plan.status === 'issued').length,
+      outfits: outfits.length,
+      orders: orders.length,
+      operationEvents: operationEvents.length,
+      recentCommands: recentCommands.length,
+    },
+    queuedPlans: tail(queuedPlans, 80),
+    operationPlans: tail(operationPlans, 80),
+    outfits: tail(outfits, 80),
+    orders,
+    operationEvents,
+    recentCommands,
+  };
+}
+
+function summarizeLogisticsState(logistics = null, commandLog = []) {
+  const snapshot = typeof logistics?.toSnapshot === 'function'
+    ? logistics.toSnapshot()
+    : { bases: [], fleets: [], recentLog: [] };
+  const recentCommands = (Array.isArray(commandLog) ? commandLog : [])
+    .filter((entry) => entry?.effect === 'logistics-command'
+      || (Number(entry?.innerCode) >= 0x0b00 && Number(entry?.innerCode) <= 0x0b06)
+      || (Number(entry?.innerCode) >= 0x0c00 && Number(entry?.innerCode) <= 0x0c0c))
+    .slice(-40);
+  const bases = Array.isArray(snapshot.bases) ? snapshot.bases : [];
+  const fleets = Array.isArray(snapshot.fleets) ? snapshot.fleets : [];
+  const recentLog = Array.isArray(snapshot.recentLog) ? snapshot.recentLog : [];
+  return {
+    enabled: logistics != null,
+    counts: {
+      bases: bases.length,
+      fleets: fleets.length,
+      recentLog: recentLog.length,
+      recentCommands: recentCommands.length,
+    },
+    bases: tail(bases, 80),
+    fleets: tail(fleets, 80),
+    recentLog,
+    recentCommands,
+  };
+}
+
+function summarizePersonnelState(personnel = null) {
+  const snapshot = typeof personnel?.toSnapshot === 'function'
+    ? personnel.toSnapshot()
+    : { characters: [], outfits: [], bases: [] };
+  const characters = Array.isArray(snapshot.characters) ? snapshot.characters : [];
+  const outfits = Array.isArray(snapshot.outfits) ? snapshot.outfits : [];
+  const bases = Array.isArray(snapshot.bases) ? snapshot.bases : [];
+  return {
+    enabled: personnel != null,
+    counts: { characters: characters.length, outfits: outfits.length, bases: bases.length },
+    characters: tail(characters, 80),
+    outfits: tail(outfits, 80),
+    bases: tail(bases, 80),
+  };
+}
+
+function summarizeSocialState(social = null) {
+  const snapshot = typeof social?.toSnapshot === 'function' ? social.toSnapshot() : { players: [] };
+  const players = (Array.isArray(snapshot.players) ? snapshot.players : []).map((p) => ({
+    connectionId: Number(p.connectionId) || 0,
+    charId: Number(p.charId) || 0,
+    presence: Number(p.presence) || 0,
+    settings: p.settings && typeof p.settings === 'object' ? { ...p.settings } : {},
+    contacts: Array.isArray(p.contacts) ? p.contacts.slice(0, 40) : [],
+    inboxCount: Array.isArray(p.inbox) ? p.inbox.length : 0,
+    inbox: tail((Array.isArray(p.inbox) ? p.inbox : []).map((mail) => ({
+      id: Number(mail.id) || 0,
+      recipientId: Number(mail.recipientId) || 0,
+      category: Number(mail.category) || 0,
+      read: Boolean(mail.read),
+      text: mail.text ?? null,
+      rawBytes: typeof mail.rawHex === 'string' ? Math.floor(mail.rawHex.length / 2) : 0,
+    })), 20),
+  }));
+  return {
+    enabled: social != null,
+    counts: {
+      players: players.length,
+      inbox: players.reduce((sum, p) => sum + p.inboxCount, 0),
+      contacts: players.reduce((sum, p) => sum + p.contacts.length, 0),
+    },
+    players: tail(players, 80),
+  };
+}
+
+function summarizeAccountState(account = null) {
+  const snapshot = typeof account?.toSnapshot === 'function' ? account.toSnapshot() : { accounts: [] };
+  const accounts = (Array.isArray(snapshot.accounts) ? snapshot.accounts : []).map((row) => ({
+    connectionId: Number(row.connectionId) || 0,
+    accountId: Number(row.accountId) || 0,
+    name: row.name ?? '',
+    owned: Array.isArray(row.owned) ? row.owned.slice(0, 80) : [],
+    available: Array.isArray(row.available) ? row.available.slice(0, 80) : [],
+    extensionSlots: Number(row.extensionSlots) || 0,
+    maxExtensionSlots: Number(row.maxExtensionSlots) || 0,
+    chargeState: Number(row.chargeState) || 0,
+    activeCharacterId: Number(row.activeCharacterId) || 0,
+  }));
+  return {
+    enabled: account != null,
+    counts: {
+      accounts: accounts.length,
+      owned: accounts.reduce((sum, row) => sum + row.owned.length, 0),
+      available: accounts.reduce((sum, row) => sum + row.available.length, 0),
+    },
+    accounts: tail(accounts, 80),
+  };
+}
+
+function summarizeIntelState(intel = null) {
+  const snapshot = typeof intel?.toSnapshot === 'function'
+    ? intel.toSnapshot()
+    : { coupLoyalty: [], unitLoyalty: [], rebellion: [] };
+  const coupLoyalty = Array.isArray(snapshot.coupLoyalty) ? snapshot.coupLoyalty : [];
+  const unitLoyalty = Array.isArray(snapshot.unitLoyalty) ? snapshot.unitLoyalty : [];
+  const rebellion = Array.isArray(snapshot.rebellion) ? snapshot.rebellion : [];
+  return {
+    enabled: intel != null,
+    counts: { coupLoyalty: coupLoyalty.length, unitLoyalty: unitLoyalty.length, rebellion: rebellion.length },
+    coupLoyalty: tail(coupLoyalty, 80),
+    unitLoyalty: tail(unitLoyalty, 80),
+    rebellion: tail(rebellion, 80),
+  };
+}
+
+function summarizeCoupState(coup = null) {
+  const snapshot = typeof coup?.toSnapshot === 'function' ? coup.toSnapshot() : { conspiracies: [] };
+  const conspiracies = Array.isArray(snapshot.conspiracies) ? snapshot.conspiracies : [];
+  return {
+    enabled: coup != null,
+    counts: {
+      conspiracies: conspiracies.length,
+      active: conspiracies.filter((c) => !c.executed).length,
+      executed: conspiracies.filter((c) => c.executed).length,
+    },
+    conspiracies: tail(conspiracies, 80),
+  };
+}
+
+function summarizeEspionageState(espionage = null) {
+  const snapshot = typeof espionage?.toSnapshot === 'function'
+    ? espionage.toSnapshot()
+    : { arrestList: [], enforcers: [], detained: [], infiltrations: [], surveillance: [], located: [], intrusions: [] };
+  return {
+    enabled: espionage != null,
+    counts: {
+      arrestList: Array.isArray(snapshot.arrestList) ? snapshot.arrestList.length : 0,
+      enforcers: Array.isArray(snapshot.enforcers) ? snapshot.enforcers.length : 0,
+      detained: Array.isArray(snapshot.detained) ? snapshot.detained.length : 0,
+      infiltrations: Array.isArray(snapshot.infiltrations) ? snapshot.infiltrations.length : 0,
+      surveillance: Array.isArray(snapshot.surveillance) ? snapshot.surveillance.length : 0,
+      located: Array.isArray(snapshot.located) ? snapshot.located.length : 0,
+      intrusions: Array.isArray(snapshot.intrusions) ? snapshot.intrusions.length : 0,
+    },
+    arrestList: tail(Array.isArray(snapshot.arrestList) ? snapshot.arrestList : [], 80),
+    enforcers: tail(Array.isArray(snapshot.enforcers) ? snapshot.enforcers : [], 80),
+    detained: tail(Array.isArray(snapshot.detained) ? snapshot.detained : [], 80),
+    infiltrations: tail(Array.isArray(snapshot.infiltrations) ? snapshot.infiltrations : [], 80),
+    surveillance: tail(Array.isArray(snapshot.surveillance) ? snapshot.surveillance : [], 80),
+    located: tail(Array.isArray(snapshot.located) ? snapshot.located : [], 80),
+    intrusions: tail(Array.isArray(snapshot.intrusions) ? snapshot.intrusions : [], 80),
+  };
+}
+
+function readContentJson(name) {
+  try {
+    return JSON.parse(readFileSync(path.join(DEFAULT_CONTENT_DIR, name), 'utf8'));
+  } catch {
+    return null;
+  }
+}
+
 function buildAdminSessionSnapshot({
   host,
   port,
@@ -578,6 +859,9 @@ function buildAdminSessionSnapshot({
   bootScenario,
   worldState,
   economyState,
+  sessionRuntimes = null,
+  contentPack = null,
+  worldContentExposure = null,
 }) {
   const nowMs = Date.now();
   const notice = noticeState.snapshot();
@@ -589,8 +873,122 @@ function buildAdminSessionSnapshot({
   const fleets = worldState.listFleets();
   const characters = worldState.listCharacters();
   const chat = worldState.listChat();
+  const commandLog = typeof worldState.listCommandLog === 'function' ? worldState.listCommandLog() : [];
   const battleLog = worldState.battleLog();
   const economySnapshot = economyEnabled ? economyState.toSnapshot() : null;
+  const commandTargets = typeof worldState._commandTargets?.snapshot === 'function'
+    ? worldState._commandTargets.snapshot()
+    : null;
+  const commandTargetHistory = typeof worldState._commandTargets?.history === 'function'
+    ? worldState._commandTargets.history()
+    : [];
+  const fallbackCommandTargets = buildPlayableCommandTargets({
+    activeCharacterId: players[0]?.charId ?? characters[0]?.id ?? 1001,
+    activeUnitId: fleets[0]?.id ?? players[0]?.charId ?? 1001,
+    baseId: 1,
+    characterName: 'Dev Player',
+    power: players[0]?.powerId ?? 1,
+    staticState: contentPack,
+  });
+  const exposedCommandTargets = commandTargets
+    ? mergeDevTargetPool(fallbackCommandTargets, commandTargets)
+    : fallbackCommandTargets;
+  const contentExposure = worldContentExposure ?? (contentPack
+    ? buildWorldContentExposure({
+      pack: contentPack,
+      galaxyDoc: readContentJson('galaxy.json'),
+      planetEconomyDoc: readContentJson('planet-economy.json'),
+    })
+    : null);
+  const devCommandCatalog = devCommandExposureCatalog({
+    targetPool: exposedCommandTargets,
+    targetProducersByKind: contentExposure?.targetProducersByKind ?? null,
+  });
+  const interactionExposure = buildDevInteractionExposure({
+    catalog: devCommandCatalog,
+    targetPool: exposedCommandTargets,
+    contentExposure,
+  });
+  const playabilityAudit = buildDevPlayabilityAudit({
+    catalog: devCommandCatalog,
+    interactionExposure,
+    contentExposure,
+  });
+  const devCommandReadiness = devCommandCatalog.readiness;
+ const strategyState = summarizeStrategyState(worldState._strategy ?? null, commandLog);
+ const logisticsState = summarizeLogisticsState(worldState._logistics ?? null, commandLog);
+ const personnelState = summarizePersonnelState(worldState._personnel ?? null);
+ const socialState = summarizeSocialState(worldState._social ?? null);
+ const accountState = summarizeAccountState(worldState._account ?? null);
+ const intelState = summarizeIntelState(worldState.getIntelState?.() ?? null);
+ const coupState = summarizeCoupState(worldState.getCoupState?.() ?? null);
+ const espionageState = summarizeEspionageState(worldState._espionage ?? null);
+ // per-session 요약: 각 세션 런타임의 카운트/경제/전략 활성 상태(운영 관측용). 기본 런타임도 포함.
+  const sessions = [];
+  if (sessionRuntimes) {
+    for (const runtime of sessionRuntimes.values()) {
+      const w = runtime.worldState;
+      const econ = economyEnabled ? runtime.economyState.toSnapshot() : null;
+      const runtimeCommandLog = typeof w.listCommandLog === 'function' ? w.listCommandLog() : [];
+      const runtimePlayers = w.listPlayers();
+      const runtimeFleets = w.listFleets();
+      const runtimeCharacters = w.listCharacters();
+      const runtimeCommandTargets = typeof w._commandTargets?.snapshot === 'function'
+        ? w._commandTargets.snapshot()
+        : null;
+    const runtimeFallbackCommandTargets = buildPlayableCommandTargets({
+      activeCharacterId: runtimePlayers[0]?.charId ?? runtimeCharacters[0]?.id ?? 1001,
+      activeUnitId: runtimeFleets[0]?.id ?? runtimePlayers[0]?.charId ?? 1001,
+      baseId: 1,
+      characterName: runtimeCharacters[0]?.name ?? 'Dev Player',
+      power: runtimePlayers[0]?.powerId ?? 1,
+      staticState: contentPack,
+    });
+    const runtimeExposedCommandTargets = runtimeCommandTargets
+      ? mergeDevTargetPool(runtimeFallbackCommandTargets, runtimeCommandTargets)
+      : runtimeFallbackCommandTargets;
+      const runtimeDevCommandCatalog = devCommandExposureCatalog({
+        targetPool: runtimeExposedCommandTargets,
+        targetProducersByKind: contentExposure?.targetProducersByKind ?? null,
+      });
+      const runtimeInteractionExposure = buildDevInteractionExposure({
+        catalog: runtimeDevCommandCatalog,
+        targetPool: runtimeExposedCommandTargets,
+        contentExposure,
+      });
+      const runtimePlayabilityAudit = buildDevPlayabilityAudit({
+        catalog: runtimeDevCommandCatalog,
+        interactionExposure: runtimeInteractionExposure,
+        contentExposure,
+      });
+      sessions.push({
+        sessionId: runtime.sessionId,
+        connections: runtime.worldRelay?.size?.() ?? 0,
+        players: runtimePlayers.length,
+        ships: w.listShips().length,
+        fleets: runtimeFleets.length,
+        systems: w.listSystems().length,
+        commandRecords: runtimeCommandLog.length,
+        currentTurn: w.getScenarioInfo().currentTurn,
+        economyPlanets: econ?.planets?.length ?? 0,
+        economyLastTickDay: economyEnabled ? runtime.economyState.lastTickDay() : null,
+        strategicActive: !!(runtime.strat && !runtime.stratOver),
+        strategyState: summarizeStrategyState(w._strategy ?? null, runtimeCommandLog),
+        logisticsState: summarizeLogisticsState(w._logistics ?? null, runtimeCommandLog),
+        personnelState: summarizePersonnelState(w._personnel ?? null),
+        socialState: summarizeSocialState(w._social ?? null),
+        accountState: summarizeAccountState(w._account ?? null),
+        intelState: summarizeIntelState(w.getIntelState?.() ?? null),
+        coupState: summarizeCoupState(w.getCoupState?.() ?? null),
+        espionageState: summarizeEspionageState(w._espionage ?? null),
+        commandTargets: runtimeExposedCommandTargets,
+        devCommandCatalog: runtimeDevCommandCatalog,
+        interactionExposure: runtimeInteractionExposure,
+        playabilityAudit: runtimePlayabilityAudit,
+        devCommandReadiness: runtimeDevCommandCatalog.readiness,
+      });
+    }
+  }
 
   return {
     ok: true,
@@ -623,6 +1021,7 @@ function buildAdminSessionSnapshot({
     lobby: {
       characters: lobbyCharacters.length,
       sessions: lobbySessions.length,
+      sessionCatalog: lobbySessions,
       announcementConfigured: notice.configured,
       announcement: notice,
     },
@@ -640,21 +1039,48 @@ function buildAdminSessionSnapshot({
       fleets: fleets.length,
       characters: characters.length,
       chatMessages: chat.length,
+      commandRecords: commandLog.length,
       battleEvents: battleLog.length,
       economyPlanets: economySnapshot?.planets?.length ?? 0,
       economyNations: economySnapshot?.nations?.length ?? 0,
+      sessionRuntimes: sessions.length,
     },
     world: {
       players,
       factions: Object.values(worldState.factionSummary()),
       shipsByFaction: countBy(ships, 'faction'),
+      ships: tail(ships, 80),
+      livingShips: tail(livingShips, 80),
+      troops: tail(troops, 80),
       fleets: tail(fleets, 40),
       systems: tail(systems, 40),
-      battle: {
-        active: worldState.isBattleActive(),
+      combatAssets: {
+        ships: tail(ships, 80),
+        livingShips: tail(livingShips, 80),
+        troops: tail(troops, 80),
+        fleetManifests: fleetAssetManifests(fleets),
+ },
+ strategyState,
+ logisticsState,
+ personnelState,
+ socialState,
+ accountState,
+ intelState,
+ coupState,
+ espionageState,
+ battle: {
+ active: worldState.isBattleActive(),
         recentEvents: tail(battleLog, 40),
       },
+    commandTargets: exposedCommandTargets,
+    commandTargetHistory: tail(commandTargetHistory, 80),
+    devCommandCatalog,
+    interactionExposure,
+    playabilityAudit,
+    devCommandReadiness,
+      contentExposure,
       recentChat: tail(chat, 40),
+      recentCommands: tail(commandLog, 40),
     },
     economy: economyEnabled
       ? {
@@ -664,6 +1090,8 @@ function buildAdminSessionSnapshot({
         planetSample: tail(economySnapshot.planets ?? [], 40),
       }
       : { enabled: false },
+    // per-session 권위 런타임 요약(멀티플레이 세션 격리 관측). 기본 런타임(session 1) 포함.
+    sessions,
   };
 }
 
@@ -677,6 +1105,15 @@ function writeJson(response, status, body, headers = {}) {
   response.end(`${json}\n`);
 }
 
+function writeHtml(response, status, html, headers = {}) {
+  response.writeHead(status, {
+    'content-type': 'text/html; charset=utf-8',
+    'cache-control': 'no-store',
+    ...headers,
+  });
+  response.end(html);
+}
+
 function corsHeaders(admin, request) {
   const origin = request.headers.origin;
   if (typeof origin !== 'string') return {};
@@ -684,7 +1121,7 @@ function corsHeaders(admin, request) {
   return {
     'access-control-allow-origin': origin,
     'access-control-allow-methods': 'GET, POST, PUT, DELETE, OPTIONS',
-    'access-control-allow-headers': 'authorization, content-type',
+    'access-control-allow-headers': 'authorization, content-type, x-logh7-admin-token',
     'vary': 'Origin',
   };
 }
@@ -770,7 +1207,341 @@ function noticeValueFromAdminBody(body) {
   }
 }
 
-async function handleAdminHttpRequest({ admin, snapshot, noticeState, request, response }) {
+function finitePositiveInt(value) {
+  const n = Number(value);
+  return Number.isFinite(n) && n > 0 ? Math.trunc(n) : null;
+}
+
+function finiteNonNegativeInt(value) {
+  const n = Number(value);
+  return Number.isFinite(n) && n >= 0 ? Math.trunc(n) : null;
+}
+
+function resolveDevCommandFromBody(body) {
+  const cards = devCommandCategoryCards();
+  const commands = cards.flatMap((card) => card.commands.map((command) => ({ card, command })));
+  const factoryId = finitePositiveInt(body?.factoryId ?? body?.commandFactoryId);
+  if (factoryId !== null) {
+    const hit = commands.find(({ command }) => command.factoryId === factoryId);
+    if (hit) return hit.command;
+    throw new AdminRequestError(404, `dev command factoryId ${factoryId} not found`);
+  }
+  const categoryIndex = Number.isInteger(body?.categoryIndex) ? body.categoryIndex : finiteNonNegativeInt(body?.categoryIndex);
+  const commandIndex = Number.isInteger(body?.commandIndex) ? body.commandIndex : finiteNonNegativeInt(body?.commandIndex);
+  if (categoryIndex !== null && commandIndex !== null) {
+    const command = cards[categoryIndex]?.commands?.[commandIndex] ?? null;
+    if (command) return command;
+    throw new AdminRequestError(404, `dev command categoryIndex=${categoryIndex} commandIndex=${commandIndex} not found`);
+  }
+  if (typeof body?.name === 'string' && body.name.length > 0) {
+    const hit = commands.find(({ command }) => command.name === body.name);
+    if (hit) return hit.command;
+    throw new AdminRequestError(404, `dev command name ${body.name} not found`);
+  }
+  throw new AdminRequestError(400, 'dev command body must include factoryId, categoryIndex+commandIndex, or name');
+}
+
+function normalizeDevTargetOverrides(raw) {
+  if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return {};
+  const out = {};
+  const setArray = (key, value) => {
+    if (Array.isArray(value)) out[key] = value;
+    else if (value && typeof value === 'object') out[key] = [value];
+  };
+  if (raw.targetPool && typeof raw.targetPool === 'object' && !Array.isArray(raw.targetPool)) {
+    Object.assign(out, raw.targetPool);
+  }
+  const targets = raw.targets && typeof raw.targets === 'object' && !Array.isArray(raw.targets) ? raw.targets : raw;
+  if (targets.base || targets.baseId) out.baseId = finitePositiveInt(targets.base?.id ?? targets.baseId) ?? out.baseId;
+  setArray('characters', targets.character ?? targets.characters);
+  setArray('outfits', targets.outfit ?? targets.outfits);
+  setArray('ships', targets.ship ?? targets.ships);
+  setArray('troops', targets.troop ?? targets.troops);
+  setArray('systems', targets.system ?? targets.systems);
+  setArray('planets', targets.planet ?? targets.planets);
+  setArray('celestials', targets.celestial ?? targets.celestials);
+  setArray('gridCells', targets.gridCell ?? targets.gridCells);
+  setArray('fighters', targets.fighter ?? targets.fighters);
+  setArray('weapons', targets.weapon ?? targets.weapons);
+  setArray('operationPlans', targets.operationPlan ?? targets.operationPlans);
+  setArray('posts', targets.post ?? targets.posts);
+  setArray('ranks', targets.rank ?? targets.ranks);
+  setArray('powers', targets.power ?? targets.powers);
+  if (targets.resources && typeof targets.resources === 'object') {
+    for (const key of ['supplies', 'food', 'mineral']) {
+      if (Number.isFinite(Number(targets.resources[key]))) out[key] = Math.max(0, Math.trunc(Number(targets.resources[key])));
+    }
+  }
+  for (const key of ['supplies', 'food', 'mineral']) {
+    if (Number.isFinite(Number(targets[key]))) out[key] = Math.max(0, Math.trunc(Number(targets[key])));
+  }
+  return out;
+}
+
+function mergeDevTargetPool(base, overrides) {
+  const merged = { ...(base ?? {}) };
+  for (const [key, value] of Object.entries(overrides ?? {})) {
+    if (Array.isArray(value)) {
+      const existing = Array.isArray(merged[key]) ? merged[key] : [];
+      merged[key] = [...value, ...existing];
+    } else if (value !== undefined) {
+      merged[key] = value;
+    }
+  }
+  return merged;
+}
+
+function summarizeNotify(notify = {}) {
+  const inner = Buffer.isBuffer(notify.inner) ? notify.inner : null;
+  const code = inner && inner.length >= 6
+    ? inner.readUInt16BE(4)
+    : inner && inner.length >= 2
+    ? inner.readUInt16BE(0)
+    : null;
+  return {
+    target: notify.target ?? null,
+    bytes: inner?.length ?? 0,
+    innerCode: code,
+    innerCodeHex: code == null ? null : `0x${code.toString(16).padStart(4, '0')}`,
+  };
+}
+
+function summarizeDevDecision(decision) {
+  return {
+    accept: Boolean(decision?.accept),
+    reject: decision?.reject ?? null,
+    preview: decision?.preview ?? null,
+    devExecution: decision?.devExecution ?? null,
+    units: Array.isArray(decision?.units) ? decision.units : [],
+    result: decision?.result ?? null,
+    notifies: Array.isArray(decision?.notifies) ? decision.notifies.map(summarizeNotify) : [],
+  };
+}
+
+function adminConsoleHtml() {
+  return `<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LOGH VII Admin</title>
+<style>
+:root { color-scheme: light dark; font-family: system-ui, -apple-system, Segoe UI, sans-serif; }
+body { margin: 0; background: #f4f5f7; color: #1d232f; }
+main { max-width: 1160px; margin: 0 auto; padding: 24px; }
+h1 { margin: 0 0 18px; font-size: 24px; font-weight: 700; }
+section { margin: 18px 0; }
+.bar { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+input, textarea, button { font: inherit; }
+input, textarea { border: 1px solid #b7becb; border-radius: 6px; padding: 8px 10px; background: #fff; color: #111827; }
+textarea { width: 100%; min-height: 132px; box-sizing: border-box; font-family: ui-monospace, SFMono-Regular, Consolas, monospace; }
+button { border: 1px solid #556070; border-radius: 6px; padding: 8px 11px; background: #202938; color: #fff; cursor: pointer; }
+button.secondary { background: #fff; color: #202938; }
+button.danger { background: #8b1e2d; border-color: #8b1e2d; }
+button:disabled { cursor: not-allowed; opacity: .45; }
+table { width: 100%; border-collapse: collapse; background: #fff; }
+th, td { border-bottom: 1px solid #dde2ea; padding: 9px 8px; text-align: left; font-size: 14px; }
+th { background: #e9edf3; font-size: 12px; text-transform: uppercase; letter-spacing: .04em; }
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.code { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 12px; }
+.pill { display: inline-block; border: 1px solid #c2cad6; border-radius: 999px; padding: 2px 7px; margin: 1px 2px 1px 0; background: #f8fafc; white-space: nowrap; }
+.dev-table td { vertical-align: top; }
+.status { min-height: 20px; color: #334155; }
+@media (max-width: 820px) { main { padding: 16px; } .grid { grid-template-columns: 1fr; } table { font-size: 13px; } }
+</style>
+</head>
+<body>
+<main>
+  <h1>LOGH VII Admin</h1>
+  <section class="bar">
+    <input id="token" type="password" autocomplete="off" placeholder="Admin token">
+    <button id="saveToken">Save</button>
+    <button id="refresh" class="secondary">Refresh</button>
+    <a href="/admin/session-state">session-state</a>
+  </section>
+  <section>
+    <table>
+      <thead><tr><th>ID</th><th>Name</th><th>Status</th><th>Begin</th><th>World</th><th>Actions</th></tr></thead>
+      <tbody id="sessions"></tbody>
+    </table>
+  </section>
+  <section class="grid">
+    <div>
+      <h2>Session</h2>
+      <textarea id="editor"></textarea>
+      <div class="bar">
+        <button id="upsert">Upsert</button>
+        <button id="newSession" class="secondary">New</button>
+      </div>
+    </div>
+    <div>
+      <h2>State</h2>
+      <textarea id="state" readonly></textarea>
+  </div>
+ </section>
+ <section>
+  <div class="bar">
+   <h2>Dev Commands</h2>
+   <button id="reloadCommands" class="secondary">Reload</button>
+  </div>
+  <table class="dev-table">
+   <thead><tr><th>Category</th><th>Command</th><th>Opcode</th><th>Targets</th><th>Status</th><th>Actions</th></tr></thead>
+   <tbody id="devCommands"></tbody>
+  </table>
+  <textarea id="commandResult" readonly></textarea>
+ </section>
+ <p id="status" class="status"></p>
+</main>
+<script>
+const tokenEl = document.querySelector('#token');
+const statusEl = document.querySelector('#status');
+const editor = document.querySelector('#editor');
+const stateEl = document.querySelector('#state');
+const sessionsEl = document.querySelector('#sessions');
+const devCommandsEl = document.querySelector('#devCommands');
+const commandResultEl = document.querySelector('#commandResult');
+tokenEl.value = localStorage.getItem('logh7.admin.token') || '';
+const headers = () => ({ 'content-type': 'application/json', 'x-logh7-admin-token': tokenEl.value });
+function setStatus(text) { statusEl.textContent = text; }
+async function api(path, options = {}) {
+  const res = await fetch(path, { ...options, headers: { ...headers(), ...(options.headers || {}) } });
+  const data = await res.json();
+  if (!res.ok || data.ok === false) throw new Error(data.error || res.statusText);
+  return data;
+}
+function sampleSession() {
+  return { sessionId: 1, sessionName: 'Amritsar', status: 1, beginDay: 'UC 796', world: { ip: '127.0.0.1', port: 47900, token: 0 } };
+}
+function renderRows(list) {
+  sessionsEl.textContent = '';
+  for (const session of list) {
+    const tr = document.createElement('tr');
+    const world = session.world || {};
+    const fields = [session.sessionId, session.sessionName, session.status, session.beginDay, [world.ip, world.port].filter(Boolean).join(':')];
+    for (const value of fields) {
+      const td = document.createElement('td');
+      td.textContent = value ?? '';
+      tr.appendChild(td);
+    }
+    const actions = document.createElement('td');
+    for (const [label, fn, cls] of [
+      ['Edit', () => { editor.value = JSON.stringify(session, null, 2); }, 'secondary'],
+      ['Open', () => setStatusCode(session.sessionId, 1), 'secondary'],
+      ['Close', () => setStatusCode(session.sessionId, 0), 'secondary'],
+      ['Delete', () => deleteSession(session.sessionId), 'danger'],
+    ]) {
+      const btn = document.createElement('button');
+      btn.textContent = label;
+      btn.className = cls;
+      btn.addEventListener('click', fn);
+      actions.appendChild(btn);
+    }
+    tr.appendChild(actions);
+    sessionsEl.appendChild(tr);
+  }
+}
+function targetSummary(command) {
+  const preview = command.executionPreview || {};
+  const selected = preview.selectedTargets || {};
+  const kinds = command.targetKinds || [];
+  return kinds.map((kind) => {
+    const target = selected[kind];
+    const label = target ? (target.id ?? target.cell ?? target.kind ?? 'ok') : 'missing';
+    return '<span class="pill">' + kind + ':' + label + '</span>';
+  }).join('');
+}
+function renderDevCommands(catalog) {
+  devCommandsEl.textContent = '';
+  const cards = catalog && Array.isArray(catalog.cards) ? catalog.cards : [];
+  for (const card of cards) {
+    for (const command of card.commands || []) {
+      const preview = command.executionPreview || {};
+      const tr = document.createElement('tr');
+      const fields = [
+        card.categoryName,
+        command.name,
+        preview.innerCodeHex || '-',
+        targetSummary(command),
+        preview.executable ? 'ready' : (preview.reject || 'unavailable'),
+      ];
+      for (const value of fields) {
+        const td = document.createElement('td');
+        if (String(value).includes('<span')) td.innerHTML = value;
+        else td.textContent = value;
+        if (value === preview.innerCodeHex) td.className = 'code';
+        tr.appendChild(td);
+      }
+      const actions = document.createElement('td');
+      for (const [label, dryRun] of [['Preview', true], ['Execute', false]]) {
+        const btn = document.createElement('button');
+        btn.textContent = label;
+        btn.className = dryRun ? 'secondary' : '';
+        btn.disabled = !preview.executable && !dryRun;
+        btn.addEventListener('click', () => runDevCommand(command, dryRun));
+        actions.appendChild(btn);
+      }
+      tr.appendChild(actions);
+      devCommandsEl.appendChild(tr);
+    }
+  }
+}
+async function runDevCommand(command, dryRun) {
+  const data = await api('/admin/dev-command/execute', {
+    method: 'POST',
+    body: JSON.stringify({ factoryId: command.factoryId, dryRun }),
+  });
+  commandResultEl.value = JSON.stringify(data, null, 2);
+  setStatus((dryRun ? 'preview' : 'executed') + ' ' + command.name);
+  if (!dryRun) await refresh();
+}
+async function refresh() {
+  const [sessions, state] = await Promise.all([api('/admin/sessions'), api('/admin/session-state')]);
+  renderRows(sessions.sessions);
+  renderDevCommands(state.world && state.world.devCommandCatalog);
+  stateEl.value = JSON.stringify(state, null, 2);
+  setStatus('ok');
+}
+async function upsert() {
+  const body = JSON.parse(editor.value);
+  const data = await api('/admin/sessions', { method: 'PUT', body: JSON.stringify(body) });
+  editor.value = JSON.stringify(data.session, null, 2);
+  await refresh();
+}
+async function setStatusCode(id, status) {
+  await api('/admin/sessions/' + id + (status ? '/open' : '/close'), { method: 'POST' });
+  await refresh();
+}
+async function deleteSession(id) {
+  await api('/admin/sessions/' + id, { method: 'DELETE' });
+  await refresh();
+}
+document.querySelector('#saveToken').addEventListener('click', () => { localStorage.setItem('logh7.admin.token', tokenEl.value); setStatus('saved'); });
+document.querySelector('#refresh').addEventListener('click', () => refresh().catch((e) => setStatus(e.message)));
+document.querySelector('#upsert').addEventListener('click', () => upsert().catch((e) => setStatus(e.message)));
+document.querySelector('#newSession').addEventListener('click', () => { editor.value = JSON.stringify(sampleSession(), null, 2); });
+document.querySelector('#reloadCommands').addEventListener('click', () => refresh().catch((e) => setStatus(e.message)));
+editor.value = JSON.stringify(sampleSession(), null, 2);
+refresh().catch((e) => setStatus(e.message));
+</script>
+</body>
+</html>`;
+}
+
+function sessionPathParts(pathname) {
+  const match = pathname.match(/^\/(?:api\/)?admin\/sessions\/(\d+)(?:\/(open|close))?$/u);
+  if (!match) return null;
+  return { sessionId: Number(match[1]), action: match[2] ?? null };
+}
+
+async function handleAdminHttpRequest({
+  admin,
+  snapshot,
+  noticeState,
+  sessionRegistry,
+  executeDevCommandRequest = null,
+  request,
+  response,
+}) {
   const cors = corsHeaders(admin, request);
   if (cors === null) {
     writeJson(response, 403, { ok: false, error: 'origin not allowed' });
@@ -783,6 +1554,14 @@ async function handleAdminHttpRequest({ admin, snapshot, noticeState, request, r
   }
 
   const url = new URL(request.url ?? '/', `http://${admin.host}:${admin.port}`);
+  if (url.pathname === '/admin' || url.pathname === '/admin/console') {
+    if (request.method !== 'GET') {
+      writeJson(response, 405, { ok: false, error: 'method not allowed' }, cors);
+      return;
+    }
+    writeHtml(response, 200, adminConsoleHtml(), cors);
+    return;
+  }
   if (url.pathname === '/health') {
     if (request.method !== 'GET') {
       writeJson(response, 405, { ok: false, error: 'method not allowed' }, cors);
@@ -791,9 +1570,74 @@ async function handleAdminHttpRequest({ admin, snapshot, noticeState, request, r
     writeJson(response, 200, {
       ok: true,
       service: 'logh7-admin',
+      consoleRoute: '/admin',
       sessionRoute: '/admin/session-state',
+      sessionsRoute: '/admin/sessions',
       noticeRoute: '/admin/notice',
     }, cors);
+    return;
+  }
+  if (url.pathname === '/admin/sessions' || url.pathname === '/api/admin/sessions') {
+    if (!requireAdminAuth(admin, request)) {
+      writeJson(response, 401, { ok: false, error: 'admin token required' }, cors);
+      return;
+    }
+    if (request.method === 'GET') {
+      writeJson(response, 200, { ok: true, sessions: sessionRegistry.listSessions() }, cors);
+      return;
+    }
+    if (request.method === 'POST' || request.method === 'PUT') {
+      const body = await readAdminJson(request);
+      const session = sessionRegistry.upsertSession(body);
+      writeJson(response, 200, { ok: true, session }, cors);
+      return;
+    }
+    writeJson(response, 405, { ok: false, error: 'method not allowed' }, cors);
+    return;
+  }
+  const sessionPath = sessionPathParts(url.pathname);
+  if (sessionPath !== null) {
+    if (!requireAdminAuth(admin, request)) {
+      writeJson(response, 401, { ok: false, error: 'admin token required' }, cors);
+      return;
+    }
+    if (sessionPath.action === 'open' || sessionPath.action === 'close') {
+      if (request.method !== 'POST' && request.method !== 'PUT') {
+        writeJson(response, 405, { ok: false, error: 'method not allowed' }, cors);
+        return;
+      }
+      const session = sessionRegistry.setStatus(sessionPath.sessionId, sessionPath.action === 'open' ? 1 : 0);
+      if (!session) {
+        writeJson(response, 404, { ok: false, error: 'session not found' }, cors);
+        return;
+      }
+      writeJson(response, 200, { ok: true, session }, cors);
+      return;
+    }
+    if (request.method === 'GET') {
+      const session = sessionRegistry.getSession(sessionPath.sessionId);
+      if (!session) {
+        writeJson(response, 404, { ok: false, error: 'session not found' }, cors);
+        return;
+      }
+      writeJson(response, 200, { ok: true, session }, cors);
+      return;
+    }
+    if (request.method === 'POST' || request.method === 'PUT') {
+      const body = await readAdminJson(request);
+      const session = sessionRegistry.upsertSession({ ...body, sessionId: sessionPath.sessionId });
+      writeJson(response, 200, { ok: true, session }, cors);
+      return;
+    }
+    if (request.method === 'DELETE') {
+      if (!sessionRegistry.deleteSession(sessionPath.sessionId)) {
+        writeJson(response, 404, { ok: false, error: 'session not found' }, cors);
+        return;
+      }
+      writeJson(response, 200, { ok: true, deletedSessionId: sessionPath.sessionId }, cors);
+      return;
+    }
+    writeJson(response, 405, { ok: false, error: 'method not allowed' }, cors);
     return;
   }
   if (url.pathname === '/admin/session-state' || url.pathname === '/api/admin/session-state') {
@@ -806,6 +1650,24 @@ async function handleAdminHttpRequest({ admin, snapshot, noticeState, request, r
       return;
     }
     writeJson(response, 200, snapshot(), cors);
+    return;
+  }
+  if (url.pathname === '/admin/dev-command/execute' || url.pathname === '/api/admin/dev-command/execute') {
+    if (!requireAdminAuth(admin, request)) {
+      writeJson(response, 401, { ok: false, error: 'admin token required' }, cors);
+      return;
+    }
+    if (request.method !== 'POST') {
+      writeJson(response, 405, { ok: false, error: 'method not allowed' }, cors);
+      return;
+    }
+    if (typeof executeDevCommandRequest !== 'function') {
+      writeJson(response, 503, { ok: false, error: 'dev command executor unavailable' }, cors);
+      return;
+    }
+    const body = await readAdminJson(request);
+    const result = executeDevCommandRequest(body);
+    writeJson(response, result.ok ? 200 : 409, result, cors);
     return;
   }
   if (url.pathname === '/admin/notice' || url.pathname === '/api/admin/notice') {
@@ -833,9 +1695,17 @@ async function handleAdminHttpRequest({ admin, snapshot, noticeState, request, r
   writeJson(response, 404, { ok: false, error: 'not found' }, cors);
 }
 
-async function startAdminHttpServer({ admin, snapshot, noticeState }) {
+async function startAdminHttpServer({ admin, snapshot, noticeState, sessionRegistry, executeDevCommandRequest = null }) {
   const httpServer = createHttpServer((request, response) => {
-    handleAdminHttpRequest({ admin, snapshot, noticeState, request, response }).catch((error) => {
+    handleAdminHttpRequest({
+      admin,
+      snapshot,
+      noticeState,
+      sessionRegistry,
+      executeDevCommandRequest,
+      request,
+      response,
+    }).catch((error) => {
       const cors = corsHeaders(admin, request) ?? {};
       if (error instanceof AdminRequestError) {
         writeJson(response, error.status, { ok: false, error: error.message }, cors);
@@ -858,6 +1728,7 @@ async function startAdminHttpServer({ admin, snapshot, noticeState }) {
   return {
     ...resolved,
     url: `http://${resolved.host}:${resolved.port}/admin/session-state`,
+    consoleUrl: `http://${resolved.host}:${resolved.port}/admin`,
     close: () => new Promise((resolve, reject) => {
       httpServer.close((error) => {
         if (error) reject(error);
@@ -878,6 +1749,7 @@ async function startAdminHttpServer({ admin, snapshot, noticeState }) {
  *   sessions?: Array<object>,
  *   worldBySession?: Record<string, { ip?: string, port?: number, token?: number|null }>,
  *   accountStore?: ReturnType<typeof createAccountStore>,
+ *   sessionRegistry?: ReturnType<typeof createSessionRegistry>|null,
  *   announcementText?: string|Buffer|null,
  *   admin?: { host?: string, port: number }|null,
  *   tracePath?: string,
@@ -896,6 +1768,7 @@ export async function startLogh7AuthServer({
   sessions,
   worldBySession,
   accountStore = createAccountStore(),
+  sessionRegistry = null,
   announcementText = undefined,
   admin = null,
   tracePath,
@@ -935,6 +1808,12 @@ export async function startLogh7AuthServer({
   // req.power를 권위 진영으로 worldState player에 일원화(C3)한다. relay가 켜져 있어야 broadcast 경로가 산다.
   // 기본 OFF로 검증된 단일클라 월드로드(1107 그린) 경로 불변 — 라이브 4클라에서만 ON.
   const mpVisibilityEnabled = relayEnabled && config.gameplay.mpVisibility;
+  // 단일클라 갤럭시 함대 가시화(opt-in LOGH_WORLD_ALL_FLEETS). ON이면 월드진입 시 그 세션 worldState의 전체
+  // 함대(시나리오 시드 24함대 등)를 입장자에게 0x0325로 push해 솔로 플레이어도 적/아 함대가 깔린 갤럭시를
+  // 보게 한다(현재 기본은 플레이어 본인 함대 1개만 — 적이 안 보임). mpVisibility의 상호-broadcast(C2)와 달리
+  // 이건 입장자에게 단방향 push만(피어 없음). 검증된 parser-stream all-fleets 빌드 + 사령관 0x0323(진영색) 동반.
+  // 기본 OFF로 검증된 단일클라 월드로드 경로 불변 — 라이브 검증 후 PLAYABLE_ENV_DEFAULTS 승격.
+  const worldAllFleetsEnabled = relayEnabled && process.env.LOGH_WORLD_ALL_FLEETS === '1';
   // 시나리오(opt-in, `LOGH_SCENARIO=경로`): 월드 시작상태를 데이터로 정의(Phase C). 부팅 전에 읽어 두면
   // (1) 게임클록 기준점을 world 생성에 반영하고 (2) 콘텐츠 시드 위에 엔티티를 레이어한다. 미설정/로드 실패면
   // null → 기존 콘텐츠팩 시드 그대로(현 동작 불변). 실패는 경고만 하고 진행(graceful).
@@ -978,17 +1857,47 @@ export async function startLogh7AuthServer({
   // 합성키는 정수 덧셈이 아니라 `world:economy` 문자열 — 두 카운터가 겹쳐 같은 합이 되는 충돌을 피한다.
   let lastPersistedFingerprint = null;
   let lastPersistedRevision = null;
-  // economyState/economyEnabled는 아래에서 선언되지만 saveSnapshot/currentRevision은 인터벌·종료 시(선언 후)에만
-  // 호출되므로 forward 참조가 안전하다.
-  const currentRevision = () => `${worldState.revision()}:${economyEnabled ? economyState.revision() : 0}`;
+  // economyState/economyEnabled/sessionRuntimes는 아래에서 선언되지만 saveSnapshot/currentRevision은
+  // 인터벌·종료·persist() 시(선언 후)에만 호출되므로 forward 참조가 안전하다.
+  // per-session: 합성키는 전 세션 런타임의 world:economy 리비전을 묶는다 — 어느 세션의 변이도 영속화를 깨운다.
+  const currentRevision = () => {
+    let key = '';
+    for (const runtime of sessionRuntimes.values()) {
+      key += `${runtime.sessionId}=${runtime.worldState.revision()}:${economyEnabled ? runtime.economyState.revision() : 0};`;
+    }
+    return key;
+  };
+  // 한 런타임의 영속 스냅샷 조각(world + 선택적 economy + 선택적 strat). 기본/세션 행 모두 이 형태를 쓴다.
+  // strat는 무유저 갤럭시 전쟁의 함대 위치/틱을 보존해 재시작 시 홈 리셋을 막는다(stratSimEnabled일 때만).
+  const buildRuntimeSnapshot = (runtime) => {
+    const entities = {};
+    if (economyEnabled) entities.economy = runtime.economyState.toSnapshot();
+    if (stratSimEnabled && runtime.strat) entities.strat = { ...runtime.strat.serialize(), tickNo: runtime.stratTickNo };
+    return {
+      world: runtime.worldState.toSnapshot(),
+      entities: Object.keys(entities).length ? entities : null,
+    };
+  };
   const saveSnapshot = () => {
     if (!repository) return;
     // ① revision 빠른 게이트 — 합성키가 직전 저장과 같으면 변이 0 → 직렬화 없이 상수시간 반환.
     const rev = currentRevision();
     if (rev === lastPersistedRevision) return;
     try {
-      const entities = economyEnabled ? { economy: economyState.toSnapshot() } : null;
-      const snapshot = composeSnapshot({ world: worldState.toSnapshot(), entities, savedAt: Date.now() });
+      // 기본(session 1)은 최상위 world/entities로(복원 호환), session 2+는 sessions 행으로 직렬화한다.
+      const def = buildRuntimeSnapshot(defaultRuntime);
+      const sessions = [];
+      for (const runtime of sessionRuntimes.values()) {
+        if (runtime.sessionId === 1) continue;
+        const snap = buildRuntimeSnapshot(runtime);
+        sessions.push({ sessionId: runtime.sessionId, world: snap.world, entities: snap.entities });
+      }
+      const snapshot = composeSnapshot({
+        world: def.world,
+        entities: def.entities,
+        sessions: sessions.length ? sessions : null,
+        savedAt: Date.now(),
+      });
       // ② 지문 게이트 — revision은 올랐어도 실제 내용이 같으면 디스크쓰기 생략(무손실 보강).
       const fingerprint = JSON.stringify({ ...snapshot, savedAt: 0 });
       if (fingerprint !== lastPersistedFingerprint) {
@@ -1020,8 +1929,71 @@ export async function startLogh7AuthServer({
   } else {
     contentPack = createContentPack(applyModsIfEnabled(CANON_CONTENT, modsDir));
   }
+  const worldContentExposure = buildWorldContentExposure({
+    pack: contentPack,
+    galaxyDoc: readContentJson('galaxy.json'),
+    planetEconomyDoc: readContentJson('planet-economy.json'),
+  });
   const lobbyCharacters = resolveLobbyCharacters({ characters, lobby, contentPack });
-  const lobbySessions = resolveLobbySessions({ sessions, lobby });
+  const lobbySessionRegistry = sessionRegistry ?? createSessionRegistry({
+    sessions: resolveLobbySessions({ sessions, lobby }),
+  });
+  const getLobbySessions = () => lobbySessionRegistry.listSessions();
+  const countSystemPlanets = (systems = []) => systems.reduce(
+    (count, system) => count + (Array.isArray(system?.planets) ? system.planets.length : 0),
+    0,
+  );
+  const scenarioSeedTrace = (scenario, counts, targetWorldState) => {
+    const worldSystems = targetWorldState.listSystems();
+    return {
+      event: 'scenario-seed',
+      name: scenario.name,
+      ...counts,
+      systems: worldSystems.length,
+      scenarioSystems: counts.systems ?? 0,
+      scenarioPlanets: countSystemPlanets(scenario.systems ?? []),
+      contentSystems: (contentPack.systems ?? []).length,
+      contentPlanets: countSystemPlanets(contentPack.systems ?? []),
+      worldSystems: worldSystems.length,
+      worldPlanets: countSystemPlanets(worldSystems),
+    };
+  };
+  const seedAuthoritativeWorld = (targetWorldState, { trace = false } = {}) => {
+    if (!authoritativeEnabled) return;
+    for (const u of contentPack.units) {
+      targetWorldState.upsertShip({
+        id: u.id, owner: 0, x: u.x, y: u.y, z: u.z, heading: u.heading,
+        faction: u.faction ?? u.nation ?? u.powerId ?? 0,
+        shipClass: u.shipClass ?? u.class ?? 'cruiser',
+      });
+    }
+    targetWorldState.seedSystems(contentPack.systems ?? []);
+    if (bootScenario) {
+      const { counts } = loadScenarioInto(targetWorldState, bootScenario);
+      if (trace) writeTrace(traceStream, scenarioSeedTrace(bootScenario, counts, targetWorldState));
+    }
+    if (process.env.LOGH_NPC_SEED === '1') {
+      const SEED_BASE = 0x0a000000;
+      const groups = [
+        { faction: 1, x: -20, name: 'Imperial' },
+        { faction: 2, x: 20, name: 'Alliance' },
+      ];
+      let globalIndex = 0;
+      for (const group of groups) {
+        for (let i = 0; i < 4; i += 1) {
+          targetWorldState.upsertShip({
+            id: SEED_BASE + globalIndex,
+            owner: 0,
+            faction: group.faction,
+            shipClass: 'battleship',
+            x: group.x,
+            z: i * 8,
+          });
+          globalIndex += 1;
+        }
+      }
+    }
+  };
   // Seed authoritative ship state from the content pack so ownership checks have ground truth. Each
   // ship starts neutral (owner 0); a player claims their nation's ships when they enter the world.
   if (authoritativeEnabled) {
@@ -1039,10 +2011,10 @@ export async function startLogh7AuthServer({
     worldState.seedSystems(contentPack.systems ?? []);
     // 시나리오 시드(opt-in): 콘텐츠팩 위에 시나리오가 정의한 시작 배치를 레이어한다. upsert는 id 기준
     // 멱등이라 같은 id면 덮어쓰고 새 id면 추가 → 시나리오가 시작상태의 단일 진실. 미설정이면 무동작.
-    if (bootScenario) {
-      const { counts } = loadScenarioInto(worldState, bootScenario);
-      writeTrace(traceStream, { event: 'scenario-seed', name: bootScenario.name, ...counts });
-    }
+  if (bootScenario) {
+    const { counts } = loadScenarioInto(worldState, bootScenario);
+    writeTrace(traceStream, scenarioSeedTrace(bootScenario, counts, worldState));
+  }
     // Opt-in (LOGH_NPC_SEED=1): seed two opposing NPC fleets into the tactical grid so the NPC AI loop
     // produces a live AI-vs-AI battle (NotifyAttackedShip 0x0426 broadcasts to in-world clients). Each
     // ship is owner:0 (server/NPC-held) with a nonzero faction so runNpcTick acts on it. Two clusters
@@ -1113,121 +2085,312 @@ export async function startLogh7AuthServer({
         if (snap?.entities?.economy) { economyState.restore(snap.entities.economy); economyRestored = true; }
       } catch { /* 복원 실패는 무시(시드로 진행) */ }
     }
-    if (!economyRestored) {
-      seedEconomyFromSystems(economyState, contentPack.systems ?? []);
+    const contentPlanets = countSystemPlanets(contentPack.systems ?? []);
+    const economySeed = economyRestored
+      ? ensureEconomyPlanetsFromSystems(economyState, contentPack.systems ?? [])
+      : { total: seedEconomyFromSystems(economyState, contentPack.systems ?? []), added: contentPlanets };
+    writeTrace(traceStream, {
+      event: 'economy-seed',
+      planets: economyState.listPlanets().length,
+      contentPlanets,
+      addedPlanets: economySeed.added,
+      restored: economyRestored,
+    });
+  }
+
+  const sessionRuntimes = new Map();
+  const normalizeRuntimeSessionId = (sessionId) => {
+    const n = Number(sessionId);
+    return Number.isInteger(n) && n > 0 && n <= 0xffff ? n : 1;
+  };
+  const createRuntimeEconomyState = () => {
+    const state = createEconomyState();
+    if (economyEnabled) seedEconomyFromSystems(state, contentPack.systems ?? []);
+    return state;
+  };
+  // 전략 시뮬 설정(opt-in LOGH_STRAT_SIM, requires LOGH_AUTHORITATIVE) — 레지스트리보다 먼저 선언해
+  // 런타임 생성 시 per-session strat 시뮬을 붙인다. seed는 전 세션 공통(결정론 재현), 그래프는 각 런타임의
+  // 시드 성계에서 도출하므로 세션마다 독립 전선이 된다.
+  const stratSimEnabled = authoritativeEnabled && process.env.LOGH_STRAT_SIM === '1';
+  const stratTickMs = Math.max(1000, Number(process.env.LOGH_STRAT_SIM_INTERVAL_MS ?? '5000'));
+  const stratSeed = Number(process.env.LOGH_STRAT_SIM_SEED ?? '1') >>> 0;
+  // 叛乱忠誠度 누적(coup_conduct 생산자) — opt-in LOGH_COUP_SIM=1(기본 OFF). 패전→불만 모델(P3 SERVER DESIGN).
+  const coupSimEnabled = stratSimEnabled && process.env.LOGH_COUP_SIM === '1';
+  // SERVER DESIGN(P3): 성계 1개 상실당 사령관 叛乱忠誠度 가산폭(누적은 intelState가 0..MAX 클램프).
+  const coupLoyaltyPerLoss = Math.max(0, Number(process.env.LOGH_COUP_LOSS_DELTA ?? '15'));
+  // 한 런타임의 worldState에 대해 전략 시뮬을 생성(게이트 off면 null). graph는 시드 성계 AFTER seedSystems에서
+  // 도출하므로 노드 진영=캐논 소유. 캐논 회랑 인접(galaxy-adjacency.json) 사용, 파일 부재 시 euclidean nearest-k 폴백.
+  const createRuntimeStrat = (targetWorldState, { trace = false, restoreFleets = null } = {}) => {
+    if (!stratSimEnabled) return null;
+    const stratGraph = buildCanonGraph(targetWorldState.listSystems(), loadCanonAdjacency());
+    // restoreFleets가 있으면 홈 시드 대신 저장된 전략 함대 위치로 복원(worldState는 호출자가 이미 복원).
+    const sim = createStrategicSim(targetWorldState, stratGraph, { seed: stratSeed, restoreFleets });
+    if (trace) writeTrace(traceStream, { event: 'strat-seed', fleets: sim.snapshot().fleets.length, restored: Array.isArray(restoreFleets) });
+    return sim;
+  };
+  const createSessionRuntime = (sessionId) => {
+    const runtimeWorldState = createWorldState({ clockStartMs });
+    seedAuthoritativeWorld(runtimeWorldState);
+    return {
+      sessionId: normalizeRuntimeSessionId(sessionId),
+      worldState: runtimeWorldState,
+      worldRelay: createWorldRelay(),
+      economyState: createRuntimeEconomyState(),
+      strat: createRuntimeStrat(runtimeWorldState),
+      stratTickNo: 0,
+      stratOver: false,
+    };
+  };
+  // 기본 런타임 전략 시뮬 복원: 저장된 스냅샷의 기본 strat(최상위 entities.strat)이 있으면 홈 시드 대신 그
+  // 함대 위치/틱으로 복원한다 — 무유저 갤럭시 전쟁이 재시작 후 홈으로 리셋되지 않고 이어진다(journal #60 갭).
+  let defaultStratRestore = null;
+  let defaultStratTickNo = 0;
+  if (repository && stratSimEnabled) {
+    try {
+      const snap = repository.load();
+      if (Array.isArray(snap?.entities?.strat?.fleets)) {
+        defaultStratRestore = snap.entities.strat.fleets;
+        if (Number.isInteger(snap.entities.strat.tickNo)) defaultStratTickNo = snap.entities.strat.tickNo;
+      }
+    } catch { /* 복원 실패는 무시(시드로 진행) */ }
+  }
+  const defaultRuntime = {
+    sessionId: 1, worldState, worldRelay, economyState,
+    // 저장 strat가 있으면 복원, 없으면 시드 완료된 기본 worldState에서 새로 시드(시드 트레이스 남김).
+    strat: createRuntimeStrat(worldState, { trace: true, restoreFleets: defaultStratRestore }),
+    stratTickNo: defaultStratTickNo,
+    stratOver: false,
+  };
+  sessionRuntimes.set(1, defaultRuntime);
+  const runtimeForSession = (sessionId = 1) => {
+    const id = normalizeRuntimeSessionId(sessionId);
+    if (!sessionRuntimes.has(id)) sessionRuntimes.set(id, createSessionRuntime(id));
+    return sessionRuntimes.get(id);
+  };
+  const runtimeForAccount = (account) => {
+    const selectedSession = account && typeof accountStore?.getSelectedSession === 'function'
+      ? accountStore.getSelectedSession(account)
+      : 1;
+    return runtimeForSession(selectedSession);
+  };
+  const executeAdminDevCommand = (body = {}) => {
+    if (!body || typeof body !== 'object' || Array.isArray(body)) {
+      throw new AdminRequestError(400, 'dev command body must be a JSON object');
     }
-    writeTrace(traceStream, { event: 'economy-seed', planets: economyState.listPlanets().length, restored: economyRestored });
+    const command = resolveDevCommandFromBody(body);
+    const sessionId = finitePositiveInt(body.sessionId) ?? 1;
+    const runtime = runtimeForSession(sessionId);
+    const runtimeWorldState = runtime.worldState;
+    const players = runtimeWorldState.listPlayers();
+    const requestedConnectionId = finitePositiveInt(body.connectionId);
+    const activeCharacterId = finitePositiveInt(body.activeCharacterId ?? body.charId)
+      ?? players[0]?.charId
+      ?? requestedConnectionId
+      ?? 1001;
+    const connectionId = requestedConnectionId ?? players[0]?.connectionId ?? activeCharacterId;
+    let player = runtimeWorldState.getPlayer(connectionId);
+    if (!player) {
+      if (body.seedPlayer === false) {
+        throw new AdminRequestError(409, 'no world player for dev command; omit seedPlayer:false or provide connectionId');
+      }
+      runtimeWorldState.addPlayer({
+        connectionId,
+        charId: activeCharacterId,
+        powerId: finitePositiveInt(body.powerId) ?? players[0]?.powerId ?? 1,
+      });
+      player = runtimeWorldState.getPlayer(connectionId);
+    }
+    if (!runtimeWorldState.getCharacter?.(activeCharacterId)) {
+      runtimeWorldState.upsertCharacter?.({
+        id: activeCharacterId,
+        rank: finiteNonNegativeInt(body.rank) ?? 0,
+        faction: player?.powerId === 2 ? 'Alliance' : 'Empire',
+      });
+    }
+    const fallbackTargets = buildPlayableCommandTargets({
+      activeCharacterId,
+      activeUnitId: finitePositiveInt(body.activeUnitId ?? body.unitId) ?? activeCharacterId,
+      baseId: finitePositiveInt(body.baseId) ?? 1,
+      characterName: body.characterName ?? 'Dev Player',
+      power: player?.powerId ?? 1,
+      staticState: contentPack,
+    });
+    const liveTargets = typeof runtimeWorldState._commandTargets?.snapshot === 'function'
+      ? runtimeWorldState._commandTargets.snapshot()
+      : null;
+    const targetPool = mergeDevTargetPool(
+      mergeDevTargetPool(fallbackTargets, liveTargets ?? {}),
+      normalizeDevTargetOverrides(body),
+    );
+    const commandInfo = {
+      factoryId: command.factoryId,
+      categoryIndex: command.categoryIndex,
+      commandIndex: command.commandIndex,
+      name: command.name,
+    };
+    const preview = previewDevCommandExecution({ command, targetPool });
+    if (body.dryRun === true) {
+      return {
+        ok: preview.executable,
+        dryRun: true,
+        sessionId,
+        connectionId,
+        command: commandInfo,
+        preview,
+      };
+    }
+    const before = typeof runtimeWorldState.commandLogCount === 'function' ? runtimeWorldState.commandLogCount() : 0;
+    const decision = executeDevCommand({ state: runtimeWorldState, connectionId, command, targetPool });
+    const commandLog = typeof runtimeWorldState.listCommandLog === 'function' ? runtimeWorldState.listCommandLog() : [];
+    return {
+      ok: Boolean(decision.accept),
+      dryRun: false,
+      sessionId,
+      connectionId,
+      command: commandInfo,
+      decision: summarizeDevDecision(decision),
+      commandRecordsBefore: before,
+      commandRecordsAfter: commandLog.length,
+      recentCommand: commandLog.at(-1) ?? null,
+    };
+  };
+  // per-session 영속 복원: 저장된 스냅샷에 sessions 행이 있으면 해당 세션 런타임을 즉시 생성·복원한다(레지스트리/
+  // 시드 이후). 기본(session 1)은 위에서 최상위 world/economy로 이미 복원됨. restore는 비우고 채우므로 시드를
+  // 덮어쓴다(복원이 권위). strat 시뮬은 createSessionRuntime에서 시드 성계 기준으로 재생성된다(기본 런타임과 동일
+  // 정책 — strat 내부 상태는 스냅샷에 없고 world/economy만 영속).
+  if (repository) {
+    try {
+      const snap = repository.load();
+      if (Array.isArray(snap?.sessions)) {
+        for (const row of snap.sessions) {
+          const id = normalizeRuntimeSessionId(row?.sessionId);
+          if (id === 1) continue;
+          const runtime = runtimeForSession(id);
+          if (row?.world) runtime.worldState.restore(row.world);
+          if (economyEnabled && row?.entities?.economy) {
+            runtime.economyState.restore(row.entities.economy);
+            ensureEconomyPlanetsFromSystems(runtime.economyState, contentPack.systems ?? []);
+          }
+          // 전략 시뮬 복원: world 복원 뒤(그래프가 복원된 소유를 반영) 저장 함대 위치/틱으로 strat를 교체한다.
+          // createSessionRuntime이 만든 시드 strat(홈 배치)을 복원본으로 대체 — 전선 위치 연속성 보존.
+          if (stratSimEnabled && Array.isArray(row?.entities?.strat?.fleets)) {
+            runtime.strat = createRuntimeStrat(runtime.worldState, { restoreFleets: row.entities.strat.fleets });
+            if (Number.isInteger(row.entities.strat.tickNo)) runtime.stratTickNo = row.entities.strat.tickNo;
+          }
+        }
+      }
+    } catch (error) {
+      console.error(`LOGH7 세션 런타임 복원 실패(기본 상태로 진행): ${error instanceof Error ? error.message : error}`);
+    }
   }
 
   // Strategic galaxy AI sim (logh7-strategic-sim): the MACRO layer — NPC fleet commanders advance across
   // the galaxy and conquer systems each tick. Opt-in via LOGH_STRAT_SIM=1 (requires LOGH_AUTHORITATIVE).
   // worldRelay-INDEPENDENT: the simulation advances even with zero connected players (the war runs without
   // anyone watching); a broadcast (0x0325 unit table re-push) only happens when someone is in-world.
-  const stratSimEnabled = authoritativeEnabled && process.env.LOGH_STRAT_SIM === '1';
-  const stratTickMs = Math.max(1000, Number(process.env.LOGH_STRAT_SIM_INTERVAL_MS ?? '5000'));
-  const stratSeed = Number(process.env.LOGH_STRAT_SIM_SEED ?? '1') >>> 0;
-  // 叛乱忠誠度 누적(coup_conduct 생산자) — opt-in LOGH_COUP_SIM=1(기본 OFF, 라이브 불변). 켜지면 전략틱에서
-  // 성계를 잃은(정복당한) 진영 사령관의 叛乱忠誠度를 누적한다(패전→불만 모델). delta·트리거는 P3 SERVER DESIGN.
-  const coupSimEnabled = stratSimEnabled && process.env.LOGH_COUP_SIM === '1';
-  // SERVER DESIGN(P3): 성계 1개 상실당 사령관 叛乱忠誠度 가산폭(누적은 intelState가 0..MAX 클램프).
-  const coupLoyaltyPerLoss = Math.max(0, Number(process.env.LOGH_COUP_LOSS_DELTA ?? '15'));
-  let strat = null;
-  let stratTickNo = 0;
+  // per-session: 설정·strat 생성은 위 레지스트리 블록으로 옮겨 런타임마다 독립 strat를 갖는다. 여기서는 한
+  // 런타임의 틱 로직(파라미터화)과 전 런타임 스케줄러만 정의한다.
   let stratHandle = null;
-  if (stratSimEnabled) {
-    // graph from listSystems() AFTER seedSystems, so node faction = canon owner. 캐논 회랑 인접
-    // (galaxy-adjacency.json)을 그래프 토폴로지로 사용 — 전선이 이젤론/페잔 관문과 정합. 파일 부재
-    // 시 buildCanonGraph가 euclidean nearest-k로 폴백(연결 유지). 노드/거리/와이어/게이트 불변.
-    const stratGraph = buildCanonGraph(worldState.listSystems(), loadCanonAdjacency());
-    strat = createStrategicSim(worldState, stratGraph, { seed: stratSeed });
-    writeTrace(traceStream, { event: 'strat-seed', fleets: strat.snapshot().fleets.length });
-  }
-  const runStrategicTickOnce = () => {
-    if (!stratSimEnabled || strat === null) {
+  // 한 런타임의 전략 틱 1회 — world-state 변이(moveFleet/conquerSystem), 정복 시 그 런타임 economyState 행성소유
+  // 동기화, in-world 플레이어가 있으면 그 런타임 relay로만 0x0325 재푸시, coup 누적, 종료 평가까지 동일.
+  // force=true(수동/테스트 훅)는 종료(stratOver) 런타임도 계속 틱한다 — 구 단일런타임에서 수동 stratTickOnce가
+  // 종료 후에도 계속 진행하던 동작 보존. 스케줄러(force 미지정)는 종료 런타임을 건너뛰어 무유저 갤럭시를 멈춘다.
+  const tickStrategicRuntime = (runtime, { force = false } = {}) => {
+    if (!stratSimEnabled || !runtime || runtime.strat === null || (runtime.stratOver && !force)) {
       return null;
     }
-    stratTickNo += 1;
-    const result = strat.tick(stratTickNo); // authoritative world-state mutation (moveFleet/conquerSystem)
-    // 정복 시 경제 행성 소유를 새 진영으로 동기화 — 세수가 상실 진영이 아닌 점령 진영 국고로 가게 한다
-    // (이전엔 economyState가 부팅 시드 후 재동기 안 돼 적국에 세금이 계속 적립되던 버그). economyState는
-    // 전략틱보다 먼저 생성됨(위 블록).
+    const rWorld = runtime.worldState;
+    runtime.stratTickNo += 1;
+    const result = runtime.strat.tick(runtime.stratTickNo);
+    // 정복 시 경제 행성 소유를 새 진영으로 동기화 — 세수가 상실 진영이 아닌 점령 진영 국고로 가게 한다.
     if (economyEnabled && result.economy && result.economy.length) {
       for (const { system, owner } of result.economy) {
-        economyState.setSystemOwner(system, owner);
+        runtime.economyState.setSystemOwner(system, owner);
       }
     }
-    // broadcast only when players are present: re-push the full 0x0325 unit table so in-world clients
-    // see the moved/destroyed fleets. No connected players → simulate silently (no emit).
-    if (shouldBroadcastTick(worldRelay.size(), result)) {
+    // broadcast only when players are present in THIS session: re-push the full 0x0325 unit table so
+    // in-world clients of this runtime see the moved/destroyed fleets. No connected players → silent.
+    if (shouldBroadcastTick(runtime.worldRelay.size(), result)) {
       const unitInner = buildInformationUnitRecordInner({
         wireLayout: 'parser-stream',
-        fleets: worldState.listFleets(),
+        fleets: rWorld.listFleets(),
       });
-      worldRelay.broadcast(-1, unitInner);
+      runtime.worldRelay.broadcast(-1, unitInner);
     }
     if (result.moves.length || result.conquests.length || result.battles.length) {
       writeTrace(traceStream, {
-        event: 'strat-tick', tick: stratTickNo,
+        event: 'strat-tick', session: runtime.sessionId, tick: runtime.stratTickNo,
         moves: result.moves.length, conquests: result.conquests.length, battles: result.battles.length,
       });
     }
-    // 叛乱忠誠度 누적(coup_conduct 생산자, opt-in): 이번 틱에 성계를 잃은(정복당한) 진영의 사령관들에게
-    // 패전 불만으로 叛乱忠誠度를 가산한다. delta·트리거 모두 P3 SERVER DESIGN(매뉴얼 미수록). intelState는
-    // world의 공유 인스턴스(getIntelState) — 누적/클램프는 순수 모듈(addCoupLoyalty)에 위임(배선만 추가).
+    // 叛乱忠誠度 누적(coup_conduct 생산자, opt-in): 이번 틱에 성계를 잃은 진영의 사령관들에게 패전 불만을 가산.
     if (coupSimEnabled && coupLoyaltyPerLoss > 0 && result.conquests && result.conquests.length) {
-      const intelState = worldState.getIntelState();
-      // 상실 진영(from) → 손실 성계 수 집계. from은 문자열 진영명('empire'/'alliance' 등).
+      const intelState = rWorld.getIntelState();
       const lossesByFaction = new Map();
       for (const c of result.conquests) {
         const loser = c.from;
         if (loser == null || loser === 'neutral' || loser === c.to) continue;
         lossesByFaction.set(loser, (lossesByFaction.get(loser) ?? 0) + 1);
       }
-      // 상실 진영의 사령관(전략 함대 commander charId)마다 손실분만큼 누적. 같은 진영 사령관 전원이
-      // 패전 불만을 공유(전략적 사기 저하 모델) — P3 SERVER DESIGN.
       if (lossesByFaction.size > 0) {
-        for (const fleet of strat.simState.fleetsById.values()) {
+        for (const fleet of runtime.strat.simState.fleetsById.values()) {
           const losses = lossesByFaction.get(fleet.faction);
           if (!losses || !fleet.commander) continue;
           intelState.addCoupLoyalty(fleet.commander, coupLoyaltyPerLoss * losses);
         }
       }
     }
-    // 정복으로 성계 소유가 바뀌면 캐논 §1.6 종료(≤3성계 또는 전멸)를 평가한다 — economy 클록과 독립적으로
-    // 게임을 결정짓는 시점(정복)에 종료를 감지. over면 전략 스케줄러를 멈춰 무유저 갤럭시가 무한 진행하지
-    // 않게 한다(stratHandle은 인터벌로 이 함수를 부르므로 forward 참조 안전).
+    // 정복으로 성계 소유가 바뀌면 캐논 §1.6 종료(≤3성계 또는 전멸)를 평가한다. over면 이 런타임의 strat만
+    // 멈추고(stratOver), 전 런타임이 끝났을 때만 인터벌도 멈춰 무유저 갤럭시가 무한 진행하지 않게 한다.
     if (result.conquests && result.conquests.length) {
-      const ending = worldState.evaluateEnding({ minSystems: 3 });
+      const ending = rWorld.evaluateEnding({ minSystems: 3 });
       if (ending.over) {
-        writeTrace(traceStream, { event: 'strat-ending', winner: ending.winner, tick: stratTickNo });
-        if (stratHandle) { clearInterval(stratHandle); stratHandle = null; }
+        writeTrace(traceStream, { event: 'strat-ending', session: runtime.sessionId, winner: ending.winner, tick: runtime.stratTickNo });
+        runtime.stratOver = true;
       }
     }
     return result;
   };
+  // 활성 strat 런타임이 하나도 없으면 스케줄러를 멈춘다(전 세션 종료 시).
+  const maybeStopStratInterval = () => {
+    if (!stratHandle) return;
+    for (const runtime of sessionRuntimes.values()) {
+      if (runtime.strat !== null && !runtime.stratOver) return;
+    }
+    clearInterval(stratHandle);
+    stratHandle = null;
+  };
+  // 기본(session 1) 전략 틱 — 기존 테스트 계약(stratTickOnce가 server.worldState를 변이, 종료 후에도 수동 진행) 보존.
+  const runStrategicTickOnce = () => tickStrategicRuntime(defaultRuntime, { force: true });
+  // 스케줄러: 전 세션 런타임의 전략 틱을 1회씩 진행(per-session 타이머). 종료된 런타임은 tick에서 no-op.
+  const tickAllStrategicRuntimes = () => {
+    for (const runtime of sessionRuntimes.values()) tickStrategicRuntime(runtime);
+    maybeStopStratInterval();
+  };
   if (stratSimEnabled) {
-    stratHandle = setInterval(runStrategicTickOnce, stratTickMs);
+    stratHandle = setInterval(tickAllStrategicRuntimes, stratTickMs);
     stratHandle.unref?.(); // the sim loop alone must not keep the event loop (and tests) alive
   }
 
-  // 한 번의 경제 틱: 게임클록 day가 새 30일 주기로 넘어갔을 때만 실제 적립(tickIfDue가 중복 방지). 결과/ null.
-  // 주기 경계가 실제로 넘어가면(result 비-null) 권위적 턴(A7 advanceTurn)을 1 진행하고 완전승리 종료를
-  // 평가한다(S5 시간틱). 둘 다 서버 내부 상태(턴 카운터·ending 마커) — 클라 와이어 신설 없음(트레이스만).
-  const runEconomyTickOnce = () => {
-    if (!economyEnabled) return null;
-    const gameDay = worldState.gameDayOf(Date.now());
-    const result = economyState.tickIfDue({ gameDay });
+  // 한 런타임의 경제 틱 1회: 게임클록 day가 새 30일 주기로 넘어갔을 때만 실제 적립(tickIfDue가 중복 방지).
+  // 주기 경계가 실제로 넘어가면(result 비-null) 그 런타임의 권위적 턴(A7 advanceTurn)을 1 진행하고 완전승리
+  // 종료를 평가한다(S5 시간틱). 둘 다 서버 내부 상태(턴 카운터·ending 마커) — 클라 와이어 신설 없음(트레이스만).
+  const tickEconomyRuntime = (runtime) => {
+    if (!economyEnabled || !runtime) return null;
+    const rWorld = runtime.worldState;
+    const gameDay = rWorld.gameDayOf(Date.now());
+    const result = runtime.economyState.tickIfDue({ gameDay });
     if (result) {
-      worldState.advanceTurn(1);
-      const ending = worldState.evaluateEnding();
+      rWorld.advanceTurn(1);
+      const ending = rWorld.evaluateEnding();
       if (ending.over) {
-        writeTrace(traceStream, { event: 'decisive-victory', winner: ending.winner, turn: worldState.getScenarioInfo().currentTurn });
+        writeTrace(traceStream, { event: 'decisive-victory', session: runtime.sessionId, winner: ending.winner, turn: rWorld.getScenarioInfo().currentTurn });
       }
     }
     // 작전계획 30일 lifecycle 정산(opt-in LOGH_OPERATION_ISSUE). 전략 도메인 상태(_strategy)가 lazily 생성된
     // 경우에만, 발령된 작전의 30 in-game days 자동종료(매뉴얼 p39 P2)를 같은 게임클록 day로 만료시킨다. 게이트
     // off거나 발령 작전이 없으면 no-op(회귀 0). 占領/防衛/掃討 결과 보너스는 라이브 sub-action 확정 후 별도(스텁).
-    if (operationIssueEnabled() && worldState._strategy?.tickOperationsIfDue) {
+    if (operationIssueEnabled() && rWorld._strategy?.tickOperationsIfDue) {
       // outcomeFor: 占領/防衛 목적 작전의 30일 시점 점령 상태를 world-state 갤럭시에서 공급한다. plan.target은
       // 목표 성계명(문자열)으로 발령 시 주입된다고 가정 — getSystem으로 조회되면 그 성계 1곳의 소유가 발령 진영
       // (power 1=empire/2=alliance)이면 controlledByActor=1, 아니면 lostToEnemy=1(目標 1곳 모델, P2). 조회
@@ -1237,27 +2400,33 @@ export async function startLogh7AuthServer({
         if (plan?.purpose !== OPERATION_PURPOSE.OCCUPATION && plan?.purpose !== OPERATION_PURPOSE.DEFENSE) {
           return {};
         }
-        const sys = typeof plan?.target === 'string' ? worldState.getSystem?.(plan.target) : null;
+        const sys = typeof plan?.target === 'string' ? rWorld.getSystem?.(plan.target) : null;
         if (!sys) return {}; // 목표 성계 미상 → 정보부재(보너스 0)
         const mine = sys.owner === factionOf(power);
         return mine
           ? { targetTotal: 1, controlledByActor: 1, lostToEnemy: 0 }
           : { targetTotal: 1, controlledByActor: 0, lostToEnemy: 1 };
       };
-      const expired = worldState._strategy.tickOperationsIfDue({ gameDay, outcomeFor });
+      const expired = rWorld._strategy.tickOperationsIfDue({ gameDay, outcomeFor });
       if (expired.length) {
         // 결과정산 보너스를 발령 사령관(plan.commander)의 功績에 적립한다. _personnel 로스터가 있을 때만(없으면
         // 적립 no-op). draft 작전은 expired에 오르지 않으므로 구조적 제외. 적립 내역을 트레이스로 남긴다.
-        const credits = creditOperationMerit(expired, worldState._strategy?._personnel ?? worldState._personnel ?? null);
-        writeTrace(traceStream, { event: 'operation-expire', count: expired.length, gameDay, merits: credits.length });
+        const credits = creditOperationMerit(expired, rWorld._strategy?._personnel ?? rWorld._personnel ?? null);
+        writeTrace(traceStream, { event: 'operation-expire', session: runtime.sessionId, count: expired.length, gameDay, merits: credits.length });
       }
     }
     return result;
   };
+  // 기본(session 1) 경제 틱 — 기존 테스트 계약(economyTickOnce가 server.worldState 턴을 진행) 보존.
+  const runEconomyTickOnce = () => tickEconomyRuntime(defaultRuntime);
+  // 스케줄러: 전 세션 런타임의 경제 틱을 1회씩 진행(per-session 타이머).
+  const tickAllEconomyRuntimes = () => {
+    for (const runtime of sessionRuntimes.values()) tickEconomyRuntime(runtime);
+  };
   const economyTickMs = Math.max(1000, config.gameplay.economyIntervalMs);
   let economyHandle = null;
   if (economyEnabled) {
-    economyHandle = setInterval(runEconomyTickOnce, economyTickMs);
+    economyHandle = setInterval(tickAllEconomyRuntimes, economyTickMs);
     economyHandle.unref?.(); // 경제 루프 단독으로 이벤트 루프(테스트)를 살려두지 않음
   }
 
@@ -1274,15 +2443,26 @@ export async function startLogh7AuthServer({
     const boundAccount = isLoopbackRemoteAddress(remoteAddress)
       ? loopbackAccountBindings.get(loopbackKey) ?? null
       : null;
+    let activeRuntime = runtimeForAccount(boundAccount);
+    const activeWorldState = () => activeRuntime.worldState;
+    const activeWorldRelay = () => activeRuntime.worldRelay;
     const session = createLoginSession({
       accountStore,
       lobby,
       world,
-      worldState, // 월드진입 시 플레이어 캐릭터를 전투 레지스트리에 시드(戦死/사령관 데이터)
+      worldState: activeWorldState(),
       characters: lobbyCharacters,
       contentPack,
-      sessions: lobbySessions,
-      worldBySession,
+      sessions: getLobbySessions,
+      worldBySession: ({ sessionId } = {}) => {
+        const routeMap = typeof worldBySession === 'function' ? worldBySession({ sessionId }) : worldBySession;
+        if (routeMap) return routeMap;
+        return Object.fromEntries(
+          getLobbySessions()
+            .filter((sessionRecord) => sessionRecord.world && Object.keys(sessionRecord.world).length > 0)
+            .map((sessionRecord) => [sessionRecord.sessionId, sessionRecord.world]),
+        );
+      },
       announcementText: noticeState.get(),
       boundAccount,
       connectionId, // 멀티플레이 distinct in-world 함대 id 파생(login-session sessionWorldUnitId)
@@ -1357,13 +2537,16 @@ export async function startLogh7AuthServer({
     let registeredInWorld = false;
     let relayTestSent = false;
     let mpFleetSynced = false; // C2 일회성: 신규 입장자↔기존 전원 함대 상호 동기화 1회만.
+    let worldFleetsPushed = false; // 단일클라 갤럭시 함대 push 1회만(LOGH_WORLD_ALL_FLEETS).
     const registerInWorld = () => {
       if (registeredInWorld || !relayEnabled) {
         return;
       }
       registeredInWorld = true;
       const lobbySubheaderLen = Number(process.env.LOGH_LOBBY_SUBHEADER ?? '4');
-      worldRelay.register(connectionId, (inner) => {
+      const runtimeWorldState = activeWorldState();
+      const runtimeWorldRelay = activeWorldRelay();
+      runtimeWorldRelay.register(connectionId, (inner) => {
         const frame = buildEncrypted0030Frame({
           tables,
           key: decipherKey,
@@ -1390,18 +2573,18 @@ export async function startLogh7AuthServer({
         }
         if (!nation) {
           // round-robin over the content pack — the legacy placeholder when no authoritative side is known.
-          nation = nations[worldState.playerCount() % nations.length];
+          nation = nations[runtimeWorldState.playerCount() % nations.length];
         }
-        worldState.addPlayer({ connectionId, charId: connectionId, powerId: nation.id });
+        runtimeWorldState.addPlayer({ connectionId, charId: connectionId, powerId: nation.id });
         for (const u of contentPack.unitsForNation(nation.id)) {
-          worldState.claimShip(u.id, connectionId);
+          runtimeWorldState.claimShip(u.id, connectionId);
         }
         // 인사(人事) 도메인 상태 시드: worldState에 등록된 플레이어 캐릭터를 personnelState 로스터에
         // 추가해 작위/봉토/진급 커맨드(0x0704..0x070e)가 검증·처리 가능하게 한다.
-        seedPersonnelFromWorldState({ state: worldState });
+        seedPersonnelFromWorldState({ state: runtimeWorldState });
         writeTrace(traceStream, { event: 'world-join', connectionId, powerId: nation.id, ships: contentPack.unitsForNation(nation.id).length });
       }
-      writeTrace(traceStream, { event: 'relay-register', connectionId, peers: worldRelay.size() });
+      writeTrace(traceStream, { event: 'relay-register', connectionId, peers: runtimeWorldRelay.size(), sessionId: activeRuntime.sessionId });
     };
     // C2 (멀티플레이 함대 가시성): 이 연결의 플레이어 함대가 공유 worldState에 막 등록된 시점(월드진입 0x0f02/
     // grid-enter 처리 직후)에 1회 호출. (a)이 입장자의 함대/유닛(0x0325)을 기존 전원에게 broadcast하고,
@@ -1410,10 +2593,12 @@ export async function startLogh7AuthServer({
     // 함대 1개 이상 등록 상태에서만 동작. unitId 키가 0x0325 월드진입 바인딩(char+0x24)과 일치해 그대로 렌더된다.
     const syncMultiplayerFleets = () => {
       if (mpFleetSynced || !mpVisibilityEnabled || !registeredInWorld) return;
-      if (typeof worldState.listFleets !== 'function') return;
+      const runtimeWorldState = activeWorldState();
+      const runtimeWorldRelay = activeWorldRelay();
+      if (typeof runtimeWorldState.listFleets !== 'function') return;
       const myInfo = typeof session.worldPlayerInfo === 'function' ? session.worldPlayerInfo() : null;
       const myFleetId = myInfo?.unitId ?? null;
-      const allFleets = worldState.listFleets();
+      const allFleets = runtimeWorldState.listFleets();
       const myFleet = myFleetId != null ? allFleets.find((f) => f.id === myFleetId) : null;
       if (!myFleet) return; // 아직 이 입장자의 함대가 worldState에 없음 — 다음 메시지에서 재시도(일회성 보존).
       mpFleetSynced = true;
@@ -1424,7 +2609,7 @@ export async function startLogh7AuthServer({
       // 사령관 엔트리가 없으면(iVar10==0) 마커 자체가 안 그려진다. 그래서 함대 push마다 그 사령관 0x0323
       // 레코드를 동반 push한다(같은 로비 subheader/단조 id 시퀀스). 0x0323 power만 투영(RE 확정), 0x34f 금지.
       const commanderRecordsFor = (fleets) =>
-        projectFleetCommanderRecords(fleets, worldState).map((r) =>
+        projectFleetCommanderRecords(fleets, runtimeWorldState).map((r) =>
           buildInformationCharacterRecordInner({ ...r, wireEndian: 'be' }),
         );
       // (a) joiner -> 기존 전원: 이 함대 1개를 담은 0x0325를 다른 모든 in-world 연결에 broadcast.
@@ -1432,10 +2617,10 @@ export async function startLogh7AuthServer({
         wireLayout: 'parser-stream',
         fleets: [myFleet],
       });
-      const deliveredToPeers = worldRelay.broadcast(connectionId, joinerInner);
+      const deliveredToPeers = runtimeWorldRelay.broadcast(connectionId, joinerInner);
       // (a') joiner 사령관 0x0323 레코드를 기존 전원에 broadcast(수신 클라 char-table 시드 → 마커+색).
       for (const rec of commanderRecordsFor([myFleet])) {
-        worldRelay.broadcast(connectionId, rec);
+        runtimeWorldRelay.broadcast(connectionId, rec);
       }
       // (b) 기존 전원 -> joiner: 자기 함대를 제외한 나머지 함대 전부를 0x0325로 이 입장자에게 push(sendExtraInners
       //     재사용 — 로비 subheader/단조 id로 한 프레임씩). 기존 함대가 없으면(첫 입장자) push 없음.
@@ -1457,6 +2642,25 @@ export async function startLogh7AuthServer({
         existingFleets: existingFleets.length,
       });
     };
+    // 단일클라 갤럭시 함대 가시화(LOGH_WORLD_ALL_FLEETS): 월드진입 시 이 세션 worldState의 전체 함대를 입장자에게
+    // 단방향 push한다(피어 broadcast 없음 — mpVisibility의 C2와 구분). 검증된 parser-stream all-fleets 0x0325 +
+    // 각 함대 사령관 0x0323(진영색, 마커 그리기 전제)을 먼저. 솔로 플레이어가 적/아 함대가 깔린 갤럭시를 보게 함.
+    // 함대가 없으면 no-op. 일회성(worldFleetsPushed)으로 잠금. 추측 데이터 미주입(worldState 엔티티만 투영).
+    const pushWorldFleetsToJoiner = () => {
+      if (worldFleetsPushed || !worldAllFleetsEnabled || !registeredInWorld) return;
+      const runtimeWorldState = activeWorldState();
+      if (typeof runtimeWorldState.listFleets !== 'function') return;
+      const fleets = runtimeWorldState.listFleets();
+      if (fleets.length === 0) return;
+      worldFleetsPushed = true;
+      const lobbySubheaderLen = Number(process.env.LOGH_LOBBY_SUBHEADER ?? '4');
+      const commanderRecs = projectFleetCommanderRecords(fleets, runtimeWorldState).map((r) =>
+        buildInformationCharacterRecordInner({ ...r, wireEndian: 'be' }),
+      );
+      const unitInner = buildInformationUnitRecordInner({ wireLayout: 'parser-stream', fleets });
+      sendExtraInners([...commanderRecs, unitInner], lobbySubheaderLen);
+      writeTrace(traceStream, { event: 'world-all-fleets-push', connectionId, fleets: fleets.length });
+    };
     // C4 (멀티플레이 진영 정합): registerInWorld는 세션 연결(ss-response) 시점에 호출되는데, 캐릭터 생성
     // (0x1008 requestCategory0=진영선택)보다 먼저라 그 순간 worldPlayerInfo().power가 아직 기본(제국) 시드
     // 캐릭터의 power다 → 동맹 클라까지 전부 제국(powerId 1280)으로 등록되는 버그(라이브 2026-06-22 확정:
@@ -1469,15 +2673,16 @@ export async function startLogh7AuthServer({
     const reconcileWorldNation = () => {
       if (!authoritativeEnabled || !mpVisibilityEnabled || !registeredInWorld) return;
       if (typeof session.worldPlayerInfo !== 'function') return;
+      const runtimeWorldState = activeWorldState();
       const nation = nationForPowerByte(contentPack.nations, session.worldPlayerInfo().power);
       if (!nation) return; // 매핑 실패(데이터 불일치) → registerInWorld의 round-robin 배정 유지.
-      const player = worldState.getPlayer(connectionId);
+      const player = runtimeWorldState.getPlayer(connectionId);
       if (!player || player.powerId === nation.id) return; // 이미 정합 → no-op.
       // 잘못 claim된 이전 진영 함선을 neutral로 풀고, 올바른 진영으로 재등록 + 재claim.
-      worldState.releaseShipsOf(connectionId);
-      worldState.addPlayer({ connectionId, charId: connectionId, powerId: nation.id });
+      runtimeWorldState.releaseShipsOf(connectionId);
+      runtimeWorldState.addPlayer({ connectionId, charId: connectionId, powerId: nation.id });
       for (const u of contentPack.unitsForNation(nation.id)) {
-        worldState.claimShip(u.id, connectionId);
+        runtimeWorldState.claimShip(u.id, connectionId);
       }
       writeTrace(traceStream, {
         event: 'world-nation-reconciled',
@@ -1491,15 +2696,16 @@ export async function startLogh7AuthServer({
     // including the actor (the thin client only applies an effect when it receives the Notify).
     const dispatchNotifies = (notifies) => {
       let delivered = 0;
+      const runtimeWorldRelay = activeWorldRelay();
       for (const n of notifies) {
         const plan = planNotifyDispatch(n, connectionId);
         if (plan.kind === 'unicast') {
-          delivered += worldRelay.send(plan.to, n.inner) ? 1 : 0;
+          delivered += runtimeWorldRelay.send(plan.to, n.inner) ? 1 : 0;
           continue;
         }
-        delivered += worldRelay.broadcast(connectionId, n.inner);
+        delivered += runtimeWorldRelay.broadcast(connectionId, n.inner);
         if (plan.alsoSelf) {
-          worldRelay.send(connectionId, n.inner);
+          runtimeWorldRelay.send(connectionId, n.inner);
         }
       }
       return delivered;
@@ -1578,7 +2784,17 @@ export async function startLogh7AuthServer({
             nextReplyId = parsed.id + 1;
           }
           const action = session.onInnerMessage(parsed.innerPayload);
+          if (Number.isInteger(action?.trace?.resolvedSessionId)) {
+            activeRuntime = runtimeForSession(action.trace.resolvedSessionId);
+          }
           writeTrace(traceStream, buildLoginMessageTraceFields({ connectionId, parsed, action, sessionAccount: session.account }));
+          if (Array.isArray(action?.traceEvents)) {
+            for (const event of action.traceEvents) {
+              if (event && typeof event === 'object') {
+                writeTrace(traceStream, { connectionId, ...event });
+              }
+            }
+          }
           // G169 in-world relay (opt-in). Register conn3 (world) connections on their SS handshake,
           // then rebroadcast any in-world command (chat/move) to the other players. The client sends
           // these inners raw ([u16 code][payload]); recipients consume conn3 frames in the message32
@@ -1597,6 +2813,10 @@ export async function startLogh7AuthServer({
             if (mpVisibilityEnabled && registeredInWorld && !mpFleetSynced) {
               syncMultiplayerFleets();
             }
+            // 단일클라 갤럭시 함대 가시화(mpVisibility와 독립): 월드진입 후 전체 함대를 입장자에게 1회 push.
+            if (worldAllFleetsEnabled && registeredInWorld && !worldFleetsPushed) {
+              pushWorldFleetsToJoiner();
+            }
             if (registeredInWorld) {
               const inboundCode = parsed.innerPayload.readUInt16BE(0);
               if (isRelayCommandCode(inboundCode)) {
@@ -1604,7 +2824,7 @@ export async function startLogh7AuthServer({
                   // Authoritative path: validate + apply + broadcast the canonical Notify the engine
                   // decides (vs blindly echoing the client's frame).
                   const decision = processCommand({
-                    state: worldState,
+                    state: activeWorldState(),
                     connectionId,
                     innerCode: inboundCode,
                     inner: parsed.innerPayload,
@@ -1621,7 +2841,7 @@ export async function startLogh7AuthServer({
                   });
                 } else {
                   const relayInner = wrapRawInnerAsMessage32(parsed.innerPayload);
-                  const delivered = worldRelay.broadcast(connectionId, relayInner);
+                  const delivered = activeWorldRelay().broadcast(connectionId, relayInner);
                   writeTrace(traceStream, {
                     event: 'relay-broadcast',
                     connectionId,
@@ -1634,10 +2854,10 @@ export async function startLogh7AuthServer({
               // server-built CommandGridChat (0x0f1c) to the OTHER players so it appears on their
               // screens — an end-to-end demo of the relay delivering an in-world message between
               // players, without needing the chat-UI. One-shot per connection, opt-in LOGH_RELAY_TEST=1.
-              if (process.env.LOGH_RELAY_TEST === '1' && !relayTestSent && worldRelay.size() >= 2) {
+              if (process.env.LOGH_RELAY_TEST === '1' && !relayTestSent && activeWorldRelay().size() >= 2) {
                 relayTestSent = true;
                 const chat = buildCommandGridChatInner({ text: `RELAY OK conn${connectionId}` });
-                const delivered = worldRelay.broadcast(connectionId, chat);
+                const delivered = activeWorldRelay().broadcast(connectionId, chat);
                 writeTrace(traceStream, { event: 'relay-test-broadcast', connectionId, delivered });
               }
             }
@@ -1884,30 +3104,32 @@ export async function startLogh7AuthServer({
     socket.on('close', (hadError) => {
       session.close();
       if (registeredInWorld) {
+        const runtimeWorldState = activeWorldState();
+        const runtimeWorldRelay = activeWorldRelay();
         // C2 (멀티플레이 leave): 게이트 ON이면 다른 클라에 제거 통지를 보낸다(가능 범위). 떠나는 함대를
         // 공유 worldState에서 제거한 뒤, 남은 함대 테이블을 0x0325로 re-broadcast해 다른 in-world 클라가
         // 떠난 함대를 드롭하게 한다. unregister 전에 broadcast해야 이 연결의 콜백이 빠지기 전에 처리되며,
         // broadcast는 자신을 제외하므로 (이미 닫히는) 자기 소켓엔 안 쓴다. 게이트 OFF면 기존 동작 그대로.
-        if (mpVisibilityEnabled && typeof worldState.listFleets === 'function') {
+        if (mpVisibilityEnabled && typeof runtimeWorldState.listFleets === 'function') {
           const myInfo = typeof session.worldPlayerInfo === 'function' ? session.worldPlayerInfo() : null;
           const myFleetId = myInfo?.unitId ?? null;
-          if (myFleetId != null && typeof worldState.removeFleet === 'function') {
-            worldState.removeFleet(myFleetId);
+          if (myFleetId != null && typeof runtimeWorldState.removeFleet === 'function') {
+            runtimeWorldState.removeFleet(myFleetId);
           }
-          const remaining = worldState.listFleets();
-          if (worldRelay.size() > 1) {
+          const remaining = runtimeWorldState.listFleets();
+          if (runtimeWorldRelay.size() > 1) {
             const remainingInner = buildInformationUnitRecordInner({
               wireLayout: 'parser-stream',
               fleets: remaining,
             });
-            const delivered = worldRelay.broadcast(connectionId, remainingInner);
+            const delivered = runtimeWorldRelay.broadcast(connectionId, remainingInner);
             writeTrace(traceStream, { event: 'mp-fleet-leave', connectionId, myFleetId, remaining: remaining.length, delivered });
           }
         }
-        worldRelay.unregister(connectionId);
+        runtimeWorldRelay.unregister(connectionId);
         if (authoritativeEnabled) {
-          worldState.releaseShipsOf(connectionId);
-          worldState.removePlayer(connectionId);
+          runtimeWorldState.releaseShipsOf(connectionId);
+          runtimeWorldState.removePlayer(connectionId);
         }
       }
       // 동시 세션 가드 해제: 이 연결이 계정의 현 소유자일 때만 제거한다. takeover로 축출된 옛 소켓의 close가
@@ -1932,6 +3154,8 @@ export async function startLogh7AuthServer({
     ? await startAdminHttpServer({
       admin: adminOptions,
       noticeState,
+      sessionRegistry: lobbySessionRegistry,
+      executeDevCommandRequest: executeAdminDevCommand,
       snapshot: () => buildAdminSessionSnapshot({
         host,
         port: boundPort,
@@ -1946,30 +3170,42 @@ export async function startLogh7AuthServer({
         repository,
         config,
         lobbyCharacters,
-        lobbySessions,
+        lobbySessions: getLobbySessions(),
         noticeState,
         bootScenario,
-        worldState,
-        economyState,
-      }),
+          worldState,
+          economyState,
+          sessionRuntimes,
+          contentPack,
+          worldContentExposure,
+        }),
     })
     : null;
   return {
     host,
     port: boundPort,
     admin: adminServer
-      ? { host: adminServer.host, port: adminServer.port, url: adminServer.url }
+      ? { host: adminServer.host, port: adminServer.port, url: adminServer.url, consoleUrl: adminServer.consoleUrl }
       : null,
     // Exposed for deterministic testing: run a single NPC tick (broadcasts to in-world connections).
     npcTickOnce: runNpcTickOnce,
     npcAiEnabled,
     // Exposed for deterministic testing: run a single strategic-sim tick (mutates the galaxy authoritatively).
+    // 기본(session 1) 변이. per-session 검증은 stratTickOnceForSession(id)/tickAllStrategicRuntimes() 사용.
     stratTickOnce: runStrategicTickOnce,
+    stratTickOnceForSession: (id) => tickStrategicRuntime(runtimeForSession(id), { force: true }),
+    tickAllStrategicRuntimes,
     stratSimEnabled,
     // 결정론 테스트용: 경제 틱 1회(게임클록 30일 경계에서만 적립). economyEnabled로 게이트.
+    // 기본(session 1) 진행. per-session은 economyTickOnceForSession(id)/tickAllEconomyRuntimes() 사용.
     economyTickOnce: runEconomyTickOnce,
+    economyTickOnceForSession: (id) => tickEconomyRuntime(runtimeForSession(id)),
+    tickAllEconomyRuntimes,
     economyEnabled,
     economyState,
+    runtimeForSession,
+    runtimeForAccount,
+    sessionRuntimes,
     // 테스트/운영 관측용: authoritative 월드 상태(시나리오/콘텐츠 시드 결과 조회). bootScenario.name으로
     // 부팅에 어떤 시나리오가 적용됐는지 확인 가능(미적용이면 null).
     worldState,

@@ -1,7 +1,13 @@
 // logh7-economy: 세수 공식(P3) + 30일틱 국고 누적 + 국고 차감 + 영속 검증.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { createEconomyState, computePlanetTax, seedEconomyFromSystems, ECONOMY_TUNING } from '../../src/server/logh7-economy.mjs';
+import {
+  createEconomyState,
+  computePlanetTax,
+  ensureEconomyPlanetsFromSystems,
+  seedEconomyFromSystems,
+  ECONOMY_TUNING,
+} from '../../src/server/logh7-economy.mjs';
 
 test('computePlanetTax: 세율↑ → 세수 단조증가', () => {
   const base = { taxBase: 1000, approval: 100 };
@@ -87,6 +93,29 @@ test('seedEconomyFromSystems: 성계→행성 진영별 등록 + 세원 산출',
   const { revenueByFaction } = eco.runEconomyTick({ gameDay: 30 });
   assert.ok(revenueByFaction.empire > revenueByFaction.alliance, '제국(2행성 더 큰 세원) > 동맹');
   assert.equal(eco.treasuryOf('empire'), revenueByFaction.empire);
+});
+
+test('ensureEconomyPlanetsFromSystems: 복원 경제값은 보존하고 누락 콘텐츠 행성만 추가', () => {
+  const eco = createEconomyState();
+  eco.registerPlanet('old', {
+    faction: 'empire',
+    taxBase: 999,
+    taxRate: 0.33,
+    approval: 44,
+    security: 55,
+    system: 'Odin',
+  });
+
+  const result = ensureEconomyPlanetsFromSystems(eco, [
+    { name: 'Odin', faction: 'empire', planets: [{ id: 'old', population: 1 }, { id: 'new', population: 2 }] },
+  ]);
+
+  assert.deepEqual(result, { total: 2, added: 1 });
+  assert.equal(eco.listPlanets().length, 2);
+  assert.equal(eco.getPlanet('old').taxBase, 999, 'restored tax base preserved');
+  assert.equal(eco.getPlanet('old').taxRate, 0.33, 'restored tax rate preserved');
+  assert.equal(eco.getPlanet('old').approval, 44, 'restored approval preserved');
+  assert.equal(eco.getPlanet('new').system, 'Odin');
 });
 
 test('tickIfDue: 30일 경계에서만 1회 틱(중복적립 방지)', () => {

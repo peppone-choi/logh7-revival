@@ -79,9 +79,14 @@ function openAccountSqlite(persistPath) {
       salt TEXT NOT NULL,
       hash TEXT NOT NULL,
       created_at TEXT,
+      selected_session_id INTEGER NOT NULL DEFAULT 1,
       characters_json TEXT NOT NULL DEFAULT '[]'
     );
   `);
+  const columns = new Set(db.prepare('PRAGMA table_info(accounts)').all().map((row) => row.name));
+  if (!columns.has('selected_session_id')) {
+    db.exec('ALTER TABLE accounts ADD COLUMN selected_session_id INTEGER NOT NULL DEFAULT 1');
+  }
   return db;
 }
 
@@ -113,7 +118,9 @@ function loadSqliteAccountRecords(persistPath) {
   const db = openAccountSqlite(persistPath);
   try {
     return db.prepare(`
-      SELECT account, salt, hash, created_at AS createdAt, characters_json AS charactersJson
+      SELECT account, salt, hash, created_at AS createdAt,
+             selected_session_id AS selectedSessionId,
+             characters_json AS charactersJson
       FROM accounts
       ORDER BY account
     `).all().map((row) => ({
@@ -121,6 +128,7 @@ function loadSqliteAccountRecords(persistPath) {
       salt: row.salt,
       hash: row.hash,
       createdAt: row.createdAt ?? null,
+      selectedSessionId: normalizeSelectedSessionId(row.selectedSessionId),
       characters: parseCharactersJson(row.charactersJson),
     }));
   } finally {
@@ -138,8 +146,8 @@ function persistSqliteAccountRecords(persistPath, records) {
   let inTransaction = false;
   try {
     const insert = db.prepare(`
-      INSERT INTO accounts (account, salt, hash, created_at, characters_json)
-      VALUES (?, ?, ?, ?, ?)
+      INSERT INTO accounts (account, salt, hash, created_at, selected_session_id, characters_json)
+      VALUES (?, ?, ?, ?, ?, ?)
     `);
     db.exec('BEGIN IMMEDIATE');
     inTransaction = true;
@@ -150,6 +158,7 @@ function persistSqliteAccountRecords(persistPath, records) {
         record.salt,
         record.hash,
         record.createdAt ?? null,
+        normalizeSelectedSessionId(record.selectedSessionId),
         JSON.stringify(profileRecords(record)),
       );
     }
@@ -182,6 +191,11 @@ function normalizeProfileRecord(character) {
   } catch {
     return null;
   }
+}
+
+function normalizeSelectedSessionId(value) {
+  const n = Number(value);
+  return Number.isInteger(n) && n > 0 && n <= 0xffff ? n : 1;
 }
 
 /**
@@ -222,6 +236,7 @@ export function createAccountRegistry({
         salt: record.salt,
         hash: record.hash,
         createdAt: record.createdAt ?? null,
+        selectedSessionId: normalizeSelectedSessionId(record.selectedSessionId),
         characters: profileRecords(record).map(normalizeProfileRecord).filter(Boolean),
       });
     }
@@ -244,7 +259,7 @@ export function createAccountRegistry({
     },
     getAccount(account) {
       const r = byAccount.get(account);
-      return r ? { account: r.account, createdAt: r.createdAt } : null;
+      return r ? { account: r.account, createdAt: r.createdAt, selectedSessionId: r.selectedSessionId } : null;
     },
     /**
      * Register a new account. Throws ACCOUNT_EXISTS (dupe), ACCOUNT_LIMIT (cap), or on invalid label.
@@ -268,7 +283,7 @@ export function createAccountRegistry({
       }
       const saltHex = randomBytes(SALT_BYTES).toString('hex');
       const hash = hashSecret(toBuffer(secret), saltHex);
-      const record = { account, salt: saltHex, hash, createdAt, characters: [] };
+      const record = { account, salt: saltHex, hash, createdAt, selectedSessionId: 1, characters: [] };
       byAccount.set(account, record);
       persist();
       return { account, createdAt };
@@ -351,6 +366,21 @@ export function createAccountRegistry({
       record.characters = next;
       persist();
       return true;
+    },
+    getSelectedSession(account) {
+      const record = byAccount.get(account);
+      return record ? normalizeSelectedSessionId(record.selectedSessionId) : 1;
+    },
+    setSelectedSession(account, sessionId) {
+      const record = byAccount.get(account);
+      if (!record) {
+        const error = new Error(`no such account: ${account}`);
+        error.code = 'NO_SUCH_ACCOUNT';
+        throw error;
+      }
+      record.selectedSessionId = normalizeSelectedSessionId(sessionId);
+      persist();
+      return record.selectedSessionId;
     },
   };
 }

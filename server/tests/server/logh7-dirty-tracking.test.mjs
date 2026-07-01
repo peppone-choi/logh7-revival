@@ -22,7 +22,7 @@ const WORLD_READERS = new Set([
   'getIntelState', 'getCoupState',
   'isBattleActive', 'battleLog',
   'getScenarioInfo',
-  'chatCount', 'listChat',
+  'chatCount', 'listChat', 'commandLogCount', 'listCommandLog',
   'gameClock', 'gameDayOf', 'gameMonthOf',
   'toSnapshot',
 ]);

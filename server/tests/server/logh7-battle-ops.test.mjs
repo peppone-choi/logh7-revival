@@ -547,7 +547,7 @@ test('processBattleOps ChangeAuthority sets commander on each unit and broadcast
   assert.equal(p.readUInt8(0x04), 2);
 });
 
-test('processBattleOps Mission with occupation flag emits 0x43c per unit + 0x442', () => {
+test('processBattleOps Mission echoes 0x421 OK to sender + emits 0x43c per unit + 0x442', () => {
   const state = createBattleOpsState();
   state.addUnit({ id: 401, owner: 1 });
   state.addBase({ id: 0xbeef, owner: 0 });
@@ -558,6 +558,9 @@ test('processBattleOps Mission with occupation flag emits 0x43c per unit + 0x442
   body.writeUInt32LE(0xbeef, 0x94);
   const res = processBattleOps({ state, connectionId: 1, innerCode: COMMAND_MISSION_CODE, inner: rawInner(COMMAND_MISSION_CODE, body) });
   assert.equal(res.accept, true);
+  // The client blocks on the 0x421 CommandMission_OK echo; it must come first, unicast to the sender.
+  assert.equal(res.notifies[0].target, 'self');
+  assert.equal(decode(res.notifies[0].inner).code, COMMAND_MISSION_CODE);
   const codes = res.notifies.map((n) => decode(n.inner).code);
   assert.ok(codes.includes(NOTIFY_MISSION_RESULT_CODE));
   assert.ok(codes.includes(NOTIFY_FINISH_OCCUPATION_CODE));

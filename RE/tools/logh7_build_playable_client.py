@@ -20,46 +20,60 @@ running file state before it is written):
   4. strat-camera-focus — tools/client_patches/strat-camera-focus.json (center camera on the owned strategic fleet)
   5. hud-msgdat-groupfix — tools/client_patches/hud-msgdat-groupfix.json
                  (right/HUD detail labels: constmsg group 0x68 -> 0x63)
-  6. hud-character-status-msgdatfix — tools/client_patches/hud-character-status-msgdatfix.json
-                 (character HUD status/title: constmsg group 0x67 login errors -> 0x60 character UI labels)
-  7. mission-msgdat-subidfix — tools/client_patches/mission-msgdat-subidfix.json
-                 (left mission selector: constmsg group 0x6a subId 0x09..0x15 -> source-backed mission labels)
-  8. sector-label-hardcoded-ko — tools/client_patches/sector-label-hardcoded-ko.json
-                 (strategic system labels: hardcoded CP932 星系 strings -> CP949 Korean)
-  9. tactical-grid-msgdat-boundaryfix — tools/client_patches/tactical-grid-msgdat-boundaryfix.json
+6. hud-character-status-msgdatfix — tools/client_patches/hud-character-status-msgdatfix.json
+(character HUD status/title: constmsg group 0x67 login errors -> 0x60 character UI labels)
+7. command-panel-msgdat-groupfix — tools/client_patches/command-panel-msgdat-groupfix.json
+(command/authority panel labels: constmsg group 0x5f status strings -> 0x60 panel labels for subIds 4..0x12)
+8. mission-msgdat-subidfix — tools/client_patches/mission-msgdat-subidfix.json
+(left mission selector: constmsg group 0x6a subId 0x09..0x15 -> source-backed mission labels)
+9. sector-label-hardcoded-ko — tools/client_patches/sector-label-hardcoded-ko.json
+(strategic system labels: hardcoded CP932 星系 strings -> CP949 Korean)
+10. session-select-hardcoded-ko — tools/client_patches/session-select-hardcoded-ko.json
+(lobby session picker header/card labels: hardcoded UTF-16LE .data strings -> Korean)
+11. tactical-grid-msgdat-boundaryfix — tools/client_patches/tactical-grid-msgdat-boundaryfix.json
                  (tactical/grid panel: constmsg group 0x16 boundary-crossing lookups -> real groups)
- 10. galaxy-screen-starname-msgdat-boundaryfix — tools/client_patches/galaxy-screen-starname-msgdat-boundaryfix.json
+ 11. galaxy-screen-starname-msgdat-boundaryfix — tools/client_patches/galaxy-screen-starname-msgdat-boundaryfix.json
                  (in-world screen: constmsg group 0x16 boundary-crossing star-name lookup -> group 0x18)
- 11. galaxy-screen-grid-format-msgdat-boundaryfix — tools/client_patches/galaxy-screen-grid-format-msgdat-boundaryfix.json
+ 12. galaxy-screen-grid-format-msgdat-boundaryfix — tools/client_patches/galaxy-screen-grid-format-msgdat-boundaryfix.json
                  (in-world screen: constmsg group 0x16 boundary-crossing grid label lookup -> group 0x17)
- 12. hud-hardcoded-stat-labels-ko — tools/client_patches/hud-hardcoded-stat-labels-ko.json
+ 13. hud-hardcoded-stat-labels-ko — tools/client_patches/hud-hardcoded-stat-labels-ko.json
                  (character HUD stat labels: hardcoded CP932 航続 -> CP949 Korean)
- 13. font-face — tools/client_patches/font-face.json (global GDI face -> Pretendard)
- 14. font-cleartype — tools/client_patches/font-cleartype.json (GDI text quality 4 -> 5)
- 15. login-title-ko — tools/client_patches/login-title-ko.json
+ 14. font-face — tools/client_patches/font-face.json (global GDI face -> Pretendard)
+ 15. font-atlas-face — tools/client_patches/font-atlas-face.json (D3D glyph atlas face -> Pretendard)
+ 16. font-cleartype — tools/client_patches/font-cleartype.json (GDI text quality 4 -> 5)
+ 17. font-atlas-antialias — tools/client_patches/font-atlas-antialias.json
+                 (D3D glyph atlas quality 5 -> 4 to avoid hollow/outline glyphs)
+18. font-readable-size — tools/client_patches/font-readable-size.json (12px-ish -> 18px-ish UI text)
+ 19. login-title-ko — tools/client_patches/login-title-ko.json
                  (load the official Korean title asset; preserves the original logo artwork)
- 16. login-native-layout — tools/client_patches/login-native-layout.json
+ 20. login-native-layout — tools/client_patches/login-native-layout.json
                  (native-resolution login/initial scene canvas plus object layout; no letterbox)
- 17. login-commandline-bootstrap — tools/client_patches/login-commandline-bootstrap.json
+ 21. login-commandline-bootstrap — tools/client_patches/login-commandline-bootstrap.json
                  (use the RE-confirmed static 127.0.0.1:47900/ginei00/dummy client bootstrap)
- 18. login-blank-password-local-ok — tools/client_patches/login-blank-password-local-ok.json
+ 22. login-blank-password-local-ok — tools/client_patches/login-blank-password-local-ok.json
                  (temporary native-login hitbox regression guard: server auth remains authoritative)
- 19. lobby-res — tools/client_patches/lobby-res.json
+ 23. lobby-res — tools/client_patches/lobby-res.json
                  (retarget the lobby canvas to the checked-in 1920x1080 native build)
- 20. lobby-native-layout — tools/client_patches/lobby-native-layout.json
-                 (move lobby scene anchors for that native canvas; no letterbox)
- 21. brightbtn — tools/client_patches/brightbtn.json (optional; force bright/active button
+ 24. lobby-native-layout-v2 — tools/client_patches/lobby-native-layout-v2.json
+                 (translate the lobby anchor block to the 1920x1080 visual center)
+ 25. charsel-recenter — tools/client_patches/charsel-recenter.json
+                 (move the lobby-derived character/session/create content blocks inside the native panel)
+ 26. charsel-content-inset — tools/client_patches/charsel-content-inset.json
+                 (fine-tune 8-step creation form content so it sits inside the right panel)
+ 27. charsel-content-y-inset — tools/client_patches/charsel-content-y-inset.json
+                 (align the remaining create-step Y anchors with the native right panel)
+ 28. brightbtn — tools/client_patches/brightbtn.json (optional; force bright/active button
                  sprite state — added once the RE for the dim-button regression lands)
 The rejected `lobby-fullscreen-display` path is not part of the default stack: live use showed
 that keeping the 1024x768 UI basis while requesting a 1920x1080 display stretches the lobby.
 
 Opt-in 그래픽/리마스터 배선 (T24, 모두 기본 OFF — DEFAULT_STACK 및 기본 빌드 SHA 불변):
   --remaster-res    : 커스텀 --patches 목록이 누락했을 때만 네이티브 로비 리마스터 스택
-                      (lobby-res + lobby-native-layout)을 보충 append. 기본 스택은 이미 포함하므로
+                      (lobby-res + lobby-native-layout-v2)을 보충 append. 기본 스택은 이미 포함하므로
                       기본 빌드에는 영향 없음(보충용 호환 플래그).
   --widescreen-ui   : Path B 진단 패치(widescreen-ui.json) 1개를 append. FUN_004ea460의 2D UI 스케일러를
                       X·Y 동일 비율(uniform-scale, 비왜곡 island)로 강제한다. lobby-res와 사이트가 겹치지 않아
-                      함께 쓸 수 있으나, 네이티브 좌표 리마스터(lobby-native-layout)와는 접근이 다른 A/B 진단용.
+                      함께 쓸 수 있으나, 네이티브 좌표 리마스터(lobby-native-layout-v2)와는 접근이 다른 A/B 진단용.
   --hd-textures     : EXE 패치 아님. 최대 LOD(Hi) 텍스처/dgVoodoo AA·이방성·샤픈은 무패치 경로이므로
                       `python tools/logh7_graphics_config.py --remaster`로 적용하라는 안내만 출력하고
                       빌드 산출물은 바꾸지 않는다(SHA 불변 보장).
@@ -85,6 +99,7 @@ if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from tools.logh7_codepage_patch import apply_byte_patches
+from tools.logh7_confirm_dialog_inset_patch import apply_confirm_dialog_inset_patch
 from tools.logh7_client_exe import (
     CANONICAL_KOREAN_EXE,
     CANONICAL_PLAYABLE_EXE,
@@ -124,8 +139,10 @@ DEFAULT_STACK = [
     "strat-camera-focus",
     "hud-msgdat-groupfix",
     "hud-character-status-msgdatfix",
+    "command-panel-msgdat-groupfix",
     "mission-msgdat-subidfix",
     "sector-label-hardcoded-ko",
+    "session-select-hardcoded-ko",
     "tactical-grid-msgdat-boundaryfix",
     "galaxy-screen-starname-msgdat-boundaryfix",
     "galaxy-screen-grid-format-msgdat-boundaryfix",
@@ -136,7 +153,10 @@ DEFAULT_STACK = [
     # 패치 스펙(tools/client_patches/chat-target-labels-ko.json)은 재인코딩용으로 보존하되,
     # detour/cave를 안전하게 다시 검증하기 전까지 기본 스택에서 제외한다.
     "font-face",
+    "font-atlas-face",
     "font-cleartype",
+    "font-atlas-antialias",
+    "font-readable-size",
     "login-title-ko",
     # login-native-layout 제외(2026-06-22 사용자 결정 "타이틀/로그인은 640x480으로 해도 돼"):
     # 이 패치는 로그인 씬을 640x480 -> 1920x1080으로 옮기는 부분 HD-리마스터인데,
@@ -156,10 +176,15 @@ DEFAULT_STACK = [
     # 스펙(tools/client_patches/login-commandline-bootstrap.json)은 그 변종 빌드용으로 보존만 한다.
     "login-blank-password-local-ok",
     "lobby-res",
-    "lobby-native-layout",
+    "lobby-native-layout-v2",
+    "charsel-recenter",
+    "charsel-content-inset",
+    "charsel-content-y-inset",
+    "charsel-confirm-dialog-inset",
 ]
+APPENDED_SECTION_PATCHES = {"charsel-confirm-dialog-inset"}
 
-REMASTER_RES_STACK = ["lobby-res", "lobby-native-layout"]
+REMASTER_RES_STACK = ["lobby-res", "lobby-native-layout-v2"]
 # Path B 진단 스택(opt-in 전용). widescreen-ui는 FUN_004ea460 2D 스케일러를 X·Y 동일비율로 강제하는
 # same-length 바이트패치 1개라 lobby-res(0x51a7xx push 사이트)와 겹치지 않는다. 기본 스택엔 절대 넣지 않는다.
 WIDESCREEN_UI_STACK = ["widescreen-ui"]
@@ -186,7 +211,11 @@ def build(base: Path, out: Path, patch_names: list[str]) -> dict:
     tmp.write_bytes(bytes(work))
 
     applied_all: list[dict] = []
+    delayed_section_patches: list[str] = []
     for name in names:
+        if name in APPENDED_SECTION_PATCHES:
+            delayed_section_patches.append(name)
+            continue
         spec_path = PATCH_DIR / f"{name}.json"
         if not spec_path.exists():
             raise SystemExit(f"patch spec not found: {spec_path}")
@@ -200,6 +229,20 @@ def build(base: Path, out: Path, patch_names: list[str]) -> dict:
         rsrc_exit = patch_resources_to_korean(tmp, tmp, RESOURCE_LOCALIZATION_MAP)
     if rsrc_exit != 0:
         raise SystemExit("failed to localize Win32 .rsrc strings")
+
+    for name in delayed_section_patches:
+        if name == "charsel-confirm-dialog-inset":
+            section_patch = apply_confirm_dialog_inset_patch(tmp, tmp)
+            applied_all.append(
+                {
+                    "name": name,
+                    "desc": "Final character-registration confirmation dialog inset.",
+                    "verified": "Live-verified on lobby-confirm-returnsite-bf15-20260629.",
+                    "sectionPatch": section_patch.to_json(),
+                }
+            )
+        else:  # pragma: no cover - kept as a guard for future section patch entries.
+            raise SystemExit(f"unknown appended-section patch: {name}")
 
     tmp.replace(out)
     manifest = {
@@ -300,12 +343,16 @@ def main() -> int:
             # 읽힐 수 있게 한다. (바이트 단위 병합, 줄바꿈은 \r\n)
             orig_bytes = (INSTALLED_EXE.parent / "String.txt").read_bytes()
             overlay_bytes = CANONICAL_KOREAN_STRING.read_bytes()
-            orig_lines = orig_bytes.split(b"\r\n")
+            orig_lines = orig_bytes.split(b"\r\n") if orig_bytes else []
             overlay_lines = overlay_bytes.split(b"\r\n")
-            merged_lines = list(orig_lines)
-            for i, line in enumerate(overlay_lines):
-                if i < len(merged_lines):
+            if orig_lines and len(orig_lines) >= len(overlay_lines):
+                merged_lines = list(orig_lines)
+                for i, line in enumerate(overlay_lines):
                     merged_lines[i] = line
+            else:
+                # If the installed String.txt was already empty/truncated, using it as the
+                # merge base would silently drop nearly the whole Korean overlay.
+                merged_lines = list(overlay_lines)
             # 핵심 누락 메시지 보충 (1-based 라인 번호)
             for line_no, text in STRING_CRITICAL_OVERRIDES.items():
                 idx = line_no - 1

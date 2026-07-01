@@ -52,6 +52,7 @@ import { createLogisticsState, processLogistics, LOGISTICS_COMMAND_CODES } from 
 import { createSocialState, processSocial, isSocialCommandCode } from './logh7-social.mjs';
 import { createBattleOpsState, processBattleOps } from './logh7-battle-ops.mjs';
 import { canCommand } from './logh7-morale.mjs';
+import { createCommandTargetPool, ensureCommandExecutionTargets } from './logh7-command-targets.mjs';
 import { createAccountState, processAccount, isAccountCommandCode } from './logh7-account.mjs';
 import { openBattleField, concludeBattle, resolveBattleSurrenders } from './logh7-battle-engine.mjs';
 
@@ -104,7 +105,13 @@ function routeInternalAffairs({ state, player, connectionId, innerCode, inner })
     });
   }
   if (innerCode >= STRATEGY_CODE_LO && innerCode <= STRATEGY_CODE_HI) {
-    state._strategy ??= createStrategyState();
+    state._commandTargets ??= createCommandTargetPool();
+    ensureCommandExecutionTargets(state._commandTargets, {
+      characterId: player.charId,
+      unitId: player.charId,
+      power: player.powerId ?? 0,
+    }, 'strategy-route');
+    state._strategy ??= createStrategyState({ targetPool: state._commandTargets });
     return processStrategy({ state: state._strategy, connectionId, innerCode, inner, power: player.powerId ?? 0 });
   }
   if (LOGISTICS_CODE_SET.has(innerCode)) {
@@ -238,32 +245,84 @@ export function parseInboundMoveShip(inner) {
  * builder is unsymbolized; the consumer FUN_004bea90 is an empty stub). Returns null if too short.
  * Evidence: docs/logh7-strategic-input-wire.md §2.
  */
+// Live 2026-06-30 SendWarp captures can be shorter and diagnostic-only; do
+// not read their coordinate/object bytes as authoritative fleet ids.
+function u16BeWords(body) {
+  const words = [];
+  const evenLength = body.length - (body.length % 2);
+  for (let offset = 0; offset < evenLength; offset += 2) {
+    const value = body.readUInt16BE(offset);
+    if (value !== 0) {
+      words.push({ offset, value, valueHex: `0x${value.toString(16).padStart(4, '0')}` });
+    }
+  }
+  return words;
+}
+
 export function parseInboundMoveGrid(inner) {
   const body = inner.subarray(2);
-  if (body.length < 0x14) {
-    return null;
+  if (body.length >= 0x24) {
+    return {
+      format: 'legacy-grid-dwords',
+      unitId: body.readUInt32LE(0x0c),
+      destCell: body.readUInt32LE(0x10),
+      bodyLength: body.length,
+    };
   }
-  return { unitId: body.readUInt32LE(0x0c), destCell: body.readUInt32LE(0x10) };
+  if (body.length === 0x1f) {
+    const screenCoord0 = { x: body.readUInt16BE(0x00), y: body.readUInt16BE(0x02) };
+    const screenCoord1 = { x: body.readUInt16BE(0x04), y: body.readUInt16BE(0x06) };
+    const commandCoord = { x: body.readUInt16BE(0x0e), y: body.readUInt16BE(0x10) };
+    const routeCellCandidate = body.readUInt16BE(0x16);
+    const routeTailWord = body.readUInt16BE(0x18);
+    return {
+      format: 'sendwarp-live-v1',
+      unitId: null,
+      destCell: null,
+      unresolved: true,
+      bodyLength: body.length,
+      fields: {
+        coord0: screenCoord0,
+        coord1: screenCoord1,
+        actorOrSequence: body.readUInt32BE(0x08),
+        commandCoord,
+        routeCellCandidate,
+        routeCellCandidateHex: `0x${routeCellCandidate.toString(16).padStart(4, '0')}`,
+        routeTailWord,
+        routeTailWordHex: `0x${routeTailWord.toString(16).padStart(4, '0')}`,
+        terminalByte: body.readUInt8(0x1e),
+        nonzeroWordsBe: u16BeWords(body),
+        rawHex: body.toString('hex'),
+        evidence:
+          'P3 diagnostic: live 2026-06-30 SendWarp path; candidates are exposed for comparison, not promoted to authoritative fleet/dest ids',
+      },
+    };
+  }
+  return null;
 }
 
 /**
  * Parse an inbound CommandGridChat/CommandSpotChat inner (client SEND form, G193): the raw inner is
- * [u16 BE code][u32 0][u32 time][u8 castType][u8 msgLen][wide chars]. Returns the decoded message.
+ * [u16 BE code][u32 0][u32 LE time][u8 castType][u8 msgLen][LE wide chars]. Returns the decoded message.
+ * Body fields are little-endian: the client (FUN_004be6f0 raw-LE dword memcpy) serializes time and the
+ * 16-bit chars LE, and the server's own receive-form builder buildCommandGridChatInner writes LE — the
+ * SpotChat sibling (logh7-social.mjs parseInboundSpotChat) also reads LE. A prior BE read here byte-swapped
+ * every wide char, so Korean (cp949-typed → UTF-16LE wire) chat came through as mojibake (audit 2026-06-28).
  */
 export function parseInboundChat(inner) {
-  // inner[0..1] = code (BE), body starts at +2.
+  // inner[0..1] = code (BE transport header), body starts at +2; body multibyte fields are LE.
   const body = inner.subarray(2);
   if (body.length < 10) {
     return null;
   }
-  const time = body.readUInt32BE(4);
+  const time = body.readUInt32LE(4);
   const castType = body.readUInt8(8);
   const msgLen = body.readUInt8(9);
   const available = Math.max(0, Math.floor((body.length - 10) / 2));
   const count = Math.min(msgLen, available, MAX_CHAT_TEXT);
   let text = '';
   for (let i = 0; i < count; i += 1) {
-    text += String.fromCharCode(body.readUInt16BE(10 + i * 2));
+    text += String.fromCharCode(body.readUInt16LE(10 + i * 2));
   }
   return { time, castType, msgLen, text };
 }
@@ -342,12 +401,46 @@ function recommendSurrender(state, recommenderShipId, survivingTargets) {
   return accepted;
 }
 
+function devGridMoveFallbackCell() {
+  const raw = process.env.LOGH_DEV_GRID_MOVE_FALLBACK_CELL;
+  if (raw == null || raw === '') return null;
+  const cell = Number(raw);
+  if (!Number.isInteger(cell) || cell < 0 || cell >= 5000) return null;
+  return cell;
+}
+
+function devGridMoveRouteCellCandidate(move) {
+  const cell = Number(move?.fields?.routeCellCandidate);
+  if (!Number.isInteger(cell) || cell < 0 || cell >= 5000) return null;
+  return cell;
+}
+
+function ownerByteForPlayer(player = {}) {
+  const power = Number(player.powerId);
+  if (Number.isInteger(power) && power > 0) return power & 0xff;
+  return 0;
+}
+
+function selectDevFallbackFleet(state, player) {
+  if (typeof state.listFleets !== 'function') return null;
+  const fleets = state.listFleets();
+  if (!fleets.length) return null;
+  const ownerByte = ownerByteForPlayer(player);
+  return (
+    fleets.find((fleet) => fleet.id === player.charId)
+    ?? fleets.find((fleet) => fleet.commander === player.charId)
+    ?? fleets.find((fleet) => fleet.owner === player.connectionId)
+    ?? (ownerByte > 0 ? fleets.find((fleet) => fleet.owner === ownerByte) : null)
+    ?? fleets[0]
+  );
+}
+
 /**
  * Process an inbound in-world command from `connectionId`.
  * @param {{ state: ReturnType<import('./logh7-world-state.mjs').createWorldState>, connectionId: number, innerCode: number, inner: Buffer }} args
  * @returns {{ accept: boolean, reject?: string, notifies: { inner: Buffer, target: 'self'|'others'|'all' }[] }}
  */
-export function processCommand({ state, connectionId, innerCode, inner }) {
+function processCommandCore({ state, connectionId, innerCode, inner }) {
   const player = state.getPlayer(connectionId);
   if (!player) {
     return { accept: false, reject: 'not-in-world', notifies: [] };
@@ -377,9 +470,17 @@ export function processCommand({ state, connectionId, innerCode, inner }) {
       if (!fleet) {
         return { accept: false, reject: 'no-fleet', notifies: [], debug };
       }
-      state.moveFleet(fleet.id, destCell);
-      const notify = buildNotifyMovedGridInner({ units: [{ unitId: fleet.id, cell: destCell }] });
-      return { accept: true, units: [fleet.id], notifies: [{ inner: notify, target: 'all' }], debug };
+state.moveFleet(fleet.id, destCell);
+state.recordCommand?.({
+connectionId,
+innerCode,
+accept: true,
+units: [fleet.id],
+effect: 'grid-chat-fleet-move',
+debug: { destCell, source: 'chat-fallback' },
+});
+const notify = buildNotifyMovedGridInner({ units: [{ unitId: fleet.id, cell: destCell }] });
+return { accept: true, units: [fleet.id], notifies: [{ inner: notify, target: 'all' }], debug };
     }
 
     state.appendChat({
@@ -449,25 +550,79 @@ export function processCommand({ state, connectionId, innerCode, inner }) {
     // Authoritative path (docs/logh7-strategic-input-wire.md): parse [hdr 3 dwords][u32 unitId @0x0c]
     // [u32 destCell @0x10], enforce ownership, then send the two packets the real SelectGrid FSM waits
     // on: a byte-faithful 0x0b01 ACK to the mover (event 0x17), and the canonical NotifyMovedGrid
-    // 0x0b07 to ALL in-world clients (event 0x16 + visible relocation). FUN_004bea90 itself is an
+    // 0x0b07 to ALL in-world clients (event 0x16; visible relocation is still live-RE gated).
+    // FUN_004bea90 itself is an
     // empty stub, but the ACK still releases the dialog state machine.
     const move = parseInboundMoveGrid(inner);
     if (!move) {
       return { accept: false, reject: 'invalid-grid-move', notifies: [] };
     }
-    const ship = state.getShip(move.unitId);
+    const ship = Number.isInteger(move.unitId) ? state.getShip(move.unitId) : null;
     if (ship && ship.owner !== 0 && ship.owner !== connectionId) {
       return { accept: false, reject: 'not-owner', notifies: [] };
     }
+    let unitId = move.unitId;
+    let destCell = move.destCell;
+    let fleet = Number.isInteger(unitId) && typeof state.getFleet === 'function' ? state.getFleet(unitId) : null;
+    let fallback = null;
+    const configuredFallbackCell = fleet ? null : devGridMoveFallbackCell();
+    const routeCandidateCell = configuredFallbackCell !== null ? devGridMoveRouteCellCandidate(move) : null;
+    const fallbackCell = routeCandidateCell ?? configuredFallbackCell;
+    if (!fleet && fallbackCell !== null) {
+      const fallbackFleet = selectDevFallbackFleet(state, player);
+      if (fallbackFleet) {
+        fallback = {
+          source: routeCandidateCell !== null
+            ? 'LOGH_DEV_GRID_MOVE_FALLBACK_CELL:routeCellCandidate'
+            : 'LOGH_DEV_GRID_MOVE_FALLBACK_CELL',
+          configuredFallbackCell,
+          originalUnitId: move.unitId,
+          originalDestCell: move.destCell,
+          ...(move.format ? { parsed: move } : {}),
+        };
+        fleet = fallbackFleet;
+        unitId = fallbackFleet.id;
+        destCell = fallbackCell;
+      }
+    }
+    if (!fleet && move.unresolved) {
+      return {
+        accept: false,
+        reject: 'unresolved-grid-move-target',
+        notifies: [],
+        debug: { parsed: move },
+      };
+    }
+    const debug = {
+      unitId,
+      unitIdHex: `0x${(unitId >>> 0).toString(16).padStart(8, '0')}`,
+      destCell,
+      destCellHex: `0x${(destCell >>> 0).toString(16).padStart(8, '0')}`,
+      hadFleet: Boolean(fleet),
+      ...(move.format ? { parsed: move } : {}),
+      ...(fallback ? { fallback } : {}),
+    };
+    if (fleet && typeof state.moveFleet === 'function') {
+      state.moveFleet(unitId, destCell);
+    }
+    state.recordCommand?.({
+      connectionId,
+      innerCode,
+      accept: true,
+      units: [unitId],
+      effect: 'fleet-grid-move',
+      debug,
+    });
     const ack = wrapRawInnerAsMessage32(inner);
-    const notify = buildNotifyMovedGridInner({ units: [{ unitId: move.unitId, cell: move.destCell }] });
+    const notify = buildNotifyMovedGridInner({ units: [{ unitId, cell: destCell }] });
     return {
       accept: true,
-      units: [move.unitId],
+      units: [unitId],
       notifies: [
         { inner: ack, target: 'self' },
         { inner: notify, target: 'all' },
       ],
+      debug,
     };
   }
 
@@ -682,5 +837,54 @@ export function processCommand({ state, connectionId, innerCode, inner }) {
     return internalAffairs;
   }
 
-  return { accept: false, reject: 'unknown-command', notifies: [] };
+return { accept: false, reject: 'unknown-command', notifies: [] };
+}
+
+function unitsFromDecision(decision = {}) {
+if (Array.isArray(decision.units)) return decision.units;
+if (Array.isArray(decision.hits)) return decision.hits.flatMap((hit) => [hit.attackerId, hit.targetId]).filter((id) => Number.isInteger(id));
+if (Array.isArray(decision.results)) return decision.results.flatMap((result) => [result.attackerId, result.defenderId]).filter((id) => Number.isInteger(id));
+return [];
+}
+
+function effectForCommand(innerCode, decision = {}) {
+if (!decision.accept) return null;
+if (innerCode === COMMAND_GRID_CHAT_CODE) return 'grid-chat';
+if (innerCode === COMMAND_MOVE_SHIP_CODE || innerCode === COMMAND_PARALLEL_MOVE_SHIP_CODE) return 'ship-move';
+if (innerCode === COMMAND_MOVE_GRID_CODE) return 'fleet-grid-move';
+if (innerCode === COMMAND_ATTACK_SHIP_CODE || innerCode === COMMAND_SHOOT_SHIP_CODE) return 'ship-attack';
+if (innerCode === COMMAND_CHANGE_MODE_CODE) return 'battle-mode-change';
+if (innerCode === COMMAND_WARP_SHIP_CODE) return 'ship-warp';
+if (innerCode === COMMAND_FIGHT_CODE) return 'ship-fight';
+if (innerCode === COMMAND_SORTIE_TROOPS_CODE) return 'troop-sortie';
+if (innerCode >= STRATEGY_CODE_LO && innerCode <= STRATEGY_CODE_HI) return 'strategy-command';
+if (LOGISTICS_CODE_SET.has(innerCode)) return 'logistics-command';
+if (BATTLE_OPS_CODE_SET.has(innerCode)) return 'battle-ops-command';
+if (innerCode >= PERSONNEL_CODE_LO && innerCode <= PERSONNEL_CODE_HI) return 'personnel-command';
+if (isSocialCommandCode(innerCode)) return 'social-command';
+if (isAccountCommandCode(innerCode)) return 'account-command';
+return 'command';
+}
+
+function recordCommandDecision({ state, connectionId, innerCode, decision }) {
+if (!state || typeof state.recordCommand !== 'function' || !decision) return;
+state.recordCommand({
+connectionId,
+innerCode,
+accept: decision.accept,
+reject: decision.reject ?? null,
+units: unitsFromDecision(decision),
+effect: effectForCommand(innerCode, decision),
+...(decision.debug !== undefined ? { debug: decision.debug } : {}),
+});
+}
+
+export function processCommand(args) {
+const beforeCount = typeof args?.state?.commandLogCount === 'function' ? args.state.commandLogCount() : null;
+const decision = processCommandCore(args);
+const afterCount = typeof args?.state?.commandLogCount === 'function' ? args.state.commandLogCount() : null;
+if (beforeCount != null && afterCount === beforeCount) {
+recordCommandDecision({ state: args.state, connectionId: args.connectionId, innerCode: args.innerCode, decision });
+}
+return decision;
 }

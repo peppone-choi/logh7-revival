@@ -20,6 +20,8 @@ class Logh7SelectGridSnapshotTests(unittest.TestCase):
         self.assertIn("0x3416d8", script)
         self.assertIn("0x36a5dc", script)
         self.assertIn("0x41a364", script)
+        self.assertIn("payloadCount270U8", script)
+        self.assertIn("currentPayloadCount270U8", script)
         self.assertIn("payloadWord274", script)
         self.assertIn("hudModeF4", script)
         self.assertIn("hudState14e0", script)

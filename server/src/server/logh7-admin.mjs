@@ -159,6 +159,7 @@ export function adminList(dbPath) {
     return {
       account: record?.account ?? '',
       createdAt: record?.createdAt ?? null,
+      selectedSessionId: record?.selectedSessionId ?? 1,
       characterCount: characters.length,
       characters,
     };

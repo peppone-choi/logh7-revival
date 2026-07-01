@@ -430,6 +430,33 @@ export function createAccountState() {
       const a = accounts.get(connectionId);
       return a ? [...a.available] : [];
     },
+    toSnapshot() {
+      return {
+        accounts: [...accounts.values()].map((account) => ({
+          ...account,
+          owned: [...account.owned],
+          available: [...account.available],
+        })),
+      };
+    },
+    restore(snapshot = {}) {
+      accounts.clear();
+      for (const row of snapshot.accounts ?? []) {
+        const connectionId = Number(row.connectionId) || 0;
+        accounts.set(connectionId, {
+          ...row,
+          connectionId,
+          accountId: Number(row.accountId) || 0,
+          owned: new Set(Array.isArray(row.owned) ? row.owned.map((id) => Number(id) >>> 0) : []),
+          available: new Set(Array.isArray(row.available) ? row.available.map((id) => Number(id) >>> 0) : []),
+          extensionSlots: Number(row.extensionSlots) || 0,
+          maxExtensionSlots: Number(row.maxExtensionSlots) || 0,
+          chargeState: Number(row.chargeState) || 0,
+          activeCharacterId: Number(row.activeCharacterId) || 0,
+        });
+      }
+      return this;
+    },
   };
 }
 

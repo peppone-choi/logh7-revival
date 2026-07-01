@@ -44,7 +44,7 @@
  *         J+0x0c  spot[k] base S = J + 0x0c + k*0xc  (stride 0xc, serializer label `spot[%d]={`) [P0]
  *           S+0x00  u16  field00  (parser L154/L114, NAMELESS) [P0 offset/type; PROVISIONAL name]
  *           S+0x04  u32  field04  (parser L165/L124, NAMELESS) [P0 offset/type; PROVISIONAL name]
- *           S+0x08  u16  field08  (parser L174,      NAMELESS) [P0 offset/type; PROVISIONAL name]
+ *           S+0x08  u16  background_id  (render passes spot+0x08 to bg%03d.jpg) [P0 offset/type/name]
  *   Size check: 36*0xfc=0x2370 fills B+0x08..B+0x2378 (element stride 0x2378, 0 pad); 20*0xc=0xf0 fills
  *   J+0x0c..J+0xfc (institution stride 0xfc, 0 pad); 4 + 4*0x2378 = 0x8DE4 = dispatcher copy (0 pad).
  *
@@ -56,7 +56,7 @@
  *     element id ↔ `base=`, institution[] ↔ `institution[%d]={`, spot[] ↔ `spot[%d]={`. The element-id
  *     NAME is MEDIUM (the labeled serializer is server-side: 0x761030 has NO referencing function in the
  *     export, exactly like the 0x031f base scalars). The institution/spot SCALAR fields (J+0x00/J+0x04,
- *     S+0x00/S+0x04/S+0x08) have NO resolvable labels → PROVISIONAL `fieldNN` names. Runtime spot
+ *     S+0x00/S+0x04) have no labels; S+0x08 is the spot background id. Runtime spot
  *     resolution is tested separately through FUN_004c9170 and PLAYER_INFO +0x40/+0x44; do not infer
  *     those semantics from labels alone.
  *   - Field VALUES: **P3** — never fabricated. Default 0; only what the caller supplies is written.
@@ -125,7 +125,7 @@ const clampU32 = (v) => (Math.max(0, Math.trunc(v ?? 0)) >>> 0);
  * @typedef {object} SpotRecord
  * @property {number} [field00]  u16 @spot+0x00 [PROVISIONAL name; offset/type HIGH]
  * @property {number} [field04]  u32 @spot+0x04 [PROVISIONAL name; offset/type HIGH]
- * @property {number} [field08]  u16 @spot+0x08 [PROVISIONAL name; offset/type HIGH]
+ * @property {number} [field08]  u16 @spot+0x08 background image id for data/image/spot/bg%03d.jpg [P0]
  */
 
 /**

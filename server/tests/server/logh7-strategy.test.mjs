@@ -341,6 +341,9 @@ test('processStrategy WithdrawalPlan (0x901): dequeues a queued plan + broadcast
   const res = processStrategy({ state, innerCode: COMMAND_WITHDRAWAL_PLAN_CODE, inner: rawInner(COMMAND_WITHDRAWAL_PLAN_CODE, body), power: 4 });
   assert.equal(res.accept, true);
   assert.equal(state.planCount(), 0);
+  assert.equal(state.operationEvents.at(-1).type, 'withdraw');
+  assert.equal(state.operationEvents.at(-1).planId, 88);
+  assert.equal(state.operationEvents.at(-1).target, 1);
   const n = decodeNotify(res.notifies[0].inner);
   assert.equal(n.payload.readUInt32LE(0), 88);
   assert.equal(n.payload.readUInt32LE(4), 1); // result = cancelled
@@ -363,6 +366,8 @@ test('processStrategy Announcement (0x902): accepts + broadcasts to all', () => 
   const res = processStrategy({ state, innerCode: COMMAND_ANNOUNCEMENT_CODE, inner: rawInner(COMMAND_ANNOUNCEMENT_CODE, body) });
   assert.equal(res.accept, true);
   assert.equal(res.notifies[0].target, 'all');
+  assert.equal(state.orders.at(-1).planId, 0x30);
+  assert.equal(state.orders.at(-1).message, 0x40);
   const n = decodeNotify(res.notifies[0].inner);
   assert.equal(n.code, NOTIFY_FINISH_STRATEGY_PLAN_CODE);
   assert.equal(n.payload.readUInt32LE(0), 0x30); // planId = target
@@ -721,4 +726,33 @@ test('MakePlan: operationCtx.commander 주입 → 발령 작전에 commander 부
     if (prev === undefined) delete process.env.LOGH_OPERATION_ISSUE;
     else process.env.LOGH_OPERATION_ISSUE = prev;
   }
+});
+test('createStrategyState toSnapshot/restore: plans, outfits, orders, operation events survive', () => {
+  const state = createStrategyState({ nextOutfitId: 0x3000, operationDurationDays: 12 });
+  state.enqueuePlan(4, { planId: 77, target: 11, owner: 9, units: [101, 102] });
+  state.storeOperationPlan(4, { id: 77, target: 11, status: 'issued', commander: 55 }, { issuedAt: 3 });
+  state.recordOrder(4, { target: 11, message: 99, connectionId: 9, gameDay: 3 });
+  state.markOperationWithdrawn(4, 77, { gameDay: 4, connectionId: 9, target: 11 });
+  state.createOutfit({
+    id: 0x3000,
+    base: 7,
+    power: 4,
+    camp: 1,
+    owner: 9,
+    ships: [{ kind: 1, unitNumber: 2, boatNumber: 3 }],
+    troops: [{ kind: 4, troopGrade: 5, unitNumber: 6 }],
+    practice: { warp: 8 },
+    achievement: 12,
+  });
+
+  const restored = createStrategyState();
+  restored.restore(state.toSnapshot());
+
+  assert.equal(restored.planCount(), 1);
+  assert.equal(restored.plans.get(4)[0].target, 11);
+  assert.equal(restored.operationPlans.get(4)[0].plan.status, 'withdrawn');
+  assert.equal(restored.orders[0].message, 99);
+  assert.equal(restored.operationEvents[0].type, 'withdraw');
+  assert.equal(restored.outfits.get(0x3000).ships[0].boatNumber, 3);
+  assert.equal(restored._operationDurationDays, 12);
 });

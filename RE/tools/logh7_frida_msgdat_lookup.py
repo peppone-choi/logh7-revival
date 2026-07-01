@@ -153,7 +153,7 @@ def run(args: argparse.Namespace) -> int:
         def on_message(message, _data) -> None:
             payload = message["payload"] if message.get("type") == "send" else {"tag": "ERROR", "raw": str(message)}
             events.append(payload)
-            print(json.dumps(payload, ensure_ascii=False))
+            print(json.dumps(payload, ensure_ascii=True))
 
         pid = frida.spawn([str(CLIENT_EXE)], cwd=str(CLIENT_DIR))
         session = frida.attach(pid)

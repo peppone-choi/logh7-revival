@@ -1,0 +1,656 @@
+{
+  "hypothesis": "candidate-count-10-implies-5 false positives if only five coordinate-pending systems exist",
+  "mostLikelyFalsePositiveOrCorrectionBlock": [
+    14,
+    15,
+    16,
+    17,
+    18
+  ],
+  "rationale": [
+    "#14-18 form a nearly vertical strip at col59-61 along the central boundary, matching the row band of existing Empire corridor systems rather than a scattered set of new systems.",
+    "Their nearest existing systems are exactly the nearby Empire/corridor systems: ?????, ??????, ???????, ??????, ?????????.",
+    "#17 is not passable in the current manual-derived mask, which makes it unsafe as a new marker without terrain adjustment.",
+    "The remaining set #9/#11/#12/#13/#19 gives exactly five blank/passable candidates after rejecting or reclassifying the central strip."
+  ],
+  "remainingFiveIfCentralStripIsCorrectionOrNoise": [
+    9,
+    11,
+    12,
+    13,
+    19
+  ],
+  "candidateCorrectionTable": [
+    {
+      "candidateNo": 9,
+      "candidateCell": [
+        17,
+        43
+      ],
+      "side": "alliance-left",
+      "passable": true,
+      "nearestDistance": 4.472,
+      "nearestExistingSystems": [
+        {
+          "distanceCells": 4.472,
+          "idx": 9,
+          "name": "ポリスーン",
+          "faction": "alliance",
+          "gameCell": [
+            19,
+            47
+          ]
+        },
+        {
+          "distanceCells": 8.602,
+          "idx": 10,
+          "name": "ライガール",
+          "faction": "alliance",
+          "gameCell": [
+            22,
+            36
+          ]
+        },
+        {
+          "distanceCells": 10.296,
+          "idx": 4,
+          "name": "リオ・ヴェルデ",
+          "faction": "alliance",
+          "gameCell": [
+            12,
+            34
+          ]
+        },
+        {
+          "distanceCells": 10.44,
+          "idx": 16,
+          "name": "トリプラ",
+          "faction": "alliance",
+          "gameCell": [
+            27,
+            40
+          ]
+        },
+        {
+          "distanceCells": 11.705,
+          "idx": 18,
+          "name": "シュパーラ",
+          "faction": "alliance",
+          "gameCell": [
+            28,
+            47
+          ]
+        }
+      ],
+      "possibleMeaning": "missing-system-cell or corrected-position-for-existing-system"
+    },
+    {
+      "candidateNo": 11,
+      "candidateCell": [
+        23,
+        39
+      ],
+      "side": "alliance-left",
+      "passable": true,
+      "nearestDistance": 3.162,
+      "nearestExistingSystems": [
+        {
+          "distanceCells": 3.162,
+          "idx": 10,
+          "name": "ライガール",
+          "faction": "alliance",
+          "gameCell": [
+            22,
+            36
+          ]
+        },
+        {
+          "distanceCells": 4.123,
+          "idx": 16,
+          "name": "トリプラ",
+          "faction": "alliance",
+          "gameCell": [
+            27,
+            40
+          ]
+        },
+        {
+          "distanceCells": 8.944,
+          "idx": 9,
+          "name": "ポリスーン",
+          "faction": "alliance",
+          "gameCell": [
+            19,
+            47
+          ]
+        },
+        {
+          "distanceCells": 9.434,
+          "idx": 17,
+          "name": "タッシリ",
+          "faction": "alliance",
+          "gameCell": [
+            28,
+            31
+          ]
+        },
+        {
+          "distanceCells": 9.434,
+          "idx": 18,
+          "name": "シュパーラ",
+          "faction": "alliance",
+          "gameCell": [
+            28,
+            47
+          ]
+        }
+      ],
+      "possibleMeaning": "missing-system-cell or corrected-position-for-existing-system"
+    },
+    {
+      "candidateNo": 12,
+      "candidateCell": [
+        31,
+        8
+      ],
+      "side": "alliance-left",
+      "passable": true,
+      "nearestDistance": 3.162,
+      "nearestExistingSystems": [
+        {
+          "distanceCells": 3.162,
+          "idx": 20,
+          "name": "シヴァ",
+          "faction": "alliance",
+          "gameCell": [
+            32,
+            5
+          ]
+        },
+        {
+          "distanceCells": 5.0,
+          "idx": 19,
+          "name": "ドーリア",
+          "faction": "alliance",
+          "gameCell": [
+            31,
+            13
+          ]
+        },
+        {
+          "distanceCells": 5.099,
+          "idx": 14,
+          "name": "ハダト",
+          "faction": "alliance",
+          "gameCell": [
+            26,
+            7
+          ]
+        },
+        {
+          "distanceCells": 5.099,
+          "idx": 25,
+          "name": "エルゴン",
+          "faction": "alliance",
+          "gameCell": [
+            36,
+            9
+          ]
+        },
+        {
+          "distanceCells": 7.81,
+          "idx": 13,
+          "name": "マローヴィア",
+          "faction": "alliance",
+          "gameCell": [
+            25,
+            3
+          ]
+        }
+      ],
+      "possibleMeaning": "missing-system-cell or corrected-position-for-existing-system"
+    },
+    {
+      "candidateNo": 13,
+      "candidateCell": [
+        37,
+        37
+      ],
+      "side": "alliance-left",
+      "passable": true,
+      "nearestDistance": 3.606,
+      "nearestExistingSystems": [
+        {
+          "distanceCells": 3.606,
+          "idx": 22,
+          "name": "ガンダルヴァ",
+          "faction": "alliance",
+          "gameCell": [
+            34,
+            35
+          ]
+        },
+        {
+          "distanceCells": 4.243,
+          "idx": 28,
+          "name": "シャンダルーア",
+          "faction": "alliance",
+          "gameCell": [
+            40,
+            34
+          ]
+        },
+        {
+          "distanceCells": 5.831,
+          "idx": 27,
+          "name": "バラトループ",
+          "faction": "alliance",
+          "gameCell": [
+            40,
+            42
+          ]
+        },
+        {
+          "distanceCells": 7.28,
+          "idx": 26,
+          "name": "マル・アデッタ",
+          "faction": "alliance",
+          "gameCell": [
+            39,
+            30
+          ]
+        },
+        {
+          "distanceCells": 8.246,
+          "idx": 35,
+          "name": "ポレヴィト",
+          "faction": "alliance",
+          "gameCell": [
+            45,
+            39
+          ]
+        }
+      ],
+      "possibleMeaning": "missing-system-cell or corrected-position-for-existing-system"
+    },
+    {
+      "candidateNo": 14,
+      "candidateCell": [
+        59,
+        6
+      ],
+      "side": "empire-right",
+      "passable": true,
+      "nearestDistance": 6.0,
+      "nearestExistingSystems": [
+        {
+          "distanceCells": 6.0,
+          "idx": 47,
+          "name": "ビルロスト",
+          "faction": "empire",
+          "gameCell": [
+            65,
+            6
+          ]
+        },
+        {
+          "distanceCells": 7.616,
+          "idx": 43,
+          "name": "アムリッツァ",
+          "faction": "empire",
+          "gameCell": [
+            62,
+            13
+          ]
+        },
+        {
+          "distanceCells": 8.602,
+          "idx": 41,
+          "name": "イゼルローン",
+          "faction": "empire",
+          "gameCell": [
+            54,
+            13
+          ]
+        },
+        {
+          "distanceCells": 10.198,
+          "idx": 51,
+          "name": "ボルソルン",
+          "faction": "empire",
+          "gameCell": [
+            69,
+            8
+          ]
+        },
+        {
+          "distanceCells": 12.207,
+          "idx": 52,
+          "name": "ドヴェルグ",
+          "faction": "empire",
+          "gameCell": [
+            69,
+            13
+          ]
+        }
+      ],
+      "possibleMeaning": "missing-system-cell or corrected-position-for-existing-system"
+    },
+    {
+      "candidateNo": 15,
+      "candidateCell": [
+        59,
+        16
+      ],
+      "side": "empire-right",
+      "passable": true,
+      "nearestDistance": 4.243,
+      "nearestExistingSystems": [
+        {
+          "distanceCells": 4.243,
+          "idx": 43,
+          "name": "アムリッツァ",
+          "faction": "empire",
+          "gameCell": [
+            62,
+            13
+          ]
+        },
+        {
+          "distanceCells": 5.831,
+          "idx": 41,
+          "name": "イゼルローン",
+          "faction": "empire",
+          "gameCell": [
+            54,
+            13
+          ]
+        },
+        {
+          "distanceCells": 5.831,
+          "idx": 46,
+          "name": "ヴァンステイド",
+          "faction": "empire",
+          "gameCell": [
+            64,
+            19
+          ]
+        },
+        {
+          "distanceCells": 10.44,
+          "idx": 52,
+          "name": "ドヴェルグ",
+          "faction": "empire",
+          "gameCell": [
+            69,
+            13
+          ]
+        },
+        {
+          "distanceCells": 11.662,
+          "idx": 47,
+          "name": "ビルロスト",
+          "faction": "empire",
+          "gameCell": [
+            65,
+            6
+          ]
+        }
+      ],
+      "possibleMeaning": "missing-system-cell or corrected-position-for-existing-system"
+    },
+    {
+      "candidateNo": 16,
+      "candidateCell": [
+        60,
+        20
+      ],
+      "side": "empire-right",
+      "passable": true,
+      "nearestDistance": 4.123,
+      "nearestExistingSystems": [
+        {
+          "distanceCells": 4.123,
+          "idx": 46,
+          "name": "ヴァンステイド",
+          "faction": "empire",
+          "gameCell": [
+            64,
+            19
+          ]
+        },
+        {
+          "distanceCells": 7.28,
+          "idx": 43,
+          "name": "アムリッツァ",
+          "faction": "empire",
+          "gameCell": [
+            62,
+            13
+          ]
+        },
+        {
+          "distanceCells": 8.602,
+          "idx": 49,
+          "name": "トラーバッハ",
+          "faction": "empire",
+          "gameCell": [
+            65,
+            27
+          ]
+        },
+        {
+          "distanceCells": 9.22,
+          "idx": 41,
+          "name": "イゼルローン",
+          "faction": "empire",
+          "gameCell": [
+            54,
+            13
+          ]
+        },
+        {
+          "distanceCells": 11.18,
+          "idx": 53,
+          "name": "アルタイル",
+          "faction": "empire",
+          "gameCell": [
+            71,
+            22
+          ]
+        }
+      ],
+      "possibleMeaning": "missing-system-cell or corrected-position-for-existing-system"
+    },
+    {
+      "candidateNo": 17,
+      "candidateCell": [
+        60,
+        25
+      ],
+      "side": "empire-right",
+      "passable": false,
+      "nearestDistance": 5.385,
+      "nearestExistingSystems": [
+        {
+          "distanceCells": 5.385,
+          "idx": 49,
+          "name": "トラーバッハ",
+          "faction": "empire",
+          "gameCell": [
+            65,
+            27
+          ]
+        },
+        {
+          "distanceCells": 7.211,
+          "idx": 46,
+          "name": "ヴァンステイド",
+          "faction": "empire",
+          "gameCell": [
+            64,
+            19
+          ]
+        },
+        {
+          "distanceCells": 10.296,
+          "idx": 48,
+          "name": "アルメントフベール",
+          "faction": "empire",
+          "gameCell": [
+            65,
+            34
+          ]
+        },
+        {
+          "distanceCells": 11.402,
+          "idx": 53,
+          "name": "アルタイル",
+          "faction": "empire",
+          "gameCell": [
+            71,
+            22
+          ]
+        },
+        {
+          "distanceCells": 12.166,
+          "idx": 43,
+          "name": "アムリッツァ",
+          "faction": "empire",
+          "gameCell": [
+            62,
+            13
+          ]
+        }
+      ],
+      "possibleMeaning": "missing-system-cell or corrected-position-for-existing-system"
+    },
+    {
+      "candidateNo": 18,
+      "candidateCell": [
+        61,
+        31
+      ],
+      "side": "empire-right",
+      "passable": true,
+      "nearestDistance": 5.0,
+      "nearestExistingSystems": [
+        {
+          "distanceCells": 5.0,
+          "idx": 48,
+          "name": "アルメントフベール",
+          "faction": "empire",
+          "gameCell": [
+            65,
+            34
+          ]
+        },
+        {
+          "distanceCells": 5.657,
+          "idx": 49,
+          "name": "トラーバッハ",
+          "faction": "empire",
+          "gameCell": [
+            65,
+            27
+          ]
+        },
+        {
+          "distanceCells": 8.544,
+          "idx": 42,
+          "name": "アイゼンヘルツ",
+          "faction": "empire",
+          "gameCell": [
+            58,
+            39
+          ]
+        },
+        {
+          "distanceCells": 10.44,
+          "idx": 45,
+          "name": "ヨーツンヘイム",
+          "faction": "empire",
+          "gameCell": [
+            64,
+            41
+          ]
+        },
+        {
+          "distanceCells": 10.77,
+          "idx": 54,
+          "name": "フレイア",
+          "faction": "empire",
+          "gameCell": [
+            71,
+            35
+          ]
+        }
+      ],
+      "possibleMeaning": "missing-system-cell or corrected-position-for-existing-system"
+    },
+    {
+      "candidateNo": 19,
+      "candidateCell": [
+        77,
+        19
+      ],
+      "side": "empire-right",
+      "passable": true,
+      "nearestDistance": 5.831,
+      "nearestExistingSystems": [
+        {
+          "distanceCells": 5.831,
+          "idx": 55,
+          "name": "ヤヴァンハール",
+          "faction": "empire",
+          "gameCell": [
+            72,
+            16
+          ]
+        },
+        {
+          "distanceCells": 6.708,
+          "idx": 53,
+          "name": "アルタイル",
+          "faction": "empire",
+          "gameCell": [
+            71,
+            22
+          ]
+        },
+        {
+          "distanceCells": 7.28,
+          "idx": 60,
+          "name": "リンダーホーフ",
+          "faction": "empire",
+          "gameCell": [
+            79,
+            12
+          ]
+        },
+        {
+          "distanceCells": 8.602,
+          "idx": 65,
+          "name": "ヴェルラ",
+          "faction": "empire",
+          "gameCell": [
+            84,
+            24
+          ]
+        },
+        {
+          "distanceCells": 10.0,
+          "idx": 52,
+          "name": "ドヴェルグ",
+          "faction": "empire",
+          "gameCell": [
+            69,
+            13
+          ]
+        }
+      ],
+      "possibleMeaning": "missing-system-cell or corrected-position-for-existing-system"
+    }
+  ],
+  "authority": "P3 diagnostic. Does not update galaxy.json. Needs another minimap screenshot/live capture or a deliberate experimental overlay A/B to decide whether central strip is real correction or image artifact."
+}

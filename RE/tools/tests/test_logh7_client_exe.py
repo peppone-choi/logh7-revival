@@ -1,4 +1,4 @@
-from __future__ import annotations
+﻿from __future__ import annotations
 
 import hashlib
 import json
@@ -36,23 +36,32 @@ class Logh7ClientExeSelectionTests(unittest.TestCase):
                 "strat-camera-focus",
                 "hud-msgdat-groupfix",
                 "hud-character-status-msgdatfix",
+                "command-panel-msgdat-groupfix",
                 "mission-msgdat-subidfix",
                 "sector-label-hardcoded-ko",
+                "session-select-hardcoded-ko",
                 "tactical-grid-msgdat-boundaryfix",
                 "galaxy-screen-starname-msgdat-boundaryfix",
                 "galaxy-screen-grid-format-msgdat-boundaryfix",
                 "hud-hardcoded-stat-labels-ko",
                 "font-face",
+                "font-atlas-face",
                 "font-cleartype",
+                "font-atlas-antialias",
+                "font-readable-size",
                 "login-title-ko",
                 "login-blank-password-local-ok",
                 "lobby-res",
-                "lobby-native-layout",
+                "lobby-native-layout-v2",
+                "charsel-recenter",
+                "charsel-content-inset",
+                "charsel-content-y-inset",
+                "charsel-confirm-dialog-inset",
             ],
         )
         self.assertEqual(
             PLAYABLE_CLIENT_SHA256,
-            "992dc7e25c4d7c3c982f1d2e6d9de904c733208ae9b28ddab162ef51aa076a0c",
+            "3b4f634818ff0d2b2f59eb6ddacbe73c9bcbc9cda146b9cfdb9c5d1cb7b98573",
         )
         self.assertEqual(label_for_sha(PLAYABLE_CLIENT_SHA256), "canonical-playable")
 
@@ -65,32 +74,45 @@ class Logh7ClientExeSelectionTests(unittest.TestCase):
         self.assertEqual(manifest["outSha256"], PLAYABLE_CLIENT_SHA256)
         self.assertEqual(manifest["stack"], DEFAULT_STACK)
         self.assertEqual(
-            manifest["stack"][-5:],
+            manifest["stack"][-9:],
             [
-                "font-cleartype",
+                "font-readable-size",
                 "login-title-ko",
                 "login-blank-password-local-ok",
                 "lobby-res",
-                "lobby-native-layout",
+                "lobby-native-layout-v2",
+                "charsel-recenter",
+                "charsel-content-inset",
+                "charsel-content-y-inset",
+                "charsel-confirm-dialog-inset",
             ],
         )
         self.assertNotIn("lobby-fullscreen-display", manifest["stack"])
         applied = {patch["name"] for patch in manifest["patches"]}
         self.assertIn("hud-msgdat-groupfix", applied)
         self.assertIn("hud-character-status-msgdatfix", applied)
+        self.assertIn("command-panel-msgdat-groupfix", applied)
         self.assertIn("mission-msgdat-subidfix", applied)
         self.assertIn("sector-label-hardcoded-ko", applied)
+        self.assertIn("session-select-hardcoded-ko", applied)
         self.assertIn("tactical-grid-msgdat-boundaryfix", applied)
         self.assertIn("galaxy-screen-starname-msgdat-boundaryfix", applied)
         self.assertIn("galaxy-screen-grid-format-msgdat-boundaryfix", applied)
         self.assertIn("hud-hardcoded-stat-labels-ko", applied)
+        self.assertIn("font-atlas-face", applied)
         self.assertIn("font-cleartype", applied)
+        self.assertIn("font-atlas-antialias", applied)
+        self.assertIn("font-readable-size", applied)
         self.assertIn("login-title-ko", applied)
         self.assertNotIn("login-native-layout", applied)
         self.assertNotIn(COMMANDLINE_BOOTSTRAP_PATCH, applied)
         self.assertIn("login-blank-password-local-ok", applied)
         self.assertIn("lobby-res", applied)
-        self.assertIn("lobby-native-layout", applied)
+        self.assertIn("lobby-native-layout-v2", applied)
+        self.assertIn("charsel-recenter", applied)
+        self.assertIn("charsel-content-inset", applied)
+        self.assertIn("charsel-content-y-inset", applied)
+        self.assertIn("charsel-confirm-dialog-inset", applied)
 
     def test_playable_manifest_stack_reads_patch_names(self) -> None:
         self.assertNotIn(COMMANDLINE_BOOTSTRAP_PATCH, playable_manifest_stack())

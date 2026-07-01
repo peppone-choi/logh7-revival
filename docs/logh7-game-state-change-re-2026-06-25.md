@@ -1,5 +1,12 @@
 # LOGH VII 게임 상태전환 메커니즘 — 결정적 RE (2026-06-25)
 
+> 2026-06-30 live correction: `0x0f1f NotifyTactics` is no longer treated as a safe default transition lever.
+> Live bisection showed `0x042f NotifyChangeMode` alone is safe and leaves the strategy UI alive, while
+> `0x0f1f` immediately triggers APPCRASH `c0000005` at fault offset `0x0018f83a` (VA `0x0058f83a`,
+> inside `FUN_0058ee70`) when emitted with the current server-side tactical prerequisites.
+> Server default battle-entry probes now stop at `0x042f`; `0x0f1f` is opt-in only via
+> `LOGH_BATTLE_ENTRY_NOTIFY_TACTICS=1` or explicit `LOGH_BATTLE_ENTRY_CODES=0x0f1f` for crash/RE sessions.
+
 워크플로 `wyeb22m23`(6에이전트 심층 RE). 사용자 "게임 상태 바꾸는 방법 확실히 RE / 며칠째 전략맵 정체".
 
 ## 핵심 결론: 상태전환은 2개의 분리된 축. C002는 그 중 하나일 뿐.
@@ -25,7 +32,8 @@
 
 ## 액션 (정체 돌파, 권고 순)
 1. 라이브 `worldbase+0x3579cc` 1-watch로 레버 선택.
-2. **서버가 0x0f1f(byte0=1) 푸시** → `+0x357e88=0x3f800000`·`+0x126711` 변화 관측 = **최소 가시 전환, 패치/Frida/클릭 불필요**.
+2. **서버 기본 probe는 `0x042f`까지만 푸시** → 전략 UI 생존과 mode-change grant를 먼저 관측한다.
+   `0x0f1f(byte0=1)`은 현재 `FUN_0058ee70` 크래시를 내므로, 선행조건 RE/crash bisection용 opt-in으로만 사용한다.
 3. 안 되면 0xb09+0xb0a, 또는 0xb07(마커 이동).
 4. 씬 KIND 전환(패널 등)은 Frida invoke `FUN_0054e570(DAT_02215e2c, kind)` (하네스 `abe52a7f`).
 

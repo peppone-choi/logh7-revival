@@ -17,6 +17,7 @@ import {
   REQ_UNCHARGE_CHARACTER_CODE,
   REQ_CHARACTER_ENTRY_STATE_CODE,
   REQ_INFO_CHARACTER_CODE,
+  SS_RESP_INFO_UNIT_HEADER,
 } from '../../src/server/logh7-login-protocol.mjs';
 import { createContentPack } from '../../src/server/logh7-content-pack.mjs';
 import { createWorldState } from '../../src/server/logh7-world-state.mjs';
@@ -25,6 +26,8 @@ import {
   decodeNotifyInformationCharacterStream,
   NOTIFY_INFORMATION_CHARACTER_BYTES,
 } from '../../src/server/logh7-personnel.mjs';
+import { devCommandCategoryCards } from '../../src/server/logh7-dev-command-cards.mjs';
+import { decodeStaticInformationCardMenuFields } from '../../src/server/logh7-info-records.mjs';
 import {
   RESP_INFO_BASE_ELEM_BYTES,
   RIB_OFF_ELEM0,
@@ -37,6 +40,7 @@ import {
   RIB_ELEM_OFF_COMMODITY_CNT,
   RIB_ELEM_OFF_COMMODITY,
   RIB_ELEM_OFF_FIELD_10,
+  RIB_ELEM_OFF_FIELD_179,
 } from '../../src/server/logh7-base-record.mjs';
 import {
   NBP_OFF_POPULATION,
@@ -206,6 +210,10 @@ function appInnerCode(inner) {
   return inner.length >= 6 && inner.readUInt16BE(0) === 0 ? inner.readUInt16BE(4) : inner.readUInt16BE(0);
 }
 
+function stripPostloadCommandCards(codes) {
+  return codes.filter((code) => code !== 0x0305);
+}
+
 function decodeNotifyCharacterDelta(inner) {
   const decoded = decodeNotifyInformationCharacterStream(inner.subarray(6));
   assert.ok(decoded);
@@ -333,13 +341,13 @@ function lobbyAuthedSession(opts = {}) {
   return session;
 }
 
-function strictLobbyAuthedSession(db, { account = 'p001flow', password = 'FlowPw17!' } = {}) {
+function strictLobbyAuthedSession(db, { account = 'p001flow', password = 'FlowPw17!', ...sessionOpts } = {}) {
   const store = createAccountStore({
     acceptAnyGin7: false,
     allowRegister: false,
     registry: createAccountRegistry({ persistPath: db }),
   });
-  const session = createLoginSession({ accountStore: store, lobby: LOBBY, characters: [] });
+  const session = createLoginSession({ accountStore: store, lobby: LOBBY, characters: [], ...sessionOpts });
   const login = session.onInnerMessage(buildGin7Credential({ account, password }));
   assert.equal(login.kind, 'redirect');
   session.onInnerMessage(Buffer.from('002000000001', 'hex'));
@@ -878,10 +886,16 @@ test('login session pushes the player spawn on 0x0f02 GridInitialize before the 
     assert.equal(characterBody.readUInt8(0x7d), 1); // valid parentage/name, no stale HUD string source
     assert.equal(characterBody.readUInt8(0x81), 'Character 1'.length);
     assert.equal(characterBody.readUInt16LE(0x82), 'C'.charCodeAt(0));
+    assert.equal(characterBody.readUInt8(0x24c), 0); // 0x0323 card/seat count (RE: FUN_00417390)
     assert.equal(characterBody.readUInt8(0x250), 0); // live-safe default: no experimental seat/card slots
     assert.equal(characterBody.readUInt32BE(0x254), 0);
     assert.equal(action.extraInners.at(-1).readUInt16BE(4), 0x0f03); // GridInitialize_OK LAST
     assert.equal(action.extraInners.at(-1).subarray(6).readUInt8(0), 1); // status 1
+
+    const repeat = session.onInnerMessage(Buffer.from('0f02', 'hex'));
+    assert.equal(repeat.kind, 'lobby-response');
+    assert.equal(repeat.okInner.readUInt16BE(4), 0x0f03);
+    assert.equal(repeat.extraInners, undefined);
   } finally {
     if (previous === undefined) {
       delete process.env.LOGH_WORLD_PLAYER;
@@ -896,6 +910,154 @@ test('login session pushes the player spawn on 0x0f02 GridInitialize before the 
 // 캐논 NPC 위계 시드(LOGH_SEED_CANON_NPCS=1): 월드 진입 0x0f02 시 플레이어 외 캐논 NPC를 권위적 0x0323
 // 레코드로 채워, 클라 HUD가 외톨이 플레이어를 "황제"로 폴백하지 못하게 한다. (a) 최상위 칭호(황제)를 가진
 // NPC가 ≥1개, (b) 갓 생성한 플레이어는 작위 없음 + 신참 계급(3/4), (c) 각 0x0323 레코드 바이트 길이 불변.
+test('login session 0x0f02 synth fallback player carries non-zero HUD stats when canon id 1 exists', () => {
+  const previous = process.env.LOGH_WORLD_PLAYER;
+  const prevSeats = process.env.LOGH_ACTION_LIST_SEATS;
+  process.env.LOGH_WORLD_PLAYER = '1';
+  delete process.env.LOGH_ACTION_LIST_SEATS;
+  try {
+    const contentPack = createContentPack({
+      name: 'fallback-canon',
+      nations: [{ id: 1, name: 'Empire' }],
+      characters: [
+        { id: 1, name: 'CanonSovereign', nameRomaji: 'CanonSovereign', nationId: 1, title: 9, abilities: [99, 99, 99, 99, 99, 99, 99, 99] },
+      ],
+    });
+    const store = createAccountStore({ acceptAnyGin7: true });
+    const session = createLoginSession({ accountStore: store, lobby: LOBBY, characters: [], contentPack });
+    session.markHandshakeComplete();
+
+    const action = session.onInnerMessage(makeInner(0x0f02));
+    assert.equal(action.kind, 'lobby-response');
+    const character = action.extraInners.find((inner) => inner.readUInt16BE(4) === 0x0323);
+    assert.ok(character);
+    const body = character.subarray(6);
+    const ability = (i) => body.readUInt16LE(0x188 + i * 4);
+    assert.equal(body.readUInt32BE(0), 1, 'fallback keeps the requested player id');
+    assert.equal(ability(0), 50, 'synthetic fallback carries the complete default tochi seed');
+    assert.equal(ability(1), 50, 'synthetic fallback carries the complete default seiji seed');
+    assert.equal(ability(3), 50, 'synthetic fallback carries the complete default joho seed');
+    assert.equal(body.readUInt8(0x1a9), 100, 'synthetic fallback carries full stamina');
+    assert.equal(body.readUInt8(0x2d0), 1, 'synthetic fallback carries together/HUD party flag');
+    assert.equal(body.readUInt8(0x24c), 0, 'early fallback 0x0323 still keeps card/seat count closed');
+    assert.equal(body.readUInt8(0x250), 0, '0x0323 gap remains clear');
+  } finally {
+    if (previous === undefined) delete process.env.LOGH_WORLD_PLAYER;
+    else process.env.LOGH_WORLD_PLAYER = previous;
+    if (prevSeats === undefined) delete process.env.LOGH_ACTION_LIST_SEATS;
+    else process.env.LOGH_ACTION_LIST_SEATS = prevSeats;
+  }
+});
+
+test('login session keeps second 0x0f02 ack-only when NotifyTactics probe is enabled', () => {
+  const prevPlayer = process.env.LOGH_WORLD_PLAYER;
+  const prevNotifyTactics = process.env.LOGH_BATTLE_ENTRY_NOTIFY_TACTICS;
+  const prevSeats = process.env.LOGH_ACTION_LIST_SEATS;
+  process.env.LOGH_WORLD_PLAYER = '1';
+  process.env.LOGH_BATTLE_ENTRY_NOTIFY_TACTICS = '1';
+  delete process.env.LOGH_ACTION_LIST_SEATS;
+  try {
+    const store = createAccountStore({ acceptAnyGin7: true });
+    const session = createLoginSession({ accountStore: store, lobby: LOBBY });
+    session.markHandshakeComplete();
+
+    const first = session.onInnerMessage(Buffer.from('0f02', 'hex'));
+    assert.equal(first.kind, 'lobby-response');
+    assert.equal(first.okInner.readUInt16BE(4), 0x0204);
+    assert.deepEqual(first.extraInners.map(appInnerCode), [0x031f, 0x0321, 0x0325, 0x0323, 0x0f03]);
+
+    const reseed = session.onInnerMessage(Buffer.from('0f02', 'hex'));
+    assert.equal(reseed.kind, 'lobby-response');
+    assert.equal(reseed.okInner.readUInt16BE(4), 0x0f03);
+    assert.equal(reseed.extraInners, undefined);
+
+    const repeat = session.onInnerMessage(Buffer.from('0f02', 'hex'));
+    assert.equal(repeat.kind, 'lobby-response');
+    assert.equal(repeat.okInner.readUInt16BE(4), 0x0f03);
+    assert.equal(repeat.extraInners, undefined);
+  } finally {
+    if (prevPlayer === undefined) delete process.env.LOGH_WORLD_PLAYER;
+    else process.env.LOGH_WORLD_PLAYER = prevPlayer;
+    if (prevNotifyTactics === undefined) delete process.env.LOGH_BATTLE_ENTRY_NOTIFY_TACTICS;
+    else process.env.LOGH_BATTLE_ENTRY_NOTIFY_TACTICS = prevNotifyTactics;
+    if (prevSeats === undefined) delete process.env.LOGH_ACTION_LIST_SEATS;
+    else process.env.LOGH_ACTION_LIST_SEATS = prevSeats;
+  }
+});
+
+test('login session keeps second 0x0f02 ack-only when battle-entry probe is enabled', () => {
+  const prevPlayer = process.env.LOGH_WORLD_PLAYER;
+  const prevProbe = process.env.LOGH_BATTLE_ENTRY_PROBE;
+  const prevNotifyTactics = process.env.LOGH_BATTLE_ENTRY_NOTIFY_TACTICS;
+  const prevSeats = process.env.LOGH_ACTION_LIST_SEATS;
+  const prevDeferTables = process.env.LOGH_BATTLE_ENTRY_DEFER_TABLES;
+  process.env.LOGH_WORLD_PLAYER = '1';
+  process.env.LOGH_BATTLE_ENTRY_PROBE = '1';
+  delete process.env.LOGH_BATTLE_ENTRY_NOTIFY_TACTICS;
+  delete process.env.LOGH_ACTION_LIST_SEATS;
+  delete process.env.LOGH_BATTLE_ENTRY_DEFER_TABLES;
+  try {
+    const store = createAccountStore({ acceptAnyGin7: true });
+    const session = createLoginSession({ accountStore: store, lobby: LOBBY });
+    session.markHandshakeComplete();
+
+    const first = session.onInnerMessage(Buffer.from('0f02', 'hex'));
+    assert.equal(first.kind, 'lobby-response');
+    assert.equal(first.okInner.readUInt16BE(4), 0x0204);
+    assert.deepEqual(first.extraInners.map(appInnerCode), [0x031f, 0x0321, 0x0325, 0x0323, 0x0f03]);
+
+    const reseed = session.onInnerMessage(Buffer.from('0f02', 'hex'));
+    assert.equal(reseed.kind, 'lobby-response');
+    assert.equal(reseed.okInner.readUInt16BE(4), 0x0f03);
+    assert.equal(reseed.extraInners, undefined);
+
+    const repeat = session.onInnerMessage(Buffer.from('0f02', 'hex'));
+    assert.equal(repeat.kind, 'lobby-response');
+    assert.equal(repeat.okInner.readUInt16BE(4), 0x0f03);
+    assert.equal(repeat.extraInners, undefined);
+  } finally {
+    if (prevPlayer === undefined) delete process.env.LOGH_WORLD_PLAYER;
+    else process.env.LOGH_WORLD_PLAYER = prevPlayer;
+    if (prevProbe === undefined) delete process.env.LOGH_BATTLE_ENTRY_PROBE;
+    else process.env.LOGH_BATTLE_ENTRY_PROBE = prevProbe;
+    if (prevNotifyTactics === undefined) delete process.env.LOGH_BATTLE_ENTRY_NOTIFY_TACTICS;
+    else process.env.LOGH_BATTLE_ENTRY_NOTIFY_TACTICS = prevNotifyTactics;
+    if (prevSeats === undefined) delete process.env.LOGH_ACTION_LIST_SEATS;
+    else process.env.LOGH_ACTION_LIST_SEATS = prevSeats;
+    if (prevDeferTables === undefined) delete process.env.LOGH_BATTLE_ENTRY_DEFER_TABLES;
+    else process.env.LOGH_BATTLE_ENTRY_DEFER_TABLES = prevDeferTables;
+  }
+});
+
+test('LOGH_DIAG_PLAYER returns a trace event on 0x0f02 without doing transport-layer IO', () => {
+  const previousPlayer = process.env.LOGH_WORLD_PLAYER;
+  const previousDiag = process.env.LOGH_DIAG_PLAYER;
+  process.env.LOGH_WORLD_PLAYER = '1';
+  process.env.LOGH_DIAG_PLAYER = '1';
+  try {
+    const store = createAccountStore({ acceptAnyGin7: true });
+    const session = createLoginSession({ accountStore: store, lobby: LOBBY });
+    session.markHandshakeComplete();
+
+    const action = session.onInnerMessage(makeInner(0x0f02));
+
+    assert.equal(action.kind, 'lobby-response');
+    assert.equal(action.okInner.readUInt16BE(4), 0x0204);
+    assert.equal(action.extraInners.at(-1).readUInt16BE(4), 0x0f03);
+    assert.equal(Array.isArray(action.traceEvents), true);
+    assert.equal(action.traceEvents.length, 1);
+    assert.equal(action.traceEvents[0].event, 'diag-player-record');
+    assert.equal(action.traceEvents[0].charId, 1);
+    assert.equal(action.traceEvents[0].hasRealPlayerChar, false);
+    assert.equal(action.traceEvents[0].playerName, null);
+  } finally {
+    if (previousPlayer === undefined) delete process.env.LOGH_WORLD_PLAYER;
+    else process.env.LOGH_WORLD_PLAYER = previousPlayer;
+    if (previousDiag === undefined) delete process.env.LOGH_DIAG_PLAYER;
+    else process.env.LOGH_DIAG_PLAYER = previousDiag;
+  }
+});
+
 function makeCanonNpcContentPack() {
   return createContentPack({
     name: 'test-canon-npcs',
@@ -934,7 +1096,7 @@ test('월드 진입 0x0f02: 캐논 NPC 위계 시드(LOGH_SEED_CANON_NPCS=1)가 
     // distinct id: 플레이어(1) + NPC(0x500/0x501/0x502).
     const ids = records.map((rec) => rec.readUInt32BE(6)).sort((a, b) => a - b);
     assert.deepEqual(ids, [1, 0x500, 0x501, 0x502]);
-    // (a) ≥1 NPC가 최상위 칭호 "황제"를 titlename(@0xd8 len, @0xda chars)에 가진다.
+    // (a) 서버가 합성 최상위 칭호 "황제"를 titlename(@0xd8 len, @0xda chars)에 넣지 않는다.
     const readTitlename = (rec) => {
       const body = rec.subarray(6);
       const len = body.readUInt8(0xd8);
@@ -943,9 +1105,7 @@ test('월드 진입 0x0f02: 캐논 NPC 위계 시드(LOGH_SEED_CANON_NPCS=1)가 
       return s;
     };
     const emperors = records.filter((rec) => readTitlename(rec) === '황제');
-    assert.equal(emperors.length, 1, 'exactly one canon NPC must hold the top title 황제');
-    // 황제 NPC는 제국 최상위 계급(wireRank 14)을 가진다(@0xd6, writeRecordU16=LE).
-    assert.equal(emperors[0].subarray(6).readUInt16LE(0xd6), 14);
+    assert.equal(emperors.length, 0, 'server must not synthesize a 황제 title NPC');
     // distinct face(@0xf4): 임시 O군 코드가 NPC마다 다르다.
     const npcFaces = records
       .filter((rec) => rec.readUInt32BE(6) !== 1)
@@ -1002,7 +1162,7 @@ test('캐논 NPC 시드 정제: rank 클램프(1..14) + 캐논명 unmask는 매�
     const alliance = byId.get(0x511);
     assert.ok(empire && alliance, 'both seeded NPCs present');
     // ① rank 클램프: wireRank=99 → 14(RANK_MAX)로 클램프(@0xd6, writeRecordU16=LE).
-    assert.equal(empire.readUInt16LE(0xd6), 14, 'out-of-range wireRank must clamp to 14');
+    assert.equal(empire.readUInt16LE(0xd6), 2, 'out-of-range wireRank must clamp to marshal subId 2');
     // wireRank=0(미설정)은 0(계급 없음) 유지.
     assert.equal(alliance.readUInt16LE(0xd6), 0, 'rank 0 (unset) stays 0');
     // ② unmask: 매뉴얼 문서화 인물은 캐논명 노출.
@@ -1036,9 +1196,102 @@ test('갓 생성한 플레이어는 작위 없음(공작 시도 차단) + 신참
   assert.equal(info.kind, 'lobby-response');
   const body = info.okInner.subarray(6);
   // (b) 신참 계급: 제국 少尉 = 3 (initialCharacterRankId(power=1)), 동맹이면 4. 0x0322 경로는 LE 와이어.
-  assert.ok([3, 4].includes(body.readUInt16LE(0xd6)), `junior rank expected 3|4, got ${body.readUInt16LE(0xd6)}`);
+  assert.equal(body.readUInt16LE(0xd6), 0x0d, `junior rank subId expected 13, got ${body.readUInt16LE(0xd6)}`);
   // (b) 작위 없음: titlename 길이 0(공작 시도가 0으로 클램프됨 → 작위명 미렌더). 절대 공작/황제 아님.
   assert.equal(body.readUInt8(0xd8), 0, 'created player must have no peerage titlename');
+});
+
+test('DEFECT 1: 충돌하는 캐논 id가 있어도 월드진입 0x0323 플레이어는 생성 캐릭(황제 아님)이다', () => {
+  // 근본: 생성 캐릭 id는 lobby max+1(신규 계정이면 1)이라 캐논 contentPack char id와 충돌한다.
+  // activeCharacterRecord는 contentPack 우선이라, 수정 전엔 생성한 플레이어가 같은 id의 캐논 인물에 가려져
+  // HUD가 캐논(예: 황제 칭호)으로 그려졌다. playerRecord가 생성/로비 레코드를 충돌 캐논보다 우선해야 한다.
+  const prevPlayer = process.env.LOGH_WORLD_PLAYER;
+  process.env.LOGH_WORLD_PLAYER = '1';
+  try {
+    // 캐논 char id 1 = 'CanonSovereign'(고작위) — 신규 계정의 첫 생성 캐릭이 받는 id와 충돌.
+    const contentPack = createContentPack({
+      name: 'collision-canon',
+      nations: [{ id: 1, name: 'Empire' }],
+      characters: [
+        { id: 1, name: 'CanonSovereign', nameRomaji: 'CanonSovereign', nationId: 1, title: 9, abilities: [99, 99, 99, 99, 99, 99, 99, 99], portraitIndex: 1 },
+      ],
+    });
+    const store = createAccountStore({ acceptAnyGin7: true });
+    const session = createLoginSession({ accountStore: store, lobby: LOBBY, characters: [], contentPack });
+    session.markHandshakeComplete();
+    const created = session.onInnerMessage(makeGenerateCharacterCharge({ lastname: 'Lohengram', firstname: 'Reinhard', power: 1 }));
+    assert.equal(created.okInner.readUInt16BE(4), CMD_GENERATE_CHARGE_CODE);
+    const createdId = firstLobbyCharacterId(session);
+    assert.equal(createdId, 1, '신규 생성 캐릭은 캐논 id 1과 충돌하는 id 1을 받는다');
+
+    const action = session.onInnerMessage(makeInner(0x0f02));
+    const playerCard = (action.extraInners || []).find((i) => i.readUInt16BE(4) === 0x0323);
+    assert.ok(playerCard, '월드진입이 0x0323 플레이어 레코드를 푸시');
+    const body = playerCard.subarray(6);
+    const len = body.readUInt8(0x81);
+    let lastname = '';
+    for (let i = 0; i < len; i += 1) lastname += String.fromCharCode(body.readUInt16LE(0x82 + i * 2));
+    const ability = (i) => body.readUInt16LE(0x188 + i * 4);
+    assert.equal(ability(0), 48, 'initial world-entry player card carries created tochi seed');
+    assert.equal(ability(1), 55, 'initial world-entry player card carries created seiji seed');
+    assert.equal(ability(3), 50, 'initial world-entry player card carries created joho seed');
+    assert.equal(body.readUInt8(0x1a9), 100, 'initial world-entry player card carries full stamina');
+    assert.equal(body.readUInt8(0x2d0), 1, 'initial world-entry player card carries together/HUD party flag');
+    assert.equal(lastname, 'Lohengram', `월드진입 플레이어는 생성 캐릭이어야 한다(충돌 캐논 아님), got "${lastname}"`);
+  } finally {
+    if (prevPlayer === undefined) delete process.env.LOGH_WORLD_PLAYER; else process.env.LOGH_WORLD_PLAYER = prevPlayer;
+  }
+});
+
+test('DEFECT 1 (라이브 시나리오): conn3 월드 세션이 계정 프로필의 생성 캐릭으로 플레이어를 해석한다(황제 아님)', () => {
+  // 라이브 재현: 캐릭 생성(0x1008)은 로비(conn2) 세션에서 일어나고, 월드 진입(0x0f02)은 별개의 conn3 세션
+  // 인스턴스에서 일어난다. 두 세션은 같은 계정/레지스트리를 공유하므로 conn3는 loadAccountProfileCharacters로
+  // 생성 캐릭을 다시 로드해야 한다. 그 캐릭 id가 캐논 contentPack char id와 충돌해도 월드진입 0x0323 플레이어는
+  // 생성 캐릭(Lohengram)이어야 한다 — 캐논(황제)이 아니라. (단일세션 테스트가 못 잡는 분리-세션 핸드오프 경로.)
+  const prevPlayer = process.env.LOGH_WORLD_PLAYER;
+  process.env.LOGH_WORLD_PLAYER = '1';
+  try {
+    const contentPack = createContentPack({
+      name: 'collide-canon',
+      nations: [{ id: 1, name: 'Empire' }],
+      characters: [
+        { id: 1, name: 'CanonSovereign', nameRomaji: 'CanonSovereign', nationId: 1, title: 9, abilities: [99, 99, 99, 99, 99, 99, 99, 99], portraitIndex: 1 },
+      ],
+    });
+    // 라이브와 동일: 공유 인메모리 스토어(acceptAnyGin7, no DB), 두 세션이 GIN7 로그인으로 같은 계정에 바인딩.
+    const store = createAccountStore({ acceptAnyGin7: true });
+    const cred = { account: 'p001flow', password: 'FlowPw17!' };
+
+    // conn2(로비): GIN7 로그인(계정 생성) → 로비 로그인 → 캐릭 생성(프로필에 적립).
+    const lobby = createLoginSession({ accountStore: store, lobby: LOBBY, characters: [], contentPack });
+    lobby.onInnerMessage(buildGin7Credential(cred));
+    lobby.onInnerMessage(Buffer.from('002000000001', 'hex'));
+    lobby.onInnerMessage(Buffer.from(LOBBY_LOGIN_REQUEST_HEX, 'hex'));
+    const created = lobby.onInnerMessage(makeGenerateCharacterCharge({ lastname: 'Lohengram', firstname: 'Reinhard', power: 1 }));
+    assert.equal(created.okInner.readUInt16BE(4), CMD_GENERATE_CHARGE_CODE);
+
+    // conn3(월드): 별개 세션 인스턴스, 같은 스토어. GIN7 로그인(같은 계정) → 프로필 로드 → 월드 진입.
+    const world = createLoginSession({ accountStore: store, lobby: LOBBY, characters: [], contentPack });
+    world.onInnerMessage(buildGin7Credential(cred));
+    world.onInnerMessage(Buffer.from('002000000001', 'hex'));
+    world.onInnerMessage(Buffer.from(LOBBY_LOGIN_REQUEST_HEX, 'hex'));
+    const action = world.onInnerMessage(makeInner(0x0f02));
+    const playerCard = (action.extraInners || []).find((i) => i.readUInt16BE(4) === 0x0323);
+    assert.ok(playerCard, '월드진입이 0x0323 플레이어 레코드를 푸시');
+    const body = playerCard.subarray(6);
+    const len = body.readUInt8(0x81);
+    let lastname = '';
+    for (let i = 0; i < len; i += 1) lastname += String.fromCharCode(body.readUInt16LE(0x82 + i * 2));
+    const ability = (i) => body.readUInt16LE(0x188 + i * 4);
+    assert.equal(ability(0), 48, 'conn3 initial world-entry player card carries created tochi seed');
+    assert.equal(ability(1), 55, 'conn3 initial world-entry player card carries created seiji seed');
+    assert.equal(ability(3), 50, 'conn3 initial world-entry player card carries created joho seed');
+    assert.equal(body.readUInt8(0x1a9), 100, 'conn3 initial world-entry player card carries full stamina');
+    assert.equal(body.readUInt8(0x2d0), 1, 'conn3 initial world-entry player card carries together/HUD party flag');
+    assert.equal(lastname, 'Lohengram', `conn3 월드 플레이어는 생성 캐릭이어야 한다(황제/캐논 아님), got "${lastname}"`);
+  } finally {
+    if (prevPlayer === undefined) delete process.env.LOGH_WORLD_PLAYER; else process.env.LOGH_WORLD_PLAYER = prevPlayer;
+  }
 });
 
 // 멀티플레이(2:2) distinct 함대 키: 계정 로스터 없이 같은 머신 4클라가 worldState.upsertFleet에 모두
@@ -1094,16 +1347,18 @@ test('login session preloads dynamic base and facility sources on 0x0f02 before 
     assert.deepEqual(codes, [0x031f, 0x0321, 0x0325, 0x0323, 0x0f03]);
 
     const baseBody = expandedRibBody(action.extraInners[0]);
-    assert.equal(baseBody.readUInt8(0), 2);
+    assert.equal(baseBody.readUInt8(0), 3);
     assert.equal(baseBody.readUInt32LE(ribOffset(0, RIB_ELEM_OFF_ID)), 1);
     assert.equal(baseBody.readUInt8(ribOffset(0, RIB_ELEM_OFF_FIELD_04)), 2, 'ルンビーニ owner = alliance(2)');
+    assert.equal(baseBody.readUInt32LE(ribOffset(2, RIB_ELEM_OFF_ID)), 1001, 'derived planet base is included');
 
     const institutionBody = expandedRiiBody(action.extraInners[1]);
-    assert.equal(institutionBody.readUInt8(0), 2);
+    assert.equal(institutionBody.readUInt8(0), 3);
     assert.equal(institutionBody.readUInt32LE(4), 1);
     assert.equal(institutionBody.readUInt8(0x08), 1);
     assert.equal(institutionBody.readUInt32LE(0x237c), 2);
     assert.equal(institutionBody.readUInt8(0x2380), 1);
+    assert.equal(institutionBody.readUInt32LE(0x46f4), 1001, 'facility elem[2] follows derived planet base');
   } finally {
     if (previous === undefined) delete process.env.LOGH_WORLD_PLAYER;
     else process.env.LOGH_WORLD_PLAYER = previous;
@@ -1119,6 +1374,52 @@ test('login session preloads dynamic base and facility sources on 0x0f02 before 
     else process.env.LOGH_TACTICS_UNIT = prevTactics;
     if (prevEconomy === undefined) delete process.env.LOGH_BASE_ECONOMY;
     else process.env.LOGH_BASE_ECONOMY = prevEconomy;
+  }
+});
+
+test('login session pushes 0x031d static base names at world-entry under LOGH_WORLD_IMPORT_STATIC_BASE=1 (DEFECT 2: 스폿 불명)', () => {
+  // 행성/기지 패널(FUN_0057aa90)은 이름을 0x031d로 채워지는 정적 테이블에서 읽는데, 기본 월드-임포트 PUSH엔
+  // 0x031d가 없어 0x031c PULL 전에 패널이 읽히면 "스폿 불명"이 된다. 이 게이트가 0x031d를 가장 먼저 푸시한다.
+  const previous = process.env.LOGH_WORLD_PLAYER;
+  const prevImport = process.env.LOGH_WORLD_IMPORT_BASES;
+  const prevStatic = process.env.LOGH_WORLD_IMPORT_STATIC_BASE;
+  const prevGalaxy = process.env.LOGH_STRAT_GALAXY;
+  const prevFleet = process.env.LOGH_STRAT_FLEET;
+  const prevGrid = process.env.LOGH_STRAT_GRID;
+  const prevTactics = process.env.LOGH_TACTICS_UNIT;
+  const prevEconomy = process.env.LOGH_BASE_ECONOMY;
+  process.env.LOGH_WORLD_PLAYER = '1';
+  delete process.env.LOGH_WORLD_IMPORT_BASES;
+  process.env.LOGH_WORLD_IMPORT_STATIC_BASE = '1';
+  delete process.env.LOGH_STRAT_GALAXY;
+  delete process.env.LOGH_STRAT_FLEET;
+  delete process.env.LOGH_STRAT_GRID;
+  delete process.env.LOGH_TACTICS_UNIT;
+  process.env.LOGH_BASE_ECONOMY = '0';
+  try {
+    const session = lobbyAuthedSession({ contentPack: makeGalaxyContentPack() });
+    const action = session.onInnerMessage(makeInner(0x0f02));
+    assert.equal(action.kind, 'lobby-response');
+    const codes = action.extraInners.map(appInnerCode);
+    // 0x031d static base (name table) now leads the world-import push (default OFF leaves it absent).
+    assert.equal(codes[0], 0x031d, '0x031d static base pushed FIRST at world entry');
+    assert.deepEqual(codes, [0x031d, 0x031f, 0x0321, 0x0325, 0x0323, 0x0f03]);
+    const staticBase = action.extraInners[0];
+    assert.equal(staticBase.readUInt16BE(4), 0x031d);
+    // Real builder output (staticBaseListForSpot — the same record set the 0x031c PULL is tested to fill with
+    // system+planet names), not the walker's all-zero stub: substantial payload with nonzero base content.
+    const body = staticBase.subarray(6);
+    assert.ok(body.length >= 0x500, 'static base carries the full base-record payload');
+    assert.ok(body.some((b) => b !== 0), 'static base body is real data, not a zero-fill stub');
+  } finally {
+    if (previous === undefined) delete process.env.LOGH_WORLD_PLAYER; else process.env.LOGH_WORLD_PLAYER = previous;
+    if (prevImport === undefined) delete process.env.LOGH_WORLD_IMPORT_BASES; else process.env.LOGH_WORLD_IMPORT_BASES = prevImport;
+    if (prevStatic === undefined) delete process.env.LOGH_WORLD_IMPORT_STATIC_BASE; else process.env.LOGH_WORLD_IMPORT_STATIC_BASE = prevStatic;
+    if (prevGalaxy === undefined) delete process.env.LOGH_STRAT_GALAXY; else process.env.LOGH_STRAT_GALAXY = prevGalaxy;
+    if (prevFleet === undefined) delete process.env.LOGH_STRAT_FLEET; else process.env.LOGH_STRAT_FLEET = prevFleet;
+    if (prevGrid === undefined) delete process.env.LOGH_STRAT_GRID; else process.env.LOGH_STRAT_GRID = prevGrid;
+    if (prevTactics === undefined) delete process.env.LOGH_TACTICS_UNIT; else process.env.LOGH_TACTICS_UNIT = prevTactics;
+    if (prevEconomy === undefined) delete process.env.LOGH_BASE_ECONOMY; else process.env.LOGH_BASE_ECONOMY = prevEconomy;
   }
 });
 
@@ -1214,8 +1515,8 @@ test('login session preloads the active spot and default selected system in 0x03
     assert.equal(payload.readUInt8(0), 4, '0x031f remains capped at four records');
     assert.equal(payload.readUInt32LE(ribOffset(0, RIB_ELEM_OFF_ID)), 70, 'elem[0] is the player capital/current spot');
     assert.equal(payload.readUInt32LE(ribOffset(1, RIB_ELEM_OFF_ID)), 80, 'elem[1] is the client default selected system');
-    assert.equal(payload.readUInt32LE(ribOffset(2, RIB_ELEM_OFF_ID)), 1, 'remaining slots fill from static base list');
-    assert.equal(payload.readUInt32LE(ribOffset(3, RIB_ELEM_OFF_ID)), 2, 'remaining slots fill from static base list');
+    assert.equal(payload.readUInt32LE(ribOffset(2, RIB_ELEM_OFF_ID)), 70001, 'elem[2] is Valhalla planet orbit 1');
+    assert.equal(payload.readUInt32LE(ribOffset(3, RIB_ELEM_OFF_ID)), 70002, 'elem[3] is Valhalla planet orbit 2');
 
     const facility = action.extraInners.find((inner) => appInnerCode(inner) === 0x0321);
     assert.ok(facility);
@@ -1223,8 +1524,8 @@ test('login session preloads the active spot and default selected system in 0x03
     assert.equal(facilityPayload.readUInt8(0), 4, '0x0321 mirrors the preloaded base id set');
     assert.equal(facilityPayload.readUInt32LE(4), 70, 'facility elem[0] follows active spot');
     assert.equal(facilityPayload.readUInt32LE(0x237c), 80, 'facility elem[1] follows selected system');
-    assert.equal(facilityPayload.readUInt32LE(0x46f4), 1, 'facility elem[2] follows static fill id 1');
-    assert.equal(facilityPayload.readUInt32LE(0x6a6c), 2, 'facility elem[3] follows static fill id 2');
+    assert.equal(facilityPayload.readUInt32LE(0x46f4), 70001, 'facility elem[2] follows Valhalla planet orbit 1');
+    assert.equal(facilityPayload.readUInt32LE(0x6a6c), 70002, 'facility elem[3] follows Valhalla planet orbit 2');
   } finally {
     if (previous === undefined) delete process.env.LOGH_WORLD_PLAYER;
     else process.env.LOGH_WORLD_PLAYER = previous;
@@ -1425,12 +1726,18 @@ test('login session can opt into full current location fields in 0x0325', () => 
   const prevFleetCol = process.env.LOGH_FLEET_COL;
   const prevFleetRow = process.env.LOGH_FLEET_ROW;
   const prevFullUnitLocation = process.env.LOGH_FULL_UNIT_LOCATION;
+  const prevUnitStreamWire = process.env.LOGH_UNIT_STREAM_WIRE;
+  const prevPostloadUnitStreamWire = process.env.LOGH_POSTLOAD_UNIT_STREAM_WIRE;
+  const prevPostloadUnitEndian = process.env.LOGH_POSTLOAD_UNIT_ENDIAN;
   process.env.LOGH_WORLD_PLAYER = '1';
   process.env.LOGH_WORLD_SPOT_ID = '42';
   process.env.LOGH_WORLD_SPOT_OWNER = '7';
   process.env.LOGH_FLEET_COL = '12';
   process.env.LOGH_FLEET_ROW = '34';
   process.env.LOGH_FULL_UNIT_LOCATION = '1';
+  delete process.env.LOGH_UNIT_STREAM_WIRE;
+  delete process.env.LOGH_POSTLOAD_UNIT_STREAM_WIRE;
+  delete process.env.LOGH_POSTLOAD_UNIT_ENDIAN;
   try {
     const store = createAccountStore({ acceptAnyGin7: true });
     const session = createLoginSession({ accountStore: store, lobby: LOBBY });
@@ -1463,6 +1770,12 @@ test('login session can opt into full current location fields in 0x0325', () => 
     else process.env.LOGH_FLEET_ROW = prevFleetRow;
     if (prevFullUnitLocation === undefined) delete process.env.LOGH_FULL_UNIT_LOCATION;
     else process.env.LOGH_FULL_UNIT_LOCATION = prevFullUnitLocation;
+    if (prevUnitStreamWire === undefined) delete process.env.LOGH_UNIT_STREAM_WIRE;
+    else process.env.LOGH_UNIT_STREAM_WIRE = prevUnitStreamWire;
+    if (prevPostloadUnitStreamWire === undefined) delete process.env.LOGH_POSTLOAD_UNIT_STREAM_WIRE;
+    else process.env.LOGH_POSTLOAD_UNIT_STREAM_WIRE = prevPostloadUnitStreamWire;
+    if (prevPostloadUnitEndian === undefined) delete process.env.LOGH_POSTLOAD_UNIT_ENDIAN;
+    else process.env.LOGH_POSTLOAD_UNIT_ENDIAN = prevPostloadUnitEndian;
   }
 });
 
@@ -1551,6 +1864,9 @@ test('own-fleet 렌더 배선: LOGH_PLAYER_FOCUS_CELL 게이트가 0x0325 comman
     focus: process.env.LOGH_PLAYER_FOCUS_CELL,
     col: process.env.LOGH_FLEET_COL,
     row: process.env.LOGH_FLEET_ROW,
+    unitStream: process.env.LOGH_UNIT_STREAM_WIRE,
+    postloadUnitStream: process.env.LOGH_POSTLOAD_UNIT_STREAM_WIRE,
+    postloadUnitEndian: process.env.LOGH_POSTLOAD_UNIT_ENDIAN,
   };
   process.env.LOGH_WORLD_PLAYER = '1';
   process.env.LOGH_WORLD_CHAR_ID = '777';
@@ -1558,6 +1874,9 @@ test('own-fleet 렌더 배선: LOGH_PLAYER_FOCUS_CELL 게이트가 0x0325 comman
   process.env.LOGH_FULL_UNIT_LOCATION = '1';
   process.env.LOGH_FLEET_COL = '14';
   process.env.LOGH_FLEET_ROW = '20';
+  delete process.env.LOGH_UNIT_STREAM_WIRE;
+  delete process.env.LOGH_POSTLOAD_UNIT_STREAM_WIRE;
+  delete process.env.LOGH_POSTLOAD_UNIT_ENDIAN;
   const readUnit = (action) => {
     const unit = action.extraInners.find((inner) => inner.readUInt16BE(4) === 0x0325);
     assert.ok(unit, '0x0325 unit 레코드 존재');
@@ -1590,6 +1909,8 @@ test('own-fleet 렌더 배선: LOGH_PLAYER_FOCUS_CELL 게이트가 0x0325 comman
       ['LOGH_WORLD_PLAYER', prev.player], ['LOGH_WORLD_CHAR_ID', prev.char], ['LOGH_WORLD_UNIT_ID', prev.unit],
       ['LOGH_FULL_UNIT_LOCATION', prev.full], ['LOGH_PLAYER_FOCUS_CELL', prev.focus],
       ['LOGH_FLEET_COL', prev.col], ['LOGH_FLEET_ROW', prev.row],
+      ['LOGH_UNIT_STREAM_WIRE', prev.unitStream], ['LOGH_POSTLOAD_UNIT_STREAM_WIRE', prev.postloadUnitStream],
+      ['LOGH_POSTLOAD_UNIT_ENDIAN', prev.postloadUnitEndian],
     ]) {
       if (v === undefined) delete process.env[k]; else process.env[k] = v;
     }
@@ -1667,7 +1988,8 @@ test('login session keeps post-load grid enter character records minimal by defa
     const action = session.onInnerMessage(Buffer.from('0f06', 'hex'));
     assert.equal(action.kind, 'lobby-response');
     assertMessengerStatusRow(action.okInner, 209);
-    assert.deepEqual(action.extraInners.map((inner) => inner.readUInt16BE(4)), [0x0b09, 0x0b0a]);
+    assert.deepEqual(stripPostloadCommandCards(action.extraInners.map((inner) => inner.readUInt16BE(4))), [0x0b09, 0x0b0a]);
+    assert.equal(action.extraInners.map(appInnerCode).includes(0x0305), true);
     assert.equal(action.extraInners[0].subarray(6).readUInt8(0), 0);
     assert.equal(action.extraInners[1].subarray(6).readUInt8(0), 0);
   } finally {
@@ -1723,7 +2045,7 @@ test('login session can opt into post-load grid enter player record replay', () 
     const action = session.onInnerMessage(Buffer.from('0f06', 'hex'));
     assert.equal(action.kind, 'lobby-response');
     assertMessengerStatusRow(action.okInner, 209);
-    assert.deepEqual(action.extraInners.map((inner) => inner.readUInt16BE(4)), [0x0b09, 0x0204, 0x0325, 0x0323, 0x0b0a]);
+    assert.deepEqual(stripPostloadCommandCards(action.extraInners.map((inner) => inner.readUInt16BE(4))), [0x0b09, 0x0204, 0x0325, 0x0323, 0x0b0a]);
     assert.equal(action.extraInners[0].subarray(6).readUInt8(0), 0);
     assert.equal(action.extraInners[4].subarray(6).readUInt8(0), 0);
 
@@ -1772,10 +2094,12 @@ test('login session can opt into a server-driven tactical battle-entry probe (LO
   const prevWorldCharId = process.env.LOGH_WORLD_CHAR_ID;
   const prevPostloadPlayer = process.env.LOGH_POSTLOAD_PLAYER_RECORD;
   const prevProbe = process.env.LOGH_BATTLE_ENTRY_PROBE;
+  const prevNotifyTactics = process.env.LOGH_BATTLE_ENTRY_NOTIFY_TACTICS;
   process.env.LOGH_GRID_ENTER = '1';
   process.env.LOGH_WORLD_CHAR_ID = '209';
   process.env.LOGH_POSTLOAD_PLAYER_RECORD = '1';
   process.env.LOGH_BATTLE_ENTRY_PROBE = '1';
+  delete process.env.LOGH_BATTLE_ENTRY_NOTIFY_TACTICS;
   try {
     const store = createAccountStore({ acceptAnyGin7: true });
     const session = createLoginSession({ accountStore: store, lobby: LOBBY, contentPack: makeContentPack() });
@@ -1787,7 +2111,14 @@ test('login session can opt into a server-driven tactical battle-entry probe (LO
     // grid-enter extraInners stay the proven-safe player records ONLY (battle sequence is NOT inlined —
     // live-confirmed it breaks the strategic render when injected mid-load).
     const codes = action.extraInners.map((inner) => inner.readUInt16BE(4));
-    assert.deepEqual(codes, [0x0b09, 0x0204, 0x0325, 0x0323, 0x0b0a]);
+  assert.deepEqual(stripPostloadCommandCards(codes), [
+    0x0b09, 0x0204, 0x0325, 0x0323,
+    0x0325, 0x0323, 0x0349, 0x033b, 0x0341, 0x0337, 0x0345, 0x034b,
+    0x0b0a, 0x0317,
+  ]);
+  const selector = action.extraInners.find((inner) => inner.readUInt16BE(4) === 0x0317);
+  assert.ok(selector, '0x0317 grid selector is emitted with battle-entry probe');
+  assert.equal(selector.subarray(6).readUInt32LE(0), 0x00010000, '0x0317 byte[2] arms tactical field import');
     // The battle-entry sequence is carried as a DEFERRED push the server fires after the strategic
     // scene renders (≥0 ms). ★갭2 해소 (2026-06-26): 0x33b 전술 유닛이 클라 populator FUN_004c32a0에서
     // cross-match되도록, 배틀 참가 전원의 0x325 유닛테이블 + 0x323 캐릭레코드를 시퀀스 앞에 prepend한다:
@@ -1795,31 +2126,67 @@ test('login session can opt into a server-driven tactical battle-entry probe (LO
     // -> 0x0337 roster -> 0x42f NotifyChangeMode -> 0x0f1f.
     assert.ok(Array.isArray(action.deferredBattleInners), 'deferredBattleInners present');
     const battleCodes = action.deferredBattleInners.map((inner) => inner.readUInt16BE(4));
-    assert.deepEqual(battleCodes, [0x0325, 0x0323, 0x0349, 0x033b, 0x0341, 0x0343, 0x0337, 0x042f, 0x0f1f]);
+  assert.deepEqual(battleCodes, [0x042f]);
     // ★cross-match 보장 오라클: 0x325 유닛테이블 첫 엔트리 id == 0x33b 첫 유닛 id == own unit id(1).
-    const rosterUnit = action.deferredBattleInners.find((inner) => inner.readUInt16BE(4) === 0x0325);
+    const rosterUnit = action.extraInners.filter((inner) => inner.readUInt16BE(4) === 0x0325).at(-1);
     assert.ok(rosterUnit, '0x325 roster unit-table prepended');
     // 0x325 full-element 폼: count u16 LE @0, element[0].id @ header offset. id가 own unit(1)과 일치해야
     // 클라가 0x33b 유닛(stride 0x58 id 매칭)을 스킵하지 않는다.
-    const tacticsUnit = action.deferredBattleInners.find((inner) => inner.readUInt16BE(4) === 0x033b);
+    const tacticsUnit = action.extraInners.find((inner) => inner.readUInt16BE(4) === 0x033b);
     assert.ok(tacticsUnit, '0x33b tactics unit table present');
     // 0x323 캐릭 레코드가 ≥1개여서 클라 +0x36a5dc char-count 게이트가 0이 아니다.
-    const rosterChars = action.deferredBattleInners.filter((inner) => inner.readUInt16BE(4) === 0x0323);
+    const rosterChars = action.extraInners.filter((inner) => inner.readUInt16BE(4) === 0x0323);
     assert.ok(rosterChars.length >= 1, '≥1 0x323 char record so the populator char-count gate is non-zero');
     assert.equal(typeof action.deferredBattleDelayMs, 'number');
     // 0x42f NotifyChangeMode + 0x349 ResponsePositionUnit must carry the player's own unit (id == 1 here).
-    const position = action.deferredBattleInners.find((inner) => inner.readUInt16BE(4) === 0x0349);
+    const position = action.extraInners.find((inner) => inner.readUInt16BE(4) === 0x0349);
     assert.ok(position, 'ResponsePositionUnit 0x349 present');
-    assert.equal(position.subarray(6).readUInt16LE(0), 1); // packed count == 1 participant
-    assert.equal(position.subarray(6).readUInt32LE(2), 1); // participant id == own unit id
+assert.equal(position.subarray(6).readUInt16BE(0), 1); // fixed table count == 1 participant
+assert.equal(position.subarray(6).readUInt32BE(4), 1); // participant id == own unit id
     // 0x0337 roster carries the player's own commander (non-zero charId) — full seed, not coords-only.
-    const roster = action.deferredBattleInners.find((inner) => inner.readUInt16BE(4) === 0x0337);
+    const roster = action.extraInners.find((inner) => inner.readUInt16BE(4) === 0x0337);
     assert.ok(roster, 'ResponseTacticsCharacter 0x0337 present (commander roster)');
-    assert.ok(roster.subarray(6).readUInt16LE(2) >= 1, 'roster has ≥1 commander');
+assert.ok(roster.subarray(6).readUInt16BE(2) >= 1, 'roster has ≥1 commander');
     // ★0x0f1f NotifyTactics arg0 byte0 == 1: FUN_004c1b20 tactical-engage branch (sets +0x357e8c=2).
     // Without this the client takes the strategic-return (else) branch and the tactical pool never arms.
     const tactics = action.deferredBattleInners.find((inner) => inner.readUInt16BE(4) === 0x0f1f);
-    assert.ok(tactics, 'NotifyTactics 0x0f1f present');
+    assert.equal(tactics, undefined, 'NotifyTactics 0x0f1f omitted by default');
+  } finally {
+    if (prevGridEnter === undefined) delete process.env.LOGH_GRID_ENTER;
+    else process.env.LOGH_GRID_ENTER = prevGridEnter;
+    if (prevWorldCharId === undefined) delete process.env.LOGH_WORLD_CHAR_ID;
+    else process.env.LOGH_WORLD_CHAR_ID = prevWorldCharId;
+    if (prevPostloadPlayer === undefined) delete process.env.LOGH_POSTLOAD_PLAYER_RECORD;
+    else process.env.LOGH_POSTLOAD_PLAYER_RECORD = prevPostloadPlayer;
+    if (prevProbe === undefined) delete process.env.LOGH_BATTLE_ENTRY_PROBE;
+    else process.env.LOGH_BATTLE_ENTRY_PROBE = prevProbe;
+    if (prevNotifyTactics === undefined) delete process.env.LOGH_BATTLE_ENTRY_NOTIFY_TACTICS;
+    else process.env.LOGH_BATTLE_ENTRY_NOTIFY_TACTICS = prevNotifyTactics;
+  }
+});
+
+test('login session can explicitly opt into NotifyTactics battle-entry probe', () => {
+  const prevGridEnter = process.env.LOGH_GRID_ENTER;
+  const prevWorldCharId = process.env.LOGH_WORLD_CHAR_ID;
+  const prevPostloadPlayer = process.env.LOGH_POSTLOAD_PLAYER_RECORD;
+  const prevProbe = process.env.LOGH_BATTLE_ENTRY_PROBE;
+  const prevNotifyTactics = process.env.LOGH_BATTLE_ENTRY_NOTIFY_TACTICS;
+  process.env.LOGH_GRID_ENTER = '1';
+  process.env.LOGH_WORLD_CHAR_ID = '209';
+  process.env.LOGH_POSTLOAD_PLAYER_RECORD = '1';
+  process.env.LOGH_BATTLE_ENTRY_PROBE = '1';
+  process.env.LOGH_BATTLE_ENTRY_NOTIFY_TACTICS = '1';
+  try {
+    const store = createAccountStore({ acceptAnyGin7: true });
+    const session = createLoginSession({ accountStore: store, lobby: LOBBY, contentPack: makeContentPack() });
+    session.markHandshakeComplete();
+    const action = session.onInnerMessage(Buffer.from('0f06', 'hex'));
+    assert.equal(action.kind, 'lobby-response');
+    const battleCodes = (action.deferredBattleInners ?? [])
+      .map((inner) => inner.readUInt16BE(4))
+      .filter((code) => [0x042f, 0x0f1f].includes(code));
+    assert.deepEqual(battleCodes, [0x042f, 0x0f1f]);
+    const tactics = action.deferredBattleInners.find((inner) => inner.readUInt16BE(4) === 0x0f1f);
     assert.equal(tactics.subarray(6).readUInt8(0), 1, '0x0f1f arg0 byte0 == 1 (tactical engage)');
   } finally {
     if (prevGridEnter === undefined) delete process.env.LOGH_GRID_ENTER;
@@ -1830,6 +2197,333 @@ test('login session can opt into a server-driven tactical battle-entry probe (LO
     else process.env.LOGH_POSTLOAD_PLAYER_RECORD = prevPostloadPlayer;
     if (prevProbe === undefined) delete process.env.LOGH_BATTLE_ENTRY_PROBE;
     else process.env.LOGH_BATTLE_ENTRY_PROBE = prevProbe;
+    if (prevNotifyTactics === undefined) delete process.env.LOGH_BATTLE_ENTRY_NOTIFY_TACTICS;
+    else process.env.LOGH_BATTLE_ENTRY_NOTIFY_TACTICS = prevNotifyTactics;
+  }
+});
+
+test('login session can limit battle-entry probe steps for live crash bisection', () => {
+  const prevGridEnter = process.env.LOGH_GRID_ENTER;
+  const prevWorldCharId = process.env.LOGH_WORLD_CHAR_ID;
+  const prevPostloadPlayer = process.env.LOGH_POSTLOAD_PLAYER_RECORD;
+  const prevProbe = process.env.LOGH_BATTLE_ENTRY_PROBE;
+  const prevStepLimit = process.env.LOGH_BATTLE_ENTRY_STEP_LIMIT;
+  const prevStepCodes = process.env.LOGH_BATTLE_ENTRY_CODES;
+  process.env.LOGH_GRID_ENTER = '1';
+  process.env.LOGH_WORLD_CHAR_ID = '209';
+  process.env.LOGH_POSTLOAD_PLAYER_RECORD = '1';
+  process.env.LOGH_BATTLE_ENTRY_PROBE = '1';
+  process.env.LOGH_BATTLE_ENTRY_STEP_LIMIT = '3';
+  delete process.env.LOGH_BATTLE_ENTRY_CODES;
+  try {
+    const store = createAccountStore({ acceptAnyGin7: true });
+    const session = createLoginSession({ accountStore: store, lobby: LOBBY, contentPack: makeContentPack() });
+    session.markHandshakeComplete();
+    const action = session.onInnerMessage(Buffer.from('0f06', 'hex'));
+    assert.equal(action.kind, 'lobby-response');
+    const battleCodes = [
+      ...(action.extraInners ?? []),
+      ...(action.deferredBattleInners ?? []),
+    ]
+      .map((inner) => inner.readUInt16BE(4))
+.filter((code) => [0x0349, 0x033b, 0x0341, 0x0337, 0x042f, 0x0f1f].includes(code));
+    assert.deepEqual(battleCodes, [0x0349, 0x033b, 0x0341]);
+  } finally {
+    if (prevGridEnter === undefined) delete process.env.LOGH_GRID_ENTER;
+    else process.env.LOGH_GRID_ENTER = prevGridEnter;
+    if (prevWorldCharId === undefined) delete process.env.LOGH_WORLD_CHAR_ID;
+    else process.env.LOGH_WORLD_CHAR_ID = prevWorldCharId;
+    if (prevPostloadPlayer === undefined) delete process.env.LOGH_POSTLOAD_PLAYER_RECORD;
+    else process.env.LOGH_POSTLOAD_PLAYER_RECORD = prevPostloadPlayer;
+    if (prevProbe === undefined) delete process.env.LOGH_BATTLE_ENTRY_PROBE;
+    else process.env.LOGH_BATTLE_ENTRY_PROBE = prevProbe;
+    if (prevStepLimit === undefined) delete process.env.LOGH_BATTLE_ENTRY_STEP_LIMIT;
+    else process.env.LOGH_BATTLE_ENTRY_STEP_LIMIT = prevStepLimit;
+    if (prevStepCodes === undefined) delete process.env.LOGH_BATTLE_ENTRY_CODES;
+    else process.env.LOGH_BATTLE_ENTRY_CODES = prevStepCodes;
+  }
+});
+
+test('login session accepts LOGH_BATTLE_ENTRY_STEP_CODES as battle-entry code alias', () => {
+  const prevGridEnter = process.env.LOGH_GRID_ENTER;
+  const prevWorldCharId = process.env.LOGH_WORLD_CHAR_ID;
+  const prevPostloadPlayer = process.env.LOGH_POSTLOAD_PLAYER_RECORD;
+  const prevProbe = process.env.LOGH_BATTLE_ENTRY_PROBE;
+  const prevCodes = process.env.LOGH_BATTLE_ENTRY_CODES;
+  const prevStepCodes = process.env.LOGH_BATTLE_ENTRY_STEP_CODES;
+  process.env.LOGH_GRID_ENTER = '1';
+  process.env.LOGH_WORLD_CHAR_ID = '209';
+  process.env.LOGH_POSTLOAD_PLAYER_RECORD = '1';
+  process.env.LOGH_BATTLE_ENTRY_PROBE = '1';
+  delete process.env.LOGH_BATTLE_ENTRY_CODES;
+  process.env.LOGH_BATTLE_ENTRY_STEP_CODES = '0x0349,0x033b';
+  try {
+    const store = createAccountStore({ acceptAnyGin7: true });
+    const session = createLoginSession({ accountStore: store, lobby: LOBBY, contentPack: makeContentPack() });
+    session.markHandshakeComplete();
+    const action = session.onInnerMessage(Buffer.from('0f06', 'hex'));
+    assert.equal(action.kind, 'lobby-response');
+    const battleCodes = [
+      ...(action.extraInners ?? []),
+      ...(action.deferredBattleInners ?? []),
+    ]
+      .map((inner) => inner.readUInt16BE(4))
+      .filter((code) => [0x0349, 0x0345, 0x033b, 0x0341, 0x0337, 0x042f, 0x0f1f].includes(code));
+    assert.deepEqual(battleCodes, [0x0349, 0x0345, 0x033b]);
+  } finally {
+    if (prevGridEnter === undefined) delete process.env.LOGH_GRID_ENTER;
+    else process.env.LOGH_GRID_ENTER = prevGridEnter;
+    if (prevWorldCharId === undefined) delete process.env.LOGH_WORLD_CHAR_ID;
+    else process.env.LOGH_WORLD_CHAR_ID = prevWorldCharId;
+    if (prevPostloadPlayer === undefined) delete process.env.LOGH_POSTLOAD_PLAYER_RECORD;
+    else process.env.LOGH_POSTLOAD_PLAYER_RECORD = prevPostloadPlayer;
+    if (prevProbe === undefined) delete process.env.LOGH_BATTLE_ENTRY_PROBE;
+    else process.env.LOGH_BATTLE_ENTRY_PROBE = prevProbe;
+    if (prevCodes === undefined) delete process.env.LOGH_BATTLE_ENTRY_CODES;
+    else process.env.LOGH_BATTLE_ENTRY_CODES = prevCodes;
+    if (prevStepCodes === undefined) delete process.env.LOGH_BATTLE_ENTRY_STEP_CODES;
+    else process.env.LOGH_BATTLE_ENTRY_STEP_CODES = prevStepCodes;
+  }
+});
+
+test('battle-entry tactical preseed links UnitShip rows to active character and fleet cell', () => {
+  const prevGridEnter = process.env.LOGH_GRID_ENTER;
+  const prevWorldCharId = process.env.LOGH_WORLD_CHAR_ID;
+  const prevPostloadPlayer = process.env.LOGH_POSTLOAD_PLAYER_RECORD;
+  const prevPlayerFocusCell = process.env.LOGH_PLAYER_FOCUS_CELL;
+  const prevProbe = process.env.LOGH_BATTLE_ENTRY_PROBE;
+  const prevDeferTables = process.env.LOGH_BATTLE_ENTRY_DEFER_TABLES;
+  const prevCodes = process.env.LOGH_BATTLE_ENTRY_CODES;
+  const prevStepCodes = process.env.LOGH_BATTLE_ENTRY_STEP_CODES;
+  const prevPostloadUnitStreamWire = process.env.LOGH_POSTLOAD_UNIT_STREAM_WIRE;
+  const prevPostloadUnitEndian = process.env.LOGH_POSTLOAD_UNIT_ENDIAN;
+  process.env.LOGH_GRID_ENTER = '1';
+  process.env.LOGH_WORLD_CHAR_ID = '209';
+  process.env.LOGH_POSTLOAD_PLAYER_RECORD = '1';
+  process.env.LOGH_PLAYER_FOCUS_CELL = '1';
+  process.env.LOGH_BATTLE_ENTRY_PROBE = '1';
+  process.env.LOGH_BATTLE_ENTRY_DEFER_TABLES = '1';
+  process.env.LOGH_POSTLOAD_UNIT_STREAM_WIRE = '1';
+  process.env.LOGH_POSTLOAD_UNIT_ENDIAN = 'be';
+  delete process.env.LOGH_BATTLE_ENTRY_CODES;
+  process.env.LOGH_BATTLE_ENTRY_STEP_CODES = '0x033b,0x034b,0x042f';
+  try {
+    const store = createAccountStore({ acceptAnyGin7: true });
+    const session = createLoginSession({ accountStore: store, lobby: LOBBY, contentPack: makeContentPack() });
+    session.markHandshakeComplete();
+    const action = session.onInnerMessage(Buffer.from('0f06', 'hex'));
+    assert.equal(action.kind, 'lobby-response');
+    const inners = [
+      ...(action.extraInners ?? []),
+      ...(action.deferredBattleInners ?? []),
+    ];
+    const unitTables = inners.filter((inner) => appInnerCode(inner) === 0x0325);
+    assert.ok(unitTables.length >= 2, 'grid-enter plus tactical preseed 0x0325 records exist');
+    const unitBody = unitTables.at(-1).subarray(6);
+    const unitBase = SS_RESP_INFO_UNIT_HEADER;
+    assert.equal(readUnitLeU16(unitBody, 0), 1, 'tactical 0x0325 keeps native LE count even if parser-stream env is set');
+    assert.equal(readUnitLeU32(unitBody, unitBase + 0x00), 1, '0x0325 id matches tactical ship id');
+    assert.equal(readUnitLeU32(unitBody, unitBase + 0x08), 2588, '0x0325 focus-cell slot is nonzero');
+    assert.equal(readUnitLeU32(unitBody, unitBase + 0x0c), 2588, '0x0325 cell is usable by FUN_004c32a0 spot lookup');
+    assert.equal(readUnitLeU32(unitBody, unitBase + 0x10), 1, '0x0325 owner follows active character power');
+    const characterBody = inners.filter((inner) => appInnerCode(inner) === 0x0323).at(-1).subarray(6);
+    assert.equal(characterBody.readUInt32BE(0), 209, '0x0323 active character id');
+    assert.equal(characterBody.readUInt32BE(0x24), 1, '0x0323 flagship/gridUnitId links 0x0325 id');
+    assert.equal(characterBody.readUInt8(0x04), 1, '0x0323 power survives tactical replay');
+    assert.equal(characterBody.readUInt8(0x05), 1, '0x0323 camp survives tactical replay');
+    const tactics = inners.find((inner) => appInnerCode(inner) === 0x033b);
+    assert.ok(tactics, '0x033b UnitShip table emitted');
+  const tacticsBody = tactics.subarray(6);
+  assert.equal(tacticsBody.readUInt16BE(0), 1, '0x033b count');
+  assert.equal(tacticsBody.readUInt32BE(4), 1, '0x033b id matches 0x0325 id');
+  assert.equal(tacticsBody.readUInt32BE(4 + 0x08), 209, '0x033b character key matches 0x0323 id');
+  const baseInfo = inners.find((inner) => appInnerCode(inner) === 0x0345);
+  const basePosition = inners.find((inner) => appInnerCode(inner) === 0x034b);
+  const changeMode = inners.find((inner) => appInnerCode(inner) === 0x042f);
+  assert.ok(baseInfo, '0x0345 base table emitted');
+  assert.ok(basePosition, '0x034b base position table emitted');
+  assert.ok(changeMode, '0x042f NotifyChangeMode emitted');
+  const baseId = baseInfo.subarray(6).readUInt32BE(4);
+  assert.equal(baseId, 3, '0x0345 base id follows fleet home content id');
+  assert.equal(basePosition.subarray(6).readUInt32BE(4), baseId, '0x034b base id matches 0x0345');
+  assert.equal(changeMode.subarray(6).readUInt32LE(0x08), baseId, '0x042f fieldOwnerId matches tactical base id');
+} finally {
+    if (prevGridEnter === undefined) delete process.env.LOGH_GRID_ENTER;
+    else process.env.LOGH_GRID_ENTER = prevGridEnter;
+    if (prevWorldCharId === undefined) delete process.env.LOGH_WORLD_CHAR_ID;
+    else process.env.LOGH_WORLD_CHAR_ID = prevWorldCharId;
+    if (prevPostloadPlayer === undefined) delete process.env.LOGH_POSTLOAD_PLAYER_RECORD;
+    else process.env.LOGH_POSTLOAD_PLAYER_RECORD = prevPostloadPlayer;
+    if (prevPlayerFocusCell === undefined) delete process.env.LOGH_PLAYER_FOCUS_CELL;
+    else process.env.LOGH_PLAYER_FOCUS_CELL = prevPlayerFocusCell;
+    if (prevProbe === undefined) delete process.env.LOGH_BATTLE_ENTRY_PROBE;
+    else process.env.LOGH_BATTLE_ENTRY_PROBE = prevProbe;
+    if (prevDeferTables === undefined) delete process.env.LOGH_BATTLE_ENTRY_DEFER_TABLES;
+    else process.env.LOGH_BATTLE_ENTRY_DEFER_TABLES = prevDeferTables;
+    if (prevCodes === undefined) delete process.env.LOGH_BATTLE_ENTRY_CODES;
+    else process.env.LOGH_BATTLE_ENTRY_CODES = prevCodes;
+    if (prevStepCodes === undefined) delete process.env.LOGH_BATTLE_ENTRY_STEP_CODES;
+    else process.env.LOGH_BATTLE_ENTRY_STEP_CODES = prevStepCodes;
+    if (prevPostloadUnitStreamWire === undefined) delete process.env.LOGH_POSTLOAD_UNIT_STREAM_WIRE;
+    else process.env.LOGH_POSTLOAD_UNIT_STREAM_WIRE = prevPostloadUnitStreamWire;
+    if (prevPostloadUnitEndian === undefined) delete process.env.LOGH_POSTLOAD_UNIT_ENDIAN;
+    else process.env.LOGH_POSTLOAD_UNIT_ENDIAN = prevPostloadUnitEndian;
+  }
+});
+
+test('login session can opt into a server-driven fleet move probe (LOGH_FLEET_MOVE_PROBE)', () => {
+  const prevGridEnter = process.env.LOGH_GRID_ENTER;
+  const prevWorldCharId = process.env.LOGH_WORLD_CHAR_ID;
+  const prevWorldUnitId = process.env.LOGH_WORLD_UNIT_ID;
+  const prevPostloadPlayer = process.env.LOGH_POSTLOAD_PLAYER_RECORD;
+  const prevBattleProbe = process.env.LOGH_BATTLE_ENTRY_PROBE;
+  const prevFleetProbe = process.env.LOGH_FLEET_MOVE_PROBE;
+  const prevFleetRebuildProbe = process.env.LOGH_FLEET_MOVE_REBUILD_PROBE;
+  const prevFleetDelay = process.env.LOGH_FLEET_MOVE_DELAY_MS;
+  const prevFleetDelta = process.env.LOGH_FLEET_MOVE_DELTA;
+  const prevStateProbe = process.env.LOGH_STATE_TRANSITION_PROBE;
+  process.env.LOGH_GRID_ENTER = '1';
+  process.env.LOGH_WORLD_CHAR_ID = '209';
+  process.env.LOGH_WORLD_UNIT_ID = '77';
+  process.env.LOGH_POSTLOAD_PLAYER_RECORD = '1';
+  delete process.env.LOGH_BATTLE_ENTRY_PROBE;
+  process.env.LOGH_FLEET_MOVE_PROBE = '1';
+  delete process.env.LOGH_FLEET_MOVE_REBUILD_PROBE;
+  process.env.LOGH_FLEET_MOVE_DELAY_MS = '1234';
+  process.env.LOGH_FLEET_MOVE_DELTA = '9';
+  process.env.LOGH_STATE_TRANSITION_PROBE = '1';
+  try {
+    const store = createAccountStore({ acceptAnyGin7: true });
+    const session = createLoginSession({ accountStore: store, lobby: LOBBY, contentPack: makeContentPack() });
+    session.markHandshakeComplete();
+
+    const action = session.onInnerMessage(Buffer.from('0f06', 'hex'));
+    assert.equal(action.kind, 'lobby-response');
+    assertMessengerStatusRow(action.okInner, 209);
+    assert.deepEqual(stripPostloadCommandCards(action.extraInners.map((inner) => inner.readUInt16BE(4))), [0x0b09, 0x0204, 0x0325, 0x0323, 0x0b0a]);
+    assert.equal(action.deferredBattleDelayMs, 1234);
+    assert.ok(Array.isArray(action.deferredBattleInners), 'deferred fleet-move push is present');
+    assert.equal(action.deferredBattleInners.length, 1, 'fleet-move probe owns the deferred push slot');
+
+    const move = action.deferredBattleInners[0];
+    assert.equal(move.readUInt16BE(4), 0x0b07);
+    assert.equal(move.length, 6 + 0x244);
+    const payload = move.subarray(6);
+    assert.equal(payload.readUInt8(0x12), 1, 'one moved unit');
+    assert.equal(payload.readUInt32LE(0x14), 77, 'moved unit id comes from LOGH_WORLD_UNIT_ID');
+    assert.equal(payload.readUInt32LE(0x18), 2597, 'default empire cell 2588 plus LOGH_FLEET_MOVE_DELTA');
+    assert.equal(action.deferredBattleInners.some((inner) => inner.readUInt16BE(4) === 0x0f1f), false);
+  } finally {
+    if (prevGridEnter === undefined) delete process.env.LOGH_GRID_ENTER;
+    else process.env.LOGH_GRID_ENTER = prevGridEnter;
+    if (prevWorldCharId === undefined) delete process.env.LOGH_WORLD_CHAR_ID;
+    else process.env.LOGH_WORLD_CHAR_ID = prevWorldCharId;
+    if (prevWorldUnitId === undefined) delete process.env.LOGH_WORLD_UNIT_ID;
+    else process.env.LOGH_WORLD_UNIT_ID = prevWorldUnitId;
+    if (prevPostloadPlayer === undefined) delete process.env.LOGH_POSTLOAD_PLAYER_RECORD;
+    else process.env.LOGH_POSTLOAD_PLAYER_RECORD = prevPostloadPlayer;
+    if (prevBattleProbe === undefined) delete process.env.LOGH_BATTLE_ENTRY_PROBE;
+    else process.env.LOGH_BATTLE_ENTRY_PROBE = prevBattleProbe;
+    if (prevFleetProbe === undefined) delete process.env.LOGH_FLEET_MOVE_PROBE;
+    else process.env.LOGH_FLEET_MOVE_PROBE = prevFleetProbe;
+    if (prevFleetRebuildProbe === undefined) delete process.env.LOGH_FLEET_MOVE_REBUILD_PROBE;
+    else process.env.LOGH_FLEET_MOVE_REBUILD_PROBE = prevFleetRebuildProbe;
+    if (prevFleetDelay === undefined) delete process.env.LOGH_FLEET_MOVE_DELAY_MS;
+    else process.env.LOGH_FLEET_MOVE_DELAY_MS = prevFleetDelay;
+    if (prevFleetDelta === undefined) delete process.env.LOGH_FLEET_MOVE_DELTA;
+    else process.env.LOGH_FLEET_MOVE_DELTA = prevFleetDelta;
+    if (prevStateProbe === undefined) delete process.env.LOGH_STATE_TRANSITION_PROBE;
+    else process.env.LOGH_STATE_TRANSITION_PROBE = prevStateProbe;
+  }
+});
+
+test('login session can append a rebuild candidate to the fleet move probe (LOGH_FLEET_MOVE_REBUILD_PROBE)', () => {
+  const prevGridEnter = process.env.LOGH_GRID_ENTER;
+  const prevWorldCharId = process.env.LOGH_WORLD_CHAR_ID;
+  const prevWorldUnitId = process.env.LOGH_WORLD_UNIT_ID;
+  const prevPostloadPlayer = process.env.LOGH_POSTLOAD_PLAYER_RECORD;
+  const prevFullUnitLocation = process.env.LOGH_FULL_UNIT_LOCATION;
+  const prevBattleProbe = process.env.LOGH_BATTLE_ENTRY_PROBE;
+  const prevFleetProbe = process.env.LOGH_FLEET_MOVE_PROBE;
+  const prevFleetRebuildProbe = process.env.LOGH_FLEET_MOVE_REBUILD_PROBE;
+  const prevFleetDelay = process.env.LOGH_FLEET_MOVE_DELAY_MS;
+  const prevFleetDelta = process.env.LOGH_FLEET_MOVE_DELTA;
+  const prevStateProbe = process.env.LOGH_STATE_TRANSITION_PROBE;
+  const prevPlayerFocusCell = process.env.LOGH_PLAYER_FOCUS_CELL;
+  const prevPostloadUnitEndian = process.env.LOGH_POSTLOAD_UNIT_ENDIAN;
+  const prevUnitStreamWire = process.env.LOGH_UNIT_STREAM_WIRE;
+  const prevPostloadUnitStreamWire = process.env.LOGH_POSTLOAD_UNIT_STREAM_WIRE;
+  process.env.LOGH_GRID_ENTER = '1';
+  process.env.LOGH_WORLD_CHAR_ID = '209';
+  process.env.LOGH_WORLD_UNIT_ID = '77';
+  process.env.LOGH_POSTLOAD_PLAYER_RECORD = '1';
+  delete process.env.LOGH_FULL_UNIT_LOCATION;
+  delete process.env.LOGH_BATTLE_ENTRY_PROBE;
+  process.env.LOGH_FLEET_MOVE_PROBE = '1';
+  process.env.LOGH_FLEET_MOVE_REBUILD_PROBE = '1';
+  process.env.LOGH_FLEET_MOVE_DELAY_MS = '1234';
+  process.env.LOGH_FLEET_MOVE_DELTA = '9';
+  process.env.LOGH_STATE_TRANSITION_PROBE = '1';
+  delete process.env.LOGH_PLAYER_FOCUS_CELL;
+  delete process.env.LOGH_POSTLOAD_UNIT_ENDIAN;
+  delete process.env.LOGH_UNIT_STREAM_WIRE;
+  delete process.env.LOGH_POSTLOAD_UNIT_STREAM_WIRE;
+  try {
+    const store = createAccountStore({ acceptAnyGin7: true });
+    const session = createLoginSession({ accountStore: store, lobby: LOBBY, contentPack: makeContentPack() });
+    session.markHandshakeComplete();
+
+    const action = session.onInnerMessage(Buffer.from('0f06', 'hex'));
+    assert.equal(action.kind, 'lobby-response');
+    assertMessengerStatusRow(action.okInner, 209);
+    assert.deepEqual(stripPostloadCommandCards(action.extraInners.map((inner) => inner.readUInt16BE(4))), [0x0b09, 0x0204, 0x0325, 0x0323, 0x0b0a]);
+    assert.equal(action.deferredBattleDelayMs, 1234);
+    assert.deepEqual(action.deferredBattleInners.map(appInnerCode), [0x0b07, 0x0325, 0x0b0a]);
+
+    const movePayload = action.deferredBattleInners[0].subarray(6);
+    assert.equal(movePayload.readUInt8(0x12), 1, 'one moved unit');
+    assert.equal(movePayload.readUInt32LE(0x14), 77, 'moved unit id comes from LOGH_WORLD_UNIT_ID');
+    assert.equal(movePayload.readUInt32LE(0x18), 2597, 'default empire cell 2588 plus LOGH_FLEET_MOVE_DELTA');
+
+    const unitBody = action.deferredBattleInners[1].subarray(6);
+    assert.equal(readUnitLeU16(unitBody, 0), 1, 'rebuild candidate replays one full unit');
+    assert.equal(readUnitLeU32(unitBody, 4 + 0x00), 77, '0x0325 unit id follows the moved unit');
+    assert.equal(readUnitLeU32(unitBody, 4 + 0x08), 209, 'commander remains the active character by default');
+    assert.equal(readUnitLeU32(unitBody, 4 + 0x0c), 2597, '0x0325 cell is updated to the move destination');
+    assert.equal(readUnitLeU32(unitBody, 4 + 0x10), 1, 'owner/faction remains the imperial player side');
+    assert.equal(action.deferredBattleInners[2].subarray(6).readUInt8(0), 0, '0x0b0a runs the strategic no-reset rebuild path');
+    assert.equal(action.deferredBattleInners.some((inner) => inner.readUInt16BE(4) === 0x0f1f), false);
+  } finally {
+    if (prevGridEnter === undefined) delete process.env.LOGH_GRID_ENTER;
+    else process.env.LOGH_GRID_ENTER = prevGridEnter;
+    if (prevWorldCharId === undefined) delete process.env.LOGH_WORLD_CHAR_ID;
+    else process.env.LOGH_WORLD_CHAR_ID = prevWorldCharId;
+    if (prevWorldUnitId === undefined) delete process.env.LOGH_WORLD_UNIT_ID;
+    else process.env.LOGH_WORLD_UNIT_ID = prevWorldUnitId;
+    if (prevPostloadPlayer === undefined) delete process.env.LOGH_POSTLOAD_PLAYER_RECORD;
+    else process.env.LOGH_POSTLOAD_PLAYER_RECORD = prevPostloadPlayer;
+    if (prevFullUnitLocation === undefined) delete process.env.LOGH_FULL_UNIT_LOCATION;
+    else process.env.LOGH_FULL_UNIT_LOCATION = prevFullUnitLocation;
+    if (prevBattleProbe === undefined) delete process.env.LOGH_BATTLE_ENTRY_PROBE;
+    else process.env.LOGH_BATTLE_ENTRY_PROBE = prevBattleProbe;
+    if (prevFleetProbe === undefined) delete process.env.LOGH_FLEET_MOVE_PROBE;
+    else process.env.LOGH_FLEET_MOVE_PROBE = prevFleetProbe;
+    if (prevFleetRebuildProbe === undefined) delete process.env.LOGH_FLEET_MOVE_REBUILD_PROBE;
+    else process.env.LOGH_FLEET_MOVE_REBUILD_PROBE = prevFleetRebuildProbe;
+    if (prevFleetDelay === undefined) delete process.env.LOGH_FLEET_MOVE_DELAY_MS;
+    else process.env.LOGH_FLEET_MOVE_DELAY_MS = prevFleetDelay;
+    if (prevFleetDelta === undefined) delete process.env.LOGH_FLEET_MOVE_DELTA;
+    else process.env.LOGH_FLEET_MOVE_DELTA = prevFleetDelta;
+    if (prevStateProbe === undefined) delete process.env.LOGH_STATE_TRANSITION_PROBE;
+    else process.env.LOGH_STATE_TRANSITION_PROBE = prevStateProbe;
+    if (prevPlayerFocusCell === undefined) delete process.env.LOGH_PLAYER_FOCUS_CELL;
+    else process.env.LOGH_PLAYER_FOCUS_CELL = prevPlayerFocusCell;
+    if (prevPostloadUnitEndian === undefined) delete process.env.LOGH_POSTLOAD_UNIT_ENDIAN;
+    else process.env.LOGH_POSTLOAD_UNIT_ENDIAN = prevPostloadUnitEndian;
+    if (prevUnitStreamWire === undefined) delete process.env.LOGH_UNIT_STREAM_WIRE;
+    else process.env.LOGH_UNIT_STREAM_WIRE = prevUnitStreamWire;
+    if (prevPostloadUnitStreamWire === undefined) delete process.env.LOGH_POSTLOAD_UNIT_STREAM_WIRE;
+    else process.env.LOGH_POSTLOAD_UNIT_STREAM_WIRE = prevPostloadUnitStreamWire;
   }
 });
 
@@ -1850,7 +2544,7 @@ test('login session leaves grid-enter records untouched when the battle-entry pr
 
     const action = session.onInnerMessage(Buffer.from('0f06', 'hex'));
     const codes = action.extraInners.map((inner) => inner.readUInt16BE(4));
-    assert.deepEqual(codes, [0x0b09, 0x0204, 0x0325, 0x0323, 0x0b0a]);
+    assert.deepEqual(stripPostloadCommandCards(codes), [0x0b09, 0x0204, 0x0325, 0x0323, 0x0b0a]);
     assert.ok(!codes.includes(0x042f), 'no NotifyChangeMode when probe off');
     assert.equal(action.deferredBattleInners, undefined, 'no deferred battle push when probe off');
   } finally {
@@ -1865,7 +2559,7 @@ test('login session leaves grid-enter records untouched when the battle-entry pr
   }
 });
 
-test('login session can opt into BE 0x0325 only during post-load player record replay', () => {
+test('login session keeps post-load tactical 0x0325 native LE when BE endian env is set', () => {
   const prevGridEnter = process.env.LOGH_GRID_ENTER;
   const prevWorldCharId = process.env.LOGH_WORLD_CHAR_ID;
   const prevPostloadRich = process.env.LOGH_POSTLOAD_RICH_CHARACTER;
@@ -1883,13 +2577,14 @@ test('login session can opt into BE 0x0325 only during post-load player record r
 
     const action = session.onInnerMessage(Buffer.from('0f06', 'hex'));
     assert.equal(action.kind, 'lobby-response');
-    assert.deepEqual(action.extraInners.map((inner) => inner.readUInt16BE(4)), [0x0b09, 0x0204, 0x0325, 0x0323, 0x0b0a]);
+    assert.deepEqual(stripPostloadCommandCards(action.extraInners.map((inner) => inner.readUInt16BE(4))), [0x0b09, 0x0204, 0x0325, 0x0323, 0x0b0a]);
 
     const unit = action.extraInners.find((inner) => inner.readUInt16BE(4) === 0x0325);
     assert.ok(unit);
     const unitBody = unit.subarray(6);
-    assert.equal(readUnitBeU16(unitBody, 0), 1);
-    assert.equal(readUnitBeU32(unitBody, 4), 1);
+    assert.equal(readUnitLeU16(unitBody, 0), 1);
+    assert.equal(readUnitLeU32(unitBody, 4), 1);
+    assert.notEqual(readUnitBeU16(unitBody, 0), 1);
   } finally {
     if (prevGridEnter === undefined) delete process.env.LOGH_GRID_ENTER;
     else process.env.LOGH_GRID_ENTER = prevGridEnter;
@@ -1904,7 +2599,7 @@ test('login session can opt into BE 0x0325 only during post-load player record r
   }
 });
 
-test('login session can opt into parser-stream 0x0325 unit anchors', () => {
+test('login session keeps tactical 0x0325 native LE when parser-stream env is set', () => {
   const prevGridEnter = process.env.LOGH_GRID_ENTER;
   const prevWorldCharId = process.env.LOGH_WORLD_CHAR_ID;
   const prevPostloadRich = process.env.LOGH_POSTLOAD_RICH_CHARACTER;
@@ -1922,14 +2617,14 @@ test('login session can opt into parser-stream 0x0325 unit anchors', () => {
 
     const action = session.onInnerMessage(Buffer.from('0f06', 'hex'));
     assert.equal(action.kind, 'lobby-response');
-    assert.deepEqual(action.extraInners.map((inner) => inner.readUInt16BE(4)), [0x0b09, 0x0204, 0x0325, 0x0323, 0x0b0a]);
+    assert.deepEqual(stripPostloadCommandCards(action.extraInners.map((inner) => inner.readUInt16BE(4))), [0x0b09, 0x0204, 0x0325, 0x0323, 0x0b0a]);
 
     const unit = action.extraInners.find((inner) => inner.readUInt16BE(4) === 0x0325);
     assert.ok(unit);
     const unitBody = unit.subarray(6);
-    assert.equal(readUnitBeU16(unitBody, 0), 1);
-    assert.equal(readUnitBeU32(unitBody, 2), 1);
-    assert.equal(readUnitBeU32(unitBody, 4), 0x00010000);
+    assert.equal(readUnitLeU16(unitBody, 0), 1);
+    assert.equal(readUnitLeU32(unitBody, 4), 1);
+    assert.notEqual(readUnitBeU16(unitBody, 0), 1);
   } finally {
     if (prevGridEnter === undefined) delete process.env.LOGH_GRID_ENTER;
     else process.env.LOGH_GRID_ENTER = prevGridEnter;
@@ -1944,7 +2639,7 @@ test('login session can opt into parser-stream 0x0325 unit anchors', () => {
   }
 });
 
-test('login session can limit parser-stream 0x0325 to post-load replay', () => {
+test('login session keeps post-load tactical 0x0325 native LE when parser-stream replay is requested', () => {
   const prevGridEnter = process.env.LOGH_GRID_ENTER;
   const prevWorldCharId = process.env.LOGH_WORLD_CHAR_ID;
   const prevPostloadRich = process.env.LOGH_POSTLOAD_RICH_CHARACTER;
@@ -1967,9 +2662,9 @@ test('login session can limit parser-stream 0x0325 to post-load replay', () => {
     const unit = action.extraInners.find((inner) => inner.readUInt16BE(4) === 0x0325);
     assert.ok(unit);
     const unitBody = unit.subarray(6);
-    assert.equal(readUnitBeU16(unitBody, 0), 1);
-    assert.equal(readUnitBeU32(unitBody, 2), 1);
-    assert.equal(readUnitBeU32(unitBody, 4), 0x00010000);
+    assert.equal(readUnitLeU16(unitBody, 0), 1);
+    assert.equal(readUnitLeU32(unitBody, 4), 1);
+    assert.notEqual(readUnitBeU16(unitBody, 0), 1);
   } finally {
     if (prevGridEnter === undefined) delete process.env.LOGH_GRID_ENTER;
     else process.env.LOGH_GRID_ENTER = prevGridEnter;
@@ -2006,7 +2701,7 @@ test('login session keeps simple-info disabled by default on the post-load 0x0f0
     assert.equal(action.kind, 'lobby-response');
     assertMessengerStatusRow(action.okInner, 209);
     const codes = action.extraInners.map((inner) => inner.readUInt16BE(4));
-    assert.deepEqual(codes, [0x0b09, 0x0204, 0x0325, 0x0323, 0x0b0a, 0x0356]);
+    assert.deepEqual(stripPostloadCommandCards(codes), [0x0b09, 0x0204, 0x0325, 0x0323, 0x0b0a, 0x0356]);
     assert.equal(action.extraInners[0].subarray(6).readUInt8(0), 0);
     assert.equal(action.extraInners[4].subarray(6).readUInt8(0), 0);
 
@@ -2076,7 +2771,7 @@ test('login session can opt into character simple-info ids on the post-load 0x0f
     const action = session.onInnerMessage(Buffer.from('0f06', 'hex'));
     assert.equal(action.kind, 'lobby-response');
     const codes = action.extraInners.map((inner) => inner.readUInt16BE(4));
-    assert.deepEqual(codes, [0x0b09, 0x0204, 0x0325, 0x0323, 0x0b0a, 0x0356, 0x1200, 0x1202, 0x1201]);
+    assert.deepEqual(stripPostloadCommandCards(codes), [0x0b09, 0x0204, 0x0325, 0x0323, 0x0b0a, 0x0356, 0x1200, 0x1202, 0x1201]);
 
     const characterInfo = action.extraInners.find((inner) => inner.readUInt16BE(4) === 0x1202);
     assert.ok(characterInfo);
@@ -2177,14 +2872,14 @@ test('login session post-load grid enter does not reuse 0x0305/0x0307 for duty c
     assert.equal(action.kind, 'lobby-response');
     assertMessengerStatusRow(action.okInner, 1);
     const codes = action.extraInners.map((inner) => inner.readUInt16BE(4));
-    assert.deepEqual(codes, [0x0b09, 0x0204, 0x0325, 0x0323, 0x0b0a, 0x0356]);
+    assert.deepEqual(stripPostloadCommandCards(codes), [0x0b09, 0x0204, 0x0325, 0x0323, 0x0b0a, 0x0356]);
     assert.equal(action.extraInners[0].subarray(6).readUInt8(0), 0);
     assert.equal(action.extraInners[4].subarray(6).readUInt8(0), 0);
 
     const characterDelta = decodeNotifyCharacterDelta(action.extraInners.find((inner) => inner.readUInt16BE(4) === 0x0356));
     assert.equal(characterDelta.readUInt8(0x250), 0);
     assert.equal(characterDelta.readUInt16LE(0x254), 0);
-    assert.equal(codes.includes(0x0305), false);
+    assert.equal(codes.includes(0x0305), true);
     assert.equal(codes.includes(0x0307), false);
   } finally {
     if (prevGridEnter === undefined) delete process.env.LOGH_GRID_ENTER;
@@ -2251,7 +2946,7 @@ test('login session can append experimental category-zero 0x0707 appointment can
     assert.equal(action.kind, 'lobby-response');
 
     const codes = action.extraInners.map(appInnerCode);
-    assert.deepEqual(codes, [0x0b09, 0x0204, 0x0325, 0x0323, 0x0b0a, 0x0356, 0x0707]);
+    assert.deepEqual(stripPostloadCommandCards(codes), [0x0b09, 0x0204, 0x0325, 0x0323, 0x0b0a, 0x0356, 0x0707]);
     const appointment = action.extraInners.find((inner) => appInnerCode(inner) === 0x0707);
     assert.equal(appointment.readUInt16BE(4), 0x0707);
     assert.equal(appointment.length, 46);
@@ -2368,7 +3063,7 @@ test('login session keeps generated character fields in post-load 0x0356 refresh
     assert.equal(fullBody.readUInt32BE(0x00), createdId);
     assert.equal(readPstr16(fullBody, 0x81, 0x82), 'Lee');
     assert.equal(readPstr16(fullBody, 0xb8, 0xba), 'Lee');
-    assert.equal(fullBody.readUInt16LE(0xd6), 3);
+    assert.equal(fullBody.readUInt16LE(0xd6), 0x0d); // constmsg group-5 subId: 소위
     assert.ok(fullBody.readUInt16LE(0x188) > 0);
 
     const characterDelta = postload.extraInners.find((inner) => inner.readUInt16BE(4) === 0x0356);
@@ -2377,7 +3072,7 @@ test('login session keeps generated character fields in post-load 0x0356 refresh
     assert.equal(deltaBody.readUInt32LE(0x04), createdId);
     assert.equal(readPstr16(deltaBody, 0x85, 0x86), 'Lee');
     assert.equal(readPstr16(deltaBody, 0xbc, 0xbe), 'Lee');
-    assert.equal(deltaBody.readUInt16LE(0xda), 3);
+    assert.equal(deltaBody.readUInt16LE(0xda), 0x0d); // same rank subId in 0x0356 refresh
     assert.ok(deltaBody.readUInt16LE(0x18c) > 0);
   } finally {
     if (prevGridEnter === undefined) delete process.env.LOGH_GRID_ENTER;
@@ -2386,6 +3081,64 @@ test('login session keeps generated character fields in post-load 0x0356 refresh
     else process.env.LOGH_POSTLOAD_RICH_CHARACTER = prevPostloadRich;
     if (prevKoNames === undefined) delete process.env.LOGH_KO_NAMES;
     else process.env.LOGH_KO_NAMES = prevKoNames;
+  }
+});
+
+test('login session maps raw rank ids to constmsg group-5 rank subIds', () => {
+  const prevGridEnter = process.env.LOGH_GRID_ENTER;
+  const prevPostloadRich = process.env.LOGH_POSTLOAD_RICH_CHARACTER;
+  const prevWorldPlayer = process.env.LOGH_WORLD_PLAYER;
+  const prevWorldCharId = process.env.LOGH_WORLD_CHAR_ID;
+  process.env.LOGH_GRID_ENTER = '1';
+  process.env.LOGH_POSTLOAD_RICH_CHARACTER = '1';
+  process.env.LOGH_WORLD_PLAYER = '1';
+  process.env.LOGH_WORLD_CHAR_ID = '1';
+  try {
+    const store = createAccountStore({ acceptAnyGin7: true });
+    const session = createLoginSession({
+      accountStore: store,
+      lobby: LOBBY,
+      characters: [{
+        id: 1,
+        name: 'Raw',
+        displayName: 'Raw Rank',
+        lastname: 'Raw',
+        firstname: 'Rank',
+        faction: 'empire',
+        power: 1,
+        worldPower: 1,
+        camp: 1,
+        rank: 100,
+        spot: 70,
+        spotOwner: 1,
+        abilities: [50, 50, 50, 50, 50, 50, 50, 50],
+        stamina: 100,
+      }],
+    });
+    session.markHandshakeComplete();
+
+    const world = session.onInnerMessage(Buffer.from('0f02', 'hex'));
+    const worldCharacter = world.extraInners.find((inner) => inner.readUInt16BE(4) === 0x0323);
+    assert.ok(worldCharacter);
+    assert.equal(worldCharacter.subarray(6).readUInt16LE(0xd6), 2);
+
+    const postload = session.onInnerMessage(Buffer.from('0f06', 'hex'));
+    const fullCharacter = postload.extraInners.find((inner) => inner.readUInt16BE(4) === 0x0323);
+    assert.ok(fullCharacter);
+    assert.equal(fullCharacter.subarray(6).readUInt16LE(0xd6), 2);
+
+    const characterDelta = postload.extraInners.find((inner) => inner.readUInt16BE(4) === 0x0356);
+    assert.ok(characterDelta);
+    assert.equal(decodeNotifyCharacterDelta(characterDelta).readUInt16LE(0xda), 2);
+  } finally {
+    if (prevGridEnter === undefined) delete process.env.LOGH_GRID_ENTER;
+    else process.env.LOGH_GRID_ENTER = prevGridEnter;
+    if (prevPostloadRich === undefined) delete process.env.LOGH_POSTLOAD_RICH_CHARACTER;
+    else process.env.LOGH_POSTLOAD_RICH_CHARACTER = prevPostloadRich;
+    if (prevWorldPlayer === undefined) delete process.env.LOGH_WORLD_PLAYER;
+    else process.env.LOGH_WORLD_PLAYER = prevWorldPlayer;
+    if (prevWorldCharId === undefined) delete process.env.LOGH_WORLD_CHAR_ID;
+    else process.env.LOGH_WORLD_CHAR_ID = prevWorldCharId;
   }
 });
 
@@ -2418,18 +3171,40 @@ test('login session persists generated character and reloads profile characters 
       name: 'Lee',
       displayName: 'Lee Flow',
       lastname: 'Lee',
-      firstname: 'Flow',
-      faction: 'empire',
-      power: 1,
-      blood: 2,
-      sex: 0,
-      face: 1000005,
-      abilities: [90, 80, 70, 60, 95, 88, 92, 70],
-      rank: 3,
-      spot: 70,
-      spotOwner: 1,
-      createdAt: persisted.accounts[0].characters[0].createdAt,
-    });
+    firstname: 'Flow',
+    faction: 'empire',
+    power: 1,
+    worldPower: 1,
+    createPower: 1,
+    camp: 1,
+    blood: 2,
+    sex: 0,
+    face: 1000005,
+    abilities: [90, 80, 70, 60, 95, 88, 92, 70],
+    rank: 3,
+    createRankSubId: 13,
+    state: 2,
+    fame: 1,
+    pcp: 1200,
+    mcp: 1200,
+    money: 50000,
+    influence: 1,
+    stamina: 100,
+    title: 0,
+    bonusPoint: 0,
+    specialAbilityNum: 0,
+    birthMonth: 1,
+    birthDay: 1,
+    birthYear: 767,
+    ageYears: 18,
+    spot: 70,
+    spotOwner: 1,
+    together: 1,
+    status: 1,
+    generated: 1,
+    check: 1,
+    createdAt: persisted.accounts[0].characters[0].createdAt,
+  });
     assert.equal(typeof persisted.accounts[0].characters[0].createdAt, 'string');
     assert.equal(JSON.stringify(persisted).includes('FlowPw17!'), false);
 
@@ -2733,6 +3508,7 @@ test('login session seeds the house-rule ability BASE on a 0x1008 create with al
   assert.equal(ability(0), 40); // tochi BASE
   assert.equal(ability(4), 52); // shiki = 40 + 12 (제국기사)
   assert.equal(ability(6), 48); // kogeki = 40 + 8
+  assert.equal(record.readUInt8(0x2d0), 1); // together default survives generated character persistence
   // 体力(stamina) @0x1a9: 생성 캐릭이 체력 0 게이지로 표시되던 버그 수정 — 만체력으로 시드.
   assert.equal(record.readUInt8(0x1a9), 100); // STAMINA_FULL (만체력)
 });
@@ -2829,11 +3605,12 @@ test('login session answers 0x0314 RequestStaticInformationGrid with the REAL ga
     assert.equal(action.okInner.length, 6 + 0x138c); // fixed 5004-byte record
     assert.equal(action.extraInners, undefined); // single real-data frame (the extra 0x0313 stalled the walk)
     // The cell grid decodes to the 80 systems + 1 fleet (non-empty, NOT the empty walker grid).
-    const payload = action.okInner.subarray(6);
-    assert.equal(payload.readUInt8(0), 100); // w
-    assert.equal(payload.readUInt8(1), 50); // h
-    assert.ok(payload.readUInt16BE(2) > 0); // rleCount non-zero (helper-read BE wire)
-  } finally {
+const payload = action.okInner.subarray(6);
+assert.equal(payload.readUInt8(0), 100); // w
+assert.equal(payload.readUInt8(1), 50); // h
+assert.ok(payload.readUInt16BE(2) > 0); // rleCount non-zero (helper-read BE wire)
+assert.ok(session.commandTargetSnapshot().gridCells.length > 0);
+} finally {
     if (prevPlayer === undefined) delete process.env.LOGH_WORLD_PLAYER;
     else process.env.LOGH_WORLD_PLAYER = prevPlayer;
     if (prevGalaxy === undefined) delete process.env.LOGH_STRAT_GALAXY;
@@ -2863,27 +3640,36 @@ test('login session can preload static-card command tables after the 0x0304 empt
     assert.equal(action.okInner.readUInt16BE(4), 0x0305);
     // 2026-06-21: 채운 0x305 카드를 walker okInner로 **직접** 보낸다(빈 walker 제거 — 라이브 dump상
     // 빈 walker가 staging을 차지해 명령행이 0이었음). cardBody = okInner. object-table 프리로드 플래그가
-    // off라 extraInners는 비어 있음. 포맷 = canonical LE record-relative(record base=2: card_id@+0,
-    // command_count@record+0x14=0x16, factory ids@record+0x16=0x18).
+    // off라 extraInners는 비어 있음. 포맷 = canonical LE record-relative; helper below keeps
+    // record+0x14 / record+0x16 distinct from body offsets.
     assert.ok(!action.extraInners || action.extraInners.length === 0);
-    const cardBody = action.okInner.subarray(6);
-    assert.equal(cardBody.readUInt16LE(0x00), 1); // outer count (LE), 1카드 → body[0]=1로 status-OK 의미도 충족
-    assert.equal(cardBody.readUInt16LE(0x02), 0); // card_id (record base=2, +0x00) = COMMAND_TABLE_PRELOAD_CARD_ID
-    assert.equal(cardBody.readUInt8(0x16), 2); // command_count (record+0x14)
-    assert.equal(cardBody.readUInt16LE(0x18), 0x002b); // factory id0 (record+0x16)
-    assert.equal(cardBody.readUInt16LE(0x1a), 0x0041); // factory id1
+const cardBody = action.okInner.subarray(6);
+const devCards = devCommandCategoryCards();
+assert.equal(cardBody.readUInt16LE(0x00), devCards.length); // one dev card per manual command category
+assert.equal(cardBody.readUInt16LE(0x02), 0); // card_id (record base=2, +0x00) = COMMAND_TABLE_PRELOAD_CARD_ID
+assert.equal(cardBody.readUInt8(0x16), devCards[0].commands.length); // command_count (record+0x14)
+assert.equal(cardBody.readUInt16LE(0x18), 0x002b); // factory id0 (record+0x16)
+assert.equal(cardBody.readUInt16LE(0x1a), 0x0041); // factory id1
+const menu = decodeStaticInformationCardMenuFields(action.okInner, 0);
+assert.equal(menu.consumer, 'FUN_004f5cb0');
+assert.equal(menu.recordCommandCountOffset, 0x14);
+assert.equal(menu.recordFactoryIdsOffset, 0x16);
+assert.equal(menu.bodyCommandCountOffset, 0x16);
+assert.equal(menu.bodyFactoryIdsOffset, 0x18);
+assert.deepEqual(menu.factoryIds.slice(0, 2), [0x002b, 0x0041]);
+assert.deepEqual(menu.widgetIds.slice(0, 2), [0x002b + 0x43, 0x0041 + 0x43]);
 
-    const commandAction = session.onInnerMessage(Buffer.from('0306', 'hex'));
-    assert.equal(commandAction.kind, 'lobby-response');
-    assert.equal(commandAction.okInner.readUInt16BE(4), 0x0307);
+const commandAction = session.onInnerMessage(Buffer.from('0306', 'hex'));
+assert.equal(commandAction.kind, 'lobby-response');
+assert.equal(commandAction.okInner.readUInt16BE(4), 0x0307);
     // 0x307 canonical: count LE@0x00, record base=2 {card_id LE@+0, command_count u8@+0x02,
     // descriptors @+0x04 stride 8: id LE@+0}. → id0@0x06, id1@0x0e.
-    const commandBody = commandAction.okInner.subarray(6);
-    assert.equal(commandBody.readUInt16LE(0x00), 1); // outer count
-    assert.equal(commandBody.readUInt16LE(0x02), 0); // card_id
-    assert.equal(commandBody.readUInt8(0x04), 2); // command_count
-    assert.equal(commandBody.readUInt16LE(0x06), 0x002b); // descriptor0 id
-    assert.equal(commandBody.readUInt16LE(0x0e), 0x0041); // descriptor1 id
+const commandBody = commandAction.okInner.subarray(6);
+assert.equal(commandBody.readUInt16LE(0x00), devCards.length); // outer count
+assert.equal(commandBody.readUInt16LE(0x02), 0); // card_id
+assert.equal(commandBody.readUInt8(0x04), devCards[0].commands.length); // command_count
+assert.equal(commandBody.readUInt16LE(0x06), 0x002b); // descriptor0 id
+assert.equal(commandBody.readUInt16LE(0x0e), 0x0041); // descriptor1 id
   } finally {
     if (previous === undefined) delete process.env.LOGH_COMMAND_TABLE_PRELOAD_PROBE;
     else process.env.LOGH_COMMAND_TABLE_PRELOAD_PROBE = previous;
@@ -3148,16 +3934,102 @@ test('login session 0x2009 maps a selected session id to its distinct world via 
     world: { ip: '127.0.0.1', port: 47900, token: 0 },
     worldBySession: { 2: { ip: '10.0.0.2', port: 48000, token: 0xdeadbeef } },
   });
-  // 0x2009 body = [u32 LE sessionId @+2]; selecting session 2.
-  const body = Buffer.from('200902000000', 'hex'); // code 0x2009 BE, then 0x00000002 LE
+  // RE 2026-06-28: 0x2009 body size is 2; body = [u16 LE sessionId @+2], selecting session 2.
+  const body = Buffer.from('20090200', 'hex');
   const action = session.onInnerMessage(body);
   assert.equal(action.okInner.readUInt16BE(4), 0x200a);
   assert.equal(action.okInner.readUInt32BE(6), 0x0200000a); // 10.0.0.2 octet-low-first
   assert.equal(action.okInner.readUInt16BE(10), 48000); // session 2 world port
   assert.equal(action.okInner.readUInt32BE(14), 0xdeadbeef); // session 2 token
+  assert.equal(action.trace.selectedSessionId, 2);
+  assert.equal(action.trace.resolvedSessionId, 2);
+  assert.equal(action.trace.sessionAccepted, true);
+});
+
+test('login session 0x2009 persists the selected session id on the account registry', () => {
+  const dir = mkdtempSync(path.join(tmpdir(), 'logh7-selected-session-'));
+  const db = path.join(dir, 'accounts.sqlite');
+  try {
+    const registry = createAccountRegistry({ persistPath: db });
+    registry.register('p001flow', buildGin7Credential({ account: 'p001flow', password: 'FlowPw17!' }));
+    const session = strictLobbyAuthedSession(db, {
+      sessions: [
+        { sessionId: 1, name: 'Alpha', status: 1 },
+        { sessionId: 2, name: 'Beta', status: 1 },
+      ],
+    });
+
+    const action = session.onInnerMessage(Buffer.from('20090200', 'hex'));
+
+    assert.equal(action.kind, 'lobby-response');
+    assert.equal(action.trace.selectedSessionId, 2);
+    assert.equal(action.trace.resolvedSessionId, 2);
+    assert.equal(action.trace.sessionAccepted, true);
+    assert.equal(loadAccountRecords(db)[0].selectedSessionId, 2);
+    assert.equal(createAccountRegistry({ persistPath: db }).getSelectedSession('p001flow'), 2);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
 });
 
 // ── info-panels: character card (workflow w2xh1y4z6) ──────────────────────────────────────────────
+
+test('login session 0x2009 persists only existing open session ids', () => {
+  const dir = mkdtempSync(path.join(tmpdir(), 'logh7-selected-session-valid-'));
+  const db = path.join(dir, 'accounts.sqlite');
+  try {
+    const registry = createAccountRegistry({ persistPath: db });
+    registry.register('p001flow', buildGin7Credential({ account: 'p001flow', password: 'FlowPw17!' }));
+    const store = createAccountStore({
+      acceptAnyGin7: false,
+      allowRegister: false,
+      registry,
+    });
+    const session = createLoginSession({
+      accountStore: store,
+      lobby: LOBBY,
+      world: { ip: '127.0.0.1', port: 47900, token: 0 },
+      worldBySession: {
+        1: { ip: '10.0.0.1', port: 47001, token: 0x11111111 },
+        2: { ip: '10.0.0.2', port: 47002, token: 0x22222222 },
+        9: { ip: '10.0.0.9', port: 47009, token: 0x99999999 },
+      },
+      characters: [],
+      sessions: [
+        { sessionId: 1, name: 'Open', status: 1 },
+        { sessionId: 2, name: 'Closed', status: 0 },
+      ],
+    });
+    const login = session.onInnerMessage(buildGin7Credential({ account: 'p001flow', password: 'FlowPw17!' }));
+    assert.equal(login.kind, 'redirect');
+    session.onInnerMessage(Buffer.from('002000000001', 'hex'));
+    session.onInnerMessage(Buffer.from(LOBBY_LOGIN_REQUEST_HEX, 'hex'));
+
+    const closed = session.onInnerMessage(Buffer.from('20090200', 'hex'));
+    assert.equal(closed.kind, 'lobby-response');
+    assert.equal(closed.trace.selectedSessionId, 2);
+    assert.equal(closed.trace.resolvedSessionId, 1);
+    assert.equal(closed.trace.sessionAccepted, false);
+    assert.equal(closed.trace.sessionReject, 'closed-session');
+    assert.equal(closed.okInner.readUInt32BE(6), 0x0100000a);
+    assert.equal(closed.okInner.readUInt16BE(10), 47001);
+    assert.equal(closed.okInner.readUInt32BE(14), 0x11111111);
+    assert.equal(loadAccountRecords(db)[0].selectedSessionId, 1, 'closed session is not persisted');
+
+    const missing = session.onInnerMessage(Buffer.from('20090900', 'hex'));
+    assert.equal(missing.kind, 'lobby-response');
+    assert.equal(missing.trace.selectedSessionId, 9);
+    assert.equal(missing.trace.resolvedSessionId, 1);
+    assert.equal(missing.trace.sessionAccepted, false);
+    assert.equal(missing.trace.sessionReject, 'missing-session');
+    assert.equal(missing.okInner.readUInt32BE(6), 0x0100000a);
+    assert.equal(missing.okInner.readUInt16BE(10), 47001);
+    assert.equal(missing.okInner.readUInt32BE(14), 0x11111111);
+    assert.equal(loadAccountRecords(db)[0].selectedSessionId, 1, 'missing session is not persisted');
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
 
 test('login session 0x0322 RequestInformationCharacter returns a populated 0x0323 card', () => {
   const session = lobbyAuthedSession({ contentPack: makeContentPack() });
@@ -3176,6 +4048,7 @@ test('login session 0x0322 RequestInformationCharacter returns a populated 0x032
   assert.equal(action.okInner.readUInt8(6 + 0xb8), 11);
   assert.equal(action.okInner.readUInt16LE(6 + 0xba), 'M'.charCodeAt(0));
   assert.equal(action.okInner.readUInt16LE(6 + 0xba + 10 * 2), 'r'.charCodeAt(0));
+  assert.ok(session.commandTargetSnapshot().characters.some((entry) => entry.id === 195));
 });
 
 test('login session 0x0322 still answers (zeroed-but-sized) when the id is unknown to the pack', () => {
@@ -3211,8 +4084,9 @@ function readStaticBaseStreamRecord(payload, index = 0) {
       name += String.fromCharCode(payload.readUInt16BE(cursor));
       cursor += 2;
     }
-    if (i === index) return { id, grid, name };
-    cursor += 14; // class byte + f32 + u32 + direction byte + f32 + f32
+    const class_ = payload.readUInt8(cursor);
+    if (i === index) return { id, grid, name, class_ };
+    cursor += 18; // class byte + f32 + u32 + direction byte + f32 + f32
   }
   throw new RangeError(`StaticBase record index out of range: ${index}`);
 }
@@ -3227,14 +4101,42 @@ test('login session 0x031c RequestStaticInformationBase returns populated 0x031d
     assert.equal(action.okInner.readUInt16BE(4), 0x031d);
     assert.equal(action.okInner.length, 6 + 0x520c);
     const payload = action.okInner.subarray(6);
-    assert.equal(payload.readUInt16BE(0), 2, 'two systems from the content pack');
+    assert.equal(payload.readUInt16BE(0), 3, 'current system + current planet + remaining system');
     const first = readStaticBaseStreamRecord(payload, 0);
     assert.equal(first.id, 1, 'first system id');
     assert.equal(first.name.length, 3, 'KO name length for 룬비니');
     assert.equal(first.name[0], '룬');
+    assert.equal(first.class_, 1, 'system static class');
+    const planet = readStaticBaseStreamRecord(payload, 1);
+    assert.equal(planet.id, 1001, 'derived planet id = systemId*1000+orbit');
+    assert.equal(planet.name, '박타푸르', 'planet KO name is present in 0x031d');
+    assert.equal(planet.class_, 3, 'planet static class');
+    const fortressAction = session.onInnerMessage(makeInner(0x031c, makeIdListBody([2])));
+    const fortressPayload = fortressAction.okInner.subarray(6);
+    assert.equal(fortressPayload.readUInt16BE(0), 3, 'requested fortress system + fortress + remaining system');
+    const fortress = readStaticBaseStreamRecord(fortressPayload, 1);
+    assert.equal(fortress.id, 2900, 'derived fortress id = systemId*1000+900+index');
+    assert.equal(fortress.class_, 2, 'fortress static class');
   } finally {
     if (prev === undefined) delete process.env.LOGH_KO_NAMES;
     else process.env.LOGH_KO_NAMES = prev;
+  }
+});
+
+test('login session LOGH_PLANET_BASE_RECORDS=0 keeps 0x031d legacy system-only records', () => {
+  const prev = process.env.LOGH_PLANET_BASE_RECORDS;
+  process.env.LOGH_PLANET_BASE_RECORDS = '0';
+  try {
+    const session = lobbyAuthedSession({ contentPack: makeGalaxyContentPack() });
+    const action = session.onInnerMessage(makeInner(0x031c, makeIdListBody([])));
+    assert.equal(action.kind, 'lobby-response');
+    const payload = action.okInner.subarray(6);
+    assert.equal(payload.readUInt16BE(0), 2, 'legacy path emits only the two systems');
+    assert.equal(readStaticBaseStreamRecord(payload, 0).id, 1);
+    assert.equal(readStaticBaseStreamRecord(payload, 1).id, 2);
+  } finally {
+    if (prev === undefined) delete process.env.LOGH_PLANET_BASE_RECORDS;
+    else process.env.LOGH_PLANET_BASE_RECORDS = prev;
   }
 });
 
@@ -3250,11 +4152,14 @@ test('login session 0x031e RequestInformationBase returns populated 0x031f dynam
     assert.equal(action.okInner.readUInt16BE(4), 0x031f);
     assert.equal(action.okInner.length, 6 + 0x0604);
     const payload = expandedRibBody(action.okInner);
-    assert.equal(payload.readUInt8(0), 2);
+    assert.equal(payload.readUInt8(0), 3, 'system + selected system + planet by default');
     assert.equal(payload.readUInt32LE(ribOffset(0, RIB_ELEM_OFF_ID)), 1);
     assert.equal(payload.readUInt8(ribOffset(0, RIB_ELEM_OFF_FIELD_04)), 2, 'ルンビーニ owner = alliance(2)');
     assert.equal(payload.readUInt32LE(ribOffset(1, RIB_ELEM_OFF_ID)), 2);
     assert.equal(payload.readUInt8(ribOffset(1, RIB_ELEM_OFF_FIELD_04)), 3, 'イゼルローン owner = empire(3)');
+    assert.equal(payload.readUInt32LE(ribOffset(2, RIB_ELEM_OFF_ID)), 1001, 'elem[2] is the derived planet base');
+    assert.equal(payload.readUInt8(ribOffset(2, RIB_ELEM_OFF_FIELD_04)), 2, 'planet owner follows its parent system');
+    assert.equal(payload.readUInt8(ribOffset(2, RIB_ELEM_OFF_FIELD_179)), 2, 'planet panel type byte');
     // 기본 ON(승격): elem[0]=ルンビーニ(id 1)는 planet-economy.json 의 3행성으로 다섯 P0 배열을 싣는다.
     assert.equal(payload.readUInt8(ribOffset(0, RIB_ELEM_OFF_BUDGET_CNT)), 1, 'budget cnt 1 by default (LOGH_BASE_ECONOMY now ON)');
     assert.equal(payload.readUInt32LE(ribOffset(0, RIB_ELEM_OFF_BUDGET)), 632, 'budget[0] = Σ industry (P3 proxy) by default');
@@ -3279,7 +4184,7 @@ test('login session 0x031e LOGH_BASE_ECONOMY=0 escape hatch keeps the legacy id+
     assert.equal(action.okInner.readUInt16BE(4), 0x031f);
     assert.equal(action.okInner.length, 6 + 0x0604);
     const payload = expandedRibBody(action.okInner);
-    assert.equal(payload.readUInt8(0), 2);
+    assert.equal(payload.readUInt8(0), 3, 'planet base records stay present when only economy is disabled');
     // id+owner 후보는 그대로(회귀 가드).
     assert.equal(payload.readUInt32LE(ribOffset(0, RIB_ELEM_OFF_ID)), 1);
     assert.equal(payload.readUInt8(ribOffset(0, RIB_ELEM_OFF_FIELD_04)), 2, 'ルンビーニ owner = alliance(2)');
@@ -3301,7 +4206,7 @@ test('login session 0x031e enriches 0x031f with economy arrays when LOGH_BASE_EC
     assert.equal(action.okInner.readUInt16BE(4), 0x031f);
     assert.equal(action.okInner.length, 6 + 0x0604, 'body size still fixed 0x604');
     const payload = expandedRibBody(action.okInner);
-    assert.equal(payload.readUInt8(0), 2, 'still two base records');
+    assert.equal(payload.readUInt8(0), 3, 'system + selected system + planet');
     // elem[0] = ルンビーニ (id 1): content/planet-economy.json has 3 planets, Σindustry=632, 2 habitable.
     // id + owner candidate unchanged (no regression of the proven fields).
     assert.equal(payload.readUInt32LE(ribOffset(0, RIB_ELEM_OFF_ID)), 1, 'elem[0] id still 1');
@@ -3318,6 +4223,8 @@ test('login session 0x031e enriches 0x031f with economy arrays when LOGH_BASE_EC
     // elem[1] = イゼルローン (id 2): no economy planets → falls back to owner-only seed (arrays empty).
     assert.equal(payload.readUInt32LE(ribOffset(1, RIB_ELEM_OFF_ID)), 2, 'elem[1] id still 2');
     assert.equal(payload.readUInt8(ribOffset(1, RIB_ELEM_OFF_BUDGET_CNT)), 0, 'elem[1] budget cnt 0 (no economy join)');
+    assert.equal(payload.readUInt32LE(ribOffset(2, RIB_ELEM_OFF_ID)), 1001, 'elem[2] is the derived planet base');
+    assert.equal(payload.readUInt8(ribOffset(2, RIB_ELEM_OFF_FIELD_179)), 2, 'elem[2] panel type = planet');
   } finally {
     if (prev === undefined) delete process.env.LOGH_BASE_ECONOMY;
     else process.env.LOGH_BASE_ECONOMY = prev;
@@ -3330,9 +4237,41 @@ test('login session 0x031e surfaces the requested base id as elem[0] (request-id
   const action = session.onInnerMessage(makeInner(0x031e, makeIdListBody([2])));
   assert.equal(action.okInner.readUInt16BE(4), 0x031f);
   const payload = expandedRibBody(action.okInner);
-  assert.equal(payload.readUInt8(0), 2, 'two base records');
+  assert.equal(payload.readUInt8(0), 3, 'requested system + fortress + remaining system');
   assert.equal(payload.readUInt32LE(ribOffset(0, RIB_ELEM_OFF_ID)), 2, 'elem[0] is the requested id 2');
-  assert.equal(payload.readUInt32LE(ribOffset(1, RIB_ELEM_OFF_ID)), 1, 'elem[1] is the other base (id 1)');
+  assert.equal(payload.readUInt32LE(ribOffset(1, RIB_ELEM_OFF_ID)), 2900, 'elem[1] is the derived fortress base');
+  assert.equal(payload.readUInt8(ribOffset(1, RIB_ELEM_OFF_FIELD_179)), 1, 'fortress panel type byte');
+});
+
+test('login session 0x031e can answer a derived planet base id directly', () => {
+  const session = lobbyAuthedSession({ contentPack: makeGalaxyContentPack() });
+  const action = session.onInnerMessage(makeInner(0x031e, makeIdListBody([1001])));
+  assert.equal(action.okInner.readUInt16BE(4), 0x031f);
+  const payload = expandedRibBody(action.okInner);
+  assert.equal(payload.readUInt8(0), 3, 'derived planet + parent system + remaining system');
+  assert.equal(payload.readUInt32LE(ribOffset(0, RIB_ELEM_OFF_ID)), 1001, 'elem[0] is the requested planet id');
+  assert.equal(payload.readUInt8(ribOffset(0, RIB_ELEM_OFF_FIELD_04)), 2, 'planet owner follows parent');
+  assert.equal(payload.readUInt8(ribOffset(0, RIB_ELEM_OFF_FIELD_179)), 2, 'planet panel type byte');
+  assert.equal(session.commandTargetSnapshot().baseId, 1001);
+});
+
+test('login session does not fabricate planet base records for a planetless system', () => {
+  const session = lobbyAuthedSession({ contentPack: makeEightySystemGalaxyContentPack() });
+  const staticAction = session.onInnerMessage(makeInner(0x031c, makeIdListBody([80])));
+  assert.equal(staticAction.okInner.readUInt16BE(4), 0x031d);
+  const staticPayload = staticAction.okInner.subarray(6);
+  assert.equal(staticPayload.readUInt16BE(0), 80, 'no extra derived planet/fortress records beyond the 80 systems');
+  assert.equal(readStaticBaseStreamRecord(staticPayload, 0).id, 80, 'requested planetless system stays first');
+  assert.equal(readStaticBaseStreamRecord(staticPayload, 1).id, 1, 'remaining rows are real systems, not fabricated planets');
+
+  const dynamicAction = session.onInnerMessage(makeInner(0x031e, makeIdListBody([80])));
+  assert.equal(dynamicAction.okInner.readUInt16BE(4), 0x031f);
+  const dynamicPayload = expandedRibBody(dynamicAction.okInner);
+  assert.equal(dynamicPayload.readUInt8(0), 4, '0x031f still fills from real systems up to the cap');
+  assert.equal(dynamicPayload.readUInt32LE(ribOffset(0, RIB_ELEM_OFF_ID)), 80, 'requested planetless system stays first');
+  for (let i = 0; i < dynamicPayload.readUInt8(0); i += 1) {
+    assert.notEqual(dynamicPayload.readUInt32LE(ribOffset(i, RIB_ELEM_OFF_ID)), 80001, 'no synthetic orbit-1 planet id');
+  }
 });
 
 test('login session 0x031e can answer an active far spot such as Valhalla id 70', () => {
@@ -3345,7 +4284,9 @@ test('login session 0x031e can answer an active far spot such as Valhalla id 70'
     const payload = expandedRibBody(action.okInner);
     assert.equal(payload.readUInt8(0), 4, '0x031f remains capped at four records');
     assert.equal(payload.readUInt32LE(ribOffset(0, RIB_ELEM_OFF_ID)), 70, 'elem[0] is the requested far spot id 70');
-    assert.equal(payload.readUInt32LE(ribOffset(1, RIB_ELEM_OFF_ID)), 1, 'remaining slots are filled from the static base list');
+    assert.equal(payload.readUInt32LE(ribOffset(1, RIB_ELEM_OFF_ID)), 70001, 'elem[1] is Valhalla planet orbit 1');
+    assert.equal(payload.readUInt32LE(ribOffset(2, RIB_ELEM_OFF_ID)), 70002, 'elem[2] is Valhalla planet orbit 2');
+    assert.equal(payload.readUInt8(ribOffset(1, RIB_ELEM_OFF_FIELD_179)), 2, 'derived Valhalla base is typed as planet');
     assert.equal(payload.readUInt8(ribOffset(0, RIB_ELEM_OFF_BUDGET_CNT)), 1, 'requested far spot has planet/economy roll-up');
     assert.equal(payload.readUInt32LE(ribOffset(0, RIB_ELEM_OFF_BUDGET)), 11207, 'Valhalla Σ industry is present');
     assert.equal(payload.readUInt16LE(ribOffset(0, RIB_ELEM_OFF_BUDGETING)), 4, 'Valhalla planet count is present');
@@ -3365,6 +4306,8 @@ test('login session 0x034e RequestCardCharacter returns a populated 0x034f roste
   assert.equal(payload.readUInt8(0), 2); // count = 2 canon characters in the pack
   // first 724-byte record's id (record[0]) must be the first seeded character id (209 Reinhard).
   assert.equal(payload.readUInt32LE(4), 209);
+  const targets = session.commandTargetSnapshot();
+  assert.ok(targets.characters.some((entry) => entry.id === 209));
 });
 
 test('login session 0x034e writes the recovered display name, not only the romaji fallback', () => {
@@ -3419,6 +4362,20 @@ test('login session 0x034e seeds one minimal card when the pack has no character
   assert.ok(action.okInner.subarray(6).readUInt8(0) >= 1); // never empty (count >= 1)
 });
 
+test('login session 0x034e does not expose numeric placeholder names in card roster', () => {
+  const contentPack = createContentPack({
+    name: 'masked-name-card-test',
+    nations: [{ id: 1, name: 'Empire' }],
+    characters: [{ id: 4097, name: '1', nameRomaji: '1', nationId: 1, faction: 'empire' }],
+  });
+  const action = lobbyAuthedSession({ contentPack })
+    .onInnerMessage(makeInner(0x034e, makeIdListBody([4097])));
+  const payload = action.okInner.subarray(6);
+  assert.equal(payload.readUInt8(0), 1);
+  assert.equal(payload.readUInt32LE(4), 4097);
+  assert.equal(readPstr16(payload, 4 + 0x81, 4 + 0x82), 'Officer 4097');
+});
+
 test('login session 0x032a RequestInformationOutfit returns a non-empty 0x032b outfit summary', () => {
   // content pack with a unit so the outfit list is seeded from real fleets.
   const pack = createContentPack({
@@ -3432,6 +4389,9 @@ test('login session 0x032a RequestInformationOutfit returns a non-empty 0x032b o
   assert.equal(action.okInner.readUInt16BE(4), 0x032b); // ResponseInformationOutfit
   assert.equal(action.okInner.length, 6 + 0x0af4);
   assert.ok(action.okInner.subarray(6).readUInt8(0) >= 1); // outer count (u8) >= 1
+  const targets = session.commandTargetSnapshot();
+  assert.ok(targets.outfits.some((outfit) => outfit.id === 0x01000000));
+  assert.ok(targets.ships.some((ship) => ship.units.includes(0x01000000)));
 });
 
 test('login session 0x032e RequestInformationOutfitParty returns a 0x032f manifest keyed to the id', () => {
@@ -3452,6 +4412,199 @@ test('login session 0x0324 RequestInformationUnit returns a 0x0325 unit table wi
   const payload = action.okInner.subarray(6);
   assert.equal(readUnitLeU16(payload, 0), 1); // unitCount = 1
   assert.equal(readUnitLeU32(payload, 4), 42); // unit[0].id = requested id
+  const targets = session.commandTargetSnapshot();
+  assert.ok(targets.outfits.some((outfit) => outfit.id === 42));
+  assert.ok(targets.ships.some((ship) => ship.units.includes(42)));
+});
+
+test('login session 0x033a RequestTacticsInformationUnitShip returns non-empty 0x033b table', () => {
+  const session = lobbyAuthedSession({ contentPack: makeContentPack() });
+  const action = session.onInnerMessage(makeInner(0x033a, makeIdListBody([])));
+  assert.equal(action.kind, 'lobby-response');
+  assert.equal(action.okInner.readUInt16BE(4), 0x033b);
+  assert.equal(action.okInner.length, 6 + 0x79e4);
+  const payload = action.okInner.subarray(6);
+assert.equal(payload.readUInt16BE(0), 1);
+assert.equal(payload.readUInt16BE(2), 0);
+assert.equal(payload.readUInt32BE(4), 1);
+assert.equal(payload.readUInt8(4 + 0x04), 100);
+assert.equal(payload.readUInt32BE(4 + 0x18), 1);
+});
+
+test('login session tactical read-model requests return position and shield tables', () => {
+  const session = lobbyAuthedSession({ contentPack: makeContentPack() });
+
+  const position = session.onInnerMessage(makeInner(0x0348, makeIdListBody([])));
+  assert.equal(position.kind, 'lobby-response');
+  assert.equal(position.okInner.readUInt16BE(4), 0x0349);
+  assert.equal(position.okInner.length, 6 + 0x2ee4);
+assert.equal(position.okInner.subarray(6).readUInt16BE(0), 1);
+assert.equal(position.okInner.subarray(6).readUInt32BE(4), 1);
+
+  const shield = session.onInnerMessage(makeInner(0x0340, makeIdListBody([])));
+  assert.equal(shield.kind, 'lobby-response');
+  assert.equal(shield.okInner.readUInt16BE(4), 0x0341);
+  assert.equal(shield.okInner.length, 6 + 0x5dc4);
+  assert.equal(shield.okInner.subarray(6).readUInt16BE(0), 1);
+  assert.equal(shield.okInner.subarray(6).readUInt32BE(4), 1);
+
+  const basePosition = session.onInnerMessage(makeInner(0x034a, makeIdListBody([])));
+  assert.equal(basePosition.kind, 'lobby-response');
+  assert.equal(basePosition.okInner.readUInt16BE(4), 0x034b);
+  assert.equal(basePosition.okInner.length, 6 + 0x44);
+  assert.equal(basePosition.okInner.subarray(6).readUInt8(0), 1);
+  assert.equal(basePosition.okInner.subarray(6).readUInt32BE(4), 3);
+});
+
+test('login session bundles remaining tactical read-model steps after first natural 0x0348 request when probe gates are enabled', () => {
+  const prevProbe = process.env.LOGH_BATTLE_ENTRY_PROBE;
+  const prevDeferTables = process.env.LOGH_BATTLE_ENTRY_DEFER_TABLES;
+  const prevNotifyTactics = process.env.LOGH_BATTLE_ENTRY_NOTIFY_TACTICS;
+  try {
+    process.env.LOGH_BATTLE_ENTRY_PROBE = '1';
+    process.env.LOGH_BATTLE_ENTRY_DEFER_TABLES = '1';
+    delete process.env.LOGH_BATTLE_ENTRY_NOTIFY_TACTICS;
+    const session = lobbyAuthedSession({ contentPack: makeContentPack() });
+
+  const first = session.onInnerMessage(makeInner(0x0348, makeIdListBody([])));
+  assert.equal(first.kind, 'lobby-response');
+  assert.equal(appInnerCode(first.okInner), 0x0349);
+  assert.deepEqual(first.extraInners.map(appInnerCode), [0x033b, 0x0341, 0x0337, 0x0345, 0x034b, 0x042f]);
+
+    const second = session.onInnerMessage(makeInner(0x0348, makeIdListBody([])));
+    assert.equal(second.kind, 'lobby-response');
+    assert.equal(appInnerCode(second.okInner), 0x0349);
+    assert.equal(second.extraInners, undefined);
+  } finally {
+    if (prevProbe === undefined) delete process.env.LOGH_BATTLE_ENTRY_PROBE;
+    else process.env.LOGH_BATTLE_ENTRY_PROBE = prevProbe;
+    if (prevDeferTables === undefined) delete process.env.LOGH_BATTLE_ENTRY_DEFER_TABLES;
+    else process.env.LOGH_BATTLE_ENTRY_DEFER_TABLES = prevDeferTables;
+    if (prevNotifyTactics === undefined) delete process.env.LOGH_BATTLE_ENTRY_NOTIFY_TACTICS;
+    else process.env.LOGH_BATTLE_ENTRY_NOTIFY_TACTICS = prevNotifyTactics;
+  }
+});
+
+test('login session does not duplicate primed tactical setup tables in deferred battle entry', () => {
+  const prevGridEnter = process.env.LOGH_GRID_ENTER;
+  const prevWorldPlayer = process.env.LOGH_WORLD_PLAYER;
+  const prevPostloadPlayer = process.env.LOGH_POSTLOAD_PLAYER_RECORD;
+  const prevProbe = process.env.LOGH_BATTLE_ENTRY_PROBE;
+  const prevDeferTables = process.env.LOGH_BATTLE_ENTRY_DEFER_TABLES;
+  try {
+    process.env.LOGH_GRID_ENTER = '1';
+    process.env.LOGH_WORLD_PLAYER = '1';
+    process.env.LOGH_POSTLOAD_PLAYER_RECORD = '1';
+    process.env.LOGH_BATTLE_ENTRY_PROBE = '1';
+    process.env.LOGH_BATTLE_ENTRY_DEFER_TABLES = '1';
+
+    const session = lobbyAuthedSession({ contentPack: makeContentPack() });
+    const world = session.onInnerMessage(makeInner(0x0f02));
+  assert.deepEqual(
+    world.extraInners
+      .filter((inner) => [0x0325, 0x0349, 0x033b, 0x0341, 0x0337].includes(appInnerCode(inner)))
+      .map(appInnerCode),
+    [0x0325, 0x0325, 0x033b, 0x0341, 0x0337, 0x0349],
+  );
+
+    const postload = session.onInnerMessage(makeInner(0x0f06));
+    assert.deepEqual(postload.deferredBattleInners.map(appInnerCode), [0x042f]);
+  } finally {
+    if (prevGridEnter === undefined) delete process.env.LOGH_GRID_ENTER;
+    else process.env.LOGH_GRID_ENTER = prevGridEnter;
+    if (prevWorldPlayer === undefined) delete process.env.LOGH_WORLD_PLAYER;
+    else process.env.LOGH_WORLD_PLAYER = prevWorldPlayer;
+    if (prevPostloadPlayer === undefined) delete process.env.LOGH_POSTLOAD_PLAYER_RECORD;
+    else process.env.LOGH_POSTLOAD_PLAYER_RECORD = prevPostloadPlayer;
+    if (prevProbe === undefined) delete process.env.LOGH_BATTLE_ENTRY_PROBE;
+    else process.env.LOGH_BATTLE_ENTRY_PROBE = prevProbe;
+    if (prevDeferTables === undefined) delete process.env.LOGH_BATTLE_ENTRY_DEFER_TABLES;
+    else process.env.LOGH_BATTLE_ENTRY_DEFER_TABLES = prevDeferTables;
+  }
+});
+
+test('login session schedules battle-entry probe only once per post-load session', () => {
+  const prevGridEnter = process.env.LOGH_GRID_ENTER;
+  const prevWorldPlayer = process.env.LOGH_WORLD_PLAYER;
+  const prevPostloadPlayer = process.env.LOGH_POSTLOAD_PLAYER_RECORD;
+  const prevProbe = process.env.LOGH_BATTLE_ENTRY_PROBE;
+  const prevDeferTables = process.env.LOGH_BATTLE_ENTRY_DEFER_TABLES;
+  try {
+    process.env.LOGH_GRID_ENTER = '1';
+    process.env.LOGH_WORLD_PLAYER = '1';
+    process.env.LOGH_POSTLOAD_PLAYER_RECORD = '1';
+    process.env.LOGH_BATTLE_ENTRY_PROBE = '1';
+    process.env.LOGH_BATTLE_ENTRY_DEFER_TABLES = '1';
+
+    const session = lobbyAuthedSession({ contentPack: makeContentPack() });
+    const first = session.onInnerMessage(makeInner(0x0f06));
+    assert.equal(first.deferredBattleInners.map(appInnerCode).includes(0x042f), true);
+
+    const second = session.onInnerMessage(makeInner(0x0f06));
+    assert.equal(second.deferredBattleInners, undefined);
+    assert.equal(
+      (second.extraInners ?? []).some((inner) => [0x033b, 0x0341, 0x0337, 0x0349, 0x042f].includes(appInnerCode(inner))),
+      false,
+    );
+  } finally {
+    if (prevGridEnter === undefined) delete process.env.LOGH_GRID_ENTER;
+    else process.env.LOGH_GRID_ENTER = prevGridEnter;
+    if (prevWorldPlayer === undefined) delete process.env.LOGH_WORLD_PLAYER;
+    else process.env.LOGH_WORLD_PLAYER = prevWorldPlayer;
+    if (prevPostloadPlayer === undefined) delete process.env.LOGH_POSTLOAD_PLAYER_RECORD;
+    else process.env.LOGH_POSTLOAD_PLAYER_RECORD = prevPostloadPlayer;
+    if (prevProbe === undefined) delete process.env.LOGH_BATTLE_ENTRY_PROBE;
+    else process.env.LOGH_BATTLE_ENTRY_PROBE = prevProbe;
+    if (prevDeferTables === undefined) delete process.env.LOGH_BATTLE_ENTRY_DEFER_TABLES;
+    else process.env.LOGH_BATTLE_ENTRY_DEFER_TABLES = prevDeferTables;
+  }
+});
+
+test('login session defers grid-end after tactical mode flip when requested', () => {
+  const prevGridEnter = process.env.LOGH_GRID_ENTER;
+  const prevWorldPlayer = process.env.LOGH_WORLD_PLAYER;
+  const prevPostloadPlayer = process.env.LOGH_POSTLOAD_PLAYER_RECORD;
+  const prevProbe = process.env.LOGH_BATTLE_ENTRY_PROBE;
+  const prevCodes = process.env.LOGH_BATTLE_ENTRY_CODES;
+  const prevDeferTables = process.env.LOGH_BATTLE_ENTRY_DEFER_TABLES;
+  const prevDeferGridEnd = process.env.LOGH_BATTLE_ENTRY_DEFER_GRID_END;
+  try {
+    process.env.LOGH_GRID_ENTER = '1';
+    process.env.LOGH_WORLD_PLAYER = '1';
+    process.env.LOGH_POSTLOAD_PLAYER_RECORD = '1';
+    process.env.LOGH_BATTLE_ENTRY_PROBE = '1';
+    process.env.LOGH_BATTLE_ENTRY_CODES = '0x0349,0x033b,0x0341,0x042f';
+    delete process.env.LOGH_BATTLE_ENTRY_DEFER_TABLES;
+    process.env.LOGH_BATTLE_ENTRY_DEFER_GRID_END = '1';
+
+    const session = lobbyAuthedSession({ contentPack: makeContentPack() });
+    const postload = session.onInnerMessage(makeInner(0x0f06));
+
+    assert.equal(postload.kind, 'lobby-response');
+    assert.equal(postload.extraInners.some((inner) => appInnerCode(inner) === 0x0b0a), false);
+    assert.deepEqual(
+      postload.extraInners
+        .filter((inner) => [0x0349, 0x033b, 0x0341].includes(appInnerCode(inner)))
+        .map(appInnerCode),
+      [0x0349, 0x033b, 0x0341],
+    );
+    assert.deepEqual(postload.deferredBattleInners.map(appInnerCode), [0x042f, 0x0b0a]);
+  } finally {
+    if (prevGridEnter === undefined) delete process.env.LOGH_GRID_ENTER;
+    else process.env.LOGH_GRID_ENTER = prevGridEnter;
+    if (prevWorldPlayer === undefined) delete process.env.LOGH_WORLD_PLAYER;
+    else process.env.LOGH_WORLD_PLAYER = prevWorldPlayer;
+    if (prevPostloadPlayer === undefined) delete process.env.LOGH_POSTLOAD_PLAYER_RECORD;
+    else process.env.LOGH_POSTLOAD_PLAYER_RECORD = prevPostloadPlayer;
+    if (prevProbe === undefined) delete process.env.LOGH_BATTLE_ENTRY_PROBE;
+    else process.env.LOGH_BATTLE_ENTRY_PROBE = prevProbe;
+    if (prevCodes === undefined) delete process.env.LOGH_BATTLE_ENTRY_CODES;
+    else process.env.LOGH_BATTLE_ENTRY_CODES = prevCodes;
+    if (prevDeferTables === undefined) delete process.env.LOGH_BATTLE_ENTRY_DEFER_TABLES;
+    else process.env.LOGH_BATTLE_ENTRY_DEFER_TABLES = prevDeferTables;
+    if (prevDeferGridEnd === undefined) delete process.env.LOGH_BATTLE_ENTRY_DEFER_GRID_END;
+    else process.env.LOGH_BATTLE_ENTRY_DEFER_GRID_END = prevDeferGridEnd;
+  }
 });
 
 test('login session 0x0320 RequestInformationInstitution returns a non-empty 0x0321 facility table', () => {
@@ -3463,6 +4616,7 @@ test('login session 0x0320 RequestInformationInstitution returns a non-empty 0x0
   const payload = expandedRiiBody(action.okInner);
   assert.equal(payload.readUInt8(0), 1); // outer base count (u8) = 1
   assert.equal(payload.readUInt32LE(4), 7); // base id @0x04 = requested id
+  assert.equal(session.commandTargetSnapshot().baseId, 7);
   // Nested-offset lock (regression guard for the legacy +4/−4 bug): the byte-exact builder places the
   // institution_count at elem+0x04 (body+0x08), institution[0] at elem+0x08 (body+0x0c), and spot[0] at
   // inst+0x0c (body+0x18) — matching the client parser pins (logh7-institution-record.mjs).
@@ -3504,11 +4658,15 @@ test('login session 0x0326 RequestInformationWarehouse returns a 0x0327 stockpil
   const payload = action.okInner.subarray(6);
   assert.equal(payload.readUInt32LE(0x00), 7); // base id @0x00 = requested id
   // economy stays 0 (P3 — no fabrication): supplies/food/mineral @ 0x2f4/0x2f8/0x2fc
-  assert.equal(payload.readUInt32LE(0x2f4), 0); // supplies
-  assert.equal(payload.readUInt32LE(0x2f8), 0); // food
-  assert.equal(payload.readUInt32LE(0x2fc), 0); // mineral
-  assert.equal(payload.readUInt8(0x0c), 0); // ships_count 0
-  assert.equal(payload.readUInt8(0x260), 0); // troops_count 0
+  assert.equal(payload.readUInt32LE(0x2f4), 5000); // playable target-pool supplies
+  assert.equal(payload.readUInt32LE(0x2f8), 3000); // playable target-pool food
+  assert.equal(payload.readUInt32LE(0x2fc), 2000); // playable target-pool mineral
+  assert.ok(payload.readUInt8(0x0c) > 0); // ships_count target candidates
+  assert.ok(payload.readUInt8(0x260) > 0); // troops_count target candidates
+  const targets = session.commandTargetSnapshot();
+  assert.equal(targets.baseId, 7);
+  assert.ok(targets.ships.length > 0);
+  assert.ok(targets.troops.length > 0);
 });
 
 test('login session 0x0328 RequestInformationPackage returns a 0x0329 transfer manifest keyed to the base id', () => {
@@ -3519,9 +4677,13 @@ test('login session 0x0328 RequestInformationPackage returns a 0x0329 transfer m
   assert.equal(action.okInner.length, 6 + 0x154); // fixed 0x154 body (dispatcher copies 0x55 dwords)
   const payload = action.okInner.subarray(6);
   assert.equal(payload.readUInt32LE(0x00), 7); // source base id @0x00 = requested id
-  assert.equal(payload.readUInt32LE(0x04), 0); // target_base 0 (P3 — no fabrication)
-  assert.equal(payload.readUInt8(0x08), 0); // other_package_count 0
-  assert.equal(payload.readUInt8(0x30), 0); // troop_package_count 0
+  assert.equal(payload.readUInt32LE(0x04), 3); // target_base fallback first real strategic object
+  assert.ok(payload.readUInt8(0x08) > 0); // other_package_count target candidates
+  assert.ok(payload.readUInt8(0x30) > 0); // troop_package_count target candidates
+  const targets = session.commandTargetSnapshot();
+  assert.equal(targets.baseId, 7);
+  assert.ok(targets.otherPackages.length > 0);
+  assert.ok(targets.troopPackages.length > 0);
 });
 
 // 0x030a → 0x030b ResponseStaticInformationUnitShip (함선마스터, M2-2). Reads a ship record from the wire:
@@ -3533,6 +4695,53 @@ function readUnitShipRecord(payload, index = 0) {
   for (let j = 0; j < nameLen; j += 1) name += String.fromCharCode(payload.readUInt16LE(base + 0x0a + j * 2));
   return { kind: payload.readUInt16LE(base + 0x00), nameLen, name };
 }
+
+test('login session static master requests expose troops, fighters, arms, and power curves when gated on', () => {
+  const prev = {
+    troops: process.env.LOGH_STATIC_TROOPS,
+    fighters: process.env.LOGH_STATIC_FIGHTERS,
+    arms: process.env.LOGH_STATIC_ARMS,
+    power: process.env.LOGH_STATIC_POWER_DISTRIBUTION,
+    playableSeed: process.env.LOGH_STATIC_MASTER_PLAYABLE_SEED,
+  };
+  process.env.LOGH_STATIC_TROOPS = '1';
+  process.env.LOGH_STATIC_FIGHTERS = '1';
+  process.env.LOGH_STATIC_ARMS = '1';
+  process.env.LOGH_STATIC_POWER_DISTRIBUTION = '1';
+  process.env.LOGH_STATIC_MASTER_PLAYABLE_SEED = '1';
+  try {
+    const session = lobbyAuthedSession({ contentPack: makeContentPack() });
+
+    const troop = session.onInnerMessage(makeInner(0x030c, makeIdListBody([])));
+    assert.equal(troop.kind, 'lobby-response');
+    assert.equal(troop.okInner.readUInt16BE(4), 0x030d);
+    assert.ok(troop.okInner.subarray(6).readUInt8(0x00) >= 6, 'manual troop classes delivered');
+    assert.equal(troop.okInner.subarray(6).readUInt16LE(4 + 0x08), 60, 'manual light-infantry training cost delivered');
+
+    const fighters = session.onInnerMessage(makeInner(0x030e, makeIdListBody([])));
+    assert.equal(fighters.okInner.readUInt16BE(4), 0x030f);
+    assert.equal(fighters.okInner.subarray(6).readUInt8(0x00), 4, 'fighter master exposes four client slots');
+
+    const arms = session.onInnerMessage(makeInner(0x0310, makeIdListBody([])));
+    assert.equal(arms.okInner.readUInt16BE(4), 0x0311);
+    assert.ok(arms.okInner.subarray(6).readUInt16LE(0x00) > 0, 'arms table is populated');
+
+    const power = session.onInnerMessage(makeInner(0x0308, makeIdListBody([])));
+    assert.equal(power.okInner.readUInt16BE(4), 0x0309);
+    assert.ok(power.okInner.subarray(6).readFloatLE(0x00) > 0, 'power distribution curve is populated');
+  } finally {
+    if (prev.troops === undefined) delete process.env.LOGH_STATIC_TROOPS;
+    else process.env.LOGH_STATIC_TROOPS = prev.troops;
+    if (prev.fighters === undefined) delete process.env.LOGH_STATIC_FIGHTERS;
+    else process.env.LOGH_STATIC_FIGHTERS = prev.fighters;
+    if (prev.arms === undefined) delete process.env.LOGH_STATIC_ARMS;
+    else process.env.LOGH_STATIC_ARMS = prev.arms;
+    if (prev.power === undefined) delete process.env.LOGH_STATIC_POWER_DISTRIBUTION;
+    else process.env.LOGH_STATIC_POWER_DISTRIBUTION = prev.power;
+    if (prev.playableSeed === undefined) delete process.env.LOGH_STATIC_MASTER_PLAYABLE_SEED;
+    else process.env.LOGH_STATIC_MASTER_PLAYABLE_SEED = prev.playableSeed;
+  }
+});
 
 test('login session 0x030a RequestStaticInformationUnitShip emits the live-safe 0x030b master when LOGH_STATIC_SHIPS=1', () => {
   const prev = process.env.LOGH_STATIC_SHIPS;
@@ -3648,6 +4857,76 @@ test('login session 0x030a falls through to the zero-fill 0x030b walker when LOG
     assert.equal(action.okInner.subarray(6).readUInt8(0x00), 0, 'empty master when the gate is off');
   } finally {
     if (prev !== undefined) process.env.LOGH_STATIC_SHIPS = prev;
+  }
+});
+
+test('login session 0x0f08 exposes grid ship count plus grid/system ownership records', () => {
+  const prev = {
+    col: process.env.LOGH_FLEET_COL,
+    row: process.env.LOGH_FLEET_ROW,
+  };
+  process.env.LOGH_FLEET_COL = '88';
+  process.env.LOGH_FLEET_ROW = '25';
+  try {
+    const worldState = createWorldState();
+    worldState.upsertFleet({
+      id: 0x1234,
+      owner: 3,
+      faction: 1,
+      commander: 1,
+      cell: 2588,
+      boats: [0x20, 0x21, 0x22],
+      supply: 77,
+      mapSection: 70,
+    });
+    const session = lobbyAuthedSession({
+      worldState,
+      contentPack: makeValhallaGalaxyContentPack(),
+      characters: [{ id: 1, faction: 'empire', spot: 70, spotOwner: 1 }],
+    });
+    const action = session.onInnerMessage(makeInner(0x0f08, Buffer.from('0000000100000000', 'hex')));
+    assert.equal(action.kind, 'lobby-response');
+    assert.equal(appInnerCode(action.okInner), 0x0f09);
+    assert.equal(action.okInner.subarray(6).readUInt8(0), 1);
+
+    const codes = action.extraInners.map(appInnerCode);
+  assert.ok(codes.includes(0x0325), 'unit table returned for panel target');
+  assert.ok(codes.includes(0x034f), 'card character roster returned for panel target');
+  assert.ok(codes.includes(0x032d), 'grid outfit presence returned for panel target');
+  const cardInner = action.extraInners.find((inner) => appInnerCode(inner) === 0x034f);
+  assert.ok(cardInner, '0x034f payload is present');
+  assert.ok(cardInner.subarray(6).readUInt8(0) >= 1, '0x034f roster is not empty');
+  assert.equal(action.trace.infoPanel.targetBaseId, 70);
+    assert.equal(action.trace.infoPanel.systemId, 70);
+    assert.equal(action.trace.infoPanel.gridCell, 2588);
+    assert.equal(action.trace.infoPanel.gridShipCount, 3);
+    assert.equal(action.trace.infoPanel.gridOwner, 3);
+    assert.equal(action.trace.infoPanel.gridFaction, 'empire');
+    assert.equal(action.trace.infoPanel.systemOwner, 3);
+    assert.equal(action.trace.infoPanel.systemFaction, 'empire');
+    assert.equal(action.trace.infoPanel.gridOutfitCount, 1);
+
+    const unit = action.extraInners.find((inner) => appInnerCode(inner) === 0x0325);
+    const unitBody = unit.subarray(6);
+    const B = SS_RESP_INFO_UNIT_HEADER;
+    assert.equal(unitBody.readUInt16LE(0), 1, 'one fleet in 0x0325');
+    assert.equal(unitBody.readUInt32LE(B + 0x00), 0x1234, 'fleet id in 0x0325');
+    assert.equal(unitBody.readUInt16LE(B + 0x04), 1, 'fleet faction remains client power empire=1');
+    assert.equal(unitBody.readUInt32LE(B + 0x0c), 2588, 'fleet cell in 0x0325');
+    assert.equal(unitBody.readUInt32LE(B + 0x10), 3, 'fleet owner/base owner empire=3');
+    assert.equal(unitBody.readUInt8(B + 0x14), 3, 'boats count in 0x0325');
+
+    const gridOutfit = action.extraInners.find((inner) => appInnerCode(inner) === 0x032d);
+    const gridBody = gridOutfit.subarray(6);
+    assert.equal(gridBody.readUInt16LE(0), 1, 'one grid outfit row');
+    assert.equal(gridBody.readUInt32LE(4), 0x1234, 'grid outfit id');
+    assert.equal(gridBody.readUInt8(9), 3, 'grid outfit power/base-owner byte');
+    assert.equal(gridBody.readUInt32LE(12), 77, 'grid outfit supplies');
+  } finally {
+    if (prev.col === undefined) delete process.env.LOGH_FLEET_COL;
+    else process.env.LOGH_FLEET_COL = prev.col;
+    if (prev.row === undefined) delete process.env.LOGH_FLEET_ROW;
+    else process.env.LOGH_FLEET_ROW = prev.row;
   }
 });
 
@@ -3788,13 +5067,15 @@ test('login session 0x0f02: worldState 없으면 시드 생략(무영향, 기존
 // NotifyBaseParameter (0x0337) emit tests — 기지관리 경제 패널 人口/食料/治安/思想/宗教/支持率
 // ---------------------------------------------------------------------------
 
-test('login session PUSH(world-import@0x0f02) emits 0x0337 NotifyBaseParameter with population/food from planet-economy', () => {
+test('login session PUSH(world-import@0x0f02) does not emit provisional 0x0337 by default', () => {
   const previous = process.env.LOGH_WORLD_PLAYER;
   const prevImport = process.env.LOGH_WORLD_IMPORT_BASES;
   const prevEconomy = process.env.LOGH_BASE_ECONOMY;
+  const prevNotify = process.env.LOGH_PROVISIONAL_BASE_PARAMETER_NOTIFY;
   process.env.LOGH_WORLD_PLAYER = '1';
   delete process.env.LOGH_WORLD_IMPORT_BASES;
   delete process.env.LOGH_BASE_ECONOMY; // 기본 ON
+  delete process.env.LOGH_PROVISIONAL_BASE_PARAMETER_NOTIFY;
   try {
     // Valhalla(발할라) system (spot 70) has 4 planets in planet-economy.json
     const session = lobbyAuthedSession({
@@ -3805,7 +5086,8 @@ test('login session PUSH(world-import@0x0f02) emits 0x0337 NotifyBaseParameter w
     assert.equal(action.kind, 'lobby-response');
     const codes = action.extraInners.map(appInnerCode);
     // 0x0337 (823) must be present between 0x0321 and 0x0325
-    assert.ok(codes.includes(0x0337), '0x0337 NotifyBaseParameter emitted in PUSH path');
+    assert.ok(!codes.includes(0x0337), '0x0337 is ResponseTacticsCharacter in the client and stays off by default');
+    return;
 
     const nbp = action.extraInners.find((inner) => appInnerCode(inner) === 0x0337);
     assert.ok(nbp);
@@ -3822,12 +5104,16 @@ test('login session PUSH(world-import@0x0f02) emits 0x0337 NotifyBaseParameter w
     else process.env.LOGH_WORLD_IMPORT_BASES = prevImport;
     if (prevEconomy === undefined) delete process.env.LOGH_BASE_ECONOMY;
     else process.env.LOGH_BASE_ECONOMY = prevEconomy;
+    if (prevNotify === undefined) delete process.env.LOGH_PROVISIONAL_BASE_PARAMETER_NOTIFY;
+    else process.env.LOGH_PROVISIONAL_BASE_PARAMETER_NOTIFY = prevNotify;
   }
 });
 
-test('login session PULL(0x031e→0x031f) emits 0x0337 NotifyBaseParameter as extraInner with population/food', () => {
+test('login session PULL(0x031e->0x031f) does not emit provisional 0x0337 by default', () => {
   const prevEconomy = process.env.LOGH_BASE_ECONOMY;
+  const prevNotify = process.env.LOGH_PROVISIONAL_BASE_PARAMETER_NOTIFY;
   delete process.env.LOGH_BASE_ECONOMY; // 기본 ON
+  delete process.env.LOGH_PROVISIONAL_BASE_PARAMETER_NOTIFY;
   try {
     const session = lobbyAuthedSession({
       characters: [{ id: 1, faction: 'empire', spot: 70 }],
@@ -3841,6 +5127,8 @@ test('login session PULL(0x031e→0x031f) emits 0x0337 NotifyBaseParameter as ex
     const action = session.onInnerMessage(inner);
     assert.equal(action.kind, 'lobby-response');
     assert.equal(action.okInner.readUInt16BE(4), 0x031f);
+    assert.equal(action.extraInners, undefined, '0x0337 extraInner omitted by default');
+    return;
     // 0x0337 must be present as extraInner
     assert.ok(Array.isArray(action.extraInners), 'extraInners array present');
     assert.equal(action.extraInners.length, 1);
@@ -3853,6 +5141,70 @@ test('login session PULL(0x031e→0x031f) emits 0x0337 NotifyBaseParameter as ex
   } finally {
     if (prevEconomy === undefined) delete process.env.LOGH_BASE_ECONOMY;
     else process.env.LOGH_BASE_ECONOMY = prevEconomy;
+    if (prevNotify === undefined) delete process.env.LOGH_PROVISIONAL_BASE_PARAMETER_NOTIFY;
+    else process.env.LOGH_PROVISIONAL_BASE_PARAMETER_NOTIFY = prevNotify;
+  }
+});
+
+test('login session PUSH emits provisional 0x0337 only when explicitly opted in', () => {
+  const previous = process.env.LOGH_WORLD_PLAYER;
+  const prevImport = process.env.LOGH_WORLD_IMPORT_BASES;
+  const prevEconomy = process.env.LOGH_BASE_ECONOMY;
+  const prevNotify = process.env.LOGH_PROVISIONAL_BASE_PARAMETER_NOTIFY;
+  process.env.LOGH_WORLD_PLAYER = '1';
+  delete process.env.LOGH_WORLD_IMPORT_BASES;
+  delete process.env.LOGH_BASE_ECONOMY;
+  process.env.LOGH_PROVISIONAL_BASE_PARAMETER_NOTIFY = '1';
+  try {
+    const session = lobbyAuthedSession({
+      characters: [{ id: 1, faction: 'empire', spot: 70 }],
+      contentPack: makeValhallaGalaxyContentPack(),
+    });
+    const action = session.onInnerMessage(makeInner(0x0f02));
+    const nbp = action.extraInners.find((inner) => appInnerCode(inner) === 0x0337);
+    assert.ok(nbp, 'explicit provisional notify gate emits 0x0337 diagnostic record');
+    assert.equal(nbp.readUInt16BE(4), NOTIFY_BASE_PARAMETER_CODE);
+    const body = nbp.subarray(6);
+    assert.equal(body.readUInt32LE(NBP_OFF_POPULATION), 121000000);
+    assert.equal(body.readUInt32LE(NBP_OFF_FOOD), 160);
+  } finally {
+    if (previous === undefined) delete process.env.LOGH_WORLD_PLAYER;
+    else process.env.LOGH_WORLD_PLAYER = previous;
+    if (prevImport === undefined) delete process.env.LOGH_WORLD_IMPORT_BASES;
+    else process.env.LOGH_WORLD_IMPORT_BASES = prevImport;
+    if (prevEconomy === undefined) delete process.env.LOGH_BASE_ECONOMY;
+    else process.env.LOGH_BASE_ECONOMY = prevEconomy;
+    if (prevNotify === undefined) delete process.env.LOGH_PROVISIONAL_BASE_PARAMETER_NOTIFY;
+    else process.env.LOGH_PROVISIONAL_BASE_PARAMETER_NOTIFY = prevNotify;
+  }
+});
+
+test('login session PULL emits provisional 0x0337 only when explicitly opted in', () => {
+  const prevEconomy = process.env.LOGH_BASE_ECONOMY;
+  const prevNotify = process.env.LOGH_PROVISIONAL_BASE_PARAMETER_NOTIFY;
+  delete process.env.LOGH_BASE_ECONOMY;
+  process.env.LOGH_PROVISIONAL_BASE_PARAMETER_NOTIFY = '1';
+  try {
+    const session = lobbyAuthedSession({
+      characters: [{ id: 1, faction: 'empire', spot: 70 }],
+      contentPack: makeValhallaGalaxyContentPack(),
+    });
+    const reqBody = Buffer.alloc(6);
+    reqBody.writeUInt16LE(1, 0);
+    reqBody.writeUInt32LE(70, 2);
+    const action = session.onInnerMessage(Buffer.concat([Buffer.from('031e', 'hex'), reqBody]));
+    assert.equal(action.kind, 'lobby-response');
+    assert.equal(action.okInner.readUInt16BE(4), 0x031f);
+    assert.ok(Array.isArray(action.extraInners), 'explicit provisional notify gate emits an extra inner');
+    assert.equal(action.extraInners[0].readUInt16BE(4), NOTIFY_BASE_PARAMETER_CODE);
+    const body = action.extraInners[0].subarray(6);
+    assert.equal(body.readUInt32LE(NBP_OFF_POPULATION), 121000000);
+    assert.equal(body.readUInt32LE(NBP_OFF_FOOD), 160);
+  } finally {
+    if (prevEconomy === undefined) delete process.env.LOGH_BASE_ECONOMY;
+    else process.env.LOGH_BASE_ECONOMY = prevEconomy;
+    if (prevNotify === undefined) delete process.env.LOGH_PROVISIONAL_BASE_PARAMETER_NOTIFY;
+    else process.env.LOGH_PROVISIONAL_BASE_PARAMETER_NOTIFY = prevNotify;
   }
 });
 
@@ -3860,9 +5212,11 @@ test('login session 0x0337 is suppressed when LOGH_BASE_ECONOMY=0', () => {
   const previous = process.env.LOGH_WORLD_PLAYER;
   const prevImport = process.env.LOGH_WORLD_IMPORT_BASES;
   const prevEconomy = process.env.LOGH_BASE_ECONOMY;
+  const prevNotify = process.env.LOGH_PROVISIONAL_BASE_PARAMETER_NOTIFY;
   process.env.LOGH_WORLD_PLAYER = '1';
   delete process.env.LOGH_WORLD_IMPORT_BASES;
   process.env.LOGH_BASE_ECONOMY = '0';
+  process.env.LOGH_PROVISIONAL_BASE_PARAMETER_NOTIFY = '1';
   try {
     const session = lobbyAuthedSession({
       characters: [{ id: 1, faction: 'empire', spot: 70 }],
@@ -3878,12 +5232,16 @@ test('login session 0x0337 is suppressed when LOGH_BASE_ECONOMY=0', () => {
     else process.env.LOGH_WORLD_IMPORT_BASES = prevImport;
     if (prevEconomy === undefined) delete process.env.LOGH_BASE_ECONOMY;
     else process.env.LOGH_BASE_ECONOMY = prevEconomy;
+    if (prevNotify === undefined) delete process.env.LOGH_PROVISIONAL_BASE_PARAMETER_NOTIFY;
+    else process.env.LOGH_PROVISIONAL_BASE_PARAMETER_NOTIFY = prevNotify;
   }
 });
 
 test('login session PULL 0x0337 is suppressed when LOGH_BASE_ECONOMY=0', () => {
   const prevEconomy = process.env.LOGH_BASE_ECONOMY;
+  const prevNotify = process.env.LOGH_PROVISIONAL_BASE_PARAMETER_NOTIFY;
   process.env.LOGH_BASE_ECONOMY = '0';
+  process.env.LOGH_PROVISIONAL_BASE_PARAMETER_NOTIFY = '1';
   try {
     const session = lobbyAuthedSession({
       characters: [{ id: 1, faction: 'empire', spot: 70 }],
@@ -3899,6 +5257,8 @@ test('login session PULL 0x0337 is suppressed when LOGH_BASE_ECONOMY=0', () => {
   } finally {
     if (prevEconomy === undefined) delete process.env.LOGH_BASE_ECONOMY;
     else process.env.LOGH_BASE_ECONOMY = prevEconomy;
+    if (prevNotify === undefined) delete process.env.LOGH_PROVISIONAL_BASE_PARAMETER_NOTIFY;
+    else process.env.LOGH_PROVISIONAL_BASE_PARAMETER_NOTIFY = prevNotify;
   }
 });
 

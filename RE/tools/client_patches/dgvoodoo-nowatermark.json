@@ -3,47 +3,58 @@
   "kind": "conf",
   "target": ".omo/work/logh7-installed/exe/dgVoodoo.conf",
   "dll": ".omo/work/logh7-installed/exe/D3D8.dll",
-  "description": "dgVoodoo2 우하단 'dgVoodoo' 워터마크를 제거한다. D3D8.dll은 dgVoodoo2 2.87.2 release 래퍼이며 패킹된 바이너리(.text 엔트로피 ~7.913, 섹션명 stripped)라 워터마크 렌더/문자열/비트맵을 안전하게 정적 바이트패치할 수 없다. 따라서 conf 레버(dgVoodooWatermark)로 끈다. 생성기=tools/logh7_dgvoodoo_nowatermark.py.",
+  "description": "Disable the dgVoodoo2 on-screen logo through dgVoodoo.conf. The D3D8 wrapper is packed, so the safe path is config, not a binary watermark patch.",
   "re": {
     "dllSha256": "85284d3024d6ad7d4b4154cd96b97e0d64f28f6a0f7ad490e5be70d626f62604",
-    "dllVersion": "FileDescription='dgVoodoo 2.87.2 - Direct3D8', FileVersion=4.8.2.134, ProductVersion=2.8.7.2, Copyright (C) 2013-2026 (release build, not debug/spec)",
-    "packed": "First two PE sections are name-stripped; the data/code section (raw 0x400..0x63a00) has Shannon entropy 7.913 of 8.0 → compressed/encrypted by dgVoodoo's own packer. The watermark glyphs are a baked-in texture/atlas, NOT a literal 'dgVoodoo' string in code: the only UTF-16LE 'dgVoodoo' hits (file 0x65c14, 0x65d64) are the VERSIONINFO resource (FileDescription/ProductName), not the rendered overlay. There is no ASCII/UTF-16 'Watermark' string in the image. Conclusion: no safe same-length byte patch exists for the render path inside a packed section (bytes are transformed at unpack time; a literal patch is either inert or corrupts the unpacker/integrity), and the task forbids breaking game rendering. So the watermark is disabled via the documented conf flag instead.",
-    "confMechanism": "dgVoodoo2 only adopts a conf whose 'Version' AND key-set structure match the DLL build, otherwise it silently falls back to defaults (watermark ON). The reference value for build 2.87.2 is Version=0x287 (cf. 0x280=2.8.2, 0x283=2.83.3 from the official FAQ). To eliminate any structural-rejection risk, the conf is rebuilt from the EXACT stock 2.87.2 template that ships alongside this DLL (.omo/work/dgVoodoo2_87_2/dgVoodoo.conf, key-set verified identical) with only watermark + LOGH remaster values overridden."
+    "dllVersion": "FileDescription='dgVoodoo 2.87.2 - Direct3D8', FileVersion=4.8.2.134, ProductVersion=2.8.7.2",
+    "packed": "The wrapper's high-entropy packed sections make a same-length static watermark byte patch unsafe. The rendered logo is not backed by a simple ASCII/UTF-16 string in the PE image.",
+    "confMechanism": "dgVoodoo2 accepts a config whose Version/key structure matches the DLL build. For 2.87.2 the active Version is 0x287."
   },
   "confChanges": [
     {
       "section": "[DirectX]",
       "key": "dgVoodooWatermark",
-      "from": "true (stock default)",
+      "from": "true or default",
       "to": "false",
-      "note": "핵심: D3D8/9 우하단 'dgVoodoo' 워터마크 오버레이를 끈다."
+      "note": "Disables the D3D8/D3D9 bottom-right dgVoodoo watermark."
     },
     {
       "section": "[Glide]",
       "key": "3DfxWatermark",
-      "from": "true (stock default)",
+      "from": "true or default",
       "to": "false",
-      "note": "Glide 워터마크 off. 이 게임은 D3D8 경로라 무관하나 일관성 위해 함께 off."
+      "note": "Glide is not the LOGH VII path, but keep this off too."
+    },
+    {
+      "section": "[Glide]",
+      "key": "3DfxSplashScreen",
+      "from": "true or default",
+      "to": "false",
+      "note": "Prevents dgVoodoo Glide splash/logo paths if they are ever selected."
     },
     {
       "section": "[GeneralExt]",
       "key": "WatermarkDisplayDuration",
-      "from": "0",
-      "to": "0",
-      "note": "워터마크가 켜질 때의 표시 시간(0=infinite). 워터마크 off라 무의미하나 명시 유지."
+      "from": "0 or undefined",
+      "to": "1",
+      "note": "dgVoodoo documents 0/undefined as infinite duration if a watermark is enabled."
     }
   ],
-  "preservedRemaster": {
-    "ScalingMode": "stretched",
-    "Resampling": "lanczos-3",
-    "FullscreenAttributes": "fullscreensize",
-    "Filtering": "16",
-    "Antialiasing": "4x (both [Glide] and [DirectX])",
-    "note": "기존 설치 conf의 LOGH 리마스터 화질값을 그대로 유지 → 워터마크만 제거하고 게임 렌더는 동일."
+  "sharpBorderless": {
+    "FullScreenMode": "false",
+    "ScalingMode": "centered",
+    "Resampling": "pointsampled",
+    "WindowedAttributes": "borderless",
+    "FullscreenAttributes": "fake",
+    "Filtering": "appdriven",
+    "Antialiasing": "off (all occurrences)",
+    "RTTexturesForceScaleAndMSAA": "false",
+    "SmoothedDepthSampling": "false",
+    "note": "Aligned with ui_explorer and LOGH7Launcher. The older stretched/lanczos/AA remaster preset can blur LOGH VII's 2D UI and Korean text."
   },
   "backup": ".omo/work/logh7-installed/exe/dgVoodoo.conf.original",
-  "outputConfSha256": "5b68d7ad0107237ba9e8352fa80b573edf5c268c24d002a19b8ca8cbfe867aea",
+  "outputConfSha256": "0622de26d90d325046be2b8af8ba552e2aca85b4e292dfdf6b096a176c5aa6b9",
   "apply": "python -m tools.logh7_dgvoodoo_nowatermark --deploy",
-  "verify": "Version=0x287 matches DLL 2.87.2; dgVoodooWatermark=false; 3DfxWatermark=false; conf key-set identical to stock template (no structural rejection); CRLF preserved, no BOM, 362 lines.",
-  "needsLive": "실클라에서 우하단 'dgVoodoo' 워터마크가 사라지고 게임 렌더가 정상인지 확인. ⚠️ BOTHTEC 스플래시 ~30초 대기 후 스크린샷."
+  "verify": "Version=0x287; dgVoodooWatermark=false; 3DfxWatermark=false; 3DfxSplashScreen=false; WatermarkDisplayDuration=1; sharpBorderless=PASS; conf key-set structure preserved.",
+  "liveProof": ".omo/ui-explorer/c002-latch-loop-98ca-20260628/shots/006-logo-recheck-live.png showed no bottom-right dgVoodoo logo on the previous canonical 98ca build. Current canonical 79142d12 uses the same no-watermark config path; visual recheck is still required for the new 16px/font-atlas stack."
 }

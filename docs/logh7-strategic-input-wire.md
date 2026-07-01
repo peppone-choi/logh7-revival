@@ -24,18 +24,20 @@ make a player's fleet controllable and propagate moves to all clients.
 1. **`0x0b01 CommandMoveGrid`** is **bidirectional**: the client SENDS it (36B) to order a fleet
    warp; the server ECHOES it back (36B) as the move ACK. The client's own-move ACK mutates **no**
    map state (`FUN_004bea90` is an empty stub) — it only releases the SelectGrid dialog FSM.
-2. The visible fleet movement on every client is driven by **`0x0b07 NotifyMovedGrid` (580B)**,
-   which the server broadcasts. Its consumer chain is
+2. The server-visible fleet-move notification is **`0x0b07 NotifyMovedGrid` (580B)**,
+   which the server broadcasts. Its confirmed client chain is
    `FUN_004ba2b0`(case 0xb07, copy 0x91 dw → `clientBase+0x437714`) → `FUN_004bee20` →
-   `FUN_00517cd0` (enqueues deferred event `0x16`) → applied to the unit position table + PLAYER_INFO.
+   `FUN_00517cd0` (enqueues deferred event `0x16`) → SelectGrid/result-node activity. Canonical
+   live #82 proves transient SelectGrid state change only, not persistent unit/PLAYER_INFO/cell
+   mutation or visible fleet-marker movement.
 3. **The blocker is enablement, not the wire.** A click only issues `0x0b01` after the SelectGrid
    dialog (`FUN_00581c80`) is constructed. G1-G5 below are still prerequisites for a strategic
    fleet to be meaningful, but the 2026-06-20 rerun proves they are not sufficient: the current
    blocker is the HUD selection/category/command-row admission path in §1.2.1.
 4. **`0x0b09/0x0b0a` grid-enter** on the strategic map calls `FUN_004c2a80(1)` (PLAYER_INFO rebuild,
-   no world reset). It is the mechanism that links a character record to its grid-unit. After a
-   `0x0b07` you do **not** need a `0x0b0a` to re-place a fleet — `0x0b07` mutates positions directly
-   (§3). `0x0b0a` is only needed to (re)establish the PLAYER_INFO↔unit linkage (e.g. on first entry).
+   no world reset). It is the known mechanism that links a character record to its grid-unit.
+   Whether an ordinary `0x0b07` must be followed by another rebuild/placement trigger for visible
+   relocation is still open after live #82.
 
 ---
 
@@ -187,7 +189,48 @@ across all command echoes in `FUN_004ba2b0` (`param_3[0]`=time/seq, `param_3[1]`
 0x14 (20B) and the rest is the 70-slot unit table. Only the first `unit_count` slots are read; the
 tail is zero-padded to keep the frame a fixed 580B.
 
-### 3.2 What the client mutates from `0x0b07`
+> **★ LIVE RESOLUTION (2026-06-29, clean A/B, session `abc-live-20260629`).** The entry layout is
+> **`@0x13 BIG-ENDIAN`** — settled by real client. A fresh session captured a single fleet-move
+> `0x0b07` with the watcher attached BEFORE the probe fired (`bee20-enter=1`): the
+> `clientBase+0x437714` record decoded to the server intent (`unitId=1`, `cell=2597 = 2588+9`) at
+> `@0x13 BE`, while `@0x14 LE` gave garbage (`65536` / `2427392`). This **overturns the static
+> reversal below** (which had argued "verbatim transport ⇒ `@0x14 LE`, the journal #82 capture was
+> a confound"): even a clean capture is `@0x13 BE`. The data reaches the client correctly; the
+> watcher now parses `@0x13 BE` (`layoutResolved=true`). The remaining open item is that the
+> server builder writes `@0x14 LE` in-memory yet the client reads `@0x13 BE` — an unresolved
+> server↔wire serialization detail (the on-wire frame evidently already carries `@0x13 BE` since
+> the client decodes correctly, so no functional data loss; a byte-trace of the actual emitted
+> frame would close it). `verdictCode = applied-transient-selectgrid-change`: data arrives, but
+> only transient SelectGrid state changed — visible relocation remains unproven (per §3.2 / #84).
+> The two-cycle reasoning below is preserved as history; the live verdict supersedes its conclusion.
+>
+> **Correction (2026-06-29, live #82 r2 vs runtime path).** The table above is derived from
+> `FUN_0044b460` / `FUN_0044b600`, but those are a **separate serialization-registry** parser
+> (`FUN_0044b1e0`, vtable `PTR_FUN_0066d09c`) that is **NOT on the 0x0b07 runtime path**. At runtime
+> the body is raw-copied verbatim (`FUN_004ba2b0` case 0xb07 → `clientBase+0x437714`).
+>
+> **The runtime entry layout is currently UNRESOLVED**, reconciled across two cycles:
+> - **Server + transport ⇒ `@0x14 little-endian` (leading hypothesis).** `buildNotifyMovedGridInner`
+>   writes `count @0x12` then entries `@0x14 LE`. The message32 decipher `FUN_00645db0` `ntohs/ntohl`-
+>   swaps **only the 8-byte outer transport header** (checksum/seq/len) and copies the message body
+>   **raw** (dword loop + byte tail, no swap, no Feistel decrypt); `FUN_004ae0d0 → FUN_004b8850 /
+>   FUN_004b8b00 (fixed 0x244) → FUN_004ba2b0` then raw-copies it. So client `param_3` == server
+>   payload byte-for-byte, and a **clean** `clientBase+0x437714` record should read `@0x14 LE`.
+> - **Journal #82 capture ⇒ `@0x13 big-endian`, but confounded.** The captured `clientBase+0x437714`
+>   (`.omo/ui-explorer/0b07-location-watch-r2-20260629`, read at `FUN_004bee20` onEnter) was **dense**
+>   — it carried dwords (`2312`, `2313`, `49`) the fleet-move probe never sends, unlike the sparse
+>   `buildNotifyMovedGridInner` output — so the watcher did **not** read a fresh fleet-move copy. The
+>   server intent (`unitId=1`, `cell=2597 = 2588+9`) appears in that buffer only under `@0x13
+>   big-endian`; this is treated as **coincidental**, not a confirmed layout.
+>
+> `RE/tools/logh7_0b07_location_watch.py` now reports **both** decodes per entry (primary `@0x14 LE`,
+> alt `@0x13 BE`) plus raw bytes, with `RE_CONFIRMED_0B07.recordLayout.layoutResolved = false`. No
+> server wire change is justified yet. **Settling it requires a controlled live A/B** that dumps the
+> server-emitted 0x0b07 frame bytes and the `clientBase+0x437714` bytes in the **same** session and
+> confirms whether a clean record reads `@0x14 LE` (then the watcher's primary is correct and the
+> server stays) or `@0x13 BE` (then both watcher and server need the offset/endianness change).
+
+### 3.2 What the client applies from `0x0b07`
 
 `FUN_004bee20(record)` gates on `clientBase+0x2a58f8 != 0` (world-active, G3), logs a warning if
 `**(clientBase+8)==0`, then calls `FUN_00517cd0(0xb07, record)`. `FUN_00517cd0`:
@@ -195,15 +238,87 @@ tail is zero-padded to keep the frame a fixed 580B.
 - enqueues a **deferred event `0x16`** carrying the record (`FUN_00501e30(0x16, queue, record)`),
   which `FUN_005751b0` (the SelectGrid ReceiveResult update) is polling.
 
-The position application follows the **PLAYER_INFO update pattern** (`FUN_004beaa0`, the sibling
-applicator): walk PLAYER_INFO (`DAT_007ccffc+0xc`, stride `0x370`, limit `0x80e7f`), match a record by
-entity id (`FUN_004b5b80()` vs `record+4`), then write the new position dwords into
-`playerInfo+0x40` / `playerInfo+0x44`. For each unit in the `0x0b07` array, the client updates that
-unit's cell in the object/cell tables and its PLAYER_INFO position, then the strategic renderer
-(`FUN_004c8ac0`, reached from `FUN_004b6840` mode-2 branch) draws the fleet at the new cell.
+Important correction after the canonical live #46 pass: `FUN_004bee20` itself does **not** directly
+write `PLAYER_INFO+0x40/+0x44` or the `clientBase+0x41a368` unit table. That direct write pattern
+belongs to sibling notify paths such as `FUN_004bee60` / `FUN_004beaa0`, which walk PLAYER_INFO
+(`clientBase+0x0c`, stride `0x370`) and update location-like dwords. For `0x0b07`, the confirmed
+client effect is now:
 
-> Net: a single `0x0b07` carrying `[unitId, newCell]` for the moved fleet (unit_count=1) is
-> sufficient to relocate it on every client. Multi-unit moves (formations) fill more slots.
+1. `FUN_004bee20` runs with `client+0x2a58f8` open;
+2. `FUN_00517cd0(0xb07, record)` runs;
+3. `FUN_00501e30(0x16, ...)` enqueues the scene event;
+4. the SelectGrid result node (`FUN_005751b0`) should consume that event and drive its state machine
+   (`DAT_009d2a7c`, `_DAT_009d2a74`, node `+0x34/+0x3c/+0x44/+0x4c`).
+
+Live #46 confirms steps 1-3. Canonical live #82 confirms step 4 also runs, but the only observed
+state change is transient SelectGrid result state. Static RE of `FUN_005751b0` shows it drives the
+ReceiveResult FSM (`DAT_009d2a7c`, `_DAT_009d2a74`, node fields) and does not contain a persistent
+unit-table, PLAYER_INFO, cell/object, or own-cell writer. Therefore a bare `0x0b07` is currently
+classified as a result-control event, not as a proven visual relocation event.
+
+### 3.3 Live apply-probe verdict codes
+
+Use `RE/tools/logh7_0b07_apply_probe.py` during a standard `ui_explorer` session with
+`LOGH_FLEET_MOVE_PROBE=1` after grid entry. The probe is read-only and now reports a stable
+`verdictCode` so live evidence can be compared mechanically:
+
+```bash
+cd RE
+python -m tools.logh7_0b07_apply_probe --seconds 30 --out .omo/ui-explorer/<session>/0b07-apply.json
+```
+
+Server-side prerequisite: `server/tests/server/logh7-login-session.test.mjs` locks the opt-in
+`LOGH_FLEET_MOVE_PROBE=1` path so post-load grid entry defers exactly one `0x0b07` message32 frame,
+using the active unit id and `fleetCellId() + LOGH_FLEET_MOVE_DELTA`.
+
+Follow-up placement candidate: `LOGH_FLEET_MOVE_REBUILD_PROBE=1` extends that same delayed diagnostic
+sequence from `[0x0b07]` to `[0x0b07, 0x0325, 0x0b0a]`. The appended `0x0325` is a full one-unit
+refresh with its `cell` field set to the same destination as the `0x0b07` payload, and the appended
+`0x0b0a(value=0)` runs the known strategic no-reset rebuild path (`FUN_004c2a80(1)`). This is an
+opt-in live candidate for the open persistent-placement question, not proof that visible movement is
+fixed.
+
+Expected progression:
+
+| verdictCode | Meaning |
+|---|---|
+| `record-missing` | `FUN_004bee20` was not reached; the client did not observe an applied `0x0b07` in the probe window. |
+| `grid-gate-closed` | `FUN_004bee20` ran, but `client+0x2a58f8` stayed zero, so the world/grid-active gate blocked dispatch. |
+| `dispatch-missing` | The gate opened, but `FUN_00517cd0(0x0b07)` did not fire. |
+| `enqueue-missing` | Dispatch fired, but `FUN_00501e30(0x16)` did not enqueue a scene event. |
+| `applied-no-owncell-change` | The event queue saw `0x0b07`; the watched own-cell field did not change, so use screenshots or a fleet/object watch to prove visual movement. |
+| `applied-owncell-changed` | Apply, dispatch, enqueue, and the watched own-cell mutation were all observed. |
+
+### 3.4 Live location/result watcher verdict codes
+
+Use `RE/tools/logh7_0b07_location_watch.py` when the apply probe already reports
+`applied-no-owncell-change`. This watcher is also read-only. It samples the unit table
+(`clientBase+0x41a364/+0x41a368`), character linkage (`+0x36a5dc/+0x36a8b4`), PLAYER_INFO location
+fields (`+0x3c/+0x40/+0x44/+0x48`, officer count `+0x270`), SelectGrid globals
+(`DAT_009d2a7c`, `_DAT_009d2a74`), and hooks `FUN_005751b0` / `FUN_004d6a80`.
+
+```bash
+cd RE
+python -m tools.logh7_0b07_location_watch --seconds 90 \
+  --session .omo/ui-explorer/<session> \
+  --out .omo/ui-explorer/<session>/0b07-location.json
+```
+
+| verdictCode | Meaning |
+|---|---|
+| `record-missing` | No `FUN_004bee20` hit was observed. |
+| `dispatch-missing` | `FUN_004bee20` ran, but `FUN_00517cd0(0x0b07)` did not. |
+| `enqueue-missing` | Dispatch ran, but `FUN_00501e30(0x16)` did not. |
+| `result-node-missing` | The event reached the queue, but `FUN_005751b0` did not run in the watch window. |
+| `applied-no-location-change` | Result path ran, but watched unit/PLAYER_INFO/cell/SelectGrid signatures stayed unchanged. |
+| `applied-transient-selectgrid-change` | Result path ran and SelectGrid result state changed, but persistent unit/PLAYER_INFO/cell/own-cell state did not. This is the canonical live #82 result. |
+| `applied-location-state-changed` | Result path ran and persistent unit/PLAYER_INFO/cell/own-cell state changed. This still needs screenshot agreement for visual movement proof. |
+
+The watcher JSON also emits `reEvidence` with the static contract for this opcode: parser
+`FUN_0044b460`, size `0x244`, `unit_count @ +0x12`, unit entries at `+0x14` stride `8`, and the known
+consumer path `FUN_004bee20 -> FUN_00517cd0 -> FUN_00501e30(0x16) -> FUN_005751b0`. Its
+`staticPersistentWriterKnown:false` flag is intentional; promote movement only from observed
+unit/PLAYER_INFO/cell diffs plus screenshot agreement, not from event arrival alone.
 
 ---
 
@@ -227,21 +342,25 @@ Both are **1 byte** (`FUN_004b8b00`: `0xb09`/`0xb0a` → `*param_4 = 1`; logs
 unit list `clientBase+0x41a368` (stride `0x58`), then `FUN_004c2c80(0, record)` pushes it into
 PLAYER_INFO. Other characters → `FUN_004c2c80(2, record)`.
 
-**Is `0x0b0a` needed after a `0x0b07`?** No. `0x0b07` mutates unit positions + PLAYER_INFO directly
-(§3.2). `0x0b0a`→`FUN_004c2a80(1)` only **(re)builds the PLAYER_INFO↔unit linkage** — required at
-strategic **entry** (to make the fleet selectable, gate G5) and after structural changes
-(unit added/removed), not after an ordinary move.
+**Is `0x0b0a` needed after a `0x0b07`?** Still open for visible relocation. `0x0b0a`->`FUN_004c2a80(1)`
+is the known strategic-entry rebuild path for PLAYER_INFO<->unit linkage. Canonical live #82 shows a
+server-pushed `0x0b07` by itself reaches event `0x16` and changes SelectGrid result state, but does
+not move the watched unit row, PLAYER_INFO row, cell/object bytes, own-cell field, or visible marker.
+The next RE target is therefore not another bare `0x0b07` replay; it is the persistent placement
+trigger after a move, such as a rebuild (`0x0b0a`), refreshed unit/grid content (`0x0325`,
+`0x0313`/`0x0315`), or another writer outside the known `0x0b07` control path. Do not claim
+`0x0b07` alone visibly re-places a fleet until that writer path is RE-pinned and live-proven.
 
 ---
 
-## 5. Recommended server send-sequence: "player clicks → fleet moves → all clients see it"
+## 5. Recommended server send-sequence: protocol ACK + observer notify
 
 Pre-req (one-time per player at strategic entry; see §1.3): sector map with the player's fleet as a
 grid object (`0x0313`+`0x0315`), the unit (`0x0325`), char linkage (`0x0323`+`0x0204`), and a
 `0x0b0a` so `FUN_004c2a80(1)` links PLAYER_INFO↔unit. These satisfy G1-G5 only; SelectGrid still
 requires the H1-H5 HUD command-admission gates.
 
-Then per move:
+Then per move, at the protocol/control layer:
 
 1. **Client A → server:** `0x0b01 CommandMoveGrid` (36B), raw inner `[u16 0x0b01][36B payload]`.
    Payload carries the warping unit id and destination cell/base (§2; for emulation, treat as opaque
@@ -254,14 +373,17 @@ Then per move:
    - header: `dword0`=tick/seq, `dword1`=result id (echo A's), `dword2`=mover fleet id,
      `dword3`=dest spot, `half@0x10`=route scalar (0 ok), `u8@0x12`=`unit_count` (1 for a single fleet);
    - unit[0] = `{ u32 unitId, u32 newCell }`; remaining 69 slots zero; pad to 580B.
-   Every client applies it via `FUN_004bee20`→`FUN_00517cd0` (event 0x16) and renders the fleet at
-   `newCell`. This is the broadcast the existing relay (`createWorldRelay`, `RELAY_COMMAND_CODES`)
+   Every client receives it through `FUN_004bee20`->`FUN_00517cd0` (event 0x16). This satisfies the
+   known SelectGrid result-control path only. Visible render at `newCell` still requires a
+   persistent placement trigger plus section 3.4 row/cell diffs and screenshot proof.
+   This is the broadcast the existing relay (`createWorldRelay`, `RELAY_COMMAND_CODES`)
    already forwards — server just needs to translate the inbound `0x0b01` into the authoritative
    `0x0b07` for all observers (and the `0x0b01` echo for the mover).
 
-**Minimal viable server logic:** on inbound `0x0b01` from conn3, (a) reflect `0x0b01` to the sender,
+**Minimal viable protocol logic:** on inbound `0x0b01` from conn3, (a) reflect `0x0b01` to the sender,
 (b) compute the authoritative destination, (c) broadcast one `0x0b07` with `unit_count=1` carrying
-`[fleetUnitId, destCell]` to every registered conn3. No `0x0b09/0x0b0a` needed per-move.
+`[fleetUnitId, destCell]` to every registered conn3. Whether a follow-up placement/rebuild trigger is
+needed per visible move remains open after live #82.
 
 ---
 
@@ -270,9 +392,10 @@ Then per move:
 1. **`0x0b01` payload dwords 0x0c–0x20 (§2)** are inferred, not symbol-pinned. To make the SERVER
    correctly read the player's chosen destination (vs. just echoing), capture one real `0x0b01` send
    live, or symbolize the `SendWarpCommand` send method behind vtable `PTR_FUN_00676aec`.
-2. **`0x0b07` unit element pos field (§3.1, +0x04):** confirmed a u32, but whether it is a raw cell
-   index into `0x2c03cc` or a packed (col,row)/float position needs a live `0x0b07` capture to
-   disambiguate from the PLAYER_INFO `+0x40/+0x44` float pair written by `FUN_004beaa0`.
+2. **`0x0b07` unit element position meaning (§3.1, +0x04):** `FUN_0044b460` confirms the element
+   shape as `{ u32 unitId, u32 positionOrCell }` at `+0x14` stride 8. The remaining question is not
+   byte layout; it is whether `positionOrCell` is a raw `0x2c03cc` cell, a packed position, or merely
+   control data consumed before a separate placement/rebuild writer.
 3. **Sector-object record format (gate G4):** the per-object record in `0x2c1755` (3B/object) plus the
    `0x0313`/`0x0315` content that places the player's fleet as a selectable object is still useful
    data-model work, but it is not the current primary C002 blocker. `0x0315` also has the unresolved
@@ -280,7 +403,11 @@ Then per move:
 4. **`half@0x10` and `dword3` in `0x0b07`:** named "route scalar" / "dest spot" by position; the
    labeled `_INF:NotifyMovedGrid#` dump serializer (string @0x00766a64) is **not compiled** into the
    client (server-side only), so field names are not recoverable from this binary.
-5. **HUD command-admission source:** after G4/G5 are true, identify which server record or native
+5. **Visible movement writer after `0x0b07`:** identify whether the client expects a follow-up
+   strategic rebuild/content push (`0x0b0a`, `0x0325`, `0x0313`/`0x0315`, or another opcode) to make
+   observers update persistent unit/PLAYER_INFO/cell state after the SelectGrid result FSM accepts
+   `0x0b07`.
+6. **HUD command-admission source:** after G4/G5 are true, identify which server record or native
    UI action changes `HUD+0xf4` to `2`, updates `HUD+0xab0`, and makes a selection row hit-test pass.
    `0x0356` can populate `payload+0x270`, but it does not by itself prove row visibility or command
    category dispatch.

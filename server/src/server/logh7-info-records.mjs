@@ -53,6 +53,42 @@ export const RESP_INFORMATION_OUTFIT_BYTES = 0x0af4; // 2804 = 100*0x1c + 4
 export const CARD_STRIDE = 0x46; // 70 bytes/card
 export const CARD_MAX = 300; // count cap (< 0x12d)
 export const CARD_COMMAND_MAX = 24; // per-card command factory list cap (≤ 24)
+export const CARD_MENU_COMMAND_COUNT_OFFSET = 0x14; // FUN_004f5cb0 reads record+0x14
+export const CARD_MENU_FACTORY_IDS_OFFSET = 0x16; // FUN_004f5cb0 iterates record+0x16 u16 ids
+export const CARD_MENU_WIDGET_ID_DELTA = 0x43; // row widget id = factory id + 0x43
+export const CARD_MENU_RECORD_START_TABLE_OFFSET = 0x0a; // FUN_004f5cb0 starts records at table+0x0a
+export const CARD_MENU_SELECTED_FACTORY_TABLE_OFFSET = 0x20; // FUN_005312b0 table-base offset
+export const CARD_MENU_SELECTED_FACTORY_RECORD_OFFSET =
+  CARD_MENU_SELECTED_FACTORY_TABLE_OFFSET - CARD_MENU_RECORD_START_TABLE_OFFSET; // record+0x16
+export const CARD_MENU_SPECIAL_FACTORY_ACTIONS = Object.freeze({
+  0x0019: Object.freeze({
+    factoryId: 0x0019,
+    factoryIdHex: '0x0019',
+    followupInnerCode: 0x0903,
+    followupInnerCodeHex: '0x0903',
+    consumer: 'FUN_005312b0',
+    evidence: 'FUN_005312b0 reads selected factory id at table+0x20+selected*2 (= record+0x16) and maps 0x19 -> 0x0903.',
+    confidence: 'P0-static-selected-factory-branch',
+  }),
+  0x003f: Object.freeze({
+    factoryId: 0x003f,
+    factoryIdHex: '0x003f',
+    followupInnerCode: 0x0c02,
+    followupInnerCodeHex: '0x0c02',
+    consumer: 'FUN_005312b0',
+    evidence: 'FUN_005312b0 maps selected factory id 0x3f -> 0x0c02.',
+    confidence: 'P0-static-selected-factory-branch',
+  }),
+  0x0040: Object.freeze({
+    factoryId: 0x0040,
+    factoryIdHex: '0x0040',
+    followupInnerCode: 0x0c05,
+    followupInnerCodeHex: '0x0c05',
+    consumer: 'FUN_005312b0',
+    evidence: 'FUN_005312b0 maps selected factory id 0x40 -> 0x0c05.',
+    confidence: 'P0-static-selected-factory-branch',
+  }),
+});
 export const INSTITUTION_BASE_STRIDE = 0x2378; // 9080 bytes/base
 export const INSTITUTION_BASE_MAX = 4; // outer base cap (< 5)
 export const INSTITUTION_STRIDE = 0xfc; // 252 bytes/institution
@@ -69,7 +105,7 @@ export const PACKAGE_ENTRY_STRIDE = 12; // {kind u8, unit_kind u16, troop_grade 
 export const OUTFIT_STRIDE = 0x1c; // 28 bytes/outfit
 export const OUTFIT_MAX = 100; // count cap (≤ 100)
 export const STATIC_BASE_STRIDE = 0x3c; // 60-byte destination stride used by FUN_004142e0
-export const STATIC_BASE_MAX = 80; // strategic systems (galaxy = 80 systems); fits in 0x520c
+export const STATIC_BASE_MAX = 350; // FUN_004142e0 accepts count <0x15f; 2 + 350*0x3c fits in 0x520c
 export const INFORMATION_BASE_STRIDE = 0x180;
 export const INFORMATION_BASE_MAX = 4;
 export const NAME_MAX_UNITS = 13; // name[<=13] wide-char cap shared across the family
@@ -77,6 +113,11 @@ export const NAME_MAX_UNITS = 13; // name[<=13] wide-char cap shared across the 
 const clampU8 = (v) => Math.max(0, Math.min(0xff, Math.trunc(v ?? 0))) & 0xff;
 const clampU16 = (v) => Math.max(0, Math.min(0xffff, Math.trunc(v ?? 0))) & 0xffff;
 const clampU32 = (v) => (Math.max(0, Math.trunc(v ?? 0)) >>> 0);
+
+export function staticInformationCardSpecialFactoryAction(factoryId) {
+  const action = CARD_MENU_SPECIAL_FACTORY_ACTIONS[Number(factoryId) & 0xffff];
+  return action ? { ...action } : null;
+}
 
 /**
  * Write a wide-char pascal name (u8 length + `len` u16 chars, ≤13) at byte `off` in `buf`. This is the
@@ -93,6 +134,64 @@ function writeName16(buf, off, name) {
 }
 
 // ---------------------------------------------------------------------------
+export function decodeStaticInformationCardMenuFields(innerOrBody, cardIndex = 0) {
+  const body = Buffer.isBuffer(innerOrBody)
+    && innerOrBody.length >= 6
+    && innerOrBody.readUInt16BE(4) === RESP_STATIC_INFORMATION_CARD_CODE
+    ? innerOrBody.subarray(6)
+    : innerOrBody;
+  if (!Buffer.isBuffer(body)) {
+    throw new TypeError('innerOrBody must be a Buffer');
+  }
+  const cardCount = body.length >= 2 ? body.readUInt16LE(0x00) : 0;
+  const normalizedIndex = Math.max(0, Math.trunc(cardIndex || 0));
+  const recordBodyOffset = 2 + normalizedIndex * CARD_STRIDE;
+  const recordEnd = recordBodyOffset + CARD_STRIDE;
+  if (normalizedIndex >= cardCount || recordEnd > body.length) {
+    return {
+      exists: false,
+      cardCount,
+      cardIndex: normalizedIndex,
+      recordBodyOffset,
+      consumer: 'FUN_004f5cb0',
+    };
+  }
+
+  const commandCount = body.readUInt8(recordBodyOffset + CARD_MENU_COMMAND_COUNT_OFFSET);
+  const cappedCount = Math.min(commandCount, CARD_COMMAND_MAX);
+  const factoryIds = [];
+  for (let i = 0; i < cappedCount; i += 1) {
+    factoryIds.push(body.readUInt16LE(recordBodyOffset + CARD_MENU_FACTORY_IDS_OFFSET + i * 2));
+  }
+  const specialFactoryActions = factoryIds
+    .map((factoryId, index) => {
+      const action = staticInformationCardSpecialFactoryAction(factoryId);
+      return action ? { index, ...action } : null;
+    })
+    .filter(Boolean);
+  return {
+    exists: true,
+    cardCount,
+    cardIndex: normalizedIndex,
+    recordBodyOffset,
+    recordCommandCountOffset: CARD_MENU_COMMAND_COUNT_OFFSET,
+    recordFactoryIdsOffset: CARD_MENU_FACTORY_IDS_OFFSET,
+    recordSelectedFactoryOffset: CARD_MENU_SELECTED_FACTORY_RECORD_OFFSET,
+    tableRecordStartOffset: CARD_MENU_RECORD_START_TABLE_OFFSET,
+    tableSelectedFactoryOffset: CARD_MENU_SELECTED_FACTORY_TABLE_OFFSET,
+    bodyCommandCountOffset: recordBodyOffset + CARD_MENU_COMMAND_COUNT_OFFSET,
+    bodyFactoryIdsOffset: recordBodyOffset + CARD_MENU_FACTORY_IDS_OFFSET,
+    bodySelectedFactoryOffset: recordBodyOffset + CARD_MENU_SELECTED_FACTORY_RECORD_OFFSET,
+    commandCount,
+    factoryIds,
+    widgetIds: factoryIds.map((factoryId) => factoryId + CARD_MENU_WIDGET_ID_DELTA),
+    specialFactoryActions,
+    consumer: 'FUN_004f5cb0',
+    selectedFactoryConsumer: 'FUN_005312b0',
+    evidence: 'FUN_004f5cb0 uses record+0x14 for row count and record+0x16 u16 factory ids; row widget id = factory + 0x43. FUN_005312b0 reads the selected factory id at table+0x20+selected*2, equivalent to record+0x16+selected*2 after FUN_004f5cb0 table+0x0a record-start bias.',
+  };
+}
+
 // 0x305 ResponseStaticInformationCard — card master / command-grant table
 // ---------------------------------------------------------------------------
 /**

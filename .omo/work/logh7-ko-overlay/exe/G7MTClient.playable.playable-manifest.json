@@ -1,8 +1,8 @@
 {
-  "base": "E:\\logh7-revival\\RE\\.omo\\work\\logh7-ko-overlay\\exe\\G7MTClient.korean.exe",
+  "base": "C:\\Users\\by0ng\\OneDrive\\Desktop\\logh7-revival\\RE\\.omo\\work\\logh7-ko-overlay\\exe\\G7MTClient.korean.exe",
   "baseSha256": "466725e2220726a4b5274b99e7b85fbdbef222cb424386638405d2cc7e23aa66",
-  "out": "E:\\logh7-revival\\RE\\.omo\\work\\logh7-ko-overlay\\exe\\G7MTClient.playable.exe",
-  "outSha256": "992dc7e25c4d7c3c982f1d2e6d9de904c733208ae9b28ddab162ef51aa076a0c",
+  "out": "C:\\Users\\by0ng\\OneDrive\\Desktop\\logh7-revival\\RE\\.omo\\work\\logh7-ko-overlay\\exe\\G7MTClient.playable.exe",
+  "outSha256": "3b4f634818ff0d2b2f59eb6ddacbe73c9bcbc9cda146b9cfdb9c5d1cb7b98573",
   "stack": [
     "menufix",
     "dlgfix",
@@ -10,20 +10,29 @@
     "strat-camera-focus",
     "hud-msgdat-groupfix",
     "hud-character-status-msgdatfix",
+    "command-panel-msgdat-groupfix",
     "mission-msgdat-subidfix",
     "sector-label-hardcoded-ko",
+    "session-select-hardcoded-ko",
     "tactical-grid-msgdat-boundaryfix",
     "galaxy-screen-starname-msgdat-boundaryfix",
     "galaxy-screen-grid-format-msgdat-boundaryfix",
     "hud-hardcoded-stat-labels-ko",
     "font-face",
+    "font-atlas-face",
     "font-cleartype",
+    "font-atlas-antialias",
+    "font-readable-size",
     "login-title-ko",
     "login-blank-password-local-ok",
     "lobby-res",
-    "lobby-native-layout"
+    "lobby-native-layout-v2",
+    "charsel-recenter",
+    "charsel-content-inset",
+    "charsel-content-y-inset",
+    "charsel-confirm-dialog-inset"
   ],
-  "rsrcMap": "E:\\logh7-revival\\RE\\content\\localization\\hardcoded-ui-ko.json",
+  "rsrcMap": "C:\\Users\\by0ng\\OneDrive\\Desktop\\logh7-revival\\RE\\content\\localization\\hardcoded-ui-ko.json",
   "patches": [
     {
       "name": "menufix",
@@ -292,6 +301,118 @@
       ]
     },
     {
+      "name": "command-panel-msgdat-groupfix",
+      "desc": "Repoint FUN_0057aa90 command/authority panel labels from constmsg group 0x5f to group 0x60 for subIds 4..0x12. Group 0x5f has only four command-status strings; group 0x60 has the consumed panel labels. Dynamic subIds 0..3 remain on group 0x5f.",
+      "verified": "RE 2026-06-30: FUN_00522010 has no group-index correction; installed and extracted constmsg offset tables both give group 0x5f=2957..2960 and group 0x60=2961..2980. Raw disasm at FUN_0057aa90 shows push subId; push 0x5f; mov ecx,0x2217400; call 0x522010. Same-length immediate patches verified against installed G7MTClient.exe.",
+      "sites": [
+        {
+          "virtualAddressHex": "0x0057ac18",
+          "fileOffsetHex": "0x0017ac18",
+          "originalHex": "6a5f",
+          "patchedHex": "6a60",
+          "note": "FUN_0057aa90 card detail label: g0x5f/s6 NO DATA -> g0x60/s6 card name"
+        },
+        {
+          "virtualAddressHex": "0x0057ac2c",
+          "fileOffsetHex": "0x0017ac2c",
+          "originalHex": "6a5f",
+          "patchedHex": "6a60",
+          "note": "FUN_0057aa90 card detail label: g0x5f/s5 NO DATA -> g0x60/s5 command/proposal card description"
+        },
+        {
+          "virtualAddressHex": "0x0057ac40",
+          "fileOffsetHex": "0x0017ac40",
+          "originalHex": "6a5f",
+          "patchedHex": "6a60",
+          "note": "FUN_0057aa90 card detail label: g0x5f/s4 NO DATA -> g0x60/s4 authority card description"
+        },
+        {
+          "virtualAddressHex": "0x0057ad00",
+          "fileOffsetHex": "0x0017ad00",
+          "originalHex": "6a5f",
+          "patchedHex": "6a60",
+          "note": "FUN_0057aa90 stock/warehouse label: g0x5f/s0x12 NO DATA -> g0x60/s0x12 food"
+        },
+        {
+          "virtualAddressHex": "0x0057ad14",
+          "fileOffsetHex": "0x0017ad14",
+          "originalHex": "6a5f",
+          "patchedHex": "6a60",
+          "note": "FUN_0057aa90 stock/warehouse label: g0x5f/s0x11 NO DATA -> g0x60/s0x11 supplies"
+        },
+        {
+          "virtualAddressHex": "0x0057ad24",
+          "fileOffsetHex": "0x0017ad24",
+          "originalHex": "6a5f",
+          "patchedHex": "6a60",
+          "note": "FUN_0057aa90 unit/storage label: g0x5f/s0x10 NO DATA -> g0x60/s0x10 squadron"
+        },
+        {
+          "virtualAddressHex": "0x0057ad35",
+          "fileOffsetHex": "0x0017ad35",
+          "originalHex": "6a5f",
+          "patchedHex": "6a60",
+          "note": "FUN_0057aa90 unit/storage label: g0x5f/s0x0f NO DATA -> g0x60/s0x0f troop"
+        },
+        {
+          "virtualAddressHex": "0x0057ad45",
+          "fileOffsetHex": "0x0017ad45",
+          "originalHex": "6a5f",
+          "patchedHex": "6a60",
+          "note": "FUN_0057aa90 unit/storage label: g0x5f/s0x0e NO DATA -> g0x60/s0x0e ship"
+        },
+        {
+          "virtualAddressHex": "0x0057ad56",
+          "fileOffsetHex": "0x0017ad56",
+          "originalHex": "6a5f",
+          "patchedHex": "6a60",
+          "note": "FUN_0057aa90 delta label: g0x5f/s0x0d NO DATA -> g0x60/s0x0d increase/decrease"
+        },
+        {
+          "virtualAddressHex": "0x0057ad66",
+          "fileOffsetHex": "0x0017ad66",
+          "originalHex": "6a5f",
+          "patchedHex": "6a60",
+          "note": "FUN_0057aa90 storage label: g0x5f/s0x0c NO DATA -> g0x60/s0x0c package warehouse"
+        },
+        {
+          "virtualAddressHex": "0x0057ad77",
+          "fileOffsetHex": "0x0017ad77",
+          "originalHex": "6a5f",
+          "patchedHex": "6a60",
+          "note": "FUN_0057aa90 unit label: g0x5f/s0x0b NO DATA -> g0x60/s0x0b unit"
+        },
+        {
+          "virtualAddressHex": "0x0057ad87",
+          "fileOffsetHex": "0x0017ad87",
+          "originalHex": "6a5f",
+          "patchedHex": "6a60",
+          "note": "FUN_0057aa90 storage label: g0x5f/s0x0a NO DATA -> g0x60/s0x0a unit warehouse"
+        },
+        {
+          "virtualAddressHex": "0x0057ad98",
+          "fileOffsetHex": "0x0017ad98",
+          "originalHex": "6a5f",
+          "patchedHex": "6a60",
+          "note": "FUN_0057aa90 storage label: g0x5f/s9 NO DATA -> g0x60/s9 base warehouse"
+        },
+        {
+          "virtualAddressHex": "0x0057adb5",
+          "fileOffsetHex": "0x0017adb5",
+          "originalHex": "6a5f",
+          "patchedHex": "6a60",
+          "note": "FUN_0057aa90 character-card selector label: g0x5f/s8 NO DATA -> g0x60/s8 select character with %s card"
+        },
+        {
+          "virtualAddressHex": "0x0057adc6",
+          "fileOffsetHex": "0x0017adc6",
+          "originalHex": "6a5f",
+          "patchedHex": "6a60",
+          "note": "FUN_0057aa90 character panel label: g0x5f/s7 NO DATA -> g0x60/s7 character status"
+        }
+      ]
+    },
+    {
       "name": "mission-msgdat-subidfix",
       "desc": "Fix FUN_0054f680 mission-selection UI lookups that request constmsg group 0x6a with enum-biased subIds 0x09..0x15. Group 0x6a is source-backed as six mission labels only, so the UI must render subIds 0..5 and only build six rows.",
       "verified": "RE: FUN_0054f680 fills DAT_02221e14 for the mission selector, FUN_00550a00 consumes that local text array for two selected mission labels, and FUN_004afd90 bounds mission selection to values <7. MsgDat source: original JP constmsg group 0x6a has 防衛任務/占領任務/迎撃任務/偵察任務/遊撃任務/撤退任務 and KO overlay has 방위 임무/점령 임무/요격 임무/정찰 임무/유격 임무/철퇴 임무. Live trace g006-msgdat-lookup-final-v2 showed the invalid 0x6a subIds 0x09..0x15 as the visible left mission-list NO DATA path.",
@@ -400,6 +521,83 @@
           "originalHex": "257390af8c6e",
           "patchedHex": "2573bcbab0e8",
           "note": "CP932 %s星系 -> CP949 %s성계 (same 6-byte length)"
+        }
+      ]
+    },
+    {
+      "name": "session-select-hardcoded-ko",
+      "desc": "Localize the hardcoded UTF-16LE session-selection header/card labels in the EXE .data table. These strings are not MsgDat and are not covered by the .rsrc patcher.",
+      "verified": "ENCODED 2026-06-29: live session-hangeulmenu-2d96-20260629 proved the session picker still rendered Japanese even after koreanMenuMode WriteProfileStringW succeeded and MsgDat constmsg IDs were Korean. Raw-byte scan found the visible labels in .data at file offsets 0x38d910..0x38d9b8 and related command label at 0x38c790. All replacements are UTF-16LE same-length.",
+      "sites": [
+        {
+          "virtualAddressHex": "0x0078c790",
+          "fileOffsetHex": "0x0038c790",
+          "originalHex": "e062b97078909e62",
+          "patchedHex": "70ac10c820c1ddd0",
+          "note": "Hardcoded UTF-16LE '拠点選択' -> '거점선택' (same 4 code units)"
+        },
+        {
+          "virtualAddressHex": "0x0078d910",
+          "fileOffsetHex": "0x0038d910",
+          "originalHex": "310030000b50",
+          "patchedHex": "310030001cac",
+          "note": "Hardcoded UTF-16LE '10個' -> '10개' (same 3 code units)"
+        },
+        {
+          "virtualAddressHex": "0x0078d918",
+          "fileOffsetHex": "0x0038d918",
+          "originalHex": "78909e62ef53fd80bb30c330b730e730f3307065",
+          "patchedHex": "20c1ddd0200000aca5b2200038c158c1200018c2",
+          "note": "Hardcoded UTF-16LE '選択可能セッション数' -> '선택 가능 세션 수' (same 10 code units)"
+        },
+        {
+          "virtualAddressHex": "0x0078d930",
+          "fileOffsetHex": "0x0038d930",
+          "originalHex": "d730ec30a43059308b30bb30c330b730e730f33092307890933067300b4e553044300230",
+          "patchedHex": "0cd508b874c760d5200038c158c144c7200020c1ddd074d52000fcc8edc2dcc224c62e00",
+          "note": "Hardcoded UTF-16LE 'プレイするセッションを選んで下さい。' -> '플레이할 세션을 선택해 주십시오.' (same 18 code units)"
+        },
+        {
+          "virtualAddressHex": "0x0078d96c",
+          "fileOffsetHex": "0x0038d96c",
+          "originalHex": "f6300867",
+          "patchedHex": "1cacd4c6",
+          "note": "Hardcoded UTF-16LE 'ヶ月' -> '개월' (same 2 code units)"
+        },
+        {
+          "virtualAddressHex": "0x0078d97c",
+          "fileOffsetHex": "0x0038d97c",
+          "originalHex": "4c7d4e9042669395200020002000200020002000",
+          "patchedHex": "bdacfcac2000dcc204ac20002000200020002000",
+          "note": "Hardcoded UTF-16LE '経過時間      ' -> '경과 시간     ' (same 10 code units)"
+        },
+        {
+          "virtualAddressHex": "0x0078d994",
+          "fileOffsetHex": "0x0038d994",
+          "originalHex": "e062b970",
+          "patchedHex": "70ac10c8",
+          "note": "Hardcoded UTF-16LE '拠点' -> '거점' (same 2 code units)"
+        },
+        {
+          "virtualAddressHex": "0x0078d9a0",
+          "fileOffsetHex": "0x0038d9a0",
+          "originalHex": "36ff33ff",
+          "patchedHex": "56005300",
+          "note": "Hardcoded UTF-16LE full-width 'ＶＳ' -> ASCII 'VS' (same 2 code units)"
+        },
+        {
+          "virtualAddressHex": "0x0078d9a8",
+          "fileOffsetHex": "0x0038d9a8",
+          "originalHex": "ea813175d1601f660c54df76",
+          "patchedHex": "90c720c789d531c1d9b3f9b9",
+          "note": "Hardcoded UTF-16LE '自由惑星同盟' -> '자유행성동맹' (same 6 code units)"
+        },
+        {
+          "virtualAddressHex": "0x0078d9b8",
+          "fileOffsetHex": "0x0038d9b8",
+          "originalHex": "8092b36c1d5efd56",
+          "patchedHex": "40c758d51cc86dad",
+          "note": "Hardcoded UTF-16LE '銀河帝国' -> '은하제국' (same 4 code units)"
         }
       ]
     },
@@ -524,7 +722,7 @@
     },
     {
       "name": "font-face",
-      "desc": "Replace the client's SOLE global GDI font face string 'MS UI Gothic' (VA 0x0077402c) with 'Pretendard'. RE: both CreateFontA sites (FUN_004aec70 @0x4aedd6 lpszFace=struct+0, FUN_004b0960 @0x4b0bb7 lpszFace=struct+8) read the face from a cache struct whose name is set in ONE place — FUN_004ea180 -> FUN_004aec10(s_MS_UI_Gothic_0077402c,...). Both sites already pass HANGEUL_CHARSET (0x81, encoded as `push -0x7f`); text quality is handled by the separate default-stack `font-cleartype` patch. Same-length 16-byte in-place region replace (face ≤15 chars + NUL, bounded by the following 'mkCreateVertexBuffer'); NO code cave. RE/docs: docs/logh7-font-remaster.md.",
+      "desc": "Replace the primary GDI UI font face string 'MS UI Gothic' (VA 0x0077402c) with 'Pretendard'. RE: FUN_004ea180 calls FUN_004aec10(s_MS_UI_Gothic_0077402c,...) for the UI CFont cache used by FUN_004aec70. The D3D texture-glyph atlas has a separate face slot at DAT_0076e240 handled by font-atlas-face.json. Both CreateFontA sites already pass HANGEUL_CHARSET (0x81, encoded as `push -0x7f`); text quality is handled by the separate default-stack `font-cleartype` patch. Same-length 16-byte in-place region replace (face <=15 chars + NUL, bounded by the following 'mkCreateVertexBuffer'); NO code cave. RE/docs: docs/logh7-font-remaster.md.",
       "verified": "ENCODED + originalHex guarded for vanilla references; current playable/installed trees may already contain the patched face. Same-length region patch (no cave). Requires 'Pretendard' present on the host; for the shipped Pretendard face, launcher/ui_explorer must register the bundled fonts before client start.",
       "sites": [
         {
@@ -537,8 +735,22 @@
       ]
     },
     {
+      "name": "font-atlas-face",
+      "desc": "Patch the separate D3D texture-glyph atlas face slot used by FUN_004b07c0/FUN_004b0960 from CP949 Gulim (DAT_0076e240) to Pretendard. Raw-byte proof: FUN_004b07c0 contains `bf 40 e2 76 00` (mov edi,0x0076e240) and copies that 16-byte string into the atlas object at +8; FUN_004b0960 then passes +8 to CreateFontA. This is not the global GDI face slot at 0x0077402c, so both slots must be patched for a true all-Pretendard client.",
+      "verified": "ENCODED + raw bytes verified against G7MTClient.korean.exe: file 0x0036e240 is b1bcb8b2000000000000000000000000. Same-length 16-byte data patch, no code cave. GDI spawn probe 2026-06-27 previously proved this path created faceHex=b1bcb8b200 while the other GDI path created Pretendard.",
+      "sites": [
+        {
+          "virtualAddressHex": "0x0076e240",
+          "fileOffsetHex": "0x0036e240",
+          "originalHex": "b1bcb8b2000000000000000000000000",
+          "patchedHex": "50726574656e64617264000000000000",
+          "note": "D3D glyph-atlas face DAT_0076e240: CP949 Gulim -> Pretendard (16-byte slot)"
+        }
+      ]
+    },
+    {
       "name": "font-cleartype",
-      "desc": "Upgrade the two LOGH VII CreateFontA call sites from ANTIALIASED_QUALITY (4) to CLEARTYPE_QUALITY (5). This keeps the existing global face patch ('Pretendard' at VA 0x0077402c) but makes the rendered GDI glyphs noticeably less like the old system fallback at small UI sizes. RE: FUN_004aec70 and FUN_004b0960 both pass quality via `push 4`; GDI probe on 2026-06-20 confirmed CreateFontA(face='Pretendard', charset=0x81) resolves to Pretendard, while Pretendard JP falls back to Gulim under HANGEUL_CHARSET.",
+      "desc": "Upgrade the two LOGH VII CreateFontA call sites from ANTIALIASED_QUALITY (4) to CLEARTYPE_QUALITY (5). This pairs with font-face.json for the primary UI cache and font-atlas-face.json for the D3D texture-glyph atlas, so both CreateFontA paths use Pretendard before quality is raised. RE: FUN_004aec70 and FUN_004b0960 both pass quality via `push 4`; GDI probes confirmed HANGEUL_CHARSET face resolution is runtime-dependent and must be verified live.",
       "verified": "ENCODED (two 2-byte same-length immediate patches). originalHex byte-verified against the current canonical playable/client EXE before writing. Needs live visual confirmation in the real client after rebuilding/deploying.",
       "sites": [
         {
@@ -554,6 +766,41 @@
           "originalHex": "6a04",
           "patchedHex": "6a05",
           "note": "FUN_004b0960 CreateFontA quality: ANTIALIASED_QUALITY(4) -> CLEARTYPE_QUALITY(5)"
+        }
+      ]
+    },
+    {
+      "name": "font-atlas-antialias",
+      "desc": "Keep the primary UI CreateFontA path on CLEARTYPE_QUALITY, but restore the D3D glyph-atlas CreateFontA path to ANTIALIASED_QUALITY. RE: FUN_004b0960 renders dynamic glyphs into a 16bpp DIB, then the client extracts alpha from the high nibble of the first byte (`byte >> 4`). Live/user-visible symptoms and the GDI raster comparison show Pretendard 14px with ClearType produces mostly partial-alpha outline pixels in that atlas path. Applying this after font-cleartype changes only the atlas quality push 5 -> 4; face remains Pretendard and charset remains HANGEUL_CHARSET.",
+      "verified": "Raw original bytes were verified against the previous canonical playable 98ca at file 0x000b0b91 = 6a05. Promoted to the default stack after live runtime-patch verification on the real game EXE showed the atlas-antialias path removed the hollow/outline glyph symptom while preserving the Pretendard face. Current canonical 79142d12 carries the patched byte 6a04 in the default stack.",
+      "sites": [
+        {
+          "virtualAddressHex": "0x004b0b91",
+          "fileOffsetHex": "0x000b0b91",
+          "originalHex": "6a05",
+          "patchedHex": "6a04",
+          "note": "FUN_004b0960 D3D glyph-atlas CreateFontA quality: CLEARTYPE_QUALITY(5) -> ANTIALIASED_QUALITY(4), applied after font-cleartype."
+        }
+      ]
+    },
+    {
+      "name": "font-readable-size",
+      "desc": "Increase the two LOGH VII UI font size sources after the Pretendard face patches. Primary GDI UI cache: FUN_004ea180 passes size 0x0c to FUN_004aec10, later consumed by FUN_004aec70 -> CreateFontA(-MulDiv(size,dpi,72)). Patch 12 -> 18. D3D texture-glyph atlas: FUN_004b07c0 computes uVar4=(LOGPIXELSY*10)/72 & 0xfffe, which is 12 at 96 DPI, stores it at atlas+0x60/+0x64, and derives the glyph cell from it. Patch the 5-byte even-mask to add 5 instead, yielding 18 at 96 DPI while keeping the existing atlas cell rounding path. Same-length immediate/code replacement only; needs live screenshot verification for clipping in compact edit boxes and buttons.",
+      "verified": "Raw bytes verified against G7MTClient.korean.exe, vanilla ghidra reference, and canonical playable references: primary site file 0x000ea1c6 = 6a0c; atlas site file 0x000b0869 = 25feff0000. Same-length immediate/code replacement only. The 18px-ish bytes supersede the prior 16px-ish default after the user reported the font still looked too small.",
+      "sites": [
+        {
+          "virtualAddressHex": "0x004ea1c6",
+          "fileOffsetHex": "0x000ea1c6",
+          "originalHex": "6a0c",
+          "patchedHex": "6a12",
+          "note": "FUN_004ea180 -> FUN_004aec10 primary GDI UI font size: 12 -> 18."
+        },
+        {
+          "virtualAddressHex": "0x004b0869",
+          "fileOffsetHex": "0x000b0869",
+          "originalHex": "25feff0000",
+          "patchedHex": "83c0059090",
+          "note": "FUN_004b07c0 atlas size result: replace `and eax,0xfffe` with `add eax,5; nop; nop`, so 96DPI atlas height becomes 18 instead of 12 and the existing cell rounding path remains intact."
         }
       ]
     },
@@ -663,102 +910,548 @@
       ]
     },
     {
-      "name": "lobby-native-layout",
-      "desc": "Move the lobby scene-group anchor table to a native 1920x1080 layout. This is not a 4:3 letterbox or uniform-scale patch: pair it with a matching lobby-res patch so the client has a real native UI/backbuffer canvas.",
-      "verified": "Generated from the RE-confirmed FUN_0051c980 scene-anchor table. Scaled coordinates use integer truncation instead of rounding so regenerated patches match the legacy positive-coordinate cast behavior. The 1920x1080 native path has prior live no-stretch evidence; this truncation refresh and other resolutions still require live visual confirmation before release.",
+      "name": "lobby-native-layout-v2",
+      "desc": "Lobby scene-anchor recenter (FUN_0051c980 anchor table). Replaces uniform-scale lobby-native-layout: instead of multiplying 1024-canvas coords by ~1.875 (which left widgets clustered left-of-center because widget sprite widths do not scale), this TRANSLATES the whole original 1024x768 anchor block to the visual center of the 1920x1080 native canvas: x_new=x_orig+DX (DX=448=(1920-1024)/2), y_new=y_orig+DY (DY=156=(1080-768)/2). Same-length immediate flips only -> render geometry intact, low risk. Pair with lobby-res.json (1024x768->1920x1080 backbuffer). DX/DY are the live micro-tune knobs: nudge DX +/- to balance horizontal, DY +/- for vertical, regenerate. Integer truncation matches legacy cast.",
+      "verified": "originalHex 16B-guarded against pristine _pristine.exe (2848be76); all 13 immediates byte-verified. Centering geometry requires one live screenshot to confirm/micro-tune DX,DY.",
       "sites": [
-        {
-          "virtualAddressHex": "0x0051c983",
-          "fileOffsetHex": "0x0011c983",
-          "originalHex": "b886000000",
-          "patchedHex": "b8bc000000",
-          "note": "common row y 134 -> 188 on the 1920x1080 native canvas"
-        },
         {
           "virtualAddressHex": "0x0051c990",
           "fileOffsetHex": "0x0011c990",
           "originalHex": "b8db020000",
-          "patchedHex": "b860050000",
-          "note": "right-side submenu x 731 -> 1376 on the 1920x1080 native canvas"
+          "patchedHex": "b89b040000",
+          "note": "eax right-column x (feeds 5 slots) 731 -> 1179 (1920-center, DX=448)"
         },
         {
           "virtualAddressHex": "0x0051c995",
           "fileOffsetHex": "0x0011c995",
           "originalHex": "b95d020000",
-          "patchedHex": "b970040000",
-          "note": "middle submenu x 605 -> 1136 on the 1920x1080 native canvas"
+          "patchedHex": "b91d040000",
+          "note": "ecx middle-column x (feeds 3 slots) 605 -> 1053 (1920-center, DX=448)"
         },
         {
           "virtualAddressHex": "0x0051c9ca",
           "fileOffsetHex": "0x0011c9ca",
           "originalHex": "c74424080f000000",
-          "patchedHex": "c744240820000000",
-          "note": "left anchor x 15 -> 32 on the 1920x1080 native canvas"
+          "patchedHex": "c7442408cf010000",
+          "note": "left-column anchor x 15 -> 463 (1920-center, DX=448)"
         },
         {
           "virtualAddressHex": "0x0051c9d2",
           "fileOffsetHex": "0x0011c9d2",
           "originalHex": "c74424102c010000",
-          "patchedHex": "c744241030020000",
-          "note": "main lobby panel anchor x 300 -> 560 on the 1920x1080 native canvas"
+          "patchedHex": "c7442410ec020000",
+          "note": "main lobby panel anchor x 300 -> 748 (1920-center, DX=448)"
+        },
+        {
+          "virtualAddressHex": "0x0051c983",
+          "fileOffsetHex": "0x0011c983",
+          "originalHex": "b886000000",
+          "patchedHex": "b822010000",
+          "note": "common-row y 134 -> 290 (1080-center, DY=156)"
         },
         {
           "virtualAddressHex": "0x0051c9da",
           "fileOffsetHex": "0x0011c9da",
           "originalHex": "c744241cce000000",
-          "patchedHex": "c744241c21010000",
-          "note": "submenu row y 206 -> 289 on the 1920x1080 native canvas"
+          "patchedHex": "c744241c6a010000",
+          "note": "submenu row y 206 -> 362 (1080-center, DY=156)"
         },
         {
           "virtualAddressHex": "0x0051c9e2",
           "fileOffsetHex": "0x0011c9e2",
           "originalHex": "c7442424f3000000",
-          "patchedHex": "c744242455010000",
-          "note": "submenu row y 243 -> 341 on the 1920x1080 native canvas"
+          "patchedHex": "c74424248f010000",
+          "note": "submenu row y 243 -> 399 (1080-center, DY=156)"
         },
         {
           "virtualAddressHex": "0x0051c9ea",
           "fileOffsetHex": "0x0011c9ea",
           "originalHex": "c744242c14010000",
-          "patchedHex": "c744242c84010000",
-          "note": "submenu row y 276 -> 388 on the 1920x1080 native canvas"
+          "patchedHex": "c744242cb0010000",
+          "note": "submenu row y 276 -> 432 (1080-center, DY=156)"
         },
         {
           "virtualAddressHex": "0x0051c9f2",
           "fileOffsetHex": "0x0011c9f2",
           "originalHex": "c744243433010000",
-          "patchedHex": "c7442434af010000",
-          "note": "submenu row y 307 -> 431 on the 1920x1080 native canvas"
+          "patchedHex": "c7442434cf010000",
+          "note": "submenu row y 307 -> 463 (1080-center, DY=156)"
         },
         {
           "virtualAddressHex": "0x0051c9fa",
           "fileOffsetHex": "0x0011c9fa",
           "originalHex": "c744243c51010000",
-          "patchedHex": "c744243cd9010000",
-          "note": "submenu row y 337 -> 473 on the 1920x1080 native canvas"
+          "patchedHex": "c744243ced010000",
+          "note": "submenu row y 337 -> 493 (1080-center, DY=156)"
         },
         {
           "virtualAddressHex": "0x0051ca02",
           "fileOffsetHex": "0x0011ca02",
           "originalHex": "c74424447c010000",
-          "patchedHex": "c744244416020000",
-          "note": "submenu row y 380 -> 534 on the 1920x1080 native canvas"
+          "patchedHex": "c744244418020000",
+          "note": "submenu row y 380 -> 536 (1080-center, DY=156)"
         },
         {
           "virtualAddressHex": "0x0051ca0a",
           "fileOffsetHex": "0x0011ca0a",
           "originalHex": "c744244c9e010000",
-          "patchedHex": "c744244c46020000",
-          "note": "submenu row y 414 -> 582 on the 1920x1080 native canvas"
+          "patchedHex": "c744244c3a020000",
+          "note": "submenu row y 414 -> 570 (1080-center, DY=156)"
         },
         {
           "virtualAddressHex": "0x0051ca12",
           "fileOffsetHex": "0x0011ca12",
           "originalHex": "c7442454bd010000",
-          "patchedHex": "c744245471020000",
-          "note": "submenu row y 445 -> 625 on the 1920x1080 native canvas"
+          "patchedHex": "c744245459020000",
+          "note": "submenu row y 445 -> 601 (1080-center, DY=156)"
         }
       ]
+    },
+    {
+      "name": "charsel-recenter",
+      "desc": "캐릭터 생성/선택 패널(FUN_0051e580, 진영선택·초상화·이름·능력치 8단계 폼 컨테이너)을 1920x1080에서 시각적 중앙으로 이동. ★로비(lobby-native-layout) 방식과 동일: 패널 컨테이너 앵커 1점만 이동(자식 위젯은 패널-로컬 좌표라 자동 따라옴). 절대 3x 스케일 아님(=640트랩 회피). 패널 크기 711x520(0x2c7 x 0x208)은 불변, 앵커 (300,134)->(604,280)=중앙정렬. same-length 즉치값 교체.",
+      "verified": "RE-CONFIRMED FUN_0051e580: 앵커는 FUN_00507a50(&local_2c8)에 전달되는 local_2c8=300(0x12c)/local_2c4=134(0x86), foff 0x11e94e/0x11e956. 패널 크기 local_2d8=0x2c7(711)/local_2d4=0x208(520) foff 0x11e928/0x11e930. 자식 위젯 rect는 FUN_00502940가 widget+0x20에 그대로 복사(부모오프셋 미가산)=패널-로컬 좌표 -> 앵커 1점 이동이 전체 패널을 옮김. originalHex는 canon playable 992dc7e2 + pristine 둘 다 BYTE-검증 일치. 중앙=(1920-711)/2=604(정수 trunc), (1080-520)/2=280.",
+      "sites": [
+        {
+          "virtualAddressHex": "0x0051e94e",
+          "fileOffsetHex": "0x0011e94e",
+          "originalHex": "c74424302c010000",
+          "patchedHex": "c74424305c020000",
+          "note": "panel container anchor X 300 -> 604 (center of 1920: (1920-711)/2). FUN_00507a50 local_2c8."
+        },
+        {
+          "virtualAddressHex": "0x0051e956",
+          "fileOffsetHex": "0x0011e956",
+          "originalHex": "c744243486000000",
+          "patchedHex": "c744243418010000",
+          "note": "panel container anchor Y 134 -> 280 (center of 1080: (1080-520)/2). FUN_00507a50 local_2c4."
+        },
+        {
+          "virtualAddressHex": "0x0051dcb4",
+          "fileOffsetHex": "0x0011dcb4",
+          "originalHex": "c74424282c010000",
+          "patchedHex": "c74424285c020000",
+          "note": "content panel FUN_0051dc00 anchor X 300->604 (+304). 507a50 setter 직전 확증."
+        },
+        {
+          "virtualAddressHex": "0x0051dcbc",
+          "fileOffsetHex": "0x0011dcbc",
+          "originalHex": "c744242c86000000",
+          "patchedHex": "c744242c18010000",
+          "note": "content panel FUN_0051dc00 anchor Y 134->280 (+146)."
+        },
+        {
+          "virtualAddressHex": "0x0051e131",
+          "fileOffsetHex": "0x0011e131",
+          "originalHex": "c744242c2c010000",
+          "patchedHex": "c744242c5c020000",
+          "note": "content panel FUN_0051dd80 anchor X 300->604 (+304)."
+        },
+        {
+          "virtualAddressHex": "0x0051e139",
+          "fileOffsetHex": "0x0011e139",
+          "originalHex": "c744243086000000",
+          "patchedHex": "c744243018010000",
+          "note": "content panel FUN_0051dd80 anchor Y 134->280 (+146)."
+        },
+        {
+          "virtualAddressHex": "0x0051fcc7",
+          "fileOffsetHex": "0x0011fcc7",
+          "originalHex": "c744242c2c010000",
+          "patchedHex": "c744242c5c020000",
+          "note": "8단계 폼 내용 패널 FUN_0051f8b0 MAIN anchor X 300->604 (+304). 진영/이름/값슬롯 origin."
+        },
+        {
+          "virtualAddressHex": "0x0051fccf",
+          "fileOffsetHex": "0x0011fccf",
+          "originalHex": "c744243086000000",
+          "patchedHex": "c744243018010000",
+          "note": "8단계 폼 내용 패널 FUN_0051f8b0 MAIN anchor Y 134->280 (+146)."
+        },
+        {
+          "virtualAddressHex": "0x00520cf0",
+          "fileOffsetHex": "0x00120cf0",
+          "originalHex": "81c12c010000",
+          "patchedHex": "81c15c020000",
+          "note": "FUN_0051f8b0 행 레이아웃 상대베이스 add ecx,0x12c(300)->0x25c(604). 값슬롯 row origin X."
+        },
+        {
+          "virtualAddressHex": "0x00520cfe",
+          "fileOffsetHex": "0x00120cfe",
+          "originalHex": "0586000000",
+          "patchedHex": "0518010000",
+          "note": "FUN_0051f8b0 행 레이아웃 상대베이스 add eax,0x86(134)->0x118(280). 값슬롯 row origin Y."
+        },
+        {
+          "virtualAddressHex": "0x00598bd2",
+          "fileOffsetHex": "0x00198bd2",
+          "originalHex": "c74424282c010000",
+          "patchedHex": "c74424285c020000",
+          "note": "FUN_005989f0 step-panel X +304"
+        },
+        {
+          "virtualAddressHex": "0x00598bda",
+          "fileOffsetHex": "0x00198bda",
+          "originalHex": "c744242c86000000",
+          "patchedHex": "c744242cf2000000",
+          "note": "FUN_005989f0 step-panel Y 134->242 (+108). PIL측정: 콘텐츠가 프레임중심보다 38px 아래 → 위로 38 보정(280→242) center-to-center."
+        },
+        {
+          "virtualAddressHex": "0x005991d2",
+          "fileOffsetHex": "0x001991d2",
+          "originalHex": "c74424282c010000",
+          "patchedHex": "c74424285c020000",
+          "note": "FUN_00598ff0 step-panel X +304"
+        },
+        {
+          "virtualAddressHex": "0x005991da",
+          "fileOffsetHex": "0x001991da",
+          "originalHex": "c744242c86000000",
+          "patchedHex": "c744242c18010000",
+          "note": "FUN_00598ff0 step-panel Y +146"
+        },
+        {
+          "virtualAddressHex": "0x005997d2",
+          "fileOffsetHex": "0x001997d2",
+          "originalHex": "c74424282c010000",
+          "patchedHex": "c74424285c020000",
+          "note": "FUN_005995f0 step-panel X +304"
+        },
+        {
+          "virtualAddressHex": "0x005997da",
+          "fileOffsetHex": "0x001997da",
+          "originalHex": "c744242c86000000",
+          "patchedHex": "c744242c18010000",
+          "note": "FUN_005995f0 step-panel Y +146"
+        },
+        {
+          "virtualAddressHex": "0x00599f70",
+          "fileOffsetHex": "0x00199f70",
+          "originalHex": "c74424282c010000",
+          "patchedHex": "c74424285c020000",
+          "note": "FUN_00599e10 step-panel X +304"
+        },
+        {
+          "virtualAddressHex": "0x00599f78",
+          "fileOffsetHex": "0x00199f78",
+          "originalHex": "c744242c86000000",
+          "patchedHex": "c744242c18010000",
+          "note": "FUN_00599e10 step-panel Y +146"
+        },
+        {
+          "virtualAddressHex": "0x0059a861",
+          "fileOffsetHex": "0x0019a861",
+          "originalHex": "c74424642c010000",
+          "patchedHex": "c74424645c020000",
+          "note": "FUN_0059a5e0 step-panel X +304 (disp 0x64)"
+        },
+        {
+          "virtualAddressHex": "0x0059a869",
+          "fileOffsetHex": "0x0019a869",
+          "originalHex": "c744246886000000",
+          "patchedHex": "c744246818010000",
+          "note": "FUN_0059a5e0 step-panel Y +146 (disp 0x68)"
+        },
+        {
+          "virtualAddressHex": "0x0059b457",
+          "fileOffsetHex": "0x0019b457",
+          "originalHex": "c744242c2c010000",
+          "patchedHex": "c744242c5c020000",
+          "note": "FUN_0059b090 초상화 패널 X +304"
+        },
+        {
+          "virtualAddressHex": "0x0059b45f",
+          "fileOffsetHex": "0x0019b45f",
+          "originalHex": "c744243086000000",
+          "patchedHex": "c744243018010000",
+          "note": "FUN_0059b090 초상화 패널 Y +146"
+        },
+        {
+          "virtualAddressHex": "0x0059bc41",
+          "fileOffsetHex": "0x0019bc41",
+          "originalHex": "c74424342c010000",
+          "patchedHex": "c74424345c020000",
+          "note": "FUN_0059b970 step-panel X +304 (disp 0x34)"
+        },
+        {
+          "virtualAddressHex": "0x0059bc49",
+          "fileOffsetHex": "0x0019bc49",
+          "originalHex": "c744243886000000",
+          "patchedHex": "c744243818010000",
+          "note": "FUN_0059b970 step-panel Y +146 (disp 0x38)"
+        },
+        {
+          "virtualAddressHex": "0x0059ca9f",
+          "fileOffsetHex": "0x0019ca9f",
+          "originalHex": "c74424282c010000",
+          "patchedHex": "c74424285c020000",
+          "note": "FUN_0059c940 step-panel X +304"
+        },
+        {
+          "virtualAddressHex": "0x0059caa7",
+          "fileOffsetHex": "0x0019caa7",
+          "originalHex": "c744242c86000000",
+          "patchedHex": "c744242c18010000",
+          "note": "FUN_0059c940 step-panel Y +146"
+        },
+        {
+          "virtualAddressHex": "0x0059cfa4",
+          "fileOffsetHex": "0x0019cfa4",
+          "originalHex": "c74424282c010000",
+          "patchedHex": "c74424285c020000",
+          "note": "FUN_0059cee0 step-panel X +304"
+        },
+        {
+          "virtualAddressHex": "0x0059cfac",
+          "fileOffsetHex": "0x0019cfac",
+          "originalHex": "c744242c86000000",
+          "patchedHex": "c744242c18010000",
+          "note": "FUN_0059cee0 step-panel Y +146"
+        },
+        {
+          "virtualAddressHex": "0x0059d2c3",
+          "fileOffsetHex": "0x0019d2c3",
+          "originalHex": "c74424282c010000",
+          "patchedHex": "c74424285c020000",
+          "note": "FUN_0059d200 step-panel X +304"
+        },
+        {
+          "virtualAddressHex": "0x0059d2cb",
+          "fileOffsetHex": "0x0019d2cb",
+          "originalHex": "c744242c86000000",
+          "patchedHex": "c744242c18010000",
+          "note": "FUN_0059d200 step-panel Y +146"
+        },
+        {
+          "virtualAddressHex": "0x0059d71a",
+          "fileOffsetHex": "0x0019d71a",
+          "originalHex": "c74424302c010000",
+          "patchedHex": "c74424305c020000",
+          "note": "FUN_0059d520 취소/다음 버튼 패널 X +304 (disp 0x30)"
+        },
+        {
+          "virtualAddressHex": "0x0059d722",
+          "fileOffsetHex": "0x0019d722",
+          "originalHex": "c744243486000000",
+          "patchedHex": "c744243418010000",
+          "note": "FUN_0059d520 취소/다음 버튼 패널 Y +146 (disp 0x34)"
+        },
+        {
+          "virtualAddressHex": "0x0059e66c",
+          "fileOffsetHex": "0x0019e66c",
+          "originalHex": "c74424302c010000",
+          "patchedHex": "c74424305c020000",
+          "note": "FUN_0059df00 step-panel X +304 (disp 0x30)"
+        },
+        {
+          "virtualAddressHex": "0x0059e674",
+          "fileOffsetHex": "0x0019e674",
+          "originalHex": "c744243486000000",
+          "patchedHex": "c744243418010000",
+          "note": "FUN_0059df00 step-panel Y +146 (disp 0x34)"
+        },
+        {
+          "virtualAddressHex": "0x00520a92",
+          "fileOffsetHex": "0x00120a92",
+          "originalHex": "c744242c5d020000",
+          "patchedHex": "c744242c8d030000",
+          "note": "FUN_0051f8b0 SUB(능력치 우측 group0x47) X 605->909 (+304)"
+        },
+        {
+          "virtualAddressHex": "0x00520a9a",
+          "fileOffsetHex": "0x00120a9a",
+          "originalHex": "c7442430ce000000",
+          "patchedHex": "c744243060010000",
+          "note": "FUN_0051f8b0 SUB(group0x47) Y 206->352 (+146)"
+        },
+        {
+          "virtualAddressHex": "0x00595e83",
+          "fileOffsetHex": "0x00195e83",
+          "originalHex": "c74424082c010000",
+          "patchedHex": "c74424085c020000",
+          "note": "진영 라디오/엠블렘 패널 (FUN_00595e70) X 300->604 (+304, 프레임과 uniform). over-move 676은 우측 과도라 되돌림 — 정확 센터링은 블록 bbox 라이브 측정 후 결정(center-to-center)."
+        },
+        {
+          "virtualAddressHex": "0x00595e8b",
+          "fileOffsetHex": "0x00195e8b",
+          "originalHex": "c744240c86000000",
+          "patchedHex": "c744240cf2000000",
+          "note": "진영 라디오/엠블렘 패널 Y 134->242 (+108). 콘텐츠 위로 38 보정(center-to-center, FUN_005989f0과 동일)."
+        }
+      ]
+    },
+    {
+      "name": "charsel-content-inset",
+      "desc": "Second-stage lobby character-creation content inset. Applies after charsel-recenter and moves only the 8-step creation form content groups right by 116 px, so labels, input boxes, radio rows, and bottom buttons sit inside the native right panel. The main lobby notice panel and session-card list anchors are intentionally unchanged.",
+      "verified": "Static target from live screenshots lobby-recenter-5aa1-20260628: native right panel visual center is about x=1080, while the creation form content group center is about x=963. Move step-form anchors x=604 -> 720 and the input sub-group x=909 -> 1025. This descriptor drift-checks against the post-charsel-recenter bytes, not the pristine EXE.",
+      "sites": [
+        {
+          "virtualAddressHex": "0x0051fcc7",
+          "fileOffsetHex": "0x0011fcc7",
+          "originalHex": "c744242c5c020000",
+          "patchedHex": "c744242cd0020000",
+          "note": "FUN_0051f8b0 MAIN creation content X 604 -> 720 (+116)."
+        },
+        {
+          "virtualAddressHex": "0x00520cf0",
+          "fileOffsetHex": "0x00120cf0",
+          "originalHex": "81c15c020000",
+          "patchedHex": "81c1d0020000",
+          "note": "FUN_0051f8b0 row-origin add ecx X 604 -> 720 (+116)."
+        },
+        {
+          "virtualAddressHex": "0x00520a92",
+          "fileOffsetHex": "0x00120a92",
+          "originalHex": "c744242c8d030000",
+          "patchedHex": "c744242c01040000",
+          "note": "FUN_0051f8b0 SUB input/right group X 909 -> 1025 (+116)."
+        },
+        {
+          "virtualAddressHex": "0x00598bd2",
+          "fileOffsetHex": "0x00198bd2",
+          "originalHex": "c74424285c020000",
+          "patchedHex": "c7442428d0020000",
+          "note": "FUN_005989f0 step-panel X 604 -> 720 (+116)."
+        },
+        {
+          "virtualAddressHex": "0x005991d2",
+          "fileOffsetHex": "0x001991d2",
+          "originalHex": "c74424285c020000",
+          "patchedHex": "c7442428d0020000",
+          "note": "FUN_00598ff0 step-panel X 604 -> 720 (+116)."
+        },
+        {
+          "virtualAddressHex": "0x005997d2",
+          "fileOffsetHex": "0x001997d2",
+          "originalHex": "c74424285c020000",
+          "patchedHex": "c7442428d0020000",
+          "note": "FUN_005995f0 step-panel X 604 -> 720 (+116)."
+        },
+        {
+          "virtualAddressHex": "0x00599f70",
+          "fileOffsetHex": "0x00199f70",
+          "originalHex": "c74424285c020000",
+          "patchedHex": "c7442428d0020000",
+          "note": "FUN_00599e10 step-panel X 604 -> 720 (+116)."
+        },
+        {
+          "virtualAddressHex": "0x0059a861",
+          "fileOffsetHex": "0x0019a861",
+          "originalHex": "c74424645c020000",
+          "patchedHex": "c7442464d0020000",
+          "note": "FUN_0059a5e0 step-panel X 604 -> 720 (+116)."
+        },
+        {
+          "virtualAddressHex": "0x0059b457",
+          "fileOffsetHex": "0x0019b457",
+          "originalHex": "c744242c5c020000",
+          "patchedHex": "c744242cd0020000",
+          "note": "FUN_0059b090 portrait step-panel X 604 -> 720 (+116)."
+        },
+        {
+          "virtualAddressHex": "0x0059bc41",
+          "fileOffsetHex": "0x0019bc41",
+          "originalHex": "c74424345c020000",
+          "patchedHex": "c7442434d0020000",
+          "note": "FUN_0059b970 step-panel X 604 -> 720 (+116)."
+        },
+        {
+          "virtualAddressHex": "0x0059ca9f",
+          "fileOffsetHex": "0x0019ca9f",
+          "originalHex": "c74424285c020000",
+          "patchedHex": "c7442428d0020000",
+          "note": "FUN_0059c940 step-panel X 604 -> 720 (+116)."
+        },
+        {
+          "virtualAddressHex": "0x0059cfa4",
+          "fileOffsetHex": "0x0019cfa4",
+          "originalHex": "c74424285c020000",
+          "patchedHex": "c7442428d0020000",
+          "note": "FUN_0059cee0 step-panel X 604 -> 720 (+116)."
+        },
+        {
+          "virtualAddressHex": "0x0059d2c3",
+          "fileOffsetHex": "0x0019d2c3",
+          "originalHex": "c74424285c020000",
+          "patchedHex": "c7442428d0020000",
+          "note": "FUN_0059d200 step-panel X 604 -> 720 (+116)."
+        },
+        {
+          "virtualAddressHex": "0x0059d71a",
+          "fileOffsetHex": "0x0019d71a",
+          "originalHex": "c74424305c020000",
+          "patchedHex": "c7442430d0020000",
+          "note": "FUN_0059d520 cancel/next button panel X 604 -> 720 (+116)."
+        },
+        {
+          "virtualAddressHex": "0x0059e66c",
+          "fileOffsetHex": "0x0019e66c",
+          "originalHex": "c74424305c020000",
+          "patchedHex": "c7442430d0020000",
+          "note": "FUN_0059df00 step-panel X 604 -> 720 (+116)."
+        },
+        {
+          "virtualAddressHex": "0x00595e83",
+          "fileOffsetHex": "0x00195e83",
+          "originalHex": "c74424085c020000",
+          "patchedHex": "c7442408d0020000",
+          "note": "FUN_00595e70 faction radio/emblem panel X 604 -> 720 (+116)."
+        }
+      ]
+    },
+    {
+      "name": "charsel-content-y-inset",
+      "desc": "Character-creation content Y inset for the native 1920x1080 lobby. Applies after charsel-recenter and charsel-content-inset, correcting the two remaining stale step-form anchors from Y=242 to the panel-aligned Y=280 so instruction text and form content sit inside the right panel.",
+      "verified": "Live fc703 screenshots hud-spot-static-fc70-20260629 measured the right panel blue bbox at about y=293..808 while several create-step instruction glyphs rendered around y=276, above the frame. Static RE/decompile confirmed FUN_005989f0 and FUN_00595e70 still carried post-recenter Y=242 bytes, unlike the main panel/container anchors at Y=280. A title-only child rect patch fixed only one transition screen, so the durable fix is to align these stale content anchors with the panel anchor.",
+      "sites": [
+        {
+          "virtualAddressHex": "0x00598bda",
+          "fileOffsetHex": "0x00198bda",
+          "originalHex": "c744242cf2000000",
+          "patchedHex": "c744242c18010000",
+          "note": "FUN_005989f0 step-panel anchor Y 242 -> 280 (+38), post-charsel-recenter correction."
+        },
+        {
+          "virtualAddressHex": "0x00595e8b",
+          "fileOffsetHex": "0x00195e8b",
+          "originalHex": "c744240cf2000000",
+          "patchedHex": "c744240c18010000",
+          "note": "FUN_00595e70 faction radio/emblem panel anchor Y 242 -> 280 (+38), post-charsel-recenter correction."
+        }
+      ]
+    },
+    {
+      "name": "charsel-confirm-dialog-inset",
+      "desc": "Final character-registration confirmation dialog inset.",
+      "verified": "Live-verified on lobby-confirm-returnsite-bf15-20260629.",
+      "sectionPatch": {
+        "hook": {
+          "virtualAddressHex": "0x0054ed41",
+          "fileOffsetHex": "0x0014ed41",
+          "returnsViaOriginalRet": true,
+          "originalHex": "5f33c05ec20c00",
+          "patchedHex": "e9ba92e0029090"
+        },
+        "section": {
+          "name": ".lg7c",
+          "virtualAddressHex": "0x03358000",
+          "rvaHex": "0x02f58000",
+          "fileOffsetHex": "0x003c6000",
+          "virtualSize": 58,
+          "rawSize": 4096
+        },
+        "behavior": {
+          "site": "FUN_0054ed00 after FUN_00570340/FUN_00570650/FUN_005706e0",
+          "gate": "type == 5",
+          "callerReturnHex": "0x00595bc0",
+          "xInsetPixels": 180,
+          "writes": [
+            "manager+0xdbc",
+            "manager+0xdc4",
+            "widget+0x0c"
+          ]
+        }
+      }
     }
   ]
 }

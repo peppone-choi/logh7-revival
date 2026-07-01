@@ -17,14 +17,14 @@ export const meta = {
 }
 
 const COMMON = [
-  'LOGH VII revival 저장소(E:\\logh7-revival). 권위적 Node.js 서버(src/server/*.mjs, ESM)가 디컴파일된',
+  'LOGH VII revival root is C:\\Users\\by0ng\\OneDrive\\Desktop\\logh7-revival. 권위적 Node.js 서버(server/src/server/*.mjs, ESM)가 디컴파일된',
   'G7MTClient.exe가 파싱하는 와이어 레코드를 emit한다. RE 인덱스: .omo/ghidra/export/G7MTClient/.',
-  '조회: `python tools/logh7_redex.py func 0x<addr>` (디컴파일) / `python tools/logh7_redex.py grep "<sym>"` (호출자/참조).',
+  '조회: `cd RE && python -m tools.logh7_redex func 0x<addr>` (디컴파일) / `python -m tools.logh7_redex grep "<sym>"` (호출자/참조).',
   '데이터 등급 표기 필수: P0(클라/와이어 바이너리 확정) P1(공식 manual/PDF) P2(IV-EX/넷마블 후보) P3(절차/플레이스홀더). 추측을 P0로 승격 금지.',
   '',
   '확정된 핵심 사실(라이브 검증됨):',
   '- 전략명령 0x0b01: FUN_004c4170(__fastcall ecx=mainState) onEnter서 source=*(mainState+8), src320=*(source+0x320).',
-  '  positive-control(tools/logh7_p0_02_focus_pc.py)이 src320=0일 때 홈셀(2550)을 source+0x320에 write하니',
+  '  positive-control(RE/tools/logh7_p0_02_focus_pc.py)이 src320=0일 때 홈셀(2550)을 source+0x320에 write하니',
   '  mainState+0x126714=2550, mode +0x126711=2, root *(DAT_007cd04c+0x11178)=2550, FUN_004d6310 검증기 PASS(이전 항상 -256).',
   '  즉 메커니즘 증명됨. 1바이트 클라패치(FUN_004c2c80 case0x325 mode 1->0)는 월드진입을 깨서 배제. 서버전용 경로도 배제',
   '  (FUN_004c2c80 mode=0 호출자는 reset 함수 FUN_004c2a80뿐). FUN_004c2c80: mode=0->inline source(param_1+0xc),',
@@ -112,13 +112,13 @@ const reJobs = [
     prompt: COMMON + '\n\n너는 RE explorer다. 전선=리마스터 Path B 네이티브 16:9(M3-1). '
       + 'UI 위젯이 가로세로 독립 스케일로 늘어지는 근원 FUN_004ea460을 RE하라. X스케일과 Y스케일이 각각 어디서 계산/적용되는지, '
       + '둘을 동일(uniform, 예: 둘 다 Y스케일 사용 → 레터/필러박스)하게 만드는 최소 패치를 찾아라. '
-      + 'tools/client_patches/widescreen-ui.json(기존 스펙)과 docs/logh7-graphics-remaster.md를 먼저 읽어라. '
+      + 'RE/tools/client_patches/widescreen-ui.json(기존 스펙)과 docs/logh7-graphics-remaster.md를 먼저 읽어라. '
       + 'recommendedChange에 patch 사이트 VA, originalHex, patchedHex 후보(검증 가능한 단일/소수 바이트)와 그 수식 근거를 적어라. feasibility 판정.',
   },
   {
     key: 'economy-0x031f', label: 'RE:economy',
     prompt: COMMON + '\n\n너는 RE explorer다. 전선=내정 경제 라이브(M2-1). '
-      + 'src/server/logh7-base-record.mjs(buildResponseInformationBaseInner, 0x031f)와 logh7-base-economy.mjs, docs/logh7-info-records-wire.md를 읽어라. '
+      + 'server/src/server/logh7-base-record.mjs(buildResponseInformationBaseInner, 0x031f)와 logh7-base-economy.mjs, docs/logh7-info-records-wire.md를 읽어라. '
       + '서버가 0x031f를 *언제* emit해야 하는지(어느 클라 요청 opcode가 base-info를 요구하는지; 0x031e 요청? 디스패처 case 799=0x031f) RE로 확정하고, '
       + '현재 핸들러(logh7-login-session.mjs / logh7-info-records.mjs의 0x031e->0x031f 경로)에서 무엇이 빠졌는지 짚어라. '
       + 'recommendedChange에 "어느 요청 분기에서 buildResponseInformationBaseInner를 어떤 게이트(LOGH_*)로 emit하고, bases 인자를 어느 월드상태에서 채우는가"를 구현 가능한 수준으로 적어라.',
@@ -126,14 +126,14 @@ const reJobs = [
   {
     key: 'shipclass-0x030a', label: 'RE:shipclass',
     prompt: COMMON + '\n\n너는 RE explorer다. 전선=함선마스터 정적 emit(M2-2). '
-      + 'src/server/logh7-info-records-static.mjs(buildStaticInformationUnitShipInner, +4바이트 버그 수정됨)와 logh7-login-session.mjs를 읽어라. '
+      + 'server/src/server/logh7-info-records-static.mjs(buildStaticInformationUnitShipInner, +4바이트 버그 수정됨)와 logh7-login-session.mjs를 읽어라. '
       + '클라가 0x030a로 함선클래스 마스터(0x30b)를 요청하는 분기를 RE로 확정하라(디스패처/요청 opcode). '
       + 'recommendedChange에 "login-session(또는 해당 핸들러)의 0x030a 요청 분기에서 LOGH_STATIC_SHIPS 게이트로 0x30b를 emit하고 shipClasses를 어디서 가져오는가"를 적어라.',
   },
   {
     key: 'titles-promotion', label: 'RE:titles',
     prompt: COMMON + '\n\n너는 RE/매뉴얼 explorer다. 전선=작위/봉토/진급(M2-3). '
-      + 'src/server/logh7-imperial-titles.mjs, content/manual/imperial-titles.json, content/roster/canon-character-posts.json, docs/logh7-post-permissions.md를 읽어라. '
+      + 'server/src/server/logh7-imperial-titles.mjs, server/content/manual/imperial-titles.json, server/content/roster/canon-character-posts.json, docs/logh7-post-permissions.md를 읽어라. '
       + '게임플레이 트리거를 확정하라: (a) 진급(功績→rank)이 어느 값/메시지로 클라에 반영되는지(0x0323 캐릭터레코드 rank/계급 필드 오프셋, docs/logh7-info-records-wire.md), '
       + '(b) 신규 유저 직위 발령이 어디로 가는지, (c) 작위/봉토 부여가 어떤 와이어로 표현되는지. '
       + 'recommendedChange에 imperial-titles.mjs를 월드상태/캐릭터레코드에 배선하는 최소 구현(어떤 필드를 0x0323에 반영, 어떤 게이트)을 적어라.',
@@ -177,8 +177,8 @@ for (const job of implJobs) {
   const r = await agent(
     COMMON + '\n\n너는 maker다. 전선=' + job.front + '. RE 스펙:\n' + JSON.stringify(job.re, null, 2)
       + '\n\n추가 지침: ' + job.extra
-      + '\n\n위 recommendedChange를 최소 범위로 src/server/*.mjs(ESM)에 구현하고, tests/server/*.test.mjs에 oracle/단위 테스트를 추가/갱신하라. '
-      + '구현 직후 영향받은 파일에 `node --test tests/server/<관련>.test.mjs`를 돌려 통과를 확인하고 localTestResult에 적어라. '
+      + '\n\n위 recommendedChange를 최소 범위로 server/src/server/*.mjs(ESM)에 구현하고, server/tests/server/*.test.mjs에 oracle/단위 테스트를 추가/갱신하라. '
+      + '구현 직후 `cd server && node --test tests/server/<관련>.test.mjs`를 돌려 통과를 확인하고 localTestResult에 적어라. '
       + '와이어 바이트 오프셋은 RE 확정값만 사용. 추측 수치는 provenance 태그 필수. IMPL을 반환하라.',
     { label: '구현:' + job.key, phase: '구현', schema: IMPL },
   )
@@ -189,7 +189,7 @@ for (const job of implJobs) {
 // ---------- Phase 3: 전체 테스트 ----------
 phase('테스트')
 const test = await agent(
-  COMMON + '\n\n너는 tester다. `npm run test:server`를 실행하고 결과를 TEST로 반환하라. '
+  COMMON + '\n\n너는 tester다. `cd server && node --test tests/server/*.test.mjs`를 실행하고 결과를 TEST로 반환하라. '
     + '실패가 있으면 실패 테스트명과 핵심 메시지를 output에 적어라. 통과면 총 통과 수를 output에 적어라.',
   { label: '전체테스트', phase: '테스트', schema: TEST },
 )

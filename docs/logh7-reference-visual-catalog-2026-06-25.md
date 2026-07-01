@@ -780,3 +780,14 @@
 - 관측: A press/event photograph of a middle-aged Japanese man in a dark suit and tie speaking at a podium microphone (likely a developer/spokesperson at a presentation). Plain light background. No game UI whatsoever.
 - 진영/색: N/A — real-world photograph, no game content or faction.
 - 재현: Non-game press photo (speaker at a podium); nothing to reproduce in-client.
+## Current Visual QA Gap (2026-06-28)
+
+The catalog contains 134 local reference images and remains the main visual source for strategy/world, command windows, cards, facility screens, battle screens, and lobby surfaces.
+
+Current missing comparison:
+
+- No obvious original reference image for the character creation/name input panel was found in the 134-image catalog. Use current live screenshots as provisional evidence until an original panel reference is recovered.
+- Fresh canonical `79142d12...` windowed screenshots are still needed to compare against the current borderless set for font blur/display-mode claims.
+- Priority comparisons for the next visual pass:
+  - strategy/world: `toshichan.my.coocan.jp/74fcc3_strategy.jpg`, `game.watch.impress.co.jp/923239_ginei01.jpg`, `toshichan.my.coocan.jp/f84aa5_return.jpg`
+  - command/card/dialog: `toshichan.my.coocan.jp/140660_card.jpg`, `toshichan.my.coocan.jp/c8858b_compnel1.jpg`, `toshichan.my.coocan.jp/8dabea_compnel2.jpg`, `toshichan.my.coocan.jp/d1e080_compnel3.jpg`

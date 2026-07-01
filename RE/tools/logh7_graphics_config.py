@@ -232,7 +232,8 @@ def main(argv: list[str]) -> int:
     if args.no_watermark:
         dg["3DfxWatermark"] = "false"
         dg["dgVoodooWatermark"] = "false"
-        notes.append("Watermark: dgVoodoo/3Dfx watermark disabled (no wrapper swap needed).")
+        dg["WatermarkDisplayDuration"] = "1"
+        notes.append("Watermark: dgVoodoo/3Dfx watermark disabled; fallback display duration capped at 1s.")
     path_a_height: int | None = None
     if args.pathA is not None:
         if args.pathA == -1:

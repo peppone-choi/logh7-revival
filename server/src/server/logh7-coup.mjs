@@ -191,5 +191,29 @@ export function createCoupState() {
       }
       return { detected: false, chance, reason: 'roll-failed' };
     },
+    toSnapshot() {
+      return {
+        conspiracies: [...conspiracies.values()].map((c) => ({
+          ...c,
+          members: [...c.members],
+          persuadedUnits: [...c.persuadedUnits],
+        })),
+      };
+    },
+    restore(snapshot = {}) {
+      conspiracies.clear();
+      for (const row of snapshot.conspiracies ?? []) {
+        const mastermindId = norm(row.mastermindId);
+        conspiracies.set(mastermindId, {
+          ...row,
+          mastermindId,
+          members: new Set(Array.isArray(row.members) ? row.members.map(norm) : []),
+          persuadedUnits: new Set(Array.isArray(row.persuadedUnits) ? row.persuadedUnits.map(norm) : []),
+          detected: Boolean(row.detected),
+          executed: Boolean(row.executed),
+        });
+      }
+      return this;
+    },
   };
 }

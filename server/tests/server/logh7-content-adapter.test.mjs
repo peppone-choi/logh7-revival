@@ -30,8 +30,9 @@ test('recovered content DB drives a valid content pack', () => {
     assert.ok(pack.shipClassById(u.shipClass), `ship class ${u.shipClass} exists`);
   }
 
-  // recovered galaxy travels with the pack (80 systems, planets orbit-ordered, Iserlohn fortress)
-  assert.equal(pack.systems.length, 80, 'all star systems carried');
+  // recovered galaxy travels with the pack (85 canon systems = 80 coordinate-confirmed + 5 coordinate-
+  // pending constmsg group-0x18 sub 13/32/34/52/75; planets orbit-ordered, Iserlohn fortress)
+  assert.equal(pack.systems.length, 85, 'all canon star systems carried');
   const iserlohn = pack.systemByName('イゼルローン');
   assert.ok(iserlohn, 'Iserlohn system in pack');
   assert.equal(iserlohn.faction, 'empire');
@@ -67,6 +68,18 @@ test('recovered content DB drives a valid content pack', () => {
   assert.ok(pack.institutions.length >= 30, 'manual institution names carried');
   assert.ok(pack.rooms.some((room) => room.name === '皇帝執務室'), 'client room/office names carried');
   assert.ok(pack.rooms.some((room) => Number.isInteger(room.nameCatalogId)), 'rooms retain constmsg catalog ids');
+  assert.ok(pack.institutions.some((inst) => inst.name === '皇宮' && inst.nameCatalogId === 451));
+  assert.ok(pack.institutions.some((inst) => inst.name === '旗艦工廠' && inst.nameCatalogId === 2294));
+  assert.ok(pack.institutions.some((inst) => inst.name === '自治領主府' && inst.nameCatalogId === 2296));
+  assert.ok(pack.rooms.some((room) => room.name === '黒真珠の間' && room.nameCatalogId === 2329));
+  assert.ok(pack.rooms.some((room) => room.name === 'シミュレーションルーム' && room.nameCatalogId === 2327));
+  assert.ok(pack.rooms.some((room) => room.name === '自治領主執務室' && room.nameCatalogId === 2414));
+
+  assert.ok(pack.institutions.some((inst) => inst.name === '政庁' && inst.stableId === 'government_office'));
+  assert.ok(pack.institutions.some((inst) => inst.name === '宇宙港' && inst.commandDomains.includes('movement')));
+  assert.ok(pack.institutions.some((inst) => inst.name === '士官学校' && inst.commandDomains.includes('training')));
+  assert.ok(pack.rooms.some((room) => room.name === '拘禁室' && room.spotType === 'closed'));
+  assert.ok(pack.rooms.some((room) => room.name === '各旗艦ユニットの桟橋' && room.facilityStableId === 'spaceport'));
 
   // abilities carried through (command/tactics/operations from the 8-ability schema)
   const empire = pack.charactersForNation(NATION_ID.empire);

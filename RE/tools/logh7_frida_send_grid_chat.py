@@ -11,28 +11,44 @@ Usage:
 from __future__ import annotations
 
 import argparse
+import json
 import sys
 import time
 
-import frida  # type: ignore[import-not-found]
-
 SEND_GRID_CHAT_VA = 0x004B5600
+MAX_CHAT_CHARS = 0x41
 
-JS = r"""
+JS_TEMPLATE = r"""
 const mod = Process.getModuleByName('G7MTClient.exe');
 const sendGridChat = new NativeFunction(ptr(%(va)d), 'void', ['pointer','uint8'], 'cdecl');
 
-const msg = Memory.allocUtf16String('%(msg)s');
-// Ensure the string length in bytes fits the 0x41 limit checked by the client.
-const byteLen = (%(msg)s.length + 1) * 2;
-if (byteLen > 0x41) {
-  send({error: 'message too long: ' + byteLen});
+const message = %(msg_json)s;
+const msg = Memory.allocUtf16String(message);
+// FUN_004b5600 checks the UTF-16 code-unit count against 0x41, not byte length.
+const unitLen = message.length;
+if (unitLen > %(max_chars)d) {
+  send({error: 'message too long: ' + unitLen});
 } else {
-  send({info: 'calling FUN_004b5600 with msg=' + '%(msg)s'});
+  send({info: 'calling FUN_004b5600 with msg=' + message, codeUnits: unitLen});
   sendGridChat(msg, 0);
   send({ok: true});
 }
 """
+
+
+def utf16_code_units(text: str) -> int:
+    return len(text.encode("utf-16-le")) // 2
+
+
+def build_script_source(msg: str, *, va: int = SEND_GRID_CHAT_VA) -> str:
+    units = utf16_code_units(msg)
+    if units > MAX_CHAT_CHARS:
+        raise ValueError(f"message is {units} UTF-16 units; client caps at {MAX_CHAT_CHARS}")
+    return JS_TEMPLATE % {
+        "va": va,
+        "msg_json": json.dumps(msg, ensure_ascii=False),
+        "max_chars": MAX_CHAT_CHARS,
+    }
 
 
 def main(argv=None):
@@ -41,7 +57,13 @@ def main(argv=None):
     parser.add_argument("--msg")
     args = parser.parse_args(argv)
     msg = args.msg if args.msg else f"/grid {args.cell}"
+    try:
+        script_source = build_script_source(msg)
+    except ValueError as exc:
+        print(str(exc), file=sys.stderr)
+        return 2
 
+    import frida  # type: ignore[import-not-found]  # noqa: PLC0415
     device = frida.get_local_device()
     # Find the game process.
     proc = None
@@ -54,7 +76,6 @@ def main(argv=None):
         return 1
 
     session = device.attach(proc.pid)
-    script_source = JS % {'va': SEND_GRID_CHAT_VA, 'msg': msg}
     script = session.create_script(script_source)
 
     def on_message(message, data):

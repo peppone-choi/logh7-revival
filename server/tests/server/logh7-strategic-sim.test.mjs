@@ -79,6 +79,7 @@ test('mulberry32 is deterministic and in [0,1)', () => {
 test('graph is symmetric and covers every galaxy node', () => {
   const ws = seededWorld();
   const graph = buildStrategicGraph(ws.listSystems());
+  // 캐논 로스터 전체(85)가 nodes에 들어간다 — 좌표 미확정 5개도 노드로 존재하되 위치가 없어 고립(빈 이웃).
   assert.equal(graph.nodes.size, GALAXY.systems.length);
   // symmetry: a ∈ N(b) ⇔ b ∈ N(a)
   for (const [a, nbs] of graph.neighbors) {
@@ -86,10 +87,22 @@ test('graph is symmetric and covers every galaxy node', () => {
       assert.ok((graph.neighbors.get(b) ?? []).includes(a), `edge ${a}->${b} not mirrored`);
     }
   }
-  // every node has at least one neighbour (galaxy is dense enough at default maxDist)
-  for (const nbs of graph.neighbors.values()) {
-    assert.ok(nbs.length >= 1);
+  // 좌표확정 노드(cx/cy 보유)는 갤럭시가 충분히 조밀해 최소 1개 이웃을 갖는다. 좌표 미확정 노드는
+  // 의도적으로 고립(빈 이웃) — buildStrategicGraph가 NaN 거리로 가짜 edge를 만들지 않음을 확인한다.
+  let positioned = 0;
+  let pending = 0;
+  for (const [name, nbs] of graph.neighbors) {
+    const node = graph.nodes.get(name);
+    if (node.cx != null && node.cy != null) {
+      positioned += 1;
+      assert.ok(nbs.length >= 1, `${name} positioned node has a neighbour`);
+    } else {
+      pending += 1;
+      assert.equal(nbs.length, 0, `${name} coordinate-pending node stays isolated`);
+    }
   }
+  assert.equal(positioned, 80);
+  assert.equal(pending, 5);
 });
 
 test('graph build is deterministic and isolated (no-coord) nodes stay safe', () => {
@@ -311,6 +324,53 @@ test('strategicTick advances the war with ZERO connected players (worldRelay-ind
   assert.notEqual(finalEmpire, initialEmpire, 'territory balance must change over 15 ticks');
 });
 
+test('createStrategicSim serialize/restore: keeps mid-war fleet positions (no home reset), rebuilds profile, skips seeder (journal #60)', () => {
+  const seed = 4242;
+  // Advance a war so fleets leave home, then serialize the sim state.
+  const ws = seededWorld();
+  const graph = buildStrategicGraph(ws.listSystems());
+  const sim = createStrategicSim(ws, graph, { seed });
+  for (let t = 1; t <= 12; t += 1) sim.tick(t);
+  const liveFleets = [...sim.simState.fleetsById.values()];
+  const moved = liveFleets.find((f) => f.system !== f.homeSystem);
+  assert.ok(moved, '12틱이면 최소 한 함대는 홈을 떠나 있어야 한다(이동 발생 전제)');
+  const ser = sim.serialize();
+  assert.equal(ser.fleets.length, liveFleets.length, 'serialize는 전 전략 함대를 담는다');
+  assert.ok(ser.fleets.every((f) => f.profile === undefined), 'serialize는 재생성 가능한 profile을 제외한다');
+
+  // Simulate a restart: fresh world restored from the saved world snapshot, sim restored from serialized fleets.
+  const worldSnap = ws.toSnapshot();
+  const ws2 = createWorldState();
+  ws2.restore(worldSnap);
+  const graph2 = buildStrategicGraph(ws2.listSystems());
+  const fleetsBefore = ws2.fleetCount();
+  const restored = createStrategicSim(ws2, graph2, { seed, restoreFleets: ser.fleets });
+  assert.equal(restored.seedResult, null, 'restore 경로는 홈 시더(seedStrategicFleets)를 돌리지 않는다');
+  assert.equal(ws2.fleetCount(), fleetsBefore, 'restore는 월드에 함대를 재시드/추가하지 않는다(저장 위치 보존)');
+  assert.equal(restored.simState.fleetsById.size, liveFleets.length, '복원된 simState는 전 함대를 가진다');
+
+  // The moved fleet keeps its mid-war system/strength — NOT reset to home (this is the journal #60 gap).
+  const r = restored.simState.fleetsById.get(moved.id);
+  assert.ok(r, '이동한 함대가 id로 복원됨');
+  assert.equal(r.system, moved.system, '복원 함대는 전시 위치를 유지(홈 리셋 아님)');
+  assert.notEqual(r.system, r.homeSystem, '복원 함대는 여전히 홈이 아닌 전선에 있다');
+  assert.equal(r.strength, moved.strength, '복원 함대는 전력을 유지');
+  assert.equal(r.order, moved.order, '복원 함대는 명령 상태를 유지');
+  assert.equal(typeof r.profile.aggression, 'number', 'profile은 stats에서 재생성된다');
+
+  // Every fleet round-trips exactly (minus the rebuilt profile).
+  for (const f of liveFleets) {
+    const { profile, ...plain } = f;
+    const got = restored.simState.fleetsById.get(f.id);
+    const { profile: _p, ...gotPlain } = got;
+    assert.deepEqual(gotPlain, plain, `함대 ${f.id} 라운드트립(끝)`);
+  }
+
+  // The restored sim is functional: it ticks without throwing and yields a valid result.
+  const tickResult = restored.tick(13);
+  assert.ok(tickResult && Array.isArray(tickResult.moves), '복원된 시뮬은 정상 틱된다(전쟁 재개)');
+});
+
 test('DEFAULT_CAPITALS reference the recovered galaxy systems', () => {
   const names = new Set(GALAXY.systems.map((s) => s.system));
   assert.ok(names.has(DEFAULT_CAPITALS.empire), 'empire capital present in galaxy');
@@ -370,7 +430,13 @@ test('buildCanonGraph: same {nodes,neighbors,distance} interface, every system i
 
 test('buildCanonGraph: graph is fully connected (corridors bridge the two faction clusters)', () => {
   const g = buildCanonGraph(GALAXY.systems, ADJACENCY);
-  const start = [...g.nodes.keys()][0];
+  // 연결성은 좌표확정(항행 그래프에 위치한) 80개 위에서 성립한다 — 좌표 미확정 5개는 adjacency에 edge가
+  // 없어 의도적으로 고립이므로 BFS는 좌표확정 노드에서 시작하고 그 집합 전체 도달을 확인한다.
+  const positioned = [...g.nodes.entries()]
+    .filter(([, node]) => node.cx != null && node.cy != null)
+    .map(([name]) => name);
+  assert.equal(positioned.length, 80);
+  const start = positioned[0];
   const seen = new Set([start]);
   let frontier = [start];
   while (frontier.length) {
@@ -380,7 +446,11 @@ test('buildCanonGraph: graph is fully connected (corridors bridge the two factio
     }
     frontier = next;
   }
-  assert.equal(seen.size, g.nodes.size, 'every system reachable — no stranded subcluster');
+  assert.equal(seen.size, positioned.length, 'every positioned system reachable — no stranded subcluster');
+  // 좌표 미확정 노드는 어떤 edge에도 닿지 않는다(BFS에 들어오지 않음).
+  for (const [name, node] of g.nodes) {
+    if (node.cx == null || node.cy == null) assert.equal(seen.has(name), false, `${name} stays isolated`);
+  }
 });
 
 test('buildCanonGraph: cross-faction edges exist ONLY through corridor systems (canon chokepoints)', () => {

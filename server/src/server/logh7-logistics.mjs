@@ -594,6 +594,38 @@ export function createLogisticsState() {
       return { other: otherPackages.length, troop: troopPackages.length };
     },
 
+    toSnapshot() {
+      return {
+        bases: [...bases.values()].map((base) => ({
+          ...base,
+          troops: [...base.troops],
+        })),
+        fleets: [...fleets.values()].map((fleet) => ({
+          ...fleet,
+          troops: [...fleet.troops],
+        })),
+        recentLog: log.slice(-80).map((entry) => ({ ...entry })),
+      };
+    },
+    restore(snapshot = {}) {
+      bases.clear();
+      fleets.clear();
+      log.length = 0;
+      for (const base of snapshot.bases ?? []) {
+        upsertBase({
+          ...base,
+          troops: Array.isArray(base?.troops) ? [...base.troops] : [],
+        });
+      }
+      for (const fleet of snapshot.fleets ?? []) {
+        upsertFleet({
+          ...fleet,
+          troops: Array.isArray(fleet?.troops) ? [...fleet.troops] : [],
+        });
+      }
+      for (const entry of snapshot.recentLog ?? []) log.push({ ...entry });
+      return this;
+    },
     log: () => log.slice(),
   };
 }

@@ -682,6 +682,76 @@ function tryReadJson(rel) {
   }
 }
 
+const finiteNumber = (value, fallback = 0) => {
+  const n = Number(value);
+  return Number.isFinite(n) ? n : fallback;
+};
+
+function seedManualTroopMaster(troopsDeployment) {
+  const unitsByName = new Map();
+  const push = (unit, sideType) => {
+    if (!unit || typeof unit !== 'object') return;
+    const key = String(unit.name_ja ?? unit.name_en ?? unit.name_ko ?? '');
+    if (!key) return;
+    const existing = unitsByName.get(key);
+    if (existing && existing.sideType !== 0) return;
+    unitsByName.set(key, { unit, sideType });
+  };
+  for (const [side, sideType] of [['empire', 1], ['alliance', 2]]) {
+    const units = troopsDeployment?.troopUnits?.[side]?.units;
+    if (!Array.isArray(units)) continue;
+    for (const unit of units) push(unit, sideType);
+  }
+  return [...unitsByName.values()].slice(0, UNIT_TROOP_MAX).map(({ unit, sideType }, i) => ({
+    kind: i + 1,
+    type: sideType,
+    category: unit.produced === false ? 1 : 0,
+    achievement: 0,
+    practice: finiteNumber(unit.training),
+    practiceCost: finiteNumber(unit.training),
+    resources: finiteNumber(unit.training),
+    speed: 0,
+    offence: finiteNumber(unit.groundAttack),
+    defence: finiteNumber(unit.groundDefense),
+    tail: unit.produced === false ? 1 : 0,
+  }));
+}
+
+function playableFighterSeed() {
+  // P3 playable seed. Replace by manual/client static dump via manual/static-info-masters.json.
+  return [
+    { kind: 1, airbattle: 70, antiship: 35, defence: 30, cruising: 100 },
+    { kind: 2, airbattle: 75, antiship: 30, defence: 28, cruising: 100 },
+    { kind: 3, airbattle: 40, antiship: 90, defence: 20, cruising: 80 },
+    { kind: 4, airbattle: 85, antiship: 20, defence: 25, cruising: 120 },
+  ];
+}
+
+function playableArmsSeed() {
+  // P3 playable hit/spread table. Shape is P0; values are temporary until original static dump lands.
+  return Array.from({ length: ARMS_ROWS }, (_, r) => (
+    Array.from({ length: ARMS_COLS }, (_, c) => Math.max(1, Math.round((96 - r * 2) * (1 - c * 0.08))))
+  ));
+}
+
+function playablePowerDistributionSeed() {
+  // P3 playable curves, intentionally smooth/nonzero so tactical panels are not blank.
+  return {
+    move: Array.from({ length: POWER_DIST_MOVE_LEN }, (_, i) => Math.max(0.25, 1 - i * 0.05)),
+    warp: [1, 1],
+    sensor: [1, 1.15, 1.3, 1.45],
+    shield: Array.from({ length: POWER_DIST_SHIELD_ROWS }, (_, r) => (
+      Array.from({ length: POWER_DIST_SHIELD_COLS }, (_, c) => 1 + r * 0.25 + c * 0.1)
+    )),
+    beam: Array.from({ length: POWER_DIST_BEAM_ROWS }, (_, r) => (
+      Array.from({ length: POWER_DIST_BEAM_COLS }, (_, c) => Math.max(1, 12 + r * 3 + c))
+    )),
+    gun: Array.from({ length: POWER_DIST_GUN_ROWS }, (_, r) => (
+      Array.from({ length: POWER_DIST_GUN_COLS }, (_, c) => Math.max(1, 10 + r * 2 + c))
+    )),
+  };
+}
+
 /**
  * Map a content/ship-stats.json `ships[]` entry onto the 0x30b UnitShip wire fields. `kind` is a
  * positional ship-class id (1-based on load order) because the manual entries carry string codes
@@ -719,23 +789,38 @@ function shipStatToUnitShip(entry, kind) {
  * content/ship-stats.json; the rest are left empty maps/arrays the server fills as the world advances.
  * The galaxy / character roster are available to the caller via the loaded handles for grid/party seeds.
  *
- * @param {{ load?:boolean }} [opts] load=false skips content reads (for pure unit tests).
+ * @param {{ load?:boolean, playableSeeds?:boolean }} [opts] load=false skips content reads (for pure unit tests).
  */
-export function createInfoRecordsStaticState({ load = true } = {}) {
+export function createInfoRecordsStaticState({ load = true, playableSeeds = false } = {}) {
   const shipStats = load ? tryReadJson('ship-stats.json') : null;
   const roster = load ? tryReadJson('character-roster.json') : null;
+  const troopsDeployment = load ? tryReadJson('manual/troops-deployment.json') : null;
+  const staticMasters = load
+    ? (tryReadJson('manual/static-info-masters.json') ?? tryReadJson('static-info-masters.json'))
+    : null;
 
   const shipClasses = [];
   if (shipStats && Array.isArray(shipStats.ships)) {
     shipStats.ships.forEach((entry, i) => shipClasses.push(shipStatToUnitShip(entry, i + 1)));
   }
+  const troops = Array.isArray(staticMasters?.troops)
+    ? staticMasters.troops
+    : seedManualTroopMaster(troopsDeployment);
+  const fighters = Array.isArray(staticMasters?.fighters)
+    ? staticMasters.fighters
+    : (playableSeeds ? playableFighterSeed() : []);
+  const arms = Array.isArray(staticMasters?.arms)
+    ? staticMasters.arms
+    : (playableSeeds ? playableArmsSeed() : []);
+  const powerDistribution = staticMasters?.powerDistribution
+    ?? (playableSeeds ? playablePowerDistributionSeed() : null);
 
   return {
     shipClasses, // [{kind, name, ...pools}] for 0x30b (seeded from REAL manual numbers)
-    troops: [], // 0x30d ground-troop master (server fills)
-    fighters: [], // 0x30f fighter master
-    arms: [], // 0x311 weapon hit table (27×8)
-    powerDistribution: null, // 0x309 perf-curve blob
+    troops, // 0x30d ground-troop master (P1 manual troops-deployment.json or static dump)
+    fighters, // 0x30f fighter master (static dump, or P3 playable seed if enabled)
+    arms, // 0x311 weapon hit table (static dump, or P3 playable seed if enabled)
+    powerDistribution, // 0x309 perf-curve blob (static dump, or P3 playable seed if enabled)
     cardCommands: [], // 0x307 per-card command grants
     gridOutfits: new Map(), // grid -> outfit presence list (0x32d)
     outfitUnits: new Map(), // outfitId -> per-unit detail list (0x331)

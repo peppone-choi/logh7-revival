@@ -44,6 +44,7 @@ function hex(value) {
 function gh(value) { return safe(() => '0x' + ptr(value).sub(moduleBase).add(IMAGE_BASE).toString(16), hex(value)); }
 function readPointer(address) { return safe(() => ptr(address).readPointer(), ptr('0x0')); }
 function readU8(address) { return safe(() => ptr(address).readU8(), null); }
+function readU16(address) { return safe(() => ptr(address).readU16(), null); }
 function readS32(address) { return safe(() => ptr(address).readS32(), null); }
 function stackU32(context, index) { return safe(() => context.esp.add(index * 4).readU32(), null); }
 function stackPtr(context, index) { return safe(() => context.esp.add(index * 4).readPointer(), ptr('0x0')); }
@@ -90,6 +91,34 @@ function uiObjectState(value) {
     rectH30: readS32(row.add(0x30)),
     eventQueueCount3f4: readS32(row.add(0x3f4)),
     firstEvent470: readS32(row.add(0x470)),
+  };
+}
+function payloadState(value) {
+  const payload = ptr(value || 0);
+  return {
+    ptr: hex(payload),
+    count270: readS32(payload.add(0x270)),
+    count270U8: readU8(payload.add(0x270)),
+    word26c: readU16(payload.add(0x26c)),
+    word274: readU16(payload.add(0x274)),
+    bytes260: bytesHex(payload.add(0x260), 64),
+  };
+}
+function widgetContainerState(value) {
+  const manager = ptr(value || 0);
+  const slot67ByFormula = readPointer(manager.add(4 + 0x67 * 4));
+  const slot67ByLegacyOffset = readPointer(manager.add(0x19c));
+  return {
+    ptr: hex(manager),
+    rootSlot0: hex(readPointer(manager)),
+    slot67ByFormula: hex(slot67ByFormula),
+    slot67ByFormulaObject: uiObjectState(slot67ByFormula),
+    slot67ByLegacyOffset: hex(slot67ByLegacyOffset),
+    slot67ByLegacyObject: uiObjectState(slot67ByLegacyOffset),
+    listCount188: readS32(manager.add(0x188 * 4)),
+    listSelected189: readS32(manager.add(0x189 * 4)),
+    listPayload18a: hex(readPointer(manager.add(0x18a * 4))),
+    listPayload18aState: payloadState(readPointer(manager.add(0x18a * 4))),
   };
 }
 function modeTargetEntries() {
@@ -185,10 +214,82 @@ lifecycleHook('0x004fd7a0', 'hudModeSet', 'hudModeSet-enter-004fd7a0', 'hudModeS
   pushHistory: stackU32(ctx, 2),
   requestedModeRows: modeRows(stackU32(ctx, 1)),
 }));
+install('0x004f6040', 'unitListPanelBuild', {
+  onEnter() {
+    const dataArg = stackPtr(this.context, 1);
+    this.info = {
+      thisEcx: hex(this.context.ecx),
+      containerBefore: widgetContainerState(this.context.ecx),
+      dataArg: hex(dataArg),
+      dataArgState: payloadState(dataArg),
+      returnAddress: hex(stackPtr(this.context, 0)),
+      returnVa: gh(stackPtr(this.context, 0)),
+    };
+    this.before = snapshot();
+    emit('unitListPanelBuild-enter-004f6040', { ...this.info, admission: this.before });
+  },
+  onLeave(retval) {
+    emit('unitListPanelBuild-leave-004f6040', {
+      ...this.info,
+      retval: retval.toInt32(),
+      containerAfter: widgetContainerState(ptr(this.info.thisEcx || 0)),
+      before: this.before,
+      admission: snapshot(),
+    });
+  },
+});
 lifecycleHook('0x004f6680', 'selectionModeSet', 'selectionModeSet-enter-004f6680', 'selectionModeSet-leave-004f6680', (ctx) => ({
   thisEcx: hex(ctx.ecx),
   requestedSelectionMode: stackU32(ctx, 1),
 }));
+install('0x004fe890', 'widgetListCreate', {
+  onEnter() {
+    this.slotId = stackU32(this.context, 2);
+    this.info = {
+      parentArg: hex(stackPtr(this.context, 1)),
+      slotId: this.slotId,
+      descriptorPtr: hex(stackPtr(this.context, 3)),
+      descriptorBytes: bytesHex(stackPtr(this.context, 3), 64),
+      rowCount: stackU32(this.context, 4),
+      outArray: hex(stackPtr(this.context, 5)),
+      flags: stackU32(this.context, 6),
+      returnAddress: hex(stackPtr(this.context, 0)),
+      returnVa: gh(stackPtr(this.context, 0)),
+    };
+    if (this.slotId === 0x67) emit('widgetListCreate-enter-004fe890-slot67', this.info);
+  },
+  onLeave(retval) {
+    if (this.slotId !== 0x67) return;
+    emit('widgetListCreate-leave-004fe890-slot67', {
+      ...this.info,
+      retval: hex(retval),
+      retvalObject: uiObjectState(retval),
+    });
+  },
+});
+install('0x0050cf40', 'widgetSlotLookup', {
+  onEnter() {
+    this.idx = stackU32(this.context, 1);
+    this.info = {
+      thisEcx: hex(this.context.ecx),
+      idx: this.idx,
+      slotByFormulaBefore: hex(readPointer(this.context.ecx.add(4 + (this.idx || 0) * 4))),
+      slot67ByFormulaBefore: hex(readPointer(this.context.ecx.add(4 + 0x67 * 4))),
+      slot67ByLegacyOffsetBefore: hex(readPointer(this.context.ecx.add(0x19c))),
+      returnAddress: hex(stackPtr(this.context, 0)),
+      returnVa: gh(stackPtr(this.context, 0)),
+    };
+  },
+  onLeave(retval) {
+    if (this.idx !== 0x67) return;
+    emit('widgetSlotLookup-leave-0050cf40-slot67', {
+      ...this.info,
+      retval: hex(retval),
+      retvalObject: uiObjectState(retval),
+      containerAfter: widgetContainerState(ptr(this.info.thisEcx || 0)),
+    });
+  },
+});
 install('0x005024b0', 'objectGateSet', {
   onEnter() {
     const objectPtr = this.context.ecx;

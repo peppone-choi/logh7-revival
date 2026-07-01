@@ -1,4 +1,4 @@
-from __future__ import annotations
+﻿from __future__ import annotations
 
 import hashlib
 import json
@@ -20,7 +20,7 @@ COMMANDLINE_BOOTSTRAP_PATCH: Final = "login-commandline-bootstrap"
 
 VANILLA_CLIENT_SHA256: Final = "2848be76a7662e25159353463bdfd8ff2f270ac5845ef4cea62983443c155345"
 KOREAN_CLIENT_SHA256: Final = "466725e2220726a4b5274b99e7b85fbdbef222cb424386638405d2cc7e23aa66"
-PLAYABLE_CLIENT_SHA256: Final = "992dc7e25c4d7c3c982f1d2e6d9de904c733208ae9b28ddab162ef51aa076a0c"
+PLAYABLE_CLIENT_SHA256: Final = "3b4f634818ff0d2b2f59eb6ddacbe73c9bcbc9cda146b9cfdb9c5d1cb7b98573"
 
 STATIC_SHA_LABELS: Final[Mapping[str, str]] = {
     VANILLA_CLIENT_SHA256: "vanilla-installed",

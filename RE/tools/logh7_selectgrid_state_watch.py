@@ -152,6 +152,21 @@ function snapshotKey() {
   return JSON.stringify([s.currentLocation.raw, s.state.p0cPhase, s.state.p10TargetRaw, s.state.p24ProjX, s.state.p28ProjY, s.flags.left, s.flags.right, s.command.selectedD5]);
 }
 function payload(extra) { return { selectGridSnapshot: selectGridSnapshot(), ...(extra || {}) }; }
+function dispatchCaseInfo(value) {
+  const n = value === null || value === undefined ? null : Number(value);
+  const known = {
+    0x30: { label: 'case30-observed-info-path', note: 'live C002 clicks correlated with 0x0f08/0x0f09, not 0x0b01' },
+    0x3a: { label: 'case3a-non-c002-selector', request: '0x0412', note: 'raw FUN_004b78a0 index: selector 0x3a is not the SelectGrid move route' },
+    0x3b: { label: 'case3b-grid-move', request: '0x0b01', response: '0x0b07' },
+  };
+  const info = n === null ? null : (known[n] || null);
+  return {
+    dispatchCase: n,
+    dispatchCaseHex: n === null ? null : '0x' + n.toString(16),
+    dispatchCaseKnown: info,
+    isGridMoveCase: n === 0x3b,
+  };
+}
 function isSelectState(value) { return safe(() => ptr(value).equals(selectState), false); }
 function interestingClickState() {
   const s = stateSnapshot(selectState);
@@ -200,7 +215,11 @@ for (const [vaText, name] of [
   ['0x00573cd0', 'targetChildSlot3-00573cd0'], ['0x005737d0', 'sendWarpSlot2-005737d0'],
   ['0x004b48d0', 'sendGridMove-004b48d0'], ['0x004b78a0', 'sendCorrelator-004b78a0'],
 ]) install(vaText, name, {
-  onEnter() { this.ecx = this.context.ecx; emit(name + '-enter', payload({ ecx: hex(this.ecx), state: objectFields(this.ecx), arg1: stackU32(this.context, 1), arg2: stackU32(this.context, 2), arg3: stackU32(this.context, 3), ret: retaddr(this.context), stack: backtrace(this.context) })); },
+  onEnter() {
+    this.ecx = this.context.ecx;
+    const arg2 = stackU32(this.context, 2);
+    emit(name + '-enter', payload({ ecx: hex(this.ecx), state: objectFields(this.ecx), arg1: stackU32(this.context, 1), arg2, arg3: stackU32(this.context, 3), dispatch: dispatchCaseInfo(arg2), ret: retaddr(this.context), stack: backtrace(this.context) }));
+  },
   onLeave(retval) { emit(name + '-leave', payload({ ecx: hex(this.ecx), retval: retval.toInt32() })); },
 });
 emit('watch-ready', payload({ sampleBytes: SAMPLE_BYTES, pollMs: POLL_MS }));

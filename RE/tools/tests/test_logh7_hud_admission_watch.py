@@ -29,6 +29,7 @@ class Logh7HudAdmissionWatchTests(unittest.TestCase):
         self.assertIn("hudModeF4", script)
         self.assertIn("hudAb0", script)
         self.assertIn("listSelected189", script)
+        self.assertIn("payloadCount270U8", script)
         self.assertIn("categoryD6", script)
         self.assertIn("selectionImport-leave-004f68f0", script)
         self.assertIn("selectionHitTest-leave-004f6600", script)

@@ -246,6 +246,32 @@ test('A2: listFleets / moveFleet / removeFleet manage the strategic fleet set', 
   assert.equal(s.fleetCount(), 1);
 });
 
+test('world state command ledger records authoritative command effects and snapshots', () => {
+  const s = createWorldState();
+  const first = s.recordCommand({
+    connectionId: 6,
+    innerCode: 0x0b01,
+    accept: true,
+    units: [0x01000005],
+    effect: 'fleet-grid-move',
+    debug: { destCell: 2550 },
+  });
+  assert.equal(first.seq, 1);
+  assert.equal(s.commandLogCount(), 1);
+  const log = s.listCommandLog();
+  assert.equal(log[0].innerCode, 0x0b01);
+  assert.deepEqual(log[0].units, [0x01000005]);
+  assert.equal(log[0].debug.destCell, 2550);
+
+  const snap = s.toSnapshot();
+  const restored = createWorldState();
+  restored.restore(snap);
+  assert.equal(restored.commandLogCount(), 1);
+  assert.equal(restored.listCommandLog()[0].effect, 'fleet-grid-move');
+  const second = restored.recordCommand({ connectionId: 6, innerCode: 0x0f1c, accept: false, reject: 'empty-chat' });
+  assert.equal(second.seq, 2, 'commandSeq restored so new records continue monotonically');
+});
+
 test('A2: upsertFleet replaces an existing fleet with the same id', () => {
   const s = createWorldState();
   s.upsertFleet({ id: 1, cell: 100, supply: 10 });

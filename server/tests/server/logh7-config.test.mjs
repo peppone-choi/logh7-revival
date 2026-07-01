@@ -74,12 +74,16 @@ test('제로설정 부팅: post-load rich character downlink는 기본 ON', () =
   const cfg = loadConfig(env);
   assert.equal(env.LOGH_POSTLOAD_PLAYER_RECORD, '1');
   assert.equal(env.LOGH_POSTLOAD_RICH_CHARACTER, '1');
-  assert.equal(env.LOGH_POSTLOAD_ACTION_LIST_SEATS, undefined);
-  assert.equal(env.LOGH_POSTLOAD_UNIT_STREAM_WIRE, '1');
+  assert.equal(env.LOGH_POSTLOAD_ACTION_LIST_SEATS, '1');
+  assert.equal(env.LOGH_POSTLOAD_UNIT_STREAM_WIRE, undefined);
   assert.equal(env.LOGH_PLAYER_FOCUS_CELL, '1');
+  assert.equal(env.LOGH_PLANET_BASE_RECORDS, '1');
   assert.equal(cfg.world.postloadPlayerRecord, true);
   assert.equal(cfg.world.postloadRichCharacter, true);
-  assert.equal(cfg.world.postloadActionListSeats, false);
+  assert.equal(cfg.world.postloadActionListSeats, true);
+  assert.equal(cfg.world.planetBaseRecords, true);
+  assert.equal(cfg.world.baseParameterNotify, false);
+  assert.equal(loadConfig({ LOGH_PROVISIONAL_BASE_PARAMETER_NOTIFY: '1' }).world.baseParameterNotify, true);
 });
 
 test('loadConfig 기본값: 빈 env면 보수적 off/기본', () => {
@@ -115,6 +119,16 @@ test('applyEnvDefaults는 미설정 키만 채우고 명시값은 보존한다',
   assert.equal(env.LOGH_STRAT_TERRAIN, '0', '명시값은 덮어쓰지 않음');
   assert.equal(env.LOGH_STRAT_GALAXY, '1', '미설정 키는 playable 기본값으로 채움');
   assert.equal(env.LOGH_AUTHORITATIVE, '1');
+assert.equal(env.LOGH_ACTION_LIST_CATEGORY, '0');
+assert.equal(env.LOGH_COMMAND_TABLE_PRELOAD_PROBE, '0');
+assert.equal(env.LOGH_DEV_COMMAND_GRANT_ALL, '0');
+assert.equal(env.LOGH_STATIC_SHIPS, '1');
+assert.equal(env.LOGH_STATIC_SHIPS_LIMIT, '1');
+assert.equal(env.LOGH_STATIC_TROOPS, '0');
+  assert.equal(env.LOGH_STATIC_FIGHTERS, '0');
+  assert.equal(env.LOGH_STATIC_ARMS, '0');
+  assert.equal(env.LOGH_STATIC_POWER_DISTRIBUTION, '0');
+  assert.equal(env.LOGH_STATIC_MASTER_PLAYABLE_SEED, '0');
   // playable 프리셋의 모든 키가 결과 env에 존재한다.
   for (const key of Object.keys(PLAYABLE_ENV_DEFAULTS)) {
     assert.ok(env[key] !== undefined, `${key} 채워짐`);

@@ -188,6 +188,32 @@ test('store registration stamps createdAt', () => {
   assert.ok(rec && typeof rec.createdAt === 'string' && rec.createdAt.length > 0);
 });
 
+test('profile characters heal missing required display fields for lobby cards', () => {
+  const reg = createAccountRegistry();
+  reg.register('profile-user', blob());
+
+  const profile = reg.addProfileCharacter('profile-user', {
+    id: 1,
+    name: '신참',
+    displayName: '신참',
+    lastname: '신참',
+    firstname: '',
+    ageYears: 0,
+    birthMonth: 0,
+    birthDay: 0,
+    birthYear: 0,
+  });
+
+  assert.equal(profile.name, '신참사관');
+  assert.equal(profile.displayName, '신참사관');
+  assert.equal(profile.lastname, '신참');
+  assert.equal(profile.firstname, '사관');
+  assert.equal(profile.ageYears, 18);
+  assert.equal(profile.birthMonth, 1);
+  assert.equal(profile.birthDay, 1);
+  assert.equal(profile.birthYear, 767);
+});
+
 test('legacy accept-any-GIN7 store is unaffected (no registry)', () => {
   const store = createAccountStore({ acceptAnyGin7: true });
   assert.deepEqual(store.authenticate(blob()), { ok: true, account: 'inei00', matchedBy: 'gin7-any' });

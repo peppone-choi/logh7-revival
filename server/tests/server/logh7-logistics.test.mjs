@@ -327,6 +327,16 @@ test('createLogisticsState.supplyFuel clamps to fleet cap and drains the source 
   assert.equal(state.getBase(1).fuel, 0); // base drained
   assert.equal(r.fuelB, 600);
   assert.equal(state.supplyFuel(999, {}), null); // unknown fleet
+  const snap = state.toSnapshot();
+  assert.equal(snap.bases[0].id, 1);
+  assert.equal(snap.fleets[0].id, 77);
+  assert.equal(snap.fleets[0].fuel, 600);
+  assert.equal(snap.recentLog.at(-1).event, 'supply-fuel');
+  const restored = createLogisticsState();
+  restored.restore(snap);
+  assert.equal(restored.getBase(1).fuel, 0);
+  assert.equal(restored.getFleet(77).fuel, 600);
+  assert.equal(restored.log().at(-1).event, 'supply-fuel');
 });
 
 test('createLogisticsState.transferTroops moves only ids actually held on the source side', () => {

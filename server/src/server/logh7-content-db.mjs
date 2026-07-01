@@ -74,6 +74,14 @@ CREATE TABLE star_systems (
   canon_line_marker_x REAL,
   canon_line_marker_y REAL,
   spectral_class TEXT,
+  spectral_class_source TEXT,
+  spectral_class_provenance_json TEXT,
+  position_authority TEXT,
+  coordinate_pending INTEGER,
+  name_authority TEXT,
+  coordinate_source TEXT,
+  planet_authority TEXT,
+  note TEXT,
   is_corridor INTEGER              -- 1 if in the Iserlohn/Fezzan corridor band (geography, not ownership)
 );
 
@@ -269,8 +277,9 @@ export function buildContentDb({ contentDir = DEFAULT_CONTENT_DIR, dbPath = DEFA
     const sysIns = db.prepare(`INSERT INTO star_systems
       (name_ja, faction, cx, cy, rect_x0, rect_y0, rect_x1, rect_y1, map_page, in_iv_ex,
        canon_col, canon_row, canon_dot_x, canon_dot_y, canon_line_marker_x, canon_line_marker_y,
-       spectral_class, is_corridor)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`);
+    spectral_class, spectral_class_source, spectral_class_provenance_json,
+    position_authority, coordinate_pending, name_authority, coordinate_source, planet_authority, note, is_corridor)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`);
     const plIns = db.prepare('INSERT INTO planets (system_id, name_ja, orbit) VALUES (?, ?, ?)');
     const ftIns = db.prepare('INSERT INTO fortresses (system_id, name_ja) VALUES (?, ?)');
     let nPlanets = 0; let nForts = 0;
@@ -279,10 +288,18 @@ export function buildContentDb({ contentDir = DEFAULT_CONTENT_DIR, dbPath = DEFA
       const info = sysIns.run(s.system, s.faction ?? null,
         s.cx ?? null, s.cy ?? null, r[0] ?? null, r[1] ?? null, r[2] ?? null, r[3] ?? null,
         s.page ?? null, s.in_iv_ex ? 1 : 0,
-        s.canonCol ?? null, s.canonRow ?? null, s.canonDotX ?? null, s.canonDotY ?? null,
-        s.canonLineMarkerX ?? null, s.canonLineMarkerY ?? null,
-        s.spectralClass ?? s.starClass ?? null,
-        s.is_corridor ? 1 : 0);
+      s.canonCol ?? null, s.canonRow ?? null, s.canonDotX ?? null, s.canonDotY ?? null,
+      s.canonLineMarkerX ?? null, s.canonLineMarkerY ?? null,
+      s.spectralClass ?? s.starClass ?? null,
+      s.spectralClassSource ?? s.starClassSource ?? null,
+      s.spectralClassProvenance ? JSON.stringify(s.spectralClassProvenance) : null,
+      s.positionAuthority ?? null,
+      s.coordinatePending ? 1 : 0,
+      s.nameAuthority ?? null,
+      s.coordinateSource ?? null,
+      s.planetAuthority ?? null,
+      s._note ?? s.note ?? null,
+      s.is_corridor ? 1 : 0);
       const sid = Number(info.lastInsertRowid);
       for (const p of s.planets ?? []) {
         if (typeof p === 'string') { plIns.run(sid, p, 0); } else { plIns.run(sid, p.name, p.orbit ?? 0); }

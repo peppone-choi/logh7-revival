@@ -11,10 +11,26 @@ try:
 except ModuleNotFoundError:
     from tools.tests.test_logh7_pipeline import REPO_ROOT, TOOL
 
-from tools.logh7_player_runtime import player_launcher_manifest
+from tools.logh7_player_runtime import (
+    CONTENT_SOURCE_DIR,
+    DGVOODOO_WINDOWED_DEFAULTS,
+    SERVER_SOURCE_DIR,
+    _content_source,
+    player_launcher_manifest,
+)
 
 
 class Logh7InstalledTreeTests(unittest.TestCase):
+    def test_player_runtime_uses_canonical_server_repo_sources(self) -> None:
+        project_root = REPO_ROOT.parent
+
+        self.assertEqual(SERVER_SOURCE_DIR.resolve(), (project_root / "server" / "src" / "server").resolve())
+        self.assertEqual(CONTENT_SOURCE_DIR.resolve(), (project_root / "server" / "content").resolve())
+        self.assertEqual(
+            _content_source("content/galaxy.json").resolve(),
+            (project_root / "server" / "content" / "galaxy.json").resolve(),
+        )
+
     def test_build_installed_copies_detected_install_root_and_iso_launcher(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
             temp_path = Path(temp)
@@ -44,7 +60,12 @@ class Logh7InstalledTreeTests(unittest.TestCase):
             playable_client_fixture = temp_path / "G7MTClient.playable.exe"
             playable_client_fixture.write_bytes(
                 client_fixture.replace(b"202.8.80.179", b"127.0.0.1\x00\x00\x00")
-                + b"\x00menufix\x00dlgfix\x00earlygrid-ringclear\x00strat-camera-focus\x00font-face\x00font-cleartype"
+                + b"\x00menufix\x00dlgfix\x00earlygrid-ringclear\x00strat-camera-focus"
+                + b"\x00session-select-hardcoded-ko"
+                + b"\x00font-face\x00font-atlas-face\x00font-cleartype\x00font-atlas-antialias\x00font-readable-size"
+                + b"\x00lobby-res\x00lobby-native-layout-v2\x00charsel-recenter\x00charsel-content-inset"
+                + b"\x00charsel-content-y-inset"
+                + b"\x00charsel-confirm-dialog-inset"
             )
             playable_sha = hashlib.sha256(playable_client_fixture.read_bytes()).hexdigest()
             playable_client_fixture.with_name(f"{playable_client_fixture.stem}.playable-manifest.json").write_text(
@@ -56,8 +77,18 @@ class Logh7InstalledTreeTests(unittest.TestCase):
                             "dlgfix",
                             "earlygrid-ringclear",
                             "strat-camera-focus",
+                            "session-select-hardcoded-ko",
                             "font-face",
+                            "font-atlas-face",
                             "font-cleartype",
+                            "font-atlas-antialias",
+                            "font-readable-size",
+                            "lobby-res",
+                            "lobby-native-layout-v2",
+                            "charsel-recenter",
+                            "charsel-content-inset",
+                            "charsel-content-y-inset",
+                            "charsel-confirm-dialog-inset",
                         ],
                     },
                     ensure_ascii=False,
@@ -160,16 +191,36 @@ class Logh7InstalledTreeTests(unittest.TestCase):
                         "dlgfix",
                         "earlygrid-ringclear",
                         "strat-camera-focus",
+                        "session-select-hardcoded-ko",
                         "font-face",
+                        "font-atlas-face",
                         "font-cleartype",
+                        "font-atlas-antialias",
+                        "font-readable-size",
+                        "lobby-res",
+                        "lobby-native-layout-v2",
+                        "charsel-recenter",
+                        "charsel-content-inset",
+                        "charsel-content-y-inset",
+                        "charsel-confirm-dialog-inset",
                     ],
                     "requiredStack": [
                         "menufix",
                         "dlgfix",
                         "earlygrid-ringclear",
                         "strat-camera-focus",
+                        "session-select-hardcoded-ko",
                         "font-face",
+                        "font-atlas-face",
                         "font-cleartype",
+                        "font-atlas-antialias",
+                        "font-readable-size",
+                        "lobby-res",
+                        "lobby-native-layout-v2",
+                        "charsel-recenter",
+                        "charsel-content-inset",
+                        "charsel-content-y-inset",
+                        "charsel-confirm-dialog-inset",
                     ],
                     "reason": "Launcher enables LOGH_STRAT_GRID_EARLY, which requires earlygrid-ringclear.",
                 },
@@ -195,6 +246,12 @@ class Logh7InstalledTreeTests(unittest.TestCase):
             self.assertIn("LOGH7Launcher.exe", {entry["path"] for entry in installed_manifest["entries"]})
             self.assertIn("exe/D3D8.dll", {entry["path"] for entry in installed_manifest["entries"]})
             self.assertIn("exe/dgVoodoo.conf", {entry["path"] for entry in installed_manifest["entries"]})
+            dgvoodoo_conf = (out / "exe" / "dgVoodoo.conf").read_text(encoding="utf-8")
+            for key, value in DGVOODOO_WINDOWED_DEFAULTS.items():
+                if value:
+                    self.assertRegex(dgvoodoo_conf, rf"(?m)^{key}\s+= {value}$")
+                else:
+                    self.assertRegex(dgvoodoo_conf, rf"(?m)^{key}\s+=\s*$")
             self.assertIn("logh7-runtime/src/server/logh7-server.mjs", {entry["path"] for entry in installed_manifest["entries"]})
             self.assertIn("logh7-runtime/content/logh7-content.db", {entry["path"] for entry in installed_manifest["entries"]})
             self.assertIn("logh7-runtime/content/scenarios/canon-801-07.json", {entry["path"] for entry in installed_manifest["entries"]})
@@ -214,31 +271,74 @@ class Logh7InstalledTreeTests(unittest.TestCase):
             self.assertIn("LOGH_STRAT_GRID_EARLY", launcher_source)
             self.assertIn("LOGH_STRAT_TERRAIN", launcher_source)
             self.assertIn("LOGH_WORLD_IMPORT_BASES", launcher_source)
+            self.assertIn("LOGH_PLANET_BASE_RECORDS", launcher_source)
             self.assertIn("LOGH_FULL_UNIT_LOCATION", launcher_source)
             self.assertIn("LOGH_BASE_ECONOMY", launcher_source)
             self.assertIn("LOGH_STATIC_SHIPS", launcher_source)
+            self.assertIn("LOGH_STATIC_SHIPS_LIMIT", launcher_source)
+            self.assertIn("LOGH_POSTLOAD_PLAYER_RECORD", launcher_source)
             self.assertIn("LOGH_ADMIN_PORT", launcher_source)
             self.assertIn("LOGH_ADMIN_TOKEN", launcher_source)
+            self.assertIn("LOGH_SESSION_DB", launcher_source)
+            self.assertIn("--session-db", launcher_source)
             self.assertIn("LOGH_REPOSITORY_BACKEND", launcher_source)
             self.assertIn("LOGH_SQLITE_PATH", launcher_source)
+            self.assertIn("LOGH_SEED_CANON_NPCS", launcher_source)
             self.assertIn("InstallFonts", launcher_source)
+            self.assertIn("ConfigureKoreanMenuMode", launcher_source)
+            self.assertIn('WriteProfileString("windows", "hangeulmenu", "hangeul")', launcher_source)
+            self.assertIn('WriteProfileString("windows", "kanjimenu", "roman")', launcher_source)
             self.assertIn("ResolveDisplayMode", launcher_source)
             self.assertIn("ConfigureDgVoodooDisplayMode", launcher_source)
             self.assertIn("GwlExStyle", launcher_source)
             self.assertIn("dgVoodooWatermark", launcher_source)
             self.assertIn("WatermarkDisplayDuration", launcher_source)
+            self.assertIn('"WatermarkDisplayDuration", "1"', launcher_source)
+            self.assertIn("RTTexturesForceScaleAndMSAA", launcher_source)
+            self.assertIn('"ScalingMode", windowedPresentation ? "centered" : "stretched"', launcher_source)
+            self.assertIn('"Resampling", windowedPresentation ? "pointsampled" : "lanczos-3"', launcher_source)
             self.assertIn("--display-mode", launcher_source)
+            self.assertIn('private const string DefaultDisplayMode = "windowed";', launcher_source)
+            self.assertIn('private const string DefaultCursorClip = "auto";', launcher_source)
+            self.assertIn("ApplyCursorClip", launcher_source)
+            self.assertIn("--cursor-clip", launcher_source)
+            self.assertIn("BuildAppControlBlockedMessage", launcher_source)
+            self.assertIn("Smart App Control blocked the game client", launcher_source)
+            self.assertIn("CodeIntegrity", launcher_source)
             self.assertIn("LOGH_POSTLOAD_RICH_CHARACTER", launcher_source)
             self.assertIn('private const string BootstrapAccount = "ginei00";', launcher_source)
             self.assertIn('private const string BootstrapPassword = "dummy";', launcher_source)
             self.assertIn("EnsureBootstrapAccount(paths);\n                    server = StartServer(paths);", launcher_source)
             self.assertIn("--password-stdin", launcher_source)
             self.assertNotIn('"admin", "create", account, password', launcher_source)
-            self.assertIn("AppCompatFlags", (out / "setup-local.ps1").read_text(encoding="utf-8"))
+            setup_local = (out / "setup-local.ps1").read_text(encoding="utf-8")
+            compatibility = (out / "WINDOWS-COMPATIBILITY.txt").read_text(encoding="utf-8")
+            appcontrol_diagnostic = (out / "diagnose-appcontrol.ps1").read_text(encoding="utf-8")
+            runtime_note = (out / "logh7-runtime" / "LOGH7-RUNTIME.txt").read_text(encoding="utf-8")
+            file_layout_note = (out / "LOGH7-FILE-LAYOUT.txt").read_text(encoding="utf-8")
+            self.assertIn("AppCompatFlags", setup_local)
+            self.assertIn("hangeulmenu", setup_local)
+            self.assertIn("kanjimenu", setup_local)
+            self.assertIn("--client-preflight", setup_local)
+            self.assertIn("diagnose-appcontrol.ps1", setup_local)
             self.assertIn("LOGH7Launcher.exe", (out / "launch-client.ps1").read_text(encoding="utf-8"))
+            self.assertIn("Get-AuthenticodeSignature", appcontrol_diagnostic)
+            self.assertIn("Get-WinEvent", appcontrol_diagnostic)
+            self.assertIn("--client-preflight", appcontrol_diagnostic)
+            self.assertIn("Zone.Identifier", appcontrol_diagnostic)
+            self.assertIn("CodeIntegrity", appcontrol_diagnostic)
+            self.assertIn("G7MTClient.exe", appcontrol_diagnostic)
+            self.assertIn("--client-preflight", compatibility)
+            self.assertIn("--no-client-preflight", compatibility)
+            self.assertIn("Smart App Control", compatibility)
+            self.assertIn("CodeIntegrity", compatibility)
+            self.assertIn("--client-preflight", runtime_note)
+            self.assertIn("Windows Application Control", runtime_note)
+            self.assertIn("--client-preflight", file_layout_note)
+            self.assertIn("diagnose-appcontrol.ps1", file_layout_note)
             self.assertEqual(
                 installed_manifest["runtime"]["windowsCompatibility"]["scripts"],
-                ["setup-local.ps1", "launch-client.ps1", "WINDOWS-COMPATIBILITY.txt"],
+                ["setup-local.ps1", "launch-client.ps1", "diagnose-appcontrol.ps1", "WINDOWS-COMPATIBILITY.txt"],
             )
             self.assertEqual(
                 installed_manifest["runtime"]["playerLauncher"],
@@ -299,9 +399,31 @@ class Logh7InstalledTreeTests(unittest.TestCase):
         self.assertIn("RedirectStandardInput", launcher_source)
         self.assertNotIn('"admin", "create", account, password', launcher_source)
         self.assertIn("\"exists\"", launcher_source)
+        self.assertIn("BuildAppControlBlockedMessage", launcher_source)
+        self.assertIn("AppendLauncherException", launcher_source)
+        self.assertIn("launcher failed:", launcher_source)
+        self.assertIn("--client-preflight", launcher_source)
+        self.assertIn("--no-client-preflight", launcher_source)
+        self.assertIn("RunClientPreflight", launcher_source)
+        self.assertIn('!HasArg(args, "--server-smoke") && !HasArg(args, "--no-client-preflight")', launcher_source)
+        self.assertIn("CreateProcess", launcher_source)
+        self.assertIn("CreateSuspended", launcher_source)
+        self.assertIn("client launch preflight", launcher_source)
+        self.assertIn("process created suspended", launcher_source)
+        self.assertIn("Smart App Control blocked the game client", launcher_source)
+        self.assertIn("CodeIntegrity", launcher_source)
         self.assertNotIn("LOGH_NPC_AI", launcher_source)
         self.assertNotIn("LOGH_RELAY", launcher_source)
         self.assertNotIn("LOGH_DUTY_CARDS_POSTLOAD", launcher_source)
+
+    def test_player_launcher_rebuild_refreshes_windows_runtime_files(self) -> None:
+        build_source = (REPO_ROOT / "tools" / "logh7_build_player_launcher.py").read_text(encoding="utf-8")
+
+        self.assertIn("write_windows_runtime_files", build_source)
+        self.assertLess(
+            build_source.index("written = write_windows_runtime_files"),
+            build_source.index("written.extend(write_player_runtime_files"),
+        )
 
     def test_build_installed_rejects_explicit_playable_without_ringclear(self) -> None:
         with tempfile.TemporaryDirectory() as temp:

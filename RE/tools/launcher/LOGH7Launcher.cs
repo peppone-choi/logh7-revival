@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
@@ -36,7 +37,9 @@ public static class LOGH7Launcher
     private const uint WsExStaticEdge = 0x00020000;
     private const uint WsExAppWindow = 0x00040000;
     private const uint MonitorDefaultToNearest = 0x00000002;
-    private const string DefaultDisplayMode = "fullscreen";
+    private const uint CreateSuspended = 0x00000004;
+    private const string DefaultDisplayMode = "windowed";
+    private const string DefaultCursorClip = "auto";
     private static readonly object LogLock = new object();
     private static readonly IntPtr InvalidHandleValue = new IntPtr(-1);
     private static readonly IntPtr HwndBroadcast = new IntPtr(0xFFFF);
@@ -44,15 +47,21 @@ public static class LOGH7Launcher
     [STAThread]
     public static int Main(string[] args)
     {
+        RuntimePaths pathsForLog = null;
         try
         {
             var paths = RuntimePaths.Create(AppDomain.CurrentDomain.BaseDirectory);
+            pathsForLog = paths;
             paths.Validate();
             Directory.CreateDirectory(paths.LogDir);
             if (HasArg(args, "--check"))
             {
                 AppendLog(paths.LauncherLog, "check ok");
                 return 0;
+            }
+            if (HasArg(args, "--client-preflight"))
+            {
+                return RunClientPreflight(paths);
             }
             if (HasArg(args, "--update-check"))
             {
@@ -87,6 +96,10 @@ public static class LOGH7Launcher
             }
 
             ConfigureWindows(paths);
+            if (!HasArg(args, "--server-smoke") && !HasArg(args, "--no-client-preflight"))
+            {
+                RunClientPreflight(paths);
+            }
             var server = default(Process);
             var startedServer = false;
             try
@@ -110,9 +123,11 @@ public static class LOGH7Launcher
                 }
 
                 var displayMode = ResolveDisplayMode(args);
+                var cursorClip = ResolveCursorClip(args);
                 ConfigureDgVoodooDisplayMode(paths, displayMode);
                 var client = StartClient(paths);
                 ApplyWindowDisplayMode(paths, client, displayMode);
+                ApplyCursorClip(paths, client, displayMode, cursorClip);
                 try
                 {
                     if (HasArg(args, "--client-smoke"))
@@ -127,6 +142,7 @@ public static class LOGH7Launcher
                 }
                 finally
                 {
+                    ReleaseCursorClip(paths);
                     client.Dispose();
                 }
             }
@@ -140,6 +156,7 @@ public static class LOGH7Launcher
         }
         catch (Exception ex)
         {
+            AppendLauncherException(pathsForLog, ex);
             if (IsAutomationMode(args))
             {
                 Console.Error.WriteLine(ex.Message);
@@ -147,6 +164,31 @@ public static class LOGH7Launcher
             }
             MessageBox.Show(ex.Message, "LOGH VII launcher", MessageBoxButtons.OK, MessageBoxIcon.Error);
             return 1;
+        }
+    }
+
+    private static void AppendLauncherException(RuntimePaths paths, Exception ex)
+    {
+        try
+        {
+            var logPath = paths != null
+                ? paths.LauncherLog
+                : Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "launcher.log");
+            var logDir = Path.GetDirectoryName(logPath);
+            if (!String.IsNullOrEmpty(logDir))
+            {
+                Directory.CreateDirectory(logDir);
+            }
+            AppendLog(logPath, "launcher failed: " + ex.GetType().FullName + ": " + ex.Message);
+            if (ex.InnerException != null)
+            {
+                AppendLog(
+                    logPath,
+                    "launcher inner: " + ex.InnerException.GetType().FullName + ": " + ex.InnerException.Message);
+            }
+        }
+        catch
+        {
         }
     }
 
@@ -165,7 +207,8 @@ public static class LOGH7Launcher
     private static bool IsAutomationMode(string[] args)
     {
         return HasArg(args, "--check") || HasArg(args, "--server-smoke") || HasArg(args, "--client-smoke")
-            || HasArg(args, "--signup-smoke") || HasArg(args, "--update") || HasArg(args, "--update-check");
+            || HasArg(args, "--client-preflight") || HasArg(args, "--signup-smoke")
+            || HasArg(args, "--update") || HasArg(args, "--update-check");
     }
 
     private static bool IsUpdateMode(string[] args)
@@ -505,8 +548,16 @@ public static class LOGH7Launcher
         {
             File.Copy(paths.StringFile, paths.StringBackup, false);
         }
+        ConfigureKoreanMenuMode(paths);
         InstallFonts(paths);
         RegisterBundledFonts(paths);
+    }
+
+    private static void ConfigureKoreanMenuMode(RuntimePaths paths)
+    {
+        var hangeulOk = WriteProfileString("windows", "hangeulmenu", "hangeul");
+        var kanjiOk = WriteProfileString("windows", "kanjimenu", "roman");
+        AppendLog(paths.LauncherLog, "win.ini Korean menu mode hangeulmenu=" + hangeulOk + " kanjimenu=" + kanjiOk);
     }
 
     private static void InstallFonts(RuntimePaths paths)
@@ -618,7 +669,8 @@ public static class LOGH7Launcher
             + " --admin-port " + AdminPort
             + " --client-exe " + Quote(paths.ClientExe)
             + " --trace " + Quote(paths.TracePath)
-            + " --account-db " + Quote(paths.AccountDb);
+            + " --account-db " + Quote(paths.AccountDb)
+            + " --session-db " + Quote(paths.SessionDb);
         SetServerEnv(psi, paths);
 
         var process = Process.Start(psi);
@@ -649,12 +701,14 @@ public static class LOGH7Launcher
     {
         var adminToken = ResolveAdminToken(paths);
         psi.EnvironmentVariables["LOGH_ACCOUNT_DB"] = paths.AccountDb;
+        psi.EnvironmentVariables["LOGH_SESSION_DB"] = paths.SessionDb;
         psi.EnvironmentVariables["LOGH_LOBBY_OK_FORMAT"] = "message32";
         psi.EnvironmentVariables["LOGH_LOBBY_RICH_CHARACTERS"] = "1";
         psi.EnvironmentVariables["LOGH_LOBBY_EARLY_OK"] = "1";
         psi.EnvironmentVariables["LOGH_SS_FORMAT"] = "message32";
         psi.EnvironmentVariables["LOGH_WORLD_PLAYER"] = "1";
         psi.EnvironmentVariables["LOGH_WORLD_IMPORT_BASES"] = "1";
+        psi.EnvironmentVariables["LOGH_PLANET_BASE_RECORDS"] = "1";
         psi.EnvironmentVariables["LOGH_STRAT_GRID"] = "1";
         psi.EnvironmentVariables["LOGH_STRAT_TERRAIN"] = "1";
         psi.EnvironmentVariables["LOGH_STRAT_FLEET"] = "1";
@@ -663,11 +717,25 @@ public static class LOGH7Launcher
         psi.EnvironmentVariables["LOGH_TACTICS_UNIT"] = "1";
         psi.EnvironmentVariables["LOGH_GRID_ENTER"] = "1";
         psi.EnvironmentVariables["LOGH_FULL_UNIT_LOCATION"] = "1";
+        psi.EnvironmentVariables["LOGH_POSTLOAD_PLAYER_RECORD"] = "1";
         psi.EnvironmentVariables["LOGH_POSTLOAD_RICH_CHARACTER"] = "1";
-        psi.EnvironmentVariables["LOGH_POSTLOAD_UNIT_STREAM_WIRE"] = "1";
+        psi.EnvironmentVariables["LOGH_POSTLOAD_ACTION_LIST_SEATS"] = "1";
+        psi.EnvironmentVariables["LOGH_ACTION_LIST_CATEGORY"] = "0";
+        // 2026-06-29 live: generic 0x0305 command-card preload stalls NOW LOADING.
+        psi.EnvironmentVariables["LOGH_COMMAND_TABLE_PRELOAD_PROBE"] = "0";
+        psi.EnvironmentVariables["LOGH_DEV_COMMAND_GRANT_ALL"] = "0";
         psi.EnvironmentVariables["LOGH_PLAYER_FOCUS_CELL"] = "1";
+        psi.EnvironmentVariables["LOGH_SEED_CANON_NPCS"] = "1";
         psi.EnvironmentVariables["LOGH_BASE_ECONOMY"] = "1";
+        // 2026-06-29 live: ship master passes world entry. Keep troop/P3 seed
+        // tables off; ship+troop and seed+ships exit before 0x0f02.
         psi.EnvironmentVariables["LOGH_STATIC_SHIPS"] = "1";
+        psi.EnvironmentVariables["LOGH_STATIC_SHIPS_LIMIT"] = "1";
+        psi.EnvironmentVariables["LOGH_STATIC_TROOPS"] = "0";
+        psi.EnvironmentVariables["LOGH_STATIC_FIGHTERS"] = "0";
+        psi.EnvironmentVariables["LOGH_STATIC_ARMS"] = "0";
+        psi.EnvironmentVariables["LOGH_STATIC_POWER_DISTRIBUTION"] = "0";
+        psi.EnvironmentVariables["LOGH_STATIC_MASTER_PLAYABLE_SEED"] = "0";
         psi.EnvironmentVariables["LOGH_CONTENT_DB"] = "1";
         psi.EnvironmentVariables["LOGH_KO_NAMES"] = "1";
         psi.EnvironmentVariables["LOGH_SCENARIO"] = Path.Combine(paths.RuntimeRoot, "content", "scenarios", "canon-801-07.json");
@@ -707,13 +775,93 @@ public static class LOGH7Launcher
         psi.FileName = paths.ClientExe;
         psi.WorkingDirectory = paths.ClientDir;
         psi.UseShellExecute = false;
-        var process = Process.Start(psi);
+        Process process;
+        try
+        {
+            process = Process.Start(psi);
+        }
+        catch (Win32Exception ex)
+        {
+            if (ex.NativeErrorCode == 4551)
+            {
+                var message = BuildAppControlBlockedMessage(paths.ClientExe);
+                AppendLog(paths.LauncherLog, message);
+                throw new InvalidOperationException(message, ex);
+            }
+            throw;
+        }
+        catch (InvalidOperationException ex)
+        {
+            if (ex.Message.IndexOf("Application Control", StringComparison.OrdinalIgnoreCase) >= 0)
+            {
+                var message = BuildAppControlBlockedMessage(paths.ClientExe);
+                AppendLog(paths.LauncherLog, message);
+                throw new InvalidOperationException(message, ex);
+            }
+            throw;
+        }
         if (process == null)
         {
             throw new InvalidOperationException("failed to start game client");
         }
         AppendLog(paths.LauncherLog, "client process " + process.Id + " started");
         return process;
+    }
+
+    private static int RunClientPreflight(RuntimePaths paths)
+    {
+        AppendLog(paths.LauncherLog, "client launch preflight " + paths.ClientExe);
+        var startup = new StartupInfo();
+        startup.Size = Marshal.SizeOf(typeof(StartupInfo));
+        var processInfo = new ProcessInformation();
+        var commandLine = new StringBuilder(Quote(paths.ClientExe));
+        var ok = CreateProcess(
+            paths.ClientExe,
+            commandLine,
+            IntPtr.Zero,
+            IntPtr.Zero,
+            false,
+            CreateSuspended,
+            IntPtr.Zero,
+            paths.ClientDir,
+            ref startup,
+            out processInfo);
+        if (!ok)
+        {
+            var errorCode = Marshal.GetLastWin32Error();
+            if (errorCode == 4551)
+            {
+                var message = BuildAppControlBlockedMessage(paths.ClientExe);
+                AppendLog(paths.LauncherLog, message);
+                throw new InvalidOperationException(message, new Win32Exception(errorCode));
+            }
+            throw new Win32Exception(errorCode);
+        }
+
+        try
+        {
+            AppendLog(paths.LauncherLog, "client launch preflight ok: process created suspended");
+            TerminateProcess(processInfo.Process, 0);
+            return 0;
+        }
+        finally
+        {
+            if (processInfo.Thread != IntPtr.Zero)
+            {
+                CloseHandle(processInfo.Thread);
+            }
+            if (processInfo.Process != IntPtr.Zero)
+            {
+                CloseHandle(processInfo.Process);
+            }
+        }
+    }
+
+    private static string BuildAppControlBlockedMessage(string clientExe)
+    {
+        return "Windows Application Control / Smart App Control blocked the game client: " + clientExe
+            + ". Check Event Viewer > Applications and Services Logs > Microsoft > Windows > CodeIntegrity > Operational "
+            + "events 3033 and 3077. The launcher and server may be allowed while G7MTClient.exe is still blocked.";
     }
 
     private static string ResolveDisplayMode(string[] args)
@@ -731,11 +879,37 @@ public static class LOGH7Launcher
             return DefaultDisplayMode;
         }
         mode = mode.Trim().ToLowerInvariant();
-        if (mode == "fullscreen" || mode == "borderless")
+        if (mode == "windowed" || mode == "fullscreen" || mode == "borderless")
         {
             return mode;
         }
-        throw new InvalidOperationException("display mode must be fullscreen or borderless");
+        throw new InvalidOperationException("display mode must be windowed, fullscreen, or borderless");
+    }
+
+    private static string ResolveCursorClip(string[] args)
+    {
+        var policy = Environment.GetEnvironmentVariable("LOGH_CURSOR_CLIP");
+        for (var i = 0; i < args.Length; i += 1)
+        {
+            if (StringComparer.OrdinalIgnoreCase.Equals(args[i], "--cursor-clip") && i + 1 < args.Length)
+            {
+                policy = args[i + 1];
+            }
+            if (StringComparer.OrdinalIgnoreCase.Equals(args[i], "--no-cursor-clip"))
+            {
+                policy = "off";
+            }
+        }
+        if (String.IsNullOrWhiteSpace(policy))
+        {
+            return DefaultCursorClip;
+        }
+        policy = policy.Trim().ToLowerInvariant();
+        if (policy == "auto" || policy == "on" || policy == "off")
+        {
+            return policy;
+        }
+        throw new InvalidOperationException("cursor clip policy must be auto, on, or off");
     }
 
     private static void ConfigureDgVoodooDisplayMode(RuntimePaths paths, string mode)
@@ -745,13 +919,22 @@ public static class LOGH7Launcher
             AppendLog(paths.LauncherLog, "dgVoodoo config not bundled: " + paths.DgVoodooConfig);
             return;
         }
-        SetDgVoodooValue(paths.DgVoodooConfig, "FullScreenMode", "true");
-        SetDgVoodooValue(paths.DgVoodooConfig, "ScalingMode", "stretched");
+        var borderless = mode == "borderless";
+        var windowed = mode == "windowed";
+        var windowedPresentation = borderless || windowed;
+        SetDgVoodooValue(paths.DgVoodooConfig, "FullScreenMode", windowedPresentation ? "false" : "true");
+        SetDgVoodooValue(paths.DgVoodooConfig, "ScalingMode", windowedPresentation ? "centered" : "stretched");
+        SetDgVoodooValue(paths.DgVoodooConfig, "Resampling", windowedPresentation ? "pointsampled" : "lanczos-3");
+        SetDgVoodooValue(paths.DgVoodooConfig, "WindowedAttributes", borderless ? "borderless" : "");
         SetDgVoodooValue(paths.DgVoodooConfig, "FullscreenAttributes", mode == "borderless" ? "fake" : "fullscreensize");
-        SetDgVoodooValue(paths.DgVoodooConfig, "WatermarkDisplayDuration", "0");
+        SetDgVoodooValue(paths.DgVoodooConfig, "WatermarkDisplayDuration", "1");
         SetDgVoodooValue(paths.DgVoodooConfig, "3DfxWatermark", "false");
         SetDgVoodooValue(paths.DgVoodooConfig, "3DfxSplashScreen", "false");
         SetDgVoodooValue(paths.DgVoodooConfig, "dgVoodooWatermark", "false");
+        SetDgVoodooValue(paths.DgVoodooConfig, "Filtering", windowedPresentation ? "appdriven" : "16");
+        SetDgVoodooValue(paths.DgVoodooConfig, "Antialiasing", windowedPresentation ? "off" : "4x");
+        SetDgVoodooValue(paths.DgVoodooConfig, "RTTexturesForceScaleAndMSAA", windowedPresentation ? "false" : "true");
+        SetDgVoodooValue(paths.DgVoodooConfig, "SmoothedDepthSampling", windowedPresentation ? "false" : "true");
         AppendLog(paths.LauncherLog, "display mode configured: " + mode);
     }
 
@@ -794,20 +977,117 @@ public static class LOGH7Launcher
             AppendLog(paths.LauncherLog, mode + " display mode skipped: monitor info unavailable");
             return;
         }
+        if (mode == "windowed")
+        {
+            AppendLog(paths.LauncherLog, "display mode applied: windowed");
+            return;
+        }
         SetMenu(hwnd, IntPtr.Zero);
         var oldExStyle = unchecked((uint)GetWindowLong(hwnd, GwlExStyle));
         var frameExMask = WsExDlgModalFrame | WsExWindowEdge | WsExClientEdge | WsExStaticEdge | WsExToolWindow;
         SetWindowLong(hwnd, GwlStyle, unchecked((int)(WsPopup | WsVisible)));
         SetWindowLong(hwnd, GwlExStyle, unchecked((int)((oldExStyle & ~frameExMask) | WsExAppWindow)));
+        var x = info.Monitor.Left;
+        var y = info.Monitor.Top;
+        var width = info.Monitor.Right - info.Monitor.Left;
+        var height = info.Monitor.Bottom - info.Monitor.Top;
+        if (mode == "borderless")
+        {
+            AspectFit16By9(info.Monitor, out x, out y, out width, out height);
+        }
         SetWindowPos(
             hwnd,
             IntPtr.Zero,
-            info.Monitor.Left,
-            info.Monitor.Top,
-            info.Monitor.Right - info.Monitor.Left,
-            info.Monitor.Bottom - info.Monitor.Top,
+            x,
+            y,
+            width,
+            height,
             SwpFrameChanged | SwpShowWindow);
         AppendLog(paths.LauncherLog, "display mode applied: " + mode);
+    }
+
+    private static void ApplyCursorClip(RuntimePaths paths, Process client, string mode, string policy)
+    {
+        if (!ShouldClipCursor(mode, policy))
+        {
+            ReleaseCursorClip(paths);
+            AppendLog(paths.LauncherLog, "cursor clip disabled: mode=" + mode + " policy=" + policy);
+            return;
+        }
+        var hwnd = WaitForMainWindow(client, 10000);
+        if (hwnd == IntPtr.Zero)
+        {
+            AppendLog(paths.LauncherLog, "cursor clip skipped: client window not found");
+            return;
+        }
+        Rect rect;
+        if (!TryGetClientScreenRect(hwnd, out rect))
+        {
+            AppendLog(paths.LauncherLog, "cursor clip skipped: client rect unavailable");
+            return;
+        }
+        if (!ClipCursor(ref rect))
+        {
+            AppendLog(paths.LauncherLog, "cursor clip failed");
+            return;
+        }
+        AppendLog(paths.LauncherLog, "cursor clip applied: " + rect.Left + "," + rect.Top + "," + rect.Right + "," + rect.Bottom);
+    }
+
+    private static bool ShouldClipCursor(string mode, string policy)
+    {
+        if (policy == "on")
+        {
+            return true;
+        }
+        if (policy == "off")
+        {
+            return false;
+        }
+        return mode == "borderless" || mode == "fullscreen";
+    }
+
+    private static bool TryGetClientScreenRect(IntPtr hwnd, out Rect rect)
+    {
+        rect = new Rect();
+        if (!GetClientRect(hwnd, out rect))
+        {
+            return false;
+        }
+        var topLeft = new NativePoint { X = rect.Left, Y = rect.Top };
+        var bottomRight = new NativePoint { X = rect.Right, Y = rect.Bottom };
+        if (!ClientToScreen(hwnd, ref topLeft) || !ClientToScreen(hwnd, ref bottomRight))
+        {
+            return false;
+        }
+        rect.Left = topLeft.X;
+        rect.Top = topLeft.Y;
+        rect.Right = bottomRight.X;
+        rect.Bottom = bottomRight.Y;
+        return rect.Right > rect.Left && rect.Bottom > rect.Top;
+    }
+
+    private static void ReleaseCursorClip(RuntimePaths paths)
+    {
+        if (ClipCursor(IntPtr.Zero))
+        {
+            AppendLog(paths.LauncherLog, "cursor clip released");
+        }
+    }
+
+    private static void AspectFit16By9(Rect rect, out int x, out int y, out int width, out int height)
+    {
+        var monitorWidth = Math.Max(1, rect.Right - rect.Left);
+        var monitorHeight = Math.Max(1, rect.Bottom - rect.Top);
+        width = monitorWidth;
+        height = (width * 9) / 16;
+        if (height > monitorHeight)
+        {
+            height = monitorHeight;
+            width = (height * 16) / 9;
+        }
+        x = rect.Left + ((monitorWidth - width) / 2);
+        y = rect.Top + ((monitorHeight - height) / 2);
     }
 
     private static IntPtr WaitForMainWindow(Process client, int timeoutMs)
@@ -1000,6 +1280,28 @@ public static class LOGH7Launcher
         out uint lpNumberOfBytesWritten,
         IntPtr lpOverlapped);
 
+    [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
+    private static extern bool CreateProcess(
+        string lpApplicationName,
+        StringBuilder lpCommandLine,
+        IntPtr lpProcessAttributes,
+        IntPtr lpThreadAttributes,
+        bool bInheritHandles,
+        uint dwCreationFlags,
+        IntPtr lpEnvironment,
+        string lpCurrentDirectory,
+        ref StartupInfo lpStartupInfo,
+        out ProcessInformation lpProcessInformation);
+
+    [DllImport("kernel32.dll", SetLastError = true)]
+    private static extern bool TerminateProcess(IntPtr hProcess, uint uExitCode);
+
+    [DllImport("kernel32.dll", SetLastError = true)]
+    private static extern bool CloseHandle(IntPtr hObject);
+
+    [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
+    private static extern bool WriteProfileString(string lpszSection, string lpszKeyName, string lpszString);
+
     [DllImport("gdi32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
     private static extern int AddFontResourceEx(string lpszFilename, uint fl, IntPtr pdv);
 
@@ -1038,6 +1340,18 @@ public static class LOGH7Launcher
     [DllImport("user32.dll", SetLastError = true)]
     private static extern bool GetMonitorInfo(IntPtr hMonitor, ref MonitorInfo lpmi);
 
+    [DllImport("user32.dll", SetLastError = true)]
+    private static extern bool GetClientRect(IntPtr hWnd, out Rect lpRect);
+
+    [DllImport("user32.dll", SetLastError = true)]
+    private static extern bool ClientToScreen(IntPtr hWnd, ref NativePoint lpPoint);
+
+    [DllImport("user32.dll", SetLastError = true)]
+    private static extern bool ClipCursor(ref Rect lpRect);
+
+    [DllImport("user32.dll", EntryPoint = "ClipCursor", SetLastError = true)]
+    private static extern bool ClipCursor(IntPtr lpRect);
+
     [StructLayout(LayoutKind.Sequential)]
     private struct Rect
     {
@@ -1048,12 +1362,51 @@ public static class LOGH7Launcher
     }
 
     [StructLayout(LayoutKind.Sequential)]
+    private struct NativePoint
+    {
+        public int X;
+        public int Y;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
     private struct MonitorInfo
     {
         public int Size;
         public Rect Monitor;
         public Rect WorkArea;
         public uint Flags;
+    }
+
+    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
+    private struct StartupInfo
+    {
+        public int Size;
+        public string Reserved;
+        public string Desktop;
+        public string Title;
+        public int X;
+        public int Y;
+        public int XSize;
+        public int YSize;
+        public int XCountChars;
+        public int YCountChars;
+        public int FillAttribute;
+        public int Flags;
+        public short ShowWindow;
+        public short Reserved2;
+        public IntPtr Reserved2Pointer;
+        public IntPtr StdInput;
+        public IntPtr StdOutput;
+        public IntPtr StdError;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    private struct ProcessInformation
+    {
+        public IntPtr Process;
+        public IntPtr Thread;
+        public int ProcessId;
+        public int ThreadId;
     }
 
     private sealed class SignupResult
@@ -1219,6 +1572,7 @@ public sealed class RuntimePaths
     public string UpdaterLog;
     public string TracePath;
     public string AccountDb;
+    public string SessionDb;
     public string WorldStateDb;
     public string AdminTokenFile;
     public string StringFile;
@@ -1254,6 +1608,7 @@ public sealed class RuntimePaths
         paths.UpdaterLog = Path.Combine(paths.LogDir, "updater.log");
         paths.TracePath = Path.Combine(paths.TraceDir, "live-trace.jsonl");
         paths.AccountDb = Path.Combine(paths.StateDir, "accounts.sqlite");
+        paths.SessionDb = Path.Combine(paths.StateDir, "lobby-sessions.sqlite");
         paths.WorldStateDb = Path.Combine(paths.StateDir, "world-state.sqlite");
         paths.AdminTokenFile = Path.Combine(paths.StateDir, "admin-token.txt");
         paths.StringFile = Path.Combine(paths.ClientDir, "String.txt");

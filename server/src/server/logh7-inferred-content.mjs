@@ -1,14 +1,18 @@
-const ROOM_NAME_RE = /執務室|会議室|居室|中央広場|公園|宇宙港|邸宅|教室|拘禁室|寝室|受付|ロビー|広場|士官クラブ|酒場|自宅|大広間|猟場/u;
-
 const nonEmptyString = (value) => typeof value === 'string' && value.length > 0;
 const asNumberOrNull = (value) => (Number.isFinite(Number(value)) ? Number(value) : null);
 const STELLAR_CLASSES = new Set(['O', 'B', 'A', 'F', 'G', 'K', 'M']);
+const CONSTMSG_ORG_INSTITUTION_FIRST_ID = 451;
+const CONSTMSG_ORG_INSTITUTION_LAST_ID = 476;
+const CONSTMSG_PLACE_FIRST_ID = 2271;
+const CONSTMSG_PLACE_LAST_ID = 2309;
+const CONSTMSG_ROOM_FIRST_ID = 2310;
+const CONSTMSG_ROOM_LAST_ID = 2414;
 
 export const INFERRED_CONTENT_PROVENANCE = Object.freeze({
   systems: 'content/galaxy.json manual star-chart annotations',
   planetPositions: 'content/galaxy.json orbit order, deterministic local polar slots',
-  institutions: 'content/extracted/all-names.json institutions + content/manual/org-posts.json',
-  rooms: 'content/client/schema.json facilities matched to constmsg.dat room/spot labels',
+  institutions: 'constmsg.dat org/place label records + content/manual/org-posts.json',
+  rooms: 'constmsg.dat facility/spot/office label records 2310-2414',
 });
 
 export function characterDisplayName(character = {}) {
@@ -112,6 +116,12 @@ export function normalizeSystemRecord(system, index) {
     contentId: contentId !== null && contentId >= 0 && contentId <= 0xff ? contentId : null,
     faction: system.faction ?? null,
     isCorridor: Boolean(system.is_corridor ?? system.isCorridor),
+    positionAuthority: system.positionAuthority ?? system.position_authority ?? null,
+    coordinatePending: Boolean(system.coordinatePending ?? system.coordinate_pending ?? false),
+    nameAuthority: system.nameAuthority ?? system.name_authority ?? null,
+    coordinateSource: system.coordinateSource ?? system.coordinate_source ?? null,
+    planetAuthority: system.planetAuthority ?? system.planet_authority ?? null,
+    note: system.note ?? system._note ?? null,
     canonCol: Number.isInteger(canonCol) ? canonCol : null,
     canonRow: Number.isInteger(canonRow) ? canonRow : null,
     provenance: normalizeSystemProvenance(system),
@@ -137,6 +147,7 @@ export function normalizeSystemRecord(system, index) {
         name: planet.name_ja ?? planet.name,
         nameKo: (planet.name_ko ?? planet.nameKo) != null ? String(planet.name_ko ?? planet.nameKo) : null,
         orbit: planet.orbit ?? 0,
+        authority: planet.planetAuthority ?? system.planetAuthority ?? system.planet_authority ?? null,
         inferredPosition: planet.inferredPosition ?? inferPlanetPosition(planet, planetIndex, planets.length),
       };
     }),
@@ -204,6 +215,27 @@ function catalogIdsByText(msgdat) {
   return ids;
 }
 
+function constmsgRecordsInRange(msgdat, firstId, lastId) {
+  const records = msgdatRecords(msgdat, 'constmsg.dat');
+  return records.filter(
+    (record) => Number.isInteger(record.id)
+      && record.id >= firstId
+      && record.id <= lastId
+      && nonEmptyString(record.text),
+  );
+}
+
+function mergeByName(entries) {
+  const seen = new Set();
+  const merged = [];
+  for (const entry of entries) {
+    if (!nonEmptyString(entry?.name) || seen.has(entry.name)) continue;
+    seen.add(entry.name);
+    merged.push(entry);
+  }
+  return merged;
+}
+
 function messageCatalogSummary(msgdat, source) {
   const files = Array.isArray(msgdat?.files) ? msgdat.files : Object.values(msgdat?.files ?? {});
   const records = files.reduce((sum, file) => sum + (Array.isArray(file.records) ? file.records.length : 0), 0);
@@ -215,31 +247,39 @@ function messageCatalogSummary(msgdat, source) {
 }
 
 export function buildInferredCatalogs({
-  allNames = {}, schema = {}, msgdat = {}, modelData = {},
+  allNames = {}, msgdat = {}, modelData = {},
 } = {}) {
   const ids = catalogIdsByText(msgdat);
   const resolveCatalogId = (name) => ids.get(name) ?? null;
-  const institutions = (Array.isArray(allNames.institutions) ? allNames.institutions : []).map((entry, index) => ({
+  const orgInstitutionRecords = constmsgRecordsInRange(
+    msgdat,
+    CONSTMSG_ORG_INSTITUTION_FIRST_ID,
+    CONSTMSG_ORG_INSTITUTION_LAST_ID,
+  );
+  const placeInstitutionRecords = constmsgRecordsInRange(
+    msgdat,
+    CONSTMSG_PLACE_FIRST_ID,
+    CONSTMSG_PLACE_LAST_ID,
+  );
+  const rooms = constmsgRecordsInRange(msgdat, CONSTMSG_ROOM_FIRST_ID, CONSTMSG_ROOM_LAST_ID).map((record) => ({
+    id: record.id,
+    name: String(record.text),
+    nameCatalogId: record.id,
+    source: INFERRED_CONTENT_PROVENANCE.rooms,
+  }));
+  const namedInstitutions = (Array.isArray(allNames.institutions) ? allNames.institutions : []).map((entry, index) => ({
     id: index + 1,
     name: String(entry.text_ja ?? entry.name ?? `Institution ${index + 1}`),
     nameCatalogId: resolveCatalogId(entry.text_ja),
     source: Array.isArray(entry.source) ? entry.source.slice() : [INFERRED_CONTENT_PROVENANCE.institutions],
   }));
-
-  const roomNames = [];
-  const seen = new Set();
-  for (const value of Array.isArray(schema.facilities) ? schema.facilities : []) {
-    if (nonEmptyString(value) && ROOM_NAME_RE.test(value) && !seen.has(value)) {
-      seen.add(value);
-      roomNames.push(value);
-    }
-  }
-  const rooms = roomNames.map((name, index) => ({
-    id: index + 1,
-    name,
-    nameCatalogId: resolveCatalogId(name),
-    source: INFERRED_CONTENT_PROVENANCE.rooms,
+  const constmsgInstitutions = [...orgInstitutionRecords, ...placeInstitutionRecords].map((record) => ({
+    id: record.id,
+    name: String(record.text),
+    nameCatalogId: record.id,
+    source: [INFERRED_CONTENT_PROVENANCE.institutions],
   }));
+  const institutions = mergeByName([...constmsgInstitutions, ...namedInstitutions]);
 
   return {
     institutions,
@@ -271,7 +311,9 @@ export function buildInstitutionSeedElements({ baseId = 1, institutions = [], ro
         // The current PLAYER_INFO spot key (+0x40, copied from character source +0x20) is matched
         // against spot.field04. Seed the first room as the current base/spot key, keep catalog ids after.
         field04: roomIndex === 0 ? resolvedSpotKey : room.id ?? roomIndex + 1,
-        field08: 1,
+        // RE: FUN_004d5030/FUN_004d5260 pass spot+0x08 to FUN_004d4f10, which loads
+        // ../data/image/spot/bg%03d.jpg. Default to bg001 only when no mapping exists.
+        field08: Number.isInteger(room.backgroundId) && room.backgroundId >= 0 ? room.backgroundId : 1,
       })),
     })),
   }];

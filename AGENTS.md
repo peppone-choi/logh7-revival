@@ -1,6 +1,8 @@
-<!-- Generated: 2026-06-10 | Updated: 2026-06-10 -->
+﻿<!-- Generated: 2026-06-10 | Updated: 2026-06-10 -->
 
 # logh7-revival
+
+> CURRENT AUTHORITY (2026-06-30): canonical live diagnostics use the installed playable game EXE SHA256 `e0b3fcf29adf799005ce28ede165a9344807e042a3197618852dbc733770c54c` (18px-ish readable-font build), driven from `RE/` by `RE/tools/logh7_ui_explorer.py --server-root ..\server`. Start/login in windowed mode by default; switch with `display --mode borderless` when needed, which auto-enables cursor clipping. Do not blanket-kill `node.exe`; use `ui_explorer stop` and verified game/session PIDs only. Keep `LOGH_PRESEED_PLAYER_CHAR` off unless explicitly running a bypass diagnostic. Server edits/tests belong under `server/`; client/launcher/localization outputs belong under `client/` or `RE/tools` as appropriate.
 
 > ★ 2026-06-26 재구조화: 루트 = **`server/`**(서버 레포) + **`client/`**(클라 레포) + **`docs/`** + **`RE/`**(dev/RE 워크스페이스: tools·.omo).
 > **작업 결과물은 캐논 레포 두 곳에 반영한다** — 서버/와이어/콘텐츠 → `server/src/server`(검증 `cd server && node --test tests/server/*.test.mjs`),

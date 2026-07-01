@@ -1,5 +1,9 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
+import { mkdtempSync, rmSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+import { buildContentDb, DEFAULT_CONTENT_DIR } from '../../src/server/logh7-content-db.mjs';
 import { openContentSource } from '../../src/server/logh7-content-source.mjs';
 
 // Build a fresh in-memory content DB from the JSON sources for every run.
@@ -11,8 +15,9 @@ test('content DB loads every dataset', () => {
   const s = src();
   const c = s.counts();
   assert.equal(c.nations, 3, 'three powers (empire/alliance/neutral) — corridor is geography, not a nation');
-  assert.equal(c.star_systems, 80);
-  assert.equal(c.planets, 281);
+  // 85 캐논 성계(constmsg group-0x18 권위): 좌표확정 80 + 좌표 미확정 5(sub 13/32/34/52/75, canonCol/cx=null).
+  assert.equal(c.star_systems, 85);
+  assert.equal(c.planets, 300);
   assert.equal(c.fortresses, 6);
   assert.ok(c.roster >= 70, 'manual initial duty-card holders');
   assert.ok(c.client_strings >= 9000, 'MsgDat catalog loaded');
@@ -65,4 +70,32 @@ test('constmsg catalog is queryable by id', () => {
   assert.ok(s.rankLadder('military').includes('元帥'));
   assert.ok(s.listShipClasses().length >= 60);
   s.close();
+});
+
+test('openContentSource rebuilds stale persisted DB when galaxy planet counts drift', () => {
+  const dir = mkdtempSync(join(tmpdir(), 'logh7-content-db-'));
+  const dbPath = join(dir, 'content.db');
+  let db = null;
+  let s = null;
+  try {
+    ({ db } = buildContentDb({ dbPath, contentDir: DEFAULT_CONTENT_DIR }));
+    db.exec("DELETE FROM planets WHERE system_id IN (SELECT id FROM star_systems WHERE position_authority = 'MINIMAP_P3_VIRTUAL_OVERLAY')");
+    assert.equal(db.prepare('SELECT COUNT(*) AS c FROM planets').get().c, 281, 'fixture is stale like the old cached DB');
+    db.close();
+    db = null;
+
+    s = openContentSource({ dbPath, contentDir: DEFAULT_CONTENT_DIR });
+    const counts = s.counts();
+    assert.equal(counts.star_systems, 85);
+    assert.equal(counts.planets, 300);
+
+    const overlayPlanetCount = s.listSystems()
+      .filter((system) => system.position_authority === 'MINIMAP_P3_VIRTUAL_OVERLAY')
+      .reduce((count, system) => count + system.planets.length, 0);
+    assert.equal(overlayPlanetCount, 19, 'P3 overlay planets restored from current JSON source');
+  } finally {
+    if (s) s.close();
+    if (db) db.close();
+    rmSync(dir, { recursive: true, force: true });
+  }
 });

@@ -69,10 +69,16 @@ export function buildAdjacency(systems, opts = {}) {
     throw new TypeError('buildAdjacency: systems must be an array');
   }
 
-  // Only navigable nodes participate. `navigable:false` (when present) excludes a node entirely so
-  // it ends up with an empty neighbor list (unreachable) — the future "non-navigable principal"
+  // Only navigable, positioned nodes participate. `navigable:false` (when present) excludes a node
+  // entirely so it ends up with an empty neighbor list (unreachable) — the "non-navigable principal"
   // handling. Absence of the key means navigable (default true).
-  const nodes = systems.filter((s) => s && s[navigableKey] !== false);
+  // 좌표 미확정 성계(coordinatePending; cx/cy가 유한수가 아님)는 위치가 없어 거리(edge)를 만들 수 없다 —
+  // 좌표를 지어내는 대신 그래프에서 아예 제외한다(그렇지 않으면 NaN 거리로 고립 노드가 되어 connectivity
+  // 불변식을 깬다). 캐논 로스터는 85지만 항행 그래프는 좌표확정 80개 위에서만 성립한다.
+  const hasPosition = (s) => s.cx != null && s.cy != null
+    && Number.isFinite(Number(s.cx))
+    && Number.isFinite(Number(s.cy));
+  const nodes = systems.filter((s) => s && s[navigableKey] !== false && s.coordinatePending !== true && hasPosition(s));
 
   const byName = new Map();
   const adjacency = new Map();

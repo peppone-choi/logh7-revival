@@ -1,0 +1,124 @@
+{
+  "base": "C:\\Users\\by0ng\\OneDrive\\Desktop\\logh7-revival\\RE\\.omo\\work\\logh7-ko-overlay\\exe\\G7MTClient.korean.exe",
+  "baseSha256": "466725e2220726a4b5274b99e7b85fbdbef222cb424386638405d2cc7e23aa66",
+  "out": ".omo\\work\\logh7-ko-overlay\\exe\\G7MTClient.command-panel-msgdat-only.exe",
+  "outSha256": "73d127317f44ce6cb1585e4daa5cb36e4cccebac8dfc13be9dad43153cfe3bee",
+  "stack": [
+    "command-panel-msgdat-groupfix"
+  ],
+  "rsrcMap": "C:\\Users\\by0ng\\OneDrive\\Desktop\\logh7-revival\\RE\\content\\localization\\hardcoded-ui-ko.json",
+  "patches": [
+    {
+      "name": "command-panel-msgdat-groupfix",
+      "desc": "Repoint FUN_0057aa90 command/authority panel labels from constmsg group 0x5f to group 0x60 for subIds 4..0x12. Group 0x5f has only four command-status strings; group 0x60 has the consumed panel labels. Dynamic subIds 0..3 remain on group 0x5f.",
+      "verified": "RE 2026-06-30: FUN_00522010 has no group-index correction; installed and extracted constmsg offset tables both give group 0x5f=2957..2960 and group 0x60=2961..2980. Raw disasm at FUN_0057aa90 shows push subId; push 0x5f; mov ecx,0x2217400; call 0x522010. Same-length immediate patches verified against installed G7MTClient.exe.",
+      "sites": [
+        {
+          "virtualAddressHex": "0x0057ac18",
+          "fileOffsetHex": "0x0017ac18",
+          "originalHex": "6a5f",
+          "patchedHex": "6a60",
+          "note": "FUN_0057aa90 card detail label: g0x5f/s6 NO DATA -> g0x60/s6 card name"
+        },
+        {
+          "virtualAddressHex": "0x0057ac2c",
+          "fileOffsetHex": "0x0017ac2c",
+          "originalHex": "6a5f",
+          "patchedHex": "6a60",
+          "note": "FUN_0057aa90 card detail label: g0x5f/s5 NO DATA -> g0x60/s5 command/proposal card description"
+        },
+        {
+          "virtualAddressHex": "0x0057ac40",
+          "fileOffsetHex": "0x0017ac40",
+          "originalHex": "6a5f",
+          "patchedHex": "6a60",
+          "note": "FUN_0057aa90 card detail label: g0x5f/s4 NO DATA -> g0x60/s4 authority card description"
+        },
+        {
+          "virtualAddressHex": "0x0057ad00",
+          "fileOffsetHex": "0x0017ad00",
+          "originalHex": "6a5f",
+          "patchedHex": "6a60",
+          "note": "FUN_0057aa90 stock/warehouse label: g0x5f/s0x12 NO DATA -> g0x60/s0x12 food"
+        },
+        {
+          "virtualAddressHex": "0x0057ad14",
+          "fileOffsetHex": "0x0017ad14",
+          "originalHex": "6a5f",
+          "patchedHex": "6a60",
+          "note": "FUN_0057aa90 stock/warehouse label: g0x5f/s0x11 NO DATA -> g0x60/s0x11 supplies"
+        },
+        {
+          "virtualAddressHex": "0x0057ad24",
+          "fileOffsetHex": "0x0017ad24",
+          "originalHex": "6a5f",
+          "patchedHex": "6a60",
+          "note": "FUN_0057aa90 unit/storage label: g0x5f/s0x10 NO DATA -> g0x60/s0x10 squadron"
+        },
+        {
+          "virtualAddressHex": "0x0057ad35",
+          "fileOffsetHex": "0x0017ad35",
+          "originalHex": "6a5f",
+          "patchedHex": "6a60",
+          "note": "FUN_0057aa90 unit/storage label: g0x5f/s0x0f NO DATA -> g0x60/s0x0f troop"
+        },
+        {
+          "virtualAddressHex": "0x0057ad45",
+          "fileOffsetHex": "0x0017ad45",
+          "originalHex": "6a5f",
+          "patchedHex": "6a60",
+          "note": "FUN_0057aa90 unit/storage label: g0x5f/s0x0e NO DATA -> g0x60/s0x0e ship"
+        },
+        {
+          "virtualAddressHex": "0x0057ad56",
+          "fileOffsetHex": "0x0017ad56",
+          "originalHex": "6a5f",
+          "patchedHex": "6a60",
+          "note": "FUN_0057aa90 delta label: g0x5f/s0x0d NO DATA -> g0x60/s0x0d increase/decrease"
+        },
+        {
+          "virtualAddressHex": "0x0057ad66",
+          "fileOffsetHex": "0x0017ad66",
+          "originalHex": "6a5f",
+          "patchedHex": "6a60",
+          "note": "FUN_0057aa90 storage label: g0x5f/s0x0c NO DATA -> g0x60/s0x0c package warehouse"
+        },
+        {
+          "virtualAddressHex": "0x0057ad77",
+          "fileOffsetHex": "0x0017ad77",
+          "originalHex": "6a5f",
+          "patchedHex": "6a60",
+          "note": "FUN_0057aa90 unit label: g0x5f/s0x0b NO DATA -> g0x60/s0x0b unit"
+        },
+        {
+          "virtualAddressHex": "0x0057ad87",
+          "fileOffsetHex": "0x0017ad87",
+          "originalHex": "6a5f",
+          "patchedHex": "6a60",
+          "note": "FUN_0057aa90 storage label: g0x5f/s0x0a NO DATA -> g0x60/s0x0a unit warehouse"
+        },
+        {
+          "virtualAddressHex": "0x0057ad98",
+          "fileOffsetHex": "0x0017ad98",
+          "originalHex": "6a5f",
+          "patchedHex": "6a60",
+          "note": "FUN_0057aa90 storage label: g0x5f/s9 NO DATA -> g0x60/s9 base warehouse"
+        },
+        {
+          "virtualAddressHex": "0x0057adb5",
+          "fileOffsetHex": "0x0017adb5",
+          "originalHex": "6a5f",
+          "patchedHex": "6a60",
+          "note": "FUN_0057aa90 character-card selector label: g0x5f/s8 NO DATA -> g0x60/s8 select character with %s card"
+        },
+        {
+          "virtualAddressHex": "0x0057adc6",
+          "fileOffsetHex": "0x0017adc6",
+          "originalHex": "6a5f",
+          "patchedHex": "6a60",
+          "note": "FUN_0057aa90 character panel label: g0x5f/s7 NO DATA -> g0x60/s7 character status"
+        }
+      ]
+    }
+  ]
+}

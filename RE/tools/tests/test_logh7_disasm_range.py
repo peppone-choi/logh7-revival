@@ -55,6 +55,46 @@ class Logh7DisasmRangeTests(unittest.TestCase):
         self.assertTrue(any(ref.address == 0x0057BC87 and ref.target_va == 0x00C9EABC for ref in references))
         self.assertTrue(any(ref.address == 0x0057BC95 and ref.target_va == 0x00C9EAC0 for ref in references))
 
+    def test_finds_state_block_writer_candidates_in_function_context(self) -> None:
+        from tools.logh7_disasm_range import FunctionRange, VirtualRange, find_memory_range_references
+
+        references = find_memory_range_references(
+            CLIENT_EXE,
+            scan_ranges=[FunctionRange(start_va=0x005751B0, size=0x190, name="FUN_005751b0")],
+            target_range=VirtualRange(0x009D2A30, 0x50),
+            access="write",
+        )
+
+        by_address = {ref.address: ref for ref in references}
+        self.assertEqual(by_address[0x00575248].function_name, "FUN_005751b0")
+        self.assertEqual(by_address[0x00575248].target_va, 0x009D2A7C)
+        self.assertEqual(by_address[0x00575248].reference_kind, "direct")
+
+    def test_cli_xref_range_outputs_function_context(self) -> None:
+        result = subprocess.run(
+            [
+                sys.executable,
+                "tools/logh7_disasm_range.py",
+                str(CLIENT_EXE),
+                "--range",
+                "0x005751b0:+0x190",
+                "--xref-range",
+                "0x009d2a30:+0x50",
+                "--access",
+                "write",
+                "--json",
+            ],
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            check=False,
+        )
+
+        self.assertEqual(result.returncode, 0, result.stderr)
+        payload = json.loads(result.stdout)
+        self.assertEqual(payload["xrefRange"]["startVa"], "0x009d2a30")
+        self.assertTrue(any(row["targetVa"] == "0x009d2a7c" for row in payload["rangeReferences"]))
+
 
 if __name__ == "__main__":
     unittest.main()

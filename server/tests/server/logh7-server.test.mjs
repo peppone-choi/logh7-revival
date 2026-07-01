@@ -1,11 +1,18 @@
 import assert from 'node:assert/strict';
+import { realpathSync } from 'node:fs';
 import { mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
 import net from 'node:net';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { test } from 'node:test';
+import { pathToFileURL } from 'node:url';
 
-import { isFetchForbiddenPort, startLogh7GameplayServer, startLogh7Server } from '../../src/server/logh7-server.mjs';
+import {
+  isCliEntrypoint,
+  isFetchForbiddenPort,
+  startLogh7GameplayServer,
+  startLogh7Server,
+} from '../../src/server/logh7-server.mjs';
 import {
   buildCommandOkResponseCandidate,
   buildPhase3ResponseFromPhase1Request,
@@ -19,6 +26,7 @@ import {
   LOBBY_SESSION_ANNOUNCE_NOTIFY_CODE,
 } from '../../src/server/logh7-login-protocol.mjs';
 import { loadAccountRecords } from '../../src/server/logh7-account-registry.mjs';
+import { loadSessionRecords } from '../../src/server/logh7-session-registry.mjs';
 
 async function readTraceLines(server, trace) {
   await server.flushTrace?.();
@@ -121,6 +129,46 @@ test('HTTP ephemeral port binding avoids ports blocked by Fetch', () => {
   assert.equal(isFetchForbiddenPort(6000), true);
   assert.equal(isFetchForbiddenPort(6667), true);
   assert.equal(isFetchForbiddenPort(4787), false);
+});
+
+test('serve-auth creates a DB-backed lobby session catalog by default', async () => {
+  const { bootServeAuthServer } = await import('../../src/server/logh7-server.mjs');
+  const root = await mkdtemp(path.join(tmpdir(), 'logh7-session-db-'));
+  const sessionDb = path.join(root, 'sessions.sqlite');
+  try {
+    const server = await bootServeAuthServer({
+      argv: ['--port', '0', '--session-db', sessionDb],
+      env: {
+        LOGH_ACCEPT_ANY_GIN7: '1',
+        LOGH_PERSIST: '0',
+      },
+    });
+    try {
+      const sessions = loadSessionRecords(sessionDb);
+      assert.equal(sessions.length, 1);
+      assert.equal(sessions[0].sessionName, '이제르론 서버');
+      assert.equal(server.admin, null);
+    } finally {
+      await server.close();
+    }
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
+});
+
+test('CLI entrypoint detection accepts resolved script paths on Windows launchers', () => {
+  const modulePath = path.resolve('src/server/logh7-server.mjs');
+  const realModulePath = realpathSync.native(modulePath);
+
+  assert.equal(isCliEntrypoint('src/server/logh7-server.mjs', modulePath), true);
+  assert.equal(isCliEntrypoint(modulePath, modulePath), true);
+  assert.equal(isCliEntrypoint(modulePath, pathToFileURL(realModulePath).href), true);
+  assert.equal(isCliEntrypoint(undefined, modulePath), false);
+  assert.equal(isCliEntrypoint(path.resolve('src/server/other.mjs'), modulePath), false);
+
+  if (process.platform === 'win32') {
+    assert.equal(isCliEntrypoint(modulePath.toUpperCase(), modulePath.toLowerCase()), true);
+  }
 });
 
 test('serves health and manifest from a bound localhost server', async () => {

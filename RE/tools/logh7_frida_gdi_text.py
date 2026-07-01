@@ -357,11 +357,11 @@ def run(args: argparse.Namespace) -> int:
             if message.get("type") == "send":
                 payload = message["payload"]
                 events.append(payload)
-                print(json.dumps(payload, ensure_ascii=False))
+                print(json.dumps(payload, ensure_ascii=True))
             else:
                 error = {"fn": "ERROR", "raw": str(message)}
                 events.append(error)
-                print(json.dumps(error, ensure_ascii=False))
+                print(json.dumps(error, ensure_ascii=True))
 
         pid = frida.spawn([str(CLIENT_EXE)], cwd=str(CLIENT_DIR))
         session = frida.attach(pid)
@@ -371,14 +371,19 @@ def run(args: argparse.Namespace) -> int:
         frida.resume(pid)
         import win32gui  # type: ignore[import-not-found]
 
-        hwnd = find_client_window(win32gui, win32process, pid)
-        time.sleep(2.5)
-        _drive_scenario(args.scenario, hwnd)
-        if args.shot_out is not None:
-            args.shot_out.parent.mkdir(parents=True, exist_ok=True)
-            captured = _capture_window(hwnd, args.shot_out)
-            events.append({"fn": "SCREENSHOT", "path": str(args.shot_out), "captured": captured})
-        time.sleep(args.seconds)
+        try:
+            hwnd = find_client_window(win32gui, win32process, pid)
+            time.sleep(2.5)
+            _drive_scenario(args.scenario, hwnd)
+            if args.shot_out is not None:
+                args.shot_out.parent.mkdir(parents=True, exist_ok=True)
+                captured = _capture_window(hwnd, args.shot_out)
+                events.append({"fn": "SCREENSHOT", "path": str(args.shot_out), "captured": captured})
+            time.sleep(args.seconds)
+        except Exception as exc:  # noqa: BLE001 - diagnostic capture must survive dead HWND/client exits.
+            error = {"fn": "DRIVE_ERROR", "error": repr(exc)}
+            events.append(error)
+            print(json.dumps(error, ensure_ascii=True))
     finally:
         if script is not None:
             try:

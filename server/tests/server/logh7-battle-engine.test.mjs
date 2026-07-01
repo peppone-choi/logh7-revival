@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Tactical battle-setup data + LIVE BATTLE-ENTRY orchestration tests — RECORD builders (packed wire
  * count header + stride + field offsets) and the openBattleField() ordered notify sequence (codes/order).
  * Pure / synchronous: no live client. Wire layouts per docs/logh7-proto-tactics-data.md + battle-core.md.
@@ -37,13 +37,20 @@ import {
   NOTIFY_TACTICS_CHIEF_COMMANDER_CODE,
   NOTIFY_CHANGE_MODE_CODE,
   UNIT_SHIP_RECORD_BYTES,
+  UNIT_SHIP_DISPATCH_BYTES,
   CORPS_RECORD_BYTES,
+  CORPS_DISPATCH_BYTES,
   FILL_SHIELD_RECORD_BYTES,
+  FILL_SHIELD_DISPATCH_BYTES,
   FILL_BEAMGUN_RECORD_BYTES,
   TACTICS_CHARACTER_RECORD_BYTES,
+  TACTICS_CHARACTER_DISPATCH_BYTES,
   BASE_RECORD_BYTES,
+  BASE_DISPATCH_BYTES,
   POSITION_UNIT_RECORD_BYTES,
+  POSITION_UNIT_DISPATCH_BYTES,
   POSITION_BASE_RECORD_BYTES,
+  POSITION_BASE_DISPATCH_BYTES,
   MAX_TACTICS_UNITS,
   MAX_TACTICS_BASES,
   MAX_POSITION_BASES,
@@ -67,7 +74,7 @@ function payloadOf(inner) {
 // ===========================================================================
 // 0x349 ResponsePositionUnit — 20B record (id + xyz + heading), u16 count.
 // ===========================================================================
-test('buildResponsePositionUnitInner: u16 count + 20B packed records, exact field offsets', () => {
+test('buildResponsePositionUnitInner: fixed 0x2ee4 table, u16 count + 20B records', () => {
   const units = [
     { id: 0x1001, x: 100.5, y: 0, z: -250.25, heading: 1.5 },
     { shipId: 0x1002, x: -50, y: 1, z: 75, heading: -0.75 },
@@ -75,26 +82,26 @@ test('buildResponsePositionUnitInner: u16 count + 20B packed records, exact fiel
   const inner = buildResponsePositionUnitInner({ units });
   const { code, payload } = unwrapMessage32(inner);
   assert.equal(code, RESPONSE_POSITION_UNIT_CODE);
-  assert.equal(payload.readUInt16LE(0), 2, 'u16 count header');
+  assert.equal(payload.readUInt16BE(0), 2, 'u16 count header');
   assert.equal(POSITION_UNIT_RECORD_BYTES, 20);
-  assert.equal(payload.length, 2 + 2 * 20, 'packed body = 2 + count*20 (not zero-padded)');
+  assert.equal(payload.length, POSITION_UNIT_DISPATCH_BYTES, 'client fixed 0x2ee4 payload');
 
   // record 0
-  let o = 2;
-  assert.equal(payload.readUInt32LE(o), 0x1001);
-  assert.ok(Math.abs(payload.readFloatLE(o + 4) - 100.5) < 1e-4);
-  assert.ok(Math.abs(payload.readFloatLE(o + 8) - 0) < 1e-4);
-  assert.ok(Math.abs(payload.readFloatLE(o + 12) - -250.25) < 1e-4);
-  assert.ok(Math.abs(payload.readFloatLE(o + 16) - 1.5) < 1e-4);
+  let o = 4;
+  assert.equal(payload.readUInt32BE(o), 0x1001);
+  assert.ok(Math.abs(payload.readFloatBE(o + 4) - 100.5) < 1e-4);
+  assert.ok(Math.abs(payload.readFloatBE(o + 8) - 0) < 1e-4);
+  assert.ok(Math.abs(payload.readFloatBE(o + 12) - -250.25) < 1e-4);
+  assert.ok(Math.abs(payload.readFloatBE(o + 16) - 1.5) < 1e-4);
   // record 1 (shipId alias)
-  o = 2 + 20;
-  assert.equal(payload.readUInt32LE(o), 0x1002);
-  assert.ok(Math.abs(payload.readFloatLE(o + 16) - -0.75) < 1e-4);
+  o = 4 + 20;
+  assert.equal(payload.readUInt32BE(o), 0x1002);
+  assert.ok(Math.abs(payload.readFloatBE(o + 16) - -0.75) < 1e-4);
 });
 
 // ===========================================================================
-// 0x33b ResponseTacticsInformationUnitShip — 52B client-aligned record, 4B header, fixed 31204B.
-// (저널 #12 NOW LOADING 정체 픽스: 클라 reader FUN_004c32a0 stride 52·entry@body+4·고정버퍼.)
+// 0x33b ResponseTacticsInformationUnitShip - [u16 count][u16 pad][record @ +4], fixed 31204B.
+// FUN_00421f80 copies records to clientBase+0x4271ac and advances by 0x34.
 // ===========================================================================
 test('buildTacticsInformationUnitShipInner: 52B client-aligned record (4B header, fixed 31204B over-read guard)', () => {
   const ships = [{
@@ -105,22 +112,26 @@ test('buildTacticsInformationUnitShipInner: 52B client-aligned record (4B header
   const { code, payload } = unwrapMessage32(inner);
   assert.equal(code, RESPONSE_TACTICS_UNIT_SHIP_CODE);
   assert.equal(UNIT_SHIP_RECORD_BYTES, 52);
-  assert.equal(payload.readUInt16LE(0), 1); // count, 4바이트 헤더
-  assert.equal(payload.length, 0x79e4); // 고정 31204B (클라 fixed receive object, over-read 방지)
+  assert.equal(payload.readUInt16BE(0), 1); // count
+  assert.equal(payload.readUInt16BE(2), 0); // fixed pad before record[0]
+  assert.equal(payload.length, UNIT_SHIP_DISPATCH_BYTES); // 고정 31204B (클라 fixed receive object, over-read 방지)
 
-  const o = 4; // entry@body+4
-  assert.equal(payload.readUInt32LE(o + 0x00), 0x2001); // unitId
-  assert.equal(payload.readUInt32LE(o + 0x04), 1); // controllable
-  assert.equal(payload.readUInt32LE(o + 0x08), 0x2001); // mapSection(default unitId)
-  assert.ok(Math.abs(payload.readFloatLE(o + 0x0c) - 10.5) < 1e-4); // x
-  assert.ok(Math.abs(payload.readFloatLE(o + 0x10) - 0) < 1e-4); // y
-  assert.ok(Math.abs(payload.readFloatLE(o + 0x14) - 20.25) < 1e-4); // z
-  assert.ok(Math.abs(payload.readFloatLE(o + 0x18) - 2.0) < 1e-4); // heading
-  assert.equal(payload.readUInt32LE(o + 0x1c), 0); // reserved zero
+  const o = 4; // entry after u16 count + u16 pad
+  assert.equal(payload.readUInt32BE(o + 0x00), 0x2001); // unitId
+assert.equal(payload.readUInt8(o + 0x04), 1); // controllable
+assert.equal(payload.readUInt8(o + 0x05), 0); // confusion
+  assert.equal(payload.readUInt32BE(o + 0x08), 0x2001); // mapSection(default unitId)
+  assert.ok(Math.abs(payload.readFloatBE(o + 0x0c) - 10.5) < 1e-4); // x
+  assert.ok(Math.abs(payload.readFloatBE(o + 0x10) - 0) < 1e-4); // y
+  assert.ok(Math.abs(payload.readFloatBE(o + 0x14) - 20.25) < 1e-4); // z
+  assert.equal(payload.readUInt32BE(o + 0x18), 0x2001); // current/anchor unit id
+  assert.equal(payload.readUInt32BE(o + 0x1c), 0); // reserved zero
+  assert.ok(Math.abs(payload.readFloatBE(o + 0x2c) - 2.0) < 1e-4); // heading/direction fallback
   // mapSection 기본값(unitId) 경로
   const inner2 = buildTacticsInformationUnitShipInner({ ships: [{ id: 7, x: 0, y: 0, z: 0, direction: 0 }] });
   const p2 = unwrapMessage32(inner2).payload;
-  assert.equal(p2.readUInt32LE(4 + 0x08), 7); // mapSection ?? unitId
+  assert.equal(p2.readUInt32BE(4 + 0x08), 7); // mapSection defaults unitId
+  assert.equal(p2.readUInt32BE(4 + 0x18), 7); // anchor defaults unitId
 });
 
 // ===========================================================================
@@ -136,16 +147,16 @@ test('buildTacticsInformationFillShieldInner: 40B record, shield[6] u32 + fill[6
   const { code, payload } = unwrapMessage32(inner);
   assert.equal(code, RESPONSE_TACTICS_FILL_SHIELD_CODE);
   assert.equal(FILL_SHIELD_RECORD_BYTES, 40);
-  assert.equal(payload.readUInt16LE(0), 1);
-  assert.equal(payload.length, 2 + 40);
+  assert.equal(payload.readUInt16BE(0), 1);
+  assert.equal(payload.length, FILL_SHIELD_DISPATCH_BYTES);
 
-  const o = 2;
-  assert.equal(payload.readUInt32LE(o), 0x3001);
+const o = 4;
+  assert.equal(payload.readUInt32BE(o), 0x3001);
   for (let k = 0; k < 6; k += 1) {
-    assert.equal(payload.readUInt32LE(o + 4 + k * 4), (k + 1) * 10, `shield[${k}]`);
+    assert.equal(payload.readUInt32BE(o + 4 + k * 4), (k + 1) * 10, `shield[${k}]`);
   }
   for (let k = 0; k < 6; k += 1) {
-    assert.equal(payload.readUInt16LE(o + 0x1c + k * 2), k + 1, `fill[${k}]`);
+    assert.equal(payload.readUInt16BE(o + 0x1c + k * 2), k + 1, `fill[${k}]`);
   }
 });
 
@@ -158,15 +169,15 @@ test('buildTacticsInformationFillBeamGunInner: 16B record, two (value,fill) bank
   const { code, payload } = unwrapMessage32(inner);
   assert.equal(code, RESPONSE_TACTICS_FILL_BEAMGUN_CODE);
   assert.equal(FILL_BEAMGUN_RECORD_BYTES, 16);
-  assert.equal(payload.readUInt16LE(0), 1);
+  assert.equal(payload.readUInt16BE(0), 1);
   assert.equal(payload.length, 2 + 16);
 
   const o = 2;
-  assert.equal(payload.readUInt32LE(o + 0x00), 0x4001);
-  assert.equal(payload.readUInt32LE(o + 0x04), 500);
-  assert.equal(payload.readUInt16LE(o + 0x08), 100);
-  assert.equal(payload.readUInt32LE(o + 0x0a), 250);
-  assert.equal(payload.readUInt16LE(o + 0x0e), 50);
+  assert.equal(payload.readUInt32BE(o + 0x00), 0x4001);
+  assert.equal(payload.readUInt32BE(o + 0x04), 500);
+  assert.equal(payload.readUInt16BE(o + 0x08), 100);
+  assert.equal(payload.readUInt32BE(o + 0x0a), 250);
+  assert.equal(payload.readUInt16BE(o + 0x0e), 50);
 });
 
 // ===========================================================================
@@ -177,12 +188,12 @@ test('buildTacticsCharacterInner: 4B header (field0,count) + u32 ids, accepts nu
   const { code, payload } = unwrapMessage32(inner);
   assert.equal(code, RESPONSE_TACTICS_CHARACTER_CODE);
   assert.equal(TACTICS_CHARACTER_RECORD_BYTES, 4);
-  assert.equal(payload.readUInt16LE(0), 7, 'field0');
-  assert.equal(payload.readUInt16LE(2), 3, 'count');
-  assert.equal(payload.length, 4 + 3 * 4);
-  assert.equal(payload.readUInt32LE(4), 0xaa);
-  assert.equal(payload.readUInt32LE(8), 0xbb);
-  assert.equal(payload.readUInt32LE(12), 0xcc);
+  assert.equal(payload.readUInt16BE(0), 7, 'field0');
+  assert.equal(payload.readUInt16BE(2), 3, 'count');
+  assert.equal(payload.length, TACTICS_CHARACTER_DISPATCH_BYTES);
+  assert.equal(payload.readUInt32BE(4), 0xaa);
+  assert.equal(payload.readUInt32BE(8), 0xbb);
+  assert.equal(payload.readUInt32BE(12), 0xcc);
 });
 
 // ===========================================================================
@@ -198,44 +209,44 @@ test('buildTacticsInformationCorpsInner: 55B record header + per-facing arrays',
   const { code, payload } = unwrapMessage32(inner);
   assert.equal(code, RESPONSE_TACTICS_CORPS_CODE);
   assert.equal(CORPS_RECORD_BYTES, 55);
-  assert.equal(payload.readUInt16LE(0), 1);
-  assert.equal(payload.length, 2 + 55);
+  assert.equal(payload.readUInt16BE(0), 1);
+assert.equal(payload.length, CORPS_DISPATCH_BYTES);
 
-  const o = 2;
-  assert.equal(payload.readUInt32LE(o + 0x00), 0x5001);
+const o = 4;
+  assert.equal(payload.readUInt32BE(o + 0x00), 0x5001);
   assert.equal(payload.readUInt8(o + 0x04), 90);
   assert.equal(payload.readUInt8(o + 0x05), 1);
-  assert.equal(payload.readUInt32LE(o + 0x06), 0x77);
-  assert.ok(Math.abs(payload.readFloatLE(o + 0x0a) - 1.25) < 1e-4);
+  assert.equal(payload.readUInt32BE(o + 0x06), 0x77);
+  assert.ok(Math.abs(payload.readFloatBE(o + 0x0a) - 1.25) < 1e-4);
   assert.equal(payload.readUInt8(o + 0x0e), 2);
   for (let k = 0; k < 6; k += 1) assert.equal(payload.readUInt8(o + 0x0f + k), k + 1);
-  assert.equal(payload.readUInt16LE(o + 0x15), 11);
-  assert.equal(payload.readUInt16LE(o + 0x17), 22);
-  for (let k = 0; k < 6; k += 1) assert.equal(payload.readUInt16LE(o + 0x19 + k * 2), (k + 1) * 100);
-  for (let k = 0; k < 6; k += 1) assert.equal(payload.readUInt16LE(o + 0x25 + k * 2), 7 + k);
+  assert.equal(payload.readUInt16BE(o + 0x15), 11);
+  assert.equal(payload.readUInt16BE(o + 0x17), 22);
+  for (let k = 0; k < 6; k += 1) assert.equal(payload.readUInt16BE(o + 0x19 + k * 2), (k + 1) * 100);
+  for (let k = 0; k < 6; k += 1) assert.equal(payload.readUInt16BE(o + 0x25 + k * 2), 7 + k);
 });
 
 // ===========================================================================
-// 0x345 ResponseTacticsInformationBase — u8 count + 8B header, 28B record.
+// 0x345 ResponseTacticsInformationBase — u8 count + 4B header, 32B record.
 // ===========================================================================
-test('buildTacticsInformationBaseInner: u8 count + 8B header, 28B record', () => {
+test('buildTacticsInformationBaseInner: u8 count + 4B header, 32B record', () => {
   const bases = [{ id: 0x6001, x: 1.5, y: 0, z: 2.5, u32a: 1000, u16a: 5, u32b: 2000, u16b: 6 }];
   const inner = buildTacticsInformationBaseInner({ bases });
   const { code, payload } = unwrapMessage32(inner);
   assert.equal(code, RESPONSE_TACTICS_BASE_CODE);
-  assert.equal(BASE_RECORD_BYTES, 28);
+  assert.equal(BASE_RECORD_BYTES, 0x20);
   assert.equal(payload.readUInt8(0), 1, 'u8 count');
-  assert.equal(payload.length, 8 + 28, '8B header + record');
+  assert.equal(payload.length, BASE_DISPATCH_BYTES);
 
-  const o = 8;
-  assert.equal(payload.readUInt32LE(o + 0x00), 0x6001);
-  assert.ok(Math.abs(payload.readFloatLE(o + 0x04) - 1.5) < 1e-4);
-  assert.ok(Math.abs(payload.readFloatLE(o + 0x08) - 0) < 1e-4);
-  assert.ok(Math.abs(payload.readFloatLE(o + 0x0c) - 2.5) < 1e-4);
-  assert.equal(payload.readUInt32LE(o + 0x10), 1000);
-  assert.equal(payload.readUInt16LE(o + 0x14), 5);
-  assert.equal(payload.readUInt32LE(o + 0x16), 2000);
-  assert.equal(payload.readUInt16LE(o + 0x1a), 6);
+  const o = 4;
+  assert.equal(payload.readUInt32BE(o + 0x00), 0x6001);
+  assert.ok(Math.abs(payload.readFloatBE(o + 0x04) - 1.5) < 1e-4);
+  assert.ok(Math.abs(payload.readFloatBE(o + 0x08) - 0) < 1e-4);
+  assert.ok(Math.abs(payload.readFloatBE(o + 0x0c) - 2.5) < 1e-4);
+  assert.equal(payload.readUInt32BE(o + 0x10), 1000);
+  assert.equal(payload.readUInt16BE(o + 0x14), 5);
+  assert.equal(payload.readUInt32BE(o + 0x18), 2000);
+  assert.equal(payload.readUInt16BE(o + 0x1c), 6);
 });
 
 // ===========================================================================
@@ -248,10 +259,10 @@ test('buildResponsePositionBaseInner: u8 count + 8B header, 16B record', () => {
   assert.equal(code, RESPONSE_POSITION_BASE_CODE);
   assert.equal(POSITION_BASE_RECORD_BYTES, 16);
   assert.equal(payload.readUInt8(0), 2);
-  assert.equal(payload.length, 8 + 2 * 16);
-  assert.equal(payload.readUInt32LE(8), 0x7001);
-  assert.ok(Math.abs(payload.readFloatLE(8 + 4) - 5) < 1e-4);
-  assert.equal(payload.readUInt32LE(8 + 16), 0x7002);
+assert.equal(payload.length, POSITION_BASE_DISPATCH_BYTES);
+assert.equal(payload.readUInt32BE(4), 0x7001);
+assert.ok(Math.abs(payload.readFloatBE(4 + 4) - 5) < 1e-4);
+assert.equal(payload.readUInt32BE(4 + 16), 0x7002);
 });
 
 // ===========================================================================
@@ -272,11 +283,11 @@ test('buildInformationObstacleInner: five [u8 count] sub-tables, correct record 
   let o = 0;
   assert.equal(payload.readUInt8(o), 1);
   o += 1;
-  assert.equal(payload.readUInt32LE(o), 1);
+  assert.equal(payload.readUInt32BE(o), 1);
   assert.equal(payload.readUInt8(o + 4), 1);
-  assert.equal(payload.readUInt16LE(o + 5), 2);
-  assert.ok(Math.abs(payload.readFloatLE(o + 7) - 3.5) < 1e-4);
-  assert.ok(Math.abs(payload.readFloatLE(o + 11) - 4.5) < 1e-4);
+  assert.equal(payload.readUInt16BE(o + 5), 2);
+  assert.ok(Math.abs(payload.readFloatBE(o + 7) - 3.5) < 1e-4);
+  assert.ok(Math.abs(payload.readFloatBE(o + 11) - 4.5) < 1e-4);
   o += 15;
   // section 2 abnormalGravity: [count=0]
   assert.equal(payload.readUInt8(o), 0);
@@ -284,9 +295,9 @@ test('buildInformationObstacleInner: five [u8 count] sub-tables, correct record 
   // section 3 gasCloud: [count=1][24B]
   assert.equal(payload.readUInt8(o), 1);
   o += 1;
-  assert.equal(payload.readUInt32LE(o), 2);
-  assert.equal(payload.readUInt32LE(o + 11), 9, 'gascloud id2');
-  assert.ok(Math.abs(payload.readFloatLE(o + 20) - 6.0) < 1e-4, 'gascloud d');
+  assert.equal(payload.readUInt32BE(o), 2);
+  assert.equal(payload.readUInt32BE(o + 11), 9, 'gascloud id2');
+  assert.ok(Math.abs(payload.readFloatBE(o + 20) - 6.0) < 1e-4, 'gascloud d');
   o += 24;
   // section 4 asteroidBelt: [count=0]
   assert.equal(payload.readUInt8(o), 0);
@@ -294,8 +305,8 @@ test('buildInformationObstacleInner: five [u8 count] sub-tables, correct record 
   // section 5 blackhole: [count=1][23B]
   assert.equal(payload.readUInt8(o), 1);
   o += 1;
-  assert.equal(payload.readUInt32LE(o), 3);
-  assert.ok(Math.abs(payload.readFloatLE(o + 19) - 100) < 1e-4, 'blackhole r');
+  assert.equal(payload.readUInt32BE(o), 3);
+  assert.ok(Math.abs(payload.readFloatBE(o + 19) - 100) < 1e-4, 'blackhole r');
   o += 23;
   assert.equal(payload.length, o, 'total payload = sum of five packed sub-tables');
 });
@@ -346,7 +357,7 @@ test('buildNotifyTacticsChiefCommanderInner: 8B body (sideOrUnitId, character)',
 test('record builders clamp counts to caps', () => {
   const manyUnits = Array.from({ length: MAX_TACTICS_UNITS + 50 }, (_, i) => ({ id: i }));
   const posInner = payloadOf(buildResponsePositionUnitInner({ units: manyUnits }));
-  assert.equal(posInner.readUInt16LE(0), MAX_TACTICS_UNITS);
+  assert.equal(posInner.readUInt16BE(0), MAX_TACTICS_UNITS);
 
   const manyBases = Array.from({ length: MAX_TACTICS_BASES + 10 }, (_, i) => ({ id: i }));
   const baseInner = payloadOf(buildTacticsInformationBaseInner({ bases: manyBases }));
@@ -375,7 +386,6 @@ test('openBattleField: minimal participants -> exact ordered codes (no optional 
     RESPONSE_POSITION_UNIT_CODE,    // 0x349 — place ships first
     RESPONSE_TACTICS_UNIT_SHIP_CODE, // 0x33b
     RESPONSE_TACTICS_FILL_SHIELD_CODE, // 0x341
-    RESPONSE_TACTICS_FILL_BEAMGUN_CODE, // 0x343
     NOTIFY_CHANGE_MODE_CODE,        // 0x42f — mode-transition grant
     NOTIFY_TACTICS_CODE,            // 0x0f1f — begin space-war (last)
   ]);
@@ -403,7 +413,6 @@ test('openBattleField: full setup -> all optional tables inserted in spec order,
     RESPONSE_POSITION_UNIT_CODE,        // 0x349
     RESPONSE_TACTICS_UNIT_SHIP_CODE,    // 0x33b
     RESPONSE_TACTICS_FILL_SHIELD_CODE,  // 0x341
-    RESPONSE_TACTICS_FILL_BEAMGUN_CODE, // 0x343
     RESPONSE_TACTICS_CHARACTER_CODE,    // 0x337
     RESPONSE_TACTICS_CORPS_CODE,        // 0x33f
     RESPONSE_TACTICS_BASE_CODE,         // 0x345
@@ -440,11 +449,11 @@ test('openBattleField: position table places ships from world-state participants
   });
   const pos = seq.find((s) => s.code === RESPONSE_POSITION_UNIT_CODE);
   const payload = pos.inner.subarray(6);
-  assert.equal(payload.readUInt16LE(0), 1);
-  assert.equal(payload.readUInt32LE(2), 0xb1);
-  assert.ok(Math.abs(payload.readFloatLE(2 + 4) - 7.5) < 1e-4);
-  assert.ok(Math.abs(payload.readFloatLE(2 + 12) - -3.25) < 1e-4);
-  assert.ok(Math.abs(payload.readFloatLE(2 + 16) - 2.0) < 1e-4);
+  assert.equal(payload.readUInt16BE(0), 1);
+assert.equal(payload.readUInt32BE(4), 0xb1);
+assert.ok(Math.abs(payload.readFloatBE(4 + 4) - 7.5) < 1e-4);
+assert.ok(Math.abs(payload.readFloatBE(4 + 12) - -3.25) < 1e-4);
+assert.ok(Math.abs(payload.readFloatBE(4 + 16) - 2.0) < 1e-4);
 });
 
 // ===========================================================================
@@ -465,44 +474,32 @@ test('openBattleField 0x341: shieldMax/shieldFill from Ship entity produce non-z
   const fillShield = seq.find((s) => s.code === RESPONSE_TACTICS_FILL_SHIELD_CODE);
   assert.ok(fillShield, '0x341 present in sequence');
   const payload = fillShield.inner.subarray(6);
-  assert.equal(payload.readUInt16LE(0), 1, 'count = 1');
-  const o = 2; // record base after u16 count
-  assert.equal(payload.readUInt32LE(o), 0xc001, 'id correct');
+  assert.equal(payload.readUInt16BE(0), 1, 'count = 1');
+const o = 4; // record base after fixed u16 count + pad
+  assert.equal(payload.readUInt32BE(o), 0xc001, 'id correct');
   for (let k = 0; k < 6; k += 1) {
-    assert.ok(payload.readUInt32LE(o + 4 + k * 4) > 0, `shield[${k}] non-zero`);
-    assert.ok(payload.readUInt16LE(o + 0x1c + k * 2) > 0, `fill[${k}] non-zero`);
+    assert.ok(payload.readUInt32BE(o + 4 + k * 4) > 0, `shield[${k}] non-zero`);
+    assert.ok(payload.readUInt16BE(o + 0x1c + k * 2) > 0, `fill[${k}] non-zero`);
   }
-  assert.equal(payload.readUInt32LE(o + 4), perDir, 'shield[0] = perDir');
-  assert.equal(payload.readUInt16LE(o + 0x1c), perDir, 'fill[0] = perDir');
+  assert.equal(payload.readUInt32BE(o + 4), perDir, 'shield[0] = perDir');
+  assert.equal(payload.readUInt16BE(o + 0x1c), perDir, 'fill[0] = perDir');
 });
 
-test('openBattleField 0x343: beamgunA/fillA/beamgunB/fillB from Ship entity produce non-zero values in wire record', () => {
+test('openBattleField omits 0x343 until live receive opcode is confirmed', () => {
   const shipParticipant = {
     shipId: 0xc002,
     x: 0, y: 0, z: 0, heading: 0,
     beamgunA: 220, fillA: 220, beamgunB: 110, fillB: 110,
   };
-  const seq = openBattleField({ participants: [shipParticipant] });
-  const fillBeam = seq.find((s) => s.code === RESPONSE_TACTICS_FILL_BEAMGUN_CODE);
-  assert.ok(fillBeam, '0x343 present in sequence');
-  const payload = fillBeam.inner.subarray(6);
-  assert.equal(payload.readUInt16LE(0), 1, 'count = 1');
-  const o = 2;
-  assert.equal(payload.readUInt32LE(o), 0xc002, 'id correct');
-  assert.ok(payload.readUInt32LE(o + 0x04) > 0, 'beamgunA non-zero');
-  assert.ok(payload.readUInt16LE(o + 0x08) > 0, 'fillA non-zero');
-  assert.ok(payload.readUInt32LE(o + 0x0a) > 0, 'beamgunB non-zero');
-  assert.ok(payload.readUInt16LE(o + 0x0e) > 0, 'fillB non-zero');
-  assert.equal(payload.readUInt32LE(o + 0x04), 220, 'beamgunA = 220');
-  assert.equal(payload.readUInt16LE(o + 0x08), 220, 'fillA = 220');
-  assert.equal(payload.readUInt32LE(o + 0x0a), 110, 'beamgunB = 110');
-  assert.equal(payload.readUInt16LE(o + 0x0e), 110, 'fillB = 110');
+const seq = openBattleField({ participants: [shipParticipant] });
+const fillBeam = seq.find((s) => s.code === RESPONSE_TACTICS_FILL_BEAMGUN_CODE);
+assert.equal(fillBeam, undefined, '0x343 is not part of live-safe battle-entry sequence yet');
 });
 
 test('BATTLE_SETUP_CODES exposes the emitted S->C codes', () => {
   for (const c of [
     RESPONSE_POSITION_UNIT_CODE, RESPONSE_TACTICS_UNIT_SHIP_CODE, RESPONSE_TACTICS_FILL_SHIELD_CODE,
-    RESPONSE_TACTICS_FILL_BEAMGUN_CODE, NOTIFY_CHANGE_MODE_CODE, NOTIFY_TACTICS_CODE,
+NOTIFY_CHANGE_MODE_CODE, NOTIFY_TACTICS_CODE,
   ]) {
     assert.ok(BATTLE_SETUP_CODES.includes(c), `BATTLE_SETUP_CODES includes 0x${c.toString(16)}`);
   }
@@ -752,20 +749,19 @@ test('buildBattleEntryParticipants: own unit absent from world-state still seede
   assert.deepEqual(characters, [99, 7], 'roster: own char then seed char, deduped');
 });
 
-test('buildBattleEntryParticipants: forwards shield/beam fill so 0x341 + 0x343 are non-zero', () => {
+test('buildBattleEntryParticipants: forwards shield fill and omits 0x343 in live-safe entry', () => {
   const world = fakeWorld([fakeShip(0x40, { x: 1, z: 2, character: 3 })]);
   const { participants } = buildBattleEntryParticipants(world, { unitId: 0x40 });
   const seq = openBattleField({ participants, anchorId: 0x40, modeKind: 0 });
 
   const fs = seq.find((s) => s.code === RESPONSE_TACTICS_FILL_SHIELD_CODE).inner.subarray(6);
-  assert.equal(fs.readUInt16LE(0), 1);
+  assert.equal(fs.readUInt16BE(0), 1);
   for (let k = 0; k < 6; k += 1) {
-    assert.ok(fs.readUInt32LE(2 + 4 + k * 4) > 0, `shield[${k}] non-zero`);
-    assert.ok(fs.readUInt16LE(2 + 0x1c + k * 2) > 0, `fill[${k}] non-zero`);
+  assert.ok(fs.readUInt32BE(4 + 4 + k * 4) > 0, `shield[${k}] non-zero`);
+  assert.ok(fs.readUInt16BE(4 + 0x1c + k * 2) > 0, `fill[${k}] non-zero`);
   }
-  const bg = seq.find((s) => s.code === RESPONSE_TACTICS_FILL_BEAMGUN_CODE).inner.subarray(6);
-  assert.equal(bg.readUInt32LE(2 + 0x04), 220, 'beamgunA');
-  assert.equal(bg.readUInt32LE(2 + 0x0a), 110, 'beamgunB');
+const bg = seq.find((s) => s.code === RESPONSE_TACTICS_FILL_BEAMGUN_CODE);
+assert.equal(bg, undefined, '0x343 omitted until live receive opcode is confirmed');
 });
 
 test('buildBattleEntryParticipants: cap bounds participant count', () => {
@@ -795,7 +791,7 @@ test('battle-entry seed -> openBattleField full sequence: 0x337 roster present +
   const roster = seq.find((s) => s.code === RESPONSE_TACTICS_CHARACTER_CODE);
   assert.ok(roster, '0x337 roster present (commanders seeded)');
   const rp = roster.inner.subarray(6);
-  assert.equal(rp.readUInt16LE(2), 2, 'two commanders');
+  assert.equal(rp.readUInt16BE(2), 2, 'two commanders');
 
   const tac = seq.find((s) => s.code === NOTIFY_TACTICS_CODE);
   assert.equal(tac.inner.subarray(6).readUInt8(0), 1, '0x0f1f arg0 byte0=1 (FUN_004c1b20 engage branch)');

@@ -1,0 +1,120 @@
+{
+  "name": "charsel-content-inset",
+  "desc": "Second-stage lobby character-creation content inset. Applies after charsel-recenter and moves only the 8-step creation form content groups right by 116 px, so labels, input boxes, radio rows, and bottom buttons sit inside the native right panel. The main lobby notice panel and session-card list anchors are intentionally unchanged.",
+  "verified": "Static target from live screenshots lobby-recenter-5aa1-20260628: native right panel visual center is about x=1080, while the creation form content group center is about x=963. Move step-form anchors x=604 -> 720 and the input sub-group x=909 -> 1025. This descriptor drift-checks against the post-charsel-recenter bytes, not the pristine EXE.",
+  "verifiedFlag": false,
+  "patches": [
+    {
+      "va": "0x0051fcc7",
+      "fileOffsetHex": "0x11fcc7",
+      "originalHex": "c744242c5c020000",
+      "patchedHex": "c744242cd0020000",
+      "note": "FUN_0051f8b0 MAIN creation content X 604 -> 720 (+116)."
+    },
+    {
+      "va": "0x00520cf0",
+      "fileOffsetHex": "0x120cf0",
+      "originalHex": "81c15c020000",
+      "patchedHex": "81c1d0020000",
+      "note": "FUN_0051f8b0 row-origin add ecx X 604 -> 720 (+116)."
+    },
+    {
+      "va": "0x00520a92",
+      "fileOffsetHex": "0x120a92",
+      "originalHex": "c744242c8d030000",
+      "patchedHex": "c744242c01040000",
+      "note": "FUN_0051f8b0 SUB input/right group X 909 -> 1025 (+116)."
+    },
+    {
+      "va": "0x00598bd2",
+      "fileOffsetHex": "0x198bd2",
+      "originalHex": "c74424285c020000",
+      "patchedHex": "c7442428d0020000",
+      "note": "FUN_005989f0 step-panel X 604 -> 720 (+116)."
+    },
+    {
+      "va": "0x005991d2",
+      "fileOffsetHex": "0x1991d2",
+      "originalHex": "c74424285c020000",
+      "patchedHex": "c7442428d0020000",
+      "note": "FUN_00598ff0 step-panel X 604 -> 720 (+116)."
+    },
+    {
+      "va": "0x005997d2",
+      "fileOffsetHex": "0x1997d2",
+      "originalHex": "c74424285c020000",
+      "patchedHex": "c7442428d0020000",
+      "note": "FUN_005995f0 step-panel X 604 -> 720 (+116)."
+    },
+    {
+      "va": "0x00599f70",
+      "fileOffsetHex": "0x199f70",
+      "originalHex": "c74424285c020000",
+      "patchedHex": "c7442428d0020000",
+      "note": "FUN_00599e10 step-panel X 604 -> 720 (+116)."
+    },
+    {
+      "va": "0x0059a861",
+      "fileOffsetHex": "0x19a861",
+      "originalHex": "c74424645c020000",
+      "patchedHex": "c7442464d0020000",
+      "note": "FUN_0059a5e0 step-panel X 604 -> 720 (+116)."
+    },
+    {
+      "va": "0x0059b457",
+      "fileOffsetHex": "0x19b457",
+      "originalHex": "c744242c5c020000",
+      "patchedHex": "c744242cd0020000",
+      "note": "FUN_0059b090 portrait step-panel X 604 -> 720 (+116)."
+    },
+    {
+      "va": "0x0059bc41",
+      "fileOffsetHex": "0x19bc41",
+      "originalHex": "c74424345c020000",
+      "patchedHex": "c7442434d0020000",
+      "note": "FUN_0059b970 step-panel X 604 -> 720 (+116)."
+    },
+    {
+      "va": "0x0059ca9f",
+      "fileOffsetHex": "0x19ca9f",
+      "originalHex": "c74424285c020000",
+      "patchedHex": "c7442428d0020000",
+      "note": "FUN_0059c940 step-panel X 604 -> 720 (+116)."
+    },
+    {
+      "va": "0x0059cfa4",
+      "fileOffsetHex": "0x19cfa4",
+      "originalHex": "c74424285c020000",
+      "patchedHex": "c7442428d0020000",
+      "note": "FUN_0059cee0 step-panel X 604 -> 720 (+116)."
+    },
+    {
+      "va": "0x0059d2c3",
+      "fileOffsetHex": "0x19d2c3",
+      "originalHex": "c74424285c020000",
+      "patchedHex": "c7442428d0020000",
+      "note": "FUN_0059d200 step-panel X 604 -> 720 (+116)."
+    },
+    {
+      "va": "0x0059d71a",
+      "fileOffsetHex": "0x19d71a",
+      "originalHex": "c74424305c020000",
+      "patchedHex": "c7442430d0020000",
+      "note": "FUN_0059d520 cancel/next button panel X 604 -> 720 (+116)."
+    },
+    {
+      "va": "0x0059e66c",
+      "fileOffsetHex": "0x19e66c",
+      "originalHex": "c74424305c020000",
+      "patchedHex": "c7442430d0020000",
+      "note": "FUN_0059df00 step-panel X 604 -> 720 (+116)."
+    },
+    {
+      "va": "0x00595e83",
+      "fileOffsetHex": "0x195e83",
+      "originalHex": "c74424085c020000",
+      "patchedHex": "c7442408d0020000",
+      "note": "FUN_00595e70 faction radio/emblem panel X 604 -> 720 (+116)."
+    }
+  ]
+}

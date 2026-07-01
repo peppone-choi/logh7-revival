@@ -9,10 +9,10 @@ export const meta = {
 }
 
 const COMMON = [
-  'LOGH VII revival(E:\\logh7-revival). 권위적 Node.js 서버(src/server/*.mjs, ESM). 서버가 클라가 파싱하는 와이어를 emit.',
-  'RE: `python tools/logh7_redex.py func 0x<addr>`. 데이터등급 P0/P1/P2/P3 표기, 추측을 원본으로 승격 금지.',
+  'LOGH VII revival root is C:\\Users\\by0ng\\OneDrive\\Desktop\\logh7-revival. 권위적 Node.js 서버(server/src/server/*.mjs, ESM). 서버가 클라가 파싱하는 와이어를 emit.',
+  'RE: `cd RE && python -m tools.logh7_redex func 0x<addr>`. 데이터등급 P0/P1/P2/P3 표기, 추측을 원본으로 승격 금지.',
   '확정 사실(logh7-gap-audit, docs/logh7-gap-backlog.md):',
-  '- world-state.mjs: upsertFleet/moveFleet/listFleets/getFleet(:398-432) 전략함대 API + conquerSystem/setSystemOwner/factionSummary(:338-387) 소유 API가 정의됐으나 src/server에서 호출처 0(테스트 외). seedSystems(auth-server.mjs:459)만 부팅시 카논소유 1회.',
+  '- world-state.mjs: upsertFleet/moveFleet/listFleets/getFleet(:398-432) 전략함대 API + conquerSystem/setSystemOwner/factionSummary(:338-387) 소유 API가 정의됐으나 server/src/server에서 호출처 0(테스트 외). seedSystems(auth-server.mjs:459)만 부팅시 카논소유 1회.',
   '- auth-server.mjs: 유일 스케줄러 runNpcTickOnce(:497-514)는 전술 함선틱이고 `worldRelay.size()===0`이면 early-return → 접속 플레이어 없으면 아무것도 안 돎. setInterval 1건뿐(:512).',
   '- npc-ai.mjs: 전술공간(x/z 함선 사격/이동/후퇴)만. 전략(성계간 함대) 의사결정 없음. behaviorProfile(통솔/기동/신중) 존재.',
   '- content/galaxy.json: 80성계 {system, planets, faction(empire/alliance/neutral), cx, cy, is_corridor}. 인접/이웃 엣지 구조 없음.',
@@ -64,7 +64,7 @@ const steps = [
   { step: 'T06 인접그래프', design: graphDesign, extra:
     '위 설계대로 갤럭시 인접/회랑 그래프를 구현(생성기 도구 또는 content/galaxy-adjacency.json + 로더 모듈). 단위테스트(이웃 대칭성·회랑연결·항행불가회피).' },
   { step: 'T04+T11+T12 전략시뮬 코어', design: coreDesign, extra:
-    '신규 src/server/logh7-strategic-sim.mjs: seedStrategicFleets(worldState, {galaxy}) + strategicTick(worldState, {graph, seed, profiles}). '
+    '신규 server/src/server/logh7-strategic-sim.mjs: seedStrategicFleets(worldState, {galaxy}) + strategicTick(worldState, {graph, seed, profiles}). '
     + 'world-state upsertFleet/moveFleet/conquerSystem/setSystemOwner 재사용. 사령관 의사결정은 순수함수로 분리(테스트). '
     + '카논 능력치/직위 소싱은 기존 로스터, 추측 룰은 P3 태그. 단위테스트(시드/틱 결정론·소유변동·인접이동제약·무유저 동작).' },
   { step: 'T03+T22 틱루프+브로드캐스트 배선', design: coreDesign, extra:
@@ -82,7 +82,7 @@ for (const s of steps) {
 
 // ---------- 테스트 ----------
 phase('테스트')
-const test = await agent(COMMON + '\n\n너는 tester다. `npm run test:server` 실행, TEST 반환. 실패시 실패명+메시지.',
+const test = await agent(COMMON + '\n\n너는 tester다. `cd server && node --test tests/server/*.test.mjs` 실행, TEST 반환. 실패시 실패명+메시지.',
   { label: '전체테스트', phase: '테스트', schema: TEST })
 
 // ---------- 검증 (적대적) ----------

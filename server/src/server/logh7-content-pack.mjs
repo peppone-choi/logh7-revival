@@ -196,12 +196,24 @@ export function createContentPack(data = DEFAULT_CONTENT) {
   const normInstitutions = (Array.isArray(data.institutions) ? data.institutions : []).map((inst, i) => ({
     id: Number.isInteger(inst.id) ? inst.id : i + 1,
     name: String(inst.name ?? inst.text_ja ?? `Institution ${i + 1}`),
+    nameKo: inst.nameKo != null ? String(inst.nameKo) : null,
+    stableId: inst.stableId != null ? String(inst.stableId) : null,
+    commandDomains: Array.isArray(inst.commandDomains) ? inst.commandDomains.map(String) : [],
     nameCatalogId: Number.isInteger(inst.nameCatalogId) ? inst.nameCatalogId : null,
     source: Array.isArray(inst.source) ? inst.source.slice() : [],
   }));
   const normRooms = (Array.isArray(data.rooms) ? data.rooms : []).map((room, i) => ({
     id: Number.isInteger(room.id) ? room.id : i + 1,
     name: String(room.name ?? room.text_ja ?? `Room ${i + 1}`),
+    stableId: room.stableId != null ? String(room.stableId) : null,
+    facilityId: Number.isInteger(room.facilityId) ? room.facilityId : null,
+    facilityStableId: room.facilityStableId != null ? String(room.facilityStableId) : null,
+    spotType: room.spotType != null ? String(room.spotType) : null,
+    backgroundId: Number.isInteger(room.backgroundId) ? room.backgroundId : null,
+    backgroundFile: room.backgroundFile != null ? String(room.backgroundFile) : null,
+    backgroundGrade: room.backgroundGrade != null ? String(room.backgroundGrade) : null,
+    backgroundSource: room.backgroundSource != null ? String(room.backgroundSource) : null,
+    backgroundReason: room.backgroundReason != null ? String(room.backgroundReason) : null,
     nameCatalogId: Number.isInteger(room.nameCatalogId) ? room.nameCatalogId : null,
     source: room.source != null ? String(room.source) : '',
   }));

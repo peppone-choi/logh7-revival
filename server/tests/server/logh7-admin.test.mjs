@@ -27,6 +27,22 @@ function freshLegacyJsonSeed() {
   return { dir, db: path.join(dir, 'accounts.sqlite'), seed: path.join(dir, 'accounts.seed.json') };
 }
 
+function publicCharacterSummary(record) {
+return {
+characterId: record.characterId,
+name: record.name,
+displayName: record.displayName,
+lastname: record.lastname,
+firstname: record.firstname,
+faction: record.faction,
+power: record.power,
+rank: record.rank,
+spot: record.spot,
+spotOwner: record.spotOwner,
+createdAt: record.createdAt,
+};
+}
+
 function freshSqliteDb() {
   const dir = mkdtempSync(path.join(tmpdir(), 'logh7-admin-'));
   return { dir, db: path.join(dir, 'accounts.sqlite') };
@@ -60,10 +76,11 @@ test('adminCreate can provision the SQLite account DB used by server deployments
     assert.equal(result.ok, true);
     const rawDb = new DatabaseSync(db);
     try {
-      const row = rawDb.prepare('SELECT account, created_at AS createdAt FROM accounts WHERE account = ?')
+      const row = rawDb.prepare('SELECT account, created_at AS createdAt, selected_session_id AS selectedSessionId FROM accounts WHERE account = ?')
         .get('sqlite-admin');
       assert.equal(row.account, 'sqlite-admin');
       assert.equal(typeof row.createdAt, 'string');
+      assert.equal(row.selectedSessionId, 1);
     } finally {
       rawDb.close();
     }
@@ -182,10 +199,11 @@ test('strict signup admin list and dump redact account secrets', () => {
     const cliDump = JSON.parse(lines.join('\n'));
 
     // Then: account metadata is visible, while salts and hashes are explicitly redacted.
-    assert.deepEqual(Object.keys(listed[0]).sort(), ['account', 'characterCount', 'characters', 'createdAt']);
+    assert.deepEqual(Object.keys(listed[0]).sort(), ['account', 'characterCount', 'characters', 'createdAt', 'selectedSessionId']);
     assert.deepEqual(dumped.accounts[0], {
       account: 'p001flow',
       createdAt: stored.accounts[0].createdAt,
+      selectedSessionId: 1,
       characters: [],
       characterCount: 0,
     });
@@ -263,20 +281,23 @@ test('admin dump redacts secrets and shows account character summaries', () => {
     assert.equal('hash' in account, false);
     assert.equal('salt' in account, false);
     assert.equal(account.characterCount, 1);
-    assert.deepEqual(listed[0].characters, [{
-      characterId: 99,
-      name: 'Lee',
-      displayName: 'Lee Flow',
-      lastname: 'Lee',
+assert.deepEqual(listed[0].characters.map(publicCharacterSummary), [{
+characterId: 99,
+name: 'Lee',
+displayName: 'Lee Flow',
+lastname: 'Lee',
       firstname: 'Flow',
       faction: 'empire',
       power: 1,
       rank: 3,
       spot: 4,
       spotOwner: 1,
-      createdAt: saved.createdAt,
-    }]);
-    assert.deepEqual(account.characters, listed[0].characters);
+createdAt: saved.createdAt,
+}]);
+assert.deepEqual(account.characters, listed[0].characters);
+assert.equal(listed[0].characters[0].state, 2);
+assert.equal(listed[0].characters[0].stamina, 100);
+assert.equal(listed[0].characters[0].ageYears, 18);
     assert.equal(JSON.stringify(dumped).includes(storedText.match(/"hash": "([^"]+)"/)?.[1] ?? 'missing'), false);
     assert.equal(JSON.stringify(dumped).includes(storedText.match(/"salt": "([^"]+)"/)?.[1] ?? 'missing'), false);
     assert.equal('abilities' in account.characters[0], false);
@@ -334,38 +355,30 @@ test('registry imports legacy JSON profileSummaries as seed and admin dump expos
     }, null, 2)}\n`);
 
     const reloaded = createAccountRegistry({ persistPath: db, seedPath: seed });
-    assert.deepEqual(reloaded.getProfileCharacters('legacy-profile'), [{
-      characterId: 42,
-      name: 'Yang',
-      displayName: 'Yang Wen-li',
-      lastname: 'Yang',
-      firstname: 'Wen-li',
-      faction: 'alliance',
-      power: 2,
-      blood: 0,
-      sex: 0,
-      face: 0,
-      abilities: [0, 0, 0, 0, 0, 0, 0, 0],
-      rank: 4,
-      spot: 5,
-      spotOwner: 2,
-      createdAt,
-    }]);
-    assert.deepEqual(reloaded.getProfileCharacters('legacy-character'), [{
-      characterId: 43,
-      name: 'Mittermeyer',
-      displayName: 'Wolfgang Mittermeyer',
-      lastname: 'Mittermeyer',
-      firstname: 'Wolfgang',
-      faction: 'empire',
-      power: 1,
-      blood: 0,
-      sex: 0,
-      face: 0,
-      abilities: [0, 0, 0, 0, 0, 0, 0, 0],
-      rank: 5,
-      spot: 6,
-      spotOwner: 1,
+assert.deepEqual(reloaded.getProfileCharacters('legacy-profile').map(publicCharacterSummary), [{
+characterId: 42,
+name: 'Yang',
+displayName: 'Yang Wen-li',
+lastname: 'Yang',
+firstname: 'Wen-li',
+faction: 'alliance',
+power: 2,
+rank: 4,
+spot: 5,
+spotOwner: 2,
+createdAt,
+}]);
+assert.deepEqual(reloaded.getProfileCharacters('legacy-character').map(publicCharacterSummary), [{
+characterId: 43,
+name: 'Mittermeyer',
+displayName: 'Wolfgang Mittermeyer',
+lastname: 'Mittermeyer',
+firstname: 'Wolfgang',
+faction: 'empire',
+power: 1,
+rank: 5,
+spot: 6,
+spotOwner: 1,
       createdAt,
     }]);
 
@@ -390,9 +403,10 @@ test('registry imports legacy JSON profileSummaries as seed and admin dump expos
     const dumpedCharacter = dumped.accounts.find((record) => record.account === 'legacy-character');
     assert.equal('profileSummaries' in dumpedProfile, false);
     assert.equal('characterSummaries' in dumpedCharacter, false);
-    assert.deepEqual(dumpedProfile, {
-      account: 'legacy-profile',
-      createdAt,
+assert.deepEqual({ ...dumpedProfile, characters: dumpedProfile.characters.map(publicCharacterSummary) }, {
+account: 'legacy-profile',
+createdAt,
+selectedSessionId: 1,
       characters: [{
         characterId: 42,
         name: 'Yang',
@@ -406,11 +420,12 @@ test('registry imports legacy JSON profileSummaries as seed and admin dump expos
         spotOwner: 2,
         createdAt,
       }],
-      characterCount: 1,
-    });
-    assert.deepEqual(dumpedCharacter, {
-      account: 'legacy-character',
-      createdAt,
+characterCount: 1,
+});
+assert.deepEqual({ ...dumpedCharacter, characters: dumpedCharacter.characters.map(publicCharacterSummary) }, {
+account: 'legacy-character',
+createdAt,
+selectedSessionId: 1,
       characters: [{
         characterId: 43,
         name: 'Mittermeyer',
@@ -424,10 +439,10 @@ test('registry imports legacy JSON profileSummaries as seed and admin dump expos
         spotOwner: 1,
         createdAt,
       }],
-      characterCount: 1,
-    });
-    assert.deepEqual(listedProfile.characters, dumpedProfile.characters);
-    assert.deepEqual(listedCharacter.characters, dumpedCharacter.characters);
+characterCount: 1,
+});
+assert.deepEqual(listedProfile.characters.map(publicCharacterSummary), dumpedProfile.characters.map(publicCharacterSummary));
+assert.deepEqual(listedCharacter.characters.map(publicCharacterSummary), dumpedCharacter.characters.map(publicCharacterSummary));
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }

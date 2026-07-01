@@ -1,53 +1,93 @@
-# LOGH VII 라이브 테스트 단일 표준 (일원화) — 2026-06-26
+# LOGH VII Live Test Standard (2026-06-28)
 
-사용자: "테스트용 접속 루트가 여러 개… 접속 env도… 전부 일원화해. 너무 복잡하다."
-→ **유일한 라이브 테스트 경로**. 이외 변종/포트/세션/env는 전부 폐기(사용 금지).
+This is the single live-diagnostic standard for the real game client.
 
-## 유일 경로 = `tools/logh7_live_env.sh`
+## Authority
 
+- Canonical live client: installed playable `G7MTClient.exe`
+- Canonical SHA256: `e0b3fcf29adf799005ce28ede165a9344807e042a3197618852dbc733770c54c`
+- Live tool: `RE/tools/logh7_ui_explorer.py`
+- Canonical server root: `server/`
+- Run live commands from `RE/` and pass `--server-root ..\server`
+- Default display: windowed for login/start. Switch after login with `display --mode borderless` when needed.
+- Cursor clipping: leave `cursor-clip=auto`; it clips only in borderless/fullscreen and releases in windowed/stop.
+- `LOGH_PRESEED_PLAYER_CHAR` is off by default. Use it only for an explicit bypass diagnostic.
+
+## Do Not
+
+- Do not blanket-kill `node.exe`; this can kill MCP and harness processes.
+- Do not count Vite/React screens as game proof.
+- Do not claim a live result without `shot` or `trace` evidence.
+- Do not judge font blur from a stretched/lanczos windowed dgVoodoo config.
+
+## Standard Command Shape
+
+```bash
+cd RE
+python -m tools.logh7_ui_explorer --session .omo/ui-explorer/<id> stop
+python -m tools.logh7_ui_explorer --session .omo/ui-explorer/<id> start --server-root ../server --port 47900 \
+  --env LOGH_ACCEPT_ANY_GIN7=1 \
+  --env LOGH_LOBBY_OK_FORMAT=message32 --env LOGH_LOBBY_EARLY_OK=1 --env LOGH_SS_FORMAT=message32 \
+  --env LOGH_STRAT_GALAXY=1 --env LOGH_STRAT_GRID_EARLY=1 --env LOGH_STRAT_TERRAIN=1 \
+--env LOGH_WORLD_PLAYER=1 \
+--env LOGH_POSTLOAD_PLAYER_RECORD=1 --env LOGH_POSTLOAD_RICH_CHARACTER=1 --env LOGH_POSTLOAD_ACTION_LIST_SEATS=1 \
+--env LOGH_ACTION_LIST_CATEGORY=0 --env LOGH_COMMAND_TABLE_PRELOAD_PROBE=0 --env LOGH_DEV_COMMAND_GRANT_ALL=0 \
+ --env LOGH_PLANET_BASE_RECORDS=1 --env LOGH_FULL_UNIT_LOCATION=1 --env LOGH_GRID_ENTER=1 \
+--env LOGH_STATIC_SHIPS=1 --env LOGH_STATIC_SHIPS_LIMIT=1 --env LOGH_STATIC_TROOPS=0 --env LOGH_STATIC_FIGHTERS=0 \
+--env LOGH_STATIC_ARMS=0 --env LOGH_STATIC_POWER_DISTRIBUTION=0 --env LOGH_STATIC_MASTER_PLAYABLE_SEED=0
 ```
-bash tools/logh7_live_env.sh start    # 서버+클라 기동(클린)
-#   → 사람이 직접 로그인: ID/PW 아무거나(accept-any). 로비→새캐릭→세션→진영/초상화/이름→게임시작.
-bash tools/logh7_live_env.sh wait --code 0x0f02 --timeout 50
-bash tools/logh7_live_env.sh shot --label X
-bash tools/logh7_live_env.sh trace
-bash tools/logh7_live_env.sh stop     # 항상 — canonical SHA 복원검증
+
+Wait for the BOTHTEC/MPS splash to clear before clicking lobby or character UI.
+
+2026-06-29 live correction: keep `LOGH_COMMAND_TABLE_PRELOAD_PROBE=0` and `LOGH_DEV_COMMAND_GRANT_ALL=0` in the standard profile. A live session `devcmd-target-20260629` proved that nonzero generic `0x0305` sends seven P3 cards (`worldInfoWireCountLe0=7`) but leaves the native command table empty and stalls at NOW LOADING. Treat that path as an explicit diagnostic only; command exposure must be recovered through the native command-table/factory path, not the conn3 generic `0x0305/0x0307` walker.
+
+Keep `LOGH_STATIC_SHIPS=1` in standard profile: `bisect-ships-20260629` reached world view and emitted `0x0f02`, `0x0f03`, `0x0f06`, `0x0356`. Keep `LOGH_STATIC_TROOPS/FIGHTERS/ARMS/POWER_DISTRIBUTION/STATIC_MASTER_PLAYABLE_SEED=0` by default. `cmdpatch-smoke-20260629` showed `ships+troops` exits after `0x0f01`; the full P3 seed bundle `bisect2-bundle-20260629` and repeated `seed+ships` sessions do the same. `seed+ships` only survived with `LOGH_STATIC_SHIPS_LIMIT=1`, so troop/P3 seed tables remain diagnostic/dev-only until the ship-row interaction is root-caused. Use:
+
+```bash
+python -m tools.logh7_ui_explorer --session .omo/ui-explorer/<id> shot --label lobby-ready
+python -m tools.logh7_ui_explorer --session .omo/ui-explorer/<id> trace
+python -m tools.logh7_ui_explorer --session .omo/ui-explorer/<id> stop
 ```
 
-## 고정 표준 (절대 불변)
-| 항목 | 값 | 이유 |
-|---|---|---|
-| 포트 | **47900** | 클라 리다이렉트가 `COMMANDLINE_BOOTSTRAP_PORT=47900` 하드코딩. **다른 포트=클라가 빈 47900 보고 NO DATA**(최근 47901~47905 실패 근본) |
-| 세션 | `.omo/ui-explorer/live` | 단일. 누적 상태/혼선 제거 |
-| EXE | canonical playable **`992dc7e2`** (ui_explorer 기본) | manual login. autologin 변종 전부 폐기 |
-| 디스플레이 | windowed(로그인) → 게임이 자동 풀스크린 | 사용자 사양 |
-| 인증 | accept-any-GIN7 (dev-test 기본) | 자격 무관 통과. strict(signup) 필요 시만 별도 |
-| 로그인 | **사람이 직접**(`--no-login`) | 자동 클릭은 D3D8 포커스 의존이라 신뢰불가 |
-| 프로세스 정리 | `G7MTClient.exe`만 kill | node 절대 안 죽임(워크플로/하네스 보호) |
+`stop` must report `shaVerified:true`.
 
-## 폐기(사용 금지) — 혼선 원인이었음
-- 포트: 47901/47902/47903/47904/47905 (전부 클라 47900 미스매치).
-- 세션: live-real-login / live-state / live-state2/3/4 / live-manual (누적 상태).
-- EXE: autologin.emp1 / autologin-bootstrap-emp1 / autologin.all1/2 / c002-setup / m1-c002-v2/v3 등 변종 전부.
-- 산발 `--env ...` 수기 나열 → 표준 1세트(wrapper ENVS)로 고정.
+## Fast C002 Dev Playable Route
 
-## 근본 교훈
-최근 라이브 실패는 "포그라운드 락"이 아니라 **포트 47905≠클라 47900 미스매치**였음. 일원화(47900 고정)가 해결.
+Use the scripted route when the task is to keep the first playable command path alive, not to recover canon command data:
 
-## 서버/클라 분리 — 운영자 vs 유저 (2026-06-26)
-사용자: "유저가 서버를 켜진 않잖아." → 서버 기동과 클라 기동을 완전히 분리.
-모두 동일 단일 표준 `tools/logh7_launch_config.py`(포트 47900 / 표준 ENV / canonical playable EXE)를 읽으므로 test == 정식 플레이 경로 불변.
+```bash
+cd RE
+python -m tools.logh7_c002_playable_route --session ..\.omo\ui-explorer\c002-playable-route-20260630 --stop-existing --server-root ..\server
+```
 
-| 역할 | 실행 | 동작 |
-|---|---|---|
-| **운영자/호스트** | `start-server.bat` (→ `start_server.py`) | Node 인증 서버만(클라 없이) 47900 에 포그라운드 기동, 자기 콘솔 유지. `serve-auth --host 127.0.0.1 --port 47900 --trace .omo/ui-explorer/live/trace.jsonl` + 표준 ENV. 종료=Ctrl+C |
-| **유저(엔드유저)** | **`dist\play-logh7.exe`** (= 새 표준) 또는 `play-logh7.bat`/`play_logh7.py` | (1) 47900 소켓 접속 테스트 → 꺼져 있으면 "서버가 꺼져 있습니다. 운영자가 start-server.bat 실행 필요" 출력 후 비정상 종료. (2) 살아 있으면 canonical playable 클라만 실행(자동 47900 리다이렉트). **서버는 절대 켜지 않음** |
-| **테스트 하네스** | `tools/logh7_live_env.sh` / `ui_explorer` | 변경 없음 — 동일 config 사용 |
+The script drives: lobby start -> character select -> temporary resident command table injection (`category=0`, factories `0x002b,0x0041`) -> manager dispatch -> target grid click -> confirm -> historical trace checks for `0x0b01` and `0x0b07`. Omit `--stop-at-end` when you want to continue playing from the post-command map; add it for a clean proof run. This is dev-only and does not claim the injected factory ids are canonical authority-card data.
 
-유저 표준 = **`dist\play-logh7.exe`** (클라 전용, 47900 접속). 빌드: 저장소 루트에서 `python -m PyInstaller --onefile --name play-logh7 play_logh7.py` (tools 네임스페이스 패키지라 `--paths . --collect-submodules tools` 권장).
+By default the route also enables the local admin snapshot on an ephemeral port and writes `adminSnapshot` plus `playable-route-logs/admin-session-state.json`. Use that to confirm the server-side command ledger (`world.recentCommands`) after the EXE route, not just trace packet presence. Add `--no-admin-snapshot` only when you intentionally need the old no-admin behavior.
 
-## 삭제 후보(유저가 나중에 prune — 자동 삭제하지 않음)
-- `.omo/work/logh7-installed/exe/` 의 autologin EXE 변종: `G7MTClient.autologin.emp1.exe`, `*.autologin-bootstrap-emp1.exe`, `*.autologin.all1/all2.exe`, `*.c002-setup.exe`, `*.m1-c002-v2/v3.exe` 등 (위 "폐기" 목록의 변종 전부). canonical playable 하나만 표준.
-- 구 per-session 런처/세션 디렉터리: `live-real-login`, `live-state`, `live-state2/3/4`, `live-manual` 등.
-- 구 `play_logh7.py`의 "서버+클라 올인원" 동작 — 이제 클라 전용으로 대체됨(서버 기동 코드 제거). `start-server.bat`/`start_server.py`가 서버 역할 인계.
-- (선택) `keep_foreground.py` 등 autologin/포그라운드 우회 보조 스크립트 — 클라 전용 표준에선 불필요.
+The route also enables dev-only state fallback by default: it resolves `バーラト` from `server/content/galaxy.json` and passes `LOGH_DEV_GRID_MOVE_FALLBACK_CELL=2115`. This makes the current 33-byte live `0x0b01` coordinate/form payload mutate an actual authoritative fleet while raw payload RE continues. Add `--no-dev-grid-fallback` for raw-only diagnostics.
+
+## Evidence Codes
+
+- Login/lobby: `0x7000`, `0x0020`
+- Session list: `0x2005 -> 0x2006`
+- Session/character selection to world: `0x2009 -> 0x200a`, `0x0200`, `0x0204`
+- Character creation: `0x1008`
+- World entry/data: `0x0f02`, `0x0313/0x0315`, `0x0323`, `0x0325`, `0x0356`
+- Natural SelectGrid movement: `0x0b01` with response/broadcast evidence such as `0x0b07`
+- `0x0f08 -> 0x0f09` is info/status traffic, not SelectGrid movement proof.
+
+## Sharp Windowed QA Profile
+
+For font/UI blur checks, use the sharp dgVoodoo profile:
+
+- `FullScreenMode=false`
+- `ScalingMode=centered`
+- `Resampling=pointsampled`
+- `Filtering=appdriven`
+- `Antialiasing=off`
+- `RTTexturesForceScaleAndMSAA=false`
+- `SmoothedDepthSampling=false`
+
+## Current UI Note
+
+The canonical playable stack now ends with `lobby-res`, `lobby-native-layout-v2`, `charsel-recenter`, `charsel-content-inset`, `charsel-content-y-inset`, and `charsel-confirm-dialog-inset`. Main lobby notice content was already inside the right panel; the character/session/create content blocks and the final registration confirm dialog are now inside the native right panel in the default playable EXE.
