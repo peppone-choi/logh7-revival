@@ -91,6 +91,25 @@ Remastering and modding sit above the canonical preservation layer.
 - **Mod Layer B: localization/texture packs**: Korean strings, glossary packs, UI textures, remastered portraits/backgrounds.
 - **Mod Layer C: client patch packs**: guarded EXE patches with original signatures, target hash recording, rollback, and live QA.
 
+## Native System Extension Layer
+
+Native system additions are core project features, not mod packs. They extend revived server/client behavior while preserving original behavior as fallback. Example target: Free Planets Alliance Supreme Council chair election.
+
+Current feasibility basis:
+
+- Server authority path exists: `server/src/server/logh7-command-engine.mjs` is already structured as validate/apply state/emit Notify, so new systems can be added as authoritative server state machines when their outputs fit existing client-visible routes.
+- Command/proposal surface exists: `server/src/server/logh7-dev-command-cards.mjs` reads manual command groups and builds command cards; `server/src/server/logh7-dev-command-executor.mjs` classifies commands including political/announcement-style commands. This is enough to prototype native systems through existing command/report/notice surfaces before new client UI work.
+- Legacy client RE evidence exists for command families: `docs/logh7-character-creation-wire.md` records client command codes such as `0x1008 CommandGenerateCharacterCharge`, and `logh7-re` confirms dispatcher/size-table functions such as `FUN_004ba2b0` and `FUN_004b8b00`. New client-consumed system records must get the same level of proof before emission.
+- Client patch mechanics exist: `RE/tools/logh7_codepage_patch.py` verifies `originalHex`/same-length patch bytes, and patch descriptors under `RE/tools/client_patches/*.json` already support guarded UI/layout/routing patches. Larger native UI work still needs a deliberate appended-section or equivalent capacity strategy; the known safe `0xCC` cave is small and must not be overrun.
+
+Native system extension sequence:
+
+1. Define server-domain state, invariants, audit log, and rollback for the system.
+2. Map the user-visible surface to existing client/web routes first: notices, proposal/report text, board/admin, command outcomes, faction/session state.
+3. Use `logh7-re`/`logh7-wire` to prove any client packet, parser, display consumer, or command surface before emitting new bytes.
+4. If existing surfaces cannot express the system, create a native-client expansion task using `logh7-patch`: patch target discovery, capacity plan, descriptor generation, hash/signature verification, rollback, and live QA.
+5. Run `/cso` for voting, admin override, audit log, and client patch supply-chain surfaces.
+
 Pack manifests must include:
 
 - Pack id, version, author/source, license, target app/client/server version, and provenance.

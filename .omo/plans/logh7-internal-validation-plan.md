@@ -178,6 +178,28 @@ Documentation sync targets:
 
 **Verification:** web/API tests, authz tests, and real-client live QA for lobby/session notice route.
 
+## Slice 7b: Native System Extension Foundation
+
+**Purpose:** make new native gameplay/political systems possible without treating them as mods or speculative client behavior.
+
+**Scope:** server-domain system state machines, audit logs, admin/operator controls, existing client/web presentation routes, RE-backed client surface discovery, and native-client patch capacity planning for systems that need richer in-client UI. Example proving target: Free Planets Alliance Supreme Council chair election.
+
+**Acceptance:**
+
+- Native system additions are documented as core extension features separate from mod packs.
+- One example system has a server-domain design covering state, invariants, actions, audit log, security roles, rollback, and user-visible outputs.
+- Existing-surface path is identified first: web/community/admin, in-game lobby/session notices, proposal/report text, command outcomes, faction/session state.
+- Any client-consumed packet, parser, command, panel, or display route required for native UI has `logh7-re`/`logh7-wire` evidence before bytes are emitted.
+- Native-client expansion work has a patch feasibility checklist: target discovery, available patch capacity, descriptor generation, original signature, target hash, rollback, and real-client live QA.
+
+**Verification:**
+
+- CodeGraph + `rg` orientation identifies server command/notify and client patch surfaces.
+- `logh7-re` evidence names relevant dispatcher, size-table, command, parser, or display functions.
+- `logh7-patch` checklist rejects any patch plan without originalHex/signature and rollback.
+- `/cso` covers election/voting ledgers, admin override, audit log, identity linking, and client patch supply chain.
+- Documentation distinguishes native system extension from modding.
+
 ## Slice 8: Remastering Foundation
 
 **Purpose:** make remastering an optional, reversible layer without delaying the first playable loop.

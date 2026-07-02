@@ -126,6 +126,19 @@ Modding requirements:
 - Generative AI 3D model work belongs to remaster/mod prototype scope until proven in client/tooling. Use `pdf`/`smart-ocr` to extract setting-book text/images, then `meshy-3d-generation` or `game-3d-assets` for image/text-to-3D experiments. Store outputs as R3/generated placeholders unless manually validated and explicitly promoted.
 - The shared Google Drive setting-book folder is an input pointer only until files are downloaded or access is verified. If Drive redirects to login or permission wall, record the blocker and work from user-provided local PDFs/images instead.
 
+### Native System Extensions
+
+Native system additions are a core extension track, separate from modding and public mod packs. They add new server-authoritative gameplay or political systems to this revival while preserving original LOGH VII behavior as the fallback. They must not be described as original/canonical unless backed by P0/P1 evidence.
+
+Feasibility ruling as of 2026-07-03:
+
+- **Likely feasible:** systems whose state and outcomes can be represented by server data, command execution, notices, proposal/report text, board/community state, faction/session data, or existing client-consumed records.
+- **Feasible with RE proof:** systems that need reused or repurposed legacy-client command, panel, lobby notice, or report surfaces. Every involved command code, parser, display consumer, and record size must be pinned by `logh7-re`/`logh7-wire` before implementation.
+- **Native-client expansion foundation needed:** systems requiring new in-client windows, widgets, packet families, or control flow need a separate RE/patch foundation before feature work: candidate surface discovery, patch capacity/cave or appended-section strategy, original-signature descriptors, target hash recording, rollback, and real-client live QA.
+- **Not acceptable:** speculative packets, auto-responding to unknown frames, or treating diagnostic-only hooks as normal player/operator workflow.
+
+Example extension: Free Planets Alliance Supreme Council chair election. First implementation should define election term, eligibility, candidacy, voting window, vote ledger, tie/break rules, faction/government effects, audit log, and notice/report outputs as native server features. It can surface initially through web/community/admin plus in-game lobby/session notices and existing command/proposal/report routes. A richer in-client election panel belongs to the native-client expansion foundation, not to modding.
+
 ### Notices and Community
 
 - Launcher/web notices are pre-login/community information.
@@ -147,6 +160,7 @@ Every executable plan must have a separate Security section and must invoke gsta
 
 Minimum CSO scope:
 
+- Native system extensions, voting/election ledgers, government/faction effects, audit logs, and admin overrides.
 - Public signup/login password handling.
 - Legacy client login/session bridge.
 - Account-to-game-character identity linking for board/session surfaces.
