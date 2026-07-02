@@ -1,0 +1,40 @@
+# Actor Scheduling
+
+> Source: `src/content/docs/actors/schedule.mdx`
+> Canonical URL: https://rivet.dev/docs/actors/schedule
+> Description: Schedule actor actions in the future with persistent timers that survive restarts and upgrades.
+
+---
+Scheduling is used to trigger events in the future. The actor scheduler is like `setTimeout`, except the timeout will persist even if the actor restarts, upgrades, or crashes.
+
+For a pattern guide to durable recurring jobs, see the cookbook: [Cron Jobs and Scheduled Tasks](/cookbook/cron-jobs/).
+
+## Use Cases
+
+Scheduling is helpful for long-running timeouts like month-long billing periods or account trials.
+
+## Scheduling
+
+### `c.schedule.after(duration, actionName, ...args)`
+
+Schedules a function to be executed after a specified duration. This function persists across actor restarts, upgrades, or crashes.
+
+Parameters:
+
+- `duration` (number): The delay in milliseconds.
+- `actionName` (string): The name of the action to be executed.
+- `...args` (unknown[]): Additional arguments to pass to the function.
+
+### `c.schedule.at(timestamp, actionName, ...args)`
+
+Schedules a function to be executed at a specific timestamp. This function persists across actor restarts, upgrades, or crashes.
+
+Parameters:
+
+- `timestamp` (number): The exact time in milliseconds since the Unix epoch when the function should be executed.
+- `actionName` (string): The name of the action to be executed.
+- `...args` (unknown[]): Additional arguments to pass to the function.
+
+## Full Example
+
+_Source doc path: /docs/actors/schedule_

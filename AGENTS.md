@@ -2,7 +2,27 @@
 
 # logh7-revival
 
-> CURRENT AUTHORITY (2026-06-30): canonical live diagnostics use the installed playable game EXE SHA256 `e0b3fcf29adf799005ce28ede165a9344807e042a3197618852dbc733770c54c` (18px-ish readable-font build), driven from `RE/` by `RE/tools/logh7_ui_explorer.py --server-root ..\server`. Start/login in windowed mode by default; switch with `display --mode borderless` when needed, which auto-enables cursor clipping. Do not blanket-kill `node.exe`; use `ui_explorer stop` and verified game/session PIDs only. Keep `LOGH_PRESEED_PLAYER_CHAR` off unless explicitly running a bypass diagnostic. Server edits/tests belong under `server/`; client/launcher/localization outputs belong under `client/` or `RE/tools` as appropriate.
+## LOGH VII Current Startup Rule
+
+For LOGH VII planning or development, start from these three current documents only:
+
+1. `docs/logh7-requirements-current.md`
+2. `docs/logh7-architecture-operations-current.md`
+3. `.omo/plans/logh7-internal-validation-plan.md`
+
+Then use `docs/logh7-document-index-current.md` to decide which older docs are current references, evidence, superseded, or archive references. Do not treat old handoffs or status docs as current guidance unless the current docs point to them.
+
+At the end of every work unit, update documentation automatically: add new requirements/evidence, modify changed guidance, prune stale duplicate entries, and delete or retire invalid current-path guidance. Apply this to the three current docs, the document index, `AGENTS.md`, root `CLAUDE.md`, and `.claude/CLAUDE.md` when startup or workflow rules change.
+
+Normal runtime boundaries: operator starts the Docker Compose server path; player starts the launcher path. `ui_explorer`, direct `G7MTClient.exe`, direct Node commands, preseed flags, and trace tools are diagnostics only, not normal player/operator workflow.
+
+Use matching skills before ad hoc work. CodeGraph is mandatory first for code location, call-path, subsystem, and blast-radius questions when `.codegraph/` exists; confirm exhaustive answers with `rg` or direct reads. Use `find-skills` when a needed capability is missing. If a matching skill is not installed in the active environment, attempt installation at development start with `find-skills` or `npx skills add <owner/repo@skill> -y`; if install fails, record command/output and fallback path.
+
+Do not burn tokens repeating blocked routes. After three same-symptom failures or two no-new-evidence investigation paths, pivot or write a concise blocker report with evidence and the next different strategy.
+
+Keep server, web/community, tests, documentation, and Docker Compose service work developable on macOS. Original D3D8 client live QA remains Windows-only; macOS developers should use Docker Desktop or OrbStack for service work. Remastering and modding are first-class planning tracks: original assets stay canonical fallback; remaster/mod packs must be optional, reversible, manifest-driven, provenance-labeled, and conflict-checked.
+
+> CURRENT LIVE DIAGNOSTIC AUTHORITY (2026-07-02): canonical live diagnostics use the installed playable game EXE, but its SHA256 changes with nearly every build/patch pass. Do not trust a hardcoded hash in any doc as current fact. Before live QA, capture a fresh hash with `Get-FileHash .omo/work/logh7-installed/exe/G7MTClient.exe -Algorithm SHA256`; `ui_explorer stop` must self-verify `shaVerified:true` for the session. Run live diagnostics from `RE/` with `RE/tools/logh7_ui_explorer.py --server-root ..\server`. Start/login in windowed mode by default; switch with `display --mode borderless` when needed, which auto-enables cursor clipping. Do not blanket-kill `node.exe`; use `ui_explorer stop` and verified game/session PIDs only. Keep `LOGH_PRESEED_PLAYER_CHAR` off unless explicitly running bypass diagnostics. Server edits/tests belong under `server/`; client/launcher/localization outputs belong under `client/` or `RE/tools` as appropriate.
 
 > ★ 2026-06-26 재구조화: 루트 = **`server/`**(서버 레포) + **`client/`**(클라 레포) + **`docs/`** + **`RE/`**(dev/RE 워크스페이스: tools·.omo).
 > **작업 결과물은 캐논 레포 두 곳에 반영한다** — 서버/와이어/콘텐츠 → `server/src/server`(검증 `cd server && node --test tests/server/*.test.mjs`),
@@ -67,3 +87,16 @@ Revival project for the 1990s Japanese strategy game "Legend of the Galactic Her
 - Node.js built-in test runner (`node --test`) — server tests; Git LFS — required for `artifacts/logh7-cd/*` binaries
 
 <!-- MANUAL: Any manually added notes below this line are preserved on regeneration -->
+
+> LOGH7 remaster/modding helper skills installed: `image-upscaling`, `game-assets`, `game-3d-assets`, `game-engine`, `multiplayer-game`, `pdf`, `smart-ocr`, `meshy-3d-generation`. Use them only as sourcebook/remaster/prototype/pattern aids; LOGH7 evidence and LOGH7 skills remain authority.
+
+<!-- CODEGRAPH_START -->
+## CodeGraph
+
+In repositories indexed by CodeGraph (a `.codegraph/` directory exists at the repo root), reach for it BEFORE grep/find or reading files when you need to understand or locate code:
+
+- **MCP tool** (when available): `codegraph_explore` answers most code questions in one call — the relevant symbols' verbatim source plus the call paths between them, including dynamic-dispatch hops grep can't follow. Name a file or symbol in the query to read its current line-numbered source. If it's listed but deferred, load it by name via tool search.
+- **Shell** (always works): `codegraph explore "<symbol names or question>"` prints the same output.
+
+If there is no `.codegraph/` directory, skip CodeGraph entirely — indexing is the user's decision.
+<!-- CODEGRAPH_END -->
