@@ -1,102 +1,114 @@
-﻿<!-- Generated: 2026-06-10 | Updated: 2026-06-10 -->
+<!-- Generated: 2026-06-10 | Updated: 2026-07-03 -->
+
+G048 moved Unity scene-panel text out of C# hardcoding into `logh7-unity-scene-surface-panels.json`. Evidence: `.omo/ulw-loop/evidence/g048-scene-panel-manifest-player-battle-20260704.png` and `.omo/ulw-loop/evidence/g048-scene-panel-manifest-proof-20260704.log`. (Historical only — the `logh7-unity-streamingassets-export` module/tool this fileCount referred to was retired in G071 along with the deleted `client-unity/` dual-write target.)
 
 # logh7-revival
 
-## LOGH VII Current Startup Rule
+2026-07-04 G071 G070 삭제 후속 정리: `client-unity/` 삭제(G070) 직후 서버 회귀 12건 발견(생성기 모듈들이 `server/content/generated/*.json` 정본과 함께 `client-unity/Assets/StreamingAssets/logh7/...`로 dual-write하던 잔재). Unity 산출물만 검증하던 테스트 3종+전용 모듈 2종(`logh7-unity-streamingassets-export.mjs`/`logh7-unity-runtime-data.mjs`, 대응 `tools/*`·`package.json` 스크립트)을 완전 삭제, 나머지 8개 모듈에서 `client-unity/` 쓰기 경로만 제거하고 `server/content/generated/*.json` 단일 정본 출력 유지. `npm --prefix server test` 180/180 통과 회복. 동시에 P0-03 cp932 한글 채팅 패치 스크립트 `RE/tools/logh7_chat_cp932_korean_patch.py` 작성(VA `0x0076e3fc` 9바이트 `"Japanese\0"`→`"Korean\0"` 동일길이 in-place 치환; `FUN_004eac60`/`FUN_004eb100`/`FUN_00516bf0`의 `setlocale(LC_ALL,"Japanese")`→cp932 mbstowcs 경로가 cp949 한글 채팅을 깨뜨리는 문제의 근본 수정; 캐이브 삽입 불필요, 스크래치 사본 드라이런으로만 검증, 실제 설치 EXE 미적용).
 
-For LOGH VII planning or development, start from these three current documents only:
+2026-07-04 G070 Unity 클라이언트 완전 삭제(사용자 "완전 삭제" 결정): `client-unity/` 작업트리를 제거했다(보존 커밋 `dbf3b43` → 제거 커밋 `ca24dd3`, 9226 files deleted). 삭제 직전 상태(스테이징된 2026-07-03/04 메달 리마스터 아트 포함)는 `dbf3b43`에 전량 보존되어 있어 git 히스토리로 복구 가능하다. G069의 "RE 완료 후 Unity 재이식" 장기 목표는 유지되지만, 현재 작업트리에는 `client-unity/`가 존재하지 않는다 — 아래 "Repository Boundaries"의 `client-unity/` 항목과 이 문서/다른 현재 문서의 과거 Unity 진행(G0xx) 항목은 모두 과거 기록이며 재현하려면 먼저 git에서 복원해야 한다.
+
+2026-07-04 G069 방향 전환(사용자 명시적 재오픈): Unity 경로 잠정 중단, 레거시 클라이언트(`G7MTClient.exe`) 직접 수정을 현재 주 경로로 재개. RE 완료 후 Unity 재이식이 장기 목표. 아래 "Current Product Direction"/"Runtime And Diagnostics"는 이 전환 동안 대체됨: EXE 직접 패치가 진단 전용이 아니라 정규 개발 경로다. 재개 전 재점검: C002 마우스클릭→커맨드 미도달, cp932 한글 채팅 인코딩, 단일 패치 크래시 취약성.
+
+## Current Startup Rule
+
+For LOGH VII planning or development, start from these three documents only:
 
 1. `docs/logh7-requirements-current.md`
 2. `docs/logh7-architecture-operations-current.md`
 3. `.omo/plans/logh7-internal-validation-plan.md`
 
-Then use `docs/logh7-document-index-current.md` to decide which older docs are current references, evidence, superseded, or archive references. Do not treat old handoffs or status docs as current guidance unless the current docs point to them.
+Use `docs/logh7-document-index-current.md` to decide which older docs are current references, evidence, superseded, or archive references. Do not treat old handoffs, old status docs, deleted tools, or deleted tests as current guidance unless the current docs point to them.
 
-At the end of every work unit, update documentation automatically: add new requirements/evidence, modify changed guidance, prune stale duplicate entries, and delete or retire invalid current-path guidance. Apply this to the three current docs, the document index, `AGENTS.md`, root `CLAUDE.md`, and `.claude/CLAUDE.md` when startup or workflow rules change.
+Apply `.omo/rules/logh7-capability-harness.md` after the three entrypoint docs. Use matching LazyCodex/OMO, Superpowers, gstack, LOGH7, CodeGraph, LSP, Git Bash, ast-grep, and Compound Engineering capabilities when the work shape matches, but do not change runtime boundaries through tooling shortcuts.
 
-Normal runtime boundaries: operator starts the Docker Compose server path; player starts the launcher path. `ui_explorer`, direct `G7MTClient.exe`, direct Node commands, preseed flags, and trace tools are diagnostics only, not normal player/operator workflow.
+At the end of every work unit, update the three current docs, the document index, `AGENTS.md`, `CLAUDE.md`, `.claude/CLAUDE.md`, and `docs/logh7-developer-dashboard.html` when status, release phase, scope, evidence, blockers, progress, remaining tasks, startup rules, or workflow rules change.
 
-Use matching skills before ad hoc work. CodeGraph is mandatory first for code location, call-path, subsystem, and blast-radius questions when `.codegraph/` exists; confirm exhaustive answers with `rg` or direct reads. Use `find-skills` when a needed capability is missing. If a matching skill is not installed in the active environment, attempt installation at development start with `find-skills` or `npx skills add <owner/repo@skill> -y`; if install fails, record command/output and fallback path.
+## Current Product Direction
 
-Do not burn tokens repeating blocked routes. After three same-symptom failures or two no-new-evidence investigation paths, pivot or write a concise blocker report with evidence and the next different strategy.
+(2026-07-04 G069 supersedes this section — see the dated entry above.) The legacy LOGH VII client (`G7MTClient.exe`) is the current primary modification target again, by explicit user direction, after Unity pixel-parity demos were judged insufficiently faithful. Unity remains paused, not deleted, for a post-RE re-port.
 
-Keep server, web/community, tests, documentation, and Docker Compose service work developable on macOS. Original D3D8 client live QA remains Windows-only; macOS developers should use Docker Desktop or OrbStack for service work. Remastering and modding are first-class planning tracks: original assets stay canonical fallback; remaster/mod packs must be optional, reversible, manifest-driven, provenance-labeled, and conflict-checked.
+Primary work now:
 
-> CURRENT LIVE DIAGNOSTIC AUTHORITY (2026-07-02): canonical live diagnostics use the installed playable game EXE, but its SHA256 changes with nearly every build/patch pass. Do not trust a hardcoded hash in any doc as current fact. Before live QA, capture a fresh hash with `Get-FileHash .omo/work/logh7-installed/exe/G7MTClient.exe -Algorithm SHA256`; `ui_explorer stop` must self-verify `shaVerified:true` for the session. Run live diagnostics from `RE/` with `RE/tools/logh7_ui_explorer.py --server-root ..\server`. Start/login in windowed mode by default; switch with `display --mode borderless` when needed, which auto-enables cursor clipping. Do not blanket-kill `node.exe`; use `ui_explorer stop` and verified game/session PIDs only. Keep `LOGH_PRESEED_PLAYER_CHAR` off unless explicitly running bypass diagnostics. Server edits/tests belong under `server/`; client/launcher/localization outputs belong under `client/` or `RE/tools` as appropriate.
+- Mine canonical data from the original BIN/CUE, installed resources, manuals, extracted content, and RE evidence.
+- Build small, testable data/spec/game-logic modules under `server/`.
+- Keep a future Unity client path in `client-unity/`, consuming generated data/spec artifacts instead of patching the old client.
+- Preserve source data and provenance. Delete or retire pre-bootstrap implementation, patch builders, JSON patch descriptors, old client-modification outputs, and tests that only protect deleted code.
 
-> ★ 2026-06-26 재구조화: 루트 = **`server/`**(서버 레포) + **`client/`**(클라 레포) + **`docs/`** + **`RE/`**(dev/RE 워크스페이스: tools·.omo).
-> **작업 결과물은 캐논 레포 두 곳에 반영한다** — 서버/와이어/콘텐츠 → `server/src/server`(검증 `cd server && node --test tests/server/*.test.mjs`),
-> 클라/런처/한글화/에셋 → `client/`. **루트 src/tools/tests·RE/src는 이주 dup(캐논 아님, 편집 금지).** 아래 본문은 재구조화 이전 레이아웃 설명이라 경로는 server/·client/ 기준으로 읽을 것. 상세 `docs/logh7-repo-restructure-2026-06-26.md`.
+## Repository Boundaries
 
-## Purpose
-Revival project for the 1990s Japanese strategy game "Legend of the Galactic Heroes VII" / 은하영웅전설 VII (BOTHTEC; registry key `SOFTWARE\BOTHTEC\銀河英雄伝説VII\1.0`). Package name is `logh-7-rework` (v0.1.0, private ESM). Work spans three intertwined streams: (1) reverse-engineering the legacy Windows PE client (`G7MTClient.exe`, `G7Start.exe` launcher, `Gin7UpdateClient.exe`) and its TCP network protocol; (2) building a dependency-free Node.js replacement game/resource server (`src/server/logh7-server.mjs`, run via `npm run server:*`); (3) Python tooling under `tools/` for ISO/InstallShield extraction, cipher reconstruction, PE patch/log trampolines, and localization/packaging. The repo root is also a Vite + React 18 SPA (`index.html` -> `src/main.jsx`) but is currently only a demo sign-in/dashboard placeholder, not real game UI. The hard technical core (login handshake: cipher transport codes `0x0034`/`0x0035`/`0x0036` -> internal queued IDs `0x0405`/`0x0406`, multi-phase key exchange around a Blowfish-like 16-round Feistel "child codec", static tables de-obfuscated by XOR `0x91`) is recorded in `.debug-journal.md`. Per the journal, the cipher handshake is solved but no real client has yet been advanced into a playable session (criteria C001/C002 pending). Intended deployment (per `docs/logh7-server-setup.md`): Windows PC runs the legacy client/capture, Linux/macOS does protocol analysis and regression tests, AWS Docker hosts the real server.
+- `docs/`: current requirements, architecture/operations, evidence index, and generated dashboard.
+- `server/content/`: canonical and mined data inputs/outputs for the reimplementation.
+- `server/src/server/`: new bootstrap modules only. Do not restore the deleted legacy Node protocol server unless a current plan explicitly reopens that path.
+- `server/tests/server/`: tests for current bootstrap data/spec/game-logic modules only.
+- `server/tools/`: small bootstrap CLIs only, currently source-provenance verification, source-root inventory, MDX catalog extraction, Null_galaxy template extraction, and Face TCF archive catalog extraction.
+- `client-unity/`: deleted from the working tree 2026-07-04 (G070, full-deletion decision). History preserved in commits `dbf3b43` (preserve) and `ca24dd3` (remove); restore from git before any future Unity re-port work.
+- `RE/content/` and `.omo/ghidra/`: reverse-engineering evidence/data. Treat the old client as oracle input, not the product runtime.
+- `.omo/work/logh7-installed/data`, `.omo/work/logh7-installed/fonts`, `.omo/work/logh7-installed/doc`, and `tmp/manual_extract*`: preserved source-like extracted materials until they are migrated or proven duplicate.
 
-## Key Files
-| File | Description |
-|------|-------------|
-| `package.json` | ESM manifest (`logh-7-rework`). Scripts: `dev` (vite on 127.0.0.1), `build` (vite build), `server:logh7`/`server:gameplay`/`server:health` (node src/server/logh7-server.mjs serve\|serve-gameplay\|health), `test:tools`, `test:server`, `test` (all three + playwright). Deps: vite, @vitejs/plugin-react, react, react-dom; devDep @playwright/test. |
-| `playwright.config.js` | E2E config: testDir `./tests`, testMatch `**/*.spec.ts`, baseURL `http://127.0.0.1:4173`, chromium-only, webServer auto-runs `npm run dev -- --port 4173` (reuseExistingServer), trace on-first-retry. |
-| `index.html` | Vite HTML entry, title "LOGH Authentication", mounts `#root`, loads `/src/main.jsx`. |
-| `.debug-journal.md` | 554-line append-only reverse-engineering work journal — the project's real technical knowledge base (dated findings G005-G063: transport/internal code mappings, phase1/2/3 key-exchange layouts, child-codec addresses, key extraction, packet sequence, runtime manager dispatcher tracing). Git-ignored via `.git/info/exclude`; treat as source of truth for protocol/cipher detail. Append dated findings — never rewrite history. |
-| `.gitignore` | Ignores `node_modules/`, `dist/`, `.omo/`, `__pycache__/`, `.bkit/`, `.playwright/`, `playwright-report/`, `test-results/`, `*.log`. Does NOT list `.omc/` or `.ruff_cache/` (present as untracked tool state) — add them before committing if you want to avoid tool noise. |
-| `.gitattributes` | Git LFS rules for legacy CD artifacts: `artifacts/logh7-cd/*.bin`, `*.iso`, `*.cab`, `*.pdf` (filter/diff/merge=lfs, -text). Never inline-commit these binaries. |
+Do not restore `.agents`, `.claude/agents`, `.claude/commands`, `.claude/skills`, `.codex/skills`, old `RE/tools`, old `RE/src`, old `RE/tests`, old server protocol/runtime modules, launcher/client patch outputs, or pre-bootstrap tests just to recover old workflows.
 
-## Subdirectories
-| Directory | Purpose |
-|-----------|---------|
-| `artifacts/` | Binary-artifact root holding the Git LFS-managed canonical LOGH VII CD image (`logh7-cd/`: `Logh7.bin` MODE2/2352 dump, cue sheet, converted `Logh7_mode2_2048.iso`) — immutable, never-shipped reference inputs consumed by `tools/convert_mode2_bin_to_iso.py` and `tools/logh7_pipeline.py`. |
-| `docs/` | Korean-language coordination docs for the revival: environment role-split rules, Windows analysis toolchain, the CD-to-distributable localization pipeline, Codex handoff prompts, and the append-only G### reverse-engineering evidence ledger for `G7MTClient.exe`'s protocol and cipher handshake. |
-| `src/` | Application source root: the demo-only React 18 + Vite auth SPA (`main.jsx`/`styles.css`) and the dependency-free Node.js replacement protocol server under `server/` (Blowfish-variant child codec, BE transport framing, `0x0034`->`0x0035` login handshake, probe builders, policy-gated HTTP resource + TCP gameplay-capture servers behind a CLI). |
-| `tests/` | Playwright E2E suite for the SPA demo login (`auth.spec.ts`) plus a node:test protocol/server suite under `server/` for the reverse-engineered codec, handshake, bootstrap/world-init frames, HTTP+TCP servers and probe CLI, anchored to golden hex values from the real `G7MTClient.exe`. |
-| `tools/` | Python 3.11+/Node toolkit for reverse-engineering the client (image base `0x00400000`) and its TCP protocol: ISO/MsgDat asset extraction, the child-codec cipher and transport framing, capstone static disassembly recovering the handshake/dispatch/entity-pool state machine, ctypes/pywin32 live-client probing, and x86 detour/trampoline runtime-patch builders; orchestrated by `logh7_pipeline.py`, tested via `tools/tests/`. |
+## Runtime And Diagnostics
 
-### Excluded directories
-`node_modules/`, `dist/`, `test-results/`, `.bkit/`, `.omo/`, `.omc/`, `.ruff_cache/` are build output / assistant tool state — no AGENTS.md, do not document or edit as source. (`.omo/`, `.bkit/`, `dist/`, `test-results/`, `node_modules/` are git-ignored; `.omc/` and `.ruff_cache/` are present but not yet in `.gitignore`.)
+Normal runtime boundaries remain explicit:
 
-## For AI Agents
-### Working In This Directory
-- `src/main.jsx` is a demo auth placeholder (hardcoded `demo@example.com`/`password123`, session in localStorage key `logh.auth.email`) — it does NOT reflect game logic. The substantive code is the Node server (`src/server/`) and Python tools (`tools/`).
-- `.debug-journal.md` is git-ignored via `.git/info/exclude` and holds sensitive reverse-engineered binary addresses. Treat it as the protocol/cipher source of truth; append new dated findings, do not rewrite, and do not promote secret/runtime addresses elsewhere without care.
-- Legacy CD binaries under `artifacts/logh7-cd/` (`*.bin`/`*.iso`/`*.cab`/`*.pdf`) are Git LFS pointers — install git-lfs before touching them; never inline-commit large binaries.
+- Operators use the Docker Compose/server path when a runnable service exists.
+- Players use the launcher/client path only for legacy-client diagnostics.
+- `ui_explorer`, direct `G7MTClient.exe`, direct Node commands, preseed flags, trace tools, and old patch outputs are diagnostic-only and are not the normal product runtime.
 
-### Testing Requirements
-- Full suite: `npm test` — chains `npm run test:tools` (`node tools/run_python_tests.mjs`, drives Python `tools/tests/`) then `npm run test:server` (`node --test tests/server/*.test.mjs`) then `playwright test` (chromium, auto-starts dev server on port 4173).
-- Subsets: `npm run test:tools`, `npm run test:server`, or `npx playwright test`. Python tests require Python 3.11+ (run from repo root).
+(2026-07-04 G069: EXE changes are now the current primary modification path, per explicit user reopening — see dated entry above.) Do not use Python builders, JSON patch descriptors, or generated client-copy stacks as the normal modification path unless a current plan reintroduces them. Require original signatures, target hash, changed bytes, rollback notes, and live QA for any EXE patch.
 
-### Common Patterns
-- npm scripts: `npm run dev` (Vite on 127.0.0.1), `npm run build` (-> `dist/`), `npm run server:logh7`/`server:gameplay`/`server:health` (node src/server/logh7-server.mjs serve\|serve-gameplay\|health). Example: `npm run server:logh7 -- --host 127.0.0.1 --port 4787 --manifest <manifest.json> --resource-root <dir>`.
-- Dependency-free / minimal-dependency stance: the Node server and tooling avoid runtime deps; root deps are only Vite+React (frontend) and Playwright (test).
-- Server CLI is subcommand-driven (`serve`/`serve-gameplay`/`health`) and binds `127.0.0.1` by default — never external interfaces.
-- Evidence-first, no-fabrication policy: server responses (e.g. the encrypted `0x0035` login frame) are emitted only when explicitly configured (`server.gameplay.loginResponse`); the server returns 404 rather than ship speculative protocol bytes.
-- Protocol invariants to preserve when editing server/tooling: transport codes `0x0034`/`0x0035`/`0x0036` map to internal `0x0405`/`0x0406`, gated by a cipher-enabled flag; the child block cipher is Blowfish-like (8-byte blocks, 16 rounds, static tables XOR `0x91`). Changing these breaks the handshake reproduction.
-- Binary VAs vs file offsets are tracked explicitly (e.g. VA `0x006140c0` -> file offset `0x002140c0`); patch targets are guarded by 16-byte original signatures to fail closed on PE drift.
+## Current Commands
 
-## Dependencies
-### Internal
-- `index.html` -> `/src/main.jsx`; `src/main.jsx` -> `src/styles.css`
-- `package.json` scripts -> `src/server/logh7-server.mjs`, `tools/run_python_tests.mjs`, `tests/server/*.test.mjs`
-- `playwright.config.js` -> `tests/**/*.spec.ts` and `npm run dev`
-- `docs/logh7-server-setup.md` documents server runtime expectations consumed by `src/server/logh7-server.mjs`
+From repo root:
 
-### External
-- `vite ^5.4.19` — dev server and build for the React SPA root
-- `@vitejs/plugin-react ^4.5.2` — React fast-refresh / JSX transform for Vite
-- `react ^18.3.1` + `react-dom ^18.3.1` — SPA UI (createRoot) for the demo auth front-end
-- `@playwright/test ^1.52.0` — chromium e2e tests under `tests/**/*.spec.ts` (devDependency)
-- Python 3.11+ (external, not in package.json) — required by `tools/` scripts and `tools/run_python_tests.mjs`; ruff used for linting (`.ruff_cache/`)
-- Node.js built-in test runner (`node --test`) — server tests; Git LFS — required for `artifacts/logh7-cd/*` binaries
+```bash
+npm --prefix server test
+npm --prefix server run inventory:sources
+npm --prefix server run catalog:mdx
+npm --prefix server run catalog:null-galaxy
+npm --prefix server run catalog:tcf
+npm --prefix server run catalog:tcf-portraits
+npm --prefix server run export:tcf-portraits -- --limit-per-archive 2
+npm --prefix server run verify:source
+```
 
-<!-- MANUAL: Any manually added notes below this line are preserved on regeneration -->
+`verify:source` expects local originals at `artifacts/logh7-cd/Logh7.bin` and `artifacts/logh7-cd/Logh7.cue`. If they are absent, `artifact-root-missing` is the expected failure.
 
-> LOGH7 remaster/modding helper skills installed: `image-upscaling`, `game-assets`, `game-3d-assets`, `game-engine`, `multiplayer-game`, `pdf`, `smart-ocr`, `meshy-3d-generation`. Use them only as sourcebook/remaster/prototype/pattern aids; LOGH7 evidence and LOGH7 skills remain authority.
+`inventory:sources` reads `server/content/original-data/logh7-source-roots.json`. Missing `archive-org-original-media` is expected until BIN/CUE download; preserved installed data should remain present and counted.
 
-<!-- CODEGRAPH_START -->
+## Tooling Rules
+
+- Use CodeGraph first for code location, call-path, subsystem, and blast-radius questions when `.codegraph/` exists. Confirm details with direct reads only when CodeGraph is stale or incomplete.
+- Prefer Git Bash MCP for shell commands on Windows.
+- Use LSP diagnostics when available, but report unavailable or crashing servers honestly.
+- Do not burn tokens repeating blocked routes. After three same-symptom failures or two no-new-evidence investigation paths, pivot or write a concise blocker report with evidence and the next different strategy.
+- Keep server, docs, tests, and Docker Compose service work developable on macOS. Original D3D8 live QA remains Windows-only.
+
+## Installed Helper Skills
+
+LOGH7 remaster/modding helper skills installed: `image-upscaling`, `game-assets`, `game-3d-assets`, `game-engine`, `multiplayer-game`, `pdf`, `smart-ocr`, `meshy-3d-generation`. Use them only as sourcebook/remaster/prototype/pattern aids; LOGH7 evidence and current LOGH7 skills remain authority.
+
 ## CodeGraph
 
-In repositories indexed by CodeGraph (a `.codegraph/` directory exists at the repo root), reach for it BEFORE grep/find or reading files when you need to understand or locate code:
+In repositories indexed by CodeGraph, reach for it before grep/find or reading files when you need to understand or locate code:
 
-- **MCP tool** (when available): `codegraph_explore` answers most code questions in one call — the relevant symbols' verbatim source plus the call paths between them, including dynamic-dispatch hops grep can't follow. Name a file or symbol in the query to read its current line-numbered source. If it's listed but deferred, load it by name via tool search.
-- **Shell** (always works): `codegraph explore "<symbol names or question>"` prints the same output.
+- MCP tool: `codegraph_explore` for most code questions and edit planning.
+- Shell fallback: `codegraph explore "<symbol names or question>"`.
 
-If there is no `.codegraph/` directory, skip CodeGraph entirely — indexing is the user's decision.
-<!-- CODEGRAPH_END -->
+If there is no `.codegraph/` directory, skip CodeGraph entirely. Indexing is the user's decision.
+
+`catalog:mdx` regenerates `server/content/generated/logh7-mdx-catalog.json` from preserved installed MDX files. Treat node names and header counts as P0 extracted-asset evidence; do not infer galaxy star positions from MDX.
+
+`catalog:null-galaxy` regenerates `server/content/generated/logh7-null-galaxy-template.json`. Treat spectral classes as P0 extracted-asset evidence and positions as explicitly absent from MDX.
+
+`catalog:tcf` regenerates `server/content/generated/logh7-face-tcf-catalog.json`. `catalog:tcf-portraits` regenerates `server/content/generated/logh7-face-portrait-catalog.json` with decoded 8-bit indexed portrait payload evidence; failures remain categorized rather than inferred. `export:tcf-portraits` writes controlled BMP evidence samples under `.omo/ulw-loop/evidence/tcf-portrait-bmp-sample/`.
+## Latest Unity Visual Build Evidence
+
+As of 2026-07-04, the current Unity prototype player builds at `client-unity/Builds/Windows/LOGH7RevivalUnity.exe`. Visual evidence is `.omo/ulw-loop/evidence/codex-unity-player-window-screenshot-final-20260704.png`; editor capture evidence is `.omo/ulw-loop/evidence/codex-unity-validation-scene-screenshot-20260704.png`. This proves a visible prototype shell only, not full gameplay parity.
+
+G045 extended the visible shell with real player clickthrough proof: `.omo/ulw-loop/evidence/g045-player-clickthrough-strategic-map-20260704.png` advances to Strategic Map, while `.omo/ulw-loop/evidence/g045-player-edge-strategic-blocked-20260704.png` stays at Boot when Strategic Map is clicked without prerequisites.
+
+G046 extended the visible shell with `logh7-ui-scene-catalog.json` consumption and gated scene surface switching. Evidence: `.omo/ulw-loop/evidence/g046-player-scene-tactics-switch-20260704.png` selects `tactics` after Strategic Map prerequisites, while `.omo/ulw-loop/evidence/g046-player-scene-tactics-blocked-20260704.png` stays on `launcher` from Boot.
+
+Unity scene-panel slice extended the same visible shell with distinct selected-surface panels for all 10 catalog surfaces. Evidence: `.omo/ulw-loop/evidence/g047-scene-panel-surfaces-compact-20260704/contact-sheet.png`; representative battle panel: `.omo/ulw-loop/evidence/g047-scene-panel-surfaces-compact-20260704/09-battle.png`.

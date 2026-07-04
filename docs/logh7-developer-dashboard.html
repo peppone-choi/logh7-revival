@@ -1,0 +1,376 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LOGH VII Developer Dashboard</title>
+  <style>
+    :root {
+      --bg: #f7f7f4;
+      --ink: #1f2933;
+      --muted: #59636e;
+      --line: #d8ddd6;
+      --surface: #ffffff;
+      --green: #27745f;
+      --amber: #9a6a16;
+      --blue: #265d85;
+      --red: #9f3f35;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: "Segoe UI", Arial, sans-serif;
+      line-height: 1.55;
+    }
+
+    header,
+    main {
+      width: min(1120px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    header { padding: 36px 0 20px; }
+    h1, h2, h3, p { margin: 0; }
+    h1 { font-size: 32px; letter-spacing: 0; }
+    h2 { font-size: 18px; margin-bottom: 10px; }
+    h3 { font-size: 15px; margin-bottom: 6px; }
+
+    .meta {
+      color: var(--muted);
+      margin-top: 8px;
+      font-size: 14px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 14px;
+      margin: 16px 0;
+    }
+
+    .panel {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 16px;
+    }
+
+    .status {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-right: 6px;
+    }
+
+    .green { color: var(--green); background: #e7f2ed; }
+    .amber { color: var(--amber); background: #fff4d8; }
+    .blue { color: var(--blue); background: #e8f1f7; }
+    .red { color: var(--red); background: #fae8e6; }
+
+    ul {
+      padding-left: 18px;
+      margin: 8px 0 0;
+    }
+
+    li { margin: 4px 0; }
+    code { font-family: "Cascadia Mono", Consolas, monospace; font-size: 0.95em; }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      overflow: hidden;
+      margin: 16px 0 32px;
+    }
+
+    th,
+    td {
+      border-bottom: 1px solid var(--line);
+      padding: 10px 12px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th { background: #eef1ee; }
+    tr:last-child td { border-bottom: 0; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>LOGH VII Developer Dashboard</h1>
+    <p class="meta">Updated: 2026-07-04 KST. Derived from current docs; not a startup authority document.</p>
+  </header>
+
+  <main>
+    <section class="grid" aria-label="Current status">
+      <article class="panel">
+        <h2>2026-07-04 G069: Direction Reversal</h2>
+        <p><span class="status amber">reopened</span>Legacy client (<code>G7MTClient.exe</code>) direct patching is the current primary path again, by explicit user direction, after Unity pixel-parity demos (G066-G068) were judged not close enough to the real game. Unity is paused (not deleted) for a post-RE re-port. Re-check known blockers before resuming: C002 mouse-click-to-command dispatch, cp932 Korean chat encoding, single-patch crash fragility.</p>
+      </article>
+
+      <article class="panel">
+        <h2>Current Objective</h2>
+        <p><span class="status blue">cd-first</span>Rebuild from verified original CD extraction, hidden-data search, data mining, and evidence-backed gameplay logic.</p>
+        <ul>
+          <li>(2026-07-04 G069) Legacy client modification is now the current primary path, not oracle-only — see banner above.</li>
+          <li>Unity import/runtime now consumes generated bootstrap/runtime manifests under <code>client-unity/</code>; CD/manual/RE evidence still gates canonical promotion.</li>
+          <li><code>server/src/server/logh7-operation-state.mjs</code> starts state-changing gameplay logic from manual operation gates.</li>
+ <li>Old Python/JSON patch builders, old server runtime, dangling tests, tool downloads, and caches are outside the current path.</li>
+          <li>Legacy evidence docs are isolated under <code>docs/reference/legacy-evidence/</code>.</li>
+        </ul>
+      </article>
+
+      <article class="panel">
+        <h2>Preserved Inputs</h2>
+        <p><span class="status green">kept</span>Original and extracted source material remain evidence inputs.</p>
+        <ul>
+          <li><code>server/content/</code></li>
+          <li><code>RE/content/</code></li>
+          <li><code>.omo/ghidra/</code></li>
+          <li><code>.omo/work/logh7-installed/{data,fonts,doc}/</code></li>
+          <li><code>.omo/work/logh7-installed/data/model/Ship/GE</code> 제국 함선 Imperial MDX source root, 117 files.</li>
+          <li><code>client-unity/Assets/ArtSource/reference/imperial-crest/</code> 제국 문장 Imperial double-eagle crest masks; use these for Empire crest/medal/UI art.</li>
+          <li><code>.omo/work/logh7-installed/data/image/Field/ShipMark.tga</code> original ship/faction mark sheet.</li>
+          <li><code>tmp/manual_extract/</code>, <code>tmp/manual_alt_render/</code></li>
+          <li><code>docs/reference/</code></li>
+        </ul>
+      </article>
+
+      <article class="panel">
+        <h2>Generated Surfaces</h2>
+        <ul>
+          <li><code>server/content/generated/logh7-mdx-catalog.json</code></li>
+          <li><code>server/content/generated/logh7-null-galaxy-template.json</code></li>
+          <li><code>server/content/generated/logh7-logistics-allocation-catalog.json</code></li>
+          <li><code>server/content/generated/logh7-operation-catalog.json</code></li>
+          <li><code>server/content/generated/logh7-rank-promotion-catalog.json</code></li>
+          <li><code>server/content/generated/logh7-ship-stat-catalog.json</code></li>
+          <li><code>server/content/generated/logh7-empire-ship-reference-manifest.json</code></li>
+          <li><code>server/content/generated/logh7-imperial-crest-mask-manifest.json</code></li>
+          <li><code>client-unity/Assets/StreamingAssets/logh7/logh7-unity-streamingassets-export.json</code></li>
+          <li><code>server/content/generated/logh7-strategy-command-catalog.json</code></li>
+          <li><code>server/content/generated/logh7-face-tcf-catalog.json</code></li>
+          <li><code>server/content/generated/logh7-face-portrait-catalog.json</code></li>
+          <li><code>server/content/generated/logh7-cd-media-manifest.json</code></li>
+          <li><code>server/content/generated/logh7-hidden-data-candidates.json</code></li>
+          <li><code>server/content/generated/logh7-hidden-data-classification.json</code></li>
+          <li><code>server/content/generated/logh7-hidden-data-watchlist.json</code></li>
+        </ul>
+      </article>
+    </section>
+
+    <section class="grid" aria-label="Verification status">
+      <article class="panel">
+        <h2>Verification Status</h2>
+        <p><span class="status green">passing</span>Current server data/spec surface.</p>
+        <ul>
+          <li><code>node --check server/src/server/*.mjs server/tools/*.mjs server/tests/server/*.test.mjs</code>: passing</li>
+          <li><code>node --test server/tests/server/logh7-operation-state.test.mjs</code>: passing, 3 operation state reducer cases</li>
+          <li><code>npm --prefix server test</code>: passing, 152 server data/spec tests</li>
+          <li>G034 remaster provenance: Empire ship source hashes and Imperial crest output assets locked; manifest SHA256 <code>7af15a68b842742ea7c70c2a8e0fa11146067becc5bfae67ed1a1ca8254cd21d</code>.</li>
+ <li>G044 Unity manifest consumption: <code>Logh7GalaxyPrototypeRuntime.cs</code> reads <code>logh7-unity-streamingassets-export.json</code> and test-locks five required manifest links.</li>
+<li>G039 Archive media: <code>Logh7.bin</code>/<code>Logh7.cue</code> hash-verified; CD media manifest SHA256 <code>44d5100b8b75df457e085c86982d41f503c45d2a7118ae3ae500ed6971bcc6a3</code>.</li>
+<li>G040 CD extraction: ISO root <code>25</code> files and InstallShield root <code>2207</code> files present; canonical promotion remains blocked pending cross-check.</li>
+<li>G041 hidden-data: <code>37047</code> candidates classified, <code>10253</code> validated, <code>26794</code> invalid; mandatory watch categories remain candidate-only.</li>
+          <li>G042 server data families: <code>15</code> families listed with source manifests; all remain <code>suspect-cross-check-required</code>.</li>
+          <li>G043 galaxy trust: current galaxy/system/star/planet data remains <code>blocked-until-cross-source-confirmed</code>; <code>systemPositions</code> reports immediately and no new hidden system-position table is confirmed.</li>
+          <li>G068 (2026-07-04): 로비 원본 재현 1파 — EXE 기본 spot 배경 bg005(P0)+施設内ロビー 패널(P1)+실서버 <code>/api/lobby</code> 슬롯, E2E 캡처, <code>195/195</code>.</li>
+          <li>G067 (2026-07-04): 원본 로그인 화면→실서버 로그인 E2E(실플레이어 UI 조작, 실토큰, Lobby 게이트 전진, <code>194/194</code>). 오라클 반증: 설치본 클라는 부트 로고 스플래시 미표시 → 로고 슬라이스 보류.</li>
+          <li>G066 (2026-07-04): 원본 로그인 화면 픽셀 패러티 — Unity 로그인 게이트가 원본 <code>title.tga</code> 디코드 배경(<code>export:original-ui-images</code>) 위 원본 좌표 위젯으로 렌더. 실플레이어 캡처 <code>g066-player-legacy-login-20260704.png</code>, 서버 <code>193/193</code>. 이후 씬도 원본-화면-재현 방식으로 전환 예정.</li>
+          <li>G065 (2026-07-04): Unity command-window client (world-session-gated catalog load, category filter, unresolved CP honest); EditMode <code>25/25</code>.</li>
+          <li>G064 (2026-07-04): token-gated command-catalog endpoint (81 commands, unresolved variable CP kept honest); server <code>182/182</code>.</li>
+          <li>G063 (2026-07-04): strategic-map scene wired to the server-approved world session context (validation-mode fallback kept); EditMode <code>23/23</code>.</li>
+          <li>G062 (2026-07-04): character persistence (atomic JSON file, fail-closed on corruption); server <code>180/180</code>.</li>
+          <li>G060/G061 (2026-07-04): world-entry contract + FULL-CHAIN LIVE E2E <code>3/3</code> — Unity&harr;server boot&rarr;login&rarr;create&rarr;select&rarr;world&rarr;strategic-map over real HTTP. Server <code>177/177</code>, EditMode <code>21/21</code>. Session skeleton of the internal playable loop proven.</li>
+          <li>G059 (2026-07-04): Unity character client (create/refresh/select with flow gating); EditMode <code>18/18</code>. Session chain boot&rarr;login&rarr;lobby&rarr;character-select fully contract-locked on both sides.</li>
+          <li>G058 (2026-07-04): server-authoritative character creation — manual-p8 faction exclusivity, 548 real G-group faces validated from the portrait export manifest, duplicate-name guard. Server <code>175/175</code>, live smoke passed.</li>
+          <li>G057 (2026-07-04): lobby contract — token-gated <code>/api/lobby</code> character slots + Unity lobby client with flow gating. Server <code>166/166</code>, EditMode <code>15/15</code>. Next: character create/select.</li>
+          <li>G056 (2026-07-04): FIRST LIVE Unity&harr;server round trip — PlayMode E2E <code>2/2</code> against live <code>serve:session</code> (real login token, 401 on wrong password). Boot+login chain proven end to end.</li>
+          <li>G055 (2026-07-04): Unity login client consumes the session-server contract with session-flow gating; EditMode <code>12/12</code>. Boot→login scene chain now has server+client logic locked.</li>
+          <li>G054 (2026-07-04): session-server runtime reboot — <code>serve:session</code> HTTP/JSON (<code>/api/boot</code>, <code>/api/login</code>) with scrypt auth, takeover sessions, no anonymous mode; tests <code>164/164</code>, live smoke verified. Next: Unity login client.</li>
+          <li>G053 (2026-07-04): Unity boot-scene logic (export integrity check + session-flow grant + fail-closed) test-locked; EditMode <code>9/9</code>. Scene port order in progress: boot done, login next.</li>
+          <li>G052 (2026-07-04): manual P2 gaps mined (strategy screen layout, system menu/chat, tactical input bindings, tactical chat routing); manual completeness ledger now <code>all-gaps-mined</code> — 매뉴얼 완독 requirement closed. Server tests <code>157/157</code>.</li>
+          <li>G051 (2026-07-04): manual P1 gaps mined into 4 new catalogs (session offline rules, strategy UI panels, tactical input selection, flagship energy allocation); first rule consumer gates warp-out retreat on WARP-max. Server tests <code>157/157</code>. P2 gap mining in flight.</li>
+          <li>G048-G050 (2026-07-04): manual read-to-completion ledger (101/101 pages; P1 mining gaps p8/p20/p22/p24), Unity session-flow gate machine (EditMode <code>7/7</code>), and original-asset import wave 1 (<code>1061</code> portraits + <code>79</code> ship thumbnails into <code>ArtSource/original</code> with hash manifests). Server tests <code>154/154</code>.</li>
+          <li>G047 (2026-07-04): manual star-chart axis quantitatively corroborates <code>galaxy.json</code> — fresh independent p101 extraction, 80 labels, 76 dots, 68 exact matches, 0 faction mismatches, 2 anomalies flagged, 5 chart-absent systems need CD/RE/live evidence; promotion stays blocked. New command: <code>crosscheck:galaxy-manual</code>; server tests <code>154/154</code>.</li>
+          <li>G045 (2026-07-04): Unity Licensing IPC repaired (stale elevated <code>Unity.Licensing.Client</code> killed via UAC-approved taskkill). Unity batchmode opens clean, EditMode manifest-loader tests pass <code>4/4</code>, and the validation scene screenshot <code>g015-unity-validation-scene-screenshot-20260704.png</code> shows the suspect banner, source ledgers, and 85-system suspect galaxy. Diagnostic-only shortcuts remain not accepted as runtime QA.</li>
+          <li>G036 scope fidelity: 12 requirement axes audited, focused guard tests <code>20/20</code>, full server regression <code>152/152</code>.</li>
+          <li>ULW final loop state: <code>complete=44</code>, <code>pending=0</code>, <code>blocked=0</code>; the former Unity Licensing IPC blocker is repaired (G045) and all Unity product-surface goals are closed with Editor evidence.</li>
+          <li><code>npm --prefix server run verify:source</code>: Archive BIN/CUE present and hash-matched under <code>artifacts/logh7-cd/</code>.</li>
+ <li><code>npm --prefix server run extract:cd-media</code>: Archive BIN/CUE verified, ISO sha1 <code>fbd7e3a685802116519ae0d23006c97d383b7737</code>, ISO root 25 files, InstallShield root 2207 files</li>
+          <li><code>npm --prefix server run scan:hidden-data</code>: 4 sources scanned, 37047 P0 signature candidates classified, no canonical promotion</li>
+          <li><code>npm --prefix server run report:hidden-data-watchlist</code>: reports mandatory 성계 위치 and 오리지널 캐릭터 로스터 categories; both are candidates/current derived data, not new hidden canonical promotion</li>
+          <li><code>npm --prefix server run catalog:mdx</code>: 406 MDX files, 8 categories, 79 <code>Null_galaxy</code> star template node names</li>
+          <li><code>npm --prefix server run catalog:null-galaxy</code>: 79 star templates, spectral classes A7/B5/F8/G19/K17/M21/O2, positions not in MDX</li>
+          <li><code>npm --prefix server run catalog:logistics-allocation</code>: 3 roles, 4 unit types, allowed 6 / blocked 4 / uncertain 2</li>
+          <li><code>npm --prefix server run catalog:operations</code>: 3 purposes, 4 plan fields, 30-day duration, CP range 10-1280 unresolved</li>
+          <li><code>npm --prefix server run catalog:ranks-promotion</code>: 13 ranks, empire-only 1, auto-promotion tiers 7, numeric caps 6 / unlimited ranks 7 / unavailable faction cells 1</li>
+          <li><code>npm --prefix server run catalog:ship-stats</code>: 63 ships, empire 52/alliance 11, missing pools preserved</li>
+          <li><code>npm --prefix server run catalog:strategy-commands</code>: 81 commands, 7 categories, 3 variable CP rows, 1 ranged execution row</li>
+        </ul>
+      </article>
+
+      <article class="panel">
+        <h2>Gameplay Rules</h2>
+        <ul>
+          <li><code>logh7-logistics-allocation-rules.mjs</code>: manual role/unit authority rules; OCR-null cells stay uncertain</li>
+          <li><code>logh7-operation-rules.mjs</code>: manual draft-gate rules; CP formula and outcome simulation stay unresolved</li>
+          <li><code>logh7-rank-promotion-rules.mjs</code>: explicit rank headcount-cap rules; promotion formulas and fame costs unresolved</li>
+          <li><code>logh7-ship-stat-rules.mjs</code>: explicit pool-readiness rules; combat formulas not inferred</li>
+          <li><code>logh7-strategy-command-rules.mjs</code>: fixed CP payment/timing rules; variable CP remains unresolved</li>
+          <li><code>logh7-strategic-grid-rules.mjs</code>: passable-mask manual entry gates</li>
+        </ul>
+      </article>
+    </section>
+
+    <section aria-label="Remaining work">
+      <h2>Remaining Work</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Area</th>
+            <th>Status</th>
+            <th>Next Evidence</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Archive.org original media</td>
+ <td><span class="status green">verified</span></td>
+ <td><code>extract:cd-media</code> now verifies local BIN/CUE and emits CD media manifest; next evidence is source inventory cross-check manifest.</td>
+          </tr>
+          <tr>
+ <td>Hidden-data watchlist</td>
+ <td><span class="status green">reported</span></td>
+ <td><code>report:hidden-data-watchlist</code> reports 성계 위치 and 오리지널 캐릭터 로스터 watch categories; next evidence parses candidate files before canonical promotion.</td>
+ </tr>
+ <tr>
+ <td>Manual/spec slices</td>
+            <td><span class="status blue">next</span></td>
+            <td>Continue converting manual tables such as session rules and org posts into catalogs and explicit rules.</td>
+          </tr>
+          <tr>
+            <td>Unity import path</td>
+            <td><span class="status green">session bootstrap exported</span></td>
+            <td><code>client-unity/</code> now has 15 generated scene placeholders and runtime manifest gates: boot/login/lobby/character/world before StrategicMap.</td>
+          </tr>
+          <tr>
+ <td>Medal and emblem remaster</td>
+ <td><span class="status amber">art QA</span></td>
+ <td><code>logh7-alliance-foundation-medal-redraw-manifest.json</code> packages Alliance 793..795 concept candidates; <code>logh7-imperial-medal-source-lock-manifest.json</code> locks Imperial medals exact visible crest plus original Empire ship data: 121 Empire records, 120 <code>Ship/GE</code> files, 117 MDX, 3 MDS, 39 render hulls. Current proof samples are <code>779-expeditionary-campaign-source-locked-crest-ship-v2.png</code> and <code>767-grand-double-eagle-order-source-locked-crest-v2.png</code>; thumbnail reliefs remain proof-only and full 26 Empire medals remain open.</td>
+ </tr>
+ <tr>
+ <td>Legacy live client</td>
+            <td><span class="status amber">diagnostic only</span></td>
+            <td>Use only as targeted oracle evidence when current data/spec ambiguity requires it.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+    <section>
+      <h2>Latest Evidence</h2>
+      <ul>
+<li><code>logh7-unity-asset-source-truth.json</code>: G012 blocks manual Unity asset drag-and-drop as source truth; <code>manualDragAsSourceTruthAllowed=false</code>, source truth input count <code>9</code>, Unity runtime consumer count <code>5</code>, violation count <code>0</code>. Server and StreamingAssets copies are generated. Imperial medal/remaster inputs now include the Empire ship reference manifest, Imperial double-eagle crest mask manifest, and Imperial medal source-lock manifest; final large ship motifs must come from original <code>Ship/GE</code> MDX render/extract data, not thumbnail upscales.</li>
+<li><code>logh7-test-decision-guard.json</code>: G013 fixes test policy for data work; Node CD extraction, hidden-data scan/classification/watchlist, current-content cross-check, and Unity source-pack behavior changes require RED then GREEN evidence. Unity C# loader/scene work remains <code>tests-after-first-loader-scene-surface</code> until the first manifest-consuming runtime surface exists. Diagnostic shortcuts remain runtime-disallowed.</li>
+<li><code>logh7-ulw-evidence-20260703-inventory.json</code>: G014 inventories the 2026-07-03 ULW evidence bundle; <code>fileCount=52</code>, <code>excludedSelfAuditFileCount=2</code>, <code>totalBytes=60234049</code>. Category counts: CD extraction 9, hidden data 7, record candidates 10, scenes 3, server tests 6, Unity 5, TCF portraits 3, source/archive 3, other 6. Current-content cross-check includes the generated catalog.</li>
+<li><code>logh7-unity-source-pack-manifest.json</code>: G015 adds required original fallback asset families for Imperial ship and crest production. Unity StreamingAssets now records <code>imperialShipMdx</code> from <code>.omo/work/logh7-installed/data/model/Ship/GE</code> with <code>fileCount=117</code>, original <code>ShipMark.tga</code>, exact double-eagle reference JPG, and gold/silver/white crest masks; <code>verifiedRecords=0</code> and canonical promotion remains blocked.</li>
+<li><code>Logh7ValidationSceneCapture.CaptureEvidence</code>: G015 Unity validation scene now has source-ledger TextMesh/runtime display for <code>source-pack</code>, <code>asset-source-truth</code>, <code>Ship/GE=117</code>, and blocked canonical promotion. Focused tests pass <code>7/7</code> and full server tests pass <code>139/139</code>. Manual screenshot capture succeeded on 2026-07-04 after the G045 licensing repair; PNG evidence exists and full server tests pass <code>152/152</code>.</li>
+<li><code>g016-pipeline-run-20260704.log</code>: G016 reran CD media extraction, hidden-data scan/classification/watchlist, server-data family, and current-content crosscheck. Hidden candidates remain <code>37047</code>, server-facing families <code>15</code>, generated catalogs <code>38</code>. Immediate-report watches found no newly confirmed <code>systemPositions</code> / 성계 위치 and no newly confirmed <code>originalCharacterRoster</code> / 오리지널 캐릭터 로스터.</li>
+<li><code>g017-manifest-consistency-20260704.log</code>: G017 refreshed source inventory and Unity import manifests. Source roots <code>8</code>; source-truth inputs <code>9</code>, runtime consumers <code>5</code>, violations <code>0</code>; source-pack required families include <code>imperialShipMdx</code>, <code>fieldShipMarkSheet</code>, <code>imperialDoubleEagleReference</code>, and <code>imperialDoubleEagleMasks</code>. Server and StreamingAssets JSON match.</li>
+        <li><code>logh7-mdx-render-source-manifest.json</code>: Imperial medal ship art now starts from original <code>data/model/Ship/GE/EH001.mdx</code>, SHA256 <code>31bc4de737d411c9c78192f63709207d5a9a58d44177bb8df78fd0a993acfbb2</code>, with 23 MDX node names recovered.</li>
+        <li>Imperial crest source remains locked <code>client-unity/Assets/ArtSource/reference/logh7-imperial-double-eagle-reference.jpg</code> gold mask <code>client-unity/Assets/ArtSource/reference/imperial-crest/logh7-imperial-double-eagle-mask-gold.png</code>; corrected v2 proof art keeps the double-eagle crest visibly legible and forbids generated ship silhouettes/generated crests.</li>
+        <li><code>EH001</code> Hi/Mid/Lo textures and <code>meca_tile2</code> textures are present; authoring <code>EH001x.lwo</code> and <code>EH001_bump.tga</code> are absent in the installed data, so final medal rendering must wait for MDX geometry extraction or renderer validation.</li>
+        <li><code>logh7-formula-provenance-guard.json</code>: G011 blocks unresolved CP/combat/economy/AI formulas from canonical promotion; domains <code>commandPoint</code>, <code>combat</code>, <code>economy</code>, <code>ai</code>, unresolved formula count <code>9</code>, canonical promotion blocked until manual/RE/live/wire cross-check.</li>
+<li><code>logh7-server-servable-data-family.json</code>: G004/G011 now scopes 15 server-facing families including <code>formulas</code>, keeps every family <code>suspect-cross-check-required</code>, preserves immediate-report watches <code>systemPositions</code> / <code>성계 위치</code> and <code>originalCharacterRoster</code> / <code>오리지널 캐릭터 로스터</code>.</li>
+        <li><code>logh7-current-content-crosscheck.json</code>: G005 inventories current <code>server/content</code>, <code>RE/content</code>, installed-game, evidence-channel roots, and 38 generated catalogs before canonical promotion; all present records stay <code>suspect-cross-check-required</code>, and Ghidra/manual/live/wire evidence roots are currently recorded as missing.</li>
+        <li><code>logh7-unity-source-pack-manifest.json</code>: G006 writes the Unity source-pack contract into server generated content and StreamingAssets; original fallback is required, <code>remaster-hd</code> is reversible and disabled by default, and <code>verifiedRecords</code> remains 0 until cross-source confirmation exists.</li>
+<li><code>logh7-remaster-provenance-manifest.json</code>: G007 keeps <code>remaster-hd</code> disabled by default, reversible, manifest-driven, conflict-check-required, provenance-label-required, and original-fallback-required across server generated content Unity StreamingAssets, including <code>imperial-crest-mask</code> and original Empire ship-derived <code>empire-ship-reference</code>.</li>
+<li><code>logh7-galaxy-trust-crosscheck.json</code>: G008 blocks existing galaxy positions, star colors, planet lists, passable cells, and generated catalogs from canonical promotion; <code>systemPositions</code> remains report-immediately and has no newly confirmed positions.</li>
+<li><code>logh7-runtime-boundary-manifest.json</code>: G009 keeps normal runtime to Docker Compose server plus Unity player/launcher; <code>G7MTClient.exe</code>, Frida, <code>ui_explorer</code>, preseed flags, and patch builders stay oracle-only diagnostics.</li>
+<li><code>logh7-asset-overwrite-guard.json</code>: G010 protects original/installed/CD/original-data roots as read-only fallback, allows remaster/reference/concept output roots, and currently reports <code>violationCount=0</code>.</li>
+      </ul>
+    </section>
+<section>
+<h2>G018 Asset Boundary</h2>
+<p><code>logh7-ui-scene-remaster-gameplay-boundary.json</code> now links UI scene inventory, remaster pack schema, runtime/gameplay boundary, and original asset contracts. Empire ship contract exposes <code>Ship/GE</code> raw <code>117</code> MDX + <code>3</code> MDS, <code>Thumbnail/Ship</code> <code>79</code> TGA, and <code>logh7-empire-ship-reference-manifest</code> <code>6</code> entries. Imperial crest contract exposes exact double-eagle mask variants <code>gold</code>, <code>silver</code>, <code>white</code>. Server and Unity StreamingAssets copies share SHA256 <code>9dab8750b051c205d4e0a84af388115d23baa52b675f31fbbdd62fd98cc90c66</code>.</p>
+</section>
+<section>
+<h2>G019 Unity Loader Boundary</h2>
+<p><code>Logh7GalaxyPrototypeRuntime</code> now reads the G018 boundary manifest and displays <code>ui-boundary</code>, <code>Ship/GE=117</code>, <code>thumbnails=79</code>, and <code>crest variants=3</code>. <code>Logh7PrototypeSceneGenerator</code> adds the same line to the validation scene source ledger. Focused source tests pass <code>6/6</code>; full server tests pass <code>142/142</code>. Unity screenshot capture remains blocked by the existing Licensing IPC issue.</p>
+</section>
+<section>
+<h2>G020 CD Extract Recheck</h2>
+<p><code>extract:cd-media</code> revalidated Archive media and extraction roots: media <code>verified</code>, ISO <code>converted</code>, ISO root <code>25</code> files, InstallShield root <code>2207</code> files, canonical promotion <code>blocked-pending-crosscheck</code>. Focused tests pass <code>3/3</code>; full server tests pass <code>142/142</code>.</p>
+</section>
+<section>
+<h2>G021 Server Data Scope</h2>
+<p><code>catalog:server-data-family</code> revalidated <code>15</code> rebuilt-server data families, all still <code>suspect-cross-check-required</code>. Immediate-report watches remain <code>systemPositions</code> and <code>originalCharacterRoster</code>. Current-content promotion remains <code>blocked-until-cross-source-confirmed</code>; focused tests pass <code>2/2</code>; full server tests pass <code>142/142</code>.</p>
+</section>
+<section>
+<h2>G022 Hidden Data Scanner</h2>
+<p><code>scan:hidden-data</code>, <code>classify:hidden-data</code>, and <code>report:hidden-data-watchlist</code> revalidated <code>37047</code> candidates: <code>10253</code> validated, <code>26794</code> invalid. Watch categories report <code>systemPositions</code> <code>209</code>/<code>44</code> paths and <code>originalCharacterRoster</code> <code>403</code>/<code>8</code> paths, with no canonical promotion. Focused tests pass <code>10/10</code>; full server tests pass <code>142/142</code>.</p>
+</section>
+<section>
+<h2>G023 Source Inventory</h2>
+<p><code>inventory:sources</code> now reports <code>10</code> source roots, including CD extraction roots <code>cd-extract-iso-filesystem</code> with <code>25</code> files and <code>cd-extract-installshield-payload</code> with <code>2207</code> files. Current-content and Unity source manifests remain <code>blocked-until-cross-source-confirmed</code>. Focused tests pass <code>3/3</code>; full server tests pass <code>142/142</code>.</p>
+</section>
+<section>
+<h2>G024 Unity Source Pack</h2>
+<p><code>logh7-unity-source-pack-manifest.json</code> now records CD media and source-root registry inputs in both server generated content and Unity StreamingAssets. Original fallback asset families require <code>imperialShipMdx</code> from <code>.omo/work/logh7-installed/data/model/Ship/GE</code> with <code>117</code> files, <code>fieldShipMarkSheet</code>, <code>imperialDoubleEagleReference</code>, and <code>imperialDoubleEagleMasks</code>. Canonical promotion remains <code>blocked-until-cross-source-confirmed</code>; focused tests pass <code>3/3</code>; full server tests pass <code>142/142</code>.</p>
+</section>
+<section>
+<h2>G025 UI Scene Catalog</h2>
+<p><code>logh7-ui-scene-catalog.json</code> maps launcher, login, lobby, character, world, strategic, select-grid, info, tactics, and battle surfaces to evidence-backed scene IDs for Unity consumption. Server and Unity StreamingAssets JSON are byte-equal; <code>surfaceCount=10</code>, <code>missingSceneCount=0</code>, <code>liveTraceSurfaceCount=6</code>, and canonical promotion remains <code>blocked-until-cross-source-confirmed</code>. Focused tests pass <code>3/3</code>; full server tests pass <code>145/145</code>.</p>
+</section>
+<section>
+<h2>G026 StreamingAssets Export</h2>
+<p><code>logh7-unity-streamingassets-export.json</code> deterministically indexes Unity StreamingAssets with sorted relative paths, bytes, and SHA256 while excluding itself. Original fallback assets from the source-pack manifest are hash-addressed, including <code>imperialShipMdx</code> as a directory-tree hash. Current G031 export copies are byte-equal with SHA256 <code>04fb0f60fd003d5b3bd90231a4449ec30f97295539fb57a9b145a2f28e7ec8dd</code>; <code>fileCount=14</code>, <code>originalFallbackAssetCount=4</code>, and <code>logh7-gameplay-contract-boundary.json</code> is included while the export manifest excludes itself. Focused export tests pass <code>6/6</code>; full server tests pass <code>151/151</code>.</p>
+</section>
+<section>
+<h2>G027 Unity Open Blocker</h2>
+<p><code>client-unity</code> is a Unity <code>6000.5.2f1</code> project and the editor exists at <code>E:/unity/hub/6000.5.2f1/Editor/Unity.exe</code>. Resolved 2026-07-04 (G045): the stale elevated <code>Unity.Licensing.Client</code> was terminated with an elevated taskkill and batch open now succeeds with exit 0 and zero compile errors after removing incompatible <code>collab-proxy</code>/<code>timeline</code>/<code>textmeshpro</code> packages.</p>
+</section>
+<section>
+<h2>G028 EditMode Blocker</h2>
+<p>Resolved 2026-07-04 (G045): EditMode manifest-loader tests exist at <code>client-unity/Assets/Tests/EditMode/</code> and pass <code>4/4</code> in batchmode.</p>
+</section>
+<section>
+<h2>G030 Remaster Provenance Lock</h2>
+<p><code>logh7-remaster-provenance-manifest.json</code> now records original Empire ship source hashes for <code>empire-ship-reference</code> instead of treating the ship artifact as missing provenance. Current proof has <code>shipSourceHashCount=6</code>; first source <code>.omo/work/logh7-installed/data/image/Thumbnail/Ship/iu008.tga</code> SHA256 <code>d92982521bf4109fd770f436c366254949a555d046332d4fd23cd00ca3144106</code>.</p>
+<p>Imperial crest remains locked to <code>client-unity/Assets/ArtSource/reference/logh7-imperial-double-eagle-reference.jpg</code> SHA256 <code>822276b190c3e83729de39c14e4e9fc06c2eb8b39a56225bdcbe16f147134e9e</code>. Server and Unity manifests are byte-equal; focused tests pass <code>2/2</code>, full server tests pass <code>148/148</code>, LSP diagnostics clean.</p>
+</section>
+<section>
+<h2>G031 Gameplay Contract Boundary</h2>
+<p><code>logh7-gameplay-contract-boundary.json</code> now separates implemented evidence-backed gameplay rules from locked unresolved formulas for server and Unity StreamingAssets consumers. Current output has <code>implementedEvidenceBackedRuleCount=1</code> with <code>strategy-command-cost-table</code>, <code>unresolvedFormulaLockCount=9</code>, and <code>unresolvedFormulaPromotionAllowed=false</code>.</p>
+<p><code>logh7-unity-streamingassets-export.json</code> was refreshed to <code>fileCount=14</code>, includes <code>logh7-gameplay-contract-boundary.json</code>, excludes its own export manifest, and server/Unity copies are byte-equal. Focused G031 tests pass <code>3/3</code>; focused export regression passes <code>6/6</code>; full server tests pass <code>151/151</code>.</p>
+</section>
+<section>
+<h2>G033 Plan Compliance Audit</h2>
+<p><code>g033-plan-compliance-audit-20260704.log</code> passed with no failed checks. It confirms G030-G032 are complete with passing criteria, remaster/gameplay/StreamingAssets manifests remain blocked from canonical promotion, Empire ship and Imperial crest source locks are present, unresolved gameplay formulas are locked, diagnostic-only paths are not normal runtime, and the Unity Licensing IPC blocker remains visible.</p>
+<p><code>g033-plan-compliance-boundary-20260704.log</code> verifies missing evidence detection with a synthetic missing path. No new <code>systemPositions</code> or <code>originalCharacterRoster</code> values were confirmed.</p>
+</section>
+</main>
+  <section class="card">
+    <h2>Unity Visual Build Evidence - 2026-07-04</h2>
+    <p><strong>Build:</strong> <code>client-unity/Builds/Windows/LOGH7RevivalUnity.exe</code></p>
+    <p><strong>Player screenshot:</strong> <code>.omo/ulw-loop/evidence/codex-unity-player-window-screenshot-final-20260704.png</code></p>
+    <p><strong>Editor capture:</strong> <code>.omo/ulw-loop/evidence/codex-unity-validation-scene-screenshot-20260704.png</code></p>
+    <p><strong>G045 clickthrough:</strong> <code>.omo/ulw-loop/evidence/g045-player-clickthrough-strategic-map-20260704.png</code></p>
+    <p><strong>G045 edge gate:</strong> <code>.omo/ulw-loop/evidence/g045-player-edge-strategic-blocked-20260704.png</code></p>
+    <p><strong>G046 scene switch:</strong> <code>.omo/ulw-loop/evidence/g046-player-scene-tactics-switch-20260704.png</code></p>
+    <p><strong>G046 scene gate:</strong> <code>.omo/ulw-loop/evidence/g046-player-scene-tactics-blocked-20260704.png</code></p>
+ <p><strong>Unity scene panels:</strong> <code>.omo/ulw-loop/evidence/g047-scene-panel-surfaces-compact-20260704/contact-sheet.png</code></p>
+ <p><strong>G048 panel manifest:</strong> <code>.omo/ulw-loop/evidence/g048-scene-panel-manifest-player-battle-20260704.png</code></p>
+    <p><strong>Status:</strong> visible prototype shell only: session controls, suspect galaxy preview, runtime evidence, and no canonical promotion of system positions or original character roster.</p>
+  </section>
+</body>
+</html>

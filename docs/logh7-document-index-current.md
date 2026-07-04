@@ -1,125 +1,252 @@
-# LOGH VII Document Index
+# LOGH VII Current Document Index
 
-Updated: 2026-07-02
+2026-07-04 G070 Unity 클라이언트 완전 삭제: `client-unity/` 작업트리 제거(보존 `dbf3b43` → 제거 `ca24dd3`). 아래 `client-unity/README.md` 등 Unity 경로를 가리키는 인덱스 항목은 더 이상 작업트리에 존재하지 않으며, 참조하려면 git 히스토리에서 복원해야 한다.
 
-This index prevents old handoffs and evidence docs from becoming accidental current guidance.
+2026-07-04 G069 방향 전환: 레거시 클라이언트(`G7MTClient.exe`) 직접 수정이 잠정 주 경로로 재오픈됨(Unity 픽셀-패러티 시연 후 사용자 명시적 지시). Unity(`client-unity/`)는 RE 완료 후 재이식 목표로 보류. 상세는 `docs/logh7-requirements-current.md`/`docs/logh7-architecture-operations-current.md`/`.omo/plans/logh7-internal-validation-plan.md`의 동일 날짜 항목과 메모리 `logh7-legacy-client-reopen-2026-07-04` 참조.
 
-## Startup Rule
+2026-07-04 G048 Unity scene-panel manifest evidence: current Unity player visual reference includes `.omo/ulw-loop/evidence/g048-scene-panel-manifest-player-battle-20260704.png`, manifest proof `.omo/ulw-loop/evidence/g048-scene-panel-manifest-proof-20260704.log`, and build log `g048-scene-panel-manifest-unity-build-20260704.log`.
 
-New Claude, Codex, OMO, and gstack sessions must start by reading only:
+Updated: 2026-07-04
+
+2026-07-04 Unity scene-panel evidence: current Unity player visual reference includes `.omo/ulw-loop/evidence/g047-scene-panel-surfaces-compact-20260704/contact-sheet.png`, representative `.omo/ulw-loop/evidence/g047-scene-panel-surfaces-compact-20260704/09-battle.png`, and `g047-scene-panel-compact-unity-windows-build-20260704.log`.
+
+2026-07-04 G043 galaxy trust references: `server/content/generated/logh7-current-content-crosscheck.json`, `server/content/generated/logh7-galaxy-trust-crosscheck.json`, `server/content/generated/logh7-hidden-data-watchlist.json`, `server/content/generated/logh7-unity-streamingassets-export.json`, `.omo/ulw-loop/evidence/g043-galaxy-current-data-proof-20260704.log`, `.omo/ulw-loop/evidence/g043-focused-galaxy-current-data-tests-20260704.log`, `.omo/ulw-loop/evidence/g043-server-tests-after-export-refresh-20260704.log`.
+
+2026-07-04 G035/G036 gate references: `.omo/ulw-loop/evidence/g035-unity-batchmode-20260704.log`, `.omo/ulw-loop/evidence/g035-unity-batchmode-summary-20260704.log`, `.omo/ulw-loop/evidence/g035-ulw-checkpoint-blocked-20260704.log`, `.omo/ulw-loop/evidence/g036-scope-fidelity-audit-20260704.log`, `.omo/ulw-loop/evidence/g036-focused-scope-fidelity-tests-20260704.log`, `.omo/ulw-loop/evidence/g036-server-tests-20260704.log`.
+
+2026-07-04 ULW final status references: `.omo/ulw-loop/evidence/g038-status-final-20260704.json`, `.omo/ulw-loop/evidence/g037-g038-git-policy-evidence-20260704.log`; final loop state is `complete=39`, `pending=0`, `blocked=5` pending Unity Licensing IPC repair.
+
+2026-07-04 asset clarification references: 제국 함선 원천은 `.omo/work/logh7-installed/data/model/Ship/GE/`, `server/content/extracted/model-ship.json`, `server/content/generated/logh7-empire-ship-reference-manifest.json`, `server/content/generated/logh7-imperial-medal-source-lock-manifest.json`; 제국 문장 원천은 (2026-07-04 G070 이후 과거 기록 — client-unity/ 삭제로 재현 불가, git 히스토리 dbf3b43에서 복원 필요) `client-unity/Assets/ArtSource/reference/logh7-imperial-double-eagle-reference.jpg`, `client-unity/Assets/ArtSource/reference/imperial-crest/`; `server/content/generated/logh7-imperial-crest-mask-manifest.json`은 여전히 현재 참조다.
+
+2026-07-04 G034 remaster provenance references: `server/src/server/logh7-remaster-provenance-manifest.mjs`, `server/tests/server/logh7-remaster-provenance-manifest.test.mjs`, `server/content/generated/logh7-remaster-provenance-manifest.json` remain current; (2026-07-04 G070 이후 과거 기록 — client-unity/ 삭제로 재현 불가, git 히스토리 dbf3b43에서 복원 필요, 또한 G071 이후 생성 코드가 이 client-unity 미러 경로에 더 이상 dual-write하지 않음) `client-unity/Assets/StreamingAssets/logh7/logh7-remaster-provenance-manifest.json`; `server/content/generated/logh7-unity-streamingassets-export.json`, and `.omo/ulw-loop/evidence/g034-*-20260704.log` are current evidence for the Empire ship original-data lock and Imperial double-eagle crest output-assets lock. Use `logh7-empire-ship-reference-manifest.json` and `logh7-imperial-crest-mask-manifest.json` as source manifests; do not replace them with generated placeholders.
+
+2026-07-04 G044 Unity manifest-consumption references: (2026-07-04 G070 이후 과거 기록 — client-unity/ 삭제로 재현 불가, git 히스토리 dbf3b43에서 복원 필요) `client-unity/Assets/Scripts/Logh7GalaxyPrototypeRuntime.cs`, `server/tests/server/logh7-unity-client-surface.test.mjs`, `client-unity/Assets/StreamingAssets/logh7/logh7-unity-streamingassets-export.json`, and `.omo/ulw-loop/evidence/g044-*-20260704.log` are current evidence that the Unity runtime surface reads the StreamingAssets export and required manifests instead of drifting into detached mock data.
+
+2026-07-04 G039 archive media references: `artifacts/logh7-cd/Logh7.bin`, `artifacts/logh7-cd/Logh7.cue`, `server/content/generated/logh7-cd-media-manifest.json`, `server/tests/server/logh7-cd-media.test.mjs`, and `.omo/ulw-loop/evidence/g039-*-20260704.log` are current evidence for original Archive BIN/CUE presence, hash verification, MODE2 conversion, ISO root inventory, and InstallShield payload root inventory. Treat them as source authority evidence; family-specific catalogs still need cross-check promotion.
+
+2026-07-04 G040 CD extraction references: `.omo/work/logh7-cd-extract/iso-root`, `.omo/work/logh7-cd-extract/installshield-root`, `server/content/generated/logh7-cd-media-manifest.json`, `server/tests/server/logh7-cd-media.test.mjs`, and `.omo/ulw-loop/evidence/g040-*-20260704.log` are current evidence for extracted CD filesystem and InstallShield payload availability. Use these roots for source mining only; do not promote extracted values to canonical without family-specific cross-check evidence.
+
+2026-07-04 G041 hidden-data references: `server/content/generated/logh7-hidden-data-candidates.json`, `server/content/generated/logh7-hidden-data-classification.json`, `server/content/generated/logh7-hidden-data-watchlist.json`, `server/tests/server/logh7-hidden-data-*.test.mjs`, and `.omo/ulw-loop/evidence/g041-*-20260704.log` are current evidence for hidden-data candidate preservation. The watchlist categories `systemPositions` and `originalCharacterRoster` are mandatory report categories but not newly confirmed canonical values.
+
+2026-07-04 G042 server-data-family references: `server/content/generated/logh7-server-servable-data-family.json`, `server/src/server/logh7-server-servable-data-family.mjs`, `server/tests/server/logh7-server-servable-data-family.test.mjs`, and `.omo/ulw-loop/evidence/g042-*-20260704.log` are current evidence for the server data-surface scope ledger. Use it to find source candidates and confidence status for every server-servable family; do not treat any family as canonical while its status is `suspect-cross-check-required`.
+
+2026-07-03 Unity scene references: `server/content/generated/logh7-scene-inventory.json` remains current; (2026-07-04 G070 이후 과거 기록 — client-unity/ 삭제로 재현 불가, git 히스토리 dbf3b43에서 복원 필요) `client-unity/Assets/Scenes/*.unity`, `client-unity/Assets/Scenes/*.unity.txt`, and `.omo/ulw-loop/evidence/*scene*20260703.log` are current evidence for the first visible Unity production surface.
+
+2026-07-03 record-candidate references: `server/content/generated/logh7-record-candidate-scan.json`, `server/content/generated/logh7-record-candidate-crosscheck.json`, and `.omo/ulw-loop/evidence/record-candidate-*-20260703.log` are current status/evidence for byte/text record-surface candidate scanning. Use them to avoid re-reporting path-only hidden-data candidates as new data.
+
+2026-07-03 hidden-data watchlist references: `server/content/generated/logh7-hidden-data-watchlist.json` and `.omo/ulw-loop/evidence/hidden-data-watchlist-*-20260703.log` are current status/evidence for the mandatory `성계 위치` and `오리지널 캐릭터 로스터` reports. Use them as watch reports only; canonical promotion still requires CD/manual/Ghidra/live/wire cross-check.
+
+2026-07-03 CD-first addition: `artifacts/logh7-cd/Logh7.bin` and `Logh7.cue`, `.omo/work/logh7-cd-extract/`, `.omo/ulw-loop/evidence/source-verify-from-archive-download-20260703.log`, `.omo/ulw-loop/evidence/cd-*-20260703.log`, `.omo/ulw-loop/evidence/unity-scene-resource-re-20260703.md`, `docs/superpowers/plans/2026-07-03-logh7-unity-canonical-port-plan.md`, and `.omo/plans/logh7-unity-canonical-port.md` are current execution references for the Unity revival/remastering port. Current extracted catalogs remain subordinate until crosschecked against the CD-derived extraction and other evidence.
+
+This index is subordinate to the three startup entrypoints:
 
 1. `docs/logh7-requirements-current.md`
 2. `docs/logh7-architecture-operations-current.md`
 3. `.omo/plans/logh7-internal-validation-plan.md`
 
-After those three, open older docs only when a current doc or this index points to them for evidence.
-
-## Classification Meanings
-
-- **Current authority**: controls current planning or operations.
-- **Current reference**: useful operational/technical detail, but subordinate to current authority docs.
-- **Evidence**: historical or technical proof. Use for facts, not current process by default.
-- **Superseded**: replaced by current authority or newer evidence. Do not use as current guidance.
-- **Archive reference**: old handoff/status context. Read only when reconstructing history.
+The project has been re-bootstrapped away from legacy-client modification. Do
+not use deleted pre-bootstrap handoffs, roadmaps, patch-builder notes, live
+runtime notes, or old status ledgers as planning authority. The legacy client is
+only an oracle for data mining and diagnostics.
 
 ## Current Authority
 
-| Document | Status | Use |
-|---|---|---|
-| `docs/logh7-requirements-current.md` | Current authority | Current requirements and must-not rules. |
-| `docs/logh7-architecture-operations-current.md` | Current authority | Current architecture, operations, security boundaries, normal/diagnostic path split, remaster/mod layers. |
-| `.omo/plans/logh7-internal-validation-plan.md` | Current authority | Current internal validation slices and closure gates. |
-| `docs/logh7-document-index-current.md` | Current authority | Routing older documents and project skills. |
+| Path | Role |
+| --- | --- |
+| `docs/logh7-requirements-current.md` | Product and evidence requirements. |
+| `docs/logh7-architecture-operations-current.md` | Architecture, workflow, and operating boundaries. |
+| `.omo/plans/logh7-internal-validation-plan.md` | Current validation and implementation plan. |
+| `docs/logh7-document-index-current.md` | This routing index. |
+| `docs/logh7-developer-dashboard.html` | Derived dashboard only; not a startup authority. |
+| `.omo/rules/logh7-capability-harness.md` | Capability harness and skill/tool routing rules. |
+| `AGENTS.md`, `CLAUDE.md`, `.claude/CLAUDE.md` | Agent startup rules mirrored from the current path. |
+| `server/AGENTS.md`, `server/README.md` | Server/data-pipeline local rules and command surface. |
 
-## Current Reference
+## Current Code And Data Surfaces
 
-| Document | Status | Use |
-|---|---|---|
-| `docs/logh7-live-test-standard.md` | Current reference | Diagnostic live-client QA standard only. Not normal run path. |
-| `docs/logh7-loop-state.md` | Current reference | Current loop state and live evidence, subordinate to current requirements. |
-| `docs/logh7-gap-backlog.md` | Current reference | Gap candidates and backlog context, subordinate to current validation slices. |
-| `docs/logh7-current-requirements-status-2026-07-01.md` | Current reference | Previous requirements/status register. Use as evidence to update current docs. |
-| `docs/logh7-active-goal-register-2026-06-30.md` | Current reference | Active goal history and unresolved technical tracks. |
-| `.debug-journal.md` | Current reference | Append-only protocol/cipher source of truth. Keep sensitive runtime addresses scoped. |
+- `server/src/server/logh7-cd-media.mjs`, `server/tools/logh7_extract_cd_media.mjs`, `server/content/generated/logh7-cd-media-manifest.json` - current CD verification and MODE2 extraction evidence surface; not canonical promotion by itself.
+- `server/src/server/logh7-hidden-data-scan.mjs`, `server/tools/logh7_scan_hidden_data.mjs`, `server/content/generated/logh7-hidden-data-candidates.json` - current raw BIN/ISO/InstallShield hidden signature candidate surface; candidates remain unverified until carved/deduplicated/cross-checked.
 
-## Project Skills
+| Path | Role |
+| --- | --- |
+| `server/content/` | Canonical normalized content, manual fixtures, extracted records, generated catalogs, and original-source manifests. |
+| `server/src/server/` | Current data-mining/catalog modules only. |
+| `server/src/server/logh7-logistics-allocation-catalog.mjs` | Manual logistics allocation authority catalog over role/unit table. |
+| `server/src/server/logh7-logistics-allocation-rules.mjs` | Explicit logistics allocation authority rules preserving uncertain OCR cells. |
+`server/src/server/logh7-rank-promotion-catalog.mjs`,Manual rank ladder/headcount-cap catalog preserving promotion/fame uncertainty.
+`server/src/server/logh7-rank-promotion-rules.mjs`,Explicit rank headcount-cap rules; no promotion formula or fame-cost inference.
+| `server/src/server/logh7-ship-stat-catalog.mjs` | Ship stat evidence catalog over normalized manual/OCR data and documented transforms. |
+| `server/src/server/logh7-ship-stat-rules.mjs` | Explicit ship pool-readiness rules; no combat formula or missing-pool inference. |
+| `server/src/server/logh7-operation-catalog.mjs` | Manual operation planning catalog preserving purposes, gates, duration, results, unresolved CP range. |
+| `server/src/server/logh7-operation-rules.mjs` | Explicit operation draft gate rules; no CP formula or outcome simulation inference. |
+| `server/src/server/logh7-operation-state.mjs` | First state-changing operation gameplay consumer; writes planned records only after explicit draft gates pass. |
+| `server/src/server/logh7-strategy-command-rules.mjs` | First command-catalog gameplay-rule consumer; fixed CP/timing only, variable CP unresolved. |
+| `server/src/server/logh7-strategic-grid-rules.mjs` | Strategic grid entry gates over passable-mask and manual terrain/navigability evidence. |
+| `server/tools/` | Current server-side inventory, verification, and catalog CLIs. |
+| `server/tests/server/` | Focused tests for current source/data catalog modules. |
+| `server/content/generated/logh7-logistics-allocation-catalog.json` | Generated logistics allocation authority catalog. |
+`server/content/generated/logh7-rank-promotion-catalog.json`,Generated rank ladder/headcount-cap catalog with uncertain cap provenance.
+| `server/content/generated/logh7-ship-stat-catalog.json` | Generated ship stat evidence catalog and pool coverage summary. |
+| `server/content/generated/logh7-operation-catalog.json` | Generated manual operations catalog preserving planning gates and unresolved cost evidence. |
+| `server/content/generated/logh7-strategy-command-catalog.json` | Generated manual strategy-command catalog for gameplay-rule consumers. |
+| `client-unity/README.md` | (2026-07-04 G070 이후 과거 기록 — client-unity/ 삭제로 재현 불가, git 히스토리 dbf3b43에서 복원 필요) Unity port placeholder and target import direction. |
 
-| Skill | Status | Use |
-|---|---|---|
-| `.agents/skills/find-skills` | Current reference | Search skills.sh and install additional project skills when a new capability gap appears. |
-| `.agents/skills/codegraph` | Current reference | Codebase orientation, call paths, and impact analysis. Use `rg`/direct reads for completeness. |
-| `.agents/skills/protocol-reverse-engineering` | Current reference | Network/protocol packet analysis. |
-| `.agents/skills/nodejs-backend-patterns` | Current reference | Node server patterns. |
-| `.agents/skills/playwright-testing` | Current reference | Web/community browser and E2E testing. |
-| `.agents/skills/security-audit` | Current reference | Security audit support. gstack `/cso` remains mandatory. |
-| `.agents/skills/docker-platform-guide` | Current reference | Cross-platform Docker setup, including macOS. |
-| `.agents/skills/orbstack-best-practices` | Current reference | macOS OrbStack Docker workflow. |
-| `.agents/skills/github-actions-efficiency` | Current reference | CI workflow efficiency when GitHub Actions are added or changed. |
-| `.agents/skills/image-upscaling` | Current reference | Optional remaster image upscale experiments. Outputs need provenance and original fallback. |
-| `.agents/skills/game-assets` | Current reference | 2D asset prototyping for placeholders/remaster experiments only. |
-| `.agents/skills/game-3d-assets` | Current reference | 3D asset prototyping for tooling/remaster experiments only. |
-| `.agents/skills/game-engine` | Current reference | Browser game/rendering/game-loop patterns for prototypes and visualization tooling; not legacy-client runtime authority. |
-| `.agents/skills/multiplayer-game` | Current reference | Multiplayer state/tick/interest-management/validation patterns; RivetKit-specific runtime guidance is reference only unless separately approved. |
-| `.agents/skills/pdf` | Current reference | PDF rendering and layout-aware extraction for setting books, manuals, and scanned source material. |
-| `.agents/skills/smart-ocr` | Current reference | OCR scanned PDFs/images with confidence and bounding-box evidence, including Japanese/Korean/English source pages. |
-| `.agents/skills/meshy-3d-generation` | Current reference | Meshy text/image-to-3D generation; requires API key, credit confirmation, provenance, output hashes, and model QA. |
+## Preserved Source Material
 
-## Skill Search Notes
+| Path | Role |
+| --- | --- |
+| `docs/reference/` | Manuals and external visual reference catalog plus preserved source visual sheets such as `logh7-spot-bg-contact-sheet.jpg`. |
+| `docs/reference/legacy-evidence/` | Pre-bootstrap evidence documents kept as source/reference material only; not startup, plan, or runtime authority. |
+| `tmp/manual_extract/`, `tmp/manual_alt_render/` | Manual text/image extraction material. |
+| `.omo/work/manual_saved.pdf` | Saved manual source copy. |
+| `.omo/work/logh7-installed/data/`, `.omo/work/logh7-installed/fonts/`, `.omo/work/logh7-installed/doc/` | Installed original game resources for mining. |
+| `.omo/ghidra/` | Ghidra/redex exports, source binaries, minimap evidence, and official patch source material. |
+| `RE/content/` | Preserved pre-bootstrap content mirror; source material only, not active code. |
+| `RE/.debug-journal.md`, `.debug-journal.md` | Reverse-engineering evidence journals. |
+| `.omo/ulw-loop/evidence/source-*`, `.omo/ulw-loop/evidence/tcf-*` | Current source inventory and TCF catalog evidence from the re-bootstrap slice. |
 
-| Date | Query | Result | Action |
-|---|---|---|---|
-| 2026-07-02 | `game engine`, `game assets` | High-install generic game candidates found; `github/awesome-copilot@game-engine` installed. | Use only for browser prototype/visualization planning. |
-| 2026-07-02 | `game modding`, `multiplayer game` | `rivet-dev/skills@multiplayer-game` installed for multiplayer patterns. Generic `modding` search returned Minecraft/Unity/DayZ-specific low-fit candidates. | Do not install keyword-only modding skills; rerun `find-skills` for exact ecosystem if future work unit needs it. |
-| 2026-07-02 | `image upscaling game assets`, `asset pipeline` | Existing `image-upscaling`, `game-assets`, `game-3d-assets` cover current remaster/prototype needs. | Keep original asset fallback and provenance labels mandatory. |
-| 2026-07-03 | `pdf image OCR`, `pdf extraction`, `ocr opencv` | `openai/skills@pdf` and `claude-office-skills/skills@smart-ocr` installed. | Use for setting-book PDF rendering, OCR, crop evidence, and confidence tracking. |
-| 2026-07-03 | `meshy 3d`, `3d model generation`, `fal 3d model` | `meshy-dev/meshy-3d-agent@meshy-3d-generation` installed; FAL query returned low-fit unrelated results. | Use Meshy for DNT/sourcebook-derived prototype 3D models after API-key/cost confirmation. |
+## Preserved Evidence Documents
 
-## Evidence
+Keep old documents only when they contain data, extraction evidence, RE facts,
+manual/visual source notes, or content provenance that has not yet been
+normalized into `server/content/`.
 
-| Document | Status | Use |
-|---|---|---|
-| `docs/logh7-character-record-wire.md` | Evidence | Character wire fields and record evidence. |
-| `docs/logh7-character-creation-wire.md` | Evidence | Character creation packet evidence. |
-| `docs/logh7-character-creation-research.md` | Evidence | Character creation research context. |
-| `docs/logh7-character-origin-data-mining-status.md` | Evidence | Character origin/canon mining status. |
-| `docs/logh7-canon-character-research.md` | Evidence | Canon character research. |
-| `docs/logh7-0030-protocol.md` | Evidence | Protocol notes. |
-| `docs/logh7-opcode-reference-2026-06-28.md` | Evidence | Opcode reference; verify against current RE before changing builders. |
-| `docs/logh7-c002-playable-route-2026-06-30.md` | Evidence | C002 route evidence; dev-only route is not normal player path. |
-| `docs/logh7-c002-mechanism-complete-2026-06-23.md` | Evidence | C002 mechanism evidence. |
-| `docs/logh7-dev-command-cards-2026-06-29.md` | Evidence | Dev command card evidence; do not treat dev cards as canonical authority. |
-| `docs/logh7-2player-e2e-plan.md` | Evidence | Earlier two-player plan; current Slice 4 controls. |
-| `docs/logh7-all-names-coverage.md` | Evidence | Name/localization coverage evidence. |
-| `docs/logh7-binary-data-extract.md` | Evidence | Binary extraction context. |
-| `docs/logh7-client-state-journal.md` | Evidence | Client state journal. |
+Examples of preserved evidence categories:
 
-## Superseded
+- `docs/reference/legacy-evidence/logh7-*data*`
+- `docs/reference/legacy-evidence/logh7-*extract*`
+- `docs/reference/legacy-evidence/logh7-*manual*`
+- `docs/reference/legacy-evidence/logh7-*canon*`
+- `docs/reference/legacy-evidence/logh7-*roster*`
+- `docs/reference/legacy-evidence/logh7-*galaxy*`
+- `docs/reference/legacy-evidence/logh7-*coord*`
+- `docs/reference/legacy-evidence/logh7-*opcode*`
+- `docs/reference/legacy-evidence/logh7-*wire*`
+- `docs/reference/legacy-evidence/logh7-*protocol*`
+- `docs/reference/legacy-evidence/logh7-*forensics*`
+- `docs/reference/legacy-evidence/logh7-*function-re*`
 
-| Document | Status | Replacement |
-|---|---|---|
-| `docs/logh7-current-requirements-status-2026-07-01.md` | Superseded as authority | Use `docs/logh7-requirements-current.md`. |
-| `docs/logh7-2player-e2e-plan.md` | Superseded as plan | Use `.omo/plans/logh7-internal-validation-plan.md`, Slice 4. |
-| Any doc that presents forced/preseeded placeholder characters as accepted validation | Superseded | Use client-created character flow only. |
-| Any doc that presents `ui_explorer` as normal user/operator runtime | Superseded | Use launcher plus Docker Compose normal path. |
-| Any doc that labels generated/upscaled assets as original/canonical | Superseded | Use provenance labels in current requirements. |
+These are evidence references, not planning authority.
 
-## Archive Reference
+## Removed Pre-Bootstrap Classes
 
-| Document Pattern | Status | Use |
-|---|---|---|
-| `docs/SESSION-HANDOFF-*.md` | Archive reference | Historical handoff reconstruction only. |
-| `docs/claude-handoff-2026-06-10.md` | Archive reference | Historical context only. |
-| `docs/codex-handoff-2026-06-11.md` | Archive reference | Historical context only. |
-| `docs/logh7-archive-sweep-2026-06-12.md` | Archive reference | Archive sweep context. |
-| `docs/logh7-audit-2026-06-20.md` | Archive reference | Historical audit context; re-check current docs before acting. |
+The 2026-07-03 cleanup removes old files unless they are source material:
 
-## Document Sync Rule
+- historical handoff documents
+- old roadmaps, status ledgers, completion matrices, gap backlogs, and loop notes
+- old live-client runtime/test plans
+- old playable-client and launcher patch/build notes
+- old remaster deployment plans
+- old campaign/progress/session/layout/modding-plan/tooling documents
+- old local RE Playwright specs and skill copies
+- old ULW runtime diagnostic logs unrelated to the current source/TCF catalog slice
 
-At the end of every work unit, update this index:
+If a deleted file is needed later, recover the specific file from git history
+and promote only the evidence into `server/content/` or a current evidence doc.
 
-- **Add** new docs, evidence artifacts, skills, remaster/mod packs, and provenance routes.
-- **Modify** classifications when a doc becomes current, evidence-only, superseded, or archive-only.
-- **Prune** duplicate routing entries.
-- **Delete or retire** entries that encourage invalid current behavior.
+## Current Unity Bootstrap Artifacts
 
-Do not move or delete old docs by default. Classification is the first cleanup mechanism.
+- `server/src/server/logh7-unity-session-flow.mjs` - current source for Unity entry scene order, session gates, and runtime state model names.
+- `server/content/generated/logh7-scene-inventory.json` - generated scene inventory; current implementation inventory, not final proof of all original scenes.
+- (2026-07-04 G070 이후 과거 기록 — client-unity/ 삭제로 재현 불가, git 히스토리 dbf3b43에서 복원 필요) `client-unity/Assets/StreamingAssets/logh7/logh7-unity-runtime-manifest.json` - Unity runtime manifest consumed by the prototype client.
+- (2026-07-04 G070 이후 과거 기록 — client-unity/ 삭제로 재현 불가, git 히스토리 dbf3b43에서 복원 필요) `client-unity/Assets/Scripts/Logh7SessionRuntimeModels.cs` - C# model surface for the first boot/login/lobby/character/world session contract.
+
+## Current Medal And Remaster Artifacts
+
+- `server/content/generated/logh7-medal-mining-catalog.json` - current generated evidence for 52 mined decorations, original 15-icon medal pool, and exact Imperial crest reference policy.
+- `docs/reference/remaster-art/logh7-medal-emblem-mining-2026-07-03.md` - current remaster-art evidence note for medals, Imperial double-eagle crest exactness, and reference-only generated imperial medal concept sheet.
+- (2026-07-04 G070 이후 과거 기록 — client-unity/ 삭제로 재현 불가, git 히스토리 dbf3b43에서 복원 필요) `client-unity/Assets/ArtSource/concept/medals/imperial-medal-concept-sheet-2026-07-03.png` - generated concept sheet only; not production replacement for mined original medal art.
+- `server/content/generated/logh7-medal-art-brief.json` - current production split: 15 Alliance upscales, 11 Alliance variants if needed, 26 Empire name-driven creations.
+- `docs/reference/remaster-art/logh7-medal-korean-list-and-production-2026-07-04.md` - Korean medal list and production order.
+- (2026-07-04 G070 이후 과거 기록 — client-unity/ 삭제로 재현 불가, git 히스토리 dbf3b43에서 복원 필요) `client-unity/Assets/ArtSource/reference/logh7-alliance-flag-pentagon-reference.png` - Alliance flag and central pentagon emblem reference.
+- (2026-07-04 G070 이후 과거 기록 — client-unity/ 삭제로 재현 불가, git 히스토리 dbf3b43에서 복원 필요) `client-unity/Assets/ArtSource/remaster/alliance-medals-4x/` - deterministic 4x Alliance medal base outputs.
+- `server/content/generated/logh7-alliance-medal-upscale-manifest.json` - manifest for the 15 Alliance 80x80 to 320x320 base upscales.
+## 2026-07-04 Medal Art Reference And Prototype Outputs
+
+| Path | Role |
+|---|---|
+| (2026-07-04 G070 이후 과거 기록 — client-unity/ 삭제로 재현 불가, git 히스토리 dbf3b43에서 복원 필요) `client-unity/Assets/ArtSource/reference/heinessen/` | User-supplied Ale Heinessen face/statue references for Alliance medal `793`. |
+| (2026-07-04 G070 이후 과거 기록 — client-unity/ 삭제로 재현 불가, git 히스토리 dbf3b43에서 복원 필요) `client-unity/Assets/ArtSource/reference/nguyen-kim-hoa/` | User-supplied Nguyen Kim Hoa face reference for Alliance medal `794`. |
+| (2026-07-04 G070 이후 과거 기록 — client-unity/ 삭제로 재현 불가, git 히스토리 dbf3b43에서 복원 필요) `client-unity/Assets/ArtSource/reference/imperial-crest/` | Exact Imperial double-eagle mask/recolor outputs derived from supplied crest reference. |
+| (2026-07-04 G070 이후 과거 기록 — client-unity/ 삭제로 재현 불가, git 히스토리 dbf3b43에서 복원 필요) `client-unity/Assets/ArtSource/reference/logh7-ship-thumbnail-contact-sheet.png` | Decoded original ship thumbnail contact sheet for faction/ship visual QA. |
+| (2026-07-04 G070 이후 과거 기록 — client-unity/ 삭제로 재현 불가, git 히스토리 dbf3b43에서 복원 필요) `client-unity/Assets/ArtSource/reference/empire-ships/` | Decoded original Empire ship thumbnail candidates and relief variants for medal composition. |
+| (2026-07-04 G070 이후 과거 기록 — client-unity/ 삭제로 재현 불가, git 히스토리 dbf3b43에서 복원 필요) `client-unity/Assets/ArtSource/remaster/alliance-foundation-medals-1024/` | Current concept candidates for Alliance medals `793..795`. |
+| (2026-07-04 G070 이후 과거 기록 — client-unity/ 삭제로 재현 불가, git 히스토리 dbf3b43에서 복원 필요) `client-unity/Assets/ArtSource/remaster/imperial-medal-prototypes-1024/` | Corrected Imperial prototype candidates using exact crest and original ship data. |
+| `server/content/generated/logh7-alliance-foundation-medal-redraw-manifest.json` | Manifest for Alliance founder/high-honor medal concepts. |
+| `server/content/generated/logh7-imperial-crest-mask-manifest.json` | Manifest proving crest masks derive from exact supplied reference. |
+| `server/content/generated/logh7-empire-ship-reference-manifest.json` | Manifest for decoded original Empire ship thumbnail candidates. |
+| `server/content/generated/logh7-imperial-medal-corrected-prototype-manifest.json` | Manifest for corrected Imperial medal prototypes `767` and `779`. |
+| `server/content/generated/logh7-imperial-medal-source-lock-manifest.json` | Source lock requiring exact Imperial crest and original Empire ship data; reports 121 Empire records, 120 `Ship/GE` files, 117 MDX, 3 MDS, and 39 render hulls. |
+| (2026-07-04 G070 이후 과거 기록 — client-unity/ 삭제로 재현 불가, git 히스토리 dbf3b43에서 복원 필요) `client-unity/Assets/ArtSource/remaster/imperial-medal-prototypes-1024/779-expeditionary-campaign-source-locked-crest-ship-v2.png` / `client-unity/Assets/ArtSource/remaster/imperial-medal-prototypes-1024/767-grand-double-eagle-order-source-locked-crest-v2.png` | QA correction samples: original Empire ship-data motif and exact double-eagle crest kept visibly legible. |
+| `server/content/generated/logh7-mdx-render-source-manifest.json` | Current generated evidence for Imperial medal ship-art source prep: first target `data/model/Ship/GE/EH001.mdx`, exact Imperial crest reference/mask, recovered node names, texture presence, and missing authoring/bump assets. Regenerate with `npm --prefix server run catalog:mdx-render-sources`. |
+| `server/content/generated/logh7-server-servable-data-family.json` | Current G004 generated evidence map for server-servable data families. Lists 14 families, source manifest paths, mandatory watch categories, and keeps all families `suspect-cross-check-required`; regenerate with `npm --prefix server run catalog:server-data-family`. |
+| `server/content/generated/logh7-current-content-crosscheck.json` | Current G005 generated evidence map for pre-canonical-promotion cross-check. Inventories `server/content`, `RE/content`, `.omo/work/logh7-installed`, evidence-channel roots, and generated catalogs; all entries remain `suspect-cross-check-required`. Regenerate with `npm --prefix server run catalog:current-content-crosscheck`. |
+| `server/content/generated/logh7-galaxy-trust-crosscheck.json` | Current G008 trust gate for existing galaxy positions, star colors, planet lists, passable cells, and generated catalogs. Keeps all listed sources suspect and blocks canonical promotion; `systemPositions` remains report-immediately with no newly confirmed positions. Regenerate with `npm --prefix server run catalog:galaxy-trust-crosscheck`. |
+| `server/content/generated/logh7-runtime-boundary-manifest.json` | Current G009 runtime boundary contract. Keeps normal runtime to Docker Compose server plus Unity player/launcher; legacy EXE, Frida, `ui_explorer`, preseed flags, and patch builders are diagnostic/oracle-only and forbidden as normal runtime. Regenerate with `npm --prefix server run catalog:runtime-boundary`. |
+| `server/content/generated/logh7-asset-overwrite-guard.json` | Current G010 asset overwrite guard. Protects original/installed/CD/original-data roots as read-only fallback, permits remaster/reference/concept outputs, and reports overwrite violations before remaster provenance can treat a pack as clean. Regenerate with `npm --prefix server run catalog:asset-overwrite-guard`. |
+| `server/content/generated/logh7-unity-source-pack-manifest.json` (server-side manifest still current; 2026-07-04 G070 이후 `client-unity/Assets/StreamingAssets/logh7/logh7-unity-source-pack-manifest.json` 미러는 client-unity/ 삭제로 재현 불가하며, G071 이후 생성기가 이 client-unity 경로에 더 이상 dual-write하지 않음, git 히스토리 dbf3b43에서 복원 필요) | Current G006 Unity pack contract. Separates required original fallback from reversible remaster pack; keeps `verifiedRecords` empty while canonical promotion remains blocked. Regenerate with `npm --prefix server run catalog:unity-source-pack`. |
+| `server/content/generated/logh7-remaster-provenance-manifest.json` (server-side manifest still current; 2026-07-04 G070 이후 `client-unity/Assets/StreamingAssets/logh7/logh7-remaster-provenance-manifest.json` 미러는 client-unity/ 삭제로 재현 불가하며, G071 이후 생성기가 이 client-unity 경로에 더 이상 dual-write하지 않음, git 히스토리 dbf3b43에서 복원 필요) | Current G007 remaster provenance contract. Keeps `remaster-hd` disabled by default, reversible, conflict-checked, provenance-labeled, manifest-driven, original-fallback-backed, and tracks `imperial-crest-mask` plus original Empire ship-derived `empire-ship-reference`. Regenerate with `npm --prefix server run catalog:remaster-provenance`. |
+| `server/content/generated/logh7-formula-provenance-guard.json` | Current G011 generated evidence guard for CP/combat/economy/AI formulas. Keeps `canonicalPromotion=blocked-until-cross-source-confirmed`, `canonicalFormulaRecords=[]`, `unresolvedFormulaCount=9`; regenerate `npm --prefix server run catalog:formula-provenance-guard`. |
+| `server/content/generated/logh7-unity-asset-source-truth.json` (server-side manifest still current; 2026-07-04 G070 이후 `client-unity/Assets/StreamingAssets/logh7/logh7-unity-asset-source-truth.json` 미러는 client-unity/ 삭제로 재현 불가하며, G071 이후 생성기가 이 client-unity 경로에 더 이상 dual-write하지 않음, git 히스토리 dbf3b43에서 복원 필요) | Current G012 generated guard: Unity assets are implementation/output/proof surfaces; manual drag-and-drop cannot become source truth. Regenerate `npm --prefix server run catalog:unity-asset-source-truth`. |
+| `server/content/generated/logh7-unity-source-pack-manifest.json` (server-side manifest still current; 2026-07-04 G070 이후 `client-unity/Assets/StreamingAssets/logh7/logh7-unity-source-pack-manifest.json` 미러는 client-unity/ 삭제로 재현 불가하며, G071 이후 생성기가 이 client-unity 경로에 더 이상 dual-write하지 않음, git 히스토리 dbf3b43에서 복원 필요) | Current G015 augmentation to the Unity pack contract. Required original fallback asset families include Imperial `Ship/GE` MDX, original `ShipMark.tga`, exact Imperial double-eagle reference JPG, and derived crest masks; `verifiedRecords` remains empty while canonical promotion is blocked. Regenerate with `npm --prefix server run catalog:unity-source-pack`. |
+| (2026-07-04 G070 이후 과거 기록 — client-unity/ 삭제로 재현 불가, git 히스토리 dbf3b43에서 복원 필요) `client-unity/Assets/Editor/Logh7ValidationSceneCapture.cs` / `client-unity/Assets/Editor/Logh7PrototypeSceneGenerator.cs` / `client-unity/Assets/Scripts/Logh7GalaxyPrototypeRuntime.cs` | Current G015 Unity validation scene surface. Runtime/editor display source-pack and asset-source-truth ledgers, `Ship/GE=117`, crest mask status, blocked canonical promotion, and provide batch screenshot entrypoint `Logh7ValidationSceneCapture.CaptureEvidence`. Screenshot evidence is currently blocked by Unity Licensing IPC timeout before `executeMethod`; do not mark G015 complete until PNG exists. |
+- `server/content/generated/logh7-ui-scene-remaster-gameplay-boundary.json` (server-side manifest still current; 2026-07-04 G070 이후 `client-unity/Assets/StreamingAssets/logh7/logh7-ui-scene-remaster-gameplay-boundary.json` 미러는 client-unity/ 삭제로 재현 불가하며, G071 이후 생성기가 이 client-unity 경로에 더 이상 dual-write하지 않음, git 히스토리 dbf3b43에서 복원 필요) - Current G018 generated evidence contract linking UI scene inventory, remaster pack schema, gameplay/runtime boundary, and original asset contracts. Regenerate `npm --prefix server run catalog:ui-scene-remaster-gameplay-boundary`; expected original asset counts are Empire `Ship/GE` `117` MDX + `3` MDS, `Thumbnail/Ship` `79` TGA, Empire ship reference manifest `6` entries, Imperial crest mask manifest `3` variants.
+- (2026-07-04 G070 이후 과거 기록 — client-unity/ 삭제로 재현 불가, git 히스토리 dbf3b43에서 복원 필요) `client-unity/Assets/Scripts/Logh7GalaxyPrototypeRuntime.cs` / `client-unity/Assets/Editor/Logh7PrototypeSceneGenerator.cs` - Current G019 Unity loader/validation source surface. Runtime and generated validation scene source-ledger panel consume/display the G018 UI/remaster/gameplay boundary manifest (`ui-boundary`, `Ship/GE=117`, `crest variants=3`) alongside source-pack/source-truth ledgers.
+
+## 2026-07-04 G021 Server Data Scope
+
+- Current reference: `server/content/generated/logh7-server-servable-data-family.json` and `server/src/server/logh7-server-servable-data-family.mjs` define the rebuilt-server data-family boundary for this slice.
+- Evidence: `.omo/ulw-loop/evidence/g021-server-data-family-catalog-20260704.log`, `.omo/ulw-loop/evidence/g021-server-data-family-focused-tests-20260704.log`, `.omo/ulw-loop/evidence/g021-current-content-crosscheck-20260704.log`, `.omo/ulw-loop/evidence/g021-server-tests-20260704.log`.
+- Status: all data families remain `suspect-cross-check-required`; `systemPositions` and `originalCharacterRoster` remain immediate-report watches with no newly promoted values.
+
+## 2026-07-04 G022 Hidden Data Scanner
+
+- Current reference: `server/content/generated/logh7-hidden-data-candidates.json`, `server/content/generated/logh7-hidden-data-classification.json`, and `server/content/generated/logh7-hidden-data-watchlist.json` are evidence-forensics catalogs, not canonical data.
+- Evidence: `.omo/ulw-loop/evidence/g022-hidden-data-scan-20260704.log`, `.omo/ulw-loop/evidence/g022-hidden-data-classify-20260704.log`, `.omo/ulw-loop/evidence/g022-hidden-data-watchlist-20260704.log`, `.omo/ulw-loop/evidence/g022-hidden-data-focused-tests-20260704.log`, `.omo/ulw-loop/evidence/g022-server-tests-20260704.log`.
+- Status: hidden candidates are preserved and classified; `systemPositions` and `originalCharacterRoster` produced reportable candidates but no newly confirmed values.
+
+## 2026-07-04 G023 Source Inventory
+
+- Current reference: `server/content/original-data/logh7-source-roots.json` and `server/src/server/logh7-source-corpus.mjs` define source-root inventory inputs.
+- Evidence: `.omo/ulw-loop/evidence/g023-source-inventory-20260704.log`, `.omo/ulw-loop/evidence/g023-source-corpus-focused-tests-20260704.log`, `.omo/ulw-loop/evidence/g023-current-content-crosscheck-20260704.log`, `.omo/ulw-loop/evidence/g023-unity-asset-source-truth-20260704.log`, `.omo/ulw-loop/evidence/g023-unity-source-pack-20260704.log`, `.omo/ulw-loop/evidence/g023-server-tests-20260704.log`.
+- Status: CD extraction roots are now indexed alongside Archive media, installed data, server/RE content, Ghidra evidence, and manual extracts; canonical promotion remains blocked pending cross-source proof.
+## 2026-07-04 G024 Unity Source Pack
+- Current reference: `server/content/generated/logh7-unity-source-pack-manifest.json` and `server/src/server/logh7-unity-source-pack-manifest.mjs`; (2026-07-04 G070 이후 과거 기록 — client-unity/ 삭제로 재현 불가, git 히스토리 dbf3b43에서 복원 필요, G071 이후 생성기가 더 이상 이 경로에 dual-write하지 않음) `client-unity/Assets/StreamingAssets/logh7/logh7-unity-source-pack-manifest.json`.
+- Evidence: `.omo/ulw-loop/evidence/g024-unity-source-pack-catalog-rerun-20260704.log`, `.omo/ulw-loop/evidence/g024-unity-source-pack-original-asset-contract-20260704.log`, `.omo/ulw-loop/evidence/g024-unity-source-pack-focused-redgreen-20260704.log`, `.omo/ulw-loop/evidence/g024-server-tests-20260704.log`.
+- Status: Unity source-pack uses CD media/source-root registry inputs, carries source-root inventory, and preserves original fallback asset requirements for Empire `Ship/GE` MDX and the Imperial double-eagle crest reference/masks; no canonical promotion yet.
+## 2026-07-04 G025 UI Scene Catalog
+- Current reference: `server/content/generated/logh7-ui-scene-catalog.json`, `server/src/server/logh7-ui-scene-catalog.mjs`, and `server/tools/logh7_catalog_ui_scenes.mjs`; (2026-07-04 G070 이후 과거 기록 — client-unity/ 삭제로 재현 불가, git 히스토리 dbf3b43에서 복원 필요, G071 이후 생성기가 더 이상 이 경로에 dual-write하지 않음) `client-unity/Assets/StreamingAssets/logh7/logh7-ui-scene-catalog.json`.
+- Evidence: `.omo/ulw-loop/evidence/g025-ui-scene-catalog-red-20260704.log`, `.omo/ulw-loop/evidence/g025-ui-scene-catalog-green-20260704.log`, `.omo/ulw-loop/evidence/g025-ui-scene-catalog-run-20260704.log`, `.omo/ulw-loop/evidence/g025-ui-scene-catalog-surface-proof-20260704.log`, `.omo/ulw-loop/evidence/g025-current-content-crosscheck-20260704.log`, `.omo/ulw-loop/evidence/g025-server-tests-20260704.log`.
+- Status: UI scene catalog covers launcher/login/lobby/character/world/strategic/select-grid/info/tactics/battle as Unity-consumable surface contract; canonical promotion remains blocked pending cross-source proof.
+## 2026-07-04 G026 Unity StreamingAssets Export
+- Current reference: `server/content/generated/logh7-unity-streamingassets-export.json`, `server/src/server/logh7-unity-streamingassets-export.mjs`, and `server/tools/logh7_catalog_unity_streamingassets_export.mjs`; (2026-07-04 G070 이후 과거 기록 — client-unity/ 삭제로 재현 불가, git 히스토리 dbf3b43에서 복원 필요, G071 이후 생성기가 더 이상 이 경로에 dual-write하지 않음) `client-unity/Assets/StreamingAssets/logh7/logh7-unity-streamingassets-export.json`.
+- Evidence: `.omo/ulw-loop/evidence/g026-streamingassets-export-red-20260704.log`, `.omo/ulw-loop/evidence/g026-streamingassets-export-green-20260704.log`, `.omo/ulw-loop/evidence/g026-streamingassets-export-final-focused-20260704.log`, `.omo/ulw-loop/evidence/g026-streamingassets-export-run-20260704.log`, `.omo/ulw-loop/evidence/g026-streamingassets-export-proof-20260704.log`, `.omo/ulw-loop/evidence/g026-current-content-crosscheck-20260704.log`, `.omo/ulw-loop/evidence/g026-server-tests-20260704.log`.
+- Status: StreamingAssets export is deterministic, self-excluding, hash-addressed, and subordinate to source-pack fallback/canonical-promotion blockers.
+## 2026-07-04 G027 Unity Project Open Blocker
+- Current reference: (2026-07-04 G070 이후 과거 기록 — client-unity/ 삭제로 재현 불가, git 히스토리 dbf3b43에서 복원 필요) `client-unity/ProjectSettings/ProjectVersion.txt`, `client-unity/Packages/manifest.json`; `.omo/ulw-loop/evidence/g027-unity-open-batch-20260704.log`, and `.omo/ulw-loop/evidence/g027-unity-open-blocker-summary-20260704.log` remain current.
+- Evidence: project declares Unity `6000.5.2f1`; editor path `E:/unity/hub/6000.5.2f1/Editor/Unity.exe`; batch open reached engine initialization but blocked on Unity Licensing IPC and non-elevated cleanup could not terminate one `Unity.Licensing.Client` PID.
+- Status: blocked until Unity Licensing Client health is repaired/cleared; not a data-manifest blocker for subsequent non-Unity slices.
+## 2026-07-04 G028 Unity EditMode Test Blocker
+- Current reference: `.omo/ulw-loop/evidence/g027-unity-open-batch-20260704.log` and `.omo/ulw-loop/evidence/g027-unity-open-blocker-summary-20260704.log`.
+- Status: C# EditMode loader tests are blocked by Unity Licensing IPC; continue non-Unity slices until licensing is repaired.
+## 2026-07-04 G030 Remaster Provenance Ship/Crest Lock
+
+- Current reference: `server/src/server/logh7-remaster-provenance-manifest.mjs`, `server/tests/server/logh7-remaster-provenance-manifest.test.mjs`, and `server/content/generated/logh7-remaster-provenance-manifest.json`; (2026-07-04 G070 이후 과거 기록 — client-unity/ 삭제로 재현 불가, git 히스토리 dbf3b43에서 복원 필요, G071 이후 생성기가 더 이상 이 경로에 dual-write하지 않음) `client-unity/Assets/StreamingAssets/logh7/logh7-remaster-provenance-manifest.json`.
+- Evidence: `.omo/ulw-loop/evidence/g030-remaster-provenance-ship-red-20260704.log`, `.omo/ulw-loop/evidence/g030-remaster-provenance-ship-green-20260704.log`, `.omo/ulw-loop/evidence/g030-remaster-provenance-ship-run-20260704.log`, `.omo/ulw-loop/evidence/g030-remaster-provenance-ship-proof-20260704.log`, `.omo/ulw-loop/evidence/g030-current-content-crosscheck-20260704.log`, `.omo/ulw-loop/evidence/g030-server-tests-20260704.log`.
+- Status: remaster provenance now records original Empire ship thumbnail source hashes for `empire-ship-reference` (`shipSourceHashCount=6`) and keeps Imperial crest locked to `logh7-imperial-double-eagle-reference.jpg` SHA256 `822276b190c3e83729de39c14e4e9fc06c2eb8b39a56225bdcbe16f147134e9e`; pack remains disabled by default and blocked pending cross-source proof.
+## 2026-07-04 G031 Gameplay Contract Boundary
+
+- Current reference: `server/src/server/logh7-gameplay-contract-boundary.mjs`, `server/tools/logh7_catalog_gameplay_contract_boundary.mjs`, `server/tests/server/logh7-gameplay-contract-boundary.test.mjs`, and `server/content/generated/logh7-gameplay-contract-boundary.json`; (2026-07-04 G070 이후 과거 기록 — client-unity/ 삭제로 재현 불가, git 히스토리 dbf3b43에서 복원 필요, G071 이후 생성기가 더 이상 이 경로에 dual-write하지 않음) `client-unity/Assets/StreamingAssets/logh7/logh7-gameplay-contract-boundary.json`.
+- Supporting updated reference: `server/tests/server/logh7-unity-streamingassets-export.test.mjs` and `server/content/generated/logh7-unity-streamingassets-export.json`; (2026-07-04 G070 이후 과거 기록 — client-unity/ 삭제로 재현 불가, git 히스토리 dbf3b43에서 복원 필요, G071 이후 생성기가 더 이상 이 경로에 dual-write하지 않음) `client-unity/Assets/StreamingAssets/logh7/logh7-unity-streamingassets-export.json`.
+- Evidence: `.omo/ulw-loop/evidence/g031-gameplay-contract-red-20260704.log`, `.omo/ulw-loop/evidence/g031-gameplay-contract-green-20260704.log`, `.omo/ulw-loop/evidence/g031-gameplay-contract-run-20260704.log`, `.omo/ulw-loop/evidence/g031-gameplay-contract-proof-20260704.log`, `.omo/ulw-loop/evidence/g031-focused-after-export-fix-20260704.log`, `.omo/ulw-loop/evidence/g031-streamingassets-export-rerun-20260704.log`, `.omo/ulw-loop/evidence/g031-streamingassets-export-proof-20260704.log`, `.omo/ulw-loop/evidence/g031-current-content-crosscheck-final-20260704.log`, `.omo/ulw-loop/evidence/g031-server-tests-final-20260704.log`.
+- Status: gameplay contract boundary exposes `strategy-command-cost-table` as the only implemented evidence-backed gameplay rule and locks `9` unresolved formulas from runtime promotion. StreamingAssets deterministic export now has `fileCount=14` and includes `logh7-gameplay-contract-boundary.json`.
+## 2026-07-04 G033 Plan Compliance Audit
+
+- Current reference: `.omo/ulw-loop/evidence/g033-plan-compliance-audit-20260704.log`, `.omo/ulw-loop/evidence/g033-plan-compliance-boundary-20260704.log`, and G030-G032 current-doc/dashboard entries.
+- Status: compliance audit passed with no failed checks. It verifies recent ULW completions, remaster/gameplay/StreamingAssets manifest guardrails, blocked canonical promotion, diagnostic-only runtime boundary, immediate-report watch non-promotion, Unity Licensing IPC blocker visibility, and required evidence-file presence.
+## 2026-07-04 Unity Visual Build Evidence
+
+- Current reference: (2026-07-04 G070 이후 과거 기록 — client-unity/ 삭제로 재현 불가, git 히스토리 dbf3b43에서 복원 필요) `client-unity/Builds/Windows/LOGH7RevivalUnity.exe`; `.omo/ulw-loop/evidence/codex-unity-windows-build-final2-20260704.log`, `.omo/ulw-loop/evidence/codex-unity-player-window-screenshot-final-20260704.png`, `.omo/ulw-loop/evidence/codex-unity-validation-scene-screenshot-20260704.png` remain valid evidence artifacts.
+- G045 current reference: `.omo/ulw-loop/evidence/g045-player-clickthrough-strategic-map-20260704.png`, `.omo/ulw-loop/evidence/g045-player-edge-strategic-blocked-20260704.png`, `.omo/ulw-loop/evidence/g045-focused-unity-surface-tests-20260704.log`, `.omo/ulw-loop/evidence/g045-server-tests-20260704.log`, `.omo/ulw-loop/evidence/g045-status-closed-20260704.json`.
+- G046 current reference: `.omo/ulw-loop/evidence/g046-player-scene-tactics-switch-20260704.png`, `.omo/ulw-loop/evidence/g046-player-scene-tactics-blocked-20260704.png`, `.omo/ulw-loop/evidence/g046-focused-unity-scene-surface-tests-20260704.log`, `.omo/ulw-loop/evidence/g046-server-tests-20260704.log`, `.omo/ulw-loop/evidence/g046-status-closed-20260704.json`.
+- Status: current Unity prototype is visually runnable as a Windows player. It shows the shell/session/data-preview surface only; full gameplay parity remains unproven and pending.
