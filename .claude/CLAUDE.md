@@ -1,5 +1,7 @@
 <!-- OMC:START -->
 
+2026-07-05 G073 legacy RE tooling 정리 커밋(`c354b4e`)에서 함께 과잉삭제됐던 C002/0x0b07/전술풀 조사 도구 5종+테스트 복구(커밋 `ebd93e6`), `test_logh7_ui_explorer.py` 잠재 import 버그 수정+삭제된 레거시 산출물만 지키던 테스트 2개 제거. RE 9종 46/46+서버 180/180 통과. C002 재점검: 서버→클라 0x0b07 적용은 라이브 확인됐으나 시각적 이동 갱신·전술 GUI 자연 트리거는 미해결. 상세는 루트 `CLAUDE.md` 동일 날짜 항목.
+
 2026-07-05 G072 cp932 한글 채팅 패치를 실제 설치 EXE(`.omo/work/logh7-installed/exe/G7MTClient.exe`)에 파일 자체 in-place 적용(SHA `bd19263c...`→`24eb7c09...`, 대상 9바이트 외 전체 동일 확인, git 추적본이라 `git checkout --`로 즉시 롤백 가능). 인게임 실주행 검증은 아직. 상세는 루트 `CLAUDE.md` 동일 날짜 항목.
 
 2026-07-04 G071 G070 삭제 후속 회귀정리(dual-write 제거, 테스트 180/180 회복) + P0-03 cp932 한글채팅 패치 스크립트(`RE/tools/logh7_chat_cp932_korean_patch.py`, VA 0x76e3fc 9바이트 동일길이 치환, 미적용/드라이런만 검증). 상세는 루트 `CLAUDE.md` 동일 날짜 항목.
