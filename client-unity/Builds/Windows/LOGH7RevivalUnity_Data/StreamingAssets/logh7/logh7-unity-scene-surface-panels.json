@@ -1,0 +1,84 @@
+{
+  "id": "logh7-unity-scene-surface-panels",
+  "generatedAt": "2026-07-04T07:45:00.000Z",
+  "canonicalPromotion": "blocked-until-cross-source-confirmed",
+  "originalExePolicy": "oracle-only",
+  "sourceSceneCatalog": "logh7-ui-scene-catalog.json",
+  "runtimePolicy": {
+    "unityMainRuntime": true,
+    "diagnosticShortcutsNormalRuntimeAllowed": false,
+    "panelTextIsCanonicalData": false
+  },
+  "panels": [
+    {
+      "id": "launcher",
+      "title": "Boot / Update Launcher",
+      "summary": "Patch/update entry.",
+      "actions": "NO DATA, PASSWORD, CONNECT, EXIT",
+      "evidence": "EXE oracle; canonical promotion is blocked."
+    },
+    {
+      "id": "login",
+      "title": "Login Session",
+      "summary": "Network admission.",
+      "actions": "CONNECT, EXIT, password",
+      "evidence": "Wire/live trace; original EXE remains oracle-only."
+    },
+    {
+      "id": "lobby",
+      "title": "Lobby Session",
+      "summary": "Pre-game session.",
+      "actions": "Lobby/session list",
+      "evidence": "Scene inventory; canonical promotion is blocked."
+    },
+    {
+      "id": "character",
+      "title": "Character Selection",
+      "summary": "Character authority.",
+      "actions": "SELECT CHARACTER",
+      "evidence": "Roster suspect until cross-source confirmation."
+    },
+    {
+      "id": "world",
+      "title": "World Entry",
+      "summary": "World admission.",
+      "actions": "ENTER WORLD",
+      "evidence": "Session oracle; no diagnostic runtime shortcut."
+    },
+    {
+      "id": "strategic",
+      "title": "Strategic Map",
+      "summary": "Galaxy command view.",
+      "actions": "STRATEGIC MAP",
+      "evidence": "Generated preview; system positions suspect."
+    },
+    {
+      "id": "select-grid",
+      "title": "Select Grid Command",
+      "summary": "Grid command gate.",
+      "actions": "Move/select rows",
+      "evidence": "SelectGrid RE trace; no shortcut promotion."
+    },
+    {
+      "id": "info",
+      "title": "Information Panels",
+      "summary": "Reports and mail.",
+      "actions": "Report/mail tabs",
+      "evidence": "Catalog source hits; canonical promotion is blocked."
+    },
+    {
+      "id": "tactics",
+      "title": "Fleet Operations",
+      "summary": "Fleet planning.",
+      "actions": "Formation, sortie",
+      "evidence": "Fleet catalog; original EXE remains oracle-only."
+    },
+    {
+      "id": "battle",
+      "title": "Tactical Battle",
+      "summary": "Combat surface.",
+      "actions": "Tactical command",
+      "evidence": "Battle catalog; RE logic pending."
+    }
+  ]
+}

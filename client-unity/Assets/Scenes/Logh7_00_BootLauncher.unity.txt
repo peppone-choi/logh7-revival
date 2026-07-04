@@ -1,0 +1,11 @@
+LOGH VII scene placeholder: 부트/업데이트/런처
+id: boot-update-launcher
+status: placeholder-required
+evidence: source-hits-present
+
+Evidence hits:
+- ghidra-strings .omo/ghidra/export/G7MTClient/strings.tsv term=Update
+- ghidra-symbols .omo/ghidra/export/G7MTClient/symbols.tsv term=Update
+- ghidra-functions .omo/ghidra/export/G7MTClient/functions.jsonl term=Update
+- msgdat-text .omo/work/logh7-cd-extract/installshield-root/____________s___/____/data/MsgDat/constmsg.dat term=アップデート
+- msgdat-text .omo/work/logh7-cd-extract/installshield-root/____________s___/____/data/MsgDat/messages_com_0.dat term=アップデート

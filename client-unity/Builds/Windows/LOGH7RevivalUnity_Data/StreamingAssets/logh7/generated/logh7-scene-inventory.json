@@ -1,0 +1,796 @@
+{
+  "id": "logh7-scene-inventory",
+  "status": "inventoried",
+  "policy": "Scene list is an implementation inventory. Each scene remains placeholder until EXE/live/manual evidence closes its UI and logic contract.",
+  "sourcePolicy": {
+    "originalExePolicy": "oracle-only-not-product-runtime",
+    "unityMainRuntime": true
+  },
+  "summary": {
+    "sceneCount": 15,
+    "evidenceBackedSceneCount": 15
+  },
+  "scenes": [
+    {
+      "order": 0,
+      "id": "boot-update-launcher",
+      "titleKo": "부트/업데이트/런처",
+      "unityScenePath": "Assets/Scenes/Logh7_00_BootLauncher.unity",
+      "sessionConcept": "boot-runtime",
+      "stateModel": "Logh7BootState",
+      "requires": [],
+      "implementationStatus": "placeholder-required",
+      "evidenceStatus": "source-hits-present",
+      "evidence": [
+        {
+          "source": ".omo/ghidra/export/G7MTClient/strings.tsv",
+          "role": "ghidra-strings",
+          "term": "Update",
+          "context": "rmat 0x006798bc No suitable image filter found 0x006798dc Update of vidmem texture failed 0x006798fc Could not lock surface 0x00679914 Failed"
+        },
+        {
+          "source": ".omo/ghidra/export/G7MTClient/symbols.tsv",
+          "role": "ghidra-symbols",
+          "term": "Update",
+          "context": "DrawFocusRect 0xEXTERNAL:000000f4 import USER32.DLL ExcludeUpdateRgn 0xEXTERNAL:000000f5 import USER32.DLL ShowCaret 0xEXTERNAL:000000f6 import"
+        },
+        {
+          "source": ".omo/ghidra/export/G7MTClient/functions.jsonl",
+          "role": "ghidra-functions",
+          "term": "Update",
+          "context": "130);\\r\\n if (iVar2 != 0) {\\r\\n FUN_00648f81(5);\\r\\n UpdateWindow(*(HWND *)(*(int *)(param_1 + 0x1c) + 0x1c));\\r\\n local_4 = 0xffffffff;"
+        },
+        {
+          "source": ".omo/work/logh7-cd-extract/installshield-root/____________s___/____/data/MsgDat/constmsg.dat",
+          "role": "msgdat-text",
+          "term": "アップデート",
+          "context": "艦砲空戦戦術 大規模空戦戦術 訓練を中止しデータの修復を行う バックアップデータでシミュレーションを行う 欠損部分以外をアップデートする 許可しない 許可する 現地指揮官の裁量に任せる 派遣する 派遣しない 密告者を逮捕 係留所 兵舎 倉庫 輸送倉庫 汚職 スパイ 反逆 危険思想 失政追求"
+        },
+        {
+          "source": ".omo/work/logh7-cd-extract/installshield-root/____________s___/____/data/MsgDat/messages_com_0.dat",
+          "role": "msgdat-text",
+          "term": "アップデート",
+          "context": "べきではないでしょうか ●訓練を中止しデータの修復を行う ○バックアップデータでシミュレーションを行う ○欠損部分以外をアップデートする 残り時間：00’00”60 兵士達が訓練カリキュラムを無視して、勝手に行動しています。どのように対処しますか ●再度召集をかける ○現在のメンバーだけで訓"
+        }
+      ]
+    },
+    {
+      "order": 1,
+      "id": "login",
+      "titleKo": "로그인/접속 세션",
+      "unityScenePath": "Assets/Scenes/Logh7_01_Login.unity",
+      "sessionConcept": "login-session",
+      "stateModel": "Logh7LoginSession",
+      "requires": [
+        "boot-runtime"
+      ],
+      "implementationStatus": "placeholder-required",
+      "evidenceStatus": "source-hits-present",
+      "evidence": [
+        {
+          "source": ".omo/ghidra/export/G7MTClient/strings.tsv",
+          "role": "ghidra-strings",
+          "term": "Login",
+          "context": "aracter_size[%d] is over than 32.\\n 0x00765ce8 LobbySessionLoginNG 0x00765cfc LobbySessionLoginOK 0x00765d10 LobbySessionLoginRequest 0x00765"
+        },
+        {
+          "source": ".omo/ghidra/export/G7MTClient/functions.jsonl",
+          "role": "ghidra-functions",
+          "term": "Login",
+          "context": "t = &pvStack_c;\\r\\n FUN_005fe8f3(acStack_8c,s__Output_LobbyLoginRequest__get_l_00766064,bVar1);\\r\\n uVar3 = 0xffffffff;\\r\\n pcVar5 = acStack_8"
+        },
+        {
+          "source": ".omo/work/logh7-cd-extract/installshield-root/____________s___/____/data/MsgDat/constmsg.dat",
+          "role": "msgdat-text",
+          "term": "ログイン",
+          "context": "制限 階級限定 警戒 建設 休止 稼動 サーバーに接続します。 IDとパスワードを入力してください。 ID パスワード ログイン 終了 ゲーム開始 新キャラクターの作成 オリジナルキャラクター抽選 キャラクター削除 セッションの変更 環境設定 クレジット ゲーム終了 サーバーからのお知ら"
+        }
+      ]
+    },
+    {
+      "order": 2,
+      "id": "lobby",
+      "titleKo": "로비 세션",
+      "unityScenePath": "Assets/Scenes/Logh7_02_Lobby.unity",
+      "sessionConcept": "lobby-session",
+      "stateModel": "Logh7LobbyState",
+      "requires": [
+        "login-session"
+      ],
+      "implementationStatus": "placeholder-required",
+      "evidenceStatus": "source-hits-present",
+      "evidence": [
+        {
+          "source": ".omo/ghidra/export/G7MTClient/strings.tsv",
+          "role": "ghidra-strings",
+          "term": "Lobby",
+          "context": "RBUTTONDOWN\\n 0x0075e810 CMainFrame 0x0075e81c [mpsClientLobbyMessage] input: too large parameter\\n 0x0075e858 .?AVexception@@ 0x0075e870 .?"
+        },
+        {
+          "source": ".omo/ghidra/export/G7MTClient/functions.jsonl",
+          "role": "ghidra-functions",
+          "term": "Lobby",
+          "context": "< uVar2) {\\r\\n FUN_00402290(&DAT_03350ce0,s__mpsClientLobbyMessage__input__t_0075e81c);\\r\\n *(undefined4 *)(param_1 + 8) = *(undefined"
+        },
+        {
+          "source": ".omo/work/logh7-cd-extract/installshield-root/____________s___/____/data/MsgDat/constmsg.dat",
+          "role": "msgdat-text",
+          "term": "ロビー",
+          "context": "令部 科学技術総監部 軍務省 憲兵本部 後方勤務本部 国防委員会 装甲擲弾兵総監部 統合作戦本部 統師本部 内閣府 警戒ロビー 自由ロビー 会議室 広場 公園 航路管理センター 旗艦桟橋 管理センター 防空司令部 士官クラブ 高級士官クラブ 酒場 自宅 居室 大広間 猟場 教室 シミュ"
+        }
+      ]
+    },
+    {
+      "order": 3,
+      "id": "character-select",
+      "titleKo": "캐릭터 슬롯 선택",
+      "unityScenePath": "Assets/Scenes/Logh7_03_CharacterSelect.unity",
+      "sessionConcept": "character-slot-session",
+      "stateModel": "Logh7CharacterSlot",
+      "requires": [
+        "lobby-session"
+      ],
+      "implementationStatus": "placeholder-required",
+      "evidenceStatus": "source-hits-present",
+      "evidence": [
+        {
+          "source": ".omo/ghidra/export/G7MTClient/strings.tsv",
+          "role": "ghidra-strings",
+          "term": "Character",
+          "context": "MsgParseSystem::conv_msgtype] %s 0x0075ecd8 CommandGenerateCharacterCharge 0x0075ecf8 CommandExtensionCharacterCharge 0x0075ed18 CommandOriginalCh"
+        },
+        {
+          "source": ".omo/ghidra/export/G7MTClient/functions.jsonl",
+          "role": "ghidra-functions",
+          "term": "Character",
+          "context": "ck_c;\\r\\n FUN_005fe8f3(acStack_8c,s__Output_CommandOriginalCharacter_0075eff4,bVar1);\\r\\n uVar3 = 0xffffffff;\\r\\n pcVar5 = acStack_8c;\\r\\n do {\\r"
+        },
+        {
+          "source": ".omo/work/logh7-cd-extract/installshield-root/____________s___/____/data/MsgDat/constmsg.dat",
+          "role": "msgdat-text",
+          "term": "キャラクター",
+          "context": "が必要です。 消費MCP80 実行待機0G時間 実行所要0G時間 戦略用の職務権限コマンドを一覧 同スポットに存在する キャラクターを一覧 自身の所有する職務権限カードを一覧 自身に権限のないコマンドを、 権限を持っているキャラクターと共同で実行 キャラクターの顔の 表示、非表示を切り替えま"
+        },
+        {
+          "source": ".omo/work/logh7-cd-extract/installshield-root/____________s___/____/data/MsgDat/messages_3.dat",
+          "role": "msgdat-text",
+          "term": "選択",
+          "context": "則である。 $r10$$xdate$までに、敵艦艇を撃破してある程度の戦術的勝利を上げよ。敵機動戦力の撃滅こそ、戦略的な選択肢を広げる糸口となるのだ。 $r10$$xdate$までに、敵艦艇を撃破して一定規模の戦術的勝利を上げよ。まず、敵機動戦力を撃破し、その後に、敵領土を速やかに侵"
+        }
+      ]
+    },
+    {
+      "order": 4,
+      "id": "character-create",
+      "titleKo": "캐릭터 생성/삭제",
+      "unityScenePath": "Assets/Scenes/Logh7_04_CharacterCreate.unity",
+      "sessionConcept": "character-edit-session",
+      "stateModel": "Logh7PlayerCharacter",
+      "requires": [
+        "lobby-session"
+      ],
+      "implementationStatus": "placeholder-required",
+      "evidenceStatus": "source-hits-present",
+      "evidence": [
+        {
+          "source": ".omo/ghidra/export/G7MTClient/strings.tsv",
+          "role": "ghidra-strings",
+          "term": "DeleteChar",
+          "context": "0x00765d10 LobbySessionLoginRequest 0x00765d2c LobbyCommandDeleteCharacter 0x00765d48 LobbyCommandExtensionCharacterCharge 0x00765d70 LobbyResponse"
+        },
+        {
+          "source": ".omo/ghidra/export/G7MTClient/functions.jsonl",
+          "role": "ghidra-functions",
+          "term": "DeleteChar",
+          "context": "n\\r\\n{\\r\\n FUN_00439da0(param_2,param_3,s__INF_LobbyCommandDeleteCharacter_00765f1c);\\r\\n FUN_00439da0(param_2,param_3,s_session_id__0075ef30);\\r\\n"
+        },
+        {
+          "source": ".omo/work/logh7-cd-extract/installshield-root/____________s___/____/data/MsgDat/constmsg.dat",
+          "role": "msgdat-text",
+          "term": "作成",
+          "context": "学校でのみ実行可能。 消費MCP160 実行待機0G時間 実行所要0G時間 特定の惑星/要塞を対象とした輸送パッケージを作成します。 作成されたパッケージは輸送倉庫に移動します。 消費MCP80 実行待機0G時間 実行所要0G時間 輸送計画を中止します。 消費MCP80 実行待機0G"
+        },
+        {
+          "source": ".omo/work/logh7-cd-extract/installshield-root/____________s___/____/data/MsgDat/messages_com_0.dat",
+          "role": "msgdat-text",
+          "term": "作成",
+          "context": "た。人事担当者は直ちに司令官以下の任命をおこなってください。 $com_xfleet$解散しました。 輸送パッケージを作成します。 作成されたパッケージは輸送艦隊用倉庫に格納されます。 コマンドポイント”MCP”消費。 ”G時間”待機の後、 ”G時間”の所要時間を要します。 よろし"
+        }
+      ]
+    },
+    {
+      "order": 5,
+      "id": "world-entry",
+      "titleKo": "월드 입장/캐릭터 권한",
+      "unityScenePath": "Assets/Scenes/Logh7_05_WorldEntry.unity",
+      "sessionConcept": "character-authority-session",
+      "stateModel": "Logh7CharacterAuthority",
+      "requires": [
+        "character-slot-session"
+      ],
+      "implementationStatus": "placeholder-required",
+      "evidenceStatus": "source-hits-present",
+      "evidence": [
+        {
+          "source": ".omo/ghidra/export/G7MTClient/strings.tsv",
+          "role": "ghidra-strings",
+          "term": "World",
+          "context": "alize 0x00767604 RequestGridInitialize 0x0076761c ResponseWorldInitialize 0x00767634 RequestWorldInitialize 0x0076764c _INF:ResponseWorldInit"
+        },
+        {
+          "source": ".omo/ghidra/export/G7MTClient/symbols.tsv",
+          "role": "ghidra-symbols",
+          "term": "Enter",
+          "context": "KERNEL32.DLL Sleep 0xEXTERNAL:0000003b import KERNEL32.DLL EnterCriticalSection 0xEXTERNAL:0000003c import KERNEL32.DLL LeaveCriticalSection 0x"
+        },
+        {
+          "source": ".omo/ghidra/export/G7MTClient/functions.jsonl",
+          "role": "ghidra-functions",
+          "term": "World",
+          "context": ")\\r\\n\\r\\n{\\r\\n FUN_00439da0(param_2,param_3,s__INF_ResponseWorldInitialize__0076764c);\\r\\n FUN_00439da0(param_2,param_3,&DAT_0075ede0);\\r\\n re"
+        },
+        {
+          "source": ".omo/work/logh7-cd-extract/installshield-root/____________s___/____/data/MsgDat/constmsg.dat",
+          "role": "msgdat-text",
+          "term": "開始",
+          "context": "建設 休止 稼動 サーバーに接続します。 IDとパスワードを入力してください。 ID パスワード ログイン 終了 ゲーム開始 新キャラクターの作成 オリジナルキャラクター抽選 キャラクター削除 セッションの変更 環境設定 クレジット ゲーム終了 サーバーからのお知らせ ログインするキ"
+        },
+        {
+          "source": ".omo/work/logh7-cd-extract/installshield-root/____________s___/____/data/MsgDat/messages_1.dat",
+          "role": "msgdat-text",
+          "term": "開始",
+          "context": "0$税率の変更案は残念ながら地方貴族の信任を得られず実行できませんでした。 $r10$$xfacilities$の建設を開始いたします。 $r10$$xfacilities$の稼動を休止いたしました。エネルギーの節約になるでしょう。 $r10$賢明なご判断です。地方貴族にもきっと陛下"
+        },
+        {
+          "source": ".omo/work/logh7-cd-extract/installshield-root/____________s___/____/data/MsgDat/messages_3.dat",
+          "role": "msgdat-text",
+          "term": "開始",
+          "context": "時刻は$xtime$の予定である。 $r10$ワープ航法演算訓練を行う。艦橋要員は直ちに所定の配置に着き、航路の算定を開始せよ！ $r10$通常航行訓練を行う。機関部員は直ちに所定の配置に着け！ $r10$指揮統制訓練を行う。戦術士官は直ちに所定の配置に着け！ $"
+        },
+        {
+          "source": ".omo/work/logh7-cd-extract/installshield-root/____________s___/____/data/MsgDat/messages_com_0.dat",
+          "role": "msgdat-text",
+          "term": "開始",
+          "context": "及び資源を回収します。 コマンドポイントを”PCP”消費します。 よろしいですか？ ”施設種別名”にて”艦艇名”の建造を開始します。 コマンドポイントを”PCP”消費します。 よろしいですか？ ”兵員ユニット名”の募兵を行います。 コマンドポイントを”PCP”消費します。 よろしいで"
+        },
+        {
+          "source": ".omo/work/logh7-cd-extract/installshield-root/____________s___/____/data/MsgDat/messages_tac_1.dat",
+          "role": "msgdat-text",
+          "term": "開始",
+          "context": "１時間でワープ航行の準備が整います。 $r10$あと30分でワープ航行の準備が整います。 $r10$間もなくワープ航行が開始されます。 $r10$射撃を停止し、$xplanet$の衛星軌道上に碇泊しました。 $r10$射撃を停止し、通常航行態勢に移行しました。 $r10$戦闘"
+        }
+      ]
+    },
+    {
+      "order": 6,
+      "id": "strategic-map",
+      "titleKo": "전략 성계 지도",
+      "unityScenePath": "Assets/Scenes/Logh7_06_StrategicMap.unity",
+      "sessionConcept": "world-session",
+      "stateModel": "Logh7WorldSession",
+      "requires": [
+        "world-session"
+      ],
+      "implementationStatus": "placeholder-required",
+      "evidenceStatus": "source-hits-present",
+      "evidence": [
+        {
+          "source": ".omo/ghidra/export/G7MTClient/strings.tsv",
+          "role": "ghidra-strings",
+          "term": "Strategy",
+          "context": "tInformationDisplayCharacter 0x0075fcec ResponseInformationStrategyPlan 0x0075fd0c RequestInformationStrategyPlan 0x0075fd2c ResponseTotalPopulat"
+        },
+        {
+          "source": ".omo/ghidra/export/G7MTClient/functions.jsonl",
+          "role": "ghidra-functions",
+          "term": "Strategy",
+          "context": "0x1206:\\r\\n FUN_005923a0(s_NotifySimpleInformationStrategy_O_0076f68c);\\r\\n puVar18 = param_3;\\r\\n puVar17 = (undefined4"
+        },
+        {
+          "source": ".omo/work/logh7-cd-extract/installshield-root/____________s___/____/data/MsgDat/constmsg.dat",
+          "role": "msgdat-text",
+          "term": "戦略",
+          "context": "り、影響力と当該惑星/要塞の 政府支持率が増減します。 消費MCP320 実行待機0G時間 実行所要0G時間 我が国家の戦略的目標を策定します。 消費MCP320 実行待機0G時間 実行所要0G時間 各惑星/要塞から納入される税金の 割合を変更します。 消費MCP320 実行待機0G"
+        },
+        {
+          "source": ".omo/work/logh7-cd-extract/installshield-root/____________s___/____/data/MsgDat/messages_0.dat",
+          "role": "msgdat-text",
+          "term": "星系",
+          "context": "tor$（$xcpe$消費） 内容：$xforce$の$xsystem$$xplaneta$より$xplanetb$への星系内航行 実行場所：$xcomplace$ $r10$$xcommand$日時：$xdate$ $xproposer$（$xcpp$+$xinfluence$消"
+        },
+        {
+          "source": ".omo/work/logh7-cd-extract/installshield-root/____________s___/____/data/MsgDat/messages_1.dat",
+          "role": "msgdat-text",
+          "term": "戦略",
+          "context": "に対する$xnumerous$な$xobject$を行います。この作戦は$xday$に発動される予定です。 $r10$戦略上の理由により、$xsystem$に対する$xobject$を撤回します。 $r10$$xday$に発動される$xsystem$に対する$xnumerous$"
+        },
+        {
+          "source": ".omo/work/logh7-cd-extract/installshield-root/____________s___/____/data/MsgDat/messages_2.dat",
+          "role": "msgdat-text",
+          "term": "戦略",
+          "context": "$に対する$xnumerous$な$xobject$を行う。この作戦は$xday$に発動される予定である。 $r10$戦略上の理由により、$xsystem$に対する$xobject$を撤回する。 $r10$$xday$に発動される$xsystem$に対する$xnumerous$な"
+        },
+        {
+          "source": ".omo/work/logh7-cd-extract/installshield-root/____________s___/____/data/MsgDat/messages_3.dat",
+          "role": "msgdat-text",
+          "term": "戦略",
+          "context": "titlepriortyb$こそ、生粋の軍人であると言えるのではないだろうか。$xtitlepriortyb$は、純粋に戦略を語っているのだ。 $r10$$xtitlepriortyb$は、真の民主主義を知らないようだ。おそらく、$xtitlepriortyb$は、自らが市民の意思を"
+        },
+        {
+          "source": ".omo/work/logh7-cd-extract/installshield-root/____________s___/____/data/MsgDat/messages_4.dat",
+          "role": "msgdat-text",
+          "term": "戦略",
+          "context": "に対する$xnumerous$な$xobject$を行います。この作戦は$xday$に発動される予定です。 $r10$戦略上の理由により、$xsystem$に対する$xobject$を撤回します。 $r10$$xday$に発動される$xsystem$に対する$xnumerous$"
+        }
+      ]
+    },
+    {
+      "order": 7,
+      "id": "fleet-operations",
+      "titleKo": "함대/작전/이동",
+      "unityScenePath": "Assets/Scenes/Logh7_07_FleetOperations.unity",
+      "sessionConcept": "world-feature-session",
+      "stateModel": "Logh7WorldSession",
+      "requires": [
+        "world-session"
+      ],
+      "implementationStatus": "placeholder-required",
+      "evidenceStatus": "source-hits-present",
+      "evidence": [
+        {
+          "source": ".omo/ghidra/export/G7MTClient/strings.tsv",
+          "role": "ghidra-strings",
+          "term": "Fleet",
+          "context": "estion 0x00769374 NotifyChangeMode 0x00769388 NotifySupplyFleet 0x0076939c NotifyRepairFleet 0x007693b0 NotifyEncourageFlagship 0x007693c8 N"
+        },
+        {
+          "source": ".omo/ghidra/export/G7MTClient/functions.jsonl",
+          "role": "ghidra-functions",
+          "term": "Fleet",
+          "context": "vStack_c;\\r\\n FUN_005fe8f3(acStack_8c,s__Output_CommandFileFleet__get_le_0076a01c,bVar1);\\r\\n uVar4 = 0xffffffff;\\r\\n pcVar6 = acStack_8c;\\r\\n"
+        },
+        {
+          "source": ".omo/work/logh7-cd-extract/installshield-root/____________s___/____/data/MsgDat/constmsg.dat",
+          "role": "msgdat-text",
+          "term": "艦隊",
+          "context": "事官 統帥本部総長 統帥本部次長 統帥本部作戦一課課長 統帥本部作戦二課課長 統帥本部作戦三課課長 統帥本部監察官 宇宙艦隊司令長官 宇宙艦隊副司令長官 宇宙艦隊総参謀長 宇宙艦隊参謀 憲兵総監 憲兵副総監 装甲擲弾兵総監 装甲擲弾兵副総監 科学技術総監 士官学校長 士官学校教官 艦"
+        },
+        {
+          "source": ".omo/work/logh7-cd-extract/installshield-root/____________s___/____/data/MsgDat/messages_0.dat",
+          "role": "msgdat-text",
+          "term": "作戦",
+          "context": "費） $xexecutor$（$xcpe$消費） 内容：$xsystem$に対する$xstrategypurpose$の作戦計画 対象部隊：$xforcecategory$ 作戦参加艦艇ユニット数：$xstrategyparticipation$ 発動予定時期：$xschedule$"
+        },
+        {
+          "source": ".omo/work/logh7-cd-extract/installshield-root/____________s___/____/data/MsgDat/messages_1.dat",
+          "role": "msgdat-text",
+          "term": "艦隊",
+          "context": "がりませんでした。これでは、長距離のワープ航行には不安が残ります。 $r10$訓練の成果が上がったようです。これで、艦隊運動の迅速さが向上するものと思われます。 $r10$訓練の成果はあまり上がりませんでした。これでは、複雑な艦隊運動の実行には不安が残ります。 $r10$訓練"
+        },
+        {
+          "source": ".omo/work/logh7-cd-extract/installshield-root/____________s___/____/data/MsgDat/messages_2.dat",
+          "role": "msgdat-text",
+          "term": "作戦",
+          "context": "$r10$$xsystem$に対する$xnumerous$な$xobject$を行う。この作戦は$xday$に発動される予定である。 $r10$戦略上の理由により、$xsystem$に対する$xobject$を撤回する。 $r10$$xday$に発動"
+        },
+        {
+          "source": ".omo/work/logh7-cd-extract/installshield-root/____________s___/____/data/MsgDat/messages_3.dat",
+          "role": "msgdat-text",
+          "term": "作戦",
+          "context": "$r10$$xsystem$に対する$xnumerous$な$xobject$を行う。この作戦は$xday$に発動される予定である。 $r10$戦略上の理由により、$xsystem$に対する$xobject$を撤回する。 $r10$$xday$に発動"
+        },
+        {
+          "source": ".omo/work/logh7-cd-extract/installshield-root/____________s___/____/data/MsgDat/messages_4.dat",
+          "role": "msgdat-text",
+          "term": "作戦",
+          "context": "$r10$$xsystem$に対する$xnumerous$な$xobject$を行います。この作戦は$xday$に発動される予定です。 $r10$戦略上の理由により、$xsystem$に対する$xobject$を撤回します。 $r10$$xday$に発動"
+        }
+      ]
+    },
+    {
+      "order": 8,
+      "id": "tactical-battle",
+      "titleKo": "전술 전투",
+      "unityScenePath": "Assets/Scenes/Logh7_08_TacticalBattle.unity",
+      "sessionConcept": "world-feature-session",
+      "stateModel": "Logh7WorldSession",
+      "requires": [
+        "world-session"
+      ],
+      "implementationStatus": "placeholder-required",
+      "evidenceStatus": "source-hits-present",
+      "evidence": [
+        {
+          "source": ".omo/ghidra/export/G7MTClient/strings.tsv",
+          "role": "ghidra-strings",
+          "term": "Battle",
+          "context": "andCombat 0x007693ec NotifyMovedTroop 0x00769400 NotifyAirBattle 0x00769410 NotifyFought 0x00769420 NotifyAttackedShip 0x00769434 NotifyWarpe"
+        },
+        {
+          "source": ".omo/ghidra/export/G7MTClient/functions.jsonl",
+          "role": "ghidra-functions",
+          "term": "Battle",
+          "context": "pvStack_c;\\r\\n FUN_005fe8f3(acStack_8c,s__Output_CommandAirBattle__get_le_0076a0d0,bVar1);\\r\\n uVar3 = 0xffffffff;\\r\\n pcVar5 = acStack_8c;\\r\\n"
+        },
+        {
+          "source": ".omo/work/logh7-cd-extract/installshield-root/____________s___/____/data/MsgDat/constmsg.dat",
+          "role": "msgdat-text",
+          "term": "会戦",
+          "context": "星間大企業が宇宙海賊に対する裏取引として、破棄されたはずの旧式艦を供給しているケースも多い。本艦型は第２次ティアマト星域会戦時に帝国軍軽快部隊の主力として活躍したZ78型標準駆逐艦をベースとしたものである。中性子パルス砲に通常推進機関を接合したと評される構造をしており、レールガンを主"
+        },
+        {
+          "source": ".omo/work/logh7-cd-extract/installshield-root/____________s___/____/data/MsgDat/messages_0.dat",
+          "role": "msgdat-text",
+          "term": "攻撃",
+          "context": "r$（$xcpp$+$xinfluence$消費） $xexecutor$（$xcpe$消費） 内容：$xforce$の攻撃訓練を主とした航宙訓練 実行場所：$xcomplace$ $r10$$xcommand$日時：$xdate$ $xproposer$（$xcpp$+$xi"
+        },
+        {
+          "source": ".omo/work/logh7-cd-extract/installshield-root/____________s___/____/data/MsgDat/messages_1.dat",
+          "role": "msgdat-text",
+          "term": "戦闘",
+          "context": "10$残念ですが、国家目標であった、兵士の増員の達成に失敗しました。 $r10$おめでとうございます。国家目標であった、戦闘艦艇の増産を達成しました。 $r10$残念ですが、国家目標であった、戦闘艦艇の増産の達成に失敗しました。 $r10$おめでとうございます。国家目標であった、商船"
+        },
+        {
+          "source": ".omo/work/logh7-cd-extract/installshield-root/____________s___/____/data/MsgDat/messages_3.dat",
+          "role": "msgdat-text",
+          "term": "会戦",
+          "context": "よ。まず、敵機動戦力を撃破し、その後に、敵領土を速やかに侵攻していくのだ。 $r10$$xdate$までに、“ダゴン星域会戦”の雪辱戦に値する歴史的大勝利を上げよ。現在の帝国軍の実力ならば、それも適うはずだ。 $r10$$xdate$までに、国内の政府支持率をある程度の支持を得るまで"
+        },
+        {
+          "source": ".omo/work/logh7-cd-extract/installshield-root/____________s___/____/data/MsgDat/messages_7.dat",
+          "role": "msgdat-text",
+          "term": "戦闘",
+          "context": "0$恐れながら申し上げます。国家目標であった、兵士の増員に失敗しました。 $r10$御報告いたします。国家目標であった、戦闘艦艇の増産を達成しました。 $r10$恐れながら申し上げます。国家目標であった、戦闘艦艇の増産に失敗しました。 $r10$御報告いたします。国家目標であった、商"
+        },
+        {
+          "source": ".omo/work/logh7-cd-extract/installshield-root/____________s___/____/data/MsgDat/messages_8.dat",
+          "role": "msgdat-text",
+          "term": "会戦",
+          "context": "的勝利を上げよ。なに、軍の精鋭を以てすれば、さして難しいことではなかろう。 $r10$$xdate$までに、“ダゴン星域会戦”の雪辱戦に値する歴史的大勝利を上げよ。なに、軍の精鋭を以てすれば、さして難しいことではなかろう。 $r10$$xdate$までに、国内の政府支持率をある程度の"
+        }
+      ]
+    },
+    {
+      "order": 9,
+      "id": "planet-system-detail",
+      "titleKo": "항성/행성/성계 상세",
+      "unityScenePath": "Assets/Scenes/Logh7_09_SystemPlanetDetail.unity",
+      "sessionConcept": "world-feature-session",
+      "stateModel": "Logh7WorldSession",
+      "requires": [
+        "world-session"
+      ],
+      "implementationStatus": "placeholder-required",
+      "evidenceStatus": "source-hits-present",
+      "evidence": [
+        {
+          "source": ".omo/ghidra/export/G7MTClient/strings.tsv",
+          "role": "ghidra-strings",
+          "term": "Planet",
+          "context": "/model/images/lo/fs_glow_000.bmp 0x00772a38 /../data/model/Planets/fs006.mdx 0x00772a5c /../data/model/Planets/fs005.mdx 0x00772a80 /../data/mo"
+        },
+        {
+          "source": ".omo/ghidra/export/G7MTClient/symbols.tsv",
+          "role": "ghidra-symbols",
+          "term": "Star",
+          "context": "DLL GetFileType 0xEXTERNAL:0000009c import KERNEL32.DLL GetStartupInfoA 0xEXTERNAL:0000009d import KERNEL32.DLL GetCommandLineA 0xEXTERNAL:000"
+        },
+        {
+          "source": ".omo/ghidra/export/G7MTClient/functions.jsonl",
+          "role": "ghidra-functions",
+          "term": "Planet",
+          "context": "n uVar2 = 0xffffffff;\\r\\n pcVar5 = (&PTR_s_____data_model_Planets_fs000_mdx_007726a4)[param_2];\\r\\n do {\\r\\n pcVar8 = pcVar5;\\r\\n if (uVa"
+        },
+        {
+          "source": ".omo/work/logh7-cd-extract/installshield-root/____________s___/____/data/MsgDat/constmsg.dat",
+          "role": "msgdat-text",
+          "term": "惑星",
+          "context": "] [ 艦種１ ] [ 艦種２ ] [ 混成１ ] [ 混成２ ] [ 散開 ] 隊列解除 [ 三列 ] [ 駐留 ]惑星／要塞に駐留 自陣営に限る [ 航行 ]通常モード [ 戦闘 ]攻撃性重視、機動性低下 [ 碇泊 ]惑星／要塞軌道上に碇泊 [ 遊撃任務 ] 敵ユニットを選択"
+        },
+        {
+          "source": ".omo/work/logh7-cd-extract/installshield-root/____________s___/____/data/MsgDat/messages_0.dat",
+          "role": "msgdat-text",
+          "term": "惑星",
+          "context": "fluence$消費） $xexecutor$（$xcpe$消費） 内容：$xplanet$・$xforce$間の割当 惑星／要塞側艦艇ユニットの増減$xwarship$ 惑星／要塞側乗組員ユニットの増減$xcrew$ 惑星／要塞側陸戦隊ユニットの増減$xlandingforce$"
+        },
+        {
+          "source": ".omo/work/logh7-cd-extract/installshield-root/____________s___/____/data/MsgDat/messages_1.dat",
+          "role": "msgdat-text",
+          "term": "惑星",
+          "context": "はありません。 $r10$……不名誉にまみれて生き長らえるより、死を賜るのが本望です！ $r10$自治領主閣下は、自由惑星同盟と称する叛徒どもに関する良い情報をお持ちであるとか。それを是非とも伺いたいものです。 $r10$自治領主閣下に帝国の情報をお知らせしておこうと思いましてな。"
+        },
+        {
+          "source": ".omo/work/logh7-cd-extract/installshield-root/____________s___/____/data/MsgDat/messages_2.dat",
+          "role": "msgdat-text",
+          "term": "惑星",
+          "context": "（情報操作によって、$xplanet$の政府支持率を低下させることにしよう） $r10$（フェザーン経由で自由惑星同盟に侵入するぞ） $r10$（フェザーン経由で帝国へ戻ることにしよう） $r10$（$yinstitution$へ向かうことにしよう） $r10$（$yro"
+        },
+        {
+          "source": ".omo/work/logh7-cd-extract/installshield-root/____________s___/____/data/MsgDat/messages_3.dat",
+          "role": "msgdat-text",
+          "term": "惑星",
+          "context": "epriortyb$こそ、民主主義の理想をすべて体現した人物であると言える。$xtitlepriortyb$こそが、自由惑星同盟の良心そのものなのだ！ $r10$$xtitlepriortyb$こそ、民主主義政体下における理想的軍人であると言える。$xtitlepriortyb$こそ"
+        }
+      ]
+    },
+    {
+      "order": 10,
+      "id": "organization-personnel",
+      "titleKo": "조직/인사/인물",
+      "unityScenePath": "Assets/Scenes/Logh7_10_OrganizationPersonnel.unity",
+      "sessionConcept": "world-feature-session",
+      "stateModel": "Logh7WorldSession",
+      "requires": [
+        "world-session"
+      ],
+      "implementationStatus": "placeholder-required",
+      "evidenceStatus": "source-hits-present",
+      "evidence": [
+        {
+          "source": ".omo/ghidra/export/G7MTClient/strings.tsv",
+          "role": "ghidra-strings",
+          "term": "Rank",
+          "context": "misal 0x0076526c CommandCardAppointment 0x00765284 CommandRankDown 0x00765294 CommandSpeciallyRankUp 0x007652ac CommandRankUp 0x007652bc Re"
+        },
+        {
+          "source": ".omo/ghidra/export/G7MTClient/functions.jsonl",
+          "role": "ghidra-functions",
+          "term": "Rank",
+          "context": "= &pvStack_c;\\r\\n FUN_005fe8f3(acStack_8c,s__Output_CommandRankUp__get_lengt_0076542c,bVar1);\\r\\n uVar3 = 0xffffffff;\\r\\n pcVar5 = acStack_8c"
+        },
+        {
+          "source": ".omo/work/logh7-cd-extract/installshield-root/____________s___/____/data/MsgDat/constmsg.dat",
+          "role": "msgdat-text",
+          "term": "人事",
+          "context": "科学尚書 内閣書記官長 フェザーン駐在高等弁務官 フェザーン駐在補佐官 フェザーン駐在武官 軍務尚書 軍務省次官 軍務省人事局長 軍務省調査局長 軍務省参事官 統帥本部総長 統帥本部次長 統帥本部作戦一課課長 統帥本部作戦二課課長 統帥本部作戦三課課長 統帥本部監察官 宇宙艦隊司令長"
+        },
+        {
+          "source": ".omo/work/logh7-cd-extract/installshield-root/____________s___/____/data/MsgDat/messages_0.dat",
+          "role": "msgdat-text",
+          "term": "任命",
+          "context": "nce$消費） $xexecutor$（$xcpe$消費） 内容：$xname$$xrank$の$xexecutive$任命 実行場所：$xcomplace$ $r10$$xcommand$日時：$xdate$ $xproposer$（$xcpp$+$xinfluence$消費）"
+        },
+        {
+          "source": ".omo/work/logh7-cd-extract/installshield-root/____________s___/____/data/MsgDat/messages_com_0.dat",
+          "role": "msgdat-text",
+          "term": "人事",
+          "context": "0時間の所要時間を要します。 よろしいですか？\" $com_xplanet$に$com_xfleet$を配備しました。人事担当者は直ちに司令官以下の任命をおこなってください。 $com_xfleet$解散しました。 輸送パッケージを作成します。 作成されたパッケージは輸送艦隊用倉"
+        }
+      ]
+    },
+    {
+      "order": 11,
+      "id": "economy-logistics",
+      "titleKo": "경제/보급/건설",
+      "unityScenePath": "Assets/Scenes/Logh7_11_EconomyLogistics.unity",
+      "sessionConcept": "world-feature-session",
+      "stateModel": "Logh7WorldSession",
+      "requires": [
+        "world-session"
+      ],
+      "implementationStatus": "placeholder-required",
+      "evidenceStatus": "source-hits-present",
+      "evidence": [
+        {
+          "source": ".omo/ghidra/export/G7MTClient/strings.tsv",
+          "role": "ghidra-strings",
+          "term": "Supply",
+          "context": "andUnloadTroop 0x007666bc CommandSearch 0x007666cc CommandSupplyFuel 0x007666e0 CommandMoveGrid 0x007666f0 CommandMoveBase 0x00766700 _INF:Co"
+        },
+        {
+          "source": ".omo/ghidra/export/G7MTClient/functions.jsonl",
+          "role": "ghidra-functions",
+          "term": "Supply",
+          "context": "= &pvStack_c;\\r\\n FUN_005fe8f3(acStack_8c,s__Output_CommandSupplyBase__get_l_0076a8f0,bVar1);\\r\\n uVar3 = 0xffffffff;\\r\\n pcVar5 = acStack_8c;\\"
+        },
+        {
+          "source": ".omo/work/logh7-cd-extract/installshield-root/____________s___/____/data/MsgDat/constmsg.dat",
+          "role": "msgdat-text",
+          "term": "補給",
+          "context": "所要時間0G秒 [ 修理 ] 工作艦による修理を行う 注）旗艦の右 実行待機時間48G秒 実行所要時間1800G秒 [ 補給 ] 補給艦による補給を行う 注）旗艦の左 実行待機時間48G秒 実行所要時間1800G秒 [ 緊急補給 ] 緊急補給可能にする 実行待機時間48G秒 実行所要"
+        },
+        {
+          "source": ".omo/work/logh7-cd-extract/installshield-root/____________s___/____/data/MsgDat/messages_0.dat",
+          "role": "msgdat-text",
+          "term": "補給",
+          "context": "e$消費） $xexecutor$（$xcpe$消費） 内容：$xforce$の$xcoordinates$における燃料補給 実行場所：$xcomplace$ $r10$$xcommand$日時：$xdate$ $xproposer$（$xcpp$+$xinfluence$消費）"
+        },
+        {
+          "source": ".omo/work/logh7-cd-extract/installshield-root/____________s___/____/data/MsgDat/messages_1.dat",
+          "role": "msgdat-text",
+          "term": "補給",
+          "context": "す必要があるのならば、戦史から学ぶことが多いでしょう。 $r10$大軍は指揮官の命令によって動くのではない、大軍は組織と補給によって動くのです。組織と物資管理なくして、大軍の運用は有り得ないのでしょう。 $r10$限定された才能が勝敗を決することもあります。それらを学んでおいても損は"
+        },
+        {
+          "source": ".omo/work/logh7-cd-extract/installshield-root/____________s___/____/data/MsgDat/messages_2.dat",
+          "role": "msgdat-text",
+          "term": "補給",
+          "context": "動かす必要があるのならば、戦史から学ぶことが多いのだ。 $r10$大軍は指揮官の命令によって動くのではない、大軍は組織と補給によって動くのだ。組織と物資管理なくして、大軍の運用は有り得ない。 $r10$限定された才能が勝敗を決することもある。それらを学んでおいても損はない。 $r10"
+        },
+        {
+          "source": ".omo/work/logh7-cd-extract/installshield-root/____________s___/____/data/MsgDat/messages_3.dat",
+          "role": "msgdat-text",
+          "term": "補給",
+          "context": "動かす必要があるのならば、戦史から学ぶことが多いのだ。 $r10$大軍は指揮官の命令によって動くのではない、大軍は組織と補給によって動くのだ。組織と物資管理なくして、大軍の運用は有り得ない。 $r10$限定された才能が勝敗を決することもある。それらを学んでおいても損はない。 $r10"
+        },
+        {
+          "source": ".omo/work/logh7-cd-extract/installshield-root/____________s___/____/data/MsgDat/messages_4.dat",
+          "role": "msgdat-text",
+          "term": "補給",
+          "context": "す必要があるのならば、戦史から学ぶことが多いでしょう。 $r10$大軍は指揮官の命令によって動くのではない、大軍は組織と補給によって動くのです。組織と物資管理なくして、大軍の運用は有り得ないのでしょう。 $r10$限定された才能が勝敗を決することもあります。それらを学んでおいても損は"
+        }
+      ]
+    },
+    {
+      "order": 12,
+      "id": "diplomacy-intel",
+      "titleKo": "외교/정보",
+      "unityScenePath": "Assets/Scenes/Logh7_12_DiplomacyIntel.unity",
+      "sessionConcept": "world-feature-session",
+      "stateModel": "Logh7WorldSession",
+      "requires": [
+        "world-session"
+      ],
+      "implementationStatus": "placeholder-required",
+      "evidenceStatus": "source-hits-present",
+      "evidence": [
+        {
+          "source": ".omo/ghidra/export/G7MTClient/strings.tsv",
+          "role": "ghidra-strings",
+          "term": "Intel",
+          "context": "icrosoft\\Direct3D 0x00679d14 DisableMMX 0x00679d20 GenuineIntel 0x00679d30 (INFO) CPU optimization disabled. Using x87 Instructions 0x00679d6"
+        },
+        {
+          "source": ".omo/ghidra/export/G7MTClient/functions.jsonl",
+          "role": "ghidra-functions",
+          "term": "Intel",
+          "context": "14) = 0;\\r\\n *(undefined4 *)(unaff_EBP + -0x24) = s_GenuineIntel_00679d20._0_4_;\\r\\n *(undefined4 *)(unaff_EBP + -0x20) = s_GenuineIntel_00679d"
+        },
+        {
+          "source": ".omo/work/logh7-cd-extract/installshield-root/____________s___/____/data/MsgDat/constmsg.dat",
+          "role": "msgdat-text",
+          "term": "外交",
+          "context": "帝国宰相によって任命される。国務尚書を補佐する職務である。 帝国宰相によって任命される。本来はフェザーン自治領に対する外交機関であるが、実質的には諜報活動も行っている。現地赴任が原則であり、自治領主によって様々な外交的特権が認められている。 国務尚書によって任命される。高等弁務官の"
+        },
+        {
+          "source": ".omo/work/logh7-cd-extract/installshield-root/____________s___/____/data/MsgDat/messages_0.dat",
+          "role": "msgdat-text",
+          "term": "情報",
+          "context": "uence$消費） $xexecutor$（$xcpe$消費） 内容：$xinstitution$$xroom$に対する情報工作 実行場所：$xcomplace$ $r10$$xcommand$日時：$xdate$ $xproposer$（$xcpp$+$xinfluence$"
+        },
+        {
+          "source": ".omo/work/logh7-cd-extract/installshield-root/____________s___/____/data/MsgDat/messages_1.dat",
+          "role": "msgdat-text",
+          "term": "情報",
+          "context": "にまみれて生き長らえるより、死を賜るのが本望です！ $r10$自治領主閣下は、自由惑星同盟と称する叛徒どもに関する良い情報をお持ちであるとか。それを是非とも伺いたいものです。 $r10$自治領主閣下に帝国の情報をお知らせしておこうと思いましてな。興味のある情報もありましょうぞ。 $"
+        },
+        {
+          "source": ".omo/work/logh7-cd-extract/installshield-root/____________s___/____/data/MsgDat/messages_2.dat",
+          "role": "msgdat-text",
+          "term": "情報",
+          "context": "$r10$（どうやら、誰かが個人情報を調べようとしているようだ……） $r10$卿に$xtitlepriortyb$を逮捕する権限を与える。可及的速やかに$xtitlepriortyb$の"
+        },
+        {
+          "source": ".omo/work/logh7-cd-extract/installshield-root/____________s___/____/data/MsgDat/messages_3.dat",
+          "role": "msgdat-text",
+          "term": "情報",
+          "context": "$r10$なるほど。多分、興味ある話かと思いますな。 $r10$お話はわかりました。しかし、特にこれといった情報はありませんのでな。 $r10$なるほど。皇帝陛下の御厚意は有り難く受け取っておきましょう。 $r10$お話はわかりました。しかし、改めてお聞きするようなことは"
+        },
+        {
+          "source": ".omo/work/logh7-cd-extract/installshield-root/____________s___/____/data/MsgDat/messages_7.dat",
+          "role": "msgdat-text",
+          "term": "フェザーン",
+          "context": "がら申し上げます。国家目標であった、治安維持率の引き上げに失敗しました。 $r10$御報告いたします。国家目標であった、フェザーン自治領の独立保障を達成しました。 $r10$恐れながら申し上げます。国家目標であった、フェザーン自治領の独立保障に失敗しました。 $r10$御報告いたします。国"
+        }
+      ]
+    },
+    {
+      "order": 13,
+      "id": "reports-mail-system",
+      "titleKo": "보고/메일/시스템 메시지",
+      "unityScenePath": "Assets/Scenes/Logh7_13_ReportsMailSystem.unity",
+      "sessionConcept": "world-feature-session",
+      "stateModel": "Logh7WorldSession",
+      "requires": [
+        "world-session"
+      ],
+      "implementationStatus": "placeholder-required",
+      "evidenceStatus": "source-hits-present",
+      "evidence": [
+        {
+          "source": ".omo/ghidra/export/G7MTClient/strings.tsv",
+          "role": "ghidra-strings",
+          "term": "Mail",
+          "context": "age 0x007673f8 CommandSetTogether 0x0076740c NotifyCommandMail 0x00767420 CommandReplyOrderSuggestMail 0x00767440 CommandOrderSuggestMail 0"
+        },
+        {
+          "source": ".omo/ghidra/export/G7MTClient/symbols.tsv",
+          "role": "ghidra-symbols",
+          "term": "Message",
+          "context": "GetLastError 0xEXTERNAL:00000035 import KERNEL32.DLL FormatMessageA 0xEXTERNAL:00000036 import KERNEL32.DLL CreateFileA 0xEXTERNAL:00000037 impo"
+        },
+        {
+          "source": ".omo/ghidra/export/G7MTClient/functions.jsonl",
+          "role": "ghidra-functions",
+          "term": "Mail",
+          "context": "FUN_00439da0(param_2,param_3,s__INF_TransactionInformationMailB_007679c8);\\r\\n FUN_00439da0(param_2,param_3,&DAT_0075ef6c);\\r\\n FUN_00439da0"
+        },
+        {
+          "source": ".omo/work/logh7-cd-extract/installshield-root/____________s___/____/data/MsgDat/constmsg.dat",
+          "role": "msgdat-text",
+          "term": "報告",
+          "context": "治安、生産などに振り分けます 消費MCP160 実行待機0G時間 実行所要0G時間 調査 惑星／要塞の状態を 調査し、報告します 消費MCP80 実行待機0G時間 実行所要0G時間 航路貿易 船団貿易 エンジン建設 要塞の推進システムを 建設します 消費MCP80 実行待機0G時間"
+        },
+        {
+          "source": ".omo/work/logh7-cd-extract/installshield-root/____________s___/____/data/MsgDat/messages_1.dat",
+          "role": "msgdat-text",
+          "term": "報告",
+          "context": "$r10$$xplanet$の専用ストックが以下のように変更されたそうです。 $r10$一斉捜索の結果を御報告いたします。$xtime$現在、$xplanet$には以下のような人物が滞在しております。 $r10$$ytitleprioritya$に$xtitlep"
+        },
+        {
+          "source": ".omo/work/logh7-cd-extract/installshield-root/____________s___/____/data/MsgDat/messages_3.dat",
+          "role": "msgdat-text",
+          "term": "報告",
+          "context": "藉者を捕らえよ！ $r10$重要人物である、$xtitlepriortyb$を常時監視せよ。怪しい行動が有れば、すぐに報告するのだ。 $r10$思うところあって、私は軍務を退くことにした。後のことはよろしく頼む"
+        },
+        {
+          "source": ".omo/work/logh7-cd-extract/installshield-root/____________s___/____/data/MsgDat/messages_7.dat",
+          "role": "msgdat-text",
+          "term": "報告",
+          "context": "$r10$御報告いたします。国家目標であった、領土占領を達成しました。 $r10$恐れながら申し上げます。国家目標であった、領土占領に失敗しました。 $r10$御報告いたします"
+        },
+        {
+          "source": ".omo/work/logh7-cd-extract/installshield-root/____________s___/____/data/MsgDat/messages_tac_1.dat",
+          "role": "msgdat-text",
+          "term": "報告",
+          "context": "…。 $r10$我が戦隊所属の$xunit$が$xsquadron$に編入されたようです。 $r10$空戦隊より報告！ 「目標を捕捉、これより攻撃を開始する」とのことです。 $r10$空戦隊より報告！ 「敵旗艦$xshipname$を撃沈。これより帰還する」とのことです。 $"
+        }
+      ]
+    },
+    {
+      "order": 14,
+      "id": "settings-save-load",
+      "titleKo": "설정/저장/불러오기",
+      "unityScenePath": "Assets/Scenes/Logh7_14_SettingsSaveLoad.unity",
+      "sessionConcept": "world-feature-session",
+      "stateModel": "Logh7WorldSession",
+      "requires": [
+        "world-session"
+      ],
+      "implementationStatus": "placeholder-required",
+      "evidenceStatus": "source-hits-present",
+      "evidence": [
+        {
+          "source": ".omo/ghidra/export/G7MTClient/strings.tsv",
+          "role": "ghidra-strings",
+          "term": "Config",
+          "context": "03d.mdx 0x007747dc MakeHighModelError 0x007747f0 G7GraphicConfigSection 0x00774808 TextureLevel 0x00774818 StarsModelLevel 0x00774828 UnitMod"
+        },
+        {
+          "source": ".omo/ghidra/export/G7MTClient/symbols.tsv",
+          "role": "ghidra-symbols",
+          "term": "Save",
+          "context": "t GDI32.DLL RestoreDC 0xEXTERNAL:00000145 import GDI32.DLL SaveDC 0xEXTERNAL:00000146 import GDI32.DLL GetDIBits 0xEXTERNAL:00000147 import G"
+        },
+        {
+          "source": ".omo/ghidra/export/G7MTClient/functions.jsonl",
+          "role": "ghidra-functions",
+          "term": "Config",
+          "context": "id FUN_004f3280(void)\\r\\n\\r\\n{\\r\\n FUN_0064c144(s_G7GraphicConfigSection_007747f0);\\r\\n return;\\r\\n}\\r\\n\\r\\n\"} {\"addr\":\"0x004f3290\",\"name\":\"FUN"
+        },
+        {
+          "source": ".omo/work/logh7-cd-extract/installshield-root/____________s___/____/data/MsgDat/constmsg.dat",
+          "role": "msgdat-text",
+          "term": "設定",
+          "context": "いる 惑星／要塞のステータス表示 所属部隊との同航／単独航行切替 メッセンジャー起動 各種情報を閲覧 オフライン時の各種設定 各種設定、ゲーム終了 メール起動 現在実行待機または実行処理中のコマンドを 一覧します 統一 中立 帝国 同盟 海賊 正規軍 叛乱軍 個人 皇帝 帝国軍最高司"
+        },
+        {
+          "source": ".omo/work/logh7-cd-extract/installshield-root/____________s___/____/data/MsgDat/messages_0.dat",
+          "role": "msgdat-text",
+          "term": "設定",
+          "context": "xplanet$の統治目標を$xgovernmenttarget$ $xgovernmenttargetdetail$に設定 実行場所：$xcomplace$ $r10$$xcommand$日時：$xdate$ $"
+        }
+      ]
+    }
+  ]
+}

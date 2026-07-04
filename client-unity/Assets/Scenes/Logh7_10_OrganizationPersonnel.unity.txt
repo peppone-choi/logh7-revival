@@ -1,0 +1,11 @@
+LOGH VII scene placeholder: 조직/인사/인물
+id: organization-personnel
+status: placeholder-required
+evidence: source-hits-present
+
+Evidence hits:
+- ghidra-strings .omo/ghidra/export/G7MTClient/strings.tsv term=Rank
+- ghidra-functions .omo/ghidra/export/G7MTClient/functions.jsonl term=Rank
+- msgdat-text .omo/work/logh7-cd-extract/installshield-root/____________s___/____/data/MsgDat/constmsg.dat term=人事
+- msgdat-text .omo/work/logh7-cd-extract/installshield-root/____________s___/____/data/MsgDat/messages_0.dat term=任命
+- msgdat-text .omo/work/logh7-cd-extract/installshield-root/____________s___/____/data/MsgDat/messages_com_0.dat term=人事

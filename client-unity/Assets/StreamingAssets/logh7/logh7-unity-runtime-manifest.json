@@ -1,0 +1,223 @@
+{
+  "id": "logh7-unity-runtime-manifest",
+  "status": "runtime-data-bootstrap",
+  "generatedAt": "2026-07-04T05:45:00.188Z",
+  "runtime": {
+    "mainClient": "Unity",
+    "unityVersion": "6000.5.2f1",
+    "originalExePolicy": "oracle-only-not-product-runtime",
+    "normalEntryScene": "boot-update-launcher"
+  },
+  "sessionFlow": [
+    {
+      "id": "boot-launcher",
+      "sceneId": "boot-update-launcher",
+      "stateModel": "Logh7BootState",
+      "grants": [
+        "boot-runtime"
+      ],
+      "requires": []
+    },
+    {
+      "id": "login-session",
+      "sceneId": "login",
+      "stateModel": "Logh7LoginSession",
+      "grants": [
+        "login-session"
+      ],
+      "requires": [
+        "boot-runtime"
+      ]
+    },
+    {
+      "id": "lobby-session",
+      "sceneId": "lobby",
+      "stateModel": "Logh7LobbyState",
+      "grants": [
+        "lobby-session"
+      ],
+      "requires": [
+        "login-session"
+      ]
+    },
+    {
+      "id": "character-select",
+      "sceneId": "character-select",
+      "stateModel": "Logh7CharacterSlot",
+      "grants": [
+        "character-slot-session"
+      ],
+      "requires": [
+        "lobby-session"
+      ]
+    },
+    {
+      "id": "character-authority",
+      "sceneId": "world-entry",
+      "stateModel": "Logh7CharacterAuthority",
+      "grants": [
+        "character-authority"
+      ],
+      "requires": [
+        "character-slot-session"
+      ]
+    },
+    {
+      "id": "world-session",
+      "sceneId": "world-entry",
+      "stateModel": "Logh7WorldSession",
+      "grants": [
+        "world-session"
+      ],
+      "requires": [
+        "character-authority"
+      ]
+    },
+    {
+      "id": "strategic-map",
+      "sceneId": "strategic-map",
+      "stateModel": "Logh7WorldSession",
+      "grants": [
+        "strategic-map-visible"
+      ],
+      "requires": [
+        "world-session"
+      ]
+    }
+  ],
+  "runtimeStateModels": [
+    {
+      "id": "Logh7BootState",
+      "authority": "client-local",
+      "owns": [
+        "launcher readiness",
+        "runtime data presence"
+      ]
+    },
+    {
+      "id": "Logh7LoginSession",
+      "authority": "server-authoritative",
+      "owns": [
+        "account authentication",
+        "server endpoint binding"
+      ]
+    },
+    {
+      "id": "Logh7LobbyState",
+      "authority": "server-authoritative",
+      "owns": [
+        "account lobby presence",
+        "character slot listing"
+      ]
+    },
+    {
+      "id": "Logh7CharacterSlot",
+      "authority": "server-authoritative",
+      "owns": [
+        "slot identity",
+        "select/create/delete admission"
+      ]
+    },
+    {
+      "id": "Logh7PlayerCharacter",
+      "authority": "server-authoritative",
+      "owns": [
+        "name",
+        "faction",
+        "rank seed",
+        "starting affiliation"
+      ]
+    },
+    {
+      "id": "Logh7CharacterAuthority",
+      "authority": "server-authoritative",
+      "owns": [
+        "selected character id",
+        "world access grant"
+      ]
+    },
+    {
+      "id": "Logh7WorldSession",
+      "authority": "server-authoritative",
+      "owns": [
+        "scenario id",
+        "strategic-map entry",
+        "game clock"
+      ]
+    }
+  ],
+  "dataPacks": {
+    "originalFallback": {
+      "required": true,
+      "path": "original/manifest.json",
+      "policy": "source-faithful fallback for every remaster/mod replacement"
+    },
+    "remaster": {
+      "policy": "optional-reversible",
+      "path": "packs/remaster-hd/manifest.json",
+      "conflictCheckRequired": true,
+      "provenanceLabelRequired": true
+    },
+    "userMods": {
+      "policy": "optional-reversible-highest-priority",
+      "path": "packs/user-mods/"
+    }
+  },
+  "localization": {
+    "defaultLocale": "ko",
+    "sourceLocale": "ja",
+    "policy": "key-preserving translation with review state and glossary-controlled names",
+    "files": {
+      "ja": "localization/ja.json",
+      "ko": "localization/ko.json",
+      "review": "localization/ko.review.json"
+    }
+  },
+  "catalogs": [
+    {
+      "id": "galaxy",
+      "sourcePath": "server/content/galaxy.json",
+      "runtimePath": "generated/galaxy.json",
+      "status": "present",
+      "canonicalState": "suspect-input",
+      "bytes": 111672,
+      "sha1": "e456c16059fe496af2283a48e620e15bd2f8eac1"
+    },
+    {
+      "id": "sceneInventory",
+      "sourcePath": "server/content/generated/logh7-scene-inventory.json",
+      "runtimePath": "generated/logh7-scene-inventory.json",
+      "status": "present",
+      "canonicalState": "evidence-input",
+      "bytes": 50112,
+      "sha1": "93a04d0228a3e7966c947c2af248bb6b265681cd"
+    },
+    {
+      "id": "bootstrapManifest",
+      "sourcePath": "server/content/generated/logh7-unity-bootstrap-manifest.json",
+      "runtimePath": "generated/logh7-unity-bootstrap-manifest.json",
+      "status": "present",
+      "canonicalState": "evidence-input",
+      "bytes": 8008,
+      "sha1": "39bc401c82cdfd16b55b0e2d50be9a0483dfc8a2"
+    },
+    {
+      "id": "recordCandidateCrosscheck",
+      "sourcePath": "server/content/generated/logh7-record-candidate-crosscheck.json",
+      "runtimePath": "generated/logh7-record-candidate-crosscheck.json",
+      "status": "present",
+      "canonicalState": "evidence-input",
+      "bytes": 3647,
+      "sha1": "84744dcc9c75ca9315858372c3d9e8151b2fe961"
+    },
+    {
+      "id": "hiddenDataWatchlist",
+      "sourcePath": "server/content/generated/logh7-hidden-data-watchlist.json",
+      "runtimePath": "generated/logh7-hidden-data-watchlist.json",
+      "status": "present",
+      "canonicalState": "evidence-input",
+      "bytes": 10372,
+      "sha1": "928f857ec4d4ec5f5b0ff4e6d1cfcf4480bea623"
+    }
+  ]
+}

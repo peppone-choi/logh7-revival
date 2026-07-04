@@ -1,0 +1,254 @@
+{
+  "id": "logh7-hidden-data-watchlist",
+  "status": "reported",
+  "policy": "Mandatory watch report for system-position and original-character-roster data. Hidden signature hits are candidates until parsed and cross-checked.",
+  "inputs": {
+    "classificationId": "logh7-hidden-data-classification",
+    "classificationStatus": "classified",
+    "classificationRecordCount": 37047
+  },
+  "summary": {
+    "categoryCount": 2,
+    "mustReportCategoryIds": [
+      "systemPositions",
+      "originalCharacterRoster"
+    ]
+  },
+  "categories": [
+    {
+      "id": "systemPositions",
+      "labelKo": "성계 위치",
+      "mustReport": true,
+      "canonicalStatus": "not-confirmed-new-hidden-system-position-table",
+      "hiddenCandidateSummary": {
+        "total": 209,
+        "uniquePathCount": 44,
+        "byVisibility": {
+          "alreadyExtracted": 39,
+          "unvalidated": 170
+        },
+        "bySignature": {
+          "BMP": 87,
+          "MZ": 120,
+          "PNG": 1,
+          "PE": 1
+        },
+        "examples": [
+          ".omo/work/logh7-cd-extract/installshield-root/____________s___/____/data/image/Thumbnail/Planet/ip021.tga",
+          ".omo/work/logh7-cd-extract/installshield-root/____________s___/____/data/image/Thumbnail/Planet/ip050.tga",
+          ".omo/work/logh7-cd-extract/installshield-root/____________s___/____/data/image/Thumbnail/Planet/ip061.tga",
+          ".omo/work/logh7-cd-extract/installshield-root/____________s___/____/data/image/Thumbnail/Star/is007.tga",
+          ".omo/work/logh7-cd-extract/installshield-root/____________s___/____/data/image/effect/grid.bmp",
+          ".omo/work/logh7-cd-extract/installshield-root/____________s___/____/data/image/effect/strategy.tga",
+          ".omo/work/logh7-cd-extract/installshield-root/____________s___/____/data/image/planetbattle/_______b__L.bmp",
+          ".omo/work/logh7-cd-extract/installshield-root/____________s___/____/data/image/planetbattle/_______b__R.bmp",
+          ".omo/work/logh7-cd-extract/installshield-root/____________s___/____/data/image/strategy/bh_flare.bmp",
+          ".omo/work/logh7-cd-extract/installshield-root/____________s___/____/data/image/strategy/bh_light.bmp",
+          ".omo/work/logh7-cd-extract/installshield-root/____________s___/____/data/image/strategy/fs000_f.bmp",
+          ".omo/work/logh7-cd-extract/installshield-root/____________s___/____/data/image/strategy/fs001_f.bmp",
+          ".omo/work/logh7-cd-extract/installshield-root/____________s___/____/data/image/strategy/fs002_f.bmp",
+          ".omo/work/logh7-cd-extract/installshield-root/____________s___/____/data/image/strategy/fs003_f.bmp",
+          ".omo/work/logh7-cd-extract/installshield-root/____________s___/____/data/image/strategy/fs004_f.bmp",
+          ".omo/work/logh7-cd-extract/installshield-root/____________s___/____/data/image/strategy/fs005_f.bmp",
+          ".omo/work/logh7-cd-extract/installshield-root/____________s___/____/data/image/strategy/fs006_f.bmp",
+          ".omo/work/logh7-cd-extract/installshield-root/____________s___/____/data/image/strategy/grid_glow.bmp",
+          ".omo/work/logh7-cd-extract/installshield-root/____________s___/____/data/image/strategy/old/_P____r___{_[_h_G.bmp",
+          ".omo/work/logh7-cd-extract/installshield-root/____________s___/____/data/image/strategy/old/sstar.bmp"
+        ]
+      },
+      "contentFindings": [
+        {
+          "path": "server/content/galaxy.json",
+          "kind": "current-derived-system-position-data",
+          "keys": [
+            "_source",
+            "_extracted",
+            "_specialBodies",
+            "systems",
+            "_planet_order",
+            "_canon_grid"
+          ],
+          "systemsCount": 85,
+          "provenance": "gin7manualsaved.pdf special Text annotations (80 system labels; cx/cy only) + page-101 raster star-dot centers; canonical roster = 85 constmsg group-0x18 systems. 80 systems have P1 manual/raster coordinates. Five constmsg-P0 systems (13/32/34/52/75) use MINIMAP_P3_VIRTUAL_OVERLAY grid coordinates, P3 virtual planets, and P3 virtual stellar colors for the..."
+        },
+        {
+          "path": "server/content/galaxy-raster-star-centers.json",
+          "kind": "current-generated-manual-raster-star-centers",
+          "keys": [
+            "_source",
+            "_generated",
+            "_grid",
+            "_method",
+            "systems"
+          ],
+          "systemsCount": 80,
+          "provenance": ".omo/work/galaxy-extract/page101-bg.jpg actual circular star centers; this JSON is seed data for DB import, not live server state"
+        },
+        {
+          "path": "server/content/galaxy-passable-cells.json",
+          "kind": "current-generated-manual-passable-mask",
+          "keys": [
+            "_source",
+            "_grid",
+            "_count",
+            "_method",
+            "rowRangesByRow"
+          ],
+          "count": 3628,
+          "provenance": ".omo/work/galaxy-extract/canon-positions.json actual star-dot cells + previous pixel mask; central gap re-cut to two one-cell corridor rows; stale annotation-marker line cells removed"
+        },
+        {
+          "path": "server/content/generated/logh7-null-galaxy-template.json",
+          "kind": "generated-mdx-star-template",
+          "keys": [
+            "id",
+            "source",
+            "headerNodeCount",
+            "starCount",
+            "spectralClasses",
+            "stars",
+            "nonStarTemplateNodes"
+          ],
+          "count": 79,
+          "starsCount": 79,
+          "positionStatus": "not-in-mdx",
+          "provenance": "Null_galaxy.mdx provides star template node names and spectral classes only. Canonical star positions remain manual/PDF-derived evidence."
+        }
+      ]
+    },
+    {
+      "id": "originalCharacterRoster",
+      "labelKo": "오리지널 캐릭터 로스터",
+      "mustReport": true,
+      "canonicalStatus": "not-confirmed-new-hidden-original-character-roster",
+      "hiddenCandidateSummary": {
+        "total": 403,
+        "uniquePathCount": 8,
+        "byVisibility": {
+          "unvalidated": 402,
+          "alreadyExtracted": 1
+        },
+        "bySignature": {
+          "MZ": 231,
+          "BMP": 171,
+          "MDX": 1
+        },
+        "examples": [
+          ".omo/work/logh7-cd-extract/installshield-root/____________s___/____/data/image/Face/gaf.tcf",
+          ".omo/work/logh7-cd-extract/installshield-root/____________s___/____/data/image/Face/gam.tcf",
+          ".omo/work/logh7-cd-extract/installshield-root/____________s___/____/data/image/Face/gef.tcf",
+          ".omo/work/logh7-cd-extract/installshield-root/____________s___/____/data/image/Face/gem.tcf",
+          ".omo/work/logh7-cd-extract/installshield-root/____________s___/____/data/image/Face/o.tcf",
+          ".omo/work/logh7-cd-extract/installshield-root/____________s___/____/data/image/Face/oam.tcf",
+          ".omo/work/logh7-cd-extract/installshield-root/____________s___/____/data/image/Face/oem.tcf",
+          ".omo/work/logh7-cd-extract/installshield-root/____________s___/____/data/image/Face/unknownface.tga"
+        ]
+      },
+      "contentFindings": [
+        {
+          "path": "server/content/character-roster.json",
+          "kind": "current-composite-character-roster",
+          "keys": [
+            "_purpose",
+            "_built",
+            "_builder",
+            "_stat_keys",
+            "_stat_key_meaning_ja",
+            "_sources",
+            "_count",
+            "_count_with_stats",
+            "_count_without_stats",
+            "_count_with_face_number",
+            "_unresolved_no_stats",
+            "characters"
+          ],
+          "count": 99,
+          "charactersCount": 99
+        },
+        {
+          "path": "server/content/roster/characters.json",
+          "kind": "current-composite-character-source",
+          "keys": [
+            "_source",
+            "_note",
+            "characters"
+          ],
+          "charactersCount": 97,
+          "provenance": "manual roster (VII duty-holders) + IV EX known-faction + canon majors; 8 innate abilities (archetype+individual, NOT rank-derived), canon overrides"
+        },
+        {
+          "path": "server/content/roster/manual-roster.json",
+          "kind": "current-manual-duty-roster",
+          "keys": [
+            "_source",
+            "_extracted",
+            "abilities",
+            "rankLadderMilitary",
+            "rankLadderPolitician",
+            "classes",
+            "growthRules",
+            "empire",
+            "alliance",
+            "postDefinitions"
+          ],
+          "provenance": "gin7 official manual (gin7manual.txt) — game-start (門閥貴族 era) initial duty-card holders"
+        },
+        {
+          "path": "server/content/roster/official-roster.json",
+          "kind": "current-external-official-sample",
+          "keys": [
+            "_source",
+            "_note",
+            "_wayback_url",
+            "_count",
+            "_portraits_archived",
+            "characters"
+          ],
+          "count": 12,
+          "charactersCount": 12,
+          "provenance": "gineiden.com/st_char.html (official BOTHTEC LOGH VII design-reference page), Wayback 20040115095030"
+        },
+        {
+          "path": "server/content/generated/logh7-face-tcf-catalog.json",
+          "kind": "generated-face-archive-catalog",
+          "keys": [
+            "id",
+            "sourceRoot",
+            "status",
+            "archiveCount",
+            "archives",
+            "archiveGroups",
+            "hed"
+          ],
+          "count": 7,
+          "archivesCount": 7
+        },
+        {
+          "path": "server/content/generated/logh7-face-portrait-catalog.json",
+          "kind": "generated-face-portrait-catalog",
+          "keys": [
+            "id",
+            "sourceRoot",
+            "status",
+            "storage",
+            "hed",
+            "archiveCount",
+            "archives",
+            "totals"
+          ],
+          "count": 7,
+          "archivesCount": 7,
+          "totals": {
+            "decodedCount": 1061,
+            "outsideArchiveCount": 1925,
+            "failureCounts": {
+              "invalid-dimensions": 7,
+              "truncated-pixel-data": 6,
+              "unsupported-bpp": 1684
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

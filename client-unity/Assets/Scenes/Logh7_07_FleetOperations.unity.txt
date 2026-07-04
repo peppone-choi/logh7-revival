@@ -1,0 +1,14 @@
+LOGH VII scene placeholder: 함대/작전/이동
+id: fleet-operations
+status: placeholder-required
+evidence: source-hits-present
+
+Evidence hits:
+- ghidra-strings .omo/ghidra/export/G7MTClient/strings.tsv term=Fleet
+- ghidra-functions .omo/ghidra/export/G7MTClient/functions.jsonl term=Fleet
+- msgdat-text .omo/work/logh7-cd-extract/installshield-root/____________s___/____/data/MsgDat/constmsg.dat term=艦隊
+- msgdat-text .omo/work/logh7-cd-extract/installshield-root/____________s___/____/data/MsgDat/messages_0.dat term=作戦
+- msgdat-text .omo/work/logh7-cd-extract/installshield-root/____________s___/____/data/MsgDat/messages_1.dat term=艦隊
+- msgdat-text .omo/work/logh7-cd-extract/installshield-root/____________s___/____/data/MsgDat/messages_2.dat term=作戦
+- msgdat-text .omo/work/logh7-cd-extract/installshield-root/____________s___/____/data/MsgDat/messages_3.dat term=作戦
+- msgdat-text .omo/work/logh7-cd-extract/installshield-root/____________s___/____/data/MsgDat/messages_4.dat term=作戦

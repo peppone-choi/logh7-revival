@@ -1,0 +1,14 @@
+LOGH VII scene placeholder: 외교/정보
+id: diplomacy-intel
+status: placeholder-required
+evidence: source-hits-present
+
+Evidence hits:
+- ghidra-strings .omo/ghidra/export/G7MTClient/strings.tsv term=Intel
+- ghidra-functions .omo/ghidra/export/G7MTClient/functions.jsonl term=Intel
+- msgdat-text .omo/work/logh7-cd-extract/installshield-root/____________s___/____/data/MsgDat/constmsg.dat term=外交
+- msgdat-text .omo/work/logh7-cd-extract/installshield-root/____________s___/____/data/MsgDat/messages_0.dat term=情報
+- msgdat-text .omo/work/logh7-cd-extract/installshield-root/____________s___/____/data/MsgDat/messages_1.dat term=情報
+- msgdat-text .omo/work/logh7-cd-extract/installshield-root/____________s___/____/data/MsgDat/messages_2.dat term=情報
+- msgdat-text .omo/work/logh7-cd-extract/installshield-root/____________s___/____/data/MsgDat/messages_3.dat term=情報
+- msgdat-text .omo/work/logh7-cd-extract/installshield-root/____________s___/____/data/MsgDat/messages_7.dat term=フェザーン

@@ -1,0 +1,225 @@
+{
+  "id": "logh7-unity-bootstrap-manifest",
+  "status": "bootstrap-contract",
+  "generatedAt": "2026-07-03T19:40:48.137Z",
+  "unity": {
+    "version": "6000.5.2f1",
+    "projectRoot": "client-unity",
+    "streamingAssetsTarget": "client-unity/Assets/StreamingAssets/logh7/logh7-unity-bootstrap-manifest.json",
+    "firstRuntimeConsumer": "Assets/StreamingAssets/logh7/logh7-unity-bootstrap-manifest.json"
+  },
+  "authority": {
+    "source": "verified-archive-bin-cue",
+    "cdMediaManifest": "server/content/generated/logh7-cd-media-manifest.json",
+    "rule": "Only CD/manual/Ghidra/live/wire cross-checked facts can become canonical."
+  },
+  "runtime": {
+    "mainClient": "Unity",
+    "originalExePolicy": "oracle-only-not-product-runtime",
+    "originalExeUses": [
+      "scene-ui-logic-reference",
+      "packet-wire-reference",
+      "resource-layout-reference",
+      "live-manual-qa-oracle"
+    ],
+    "forbiddenNormalRuntime": [
+      "direct-G7MTClient-player-workflow",
+      "diagnostic-preseed-flags",
+      "binary-patch-product-runtime"
+    ]
+  },
+  "canonicalPromotion": {
+    "defaultState": "suspect-until-cross-checked",
+    "suspectInputs": [
+      "server/content",
+      "RE/content",
+      "installed-client-data",
+      "generated-catalogs",
+      "manual-raster-derived-galaxy-positions",
+      "previous-star-planet-analysis"
+    ],
+    "requiredEvidenceClasses": [
+      "CD filesystem or raw/slack source",
+      "InstallShield payload source",
+      "manual/OCR or original text source",
+      "Ghidra/decompile or live/wire consumer proof where runtime behavior matters"
+    ]
+  },
+  "remasterPacks": {
+    "policy": "optional-reversible-manifest-driven",
+    "originalFallbackRequired": true,
+    "conflictCheckRequired": true,
+    "provenanceLabelRequired": true
+  },
+  "generatedInputs": [
+    {
+      "id": "logh7-cd-media",
+      "role": "source-authority-evidence",
+      "path": "server/content/generated/logh7-cd-media-manifest.json",
+      "status": "present",
+      "canonicalState": "authority-evidence",
+      "bytes": 2352,
+      "sha1": "55387c6130b24e8f4405c103b02f646ac57dfa05",
+      "manifestId": "logh7-cd-media",
+      "manifestStatus": "verified"
+    },
+    {
+      "id": "logh7-hidden-data-classification",
+      "role": "hidden-data-evidence",
+      "path": "server/content/generated/logh7-hidden-data-classification.json",
+      "status": "present",
+      "canonicalState": "suspect-input",
+      "bytes": 22636654,
+      "sha1": "2a15230da8a9f69a91e6cdec5078d8c2c2dec87b",
+      "manifestId": "logh7-hidden-data-classification",
+      "manifestStatus": "classified"
+    },
+    {
+      "id": "logh7-hidden-data-watchlist",
+      "role": "mandatory-watch-report",
+      "path": "server/content/generated/logh7-hidden-data-watchlist.json",
+      "status": "present",
+      "canonicalState": "suspect-input",
+      "bytes": 10372,
+      "sha1": "928f857ec4d4ec5f5b0ff4e6d1cfcf4480bea623",
+      "manifestId": "logh7-hidden-data-watchlist",
+      "manifestStatus": "reported"
+    },
+    {
+      "id": "logh7-runtime-boundary",
+      "role": "runtime-boundary-policy",
+      "path": "server/content/generated/logh7-runtime-boundary-manifest.json",
+      "status": "present",
+      "canonicalState": "suspect-input",
+      "bytes": 3447,
+      "sha1": "3f18881f9559ff26b67b4cedc11136731d3a5729",
+      "manifestId": "logh7-runtime-boundary-manifest",
+      "manifestStatus": null
+    },
+    {
+      "id": "logh7-record-candidate-scan",
+      "role": "record-surface-candidates",
+      "path": "server/content/generated/logh7-record-candidate-scan.json",
+      "status": "present",
+      "canonicalState": "suspect-input",
+      "bytes": 7404,
+      "sha1": "5a2ce8d807e63eb857ed352a7572c28129c06138",
+      "manifestId": "logh7-record-candidate-scan",
+      "manifestStatus": "scanned"
+    },
+    {
+      "id": "logh7-record-candidate-crosscheck",
+      "role": "record-surface-crosscheck",
+      "path": "server/content/generated/logh7-record-candidate-crosscheck.json",
+      "status": "present",
+      "canonicalState": "suspect-input",
+      "bytes": 3647,
+      "sha1": "84744dcc9c75ca9315858372c3d9e8151b2fe961",
+      "manifestId": "logh7-record-candidate-crosscheck",
+      "manifestStatus": "checked"
+    },
+    {
+      "id": "logh7-mdx-catalog",
+      "role": "asset-catalog",
+      "path": "server/content/generated/logh7-mdx-catalog.json",
+      "status": "present",
+      "canonicalState": "suspect-input",
+      "bytes": 816181,
+      "sha1": "843e5868250486f4e39940d1c349df4747056545",
+      "manifestId": "logh7-mdx-catalog",
+      "manifestStatus": "present"
+    },
+    {
+      "id": "logh7-face-tcf-catalog",
+      "role": "asset-catalog",
+      "path": "server/content/generated/logh7-face-tcf-catalog.json",
+      "status": "present",
+      "canonicalState": "suspect-input",
+      "bytes": 5533,
+      "sha1": "636c4e401a54d25ae426179c83127fe6891b2d21",
+      "manifestId": "logh7-face-tcf-catalog",
+      "manifestStatus": "present"
+    },
+    {
+      "id": "logh7-face-portrait-catalog",
+      "role": "asset-catalog",
+      "path": "server/content/generated/logh7-face-portrait-catalog.json",
+      "status": "present",
+      "canonicalState": "suspect-input",
+      "bytes": 626526,
+      "sha1": "680dc807a17a4b42e16184a9a4f66ca64b008b89",
+      "manifestId": "logh7-face-portrait-catalog",
+      "manifestStatus": "present"
+    },
+    {
+      "id": "logh7-null-galaxy-template",
+      "role": "suspect-galaxy-template",
+      "path": "server/content/generated/logh7-null-galaxy-template.json",
+      "status": "present",
+      "canonicalState": "suspect-input",
+      "bytes": 12412,
+      "sha1": "3590f673fff2d1e324383204937bb5870bfb615f",
+      "manifestId": "logh7-null-galaxy-template",
+      "manifestStatus": null
+    },
+    {
+      "id": "logh7-ship-stat-catalog",
+      "role": "game-data-catalog",
+      "path": "server/content/generated/logh7-ship-stat-catalog.json",
+      "status": "present",
+      "canonicalState": "suspect-input",
+      "bytes": 199929,
+      "sha1": "6f868b74f69b375048265723f5e62787d0c40264",
+      "manifestId": "logh7-ship-stat-catalog",
+      "manifestStatus": null
+    },
+    {
+      "id": "logh7-strategy-command-catalog",
+      "role": "game-data-catalog",
+      "path": "server/content/generated/logh7-strategy-command-catalog.json",
+      "status": "present",
+      "canonicalState": "suspect-input",
+      "bytes": 47598,
+      "sha1": "54cda25ca51460e8437cbe9c6b6b456c4ec3ac25",
+      "manifestId": "logh7-strategy-command-catalog",
+      "manifestStatus": null
+    },
+    {
+      "id": "logh7-operation-catalog",
+      "role": "game-data-catalog",
+      "path": "server/content/generated/logh7-operation-catalog.json",
+      "status": "present",
+      "canonicalState": "suspect-input",
+      "bytes": 8972,
+      "sha1": "422f3bdf06346a41344d7fea720b8955ac6d424b",
+      "manifestId": "logh7-operation-catalog",
+      "manifestStatus": null
+    },
+    {
+      "id": "logh7-rank-promotion-catalog",
+      "role": "game-data-catalog",
+      "path": "server/content/generated/logh7-rank-promotion-catalog.json",
+      "status": "present",
+      "canonicalState": "suspect-input",
+      "bytes": 11468,
+      "sha1": "687b554899e9c0faf603be4e6125d8485903c462",
+      "manifestId": "logh7-rank-promotion-catalog",
+      "manifestStatus": null
+    },
+    {
+      "id": "logh7-logistics-allocation-catalog",
+      "role": "game-data-catalog",
+      "path": "server/content/generated/logh7-logistics-allocation-catalog.json",
+      "status": "present",
+      "canonicalState": "suspect-input",
+      "bytes": 2968,
+      "sha1": "49150311c05e1ca02714627ce45230f895696496",
+      "manifestId": "logh7-logistics-allocation-catalog",
+      "manifestStatus": null
+    }
+  ],
+  "outputs": {
+    "serverManifest": "server/content/generated/logh7-unity-bootstrap-manifest.json",
+    "unityStreamingAssetsManifest": "client-unity/Assets/StreamingAssets/logh7/logh7-unity-bootstrap-manifest.json"
+  }
+}

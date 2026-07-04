@@ -1,0 +1,155 @@
+{
+  "id": "logh7-ui-scene-remaster-gameplay-boundary",
+  "generatedAt": "2026-07-03T22:14:29.081Z",
+  "canonicalPromotion": "blocked-until-cross-source-confirmed",
+  "streamingAssetsTarget": "client-unity/Assets/StreamingAssets/logh7/logh7-ui-scene-remaster-gameplay-boundary.json",
+  "inputs": [
+    {
+      "id": "sceneInventory",
+      "path": "server/content/generated/logh7-scene-inventory.json",
+      "status": "present",
+      "manifestId": "logh7-scene-inventory",
+      "size": 50112,
+      "sha1": "93a04d0228a3e7966c947c2af248bb6b265681cd"
+    },
+    {
+      "id": "remasterProvenance",
+      "path": "server/content/generated/logh7-remaster-provenance-manifest.json",
+      "status": "present",
+      "manifestId": "logh7-remaster-provenance-manifest",
+      "size": 4925,
+      "sha1": "e3a111a65811c1eea30ce0f171ce01e59cce06e6"
+    },
+    {
+      "id": "runtimeBoundary",
+      "path": "server/content/generated/logh7-runtime-boundary-manifest.json",
+      "status": "present",
+      "manifestId": "logh7-runtime-boundary-manifest",
+      "size": 3447,
+      "sha1": "74bea0f3c83667aeeb99bad480e3c6badc2439ba"
+    },
+    {
+      "id": "operationCatalog",
+      "path": "server/content/generated/logh7-operation-catalog.json",
+      "status": "present",
+      "manifestId": "logh7-operation-catalog",
+      "size": 8972,
+      "sha1": "422f3bdf06346a41344d7fea720b8955ac6d424b"
+    },
+    {
+      "id": "unityRuntimeManifest",
+      "path": "client-unity/Assets/StreamingAssets/logh7/logh7-unity-runtime-manifest.json",
+      "status": "present",
+      "manifestId": "logh7-unity-runtime-manifest",
+      "size": 5673,
+      "sha1": "667af365368b04f6d938a5e52065e24809def9a1"
+    },
+    {
+      "id": "empireShipReference",
+      "path": "server/content/generated/logh7-empire-ship-reference-manifest.json",
+      "status": "present",
+      "manifestId": "logh7-empire-ship-reference-manifest",
+      "size": 6869,
+      "sha1": "4f4c4a4a2a193209ee2dcebed52158d9ee4a333f"
+    },
+    {
+      "id": "imperialCrestMask",
+      "path": "server/content/generated/logh7-imperial-crest-mask-manifest.json",
+      "status": "present",
+      "manifestId": "logh7-imperial-double-eagle-mask-manifest",
+      "size": 1268,
+      "sha1": "72d9a0dcc79496d3a49f7cf6136d84ee10c83e85"
+    }
+  ],
+  "uiSceneCatalog": {
+    "status": "present",
+    "sceneCount": 15,
+    "evidenceBackedSceneCount": 15,
+    "sceneIds": [
+      "boot-update-launcher",
+      "login",
+      "lobby",
+      "character-select",
+      "character-create",
+      "world-entry",
+      "strategic-map",
+      "fleet-operations",
+      "tactical-battle",
+      "planet-system-detail",
+      "organization-personnel",
+      "economy-logistics",
+      "diplomacy-intel",
+      "reports-mail-system",
+      "settings-save-load"
+    ],
+    "placeholderRequiredCount": 15
+  },
+  "remasterPackSchema": {
+    "status": "present",
+    "packIds": [
+      "remaster-hd"
+    ],
+    "enabledByDefault": false,
+    "reversible": true,
+    "manifestDriven": true,
+    "originalFallbackRequired": true,
+    "artifactCount": 7,
+    "artifactIds": [
+      "alliance-medal-redraw",
+      "alliance-medal-upscale",
+      "asset-overwrite-guard",
+      "empire-ship-reference",
+      "imperial-crest-mask",
+      "imperial-medal-source-lock",
+      "unity-source-pack"
+    ]
+  },
+  "originalAssetContracts": {
+    "status": "present",
+    "sourceAuthority": "original-cd-assets-first",
+    "generationPolicy": "Use original Empire Ship/GE MDX, ship thumbnails, and supplied imperial crest mask before any generated remaster substitute; generated assets remain optional overlays with original fallback.",
+    "empireShips": {
+      "status": "present",
+      "manifestId": "logh7-empire-ship-reference-manifest",
+      "modelDir": ".omo/work/logh7-installed/data/model/Ship/GE",
+      "thumbnailDir": ".omo/work/logh7-installed/data/image/Thumbnail/Ship",
+      "rawMdxCount": 117,
+      "rawSidecarCount": 3,
+      "thumbnailCount": 79,
+      "referenceEntryCount": 6,
+      "contactSheetPath": "client-unity/Assets/ArtSource/reference/empire-ships/logh7-empire-ship-gold-relief-contact-sheet.png",
+      "remasterArtifactPresent": true,
+      "mappingStatus": "thumbnail-to-ship-stat-crossmap-pending"
+    },
+    "imperialCrest": {
+      "status": "present",
+      "manifestId": "logh7-imperial-double-eagle-mask-manifest",
+      "source": "client-unity/Assets/ArtSource/reference/logh7-imperial-double-eagle-reference.jpg",
+      "method": "threshold supplied crest reference to alpha mask; gold/silver variants recolor the exact alpha mask only",
+      "outputCount": 3,
+      "variantIds": [
+        "gold",
+        "silver",
+        "white"
+      ],
+      "remasterArtifactPresent": true
+    }
+  },
+  "gameplayContractBoundary": {
+    "status": "present",
+    "normalRuntimeAllowedCount": 2,
+    "diagnosticNormalRuntimeAllowedCount": 0,
+    "operationPurposeCount": 3,
+    "planFieldCount": 4,
+    "restrictionCount": 4,
+    "commandPointCostKind": "variable-unresolved"
+  },
+  "unityRuntimeContract": {
+    "status": "present",
+    "normalEntryScene": "boot-update-launcher",
+    "sessionGateCount": 7,
+    "firstGate": "boot-launcher",
+    "lastGate": "strategic-map"
+  },
+  "policy": "Unity UI scenes consume scene/remaster/gameplay contracts as suspect import data; remaster packs stay optional and gameplay formulas remain unpromoted until cross-source proof."
+}

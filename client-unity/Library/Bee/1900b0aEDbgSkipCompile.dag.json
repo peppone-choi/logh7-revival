@@ -1,0 +1,274 @@
+{
+  "Nodes": [
+    {
+      "Annotation": "all_tundra_nodes",
+      "DisplayName": null,
+      "Inputs": [],
+      "InputFlags": [],
+      "Outputs": [],
+      "OutputFlags": [],
+      "ToBuildDependencies": [
+        1,
+        2,
+        3
+      ],
+      "DebugActionIndex": 0
+    },
+    {
+      "Annotation": "ScriptAssemblies",
+      "DisplayName": null,
+      "Inputs": [],
+      "InputFlags": [],
+      "Outputs": [],
+      "OutputFlags": [],
+      "DebugActionIndex": 1
+    },
+    {
+      "Annotation": "BuildPlayerDataGenerator Library/BuildPlayerData/Editor/TypeDb-All.json",
+      "DisplayName": "Extracting script serialization layouts",
+      "Action": "\"E:/unity/hub/6000.5.2f1/Editor/Data\\netcorerun\\netcorerun.exe\" \"E:/unity/hub/6000.5.2f1/Editor/Data/Tools/BuildPipeline/BuildPlayerDataGenerator/BuildPlayerDataGenerator.exe\" -a=\"E:\\logh7-revival\\client-unity\\Library\\ScriptAssemblies\\Logh7.PlayModeTests.dll\" -a=\"E:\\logh7-revival\\client-unity\\Library\\ScriptAssemblies\\Logh7.Runtime.dll\" -a=\"E:\\logh7-revival\\client-unity\\Library\\ScriptAssemblies\\Unity.InternalAPIEngineBridge.004.dll\" -a=\"E:\\logh7-revival\\client-unity\\Library\\ScriptAssemblies\\Unity.TextMeshPro.dll\" -a=\"E:\\logh7-revival\\client-unity\\Library\\ScriptAssemblies\\UnityEngine.TestRunner.dll\" -a=\"E:\\logh7-revival\\client-unity\\Library\\ScriptAssemblies\\UnityEngine.UI.dll\" -a=\"E:\\logh7-revival\\client-unity\\Library\\PackageCache\\com.unity.ext.nunit@44f7d31723bd\\net472\\unity-custom\\nunit.framework.dll\" -a=\"E:\\logh7-revival\\client-unity\\Library\\PackageCache\\com.unity.testtools.codecoverage@19a841221620\\lib\\ReportGenerator\\ReportGeneratorMerged.dll\" -s=\"E:\\unity\\hub\\6000.5.2f1\\Editor\\Data\\BCLExtensions\\TargetingPacks\\netstandard2.1\\ref\" -s=\"E:\\unity\\hub\\6000.5.2f1\\Editor\\Data\\Managed\\UnityEngine\" -s=\"E:\\unity\\hub\\6000.5.2f1\\Editor\\Data\\NetStandard\\compat\\2.1.0\\shims\\netfx\" -s=\"E:\\unity\\hub\\6000.5.2f1\\Editor\\Data\\NetStandard\\compat\\2.1.0\\shims\\netstandard\" -s=\"E:\\unity\\hub\\6000.5.2f1\\Editor\\Data\\NetStandard\\EditorExtensions\" -s=\"E:\\unity\\hub\\6000.5.2f1\\Editor\\Data\\NetStandard\\Extensions\\2.0.0\" -s=\"E:\\unity\\hub\\6000.5.2f1\\Editor\\Data\\NetStandard\\ref\\2.1.0\" -s=\"E:\\logh7-revival\\client-unity\\Library\\ScriptAssemblies\" -s=\"E:\\logh7-revival\\client-unity\\Library\\PackageCache\\com.unity.ext.nunit@44f7d31723bd\\net472\\unity-custom\" -s=\"E:\\logh7-revival\\client-unity\\Library\\PackageCache\\com.unity.testtools.codecoverage@19a841221620\\lib\\ReportGenerator\" -o=\"Library/BuildPlayerData/Editor\" -rn=\"\" -tn=\"TypeDb-All.json\"",
+      "Inputs": [
+        "E:/unity/hub/6000.5.2f1/Editor/Data/netcorerun/netcorerun.exe",
+        "E:/unity/hub/6000.5.2f1/Editor/Data/Tools/BuildPipeline/BuildPlayerDataGenerator/BuildPlayerDataGenerator.exe",
+        "Library/ScriptAssemblies/Logh7.PlayModeTests.dll",
+        "Library/ScriptAssemblies/Logh7.Runtime.dll",
+        "Library/ScriptAssemblies/Unity.InternalAPIEngineBridge.004.dll",
+        "Library/ScriptAssemblies/Unity.TextMeshPro.dll",
+        "Library/ScriptAssemblies/UnityEngine.TestRunner.dll",
+        "Library/ScriptAssemblies/UnityEngine.UI.dll",
+        "Library/PackageCache/com.unity.ext.nunit@44f7d31723bd/net472/unity-custom/nunit.framework.dll",
+        "Library/PackageCache/com.unity.testtools.codecoverage@19a841221620/lib/ReportGenerator/ReportGeneratorMerged.dll"
+      ],
+      "InputFlags": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "Outputs": [
+        "Library/BuildPlayerData/Editor/TypeDb-All.json"
+      ],
+      "OutputFlags": [
+        0
+      ],
+      "AllowUnexpectedOutput": true,
+      "RunBeforeDependentNodeLeafInputIsCalculated": false,
+      "DebugActionIndex": 2
+    },
+    {
+      "Annotation": "ScriptAssembliesAndTypeDB",
+      "DisplayName": null,
+      "Inputs": [],
+      "InputFlags": [],
+      "Outputs": [],
+      "OutputFlags": [],
+      "ToBuildDependencies": [
+        1,
+        2
+      ],
+      "DebugActionIndex": 3
+    }
+  ],
+  "FileSignatures": [
+    {
+      "File": "E:/unity/hub/6000.5.2f1/Editor/Data/BCLExtensions/TargetingPacks/netstandard2.1/data/FrameworkList.xml"
+    },
+    {
+      "File": "E:/unity/hub/6000.5.2f1/Editor/Data/Tools/BuildPipeline/Bee.BuildGraph.dll"
+    },
+    {
+      "File": "E:/unity/hub/6000.5.2f1/Editor/Data/Tools/BuildPipeline/Bee.BuildTools.dll"
+    },
+    {
+      "File": "E:/unity/hub/6000.5.2f1/Editor/Data/Tools/BuildPipeline/Bee.Core.dll"
+    },
+    {
+      "File": "E:/unity/hub/6000.5.2f1/Editor/Data/Tools/BuildPipeline/Bee.CSharpSupport.dll"
+    },
+    {
+      "File": "E:/unity/hub/6000.5.2f1/Editor/Data/Tools/BuildPipeline/Bee.DotNet.dll"
+    },
+    {
+      "File": "E:/unity/hub/6000.5.2f1/Editor/Data/Tools/BuildPipeline/Bee.NativeProgramSupport.dll"
+    },
+    {
+      "File": "E:/unity/hub/6000.5.2f1/Editor/Data/Tools/BuildPipeline/Bee.Stevedore.Program.dll"
+    },
+    {
+      "File": "E:/unity/hub/6000.5.2f1/Editor/Data/Tools/BuildPipeline/Bee.TinyProfiler2.dll"
+    },
+    {
+      "File": "E:/unity/hub/6000.5.2f1/Editor/Data/Tools/BuildPipeline/Bee.Toolchain.GNU.dll"
+    },
+    {
+      "File": "E:/unity/hub/6000.5.2f1/Editor/Data/Tools/BuildPipeline/Bee.Toolchain.LLVM.dll"
+    },
+    {
+      "File": "E:/unity/hub/6000.5.2f1/Editor/Data/Tools/BuildPipeline/Bee.Toolchain.VisualStudio.dll"
+    },
+    {
+      "File": "E:/unity/hub/6000.5.2f1/Editor/Data/Tools/BuildPipeline/Bee.Toolchain.Xcode.dll"
+    },
+    {
+      "File": "E:/unity/hub/6000.5.2f1/Editor/Data/Tools/BuildPipeline/Bee.Tools.dll"
+    },
+    {
+      "File": "E:/unity/hub/6000.5.2f1/Editor/Data/Tools/BuildPipeline/Bee.TundraBackend.dll"
+    },
+    {
+      "File": "E:/unity/hub/6000.5.2f1/Editor/Data/Tools/BuildPipeline/Bee.VisualStudioSolution.dll"
+    },
+    {
+      "File": "E:/unity/hub/6000.5.2f1/Editor/Data/Tools/BuildPipeline/BeeBuildProgramCommon.Data.dll"
+    },
+    {
+      "File": "E:/unity/hub/6000.5.2f1/Editor/Data/Tools/BuildPipeline/BeeBuildProgramCommon.dll"
+    },
+    {
+      "File": "E:/unity/hub/6000.5.2f1/Editor/Data/Tools/BuildPipeline/BeeLocalCacheTool.exe"
+    },
+    {
+      "File": "E:/unity/hub/6000.5.2f1/Editor/Data/Tools/BuildPipeline/bee_backend.exe"
+    },
+    {
+      "File": "E:/unity/hub/6000.5.2f1/Editor/Data/Tools/BuildPipeline/MemoryPack.Core.dll"
+    },
+    {
+      "File": "E:/unity/hub/6000.5.2f1/Editor/Data/Tools/BuildPipeline/Newtonsoft.Json.dll"
+    },
+    {
+      "File": "E:/unity/hub/6000.5.2f1/Editor/Data/Tools/BuildPipeline/NiceIO.dll"
+    },
+    {
+      "File": "E:/unity/hub/6000.5.2f1/Editor/Data/Tools/BuildPipeline/PlayerBuildProgramLibrary.Data.dll"
+    },
+    {
+      "File": "E:/unity/hub/6000.5.2f1/Editor/Data/Tools/BuildPipeline/PlayerBuildProgramLibrary.dll"
+    },
+    {
+      "File": "E:/unity/hub/6000.5.2f1/Editor/Data/Tools/BuildPipeline/ScriptCompilationBuildProgram.Data.dll"
+    },
+    {
+      "File": "E:/unity/hub/6000.5.2f1/Editor/Data/Tools/BuildPipeline/ScriptCompilationBuildProgram.exe"
+    },
+    {
+      "File": "E:/unity/hub/6000.5.2f1/Editor/Data/Tools/BuildPipeline/SharpYaml.dll"
+    },
+    {
+      "File": "E:/unity/hub/6000.5.2f1/Editor/Data/Tools/BuildPipeline/Unity.Api.Attributes.dll"
+    },
+    {
+      "File": "E:/unity/hub/6000.5.2f1/Editor/Data/Tools/BuildPipeline/Unity.Cecil.dll"
+    },
+    {
+      "File": "E:/unity/hub/6000.5.2f1/Editor/Data/Tools/BuildPipeline/Unity.Cecil.Mdb.dll"
+    },
+    {
+      "File": "E:/unity/hub/6000.5.2f1/Editor/Data/Tools/BuildPipeline/Unity.Cecil.Pdb.dll"
+    },
+    {
+      "File": "E:/unity/hub/6000.5.2f1/Editor/Data/Tools/BuildPipeline/Unity.Cecil.Rocks.dll"
+    },
+    {
+      "File": "E:/unity/hub/6000.5.2f1/Editor/Data/Tools/BuildPipeline/Unity.IL2CPP.Api.dll"
+    },
+    {
+      "File": "E:/unity/hub/6000.5.2f1/Editor/Data/Tools/BuildPipeline/Unity.IL2CPP.Bee.BuildLogic.dll"
+    },
+    {
+      "File": "E:/unity/hub/6000.5.2f1/Editor/Data/Tools/BuildPipeline/Unity.IL2CPP.Bee.IL2CPPExeCompileCppBuildProgram.Data.dll"
+    },
+    {
+      "File": "E:/unity/hub/6000.5.2f1/Editor/Data/Tools/BuildPipeline/Unity.Linker.Api.dll"
+    },
+    {
+      "File": "E:/unity/hub/6000.5.2f1/Editor/Data/Tools/BuildPipeline/Unity.Options.dll"
+    },
+    {
+      "File": "E:/unity/hub/6000.5.2f1/Editor/Data/Tools/BuildPipeline/UnityEditor.iOS.Extensions.Xcode.dll"
+    },
+    {
+      "File": "Library/Bee/1900b0aEDbgSkipCompile-inputdata.json"
+    }
+  ],
+  "StatSignatures": [
+    {
+      "File": "Assets/csc.rsp"
+    },
+    {
+      "File": "Assets/mcs.rsp"
+    },
+    {
+      "File": "E:/unity/hub/6000.5.2f1/Editor/Data/BCLExtensions/TargetingPacks/netstandard2.1/data/FrameworkList.xml"
+    },
+    {
+      "File": "Library/Bee/1900b0aEDbgSkipCompile-inputdata.json"
+    },
+    {
+      "File": "Library/PackageCache/com.unity.ext.nunit@44f7d31723bd/net472/unity-custom/nunit.framework.dll"
+    },
+    {
+      "File": "Library/PackageCache/com.unity.testtools.codecoverage@19a841221620/lib/ReportGenerator/ReportGeneratorMerged.dll"
+    },
+    {
+      "File": "Library/ScriptAssemblies/Logh7.PlayModeTests.dll"
+    },
+    {
+      "File": "Library/ScriptAssemblies/Logh7.Runtime.dll"
+    },
+    {
+      "File": "Library/ScriptAssemblies/Unity.InternalAPIEngineBridge.004.dll"
+    },
+    {
+      "File": "Library/ScriptAssemblies/Unity.TextMeshPro.dll"
+    },
+    {
+      "File": "Library/ScriptAssemblies/UnityEngine.TestRunner.dll"
+    },
+    {
+      "File": "Library/ScriptAssemblies/UnityEngine.UI.dll"
+    }
+  ],
+  "GlobSignatures": [
+    {
+      "Path": "E:/unity/hub/6000.5.2f1/Editor/Data/Tools/BuildPipeline"
+    }
+  ],
+  "ContentDigestExtensions": [
+    ".rsp",
+    ".dll",
+    ".exe",
+    ".pdb",
+    ".json",
+    ".csproj"
+  ],
+  "StructuredLogFileName": "Library/Bee/tundra.log.json",
+  "StateFileName": "Library/Bee/TundraBuildState.state",
+  "StateFileNameTmp": "Library/Bee/TundraBuildState.state.tmp",
+  "StateFileNameMapped": "Library/Bee/TundraBuildState.state.map",
+  "ScanCacheFileName": "Library/Bee/tundra.scancache",
+  "ScanCacheFileNameTmp": "Library/Bee/tundra.scancache.tmp",
+  "DigestCacheFileName": "Library/Bee/tundra.digestcache",
+  "DigestCacheFileNameTmp": "Library/Bee/tundra.digestcache.tmp",
+  "CachedNodeOutputDirectoryName": "Library/Bee/CachedNodeOutput",
+  "EmitDataForBeeWhy": 0,
+        "NamedNodes": {
+          "all_tundra_nodes": 0,
+          "ScriptAssemblies": 1,
+          "ScriptAssembliesAndTypeDB": 3
+        }
+,  "DefaultNodes": [
+    0
+  ],
+  "SharedResources": [],
+  "Scanners": [],
+  "Identifier": "Library/Bee/1900b0aEDbgSkipCompile.dag.json",
+  "PayloadsFile": "E:/logh7-revival/client-unity/Library/Bee/1900b0aEDbgSkipCompile.dag.payloads",
+  "RelativePathToRoot": "../.."
+}

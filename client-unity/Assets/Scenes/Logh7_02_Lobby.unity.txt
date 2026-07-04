@@ -1,0 +1,9 @@
+LOGH VII scene placeholder: 로비 세션
+id: lobby
+status: placeholder-required
+evidence: source-hits-present
+
+Evidence hits:
+- ghidra-strings .omo/ghidra/export/G7MTClient/strings.tsv term=Lobby
+- ghidra-functions .omo/ghidra/export/G7MTClient/functions.jsonl term=Lobby
+- msgdat-text .omo/work/logh7-cd-extract/installshield-root/____________s___/____/data/MsgDat/constmsg.dat term=ロビー

@@ -1,0 +1,623 @@
+{
+  "id": "logh7-remaster-provenance-manifest",
+  "generatedAt": "2026-07-04T01:22:05.944Z",
+  "canonicalPromotion": "blocked-until-cross-source-confirmed",
+  "streamingAssetsTarget": "client-unity/Assets/StreamingAssets/logh7/logh7-remaster-provenance-manifest.json",
+  "packs": [
+    {
+      "id": "remaster-hd",
+      "enabledByDefault": false,
+      "reversible": true,
+      "manifestDriven": true,
+      "conflictCheckRequired": true,
+      "provenanceLabelRequired": true,
+      "originalFallbackRequired": true,
+      "provenanceSchemaVersion": 1,
+      "provenanceRequirementIds": [
+        "sourceHashes",
+        "tool",
+        "prompt",
+        "settings",
+        "reviewer",
+        "outputHash",
+        "rollback",
+        "qaEvidence"
+      ],
+      "artifacts": [
+        {
+          "id": "alliance-medal-upscale",
+          "path": "server/content/generated/logh7-alliance-medal-upscale-manifest.json",
+          "enabledByDefault": false,
+          "reversible": true,
+          "conflictCheckRequired": true,
+          "provenanceLabelRequired": true,
+          "originalFallbackRequired": true,
+          "canonicalStatus": "suspect-cross-check-required",
+          "status": "present",
+          "manifestId": "logh7-alliance-medal-upscale-manifest",
+          "manifestStatus": null,
+          "size": 8720,
+          "sha1": "61c3846e42dfc30653a244d5324fe19874e7b938",
+          "sha256": "df22ecc95624e5845b2e19349e26abfb985b1dff2990759f221acf1244d84af6",
+          "provenance": {
+            "sourceHashes": [
+              {
+                "path": "E:/logh7-revival/client-unity/Assets/ArtSource/original/medals/m_f001.png",
+                "sha256": "04948f94ecdff5d19512f3172db3648e352093725a4d2f38d3f3af0be8ea2b13",
+                "source": "entries.sourceSha256"
+              },
+              {
+                "path": "E:/logh7-revival/client-unity/Assets/ArtSource/original/medals/m_f002.png",
+                "sha256": "6e3b31c5ddf78b9eca639fb9aca30a63338e7287b30b325d530921105732e4bd",
+                "source": "entries.sourceSha256"
+              },
+              {
+                "path": "E:/logh7-revival/client-unity/Assets/ArtSource/original/medals/m_f003.png",
+                "sha256": "c262a189d43bc428f650a74a32fbe895b410223aa16d20631333c9403a9fcb4c",
+                "source": "entries.sourceSha256"
+              },
+              {
+                "path": "E:/logh7-revival/client-unity/Assets/ArtSource/original/medals/m_f004.png",
+                "sha256": "b8a08b1195f4030a76818229bc3e1f361713d1b582b9302522e9eaf73604c10a",
+                "source": "entries.sourceSha256"
+              },
+              {
+                "path": "E:/logh7-revival/client-unity/Assets/ArtSource/original/medals/m_f005.png",
+                "sha256": "155b2468a9a368e38f90a18e3f508f45be275c92e7fd1031c96d08f4aab82d62",
+                "source": "entries.sourceSha256"
+              },
+              {
+                "path": "E:/logh7-revival/client-unity/Assets/ArtSource/original/medals/m_f006.png",
+                "sha256": "fc00f7be9690c10660f2f9ab0559ba9a619286937faa5dd91bdc021cae2f4323",
+                "source": "entries.sourceSha256"
+              },
+              {
+                "path": "E:/logh7-revival/client-unity/Assets/ArtSource/original/medals/m_f007.png",
+                "sha256": "f813743c30d66a03f954f4ed560caef5e0975d6cd46828a0eaa2f2c684706f2a",
+                "source": "entries.sourceSha256"
+              },
+              {
+                "path": "E:/logh7-revival/client-unity/Assets/ArtSource/original/medals/m_f008.png",
+                "sha256": "55ded2d08d9087aeca3e25605111d5e1c14b974b0220f704902c25cdb4753aa5",
+                "source": "entries.sourceSha256"
+              },
+              {
+                "path": "E:/logh7-revival/client-unity/Assets/ArtSource/original/medals/m_f009.png",
+                "sha256": "35b7abc50d1ce38870a55d5a4fe36e61da10211476a7afa8417d1833e1c003b3",
+                "source": "entries.sourceSha256"
+              },
+              {
+                "path": "E:/logh7-revival/client-unity/Assets/ArtSource/original/medals/m_f010.png",
+                "sha256": "6244ca25b7ca0750b401aa63d4f011908110ce820999c0ca5bff44896216a163",
+                "source": "entries.sourceSha256"
+              },
+              {
+                "path": "E:/logh7-revival/client-unity/Assets/ArtSource/original/medals/m_f011.png",
+                "sha256": "b062da28ef8953f25da05dd4a174f746ebebe8f91662f1058cc1df7335922a3d",
+                "source": "entries.sourceSha256"
+              },
+              {
+                "path": "E:/logh7-revival/client-unity/Assets/ArtSource/original/medals/m_f012.png",
+                "sha256": "c27e37dd6037be527291bc76a9a8ecf8319e854d29001531b1fc1af07982d746",
+                "source": "entries.sourceSha256"
+              },
+              {
+                "path": "E:/logh7-revival/client-unity/Assets/ArtSource/original/medals/m_f013.png",
+                "sha256": "191a65e1c132d065ae4f80f3eda4eef58bf9c20d22f8cfaf95ed6e28d64348d7",
+                "source": "entries.sourceSha256"
+              },
+              {
+                "path": "E:/logh7-revival/client-unity/Assets/ArtSource/original/medals/m_f014.png",
+                "sha256": "a3359ffc15d7e195b50f8defd1fc15c8aca7d86ad695b1accacbf2d94e13e275",
+                "source": "entries.sourceSha256"
+              },
+              {
+                "path": "E:/logh7-revival/client-unity/Assets/ArtSource/original/medals/m_f015.png",
+                "sha256": "4503f83359b8a6620b8104a0dfa184f5fcc6f23c21de23f3481dbc45f1f42534",
+                "source": "entries.sourceSha256"
+              },
+              {
+                "path": "E:/logh7-revival/client-unity/Assets/ArtSource/original/medals",
+                "source": "sourceDir",
+                "status": "hash-pending"
+              }
+            ],
+            "tool": {
+              "status": "present",
+              "id": "alliance-medal-upscale",
+              "method": "Pillow LANCZOS resize plus light UnsharpMask; AI upscale not available in this environment",
+              "tool": null
+            },
+            "prompt": {
+              "status": "pending",
+              "required": true
+            },
+            "settings": {
+              "status": "present",
+              "values": {
+                "scale": 4,
+                "qualityNote": null
+              }
+            },
+            "reviewer": {
+              "status": "pending",
+              "required": true
+            },
+            "outputHash": {
+              "kind": "manifest-file-sha256",
+              "path": "server/content/generated/logh7-alliance-medal-upscale-manifest.json",
+              "sha256": "df22ecc95624e5845b2e19349e26abfb985b1dff2990759f221acf1244d84af6"
+            },
+            "outputAssets": {
+              "status": "not-declared"
+            },
+            "rollback": {
+              "strategy": "disable-artifact-use-original-fallback",
+              "originalFallbackRequired": true,
+              "conflictCheckRequired": true
+            },
+            "qaEvidence": {
+              "status": "pending",
+              "required": true
+            }
+          }
+        },
+        {
+          "id": "alliance-medal-redraw",
+          "path": "server/content/generated/logh7-alliance-medal-redraw-manifest.json",
+          "enabledByDefault": false,
+          "reversible": true,
+          "conflictCheckRequired": true,
+          "provenanceLabelRequired": true,
+          "originalFallbackRequired": true,
+          "canonicalStatus": "suspect-cross-check-required",
+          "status": "present",
+          "manifestId": "logh7-alliance-medal-redraw-manifest",
+          "manifestStatus": null,
+          "size": 9530,
+          "sha1": "5aacac8599b15d4d8aa3b9d32455ca5c68f58155",
+          "sha256": "bd89d86a90bc056c85656427aef24da8c28961d719fbd37036884187c00a2246",
+          "provenance": {
+            "sourceHashes": [
+              {
+                "path": {
+                  "path": "client-unity/Assets/ArtSource/concept/medals/alliance-medal-remaster-redraw-sheet-2026-07-04.png",
+                  "sha256": "816f0cadce5ea33b9584a285d0d033c9eaacc06f9f288e7db7dc4134549ef096",
+                  "dimensions": {
+                    "width": 1586,
+                    "height": 992
+                  }
+                },
+                "source": "sourceSheet",
+                "status": "hash-pending"
+              }
+            ],
+            "tool": {
+              "status": "present",
+              "id": "alliance-medal-redraw",
+              "method": "AI image-generation redraw sheet, grid crop, connected dark-background removal, largest-component cleanup, 1024 transparent PNG packaging",
+              "tool": null
+            },
+            "prompt": {
+              "status": "pending",
+              "required": true
+            },
+            "settings": {
+              "status": "present",
+              "values": {
+                "scale": null,
+                "qualityNote": "Replaces rejected Real-ESRGAN direct upscale trial; generated redraws preserve source families but require human art review before production promotion."
+              }
+            },
+            "reviewer": {
+              "status": "pending",
+              "required": true
+            },
+            "outputHash": {
+              "kind": "manifest-file-sha256",
+              "path": "server/content/generated/logh7-alliance-medal-redraw-manifest.json",
+              "sha256": "bd89d86a90bc056c85656427aef24da8c28961d719fbd37036884187c00a2246"
+            },
+            "outputAssets": {
+              "status": "not-declared"
+            },
+            "rollback": {
+              "strategy": "disable-artifact-use-original-fallback",
+              "originalFallbackRequired": true,
+              "conflictCheckRequired": true
+            },
+            "qaEvidence": {
+              "status": "pending",
+              "required": true
+            }
+          }
+        },
+        {
+          "id": "imperial-medal-source-lock",
+          "path": "server/content/generated/logh7-imperial-medal-source-lock-manifest.json",
+          "enabledByDefault": false,
+          "reversible": true,
+          "conflictCheckRequired": true,
+          "provenanceLabelRequired": true,
+          "originalFallbackRequired": true,
+          "canonicalStatus": "suspect-cross-check-required",
+          "status": "present",
+          "manifestId": "logh7-imperial-medal-source-lock-manifest",
+          "manifestStatus": null,
+          "size": 143506,
+          "sha1": "c492d1fc7c0dd4701dff598f50c3202775fb8b5f",
+          "sha256": "043f0c91ebc1296598fc6fbea26f58cb2d69aa5328abdff8a5287baa9170a158",
+          "provenance": {
+            "sourceHashes": {
+              "status": "missing"
+            },
+            "tool": {
+              "status": "pending",
+              "id": "imperial-medal-source-lock",
+              "method": null,
+              "tool": null
+            },
+            "prompt": {
+              "status": "pending",
+              "required": true
+            },
+            "settings": {
+              "status": "pending",
+              "values": {
+                "scale": null,
+                "qualityNote": null
+              }
+            },
+            "reviewer": {
+              "status": "pending",
+              "required": true
+            },
+            "outputHash": {
+              "kind": "manifest-file-sha256",
+              "path": "server/content/generated/logh7-imperial-medal-source-lock-manifest.json",
+              "sha256": "043f0c91ebc1296598fc6fbea26f58cb2d69aa5328abdff8a5287baa9170a158"
+            },
+            "outputAssets": {
+              "status": "not-declared"
+            },
+            "rollback": {
+              "strategy": "disable-artifact-use-original-fallback",
+              "originalFallbackRequired": true,
+              "conflictCheckRequired": true
+            },
+            "qaEvidence": {
+              "status": "pending",
+              "required": true
+            }
+          }
+        },
+        {
+          "id": "imperial-crest-mask",
+          "path": "server/content/generated/logh7-imperial-crest-mask-manifest.json",
+          "enabledByDefault": false,
+          "reversible": true,
+          "conflictCheckRequired": true,
+          "provenanceLabelRequired": true,
+          "originalFallbackRequired": true,
+          "canonicalStatus": "suspect-cross-check-required",
+          "status": "present",
+          "manifestId": "logh7-imperial-double-eagle-mask-manifest",
+          "manifestStatus": null,
+          "size": 1268,
+          "sha1": "72d9a0dcc79496d3a49f7cf6136d84ee10c83e85",
+          "sha256": "eeff3095743d9dadb6676580575d5e3fb53b63202d6dccdfee75acb78beaf5de",
+          "provenance": {
+            "sourceHashes": [
+              {
+                "path": "client-unity/Assets/ArtSource/reference/logh7-imperial-double-eagle-reference.jpg",
+                "sha256": "822276b190c3e83729de39c14e4e9fc06c2eb8b39a56225bdcbe16f147134e9e",
+                "source": "manifest-sourceSha256"
+              }
+            ],
+            "tool": {
+              "status": "present",
+              "id": "imperial-crest-mask",
+              "method": "threshold supplied crest reference to alpha mask; gold/silver variants recolor the exact alpha mask only",
+              "tool": null
+            },
+            "prompt": {
+              "status": "pending",
+              "required": true
+            },
+            "settings": {
+              "status": "pending",
+              "values": {
+                "scale": null,
+                "qualityNote": null
+              }
+            },
+            "reviewer": {
+              "status": "pending",
+              "required": true
+            },
+            "outputHash": {
+              "kind": "manifest-file-sha256",
+              "path": "server/content/generated/logh7-imperial-crest-mask-manifest.json",
+              "sha256": "eeff3095743d9dadb6676580575d5e3fb53b63202d6dccdfee75acb78beaf5de"
+            },
+            "outputAssets": [
+              {
+                "path": "client-unity/Assets/ArtSource/reference/imperial-crest/logh7-imperial-double-eagle-mask-gold.png",
+                "sha256": "1389cf6d306f91768bd34b65ad08c90511ac652e3158e1663eb3f06295ba3b13",
+                "dimensions": {
+                  "width": 530,
+                  "height": 478
+                }
+              },
+              {
+                "path": "client-unity/Assets/ArtSource/reference/imperial-crest/logh7-imperial-double-eagle-mask-silver.png",
+                "sha256": "28534fd8abfba37ce1bcec1475769448b3315e6c941ede1cd85cd32c5296df57",
+                "dimensions": {
+                  "width": 530,
+                  "height": 478
+                }
+              },
+              {
+                "path": "client-unity/Assets/ArtSource/reference/imperial-crest/logh7-imperial-double-eagle-mask-white.png",
+                "sha256": "be4377dbc2d93dd14435b9247cfd5e79aef5ee476fcebf96184725b5d8bc84aa",
+                "dimensions": {
+                  "width": 520,
+                  "height": 468
+                }
+              }
+            ],
+            "rollback": {
+              "strategy": "disable-artifact-use-original-fallback",
+              "originalFallbackRequired": true,
+              "conflictCheckRequired": true
+            },
+            "qaEvidence": {
+              "status": "pending",
+              "required": true
+            }
+          }
+        },
+        {
+          "id": "empire-ship-reference",
+          "path": "server/content/generated/logh7-empire-ship-reference-manifest.json",
+          "enabledByDefault": false,
+          "reversible": true,
+          "conflictCheckRequired": true,
+          "provenanceLabelRequired": true,
+          "originalFallbackRequired": true,
+          "canonicalStatus": "suspect-cross-check-required",
+          "status": "present",
+          "manifestId": "logh7-empire-ship-reference-manifest",
+          "manifestStatus": null,
+          "size": 6869,
+          "sha1": "4f4c4a4a2a193209ee2dcebed52158d9ee4a333f",
+          "sha256": "38d998a871512b6048ecbf9ea3ca8608d13fc4a250c34962d9af6b144f1730ca",
+          "provenance": {
+            "sourceHashes": [
+              {
+                "path": ".omo/work/logh7-installed/data/image/Thumbnail/Ship/iu008.tga",
+                "sha256": "d92982521bf4109fd770f436c366254949a555d046332d4fd23cd00ca3144106",
+                "source": "entries.iu008"
+              },
+              {
+                "path": ".omo/work/logh7-installed/data/image/Thumbnail/Ship/iu013.tga",
+                "sha256": "8183593192c2c2d1fb10ba4815d17c26f86a8466a2007e736753555ef41518ff",
+                "source": "entries.iu013"
+              },
+              {
+                "path": ".omo/work/logh7-installed/data/image/Thumbnail/Ship/iu014.tga",
+                "sha256": "dae48227c71dc09a2eacb162a1d7378b9e5c002776340a3424cb7b3646ee83d3",
+                "source": "entries.iu014"
+              },
+              {
+                "path": ".omo/work/logh7-installed/data/image/Thumbnail/Ship/iu015.tga",
+                "sha256": "0de3943781057dce0f748e1bc414f7352960558cfe43bc77dc648e24ff3effd2",
+                "source": "entries.iu015"
+              },
+              {
+                "path": ".omo/work/logh7-installed/data/image/Thumbnail/Ship/iu016.tga",
+                "sha256": "aac95764a4e5720a2bc636c598633aca6e3e11ddb391bb63b3d50b49e68e3735",
+                "source": "entries.iu016"
+              },
+              {
+                "path": ".omo/work/logh7-installed/data/image/Thumbnail/Ship/iu024.tga",
+                "sha256": "0baf5f82c37c680a6cee6e78c6ee46bdb766bf3d21bbdd590b5b184ebb028f17",
+                "source": "entries.iu024"
+              }
+            ],
+            "tool": {
+              "status": "present",
+              "id": "empire-ship-reference",
+              "method": "decode original Ship thumbnail TGA palette images, remove connected dark background, preserve selected silver/black Empire ship silhouettes, create gold relief variants for medal composition",
+              "tool": null
+            },
+            "prompt": {
+              "status": "pending",
+              "required": true
+            },
+            "settings": {
+              "status": "pending",
+              "values": {
+                "scale": null,
+                "qualityNote": null
+              }
+            },
+            "reviewer": {
+              "status": "pending",
+              "required": true
+            },
+            "outputHash": {
+              "kind": "manifest-file-sha256",
+              "path": "server/content/generated/logh7-empire-ship-reference-manifest.json",
+              "sha256": "38d998a871512b6048ecbf9ea3ca8608d13fc4a250c34962d9af6b144f1730ca"
+            },
+            "outputAssets": {
+              "status": "not-declared"
+            },
+            "rollback": {
+              "strategy": "disable-artifact-use-original-fallback",
+              "originalFallbackRequired": true,
+              "conflictCheckRequired": true
+            },
+            "qaEvidence": {
+              "status": "pending",
+              "required": true
+            }
+          }
+        },
+        {
+          "id": "asset-overwrite-guard",
+          "path": "server/content/generated/logh7-asset-overwrite-guard.json",
+          "enabledByDefault": false,
+          "reversible": true,
+          "conflictCheckRequired": true,
+          "provenanceLabelRequired": true,
+          "originalFallbackRequired": true,
+          "canonicalStatus": "suspect-cross-check-required",
+          "status": "present",
+          "manifestId": "logh7-asset-overwrite-guard",
+          "manifestStatus": null,
+          "size": 6629,
+          "sha1": "379be67f342c9c78d3af6a5b0973c2294e30bff4",
+          "sha256": "46874db9dce65e446ba2165e1d4560bd261b337b7b7df70f6d48d935a06c905a",
+          "provenance": {
+            "sourceHashes": {
+              "status": "missing"
+            },
+            "tool": {
+              "status": "pending",
+              "id": "asset-overwrite-guard",
+              "method": null,
+              "tool": null
+            },
+            "prompt": {
+              "status": "pending",
+              "required": true
+            },
+            "settings": {
+              "status": "pending",
+              "values": {
+                "scale": null,
+                "qualityNote": null
+              }
+            },
+            "reviewer": {
+              "status": "pending",
+              "required": true
+            },
+            "outputHash": {
+              "kind": "manifest-file-sha256",
+              "path": "server/content/generated/logh7-asset-overwrite-guard.json",
+              "sha256": "46874db9dce65e446ba2165e1d4560bd261b337b7b7df70f6d48d935a06c905a"
+            },
+            "outputAssets": {
+              "status": "not-declared"
+            },
+            "rollback": {
+              "strategy": "disable-artifact-use-original-fallback",
+              "originalFallbackRequired": true,
+              "conflictCheckRequired": true
+            },
+            "qaEvidence": {
+              "status": "pending",
+              "required": true
+            }
+          }
+        },
+        {
+          "id": "unity-source-pack",
+          "path": "server/content/generated/logh7-unity-source-pack-manifest.json",
+          "enabledByDefault": false,
+          "reversible": true,
+          "conflictCheckRequired": true,
+          "provenanceLabelRequired": true,
+          "originalFallbackRequired": true,
+          "canonicalStatus": "suspect-cross-check-required",
+          "status": "present",
+          "manifestId": "logh7-unity-source-pack-manifest",
+          "manifestStatus": "blocked-until-cross-source-confirmed",
+          "size": 23822,
+          "sha1": "02e05dc5d52fcea73c94e7d008b7f829e02ddb93",
+          "sha256": "917370e9aefc89b44a5040ea6418e8d00c8f3b8b09287f973595bb71e361c5fa",
+          "provenance": {
+            "sourceHashes": [
+              {
+                "path": "server/content/generated/logh7-cd-media-manifest.json",
+                "sha1": "55387c6130b24e8f4405c103b02f646ac57dfa05",
+                "source": "cdMedia"
+              },
+              {
+                "path": "server/content/original-data/logh7-source-roots.json",
+                "sha1": "be2039242d780af5a78b43256ccaaa45785630af",
+                "source": "sourceRootRegistry"
+              },
+              {
+                "path": "server/content/generated/logh7-current-content-crosscheck.json",
+                "sha1": "71c12e49247887f4ea3fadd1e831cf8f39638428",
+                "source": "currentContentCrosscheck"
+              },
+              {
+                "path": "server/content/generated/logh7-server-servable-data-family.json",
+                "sha1": "4c0beb949a6bf8e56396792c99c2222e7203cd92",
+                "source": "serverServableDataFamily"
+              },
+              {
+                "path": "server/content/generated/logh7-runtime-boundary-manifest.json",
+                "sha1": "74bea0f3c83667aeeb99bad480e3c6badc2439ba",
+                "source": "runtimeBoundary"
+              },
+              {
+                "path": "client-unity/Assets/StreamingAssets/logh7/logh7-unity-runtime-manifest.json",
+                "sha1": "667af365368b04f6d938a5e52065e24809def9a1",
+                "source": "unityRuntimeManifest"
+              },
+              {
+                "path": "client-unity/Assets/StreamingAssets/logh7/logh7-unity-bootstrap-manifest.json",
+                "sha1": "39bc401c82cdfd16b55b0e2d50be9a0483dfc8a2",
+                "source": "unityBootstrapManifest"
+              }
+            ],
+            "tool": {
+              "status": "pending",
+              "id": "unity-source-pack",
+              "method": null,
+              "tool": null
+            },
+            "prompt": {
+              "status": "pending",
+              "required": true
+            },
+            "settings": {
+              "status": "pending",
+              "values": {
+                "scale": null,
+                "qualityNote": null
+              }
+            },
+            "reviewer": {
+              "status": "pending",
+              "required": true
+            },
+            "outputHash": {
+              "kind": "manifest-file-sha256",
+              "path": "server/content/generated/logh7-unity-source-pack-manifest.json",
+              "sha256": "917370e9aefc89b44a5040ea6418e8d00c8f3b8b09287f973595bb71e361c5fa"
+            },
+            "outputAssets": {
+              "status": "not-declared"
+            },
+            "rollback": {
+              "strategy": "disable-artifact-use-original-fallback",
+              "originalFallbackRequired": true,
+              "conflictCheckRequired": true
+            },
+            "qaEvidence": {
+              "status": "pending",
+              "required": true
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
