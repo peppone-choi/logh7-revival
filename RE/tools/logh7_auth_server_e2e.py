@@ -174,7 +174,7 @@ def run(
             "--trace",
             str(trace_out),
         ],
-        cwd=ROOT,
+        cwd=ROOT / "server",
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
         text=True,

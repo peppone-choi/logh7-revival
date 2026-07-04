@@ -1,8 +1,0 @@
-{
-  "name": "lobbyfsm",
-  "desc": "Make the lobby FSM process clicks even when a lobby reply was dropped/mistagged. The lobby scene driver FUN_0051a370 (contains the ONLY button dispatcher, state 0x17) runs its body only on frames where the recv-pump FUN_004b8950 returns true. On the transport-active path that return = (*(clientBase+0x357ec0)==0) = 'no lobby request awaiting a reply'. The outstanding-request count +0x357ec0 is decremented ONLY when an incoming reply's opcode matches a registered expected opcode in FUN_004ba2b0; a dropped/mistagged reply (recv-pump cadence gap) leaves it stuck >0 with NO timeout reset -> FSM body never ticks -> state 0x17 never polls -> ALL lobby buttons (incl native 게임시작) go dead while rendering continues. This patches FUN_004b8950's tail `test eax,eax` -> `xor eax,eax` at VA 0x4b8ae8 so `sete al` returns 1 unconditionally on the transport-active path; the FSM body ticks every frame regardless of the stuck count, while the transport-service call 0x4ad4b0 still runs. RE: tracer agent a85d43b. This is the click-deadness fix (separate from menufix which only flips the +0x15 enable byte).",
-  "verified": "RE-derived; live-verify pending",
-  "patches": [
-    { "va": "0x004b8ae8", "originalHex": "85c0", "patchedHex": "33c0", "note": "recv-pump FUN_004b8950 tail: test eax,eax -> xor eax,eax; sete al then returns 1 so the lobby FSM (state 0x17 button poll) ticks every frame even when outstanding-request count +0x357ec0 is stuck>0" }
-  ]
-}

@@ -1,9 +1,0 @@
-==== /target ====
-cd "C:/Users/by0ng/OneDrive/Desktop/logh7-revival" && grep -rl "strategic-grid-chat\|CommandSupplyFuel (echo)\|serverBuilder" --include=*.md --include=*.json --include=*.jsonl . 2>/dev/null | grep -v 
-
-==== /target ====
-cd /c/Users/by0ng/OneDrive/Desktop/logh7-revival && grep -rl "strategic-grid-chat" . --include=*.json --include=*.md --include=*.jsonl 2>/dev/null | grep -v ".git/" | head; echo "=== CommandSupplyFuel
-
-==== /target ====
-cd /c/Users/by0ng/OneDrive/Desktop/logh7-revival && grep -o "strategic-grid-chat" .bkit/audit/2026-06-29.jsonl | head -1; echo "=== row opcodes present ==="; grep -oE '"opcode":"0x[0-9a-f]+"' .bkit/au
-

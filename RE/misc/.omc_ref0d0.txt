@@ -1,3 +1,0 @@
-0x004ae0d0  FUN_004ae0d0  (1 hit)  e.g. void __thiscall FUN_004ae0d0(int param_1,uint param_2,undefined4 param_3,undefined4 *param
-
-// 1 functions matched
