@@ -1,9 +1,0 @@
-LOGH VII scene placeholder: 로그인/접속 세션
-id: login
-status: placeholder-required
-evidence: source-hits-present
-
-Evidence hits:
-- ghidra-strings .omo/ghidra/export/G7MTClient/strings.tsv term=Login
-- ghidra-functions .omo/ghidra/export/G7MTClient/functions.jsonl term=Login
-- msgdat-text .omo/work/logh7-cd-extract/installshield-root/____________s___/____/data/MsgDat/constmsg.dat term=ログイン
