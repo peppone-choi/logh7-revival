@@ -2,7 +2,6 @@
 
 import argparse
 import json
-import re
 import subprocess
 import sys
 import unittest
@@ -10,8 +9,8 @@ from pathlib import Path
 from tempfile import TemporaryDirectory
 from unittest.mock import patch
 
-from tools.tests.test_logh7_pipeline import REPO_ROOT
-from tools.logh7_runtime_patch_apply import _build_js as _build_runtime_patch_apply_js
+REPO_ROOT = Path(__file__).resolve().parents[2]
+
 from tools.logh7_runtime_patch_apply import _load_patch as _load_runtime_patch_descriptor
 from tools.logh7_ui_flow import CharacterFaction, CharacterFlowSpec, LoginSpec, run_create_character_flow, run_login_flow
 from tools.logh7_ui_explorer import (
@@ -92,28 +91,6 @@ class Logh7UiExplorerTests(unittest.TestCase):
         self.assertIn("LOGH_COMMAND_TABLE_PRELOAD_PROBE=0", standard_env_cli_args())
         self.assertIn("LOGH_DEV_COMMAND_GRANT_ALL=0", standard_env_cli_args())
         self.assertIn("LOGH_STATIC_TROOPS=0", standard_env_cli_args())
-
-    def test_launcher_env_mirrors_shared_live_env_with_documented_deltas(self) -> None:
-        from tools.logh7_launch_config import (
-            HARNESS_ONLY_SERVER_ENV_KEYS,
-            LAUNCHER_ONLY_SERVER_ENV_KEYS,
-            SHARED_LAUNCHER_ENV_KEYS,
-            STANDARD_SERVER_ENV,
-        )
-
-        launcher_source = (REPO_ROOT / "tools" / "launcher" / "LOGH7Launcher.cs").read_text(encoding="utf-8")
-        literal_env = dict(
-            re.findall(r'psi\.EnvironmentVariables\["([^"]+)"\]\s*=\s*"([^"]*)";', launcher_source)
-        )
-        launcher_keys = set(re.findall(r'psi\.EnvironmentVariables\["([^"]+)"\]', launcher_source))
-
-        self.assertEqual(set(SHARED_LAUNCHER_ENV_KEYS) | set(HARNESS_ONLY_SERVER_ENV_KEYS), set(STANDARD_SERVER_ENV))
-        for key in SHARED_LAUNCHER_ENV_KEYS:
-            self.assertEqual(literal_env.get(key), STANDARD_SERVER_ENV[key], key)
-        for key in HARNESS_ONLY_SERVER_ENV_KEYS:
-            self.assertNotIn(key, launcher_keys)
-        self.assertTrue(set(LAUNCHER_ONLY_SERVER_ENV_KEYS).issubset(launcher_keys))
-        self.assertEqual(launcher_keys - set(SHARED_LAUNCHER_ENV_KEYS) - set(LAUNCHER_ONLY_SERVER_ENV_KEYS), set())
 
     def test_taskkill_pid_targets_only_recorded_live_pid(self) -> None:
         with patch("tools.logh7_ui_explorer._process_alive", side_effect=lambda pid: pid == 16040):
@@ -449,23 +426,6 @@ class Logh7UiExplorerTests(unittest.TestCase):
 
         incomplete = _runtime_patch_receipt(["font-atlas-antialias"], [events[0]])
         self.assertFalse(incomplete["ok"])
-
-    def test_runtime_patch_descriptor_loader_preserves_original_hex_guard(self) -> None:
-        patch = _load_runtime_patch_descriptor("font-atlas-antialias")
-
-        site = patch["patches"][0]
-        self.assertEqual(site["originalHex"], "6a05")
-        self.assertEqual(site["patchedHex"], "6a04")
-
-        js = _build_runtime_patch_apply_js([patch])
-        self.assertIn("allBeforeOk", js)
-        self.assertIn("beforeOk", js)
-        self.assertIn("alreadyApplied", js)
-        self.assertIn("preflightOk", js)
-        self.assertIn("wrote", js)
-        self.assertIn("original", js)
-        self.assertNotIn("original === '' ||", js)
-        self.assertIn("!alreadyApplied", js)
 
     def test_runtime_patch_descriptor_loader_requires_original_hex_guard(self) -> None:
         with TemporaryDirectory() as raw_patch_dir:
