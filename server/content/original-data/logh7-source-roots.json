@@ -1,0 +1,87 @@
+{
+  "id": "logh7-source-roots",
+  "updatedAt": "2026-07-03",
+  "description": "Source-material roots for the post-pivot LOGH VII data/spec pipeline. Missing roots are reported by inventory tooling instead of silently ignored.",
+  "roots": [
+    {
+      "id": "archive-org-original-media",
+      "path": "artifacts/logh7-cd",
+      "relativeTo": "repo",
+      "provenance": "P0-candidate",
+      "status": "required-missing-until-downloaded",
+      "use": "Original BIN/CUE verification source for Logh7.bin and Logh7.cue."
+    },
+    {
+ "id": "cd-extract-iso-filesystem",
+ "path": ".omo/work/logh7-cd-extract/iso-root",
+ "relativeTo": "repo",
+ "provenance": "P0-cd-extraction",
+ "status": "preserved-source-material",
+ "use": "ISO filesystem extracted from verified Archive BIN/CUE conversion."
+ },
+ {
+ "id": "cd-extract-installshield-payload",
+ "path": ".omo/work/logh7-cd-extract/installshield-root",
+ "relativeTo": "repo",
+ "provenance": "P0-cd-extraction",
+ "status": "preserved-source-material",
+ "use": "InstallShield payload extracted from the verified CD filesystem."
+ },
+ {
+ "id": "installed-game-data",
+      "path": ".omo/work/logh7-installed/data",
+      "relativeTo": "repo",
+      "provenance": "P0-extracted-install",
+      "status": "preserved-source-material",
+      "use": "Installed BMP, TGA, MDX, TCF, DAT, WAV, OGG, and related game resources."
+    },
+    {
+      "id": "installed-fonts",
+      "path": ".omo/work/logh7-installed/fonts",
+      "relativeTo": "repo",
+      "provenance": "P0-extracted-install",
+      "status": "preserved-source-material",
+      "use": "Installed font resources for localization and readability evidence."
+    },
+    {
+      "id": "installed-docs",
+      "path": ".omo/work/logh7-installed/doc",
+      "relativeTo": "repo",
+      "provenance": "P0-extracted-install",
+      "status": "preserved-source-material",
+      "use": "Installed document resources from the game installation."
+    },
+    {
+      "id": "server-content",
+      "path": "server/content",
+      "relativeTo": "repo",
+      "provenance": "mixed-current-content",
+      "status": "canonical-workspace-data",
+      "use": "Current canonical and generated content candidates used by the reimplementation."
+    },
+    {
+      "id": "re-content",
+      "path": "RE/content",
+      "relativeTo": "repo",
+      "provenance": "mixed-re-evidence",
+      "status": "preserved-evidence-material",
+      "use": "Reverse-engineering extracted content and evidence mirrors."
+    },
+    {
+      "id": "ghidra-evidence",
+      "path": ".omo/ghidra",
+      "relativeTo": "repo",
+      "provenance": "P1-static-re",
+      "status": "preserved-evidence-material",
+      "use": "Ghidra/redex index and decompile evidence for client oracle checks."
+    },
+    {
+      "id": "manual-extracts",
+      "path": "tmp/manual_extract",
+      "relativeTo": "repo",
+      "provenance": "P1-manual-derived",
+      "status": "preserved-source-material",
+      "use": "Manual PDF extraction outputs and page-derived source evidence."
+    }
+  ]
+}

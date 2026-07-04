@@ -1,0 +1,3058 @@
+{
+  "id": "logh7-medal-mining-catalog",
+  "generatedAt": "2026-07-03T17:02:06.457Z",
+  "source": {
+    "rosterPath": "server/content/roster/medals.json",
+    "japaneseMsgDatPath": "server/content/client/msgdat.json",
+    "localizedDatTablesPath": "server/content/extracted/dat-tables.json",
+    "installedMedalDir": ".omo/work/logh7-installed/data/image/Medal",
+    "evidenceGrade": {
+      "medalNamesJa": "P1-original-msgdat-constmsg-records-767-818",
+      "medalNamesKo": "localized-cp949-dat-table-records-767-818",
+      "medalIconPool": "P1-original-install-media-files",
+      "perMedalIconMapping": "pending-runtime-or-static-RE",
+      "imperialEmblem": "user-supplied-reference; exact-shape-remaster-only"
+    },
+    "policy": "Mine medal list and images from original data first. Do not generate replacement medal art when original medal images are present; generated art is only a blocked fallback for missing data."
+  },
+  "summary": {
+    "medalCount": 52,
+    "expectedMedalCount": 52,
+    "sourceIdRange": [
+      767,
+      818
+    ],
+    "factions": {
+      "empire": {
+        "count": 26,
+        "idRange": [
+          767,
+          792
+        ],
+        "bitRange": [
+          0,
+          25
+        ]
+      },
+      "alliance": {
+        "count": 26,
+        "idRange": [
+          793,
+          818
+        ],
+        "bitRange": [
+          26,
+          51
+        ]
+      }
+    },
+    "japaneseMsgDatRecordCount": 52,
+    "localizedDatTableRecordCount": 52,
+    "originalIconPool": {
+      "stemCount": 15,
+      "fileCount": 30,
+      "pngCount": 15,
+      "tgaCount": 15,
+      "stems": [
+        "m_f001",
+        "m_f002",
+        "m_f003",
+        "m_f004",
+        "m_f005",
+        "m_f006",
+        "m_f007",
+        "m_f008",
+        "m_f009",
+        "m_f010",
+        "m_f011",
+        "m_f012",
+        "m_f013",
+        "m_f014",
+        "m_f015"
+      ]
+    },
+    "generationPolicy": {
+      "imperialMedals": "do-not-generate-while-original-m_f001-m_f015-icon-pool-exists",
+      "allianceMedals": "do-not-generate-while-original-m_f001-m_f015-icon-pool-exists",
+      "fallbackCondition": "generation may be reconsidered only after mining proves a required original image is absent"
+    }
+  },
+  "imperialEmblem": {
+    "path": "client-unity/Assets/ArtSource/reference/logh7-imperial-double-eagle-reference.jpg",
+    "exists": true,
+    "byteSize": 56303,
+    "sha256": "822276b190c3e83729de39c14e4e9fc06c2eb8b39a56225bdcbe16f147134e9e",
+    "image": {
+      "format": "jpeg",
+      "width": 1000,
+      "height": 600
+    },
+    "exactnessPolicy": "The supplied double-eagle crest is canonical reference for remastering. Preserve the full silhouette and internal structure; no simplified/generated substitute is acceptable."
+  },
+  "medals": [
+    {
+      "bit": 0,
+      "id": 767,
+      "faction": "empire",
+      "names": {
+        "ja": "大双頭鷲勲章",
+        "ko": "대쌍두독수리훈장",
+        "en": "Grand Order of the Double-Headed Eagle"
+      },
+      "source": {
+        "roster": {
+          "path": "server/content/roster/medals.json",
+          "nameJaMatchesMsgDat": true,
+          "nameKoMatchesLocalizedTable": true
+        },
+        "japaneseMsgDat": {
+          "path": "server/content/client/msgdat.json",
+          "file": "constmsg.dat",
+          "recordId": 767
+        },
+        "localizedDatTable": {
+          "path": "server/content/extracted/dat-tables.json",
+          "recordId": 767,
+          "encoding": "cp949"
+        }
+      },
+      "originalAsset": {
+        "stem": "m_f001",
+        "status": "original-icon-pool-present",
+        "mapping": "asset-hint-only; per-medal runtime icon mapping still requires RE/live UI proof",
+        "files": [
+          {
+            "path": ".omo/work/logh7-installed/data/image/Medal/m_f001.png",
+            "extension": ".png",
+            "sha256": "04948f94ecdff5d19512f3172db3648e352093725a4d2f38d3f3af0be8ea2b13",
+            "byteSize": 18429,
+            "image": {
+              "format": "png",
+              "width": 80,
+              "height": 80
+            }
+          },
+          {
+            "path": ".omo/work/logh7-installed/data/image/Medal/m_f001.tga",
+            "extension": ".tga",
+            "sha256": "466b83d56fa0d51a4e4a10a0b62f320b729c878a9249d719337c9fc5af336250",
+            "byteSize": 7442,
+            "image": {
+              "format": "tga",
+              "width": 80,
+              "height": 80,
+              "bitsPerPixel": 8
+            }
+          }
+        ]
+      }
+    },
+    {
+      "bit": 1,
+      "id": 768,
+      "faction": "empire",
+      "names": {
+        "ja": "双頭鷲武勲章",
+        "ko": "쌍두독수리무훈장",
+        "en": "Double-Headed Eagle War Merit Medal"
+      },
+      "source": {
+        "roster": {
+          "path": "server/content/roster/medals.json",
+          "nameJaMatchesMsgDat": true,
+          "nameKoMatchesLocalizedTable": false
+        },
+        "japaneseMsgDat": {
+          "path": "server/content/client/msgdat.json",
+          "file": "constmsg.dat",
+          "recordId": 768
+        },
+        "localizedDatTable": {
+          "path": "server/content/extracted/dat-tables.json",
+          "recordId": 768,
+          "encoding": "cp949"
+        }
+      },
+      "originalAsset": {
+        "stem": "m_f002",
+        "status": "original-icon-pool-present",
+        "mapping": "asset-hint-only; per-medal runtime icon mapping still requires RE/live UI proof",
+        "files": [
+          {
+            "path": ".omo/work/logh7-installed/data/image/Medal/m_f002.png",
+            "extension": ".png",
+            "sha256": "6e3b31c5ddf78b9eca639fb9aca30a63338e7287b30b325d530921105732e4bd",
+            "byteSize": 23240,
+            "image": {
+              "format": "png",
+              "width": 80,
+              "height": 80
+            }
+          },
+          {
+            "path": ".omo/work/logh7-installed/data/image/Medal/m_f002.tga",
+            "extension": ".tga",
+            "sha256": "a400b4e2102f1ef1fa552f20c10d65dc5692f79b4514f54bcaeacdd1500b6899",
+            "byteSize": 7442,
+            "image": {
+              "format": "tga",
+              "width": 80,
+              "height": 80,
+              "bitsPerPixel": 8
+            }
+          }
+        ]
+      }
+    },
+    {
+      "bit": 2,
+      "id": 769,
+      "faction": "empire",
+      "names": {
+        "ja": "銀河帝国大十字章",
+        "ko": "은하제국 대십자장",
+        "en": "Galactic Empire Grand Cross"
+      },
+      "source": {
+        "roster": {
+          "path": "server/content/roster/medals.json",
+          "nameJaMatchesMsgDat": true,
+          "nameKoMatchesLocalizedTable": true
+        },
+        "japaneseMsgDat": {
+          "path": "server/content/client/msgdat.json",
+          "file": "constmsg.dat",
+          "recordId": 769
+        },
+        "localizedDatTable": {
+          "path": "server/content/extracted/dat-tables.json",
+          "recordId": 769,
+          "encoding": "cp949"
+        }
+      },
+      "originalAsset": {
+        "stem": "m_f003",
+        "status": "original-icon-pool-present",
+        "mapping": "asset-hint-only; per-medal runtime icon mapping still requires RE/live UI proof",
+        "files": [
+          {
+            "path": ".omo/work/logh7-installed/data/image/Medal/m_f003.png",
+            "extension": ".png",
+            "sha256": "c262a189d43bc428f650a74a32fbe895b410223aa16d20631333c9403a9fcb4c",
+            "byteSize": 21195,
+            "image": {
+              "format": "png",
+              "width": 80,
+              "height": 80
+            }
+          },
+          {
+            "path": ".omo/work/logh7-installed/data/image/Medal/m_f003.tga",
+            "extension": ".tga",
+            "sha256": "bd3b718c6fe2c4aa0f17a815089d5b3e0a08124ff8e877ec0acea2a8edaac3ec",
+            "byteSize": 7442,
+            "image": {
+              "format": "tga",
+              "width": 80,
+              "height": 80,
+              "bitsPerPixel": 8
+            }
+          }
+        ]
+      }
+    },
+    {
+      "bit": 3,
+      "id": 770,
+      "faction": "empire",
+      "names": {
+        "ja": "功一級騎士十字章",
+        "ko": "공일급 기사십자장",
+        "en": "Knight's Cross, 1st Class"
+      },
+      "source": {
+        "roster": {
+          "path": "server/content/roster/medals.json",
+          "nameJaMatchesMsgDat": true,
+          "nameKoMatchesLocalizedTable": false
+        },
+        "japaneseMsgDat": {
+          "path": "server/content/client/msgdat.json",
+          "file": "constmsg.dat",
+          "recordId": 770
+        },
+        "localizedDatTable": {
+          "path": "server/content/extracted/dat-tables.json",
+          "recordId": 770,
+          "encoding": "cp949"
+        }
+      },
+      "originalAsset": {
+        "stem": "m_f004",
+        "status": "original-icon-pool-present",
+        "mapping": "asset-hint-only; per-medal runtime icon mapping still requires RE/live UI proof",
+        "files": [
+          {
+            "path": ".omo/work/logh7-installed/data/image/Medal/m_f004.png",
+            "extension": ".png",
+            "sha256": "b8a08b1195f4030a76818229bc3e1f361713d1b582b9302522e9eaf73604c10a",
+            "byteSize": 15056,
+            "image": {
+              "format": "png",
+              "width": 80,
+              "height": 80
+            }
+          },
+          {
+            "path": ".omo/work/logh7-installed/data/image/Medal/m_f004.tga",
+            "extension": ".tga",
+            "sha256": "00a0fb69d3752ad4e58accb612d049a15a7818ca0b0c92500284ce6e30b0bd3c",
+            "byteSize": 7442,
+            "image": {
+              "format": "tga",
+              "width": 80,
+              "height": 80,
+              "bitsPerPixel": 8
+            }
+          }
+        ]
+      }
+    },
+    {
+      "bit": 4,
+      "id": 771,
+      "faction": "empire",
+      "names": {
+        "ja": "功二級騎士十字章",
+        "ko": "공이급 기사십자장",
+        "en": "Knight's Cross, 2nd Class"
+      },
+      "source": {
+        "roster": {
+          "path": "server/content/roster/medals.json",
+          "nameJaMatchesMsgDat": true,
+          "nameKoMatchesLocalizedTable": false
+        },
+        "japaneseMsgDat": {
+          "path": "server/content/client/msgdat.json",
+          "file": "constmsg.dat",
+          "recordId": 771
+        },
+        "localizedDatTable": {
+          "path": "server/content/extracted/dat-tables.json",
+          "recordId": 771,
+          "encoding": "cp949"
+        }
+      },
+      "originalAsset": {
+        "stem": "m_f005",
+        "status": "original-icon-pool-present",
+        "mapping": "asset-hint-only; per-medal runtime icon mapping still requires RE/live UI proof",
+        "files": [
+          {
+            "path": ".omo/work/logh7-installed/data/image/Medal/m_f005.png",
+            "extension": ".png",
+            "sha256": "155b2468a9a368e38f90a18e3f508f45be275c92e7fd1031c96d08f4aab82d62",
+            "byteSize": 14534,
+            "image": {
+              "format": "png",
+              "width": 80,
+              "height": 80
+            }
+          },
+          {
+            "path": ".omo/work/logh7-installed/data/image/Medal/m_f005.tga",
+            "extension": ".tga",
+            "sha256": "41557050ad872b619f54e2c66d69ef47a0536674aea6bc4e73552265aa752d60",
+            "byteSize": 7442,
+            "image": {
+              "format": "tga",
+              "width": 80,
+              "height": 80,
+              "bitsPerPixel": 8
+            }
+          }
+        ]
+      }
+    },
+    {
+      "bit": 5,
+      "id": 772,
+      "faction": "empire",
+      "names": {
+        "ja": "功一級十字章",
+        "ko": "공일급 십자장",
+        "en": "Cross of Merit, 1st Class"
+      },
+      "source": {
+        "roster": {
+          "path": "server/content/roster/medals.json",
+          "nameJaMatchesMsgDat": true,
+          "nameKoMatchesLocalizedTable": false
+        },
+        "japaneseMsgDat": {
+          "path": "server/content/client/msgdat.json",
+          "file": "constmsg.dat",
+          "recordId": 772
+        },
+        "localizedDatTable": {
+          "path": "server/content/extracted/dat-tables.json",
+          "recordId": 772,
+          "encoding": "cp949"
+        }
+      },
+      "originalAsset": {
+        "stem": "m_f006",
+        "status": "original-icon-pool-present",
+        "mapping": "asset-hint-only; per-medal runtime icon mapping still requires RE/live UI proof",
+        "files": [
+          {
+            "path": ".omo/work/logh7-installed/data/image/Medal/m_f006.png",
+            "extension": ".png",
+            "sha256": "fc00f7be9690c10660f2f9ab0559ba9a619286937faa5dd91bdc021cae2f4323",
+            "byteSize": 16396,
+            "image": {
+              "format": "png",
+              "width": 80,
+              "height": 80
+            }
+          },
+          {
+            "path": ".omo/work/logh7-installed/data/image/Medal/m_f006.tga",
+            "extension": ".tga",
+            "sha256": "10498029f6276315879cd645f390e467582ea43b90b50b75e15e473d17eb5a98",
+            "byteSize": 7442,
+            "image": {
+              "format": "tga",
+              "width": 80,
+              "height": 80,
+              "bitsPerPixel": 8
+            }
+          }
+        ]
+      }
+    },
+    {
+      "bit": 6,
+      "id": 773,
+      "faction": "empire",
+      "names": {
+        "ja": "功二級十字章",
+        "ko": "공이급 십자장",
+        "en": "Cross of Merit, 2nd Class"
+      },
+      "source": {
+        "roster": {
+          "path": "server/content/roster/medals.json",
+          "nameJaMatchesMsgDat": true,
+          "nameKoMatchesLocalizedTable": false
+        },
+        "japaneseMsgDat": {
+          "path": "server/content/client/msgdat.json",
+          "file": "constmsg.dat",
+          "recordId": 773
+        },
+        "localizedDatTable": {
+          "path": "server/content/extracted/dat-tables.json",
+          "recordId": 773,
+          "encoding": "cp949"
+        }
+      },
+      "originalAsset": {
+        "stem": "m_f007",
+        "status": "original-icon-pool-present",
+        "mapping": "asset-hint-only; per-medal runtime icon mapping still requires RE/live UI proof",
+        "files": [
+          {
+            "path": ".omo/work/logh7-installed/data/image/Medal/m_f007.png",
+            "extension": ".png",
+            "sha256": "f813743c30d66a03f954f4ed560caef5e0975d6cd46828a0eaa2f2c684706f2a",
+            "byteSize": 17076,
+            "image": {
+              "format": "png",
+              "width": 80,
+              "height": 80
+            }
+          },
+          {
+            "path": ".omo/work/logh7-installed/data/image/Medal/m_f007.tga",
+            "extension": ".tga",
+            "sha256": "8d8a00fd2b963ec42e84491e1063eae3182ad0c64d13978f6e036302624f124f",
+            "byteSize": 7442,
+            "image": {
+              "format": "tga",
+              "width": 80,
+              "height": 80,
+              "bitsPerPixel": 8
+            }
+          }
+        ]
+      }
+    },
+    {
+      "bit": 7,
+      "id": 774,
+      "faction": "empire",
+      "names": {
+        "ja": "功一級戦功章",
+        "ko": "공일급 전공장",
+        "en": "War Merit Medal, 1st Class"
+      },
+      "source": {
+        "roster": {
+          "path": "server/content/roster/medals.json",
+          "nameJaMatchesMsgDat": true,
+          "nameKoMatchesLocalizedTable": false
+        },
+        "japaneseMsgDat": {
+          "path": "server/content/client/msgdat.json",
+          "file": "constmsg.dat",
+          "recordId": 774
+        },
+        "localizedDatTable": {
+          "path": "server/content/extracted/dat-tables.json",
+          "recordId": 774,
+          "encoding": "cp949"
+        }
+      },
+      "originalAsset": {
+        "stem": "m_f008",
+        "status": "original-icon-pool-present",
+        "mapping": "asset-hint-only; per-medal runtime icon mapping still requires RE/live UI proof",
+        "files": [
+          {
+            "path": ".omo/work/logh7-installed/data/image/Medal/m_f008.png",
+            "extension": ".png",
+            "sha256": "55ded2d08d9087aeca3e25605111d5e1c14b974b0220f704902c25cdb4753aa5",
+            "byteSize": 19382,
+            "image": {
+              "format": "png",
+              "width": 80,
+              "height": 80
+            }
+          },
+          {
+            "path": ".omo/work/logh7-installed/data/image/Medal/m_f008.tga",
+            "extension": ".tga",
+            "sha256": "77d5f54af71feeab23528aba768b6322169bb64f4633d2c2cd0e2a5781d10081",
+            "byteSize": 7442,
+            "image": {
+              "format": "tga",
+              "width": 80,
+              "height": 80,
+              "bitsPerPixel": 8
+            }
+          }
+        ]
+      }
+    },
+    {
+      "bit": 8,
+      "id": 775,
+      "faction": "empire",
+      "names": {
+        "ja": "功二級戦功章",
+        "ko": "공이급 전공장",
+        "en": "War Merit Medal, 2nd Class"
+      },
+      "source": {
+        "roster": {
+          "path": "server/content/roster/medals.json",
+          "nameJaMatchesMsgDat": true,
+          "nameKoMatchesLocalizedTable": false
+        },
+        "japaneseMsgDat": {
+          "path": "server/content/client/msgdat.json",
+          "file": "constmsg.dat",
+          "recordId": 775
+        },
+        "localizedDatTable": {
+          "path": "server/content/extracted/dat-tables.json",
+          "recordId": 775,
+          "encoding": "cp949"
+        }
+      },
+      "originalAsset": {
+        "stem": "m_f009",
+        "status": "original-icon-pool-present",
+        "mapping": "asset-hint-only; per-medal runtime icon mapping still requires RE/live UI proof",
+        "files": [
+          {
+            "path": ".omo/work/logh7-installed/data/image/Medal/m_f009.png",
+            "extension": ".png",
+            "sha256": "35b7abc50d1ce38870a55d5a4fe36e61da10211476a7afa8417d1833e1c003b3",
+            "byteSize": 15246,
+            "image": {
+              "format": "png",
+              "width": 80,
+              "height": 80
+            }
+          },
+          {
+            "path": ".omo/work/logh7-installed/data/image/Medal/m_f009.tga",
+            "extension": ".tga",
+            "sha256": "6aac259abf650471f02d00c1c2ba466c0f20e7587ede7eefc3496a79c2f5fe57",
+            "byteSize": 7442,
+            "image": {
+              "format": "tga",
+              "width": 80,
+              "height": 80,
+              "bitsPerPixel": 8
+            }
+          }
+        ]
+      }
+    },
+    {
+      "bit": 9,
+      "id": 776,
+      "faction": "empire",
+      "names": {
+        "ja": "功三級戦功章",
+        "ko": "공삼급 전공장",
+        "en": "War Merit Medal, 3rd Class"
+      },
+      "source": {
+        "roster": {
+          "path": "server/content/roster/medals.json",
+          "nameJaMatchesMsgDat": true,
+          "nameKoMatchesLocalizedTable": false
+        },
+        "japaneseMsgDat": {
+          "path": "server/content/client/msgdat.json",
+          "file": "constmsg.dat",
+          "recordId": 776
+        },
+        "localizedDatTable": {
+          "path": "server/content/extracted/dat-tables.json",
+          "recordId": 776,
+          "encoding": "cp949"
+        }
+      },
+      "originalAsset": {
+        "stem": "m_f010",
+        "status": "original-icon-pool-present",
+        "mapping": "asset-hint-only; per-medal runtime icon mapping still requires RE/live UI proof",
+        "files": [
+          {
+            "path": ".omo/work/logh7-installed/data/image/Medal/m_f010.png",
+            "extension": ".png",
+            "sha256": "6244ca25b7ca0750b401aa63d4f011908110ce820999c0ca5bff44896216a163",
+            "byteSize": 15957,
+            "image": {
+              "format": "png",
+              "width": 80,
+              "height": 80
+            }
+          },
+          {
+            "path": ".omo/work/logh7-installed/data/image/Medal/m_f010.tga",
+            "extension": ".tga",
+            "sha256": "955fee6473d911213e9fe5d83b3d24bf680da67b56b8810ca252469845604e4a",
+            "byteSize": 7442,
+            "image": {
+              "format": "tga",
+              "width": 80,
+              "height": 80,
+              "bitsPerPixel": 8
+            }
+          }
+        ]
+      }
+    },
+    {
+      "bit": 10,
+      "id": 777,
+      "faction": "empire",
+      "names": {
+        "ja": "功四級戦功章",
+        "ko": "공사급 전공장",
+        "en": "War Merit Medal, 4th Class"
+      },
+      "source": {
+        "roster": {
+          "path": "server/content/roster/medals.json",
+          "nameJaMatchesMsgDat": true,
+          "nameKoMatchesLocalizedTable": false
+        },
+        "japaneseMsgDat": {
+          "path": "server/content/client/msgdat.json",
+          "file": "constmsg.dat",
+          "recordId": 777
+        },
+        "localizedDatTable": {
+          "path": "server/content/extracted/dat-tables.json",
+          "recordId": 777,
+          "encoding": "cp949"
+        }
+      },
+      "originalAsset": {
+        "stem": "m_f011",
+        "status": "original-icon-pool-present",
+        "mapping": "asset-hint-only; per-medal runtime icon mapping still requires RE/live UI proof",
+        "files": [
+          {
+            "path": ".omo/work/logh7-installed/data/image/Medal/m_f011.png",
+            "extension": ".png",
+            "sha256": "b062da28ef8953f25da05dd4a174f746ebebe8f91662f1058cc1df7335922a3d",
+            "byteSize": 15827,
+            "image": {
+              "format": "png",
+              "width": 80,
+              "height": 80
+            }
+          },
+          {
+            "path": ".omo/work/logh7-installed/data/image/Medal/m_f011.tga",
+            "extension": ".tga",
+            "sha256": "cb98ac03d34bfd3e40a9b19410f2a93cd16c65b55425101649b3278f2fe64b61",
+            "byteSize": 7442,
+            "image": {
+              "format": "tga",
+              "width": 80,
+              "height": 80,
+              "bitsPerPixel": 8
+            }
+          }
+        ]
+      }
+    },
+    {
+      "bit": 11,
+      "id": 778,
+      "faction": "empire",
+      "names": {
+        "ja": "功五級戦功章",
+        "ko": "공오급 전공장",
+        "en": "War Merit Medal, 5th Class"
+      },
+      "source": {
+        "roster": {
+          "path": "server/content/roster/medals.json",
+          "nameJaMatchesMsgDat": true,
+          "nameKoMatchesLocalizedTable": false
+        },
+        "japaneseMsgDat": {
+          "path": "server/content/client/msgdat.json",
+          "file": "constmsg.dat",
+          "recordId": 778
+        },
+        "localizedDatTable": {
+          "path": "server/content/extracted/dat-tables.json",
+          "recordId": 778,
+          "encoding": "cp949"
+        }
+      },
+      "originalAsset": {
+        "stem": "m_f012",
+        "status": "original-icon-pool-present",
+        "mapping": "asset-hint-only; per-medal runtime icon mapping still requires RE/live UI proof",
+        "files": [
+          {
+            "path": ".omo/work/logh7-installed/data/image/Medal/m_f012.png",
+            "extension": ".png",
+            "sha256": "c27e37dd6037be527291bc76a9a8ecf8319e854d29001531b1fc1af07982d746",
+            "byteSize": 21291,
+            "image": {
+              "format": "png",
+              "width": 80,
+              "height": 80
+            }
+          },
+          {
+            "path": ".omo/work/logh7-installed/data/image/Medal/m_f012.tga",
+            "extension": ".tga",
+            "sha256": "fee52c9d8c3dcbb05e227e91033e16ac72059690fefb62984484679d0c301478",
+            "byteSize": 7442,
+            "image": {
+              "format": "tga",
+              "width": 80,
+              "height": 80,
+              "bitsPerPixel": 8
+            }
+          }
+        ]
+      }
+    },
+    {
+      "bit": 12,
+      "id": 779,
+      "faction": "empire",
+      "names": {
+        "ja": "遠征部隊従軍記章",
+        "ko": "원정부대 종군기장",
+        "en": "Expeditionary Force Campaign Badge"
+      },
+      "source": {
+        "roster": {
+          "path": "server/content/roster/medals.json",
+          "nameJaMatchesMsgDat": true,
+          "nameKoMatchesLocalizedTable": true
+        },
+        "japaneseMsgDat": {
+          "path": "server/content/client/msgdat.json",
+          "file": "constmsg.dat",
+          "recordId": 779
+        },
+        "localizedDatTable": {
+          "path": "server/content/extracted/dat-tables.json",
+          "recordId": 779,
+          "encoding": "cp949"
+        }
+      },
+      "originalAsset": {
+        "stem": "m_f013",
+        "status": "original-icon-pool-present",
+        "mapping": "asset-hint-only; per-medal runtime icon mapping still requires RE/live UI proof",
+        "files": [
+          {
+            "path": ".omo/work/logh7-installed/data/image/Medal/m_f013.png",
+            "extension": ".png",
+            "sha256": "191a65e1c132d065ae4f80f3eda4eef58bf9c20d22f8cfaf95ed6e28d64348d7",
+            "byteSize": 20394,
+            "image": {
+              "format": "png",
+              "width": 80,
+              "height": 80
+            }
+          },
+          {
+            "path": ".omo/work/logh7-installed/data/image/Medal/m_f013.tga",
+            "extension": ".tga",
+            "sha256": "1320c0f8703ec5ba6012d486eb2412a4c5061e2cc59bdd875115358da9d90e3b",
+            "byteSize": 7442,
+            "image": {
+              "format": "tga",
+              "width": 80,
+              "height": 80,
+              "bitsPerPixel": 8
+            }
+          }
+        ]
+      }
+    },
+    {
+      "bit": 13,
+      "id": 780,
+      "faction": "empire",
+      "names": {
+        "ja": "戦闘功績記章",
+        "ko": "전투공적기장",
+        "en": "Combat Achievement Badge"
+      },
+      "source": {
+        "roster": {
+          "path": "server/content/roster/medals.json",
+          "nameJaMatchesMsgDat": true,
+          "nameKoMatchesLocalizedTable": false
+        },
+        "japaneseMsgDat": {
+          "path": "server/content/client/msgdat.json",
+          "file": "constmsg.dat",
+          "recordId": 780
+        },
+        "localizedDatTable": {
+          "path": "server/content/extracted/dat-tables.json",
+          "recordId": 780,
+          "encoding": "cp949"
+        }
+      },
+      "originalAsset": {
+        "stem": "m_f014",
+        "status": "original-icon-pool-present",
+        "mapping": "asset-hint-only; per-medal runtime icon mapping still requires RE/live UI proof",
+        "files": [
+          {
+            "path": ".omo/work/logh7-installed/data/image/Medal/m_f014.png",
+            "extension": ".png",
+            "sha256": "a3359ffc15d7e195b50f8defd1fc15c8aca7d86ad695b1accacbf2d94e13e275",
+            "byteSize": 21549,
+            "image": {
+              "format": "png",
+              "width": 80,
+              "height": 80
+            }
+          },
+          {
+            "path": ".omo/work/logh7-installed/data/image/Medal/m_f014.tga",
+            "extension": ".tga",
+            "sha256": "9ac604b755e6465d0826d81e31b9b16ea8edb60e686756b81915f5ed22c87eff",
+            "byteSize": 7442,
+            "image": {
+              "format": "tga",
+              "width": 80,
+              "height": 80,
+              "bitsPerPixel": 8
+            }
+          }
+        ]
+      }
+    },
+    {
+      "bit": 14,
+      "id": 781,
+      "faction": "empire",
+      "names": {
+        "ja": "戦傷章",
+        "ko": "전상장",
+        "en": "Wound Badge"
+      },
+      "source": {
+        "roster": {
+          "path": "server/content/roster/medals.json",
+          "nameJaMatchesMsgDat": true,
+          "nameKoMatchesLocalizedTable": true
+        },
+        "japaneseMsgDat": {
+          "path": "server/content/client/msgdat.json",
+          "file": "constmsg.dat",
+          "recordId": 781
+        },
+        "localizedDatTable": {
+          "path": "server/content/extracted/dat-tables.json",
+          "recordId": 781,
+          "encoding": "cp949"
+        }
+      },
+      "originalAsset": {
+        "stem": "m_f015",
+        "status": "original-icon-pool-present",
+        "mapping": "asset-hint-only; per-medal runtime icon mapping still requires RE/live UI proof",
+        "files": [
+          {
+            "path": ".omo/work/logh7-installed/data/image/Medal/m_f015.png",
+            "extension": ".png",
+            "sha256": "4503f83359b8a6620b8104a0dfa184f5fcc6f23c21de23f3481dbc45f1f42534",
+            "byteSize": 17720,
+            "image": {
+              "format": "png",
+              "width": 80,
+              "height": 80
+            }
+          },
+          {
+            "path": ".omo/work/logh7-installed/data/image/Medal/m_f015.tga",
+            "extension": ".tga",
+            "sha256": "6ddfb34f319f0250f6be8cc1a8fd7ad6ee1830fd3d0a41b3df59ba733247484c",
+            "byteSize": 7442,
+            "image": {
+              "format": "tga",
+              "width": 80,
+              "height": 80,
+              "bitsPerPixel": 8
+            }
+          }
+        ]
+      }
+    },
+    {
+      "bit": 15,
+      "id": 782,
+      "faction": "empire",
+      "names": {
+        "ja": "特別戦功メダル１",
+        "ko": "특별전공메달1",
+        "en": "Special Battle-Merit Medal 1"
+      },
+      "source": {
+        "roster": {
+          "path": "server/content/roster/medals.json",
+          "nameJaMatchesMsgDat": true,
+          "nameKoMatchesLocalizedTable": false
+        },
+        "japaneseMsgDat": {
+          "path": "server/content/client/msgdat.json",
+          "file": "constmsg.dat",
+          "recordId": 782
+        },
+        "localizedDatTable": {
+          "path": "server/content/extracted/dat-tables.json",
+          "recordId": 782,
+          "encoding": "cp949"
+        }
+      },
+      "originalAsset": {
+        "stem": "m_f001",
+        "status": "original-icon-pool-present",
+        "mapping": "asset-hint-only; per-medal runtime icon mapping still requires RE/live UI proof",
+        "files": [
+          {
+            "path": ".omo/work/logh7-installed/data/image/Medal/m_f001.png",
+            "extension": ".png",
+            "sha256": "04948f94ecdff5d19512f3172db3648e352093725a4d2f38d3f3af0be8ea2b13",
+            "byteSize": 18429,
+            "image": {
+              "format": "png",
+              "width": 80,
+              "height": 80
+            }
+          },
+          {
+            "path": ".omo/work/logh7-installed/data/image/Medal/m_f001.tga",
+            "extension": ".tga",
+            "sha256": "466b83d56fa0d51a4e4a10a0b62f320b729c878a9249d719337c9fc5af336250",
+            "byteSize": 7442,
+            "image": {
+              "format": "tga",
+              "width": 80,
+              "height": 80,
+              "bitsPerPixel": 8
+            }
+          }
+        ]
+      }
+    },
+    {
+      "bit": 16,
+      "id": 783,
+      "faction": "empire",
+      "names": {
+        "ja": "特別戦功メダル２",
+        "ko": "특별전공메달2",
+        "en": "Special Battle-Merit Medal 2"
+      },
+      "source": {
+        "roster": {
+          "path": "server/content/roster/medals.json",
+          "nameJaMatchesMsgDat": true,
+          "nameKoMatchesLocalizedTable": false
+        },
+        "japaneseMsgDat": {
+          "path": "server/content/client/msgdat.json",
+          "file": "constmsg.dat",
+          "recordId": 783
+        },
+        "localizedDatTable": {
+          "path": "server/content/extracted/dat-tables.json",
+          "recordId": 783,
+          "encoding": "cp949"
+        }
+      },
+      "originalAsset": {
+        "stem": "m_f002",
+        "status": "original-icon-pool-present",
+        "mapping": "asset-hint-only; per-medal runtime icon mapping still requires RE/live UI proof",
+        "files": [
+          {
+            "path": ".omo/work/logh7-installed/data/image/Medal/m_f002.png",
+            "extension": ".png",
+            "sha256": "6e3b31c5ddf78b9eca639fb9aca30a63338e7287b30b325d530921105732e4bd",
+            "byteSize": 23240,
+            "image": {
+              "format": "png",
+              "width": 80,
+              "height": 80
+            }
+          },
+          {
+            "path": ".omo/work/logh7-installed/data/image/Medal/m_f002.tga",
+            "extension": ".tga",
+            "sha256": "a400b4e2102f1ef1fa552f20c10d65dc5692f79b4514f54bcaeacdd1500b6899",
+            "byteSize": 7442,
+            "image": {
+              "format": "tga",
+              "width": 80,
+              "height": 80,
+              "bitsPerPixel": 8
+            }
+          }
+        ]
+      }
+    },
+    {
+      "bit": 17,
+      "id": 784,
+      "faction": "empire",
+      "names": {
+        "ja": "特別戦功メダル３",
+        "ko": "특별전공메달3",
+        "en": "Special Battle-Merit Medal 3"
+      },
+      "source": {
+        "roster": {
+          "path": "server/content/roster/medals.json",
+          "nameJaMatchesMsgDat": true,
+          "nameKoMatchesLocalizedTable": false
+        },
+        "japaneseMsgDat": {
+          "path": "server/content/client/msgdat.json",
+          "file": "constmsg.dat",
+          "recordId": 784
+        },
+        "localizedDatTable": {
+          "path": "server/content/extracted/dat-tables.json",
+          "recordId": 784,
+          "encoding": "cp949"
+        }
+      },
+      "originalAsset": {
+        "stem": "m_f003",
+        "status": "original-icon-pool-present",
+        "mapping": "asset-hint-only; per-medal runtime icon mapping still requires RE/live UI proof",
+        "files": [
+          {
+            "path": ".omo/work/logh7-installed/data/image/Medal/m_f003.png",
+            "extension": ".png",
+            "sha256": "c262a189d43bc428f650a74a32fbe895b410223aa16d20631333c9403a9fcb4c",
+            "byteSize": 21195,
+            "image": {
+              "format": "png",
+              "width": 80,
+              "height": 80
+            }
+          },
+          {
+            "path": ".omo/work/logh7-installed/data/image/Medal/m_f003.tga",
+            "extension": ".tga",
+            "sha256": "bd3b718c6fe2c4aa0f17a815089d5b3e0a08124ff8e877ec0acea2a8edaac3ec",
+            "byteSize": 7442,
+            "image": {
+              "format": "tga",
+              "width": 80,
+              "height": 80,
+              "bitsPerPixel": 8
+            }
+          }
+        ]
+      }
+    },
+    {
+      "bit": 18,
+      "id": 785,
+      "faction": "empire",
+      "names": {
+        "ja": "特別戦功メダル４",
+        "ko": "특별전공메달4",
+        "en": "Special Battle-Merit Medal 4"
+      },
+      "source": {
+        "roster": {
+          "path": "server/content/roster/medals.json",
+          "nameJaMatchesMsgDat": true,
+          "nameKoMatchesLocalizedTable": false
+        },
+        "japaneseMsgDat": {
+          "path": "server/content/client/msgdat.json",
+          "file": "constmsg.dat",
+          "recordId": 785
+        },
+        "localizedDatTable": {
+          "path": "server/content/extracted/dat-tables.json",
+          "recordId": 785,
+          "encoding": "cp949"
+        }
+      },
+      "originalAsset": {
+        "stem": "m_f004",
+        "status": "original-icon-pool-present",
+        "mapping": "asset-hint-only; per-medal runtime icon mapping still requires RE/live UI proof",
+        "files": [
+          {
+            "path": ".omo/work/logh7-installed/data/image/Medal/m_f004.png",
+            "extension": ".png",
+            "sha256": "b8a08b1195f4030a76818229bc3e1f361713d1b582b9302522e9eaf73604c10a",
+            "byteSize": 15056,
+            "image": {
+              "format": "png",
+              "width": 80,
+              "height": 80
+            }
+          },
+          {
+            "path": ".omo/work/logh7-installed/data/image/Medal/m_f004.tga",
+            "extension": ".tga",
+            "sha256": "00a0fb69d3752ad4e58accb612d049a15a7818ca0b0c92500284ce6e30b0bd3c",
+            "byteSize": 7442,
+            "image": {
+              "format": "tga",
+              "width": 80,
+              "height": 80,
+              "bitsPerPixel": 8
+            }
+          }
+        ]
+      }
+    },
+    {
+      "bit": 19,
+      "id": 786,
+      "faction": "empire",
+      "names": {
+        "ja": "特別戦功メダル５",
+        "ko": "특별전공메달5",
+        "en": "Special Battle-Merit Medal 5"
+      },
+      "source": {
+        "roster": {
+          "path": "server/content/roster/medals.json",
+          "nameJaMatchesMsgDat": true,
+          "nameKoMatchesLocalizedTable": false
+        },
+        "japaneseMsgDat": {
+          "path": "server/content/client/msgdat.json",
+          "file": "constmsg.dat",
+          "recordId": 786
+        },
+        "localizedDatTable": {
+          "path": "server/content/extracted/dat-tables.json",
+          "recordId": 786,
+          "encoding": "cp949"
+        }
+      },
+      "originalAsset": {
+        "stem": "m_f005",
+        "status": "original-icon-pool-present",
+        "mapping": "asset-hint-only; per-medal runtime icon mapping still requires RE/live UI proof",
+        "files": [
+          {
+            "path": ".omo/work/logh7-installed/data/image/Medal/m_f005.png",
+            "extension": ".png",
+            "sha256": "155b2468a9a368e38f90a18e3f508f45be275c92e7fd1031c96d08f4aab82d62",
+            "byteSize": 14534,
+            "image": {
+              "format": "png",
+              "width": 80,
+              "height": 80
+            }
+          },
+          {
+            "path": ".omo/work/logh7-installed/data/image/Medal/m_f005.tga",
+            "extension": ".tga",
+            "sha256": "41557050ad872b619f54e2c66d69ef47a0536674aea6bc4e73552265aa752d60",
+            "byteSize": 7442,
+            "image": {
+              "format": "tga",
+              "width": 80,
+              "height": 80,
+              "bitsPerPixel": 8
+            }
+          }
+        ]
+      }
+    },
+    {
+      "bit": 20,
+      "id": 787,
+      "faction": "empire",
+      "names": {
+        "ja": "特別戦功メダル６",
+        "ko": "특별전공메달6",
+        "en": "Special Battle-Merit Medal 6"
+      },
+      "source": {
+        "roster": {
+          "path": "server/content/roster/medals.json",
+          "nameJaMatchesMsgDat": true,
+          "nameKoMatchesLocalizedTable": false
+        },
+        "japaneseMsgDat": {
+          "path": "server/content/client/msgdat.json",
+          "file": "constmsg.dat",
+          "recordId": 787
+        },
+        "localizedDatTable": {
+          "path": "server/content/extracted/dat-tables.json",
+          "recordId": 787,
+          "encoding": "cp949"
+        }
+      },
+      "originalAsset": {
+        "stem": "m_f006",
+        "status": "original-icon-pool-present",
+        "mapping": "asset-hint-only; per-medal runtime icon mapping still requires RE/live UI proof",
+        "files": [
+          {
+            "path": ".omo/work/logh7-installed/data/image/Medal/m_f006.png",
+            "extension": ".png",
+            "sha256": "fc00f7be9690c10660f2f9ab0559ba9a619286937faa5dd91bdc021cae2f4323",
+            "byteSize": 16396,
+            "image": {
+              "format": "png",
+              "width": 80,
+              "height": 80
+            }
+          },
+          {
+            "path": ".omo/work/logh7-installed/data/image/Medal/m_f006.tga",
+            "extension": ".tga",
+            "sha256": "10498029f6276315879cd645f390e467582ea43b90b50b75e15e473d17eb5a98",
+            "byteSize": 7442,
+            "image": {
+              "format": "tga",
+              "width": 80,
+              "height": 80,
+              "bitsPerPixel": 8
+            }
+          }
+        ]
+      }
+    },
+    {
+      "bit": 21,
+      "id": 788,
+      "faction": "empire",
+      "names": {
+        "ja": "特別戦功メダル７",
+        "ko": "특별전공메달7",
+        "en": "Special Battle-Merit Medal 7"
+      },
+      "source": {
+        "roster": {
+          "path": "server/content/roster/medals.json",
+          "nameJaMatchesMsgDat": true,
+          "nameKoMatchesLocalizedTable": false
+        },
+        "japaneseMsgDat": {
+          "path": "server/content/client/msgdat.json",
+          "file": "constmsg.dat",
+          "recordId": 788
+        },
+        "localizedDatTable": {
+          "path": "server/content/extracted/dat-tables.json",
+          "recordId": 788,
+          "encoding": "cp949"
+        }
+      },
+      "originalAsset": {
+        "stem": "m_f007",
+        "status": "original-icon-pool-present",
+        "mapping": "asset-hint-only; per-medal runtime icon mapping still requires RE/live UI proof",
+        "files": [
+          {
+            "path": ".omo/work/logh7-installed/data/image/Medal/m_f007.png",
+            "extension": ".png",
+            "sha256": "f813743c30d66a03f954f4ed560caef5e0975d6cd46828a0eaa2f2c684706f2a",
+            "byteSize": 17076,
+            "image": {
+              "format": "png",
+              "width": 80,
+              "height": 80
+            }
+          },
+          {
+            "path": ".omo/work/logh7-installed/data/image/Medal/m_f007.tga",
+            "extension": ".tga",
+            "sha256": "8d8a00fd2b963ec42e84491e1063eae3182ad0c64d13978f6e036302624f124f",
+            "byteSize": 7442,
+            "image": {
+              "format": "tga",
+              "width": 80,
+              "height": 80,
+              "bitsPerPixel": 8
+            }
+          }
+        ]
+      }
+    },
+    {
+      "bit": 22,
+      "id": 789,
+      "faction": "empire",
+      "names": {
+        "ja": "特別戦功メダル８",
+        "ko": "특별전공메달8",
+        "en": "Special Battle-Merit Medal 8"
+      },
+      "source": {
+        "roster": {
+          "path": "server/content/roster/medals.json",
+          "nameJaMatchesMsgDat": true,
+          "nameKoMatchesLocalizedTable": false
+        },
+        "japaneseMsgDat": {
+          "path": "server/content/client/msgdat.json",
+          "file": "constmsg.dat",
+          "recordId": 789
+        },
+        "localizedDatTable": {
+          "path": "server/content/extracted/dat-tables.json",
+          "recordId": 789,
+          "encoding": "cp949"
+        }
+      },
+      "originalAsset": {
+        "stem": "m_f008",
+        "status": "original-icon-pool-present",
+        "mapping": "asset-hint-only; per-medal runtime icon mapping still requires RE/live UI proof",
+        "files": [
+          {
+            "path": ".omo/work/logh7-installed/data/image/Medal/m_f008.png",
+            "extension": ".png",
+            "sha256": "55ded2d08d9087aeca3e25605111d5e1c14b974b0220f704902c25cdb4753aa5",
+            "byteSize": 19382,
+            "image": {
+              "format": "png",
+              "width": 80,
+              "height": 80
+            }
+          },
+          {
+            "path": ".omo/work/logh7-installed/data/image/Medal/m_f008.tga",
+            "extension": ".tga",
+            "sha256": "77d5f54af71feeab23528aba768b6322169bb64f4633d2c2cd0e2a5781d10081",
+            "byteSize": 7442,
+            "image": {
+              "format": "tga",
+              "width": 80,
+              "height": 80,
+              "bitsPerPixel": 8
+            }
+          }
+        ]
+      }
+    },
+    {
+      "bit": 23,
+      "id": 790,
+      "faction": "empire",
+      "names": {
+        "ja": "特別戦功メダル９",
+        "ko": "특별전공메달9",
+        "en": "Special Battle-Merit Medal 9"
+      },
+      "source": {
+        "roster": {
+          "path": "server/content/roster/medals.json",
+          "nameJaMatchesMsgDat": true,
+          "nameKoMatchesLocalizedTable": false
+        },
+        "japaneseMsgDat": {
+          "path": "server/content/client/msgdat.json",
+          "file": "constmsg.dat",
+          "recordId": 790
+        },
+        "localizedDatTable": {
+          "path": "server/content/extracted/dat-tables.json",
+          "recordId": 790,
+          "encoding": "cp949"
+        }
+      },
+      "originalAsset": {
+        "stem": "m_f009",
+        "status": "original-icon-pool-present",
+        "mapping": "asset-hint-only; per-medal runtime icon mapping still requires RE/live UI proof",
+        "files": [
+          {
+            "path": ".omo/work/logh7-installed/data/image/Medal/m_f009.png",
+            "extension": ".png",
+            "sha256": "35b7abc50d1ce38870a55d5a4fe36e61da10211476a7afa8417d1833e1c003b3",
+            "byteSize": 15246,
+            "image": {
+              "format": "png",
+              "width": 80,
+              "height": 80
+            }
+          },
+          {
+            "path": ".omo/work/logh7-installed/data/image/Medal/m_f009.tga",
+            "extension": ".tga",
+            "sha256": "6aac259abf650471f02d00c1c2ba466c0f20e7587ede7eefc3496a79c2f5fe57",
+            "byteSize": 7442,
+            "image": {
+              "format": "tga",
+              "width": 80,
+              "height": 80,
+              "bitsPerPixel": 8
+            }
+          }
+        ]
+      }
+    },
+    {
+      "bit": 24,
+      "id": 791,
+      "faction": "empire",
+      "names": {
+        "ja": "特別戦功メダル１０",
+        "ko": "특별전공메달10",
+        "en": "Special Battle-Merit Medal 10"
+      },
+      "source": {
+        "roster": {
+          "path": "server/content/roster/medals.json",
+          "nameJaMatchesMsgDat": true,
+          "nameKoMatchesLocalizedTable": false
+        },
+        "japaneseMsgDat": {
+          "path": "server/content/client/msgdat.json",
+          "file": "constmsg.dat",
+          "recordId": 791
+        },
+        "localizedDatTable": {
+          "path": "server/content/extracted/dat-tables.json",
+          "recordId": 791,
+          "encoding": "cp949"
+        }
+      },
+      "originalAsset": {
+        "stem": "m_f010",
+        "status": "original-icon-pool-present",
+        "mapping": "asset-hint-only; per-medal runtime icon mapping still requires RE/live UI proof",
+        "files": [
+          {
+            "path": ".omo/work/logh7-installed/data/image/Medal/m_f010.png",
+            "extension": ".png",
+            "sha256": "6244ca25b7ca0750b401aa63d4f011908110ce820999c0ca5bff44896216a163",
+            "byteSize": 15957,
+            "image": {
+              "format": "png",
+              "width": 80,
+              "height": 80
+            }
+          },
+          {
+            "path": ".omo/work/logh7-installed/data/image/Medal/m_f010.tga",
+            "extension": ".tga",
+            "sha256": "955fee6473d911213e9fe5d83b3d24bf680da67b56b8810ca252469845604e4a",
+            "byteSize": 7442,
+            "image": {
+              "format": "tga",
+              "width": 80,
+              "height": 80,
+              "bitsPerPixel": 8
+            }
+          }
+        ]
+      }
+    },
+    {
+      "bit": 25,
+      "id": 792,
+      "faction": "empire",
+      "names": {
+        "ja": "参謀記章",
+        "ko": "참모기장",
+        "en": "Staff Officer's Badge"
+      },
+      "source": {
+        "roster": {
+          "path": "server/content/roster/medals.json",
+          "nameJaMatchesMsgDat": true,
+          "nameKoMatchesLocalizedTable": false
+        },
+        "japaneseMsgDat": {
+          "path": "server/content/client/msgdat.json",
+          "file": "constmsg.dat",
+          "recordId": 792
+        },
+        "localizedDatTable": {
+          "path": "server/content/extracted/dat-tables.json",
+          "recordId": 792,
+          "encoding": "cp949"
+        }
+      },
+      "originalAsset": {
+        "stem": "m_f011",
+        "status": "original-icon-pool-present",
+        "mapping": "asset-hint-only; per-medal runtime icon mapping still requires RE/live UI proof",
+        "files": [
+          {
+            "path": ".omo/work/logh7-installed/data/image/Medal/m_f011.png",
+            "extension": ".png",
+            "sha256": "b062da28ef8953f25da05dd4a174f746ebebe8f91662f1058cc1df7335922a3d",
+            "byteSize": 15827,
+            "image": {
+              "format": "png",
+              "width": 80,
+              "height": 80
+            }
+          },
+          {
+            "path": ".omo/work/logh7-installed/data/image/Medal/m_f011.tga",
+            "extension": ".tga",
+            "sha256": "cb98ac03d34bfd3e40a9b19410f2a93cd16c65b55425101649b3278f2fe64b61",
+            "byteSize": 7442,
+            "image": {
+              "format": "tga",
+              "width": 80,
+              "height": 80,
+              "bitsPerPixel": 8
+            }
+          }
+        ]
+      }
+    },
+    {
+      "bit": 26,
+      "id": 793,
+      "faction": "alliance",
+      "names": {
+        "ja": "アーレ・ハイネセン特別勲功大章",
+        "ko": "아레 하이네센 특별훈공대장",
+        "en": "Ahle Heinessen Special Order of Merit"
+      },
+      "source": {
+        "roster": {
+          "path": "server/content/roster/medals.json",
+          "nameJaMatchesMsgDat": true,
+          "nameKoMatchesLocalizedTable": true
+        },
+        "japaneseMsgDat": {
+          "path": "server/content/client/msgdat.json",
+          "file": "constmsg.dat",
+          "recordId": 793
+        },
+        "localizedDatTable": {
+          "path": "server/content/extracted/dat-tables.json",
+          "recordId": 793,
+          "encoding": "cp949"
+        }
+      },
+      "originalAsset": {
+        "stem": "m_f001",
+        "status": "original-icon-pool-present",
+        "mapping": "asset-hint-only; per-medal runtime icon mapping still requires RE/live UI proof",
+        "files": [
+          {
+            "path": ".omo/work/logh7-installed/data/image/Medal/m_f001.png",
+            "extension": ".png",
+            "sha256": "04948f94ecdff5d19512f3172db3648e352093725a4d2f38d3f3af0be8ea2b13",
+            "byteSize": 18429,
+            "image": {
+              "format": "png",
+              "width": 80,
+              "height": 80
+            }
+          },
+          {
+            "path": ".omo/work/logh7-installed/data/image/Medal/m_f001.tga",
+            "extension": ".tga",
+            "sha256": "466b83d56fa0d51a4e4a10a0b62f320b729c878a9249d719337c9fc5af336250",
+            "byteSize": 7442,
+            "image": {
+              "format": "tga",
+              "width": 80,
+              "height": 80,
+              "bitsPerPixel": 8
+            }
+          }
+        ]
+      }
+    },
+    {
+      "bit": 27,
+      "id": 794,
+      "faction": "alliance",
+      "names": {
+        "ja": "グエン・キム・ホア特別勲功大章",
+        "ko": "구엔 킴 호아 특별훈공대장",
+        "en": "Nguyen Kim Hua Special Order of Merit"
+      },
+      "source": {
+        "roster": {
+          "path": "server/content/roster/medals.json",
+          "nameJaMatchesMsgDat": true,
+          "nameKoMatchesLocalizedTable": true
+        },
+        "japaneseMsgDat": {
+          "path": "server/content/client/msgdat.json",
+          "file": "constmsg.dat",
+          "recordId": 794
+        },
+        "localizedDatTable": {
+          "path": "server/content/extracted/dat-tables.json",
+          "recordId": 794,
+          "encoding": "cp949"
+        }
+      },
+      "originalAsset": {
+        "stem": "m_f002",
+        "status": "original-icon-pool-present",
+        "mapping": "asset-hint-only; per-medal runtime icon mapping still requires RE/live UI proof",
+        "files": [
+          {
+            "path": ".omo/work/logh7-installed/data/image/Medal/m_f002.png",
+            "extension": ".png",
+            "sha256": "6e3b31c5ddf78b9eca639fb9aca30a63338e7287b30b325d530921105732e4bd",
+            "byteSize": 23240,
+            "image": {
+              "format": "png",
+              "width": 80,
+              "height": 80
+            }
+          },
+          {
+            "path": ".omo/work/logh7-installed/data/image/Medal/m_f002.tga",
+            "extension": ".tga",
+            "sha256": "a400b4e2102f1ef1fa552f20c10d65dc5692f79b4514f54bcaeacdd1500b6899",
+            "byteSize": 7442,
+            "image": {
+              "format": "tga",
+              "width": 80,
+              "height": 80,
+              "bitsPerPixel": 8
+            }
+          }
+        ]
+      }
+    },
+    {
+      "bit": 28,
+      "id": 795,
+      "faction": "alliance",
+      "names": {
+        "ja": "自由惑星同盟最高評議会名誉勲章",
+        "ko": "자유행성동맹 최고평의회 명예훈장",
+        "en": "Free Planets Alliance Supreme Council Medal of Honor"
+      },
+      "source": {
+        "roster": {
+          "path": "server/content/roster/medals.json",
+          "nameJaMatchesMsgDat": true,
+          "nameKoMatchesLocalizedTable": true
+        },
+        "japaneseMsgDat": {
+          "path": "server/content/client/msgdat.json",
+          "file": "constmsg.dat",
+          "recordId": 795
+        },
+        "localizedDatTable": {
+          "path": "server/content/extracted/dat-tables.json",
+          "recordId": 795,
+          "encoding": "cp949"
+        }
+      },
+      "originalAsset": {
+        "stem": "m_f003",
+        "status": "original-icon-pool-present",
+        "mapping": "asset-hint-only; per-medal runtime icon mapping still requires RE/live UI proof",
+        "files": [
+          {
+            "path": ".omo/work/logh7-installed/data/image/Medal/m_f003.png",
+            "extension": ".png",
+            "sha256": "c262a189d43bc428f650a74a32fbe895b410223aa16d20631333c9403a9fcb4c",
+            "byteSize": 21195,
+            "image": {
+              "format": "png",
+              "width": 80,
+              "height": 80
+            }
+          },
+          {
+            "path": ".omo/work/logh7-installed/data/image/Medal/m_f003.tga",
+            "extension": ".tga",
+            "sha256": "bd3b718c6fe2c4aa0f17a815089d5b3e0a08124ff8e877ec0acea2a8edaac3ec",
+            "byteSize": 7442,
+            "image": {
+              "format": "tga",
+              "width": 80,
+              "height": 80,
+              "bitsPerPixel": 8
+            }
+          }
+        ]
+      }
+    },
+    {
+      "bit": 29,
+      "id": 796,
+      "faction": "alliance",
+      "names": {
+        "ja": "共和国戦争勲章",
+        "ko": "공화국 전쟁훈장",
+        "en": "Republic War Medal"
+      },
+      "source": {
+        "roster": {
+          "path": "server/content/roster/medals.json",
+          "nameJaMatchesMsgDat": true,
+          "nameKoMatchesLocalizedTable": true
+        },
+        "japaneseMsgDat": {
+          "path": "server/content/client/msgdat.json",
+          "file": "constmsg.dat",
+          "recordId": 796
+        },
+        "localizedDatTable": {
+          "path": "server/content/extracted/dat-tables.json",
+          "recordId": 796,
+          "encoding": "cp949"
+        }
+      },
+      "originalAsset": {
+        "stem": "m_f004",
+        "status": "original-icon-pool-present",
+        "mapping": "asset-hint-only; per-medal runtime icon mapping still requires RE/live UI proof",
+        "files": [
+          {
+            "path": ".omo/work/logh7-installed/data/image/Medal/m_f004.png",
+            "extension": ".png",
+            "sha256": "b8a08b1195f4030a76818229bc3e1f361713d1b582b9302522e9eaf73604c10a",
+            "byteSize": 15056,
+            "image": {
+              "format": "png",
+              "width": 80,
+              "height": 80
+            }
+          },
+          {
+            "path": ".omo/work/logh7-installed/data/image/Medal/m_f004.tga",
+            "extension": ".tga",
+            "sha256": "00a0fb69d3752ad4e58accb612d049a15a7818ca0b0c92500284ce6e30b0bd3c",
+            "byteSize": 7442,
+            "image": {
+              "format": "tga",
+              "width": 80,
+              "height": 80,
+              "bitsPerPixel": 8
+            }
+          }
+        ]
+      }
+    },
+    {
+      "bit": 30,
+      "id": 797,
+      "faction": "alliance",
+      "names": {
+        "ja": "共和国栄誉勲章",
+        "ko": "공화국 영예훈장",
+        "en": "Republic Medal of Honor"
+      },
+      "source": {
+        "roster": {
+          "path": "server/content/roster/medals.json",
+          "nameJaMatchesMsgDat": true,
+          "nameKoMatchesLocalizedTable": true
+        },
+        "japaneseMsgDat": {
+          "path": "server/content/client/msgdat.json",
+          "file": "constmsg.dat",
+          "recordId": 797
+        },
+        "localizedDatTable": {
+          "path": "server/content/extracted/dat-tables.json",
+          "recordId": 797,
+          "encoding": "cp949"
+        }
+      },
+      "originalAsset": {
+        "stem": "m_f005",
+        "status": "original-icon-pool-present",
+        "mapping": "asset-hint-only; per-medal runtime icon mapping still requires RE/live UI proof",
+        "files": [
+          {
+            "path": ".omo/work/logh7-installed/data/image/Medal/m_f005.png",
+            "extension": ".png",
+            "sha256": "155b2468a9a368e38f90a18e3f508f45be275c92e7fd1031c96d08f4aab82d62",
+            "byteSize": 14534,
+            "image": {
+              "format": "png",
+              "width": 80,
+              "height": 80
+            }
+          },
+          {
+            "path": ".omo/work/logh7-installed/data/image/Medal/m_f005.tga",
+            "extension": ".tga",
+            "sha256": "41557050ad872b619f54e2c66d69ef47a0536674aea6bc4e73552265aa752d60",
+            "byteSize": 7442,
+            "image": {
+              "format": "tga",
+              "width": 80,
+              "height": 80,
+              "bitsPerPixel": 8
+            }
+          }
+        ]
+      }
+    },
+    {
+      "bit": 31,
+      "id": 798,
+      "faction": "alliance",
+      "names": {
+        "ja": "自由戦士一等勲章",
+        "ko": "자유전사 일등훈장",
+        "en": "Free Warrior Medal, 1st Class"
+      },
+      "source": {
+        "roster": {
+          "path": "server/content/roster/medals.json",
+          "nameJaMatchesMsgDat": true,
+          "nameKoMatchesLocalizedTable": false
+        },
+        "japaneseMsgDat": {
+          "path": "server/content/client/msgdat.json",
+          "file": "constmsg.dat",
+          "recordId": 798
+        },
+        "localizedDatTable": {
+          "path": "server/content/extracted/dat-tables.json",
+          "recordId": 798,
+          "encoding": "cp949"
+        }
+      },
+      "originalAsset": {
+        "stem": "m_f006",
+        "status": "original-icon-pool-present",
+        "mapping": "asset-hint-only; per-medal runtime icon mapping still requires RE/live UI proof",
+        "files": [
+          {
+            "path": ".omo/work/logh7-installed/data/image/Medal/m_f006.png",
+            "extension": ".png",
+            "sha256": "fc00f7be9690c10660f2f9ab0559ba9a619286937faa5dd91bdc021cae2f4323",
+            "byteSize": 16396,
+            "image": {
+              "format": "png",
+              "width": 80,
+              "height": 80
+            }
+          },
+          {
+            "path": ".omo/work/logh7-installed/data/image/Medal/m_f006.tga",
+            "extension": ".tga",
+            "sha256": "10498029f6276315879cd645f390e467582ea43b90b50b75e15e473d17eb5a98",
+            "byteSize": 7442,
+            "image": {
+              "format": "tga",
+              "width": 80,
+              "height": 80,
+              "bitsPerPixel": 8
+            }
+          }
+        ]
+      }
+    },
+    {
+      "bit": 32,
+      "id": 799,
+      "faction": "alliance",
+      "names": {
+        "ja": "自由戦士二等勲章",
+        "ko": "자유전사 이등훈장",
+        "en": "Free Warrior Medal, 2nd Class"
+      },
+      "source": {
+        "roster": {
+          "path": "server/content/roster/medals.json",
+          "nameJaMatchesMsgDat": true,
+          "nameKoMatchesLocalizedTable": false
+        },
+        "japaneseMsgDat": {
+          "path": "server/content/client/msgdat.json",
+          "file": "constmsg.dat",
+          "recordId": 799
+        },
+        "localizedDatTable": {
+          "path": "server/content/extracted/dat-tables.json",
+          "recordId": 799,
+          "encoding": "cp949"
+        }
+      },
+      "originalAsset": {
+        "stem": "m_f007",
+        "status": "original-icon-pool-present",
+        "mapping": "asset-hint-only; per-medal runtime icon mapping still requires RE/live UI proof",
+        "files": [
+          {
+            "path": ".omo/work/logh7-installed/data/image/Medal/m_f007.png",
+            "extension": ".png",
+            "sha256": "f813743c30d66a03f954f4ed560caef5e0975d6cd46828a0eaa2f2c684706f2a",
+            "byteSize": 17076,
+            "image": {
+              "format": "png",
+              "width": 80,
+              "height": 80
+            }
+          },
+          {
+            "path": ".omo/work/logh7-installed/data/image/Medal/m_f007.tga",
+            "extension": ".tga",
+            "sha256": "8d8a00fd2b963ec42e84491e1063eae3182ad0c64d13978f6e036302624f124f",
+            "byteSize": 7442,
+            "image": {
+              "format": "tga",
+              "width": 80,
+              "height": 80,
+              "bitsPerPixel": 8
+            }
+          }
+        ]
+      }
+    },
+    {
+      "bit": 33,
+      "id": 800,
+      "faction": "alliance",
+      "names": {
+        "ja": "自由戦士三等勲章",
+        "ko": "자유전사 3등 훈장",
+        "en": "Free Warrior Medal, 3rd Class"
+      },
+      "source": {
+        "roster": {
+          "path": "server/content/roster/medals.json",
+          "nameJaMatchesMsgDat": true,
+          "nameKoMatchesLocalizedTable": false
+        },
+        "japaneseMsgDat": {
+          "path": "server/content/client/msgdat.json",
+          "file": "constmsg.dat",
+          "recordId": 800
+        },
+        "localizedDatTable": {
+          "path": "server/content/extracted/dat-tables.json",
+          "recordId": 800,
+          "encoding": "cp949"
+        }
+      },
+      "originalAsset": {
+        "stem": "m_f008",
+        "status": "original-icon-pool-present",
+        "mapping": "asset-hint-only; per-medal runtime icon mapping still requires RE/live UI proof",
+        "files": [
+          {
+            "path": ".omo/work/logh7-installed/data/image/Medal/m_f008.png",
+            "extension": ".png",
+            "sha256": "55ded2d08d9087aeca3e25605111d5e1c14b974b0220f704902c25cdb4753aa5",
+            "byteSize": 19382,
+            "image": {
+              "format": "png",
+              "width": 80,
+              "height": 80
+            }
+          },
+          {
+            "path": ".omo/work/logh7-installed/data/image/Medal/m_f008.tga",
+            "extension": ".tga",
+            "sha256": "77d5f54af71feeab23528aba768b6322169bb64f4633d2c2cd0e2a5781d10081",
+            "byteSize": 7442,
+            "image": {
+              "format": "tga",
+              "width": 80,
+              "height": 80,
+              "bitsPerPixel": 8
+            }
+          }
+        ]
+      }
+    },
+    {
+      "bit": 34,
+      "id": 801,
+      "faction": "alliance",
+      "names": {
+        "ja": "一等栄誉勲章",
+        "ko": "1등 영예 훈장",
+        "en": "Medal of Honor, 1st Class"
+      },
+      "source": {
+        "roster": {
+          "path": "server/content/roster/medals.json",
+          "nameJaMatchesMsgDat": true,
+          "nameKoMatchesLocalizedTable": false
+        },
+        "japaneseMsgDat": {
+          "path": "server/content/client/msgdat.json",
+          "file": "constmsg.dat",
+          "recordId": 801
+        },
+        "localizedDatTable": {
+          "path": "server/content/extracted/dat-tables.json",
+          "recordId": 801,
+          "encoding": "cp949"
+        }
+      },
+      "originalAsset": {
+        "stem": "m_f009",
+        "status": "original-icon-pool-present",
+        "mapping": "asset-hint-only; per-medal runtime icon mapping still requires RE/live UI proof",
+        "files": [
+          {
+            "path": ".omo/work/logh7-installed/data/image/Medal/m_f009.png",
+            "extension": ".png",
+            "sha256": "35b7abc50d1ce38870a55d5a4fe36e61da10211476a7afa8417d1833e1c003b3",
+            "byteSize": 15246,
+            "image": {
+              "format": "png",
+              "width": 80,
+              "height": 80
+            }
+          },
+          {
+            "path": ".omo/work/logh7-installed/data/image/Medal/m_f009.tga",
+            "extension": ".tga",
+            "sha256": "6aac259abf650471f02d00c1c2ba466c0f20e7587ede7eefc3496a79c2f5fe57",
+            "byteSize": 7442,
+            "image": {
+              "format": "tga",
+              "width": 80,
+              "height": 80,
+              "bitsPerPixel": 8
+            }
+          }
+        ]
+      }
+    },
+    {
+      "bit": 35,
+      "id": 802,
+      "faction": "alliance",
+      "names": {
+        "ja": "二等栄誉勲章",
+        "ko": "2등 영예 훈장",
+        "en": "Medal of Honor, 2nd Class"
+      },
+      "source": {
+        "roster": {
+          "path": "server/content/roster/medals.json",
+          "nameJaMatchesMsgDat": true,
+          "nameKoMatchesLocalizedTable": false
+        },
+        "japaneseMsgDat": {
+          "path": "server/content/client/msgdat.json",
+          "file": "constmsg.dat",
+          "recordId": 802
+        },
+        "localizedDatTable": {
+          "path": "server/content/extracted/dat-tables.json",
+          "recordId": 802,
+          "encoding": "cp949"
+        }
+      },
+      "originalAsset": {
+        "stem": "m_f010",
+        "status": "original-icon-pool-present",
+        "mapping": "asset-hint-only; per-medal runtime icon mapping still requires RE/live UI proof",
+        "files": [
+          {
+            "path": ".omo/work/logh7-installed/data/image/Medal/m_f010.png",
+            "extension": ".png",
+            "sha256": "6244ca25b7ca0750b401aa63d4f011908110ce820999c0ca5bff44896216a163",
+            "byteSize": 15957,
+            "image": {
+              "format": "png",
+              "width": 80,
+              "height": 80
+            }
+          },
+          {
+            "path": ".omo/work/logh7-installed/data/image/Medal/m_f010.tga",
+            "extension": ".tga",
+            "sha256": "955fee6473d911213e9fe5d83b3d24bf680da67b56b8810ca252469845604e4a",
+            "byteSize": 7442,
+            "image": {
+              "format": "tga",
+              "width": 80,
+              "height": 80,
+              "bitsPerPixel": 8
+            }
+          }
+        ]
+      }
+    },
+    {
+      "bit": 36,
+      "id": 803,
+      "faction": "alliance",
+      "names": {
+        "ja": "三等栄誉勲章",
+        "ko": "3등 영예 훈장",
+        "en": "Medal of Honor, 3rd Class"
+      },
+      "source": {
+        "roster": {
+          "path": "server/content/roster/medals.json",
+          "nameJaMatchesMsgDat": true,
+          "nameKoMatchesLocalizedTable": false
+        },
+        "japaneseMsgDat": {
+          "path": "server/content/client/msgdat.json",
+          "file": "constmsg.dat",
+          "recordId": 803
+        },
+        "localizedDatTable": {
+          "path": "server/content/extracted/dat-tables.json",
+          "recordId": 803,
+          "encoding": "cp949"
+        }
+      },
+      "originalAsset": {
+        "stem": "m_f011",
+        "status": "original-icon-pool-present",
+        "mapping": "asset-hint-only; per-medal runtime icon mapping still requires RE/live UI proof",
+        "files": [
+          {
+            "path": ".omo/work/logh7-installed/data/image/Medal/m_f011.png",
+            "extension": ".png",
+            "sha256": "b062da28ef8953f25da05dd4a174f746ebebe8f91662f1058cc1df7335922a3d",
+            "byteSize": 15827,
+            "image": {
+              "format": "png",
+              "width": 80,
+              "height": 80
+            }
+          },
+          {
+            "path": ".omo/work/logh7-installed/data/image/Medal/m_f011.tga",
+            "extension": ".tga",
+            "sha256": "cb98ac03d34bfd3e40a9b19410f2a93cd16c65b55425101649b3278f2fe64b61",
+            "byteSize": 7442,
+            "image": {
+              "format": "tga",
+              "width": 80,
+              "height": 80,
+              "bitsPerPixel": 8
+            }
+          }
+        ]
+      }
+    },
+    {
+      "bit": 37,
+      "id": 804,
+      "faction": "alliance",
+      "names": {
+        "ja": "リン・パオ記章",
+        "ko": "린 파오 기장",
+        "en": "Lin Pao Badge"
+      },
+      "source": {
+        "roster": {
+          "path": "server/content/roster/medals.json",
+          "nameJaMatchesMsgDat": true,
+          "nameKoMatchesLocalizedTable": true
+        },
+        "japaneseMsgDat": {
+          "path": "server/content/client/msgdat.json",
+          "file": "constmsg.dat",
+          "recordId": 804
+        },
+        "localizedDatTable": {
+          "path": "server/content/extracted/dat-tables.json",
+          "recordId": 804,
+          "encoding": "cp949"
+        }
+      },
+      "originalAsset": {
+        "stem": "m_f012",
+        "status": "original-icon-pool-present",
+        "mapping": "asset-hint-only; per-medal runtime icon mapping still requires RE/live UI proof",
+        "files": [
+          {
+            "path": ".omo/work/logh7-installed/data/image/Medal/m_f012.png",
+            "extension": ".png",
+            "sha256": "c27e37dd6037be527291bc76a9a8ecf8319e854d29001531b1fc1af07982d746",
+            "byteSize": 21291,
+            "image": {
+              "format": "png",
+              "width": 80,
+              "height": 80
+            }
+          },
+          {
+            "path": ".omo/work/logh7-installed/data/image/Medal/m_f012.tga",
+            "extension": ".tga",
+            "sha256": "fee52c9d8c3dcbb05e227e91033e16ac72059690fefb62984484679d0c301478",
+            "byteSize": 7442,
+            "image": {
+              "format": "tga",
+              "width": 80,
+              "height": 80,
+              "bitsPerPixel": 8
+            }
+          }
+        ]
+      }
+    },
+    {
+      "bit": 38,
+      "id": 805,
+      "faction": "alliance",
+      "names": {
+        "ja": "ユースフ・トパロウル記章",
+        "ko": "유스프 토파롤 기장",
+        "en": "Yusuf Topparole Badge"
+      },
+      "source": {
+        "roster": {
+          "path": "server/content/roster/medals.json",
+          "nameJaMatchesMsgDat": true,
+          "nameKoMatchesLocalizedTable": false
+        },
+        "japaneseMsgDat": {
+          "path": "server/content/client/msgdat.json",
+          "file": "constmsg.dat",
+          "recordId": 805
+        },
+        "localizedDatTable": {
+          "path": "server/content/extracted/dat-tables.json",
+          "recordId": 805,
+          "encoding": "cp949"
+        }
+      },
+      "originalAsset": {
+        "stem": "m_f013",
+        "status": "original-icon-pool-present",
+        "mapping": "asset-hint-only; per-medal runtime icon mapping still requires RE/live UI proof",
+        "files": [
+          {
+            "path": ".omo/work/logh7-installed/data/image/Medal/m_f013.png",
+            "extension": ".png",
+            "sha256": "191a65e1c132d065ae4f80f3eda4eef58bf9c20d22f8cfaf95ed6e28d64348d7",
+            "byteSize": 20394,
+            "image": {
+              "format": "png",
+              "width": 80,
+              "height": 80
+            }
+          },
+          {
+            "path": ".omo/work/logh7-installed/data/image/Medal/m_f013.tga",
+            "extension": ".tga",
+            "sha256": "1320c0f8703ec5ba6012d486eb2412a4c5061e2cc59bdd875115358da9d90e3b",
+            "byteSize": 7442,
+            "image": {
+              "format": "tga",
+              "width": 80,
+              "height": 80,
+              "bitsPerPixel": 8
+            }
+          }
+        ]
+      }
+    },
+    {
+      "bit": 39,
+      "id": 806,
+      "faction": "alliance",
+      "names": {
+        "ja": "軍務功労記章",
+        "ko": "군무공로 기장",
+        "en": "Meritorious Service Badge"
+      },
+      "source": {
+        "roster": {
+          "path": "server/content/roster/medals.json",
+          "nameJaMatchesMsgDat": true,
+          "nameKoMatchesLocalizedTable": true
+        },
+        "japaneseMsgDat": {
+          "path": "server/content/client/msgdat.json",
+          "file": "constmsg.dat",
+          "recordId": 806
+        },
+        "localizedDatTable": {
+          "path": "server/content/extracted/dat-tables.json",
+          "recordId": 806,
+          "encoding": "cp949"
+        }
+      },
+      "originalAsset": {
+        "stem": "m_f014",
+        "status": "original-icon-pool-present",
+        "mapping": "asset-hint-only; per-medal runtime icon mapping still requires RE/live UI proof",
+        "files": [
+          {
+            "path": ".omo/work/logh7-installed/data/image/Medal/m_f014.png",
+            "extension": ".png",
+            "sha256": "a3359ffc15d7e195b50f8defd1fc15c8aca7d86ad695b1accacbf2d94e13e275",
+            "byteSize": 21549,
+            "image": {
+              "format": "png",
+              "width": 80,
+              "height": 80
+            }
+          },
+          {
+            "path": ".omo/work/logh7-installed/data/image/Medal/m_f014.tga",
+            "extension": ".tga",
+            "sha256": "9ac604b755e6465d0826d81e31b9b16ea8edb60e686756b81915f5ed22c87eff",
+            "byteSize": 7442,
+            "image": {
+              "format": "tga",
+              "width": 80,
+              "height": 80,
+              "bitsPerPixel": 8
+            }
+          }
+        ]
+      }
+    },
+    {
+      "bit": 40,
+      "id": 807,
+      "faction": "alliance",
+      "names": {
+        "ja": "名誉負傷勲章",
+        "ko": "명예부상 훈장",
+        "en": "Honorable Wound Medal"
+      },
+      "source": {
+        "roster": {
+          "path": "server/content/roster/medals.json",
+          "nameJaMatchesMsgDat": true,
+          "nameKoMatchesLocalizedTable": true
+        },
+        "japaneseMsgDat": {
+          "path": "server/content/client/msgdat.json",
+          "file": "constmsg.dat",
+          "recordId": 807
+        },
+        "localizedDatTable": {
+          "path": "server/content/extracted/dat-tables.json",
+          "recordId": 807,
+          "encoding": "cp949"
+        }
+      },
+      "originalAsset": {
+        "stem": "m_f015",
+        "status": "original-icon-pool-present",
+        "mapping": "asset-hint-only; per-medal runtime icon mapping still requires RE/live UI proof",
+        "files": [
+          {
+            "path": ".omo/work/logh7-installed/data/image/Medal/m_f015.png",
+            "extension": ".png",
+            "sha256": "4503f83359b8a6620b8104a0dfa184f5fcc6f23c21de23f3481dbc45f1f42534",
+            "byteSize": 17720,
+            "image": {
+              "format": "png",
+              "width": 80,
+              "height": 80
+            }
+          },
+          {
+            "path": ".omo/work/logh7-installed/data/image/Medal/m_f015.tga",
+            "extension": ".tga",
+            "sha256": "6ddfb34f319f0250f6be8cc1a8fd7ad6ee1830fd3d0a41b3df59ba733247484c",
+            "byteSize": 7442,
+            "image": {
+              "format": "tga",
+              "width": 80,
+              "height": 80,
+              "bitsPerPixel": 8
+            }
+          }
+        ]
+      }
+    },
+    {
+      "bit": 41,
+      "id": 808,
+      "faction": "alliance",
+      "names": {
+        "ja": "特別戦功メダル１",
+        "ko": "특별전공 메달 1",
+        "en": "Special Battle-Merit Medal 1"
+      },
+      "source": {
+        "roster": {
+          "path": "server/content/roster/medals.json",
+          "nameJaMatchesMsgDat": true,
+          "nameKoMatchesLocalizedTable": true
+        },
+        "japaneseMsgDat": {
+          "path": "server/content/client/msgdat.json",
+          "file": "constmsg.dat",
+          "recordId": 808
+        },
+        "localizedDatTable": {
+          "path": "server/content/extracted/dat-tables.json",
+          "recordId": 808,
+          "encoding": "cp949"
+        }
+      },
+      "originalAsset": {
+        "stem": "m_f001",
+        "status": "original-icon-pool-present",
+        "mapping": "asset-hint-only; per-medal runtime icon mapping still requires RE/live UI proof",
+        "files": [
+          {
+            "path": ".omo/work/logh7-installed/data/image/Medal/m_f001.png",
+            "extension": ".png",
+            "sha256": "04948f94ecdff5d19512f3172db3648e352093725a4d2f38d3f3af0be8ea2b13",
+            "byteSize": 18429,
+            "image": {
+              "format": "png",
+              "width": 80,
+              "height": 80
+            }
+          },
+          {
+            "path": ".omo/work/logh7-installed/data/image/Medal/m_f001.tga",
+            "extension": ".tga",
+            "sha256": "466b83d56fa0d51a4e4a10a0b62f320b729c878a9249d719337c9fc5af336250",
+            "byteSize": 7442,
+            "image": {
+              "format": "tga",
+              "width": 80,
+              "height": 80,
+              "bitsPerPixel": 8
+            }
+          }
+        ]
+      }
+    },
+    {
+      "bit": 42,
+      "id": 809,
+      "faction": "alliance",
+      "names": {
+        "ja": "特別戦功メダル２",
+        "ko": "특별전공 메달 2",
+        "en": "Special Battle-Merit Medal 2"
+      },
+      "source": {
+        "roster": {
+          "path": "server/content/roster/medals.json",
+          "nameJaMatchesMsgDat": true,
+          "nameKoMatchesLocalizedTable": true
+        },
+        "japaneseMsgDat": {
+          "path": "server/content/client/msgdat.json",
+          "file": "constmsg.dat",
+          "recordId": 809
+        },
+        "localizedDatTable": {
+          "path": "server/content/extracted/dat-tables.json",
+          "recordId": 809,
+          "encoding": "cp949"
+        }
+      },
+      "originalAsset": {
+        "stem": "m_f002",
+        "status": "original-icon-pool-present",
+        "mapping": "asset-hint-only; per-medal runtime icon mapping still requires RE/live UI proof",
+        "files": [
+          {
+            "path": ".omo/work/logh7-installed/data/image/Medal/m_f002.png",
+            "extension": ".png",
+            "sha256": "6e3b31c5ddf78b9eca639fb9aca30a63338e7287b30b325d530921105732e4bd",
+            "byteSize": 23240,
+            "image": {
+              "format": "png",
+              "width": 80,
+              "height": 80
+            }
+          },
+          {
+            "path": ".omo/work/logh7-installed/data/image/Medal/m_f002.tga",
+            "extension": ".tga",
+            "sha256": "a400b4e2102f1ef1fa552f20c10d65dc5692f79b4514f54bcaeacdd1500b6899",
+            "byteSize": 7442,
+            "image": {
+              "format": "tga",
+              "width": 80,
+              "height": 80,
+              "bitsPerPixel": 8
+            }
+          }
+        ]
+      }
+    },
+    {
+      "bit": 43,
+      "id": 810,
+      "faction": "alliance",
+      "names": {
+        "ja": "特別戦功メダル３",
+        "ko": "특별전공 메달 3",
+        "en": "Special Battle-Merit Medal 3"
+      },
+      "source": {
+        "roster": {
+          "path": "server/content/roster/medals.json",
+          "nameJaMatchesMsgDat": true,
+          "nameKoMatchesLocalizedTable": true
+        },
+        "japaneseMsgDat": {
+          "path": "server/content/client/msgdat.json",
+          "file": "constmsg.dat",
+          "recordId": 810
+        },
+        "localizedDatTable": {
+          "path": "server/content/extracted/dat-tables.json",
+          "recordId": 810,
+          "encoding": "cp949"
+        }
+      },
+      "originalAsset": {
+        "stem": "m_f003",
+        "status": "original-icon-pool-present",
+        "mapping": "asset-hint-only; per-medal runtime icon mapping still requires RE/live UI proof",
+        "files": [
+          {
+            "path": ".omo/work/logh7-installed/data/image/Medal/m_f003.png",
+            "extension": ".png",
+            "sha256": "c262a189d43bc428f650a74a32fbe895b410223aa16d20631333c9403a9fcb4c",
+            "byteSize": 21195,
+            "image": {
+              "format": "png",
+              "width": 80,
+              "height": 80
+            }
+          },
+          {
+            "path": ".omo/work/logh7-installed/data/image/Medal/m_f003.tga",
+            "extension": ".tga",
+            "sha256": "bd3b718c6fe2c4aa0f17a815089d5b3e0a08124ff8e877ec0acea2a8edaac3ec",
+            "byteSize": 7442,
+            "image": {
+              "format": "tga",
+              "width": 80,
+              "height": 80,
+              "bitsPerPixel": 8
+            }
+          }
+        ]
+      }
+    },
+    {
+      "bit": 44,
+      "id": 811,
+      "faction": "alliance",
+      "names": {
+        "ja": "特別戦功メダル４",
+        "ko": "특별전공 메달 4",
+        "en": "Special Battle-Merit Medal 4"
+      },
+      "source": {
+        "roster": {
+          "path": "server/content/roster/medals.json",
+          "nameJaMatchesMsgDat": true,
+          "nameKoMatchesLocalizedTable": true
+        },
+        "japaneseMsgDat": {
+          "path": "server/content/client/msgdat.json",
+          "file": "constmsg.dat",
+          "recordId": 811
+        },
+        "localizedDatTable": {
+          "path": "server/content/extracted/dat-tables.json",
+          "recordId": 811,
+          "encoding": "cp949"
+        }
+      },
+      "originalAsset": {
+        "stem": "m_f004",
+        "status": "original-icon-pool-present",
+        "mapping": "asset-hint-only; per-medal runtime icon mapping still requires RE/live UI proof",
+        "files": [
+          {
+            "path": ".omo/work/logh7-installed/data/image/Medal/m_f004.png",
+            "extension": ".png",
+            "sha256": "b8a08b1195f4030a76818229bc3e1f361713d1b582b9302522e9eaf73604c10a",
+            "byteSize": 15056,
+            "image": {
+              "format": "png",
+              "width": 80,
+              "height": 80
+            }
+          },
+          {
+            "path": ".omo/work/logh7-installed/data/image/Medal/m_f004.tga",
+            "extension": ".tga",
+            "sha256": "00a0fb69d3752ad4e58accb612d049a15a7818ca0b0c92500284ce6e30b0bd3c",
+            "byteSize": 7442,
+            "image": {
+              "format": "tga",
+              "width": 80,
+              "height": 80,
+              "bitsPerPixel": 8
+            }
+          }
+        ]
+      }
+    },
+    {
+      "bit": 45,
+      "id": 812,
+      "faction": "alliance",
+      "names": {
+        "ja": "特別戦功メダル５",
+        "ko": "특별전공 메달 5",
+        "en": "Special Battle-Merit Medal 5"
+      },
+      "source": {
+        "roster": {
+          "path": "server/content/roster/medals.json",
+          "nameJaMatchesMsgDat": true,
+          "nameKoMatchesLocalizedTable": true
+        },
+        "japaneseMsgDat": {
+          "path": "server/content/client/msgdat.json",
+          "file": "constmsg.dat",
+          "recordId": 812
+        },
+        "localizedDatTable": {
+          "path": "server/content/extracted/dat-tables.json",
+          "recordId": 812,
+          "encoding": "cp949"
+        }
+      },
+      "originalAsset": {
+        "stem": "m_f005",
+        "status": "original-icon-pool-present",
+        "mapping": "asset-hint-only; per-medal runtime icon mapping still requires RE/live UI proof",
+        "files": [
+          {
+            "path": ".omo/work/logh7-installed/data/image/Medal/m_f005.png",
+            "extension": ".png",
+            "sha256": "155b2468a9a368e38f90a18e3f508f45be275c92e7fd1031c96d08f4aab82d62",
+            "byteSize": 14534,
+            "image": {
+              "format": "png",
+              "width": 80,
+              "height": 80
+            }
+          },
+          {
+            "path": ".omo/work/logh7-installed/data/image/Medal/m_f005.tga",
+            "extension": ".tga",
+            "sha256": "41557050ad872b619f54e2c66d69ef47a0536674aea6bc4e73552265aa752d60",
+            "byteSize": 7442,
+            "image": {
+              "format": "tga",
+              "width": 80,
+              "height": 80,
+              "bitsPerPixel": 8
+            }
+          }
+        ]
+      }
+    },
+    {
+      "bit": 46,
+      "id": 813,
+      "faction": "alliance",
+      "names": {
+        "ja": "特別戦功メダル６",
+        "ko": "특별전공 메달 6",
+        "en": "Special Battle-Merit Medal 6"
+      },
+      "source": {
+        "roster": {
+          "path": "server/content/roster/medals.json",
+          "nameJaMatchesMsgDat": true,
+          "nameKoMatchesLocalizedTable": true
+        },
+        "japaneseMsgDat": {
+          "path": "server/content/client/msgdat.json",
+          "file": "constmsg.dat",
+          "recordId": 813
+        },
+        "localizedDatTable": {
+          "path": "server/content/extracted/dat-tables.json",
+          "recordId": 813,
+          "encoding": "cp949"
+        }
+      },
+      "originalAsset": {
+        "stem": "m_f006",
+        "status": "original-icon-pool-present",
+        "mapping": "asset-hint-only; per-medal runtime icon mapping still requires RE/live UI proof",
+        "files": [
+          {
+            "path": ".omo/work/logh7-installed/data/image/Medal/m_f006.png",
+            "extension": ".png",
+            "sha256": "fc00f7be9690c10660f2f9ab0559ba9a619286937faa5dd91bdc021cae2f4323",
+            "byteSize": 16396,
+            "image": {
+              "format": "png",
+              "width": 80,
+              "height": 80
+            }
+          },
+          {
+            "path": ".omo/work/logh7-installed/data/image/Medal/m_f006.tga",
+            "extension": ".tga",
+            "sha256": "10498029f6276315879cd645f390e467582ea43b90b50b75e15e473d17eb5a98",
+            "byteSize": 7442,
+            "image": {
+              "format": "tga",
+              "width": 80,
+              "height": 80,
+              "bitsPerPixel": 8
+            }
+          }
+        ]
+      }
+    },
+    {
+      "bit": 47,
+      "id": 814,
+      "faction": "alliance",
+      "names": {
+        "ja": "特別戦功メダル７",
+        "ko": "특별전공 메달 7",
+        "en": "Special Battle-Merit Medal 7"
+      },
+      "source": {
+        "roster": {
+          "path": "server/content/roster/medals.json",
+          "nameJaMatchesMsgDat": true,
+          "nameKoMatchesLocalizedTable": true
+        },
+        "japaneseMsgDat": {
+          "path": "server/content/client/msgdat.json",
+          "file": "constmsg.dat",
+          "recordId": 814
+        },
+        "localizedDatTable": {
+          "path": "server/content/extracted/dat-tables.json",
+          "recordId": 814,
+          "encoding": "cp949"
+        }
+      },
+      "originalAsset": {
+        "stem": "m_f007",
+        "status": "original-icon-pool-present",
+        "mapping": "asset-hint-only; per-medal runtime icon mapping still requires RE/live UI proof",
+        "files": [
+          {
+            "path": ".omo/work/logh7-installed/data/image/Medal/m_f007.png",
+            "extension": ".png",
+            "sha256": "f813743c30d66a03f954f4ed560caef5e0975d6cd46828a0eaa2f2c684706f2a",
+            "byteSize": 17076,
+            "image": {
+              "format": "png",
+              "width": 80,
+              "height": 80
+            }
+          },
+          {
+            "path": ".omo/work/logh7-installed/data/image/Medal/m_f007.tga",
+            "extension": ".tga",
+            "sha256": "8d8a00fd2b963ec42e84491e1063eae3182ad0c64d13978f6e036302624f124f",
+            "byteSize": 7442,
+            "image": {
+              "format": "tga",
+              "width": 80,
+              "height": 80,
+              "bitsPerPixel": 8
+            }
+          }
+        ]
+      }
+    },
+    {
+      "bit": 48,
+      "id": 815,
+      "faction": "alliance",
+      "names": {
+        "ja": "特別戦功メダル８",
+        "ko": "특별전공 메달 8",
+        "en": "Special Battle-Merit Medal 8"
+      },
+      "source": {
+        "roster": {
+          "path": "server/content/roster/medals.json",
+          "nameJaMatchesMsgDat": true,
+          "nameKoMatchesLocalizedTable": true
+        },
+        "japaneseMsgDat": {
+          "path": "server/content/client/msgdat.json",
+          "file": "constmsg.dat",
+          "recordId": 815
+        },
+        "localizedDatTable": {
+          "path": "server/content/extracted/dat-tables.json",
+          "recordId": 815,
+          "encoding": "cp949"
+        }
+      },
+      "originalAsset": {
+        "stem": "m_f008",
+        "status": "original-icon-pool-present",
+        "mapping": "asset-hint-only; per-medal runtime icon mapping still requires RE/live UI proof",
+        "files": [
+          {
+            "path": ".omo/work/logh7-installed/data/image/Medal/m_f008.png",
+            "extension": ".png",
+            "sha256": "55ded2d08d9087aeca3e25605111d5e1c14b974b0220f704902c25cdb4753aa5",
+            "byteSize": 19382,
+            "image": {
+              "format": "png",
+              "width": 80,
+              "height": 80
+            }
+          },
+          {
+            "path": ".omo/work/logh7-installed/data/image/Medal/m_f008.tga",
+            "extension": ".tga",
+            "sha256": "77d5f54af71feeab23528aba768b6322169bb64f4633d2c2cd0e2a5781d10081",
+            "byteSize": 7442,
+            "image": {
+              "format": "tga",
+              "width": 80,
+              "height": 80,
+              "bitsPerPixel": 8
+            }
+          }
+        ]
+      }
+    },
+    {
+      "bit": 49,
+      "id": 816,
+      "faction": "alliance",
+      "names": {
+        "ja": "特別戦功メダル９",
+        "ko": "특별전공 메달 9",
+        "en": "Special Battle-Merit Medal 9"
+      },
+      "source": {
+        "roster": {
+          "path": "server/content/roster/medals.json",
+          "nameJaMatchesMsgDat": true,
+          "nameKoMatchesLocalizedTable": true
+        },
+        "japaneseMsgDat": {
+          "path": "server/content/client/msgdat.json",
+          "file": "constmsg.dat",
+          "recordId": 816
+        },
+        "localizedDatTable": {
+          "path": "server/content/extracted/dat-tables.json",
+          "recordId": 816,
+          "encoding": "cp949"
+        }
+      },
+      "originalAsset": {
+        "stem": "m_f009",
+        "status": "original-icon-pool-present",
+        "mapping": "asset-hint-only; per-medal runtime icon mapping still requires RE/live UI proof",
+        "files": [
+          {
+            "path": ".omo/work/logh7-installed/data/image/Medal/m_f009.png",
+            "extension": ".png",
+            "sha256": "35b7abc50d1ce38870a55d5a4fe36e61da10211476a7afa8417d1833e1c003b3",
+            "byteSize": 15246,
+            "image": {
+              "format": "png",
+              "width": 80,
+              "height": 80
+            }
+          },
+          {
+            "path": ".omo/work/logh7-installed/data/image/Medal/m_f009.tga",
+            "extension": ".tga",
+            "sha256": "6aac259abf650471f02d00c1c2ba466c0f20e7587ede7eefc3496a79c2f5fe57",
+            "byteSize": 7442,
+            "image": {
+              "format": "tga",
+              "width": 80,
+              "height": 80,
+              "bitsPerPixel": 8
+            }
+          }
+        ]
+      }
+    },
+    {
+      "bit": 50,
+      "id": 817,
+      "faction": "alliance",
+      "names": {
+        "ja": "特別戦功メダル１０",
+        "ko": "특별전공 메달 10",
+        "en": "Special Battle-Merit Medal 10"
+      },
+      "source": {
+        "roster": {
+          "path": "server/content/roster/medals.json",
+          "nameJaMatchesMsgDat": true,
+          "nameKoMatchesLocalizedTable": true
+        },
+        "japaneseMsgDat": {
+          "path": "server/content/client/msgdat.json",
+          "file": "constmsg.dat",
+          "recordId": 817
+        },
+        "localizedDatTable": {
+          "path": "server/content/extracted/dat-tables.json",
+          "recordId": 817,
+          "encoding": "cp949"
+        }
+      },
+      "originalAsset": {
+        "stem": "m_f010",
+        "status": "original-icon-pool-present",
+        "mapping": "asset-hint-only; per-medal runtime icon mapping still requires RE/live UI proof",
+        "files": [
+          {
+            "path": ".omo/work/logh7-installed/data/image/Medal/m_f010.png",
+            "extension": ".png",
+            "sha256": "6244ca25b7ca0750b401aa63d4f011908110ce820999c0ca5bff44896216a163",
+            "byteSize": 15957,
+            "image": {
+              "format": "png",
+              "width": 80,
+              "height": 80
+            }
+          },
+          {
+            "path": ".omo/work/logh7-installed/data/image/Medal/m_f010.tga",
+            "extension": ".tga",
+            "sha256": "955fee6473d911213e9fe5d83b3d24bf680da67b56b8810ca252469845604e4a",
+            "byteSize": 7442,
+            "image": {
+              "format": "tga",
+              "width": 80,
+              "height": 80,
+              "bitsPerPixel": 8
+            }
+          }
+        ]
+      }
+    },
+    {
+      "bit": 51,
+      "id": 818,
+      "faction": "alliance",
+      "names": {
+        "ja": "参謀記章",
+        "ko": "참모 기장",
+        "en": "Staff Officer's Badge"
+      },
+      "source": {
+        "roster": {
+          "path": "server/content/roster/medals.json",
+          "nameJaMatchesMsgDat": true,
+          "nameKoMatchesLocalizedTable": true
+        },
+        "japaneseMsgDat": {
+          "path": "server/content/client/msgdat.json",
+          "file": "constmsg.dat",
+          "recordId": 818
+        },
+        "localizedDatTable": {
+          "path": "server/content/extracted/dat-tables.json",
+          "recordId": 818,
+          "encoding": "cp949"
+        }
+      },
+      "originalAsset": {
+        "stem": "m_f011",
+        "status": "original-icon-pool-present",
+        "mapping": "asset-hint-only; per-medal runtime icon mapping still requires RE/live UI proof",
+        "files": [
+          {
+            "path": ".omo/work/logh7-installed/data/image/Medal/m_f011.png",
+            "extension": ".png",
+            "sha256": "b062da28ef8953f25da05dd4a174f746ebebe8f91662f1058cc1df7335922a3d",
+            "byteSize": 15827,
+            "image": {
+              "format": "png",
+              "width": 80,
+              "height": 80
+            }
+          },
+          {
+            "path": ".omo/work/logh7-installed/data/image/Medal/m_f011.tga",
+            "extension": ".tga",
+            "sha256": "cb98ac03d34bfd3e40a9b19410f2a93cd16c65b55425101649b3278f2fe64b61",
+            "byteSize": 7442,
+            "image": {
+              "format": "tga",
+              "width": 80,
+              "height": 80,
+              "bitsPerPixel": 8
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

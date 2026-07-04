@@ -1,0 +1,483 @@
+{
+ "id": "logh7-ship-thumbnail-original-import",
+ "generatedAt": "2026-07-04",
+ "provenance": "byte-for-byte copy of original installed data (R0 original fallback)",
+ "sourceRoot": ".omo/work/logh7-installed/data/image/Thumbnail/Ship",
+ "count": 79,
+ "entries": [
+  {
+   "file": "iu000.tga",
+   "bytes": 3346,
+   "sha256": "df4e40bc6775725162cfe6e08cbc932e265c78e4b9e198282b842db317c62324",
+   "source": ".omo/work/logh7-installed/data/image/Thumbnail/Ship/iu000.tga"
+  },
+  {
+   "file": "iu001.tga",
+   "bytes": 3346,
+   "sha256": "73b42b812f1d131c2ebfeee4b88f81f2ba36c4a2842b2c58bde8b37e0c6109a3",
+   "source": ".omo/work/logh7-installed/data/image/Thumbnail/Ship/iu001.tga"
+  },
+  {
+   "file": "iu002.tga",
+   "bytes": 3346,
+   "sha256": "59f31e036506692a32bfba0dc71b1da27fd9d0254c1184d6c3f5b0e3221ed990",
+   "source": ".omo/work/logh7-installed/data/image/Thumbnail/Ship/iu002.tga"
+  },
+  {
+   "file": "iu003.tga",
+   "bytes": 3346,
+   "sha256": "dbb19ca4600c430be889f30a3d5d60c143479d8f7da4a64ff352ef01580117d5",
+   "source": ".omo/work/logh7-installed/data/image/Thumbnail/Ship/iu003.tga"
+  },
+  {
+   "file": "iu004.tga",
+   "bytes": 3346,
+   "sha256": "69966f1101e6bf62831f4239a2935d92807695dce0d80ba9ef4fd2bb38887c4a",
+   "source": ".omo/work/logh7-installed/data/image/Thumbnail/Ship/iu004.tga"
+  },
+  {
+   "file": "iu005.tga",
+   "bytes": 3346,
+   "sha256": "69966f1101e6bf62831f4239a2935d92807695dce0d80ba9ef4fd2bb38887c4a",
+   "source": ".omo/work/logh7-installed/data/image/Thumbnail/Ship/iu005.tga"
+  },
+  {
+   "file": "iu006.tga",
+   "bytes": 3346,
+   "sha256": "7d82918958dd20979eb59a11e5c31376349480c7390adc42cdc0855f26c033e5",
+   "source": ".omo/work/logh7-installed/data/image/Thumbnail/Ship/iu006.tga"
+  },
+  {
+   "file": "iu007.tga",
+   "bytes": 3346,
+   "sha256": "7d66f389b7626937fd505f365720e136c01d6feaffbcfe3860939dfe7f0809af",
+   "source": ".omo/work/logh7-installed/data/image/Thumbnail/Ship/iu007.tga"
+  },
+  {
+   "file": "iu008.tga",
+   "bytes": 3346,
+   "sha256": "d92982521bf4109fd770f436c366254949a555d046332d4fd23cd00ca3144106",
+   "source": ".omo/work/logh7-installed/data/image/Thumbnail/Ship/iu008.tga"
+  },
+  {
+   "file": "iu009.tga",
+   "bytes": 3346,
+   "sha256": "dc92a988aea49a5c1edc44392d34ac2a97bc42b2e6ca3062f2eccb596da0a1c0",
+   "source": ".omo/work/logh7-installed/data/image/Thumbnail/Ship/iu009.tga"
+  },
+  {
+   "file": "iu010.tga",
+   "bytes": 3346,
+   "sha256": "5c306591dc4bb300bd3b3aecd8b076477bc3f9a8b68b501689281c772e214e58",
+   "source": ".omo/work/logh7-installed/data/image/Thumbnail/Ship/iu010.tga"
+  },
+  {
+   "file": "iu011.tga",
+   "bytes": 3346,
+   "sha256": "ef09f59eb930c657be0b5fadfcbe6e48ebcd3525465a4d39a027765ebbd6f241",
+   "source": ".omo/work/logh7-installed/data/image/Thumbnail/Ship/iu011.tga"
+  },
+  {
+   "file": "iu012.tga",
+   "bytes": 3346,
+   "sha256": "274f72fdbb702a58fa08cc364a9f5f65e4ca05a354decd89c7e5cbbeea2189de",
+   "source": ".omo/work/logh7-installed/data/image/Thumbnail/Ship/iu012.tga"
+  },
+  {
+   "file": "iu013.tga",
+   "bytes": 3346,
+   "sha256": "8183593192c2c2d1fb10ba4815d17c26f86a8466a2007e736753555ef41518ff",
+   "source": ".omo/work/logh7-installed/data/image/Thumbnail/Ship/iu013.tga"
+  },
+  {
+   "file": "iu014.tga",
+   "bytes": 3346,
+   "sha256": "dae48227c71dc09a2eacb162a1d7378b9e5c002776340a3424cb7b3646ee83d3",
+   "source": ".omo/work/logh7-installed/data/image/Thumbnail/Ship/iu014.tga"
+  },
+  {
+   "file": "iu015.tga",
+   "bytes": 3346,
+   "sha256": "0de3943781057dce0f748e1bc414f7352960558cfe43bc77dc648e24ff3effd2",
+   "source": ".omo/work/logh7-installed/data/image/Thumbnail/Ship/iu015.tga"
+  },
+  {
+   "file": "iu016.tga",
+   "bytes": 3346,
+   "sha256": "aac95764a4e5720a2bc636c598633aca6e3e11ddb391bb63b3d50b49e68e3735",
+   "source": ".omo/work/logh7-installed/data/image/Thumbnail/Ship/iu016.tga"
+  },
+  {
+   "file": "iu017.tga",
+   "bytes": 3346,
+   "sha256": "4acbbb01ec04226433ef02671c1a8575f2b8eb8b661474677b3f684cc4322ef3",
+   "source": ".omo/work/logh7-installed/data/image/Thumbnail/Ship/iu017.tga"
+  },
+  {
+   "file": "iu018.tga",
+   "bytes": 3346,
+   "sha256": "28a6572d5aab78d593810cb36946bb3318575905e3f5f0efc0ab5167d900ee81",
+   "source": ".omo/work/logh7-installed/data/image/Thumbnail/Ship/iu018.tga"
+  },
+  {
+   "file": "iu019.tga",
+   "bytes": 3346,
+   "sha256": "cfa9bc86dde813456ba835c6e4d60e284ba43d9f962be262425a806c87d70eaf",
+   "source": ".omo/work/logh7-installed/data/image/Thumbnail/Ship/iu019.tga"
+  },
+  {
+   "file": "iu020.tga",
+   "bytes": 3346,
+   "sha256": "7d82918958dd20979eb59a11e5c31376349480c7390adc42cdc0855f26c033e5",
+   "source": ".omo/work/logh7-installed/data/image/Thumbnail/Ship/iu020.tga"
+  },
+  {
+   "file": "iu021.tga",
+   "bytes": 3346,
+   "sha256": "7d82918958dd20979eb59a11e5c31376349480c7390adc42cdc0855f26c033e5",
+   "source": ".omo/work/logh7-installed/data/image/Thumbnail/Ship/iu021.tga"
+  },
+  {
+   "file": "iu022.tga",
+   "bytes": 3346,
+   "sha256": "728d4aacf2475738df989118aef3a0266b970fc301957020aef19c4794c755bf",
+   "source": ".omo/work/logh7-installed/data/image/Thumbnail/Ship/iu022.tga"
+  },
+  {
+   "file": "iu023.tga",
+   "bytes": 3346,
+   "sha256": "ea1272a0e030d097d5cb2877c1b1604c5634c9aa1473cf76bb831e5432fbcdfa",
+   "source": ".omo/work/logh7-installed/data/image/Thumbnail/Ship/iu023.tga"
+  },
+  {
+   "file": "iu024.tga",
+   "bytes": 3346,
+   "sha256": "0baf5f82c37c680a6cee6e78c6ee46bdb766bf3d21bbdd590b5b184ebb028f17",
+   "source": ".omo/work/logh7-installed/data/image/Thumbnail/Ship/iu024.tga"
+  },
+  {
+   "file": "iu025.tga",
+   "bytes": 3346,
+   "sha256": "7d82918958dd20979eb59a11e5c31376349480c7390adc42cdc0855f26c033e5",
+   "source": ".omo/work/logh7-installed/data/image/Thumbnail/Ship/iu025.tga"
+  },
+  {
+   "file": "iu026.tga",
+   "bytes": 3346,
+   "sha256": "10731af0f1ddeddc902f3685a7559ffe2611f89f9d03373aad5907e5a01c9739",
+   "source": ".omo/work/logh7-installed/data/image/Thumbnail/Ship/iu026.tga"
+  },
+  {
+   "file": "iu027.tga",
+   "bytes": 3346,
+   "sha256": "7d82918958dd20979eb59a11e5c31376349480c7390adc42cdc0855f26c033e5",
+   "source": ".omo/work/logh7-installed/data/image/Thumbnail/Ship/iu027.tga"
+  },
+  {
+   "file": "iu028.tga",
+   "bytes": 3346,
+   "sha256": "5dc1194e1c64d9757f8319c691eadf04e3e413e05dadfede3d624ebcc58d3d09",
+   "source": ".omo/work/logh7-installed/data/image/Thumbnail/Ship/iu028.tga"
+  },
+  {
+   "file": "iu029.tga",
+   "bytes": 3346,
+   "sha256": "7d82918958dd20979eb59a11e5c31376349480c7390adc42cdc0855f26c033e5",
+   "source": ".omo/work/logh7-installed/data/image/Thumbnail/Ship/iu029.tga"
+  },
+  {
+   "file": "iu030.tga",
+   "bytes": 3346,
+   "sha256": "7d82918958dd20979eb59a11e5c31376349480c7390adc42cdc0855f26c033e5",
+   "source": ".omo/work/logh7-installed/data/image/Thumbnail/Ship/iu030.tga"
+  },
+  {
+   "file": "iu064.tga",
+   "bytes": 3346,
+   "sha256": "5cc56ad8e0d8fdb1145df6325082aca27f09457878bfee6f605e3fed7607bec8",
+   "source": ".omo/work/logh7-installed/data/image/Thumbnail/Ship/iu064.tga"
+  },
+  {
+   "file": "iu068.tga",
+   "bytes": 3346,
+   "sha256": "5cc56ad8e0d8fdb1145df6325082aca27f09457878bfee6f605e3fed7607bec8",
+   "source": ".omo/work/logh7-installed/data/image/Thumbnail/Ship/iu068.tga"
+  },
+  {
+   "file": "iu072.tga",
+   "bytes": 3346,
+   "sha256": "bcdf37363599faa6c31bee161d29ac4d739bcfba00368082d2c4066a26b2a902",
+   "source": ".omo/work/logh7-installed/data/image/Thumbnail/Ship/iu072.tga"
+  },
+  {
+   "file": "iu076.tga",
+   "bytes": 3346,
+   "sha256": "1f2864d43da6b7c7aea80b62517be393ffeb35fbd631a6b27ab948f6da3e04b7",
+   "source": ".omo/work/logh7-installed/data/image/Thumbnail/Ship/iu076.tga"
+  },
+  {
+   "file": "iu080.tga",
+   "bytes": 3346,
+   "sha256": "69966f1101e6bf62831f4239a2935d92807695dce0d80ba9ef4fd2bb38887c4a",
+   "source": ".omo/work/logh7-installed/data/image/Thumbnail/Ship/iu080.tga"
+  },
+  {
+   "file": "iu088.tga",
+   "bytes": 3346,
+   "sha256": "1f2864d43da6b7c7aea80b62517be393ffeb35fbd631a6b27ab948f6da3e04b7",
+   "source": ".omo/work/logh7-installed/data/image/Thumbnail/Ship/iu088.tga"
+  },
+  {
+   "file": "iu089.tga",
+   "bytes": 3346,
+   "sha256": "6968b0091f80e775353e4bd04328dd5af6bcbb08ea6039e976ab47f336915021",
+   "source": ".omo/work/logh7-installed/data/image/Thumbnail/Ship/iu089.tga"
+  },
+  {
+   "file": "iu090.tga",
+   "bytes": 3346,
+   "sha256": "1e8dd5b244cff59990d39b7f837dcd81970ff06e119744d7aab510743d88c173",
+   "source": ".omo/work/logh7-installed/data/image/Thumbnail/Ship/iu090.tga"
+  },
+  {
+   "file": "iu091.tga",
+   "bytes": 3346,
+   "sha256": "1e8dd5b244cff59990d39b7f837dcd81970ff06e119744d7aab510743d88c173",
+   "source": ".omo/work/logh7-installed/data/image/Thumbnail/Ship/iu091.tga"
+  },
+  {
+   "file": "iu092.tga",
+   "bytes": 3346,
+   "sha256": "25ff42b50adf60bdf3c17e72aa9cc595190134f60a250916bb6fd069fe4a1ca3",
+   "source": ".omo/work/logh7-installed/data/image/Thumbnail/Ship/iu092.tga"
+  },
+  {
+   "file": "iu093.tga",
+   "bytes": 3346,
+   "sha256": "1d44ad4d6ae2c2a6d77fdfcc321fd9456cc42aa023f302478205450f628e9b3e",
+   "source": ".omo/work/logh7-installed/data/image/Thumbnail/Ship/iu093.tga"
+  },
+  {
+   "file": "iu094.tga",
+   "bytes": 3346,
+   "sha256": "efe40bf78a0a40e701360ccd5764506161d584026d7e595ed6576419e06804cf",
+   "source": ".omo/work/logh7-installed/data/image/Thumbnail/Ship/iu094.tga"
+  },
+  {
+   "file": "iu095.tga",
+   "bytes": 3346,
+   "sha256": "a14bdc2daf6e5991844b5bde20bd148fe9a579ae182eed2e3df86fcff0542369",
+   "source": ".omo/work/logh7-installed/data/image/Thumbnail/Ship/iu095.tga"
+  },
+  {
+   "file": "iu096.tga",
+   "bytes": 3346,
+   "sha256": "a14bdc2daf6e5991844b5bde20bd148fe9a579ae182eed2e3df86fcff0542369",
+   "source": ".omo/work/logh7-installed/data/image/Thumbnail/Ship/iu096.tga"
+  },
+  {
+   "file": "iu097.tga",
+   "bytes": 3346,
+   "sha256": "a14bdc2daf6e5991844b5bde20bd148fe9a579ae182eed2e3df86fcff0542369",
+   "source": ".omo/work/logh7-installed/data/image/Thumbnail/Ship/iu097.tga"
+  },
+  {
+   "file": "iu098.tga",
+   "bytes": 3346,
+   "sha256": "a14bdc2daf6e5991844b5bde20bd148fe9a579ae182eed2e3df86fcff0542369",
+   "source": ".omo/work/logh7-installed/data/image/Thumbnail/Ship/iu098.tga"
+  },
+  {
+   "file": "iu099.tga",
+   "bytes": 3346,
+   "sha256": "a14bdc2daf6e5991844b5bde20bd148fe9a579ae182eed2e3df86fcff0542369",
+   "source": ".omo/work/logh7-installed/data/image/Thumbnail/Ship/iu099.tga"
+  },
+  {
+   "file": "iu100.tga",
+   "bytes": 3346,
+   "sha256": "7a5a4b5e86b1c71904071929414d17f7949517ad0bcb40a778caa3a389a96129",
+   "source": ".omo/work/logh7-installed/data/image/Thumbnail/Ship/iu100.tga"
+  },
+  {
+   "file": "iu101.tga",
+   "bytes": 3346,
+   "sha256": "e666b04dddfa4a8af3979aaf1986a5639dd1e6c33cdd223ea16f5d5e6cf9b401",
+   "source": ".omo/work/logh7-installed/data/image/Thumbnail/Ship/iu101.tga"
+  },
+  {
+   "file": "iu102.tga",
+   "bytes": 3346,
+   "sha256": "a14bdc2daf6e5991844b5bde20bd148fe9a579ae182eed2e3df86fcff0542369",
+   "source": ".omo/work/logh7-installed/data/image/Thumbnail/Ship/iu102.tga"
+  },
+  {
+   "file": "iu103.tga",
+   "bytes": 3346,
+   "sha256": "a14bdc2daf6e5991844b5bde20bd148fe9a579ae182eed2e3df86fcff0542369",
+   "source": ".omo/work/logh7-installed/data/image/Thumbnail/Ship/iu103.tga"
+  },
+  {
+   "file": "iu104.tga",
+   "bytes": 3346,
+   "sha256": "7800c983a5f0f526a9d9359332af3eade9faa8d2eb9a0bd3ee3a5bcad0c2dd8f",
+   "source": ".omo/work/logh7-installed/data/image/Thumbnail/Ship/iu104.tga"
+  },
+  {
+   "file": "iu105.tga",
+   "bytes": 3346,
+   "sha256": "e429fe34858f0ad6ae84dba88d01e0f05756652b6f68fb2d197aa2912409c77a",
+   "source": ".omo/work/logh7-installed/data/image/Thumbnail/Ship/iu105.tga"
+  },
+  {
+   "file": "iu106.tga",
+   "bytes": 3346,
+   "sha256": "76d1eda32e87ea9dd663de821a8ad2e6bcc51eedcdeda1e2f1041616cf05d21c",
+   "source": ".omo/work/logh7-installed/data/image/Thumbnail/Ship/iu106.tga"
+  },
+  {
+   "file": "iu107.tga",
+   "bytes": 3346,
+   "sha256": "a14bdc2daf6e5991844b5bde20bd148fe9a579ae182eed2e3df86fcff0542369",
+   "source": ".omo/work/logh7-installed/data/image/Thumbnail/Ship/iu107.tga"
+  },
+  {
+   "file": "iu108.tga",
+   "bytes": 3346,
+   "sha256": "a14bdc2daf6e5991844b5bde20bd148fe9a579ae182eed2e3df86fcff0542369",
+   "source": ".omo/work/logh7-installed/data/image/Thumbnail/Ship/iu108.tga"
+  },
+  {
+   "file": "iu109.tga",
+   "bytes": 3346,
+   "sha256": "a14bdc2daf6e5991844b5bde20bd148fe9a579ae182eed2e3df86fcff0542369",
+   "source": ".omo/work/logh7-installed/data/image/Thumbnail/Ship/iu109.tga"
+  },
+  {
+   "file": "iu110.tga",
+   "bytes": 3346,
+   "sha256": "a14bdc2daf6e5991844b5bde20bd148fe9a579ae182eed2e3df86fcff0542369",
+   "source": ".omo/work/logh7-installed/data/image/Thumbnail/Ship/iu110.tga"
+  },
+  {
+   "file": "iu111.tga",
+   "bytes": 3346,
+   "sha256": "bebbff7752e43b971852d08fbdbce2d0071673ef196be9e4527df071e90b8e9d",
+   "source": ".omo/work/logh7-installed/data/image/Thumbnail/Ship/iu111.tga"
+  },
+  {
+   "file": "iu112.tga",
+   "bytes": 3346,
+   "sha256": "38a58b29f49b3b7ba3630ca0eb78b36eb9683c154e1895a032327f851c4add50",
+   "source": ".omo/work/logh7-installed/data/image/Thumbnail/Ship/iu112.tga"
+  },
+  {
+   "file": "iu113.tga",
+   "bytes": 3346,
+   "sha256": "c183577bb163d6f430ffc303c33dd75a9d76c36b9b44971ffa92ca97cd11cb33",
+   "source": ".omo/work/logh7-installed/data/image/Thumbnail/Ship/iu113.tga"
+  },
+  {
+   "file": "iu114.tga",
+   "bytes": 3346,
+   "sha256": "a14bdc2daf6e5991844b5bde20bd148fe9a579ae182eed2e3df86fcff0542369",
+   "source": ".omo/work/logh7-installed/data/image/Thumbnail/Ship/iu114.tga"
+  },
+  {
+   "file": "iu115.tga",
+   "bytes": 3346,
+   "sha256": "a14bdc2daf6e5991844b5bde20bd148fe9a579ae182eed2e3df86fcff0542369",
+   "source": ".omo/work/logh7-installed/data/image/Thumbnail/Ship/iu115.tga"
+  },
+  {
+   "file": "iu116.tga",
+   "bytes": 3346,
+   "sha256": "a14bdc2daf6e5991844b5bde20bd148fe9a579ae182eed2e3df86fcff0542369",
+   "source": ".omo/work/logh7-installed/data/image/Thumbnail/Ship/iu116.tga"
+  },
+  {
+   "file": "iu117.tga",
+   "bytes": 3346,
+   "sha256": "282e2201d3ee8666985954bee5736170889329cc3bf796a2741065825b8c6216",
+   "source": ".omo/work/logh7-installed/data/image/Thumbnail/Ship/iu117.tga"
+  },
+  {
+   "file": "iu118.tga",
+   "bytes": 3346,
+   "sha256": "662b4989dbe7a012b98d83f67581591172f5cd4a40f2145b9f45301b123fa569",
+   "source": ".omo/work/logh7-installed/data/image/Thumbnail/Ship/iu118.tga"
+  },
+  {
+   "file": "iu147.tga",
+   "bytes": 3346,
+   "sha256": "9bee4c86cd9c35be61b8f97b1f34bbe753cab5c51ba77da3116d715c9a0f6f5a",
+   "source": ".omo/work/logh7-installed/data/image/Thumbnail/Ship/iu147.tga"
+  },
+  {
+   "file": "iu151.tga",
+   "bytes": 3346,
+   "sha256": "6286d31f3d9fb96ba5a7384a09e0fa557a3dabc6449d1b271df4dada329e8cab",
+   "source": ".omo/work/logh7-installed/data/image/Thumbnail/Ship/iu151.tga"
+  },
+  {
+   "file": "iu155.tga",
+   "bytes": 3346,
+   "sha256": "662b4989dbe7a012b98d83f67581591172f5cd4a40f2145b9f45301b123fa569",
+   "source": ".omo/work/logh7-installed/data/image/Thumbnail/Ship/iu155.tga"
+  },
+  {
+   "file": "iu159.tga",
+   "bytes": 3346,
+   "sha256": "efe40bf78a0a40e701360ccd5764506161d584026d7e595ed6576419e06804cf",
+   "source": ".omo/work/logh7-installed/data/image/Thumbnail/Ship/iu159.tga"
+  },
+  {
+   "file": "iu169.tga",
+   "bytes": 3346,
+   "sha256": "662b4989dbe7a012b98d83f67581591172f5cd4a40f2145b9f45301b123fa569",
+   "source": ".omo/work/logh7-installed/data/image/Thumbnail/Ship/iu169.tga"
+  },
+  {
+   "file": "iu170.tga",
+   "bytes": 3346,
+   "sha256": "d92982521bf4109fd770f436c366254949a555d046332d4fd23cd00ca3144106",
+   "source": ".omo/work/logh7-installed/data/image/Thumbnail/Ship/iu170.tga"
+  },
+  {
+   "file": "iu171.tga",
+   "bytes": 3346,
+   "sha256": "d92982521bf4109fd770f436c366254949a555d046332d4fd23cd00ca3144106",
+   "source": ".omo/work/logh7-installed/data/image/Thumbnail/Ship/iu171.tga"
+  },
+  {
+   "file": "iu172.tga",
+   "bytes": 3346,
+   "sha256": "d92982521bf4109fd770f436c366254949a555d046332d4fd23cd00ca3144106",
+   "source": ".omo/work/logh7-installed/data/image/Thumbnail/Ship/iu172.tga"
+  },
+  {
+   "file": "iu173.tga",
+   "bytes": 3346,
+   "sha256": "d92982521bf4109fd770f436c366254949a555d046332d4fd23cd00ca3144106",
+   "source": ".omo/work/logh7-installed/data/image/Thumbnail/Ship/iu173.tga"
+  },
+  {
+   "file": "iu174.tga",
+   "bytes": 3346,
+   "sha256": "d92982521bf4109fd770f436c366254949a555d046332d4fd23cd00ca3144106",
+   "source": ".omo/work/logh7-installed/data/image/Thumbnail/Ship/iu174.tga"
+  },
+  {
+   "file": "iu175.tga",
+   "bytes": 3346,
+   "sha256": "d92982521bf4109fd770f436c366254949a555d046332d4fd23cd00ca3144106",
+   "source": ".omo/work/logh7-installed/data/image/Thumbnail/Ship/iu175.tga"
+  },
+  {
+   "file": "iu176.tga",
+   "bytes": 3346,
+   "sha256": "5f4a49f6035347f3a79c623bd6f019a4a4522adc6ac49be7fecf72f6ea81b69d",
+   "source": ".omo/work/logh7-installed/data/image/Thumbnail/Ship/iu176.tga"
+  }
+ ]
+}

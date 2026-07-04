@@ -1,35 +1,61 @@
-# LOGH VII Revival Server
+# LOGH VII Data Package
 
 ## Scope
 
-This directory is an independent Git repository for the authoritative LOGH VII server and admin surfaces. Do not rely on files outside this repo at runtime or in tests.
+This directory is the canonical server-side data/spec bootstrap package for the
+LOGH VII revival. It no longer owns the old playable protocol server,
+launcher/runtime, EXE patch builders, or diagnostic client automation.
 
 ## Owns
 
-- `src/server/`: login, lobby, session, world state, command handling, admin CLI/API.
-- `tests/server/`: standalone node:test coverage for the server package.
-- `content/`: committed server content, scenarios, roster, galaxy, economy, manual-derived data, and codec fixtures.
-- `state/`: local SQLite runtime state. This directory is ignored and should be created by the running server/admin tools.
-- `logs/` and `traces/`: local runtime evidence. These directories are ignored.
+- `content/`: preserved and generated LOGH VII data, extracted resources,
+  manual-derived records, roster/galaxy/economy fixtures, and provenance
+  manifests.
+- `src/server/`: pure modules for source provenance, source inventory, MDX
+  cataloging, Null_galaxy fixture extraction, TCF archive/slot cataloging, TCF
+  portrait payload decode cataloging, controlled BMP sample export, logistics
+  allocation cataloging, explicit allocation authority rules, ship stat
+ cataloging, explicit pool-readiness rules, operation planning cataloging,
+ first operation state reducer,
+  and explicit operation draft-gate rules.
+- `tools/`: CLI wrappers that regenerate committed/generated catalogs and
+  controlled evidence exports.
+- `tests/server/`: node:test coverage for the current data/spec pipeline only.
 
 ## Does Not Own
 
-- Windows client EXEs, launchers, player packaging, or Pretendard font payloads.
-- Original LOGH VII installer/CD/ISO artifacts.
-- Parent workspace paths such as `../`, `.omo/`, `.omc/`, or root extraction scratch data.
+- Legacy client EXE modification, playable EXE builders, JSON patch descriptors,
+  Frida hooks, or direct game-client runtime.
+- Historical auth/gameplay TCP server runtime removed during the 2026-07-03
+  bootstrap cleanup.
+- Tool caches, local RE scratch space, downloaded reverse-engineering tools, or
+  assistant state.
 
 ## Rules
 
-- Keep the server package dependency-light and evidence-first.
-- Runtime defaults must resolve inside this repo: `content/`, `state/accounts.sqlite`, and `state/world-state.sqlite`.
-- Codec tables are loaded from `content/crypto/child-codec-tables.json`. Regenerating them requires an explicit `G7MTClient.exe` path and is not a runtime dependency.
-- Tests must run from this repo with `npm test` and must not read the parent workspace or a client EXE.
-- Do not commit SQLite state, logs, traces, or generated caches.
+- Treat original media, installed game data, manuals, Ghidra exports, and
+  extracted resources as evidence inputs.
+- Do not infer facts that are not present in the source being cataloged. For
+  example, `Null_galaxy.mdx` gives star template names/classes, not positions.
+- Generated catalogs must be reproducible from `content/original-data` source
+  roots and installed preserved data.
+- Keep runtime dependencies minimal; use Node built-ins unless a current
+  requirement justifies otherwise.
 
 ## Verification
 
 ```bash
 npm test
-node --check src/server/logh7-server.mjs
-node --check src/server/logh7-auth-server.mjs
+npm run inventory:sources
+npm run catalog:logistics-allocation
+npm run catalog:mdx
+npm run catalog:null-galaxy
+npm run catalog:operations
+npm run catalog:ranks-promotion
+npm run catalog:ship-stats
+npm run catalog:strategy-commands
+npm run catalog:tcf
+npm run catalog:tcf-portraits
+npm run export:tcf-portraits -- --limit-per-archive 2
+npm run verify:source
 ```

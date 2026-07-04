@@ -1,0 +1,4868 @@
+{
+  "id": "logh7-imperial-medal-source-lock-manifest",
+  "generatedAt": "2026-07-04T01:22:03.073Z",
+  "purpose": "Lock Imperial medal ship motifs to original LOGH VII Empire ship data before remaster production.",
+  "sourceLock": {
+    "imperialCrestRequired": true,
+    "crestReference": "client-unity/Assets/ArtSource/reference/logh7-imperial-double-eagle-reference.jpg",
+    "crestMask": "client-unity/Assets/ArtSource/reference/imperial-crest/logh7-imperial-double-eagle-mask-gold.png",
+    "empireShipDataRequired": true,
+    "empireModelCatalog": "server/content/extracted/model-ship.json",
+    "empireModelRecordCount": 121,
+    "empireGeFileRecordCount": 120,
+    "empireGeMdxRecordCount": 117,
+    "empireGeMdsRecordCount": 3,
+    "renderQueueCount": 39,
+    "empireGeRoot": ".omo/work/logh7-installed/data/model/Ship/GE/",
+    "thumbnailRoot": ".omo/work/logh7-installed/data/image/Thumbnail/Ship/",
+    "finalLargeShipMotifRequired": true,
+    "centralImperialCrestMaskRequired": true,
+    "thumbnailPolicy": "Decoded thumbnails are proof-only composition references; do not upscale them into final large ship medal art.",
+    "largeShipArtGate": "Final large ship motifs must use original Ship/GE MDX render/extract output.",
+    "visualCompositionPolicy": "Imperial medal concepts must keep the double-eagle crest visibly legible; ship-medal concepts must use original Empire ship data, never invented ship silhouettes."
+  },
+  "proofThumbnail": {
+    "stem": "iu008",
+    "source": ".omo/work/logh7-installed/data/image/Thumbnail/Ship/iu008.tga",
+    "sourceSha256": "d92982521bf4109fd770f436c366254949a555d046332d4fd23cd00ca3144106",
+    "transparentReference": "client-unity/Assets/ArtSource/reference/empire-ships/iu008-original-thumbnail-transparent.png",
+    "transparentReferenceSha256": "84b2a5eb845b04ecbba9b463fb8d74a75e095c944c225e6aa15f570c2838dac6",
+    "usage": "proof-only until replaced by MDX render/extract output"
+  },
+  "prototype": {
+    "medalId": 779,
+    "nameKo": "원정부대 종군기장",
+    "output": "client-unity/Assets/ArtSource/remaster/imperial-medal-prototypes-1024/779-expeditionary-campaign-source-locked-crest-ship-prototype.png",
+    "outputSha256": "9dc91a9343c4b6d16549138d8f8d09ef3e6d449ddbe8d3eafebad2140cf99a61",
+    "correctedOutput": "client-unity/Assets/ArtSource/remaster/imperial-medal-prototypes-1024/779-expeditionary-campaign-source-locked-crest-ship-v2.png",
+    "correctedOutputSha256": "124955300e5040b721ee2bd5c35c18df28b7d66c4065e6572782ec9ae94456d0",
+    "crestPrimaryOutput": "client-unity/Assets/ArtSource/remaster/imperial-medal-prototypes-1024/767-grand-double-eagle-order-source-locked-crest-v2.png",
+    "crestPrimaryOutputSha256": "87b90e2a89e25fea50582361ca71bb123f836280272f9d8807a8a4531904b909",
+    "visualRequirements": {
+      "imperialCrestPlacement": "large-visible-faction-mark",
+      "shipMotifSource": "original-empire-ship-data",
+      "finalLargeShipMotifSource": "original-ship-ge-mdx-render",
+      "centralCrestMask": "client-unity/Assets/ArtSource/reference/imperial-crest/logh7-imperial-double-eagle-mask-gold.png",
+      "thumbnailUse": "proof-only",
+      "generatedShipSilhouettesAllowed": false,
+      "generatedCrestAllowed": false
+    },
+    "status": "source-locked proof sample; ship motif still thumbnail-derived"
+  },
+  "renderQueue": [
+    {
+      "hullId": "001",
+      "status": "pending-mdx-render",
+      "selectedMdx": {
+        "name": "EH001",
+        "file": "data/model/Ship/GE/EH001.mdx",
+        "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EH001.mdx",
+        "sourceSha256": "31bc4de737d411c9c78192f63709207d5a9a58d44177bb8df78fd0a993acfbb2",
+        "detailTier": "high",
+        "nodeCount": 23,
+        "nodes": [
+          "EH001x:Layer1",
+          "ENGINE_01",
+          "ENGINE_02",
+          "ENGINE_03",
+          "ENGINE_04",
+          "FR_01",
+          "FR_02",
+          "FL_01",
+          "FL_02",
+          "RR_01",
+          "RR_02",
+          "RL_01",
+          "RL_02",
+          "FF_01",
+          "FF_02",
+          "FF_03",
+          "FF_04",
+          "MISSILE_01",
+          "GUN_01",
+          "GUN_02",
+          "LASER_01",
+          "BEAM_01",
+          "BEAM_03"
+        ],
+        "assets": [
+          "W:\\Gin7\\CG\\D\\objects\\EH001\\EH001x.lwo",
+          "W:\\Gin7\\CG\\D\\images\\EH001.bmp",
+          "W:\\Gin7\\CG\\D\\images\\meca_tile2.bmp",
+          "W:\\Gin7\\CG\\D\\images\\EH001_bump.tga"
+        ]
+      },
+      "candidates": [
+        {
+          "name": "EH001",
+          "file": "data/model/Ship/GE/EH001.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EH001.mdx",
+          "sourceSha256": "31bc4de737d411c9c78192f63709207d5a9a58d44177bb8df78fd0a993acfbb2",
+          "detailTier": "high",
+          "nodeCount": 23,
+          "nodes": [
+            "EH001x:Layer1",
+            "ENGINE_01",
+            "ENGINE_02",
+            "ENGINE_03",
+            "ENGINE_04",
+            "FR_01",
+            "FR_02",
+            "FL_01",
+            "FL_02",
+            "RR_01",
+            "RR_02",
+            "RL_01",
+            "RL_02",
+            "FF_01",
+            "FF_02",
+            "FF_03",
+            "FF_04",
+            "MISSILE_01",
+            "GUN_01",
+            "GUN_02",
+            "LASER_01",
+            "BEAM_01",
+            "BEAM_03"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\D\\objects\\EH001\\EH001x.lwo",
+            "W:\\Gin7\\CG\\D\\images\\EH001.bmp",
+            "W:\\Gin7\\CG\\D\\images\\meca_tile2.bmp",
+            "W:\\Gin7\\CG\\D\\images\\EH001_bump.tga"
+          ]
+        },
+        {
+          "name": "EM001",
+          "file": "data/model/Ship/GE/EM001.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EM001.mdx",
+          "sourceSha256": "8b2e15c27aa75f59357bcdecc833d97f7a94220bb1a06fca7936bb698e75d736",
+          "detailTier": "medium",
+          "nodeCount": 23,
+          "nodes": [
+            "EM001:Layer1",
+            "ENGINE_01",
+            "ENGINE_02",
+            "ENGINE_03",
+            "ENGINE_04",
+            "FR_01",
+            "FR_02",
+            "FL_01",
+            "FL_02",
+            "RR_01",
+            "RR_02",
+            "RL_01",
+            "RL_02",
+            "FF_01",
+            "FF_02",
+            "FF_03",
+            "FF_04",
+            "MISSILE_01",
+            "GUN_01",
+            "GUN_02",
+            "LASER_01",
+            "BEAM_01",
+            "BEAM_03"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\D\\objects\\EM001\\EM001.lwo",
+            "D\\images\\EM001\\eh_001_body_t.bmp"
+          ]
+        },
+        {
+          "name": "EL001",
+          "file": "data/model/Ship/GE/EL001.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EL001.mdx",
+          "sourceSha256": "6ab553d477d91a108763525b21c32d917966db4b70eea1bf4ca1330ada5a203d",
+          "detailTier": "low",
+          "nodeCount": 5,
+          "nodes": [
+            "EL001:Layer1",
+            "ENGINE_01",
+            "ENGINE_02",
+            "ENGINE_03",
+            "ENGINE_04"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\D\\objects\\EL001.lwo"
+          ]
+        }
+      ]
+    },
+    {
+      "hullId": "002",
+      "status": "pending-mdx-render",
+      "selectedMdx": {
+        "name": "EH002",
+        "file": "data/model/Ship/GE/EH002.mdx",
+        "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EH002.mdx",
+        "sourceSha256": "83d6895cffe8814ca5b027d9975f5f500668472822605d2fb66f792345e415ca",
+        "detailTier": "high",
+        "nodeCount": 21,
+        "nodes": [
+          "EH002:Layer1",
+          "ENGINE_01",
+          "ENGINE_02",
+          "ENGINE_03",
+          "FF_01",
+          "FF_02",
+          "FF_03",
+          "FF_04",
+          "FR_01",
+          "FR_02",
+          "FL_01",
+          "FL_02",
+          "RR_01",
+          "RR_02",
+          "RL_01",
+          "RL_02",
+          "BEAM_01",
+          "MISSILE_01",
+          "GUN_01",
+          "GUN_02",
+          "LASER_01"
+        ],
+        "assets": [
+          "W:\\Gin7\\CG\\D\\objects\\EH002\\EH002.lwo",
+          "W:\\Gin7\\CG\\D\\images\\EH002.bmp",
+          "W:\\Gin7\\CG\\D\\images\\meca_tile2.bmp"
+        ]
+      },
+      "candidates": [
+        {
+          "name": "EH002",
+          "file": "data/model/Ship/GE/EH002.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EH002.mdx",
+          "sourceSha256": "83d6895cffe8814ca5b027d9975f5f500668472822605d2fb66f792345e415ca",
+          "detailTier": "high",
+          "nodeCount": 21,
+          "nodes": [
+            "EH002:Layer1",
+            "ENGINE_01",
+            "ENGINE_02",
+            "ENGINE_03",
+            "FF_01",
+            "FF_02",
+            "FF_03",
+            "FF_04",
+            "FR_01",
+            "FR_02",
+            "FL_01",
+            "FL_02",
+            "RR_01",
+            "RR_02",
+            "RL_01",
+            "RL_02",
+            "BEAM_01",
+            "MISSILE_01",
+            "GUN_01",
+            "GUN_02",
+            "LASER_01"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\D\\objects\\EH002\\EH002.lwo",
+            "W:\\Gin7\\CG\\D\\images\\EH002.bmp",
+            "W:\\Gin7\\CG\\D\\images\\meca_tile2.bmp"
+          ]
+        },
+        {
+          "name": "em002",
+          "file": "data/model/Ship/GE/em002.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/em002.mdx",
+          "sourceSha256": "45d742fe1ce1cfba47fa71c0ecc4aa07a7c2643fbd9e1e6ad3de2a4310ef5696",
+          "detailTier": "medium",
+          "nodeCount": 21,
+          "nodes": [
+            "EM002:Layer1",
+            "ENGINE_01",
+            "ENGINE_02",
+            "ENGINE_03",
+            "FF_01",
+            "FF_02",
+            "FF_03",
+            "FF_04",
+            "FR_01",
+            "FR_02",
+            "FL_01",
+            "FL_02",
+            "RR_01",
+            "RR_02",
+            "RL_01",
+            "RL_02",
+            "BEAM_01",
+            "MISSILE_01",
+            "GUN_01",
+            "GUN_02",
+            "LASER_01"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\D\\objects\\EM002\\EM002.lwo",
+            "D\\images\\EM002\\el002_body3_s.bmp"
+          ]
+        },
+        {
+          "name": "EL002",
+          "file": "data/model/Ship/GE/EL002.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EL002.mdx",
+          "sourceSha256": "216728309cb90000eaf960e3eab63d17c36f14defd1da3137073ccf2f7aa587a",
+          "detailTier": "low",
+          "nodeCount": 4,
+          "nodes": [
+            "EL002:Layer1",
+            "ENGINE_01",
+            "ENGINE_02",
+            "ENGINE_03"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\D\\objects\\EL002.lwo"
+          ]
+        }
+      ]
+    },
+    {
+      "hullId": "003",
+      "status": "pending-mdx-render",
+      "selectedMdx": {
+        "name": "EH003",
+        "file": "data/model/Ship/GE/EH003.mdx",
+        "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EH003.mdx",
+        "sourceSha256": "76e8d00182599306688637e42328ae7c81e259c157220a2c39fb5f1f191209ea",
+        "detailTier": "high",
+        "nodeCount": 20,
+        "nodes": [
+          "EH003:Layer1",
+          "ENGINE_01",
+          "ENGINE_02",
+          "ENGINE_03",
+          "BEAM_01",
+          "FF_01",
+          "FF_02",
+          "FR_01",
+          "FR_02",
+          "FL_01",
+          "FL_02",
+          "MISSILE_01",
+          "GUN_01",
+          "GUN_02",
+          "LASER_01",
+          "null",
+          "RR_01",
+          "RR_02",
+          "RL_01",
+          "RL_02"
+        ],
+        "assets": [
+          "W:\\Gin7\\CG\\D\\objects\\EH003\\EH003.lwo",
+          "W:\\Gin7\\CG\\D\\images\\eh003.bmp",
+          "W:\\Gin7\\CG\\D\\images\\meca_tile.bmp",
+          "W:\\Gin7\\CG\\D\\images\\eh003_bump.bmp"
+        ]
+      },
+      "candidates": [
+        {
+          "name": "EH003",
+          "file": "data/model/Ship/GE/EH003.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EH003.mdx",
+          "sourceSha256": "76e8d00182599306688637e42328ae7c81e259c157220a2c39fb5f1f191209ea",
+          "detailTier": "high",
+          "nodeCount": 20,
+          "nodes": [
+            "EH003:Layer1",
+            "ENGINE_01",
+            "ENGINE_02",
+            "ENGINE_03",
+            "BEAM_01",
+            "FF_01",
+            "FF_02",
+            "FR_01",
+            "FR_02",
+            "FL_01",
+            "FL_02",
+            "MISSILE_01",
+            "GUN_01",
+            "GUN_02",
+            "LASER_01",
+            "null",
+            "RR_01",
+            "RR_02",
+            "RL_01",
+            "RL_02"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\D\\objects\\EH003\\EH003.lwo",
+            "W:\\Gin7\\CG\\D\\images\\eh003.bmp",
+            "W:\\Gin7\\CG\\D\\images\\meca_tile.bmp",
+            "W:\\Gin7\\CG\\D\\images\\eh003_bump.bmp"
+          ]
+        },
+        {
+          "name": "em003",
+          "file": "data/model/Ship/GE/em003.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/em003.mdx",
+          "sourceSha256": "996cdc97e0f2f033a32b4a898e59e0ca443c26637ac64f5d66c180416e757595",
+          "detailTier": "medium",
+          "nodeCount": 20,
+          "nodes": [
+            "EM003:Layer1",
+            "ENGINE_01",
+            "ENGINE_02",
+            "ENGINE_03",
+            "BEAM_01",
+            "FF_01",
+            "FF_02",
+            "FR_01",
+            "FR_02",
+            "FL_01",
+            "FL_02",
+            "MISSILE_01",
+            "GUN_01",
+            "GUN_02",
+            "LASER_01",
+            "null",
+            "RR_01",
+            "RR_02",
+            "RL_01",
+            "RL_02"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\D\\objects\\EM003\\EM003.lwo",
+            "D\\images\\EM003\\el003_body_t2.bmp"
+          ]
+        },
+        {
+          "name": "EL003",
+          "file": "data/model/Ship/GE/EL003.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EL003.mdx",
+          "sourceSha256": "2a1840f5e937f628f4184ab1256204cd1ca662bd8c57e3096f86b4911f10ce7a",
+          "detailTier": "low",
+          "nodeCount": 5,
+          "nodes": [
+            "EL003:Layer1",
+            "ENGINE_01",
+            "ENGINE_02",
+            "ENGINE_03",
+            "null"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\D\\objects\\EL003.lwo"
+          ]
+        }
+      ]
+    },
+    {
+      "hullId": "004",
+      "status": "pending-mdx-render",
+      "selectedMdx": {
+        "name": "EH004",
+        "file": "data/model/Ship/GE/EH004.mdx",
+        "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EH004.mdx",
+        "sourceSha256": "21ad766bc22f012c3d786a0ce339ee7b3dde8aac4a979c5eecf4a615289d5e4f",
+        "detailTier": "high",
+        "nodeCount": 19,
+        "nodes": [
+          "EH004:Layer1",
+          "BEAM_02",
+          "FR_01",
+          "FR_02",
+          "FL_01",
+          "FL_02",
+          "RR_01",
+          "RR_02",
+          "RL_01",
+          "RL_02",
+          "FF_01",
+          "FF_02",
+          "MISSILE_01",
+          "GUN_01",
+          "GUN_02",
+          "LASER_01",
+          "ENGINE_01",
+          "ENGINE_02",
+          "ENGINE_03"
+        ],
+        "assets": [
+          "W:\\Gin7\\CG\\D\\objects\\EH004\\EH004.lwo",
+          "W:\\Gin7\\CG\\D\\images\\EH004.bmp",
+          "W:\\Gin7\\CG\\D\\images\\meca_tile2.bmp",
+          "W:\\Gin7\\CG\\D\\images\\EH004_bump.bmp"
+        ]
+      },
+      "candidates": [
+        {
+          "name": "EH004",
+          "file": "data/model/Ship/GE/EH004.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EH004.mdx",
+          "sourceSha256": "21ad766bc22f012c3d786a0ce339ee7b3dde8aac4a979c5eecf4a615289d5e4f",
+          "detailTier": "high",
+          "nodeCount": 19,
+          "nodes": [
+            "EH004:Layer1",
+            "BEAM_02",
+            "FR_01",
+            "FR_02",
+            "FL_01",
+            "FL_02",
+            "RR_01",
+            "RR_02",
+            "RL_01",
+            "RL_02",
+            "FF_01",
+            "FF_02",
+            "MISSILE_01",
+            "GUN_01",
+            "GUN_02",
+            "LASER_01",
+            "ENGINE_01",
+            "ENGINE_02",
+            "ENGINE_03"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\D\\objects\\EH004\\EH004.lwo",
+            "W:\\Gin7\\CG\\D\\images\\EH004.bmp",
+            "W:\\Gin7\\CG\\D\\images\\meca_tile2.bmp",
+            "W:\\Gin7\\CG\\D\\images\\EH004_bump.bmp"
+          ]
+        },
+        {
+          "name": "em004",
+          "file": "data/model/Ship/GE/em004.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/em004.mdx",
+          "sourceSha256": "bd8f2fc7fc7339898d8ef71a35c209eaba7ce99258302db016e24649f426d565",
+          "detailTier": "medium",
+          "nodeCount": 19,
+          "nodes": [
+            "EM004:Layer1",
+            "BEAM_02",
+            "FR_01",
+            "FR_02",
+            "FL_01",
+            "FL_02",
+            "RR_01",
+            "RR_02",
+            "RL_01",
+            "RL_02",
+            "FF_01",
+            "FF_02",
+            "MISSILE_01",
+            "GUN_01",
+            "GUN_02",
+            "LASER_01",
+            "ENGINE_01",
+            "ENGINE_02",
+            "ENGINE_03"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\D\\objects\\EM004\\EM004.lwo",
+            "D\\images\\EM004\\el004_body_t1.bmp"
+          ]
+        },
+        {
+          "name": "EL004",
+          "file": "data/model/Ship/GE/EL004.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EL004.mdx",
+          "sourceSha256": "c1449bb9a9d4bb408de951db2ad1dadbdc762ed0af9789e8fcafb7a251e89242",
+          "detailTier": "low",
+          "nodeCount": 4,
+          "nodes": [
+            "EL004:Layer1",
+            "ENGINE_01",
+            "ENGINE_02",
+            "ENGINE_03"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\D\\objects\\EL004.lwo"
+          ]
+        }
+      ]
+    },
+    {
+      "hullId": "005",
+      "status": "pending-mdx-render",
+      "selectedMdx": {
+        "name": "EH005",
+        "file": "data/model/Ship/GE/EH005.mdx",
+        "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EH005.mdx",
+        "sourceSha256": "a6c0a97f36641c1cf5c3bacbb8c12a611a8e43e7454c0be768f644570b629c98",
+        "detailTier": "high",
+        "nodeCount": 22,
+        "nodes": [
+          "EH005:Layer1",
+          "ENGINE_01",
+          "ENGINE_02",
+          "ENGINE_03",
+          "ENGINE_04",
+          "BEAM_01",
+          "FF_01",
+          "FF_02",
+          "FF_03",
+          "FF_04",
+          "FR_01",
+          "FR_02",
+          "FL_01",
+          "FL_02",
+          "RR_01",
+          "RR_02",
+          "RL_01",
+          "RL_02",
+          "MISSILE_01",
+          "LASER_01",
+          "GUN_01",
+          "GUN_02"
+        ],
+        "assets": [
+          "W:\\Gin7\\CG\\D\\objects\\EH005\\EH005.lwo",
+          "W:\\Gin7\\CG\\D\\images\\eh005.bmp",
+          "W:\\Gin7\\CG\\D\\images\\meca_tile.bmp",
+          "W:\\Gin7\\CG\\D\\images\\eh005_bump.bmp"
+        ]
+      },
+      "candidates": [
+        {
+          "name": "EH005",
+          "file": "data/model/Ship/GE/EH005.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EH005.mdx",
+          "sourceSha256": "a6c0a97f36641c1cf5c3bacbb8c12a611a8e43e7454c0be768f644570b629c98",
+          "detailTier": "high",
+          "nodeCount": 22,
+          "nodes": [
+            "EH005:Layer1",
+            "ENGINE_01",
+            "ENGINE_02",
+            "ENGINE_03",
+            "ENGINE_04",
+            "BEAM_01",
+            "FF_01",
+            "FF_02",
+            "FF_03",
+            "FF_04",
+            "FR_01",
+            "FR_02",
+            "FL_01",
+            "FL_02",
+            "RR_01",
+            "RR_02",
+            "RL_01",
+            "RL_02",
+            "MISSILE_01",
+            "LASER_01",
+            "GUN_01",
+            "GUN_02"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\D\\objects\\EH005\\EH005.lwo",
+            "W:\\Gin7\\CG\\D\\images\\eh005.bmp",
+            "W:\\Gin7\\CG\\D\\images\\meca_tile.bmp",
+            "W:\\Gin7\\CG\\D\\images\\eh005_bump.bmp"
+          ]
+        },
+        {
+          "name": "em005",
+          "file": "data/model/Ship/GE/em005.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/em005.mdx",
+          "sourceSha256": "26777d3cd1235feeb5a5edf0164146cc3a73c0b529e5827529e040ab69441156",
+          "detailTier": "medium",
+          "nodeCount": 22,
+          "nodes": [
+            "EM005:Layer1",
+            "ENGINE_01",
+            "ENGINE_02",
+            "ENGINE_03",
+            "ENGINE_04",
+            "BEAM_01",
+            "FF_01",
+            "FF_02",
+            "FF_03",
+            "FF_04",
+            "FR_01",
+            "FR_02",
+            "FL_01",
+            "FL_02",
+            "RR_01",
+            "RR_02",
+            "RL_01",
+            "RL_02",
+            "MISSILE_01",
+            "LASER_01",
+            "GUN_01",
+            "GUN_02"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\D\\objects\\EM005\\EM005.lwo",
+            "D\\images\\EM005\\el005_body_bot2.bmp"
+          ]
+        },
+        {
+          "name": "EL005",
+          "file": "data/model/Ship/GE/EL005.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EL005.mdx",
+          "sourceSha256": "10d13736096d59464b5f0135e6b687d25c7391cc8393b9f3702fe6e2e2c5c78f",
+          "detailTier": "low",
+          "nodeCount": 5,
+          "nodes": [
+            "EL005:Layer1",
+            "ENGINE_01",
+            "ENGINE_02",
+            "ENGINE_03",
+            "ENGINE_04"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\D\\objects\\EL005.lwo"
+          ]
+        }
+      ]
+    },
+    {
+      "hullId": "006",
+      "status": "pending-mdx-render",
+      "selectedMdx": {
+        "name": "EH006",
+        "file": "data/model/Ship/GE/EH006.mdx",
+        "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EH006.mdx",
+        "sourceSha256": "96a978d99e6308560f1990b82124addf532a04f52b7a0e4dcfe0aaa469971cfb",
+        "detailTier": "high",
+        "nodeCount": 21,
+        "nodes": [
+          "EH006:Layer1",
+          "ENGINE_01",
+          "ENGINE_02",
+          "ENGINE_03",
+          "BEAM_01",
+          "FF_01",
+          "FF_02",
+          "FF_03",
+          "FF_04",
+          "FR_01",
+          "FR_02",
+          "FL_01",
+          "FL_02",
+          "LR_01",
+          "LR_02",
+          "LL_01",
+          "LL_02",
+          "MISSILE_01",
+          "GUN_01",
+          "GUN_02",
+          "LASER_01"
+        ],
+        "assets": [
+          "W:\\Gin7\\CG\\D\\objects\\EH006\\EH006.lwo",
+          "W:\\Gin7\\CG\\D\\images\\eh006.bmp",
+          "W:\\Gin7\\CG\\D\\images\\meca_tile.bmp",
+          "W:\\Gin7\\CG\\D\\images\\eh006_bump.bmp"
+        ]
+      },
+      "candidates": [
+        {
+          "name": "EH006",
+          "file": "data/model/Ship/GE/EH006.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EH006.mdx",
+          "sourceSha256": "96a978d99e6308560f1990b82124addf532a04f52b7a0e4dcfe0aaa469971cfb",
+          "detailTier": "high",
+          "nodeCount": 21,
+          "nodes": [
+            "EH006:Layer1",
+            "ENGINE_01",
+            "ENGINE_02",
+            "ENGINE_03",
+            "BEAM_01",
+            "FF_01",
+            "FF_02",
+            "FF_03",
+            "FF_04",
+            "FR_01",
+            "FR_02",
+            "FL_01",
+            "FL_02",
+            "LR_01",
+            "LR_02",
+            "LL_01",
+            "LL_02",
+            "MISSILE_01",
+            "GUN_01",
+            "GUN_02",
+            "LASER_01"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\D\\objects\\EH006\\EH006.lwo",
+            "W:\\Gin7\\CG\\D\\images\\eh006.bmp",
+            "W:\\Gin7\\CG\\D\\images\\meca_tile.bmp",
+            "W:\\Gin7\\CG\\D\\images\\eh006_bump.bmp"
+          ]
+        },
+        {
+          "name": "em006",
+          "file": "data/model/Ship/GE/em006.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/em006.mdx",
+          "sourceSha256": "5f5cc058a5287bb60856f4c51c0499f92eb95c0bb71cea9b527f3962638dfd12",
+          "detailTier": "medium",
+          "nodeCount": 21,
+          "nodes": [
+            "EM006:Layer1",
+            "ENGINE_01",
+            "ENGINE_02",
+            "ENGINE_03",
+            "BEAM_01",
+            "FF_01",
+            "FF_02",
+            "FF_03",
+            "FF_04",
+            "FR_01",
+            "FR_02",
+            "FL_01",
+            "FL_02",
+            "LR_01",
+            "LR_02",
+            "LL_01",
+            "LL_02",
+            "MISSILE_01",
+            "GUN_01",
+            "GUN_02",
+            "LASER_01"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\D\\objects\\EM006\\EM006.lwo",
+            "D\\images\\EM006\\el006_body_s02.bmp"
+          ]
+        },
+        {
+          "name": "EL006",
+          "file": "data/model/Ship/GE/EL006.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EL006.mdx",
+          "sourceSha256": "cc51edfafc7af89fbd00116814d70e49ed347797145b98b7091db613cc55fe0d",
+          "detailTier": "low",
+          "nodeCount": 4,
+          "nodes": [
+            "EL006:Layer1",
+            "ENGINE_01",
+            "ENGINE_02",
+            "ENGINE_03"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\D\\objects\\EL006.lwo"
+          ]
+        }
+      ]
+    },
+    {
+      "hullId": "007",
+      "status": "pending-mdx-render",
+      "selectedMdx": {
+        "name": "EH007",
+        "file": "data/model/Ship/GE/EH007.mdx",
+        "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EH007.mdx",
+        "sourceSha256": "f42ebc33d83d990c747d27c21dcd26a36c931baa9d70e7befed8fad921acd8a0",
+        "detailTier": "high",
+        "nodeCount": 24,
+        "nodes": [
+          "EH007:Layer1",
+          "ENGINE_01",
+          "ENGINE_02",
+          "ENGINE_03",
+          "ENGINE_04",
+          "ENGINE_05",
+          "ENGINE_06",
+          "BEAM_01",
+          "FF_01",
+          "FF_02",
+          "FF_03",
+          "FF_04",
+          "FR_01",
+          "FR_02",
+          "FL_01",
+          "FL_02",
+          "LR_01",
+          "LR_02",
+          "LL_01",
+          "LL_02",
+          "MISSILE_01",
+          "GUN_01",
+          "GUN_02",
+          "LASER_01"
+        ],
+        "assets": [
+          "W:\\Gin7\\CG\\D\\objects\\EH007\\EH007.lwo",
+          "W:\\Gin7\\CG\\D\\images\\eh007.bmp",
+          "W:\\Gin7\\CG\\D\\images\\meca_tile.bmp"
+        ]
+      },
+      "candidates": [
+        {
+          "name": "EH007",
+          "file": "data/model/Ship/GE/EH007.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EH007.mdx",
+          "sourceSha256": "f42ebc33d83d990c747d27c21dcd26a36c931baa9d70e7befed8fad921acd8a0",
+          "detailTier": "high",
+          "nodeCount": 24,
+          "nodes": [
+            "EH007:Layer1",
+            "ENGINE_01",
+            "ENGINE_02",
+            "ENGINE_03",
+            "ENGINE_04",
+            "ENGINE_05",
+            "ENGINE_06",
+            "BEAM_01",
+            "FF_01",
+            "FF_02",
+            "FF_03",
+            "FF_04",
+            "FR_01",
+            "FR_02",
+            "FL_01",
+            "FL_02",
+            "LR_01",
+            "LR_02",
+            "LL_01",
+            "LL_02",
+            "MISSILE_01",
+            "GUN_01",
+            "GUN_02",
+            "LASER_01"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\D\\objects\\EH007\\EH007.lwo",
+            "W:\\Gin7\\CG\\D\\images\\eh007.bmp",
+            "W:\\Gin7\\CG\\D\\images\\meca_tile.bmp"
+          ]
+        },
+        {
+          "name": "em007",
+          "file": "data/model/Ship/GE/em007.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/em007.mdx",
+          "sourceSha256": "39ecf39b2635ffeb050cf2635290ab378664e5d037bce716541579af6ca78425",
+          "detailTier": "medium",
+          "nodeCount": 25,
+          "nodes": [
+            "EM007:Layer1",
+            "EM007_fin:Layer1",
+            "ENGINE_01",
+            "ENGINE_02",
+            "ENGINE_03",
+            "ENGINE_04",
+            "ENGINE_05",
+            "ENGINE_06",
+            "BEAM_01",
+            "FF_01",
+            "FF_02",
+            "FF_03",
+            "FF_04",
+            "FR_01",
+            "FR_02",
+            "FL_01",
+            "FL_02",
+            "LR_01",
+            "LR_02",
+            "LL_01",
+            "LL_02",
+            "MISSILE_01",
+            "GUN_01",
+            "GUN_02",
+            "LASER_01"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\D\\objects\\EM007\\EM007.lwo",
+            "W:\\Gin7\\CG\\D\\objects\\EM007\\EM007_fin.lwo",
+            "D\\images\\EM007\\el007_z1.bmp"
+          ]
+        },
+        {
+          "name": "EL007",
+          "file": "data/model/Ship/GE/EL007.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EL007.mdx",
+          "sourceSha256": "c25050c77100b3e1e7d0531a4c7d9f102497a41fea6cbea35d4d07bfe716e51b",
+          "detailTier": "low",
+          "nodeCount": 7,
+          "nodes": [
+            "EL007:Layer1",
+            "ENGINE_01",
+            "ENGINE_02",
+            "ENGINE_03",
+            "ENGINE_04",
+            "ENGINE_05",
+            "ENGINE_06"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\D\\objects\\EL007.lwo"
+          ]
+        }
+      ]
+    },
+    {
+      "hullId": "008",
+      "status": "pending-mdx-render",
+      "selectedMdx": {
+        "name": "EH008",
+        "file": "data/model/Ship/GE/EH008.mdx",
+        "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EH008.mdx",
+        "sourceSha256": "b3c5d9d90c5412ba1ae7389181fe208a4897f58f84f9263ff3cc02b0a8fd7c38",
+        "detailTier": "high",
+        "nodeCount": 22,
+        "nodes": [
+          "EH008:Layer1",
+          "ENGINE_01",
+          "ENGINE_02",
+          "ENGINE_03",
+          "ENGINE_04",
+          "BEAM_01",
+          "FF_01",
+          "FF_02",
+          "FF_03",
+          "FF_04",
+          "FR_01",
+          "FR_02",
+          "FL_01",
+          "FL_02",
+          "LR_01",
+          "LR_02",
+          "LL_01",
+          "LL_02",
+          "MISSILE_01",
+          "GUN_01",
+          "GUN_02",
+          "LASER_01"
+        ],
+        "assets": [
+          "W:\\Gin7\\CG\\D\\objects\\EH008\\EH008.lwo",
+          "W:\\Gin7\\CG\\D\\images\\EH008.bmp",
+          "W:\\Gin7\\CG\\D\\images\\meca_tile1.bmp"
+        ]
+      },
+      "candidates": [
+        {
+          "name": "EH008",
+          "file": "data/model/Ship/GE/EH008.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EH008.mdx",
+          "sourceSha256": "b3c5d9d90c5412ba1ae7389181fe208a4897f58f84f9263ff3cc02b0a8fd7c38",
+          "detailTier": "high",
+          "nodeCount": 22,
+          "nodes": [
+            "EH008:Layer1",
+            "ENGINE_01",
+            "ENGINE_02",
+            "ENGINE_03",
+            "ENGINE_04",
+            "BEAM_01",
+            "FF_01",
+            "FF_02",
+            "FF_03",
+            "FF_04",
+            "FR_01",
+            "FR_02",
+            "FL_01",
+            "FL_02",
+            "LR_01",
+            "LR_02",
+            "LL_01",
+            "LL_02",
+            "MISSILE_01",
+            "GUN_01",
+            "GUN_02",
+            "LASER_01"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\D\\objects\\EH008\\EH008.lwo",
+            "W:\\Gin7\\CG\\D\\images\\EH008.bmp",
+            "W:\\Gin7\\CG\\D\\images\\meca_tile1.bmp"
+          ]
+        },
+        {
+          "name": "em008",
+          "file": "data/model/Ship/GE/em008.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/em008.mdx",
+          "sourceSha256": "05323dc8f94b8db091580d0b7df43f3bd9d62c14470087a8bac762fcd532d3c3",
+          "detailTier": "medium",
+          "nodeCount": 22,
+          "nodes": [
+            "EM008:Layer1",
+            "ENGINE_01",
+            "ENGINE_02",
+            "ENGINE_03",
+            "ENGINE_04",
+            "BEAM_01",
+            "FF_01",
+            "FF_02",
+            "FF_03",
+            "FF_04",
+            "FR_01",
+            "FR_02",
+            "FL_01",
+            "FL_02",
+            "LR_01",
+            "LR_02",
+            "LL_01",
+            "LL_02",
+            "MISSILE_01",
+            "GUN_01",
+            "GUN_02",
+            "LASER_01"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\D\\objects\\EM008\\EM008.lwo",
+            "D\\images\\EM008\\el008_sp_os.bmp"
+          ]
+        },
+        {
+          "name": "EL008",
+          "file": "data/model/Ship/GE/EL008.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EL008.mdx",
+          "sourceSha256": "d408182fcd7b7571a67ebc80f9f9ec8ff4512e0053bca3d10ca6e77e5766e813",
+          "detailTier": "low",
+          "nodeCount": 5,
+          "nodes": [
+            "EL008:Layer1",
+            "ENGINE_01",
+            "ENGINE_02",
+            "ENGINE_03",
+            "ENGINE_04"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\D\\objects\\EL008.lwo"
+          ]
+        }
+      ]
+    },
+    {
+      "hullId": "009",
+      "status": "pending-mdx-render",
+      "selectedMdx": {
+        "name": "EH009",
+        "file": "data/model/Ship/GE/EH009.mdx",
+        "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EH009.mdx",
+        "sourceSha256": "6c5ae20574890aea3ae89ff7a38cea817162afe9e26d917e4221b97cac6dbd12",
+        "detailTier": "high",
+        "nodeCount": 22,
+        "nodes": [
+          "EH009:Layer1",
+          "ENGINE_01",
+          "ENGINE_02",
+          "ENGINE_03",
+          "ENGINE_04",
+          "FF_02",
+          "FF_01",
+          "FF_04",
+          "FF_03",
+          "FR_01",
+          "FR_02",
+          "RR_01",
+          "RR_02",
+          "FR_03",
+          "FR_04",
+          "RR_03",
+          "RR_04",
+          "BEAM_01",
+          "GUN_01",
+          "GUN_02",
+          "LASER_01",
+          "MISSILE_01"
+        ],
+        "assets": [
+          "W:\\Gin7\\CG\\D\\objects\\EH009\\EH009.lwo",
+          "W:\\Gin7\\CG\\D\\images\\EH009.bmp",
+          "W:\\Gin7\\CG\\D\\images\\meca_tile1.bmp",
+          "W:\\Gin7\\CG\\D\\images\\EH009_bump.bmp"
+        ]
+      },
+      "candidates": [
+        {
+          "name": "EH009",
+          "file": "data/model/Ship/GE/EH009.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EH009.mdx",
+          "sourceSha256": "6c5ae20574890aea3ae89ff7a38cea817162afe9e26d917e4221b97cac6dbd12",
+          "detailTier": "high",
+          "nodeCount": 22,
+          "nodes": [
+            "EH009:Layer1",
+            "ENGINE_01",
+            "ENGINE_02",
+            "ENGINE_03",
+            "ENGINE_04",
+            "FF_02",
+            "FF_01",
+            "FF_04",
+            "FF_03",
+            "FR_01",
+            "FR_02",
+            "RR_01",
+            "RR_02",
+            "FR_03",
+            "FR_04",
+            "RR_03",
+            "RR_04",
+            "BEAM_01",
+            "GUN_01",
+            "GUN_02",
+            "LASER_01",
+            "MISSILE_01"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\D\\objects\\EH009\\EH009.lwo",
+            "W:\\Gin7\\CG\\D\\images\\EH009.bmp",
+            "W:\\Gin7\\CG\\D\\images\\meca_tile1.bmp",
+            "W:\\Gin7\\CG\\D\\images\\EH009_bump.bmp"
+          ]
+        },
+        {
+          "name": "em009",
+          "file": "data/model/Ship/GE/em009.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/em009.mdx",
+          "sourceSha256": "89178eedfb6518986235954fe772bee3d06287a25bf5b5967941ce129c6c8086",
+          "detailTier": "medium",
+          "nodeCount": 22,
+          "nodes": [
+            "EM009:Layer1",
+            "ENGINE_01",
+            "ENGINE_02",
+            "ENGINE_03",
+            "ENGINE_04",
+            "FF_02",
+            "FF_01",
+            "FF_04",
+            "FF_03",
+            "FR_01",
+            "FR_02",
+            "RR_01",
+            "RR_02",
+            "FR_03",
+            "FR_04",
+            "RR_03",
+            "RR_04",
+            "BEAM_01",
+            "GUN_01",
+            "GUN_02",
+            "LASER_01",
+            "MISSILE_01"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\D\\objects\\EM009\\EM009.lwo",
+            "D\\images\\EM009\\el009_parts_04.bmp"
+          ]
+        },
+        {
+          "name": "EL009",
+          "file": "data/model/Ship/GE/EL009.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EL009.mdx",
+          "sourceSha256": "2f16eebf3beb61fef876f25ff2f9e2c0b338a02918a6b6638d1eb75cc3deb7bf",
+          "detailTier": "low",
+          "nodeCount": 5,
+          "nodes": [
+            "EL009:Layer1",
+            "ENGINE_01",
+            "ENGINE_02",
+            "ENGINE_03",
+            "ENGINE_04"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\D\\objects\\EL009.lwo"
+          ]
+        }
+      ]
+    },
+    {
+      "hullId": "010",
+      "status": "pending-mdx-render",
+      "selectedMdx": {
+        "name": "EH010",
+        "file": "data/model/Ship/GE/EH010.mdx",
+        "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EH010.mdx",
+        "sourceSha256": "b14367d49a69cbb5a3038520410c263f1d17cc52048a730ce5690d497c2c5a3f",
+        "detailTier": "high",
+        "nodeCount": 18,
+        "nodes": [
+          "ENGINE_01",
+          "ENGINE_02",
+          "BEAM_01",
+          "EH010:Layer1",
+          "FF_01",
+          "FF_02",
+          "GUN_01",
+          "GUN_02",
+          "FR_01",
+          "FR_02",
+          "FL_01",
+          "FL_02",
+          "RR_01",
+          "RR_02",
+          "RL_01",
+          "RL_02",
+          "MISSILE_01",
+          "LASER_01"
+        ],
+        "assets": [
+          "W:\\Gin7\\CG\\D\\objects\\EH010\\EH010.lwo",
+          "W:\\Gin7\\CG\\D\\images\\EH010.bmp",
+          "W:\\Gin7\\CG\\D\\images\\meca_tile1.bmp",
+          "W:\\Gin7\\CG\\D\\images\\EH010_bump.bmp"
+        ]
+      },
+      "candidates": [
+        {
+          "name": "EH010",
+          "file": "data/model/Ship/GE/EH010.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EH010.mdx",
+          "sourceSha256": "b14367d49a69cbb5a3038520410c263f1d17cc52048a730ce5690d497c2c5a3f",
+          "detailTier": "high",
+          "nodeCount": 18,
+          "nodes": [
+            "ENGINE_01",
+            "ENGINE_02",
+            "BEAM_01",
+            "EH010:Layer1",
+            "FF_01",
+            "FF_02",
+            "GUN_01",
+            "GUN_02",
+            "FR_01",
+            "FR_02",
+            "FL_01",
+            "FL_02",
+            "RR_01",
+            "RR_02",
+            "RL_01",
+            "RL_02",
+            "MISSILE_01",
+            "LASER_01"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\D\\objects\\EH010\\EH010.lwo",
+            "W:\\Gin7\\CG\\D\\images\\EH010.bmp",
+            "W:\\Gin7\\CG\\D\\images\\meca_tile1.bmp",
+            "W:\\Gin7\\CG\\D\\images\\EH010_bump.bmp"
+          ]
+        },
+        {
+          "name": "em010",
+          "file": "data/model/Ship/GE/em010.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/em010.mdx",
+          "sourceSha256": "ac786c5f5383183ca942b5d335b8bff8d19ec0c0fe99363cd82eebf6d4d17d25",
+          "detailTier": "medium",
+          "nodeCount": 18,
+          "nodes": [
+            "ENGINE_01",
+            "ENGINE_02",
+            "BEAM_01",
+            "EM010:Layer1",
+            "FF_01",
+            "FF_02",
+            "GUN_01",
+            "GUN_02",
+            "FR_01",
+            "FR_02",
+            "FL_01",
+            "FL_02",
+            "RR_01",
+            "RR_02",
+            "RL_01",
+            "RL_02",
+            "MISSILE_01",
+            "LASER_01"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\D\\objects\\EM010\\EM010.lwo",
+            "D\\images\\EM010\\el010_body2_s.bmp"
+          ]
+        },
+        {
+          "name": "EL010",
+          "file": "data/model/Ship/GE/EL010.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EL010.mdx",
+          "sourceSha256": "b366955ab4cba223b6c3bd1fd0810594d8408add9baee52f3d6ce7f180520d98",
+          "detailTier": "low",
+          "nodeCount": 3,
+          "nodes": [
+            "ENGINE_01",
+            "ENGINE_02",
+            "EL010:Layer1"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\D\\objects\\EL010.lwo"
+          ]
+        }
+      ]
+    },
+    {
+      "hullId": "011",
+      "status": "pending-mdx-render",
+      "selectedMdx": {
+        "name": "EH011",
+        "file": "data/model/Ship/GE/EH011.mdx",
+        "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EH011.mdx",
+        "sourceSha256": "1d14e94925de8c269e02c37a8173c93daeccf08f4b6fc8b291d248e5fd80d92a",
+        "detailTier": "high",
+        "nodeCount": 21,
+        "nodes": [
+          "EH011:Layer1",
+          "ENGINE_01",
+          "ENGINE_02",
+          "ENGINE_03",
+          "BEAM_01",
+          "FR_01",
+          "FR_02",
+          "FL_01",
+          "FL_02",
+          "RR_01",
+          "RR_02",
+          "RL_01",
+          "RL_02",
+          "FF_01",
+          "FF_02",
+          "FF_03",
+          "FF_04",
+          "MISSILE_01",
+          "LASER_01",
+          "GUN_01",
+          "GUN_02"
+        ],
+        "assets": [
+          "W:\\Gin7\\CG\\D\\objects\\EH011\\EH011.lwo",
+          "W:\\Gin7\\CG\\D\\images\\EH011.bmp",
+          "W:\\Gin7\\CG\\D\\images\\meca_tile1.bmp",
+          "W:\\Gin7\\CG\\D\\images\\EH011_bump.bmp"
+        ]
+      },
+      "candidates": [
+        {
+          "name": "EH011",
+          "file": "data/model/Ship/GE/EH011.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EH011.mdx",
+          "sourceSha256": "1d14e94925de8c269e02c37a8173c93daeccf08f4b6fc8b291d248e5fd80d92a",
+          "detailTier": "high",
+          "nodeCount": 21,
+          "nodes": [
+            "EH011:Layer1",
+            "ENGINE_01",
+            "ENGINE_02",
+            "ENGINE_03",
+            "BEAM_01",
+            "FR_01",
+            "FR_02",
+            "FL_01",
+            "FL_02",
+            "RR_01",
+            "RR_02",
+            "RL_01",
+            "RL_02",
+            "FF_01",
+            "FF_02",
+            "FF_03",
+            "FF_04",
+            "MISSILE_01",
+            "LASER_01",
+            "GUN_01",
+            "GUN_02"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\D\\objects\\EH011\\EH011.lwo",
+            "W:\\Gin7\\CG\\D\\images\\EH011.bmp",
+            "W:\\Gin7\\CG\\D\\images\\meca_tile1.bmp",
+            "W:\\Gin7\\CG\\D\\images\\EH011_bump.bmp"
+          ]
+        },
+        {
+          "name": "em011",
+          "file": "data/model/Ship/GE/em011.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/em011.mdx",
+          "sourceSha256": "209e698aecd17c721ee05453fc94dfb685064fff5dd87499e49f9fc604de2870",
+          "detailTier": "medium",
+          "nodeCount": 21,
+          "nodes": [
+            "EM011:Layer1",
+            "ENGINE_01",
+            "ENGINE_02",
+            "ENGINE_03",
+            "BEAM_01",
+            "FR_01",
+            "FR_02",
+            "FL_01",
+            "FL_02",
+            "RR_01",
+            "RR_02",
+            "RL_01",
+            "RL_02",
+            "FF_01",
+            "FF_02",
+            "FF_03",
+            "FF_04",
+            "MISSILE_01",
+            "LASER_01",
+            "GUN_01",
+            "GUN_02"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\D\\objects\\EM011\\EM011.lwo",
+            "D\\images\\EM011\\el011body_s1.bmp"
+          ]
+        },
+        {
+          "name": "EL011",
+          "file": "data/model/Ship/GE/EL011.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EL011.mdx",
+          "sourceSha256": "b3a8105ae93f7af774abad335c9341dc5ddb6e58f9f1c8fff6bf766f704f6127",
+          "detailTier": "low",
+          "nodeCount": 4,
+          "nodes": [
+            "EL011:Layer1",
+            "ENGINE_01",
+            "ENGINE_02",
+            "ENGINE_03"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\D\\objects\\EL011.lwo"
+          ]
+        }
+      ]
+    },
+    {
+      "hullId": "012",
+      "status": "pending-mdx-render",
+      "selectedMdx": {
+        "name": "EH012",
+        "file": "data/model/Ship/GE/EH012.mdx",
+        "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EH012.mdx",
+        "sourceSha256": "726988356d13084e5c022c48e8356a7f40b12300da89d3c6f70e8156c208e054",
+        "detailTier": "high",
+        "nodeCount": 21,
+        "nodes": [
+          "EH012:Layer1",
+          "ENGINE_01",
+          "ENGINE_02",
+          "ENGINE_03",
+          "BEAM_01",
+          "FF_01",
+          "FF_02",
+          "FF_03",
+          "FF_04",
+          "FR_01",
+          "FR_02",
+          "FL_01",
+          "FL_02",
+          "RR_01",
+          "RR_02",
+          "RL_01",
+          "RL_02",
+          "GUN_01",
+          "GUN_02",
+          "LASER_01",
+          "MISSILE_01"
+        ],
+        "assets": [
+          "W:\\Gin7\\CG\\D\\objects\\EH012\\EH012.lwo",
+          "W:\\Gin7\\CG\\D\\images\\eh012.bmp",
+          "W:\\Gin7\\CG\\D\\images\\meca_tile.bmp",
+          "W:\\Gin7\\CG\\D\\images\\EH012_bump.bmp"
+        ]
+      },
+      "candidates": [
+        {
+          "name": "EH012",
+          "file": "data/model/Ship/GE/EH012.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EH012.mdx",
+          "sourceSha256": "726988356d13084e5c022c48e8356a7f40b12300da89d3c6f70e8156c208e054",
+          "detailTier": "high",
+          "nodeCount": 21,
+          "nodes": [
+            "EH012:Layer1",
+            "ENGINE_01",
+            "ENGINE_02",
+            "ENGINE_03",
+            "BEAM_01",
+            "FF_01",
+            "FF_02",
+            "FF_03",
+            "FF_04",
+            "FR_01",
+            "FR_02",
+            "FL_01",
+            "FL_02",
+            "RR_01",
+            "RR_02",
+            "RL_01",
+            "RL_02",
+            "GUN_01",
+            "GUN_02",
+            "LASER_01",
+            "MISSILE_01"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\D\\objects\\EH012\\EH012.lwo",
+            "W:\\Gin7\\CG\\D\\images\\eh012.bmp",
+            "W:\\Gin7\\CG\\D\\images\\meca_tile.bmp",
+            "W:\\Gin7\\CG\\D\\images\\EH012_bump.bmp"
+          ]
+        },
+        {
+          "name": "EM012",
+          "file": "data/model/Ship/GE/EM012.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EM012.mdx",
+          "sourceSha256": "58eb86fb8af53ee3e851dfa91611a14f0bd3c972fa5d768497f84ccb98aeb751",
+          "detailTier": "medium",
+          "nodeCount": 21,
+          "nodes": [
+            "EM012:Layer1",
+            "ENGINE_01",
+            "ENGINE_02",
+            "ENGINE_03",
+            "BEAM_01",
+            "FF_01",
+            "FF_02",
+            "FF_03",
+            "FF_04",
+            "FR_01",
+            "FR_02",
+            "FL_01",
+            "FL_02",
+            "RR_01",
+            "RR_02",
+            "RL_01",
+            "RL_02",
+            "GUN_01",
+            "GUN_02",
+            "LASER_01",
+            "MISSILE_01"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\D\\objects\\EM012\\EM012.lwo",
+            "D\\images\\EM012\\el012_body_as2.bmp"
+          ]
+        },
+        {
+          "name": "EL012",
+          "file": "data/model/Ship/GE/EL012.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EL012.mdx",
+          "sourceSha256": "c1443778dae2955b7a1025954e693374c00d5e752007c489e7b5e3da5231ca93",
+          "detailTier": "low",
+          "nodeCount": 4,
+          "nodes": [
+            "EL012:Layer1",
+            "ENGINE_01",
+            "ENGINE_02",
+            "ENGINE_03"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\D\\objects\\EL012.lwo"
+          ]
+        }
+      ]
+    },
+    {
+      "hullId": "013",
+      "status": "pending-mdx-render",
+      "selectedMdx": {
+        "name": "EH013",
+        "file": "data/model/Ship/GE/EH013.mdx",
+        "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EH013.mdx",
+        "sourceSha256": "eac5bc8000d9381ffaaef7a9f487a1e511654d4f1104cf19bf918987d6833491",
+        "detailTier": "high",
+        "nodeCount": 23,
+        "nodes": [
+          "EH013:Layer1",
+          "ENGINE_01",
+          "ENGINE_03",
+          "ENGINE_04",
+          "ENGINE_05",
+          "ENGINE_06",
+          "BEAM_01",
+          "FF_01",
+          "FF_02",
+          "FF_03",
+          "FF_04",
+          "FR_01",
+          "FR_02",
+          "FL_01",
+          "FL_02",
+          "LR_01",
+          "LR_02",
+          "LL_01",
+          "LL_02",
+          "MISSILE_01",
+          "GUN_01",
+          "GUN_02",
+          "LASER_01"
+        ],
+        "assets": [
+          "W:\\Gin7\\CG\\D\\objects\\EH013\\EH013.lwo",
+          "W:\\Gin7\\CG\\D\\images\\EH013.bmp",
+          "W:\\Gin7\\CG\\D\\images\\meca_tile.bmp",
+          "W:\\Gin7\\CG\\D\\images\\EH013_bump.bmp",
+          "W:`/}?6"
+        ]
+      },
+      "candidates": [
+        {
+          "name": "EH013",
+          "file": "data/model/Ship/GE/EH013.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EH013.mdx",
+          "sourceSha256": "eac5bc8000d9381ffaaef7a9f487a1e511654d4f1104cf19bf918987d6833491",
+          "detailTier": "high",
+          "nodeCount": 23,
+          "nodes": [
+            "EH013:Layer1",
+            "ENGINE_01",
+            "ENGINE_03",
+            "ENGINE_04",
+            "ENGINE_05",
+            "ENGINE_06",
+            "BEAM_01",
+            "FF_01",
+            "FF_02",
+            "FF_03",
+            "FF_04",
+            "FR_01",
+            "FR_02",
+            "FL_01",
+            "FL_02",
+            "LR_01",
+            "LR_02",
+            "LL_01",
+            "LL_02",
+            "MISSILE_01",
+            "GUN_01",
+            "GUN_02",
+            "LASER_01"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\D\\objects\\EH013\\EH013.lwo",
+            "W:\\Gin7\\CG\\D\\images\\EH013.bmp",
+            "W:\\Gin7\\CG\\D\\images\\meca_tile.bmp",
+            "W:\\Gin7\\CG\\D\\images\\EH013_bump.bmp",
+            "W:`/}?6"
+          ]
+        },
+        {
+          "name": "em013",
+          "file": "data/model/Ship/GE/em013.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/em013.mdx",
+          "sourceSha256": "5ff82bd7097bcec87824b9188a0206917e2aba80255863da52d488b35d9fb7a5",
+          "detailTier": "medium",
+          "nodeCount": 25,
+          "nodes": [
+            "EM013:Layer1",
+            "ENGINE_01",
+            "ENGINE_03",
+            "ENGINE_04",
+            "ENGINE_05",
+            "ENGINE_06",
+            "BEAM_01",
+            "FF_01",
+            "FF_02",
+            "FF_03",
+            "FF_04",
+            "FR_01",
+            "FR_02",
+            "FL_01",
+            "FL_02",
+            "LR_01",
+            "LR_02",
+            "LL_01",
+            "LL_02",
+            "MISSILE_01",
+            "GUN_01",
+            "GUN_02",
+            "LASER_01",
+            "EM013_fin1:Layer1",
+            "EM013_fin2:Layer1"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\D\\objects\\EM013\\EM013.lwo",
+            "W:\\Gin7\\CG\\D\\objects\\EM013\\EM013_fin1.lwo",
+            "W:\\Gin7\\CG\\D\\objects\\EM013\\EM013_fin2.lwo",
+            "D\\images\\EM013\\el013_parts3_s.bmp"
+          ]
+        },
+        {
+          "name": "EL013",
+          "file": "data/model/Ship/GE/EL013.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EL013.mdx",
+          "sourceSha256": "9e77d6823404c82c4c840b1bffd2b4967f516b360c41a1593398331b75a023c3",
+          "detailTier": "low",
+          "nodeCount": 6,
+          "nodes": [
+            "EL013:Layer1",
+            "ENGINE_01",
+            "ENGINE_03",
+            "ENGINE_04",
+            "ENGINE_05",
+            "ENGINE_06"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\D\\objects\\EL013.lwo"
+          ]
+        }
+      ]
+    },
+    {
+      "hullId": "014",
+      "status": "pending-mdx-render",
+      "selectedMdx": {
+        "name": "EH014",
+        "file": "data/model/Ship/GE/EH014.mdx",
+        "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EH014.mdx",
+        "sourceSha256": "e15ac3d00382682ad6196c8eb7962518705fdac5e68213419c8b876de17f887d",
+        "detailTier": "high",
+        "nodeCount": 21,
+        "nodes": [
+          "EH014:Layer1",
+          "ENGINE_01",
+          "ENGINE_02",
+          "ENGINE_03",
+          "ENGINE_04",
+          "BEAM_01",
+          "FF_01",
+          "FF_02",
+          "FF_03",
+          "FF_04",
+          "FR_01",
+          "FR_02",
+          "FL_01",
+          "FL_02",
+          "RR_01",
+          "RR_02",
+          "RL_01",
+          "RL_02",
+          "MISSILE_01",
+          "GUN_01",
+          "LASER_01"
+        ],
+        "assets": [
+          "W:\\Gin7\\CG\\D\\objects\\EH014\\EH014.lwo",
+          "W:\\Gin7\\CG\\D\\images\\EH014.bmp",
+          "W:\\Gin7\\CG\\D\\images\\meca_tile1.bmp",
+          "W:\\Gin7\\CG\\D\\images\\EH014_bump.tga"
+        ]
+      },
+      "candidates": [
+        {
+          "name": "EH014",
+          "file": "data/model/Ship/GE/EH014.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EH014.mdx",
+          "sourceSha256": "e15ac3d00382682ad6196c8eb7962518705fdac5e68213419c8b876de17f887d",
+          "detailTier": "high",
+          "nodeCount": 21,
+          "nodes": [
+            "EH014:Layer1",
+            "ENGINE_01",
+            "ENGINE_02",
+            "ENGINE_03",
+            "ENGINE_04",
+            "BEAM_01",
+            "FF_01",
+            "FF_02",
+            "FF_03",
+            "FF_04",
+            "FR_01",
+            "FR_02",
+            "FL_01",
+            "FL_02",
+            "RR_01",
+            "RR_02",
+            "RL_01",
+            "RL_02",
+            "MISSILE_01",
+            "GUN_01",
+            "LASER_01"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\D\\objects\\EH014\\EH014.lwo",
+            "W:\\Gin7\\CG\\D\\images\\EH014.bmp",
+            "W:\\Gin7\\CG\\D\\images\\meca_tile1.bmp",
+            "W:\\Gin7\\CG\\D\\images\\EH014_bump.tga"
+          ]
+        },
+        {
+          "name": "em014",
+          "file": "data/model/Ship/GE/em014.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/em014.mdx",
+          "sourceSha256": "63c73eab791da2ffb0a94ad8c983221dfd48d1232e1f5076140572e43ff6c762",
+          "detailTier": "medium",
+          "nodeCount": 21,
+          "nodes": [
+            "EM014:Layer1",
+            "ENGINE_01",
+            "ENGINE_02",
+            "ENGINE_03",
+            "ENGINE_04",
+            "BEAM_01",
+            "FF_01",
+            "FF_02",
+            "FF_03",
+            "FF_04",
+            "FR_01",
+            "FR_02",
+            "FL_01",
+            "FL_02",
+            "RR_01",
+            "RR_02",
+            "RL_01",
+            "RL_02",
+            "MISSILE_01",
+            "GUN_01",
+            "LASER_01"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\D\\objects\\EM014\\EM014.lwo",
+            "D\\images\\EM014\\EL014_side_1.bmp"
+          ]
+        },
+        {
+          "name": "EL014",
+          "file": "data/model/Ship/GE/EL014.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EL014.mdx",
+          "sourceSha256": "0e8da44fea8d1a2f7cc3ece9695b6b0b35ce283c1a03346ca5c72a860150b8d7",
+          "detailTier": "low",
+          "nodeCount": 5,
+          "nodes": [
+            "EL014:Layer1",
+            "ENGINE_01",
+            "ENGINE_02",
+            "ENGINE_03",
+            "ENGINE_04"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\D\\objects\\EL014.lwo"
+          ]
+        }
+      ]
+    },
+    {
+      "hullId": "015",
+      "status": "pending-mdx-render",
+      "selectedMdx": {
+        "name": "EH015",
+        "file": "data/model/Ship/GE/EH015.mdx",
+        "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EH015.mdx",
+        "sourceSha256": "397aed43bf0dec327fed83dface01a672af2222aae64bac45a94016546a15bd1",
+        "detailTier": "high",
+        "nodeCount": 22,
+        "nodes": [
+          "EH015:Layer1",
+          "ENGINE_01",
+          "ENGINE_02",
+          "FR_01",
+          "FR_02",
+          "RR_01",
+          "RR_02",
+          "FL_01",
+          "FL_02",
+          "RL_01",
+          "RL_02",
+          "FF_01",
+          "FF_02",
+          "FF_03",
+          "FF_04",
+          "RAILGUN_01",
+          "RAILGUN_02",
+          "RAILGUN_03",
+          "RAILGUN_04",
+          "MISSILE_01",
+          "BEAM_01",
+          "LASER_01"
+        ],
+        "assets": [
+          "W:\\Gin7\\CG\\D\\objects\\EH015\\EH015.lwo",
+          "W:\\Gin7\\CG\\D\\images\\EH015.bmp",
+          "W:\\Gin7\\CG\\D\\images\\meca_tile.bmp",
+          "W:\\Gin7\\CG\\D\\images\\EH015_bump.bmp"
+        ]
+      },
+      "candidates": [
+        {
+          "name": "EH015",
+          "file": "data/model/Ship/GE/EH015.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EH015.mdx",
+          "sourceSha256": "397aed43bf0dec327fed83dface01a672af2222aae64bac45a94016546a15bd1",
+          "detailTier": "high",
+          "nodeCount": 22,
+          "nodes": [
+            "EH015:Layer1",
+            "ENGINE_01",
+            "ENGINE_02",
+            "FR_01",
+            "FR_02",
+            "RR_01",
+            "RR_02",
+            "FL_01",
+            "FL_02",
+            "RL_01",
+            "RL_02",
+            "FF_01",
+            "FF_02",
+            "FF_03",
+            "FF_04",
+            "RAILGUN_01",
+            "RAILGUN_02",
+            "RAILGUN_03",
+            "RAILGUN_04",
+            "MISSILE_01",
+            "BEAM_01",
+            "LASER_01"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\D\\objects\\EH015\\EH015.lwo",
+            "W:\\Gin7\\CG\\D\\images\\EH015.bmp",
+            "W:\\Gin7\\CG\\D\\images\\meca_tile.bmp",
+            "W:\\Gin7\\CG\\D\\images\\EH015_bump.bmp"
+          ]
+        },
+        {
+          "name": "em015",
+          "file": "data/model/Ship/GE/em015.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/em015.mdx",
+          "sourceSha256": "559c8c9252d27ea43b7743c064f7349eb8b31fcbb6e61a430bbe13d5307d8feb",
+          "detailTier": "medium",
+          "nodeCount": 22,
+          "nodes": [
+            "EM015:Layer1",
+            "ENGINE_01",
+            "ENGINE_02",
+            "FR_01",
+            "FR_02",
+            "RR_01",
+            "RR_02",
+            "FL_01",
+            "FL_02",
+            "RL_01",
+            "RL_02",
+            "FF_01",
+            "FF_02",
+            "FF_03",
+            "FF_04",
+            "RAILGUN_01",
+            "RAILGUN_02",
+            "RAILGUN_03",
+            "RAILGUN_04",
+            "MISSILE_01",
+            "BEAM_01",
+            "LASER_01"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\D\\objects\\EM015\\EM015.lwo",
+            "D\\images\\EM015\\el015_body_s1.bmp"
+          ]
+        },
+        {
+          "name": "EL015",
+          "file": "data/model/Ship/GE/EL015.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EL015.mdx",
+          "sourceSha256": "4d9f2e25438e8b13043ed01fdc34af5e8600e65c0fe1dfd26787b3c8305c0337",
+          "detailTier": "low",
+          "nodeCount": 3,
+          "nodes": [
+            "EL015:Layer1",
+            "ENGINE_01",
+            "ENGINE_02"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\D\\objects\\EL015.lwo"
+          ]
+        }
+      ]
+    },
+    {
+      "hullId": "016",
+      "status": "pending-mdx-render",
+      "selectedMdx": {
+        "name": "EH016",
+        "file": "data/model/Ship/GE/EH016.mdx",
+        "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EH016.mdx",
+        "sourceSha256": "107dd8d303b35188e78f57de9c7523712453576443866ea56717f2eff38745d9",
+        "detailTier": "high",
+        "nodeCount": 23,
+        "nodes": [
+          "EH016:Layer1",
+          "ENGINE_01",
+          "ENGINE_02",
+          "ENGINE_03",
+          "ENGINE_04",
+          "FF_01",
+          "FF_02",
+          "FF_03",
+          "FF_04",
+          "FR_01",
+          "FR_02",
+          "FL_01",
+          "FL_02",
+          "RR_01",
+          "RR_02",
+          "RR_03",
+          "RR_04",
+          "BEAM_01",
+          "MISSILE_01",
+          "MISSILE_02",
+          "GUN_01",
+          "GUN_02",
+          "LASER_01"
+        ],
+        "assets": [
+          "W:\\Gin7\\CG\\D\\objects\\EH016\\EH016.lwo",
+          "W:\\Gin7\\CG\\D\\images\\EH016.bmp",
+          "W:\\Gin7\\CG\\D\\images\\meca_tile1.bmp",
+          "W:\\Gin7\\CG\\D\\images\\EH016_bump.bmp"
+        ]
+      },
+      "candidates": [
+        {
+          "name": "EH016",
+          "file": "data/model/Ship/GE/EH016.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EH016.mdx",
+          "sourceSha256": "107dd8d303b35188e78f57de9c7523712453576443866ea56717f2eff38745d9",
+          "detailTier": "high",
+          "nodeCount": 23,
+          "nodes": [
+            "EH016:Layer1",
+            "ENGINE_01",
+            "ENGINE_02",
+            "ENGINE_03",
+            "ENGINE_04",
+            "FF_01",
+            "FF_02",
+            "FF_03",
+            "FF_04",
+            "FR_01",
+            "FR_02",
+            "FL_01",
+            "FL_02",
+            "RR_01",
+            "RR_02",
+            "RR_03",
+            "RR_04",
+            "BEAM_01",
+            "MISSILE_01",
+            "MISSILE_02",
+            "GUN_01",
+            "GUN_02",
+            "LASER_01"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\D\\objects\\EH016\\EH016.lwo",
+            "W:\\Gin7\\CG\\D\\images\\EH016.bmp",
+            "W:\\Gin7\\CG\\D\\images\\meca_tile1.bmp",
+            "W:\\Gin7\\CG\\D\\images\\EH016_bump.bmp"
+          ]
+        },
+        {
+          "name": "em016",
+          "file": "data/model/Ship/GE/em016.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/em016.mdx",
+          "sourceSha256": "64bad508a97b01483a9661fd02ba2208e86e819666d8d45a62ee2a6026f8236c",
+          "detailTier": "medium",
+          "nodeCount": 23,
+          "nodes": [
+            "EM016:Layer1",
+            "ENGINE_01",
+            "ENGINE_02",
+            "ENGINE_03",
+            "ENGINE_04",
+            "FF_01",
+            "FF_02",
+            "FF_03",
+            "FF_04",
+            "FR_01",
+            "FR_02",
+            "FL_01",
+            "FL_02",
+            "RR_01",
+            "RR_02",
+            "RR_03",
+            "RR_04",
+            "BEAM_01",
+            "MISSILE_01",
+            "MISSILE_02",
+            "GUN_01",
+            "GUN_02",
+            "LASER_01"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\D\\objects\\EM016\\EM016.lwo",
+            "D\\images\\EM016\\el016_parts_01.bmp"
+          ]
+        },
+        {
+          "name": "EL016",
+          "file": "data/model/Ship/GE/EL016.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EL016.mdx",
+          "sourceSha256": "d206f5818ab6e74989efb9e86986f1d3ab96cb7ca2343bec083f584012fda8da",
+          "detailTier": "low",
+          "nodeCount": 5,
+          "nodes": [
+            "EL017:Layer1",
+            "ENGINE_01",
+            "ENGINE_02",
+            "ENGINE_03",
+            "ENGINE_04"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\D\\objects\\EL017.lwo"
+          ]
+        }
+      ]
+    },
+    {
+      "hullId": "017",
+      "status": "pending-mdx-render",
+      "selectedMdx": {
+        "name": "EH017",
+        "file": "data/model/Ship/GE/EH017.mdx",
+        "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EH017.mdx",
+        "sourceSha256": "fd6d3c5c625b818cef6210d147233577582e6c1b8214b9c6b9667277b30eccea",
+        "detailTier": "high",
+        "nodeCount": 29,
+        "nodes": [
+          "EH017.lwo",
+          "B1_1",
+          "B1_2",
+          "B3b_1",
+          "B3b_2",
+          "B3a_1",
+          "B3a_2",
+          "B4b_1",
+          "B4b_2",
+          "B4a_1",
+          "B4a_2",
+          "B5a_1",
+          "B5a_2",
+          "B5b_1",
+          "B5b_2",
+          "B6a_1",
+          "B6a_2",
+          "B6b_1",
+          "B6b_2",
+          "B2_1",
+          "B2_2",
+          "B2_3",
+          "B2_4",
+          "C_1",
+          "C_2",
+          "C_3",
+          "C_4",
+          "B1_3",
+          "B1_4"
+        ],
+        "assets": [
+          "LW_objects\\EH017\\EH017.lwo",
+          "\\eh017_body_sa.bmp"
+        ]
+      },
+      "candidates": [
+        {
+          "name": "EH017",
+          "file": "data/model/Ship/GE/EH017.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EH017.mdx",
+          "sourceSha256": "fd6d3c5c625b818cef6210d147233577582e6c1b8214b9c6b9667277b30eccea",
+          "detailTier": "high",
+          "nodeCount": 29,
+          "nodes": [
+            "EH017.lwo",
+            "B1_1",
+            "B1_2",
+            "B3b_1",
+            "B3b_2",
+            "B3a_1",
+            "B3a_2",
+            "B4b_1",
+            "B4b_2",
+            "B4a_1",
+            "B4a_2",
+            "B5a_1",
+            "B5a_2",
+            "B5b_1",
+            "B5b_2",
+            "B6a_1",
+            "B6a_2",
+            "B6b_1",
+            "B6b_2",
+            "B2_1",
+            "B2_2",
+            "B2_3",
+            "B2_4",
+            "C_1",
+            "C_2",
+            "C_3",
+            "C_4",
+            "B1_3",
+            "B1_4"
+          ],
+          "assets": [
+            "LW_objects\\EH017\\EH017.lwo",
+            "\\eh017_body_sa.bmp"
+          ]
+        },
+        {
+          "name": "em017",
+          "file": "data/model/Ship/GE/em017.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/em017.mdx",
+          "sourceSha256": "baf1e97f5773981e010e271d3d6e3b4dc2f393db5a22fe9db29b0339498e6273",
+          "detailTier": "medium",
+          "nodeCount": 29,
+          "nodes": [
+            "EL017:Layer1",
+            "B1_1",
+            "B1_2",
+            "B3b_1",
+            "B3b_2",
+            "B3a_1",
+            "B3a_2",
+            "B4b_1",
+            "B4b_2",
+            "B4a_1",
+            "B4a_2",
+            "B5a_1",
+            "B5a_2",
+            "B5b_1",
+            "B5b_2",
+            "B6a_1",
+            "B6a_2",
+            "B6b_1",
+            "B6b_2",
+            "B2_1",
+            "B2_2",
+            "B2_3",
+            "B2_4",
+            "C_1",
+            "C_2",
+            "C_3",
+            "C_4",
+            "B1_3",
+            "B1_4"
+          ],
+          "assets": [
+            "VII\\3D\\SHIP\\objects\\EM017\\EL017.lwo"
+          ]
+        }
+      ]
+    },
+    {
+      "hullId": "018",
+      "status": "pending-mdx-render",
+      "selectedMdx": {
+        "name": "EH018",
+        "file": "data/model/Ship/GE/EH018.mdx",
+        "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EH018.mdx",
+        "sourceSha256": "b9ed3b30b70295513f518df225ee54808266a29b79ce71d86db395a124f72be1",
+        "detailTier": "high",
+        "nodeCount": 8,
+        "nodes": [
+          "EH018_01.lwo",
+          "B2",
+          "B1",
+          "C4",
+          "C1",
+          "C2",
+          "C3",
+          "EH018_02.lwo"
+        ],
+        "assets": [
+          "LW_objects\\EH018\\EH018_01.lwo",
+          "LW_objects\\EH018\\EH018_02.lwo",
+          "\\eh018_body_s03.bmp"
+        ]
+      },
+      "candidates": [
+        {
+          "name": "EH018",
+          "file": "data/model/Ship/GE/EH018.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EH018.mdx",
+          "sourceSha256": "b9ed3b30b70295513f518df225ee54808266a29b79ce71d86db395a124f72be1",
+          "detailTier": "high",
+          "nodeCount": 8,
+          "nodes": [
+            "EH018_01.lwo",
+            "B2",
+            "B1",
+            "C4",
+            "C1",
+            "C2",
+            "C3",
+            "EH018_02.lwo"
+          ],
+          "assets": [
+            "LW_objects\\EH018\\EH018_01.lwo",
+            "LW_objects\\EH018\\EH018_02.lwo",
+            "\\eh018_body_s03.bmp"
+          ]
+        },
+        {
+          "name": "em018",
+          "file": "data/model/Ship/GE/em018.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/em018.mdx",
+          "sourceSha256": "479b827aac9bf20ad508a39ace953db15ab4ac6c4989ec29101dab3d3ce706a8",
+          "detailTier": "medium",
+          "nodeCount": 8,
+          "nodes": [
+            "EL018:Layer1",
+            "B2",
+            "B1",
+            "C4",
+            "C1",
+            "C2",
+            "C3",
+            "EL018_02"
+          ],
+          "assets": [
+            "VII\\3D\\SHIP\\objects\\EM018\\EL018.lwo"
+          ]
+        },
+        {
+          "name": "EL018",
+          "file": "data/model/Ship/GE/EL018.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EL018.mdx",
+          "sourceSha256": "ad0ac8ed9c73ac853e927061ef1bd2230ccc3ab637e7dd1d2906a6b4652240eb",
+          "detailTier": "low",
+          "nodeCount": 1,
+          "nodes": [
+            "EL018:Layer1"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\D\\objects\\EL018\\EL018.lwo",
+            "W:\\Gin7\\CG\\D\\images\\EL018\\EL018.bmp"
+          ]
+        }
+      ]
+    },
+    {
+      "hullId": "019",
+      "status": "pending-mdx-render",
+      "selectedMdx": {
+        "name": "EH019",
+        "file": "data/model/Ship/GE/EH019.mdx",
+        "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EH019.mdx",
+        "sourceSha256": "f5beb17415660821197def6c3330d1c7150d9c36e24225a2b0f20e2c851d96c5",
+        "detailTier": "high",
+        "nodeCount": 17,
+        "nodes": [
+          "EH019:Layer1",
+          "ENGINE_01",
+          "ENGINE_02",
+          "ENGINE_03",
+          "BEAM_01",
+          "FF_01",
+          "FF_02",
+          "FF_03",
+          "FF_04",
+          "FR_01",
+          "FL_01",
+          "RR_01",
+          "RL_01",
+          "GUN_01",
+          "GUN_02",
+          "LASER_01",
+          "MISSILE_01"
+        ],
+        "assets": [
+          "W:\\Gin7\\CG\\D2\\objects\\EH019\\EH019.lwo",
+          "W:\\Gin7\\CG\\D2\\images\\EH019.bmp",
+          "W:\\Gin7\\CG\\D2\\images\\meca_tile.bmp",
+          "W:\\Gin7\\CG\\D2\\images\\EH019_bump.bmp"
+        ]
+      },
+      "candidates": [
+        {
+          "name": "EH019",
+          "file": "data/model/Ship/GE/EH019.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EH019.mdx",
+          "sourceSha256": "f5beb17415660821197def6c3330d1c7150d9c36e24225a2b0f20e2c851d96c5",
+          "detailTier": "high",
+          "nodeCount": 17,
+          "nodes": [
+            "EH019:Layer1",
+            "ENGINE_01",
+            "ENGINE_02",
+            "ENGINE_03",
+            "BEAM_01",
+            "FF_01",
+            "FF_02",
+            "FF_03",
+            "FF_04",
+            "FR_01",
+            "FL_01",
+            "RR_01",
+            "RL_01",
+            "GUN_01",
+            "GUN_02",
+            "LASER_01",
+            "MISSILE_01"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\D2\\objects\\EH019\\EH019.lwo",
+            "W:\\Gin7\\CG\\D2\\images\\EH019.bmp",
+            "W:\\Gin7\\CG\\D2\\images\\meca_tile.bmp",
+            "W:\\Gin7\\CG\\D2\\images\\EH019_bump.bmp"
+          ]
+        },
+        {
+          "name": "EM019",
+          "file": "data/model/Ship/GE/EM019.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EM019.mdx",
+          "sourceSha256": "505f6691dd6417749be15bfad3ff677ac3f95508bed387c70635f0fb0352260f",
+          "detailTier": "medium",
+          "nodeCount": 17,
+          "nodes": [
+            "EM019:Layer1",
+            "ENGINE_01",
+            "ENGINE_02",
+            "ENGINE_03",
+            "BEAM_01",
+            "FF_01",
+            "FF_02",
+            "FF_03",
+            "FF_04",
+            "FR_01",
+            "FL_01",
+            "RR_01",
+            "RL_01",
+            "GUN_01",
+            "GUN_02",
+            "LASER_01",
+            "MISSILE_01"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\D2\\objects\\EM019\\EM019.lwo",
+            "D2\\images\\EM019\\EL019_body1.bmp"
+          ]
+        },
+        {
+          "name": "EL019",
+          "file": "data/model/Ship/GE/EL019.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EL019.mdx",
+          "sourceSha256": "c1443778dae2955b7a1025954e693374c00d5e752007c489e7b5e3da5231ca93",
+          "detailTier": "low",
+          "nodeCount": 4,
+          "nodes": [
+            "EL012:Layer1",
+            "ENGINE_01",
+            "ENGINE_02",
+            "ENGINE_03"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\D\\objects\\EL012.lwo"
+          ]
+        }
+      ]
+    },
+    {
+      "hullId": "020",
+      "status": "pending-mdx-render",
+      "selectedMdx": {
+        "name": "EH020",
+        "file": "data/model/Ship/GE/EH020.mdx",
+        "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EH020.mdx",
+        "sourceSha256": "53b1aafcb64c0e08369d4d9e03aa33094ba0918bd26f699099efeb34dc4c70fa",
+        "detailTier": "high",
+        "nodeCount": 4,
+        "nodes": [
+          "EH020:Layer1",
+          "BEAM_01",
+          "FF_01",
+          "FF_02"
+        ],
+        "assets": [
+          "W:\\Gin7\\CG\\D2\\objects\\EH020\\EH020.lwo",
+          "W:\\Gin7\\CG\\D2\\images\\EH020.bmp",
+          "W:\\Gin7\\CG\\D2\\images\\meca_tile.bmp",
+          "W:\\Gin7\\CG\\D2\\images\\EH020_bump.bmp"
+        ]
+      },
+      "candidates": [
+        {
+          "name": "EH020",
+          "file": "data/model/Ship/GE/EH020.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EH020.mdx",
+          "sourceSha256": "53b1aafcb64c0e08369d4d9e03aa33094ba0918bd26f699099efeb34dc4c70fa",
+          "detailTier": "high",
+          "nodeCount": 4,
+          "nodes": [
+            "EH020:Layer1",
+            "BEAM_01",
+            "FF_01",
+            "FF_02"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\D2\\objects\\EH020\\EH020.lwo",
+            "W:\\Gin7\\CG\\D2\\images\\EH020.bmp",
+            "W:\\Gin7\\CG\\D2\\images\\meca_tile.bmp",
+            "W:\\Gin7\\CG\\D2\\images\\EH020_bump.bmp"
+          ]
+        },
+        {
+          "name": "EM020",
+          "file": "data/model/Ship/GE/EM020.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EM020.mdx",
+          "sourceSha256": "0caa07ff3be437ae5e4a8970dc760fb3b272a1979c959c688662a3a235510ad4",
+          "detailTier": "medium",
+          "nodeCount": 4,
+          "nodes": [
+            "EM_020:Layer1",
+            "BEAM_01",
+            "FF_01",
+            "FF_02"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\D2\\objects\\EM020\\EM_020.lwo",
+            "D2\\images\\EM020\\EL020_front.bmp"
+          ]
+        },
+        {
+          "name": "EL020",
+          "file": "data/model/Ship/GE/EL020.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EL020.mdx",
+          "sourceSha256": "c1443778dae2955b7a1025954e693374c00d5e752007c489e7b5e3da5231ca93",
+          "detailTier": "low",
+          "nodeCount": 4,
+          "nodes": [
+            "EL012:Layer1",
+            "ENGINE_01",
+            "ENGINE_02",
+            "ENGINE_03"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\D\\objects\\EL012.lwo"
+          ]
+        }
+      ]
+    },
+    {
+      "hullId": "021",
+      "status": "pending-mdx-render",
+      "selectedMdx": {
+        "name": "EH021",
+        "file": "data/model/Ship/GE/EH021.mdx",
+        "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EH021.mdx",
+        "sourceSha256": "e7ad62179e9cec17de4fd1ba980bb42bd572c4ac0759ebd7db24057f0b41868a",
+        "detailTier": "high",
+        "nodeCount": 20,
+        "nodes": [
+          "EH021:Layer1",
+          "ENGINE_01",
+          "BEAM_01",
+          "FF_01",
+          "FF_02",
+          "GUN_01",
+          "FR_01",
+          "FR_02",
+          "RR_01",
+          "MISSILE_01",
+          "LASER_01",
+          "ENGINE_02",
+          "ENGINE_03",
+          "ENGINE_04",
+          "GUN_02",
+          "RR_02",
+          "FL_01",
+          "FL_02",
+          "RL_01",
+          "RL_02"
+        ],
+        "assets": [
+          "W:\\Gin7\\CG\\D3\\objects\\EH021\\EH021.lwo",
+          "W:\\Gin7\\CG\\D3\\images\\EH021.bmp",
+          "W:\\Gin7\\CG\\D3\\images\\meca_tile1.bmp",
+          "W:\\Gin7\\CG\\D3\\images\\EH021_bump.bmp"
+        ]
+      },
+      "candidates": [
+        {
+          "name": "EH021",
+          "file": "data/model/Ship/GE/EH021.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EH021.mdx",
+          "sourceSha256": "e7ad62179e9cec17de4fd1ba980bb42bd572c4ac0759ebd7db24057f0b41868a",
+          "detailTier": "high",
+          "nodeCount": 20,
+          "nodes": [
+            "EH021:Layer1",
+            "ENGINE_01",
+            "BEAM_01",
+            "FF_01",
+            "FF_02",
+            "GUN_01",
+            "FR_01",
+            "FR_02",
+            "RR_01",
+            "MISSILE_01",
+            "LASER_01",
+            "ENGINE_02",
+            "ENGINE_03",
+            "ENGINE_04",
+            "GUN_02",
+            "RR_02",
+            "FL_01",
+            "FL_02",
+            "RL_01",
+            "RL_02"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\D3\\objects\\EH021\\EH021.lwo",
+            "W:\\Gin7\\CG\\D3\\images\\EH021.bmp",
+            "W:\\Gin7\\CG\\D3\\images\\meca_tile1.bmp",
+            "W:\\Gin7\\CG\\D3\\images\\EH021_bump.bmp"
+          ]
+        },
+        {
+          "name": "EM021",
+          "file": "data/model/Ship/GE/EM021.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EM021.mdx",
+          "sourceSha256": "58eb86fb8af53ee3e851dfa91611a14f0bd3c972fa5d768497f84ccb98aeb751",
+          "detailTier": "medium",
+          "nodeCount": 21,
+          "nodes": [
+            "EM012:Layer1",
+            "ENGINE_01",
+            "ENGINE_02",
+            "ENGINE_03",
+            "BEAM_01",
+            "FF_01",
+            "FF_02",
+            "FF_03",
+            "FF_04",
+            "FR_01",
+            "FR_02",
+            "FL_01",
+            "FL_02",
+            "RR_01",
+            "RR_02",
+            "RL_01",
+            "RL_02",
+            "GUN_01",
+            "GUN_02",
+            "LASER_01",
+            "MISSILE_01"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\D\\objects\\EM012\\EM012.lwo",
+            "D\\images\\EM012\\el012_body_as2.bmp"
+          ]
+        },
+        {
+          "name": "EL021",
+          "file": "data/model/Ship/GE/EL021.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EL021.mdx",
+          "sourceSha256": "c1443778dae2955b7a1025954e693374c00d5e752007c489e7b5e3da5231ca93",
+          "detailTier": "low",
+          "nodeCount": 4,
+          "nodes": [
+            "EL012:Layer1",
+            "ENGINE_01",
+            "ENGINE_02",
+            "ENGINE_03"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\D\\objects\\EL012.lwo"
+          ]
+        }
+      ]
+    },
+    {
+      "hullId": "022",
+      "status": "pending-mdx-render",
+      "selectedMdx": {
+        "name": "EH022",
+        "file": "data/model/Ship/GE/EH022.mdx",
+        "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EH022.mdx",
+        "sourceSha256": "285557d3dc9d3c1986497e0e786f1c41efccc4b1654711a769e8726b925a82fd",
+        "detailTier": "high",
+        "nodeCount": 18,
+        "nodes": [
+          "EH022:Layer1",
+          "ENGINE_01",
+          "ENGINE_02",
+          "ENGINE_03",
+          "ENGINE_04",
+          "FF_01",
+          "FF_02",
+          "FR_01",
+          "FL_01",
+          "RR_01",
+          "RR_02",
+          "RL_01",
+          "RL_02",
+          "BEAM_01",
+          "BEAM_02",
+          "MISSILE_01",
+          "GUN_01",
+          "GUN_02"
+        ],
+        "assets": [
+          "W:\\Gin7\\CG\\D3\\objects\\EH022\\EH022.lwo",
+          "W:\\Gin7\\CG\\D3\\images\\EH022.bmp",
+          "W:\\Gin7\\CG\\D3\\images\\EH022_bump.bmp",
+          "W:\\Gin7\\CG\\D3\\images\\meca_tile1.bmp"
+        ]
+      },
+      "candidates": [
+        {
+          "name": "EH022",
+          "file": "data/model/Ship/GE/EH022.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EH022.mdx",
+          "sourceSha256": "285557d3dc9d3c1986497e0e786f1c41efccc4b1654711a769e8726b925a82fd",
+          "detailTier": "high",
+          "nodeCount": 18,
+          "nodes": [
+            "EH022:Layer1",
+            "ENGINE_01",
+            "ENGINE_02",
+            "ENGINE_03",
+            "ENGINE_04",
+            "FF_01",
+            "FF_02",
+            "FR_01",
+            "FL_01",
+            "RR_01",
+            "RR_02",
+            "RL_01",
+            "RL_02",
+            "BEAM_01",
+            "BEAM_02",
+            "MISSILE_01",
+            "GUN_01",
+            "GUN_02"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\D3\\objects\\EH022\\EH022.lwo",
+            "W:\\Gin7\\CG\\D3\\images\\EH022.bmp",
+            "W:\\Gin7\\CG\\D3\\images\\EH022_bump.bmp",
+            "W:\\Gin7\\CG\\D3\\images\\meca_tile1.bmp"
+          ]
+        },
+        {
+          "name": "EM022",
+          "file": "data/model/Ship/GE/EM022.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EM022.mdx",
+          "sourceSha256": "58eb86fb8af53ee3e851dfa91611a14f0bd3c972fa5d768497f84ccb98aeb751",
+          "detailTier": "medium",
+          "nodeCount": 21,
+          "nodes": [
+            "EM012:Layer1",
+            "ENGINE_01",
+            "ENGINE_02",
+            "ENGINE_03",
+            "BEAM_01",
+            "FF_01",
+            "FF_02",
+            "FF_03",
+            "FF_04",
+            "FR_01",
+            "FR_02",
+            "FL_01",
+            "FL_02",
+            "RR_01",
+            "RR_02",
+            "RL_01",
+            "RL_02",
+            "GUN_01",
+            "GUN_02",
+            "LASER_01",
+            "MISSILE_01"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\D\\objects\\EM012\\EM012.lwo",
+            "D\\images\\EM012\\el012_body_as2.bmp"
+          ]
+        },
+        {
+          "name": "EL022",
+          "file": "data/model/Ship/GE/EL022.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EL022.mdx",
+          "sourceSha256": "c1443778dae2955b7a1025954e693374c00d5e752007c489e7b5e3da5231ca93",
+          "detailTier": "low",
+          "nodeCount": 4,
+          "nodes": [
+            "EL012:Layer1",
+            "ENGINE_01",
+            "ENGINE_02",
+            "ENGINE_03"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\D\\objects\\EL012.lwo"
+          ]
+        }
+      ]
+    },
+    {
+      "hullId": "023",
+      "status": "pending-mdx-render",
+      "selectedMdx": {
+        "name": "EH023",
+        "file": "data/model/Ship/GE/EH023.mdx",
+        "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EH023.mdx",
+        "sourceSha256": "fb96069b177a329c4604be13ccde45f99b7a926fdbc392ffdaab2937e3d67b9e",
+        "detailTier": "high",
+        "nodeCount": 18,
+        "nodes": [
+          "EH023:Layer1",
+          "ENGINE_01",
+          "ENGINE_02",
+          "ENGINE_03",
+          "ENGINE_04",
+          "FR_01",
+          "FL_01",
+          "RR_01",
+          "RL_01",
+          "FF_01",
+          "FF_03",
+          "FF_02",
+          "FF_04",
+          "BEAM_01",
+          "MISSILE_01",
+          "LASER_01",
+          "GUN_01",
+          "GUN_02"
+        ],
+        "assets": [
+          "W:\\Gin7\\CG\\D2\\objects\\EH023\\EH023.lwo",
+          "W:\\Gin7\\CG\\D2\\images\\EH023.bmp",
+          "W:\\Gin7\\CG\\D2\\images\\meca_tile.bmp",
+          "W:\\Gin7\\CG\\D2\\images\\EH023_bump.bmp"
+        ]
+      },
+      "candidates": [
+        {
+          "name": "EH023",
+          "file": "data/model/Ship/GE/EH023.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EH023.mdx",
+          "sourceSha256": "fb96069b177a329c4604be13ccde45f99b7a926fdbc392ffdaab2937e3d67b9e",
+          "detailTier": "high",
+          "nodeCount": 18,
+          "nodes": [
+            "EH023:Layer1",
+            "ENGINE_01",
+            "ENGINE_02",
+            "ENGINE_03",
+            "ENGINE_04",
+            "FR_01",
+            "FL_01",
+            "RR_01",
+            "RL_01",
+            "FF_01",
+            "FF_03",
+            "FF_02",
+            "FF_04",
+            "BEAM_01",
+            "MISSILE_01",
+            "LASER_01",
+            "GUN_01",
+            "GUN_02"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\D2\\objects\\EH023\\EH023.lwo",
+            "W:\\Gin7\\CG\\D2\\images\\EH023.bmp",
+            "W:\\Gin7\\CG\\D2\\images\\meca_tile.bmp",
+            "W:\\Gin7\\CG\\D2\\images\\EH023_bump.bmp"
+          ]
+        },
+        {
+          "name": "EM023",
+          "file": "data/model/Ship/GE/EM023.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EM023.mdx",
+          "sourceSha256": "5273b664d08f3884c2bb51a934ac682a26150000ee6ef0924b35d2819f9d5aa0",
+          "detailTier": "medium",
+          "nodeCount": 18,
+          "nodes": [
+            "EM023:Layer1",
+            "ENGINE_01",
+            "ENGINE_02",
+            "ENGINE_03",
+            "ENGINE_04",
+            "FR_01",
+            "FL_01",
+            "RR_01",
+            "RL_01",
+            "FF_01",
+            "FF_03",
+            "FF_02",
+            "FF_04",
+            "BEAM_01",
+            "MISSILE_01",
+            "LASER_01",
+            "GUN_01",
+            "GUN_02"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\D2\\objects\\EM023\\EM023.lwo",
+            "D2\\images\\EM023\\EL027_dark.bmp"
+          ]
+        },
+        {
+          "name": "EL023",
+          "file": "data/model/Ship/GE/EL023.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EL023.mdx",
+          "sourceSha256": "c38671902bc8f8731b41bc492baf56bfdfcd7a091dbff6033e8f51d95bb25c53",
+          "detailTier": "low",
+          "nodeCount": 5,
+          "nodes": [
+            "EL023:Layer1",
+            "ENGINE_01",
+            "ENGINE_02",
+            "ENGINE_03",
+            "ENGINE_04"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\D\\objects\\EL023.lwo"
+          ]
+        }
+      ]
+    },
+    {
+      "hullId": "024",
+      "status": "pending-mdx-render",
+      "selectedMdx": {
+        "name": "EH024",
+        "file": "data/model/Ship/GE/EH024.mdx",
+        "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EH024.mdx",
+        "sourceSha256": "4fa477420cc666b5a665dad84d296911472ac4ce3998e391bc73b9232b25323d",
+        "detailTier": "high",
+        "nodeCount": 18,
+        "nodes": [
+          "EH024:Layer1",
+          "ENGINE_01",
+          "BEAM_01",
+          "FF_01",
+          "FR_01",
+          "FR_02",
+          "RR_01",
+          "RR_02",
+          "GUN_01",
+          "MISSILE_01",
+          "LASER_01",
+          "FF_02",
+          "FL_01",
+          "FL_02",
+          "RL_01",
+          "RL_02",
+          "GUN_02",
+          "ENGINE_02"
+        ],
+        "assets": [
+          "W:\\Gin7\\CG\\D3\\objects\\EH024\\EH024.lwo",
+          "D3\\images\\EH024\\EH024_Body_tana.bmp"
+        ]
+      },
+      "candidates": [
+        {
+          "name": "EH024",
+          "file": "data/model/Ship/GE/EH024.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EH024.mdx",
+          "sourceSha256": "4fa477420cc666b5a665dad84d296911472ac4ce3998e391bc73b9232b25323d",
+          "detailTier": "high",
+          "nodeCount": 18,
+          "nodes": [
+            "EH024:Layer1",
+            "ENGINE_01",
+            "BEAM_01",
+            "FF_01",
+            "FR_01",
+            "FR_02",
+            "RR_01",
+            "RR_02",
+            "GUN_01",
+            "MISSILE_01",
+            "LASER_01",
+            "FF_02",
+            "FL_01",
+            "FL_02",
+            "RL_01",
+            "RL_02",
+            "GUN_02",
+            "ENGINE_02"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\D3\\objects\\EH024\\EH024.lwo",
+            "D3\\images\\EH024\\EH024_Body_tana.bmp"
+          ]
+        },
+        {
+          "name": "EM024",
+          "file": "data/model/Ship/GE/EM024.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EM024.mdx",
+          "sourceSha256": "ac23ea208ad7fed97f6710bbe2a81205bb7d69f5366896a0f5464aa59a4f0059",
+          "detailTier": "medium",
+          "nodeCount": 18,
+          "nodes": [
+            "EM024:Layer1",
+            "ENGINE_01",
+            "BEAM_01",
+            "FF_01",
+            "FR_01",
+            "FR_02",
+            "RR_01",
+            "RR_02",
+            "GUN_01",
+            "MISSILE_01",
+            "LASER_01",
+            "FF_02",
+            "FL_01",
+            "FL_02",
+            "RL_01",
+            "RL_02",
+            "GUN_02",
+            "ENGINE_02"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\D3\\objects\\EM024\\EM024.lwo",
+            "D3\\images\\EM024\\EL024_Body_t.bmp"
+          ]
+        },
+        {
+          "name": "EL024",
+          "file": "data/model/Ship/GE/EL024.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EL024.mdx",
+          "sourceSha256": "c1443778dae2955b7a1025954e693374c00d5e752007c489e7b5e3da5231ca93",
+          "detailTier": "low",
+          "nodeCount": 4,
+          "nodes": [
+            "EL012:Layer1",
+            "ENGINE_01",
+            "ENGINE_02",
+            "ENGINE_03"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\D\\objects\\EL012.lwo"
+          ]
+        }
+      ]
+    },
+    {
+      "hullId": "025",
+      "status": "pending-mdx-render",
+      "selectedMdx": {
+        "name": "EH025",
+        "file": "data/model/Ship/GE/EH025.mdx",
+        "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EH025.mdx",
+        "sourceSha256": "da3d8bfd9ef6837dca3ca026a68ac9d44c67b7c7aaa19abe7d0c089f46d789ba",
+        "detailTier": "high",
+        "nodeCount": 20,
+        "nodes": [
+          "EH025:Layer1",
+          "ENGINE_01",
+          "ENGINE_02",
+          "ENGINE_03",
+          "FF_1",
+          "FF_2",
+          "FF_3",
+          "FF_4",
+          "FR_01",
+          "FR_02",
+          "RR_01",
+          "RR_02",
+          "FL_01",
+          "FL_02",
+          "RL_01",
+          "RL_02",
+          "MISSILE_01",
+          "GUN_01",
+          "GUN_02",
+          "LASER_01"
+        ],
+        "assets": [
+          "W:\\Gin7\\CG\\D2\\objects\\EH025\\EH025.lwo",
+          "W:\\Gin7\\CG\\D2\\images\\EH025.bmp",
+          "W:\\Gin7\\CG\\D2\\images\\meca_tile.bmp"
+        ]
+      },
+      "candidates": [
+        {
+          "name": "EH025",
+          "file": "data/model/Ship/GE/EH025.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EH025.mdx",
+          "sourceSha256": "da3d8bfd9ef6837dca3ca026a68ac9d44c67b7c7aaa19abe7d0c089f46d789ba",
+          "detailTier": "high",
+          "nodeCount": 20,
+          "nodes": [
+            "EH025:Layer1",
+            "ENGINE_01",
+            "ENGINE_02",
+            "ENGINE_03",
+            "FF_1",
+            "FF_2",
+            "FF_3",
+            "FF_4",
+            "FR_01",
+            "FR_02",
+            "RR_01",
+            "RR_02",
+            "FL_01",
+            "FL_02",
+            "RL_01",
+            "RL_02",
+            "MISSILE_01",
+            "GUN_01",
+            "GUN_02",
+            "LASER_01"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\D2\\objects\\EH025\\EH025.lwo",
+            "W:\\Gin7\\CG\\D2\\images\\EH025.bmp",
+            "W:\\Gin7\\CG\\D2\\images\\meca_tile.bmp"
+          ]
+        },
+        {
+          "name": "EM025",
+          "file": "data/model/Ship/GE/EM025.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EM025.mdx",
+          "sourceSha256": "31fe0a48d7f34e1c282ac4bf4cd102969834da68bc7dac30fadb86820b82ad98",
+          "detailTier": "medium",
+          "nodeCount": 20,
+          "nodes": [
+            "EM025:Layer1",
+            "ENGINE_01",
+            "ENGINE_02",
+            "ENGINE_03",
+            "FF_1",
+            "FF_2",
+            "FF_3",
+            "FF_4",
+            "FR_01",
+            "FR_02",
+            "RR_01",
+            "RR_02",
+            "FL_01",
+            "FL_02",
+            "RL_01",
+            "RL_02",
+            "MISSILE_01",
+            "GUN_01",
+            "GUN_02",
+            "LASER_01"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\D2\\objects\\EM025\\EM025.lwo",
+            "D2\\images\\EM025\\EL025_parts1.bmp"
+          ]
+        },
+        {
+          "name": "EL025",
+          "file": "data/model/Ship/GE/EL025.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EL025.mdx",
+          "sourceSha256": "c1443778dae2955b7a1025954e693374c00d5e752007c489e7b5e3da5231ca93",
+          "detailTier": "low",
+          "nodeCount": 4,
+          "nodes": [
+            "EL012:Layer1",
+            "ENGINE_01",
+            "ENGINE_02",
+            "ENGINE_03"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\D\\objects\\EL012.lwo"
+          ]
+        }
+      ]
+    },
+    {
+      "hullId": "027",
+      "status": "pending-mdx-render",
+      "selectedMdx": {
+        "name": "EH027",
+        "file": "data/model/Ship/GE/EH027.mdx",
+        "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EH027.mdx",
+        "sourceSha256": "c6e5a82373bc1035ec577336d8d31da67ff8d73a70a32d48ac7defa4480203de",
+        "detailTier": "high",
+        "nodeCount": 29,
+        "nodes": [
+          "EH023:Layer1",
+          "ENGINE_01",
+          "ENGINE_02",
+          "ENGINE_03",
+          "ENGINE_04",
+          "FR_01",
+          "FL_01",
+          "RR_01",
+          "RL_01",
+          "FF_01",
+          "FF_03",
+          "FF_02",
+          "FF_04",
+          "BEAM_01",
+          "MISSILE_01",
+          "LASER_01",
+          "GUN_01",
+          "GUN_02",
+          "EH027L:Layer1",
+          "EH027R:Layer1",
+          "ENGINE_05",
+          "FF_05",
+          "FR_03",
+          "FR_04",
+          "RR_03",
+          "FF_06",
+          "FL_03",
+          "FL_04",
+          "RL_03"
+        ],
+        "assets": [
+          "W:\\Gin7\\CG\\D2\\objects\\EH023\\EH023.lwo",
+          "W:\\Gin7\\CG\\D3\\objects\\EH027L\\EH027L.lwo",
+          "W:\\Gin7\\CG\\D3\\objects\\EH027R\\EH027R.lwo",
+          "W:\\Gin7\\CG\\D2\\images\\EH023.bmp",
+          "W:\\Gin7\\CG\\D2\\images\\meca_tile.bmp",
+          "W:\\Gin7\\CG\\D2\\images\\EH023_bump.bmp",
+          "W:\\Gin7\\CG\\D3\\images\\EH027L\\EH027L_side.bmp",
+          "W:\\Gin7\\CG\\D3\\images\\EH027L\\EH027L_fire.bmp",
+          "W:\\Gin7\\CG\\D3\\images\\EH027L\\EL027L_ball.bmp",
+          "W:\\Gin7\\CG\\D3\\images\\EH027L\\EH027L_front_in.bmp",
+          "W:\\Gin7\\CG\\D3\\images\\EH027R\\EH027R_side.bmp",
+          "W:\\Gin7\\CG\\D3\\images\\EH027R\\EH027R_fire.bmp",
+          "W:\\Gin7\\CG\\D3\\images\\EH027R\\EL027R_ball.bmp",
+          "W:\\Gin7\\CG\\D3\\images\\EH027R\\EH027R_front_in.bmp"
+        ]
+      },
+      "candidates": [
+        {
+          "name": "EH027",
+          "file": "data/model/Ship/GE/EH027.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EH027.mdx",
+          "sourceSha256": "c6e5a82373bc1035ec577336d8d31da67ff8d73a70a32d48ac7defa4480203de",
+          "detailTier": "high",
+          "nodeCount": 29,
+          "nodes": [
+            "EH023:Layer1",
+            "ENGINE_01",
+            "ENGINE_02",
+            "ENGINE_03",
+            "ENGINE_04",
+            "FR_01",
+            "FL_01",
+            "RR_01",
+            "RL_01",
+            "FF_01",
+            "FF_03",
+            "FF_02",
+            "FF_04",
+            "BEAM_01",
+            "MISSILE_01",
+            "LASER_01",
+            "GUN_01",
+            "GUN_02",
+            "EH027L:Layer1",
+            "EH027R:Layer1",
+            "ENGINE_05",
+            "FF_05",
+            "FR_03",
+            "FR_04",
+            "RR_03",
+            "FF_06",
+            "FL_03",
+            "FL_04",
+            "RL_03"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\D2\\objects\\EH023\\EH023.lwo",
+            "W:\\Gin7\\CG\\D3\\objects\\EH027L\\EH027L.lwo",
+            "W:\\Gin7\\CG\\D3\\objects\\EH027R\\EH027R.lwo",
+            "W:\\Gin7\\CG\\D2\\images\\EH023.bmp",
+            "W:\\Gin7\\CG\\D2\\images\\meca_tile.bmp",
+            "W:\\Gin7\\CG\\D2\\images\\EH023_bump.bmp",
+            "W:\\Gin7\\CG\\D3\\images\\EH027L\\EH027L_side.bmp",
+            "W:\\Gin7\\CG\\D3\\images\\EH027L\\EH027L_fire.bmp",
+            "W:\\Gin7\\CG\\D3\\images\\EH027L\\EL027L_ball.bmp",
+            "W:\\Gin7\\CG\\D3\\images\\EH027L\\EH027L_front_in.bmp",
+            "W:\\Gin7\\CG\\D3\\images\\EH027R\\EH027R_side.bmp",
+            "W:\\Gin7\\CG\\D3\\images\\EH027R\\EH027R_fire.bmp",
+            "W:\\Gin7\\CG\\D3\\images\\EH027R\\EL027R_ball.bmp",
+            "W:\\Gin7\\CG\\D3\\images\\EH027R\\EH027R_front_in.bmp"
+          ]
+        },
+        {
+          "name": "EM027",
+          "file": "data/model/Ship/GE/EM027.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EM027.mdx",
+          "sourceSha256": "1d3d36730769621ef7f291a72d869be6d96b26c66a3884af27295863d4e14567",
+          "detailTier": "medium",
+          "nodeCount": 29,
+          "nodes": [
+            "EM023:Layer1",
+            "ENGINE_01",
+            "ENGINE_02",
+            "ENGINE_03",
+            "ENGINE_04",
+            "FR_01",
+            "FL_01",
+            "RR_01",
+            "RL_01",
+            "FF_01",
+            "FF_03",
+            "FF_02",
+            "FF_04",
+            "BEAM_01",
+            "MISSILE_01",
+            "LASER_01",
+            "GUN_01",
+            "GUN_02",
+            "EM027L:Layer1",
+            "EM027R:Layer1",
+            "ENGINE_05",
+            "FF_05",
+            "FR_03",
+            "FR_04",
+            "RR_03",
+            "FF_06",
+            "FL_03",
+            "FL_04",
+            "RL_03"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\D2\\objects\\EM023\\EM023.lwo",
+            "W:\\Gin7\\CG\\D3\\objects\\EM027L\\EM027L.lwo",
+            "W:\\Gin7\\CG\\D3\\objects\\EM027R\\EM027R.lwo",
+            "D2\\images\\EM023\\EL027_dark.bmp"
+          ]
+        },
+        {
+          "name": "EL027",
+          "file": "data/model/Ship/GE/EL027.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EL027.mdx",
+          "sourceSha256": "c38671902bc8f8731b41bc492baf56bfdfcd7a091dbff6033e8f51d95bb25c53",
+          "detailTier": "low",
+          "nodeCount": 5,
+          "nodes": [
+            "EL023:Layer1",
+            "ENGINE_01",
+            "ENGINE_02",
+            "ENGINE_03",
+            "ENGINE_04"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\D\\objects\\EL023.lwo"
+          ]
+        }
+      ]
+    },
+    {
+      "hullId": "028",
+      "status": "pending-mdx-render",
+      "selectedMdx": {
+        "name": "EH028",
+        "file": "data/model/Ship/GE/EH028.mdx",
+        "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EH028.mdx",
+        "sourceSha256": "ee4be99142ea35916efa318ca14ffd0d89e600f21366a549d77187492ca25df0",
+        "detailTier": "high",
+        "nodeCount": 23,
+        "nodes": [
+          "EH012:Layer1",
+          "ENGINE_01",
+          "ENGINE_02",
+          "ENGINE_03",
+          "BEAM_01",
+          "FF_01",
+          "FF_02",
+          "FF_03",
+          "FF_04",
+          "FR_01",
+          "FR_02",
+          "FL_01",
+          "FL_02",
+          "RR_01",
+          "RR_02",
+          "RL_01",
+          "RL_02",
+          "GUN_01",
+          "GUN_02",
+          "LASER_01",
+          "MISSILE_01",
+          "EH028L:Layer1",
+          "EH028R:Layer1"
+        ],
+        "assets": [
+          "W:\\Gin7\\CG\\D1\\objects\\EH012\\EH012.lwo",
+          "W:\\Gin7\\CG\\D3\\objects\\EH028L\\EH028L.lwo",
+          "W:\\Gin7\\CG\\D3\\objects\\EH028R\\EH028R.lwo",
+          "W:\\Gin7\\CG\\D1\\images\\eh012.bmp",
+          "W:\\Gin7\\CG\\D1\\images\\meca_tile.bmp",
+          "W:\\Gin7\\CG\\D1\\images\\EH012_bump.bmp",
+          "W:\\Gin7\\CG\\D3\\images\\EH028L\\EH028L_basic.bmp",
+          "W:\\Gin7\\CG\\D3\\images\\EH028L\\EH028_side.bmp",
+          "W:\\Gin7\\CG\\D3\\images\\EH028L\\EH028L_ball.bmp",
+          "W:\\Gin7\\CG\\D3\\images\\EH028L\\EH028_L_fire.bmp",
+          "W:\\Gin7\\CG\\D3\\images\\EH028R\\EH028R_basic.bmp",
+          "W:\\Gin7\\CG\\D3\\images\\EH028R\\EH028R_side.bmp",
+          "W:\\Gin7\\CG\\D3\\images\\EH028R\\EH028R_ball.bmp",
+          "W:\\Gin7\\CG\\D3\\images\\EH028R\\EH028_R_fire.bmp"
+        ]
+      },
+      "candidates": [
+        {
+          "name": "EH028",
+          "file": "data/model/Ship/GE/EH028.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EH028.mdx",
+          "sourceSha256": "ee4be99142ea35916efa318ca14ffd0d89e600f21366a549d77187492ca25df0",
+          "detailTier": "high",
+          "nodeCount": 23,
+          "nodes": [
+            "EH012:Layer1",
+            "ENGINE_01",
+            "ENGINE_02",
+            "ENGINE_03",
+            "BEAM_01",
+            "FF_01",
+            "FF_02",
+            "FF_03",
+            "FF_04",
+            "FR_01",
+            "FR_02",
+            "FL_01",
+            "FL_02",
+            "RR_01",
+            "RR_02",
+            "RL_01",
+            "RL_02",
+            "GUN_01",
+            "GUN_02",
+            "LASER_01",
+            "MISSILE_01",
+            "EH028L:Layer1",
+            "EH028R:Layer1"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\D1\\objects\\EH012\\EH012.lwo",
+            "W:\\Gin7\\CG\\D3\\objects\\EH028L\\EH028L.lwo",
+            "W:\\Gin7\\CG\\D3\\objects\\EH028R\\EH028R.lwo",
+            "W:\\Gin7\\CG\\D1\\images\\eh012.bmp",
+            "W:\\Gin7\\CG\\D1\\images\\meca_tile.bmp",
+            "W:\\Gin7\\CG\\D1\\images\\EH012_bump.bmp",
+            "W:\\Gin7\\CG\\D3\\images\\EH028L\\EH028L_basic.bmp",
+            "W:\\Gin7\\CG\\D3\\images\\EH028L\\EH028_side.bmp",
+            "W:\\Gin7\\CG\\D3\\images\\EH028L\\EH028L_ball.bmp",
+            "W:\\Gin7\\CG\\D3\\images\\EH028L\\EH028_L_fire.bmp",
+            "W:\\Gin7\\CG\\D3\\images\\EH028R\\EH028R_basic.bmp",
+            "W:\\Gin7\\CG\\D3\\images\\EH028R\\EH028R_side.bmp",
+            "W:\\Gin7\\CG\\D3\\images\\EH028R\\EH028R_ball.bmp",
+            "W:\\Gin7\\CG\\D3\\images\\EH028R\\EH028_R_fire.bmp"
+          ]
+        },
+        {
+          "name": "EM028",
+          "file": "data/model/Ship/GE/EM028.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EM028.mdx",
+          "sourceSha256": "58eb86fb8af53ee3e851dfa91611a14f0bd3c972fa5d768497f84ccb98aeb751",
+          "detailTier": "medium",
+          "nodeCount": 21,
+          "nodes": [
+            "EM012:Layer1",
+            "ENGINE_01",
+            "ENGINE_02",
+            "ENGINE_03",
+            "BEAM_01",
+            "FF_01",
+            "FF_02",
+            "FF_03",
+            "FF_04",
+            "FR_01",
+            "FR_02",
+            "FL_01",
+            "FL_02",
+            "RR_01",
+            "RR_02",
+            "RL_01",
+            "RL_02",
+            "GUN_01",
+            "GUN_02",
+            "LASER_01",
+            "MISSILE_01"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\D\\objects\\EM012\\EM012.lwo",
+            "D\\images\\EM012\\el012_body_as2.bmp"
+          ]
+        },
+        {
+          "name": "EL028",
+          "file": "data/model/Ship/GE/EL028.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EL028.mdx",
+          "sourceSha256": "c1443778dae2955b7a1025954e693374c00d5e752007c489e7b5e3da5231ca93",
+          "detailTier": "low",
+          "nodeCount": 4,
+          "nodes": [
+            "EL012:Layer1",
+            "ENGINE_01",
+            "ENGINE_02",
+            "ENGINE_03"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\D\\objects\\EL012.lwo"
+          ]
+        }
+      ]
+    },
+    {
+      "hullId": "029",
+      "status": "pending-mdx-render",
+      "selectedMdx": {
+        "name": "EH029",
+        "file": "data/model/Ship/GE/EH029.mdx",
+        "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EH029.mdx",
+        "sourceSha256": "183e8ca5425e661198175d067da90a2632c9bdae21c0ad92bb994c71a6361745",
+        "detailTier": "high",
+        "nodeCount": 14,
+        "nodes": [
+          "EH029:Layer1",
+          "ENGINE_01",
+          "ENGINE_02",
+          "BEAM_01",
+          "FF_01",
+          "FF_02",
+          "FR_01",
+          "FL_01",
+          "RR_01",
+          "RL_01",
+          "MISSILE_01",
+          "GUN_01",
+          "GUN_02",
+          "LASER_01"
+        ],
+        "assets": [
+          "W:\\Gin7\\CG\\D2\\objects\\EH029\\EH029.lwo",
+          "W:\\Gin7\\CG\\D2\\images\\EH029.bmp",
+          "W:\\Gin7\\CG\\D2\\images\\meca_tile.bmp",
+          "W:\\Gin7\\CG\\D2\\images\\EH029_bump.bmp"
+        ]
+      },
+      "candidates": [
+        {
+          "name": "EH029",
+          "file": "data/model/Ship/GE/EH029.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EH029.mdx",
+          "sourceSha256": "183e8ca5425e661198175d067da90a2632c9bdae21c0ad92bb994c71a6361745",
+          "detailTier": "high",
+          "nodeCount": 14,
+          "nodes": [
+            "EH029:Layer1",
+            "ENGINE_01",
+            "ENGINE_02",
+            "BEAM_01",
+            "FF_01",
+            "FF_02",
+            "FR_01",
+            "FL_01",
+            "RR_01",
+            "RL_01",
+            "MISSILE_01",
+            "GUN_01",
+            "GUN_02",
+            "LASER_01"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\D2\\objects\\EH029\\EH029.lwo",
+            "W:\\Gin7\\CG\\D2\\images\\EH029.bmp",
+            "W:\\Gin7\\CG\\D2\\images\\meca_tile.bmp",
+            "W:\\Gin7\\CG\\D2\\images\\EH029_bump.bmp"
+          ]
+        },
+        {
+          "name": "EM029",
+          "file": "data/model/Ship/GE/EM029.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EM029.mdx",
+          "sourceSha256": "27e0dcbf41fee5e55ebcc04aebdd1cebe8fa343c8275a103c712384d9269c3c2",
+          "detailTier": "medium",
+          "nodeCount": 14,
+          "nodes": [
+            "EM029:Layer1",
+            "ENGINE_01",
+            "ENGINE_02",
+            "BEAM_01",
+            "FF_01",
+            "FF_02",
+            "FR_01",
+            "FL_01",
+            "RR_01",
+            "RL_01",
+            "MISSILE_01",
+            "GUN_01",
+            "GUN_02",
+            "LASER_01"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\D2\\objects\\EM029\\EM029.lwo",
+            "D2\\images\\EM029\\EL029_top3.bmp"
+          ]
+        },
+        {
+          "name": "EL029",
+          "file": "data/model/Ship/GE/EL029.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EL029.mdx",
+          "sourceSha256": "c1443778dae2955b7a1025954e693374c00d5e752007c489e7b5e3da5231ca93",
+          "detailTier": "low",
+          "nodeCount": 4,
+          "nodes": [
+            "EL012:Layer1",
+            "ENGINE_01",
+            "ENGINE_02",
+            "ENGINE_03"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\D\\objects\\EL012.lwo"
+          ]
+        }
+      ]
+    },
+    {
+      "hullId": "030",
+      "status": "pending-mdx-render",
+      "selectedMdx": {
+        "name": "EH030",
+        "file": "data/model/Ship/GE/EH030.mdx",
+        "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EH030.mdx",
+        "sourceSha256": "00fefb72bee05a0c8adc94c443def505d5a4b0c0ab5e9adb64f93a3648f7f8ae",
+        "detailTier": "high",
+        "nodeCount": 13,
+        "nodes": [
+          "EH030:Layer1",
+          "ENGINE_01",
+          "ENGINE_02",
+          "BEAM_01",
+          "FF_01",
+          "FR_01",
+          "FL_01",
+          "RR_01",
+          "RL_01",
+          "MISSILE_01",
+          "GUN_01",
+          "GUN_02",
+          "LASER_01"
+        ],
+        "assets": [
+          "W:\\Gin7\\CG\\D2\\objects\\EH030\\EH030.lwo",
+          "W:\\Gin7\\CG\\D2\\images\\EH030.bmp",
+          "W:\\Gin7\\CG\\D2\\images\\meca_tile.bmp"
+        ]
+      },
+      "candidates": [
+        {
+          "name": "EH030",
+          "file": "data/model/Ship/GE/EH030.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EH030.mdx",
+          "sourceSha256": "00fefb72bee05a0c8adc94c443def505d5a4b0c0ab5e9adb64f93a3648f7f8ae",
+          "detailTier": "high",
+          "nodeCount": 13,
+          "nodes": [
+            "EH030:Layer1",
+            "ENGINE_01",
+            "ENGINE_02",
+            "BEAM_01",
+            "FF_01",
+            "FR_01",
+            "FL_01",
+            "RR_01",
+            "RL_01",
+            "MISSILE_01",
+            "GUN_01",
+            "GUN_02",
+            "LASER_01"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\D2\\objects\\EH030\\EH030.lwo",
+            "W:\\Gin7\\CG\\D2\\images\\EH030.bmp",
+            "W:\\Gin7\\CG\\D2\\images\\meca_tile.bmp"
+          ]
+        },
+        {
+          "name": "EM030",
+          "file": "data/model/Ship/GE/EM030.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EM030.mdx",
+          "sourceSha256": "e7a407c96b90c1b896d58fdb437f5ebd3ed5c1348d0df26f6b070a7abcc165ed",
+          "detailTier": "medium",
+          "nodeCount": 13,
+          "nodes": [
+            "EM030:Layer1",
+            "ENGINE_01",
+            "ENGINE_02",
+            "BEAM_01",
+            "FF_01",
+            "FR_01",
+            "FL_01",
+            "RR_01",
+            "RL_01",
+            "MISSILE_01",
+            "GUN_01",
+            "GUN_02",
+            "LASER_01"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\D2\\objects\\EM030\\EM030.lwo",
+            "D2\\images\\EM030\\EL030_under_2.bmp"
+          ]
+        },
+        {
+          "name": "EL030",
+          "file": "data/model/Ship/GE/EL030.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EL030.mdx",
+          "sourceSha256": "c1443778dae2955b7a1025954e693374c00d5e752007c489e7b5e3da5231ca93",
+          "detailTier": "low",
+          "nodeCount": 4,
+          "nodes": [
+            "EL012:Layer1",
+            "ENGINE_01",
+            "ENGINE_02",
+            "ENGINE_03"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\D\\objects\\EL012.lwo"
+          ]
+        }
+      ]
+    },
+    {
+      "hullId": "032",
+      "status": "pending-mdx-render",
+      "selectedMdx": {
+        "name": "EH032",
+        "file": "data/model/Ship/GE/EH032.mdx",
+        "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EH032.mdx",
+        "sourceSha256": "71850b08fc00abb0f66e9057a47dd30287444595c593f426c419399879cb565b",
+        "detailTier": "high",
+        "nodeCount": 13,
+        "nodes": [
+          "EH032:Layer1",
+          "ENGINE_01",
+          "ENGINE_02",
+          "BEAM_01",
+          "FF_01",
+          "FR_01",
+          "FL_01",
+          "RR_01",
+          "RL_01",
+          "MISSILE_01",
+          "GUN_01",
+          "GUN_02",
+          "LASER_01"
+        ],
+        "assets": [
+          "W:\\Gin7\\CG\\D2\\objects\\EH032\\EH032.lwo",
+          "W:\\Gin7\\CG\\D2\\images\\EH032.bmp",
+          "W:\\Gin7\\CG\\D2\\images\\meca_tile.bmp",
+          "W:\\Gin7\\CG\\D2\\images\\EH032_bump.bmp"
+        ]
+      },
+      "candidates": [
+        {
+          "name": "EH032",
+          "file": "data/model/Ship/GE/EH032.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EH032.mdx",
+          "sourceSha256": "71850b08fc00abb0f66e9057a47dd30287444595c593f426c419399879cb565b",
+          "detailTier": "high",
+          "nodeCount": 13,
+          "nodes": [
+            "EH032:Layer1",
+            "ENGINE_01",
+            "ENGINE_02",
+            "BEAM_01",
+            "FF_01",
+            "FR_01",
+            "FL_01",
+            "RR_01",
+            "RL_01",
+            "MISSILE_01",
+            "GUN_01",
+            "GUN_02",
+            "LASER_01"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\D2\\objects\\EH032\\EH032.lwo",
+            "W:\\Gin7\\CG\\D2\\images\\EH032.bmp",
+            "W:\\Gin7\\CG\\D2\\images\\meca_tile.bmp",
+            "W:\\Gin7\\CG\\D2\\images\\EH032_bump.bmp"
+          ]
+        },
+        {
+          "name": "EM032",
+          "file": "data/model/Ship/GE/EM032.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EM032.mdx",
+          "sourceSha256": "932b6ac89c0ecf22b5f6c340ae3252f9f4e4043a9f45f120ad010faa2bfa05b8",
+          "detailTier": "medium",
+          "nodeCount": 13,
+          "nodes": [
+            "EM032:Layer1",
+            "ENGINE_01",
+            "ENGINE_02",
+            "BEAM_01",
+            "FF_01",
+            "FR_01",
+            "FL_01",
+            "RR_01",
+            "RL_01",
+            "MISSILE_01",
+            "GUN_01",
+            "GUN_02",
+            "LASER_01"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\D2\\objects\\EM032\\EM032.lwo",
+            "D2\\images\\EM032\\EL032_under_2.bmp"
+          ]
+        },
+        {
+          "name": "EL032",
+          "file": "data/model/Ship/GE/EL032.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EL032.mdx",
+          "sourceSha256": "c1443778dae2955b7a1025954e693374c00d5e752007c489e7b5e3da5231ca93",
+          "detailTier": "low",
+          "nodeCount": 4,
+          "nodes": [
+            "EL012:Layer1",
+            "ENGINE_01",
+            "ENGINE_02",
+            "ENGINE_03"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\D\\objects\\EL012.lwo"
+          ]
+        }
+      ]
+    },
+    {
+      "hullId": "036",
+      "status": "pending-mdx-render",
+      "selectedMdx": {
+        "name": "EH036",
+        "file": "data/model/Ship/GE/EH036.mdx",
+        "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EH036.mdx",
+        "sourceSha256": "bdb835f980cccc30bc59af48d3a6943ce98234a2e7120f0f51a63a61338a0254",
+        "detailTier": "high",
+        "nodeCount": 14,
+        "nodes": [
+          "EH036:Layer1",
+          "ENGINE_01",
+          "ENGINE_02",
+          "BEAM_01",
+          "FF_01",
+          "FF_02",
+          "FR_01",
+          "FL_01",
+          "RR_01",
+          "RL_01",
+          "MISSILE_01",
+          "GUN_01",
+          "GUN_02",
+          "LASER_01"
+        ],
+        "assets": [
+          "W:\\Gin7\\CG\\D2\\objects\\EH036\\EH036.lwo",
+          "W:\\Gin7\\CG\\D2\\images\\EH036.bmp",
+          "W:\\Gin7\\CG\\D2\\images\\meca_tile.bmp",
+          "W:\\Gin7\\CG\\D2\\images\\EH036_bump.bmp"
+        ]
+      },
+      "candidates": [
+        {
+          "name": "EH036",
+          "file": "data/model/Ship/GE/EH036.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EH036.mdx",
+          "sourceSha256": "bdb835f980cccc30bc59af48d3a6943ce98234a2e7120f0f51a63a61338a0254",
+          "detailTier": "high",
+          "nodeCount": 14,
+          "nodes": [
+            "EH036:Layer1",
+            "ENGINE_01",
+            "ENGINE_02",
+            "BEAM_01",
+            "FF_01",
+            "FF_02",
+            "FR_01",
+            "FL_01",
+            "RR_01",
+            "RL_01",
+            "MISSILE_01",
+            "GUN_01",
+            "GUN_02",
+            "LASER_01"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\D2\\objects\\EH036\\EH036.lwo",
+            "W:\\Gin7\\CG\\D2\\images\\EH036.bmp",
+            "W:\\Gin7\\CG\\D2\\images\\meca_tile.bmp",
+            "W:\\Gin7\\CG\\D2\\images\\EH036_bump.bmp"
+          ]
+        },
+        {
+          "name": "EM036",
+          "file": "data/model/Ship/GE/EM036.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EM036.mdx",
+          "sourceSha256": "3931bf362f695ea29b8e503eb73ad3b8ef9ae1ba28d72b67f6be78955af1eaff",
+          "detailTier": "medium",
+          "nodeCount": 14,
+          "nodes": [
+            "EM036:Layer1",
+            "ENGINE_01",
+            "ENGINE_02",
+            "BEAM_01",
+            "FF_01",
+            "FF_02",
+            "FR_01",
+            "FL_01",
+            "RR_01",
+            "RL_01",
+            "MISSILE_01",
+            "GUN_01",
+            "GUN_02",
+            "LASER_01"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\D2\\objects\\EM036\\EM036.lwo",
+            "D2\\images\\EM036\\EL036_top_1.bmp"
+          ]
+        },
+        {
+          "name": "EL036",
+          "file": "data/model/Ship/GE/EL036.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EL036.mdx",
+          "sourceSha256": "c1443778dae2955b7a1025954e693374c00d5e752007c489e7b5e3da5231ca93",
+          "detailTier": "low",
+          "nodeCount": 4,
+          "nodes": [
+            "EL012:Layer1",
+            "ENGINE_01",
+            "ENGINE_02",
+            "ENGINE_03"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\D\\objects\\EL012.lwo"
+          ]
+        }
+      ]
+    },
+    {
+      "hullId": "037",
+      "status": "pending-mdx-render",
+      "selectedMdx": {
+        "name": "EH037",
+        "file": "data/model/Ship/GE/EH037.mdx",
+        "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EH037.mdx",
+        "sourceSha256": "030cb6e3c1acdfcb99d0c6cd037b368c6c14a7c116e6be3668085b9b9888489b",
+        "detailTier": "high",
+        "nodeCount": 22,
+        "nodes": [
+          "EH_037:Layer1",
+          "BEAM_01",
+          "FF_01",
+          "FR_01",
+          "FR_02",
+          "RR_01",
+          "RR_02",
+          "GUN_01",
+          "MISSILE_01",
+          "LASER_01",
+          "ENGINE_01",
+          "ENGINE_02",
+          "ENGINE_03",
+          "ENGINE_04",
+          "ENGINE_05",
+          "ENGINE_06",
+          "FF_02",
+          "FL_01",
+          "FL_02",
+          "RL_01",
+          "RL_02",
+          "GUN_02"
+        ],
+        "assets": [
+          "W:\\Gin7\\CG\\D3\\objects\\EH037\\EH_037.lwo",
+          "D3\\images\\EH037\\cuH_op2.bmp"
+        ]
+      },
+      "candidates": [
+        {
+          "name": "EH037",
+          "file": "data/model/Ship/GE/EH037.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EH037.mdx",
+          "sourceSha256": "030cb6e3c1acdfcb99d0c6cd037b368c6c14a7c116e6be3668085b9b9888489b",
+          "detailTier": "high",
+          "nodeCount": 22,
+          "nodes": [
+            "EH_037:Layer1",
+            "BEAM_01",
+            "FF_01",
+            "FR_01",
+            "FR_02",
+            "RR_01",
+            "RR_02",
+            "GUN_01",
+            "MISSILE_01",
+            "LASER_01",
+            "ENGINE_01",
+            "ENGINE_02",
+            "ENGINE_03",
+            "ENGINE_04",
+            "ENGINE_05",
+            "ENGINE_06",
+            "FF_02",
+            "FL_01",
+            "FL_02",
+            "RL_01",
+            "RL_02",
+            "GUN_02"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\D3\\objects\\EH037\\EH_037.lwo",
+            "D3\\images\\EH037\\cuH_op2.bmp"
+          ]
+        },
+        {
+          "name": "EM037",
+          "file": "data/model/Ship/GE/EM037.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EM037.mdx",
+          "sourceSha256": "7936fa25478c43e90fc132db768e2e50550c6892dab48518932a7028a6539031",
+          "detailTier": "medium",
+          "nodeCount": 22,
+          "nodes": [
+            "EM037:Layer1",
+            "BEAM_01",
+            "FF_01",
+            "FR_01",
+            "FR_02",
+            "RR_01",
+            "RR_02",
+            "GUN_01",
+            "MISSILE_01",
+            "LASER_01",
+            "ENGINE_01",
+            "ENGINE_02",
+            "ENGINE_03",
+            "ENGINE_04",
+            "ENGINE_05",
+            "ENGINE_06",
+            "FF_02",
+            "FL_01",
+            "FL_02",
+            "RL_01",
+            "RL_02",
+            "GUN_02"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\D3\\objects\\EM037\\EM037.lwo",
+            "D3\\images\\EM037\\cuL_top_1.bmp"
+          ]
+        },
+        {
+          "name": "EL037",
+          "file": "data/model/Ship/GE/EL037.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EL037.mdx",
+          "sourceSha256": "c1443778dae2955b7a1025954e693374c00d5e752007c489e7b5e3da5231ca93",
+          "detailTier": "low",
+          "nodeCount": 4,
+          "nodes": [
+            "EL012:Layer1",
+            "ENGINE_01",
+            "ENGINE_02",
+            "ENGINE_03"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\D\\objects\\EL012.lwo"
+          ]
+        }
+      ]
+    },
+    {
+      "hullId": "039",
+      "status": "pending-mdx-render",
+      "selectedMdx": {
+        "name": "EH039",
+        "file": "data/model/Ship/GE/EH039.mdx",
+        "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EH039.mdx",
+        "sourceSha256": "79c9b2b7901efa659a40e97357972bb6f404743cf265be07115cf95c6f9837c7",
+        "detailTier": "high",
+        "nodeCount": 18,
+        "nodes": [
+          "ENGINE_01",
+          "ENGINE_02",
+          "ENGINE_03",
+          "ENGINE_04",
+          "FF_01",
+          "FF_02",
+          "FR_01",
+          "FR_02",
+          "RR_01",
+          "RR_02",
+          "LASER_01",
+          "FF_03",
+          "FF_04",
+          "FL_01",
+          "FL_02",
+          "RL_01",
+          "RL_02",
+          "EH039:Layer1"
+        ],
+        "assets": [
+          "W:\\Gin7\\CG\\D2\\objects\\EH039\\EH039.lwo",
+          "W:\\Gin7\\CG\\D2\\images\\EH039.bmp",
+          "W:\\Gin7\\CG\\D2\\images\\meca_tile.bmp"
+        ]
+      },
+      "candidates": [
+        {
+          "name": "EH039",
+          "file": "data/model/Ship/GE/EH039.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EH039.mdx",
+          "sourceSha256": "79c9b2b7901efa659a40e97357972bb6f404743cf265be07115cf95c6f9837c7",
+          "detailTier": "high",
+          "nodeCount": 18,
+          "nodes": [
+            "ENGINE_01",
+            "ENGINE_02",
+            "ENGINE_03",
+            "ENGINE_04",
+            "FF_01",
+            "FF_02",
+            "FR_01",
+            "FR_02",
+            "RR_01",
+            "RR_02",
+            "LASER_01",
+            "FF_03",
+            "FF_04",
+            "FL_01",
+            "FL_02",
+            "RL_01",
+            "RL_02",
+            "EH039:Layer1"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\D2\\objects\\EH039\\EH039.lwo",
+            "W:\\Gin7\\CG\\D2\\images\\EH039.bmp",
+            "W:\\Gin7\\CG\\D2\\images\\meca_tile.bmp"
+          ]
+        },
+        {
+          "name": "EM039",
+          "file": "data/model/Ship/GE/EM039.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EM039.mdx",
+          "sourceSha256": "8a7fb171380afab821439fceb824ed51725502538c4575e3aeadefb9e74142f9",
+          "detailTier": "medium",
+          "nodeCount": 18,
+          "nodes": [
+            "ENGINE_01",
+            "ENGINE_02",
+            "ENGINE_03",
+            "ENGINE_04",
+            "FF_01",
+            "FF_02",
+            "FR_01",
+            "FR_02",
+            "RR_01",
+            "RR_02",
+            "LASER_01",
+            "FF_03",
+            "FF_04",
+            "FL_01",
+            "FL_02",
+            "RL_01",
+            "RL_02",
+            "EM039:Layer1"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\D2\\objects\\EM039\\EM039.lwo",
+            "D2\\images\\EM039\\EL039_under.bmp"
+          ]
+        },
+        {
+          "name": "EL039",
+          "file": "data/model/Ship/GE/EL039.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EL039.mdx",
+          "sourceSha256": "18ad1f77d0f6386fb50282f53cd3e753fcbaacfd7f9685967f12cfe0dcbe1c86",
+          "detailTier": "low",
+          "nodeCount": 5,
+          "nodes": [
+            "EL039:Layer1",
+            "ENGINE_01",
+            "ENGINE_02",
+            "ENGINE_03",
+            "ENGINE_04"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\D\\objects\\EL039.lwo"
+          ]
+        }
+      ]
+    },
+    {
+      "hullId": "040",
+      "status": "pending-mdx-render",
+      "selectedMdx": {
+        "name": "EH040",
+        "file": "data/model/Ship/GE/EH040.mdx",
+        "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EH040.mdx",
+        "sourceSha256": "cb82c97672c33e2aa78dd51dc9b00a2093db720679c95953d921407c69f650a6",
+        "detailTier": "high",
+        "nodeCount": 19,
+        "nodes": [
+          "EH040:Layer1",
+          "ENGINE_01",
+          "ENGINE_02",
+          "FF_01",
+          "FF_02",
+          "FF_03",
+          "FF_04",
+          "FR_01",
+          "FR_02",
+          "RR_01",
+          "RR_02",
+          "BEAM_01",
+          "LASER_01",
+          "FL_01",
+          "FL_02",
+          "RL_01",
+          "RL_02",
+          "ENGINE_03",
+          "ENGINE_04"
+        ],
+        "assets": [
+          "W:\\Gin7\\CG\\D2\\objects\\EH040\\EH040.lwo",
+          "W:\\Gin7\\CG\\D2\\images\\EH040.bmp",
+          "W:\\Gin7\\CG\\D2\\images\\meca_tile.bmp",
+          "W:\\Gin7\\CG\\D2\\images\\EH040_bump.bmp"
+        ]
+      },
+      "candidates": [
+        {
+          "name": "EH040",
+          "file": "data/model/Ship/GE/EH040.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EH040.mdx",
+          "sourceSha256": "cb82c97672c33e2aa78dd51dc9b00a2093db720679c95953d921407c69f650a6",
+          "detailTier": "high",
+          "nodeCount": 19,
+          "nodes": [
+            "EH040:Layer1",
+            "ENGINE_01",
+            "ENGINE_02",
+            "FF_01",
+            "FF_02",
+            "FF_03",
+            "FF_04",
+            "FR_01",
+            "FR_02",
+            "RR_01",
+            "RR_02",
+            "BEAM_01",
+            "LASER_01",
+            "FL_01",
+            "FL_02",
+            "RL_01",
+            "RL_02",
+            "ENGINE_03",
+            "ENGINE_04"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\D2\\objects\\EH040\\EH040.lwo",
+            "W:\\Gin7\\CG\\D2\\images\\EH040.bmp",
+            "W:\\Gin7\\CG\\D2\\images\\meca_tile.bmp",
+            "W:\\Gin7\\CG\\D2\\images\\EH040_bump.bmp"
+          ]
+        },
+        {
+          "name": "EM040",
+          "file": "data/model/Ship/GE/EM040.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EM040.mdx",
+          "sourceSha256": "ece4caa32875ca025404010c8fa4c7a76359a061f7386c7d13cba9311784c51e",
+          "detailTier": "medium",
+          "nodeCount": 19,
+          "nodes": [
+            "EM040:Layer1",
+            "ENGINE_01",
+            "ENGINE_02",
+            "FF_01",
+            "FF_02",
+            "FF_03",
+            "FF_04",
+            "FR_01",
+            "FR_02",
+            "RR_01",
+            "RR_02",
+            "BEAM_01",
+            "LASER_01",
+            "FL_01",
+            "FL_02",
+            "RL_01",
+            "RL_02",
+            "ENGINE_03",
+            "ENGINE_04"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\D2\\objects\\EM040\\EM040.lwo",
+            "W:\\Gin7\\CG\\D2\\images\\EH040.bmp",
+            "W:\\Gin7\\CG\\D2\\images\\meca_tile.bmp",
+            "W:\\Gin7\\CG\\D2\\images\\EH040_bump.bmp"
+          ]
+        },
+        {
+          "name": "EL040",
+          "file": "data/model/Ship/GE/EL040.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EL040.mdx",
+          "sourceSha256": "1e11381fcd5348fe15aa8c2ba42e2fa06e53d228af901913f10b6ab3f7a92dd4",
+          "detailTier": "low",
+          "nodeCount": 5,
+          "nodes": [
+            "EL040:Layer1",
+            "ENGINE_01",
+            "ENGINE_02",
+            "ENGINE_03",
+            "ENGINE_04"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\D\\objects\\EL040.lwo"
+          ]
+        }
+      ]
+    },
+    {
+      "hullId": "041",
+      "status": "pending-mdx-render",
+      "selectedMdx": {
+        "name": "EH041",
+        "file": "data/model/Ship/GE/EH041.mdx",
+        "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EH041.mdx",
+        "sourceSha256": "b916b508e7614d5f9382532ec81d70d197aa50ac3807ac47c9d9b0316cb9dd45",
+        "detailTier": "high",
+        "nodeCount": 13,
+        "nodes": [
+          "EH041:Layer1",
+          "ENGINE_01",
+          "ENGINE_02",
+          "FF_01",
+          "FF_02",
+          "FF_03",
+          "FF_04",
+          "FR_01",
+          "FL_01",
+          "RR_01",
+          "RL_01",
+          "LASER_01",
+          "MISSILE_01"
+        ],
+        "assets": [
+          "W:\\Gin7\\CG\\D2\\objects\\EH041\\EH041.lwo",
+          "W:\\Gin7\\CG\\D2\\images\\EH041.bmp",
+          "W:\\Gin7\\CG\\D2\\images\\meca_tile.bmp",
+          "W:\\Gin7\\CG\\D2\\images\\EH041_bump.bmp"
+        ]
+      },
+      "candidates": [
+        {
+          "name": "EH041",
+          "file": "data/model/Ship/GE/EH041.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EH041.mdx",
+          "sourceSha256": "b916b508e7614d5f9382532ec81d70d197aa50ac3807ac47c9d9b0316cb9dd45",
+          "detailTier": "high",
+          "nodeCount": 13,
+          "nodes": [
+            "EH041:Layer1",
+            "ENGINE_01",
+            "ENGINE_02",
+            "FF_01",
+            "FF_02",
+            "FF_03",
+            "FF_04",
+            "FR_01",
+            "FL_01",
+            "RR_01",
+            "RL_01",
+            "LASER_01",
+            "MISSILE_01"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\D2\\objects\\EH041\\EH041.lwo",
+            "W:\\Gin7\\CG\\D2\\images\\EH041.bmp",
+            "W:\\Gin7\\CG\\D2\\images\\meca_tile.bmp",
+            "W:\\Gin7\\CG\\D2\\images\\EH041_bump.bmp"
+          ]
+        },
+        {
+          "name": "EM041",
+          "file": "data/model/Ship/GE/EM041.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EM041.mdx",
+          "sourceSha256": "2b4024aaeb01c65cf8a7cc172a29079721a7068c115bcc6eba99e820c63dc2dc",
+          "detailTier": "medium",
+          "nodeCount": 13,
+          "nodes": [
+            "EH041_UV:Layer1",
+            "ENGINE_01",
+            "ENGINE_02",
+            "FF_01",
+            "FF_02",
+            "FF_03",
+            "FF_04",
+            "FR_01",
+            "FL_01",
+            "RR_01",
+            "RL_01",
+            "LASER_01",
+            "MISSILE_01"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\D2\\objects\\EH041\\EH041_UV.lwo",
+            "W:\\Gin7\\CG\\D2\\images\\EH041.bmp",
+            "W:\\Gin7\\CG\\D2\\images\\meca_tile.bmp",
+            "W:\\Gin7\\CG\\D2\\images\\EH041_bump.bmp"
+          ]
+        },
+        {
+          "name": "EL041",
+          "file": "data/model/Ship/GE/EL041.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EL041.mdx",
+          "sourceSha256": "519745c6950c45b48644d78e208b698676f6516172855452bfea23353bf18bae",
+          "detailTier": "low",
+          "nodeCount": 3,
+          "nodes": [
+            "EL041:Layer1",
+            "ENGINE_01",
+            "ENGINE_02"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\D\\objects\\EL041.lwo"
+          ]
+        }
+      ]
+    },
+    {
+      "hullId": "042",
+      "status": "pending-mdx-render",
+      "selectedMdx": {
+        "name": "EH042",
+        "file": "data/model/Ship/GE/EH042.mdx",
+        "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EH042.mdx",
+        "sourceSha256": "2b4024aaeb01c65cf8a7cc172a29079721a7068c115bcc6eba99e820c63dc2dc",
+        "detailTier": "high",
+        "nodeCount": 13,
+        "nodes": [
+          "EH041_UV:Layer1",
+          "ENGINE_01",
+          "ENGINE_02",
+          "FF_01",
+          "FF_02",
+          "FF_03",
+          "FF_04",
+          "FR_01",
+          "FL_01",
+          "RR_01",
+          "RL_01",
+          "LASER_01",
+          "MISSILE_01"
+        ],
+        "assets": [
+          "W:\\Gin7\\CG\\D2\\objects\\EH041\\EH041_UV.lwo",
+          "W:\\Gin7\\CG\\D2\\images\\EH041.bmp",
+          "W:\\Gin7\\CG\\D2\\images\\meca_tile.bmp",
+          "W:\\Gin7\\CG\\D2\\images\\EH041_bump.bmp"
+        ]
+      },
+      "candidates": [
+        {
+          "name": "EH042",
+          "file": "data/model/Ship/GE/EH042.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EH042.mdx",
+          "sourceSha256": "2b4024aaeb01c65cf8a7cc172a29079721a7068c115bcc6eba99e820c63dc2dc",
+          "detailTier": "high",
+          "nodeCount": 13,
+          "nodes": [
+            "EH041_UV:Layer1",
+            "ENGINE_01",
+            "ENGINE_02",
+            "FF_01",
+            "FF_02",
+            "FF_03",
+            "FF_04",
+            "FR_01",
+            "FL_01",
+            "RR_01",
+            "RL_01",
+            "LASER_01",
+            "MISSILE_01"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\D2\\objects\\EH041\\EH041_UV.lwo",
+            "W:\\Gin7\\CG\\D2\\images\\EH041.bmp",
+            "W:\\Gin7\\CG\\D2\\images\\meca_tile.bmp",
+            "W:\\Gin7\\CG\\D2\\images\\EH041_bump.bmp"
+          ]
+        },
+        {
+          "name": "EM042",
+          "file": "data/model/Ship/GE/EM042.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EM042.mdx",
+          "sourceSha256": "2b4024aaeb01c65cf8a7cc172a29079721a7068c115bcc6eba99e820c63dc2dc",
+          "detailTier": "medium",
+          "nodeCount": 13,
+          "nodes": [
+            "EH041_UV:Layer1",
+            "ENGINE_01",
+            "ENGINE_02",
+            "FF_01",
+            "FF_02",
+            "FF_03",
+            "FF_04",
+            "FR_01",
+            "FL_01",
+            "RR_01",
+            "RL_01",
+            "LASER_01",
+            "MISSILE_01"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\D2\\objects\\EH041\\EH041_UV.lwo",
+            "W:\\Gin7\\CG\\D2\\images\\EH041.bmp",
+            "W:\\Gin7\\CG\\D2\\images\\meca_tile.bmp",
+            "W:\\Gin7\\CG\\D2\\images\\EH041_bump.bmp"
+          ]
+        },
+        {
+          "name": "EL042",
+          "file": "data/model/Ship/GE/EL042.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EL042.mdx",
+          "sourceSha256": "519745c6950c45b48644d78e208b698676f6516172855452bfea23353bf18bae",
+          "detailTier": "low",
+          "nodeCount": 3,
+          "nodes": [
+            "EL041:Layer1",
+            "ENGINE_01",
+            "ENGINE_02"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\D\\objects\\EL041.lwo"
+          ]
+        }
+      ]
+    },
+    {
+      "hullId": "043",
+      "status": "pending-mdx-render",
+      "selectedMdx": {
+        "name": "EH043",
+        "file": "data/model/Ship/GE/EH043.mdx",
+        "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EH043.mdx",
+        "sourceSha256": "2b4024aaeb01c65cf8a7cc172a29079721a7068c115bcc6eba99e820c63dc2dc",
+        "detailTier": "high",
+        "nodeCount": 13,
+        "nodes": [
+          "EH041_UV:Layer1",
+          "ENGINE_01",
+          "ENGINE_02",
+          "FF_01",
+          "FF_02",
+          "FF_03",
+          "FF_04",
+          "FR_01",
+          "FL_01",
+          "RR_01",
+          "RL_01",
+          "LASER_01",
+          "MISSILE_01"
+        ],
+        "assets": [
+          "W:\\Gin7\\CG\\D2\\objects\\EH041\\EH041_UV.lwo",
+          "W:\\Gin7\\CG\\D2\\images\\EH041.bmp",
+          "W:\\Gin7\\CG\\D2\\images\\meca_tile.bmp",
+          "W:\\Gin7\\CG\\D2\\images\\EH041_bump.bmp"
+        ]
+      },
+      "candidates": [
+        {
+          "name": "EH043",
+          "file": "data/model/Ship/GE/EH043.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EH043.mdx",
+          "sourceSha256": "2b4024aaeb01c65cf8a7cc172a29079721a7068c115bcc6eba99e820c63dc2dc",
+          "detailTier": "high",
+          "nodeCount": 13,
+          "nodes": [
+            "EH041_UV:Layer1",
+            "ENGINE_01",
+            "ENGINE_02",
+            "FF_01",
+            "FF_02",
+            "FF_03",
+            "FF_04",
+            "FR_01",
+            "FL_01",
+            "RR_01",
+            "RL_01",
+            "LASER_01",
+            "MISSILE_01"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\D2\\objects\\EH041\\EH041_UV.lwo",
+            "W:\\Gin7\\CG\\D2\\images\\EH041.bmp",
+            "W:\\Gin7\\CG\\D2\\images\\meca_tile.bmp",
+            "W:\\Gin7\\CG\\D2\\images\\EH041_bump.bmp"
+          ]
+        },
+        {
+          "name": "EM043",
+          "file": "data/model/Ship/GE/EM043.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EM043.mdx",
+          "sourceSha256": "2b4024aaeb01c65cf8a7cc172a29079721a7068c115bcc6eba99e820c63dc2dc",
+          "detailTier": "medium",
+          "nodeCount": 13,
+          "nodes": [
+            "EH041_UV:Layer1",
+            "ENGINE_01",
+            "ENGINE_02",
+            "FF_01",
+            "FF_02",
+            "FF_03",
+            "FF_04",
+            "FR_01",
+            "FL_01",
+            "RR_01",
+            "RL_01",
+            "LASER_01",
+            "MISSILE_01"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\D2\\objects\\EH041\\EH041_UV.lwo",
+            "W:\\Gin7\\CG\\D2\\images\\EH041.bmp",
+            "W:\\Gin7\\CG\\D2\\images\\meca_tile.bmp",
+            "W:\\Gin7\\CG\\D2\\images\\EH041_bump.bmp"
+          ]
+        },
+        {
+          "name": "EL043",
+          "file": "data/model/Ship/GE/EL043.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EL043.mdx",
+          "sourceSha256": "519745c6950c45b48644d78e208b698676f6516172855452bfea23353bf18bae",
+          "detailTier": "low",
+          "nodeCount": 3,
+          "nodes": [
+            "EL041:Layer1",
+            "ENGINE_01",
+            "ENGINE_02"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\D\\objects\\EL041.lwo"
+          ]
+        }
+      ]
+    },
+    {
+      "hullId": "044",
+      "status": "pending-mdx-render",
+      "selectedMdx": {
+        "name": "EH044",
+        "file": "data/model/Ship/GE/EH044.mdx",
+        "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EH044.mdx",
+        "sourceSha256": "270fe1b5190a1f54af9a60fd8a245f3c443a14ca2bf57b50dd52dd12ade27e41",
+        "detailTier": "high",
+        "nodeCount": 1,
+        "nodes": [
+          "EH044:Layer1"
+        ],
+        "assets": [
+          "W:\\Gin7\\CG\\",
+          "j\\objects\\EH044.lwo",
+          "j\\images\\EH044.bmp"
+        ]
+      },
+      "candidates": [
+        {
+          "name": "EH044",
+          "file": "data/model/Ship/GE/EH044.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EH044.mdx",
+          "sourceSha256": "270fe1b5190a1f54af9a60fd8a245f3c443a14ca2bf57b50dd52dd12ade27e41",
+          "detailTier": "high",
+          "nodeCount": 1,
+          "nodes": [
+            "EH044:Layer1"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\",
+            "j\\objects\\EH044.lwo",
+            "j\\images\\EH044.bmp"
+          ]
+        },
+        {
+          "name": "EM044",
+          "file": "data/model/Ship/GE/EM044.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EM044.mdx",
+          "sourceSha256": "270fe1b5190a1f54af9a60fd8a245f3c443a14ca2bf57b50dd52dd12ade27e41",
+          "detailTier": "medium",
+          "nodeCount": 1,
+          "nodes": [
+            "EH044:Layer1"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\",
+            "j\\objects\\EH044.lwo",
+            "j\\images\\EH044.bmp"
+          ]
+        },
+        {
+          "name": "EL044",
+          "file": "data/model/Ship/GE/EL044.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EL044.mdx",
+          "sourceSha256": "270fe1b5190a1f54af9a60fd8a245f3c443a14ca2bf57b50dd52dd12ade27e41",
+          "detailTier": "low",
+          "nodeCount": 1,
+          "nodes": [
+            "EH044:Layer1"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\",
+            "j\\objects\\EH044.lwo",
+            "j\\images\\EH044.bmp"
+          ]
+        }
+      ]
+    },
+    {
+      "hullId": "045",
+      "status": "pending-mdx-render",
+      "selectedMdx": {
+        "name": "EH045",
+        "file": "data/model/Ship/GE/EH045.mdx",
+        "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EH045.mdx",
+        "sourceSha256": "270fe1b5190a1f54af9a60fd8a245f3c443a14ca2bf57b50dd52dd12ade27e41",
+        "detailTier": "high",
+        "nodeCount": 1,
+        "nodes": [
+          "EH044:Layer1"
+        ],
+        "assets": [
+          "W:\\Gin7\\CG\\",
+          "j\\objects\\EH044.lwo",
+          "j\\images\\EH044.bmp"
+        ]
+      },
+      "candidates": [
+        {
+          "name": "EH045",
+          "file": "data/model/Ship/GE/EH045.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EH045.mdx",
+          "sourceSha256": "270fe1b5190a1f54af9a60fd8a245f3c443a14ca2bf57b50dd52dd12ade27e41",
+          "detailTier": "high",
+          "nodeCount": 1,
+          "nodes": [
+            "EH044:Layer1"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\",
+            "j\\objects\\EH044.lwo",
+            "j\\images\\EH044.bmp"
+          ]
+        },
+        {
+          "name": "EM045",
+          "file": "data/model/Ship/GE/EM045.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EM045.mdx",
+          "sourceSha256": "270fe1b5190a1f54af9a60fd8a245f3c443a14ca2bf57b50dd52dd12ade27e41",
+          "detailTier": "medium",
+          "nodeCount": 1,
+          "nodes": [
+            "EH044:Layer1"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\",
+            "j\\objects\\EH044.lwo",
+            "j\\images\\EH044.bmp"
+          ]
+        },
+        {
+          "name": "EL045",
+          "file": "data/model/Ship/GE/EL045.mdx",
+          "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EL045.mdx",
+          "sourceSha256": "270fe1b5190a1f54af9a60fd8a245f3c443a14ca2bf57b50dd52dd12ade27e41",
+          "detailTier": "low",
+          "nodeCount": 1,
+          "nodes": [
+            "EH044:Layer1"
+          ],
+          "assets": [
+            "W:\\Gin7\\CG\\",
+            "j\\objects\\EH044.lwo",
+            "j\\images\\EH044.bmp"
+          ]
+        }
+      ]
+    }
+  ]
+}

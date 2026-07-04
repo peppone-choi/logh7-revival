@@ -1,64 +1,80 @@
-# LOGH VII Revival Server
+# LOGH VII Data/Spec Bootstrap
 
-This is the authoritative server/admin package. It is intentionally separate from the Windows client package.
+This package now contains the evidence-backed data pipeline for the LOGH VII
+revival. The old playable protocol server and client-patch helper stack have
+been removed from the normal development path.
 
-## Owns
+## What Remains
 
-- `src/server/`: login, lobby, session, world/bootstrap, admin CLI/API.
-- `content/`: scenario, galaxy, roster, economy, manual-derived data loaded by the server.
-- `state/accounts.sqlite`: account registry created by `admin create` or launcher signup.
-- `state/world-state.sqlite`: world/session snapshot persistence.
-- `logs/` and `traces/`: server runtime evidence.
-- `content/crypto/child-codec-tables.json`: committed codec table fixture; the server does not need a client EXE at runtime.
+- Preserved and generated data under `content/`.
+- Source provenance manifests under `content/original-data/`.
+- Generated catalogs under `content/generated/`.
+- Small Node.js catalog modules under `src/server/`.
+- Regeneration CLIs under `tools/`.
+- Focused node:test coverage under `tests/server/`.
 
-## Does Not Own
-
-- Windows game executable or player data files.
-- Pretendard font payload.
-- Client installer/launcher packaging.
-- Original CD/ISO artifacts and reverse-engineering scratch data.
-
-## Quick Start
+## Commands
 
 ```bash
-npm run admin -- create test01 --password-stdin --account-db state/accounts.sqlite
-npm run serve:auth -- --host 127.0.0.1 --port 47900 --admin-host 127.0.0.1 --admin-port 47910
+npm test
+npm run inventory:sources
+npm run verify:source
+npm run catalog:logistics-allocation
+npm run catalog:mdx
+npm run catalog:null-galaxy
+npm run catalog:operations
+npm run catalog:ranks-promotion
+npm run catalog:ship-stats
+npm run catalog:strategy-commands
+npm run catalog:tcf
+npm run catalog:tcf-portraits
+npm run export:tcf-portraits -- --limit-per-archive 2
 ```
 
-The admin session snapshot is available at `http://127.0.0.1:47910/admin/session-state` when `--admin-port` is enabled.
+`verify:source` currently reports the Archive.org original-media root as missing
+until a locally hash-matched BIN/CUE import is present.
 
-## Server Notice
+## Current Catalogs
 
-`--announcement` and the admin `text` field are for ASCII/Latin-1 probe text only:
+- `content/generated/logh7-mdx-catalog.json`: installed MDX file inventory and
+  structural header/node-name evidence.
+- `content/generated/logh7-null-galaxy-template.json`: star template names and
+ spectral classes from `strategy/Null_galaxy.mdx`; it does not contain star
+ positions.
+- `content/generated/logh7-logistics-allocation-catalog.json`: manual logistics
+- `content/generated/logh7-rank-promotion-catalog.json`: manual rank ladder and headcount caps; cap values marked uncertain and lower ranks stay unlimited.
+- `src/server/logh7-rank-promotion-rules.mjs`: explicit rank headcount-cap consumer; promotion formulas and fame costs stay unresolved.
+allocation authority table normalized by role and unit type.
+- `src/server/logh7-logistics-allocation-rules.mjs`: explicit allocation
+authority consumer; OCR-null cells stay uncertain.
+- `content/generated/logh7-ship-stat-catalog.json`: normalized ship stat
+evidence plus side/class counts and pool coverage.
+- `src/server/logh7-ship-stat-rules.mjs`: explicit ship pool-readiness
+consumer; missing pools stay missing and combat formulas are not inferred.
+- `content/generated/logh7-operation-catalog.json`: manual operation purposes,
+planning fields, draft gates, 30-day duration, results, unresolved CP range.
+- `src/server/logh7-operation-rules.mjs`: explicit operation draft-gate
+consumer; CP formula and outcome simulation stay unresolved.
+- `src/server/logh7-operation-state.mjs`: first state-changing operation
+gameplay consumer; appends planned records only after draft gates pass.
+- `content/generated/logh7-strategy-command-catalog.json`: manual strategy
+  commands normalized into stable category/command ids plus CP and duration
+  classifications.
+- `src/server/logh7-strategy-command-rules.mjs`: first gameplay-rule consumer
+  for the command catalog; fixed CP is payable/insufficient, variable CP stays
+  unresolved.
+- `src/server/logh7-strategic-grid-rules.mjs`: strategic grid entry gates from
+  the 3628-cell passable mask and manual terrain/navigability restrictions.
+- `content/generated/logh7-face-tcf-catalog.json`: Face TCF archive and HED slot
+  metadata.
+- `content/generated/logh7-face-portrait-catalog.json`: Face TCF portrait payload
+  decode evidence using BGRA palettes and bottom-up 8-bit indices.
+- `.omo/ulw-loop/evidence/tcf-portrait-bmp-sample/`: controlled visual BMP
+  samples from decoded portraits; evidence output, not a full committed dump.
 
-```bash
-npm run serve:auth -- --admin-port 47910 --announcement "WELCOME"
-```
+## Boundaries
 
-For Korean notices, pre-encode the body as CP949 bytes and pass hex so the legacy client receives ANSI text without mojibake:
-
-```bash
-NOTICE_HEX=$(python -c "import sys; print(sys.argv[1].encode('cp949').hex())" "서버 점검 안내")
-npm run serve:auth -- --admin-port 47910 --announcement-cp949-hex "$NOTICE_HEX"
-```
-
-With the admin port enabled, the notice can be changed at runtime for future lobby logins:
-
-```bash
-curl http://127.0.0.1:47910/admin/notice
-curl -X PUT http://127.0.0.1:47910/admin/notice -H "content-type: application/json" -d "{\"text\":\"WELCOME\"}"
-curl -X PUT http://127.0.0.1:47910/admin/notice -H "content-type: application/json" -d "{\"cp949Hex\":\"$NOTICE_HEX\"}"
-curl -X DELETE http://127.0.0.1:47910/admin/notice
-```
-
-Environment equivalents are `LOGH_LOBBY_ANNOUNCE_TEXT`, `LOGH_SESSION_ANNOUNCE_TEXT`, `LOGH_LOBBY_ANNOUNCE_CP949_HEX`, and `LOGH_SESSION_ANNOUNCE_CP949_HEX`.
-
-A deployed server should run without any parent workspace, `.omo` directory, or client package.
-
-Some committed content files keep `_source` strings that mention extraction workspaces such as `.omo`; those are audit provenance strings, not runtime file dependencies.
-
-If the committed codec fixture must be regenerated, do it inside this repo with an explicit EXE path:
-
-```bash
-npm run extract:codec -- /path/to/G7MTClient.exe
-```
+Legacy live-client tooling is diagnostic/oracle-only. Product work should build
+canonical data/spec artifacts and gameplay logic from evidence. Do not restore
+Python EXE builders, JSON patch descriptors, Frida runtime patches, direct EXE
+launch workflows, or old auth/gameplay server code as normal runtime.

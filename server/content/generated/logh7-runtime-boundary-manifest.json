@@ -1,0 +1,114 @@
+{
+  "id": "logh7-runtime-boundary-manifest",
+  "generatedAt": "2026-07-03T19:43:03.239Z",
+  "productClient": "Unity 6000.5.2f1",
+  "policy": "diagnostic-only-shortcuts-never-normal-runtime",
+  "normalRuntime": [
+    {
+      "id": "operator-docker-compose-server",
+      "owner": "operator",
+      "entrypoint": "Docker Compose server path",
+      "normalRuntimeAllowed": true
+    },
+    {
+      "id": "unity-player-launcher",
+      "owner": "player",
+      "entrypoint": "Unity 6000.5.2f1 player/launcher path",
+      "normalRuntimeAllowed": true
+    }
+  ],
+  "diagnosticOnly": [
+    {
+      "id": "G7MTClient.exe",
+      "oracleUse": "original scene/UI/protocol/resource oracle",
+      "status": "oracle-only",
+      "oracleUseAllowed": true,
+      "normalRuntimeAllowed": false
+    },
+    {
+      "id": "Frida",
+      "oracleUse": "live instrumentation oracle",
+      "status": "oracle-only",
+      "oracleUseAllowed": true,
+      "normalRuntimeAllowed": false
+    },
+    {
+      "id": "ui_explorer",
+      "oracleUse": "live UI diagnostic driver",
+      "status": "oracle-only",
+      "oracleUseAllowed": true,
+      "normalRuntimeAllowed": false
+    },
+    {
+      "id": "preseed-flags",
+      "oracleUse": "diagnostic bootstrap bypass only",
+      "status": "oracle-only",
+      "oracleUseAllowed": true,
+      "normalRuntimeAllowed": false
+    },
+    {
+      "id": "patch-builders",
+      "oracleUse": "direct patch construction and verification only",
+      "status": "oracle-only",
+      "oracleUseAllowed": true,
+      "normalRuntimeAllowed": false
+    }
+  ],
+  "preseedPolicy": {
+    "normalRuntimeAllowed": false,
+    "allowedOnlyFor": "explicit bypass diagnostics"
+  },
+  "patchPolicy": {
+    "directPatchOperationsOnly": true,
+    "normalRuntimeAllowed": false,
+    "requiredEvidence": [
+      "originalSignature",
+      "targetHash",
+      "changedBytes",
+      "rollback",
+      "liveQa"
+    ]
+  },
+  "runtimeInputs": [
+    {
+      "id": "unityBootstrapManifest",
+      "path": "server/content/generated/logh7-unity-bootstrap-manifest.json",
+      "normalRuntimeAllowed": true,
+      "status": "present",
+      "size": 8008,
+      "sha1": "39bc401c82cdfd16b55b0e2d50be9a0483dfc8a2",
+      "manifestId": "logh7-unity-bootstrap-manifest",
+      "manifestStatus": "bootstrap-contract"
+    },
+    {
+      "id": "unityRuntimeManifest",
+      "path": "client-unity/Assets/StreamingAssets/logh7/logh7-unity-runtime-manifest.json",
+      "normalRuntimeAllowed": true,
+      "status": "present",
+      "size": 5673,
+      "sha1": "667af365368b04f6d938a5e52065e24809def9a1",
+      "manifestId": "logh7-unity-runtime-manifest",
+      "manifestStatus": "runtime-data-bootstrap"
+    },
+    {
+      "id": "unitySourcePackManifest",
+      "path": "server/content/generated/logh7-unity-source-pack-manifest.json",
+      "normalRuntimeAllowed": true,
+      "status": "present",
+      "size": 4704,
+      "sha1": "34eaa4bad66f1a90f17aa6a7e2e3312a41440d49",
+      "manifestId": "logh7-unity-source-pack-manifest",
+      "manifestStatus": "blocked-until-cross-source-confirmed"
+    },
+    {
+      "id": "serverDataFamilyManifest",
+      "path": "server/content/generated/logh7-server-servable-data-family.json",
+      "normalRuntimeAllowed": true,
+      "status": "present",
+      "size": 20411,
+      "sha1": "e755e16e853a81d7a2933291d93b02622253fe3f",
+      "manifestId": "logh7-server-servable-data-family",
+      "manifestStatus": null
+    }
+  ]
+}

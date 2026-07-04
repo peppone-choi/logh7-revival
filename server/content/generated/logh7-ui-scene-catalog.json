@@ -1,0 +1,227 @@
+{
+  "id": "logh7-ui-scene-catalog",
+  "generatedAt": "2026-07-03T23:21:24.185Z",
+  "canonicalPromotion": "blocked-until-cross-source-confirmed",
+  "streamingAssetsTarget": "client-unity/Assets/StreamingAssets/logh7/logh7-ui-scene-catalog.json",
+  "inputs": [
+    {
+      "id": "sceneInventory",
+      "path": "server/content/generated/logh7-scene-inventory.json",
+      "status": "present"
+    }
+  ],
+  "runtimePolicy": {
+    "unityMainRuntime": true,
+    "originalClientRole": "oracle-and-data-mining-only",
+    "diagnosticShortcutsNormalRuntimeAllowed": false
+  },
+  "summary": {
+    "surfaceCount": 10,
+    "requiredSurfaceCount": 10,
+    "missingSceneCount": 0,
+    "liveTraceSurfaceCount": 6,
+    "sourceHitSurfaceCount": 10
+  },
+  "surfaces": [
+    {
+      "id": "launcher",
+      "sceneIds": [
+        "boot-update-launcher"
+      ],
+      "relatedSceneIds": [],
+      "runtimePhase": "operator-player-entry",
+      "requiredEvidenceChannels": [
+        "exe-launcher",
+        "ghidra-strings",
+        "cd-extract"
+      ],
+      "evidenceStatus": "source-hits-present",
+      "liveTraceRecords": [],
+      "liveTraceRecord": null,
+      "implementationStatus": "cataloged-placeholder-required",
+      "missingSceneIds": []
+    },
+    {
+      "id": "login",
+      "sceneIds": [
+        "login"
+      ],
+      "relatedSceneIds": [],
+      "runtimePhase": "network-session-entry",
+      "requiredEvidenceChannels": [
+        "ghidra-strings",
+        "wire-login",
+        "live-trace"
+      ],
+      "evidenceStatus": "source-hits-present",
+      "liveTraceRecords": [
+        "0x7000"
+      ],
+      "liveTraceRecord": "0x7000",
+      "implementationStatus": "cataloged-placeholder-required",
+      "missingSceneIds": []
+    },
+    {
+      "id": "lobby",
+      "sceneIds": [
+        "lobby"
+      ],
+      "relatedSceneIds": [],
+      "runtimePhase": "pre-game-session",
+      "requiredEvidenceChannels": [
+        "ghidra-strings",
+        "wire-lobby",
+        "live-trace"
+      ],
+      "evidenceStatus": "source-hits-present",
+      "liveTraceRecords": [
+        "0x0020",
+        "0x2005",
+        "0x2006"
+      ],
+      "liveTraceRecord": "0x0020",
+      "implementationStatus": "cataloged-placeholder-required",
+      "missingSceneIds": []
+    },
+    {
+      "id": "character",
+      "sceneIds": [
+        "character-select"
+      ],
+      "relatedSceneIds": [
+        "character-create"
+      ],
+      "runtimePhase": "player-character-selection",
+      "requiredEvidenceChannels": [
+        "ghidra-strings",
+        "msgdat-text",
+        "live-trace"
+      ],
+      "evidenceStatus": "source-hits-present",
+      "liveTraceRecords": [
+        "0x1008"
+      ],
+      "liveTraceRecord": "0x1008",
+      "implementationStatus": "cataloged-placeholder-required",
+      "missingSceneIds": []
+    },
+    {
+      "id": "world",
+      "sceneIds": [
+        "world-entry"
+      ],
+      "relatedSceneIds": [],
+      "runtimePhase": "world-loaded",
+      "requiredEvidenceChannels": [
+        "ghidra-functions",
+        "wire-world",
+        "live-trace"
+      ],
+      "evidenceStatus": "source-hits-present",
+      "liveTraceRecords": [
+        "0x0f02"
+      ],
+      "liveTraceRecord": "0x0f02",
+      "implementationStatus": "cataloged-placeholder-required",
+      "missingSceneIds": []
+    },
+    {
+      "id": "strategic",
+      "sceneIds": [
+        "strategic-map"
+      ],
+      "relatedSceneIds": [],
+      "runtimePhase": "strategic-map",
+      "requiredEvidenceChannels": [
+        "ghidra-functions",
+        "manual-map",
+        "live-trace"
+      ],
+      "evidenceStatus": "source-hits-present",
+      "liveTraceRecords": [
+        "0x0313",
+        "0x0315"
+      ],
+      "liveTraceRecord": "0x0313",
+      "implementationStatus": "cataloged-placeholder-required",
+      "missingSceneIds": []
+    },
+    {
+      "id": "select-grid",
+      "sceneIds": [
+        "strategic-map"
+      ],
+      "relatedSceneIds": [],
+      "runtimePhase": "strategic-grid-command",
+      "requiredEvidenceChannels": [
+        "ghidra-functions",
+        "wire-select-grid",
+        "live-trace"
+      ],
+      "evidenceStatus": "source-hits-present",
+      "liveTraceRecords": [
+        "0x0b01"
+      ],
+      "liveTraceRecord": "0x0b01",
+      "implementationStatus": "cataloged-placeholder-required",
+      "missingSceneIds": []
+    },
+    {
+      "id": "info",
+      "sceneIds": [
+        "reports-mail-system"
+      ],
+      "relatedSceneIds": [
+        "planet-system-detail",
+        "organization-personnel"
+      ],
+      "runtimePhase": "information-panels",
+      "requiredEvidenceChannels": [
+        "msgdat-text",
+        "manual",
+        "ghidra-strings"
+      ],
+      "evidenceStatus": "source-hits-present",
+      "liveTraceRecords": [],
+      "liveTraceRecord": null,
+      "implementationStatus": "cataloged-placeholder-required",
+      "missingSceneIds": []
+    },
+    {
+      "id": "tactics",
+      "sceneIds": [
+        "fleet-operations"
+      ],
+      "relatedSceneIds": [],
+      "runtimePhase": "fleet-command-planning",
+      "requiredEvidenceChannels": [
+        "manual-operations",
+        "ghidra-strings",
+        "wire-command"
+      ],
+      "evidenceStatus": "source-hits-present",
+      "liveTraceRecords": [],
+      "liveTraceRecord": null,
+      "implementationStatus": "cataloged-placeholder-required",
+      "missingSceneIds": []
+    },
+    {
+      "id": "battle",
+      "sceneIds": [
+        "tactical-battle"
+      ],
+      "relatedSceneIds": [],
+      "runtimePhase": "tactical-battle",
+      "requiredEvidenceChannels": [
+        "ghidra-functions",
+        "manual-combat",
+        "live-trace"
+      ],
+      "evidenceStatus": "source-hits-present",
+      "liveTraceRecords": [],
+      "liveTraceRecord": null,
+      "implementationStatus": "cataloged-placeholder-required",
+      "missingSceneIds": []
+    }
+  ]
+}

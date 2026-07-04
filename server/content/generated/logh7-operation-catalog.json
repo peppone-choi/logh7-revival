@@ -1,0 +1,219 @@
+{
+  "id": "logh7-operation-catalog",
+  "source": {
+    "path": "server/content/manual/operations.json",
+    "source": "gin7 manual pp.38-40 via logh7-manual-canon.md §7 (lines 342-379)",
+    "evidenceGrade": "P1",
+    "confidenceNotes": [
+      "PDF-verified against gin7manual_djvu.txt OCR (lines 1820-1962), the verbatim text layer of .omo/work/gin7manual/gin7manual.pdf.",
+      "OCR printed-page numbers run one behind the manual's stated page: 占領/防衛 results sit on OCR p38-39 (printed footer '38','39') = manual pp.39-40 region; consistent with digest §7 pp.38-40.",
+      "掃討 distance '400 ly' (400光年): OCR renders it as '400 兆 年' which is an OCR misread of 光年 (kōnen / light-years). Digest §7 line 376 confirms '400 ly'. Treated as 400 light-years.",
+      "占領/防衛 evaluated AFTER game-internal 30 days ('30日後'); 掃討 accrues DURING the 30-day window ('30日の間に'). Both confirmed verbatim in OCR.",
+      "CP cost of an operation-plan command varies by 発動予定時期 (scheduled activation timing); no numeric CP table appears on these pages — digest §10 gives an overall 10–1280 CP range. Marked _uncertain on the cost field.",
+      "Bonus point values: full = plan's base bonus; partial occupation/defense = approx 50% ('約50%'). Verbatim 'ボーナスポイント'."
+    ]
+  },
+  "purposeCount": 3,
+  "purposeIds": [
+    "occupation",
+    "defense",
+    "sweep"
+  ],
+  "purposes": [
+    {
+      "id": "occupation",
+      "nameJa": "占領",
+      "nameEn": "Occupation",
+      "nameKo": "점령",
+      "description": "Capture an enemy system.",
+      "targetConstraint": "Target system must contain ONLY other-faction-controlled planets/fortresses at the time of planning (敵星系).",
+      "gates": {
+        "enemyOnly": true,
+        "ownHoldingRequired": false,
+        "loneShipsRequired": false,
+        "anySystem": false
+      }
+    },
+    {
+      "id": "defense",
+      "nameJa": "防衛",
+      "nameEn": "Defense",
+      "nameKo": "방위",
+      "description": "Hold one of your own systems in its current state for a fixed period.",
+      "targetConstraint": "Target system must contain at least 1 own-faction-controlled planet/fortress at the time of planning (自陣営の支配する惑星/要塞が最低1つ).",
+      "gates": {
+        "enemyOnly": false,
+        "ownHoldingRequired": true,
+        "loneShipsRequired": false,
+        "anySystem": false
+      }
+    },
+    {
+      "id": "sweep",
+      "nameJa": "掃討",
+      "nameEn": "Sweep",
+      "nameKo": "소탕",
+      "description": "Destroy/sweep enemy units present in a grid.",
+      "targetConstraint": "Any system may be set as the target (全ての星系が目標に設定できます), BUT this purpose can only be offered when the target is 独行艦 (lone ships).",
+      "gates": {
+        "enemyOnly": false,
+        "ownHoldingRequired": false,
+        "loneShipsRequired": true,
+        "anySystem": true
+      }
+    }
+  ],
+  "planFieldCount": 4,
+  "planFields": [
+    {
+      "id": "field-01",
+      "nameJa": "作戦目的",
+      "nameEn": "Operation purpose",
+      "nameKo": "작전 목적",
+      "note": "One of the 3 operationPurposes (占領 / 防衛 / 掃討).",
+      "affectsCommandPointCost": false
+    },
+    {
+      "id": "field-02",
+      "nameJa": "目標星系",
+      "nameEn": "Target system",
+      "nameKo": "목표 성계",
+      "note": "Select the target system grid; allowed grids are restricted per purpose (see targetConstraint).",
+      "affectsCommandPointCost": false
+    },
+    {
+      "id": "field-03",
+      "nameJa": "作戦参加艦艇ユニット数",
+      "nameEn": "Participating ship-unit count",
+      "nameKo": "작전 참가 함정 유닛 수",
+      "note": "Ship-unit count is capped per unit category, so in practice this decides how many fleets/units join the operation.",
+      "affectsCommandPointCost": false
+    },
+    {
+      "id": "field-04",
+      "nameJa": "発動予定時期",
+      "nameEn": "Scheduled activation timing",
+      "nameKo": "발동 예정 시기",
+      "note": "Decides when the plan actually activates/takes effect. The Command Point (CP) cost of the operation-plan command varies by this timing.",
+      "affectsCommandPointCost": true
+    }
+  ],
+  "planningEffect": {
+    "bonusOnTopOfNormalMerit": true,
+    "description": "An operation plan broadly publicizes the faction's strategic objective. Acting in accordance with the plan grants a BONUS point on top of the normal kill-merit (撃破功績) points; acting otherwise does not."
+  },
+  "commandPointCost": {
+    "kind": "variable-unresolved",
+    "variesBy": "発動予定時期 (scheduled activation timing)",
+    "numericTable": null,
+    "overallRange": {
+      "minCp": 10,
+      "maxCp": 1280,
+      "raw": "10-1280 CP"
+    },
+    "uncertain": true,
+    "note": "No numeric CP table on pp.38-40; range sourced from digest §10."
+  },
+  "restrictions": [
+    {
+      "id": "restriction-01",
+      "nameJa": "自動撤回",
+      "nameEn": "Auto-withdrawal",
+      "rule": "If the target system's conditions can no longer be met for any reason, the plan is automatically and immediately withdrawn and deleted (the plan itself disappears)."
+    },
+    {
+      "id": "restriction-02",
+      "nameJa": "目標星系の重複禁止",
+      "nameEn": "No duplicate target system per card",
+      "rule": "A single job-authority card (職務権限カード) cannot issue two plans against the same target system, even if the operation purpose or activation timing differ."
+    },
+    {
+      "id": "restriction-03",
+      "nameJa": "有効艦艇ユニット総数の上限",
+      "nameEn": "Global ship-unit cap",
+      "rule": "The sum of 作戦参加艦艇ユニット数 across ALL operations (pending + active) cannot exceed the faction's total effective ship-unit count (有効艦艇ユニット総数)."
+    },
+    {
+      "id": "restriction-04",
+      "nameJa": "新規策定ロック",
+      "nameEn": "New-plan lockout on infeasibility",
+      "rule": "If tactical-game defeats reduce total unit count so that an already-executing plan becomes infeasible, no new operation plan can be drafted until that situation is corrected."
+    }
+  ],
+  "duration": {
+    "durationDays": 30,
+    "earlyWithdrawalCommand": {
+      "nameJa": "作戦撤回",
+      "nameEn": "Operation withdrawal"
+    }
+  },
+  "results": [
+    {
+      "purposeId": "occupation",
+      "nameJa": "占領",
+      "nameEn": "Occupation",
+      "evaluationTiming": "After 30 game-internal days from operation start (30日後)",
+      "outcomes": [
+        {
+          "condition": "All planets/fortresses in the target system brought under control.",
+          "conditionJa": "作戦目標となっている星系内の全ての惑星/要塞を支配下にした",
+          "bonus": "Full",
+          "bonusFraction": 1,
+          "uncertain": false
+        },
+        {
+          "condition": "At least 1 planet/fortress in the target system brought under control.",
+          "conditionJa": "作戦目標となっている星系内の惑星/要塞を最低1つ支配下にした",
+          "bonus": "Partial (~50%)",
+          "bonusFraction": 0.5,
+          "uncertain": true
+        }
+      ]
+    },
+    {
+      "purposeId": "defense",
+      "nameJa": "防衛",
+      "nameEn": "Defense",
+      "evaluationTiming": "After 30 game-internal days from operation start (30日後)",
+      "outcomes": [
+        {
+          "condition": "All planets/fortresses in the target system kept in own-faction state, none captured by the enemy.",
+          "conditionJa": "星系内の全ての惑星/要塞が敵に占領されることなく自陣営の状態を維持できた",
+          "bonus": "Full",
+          "bonusFraction": 1,
+          "uncertain": false
+        },
+        {
+          "condition": "At least 1 planet/fortress in the target system was captured by the enemy.",
+          "conditionJa": "星系内の惑星/要塞を最低1つが敵に占領された",
+          "bonus": "Partial (~50%)",
+          "bonusFraction": 0.5,
+          "uncertain": true
+        }
+      ]
+    },
+    {
+      "purposeId": "sweep",
+      "nameJa": "掃討",
+      "nameEn": "Sweep",
+      "evaluationTiming": "Accrues DURING the 30-day window from operation start (30日の間に)",
+      "outcomes": [
+        {
+          "condition": "Each enemy ship sunk within 400 light-years of the designated target system.",
+          "conditionJa": "指定された星系から400光年以内で敵艦船を1隻撃沈するごとにボーナスポイントを得ます",
+          "bonus": "+1 bonus point per enemy ship sunk",
+          "bonusFraction": null,
+          "uncertain": true
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "purposeCount": 3,
+    "planFieldCount": 4,
+    "restrictionCount": 4,
+    "resultPurposeCount": 3,
+    "operationDurationDays": 30,
+    "hasUnresolvedCpFormula": true
+  }
+}

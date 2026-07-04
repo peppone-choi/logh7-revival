@@ -1,0 +1,346 @@
+{
+  "id": "logh7-alliance-medal-redraw-manifest",
+  "sourceSheet": {
+    "path": "client-unity/Assets/ArtSource/concept/medals/alliance-medal-remaster-redraw-sheet-2026-07-04.png",
+    "sha256": "816f0cadce5ea33b9584a285d0d033c9eaacc06f9f288e7db7dc4134549ef096",
+    "dimensions": {
+      "width": 1586,
+      "height": 992
+    }
+  },
+  "method": "AI image-generation redraw sheet, grid crop, connected dark-background removal, largest-component cleanup, 1024 transparent PNG packaging",
+  "qualityNote": "Replaces rejected Real-ESRGAN direct upscale trial; generated redraws preserve source families but require human art review before production promotion.",
+  "entryCount": 15,
+  "entries": [
+    {
+      "stem": "m_f001",
+      "sourceSheetCell": {
+        "column": 1,
+        "row": 1,
+        "bounds": [
+          0,
+          0,
+          317,
+          331
+        ]
+      },
+      "output": {
+        "path": "client-unity/Assets/ArtSource/remaster/alliance-medals-redraw-1024/m_f001_redraw_1024.png",
+        "sha256": "1aa2c2f0c42888f59af49af06ad6045ecf0746c337a129025c9e5ae7a72d3639",
+        "dimensions": {
+          "width": 1024,
+          "height": 1024
+        }
+      },
+      "status": "concept-candidate-needs-human-art-review"
+    },
+    {
+      "stem": "m_f002",
+      "sourceSheetCell": {
+        "column": 2,
+        "row": 1,
+        "bounds": [
+          317,
+          0,
+          634,
+          331
+        ]
+      },
+      "output": {
+        "path": "client-unity/Assets/ArtSource/remaster/alliance-medals-redraw-1024/m_f002_redraw_1024.png",
+        "sha256": "aa038436489dc9f060303c118f41ca4a899e3da0a29a38d4ac5d9a6a7148f85e",
+        "dimensions": {
+          "width": 1024,
+          "height": 1024
+        }
+      },
+      "status": "concept-candidate-needs-human-art-review"
+    },
+    {
+      "stem": "m_f003",
+      "sourceSheetCell": {
+        "column": 3,
+        "row": 1,
+        "bounds": [
+          634,
+          0,
+          952,
+          331
+        ]
+      },
+      "output": {
+        "path": "client-unity/Assets/ArtSource/remaster/alliance-medals-redraw-1024/m_f003_redraw_1024.png",
+        "sha256": "67dac21537ab8d9dbf8ee876fe80ec18096441734a106285ad33fde60d8f57d7",
+        "dimensions": {
+          "width": 1024,
+          "height": 1024
+        }
+      },
+      "status": "concept-candidate-needs-human-art-review"
+    },
+    {
+      "stem": "m_f004",
+      "sourceSheetCell": {
+        "column": 4,
+        "row": 1,
+        "bounds": [
+          952,
+          0,
+          1269,
+          331
+        ]
+      },
+      "output": {
+        "path": "client-unity/Assets/ArtSource/remaster/alliance-medals-redraw-1024/m_f004_redraw_1024.png",
+        "sha256": "3fecbcccd51f8a2c7e782416dfa3ea2957affdaafe746986f8a3b61b2d0fc87b",
+        "dimensions": {
+          "width": 1024,
+          "height": 1024
+        }
+      },
+      "status": "concept-candidate-needs-human-art-review"
+    },
+    {
+      "stem": "m_f005",
+      "sourceSheetCell": {
+        "column": 5,
+        "row": 1,
+        "bounds": [
+          1269,
+          0,
+          1586,
+          331
+        ]
+      },
+      "output": {
+        "path": "client-unity/Assets/ArtSource/remaster/alliance-medals-redraw-1024/m_f005_redraw_1024.png",
+        "sha256": "780b369ea1d0325bec6c553b3e78b1802a446c83b8f076587ccb9ca50e965125",
+        "dimensions": {
+          "width": 1024,
+          "height": 1024
+        }
+      },
+      "status": "concept-candidate-needs-human-art-review"
+    },
+    {
+      "stem": "m_f006",
+      "sourceSheetCell": {
+        "column": 1,
+        "row": 2,
+        "bounds": [
+          0,
+          331,
+          317,
+          661
+        ]
+      },
+      "output": {
+        "path": "client-unity/Assets/ArtSource/remaster/alliance-medals-redraw-1024/m_f006_redraw_1024.png",
+        "sha256": "5abfb9c43f0f0d3cd869e0bd74a9d83066659c9d0b67898b48ebd780e573677d",
+        "dimensions": {
+          "width": 1024,
+          "height": 1024
+        }
+      },
+      "status": "concept-candidate-needs-human-art-review"
+    },
+    {
+      "stem": "m_f007",
+      "sourceSheetCell": {
+        "column": 2,
+        "row": 2,
+        "bounds": [
+          317,
+          331,
+          634,
+          661
+        ]
+      },
+      "output": {
+        "path": "client-unity/Assets/ArtSource/remaster/alliance-medals-redraw-1024/m_f007_redraw_1024.png",
+        "sha256": "99f25c877cf6d1cb4c1185b87c54fd3883be524aaa1b00ddb3931749fee027dc",
+        "dimensions": {
+          "width": 1024,
+          "height": 1024
+        }
+      },
+      "status": "concept-candidate-needs-human-art-review"
+    },
+    {
+      "stem": "m_f008",
+      "sourceSheetCell": {
+        "column": 3,
+        "row": 2,
+        "bounds": [
+          634,
+          331,
+          952,
+          661
+        ]
+      },
+      "output": {
+        "path": "client-unity/Assets/ArtSource/remaster/alliance-medals-redraw-1024/m_f008_redraw_1024.png",
+        "sha256": "889498e6ce0b7eee9d108c803ab561bb8766c0c062704347c600b3545b6634f2",
+        "dimensions": {
+          "width": 1024,
+          "height": 1024
+        }
+      },
+      "status": "concept-candidate-needs-human-art-review"
+    },
+    {
+      "stem": "m_f009",
+      "sourceSheetCell": {
+        "column": 4,
+        "row": 2,
+        "bounds": [
+          952,
+          331,
+          1269,
+          661
+        ]
+      },
+      "output": {
+        "path": "client-unity/Assets/ArtSource/remaster/alliance-medals-redraw-1024/m_f009_redraw_1024.png",
+        "sha256": "7e19143e6ddc2c1faa88a8dc179e55b3c9337ae2c738ba7543bfd396276ae784",
+        "dimensions": {
+          "width": 1024,
+          "height": 1024
+        }
+      },
+      "status": "concept-candidate-needs-human-art-review"
+    },
+    {
+      "stem": "m_f010",
+      "sourceSheetCell": {
+        "column": 5,
+        "row": 2,
+        "bounds": [
+          1269,
+          331,
+          1586,
+          661
+        ]
+      },
+      "output": {
+        "path": "client-unity/Assets/ArtSource/remaster/alliance-medals-redraw-1024/m_f010_redraw_1024.png",
+        "sha256": "c463dee1b25bb853befbd2a8329eea614c263a75917f246cb3aaf4f2c5a42bda",
+        "dimensions": {
+          "width": 1024,
+          "height": 1024
+        }
+      },
+      "status": "concept-candidate-needs-human-art-review"
+    },
+    {
+      "stem": "m_f011",
+      "sourceSheetCell": {
+        "column": 1,
+        "row": 3,
+        "bounds": [
+          0,
+          661,
+          317,
+          992
+        ]
+      },
+      "output": {
+        "path": "client-unity/Assets/ArtSource/remaster/alliance-medals-redraw-1024/m_f011_redraw_1024.png",
+        "sha256": "6bd473fe6874701f35b81f1b88d822b2438c4e2fc18a57cc403c57e473d4bc50",
+        "dimensions": {
+          "width": 1024,
+          "height": 1024
+        }
+      },
+      "status": "concept-candidate-needs-human-art-review"
+    },
+    {
+      "stem": "m_f012",
+      "sourceSheetCell": {
+        "column": 2,
+        "row": 3,
+        "bounds": [
+          317,
+          661,
+          634,
+          992
+        ]
+      },
+      "output": {
+        "path": "client-unity/Assets/ArtSource/remaster/alliance-medals-redraw-1024/m_f012_redraw_1024.png",
+        "sha256": "a213638dc7d18a9aaf0e8edf3a92d87f6fad74a99e8ffb7528ebbfbe6b5f3aa4",
+        "dimensions": {
+          "width": 1024,
+          "height": 1024
+        }
+      },
+      "status": "concept-candidate-needs-human-art-review"
+    },
+    {
+      "stem": "m_f013",
+      "sourceSheetCell": {
+        "column": 3,
+        "row": 3,
+        "bounds": [
+          634,
+          661,
+          952,
+          992
+        ]
+      },
+      "output": {
+        "path": "client-unity/Assets/ArtSource/remaster/alliance-medals-redraw-1024/m_f013_redraw_1024.png",
+        "sha256": "5421a1e4394f77b50b743cd883e84eac8f532d807cb59a81e1c7ab46b7e4bdc6",
+        "dimensions": {
+          "width": 1024,
+          "height": 1024
+        }
+      },
+      "status": "concept-candidate-needs-human-art-review"
+    },
+    {
+      "stem": "m_f014",
+      "sourceSheetCell": {
+        "column": 4,
+        "row": 3,
+        "bounds": [
+          952,
+          661,
+          1269,
+          992
+        ]
+      },
+      "output": {
+        "path": "client-unity/Assets/ArtSource/remaster/alliance-medals-redraw-1024/m_f014_redraw_1024.png",
+        "sha256": "db3c5c877f303c57c290c72733384efe3c4b64bbad8692ad106c51a8855e959b",
+        "dimensions": {
+          "width": 1024,
+          "height": 1024
+        }
+      },
+      "status": "concept-candidate-needs-human-art-review"
+    },
+    {
+      "stem": "m_f015",
+      "sourceSheetCell": {
+        "column": 5,
+        "row": 3,
+        "bounds": [
+          1269,
+          661,
+          1586,
+          992
+        ]
+      },
+      "output": {
+        "path": "client-unity/Assets/ArtSource/remaster/alliance-medals-redraw-1024/m_f015_redraw_1024.png",
+        "sha256": "a16f470db66664ef59913f21b618d37d69d59af85dbdd3d69cddcc3ff4e538b5",
+        "dimensions": {
+          "width": 1024,
+          "height": 1024
+        }
+      },
+      "status": "concept-candidate-needs-human-art-review"
+    }
+  ]
+}

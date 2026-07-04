@@ -1,0 +1,32 @@
+{
+  "id": "logh7-archive-org",
+  "label": "Internet Archive LOGH VII BIN/CUE candidate",
+  "sourceUrl": "https://archive.org/download/logh-7",
+  "metadataUrl": "https://archive.org/download/logh-7/logh-7_files.xml",
+  "verifiedAt": "2026-07-03",
+  "status": "remote-metadata-verified",
+  "notes": [
+    "Use as provenance input until local files are downloaded and hash-matched.",
+    "Do not treat local media as canonical unless size and hashes match this record."
+  ],
+  "files": [
+    {
+      "name": "Logh7.bin",
+      "source": "original",
+      "size": 229070688,
+      "md5": "bf87c6a8cb068f05625737377a07b09d",
+      "sha1": "80e261e9d84c81bca622c99d9cbdc47a2154c1a8",
+      "crc32": "a93aadd8",
+      "format": "Unknown"
+    },
+    {
+      "name": "Logh7.cue",
+      "source": "original",
+      "size": 71,
+      "md5": "878418e704a913f7baac67b38b10e680",
+      "sha1": "9bff4ea17ca6ff7b088440bd7f8a5206cd2dfe81",
+      "crc32": "391b93fa",
+      "format": "Cue Sheet"
+    }
+  ]
+}

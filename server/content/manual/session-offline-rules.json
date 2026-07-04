@@ -1,0 +1,125 @@
+{
+  "_source": "gin7 manual printed page 7 (image page008.png, .omo/work/manual-pages-101/page008.png), sections ゲームにログイン / ゲームからログアウト",
+  "_grade": "P1",
+  "_confidence_notes": [
+    "Read directly from page image render (clean, fully legible). Text layer .omo/work/manual-pages-101/uncovered-texts.json key '7' exists but is mojibake (encoding-corrupted); image is authoritative here.",
+    "Page states one server holds data for EITHER Empire OR Alliance ('1つのサーバには帝国軍/同盟軍のどちらかのデータを作成することができます') — exclusivity is per-server character-data creation; no character-count numbers given.",
+    "Offline persistence principle: logged-out characters continue acting in-server ('ログアウトした状態でも、貴方のキャラクターはサーバ内で行動を続けています'). No tick rate, duration, or simulation detail specified.",
+    "Flagship-unit docked (惑星/要塞に駐留) offline: no combat death even if tactical game occurs; if the planet/fortress falls (陥落) during offline tactical game, flagship unit MAY lose docked status ('駐留状態ではなくなる可能性があります') — stated as possibility, not certainty.",
+    "Flagship in open space + tactical game: AI automatically substitutes ('AIが自動的に代行して戦術ゲームを行います') but manual notes AI feature currently unimplemented ('AI機能は現在未実装となっております'). Outcome when unimplemented is NOT stated on this page.",
+    "Arrest (逮捕) possibility and personnel-command (人事コマンド) targeting while offline are stated for both home/hotel/residence logout AND flagship-unit logout.",
+    "Home/hotel/residence logout: no combat death (戦死することはありません) and no movement to other locations occurs.",
+    "その他 (other locations): character in principle (原則として) stays at that location; exceptions to 原則 not enumerated on this page."
+  ],
+  "login": {
+    "sectionJa": "ゲームにログイン",
+    "idPassword": {
+      "termJa": "「ID」と「パスワード」",
+      "ko": "ID와 패스워드",
+      "rule": "β登録時にメールで送付されたIDとパスワードを入力 (베타 등록 시 메일로 송부된 ID/패스워드를 입력)",
+      "officialSiteRef": "http://www.gineiden.com/"
+    },
+    "serverSelection": {
+      "termJa": "サーバの選択",
+      "ko": "서버 선택",
+      "rule": "ゲームをプレイするサーバを選択します (플레이할 서버를 선택)",
+      "factionExclusivityPerServer": {
+        "termJa": "1つのサーバには帝国軍/同盟軍のどちらかのデータを作成することができます",
+        "ko": "한 서버에는 제국군/동맹군 중 어느 한쪽의 (캐릭터) 데이터만 작성 가능",
+        "exclusive": true,
+        "factions": [
+          {
+            "termJa": "帝国軍",
+            "ko": "제국군"
+          },
+          {
+            "termJa": "同盟軍",
+            "ko": "동맹군"
+          }
+        ]
+      }
+    }
+  },
+  "logout": {
+    "sectionJa": "ゲームからログアウト",
+    "offlinePersistencePrinciple": {
+      "termJa": "『銀河英雄伝説VII』ではゲームからログアウトした状態でも、貴方のキャラクターはサーバ内で行動を続けています",
+      "ko": "로그아웃 상태에서도 캐릭터는 서버 내에서 행동을 계속한다 (오프라인 지속 시뮬레이션 총칙)",
+      "persistent": true
+    },
+    "logoutLocations": [
+      {
+        "termJa": "自宅/ホテル（居室）/居住区（居室）",
+        "ko": "자택/호텔(거실)/거주구(거실)",
+        "rules": [
+          {
+            "termJa": "戦死することはありません",
+            "ko": "전사하지 않음",
+            "combatDeathPossible": false
+          },
+          {
+            "termJa": "オフライン中に逮捕される可能性はあります",
+            "ko": "오프라인 중 체포될 가능성 있음",
+            "arrestPossible": true
+          },
+          {
+            "termJa": "人事コマンドの対象にもなります",
+            "ko": "인사 커맨드 대상이 됨",
+            "personnelCommandTarget": true
+          },
+          {
+            "termJa": "この場所でログアウトした場合は、他の場所への移動は行われません",
+            "ko": "이 장소에서 로그아웃하면 다른 장소로 이동하지 않음",
+            "movesWhileOffline": false
+          }
+        ]
+      },
+      {
+        "termJa": "旗艦ユニットの中",
+        "ko": "기함 유닛 안",
+        "rules": [
+          {
+            "termJa": "旗艦ユニットが惑星/要塞に駐留している状態であれば、オフライン中に戦術ゲームが発生しても戦死する可能性はありません",
+            "ko": "기함 유닛이 행성/요새에 주둔 중이면 오프라인 중 전술 게임이 발생해도 전사 가능성 없음",
+            "dockedCombatDeathPossible": false
+          },
+          {
+            "termJa": "オフライン中の戦術ゲームで惑星/要塞が陥落した場合は、旗艦ユニットが駐留状態ではなくなる可能性があります",
+            "ko": "오프라인 중 전술 게임으로 행성/요새가 함락되면 기함 유닛의 주둔 상태가 해제될 가능성 있음",
+            "undockOnBaseFall": "possible"
+          },
+          {
+            "termJa": "旗艦ユニットが宇宙空間に存在している場合に戦術ゲームが発生した場合、AIが自動的に代行して戦術ゲームを行います",
+            "ko": "기함 유닛이 우주 공간에 있을 때 전술 게임이 발생하면 AI가 자동으로 대행하여 전술 게임을 수행",
+            "aiProxy": true,
+            "aiProxyStatusJa": "AI機能は現在未実装となっております",
+            "aiProxyStatusKo": "AI 기능은 현재 미구현(未実装)",
+            "aiProxyImplemented": false
+          },
+          {
+            "termJa": "旗艦ユニットの中でログアウトした場合、逮捕される可能性があります",
+            "ko": "기함 유닛 안에서 로그아웃 시 체포될 가능성 있음",
+            "arrestPossible": true
+          },
+          {
+            "termJa": "人事コマンドの対象にもなります",
+            "ko": "인사 커맨드 대상이 됨",
+            "personnelCommandTarget": true
+          }
+        ]
+      },
+      {
+        "termJa": "その他",
+        "ko": "기타 장소",
+        "rules": [
+          {
+            "termJa": "その他の場所でオフラインになった場合でも、原則としてキャラクターはその場所に居続けます",
+            "ko": "기타 장소에서 오프라인이 되어도 원칙적으로 캐릭터는 그 장소에 머무름",
+            "staysInPlace": "in principle (原則として)"
+          }
+        ]
+      }
+    ]
+  },
+  "_mining_notes": "불확실/비어둔 항목: (1) uncovered-texts.json의 페이지 7(page008) 텍스트 레이어는 인코딩 손상(mojibake)이라 이미지 판독을 권위로 사용, 그러나 이미지 자체는 선명해 OCR 불확실 셀 없음. (2) 서버당 캐릭터 수 상한 — 명시 없음(진영 배타만 명시). (3) 오프라인 시뮬레이션의 틱/주기/범위 세부 — 명시 없음(행동 지속 총칙만). (4) 기함 주둔지 함락 시 주둔 해제는 '可能性があります'(가능성)로만 표기, 확정 규칙 아님. (5) AI 대행 미구현 시 우주공간 전술 게임의 실제 처리 결과 — 명시 없음. (6) '原則として'의 예외 조건 — 명시 없음. (7) 체포·인사 커맨드의 구체 절차/조건 — 이 페이지에 명시 없음."
+}

@@ -1,0 +1,887 @@
+{
+  "id": "logh7-server-servable-data-family",
+  "generatedAt": "2026-07-04T01:03:52.772Z",
+  "purpose": "Scope server-servable LOGH VII data families without promoting suspect generated data to canonical.",
+  "canonicalPromotionRule": "All current generated catalogs remain suspect until CD/manual/Ghidra/live/wire cross-check promotes a specific datum.",
+  "mandatoryWatchCategories": [
+    {
+      "id": "systemPositions",
+      "labelKo": "성계 위치",
+      "reportImmediately": true
+    },
+    {
+      "id": "originalCharacterRoster",
+      "labelKo": "오리지널 캐릭터 로스터",
+      "reportImmediately": true
+    }
+  ],
+  "families": [
+    {
+      "id": "systems",
+      "canonicalStatus": "suspect-cross-check-required",
+      "watchCategories": [
+        "systemPositions"
+      ],
+      "sourceManifests": [
+        {
+          "path": "server/content/galaxy.json",
+          "status": "present",
+          "size": 111672,
+          "keys": [
+            "_source",
+            "_extracted",
+            "_specialBodies",
+            "systems",
+            "_planet_order",
+            "_canon_grid"
+          ],
+          "counts": {
+            "systemsCount": 85
+          }
+        },
+        {
+          "path": "server/content/galaxy-passable-cells.json",
+          "status": "present",
+          "size": 10076,
+          "keys": [
+            "_source",
+            "_grid",
+            "_count",
+            "_method",
+            "rowRangesByRow"
+          ],
+          "counts": {}
+        },
+        {
+          "path": "server/content/generated/logh7-null-galaxy-template.json",
+          "status": "present",
+          "size": 12412,
+          "keys": [
+            "id",
+            "source",
+            "headerNodeCount",
+            "starCount",
+            "spectralClasses",
+            "stars",
+            "nonStarTemplateNodes"
+          ],
+          "counts": {
+            "starCount": 79
+          }
+        },
+        {
+          "path": "server/content/generated/logh7-hidden-data-watchlist.json",
+          "status": "present",
+          "size": 10372,
+          "keys": [
+            "id",
+            "status",
+            "policy",
+            "inputs",
+            "summary",
+            "categories"
+          ],
+          "counts": {}
+        },
+        {
+          "path": "server/content/generated/logh7-galaxy-trust-crosscheck.json",
+          "status": "present",
+          "size": 10015,
+          "keys": [
+            "id",
+            "generatedAt",
+            "purpose",
+            "canonicalPromotion",
+            "trustPolicy",
+            "mandatoryWatchCategories",
+            "sourceGroups",
+            "confirmedNewHiddenData"
+          ],
+          "counts": {}
+        },
+        {
+          "path": "server/content/generated/logh7-runtime-boundary-manifest.json",
+          "status": "present",
+          "size": 3447,
+          "keys": [
+            "id",
+            "generatedAt",
+            "productClient",
+            "policy",
+            "normalRuntime",
+            "diagnosticOnly",
+            "preseedPolicy",
+            "patchPolicy",
+            "runtimeInputs"
+          ],
+          "counts": {}
+        }
+      ]
+    },
+    {
+      "id": "stars",
+      "canonicalStatus": "suspect-cross-check-required",
+      "watchCategories": [
+        "systemPositions"
+      ],
+      "sourceManifests": [
+        {
+          "path": "server/content/galaxy.json",
+          "status": "present",
+          "size": 111672,
+          "keys": [
+            "_source",
+            "_extracted",
+            "_specialBodies",
+            "systems",
+            "_planet_order",
+            "_canon_grid"
+          ],
+          "counts": {
+            "systemsCount": 85
+          }
+        },
+        {
+          "path": "server/content/generated/logh7-null-galaxy-template.json",
+          "status": "present",
+          "size": 12412,
+          "keys": [
+            "id",
+            "source",
+            "headerNodeCount",
+            "starCount",
+            "spectralClasses",
+            "stars",
+            "nonStarTemplateNodes"
+          ],
+          "counts": {
+            "starCount": 79
+          }
+        },
+        {
+          "path": "server/content/generated/logh7-mdx-catalog.json",
+          "status": "present",
+          "size": 816181,
+          "keys": [
+            "id",
+            "sourceRoot",
+            "status",
+            "fileCount",
+            "files",
+            "categories"
+          ],
+          "counts": {
+            "filesCount": 406,
+            "fileCount": 406
+          }
+        }
+      ]
+    },
+    {
+      "id": "planets",
+      "canonicalStatus": "suspect-cross-check-required",
+      "watchCategories": [
+        "systemPositions"
+      ],
+      "sourceManifests": [
+        {
+          "path": "server/content/generated/logh7-hidden-data-watchlist.json",
+          "status": "present",
+          "size": 10372,
+          "keys": [
+            "id",
+            "status",
+            "policy",
+            "inputs",
+            "summary",
+            "categories"
+          ],
+          "counts": {}
+        },
+        {
+          "path": "server/content/generated/logh7-record-candidate-crosscheck.json",
+          "status": "present",
+          "size": 3647,
+          "keys": [
+            "id",
+            "status",
+            "policy",
+            "inputs",
+            "summary",
+            "systemPositions",
+            "originalCharacterRoster"
+          ],
+          "counts": {}
+        }
+      ]
+    },
+    {
+      "id": "grids",
+      "canonicalStatus": "suspect-cross-check-required",
+      "watchCategories": [],
+      "sourceManifests": [
+        {
+          "path": "server/content/galaxy-passable-cells.json",
+          "status": "present",
+          "size": 10076,
+          "keys": [
+            "_source",
+            "_grid",
+            "_count",
+            "_method",
+            "rowRangesByRow"
+          ],
+          "counts": {}
+        },
+        {
+          "path": "server/content/generated/logh7-strategy-command-catalog.json",
+          "status": "present",
+          "size": 47598,
+          "keys": [
+            "id",
+            "source",
+            "commandCount",
+            "categoryCount",
+            "summary",
+            "categories",
+            "commands"
+          ],
+          "counts": {}
+        },
+        {
+          "path": "server/content/generated/logh7-logistics-allocation-catalog.json",
+          "status": "present",
+          "size": 2968,
+          "keys": [
+            "id",
+            "source",
+            "unitTypeCount",
+            "roleCount",
+            "unitTypes",
+            "roles",
+            "summary"
+          ],
+          "counts": {}
+        }
+      ]
+    },
+    {
+      "id": "characters",
+      "canonicalStatus": "suspect-cross-check-required",
+      "watchCategories": [
+        "originalCharacterRoster"
+      ],
+      "sourceManifests": [
+        {
+          "path": "server/content/generated/logh7-face-portrait-catalog.json",
+          "status": "present",
+          "size": 626526,
+          "keys": [
+            "id",
+            "sourceRoot",
+            "status",
+            "storage",
+            "hed",
+            "archiveCount",
+            "archives",
+            "totals"
+          ],
+          "counts": {
+            "archiveCount": 7,
+            "totals": {
+              "decodedCount": 1061,
+              "outsideArchiveCount": 1925,
+              "failureCounts": {
+                "invalid-dimensions": 7,
+                "truncated-pixel-data": 6,
+                "unsupported-bpp": 1684
+              }
+            }
+          }
+        },
+        {
+          "path": "server/content/generated/logh7-face-tcf-catalog.json",
+          "status": "present",
+          "size": 5533,
+          "keys": [
+            "id",
+            "sourceRoot",
+            "status",
+            "archiveCount",
+            "archives",
+            "archiveGroups",
+            "hed"
+          ],
+          "counts": {
+            "archiveCount": 7
+          }
+        },
+        {
+          "path": "server/content/generated/logh7-rank-promotion-catalog.json",
+          "status": "present",
+          "size": 11468,
+          "keys": [
+            "id",
+            "source",
+            "rankCount",
+            "ranks",
+            "personnelAuthority",
+            "manualRules",
+            "summary"
+          ],
+          "counts": {}
+        },
+        {
+          "path": "server/content/generated/logh7-hidden-data-watchlist.json",
+          "status": "present",
+          "size": 10372,
+          "keys": [
+            "id",
+            "status",
+            "policy",
+            "inputs",
+            "summary",
+            "categories"
+          ],
+          "counts": {}
+        }
+      ]
+    },
+    {
+      "id": "fleets",
+      "canonicalStatus": "suspect-cross-check-required",
+      "watchCategories": [],
+      "sourceManifests": [
+        {
+          "path": "server/content/generated/logh7-ship-stat-catalog.json",
+          "status": "present",
+          "size": 199929,
+          "keys": [
+            "id",
+            "source",
+            "poolFields",
+            "shipCount",
+            "summary",
+            "ships"
+          ],
+          "counts": {}
+        },
+        {
+          "path": "server/content/generated/logh7-logistics-allocation-catalog.json",
+          "status": "present",
+          "size": 2968,
+          "keys": [
+            "id",
+            "source",
+            "unitTypeCount",
+            "roleCount",
+            "unitTypes",
+            "roles",
+            "summary"
+          ],
+          "counts": {}
+        },
+        {
+          "path": "server/content/generated/logh7-operation-catalog.json",
+          "status": "present",
+          "size": 8972,
+          "keys": [
+            "id",
+            "source",
+            "purposeCount",
+            "purposeIds",
+            "purposes",
+            "planFieldCount",
+            "planFields",
+            "planningEffect",
+            "commandPointCost",
+            "restrictions",
+            "duration",
+            "results"
+          ],
+          "counts": {}
+        }
+      ]
+    },
+    {
+      "id": "ships",
+      "canonicalStatus": "suspect-cross-check-required",
+      "watchCategories": [],
+      "sourceManifests": [
+        {
+          "path": "server/content/generated/logh7-ship-stat-catalog.json",
+          "status": "present",
+          "size": 199929,
+          "keys": [
+            "id",
+            "source",
+            "poolFields",
+            "shipCount",
+            "summary",
+            "ships"
+          ],
+          "counts": {}
+        },
+        {
+          "path": "server/content/generated/logh7-mdx-catalog.json",
+          "status": "present",
+          "size": 816181,
+          "keys": [
+            "id",
+            "sourceRoot",
+            "status",
+            "fileCount",
+            "files",
+            "categories"
+          ],
+          "counts": {
+            "filesCount": 406,
+            "fileCount": 406
+          }
+        },
+        {
+          "path": "server/content/generated/logh7-mdx-render-source-manifest.json",
+          "status": "present",
+          "size": 3553,
+          "keys": [
+            "id",
+            "generatedAt",
+            "purpose",
+            "imperialCrest",
+            "sourceRoot",
+            "productionPolicy",
+            "targets"
+          ],
+          "counts": {}
+        },
+        {
+          "path": "server/content/generated/logh7-empire-ship-reference-manifest.json",
+          "status": "present",
+          "size": 6869,
+          "keys": [
+            "id",
+            "method",
+            "selectionRationale",
+            "entries",
+            "contactSheet"
+          ],
+          "counts": {}
+        },
+        {
+          "path": "server/content/generated/logh7-imperial-medal-source-lock-manifest.json",
+          "status": "present",
+          "size": 143506,
+          "keys": [
+            "id",
+            "generatedAt",
+            "purpose",
+            "sourceLock",
+            "proofThumbnail",
+            "prototype",
+            "renderQueue"
+          ],
+          "counts": {}
+        }
+      ]
+    },
+    {
+      "id": "commands",
+      "canonicalStatus": "suspect-cross-check-required",
+      "watchCategories": [],
+      "sourceManifests": [
+        {
+          "path": "server/content/generated/logh7-strategy-command-catalog.json",
+          "status": "present",
+          "size": 47598,
+          "keys": [
+            "id",
+            "source",
+            "commandCount",
+            "categoryCount",
+            "summary",
+            "categories",
+            "commands"
+          ],
+          "counts": {}
+        },
+        {
+          "path": "server/content/generated/logh7-operation-catalog.json",
+          "status": "present",
+          "size": 8972,
+          "keys": [
+            "id",
+            "source",
+            "purposeCount",
+            "purposeIds",
+            "purposes",
+            "planFieldCount",
+            "planFields",
+            "planningEffect",
+            "commandPointCost",
+            "restrictions",
+            "duration",
+            "results"
+          ],
+          "counts": {}
+        }
+      ]
+    },
+    {
+      "id": "operations",
+      "canonicalStatus": "suspect-cross-check-required",
+      "watchCategories": [],
+      "sourceManifests": [
+        {
+          "path": "server/content/generated/logh7-operation-catalog.json",
+          "status": "present",
+          "size": 8972,
+          "keys": [
+            "id",
+            "source",
+            "purposeCount",
+            "purposeIds",
+            "purposes",
+            "planFieldCount",
+            "planFields",
+            "planningEffect",
+            "commandPointCost",
+            "restrictions",
+            "duration",
+            "results"
+          ],
+          "counts": {}
+        },
+        {
+          "path": "server/content/generated/logh7-logistics-allocation-catalog.json",
+          "status": "present",
+          "size": 2968,
+          "keys": [
+            "id",
+            "source",
+            "unitTypeCount",
+            "roleCount",
+            "unitTypes",
+            "roles",
+            "summary"
+          ],
+          "counts": {}
+        }
+      ]
+    },
+    {
+      "id": "tactics",
+      "canonicalStatus": "suspect-cross-check-required",
+      "watchCategories": [],
+      "sourceManifests": [
+        {
+          "path": "server/content/generated/logh7-scene-inventory.json",
+          "status": "present",
+          "size": 50112,
+          "keys": [
+            "id",
+            "status",
+            "policy",
+            "sourcePolicy",
+            "summary",
+            "scenes"
+          ],
+          "counts": {}
+        },
+        {
+          "path": "server/content/generated/logh7-ship-stat-catalog.json",
+          "status": "present",
+          "size": 199929,
+          "keys": [
+            "id",
+            "source",
+            "poolFields",
+            "shipCount",
+            "summary",
+            "ships"
+          ],
+          "counts": {}
+        },
+        {
+          "path": "server/content/generated/logh7-strategy-command-catalog.json",
+          "status": "present",
+          "size": 47598,
+          "keys": [
+            "id",
+            "source",
+            "commandCount",
+            "categoryCount",
+            "summary",
+            "categories",
+            "commands"
+          ],
+          "counts": {}
+        }
+      ]
+    },
+    {
+      "id": "economy",
+      "canonicalStatus": "suspect-cross-check-required",
+      "watchCategories": [],
+      "sourceManifests": [
+        {
+          "path": "server/content/generated/logh7-logistics-allocation-catalog.json",
+          "status": "present",
+          "size": 2968,
+          "keys": [
+            "id",
+            "source",
+            "unitTypeCount",
+            "roleCount",
+            "unitTypes",
+            "roles",
+            "summary"
+          ],
+          "counts": {}
+        },
+        {
+          "path": "server/content/generated/logh7-operation-catalog.json",
+          "status": "present",
+          "size": 8972,
+          "keys": [
+            "id",
+            "source",
+            "purposeCount",
+            "purposeIds",
+            "purposes",
+            "planFieldCount",
+            "planFields",
+            "planningEffect",
+            "commandPointCost",
+            "restrictions",
+            "duration",
+            "results"
+          ],
+          "counts": {}
+        }
+      ]
+    },
+    {
+      "id": "uiText",
+      "canonicalStatus": "suspect-cross-check-required",
+      "watchCategories": [],
+      "sourceManifests": [
+        {
+          "path": "server/content/generated/logh7-scene-inventory.json",
+          "status": "present",
+          "size": 50112,
+          "keys": [
+            "id",
+            "status",
+            "policy",
+            "sourcePolicy",
+            "summary",
+            "scenes"
+          ],
+          "counts": {}
+        },
+        {
+          "path": "server/content/generated/logh7-record-candidate-crosscheck.json",
+          "status": "present",
+          "size": 3647,
+          "keys": [
+            "id",
+            "status",
+            "policy",
+            "inputs",
+            "summary",
+            "systemPositions",
+            "originalCharacterRoster"
+          ],
+          "counts": {}
+        },
+        {
+          "path": "server/content/generated/logh7-cd-media-manifest.json",
+          "status": "present",
+          "size": 2352,
+          "keys": [
+            "id",
+            "sourceId",
+            "sourceUrl",
+            "mediaRoot",
+            "workRoot",
+            "media",
+            "iso",
+            "extraction",
+            "canonicalPromotion"
+          ],
+          "counts": {}
+        }
+      ]
+    },
+    {
+      "id": "reports",
+      "canonicalStatus": "suspect-cross-check-required",
+      "watchCategories": [],
+      "sourceManifests": [
+        {
+          "path": "server/content/generated/logh7-hidden-data-watchlist.json",
+          "status": "present",
+          "size": 10372,
+          "keys": [
+            "id",
+            "status",
+            "policy",
+            "inputs",
+            "summary",
+            "categories"
+          ],
+          "counts": {}
+        },
+        {
+          "path": "server/content/generated/logh7-operation-catalog.json",
+          "status": "present",
+          "size": 8972,
+          "keys": [
+            "id",
+            "source",
+            "purposeCount",
+            "purposeIds",
+            "purposes",
+            "planFieldCount",
+            "planFields",
+            "planningEffect",
+            "commandPointCost",
+            "restrictions",
+            "duration",
+            "results"
+          ],
+          "counts": {}
+        }
+      ]
+    },
+    {
+      "id": "launcherCommunity",
+      "canonicalStatus": "suspect-cross-check-required",
+      "watchCategories": [],
+      "sourceManifests": [
+        {
+          "path": "server/content/generated/logh7-unity-bootstrap-manifest.json",
+          "status": "present",
+          "size": 8008,
+          "keys": [
+            "id",
+            "status",
+            "generatedAt",
+            "unity",
+            "authority",
+            "runtime",
+            "canonicalPromotion",
+            "remasterPacks",
+            "generatedInputs",
+            "outputs"
+          ],
+          "counts": {}
+        },
+        {
+          "path": "server/content/generated/logh7-cd-media-manifest.json",
+          "status": "present",
+          "size": 2352,
+          "keys": [
+            "id",
+            "sourceId",
+            "sourceUrl",
+            "mediaRoot",
+            "workRoot",
+            "media",
+            "iso",
+            "extraction",
+            "canonicalPromotion"
+          ],
+          "counts": {}
+        },
+        {
+          "path": "server/content/generated/logh7-scene-inventory.json",
+          "status": "present",
+          "size": 50112,
+          "keys": [
+            "id",
+            "status",
+            "policy",
+            "sourcePolicy",
+            "summary",
+            "scenes"
+          ],
+          "counts": {}
+        }
+      ]
+    },
+    {
+      "id": "formulas",
+      "canonicalStatus": "suspect-cross-check-required",
+      "watchCategories": [],
+      "sourceManifests": [
+        {
+          "path": "server/content/generated/logh7-formula-provenance-guard.json",
+          "status": "present",
+          "size": 8838,
+          "keys": [
+            "id",
+            "generatedAt",
+            "purpose",
+            "canonicalPromotion",
+            "canonicalFormulaRecords",
+            "unresolvedFormulaCount",
+            "requiredEvidence",
+            "forbiddenRuntimeUse",
+            "domains"
+          ],
+          "counts": {}
+        },
+        {
+          "path": "server/content/generated/logh7-strategy-command-catalog.json",
+          "status": "present",
+          "size": 47598,
+          "keys": [
+            "id",
+            "source",
+            "commandCount",
+            "categoryCount",
+            "summary",
+            "categories",
+            "commands"
+          ],
+          "counts": {}
+        },
+        {
+          "path": "server/content/generated/logh7-ship-stat-catalog.json",
+          "status": "present",
+          "size": 199929,
+          "keys": [
+            "id",
+            "source",
+            "poolFields",
+            "shipCount",
+            "summary",
+            "ships"
+          ],
+          "counts": {}
+        },
+        {
+          "path": "server/content/generated/logh7-operation-catalog.json",
+          "status": "present",
+          "size": 8972,
+          "keys": [
+            "id",
+            "source",
+            "purposeCount",
+            "purposeIds",
+            "purposes",
+            "planFieldCount",
+            "planFields",
+            "planningEffect",
+            "commandPointCost",
+            "restrictions",
+            "duration",
+            "results"
+          ],
+          "counts": {}
+        }
+      ]
+    }
+  ]
+}

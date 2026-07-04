@@ -1,0 +1,59 @@
+{
+  "id": "logh7-alliance-foundation-medal-redraw-manifest",
+  "method": "AI image-generation individual redraws, edge-connected checkerboard removal, 1024 transparent PNG packaging",
+  "qualityNote": "793 and 794 use user-supplied founder face references as bas-relief inspiration; 795 uses Alliance flag colors and pentagon emblem with real-world medal references kept inspiration-only.",
+  "entryCount": 3,
+  "entries": [
+    {
+      "medalId": 793,
+      "slug": "are-heinessen-special-distinguished-service-grand-order",
+      "concept": {
+        "path": "client-unity/Assets/ArtSource/concept/medals/foundation-orders/793-are-heinessen-special-distinguished-service-grand-order.png",
+        "sha256": "f0987afebc621b7fd7339edd3ec0e6c95ce15a1cfc4c1d3662c191cd54060339"
+      },
+      "output": {
+        "path": "client-unity/Assets/ArtSource/remaster/alliance-foundation-medals-1024/793-are-heinessen-special-distinguished-service-grand-order.png",
+        "sha256": "b654a6182b21661e30b965f424eaeaea471cd704a4e1d12ec89a51890aba375e",
+        "dimensions": {
+          "width": 1024,
+          "height": 1024
+        }
+      },
+      "status": "concept-candidate-needs-human-art-review"
+    },
+    {
+      "medalId": 794,
+      "slug": "nguyen-kim-hoa-special-distinguished-service-grand-order",
+      "concept": {
+        "path": "client-unity/Assets/ArtSource/concept/medals/foundation-orders/794-nguyen-kim-hoa-special-distinguished-service-grand-order.png",
+        "sha256": "8147e7a2bee7f914afe7cc3ad2c9a2264082fff12908c93a4e0bc1e08878d525"
+      },
+      "output": {
+        "path": "client-unity/Assets/ArtSource/remaster/alliance-foundation-medals-1024/794-nguyen-kim-hoa-special-distinguished-service-grand-order.png",
+        "sha256": "7013e4bceb005be4639e7bd83362187843ea77241927a3bd01e581891a1ec58c",
+        "dimensions": {
+          "width": 1024,
+          "height": 1024
+        }
+      },
+      "status": "concept-candidate-needs-human-art-review"
+    },
+    {
+      "medalId": 795,
+      "slug": "alliance-supreme-council-medal-of-honor",
+      "concept": {
+        "path": "client-unity/Assets/ArtSource/concept/medals/foundation-orders/795-alliance-supreme-council-medal-of-honor.png",
+        "sha256": "37f730f82b116a19427757622ee066a5e1a73a046a9b3a9c765db678e1a8d77a"
+      },
+      "output": {
+        "path": "client-unity/Assets/ArtSource/remaster/alliance-foundation-medals-1024/795-alliance-supreme-council-medal-of-honor.png",
+        "sha256": "eef9e7e0eb114d9ee3910ea9be0d4c3f9e36aa79b0f7aa95c0d8d91eaab3c274",
+        "dimensions": {
+          "width": 1024,
+          "height": 1024
+        }
+      },
+      "status": "concept-candidate-needs-human-art-review"
+    }
+  ]
+}

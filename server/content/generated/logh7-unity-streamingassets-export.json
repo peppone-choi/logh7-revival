@@ -1,0 +1,177 @@
+{
+  "id": "logh7-unity-streamingassets-export",
+  "deterministic": true,
+  "canonicalPromotion": "blocked-until-cross-source-confirmed",
+  "streamingAssetsRoot": "client-unity/Assets/StreamingAssets/logh7",
+  "streamingAssetsTarget": "client-unity/Assets/StreamingAssets/logh7/logh7-unity-streamingassets-export.json",
+  "sourcePack": {
+    "id": "unitySourcePack",
+    "path": "client-unity/Assets/StreamingAssets/logh7/logh7-unity-source-pack-manifest.json",
+    "status": "present"
+  },
+  "summary": {
+    "fileCount": 17,
+    "totalBytes": 891320,
+    "jsonFileCount": 15,
+    "originalFallbackAssetCount": 4
+  },
+  "files": [
+    {
+      "path": "generated/galaxy.json",
+      "byteSize": 111672,
+      "sha256": "c24ed3a7c76fc0a61e7c0dff0c0c757c5848f44317cf35c7bc3eedb987754bab"
+    },
+    {
+      "path": "generated/logh7-hidden-data-watchlist.json",
+      "byteSize": 10372,
+      "sha256": "0c7858946e504754e2ccfa6eb5791e2415df0521ea76f338fe3cee5f6ecf3e3d"
+    },
+    {
+      "path": "generated/logh7-record-candidate-crosscheck.json",
+      "byteSize": 3647,
+      "sha256": "976d9ebd69f28c5366cbefcd6f2ba28fce128e71f1f0f8264f2bfb3f11682ee2"
+    },
+    {
+      "path": "generated/logh7-scene-inventory.json",
+      "byteSize": 50112,
+      "sha256": "7b9a0dbefada90a27ab4d45a2a437066141e9df57acd42e082bd2648608eb802"
+    },
+    {
+      "path": "generated/logh7-unity-bootstrap-manifest.json",
+      "byteSize": 8008,
+      "sha256": "6dc60a91913bf797ef797d9048598c131ba8255e16de8e3eace801873e027555"
+    },
+    {
+      "path": "logh7-gameplay-contract-boundary.json",
+      "byteSize": 10913,
+      "sha256": "c6aeb113835dccda6cacd2dbc7012e072268035bcc043990108ccbfe309dce40"
+    },
+    {
+      "path": "logh7-remaster-provenance-manifest.json",
+      "byteSize": 25172,
+      "sha256": "08bc815039e0952eb71489d8e05d7f449d198ca200474efc2f73e19505be8d21"
+    },
+    {
+      "path": "logh7-scene-inventory.json",
+      "byteSize": 50112,
+      "sha256": "7b9a0dbefada90a27ab4d45a2a437066141e9df57acd42e082bd2648608eb802"
+    },
+    {
+      "path": "logh7-ui-scene-catalog.json",
+      "byteSize": 5878,
+      "sha256": "d87f858f1f25f68e237a80d22125331d269632e5848ba14d8c1b024cbb7cdb3c"
+    },
+    {
+      "path": "logh7-ui-scene-remaster-gameplay-boundary.json",
+      "byteSize": 5423,
+      "sha256": "9dab8750b051c205d4e0a84af388115d23baa52b675f31fbbdd62fd98cc90c66"
+    },
+    {
+      "path": "logh7-unity-asset-source-truth.json",
+      "byteSize": 6098,
+      "sha256": "b712ba7e7ddad60a487d84c9e16513cc55ca5c873f5caa3c146f4cd7d4d1a4de"
+    },
+    {
+      "path": "logh7-unity-bootstrap-manifest.json",
+      "byteSize": 8008,
+      "sha256": "6dc60a91913bf797ef797d9048598c131ba8255e16de8e3eace801873e027555"
+    },
+    {
+      "path": "logh7-unity-runtime-manifest.json",
+      "byteSize": 5673,
+      "sha256": "a1bdadd89a3bb9346f0f5c95f8341695fa2d89923be828c89f724f44f8ba3efb"
+    },
+    {
+      "path": "logh7-unity-scene-surface-panels.json",
+      "byteSize": 2561,
+      "sha256": "c7020afa15cf4e5a17303994aea426a1641720e5457f57ea056473f77fb29898"
+    },
+    {
+      "path": "logh7-unity-source-pack-manifest.json",
+      "byteSize": 23822,
+      "sha256": "917370e9aefc89b44a5040ea6418e8d00c8f3b8b09287f973595bb71e361c5fa"
+    },
+    {
+      "path": "original/gamemenu/title.png",
+      "byteSize": 196755,
+      "sha256": "b05fc1fcc3935f607c691aa25fa67cf3292b95823d8183d77fc90a50d337bdf7"
+    },
+    {
+      "path": "original/spot/bg005.jpg",
+      "byteSize": 367094,
+      "sha256": "4e639db66a901e77e8600c0456b521f8ec057b0cf398377ec185f9472a79d099"
+    }
+  ],
+  "originalFallbackAssets": [
+    {
+      "id": "imperialShipMdx",
+      "format": "MDX",
+      "required": true,
+      "status": "present",
+      "path": ".omo/work/logh7-installed/data/model/Ship/GE",
+      "paths": [
+        ".omo/work/logh7-installed/data/model/Ship/GE"
+      ],
+      "hashAddress": {
+        "kind": "directory-tree-sha256",
+        "path": ".omo/work/logh7-installed/data/model/Ship/GE",
+        "fileCount": 120,
+        "totalBytes": 13833278,
+        "sha256": "636057fe8583ca259f23490f08d27c773f63b776d70e50b371e237b8b70b68a4"
+      }
+    },
+    {
+      "id": "fieldShipMarkSheet",
+      "format": "TGA",
+      "required": true,
+      "status": "present",
+      "path": ".omo/work/logh7-installed/data/image/Field/ShipMark.tga",
+      "paths": [
+        ".omo/work/logh7-installed/data/image/Field/ShipMark.tga"
+      ],
+      "hashAddress": {
+        "kind": "file-sha256",
+        "path": ".omo/work/logh7-installed/data/image/Field/ShipMark.tga",
+        "fileCount": 1,
+        "totalBytes": 66578,
+        "sha256": "5e0a0aa0267c68e1dc750828d06ba93fb0d437105079d849cde428a1d669cea5"
+      }
+    },
+    {
+      "id": "imperialDoubleEagleReference",
+      "format": "JPG",
+      "required": true,
+      "status": "present",
+      "path": "client-unity/Assets/ArtSource/reference/logh7-imperial-double-eagle-reference.jpg",
+      "paths": [
+        "client-unity/Assets/ArtSource/reference/logh7-imperial-double-eagle-reference.jpg"
+      ],
+      "hashAddress": {
+        "kind": "file-sha256",
+        "path": "client-unity/Assets/ArtSource/reference/logh7-imperial-double-eagle-reference.jpg",
+        "fileCount": 1,
+        "totalBytes": 56303,
+        "sha256": "822276b190c3e83729de39c14e4e9fc06c2eb8b39a56225bdcbe16f147134e9e"
+      }
+    },
+    {
+      "id": "imperialDoubleEagleMasks",
+      "format": "PNG",
+      "required": true,
+      "status": "present",
+      "path": null,
+      "paths": [
+        "client-unity/Assets/ArtSource/reference/imperial-crest/logh7-imperial-double-eagle-mask-gold.png",
+        "client-unity/Assets/ArtSource/reference/imperial-crest/logh7-imperial-double-eagle-mask-silver.png",
+        "client-unity/Assets/ArtSource/reference/imperial-crest/logh7-imperial-double-eagle-mask-white.png"
+      ],
+      "hashAddress": {
+        "kind": "file-set-sha256",
+        "path": null,
+        "fileCount": 3,
+        "totalBytes": 218858,
+        "sha256": "86f219ce2746680b1c0a8590e5f4dcaca97cfd950d2ec17a5891e24f0e11baa2"
+      }
+    }
+  ]
+}
