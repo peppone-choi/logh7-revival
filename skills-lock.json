@@ -1,0 +1,71 @@
+{
+  "version": 1,
+  "skills": {
+    "binary-triage": {
+      "source": "cyberkaida/reverse-engineering-assistant",
+      "sourceType": "github",
+      "skillPath": "ReVa/skills/binary-triage/SKILL.md",
+      "computedHash": "030a57e11e4eb6fb494e95fad6f35b170546a1469d906b3cdd8ecbd31429a600"
+    },
+    "grammar-checker": {
+      "source": "DaleSeo/korean-skills",
+      "sourceType": "github",
+      "skillPath": "skills/grammar-checker/SKILL.md",
+      "computedHash": "0b73fdf661f6b329ccf62946280a4e3c75852ef34b9fc06a4ad593c70166ac61"
+    },
+    "humanize": {
+      "source": "epoko77-ai/im-not-ai",
+      "sourceType": "github",
+      "skillPath": ".claude/skills/humanize/SKILL.md",
+      "computedHash": "1f52c834fd5b804a512d4a128ad286bbf575be914f101de32f7e3df7066454f5"
+    },
+    "humanize-korean": {
+      "source": "epoko77-ai/im-not-ai",
+      "sourceType": "github",
+      "skillPath": ".claude/skills/humanize-korean/SKILL.md",
+      "computedHash": "e01f3b2067450d6f2e7780ffb98f4e3a7e26be0d0a1533efc6e283670d91b107"
+    },
+    "humanize-redo": {
+      "source": "epoko77-ai/im-not-ai",
+      "sourceType": "github",
+      "skillPath": ".claude/skills/humanize-redo/SKILL.md",
+      "computedHash": "d4cb4e1983ba7774a047f232b887a6a2442ca955a8f17b0ae3b6a7f932feb5ec"
+    },
+    "humanizer": {
+      "source": "DaleSeo/korean-skills",
+      "sourceType": "github",
+      "skillPath": "skills/humanizer/SKILL.md",
+      "computedHash": "fe1b10de57c7ad35ea48b0bdfe21d94631b3f8591df0922f9988416b2a94ad23"
+    },
+    "karpathy-guidelines": {
+      "source": "multica-ai/andrej-karpathy-skills",
+      "sourceType": "github",
+      "skillPath": "skills/karpathy-guidelines/SKILL.md",
+      "computedHash": "0ec1641120accbb458780e0bd19a50a4182f2b97863e90851b91307f29802c9f"
+    },
+    "style-guide": {
+      "source": "DaleSeo/korean-skills",
+      "sourceType": "github",
+      "skillPath": "skills/style-guide/SKILL.md",
+      "computedHash": "e31942c00bf9f67545b0f0fe091098dcfb00a04ed048388b88876602a25eed4d"
+    },
+    "systematic-debugging": {
+      "source": "obra/superpowers",
+      "sourceType": "github",
+      "skillPath": "skills/systematic-debugging/SKILL.md",
+      "computedHash": "792a368e074981d7e3138edb439e138489b2ac247cd1e5739fab52af680fb17b"
+    },
+    "test-driven-development": {
+      "source": "obra/superpowers",
+      "sourceType": "github",
+      "skillPath": "skills/test-driven-development/SKILL.md",
+      "computedHash": "eee144aea35d783296d178017e9fe843c6d16cc8b240e106f5e50910f6caf329"
+    },
+    "verification-before-completion": {
+      "source": "obra/superpowers",
+      "sourceType": "github",
+      "skillPath": "skills/verification-before-completion/SKILL.md",
+      "computedHash": "9b446f0c7fe1cfb560b1d34439523b1a76d5f177290007b2c053a1c749a4a8ba"
+    }
+  }
+}
