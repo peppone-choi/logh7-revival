@@ -1,0 +1,3705 @@
+{
+ "_source": ".omo/work/galaxy-extract/page101-bg.jpg actual circular star centers; this JSON is seed data for DB import, not live server state",
+ "_generated": "2026-06-21",
+ "_grid": {
+  "width": 100,
+  "height": 50,
+  "coordinateBase": {
+   "cell": 0,
+   "gameCell": 1
+  },
+  "rasterCellFormula": "col=round((pixelX-47.5)/7), row=round((pixelY-114.5)/7)",
+  "pitchPx": 7.0,
+  "originCenterPx": [
+   47.5,
+   114.5
+  ]
+ },
+ "_method": {
+  "coordinate": "actual raster star-circle center, not PDF annotation or black inner line",
+  "color": "background-subtracted disk color from the actual raster star circle; center pixel alone is recorded only as centerPixelRgb and is not used for spectral class",
+  "assignment": "80 unique raster dot candidates matched to the 80 manual labels; duplicate component count is zero in the audit artifact"
+ },
+ "systems": [
+  {
+   "name": "ルンビーニ",
+   "faction": "alliance",
+   "pixelX": 82.275,
+   "pixelY": 257.856,
+   "cell": [
+    5,
+    20
+   ],
+   "gameCell": [
+    6,
+    21
+   ],
+   "rgb": [
+    168,
+    62,
+    11
+   ],
+   "hue": 19.5,
+   "saturation": 0.318,
+   "spectralClass": "K",
+   "component": 38,
+   "componentArea": 26,
+   "componentBbox": [
+    80,
+    255,
+    85,
+    261
+   ],
+   "vectorCellBeforeRasterAudit": [
+    3,
+    20
+   ],
+   "representativeRgb": [
+    168,
+    62,
+    11
+   ],
+   "representativeHue": 19.5,
+   "centerPixelRgb": [
+    255,
+    212,
+    161
+   ],
+   "colorMethod": "background-subtracted disk color, local ring radius 7..11 as background, disk radius <=5.2 as source"
+  },
+  {
+   "name": "シロン",
+   "faction": "alliance",
+   "pixelX": 89.572,
+   "pixelY": 214.45,
+   "cell": [
+    6,
+    14
+   ],
+   "gameCell": [
+    7,
+    15
+   ],
+   "rgb": [
+    171,
+    118,
+    46
+   ],
+   "hue": 34.6,
+   "saturation": 0.169,
+   "spectralClass": "G",
+   "component": 22,
+   "componentArea": 31,
+   "componentBbox": [
+    87,
+    212,
+    92,
+    217
+   ],
+   "vectorCellBeforeRasterAudit": [
+    4,
+    14
+   ],
+   "representativeRgb": [
+    171,
+    118,
+    46
+   ],
+   "representativeHue": 34.6,
+   "centerPixelRgb": [
+    255,
+    251,
+    211
+   ],
+   "colorMethod": "background-subtracted disk color, local ring radius 7..11 as background, disk radius <=5.2 as source"
+  },
+  {
+   "name": "エリューセラ",
+   "faction": "alliance",
+   "pixelX": 96.962,
+   "pixelY": 351.15,
+   "cell": [
+    7,
+    34
+   ],
+   "gameCell": [
+    8,
+    35
+   ],
+   "rgb": [
+    179,
+    107,
+    40
+   ],
+   "hue": 28.9,
+   "saturation": 0.024,
+   "spectralClass": "G",
+   "component": 62,
+   "componentArea": 46,
+   "componentBbox": [
+    93,
+    348,
+    100,
+    355
+   ],
+   "vectorCellBeforeRasterAudit": [
+    5,
+    34
+   ],
+   "representativeRgb": [
+    179,
+    107,
+    40
+   ],
+   "representativeHue": 28.9,
+   "centerPixelRgb": [
+    255,
+    251,
+    244
+   ],
+   "colorMethod": "background-subtracted disk color, local ring radius 7..11 as background, disk radius <=5.2 as source"
+  },
+  {
+   "name": "タナトス",
+   "faction": "alliance",
+   "pixelX": 111.356,
+   "pixelY": 300.967,
+   "cell": [
+    9,
+    27
+   ],
+   "gameCell": [
+    10,
+    28
+   ],
+   "rgb": [
+    180,
+    116,
+    43
+   ],
+   "hue": 32.0,
+   "saturation": 0.224,
+   "spectralClass": "G",
+   "component": 48,
+   "componentArea": 25,
+   "componentBbox": [
+    109,
+    299,
+    114,
+    303
+   ],
+   "vectorCellBeforeRasterAudit": [
+    7,
+    27
+   ],
+   "representativeRgb": [
+    180,
+    116,
+    43
+   ],
+   "representativeHue": 32.0,
+   "centerPixelRgb": [
+    255,
+    243,
+    190
+   ],
+   "colorMethod": "background-subtracted disk color, local ring radius 7..11 as background, disk radius <=5.2 as source"
+  },
+  {
+   "name": "リオ・ヴェルデ",
+   "faction": "alliance",
+   "pixelX": 125.868,
+   "pixelY": 344.121,
+   "cell": [
+    11,
+    33
+   ],
+   "gameCell": [
+    12,
+    34
+   ],
+   "rgb": [
+    173,
+    61,
+    21
+   ],
+   "hue": 15.8,
+   "saturation": 0.412,
+   "spectralClass": "K",
+   "component": 61,
+   "componentArea": 22,
+   "componentBbox": [
+    124,
+    342,
+    128,
+    346
+   ],
+   "vectorCellBeforeRasterAudit": [
+    9,
+    33
+   ],
+   "representativeRgb": [
+    173,
+    61,
+    21
+   ],
+   "representativeHue": 15.8,
+   "centerPixelRgb": [
+    255,
+    209,
+    132
+   ],
+   "colorMethod": "background-subtracted disk color, local ring radius 7..11 as background, disk radius <=5.2 as source"
+  },
+  {
+   "name": "ロフォーテン",
+   "faction": "alliance",
+   "pixelX": 140.154,
+   "pixelY": 192.615,
+   "cell": [
+    13,
+    11
+   ],
+   "gameCell": [
+    14,
+    12
+   ],
+   "rgb": [
+    166,
+    116,
+    32
+   ],
+   "hue": 37.6,
+   "saturation": 0.129,
+   "spectralClass": "G",
+   "component": 13,
+   "componentArea": 37,
+   "componentBbox": [
+    137,
+    190,
+    143,
+    196
+   ],
+   "vectorCellBeforeRasterAudit": [
+    11,
+    12
+   ],
+   "representativeRgb": [
+    166,
+    116,
+    32
+   ],
+   "representativeHue": 37.6,
+   "centerPixelRgb": [
+    255,
+    238,
+    214
+   ],
+   "colorMethod": "background-subtracted disk color, local ring radius 7..11 as background, disk radius <=5.2 as source"
+  },
+  {
+   "name": "バーラト",
+   "faction": "alliance",
+   "pixelX": 147.296,
+   "pixelY": 257.676,
+   "cell": [
+    14,
+    20
+   ],
+   "gameCell": [
+    15,
+    21
+   ],
+   "rgb": [
+    173,
+    111,
+    43
+   ],
+   "hue": 31.4,
+   "saturation": 0.134,
+   "spectralClass": "G",
+   "component": 37,
+   "componentArea": 28,
+   "componentBbox": [
+    145,
+    255,
+    150,
+    260
+   ],
+   "vectorCellBeforeRasterAudit": [
+    12,
+    21
+   ],
+   "representativeRgb": [
+    173,
+    111,
+    43
+   ],
+   "representativeHue": 31.4,
+   "centerPixelRgb": [
+    255,
+    241,
+    215
+   ],
+   "colorMethod": "background-subtracted disk color, local ring radius 7..11 as background, disk radius <=5.2 as source"
+  },
+  {
+   "name": "ファラーファラ",
+   "faction": "alliance",
+   "pixelX": 176.013,
+   "pixelY": 164.008,
+   "cell": [
+    18,
+    7
+   ],
+   "gameCell": [
+    19,
+    8
+   ],
+   "rgb": [
+    169,
+    124,
+    32
+   ],
+   "hue": 40.3,
+   "saturation": 0.208,
+   "spectralClass": "G",
+   "component": 8,
+   "componentArea": 37,
+   "componentBbox": [
+    173,
+    161,
+    179,
+    167
+   ],
+   "vectorCellBeforeRasterAudit": [
+    16,
+    7
+   ],
+   "representativeRgb": [
+    169,
+    124,
+    32
+   ],
+   "representativeHue": 40.3,
+   "centerPixelRgb": [
+    255,
+    241,
+    198
+   ],
+   "colorMethod": "background-subtracted disk color, local ring radius 7..11 as background, disk radius <=5.2 as source"
+  },
+  {
+   "name": "ケリム",
+   "faction": "alliance",
+   "pixelX": 175.931,
+   "pixelY": 214.624,
+   "cell": [
+    18,
+    14
+   ],
+   "gameCell": [
+    19,
+    15
+   ],
+   "rgb": [
+    163,
+    114,
+    38
+   ],
+   "hue": 36.5,
+   "saturation": 0.169,
+   "spectralClass": "G",
+   "component": 24,
+   "componentArea": 32,
+   "componentBbox": [
+    173,
+    212,
+    179,
+    218
+   ],
+   "vectorCellBeforeRasterAudit": [
+    16,
+    14
+   ],
+   "representativeRgb": [
+    163,
+    114,
+    38
+   ],
+   "representativeHue": 36.5,
+   "centerPixelRgb": [
+    255,
+    252,
+    211
+   ],
+   "colorMethod": "background-subtracted disk color, local ring radius 7..11 as background, disk radius <=5.2 as source"
+  },
+  {
+   "name": "ポリスーン",
+   "faction": "alliance",
+   "pixelX": 176.164,
+   "pixelY": 437.782,
+   "cell": [
+    18,
+    46
+   ],
+   "gameCell": [
+    19,
+    47
+   ],
+   "rgb": [
+    172,
+    64,
+    23
+   ],
+   "hue": 16.5,
+   "saturation": 0.431,
+   "spectralClass": "K",
+   "component": 84,
+   "componentArea": 21,
+   "componentBbox": [
+    174,
+    436,
+    178,
+    440
+   ],
+   "vectorCellBeforeRasterAudit": [
+    16,
+    46
+   ],
+   "representativeRgb": [
+    172,
+    64,
+    23
+   ],
+   "representativeHue": 16.5,
+   "centerPixelRgb": [
+    255,
+    191,
+    119
+   ],
+   "colorMethod": "background-subtracted disk color, local ring radius 7..11 as background, disk radius <=5.2 as source"
+  },
+  {
+   "name": "ライガール",
+   "faction": "alliance",
+   "pixelX": 197.872,
+   "pixelY": 358.346,
+   "cell": [
+    21,
+    35
+   ],
+   "gameCell": [
+    22,
+    36
+   ],
+   "rgb": [
+    148,
+    32,
+    11
+   ],
+   "hue": 9.2,
+   "saturation": 0.416,
+   "spectralClass": "M",
+   "component": 65,
+   "componentArea": 20,
+   "componentBbox": [
+    196,
+    356,
+    200,
+    360
+   ],
+   "vectorCellBeforeRasterAudit": [
+    19,
+    35
+   ],
+   "representativeRgb": [
+    148,
+    32,
+    11
+   ],
+   "representativeHue": 9.2,
+   "centerPixelRgb": [
+    255,
+    208,
+    144
+   ],
+   "colorMethod": "background-subtracted disk color, local ring radius 7..11 as background, disk radius <=5.2 as source"
+  },
+  {
+   "name": "バーミリオン",
+   "faction": "alliance",
+   "pixelX": 198.035,
+   "pixelY": 308.103,
+   "cell": [
+    22,
+    28
+   ],
+   "gameCell": [
+    23,
+    29
+   ],
+   "rgb": [
+    145,
+    28,
+    4
+   ],
+   "hue": 10.2,
+   "saturation": 0.439,
+   "spectralClass": "M",
+   "component": 49,
+   "componentArea": 22,
+   "componentBbox": [
+    196,
+    306,
+    200,
+    310
+   ],
+   "vectorCellBeforeRasterAudit": [
+    19,
+    28
+   ],
+   "representativeRgb": [
+    145,
+    28,
+    4
+   ],
+   "representativeHue": 10.2,
+   "centerPixelRgb": [
+    255,
+    198,
+    122
+   ],
+   "colorMethod": "background-subtracted disk color, local ring radius 7..11 as background, disk radius <=5.2 as source"
+  },
+  {
+   "name": "リューカス",
+   "faction": "alliance",
+   "pixelX": 212.294,
+   "pixelY": 279.21,
+   "cell": [
+    24,
+    24
+   ],
+   "gameCell": [
+    25,
+    25
+   ],
+   "rgb": [
+    178,
+    100,
+    39
+   ],
+   "hue": 26.3,
+   "saturation": 0.184,
+   "spectralClass": "G",
+   "component": 42,
+   "componentArea": 27,
+   "componentBbox": [
+    210,
+    277,
+    215,
+    282
+   ],
+   "vectorCellBeforeRasterAudit": [
+    21,
+    24
+   ],
+   "representativeRgb": [
+    178,
+    100,
+    39
+   ],
+   "representativeHue": 26.3,
+   "centerPixelRgb": [
+    255,
+    247,
+    198
+   ],
+   "colorMethod": "background-subtracted disk color, local ring radius 7..11 as background, disk radius <=5.2 as source"
+  },
+  {
+   "name": "マローヴィア",
+   "faction": "alliance",
+   "pixelX": 212.084,
+   "pixelY": 127.929,
+   "cell": [
+    24,
+    2
+   ],
+   "gameCell": [
+    25,
+    3
+   ],
+   "rgb": [
+    183,
+    95,
+    34
+   ],
+   "hue": 24.6,
+   "saturation": 0.161,
+   "spectralClass": "K",
+   "component": 1,
+   "componentArea": 24,
+   "componentBbox": [
+    210,
+    126,
+    214,
+    130
+   ],
+   "vectorCellBeforeRasterAudit": [
+    21,
+    2
+   ],
+   "representativeRgb": [
+    183,
+    95,
+    34
+   ],
+   "representativeHue": 24.6,
+   "centerPixelRgb": [
+    255,
+    235,
+    198
+   ],
+   "colorMethod": "background-subtracted disk color, local ring radius 7..11 as background, disk radius <=5.2 as source"
+  },
+  {
+   "name": "ハダト",
+   "faction": "alliance",
+   "pixelX": 219.185,
+   "pixelY": 156.794,
+   "cell": [
+    25,
+    6
+   ],
+   "gameCell": [
+    26,
+    7
+   ],
+   "rgb": [
+    125,
+    13,
+    1
+   ],
+   "hue": 5.8,
+   "saturation": 0.404,
+   "spectralClass": "M",
+   "component": 6,
+   "componentArea": 21,
+   "componentBbox": [
+    217,
+    155,
+    221,
+    159
+   ],
+   "vectorCellBeforeRasterAudit": [
+    22,
+    6
+   ],
+   "representativeRgb": [
+    125,
+    13,
+    1
+   ],
+   "representativeHue": 5.8,
+   "centerPixelRgb": [
+    255,
+    195,
+    131
+   ],
+   "colorMethod": "background-subtracted disk color, local ring radius 7..11 as background, disk radius <=5.2 as source"
+  },
+  {
+   "name": "ジャムシード",
+   "faction": "alliance",
+   "pixelX": 219.397,
+   "pixelY": 228.757,
+   "cell": [
+    25,
+    16
+   ],
+   "gameCell": [
+    26,
+    17
+   ],
+   "rgb": [
+    169,
+    112,
+    32
+   ],
+   "hue": 35.0,
+   "saturation": 0.188,
+   "spectralClass": "G",
+   "component": 30,
+   "componentArea": 29,
+   "componentBbox": [
+    217,
+    226,
+    222,
+    231
+   ],
+   "vectorCellBeforeRasterAudit": [
+    22,
+    16
+   ],
+   "representativeRgb": [
+    169,
+    112,
+    32
+   ],
+   "representativeHue": 35.0,
+   "centerPixelRgb": [
+    255,
+    232,
+    194
+   ],
+   "colorMethod": "background-subtracted disk color, local ring radius 7..11 as background, disk radius <=5.2 as source"
+  },
+  {
+   "name": "トリプラ",
+   "faction": "alliance",
+   "pixelX": 226.766,
+   "pixelY": 387.177,
+   "cell": [
+    26,
+    39
+   ],
+   "gameCell": [
+    27,
+    40
+   ],
+   "rgb": [
+    174,
+    68,
+    25
+   ],
+   "hue": 17.3,
+   "saturation": 0.435,
+   "spectralClass": "K",
+   "component": 73,
+   "componentArea": 21,
+   "componentBbox": [
+    225,
+    385,
+    229,
+    389
+   ],
+   "vectorCellBeforeRasterAudit": [
+    23,
+    39
+   ],
+   "representativeRgb": [
+    174,
+    68,
+    25
+   ],
+   "representativeHue": 17.3,
+   "centerPixelRgb": [
+    255,
+    200,
+    125
+   ],
+   "colorMethod": "background-subtracted disk color, local ring radius 7..11 as background, disk radius <=5.2 as source"
+  },
+  {
+   "name": "タッシリ",
+   "faction": "alliance",
+   "pixelX": 233.965,
+   "pixelY": 322.67,
+   "cell": [
+    27,
+    30
+   ],
+   "gameCell": [
+    28,
+    31
+   ],
+   "rgb": [
+    142,
+    27,
+    6
+   ],
+   "hue": 9.3,
+   "saturation": 0.416,
+   "spectralClass": "M",
+   "component": 56,
+   "componentArea": 22,
+   "componentBbox": [
+    232,
+    321,
+    236,
+    325
+   ],
+   "vectorCellBeforeRasterAudit": [
+    24,
+    30
+   ],
+   "representativeRgb": [
+    142,
+    27,
+    6
+   ],
+   "representativeHue": 9.3,
+   "centerPixelRgb": [
+    255,
+    198,
+    134
+   ],
+   "colorMethod": "background-subtracted disk color, local ring radius 7..11 as background, disk radius <=5.2 as source"
+  },
+  {
+   "name": "シュパーラ",
+   "faction": "alliance",
+   "pixelX": 233.99,
+   "pixelY": 437.72,
+   "cell": [
+    27,
+    46
+   ],
+   "gameCell": [
+    28,
+    47
+   ],
+   "rgb": [
+    164,
+    83,
+    51
+   ],
+   "hue": 17.0,
+   "saturation": 0.137,
+   "spectralClass": "K",
+   "component": 83,
+   "componentArea": 24,
+   "componentBbox": [
+    232,
+    435,
+    236,
+    440
+   ],
+   "vectorCellBeforeRasterAudit": [
+    24,
+    46
+   ],
+   "representativeRgb": [
+    164,
+    83,
+    51
+   ],
+   "representativeHue": 17.0,
+   "centerPixelRgb": [
+    255,
+    243,
+    210
+   ],
+   "colorMethod": "background-subtracted disk color, local ring radius 7..11 as background, disk radius <=5.2 as source"
+  },
+  {
+   "name": "ドーリア",
+   "faction": "alliance",
+   "pixelX": 255.681,
+   "pixelY": 200.461,
+   "cell": [
+    30,
+    12
+   ],
+   "gameCell": [
+    31,
+    13
+   ],
+   "rgb": [
+    163,
+    92,
+    25
+   ],
+   "hue": 29.1,
+   "saturation": 0.129,
+   "spectralClass": "G",
+   "component": 21,
+   "componentArea": 34,
+   "componentBbox": [
+    253,
+    198,
+    259,
+    203
+   ],
+   "vectorCellBeforeRasterAudit": [
+    27,
+    12
+   ],
+   "representativeRgb": [
+    163,
+    92,
+    25
+   ],
+   "representativeHue": 29.1,
+   "centerPixelRgb": [
+    255,
+    235,
+    213
+   ],
+   "colorMethod": "background-subtracted disk color, local ring radius 7..11 as background, disk radius <=5.2 as source"
+  },
+  {
+   "name": "シヴァ",
+   "faction": "alliance",
+   "pixelX": 262.637,
+   "pixelY": 142.373,
+   "cell": [
+    31,
+    4
+   ],
+   "gameCell": [
+    32,
+    5
+   ],
+   "rgb": [
+    187,
+    163,
+    95
+   ],
+   "hue": 44.3,
+   "saturation": 0.157,
+   "spectralClass": "F",
+   "component": 3,
+   "componentArea": 30,
+   "componentBbox": [
+    260,
+    140,
+    265,
+    145
+   ],
+   "vectorCellBeforeRasterAudit": [
+    28,
+    4
+   ],
+   "representativeRgb": [
+    187,
+    163,
+    95
+   ],
+   "representativeHue": 44.3,
+   "centerPixelRgb": [
+    218,
+    255,
+    255
+   ],
+   "colorMethod": "background-subtracted disk color, local ring radius 7..11 as background, disk radius <=5.2 as source"
+  },
+  {
+   "name": "エル・ファシル",
+   "faction": "alliance",
+   "pixelX": 269.653,
+   "pixelY": 236.233,
+   "cell": [
+    32,
+    17
+   ],
+   "gameCell": [
+    33,
+    18
+   ],
+   "rgb": [
+    167,
+    112,
+    43
+   ],
+   "hue": 33.4,
+   "saturation": 0.149,
+   "spectralClass": "G",
+   "component": 32,
+   "componentArea": 29,
+   "componentBbox": [
+    267,
+    234,
+    272,
+    239
+   ],
+   "vectorCellBeforeRasterAudit": [
+    30,
+    18
+   ],
+   "representativeRgb": [
+    167,
+    112,
+    43
+   ],
+   "representativeHue": 33.4,
+   "centerPixelRgb": [
+    255,
+    250,
+    217
+   ],
+   "colorMethod": "background-subtracted disk color, local ring radius 7..11 as background, disk radius <=5.2 as source"
+  },
+  {
+   "name": "ガンダルヴァ",
+   "faction": "alliance",
+   "pixelX": 276.995,
+   "pixelY": 351.191,
+   "cell": [
+    33,
+    34
+   ],
+   "gameCell": [
+    34,
+    35
+   ],
+   "rgb": [
+    174,
+    66,
+    20
+   ],
+   "hue": 17.9,
+   "saturation": 0.416,
+   "spectralClass": "K",
+   "component": 63,
+   "componentArea": 23,
+   "componentBbox": [
+    275,
+    349,
+    279,
+    353
+   ],
+   "vectorCellBeforeRasterAudit": [
+    31,
+    34
+   ],
+   "representativeRgb": [
+    174,
+    66,
+    20
+   ],
+   "representativeHue": 17.9,
+   "centerPixelRgb": [
+    255,
+    207,
+    132
+   ],
+   "colorMethod": "background-subtracted disk color, local ring radius 7..11 as background, disk radius <=5.2 as source"
+  },
+  {
+   "name": "ランテマリオ",
+   "faction": "alliance",
+   "pixelX": 284.31,
+   "pixelY": 286.504,
+   "cell": [
+    34,
+    25
+   ],
+   "gameCell": [
+    35,
+    26
+   ],
+   "rgb": [
+    169,
+    62,
+    14
+   ],
+   "hue": 18.6,
+   "saturation": 0.404,
+   "spectralClass": "K",
+   "component": 44,
+   "componentArea": 22,
+   "componentBbox": [
+    282,
+    284,
+    286,
+    289
+   ],
+   "vectorCellBeforeRasterAudit": [
+    31,
+    25
+   ],
+   "representativeRgb": [
+    169,
+    62,
+    14
+   ],
+   "representativeHue": 18.6,
+   "centerPixelRgb": [
+    255,
+    186,
+    128
+   ],
+   "colorMethod": "background-subtracted disk color, local ring radius 7..11 as background, disk radius <=5.2 as source"
+  },
+  {
+   "name": "メルカルト",
+   "faction": "alliance",
+   "pixelX": 284.21,
+   "pixelY": 430.617,
+   "cell": [
+    34,
+    45
+   ],
+   "gameCell": [
+    35,
+    46
+   ],
+   "rgb": [
+    185,
+    109,
+    25
+   ],
+   "hue": 31.5,
+   "saturation": 0.087,
+   "spectralClass": "G",
+   "component": 81,
+   "componentArea": 46,
+   "componentBbox": [
+    281,
+    427,
+    288,
+    434
+   ],
+   "vectorCellBeforeRasterAudit": [
+    32,
+    45
+   ],
+   "representativeRgb": [
+    185,
+    109,
+    25
+   ],
+   "representativeHue": 31.5,
+   "centerPixelRgb": [
+    255,
+    250,
+    227
+   ],
+   "colorMethod": "background-subtracted disk color, local ring radius 7..11 as background, disk radius <=5.2 as source"
+  },
+  {
+   "name": "エルゴン",
+   "faction": "alliance",
+   "pixelX": 291.49,
+   "pixelY": 171.19,
+   "cell": [
+    35,
+    8
+   ],
+   "gameCell": [
+    36,
+    9
+   ],
+   "rgb": [
+    166,
+    84,
+    35
+   ],
+   "hue": 22.4,
+   "saturation": 0.099,
+   "spectralClass": "K",
+   "component": 10,
+   "componentArea": 28,
+   "componentBbox": [
+    289,
+    169,
+    294,
+    174
+   ],
+   "vectorCellBeforeRasterAudit": [
+    32,
+    8
+   ],
+   "representativeRgb": [
+    166,
+    84,
+    35
+   ],
+   "representativeHue": 22.4,
+   "centerPixelRgb": [
+    248,
+    240,
+    217
+   ],
+   "colorMethod": "background-subtracted disk color, local ring radius 7..11 as background, disk radius <=5.2 as source"
+  },
+  {
+   "name": "マル・アデッタ",
+   "faction": "alliance",
+   "pixelX": 313.006,
+   "pixelY": 315.442,
+   "cell": [
+    38,
+    29
+   ],
+   "gameCell": [
+    39,
+    30
+   ],
+   "rgb": [
+    167,
+    83,
+    44
+   ],
+   "hue": 19.0,
+   "saturation": 0.118,
+   "spectralClass": "K",
+   "component": 53,
+   "componentArea": 26,
+   "componentBbox": [
+    311,
+    313,
+    315,
+    318
+   ],
+   "vectorCellBeforeRasterAudit": [
+    35,
+    29
+   ],
+   "representativeRgb": [
+    167,
+    83,
+    44
+   ],
+   "representativeHue": 19.0,
+   "centerPixelRgb": [
+    255,
+    247,
+    222
+   ],
+   "colorMethod": "background-subtracted disk color, local ring radius 7..11 as background, disk radius <=5.2 as source"
+  },
+  {
+   "name": "バラトループ",
+   "faction": "alliance",
+   "pixelX": 320.12,
+   "pixelY": 401.673,
+   "cell": [
+    39,
+    41
+   ],
+   "gameCell": [
+    40,
+    42
+   ],
+   "rgb": [
+    166,
+    61,
+    25
+   ],
+   "hue": 15.3,
+   "saturation": 0.392,
+   "spectralClass": "K",
+   "component": 75,
+   "componentArea": 20,
+   "componentBbox": [
+    318,
+    400,
+    322,
+    404
+   ],
+   "vectorCellBeforeRasterAudit": [
+    36,
+    41
+   ],
+   "representativeRgb": [
+    166,
+    61,
+    25
+   ],
+   "representativeHue": 15.3,
+   "centerPixelRgb": [
+    255,
+    190,
+    138
+   ],
+   "colorMethod": "background-subtracted disk color, local ring radius 7..11 as background, disk radius <=5.2 as source"
+  },
+  {
+   "name": "シャンダルーア",
+   "faction": "alliance",
+   "pixelX": 320.467,
+   "pixelY": 343.867,
+   "cell": [
+    39,
+    33
+   ],
+   "gameCell": [
+    40,
+    34
+   ],
+   "rgb": [
+    40,
+    35,
+    80
+   ],
+   "hue": 246.7,
+   "saturation": 0.239,
+   "spectralClass": "B",
+   "component": 58,
+   "componentArea": 15,
+   "componentBbox": [
+    319,
+    342,
+    322,
+    346
+   ],
+   "vectorCellBeforeRasterAudit": [
+    37,
+    33
+   ],
+   "representativeRgb": [
+    40,
+    35,
+    80
+   ],
+   "representativeHue": 246.7,
+   "centerPixelRgb": [
+    175,
+    222,
+    255
+   ],
+   "colorMethod": "background-subtracted disk color, local ring radius 7..11 as background, disk radius <=5.2 as source"
+  },
+  {
+   "name": "ダゴン",
+   "faction": "alliance",
+   "pixelX": 327.446,
+   "pixelY": 156.959,
+   "cell": [
+    40,
+    6
+   ],
+   "gameCell": [
+    41,
+    7
+   ],
+   "rgb": [
+    170,
+    84,
+    32
+   ],
+   "hue": 22.6,
+   "saturation": 0.137,
+   "spectralClass": "K",
+   "component": 7,
+   "componentArea": 26,
+   "componentBbox": [
+    325,
+    155,
+    330,
+    159
+   ],
+   "vectorCellBeforeRasterAudit": [
+    38,
+    6
+   ],
+   "representativeRgb": [
+    170,
+    84,
+    32
+   ],
+   "representativeHue": 22.6,
+   "centerPixelRgb": [
+    255,
+    249,
+    213
+   ],
+   "colorMethod": "background-subtracted disk color, local ring radius 7..11 as background, disk radius <=5.2 as source"
+  },
+  {
+   "name": "ティアマト",
+   "faction": "alliance",
+   "pixelX": 327.311,
+   "pixelY": 221.527,
+   "cell": [
+    40,
+    15
+   ],
+   "gameCell": [
+    41,
+    16
+   ],
+   "rgb": [
+    122,
+    14,
+    1
+   ],
+   "hue": 6.4,
+   "saturation": 0.376,
+   "spectralClass": "M",
+   "component": 26,
+   "componentArea": 26,
+   "componentBbox": [
+    325,
+    219,
+    330,
+    224
+   ],
+   "vectorCellBeforeRasterAudit": [
+    38,
+    15
+   ],
+   "representativeRgb": [
+    122,
+    14,
+    1
+   ],
+   "representativeHue": 6.4,
+   "centerPixelRgb": [
+    255,
+    215,
+    143
+   ],
+   "colorMethod": "background-subtracted disk color, local ring radius 7..11 as background, disk radius <=5.2 as source"
+  },
+  {
+   "name": "ドラゴニア",
+   "faction": "alliance",
+   "pixelX": 334.731,
+   "pixelY": 250.491,
+   "cell": [
+    41,
+    19
+   ],
+   "gameCell": [
+    42,
+    20
+   ],
+   "rgb": [
+    188,
+    188,
+    136
+   ],
+   "hue": 60.0,
+   "saturation": 0.2,
+   "spectralClass": "A",
+   "component": 36,
+   "componentArea": 22,
+   "componentBbox": [
+    333,
+    248,
+    337,
+    253
+   ],
+   "vectorCellBeforeRasterAudit": [
+    38,
+    20
+   ],
+   "representativeRgb": [
+    188,
+    188,
+    136
+   ],
+   "representativeHue": 60.0,
+   "centerPixelRgb": [
+    200,
+    255,
+    255
+   ],
+   "colorMethod": "background-subtracted disk color, local ring radius 7..11 as background, disk radius <=5.2 as source"
+  },
+  {
+   "name": "フォルセティ",
+   "faction": "alliance",
+   "pixelX": 334.608,
+   "pixelY": 286.451,
+   "cell": [
+    41,
+    25
+   ],
+   "gameCell": [
+    42,
+    26
+   ],
+   "rgb": [
+    51,
+    73,
+    69
+   ],
+   "hue": 169.1,
+   "saturation": 0.145,
+   "spectralClass": "A",
+   "component": 43,
+   "componentArea": 25,
+   "componentBbox": [
+    332,
+    284,
+    337,
+    289
+   ],
+   "vectorCellBeforeRasterAudit": [
+    39,
+    25
+   ],
+   "representativeRgb": [
+    51,
+    73,
+    69
+   ],
+   "representativeHue": 169.1,
+   "centerPixelRgb": [
+    218,
+    255,
+    255
+   ],
+   "colorMethod": "background-subtracted disk color, local ring radius 7..11 as background, disk radius <=5.2 as source"
+  },
+  {
+   "name": "アスターテ",
+   "faction": "alliance",
+   "pixelX": 349.066,
+   "pixelY": 192.9,
+   "cell": [
+    43,
+    11
+   ],
+   "gameCell": [
+    44,
+    12
+   ],
+   "rgb": [
+    167,
+    121,
+    35
+   ],
+   "hue": 39.1,
+   "saturation": 0.129,
+   "spectralClass": "G",
+   "component": 15,
+   "componentArea": 38,
+   "componentBbox": [
+    346,
+    190,
+    352,
+    196
+   ],
+   "vectorCellBeforeRasterAudit": [
+    41,
+    11
+   ],
+   "representativeRgb": [
+    167,
+    121,
+    35
+   ],
+   "representativeHue": 39.1,
+   "centerPixelRgb": [
+    255,
+    248,
+    221
+   ],
+   "colorMethod": "background-subtracted disk color, local ring radius 7..11 as background, disk radius <=5.2 as source"
+  },
+  {
+   "name": "ファイアザード",
+   "faction": "alliance",
+   "pixelX": 349.055,
+   "pixelY": 315.417,
+   "cell": [
+    43,
+    29
+   ],
+   "gameCell": [
+    44,
+    30
+   ],
+   "rgb": [
+    171,
+    128,
+    47
+   ],
+   "hue": 39.2,
+   "saturation": 0.196,
+   "spectralClass": "G",
+   "component": 52,
+   "componentArea": 33,
+   "componentBbox": [
+    346,
+    313,
+    352,
+    318
+   ],
+   "vectorCellBeforeRasterAudit": [
+    41,
+    29
+   ],
+   "representativeRgb": [
+    171,
+    128,
+    47
+   ],
+   "representativeHue": 39.2,
+   "centerPixelRgb": [
+    255,
+    248,
+    200
+   ],
+   "colorMethod": "background-subtracted disk color, local ring radius 7..11 as background, disk radius <=5.2 as source"
+  },
+  {
+   "name": "ポレヴィト",
+   "faction": "alliance",
+   "pixelX": 356.087,
+   "pixelY": 380.087,
+   "cell": [
+    44,
+    38
+   ],
+   "gameCell": [
+    45,
+    39
+   ],
+   "rgb": [
+    32,
+    62,
+    75
+   ],
+   "hue": 198.1,
+   "saturation": 0.141,
+   "spectralClass": "B",
+   "component": 71,
+   "componentArea": 22,
+   "componentBbox": [
+    354,
+    378,
+    358,
+    382
+   ],
+   "vectorCellBeforeRasterAudit": [
+    41,
+    38
+   ],
+   "representativeRgb": [
+    32,
+    62,
+    75
+   ],
+   "representativeHue": 198.1,
+   "centerPixelRgb": [
+    210,
+    247,
+    255
+   ],
+   "colorMethod": "background-subtracted disk color, local ring radius 7..11 as background, disk radius <=5.2 as source"
+  },
+  {
+   "name": "アルレスハイム",
+   "faction": "alliance",
+   "pixelX": 356.394,
+   "pixelY": 250.428,
+   "cell": [
+    44,
+    19
+   ],
+   "gameCell": [
+    45,
+    20
+   ],
+   "rgb": [
+    178,
+    136,
+    39
+   ],
+   "hue": 41.9,
+   "saturation": 0.235,
+   "spectralClass": "G",
+   "component": 35,
+   "componentArea": 31,
+   "componentBbox": [
+    354,
+    248,
+    359,
+    253
+   ],
+   "vectorCellBeforeRasterAudit": [
+    42,
+    20
+   ],
+   "representativeRgb": [
+    178,
+    136,
+    39
+   ],
+   "representativeHue": 41.9,
+   "centerPixelRgb": [
+    255,
+    245,
+    195
+   ],
+   "colorMethod": "background-subtracted disk color, local ring radius 7..11 as background, disk radius <=5.2 as source"
+  },
+  {
+   "name": "パランティア",
+   "faction": "alliance",
+   "pixelX": 356.209,
+   "pixelY": 286.509,
+   "cell": [
+    44,
+    25
+   ],
+   "gameCell": [
+    45,
+    26
+   ],
+   "rgb": [
+    40,
+    66,
+    61
+   ],
+   "hue": 168.5,
+   "saturation": 0.165,
+   "spectralClass": "A",
+   "component": 45,
+   "componentArea": 28,
+   "componentBbox": [
+    354,
+    284,
+    359,
+    289
+   ],
+   "vectorCellBeforeRasterAudit": [
+    42,
+    25
+   ],
+   "representativeRgb": [
+    40,
+    66,
+    61
+   ],
+   "representativeHue": 168.5,
+   "centerPixelRgb": [
+    209,
+    255,
+    255
+   ],
+   "colorMethod": "background-subtracted disk color, local ring radius 7..11 as background, disk radius <=5.2 as source"
+  },
+  {
+   "name": "アルトミュール",
+   "faction": "alliance",
+   "pixelX": 370.687,
+   "pixelY": 214.537,
+   "cell": [
+    46,
+    14
+   ],
+   "gameCell": [
+    47,
+    15
+   ],
+   "rgb": [
+    187,
+    175,
+    115
+   ],
+   "hue": 50.0,
+   "saturation": 0.165,
+   "spectralClass": "F",
+   "component": 23,
+   "componentArea": 29,
+   "componentBbox": [
+    368,
+    212,
+    373,
+    217
+   ],
+   "vectorCellBeforeRasterAudit": [
+    43,
+    15
+   ],
+   "representativeRgb": [
+    187,
+    175,
+    115
+   ],
+   "representativeHue": 50.0,
+   "centerPixelRgb": [
+    213,
+    255,
+    255
+   ],
+   "colorMethod": "background-subtracted disk color, local ring radius 7..11 as background, disk radius <=5.2 as source"
+  },
+  {
+   "name": "ヴァンフリート",
+   "faction": "alliance",
+   "pixelX": 370.528,
+   "pixelY": 199.901,
+   "cell": [
+    46,
+    12
+   ],
+   "gameCell": [
+    47,
+    13
+   ],
+   "rgb": [
+    160,
+    154,
+    92
+   ],
+   "hue": 54.7,
+   "saturation": 0.169,
+   "spectralClass": "F",
+   "component": 18,
+   "componentArea": 27,
+   "componentBbox": [
+    368,
+    197,
+    373,
+    202
+   ],
+   "vectorCellBeforeRasterAudit": [
+    44,
+    12
+   ],
+   "representativeRgb": [
+    160,
+    154,
+    92
+   ],
+   "representativeHue": 54.7,
+   "centerPixelRgb": [
+    209,
+    255,
+    255
+   ],
+   "colorMethod": "background-subtracted disk color, local ring radius 7..11 as background, disk radius <=5.2 as source"
+  },
+  {
+   "name": "フェザーン",
+   "faction": "neutral",
+   "pixelX": 407.248,
+   "pixelY": 380.015,
+   "cell": [
+    51,
+    38
+   ],
+   "gameCell": [
+    52,
+    39
+   ],
+   "rgb": [
+    213,
+    163,
+    110
+   ],
+   "hue": 30.9,
+   "saturation": 0.098,
+   "spectralClass": "G",
+   "component": 70,
+   "componentArea": 55,
+   "componentBbox": [
+    404,
+    376,
+    411,
+    384
+   ],
+   "vectorCellBeforeRasterAudit": [
+    49,
+    38
+   ],
+   "representativeRgb": [
+    213,
+    163,
+    110
+   ],
+   "representativeHue": 30.9,
+   "centerPixelRgb": [
+    255,
+    248,
+    222
+   ],
+   "colorMethod": "background-subtracted disk color, local ring radius 7..11 as background, disk radius <=5.2 as source"
+  },
+  {
+   "name": "イゼルローン",
+   "faction": "empire",
+   "pixelX": 420.601,
+   "pixelY": 199.236,
+   "cell": [
+    53,
+    12
+   ],
+   "gameCell": [
+    54,
+    13
+   ],
+   "rgb": [
+    184,
+    92,
+    55
+   ],
+   "hue": 17.2,
+   "saturation": 0.252,
+   "spectralClass": "K",
+   "component": 17,
+   "componentArea": 44,
+   "componentBbox": [
+    415,
+    196,
+    425,
+    203
+   ],
+   "vectorCellBeforeRasterAudit": [
+    51,
+    12
+   ],
+   "representativeRgb": [
+    184,
+    92,
+    55
+   ],
+   "representativeHue": 17.2,
+   "centerPixelRgb": [
+    255,
+    213,
+    187
+   ],
+   "colorMethod": "background-subtracted disk color, local ring radius 7..11 as background, disk radius <=5.2 as source"
+  },
+  {
+   "name": "アイゼンヘルツ",
+   "faction": "empire",
+   "pixelX": 449.981,
+   "pixelY": 380.149,
+   "cell": [
+    57,
+    38
+   ],
+   "gameCell": [
+    58,
+    39
+   ],
+   "rgb": [
+    171,
+    85,
+    38
+   ],
+   "hue": 21.2,
+   "saturation": 0.188,
+   "spectralClass": "K",
+   "component": 72,
+   "componentArea": 23,
+   "componentBbox": [
+    448,
+    378,
+    452,
+    382
+   ],
+   "vectorCellBeforeRasterAudit": [
+    55,
+    38
+   ],
+   "representativeRgb": [
+    171,
+    85,
+    38
+   ],
+   "representativeHue": 21.2,
+   "centerPixelRgb": [
+    255,
+    243,
+    199
+   ],
+   "colorMethod": "background-subtracted disk color, local ring radius 7..11 as background, disk radius <=5.2 as source"
+  },
+  {
+   "name": "アムリッツァ",
+   "faction": "empire",
+   "pixelX": 471.539,
+   "pixelY": 200.125,
+   "cell": [
+    61,
+    12
+   ],
+   "gameCell": [
+    62,
+    13
+   ],
+   "rgb": [
+    134,
+    16,
+    2
+   ],
+   "hue": 6.4,
+   "saturation": 0.341,
+   "spectralClass": "M",
+   "component": 19,
+   "componentArea": 27,
+   "componentBbox": [
+    469,
+    198,
+    474,
+    203
+   ],
+   "vectorCellBeforeRasterAudit": [
+    58,
+    12
+   ],
+   "representativeRgb": [
+    134,
+    16,
+    2
+   ],
+   "representativeHue": 6.4,
+   "centerPixelRgb": [
+    255,
+    201,
+    144
+   ],
+   "colorMethod": "background-subtracted disk color, local ring radius 7..11 as background, disk radius <=5.2 as source"
+  },
+  {
+   "name": "フォルゲン",
+   "faction": "empire",
+   "pixelX": 471.301,
+   "pixelY": 444.784,
+   "cell": [
+    61,
+    47
+   ],
+   "gameCell": [
+    62,
+    48
+   ],
+   "rgb": [
+    177,
+    61,
+    20
+   ],
+   "hue": 15.7,
+   "saturation": 0.396,
+   "spectralClass": "K",
+   "component": 85,
+   "componentArea": 22,
+   "componentBbox": [
+    469,
+    443,
+    474,
+    447
+   ],
+   "vectorCellBeforeRasterAudit": [
+    58,
+    47
+   ],
+   "representativeRgb": [
+    177,
+    61,
+    20
+   ],
+   "representativeHue": 15.7,
+   "centerPixelRgb": [
+    255,
+    219,
+    147
+   ],
+   "colorMethod": "background-subtracted disk color, local ring radius 7..11 as background, disk radius <=5.2 as source"
+  },
+  {
+   "name": "ヨーツンヘイム",
+   "faction": "empire",
+   "pixelX": 485.992,
+   "pixelY": 394.475,
+   "cell": [
+    63,
+    40
+   ],
+   "gameCell": [
+    64,
+    41
+   ],
+   "rgb": [
+    179,
+    140,
+    55
+   ],
+   "hue": 41.1,
+   "saturation": 0.2,
+   "spectralClass": "G",
+   "component": 74,
+   "componentArea": 26,
+   "componentBbox": [
+    484,
+    392,
+    488,
+    397
+   ],
+   "vectorCellBeforeRasterAudit": [
+    60,
+    40
+   ],
+   "representativeRgb": [
+    179,
+    140,
+    55
+   ],
+   "representativeHue": 41.1,
+   "centerPixelRgb": [
+    255,
+    250,
+    209
+   ],
+   "colorMethod": "background-subtracted disk color, local ring radius 7..11 as background, disk radius <=5.2 as source"
+  },
+  {
+   "name": "ヴァンステイド",
+   "faction": "empire",
+   "pixelX": 486.145,
+   "pixelY": 242.879,
+   "cell": [
+    63,
+    18
+   ],
+   "gameCell": [
+    64,
+    19
+   ],
+   "rgb": [
+    180,
+    76,
+    5
+   ],
+   "hue": 24.3,
+   "saturation": 0.337,
+   "spectralClass": "K",
+   "component": 33,
+   "componentArea": 29,
+   "componentBbox": [
+    484,
+    240,
+    489,
+    245
+   ],
+   "vectorCellBeforeRasterAudit": [
+    60,
+    19
+   ],
+   "representativeRgb": [
+    180,
+    76,
+    5
+   ],
+   "representativeHue": 24.3,
+   "centerPixelRgb": [
+    255,
+    211,
+    154
+   ],
+   "colorMethod": "background-subtracted disk color, local ring radius 7..11 as background, disk radius <=5.2 as source"
+  },
+  {
+   "name": "ビルロスト",
+   "faction": "empire",
+   "pixelX": 493.278,
+   "pixelY": 149.495,
+   "cell": [
+    64,
+    5
+   ],
+   "gameCell": [
+    65,
+    6
+   ],
+   "rgb": [
+    139,
+    23,
+    3
+   ],
+   "hue": 8.8,
+   "saturation": 0.322,
+   "spectralClass": "M",
+   "component": 5,
+   "componentArea": 22,
+   "componentBbox": [
+    491,
+    147,
+    495,
+    152
+   ],
+   "vectorCellBeforeRasterAudit": [
+    61,
+    5
+   ],
+   "representativeRgb": [
+    139,
+    23,
+    3
+   ],
+   "representativeHue": 8.8,
+   "centerPixelRgb": [
+    255,
+    210,
+    166
+   ],
+   "colorMethod": "background-subtracted disk color, local ring radius 7..11 as background, disk radius <=5.2 as source"
+  },
+  {
+   "name": "アルメントフベール",
+   "faction": "empire",
+   "pixelX": 493.11,
+   "pixelY": 344.116,
+   "cell": [
+    64,
+    33
+   ],
+   "gameCell": [
+    65,
+    34
+   ],
+   "rgb": [
+    174,
+    64,
+    24
+   ],
+   "hue": 16.0,
+   "saturation": 0.404,
+   "spectralClass": "K",
+   "component": 60,
+   "componentArea": 22,
+   "componentBbox": [
+    491,
+    342,
+    495,
+    346
+   ],
+   "vectorCellBeforeRasterAudit": [
+    61,
+    33
+   ],
+   "representativeRgb": [
+    174,
+    64,
+    24
+   ],
+   "representativeHue": 16.0,
+   "centerPixelRgb": [
+    255,
+    213,
+    144
+   ],
+   "colorMethod": "background-subtracted disk color, local ring radius 7..11 as background, disk radius <=5.2 as source"
+  },
+  {
+   "name": "トラーバッハ",
+   "faction": "empire",
+   "pixelX": 493.336,
+   "pixelY": 293.657,
+   "cell": [
+    64,
+    26
+   ],
+   "gameCell": [
+    65,
+    27
+   ],
+   "rgb": [
+    167,
+    116,
+    41
+   ],
+   "hue": 35.7,
+   "saturation": 0.153,
+   "spectralClass": "G",
+   "component": 47,
+   "componentArea": 30,
+   "componentBbox": [
+    491,
+    291,
+    496,
+    296
+   ],
+   "vectorCellBeforeRasterAudit": [
+    61,
+    26
+   ],
+   "representativeRgb": [
+    167,
+    116,
+    41
+   ],
+   "representativeHue": 35.7,
+   "centerPixelRgb": [
+    255,
+    249,
+    212
+   ],
+   "colorMethod": "background-subtracted disk color, local ring radius 7..11 as background, disk radius <=5.2 as source"
+  },
+  {
+   "name": "ブラウンシュヴァイク",
+   "faction": "empire",
+   "pixelX": 514.774,
+   "pixelY": 423.269,
+   "cell": [
+    67,
+    44
+   ],
+   "gameCell": [
+    68,
+    45
+   ],
+   "rgb": [
+    178,
+    122,
+    61
+   ],
+   "hue": 31.3,
+   "saturation": 0.157,
+   "spectralClass": "G",
+   "component": 78,
+   "componentArea": 27,
+   "componentBbox": [
+    512,
+    421,
+    517,
+    426
+   ],
+   "vectorCellBeforeRasterAudit": [
+    64,
+    44
+   ],
+   "representativeRgb": [
+    178,
+    122,
+    61
+   ],
+   "representativeHue": 31.3,
+   "centerPixelRgb": [
+    255,
+    238,
+    210
+   ],
+   "colorMethod": "background-subtracted disk color, local ring radius 7..11 as background, disk radius <=5.2 as source"
+  },
+  {
+   "name": "ボルソルン",
+   "faction": "empire",
+   "pixelX": 522.27,
+   "pixelY": 164.015,
+   "cell": [
+    68,
+    7
+   ],
+   "gameCell": [
+    69,
+    8
+   ],
+   "rgb": [
+    180,
+    99,
+    38
+   ],
+   "hue": 25.8,
+   "saturation": 0.204,
+   "spectralClass": "G",
+   "component": 9,
+   "componentArea": 24,
+   "componentBbox": [
+    520,
+    162,
+    525,
+    166
+   ],
+   "vectorCellBeforeRasterAudit": [
+    65,
+    7
+   ],
+   "representativeRgb": [
+    180,
+    99,
+    38
+   ],
+   "representativeHue": 25.8,
+   "centerPixelRgb": [
+    255,
+    247,
+    192
+   ],
+   "colorMethod": "background-subtracted disk color, local ring radius 7..11 as background, disk radius <=5.2 as source"
+  },
+  {
+   "name": "ドヴェルグ",
+   "faction": "empire",
+   "pixelX": 522.171,
+   "pixelY": 200.17,
+   "cell": [
+    68,
+    12
+   ],
+   "gameCell": [
+    69,
+    13
+   ],
+   "rgb": [
+    173,
+    95,
+    38
+   ],
+   "hue": 25.3,
+   "saturation": 0.157,
+   "spectralClass": "G",
+   "component": 20,
+   "componentArea": 26,
+   "componentBbox": [
+    520,
+    198,
+    525,
+    203
+   ],
+   "vectorCellBeforeRasterAudit": [
+    65,
+    12
+   ],
+   "representativeRgb": [
+    173,
+    95,
+    38
+   ],
+   "representativeHue": 25.3,
+   "centerPixelRgb": [
+    255,
+    239,
+    205
+   ],
+   "colorMethod": "background-subtracted disk color, local ring radius 7..11 as background, disk radius <=5.2 as source"
+  },
+  {
+   "name": "アルタイル",
+   "faction": "empire",
+   "pixelX": 536.33,
+   "pixelY": 264.967,
+   "cell": [
+    70,
+    21
+   ],
+   "gameCell": [
+    71,
+    22
+   ],
+   "rgb": [
+    139,
+    26,
+    3
+   ],
+   "hue": 10.1,
+   "saturation": 0.435,
+   "spectralClass": "M",
+   "component": 39,
+   "componentArea": 24,
+   "componentBbox": [
+    534,
+    263,
+    539,
+    267
+   ],
+   "vectorCellBeforeRasterAudit": [
+    67,
+    22
+   ],
+   "representativeRgb": [
+    139,
+    26,
+    3
+   ],
+   "representativeHue": 10.1,
+   "centerPixelRgb": [
+    255,
+    212,
+    131
+   ],
+   "colorMethod": "background-subtracted disk color, local ring radius 7..11 as background, disk radius <=5.2 as source"
+  },
+  {
+   "name": "フレイア",
+   "faction": "empire",
+   "pixelX": 536.623,
+   "pixelY": 351.211,
+   "cell": [
+    70,
+    34
+   ],
+   "gameCell": [
+    71,
+    35
+   ],
+   "rgb": [
+    37,
+    59,
+    81
+   ],
+   "hue": 210.0,
+   "saturation": 0.176,
+   "spectralClass": "B",
+   "component": 64,
+   "componentArea": 19,
+   "componentBbox": [
+    535,
+    349,
+    539,
+    353
+   ],
+   "vectorCellBeforeRasterAudit": [
+    68,
+    34
+   ],
+   "representativeRgb": [
+    37,
+    59,
+    81
+   ],
+   "representativeHue": 210.0,
+   "centerPixelRgb": [
+    216,
+    255,
+    255
+   ],
+   "colorMethod": "background-subtracted disk color, local ring radius 7..11 as background, disk radius <=5.2 as source"
+  },
+  {
+   "name": "ヤヴァンハール",
+   "faction": "empire",
+   "pixelX": 543.793,
+   "pixelY": 221.718,
+   "cell": [
+    71,
+    15
+   ],
+   "gameCell": [
+    72,
+    16
+   ],
+   "rgb": [
+    166,
+    93,
+    41
+   ],
+   "hue": 25.0,
+   "saturation": 0.118,
+   "spectralClass": "G",
+   "component": 28,
+   "componentArea": 26,
+   "componentBbox": [
+    541,
+    219,
+    546,
+    224
+   ],
+   "vectorCellBeforeRasterAudit": [
+    68,
+    16
+   ],
+   "representativeRgb": [
+    166,
+    93,
+    41
+   ],
+   "representativeHue": 25.0,
+   "centerPixelRgb": [
+    255,
+    245,
+    217
+   ],
+   "colorMethod": "background-subtracted disk color, local ring radius 7..11 as background, disk radius <=5.2 as source"
+  },
+  {
+   "name": "キフォイザー",
+   "faction": "empire",
+   "pixelX": 558.005,
+   "pixelY": 430.185,
+   "cell": [
+    73,
+    45
+   ],
+   "gameCell": [
+    74,
+    46
+   ],
+   "rgb": [
+    39,
+    71,
+    83
+   ],
+   "hue": 196.4,
+   "saturation": 0.125,
+   "spectralClass": "B",
+   "component": 80,
+   "componentArea": 23,
+   "componentBbox": [
+    556,
+    428,
+    560,
+    432
+   ],
+   "vectorCellBeforeRasterAudit": [
+    70,
+    45
+   ],
+   "representativeRgb": [
+    39,
+    71,
+    83
+   ],
+   "representativeHue": 196.4,
+   "centerPixelRgb": [
+    232,
+    255,
+    255
+   ],
+   "colorMethod": "background-subtracted disk color, local ring radius 7..11 as background, disk radius <=5.2 as source"
+  },
+  {
+   "name": "アルヴィース",
+   "faction": "empire",
+   "pixelX": 579.857,
+   "pixelY": 308.204,
+   "cell": [
+    76,
+    28
+   ],
+   "gameCell": [
+    77,
+    29
+   ],
+   "rgb": [
+    178,
+    132,
+    42
+   ],
+   "hue": 39.7,
+   "saturation": 0.227,
+   "spectralClass": "G",
+   "component": 50,
+   "componentArea": 30,
+   "componentBbox": [
+    577,
+    306,
+    583,
+    311
+   ],
+   "vectorCellBeforeRasterAudit": [
+    73,
+    28
+   ],
+   "representativeRgb": [
+    178,
+    132,
+    42
+   ],
+   "representativeHue": 39.7,
+   "centerPixelRgb": [
+    255,
+    232,
+    187
+   ],
+   "colorMethod": "background-subtracted disk color, local ring radius 7..11 as background, disk radius <=5.2 as source"
+  },
+  {
+   "name": "太陽系",
+   "faction": "empire",
+   "pixelX": 579.5,
+   "pixelY": 135.021,
+   "cell": [
+    76,
+    3
+   ],
+   "gameCell": [
+    77,
+    4
+   ],
+   "rgb": [
+    177,
+    112,
+    37
+   ],
+   "hue": 32.1,
+   "saturation": 0.129,
+   "spectralClass": "G",
+   "component": 2,
+   "componentArea": 30,
+   "componentBbox": [
+    577,
+    132,
+    582,
+    138
+   ],
+   "vectorCellBeforeRasterAudit": [
+    74,
+    3
+   ],
+   "representativeRgb": [
+    177,
+    112,
+    37
+   ],
+   "representativeHue": 32.1,
+   "centerPixelRgb": [
+    255,
+    248,
+    214
+   ],
+   "colorMethod": "background-subtracted disk color, local ring radius 7..11 as background, disk radius <=5.2 as source"
+  },
+  {
+   "name": "バルドル",
+   "faction": "empire",
+   "pixelX": 586.995,
+   "pixelY": 444.825,
+   "cell": [
+    77,
+    47
+   ],
+   "gameCell": [
+    78,
+    48
+   ],
+   "rgb": [
+    166,
+    90,
+    52
+   ],
+   "hue": 20.0,
+   "saturation": 0.224,
+   "spectralClass": "K",
+   "component": 86,
+   "componentArea": 23,
+   "componentBbox": [
+    585,
+    443,
+    589,
+    447
+   ],
+   "vectorCellBeforeRasterAudit": [
+    75,
+    47
+   ],
+   "representativeRgb": [
+    166,
+    90,
+    52
+   ],
+   "representativeHue": 20.0,
+   "centerPixelRgb": [
+    255,
+    226,
+    178
+   ],
+   "colorMethod": "background-subtracted disk color, local ring radius 7..11 as background, disk radius <=5.2 as source"
+  },
+  {
+   "name": "リンダーホーフ",
+   "faction": "empire",
+   "pixelX": 593.965,
+   "pixelY": 192.797,
+   "cell": [
+    78,
+    11
+   ],
+   "gameCell": [
+    79,
+    12
+   ],
+   "rgb": [
+    168,
+    111,
+    34
+   ],
+   "hue": 34.5,
+   "saturation": 0.173,
+   "spectralClass": "G",
+   "component": 14,
+   "componentArea": 27,
+   "componentBbox": [
+    592,
+    190,
+    596,
+    195
+   ],
+   "vectorCellBeforeRasterAudit": [
+    75,
+    11
+   ],
+   "representativeRgb": [
+    168,
+    111,
+    34
+   ],
+   "representativeHue": 34.5,
+   "centerPixelRgb": [
+    255,
+    241,
+    208
+   ],
+   "colorMethod": "background-subtracted disk color, local ring radius 7..11 as background, disk radius <=5.2 as source"
+  },
+  {
+   "name": "シリウス",
+   "faction": "empire",
+   "pixelX": 608.379,
+   "pixelY": 120.824,
+   "cell": [
+    80,
+    1
+   ],
+   "gameCell": [
+    81,
+    2
+   ],
+   "rgb": [
+    178,
+    90,
+    31
+   ],
+   "hue": 24.1,
+   "saturation": 0.137,
+   "spectralClass": "K",
+   "component": 0,
+   "componentArea": 26,
+   "componentBbox": [
+    606,
+    118,
+    611,
+    123
+   ],
+   "vectorCellBeforeRasterAudit": [
+    77,
+    1
+   ],
+   "representativeRgb": [
+    178,
+    90,
+    31
+   ],
+   "representativeHue": 24.1,
+   "centerPixelRgb": [
+    255,
+    242,
+    216
+   ],
+   "colorMethod": "background-subtracted disk color, local ring radius 7..11 as background, disk radius <=5.2 as source"
+  },
+  {
+   "name": "ヴェガ",
+   "faction": "empire",
+   "pixelX": 608.353,
+   "pixelY": 142.406,
+   "cell": [
+    80,
+    4
+   ],
+   "gameCell": [
+    81,
+    5
+   ],
+   "rgb": [
+    167,
+    55,
+    9
+   ],
+   "hue": 17.5,
+   "saturation": 0.361,
+   "spectralClass": "K",
+   "component": 4,
+   "componentArea": 23,
+   "componentBbox": [
+    606,
+    140,
+    610,
+    145
+   ],
+   "vectorCellBeforeRasterAudit": [
+    78,
+    4
+   ],
+   "representativeRgb": [
+    167,
+    55,
+    9
+   ],
+   "representativeHue": 17.5,
+   "centerPixelRgb": [
+    255,
+    220,
+    158
+   ],
+   "colorMethod": "background-subtracted disk color, local ring radius 7..11 as background, disk radius <=5.2 as source"
+  },
+  {
+   "name": "アルテナ",
+   "faction": "empire",
+   "pixelX": 615.691,
+   "pixelY": 344.083,
+   "cell": [
+    81,
+    33
+   ],
+   "gameCell": [
+    82,
+    34
+   ],
+   "rgb": [
+    36,
+    39,
+    89
+   ],
+   "hue": 236.6,
+   "saturation": 0.227,
+   "spectralClass": "B",
+   "component": 59,
+   "componentArea": 13,
+   "componentBbox": [
+    614,
+    342,
+    617,
+    346
+   ],
+   "vectorCellBeforeRasterAudit": [
+    79,
+    33
+   ],
+   "representativeRgb": [
+    36,
+    39,
+    89
+   ],
+   "representativeHue": 236.6,
+   "centerPixelRgb": [
+    187,
+    231,
+    255
+   ],
+   "colorMethod": "background-subtracted disk color, local ring radius 7..11 as background, disk radius <=5.2 as source"
+  },
+  {
+   "name": "リッテンハイム",
+   "faction": "empire",
+   "pixelX": 623.011,
+   "pixelY": 423.269,
+   "cell": [
+    82,
+    44
+   ],
+   "gameCell": [
+    83,
+    45
+   ],
+   "rgb": [
+    174,
+    119,
+    64
+   ],
+   "hue": 30.0,
+   "saturation": 0.18,
+   "spectralClass": "G",
+   "component": 79,
+   "componentArea": 24,
+   "componentBbox": [
+    621,
+    421,
+    625,
+    426
+   ],
+   "vectorCellBeforeRasterAudit": [
+    80,
+    44
+   ],
+   "representativeRgb": [
+    174,
+    119,
+    64
+   ],
+   "representativeHue": 30.0,
+   "centerPixelRgb": [
+    255,
+    241,
+    203
+   ],
+   "colorMethod": "background-subtracted disk color, local ring radius 7..11 as background, disk radius <=5.2 as source"
+  },
+  {
+   "name": "ヴェルラ",
+   "faction": "empire",
+   "pixelX": 630.491,
+   "pixelY": 272.205,
+   "cell": [
+    83,
+    23
+   ],
+   "gameCell": [
+    84,
+    24
+   ],
+   "rgb": [
+    161,
+    165,
+    102
+   ],
+   "hue": 63.8,
+   "saturation": 0.188,
+   "spectralClass": "A",
+   "component": 40,
+   "componentArea": 28,
+   "componentBbox": [
+    628,
+    270,
+    633,
+    275
+   ],
+   "vectorCellBeforeRasterAudit": [
+    81,
+    22
+   ],
+   "representativeRgb": [
+    161,
+    165,
+    102
+   ],
+   "representativeHue": 63.8,
+   "centerPixelRgb": [
+    201,
+    255,
+    255
+   ],
+   "colorMethod": "background-subtracted disk color, local ring radius 7..11 as background, disk radius <=5.2 as source"
+  },
+  {
+   "name": "ヴィレンシュタイン",
+   "faction": "empire",
+   "pixelX": 644.39,
+   "pixelY": 178.374,
+   "cell": [
+    85,
+    9
+   ],
+   "gameCell": [
+    86,
+    10
+   ],
+   "rgb": [
+    178,
+    122,
+    42
+   ],
+   "hue": 35.3,
+   "saturation": 0.196,
+   "spectralClass": "G",
+   "component": 12,
+   "componentArea": 30,
+   "componentBbox": [
+    642,
+    176,
+    647,
+    181
+   ],
+   "vectorCellBeforeRasterAudit": [
+    83,
+    9
+   ],
+   "representativeRgb": [
+    178,
+    122,
+    42
+   ],
+   "representativeHue": 35.3,
+   "centerPixelRgb": [
+    255,
+    248,
+    209
+   ],
+   "colorMethod": "background-subtracted disk color, local ring radius 7..11 as background, disk radius <=5.2 as source"
+  },
+  {
+   "name": "ハインスベルク",
+   "faction": "empire",
+   "pixelX": 666.329,
+   "pixelY": 221.728,
+   "cell": [
+    88,
+    15
+   ],
+   "gameCell": [
+    89,
+    16
+   ],
+   "rgb": [
+    138,
+    24,
+    4
+   ],
+   "hue": 9.0,
+   "saturation": 0.441,
+   "spectralClass": "M",
+   "component": 29,
+   "componentArea": 21,
+   "componentBbox": [
+    664,
+    220,
+    669,
+    224
+   ],
+   "vectorCellBeforeRasterAudit": [
+    86,
+    15
+   ],
+   "representativeRgb": [
+    138,
+    24,
+    4
+   ],
+   "representativeHue": 9.0,
+   "centerPixelRgb": [
+    248,
+    204,
+    117
+   ],
+   "colorMethod": "background-subtracted disk color, local ring radius 7..11 as background, disk radius <=5.2 as source"
+  },
+  {
+   "name": "ヴァルデマール",
+   "faction": "empire",
+   "pixelX": 666.29,
+   "pixelY": 380.011,
+   "cell": [
+    88,
+    38
+   ],
+   "gameCell": [
+    89,
+    39
+   ],
+   "rgb": [
+    169,
+    93,
+    51
+   ],
+   "hue": 21.4,
+   "saturation": 0.2,
+   "spectralClass": "K",
+   "component": 68,
+   "componentArea": 24,
+   "componentBbox": [
+    664,
+    378,
+    669,
+    382
+   ],
+   "vectorCellBeforeRasterAudit": [
+    86,
+    38
+   ],
+   "representativeRgb": [
+    169,
+    93,
+    51
+   ],
+   "representativeHue": 21.4,
+   "centerPixelRgb": [
+    255,
+    234,
+    192
+   ],
+   "colorMethod": "background-subtracted disk color, local ring radius 7..11 as background, disk radius <=5.2 as source"
+  },
+  {
+   "name": "ヴァルハラ",
+   "faction": "empire",
+   "pixelX": 666.289,
+   "pixelY": 286.568,
+   "cell": [
+    88,
+    25
+   ],
+   "gameCell": [
+    89,
+    26
+   ],
+   "rgb": [
+    179,
+    123,
+    46
+   ],
+   "hue": 34.7,
+   "saturation": 0.247,
+   "spectralClass": "G",
+   "component": 46,
+   "componentArea": 29,
+   "componentBbox": [
+    664,
+    284,
+    669,
+    289
+   ],
+   "vectorCellBeforeRasterAudit": [
+    86,
+    25
+   ],
+   "representativeRgb": [
+    179,
+    123,
+    46
+   ],
+   "representativeHue": 34.7,
+   "centerPixelRgb": [
+    255,
+    248,
+    191
+   ],
+   "colorMethod": "background-subtracted disk color, local ring radius 7..11 as background, disk radius <=5.2 as source"
+  },
+  {
+   "name": "シャンタウ",
+   "faction": "empire",
+   "pixelX": 666.102,
+   "pixelY": 336.909,
+   "cell": [
+    88,
+    32
+   ],
+   "gameCell": [
+    89,
+    33
+   ],
+   "rgb": [
+    34,
+    55,
+    74
+   ],
+   "hue": 208.5,
+   "saturation": 0.188,
+   "spectralClass": "B",
+   "component": 57,
+   "componentArea": 22,
+   "componentBbox": [
+    664,
+    335,
+    668,
+    339
+   ],
+   "vectorCellBeforeRasterAudit": [
+    86,
+    32
+   ],
+   "representativeRgb": [
+    34,
+    55,
+    74
+   ],
+   "representativeHue": 208.5,
+   "centerPixelRgb": [
+    202,
+    255,
+    255
+   ],
+   "colorMethod": "background-subtracted disk color, local ring radius 7..11 as background, disk radius <=5.2 as source"
+  },
+  {
+   "name": "ニヴルヘイム",
+   "faction": "empire",
+   "pixelX": 673.383,
+   "pixelY": 243.241,
+   "cell": [
+    89,
+    18
+   ],
+   "gameCell": [
+    90,
+    19
+   ],
+   "rgb": [
+    26,
+    61,
+    69
+   ],
+   "hue": 191.2,
+   "saturation": 0.098,
+   "spectralClass": "B",
+   "component": 34,
+   "componentArea": 27,
+   "componentBbox": [
+    671,
+    241,
+    676,
+    246
+   ],
+   "vectorCellBeforeRasterAudit": [
+    87,
+    19
+   ],
+   "representativeRgb": [
+    26,
+    61,
+    69
+   ],
+   "representativeHue": 191.2,
+   "centerPixelRgb": [
+    237,
+    252,
+    255
+   ],
+   "colorMethod": "background-subtracted disk color, local ring radius 7..11 as background, disk radius <=5.2 as source"
+  },
+  {
+   "name": "ランメルスベルク",
+   "faction": "empire",
+   "pixelX": 673.582,
+   "pixelY": 416.039,
+   "cell": [
+    89,
+    43
+   ],
+   "gameCell": [
+    90,
+    44
+   ],
+   "rgb": [
+    163,
+    85,
+    52
+   ],
+   "hue": 17.8,
+   "saturation": 0.082,
+   "spectralClass": "K",
+   "component": 76,
+   "componentArea": 25,
+   "componentBbox": [
+    671,
+    414,
+    676,
+    418
+   ],
+   "vectorCellBeforeRasterAudit": [
+    87,
+    43
+   ],
+   "representativeRgb": [
+    163,
+    85,
+    52
+   ],
+   "representativeHue": 17.8,
+   "centerPixelRgb": [
+    255,
+    239,
+    234
+   ],
+   "colorMethod": "background-subtracted disk color, local ring radius 7..11 as background, disk radius <=5.2 as source"
+  },
+  {
+   "name": "カストロプ",
+   "faction": "empire",
+   "pixelX": 694.984,
+   "pixelY": 171.263,
+   "cell": [
+    92,
+    8
+   ],
+   "gameCell": [
+    93,
+    9
+   ],
+   "rgb": [
+    175,
+    120,
+    61
+   ],
+   "hue": 31.1,
+   "saturation": 0.239,
+   "spectralClass": "G",
+   "component": 11,
+   "componentArea": 24,
+   "componentBbox": [
+    693,
+    169,
+    697,
+    174
+   ],
+   "vectorCellBeforeRasterAudit": [
+    90,
+    8
+   ],
+   "representativeRgb": [
+    175,
+    120,
+    61
+   ],
+   "representativeHue": 31.1,
+   "centerPixelRgb": [
+    255,
+    234,
+    176
+   ],
+   "colorMethod": "background-subtracted disk color, local ring radius 7..11 as background, disk radius <=5.2 as source"
+  },
+  {
+   "name": "アスガルド",
+   "faction": "empire",
+   "pixelX": 695.079,
+   "pixelY": 322.511,
+   "cell": [
+    93,
+    30
+   ],
+   "gameCell": [
+    94,
+    31
+   ],
+   "rgb": [
+    39,
+    75,
+    91
+   ],
+   "hue": 198.5,
+   "saturation": 0.18,
+   "spectralClass": "B",
+   "component": 55,
+   "componentArea": 24,
+   "componentBbox": [
+    693,
+    320,
+    697,
+    325
+   ],
+   "vectorCellBeforeRasterAudit": [
+    90,
+    30
+   ],
+   "representativeRgb": [
+    39,
+    75,
+    91
+   ],
+   "representativeHue": 198.5,
+   "centerPixelRgb": [
+    210,
+    255,
+    255
+   ],
+   "colorMethod": "background-subtracted disk color, local ring radius 7..11 as background, disk radius <=5.2 as source"
+  },
+  {
+   "name": "ヴァナヘイム",
+   "faction": "empire",
+   "pixelX": 702.061,
+   "pixelY": 221.648,
+   "cell": [
+    94,
+    15
+   ],
+   "gameCell": [
+    95,
+    16
+   ],
+   "rgb": [
+    177,
+    140,
+    56
+   ],
+   "hue": 41.7,
+   "saturation": 0.141,
+   "spectralClass": "G",
+   "component": 27,
+   "componentArea": 25,
+   "componentBbox": [
+    700,
+    219,
+    704,
+    224
+   ],
+   "vectorCellBeforeRasterAudit": [
+    91,
+    15
+   ],
+   "representativeRgb": [
+    177,
+    140,
+    56
+   ],
+   "representativeHue": 41.7,
+   "centerPixelRgb": [
+    255,
+    253,
+    230
+   ],
+   "colorMethod": "background-subtracted disk color, local ring radius 7..11 as background, disk radius <=5.2 as source"
+  },
+  {
+   "name": "ヴィッテルスバッハ",
+   "faction": "empire",
+   "pixelX": 702.479,
+   "pixelY": 380.011,
+   "cell": [
+    94,
+    38
+   ],
+   "gameCell": [
+    95,
+    39
+   ],
+   "rgb": [
+    185,
+    123,
+    45
+   ],
+   "hue": 33.4,
+   "saturation": 0.184,
+   "spectralClass": "G",
+   "component": 69,
+   "componentArea": 26,
+   "componentBbox": [
+    700,
+    378,
+    705,
+    382
+   ],
+   "vectorCellBeforeRasterAudit": [
+    91,
+    38
+   ],
+   "representativeRgb": [
+    185,
+    123,
+    45
+   ],
+   "representativeHue": 33.4,
+   "centerPixelRgb": [
+    255,
+    255,
+    212
+   ],
+   "colorMethod": "background-subtracted disk color, local ring radius 7..11 as background, disk radius <=5.2 as source"
+  },
+  {
+   "name": "ルイトポルディング",
+   "faction": "empire",
+   "pixelX": 716.881,
+   "pixelY": 279.107,
+   "cell": [
+    96,
+    24
+   ],
+   "gameCell": [
+    97,
+    25
+   ],
+   "rgb": [
+    148,
+    29,
+    10
+   ],
+   "hue": 8.3,
+   "saturation": 0.392,
+   "spectralClass": "M",
+   "component": 41,
+   "componentArea": 22,
+   "componentBbox": [
+    715,
+    277,
+    719,
+    281
+   ],
+   "vectorCellBeforeRasterAudit": [
+    93,
+    24
+   ],
+   "representativeRgb": [
+    148,
+    29,
+    10
+   ],
+   "representativeHue": 8.3,
+   "centerPixelRgb": [
+    255,
+    201,
+    137
+   ],
+   "colorMethod": "background-subtracted disk color, local ring radius 7..11 as background, disk radius <=5.2 as source"
+  },
+  {
+   "name": "ヴィンスティンゲン",
+   "faction": "empire",
+   "pixelX": 730.995,
+   "pixelY": 358.494,
+   "cell": [
+    98,
+    35
+   ],
+   "gameCell": [
+    99,
+    36
+   ],
+   "rgb": [
+    189,
+    113,
+    28
+   ],
+   "hue": 31.7,
+   "saturation": 0.157,
+   "spectralClass": "G",
+   "component": 66,
+   "componentArea": 32,
+   "componentBbox": [
+    728,
+    356,
+    734,
+    361
+   ],
+   "vectorCellBeforeRasterAudit": [
+    95,
+    35
+   ],
+   "representativeRgb": [
+    189,
+    113,
+    28
+   ],
+   "representativeHue": 31.7,
+   "centerPixelRgb": [
+    255,
+    245,
+    211
+   ],
+   "colorMethod": "background-subtracted disk color, local ring radius 7..11 as background, disk radius <=5.2 as source"
+  },
+  {
+   "name": "ウォームスガウ",
+   "faction": "empire",
+   "pixelX": 738.253,
+   "pixelY": 322.511,
+   "cell": [
+    99,
+    30
+   ],
+   "gameCell": [
+    100,
+    31
+   ],
+   "rgb": [
+    180,
+    87,
+    32
+   ],
+   "hue": 22.3,
+   "saturation": 0.125,
+   "spectralClass": "K",
+   "component": 54,
+   "componentArea": 28,
+   "componentBbox": [
+    736,
+    320,
+    741,
+    325
+   ],
+   "vectorCellBeforeRasterAudit": [
+    96,
+    30
+   ],
+   "representativeRgb": [
+    180,
+    87,
+    32
+   ],
+   "representativeHue": 22.3,
+   "centerPixelRgb": [
+    255,
+    240,
+    213
+   ],
+   "colorMethod": "background-subtracted disk color, local ring radius 7..11 as background, disk radius <=5.2 as source"
+  }
+ ]
+}
