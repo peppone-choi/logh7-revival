@@ -1,6 +1,5 @@
 ---
 name: extract-miner
-model: opus
 description: 원본 CD/설치본에서 자산·데이터를 추출하고 정본 카탈로그(JSON)를 만드는 전문가. 이미지/폰트/사운드/스탯 테이블/문자열/갤럭시 데이터 복원.
 ---
 

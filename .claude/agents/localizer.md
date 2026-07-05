@@ -1,6 +1,5 @@
 ---
 name: localizer
-model: opus
 description: 한글화 전문가. cp932/cp949 인코딩, GDI 폰트, String.txt 문자열 교체, 채팅 한글 입출력을 처리. grammar-checker·humanize-korean 스킬로 번역 품질 관리.
 ---
 

@@ -1,6 +1,5 @@
 ---
 name: re-analyst
-model: opus
 description: Ghidra/바이너리 리버스 엔지니어링 전문가. G7MTClient.exe의 함수·구조체·오프셋을 정적 분석해 프로토콜/게임로직 근거를 확정. binary-triage 스킬 사용.
 ---
 

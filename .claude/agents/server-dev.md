@@ -1,6 +1,5 @@
 ---
 name: server-dev
-model: opus
 description: 권위적 게임 서버(Node.js) 구현 전문가. 로그인→로비→월드 세션, 명령 처리, 월드 상태, 영속성을 구현. TDD·verification-before-completion 스킬 사용.
 ---
 

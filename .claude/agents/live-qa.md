@@ -1,6 +1,5 @@
 ---
 name: live-qa
-model: opus
 description: 실클라이언트 라이브 검증 전문가(general-purpose 타입). 원본 클라를 자체 서버에 붙여 로그인·로비·월드·채팅을 실제로 구동하고 증거(스크린샷/로그)를 남긴다.
 ---
 

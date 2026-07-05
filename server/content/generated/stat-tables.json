@@ -1,0 +1,642 @@
+{
+  "id": "logh7-stat-tables-catalog",
+  "generatedAt": "2026-07-05T05:26:01.361Z",
+  "gameRoot": "artifacts/logh7-install/____________s___/____",
+  "scopeNote": "data/ 트리에서 msgdat/*.dat 제외 전 바이너리 테이블. bmp/tga/jpg/png/wav/ogg/mdx는 자산으로 별도 트랙.",
+  "tables": [
+    {
+      "file": "data/image/face/tcf.hed",
+      "format": "tcf-hed-slot-table",
+      "provenance": {
+        "source": "data/image/face/tcf.hed",
+        "layout": "8바이트 슬롯 배열: offset u32LE @+0, size u32LE @+4",
+        "knowledgeFrom": "git 5bd249c logh7-tcf-portrait-catalog.mjs"
+      },
+      "sizeBytes": 10840,
+      "sha1": "ba615901594f1a25cfb4088574171cd7a02bac8e",
+      "slotCount": 1355,
+      "usedSlotCount": 669,
+      "sizeHistogram": {
+        "6002": 3,
+        "6082": 4,
+        "6162": 536,
+        "6212": 4,
+        "24698": 4,
+        "43184": 4,
+        "61510": 1,
+        "61670": 2,
+        "79996": 1,
+        "80156": 2,
+        "98482": 1,
+        "98642": 2,
+        "116968": 1,
+        "117128": 2,
+        "135454": 1,
+        "135614": 2,
+        "153940": 1,
+        "154100": 2,
+        "172426": 1,
+        "172586": 2,
+        "190912": 1,
+        "191072": 2,
+        "209398": 1,
+        "209558": 2,
+        "227884": 1,
+        "228044": 2,
+        "246370": 1,
+        "246530": 2,
+        "264856": 1,
+        "265016": 2,
+        "283342": 1,
+        "283502": 1,
+        "301828": 1,
+        "301988": 1,
+        "320314": 1,
+        "320474": 1,
+        "338960": 1,
+        "357446": 1,
+        "375932": 1,
+        "394338": 1,
+        "412504": 1,
+        "430990": 1,
+        "449476": 1,
+        "467962": 1,
+        "486448": 1,
+        "504934": 1,
+        "523420": 1,
+        "541906": 1,
+        "560392": 1,
+        "578878": 1,
+        "597364": 1,
+        "615850": 1,
+        "634336": 1,
+        "652822": 1,
+        "671308": 1,
+        "689794": 1,
+        "708280": 1,
+        "726766": 1,
+        "745252": 1,
+        "763738": 1,
+        "782224": 1,
+        "800710": 1,
+        "819196": 1,
+        "837682": 1,
+        "856168": 1,
+        "874654": 1,
+        "893140": 1,
+        "911626": 1,
+        "930112": 1,
+        "948598": 1,
+        "967084": 1,
+        "985570": 1,
+        "1004056": 1,
+        "1022542": 1,
+        "1041028": 1,
+        "1059514": 1,
+        "1078000": 1,
+        "1096486": 1,
+        "1114972": 1,
+        "1133458": 1,
+        "1151944": 1,
+        "1170430": 1,
+        "1188916": 1,
+        "1207402": 1,
+        "1225888": 1,
+        "1244374": 1,
+        "1262860": 1,
+        "1281346": 1,
+        "1299832": 1,
+        "1318318": 1,
+        "1336804": 1,
+        "1355290": 1,
+        "1373776": 1,
+        "1392262": 1,
+        "1410748": 1,
+        "1429234": 1,
+        "1447720": 1,
+        "1466206": 1,
+        "1484692": 1,
+        "1503178": 1,
+        "1521664": 1,
+        "1540150": 1,
+        "1558636": 1,
+        "1577122": 1,
+        "1595608": 1,
+        "1614094": 1,
+        "1632580": 1,
+        "1651066": 1
+      },
+      "sampleSlots": [
+        {
+          "index": 1,
+          "offset": 50,
+          "size": 6162
+        },
+        {
+          "index": 2,
+          "offset": 6212,
+          "size": 6162
+        },
+        {
+          "index": 3,
+          "offset": 12374,
+          "size": 6162
+        },
+        {
+          "index": 4,
+          "offset": 18536,
+          "size": 6162
+        },
+        {
+          "index": 5,
+          "offset": 24698,
+          "size": 6162
+        }
+      ]
+    },
+    {
+      "file": "data/image/face/gaf.tcf",
+      "format": "tcf-portrait-archive",
+      "provenance": {
+        "source": "data/image/face/gaf.tcf",
+        "layout": "이미지 연접: 18B 헤더(w u16@+12, h u16@+14, bpp u16@+16, bpp=8) + 1024B BGRA 팔레트 + bottom-up 8bit 인덱스",
+        "knowledgeFrom": "git 5bd249c logh7-tcf-portrait-catalog.mjs"
+      },
+      "sizeBytes": 55508,
+      "sha1": "86ba9ca305f4358cf59cf7f15d94c78ea078ba2e",
+      "firstImageOffset": 50,
+      "imageCount": 9,
+      "dimensionHistogram": {
+        "64x80": 9
+      },
+      "trailingBytes": 0,
+      "sampleImages": [
+        {
+          "offset": 50,
+          "width": 64,
+          "height": 80
+        },
+        {
+          "offset": 6212,
+          "width": 64,
+          "height": 80
+        },
+        {
+          "offset": 12374,
+          "width": 64,
+          "height": 80
+        }
+      ]
+    },
+    {
+      "file": "data/image/face/gam.tcf",
+      "format": "tcf-portrait-archive",
+      "provenance": {
+        "source": "data/image/face/gam.tcf",
+        "layout": "이미지 연접: 18B 헤더(w u16@+12, h u16@+14, bpp u16@+16, bpp=8) + 1024B BGRA 팔레트 + bottom-up 8bit 인덱스",
+        "knowledgeFrom": "git 5bd249c logh7-tcf-portrait-catalog.mjs"
+      },
+      "sizeBytes": 277340,
+      "sha1": "de00dd03321d230f4c039ee9302d0ebdf5e12ba5",
+      "firstImageOffset": 50,
+      "imageCount": 45,
+      "dimensionHistogram": {
+        "64x80": 45
+      },
+      "trailingBytes": 0,
+      "sampleImages": [
+        {
+          "offset": 50,
+          "width": 64,
+          "height": 80
+        },
+        {
+          "offset": 6212,
+          "width": 64,
+          "height": 80
+        },
+        {
+          "offset": 12374,
+          "width": 64,
+          "height": 80
+        }
+      ]
+    },
+    {
+      "file": "data/image/face/gef.tcf",
+      "format": "tcf-portrait-archive",
+      "provenance": {
+        "source": "data/image/face/gef.tcf",
+        "layout": "이미지 연접: 18B 헤더(w u16@+12, h u16@+14, bpp u16@+16, bpp=8) + 1024B BGRA 팔레트 + bottom-up 8bit 인덱스",
+        "knowledgeFrom": "git 5bd249c logh7-tcf-portrait-catalog.mjs"
+      },
+      "sizeBytes": 332638,
+      "sha1": "335703c7bca99b14aae0b13457f0d2b5b6b00206",
+      "firstImageOffset": 50,
+      "imageCount": 54,
+      "dimensionHistogram": {
+        "64x80": 53,
+        "62x80": 1
+      },
+      "trailingBytes": 0,
+      "sampleImages": [
+        {
+          "offset": 50,
+          "width": 64,
+          "height": 80
+        },
+        {
+          "offset": 6212,
+          "width": 64,
+          "height": 80
+        },
+        {
+          "offset": 12374,
+          "width": 64,
+          "height": 80
+        }
+      ]
+    },
+    {
+      "file": "data/image/face/gem.tcf",
+      "format": "tcf-portrait-archive",
+      "provenance": {
+        "source": "data/image/face/gem.tcf",
+        "layout": "이미지 연접: 18B 헤더(w u16@+12, h u16@+14, bpp u16@+16, bpp=8) + 1024B BGRA 팔레트 + bottom-up 8bit 인덱스",
+        "knowledgeFrom": "git 5bd249c logh7-tcf-portrait-catalog.mjs"
+      },
+      "sizeBytes": 1663390,
+      "sha1": "867894d344b214f4677cef34692f0a399b0b4cf1",
+      "firstImageOffset": 50,
+      "imageCount": 270,
+      "dimensionHistogram": {
+        "64x80": 267,
+        "63x80": 1,
+        "62x80": 2
+      },
+      "trailingBytes": 0,
+      "sampleImages": [
+        {
+          "offset": 50,
+          "width": 64,
+          "height": 80
+        },
+        {
+          "offset": 6212,
+          "width": 64,
+          "height": 80
+        },
+        {
+          "offset": 12374,
+          "width": 64,
+          "height": 80
+        }
+      ]
+    },
+    {
+      "file": "data/image/face/o.tcf",
+      "format": "tcf-portrait-archive",
+      "provenance": {
+        "source": "data/image/face/o.tcf",
+        "layout": "이미지 연접: 18B 헤더(w u16@+12, h u16@+14, bpp u16@+16, bpp=8) + 1024B BGRA 팔레트 + bottom-up 8bit 인덱스",
+        "knowledgeFrom": "git 5bd249c logh7-tcf-portrait-catalog.mjs"
+      },
+      "sizeBytes": 154100,
+      "sha1": "2beda86171b7efa69ae31996233f5b39a714d937",
+      "firstImageOffset": 50,
+      "imageCount": 25,
+      "dimensionHistogram": {
+        "64x80": 25
+      },
+      "trailingBytes": 0,
+      "sampleImages": [
+        {
+          "offset": 50,
+          "width": 64,
+          "height": 80
+        },
+        {
+          "offset": 6212,
+          "width": 64,
+          "height": 80
+        },
+        {
+          "offset": 12374,
+          "width": 64,
+          "height": 80
+        }
+      ]
+    },
+    {
+      "file": "data/image/face/oam.tcf",
+      "format": "tcf-portrait-archive",
+      "provenance": {
+        "source": "data/image/face/oam.tcf",
+        "layout": "이미지 연접: 18B 헤더(w u16@+12, h u16@+14, bpp u16@+16, bpp=8) + 1024B BGRA 팔레트 + bottom-up 8bit 인덱스",
+        "knowledgeFrom": "git 5bd249c logh7-tcf-portrait-catalog.mjs"
+      },
+      "sizeBytes": 665546,
+      "sha1": "38f1c6ddb1a157c8b9fd578820c4ac18dd7dff4c",
+      "firstImageOffset": 50,
+      "imageCount": 108,
+      "dimensionHistogram": {
+        "64x80": 108
+      },
+      "trailingBytes": 0,
+      "sampleImages": [
+        {
+          "offset": 50,
+          "width": 64,
+          "height": 80
+        },
+        {
+          "offset": 6212,
+          "width": 64,
+          "height": 80
+        },
+        {
+          "offset": 12374,
+          "width": 64,
+          "height": 80
+        }
+      ]
+    },
+    {
+      "file": "data/image/face/oem.tcf",
+      "format": "tcf-portrait-archive",
+      "provenance": {
+        "source": "data/image/face/oem.tcf",
+        "layout": "이미지 연접: 18B 헤더(w u16@+12, h u16@+14, bpp u16@+16, bpp=8) + 1024B BGRA 팔레트 + bottom-up 8bit 인덱스",
+        "knowledgeFrom": "git 5bd249c logh7-tcf-portrait-catalog.mjs"
+      },
+      "sizeBytes": 973246,
+      "sha1": "c5282811c56c6dfe8d1741dd88c3807a3e1a1220",
+      "firstImageOffset": 50,
+      "imageCount": 158,
+      "dimensionHistogram": {
+        "64x80": 154,
+        "63x80": 3,
+        "62x80": 1
+      },
+      "trailingBytes": 0,
+      "sampleImages": [
+        {
+          "offset": 50,
+          "width": 64,
+          "height": 80
+        },
+        {
+          "offset": 6212,
+          "width": 64,
+          "height": 80
+        },
+        {
+          "offset": 12374,
+          "width": 64,
+          "height": 80
+        }
+      ]
+    },
+    {
+      "file": "data/image/icon_kj/_catalog.vix",
+      "format": "vix-thumbnail-cache",
+      "provenance": {
+        "source": "data/image/icon_kj/_catalog.vix",
+        "layout": "TLV: tag u16LE + len u32LE + payload. tag3=파일명, tag9=치수(w,h,bpp u32LE), tag0x0b=수정시각(7B), tag0x0c=파일크기, tag0x0d=JPEG 썸네일",
+        "judgment": "ViX(일본산 이미지 뷰어) 썸네일 캐시 — 개발 잔재물, 게임 스탯 테이블 아님"
+      },
+      "sizeBytes": 88771,
+      "sha1": "fae50db7515360b247005560c875f684e6f4d2b3",
+      "entryCount": 65,
+      "jpegThumbCount": 65,
+      "resyncBytes": 338,
+      "sampleEntries": [
+        {
+          "name": "com_saishou.tga",
+          "width": 16,
+          "height": 16,
+          "bpp": 32,
+          "mtime": "2003-07-06 22:11:8",
+          "fileSize": 956,
+          "thumbJpegBytes": 832
+        },
+        {
+          "name": "gushin.tga",
+          "width": 32,
+          "height": 32,
+          "bpp": 32,
+          "mtime": "2003-07-30 14:47:20",
+          "fileSize": 1312,
+          "thumbJpegBytes": 1193
+        },
+        {
+          "name": "hakuheisen.tga",
+          "width": 32,
+          "height": 32,
+          "bpp": 32,
+          "mtime": "2003-07-30 14:47:20",
+          "fileSize": 1318,
+          "thumbJpegBytes": 1195
+        },
+        {
+          "name": "hanten.tga",
+          "width": 32,
+          "height": 32,
+          "bpp": 32,
+          "mtime": "2003-07-30 14:47:20",
+          "fileSize": 1348,
+          "thumbJpegBytes": 1229
+        },
+        {
+          "name": "heikou_idou.tga",
+          "width": 32,
+          "height": 32,
+          "bpp": 32,
+          "mtime": "2003-07-30 14:47:20",
+          "fileSize": 1403,
+          "thumbJpegBytes": 1279
+        }
+      ],
+      "allNames": [
+        "com_saishou.tga",
+        "gushin.tga",
+        "hakuheisen.tga",
+        "hanten.tga",
+        "heikou_idou.tga",
+        "hokyuu.tga",
+        "idou.tga",
+        "kobu.tga",
+        "kougeki.tga",
+        "kuusen.tga",
+        "ninmu.tga",
+        "no_mark.tga",
+        "rader.tga",
+        "riku.tga",
+        "riku_tesshuu.tga",
+        "senkai.tga",
+        "shageki.tga",
+        "shozoku.tga",
+        "shutsugeki.tga",
+        "shuuri.tga",
+        "tairetsu.tga",
+        "taisei.tga",
+        "teishi.tga",
+        "tettai.tga",
+        "yosaihou.tga",
+        "kojin.tga",
+        "shokumu.tga",
+        "senjutsu.tga",
+        "yousai.tga",
+        "com_window.tga",
+        "com_bar.tga",
+        "gushin_bouei.tga",
+        "gushin_geigeki.tga",
+        "gushin_senryou.tga",
+        "gushin_tettai.tga",
+        "gushin_yuugeki.tga",
+        "hanten_left.tga",
+        "hanten_right.tga",
+        "idou_1_2.tga",
+        "idou_1_4.tga",
+        "idou_3_4.tga",
+        "idou_zensoku.tga",
+        "kougeki_issei.tga",
+        "kougeki_renzoku.tga",
+        "kougeki_teishi.tga",
+        "shageki_beam.tga",
+        "shageki_gun.tga",
+        "shageki_missile.tga",
+        "shageki_taikuu.tga",
+        "tairetsu_bougyo.tga",
+        "tairetsu_bousui.tga",
+        "tairetsu_kanshu1.tga",
+        "tairetsu_kanshu2.tga",
+        "tairetsu_konsei1.tga",
+        "tairetsu_konsei2.tga",
+        "tairetsu_sankai.tga",
+        "tairetsu_sanretsu.tga",
+        "taisei_chuuryuu.tga",
+        "taisei_teihaku.tga",
+        "no.tga",
+        "yes.tga",
+        "kinkyuuhokyuu.tga",
+        "gushin_teisatsu.tga",
+        "taisei_koukou.tga",
+        "taisei_sentou.tga"
+      ]
+    },
+    {
+      "file": "data/image/lens/thumbs.db",
+      "format": "ole-compound-thumbnail-cache",
+      "sizeBytes": 10240,
+      "sha1": "45efc2289c2f54fed9d39029fbd568d57739bba6",
+      "notes": "Windows 탐색기 Thumbs.db(매직 d0cf11e0) — 개발 잔재물, 게임 데이터 아님",
+      "headHex": "d0cf11e0a1b11ae1000000000000000000000000000000003e000300feff0900"
+    },
+    {
+      "group": "data/model/ship/**/*.mds",
+      "format": "mds-ship-model",
+      "notes": "직렬화된 인메모리 구조(포인터/카운트 u32 페어 11개, 포인터 base≈0x018700a0) + 0x58에 \"EM###/FM###:Layer1\" 레이어명. 지오메트리 상세는 unknown — 스탯 테이블 아님(메시).",
+      "files": [
+        {
+          "file": "data/model/ship/fp/fm023.mds",
+          "format": "mds-ship-model",
+          "sizeBytes": 116296,
+          "sha1": "7133f22096d68dc7c542c0812766a42979405d04",
+          "layerName": "FM023:Layer1"
+        },
+        {
+          "file": "data/model/ship/fp/fm026.mds",
+          "format": "mds-ship-model",
+          "sizeBytes": 121106,
+          "sha1": "22837f21a29aed803af0729991a7662e4e3df367",
+          "layerName": "FM026:Layer1"
+        },
+        {
+          "file": "data/model/ship/fp/fm029.mds",
+          "format": "mds-ship-model",
+          "sizeBytes": 132078,
+          "sha1": "3d52805a184185bd50a0c4f07e711b8b193be573",
+          "layerName": "FM029:Layer1"
+        },
+        {
+          "file": "data/model/ship/fp/fm030.mds",
+          "format": "mds-ship-model",
+          "sizeBytes": 128738,
+          "sha1": "d17190fa78874c07e5a9cf7d312ecd4d6a2abcee",
+          "layerName": "FM030:Layer1"
+        },
+        {
+          "file": "data/model/ship/fp/fm033.mds",
+          "format": "mds-ship-model",
+          "sizeBytes": 134528,
+          "sha1": "cdacf0faae1654b4d56d0921a6c48e4ffa1eca50",
+          "layerName": "FM033:Layer1"
+        },
+        {
+          "file": "data/model/ship/fp/fm034.mds",
+          "format": "mds-ship-model",
+          "sizeBytes": 140926,
+          "sha1": "e5e0570e939718d46fd9a013b8b56612b5eb1ff2",
+          "layerName": "FM034:Layer1"
+        },
+        {
+          "file": "data/model/ship/fp/fm035.mds",
+          "format": "mds-ship-model",
+          "sizeBytes": 135066,
+          "sha1": "22a6454719e9523dc7a262935984ea4cf2f80fc4",
+          "layerName": "FM035:Layer1"
+        },
+        {
+          "file": "data/model/ship/fp/fm037.mds",
+          "format": "mds-ship-model",
+          "sizeBytes": 165838,
+          "sha1": "147a0ff54b382a60b1be7a2d72d2cab8fb8dcb3f",
+          "layerName": "FM037:Layer1"
+        },
+        {
+          "file": "data/model/ship/fp/fm039.mds",
+          "format": "mds-ship-model",
+          "sizeBytes": 172338,
+          "sha1": "1137b549aacb401afe84cf950946eea750f6dadc",
+          "layerName": "FM039:Layer1"
+        },
+        {
+          "file": "data/model/ship/ge/em027.mds",
+          "format": "mds-ship-model",
+          "sizeBytes": 291926,
+          "sha1": "8962a760ac4cbd818a8feb5f85116674bd78a2bb",
+          "layerName": "EM023:Layer1"
+        },
+        {
+          "file": "data/model/ship/ge/em028.mds",
+          "format": "mds-ship-model",
+          "sizeBytes": 349984,
+          "sha1": "a8bebd0521e9cac309e8d3ccc75145035f171fca",
+          "layerName": "EM012:Layer1"
+        },
+        {
+          "file": "data/model/ship/ge/em037.mds",
+          "format": "mds-ship-model",
+          "sizeBytes": 177640,
+          "sha1": "0b12fbd6228c205c0760939ddea459c8c1fdfe3b",
+          "layerName": "EM037:Layer1"
+        }
+      ]
+    }
+  ],
+  "excludedInventory": {
+    "msgdat": "25개 .dat (constmsg/messages_*/g7sw) — msgdat 트랙에서 별도 처리",
+    "assetCounts": {
+      "bmp": 993,
+      "tga": 661,
+      "mdx": 406,
+      "jpg": 45,
+      "png": 16,
+      "wav": 13,
+      "mds": 12,
+      "ogg": 7,
+      "tcf": 7
+    }
+  }
+}
