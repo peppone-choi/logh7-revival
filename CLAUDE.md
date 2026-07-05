@@ -1,139 +1,26 @@
-# logh7-revival Claude Entry
+# LOGH VII Revival
 
-2026-07-05 G076 로그인 확인 버튼 좌표 재교정 시도 → 3회 동일증상으로 블록, Blocked-Loop Rule 적용 후 피벗: `(352,347)`가 제출 버튼이 아니라는 G075 발견을 좇아 실제 버튼 위치를 픽셀 분석(색상 밴드 검출)으로 재추정했으나, 검출된 두 후보 좌표(로그인 폼 하단 버튼 라벨 "갑금긑갑"/"핗뻽" 각각의 중심으로 계산한 클라 좌표 `(318,339)`와 `(318,405)`) 모두 클릭 시 서버 로그에 로그인 시도가 단 한 번도 찍히지 않고 매번 ID 콤보의 "NO DATA" 드롭다운만 재오픈됨을 라이브로 3회 재현(좌표 A 1회+좌표 B 1회, 세션 재시작 후에도 재현) — 스크린샷 픽셀 좌표(창 전체 캡처, chrome 오프셋 +3/+49 가정)와 실제 클릭 주입 좌표 공간이 어긋나 있을 가능성(DPI 스케일링 등)을 배제 못함. 부수 재확인: 열린 드롭다운에 Escape를 누르면 닫히지 않고 "NO DATA" 라벨이 깨진 한글 조각으로 재렌더링되는 현상이 이번에도 재현(G075와 동일) — 여전히 cp932 관련 여부 미판단, 판단 보류 유지. Blocked-Loop Rule(3회 동일증상)에 따라 좌표 추측 접근은 중단. 다음 다른 전략 필요: (1) DPI/스케일링 배율 확인 후 스크린샷↔클릭 좌표 공간 일치 여부부터 검증, 또는 (2) `FUN_00507f20`류 버튼 히트테스트 코드를 Ghidra로 직접 RE해 정확한 클라이언트 좌표 사각형을 정적으로 확정. cp932 인게임 실주행 QA는 이 블로커 해소 전까지 계속 이월.
+## 미션
 
-2026-07-05 G075 cp932 패치 인게임 실주행 QA 착수 + C002 근본원인 2건 라이브 확정·수정: 실제 설치 EXE(`--no-patch`)로 로그인 화면까지 자동화 재현 중 클릭이 서버에 단 한 번도 도달하지 않는 것을 발견, 근본원인 조사 결과 (1) `logh7_ui_explorer.py`/`logh7_window_login.py`의 모든 `SetForegroundWindow` 호출이 백그라운드 프로세스에서 조용히 no-op되는 Windows 포커스 스틸링 방지에 막혀 있었음(예외를 삼켜서 실패가 안 보였음) — `AttachThreadInput` 우회를 쓰는 공용 헬퍼 `_force_foreground()`로 6개 호출부 전부 교체, 라이브로 키보드 입력(ID/PW 필드 타이핑)이 실제로 먹히는 것까지 확인. (2) ID 콤보 필드가 재시작 간에도 이전 입력을 유지(네이티브 edit 컨트롤이 아닌 커스텀 위젯이라 EM_SETSEL 불가)해 매 시도마다 텍스트가 누적(`"ginei00"`×2 → `"inei00ginei00"`)되던 것을 발견, 타이핑 전 하드웨어 백스페이스로 지우는 `_clear_field()`를 추가해 필드가 항상 깨끗하게 `"ginei00"`만 남도록 수정. 두 수정 모두 RE 도구 회귀 32/32 통과. 그러나 "로그인 제출" 좌표로 알려진 `(352,347)`는 실제로는 제출 버튼이 아니라 ID 콤보의 드롭다운을 다시 여는 좌표였음이 라이브로 드러남(클릭하면 NO DATA 목록이 재오픈됨) — 진짜 로그인/확인 버튼의 정확한 좌표는 아직 미상(추정 좌표만 있음, `logh7_window_login.py`의 좌표 테이블 자체가 재교정 필요). cp932 패치의 실제 한글 채팅 검증은 이 좌표 재교정 이후로 계속 이월. 부수 관찰: 콤보 드롭다운을 Escape로 다시 열면 원래 "NO DATA"(정상 ASCII) 라벨이 깨진 한글 조각으로 재렌더링되는 현상을 목격 — cp932 인코딩과 관련 있을 수도 있고 단순 리드로우 버그일 수도 있어 별도 확인 필요(현재는 판단 보류).
+2008년 서비스 종료된 일본 MMO **은하영웅전설 VII (LOGH VII)** 를 되살린다.
+원본 클라이언트(archive.org CD)에 자체 구현 서버를 붙여 멀티플레이 온라인 게임으로 복원한다.
 
-2026-07-05 G074 "단일 패치 크래시 취약성"(G069 3번째 재점검 항목) 정적 점검: `RE/tools/client_patches/`는 실제로 존재하지 않음(정당하게 삭제된 JSON 패치 디스크립터 프레임워크) — `RE/tools/logh7_runtime_patch_apply.py`의 다중-패치셋 순차적용 로직(`allBeforeOk`/`alreadyApplied` 가드) 자체는 코드로 남아있지만, 로드할 디스크립터가 0개이므로 현재 이 프레임워크로 실제 크래시를 유발할 방법이 없음(호출해도 빈 리스트로 즉시 no-op). 따라서 이 항목이 원래 가리켰던 "다중 Frida 런타임 패치 중 일부만 적용됐을 때의 크래시"는 현재 지분이 없다. 유일하게 라이브인 실제 EXE 파일 패치는 G072 cp932 9바이트 치환 하나뿐이며, 다른 패치와 조합되지 않는 단일 변경이라 조합 크래시 리스크가 없음(git-tracked라 `git checkout --`로 즉시 롤백 가능). G069 재점검 3항목(C002/cp932/단일패치크래시) 중 이 항목은 이것으로 종결. 남은 미완료: cp932 패치의 인게임 실주행 QA(로그인→채팅→한글표시, `ui_explorer --no-patch` 필요)는 아직 미실행 — 다음 라이브 세션 과제.
+## 2026-07-05 전체 리셋
 
-2026-07-05 G073 RE 정리 커밋(`c354b4e`) 2차 과잉삭제 발견+복구, C002 상태 재점검: 대량 legacy RE tooling 삭제 시 실사용 중인 C002/0x0b07/전술풀 조사 도구 5종(`logh7_0b07_location_watch.py`/`logh7_endpoint_cache_snapshot.py`/`logh7_player_info_probe.py`/`logh7_selectgrid_snapshot.py`/`logh7_tactical_poke.py`)과 그 테스트, 그리고 조사이력 문서 2종(`docs/logh7-loop-state.md`/`docs/logh7-ownfleet-render-fix-2026-06-26.md`, 커밋 `0524f4f`로 선복구)까지 함께 삭제됐던 것을 `c354b4e~1`에서 복구(커밋 `ebd93e6`). 공유 테스트 의존성 `test_logh7_pipeline.py`는 이미 삭제된 `logh7_pipeline.py` 빌더 전용이라 재복구하지 않고, 필요한 `REPO_ROOT` 상수만 인라인. 같은 정리 커밋에서 생긴 `test_logh7_ui_explorer.py`의 잠재 버그(동일 import 깨짐)도 같이 수정하고, 이미 정당하게 삭제된 레거시 산출물(`LOGH7Launcher.cs`/`client_patches/font-atlas-antialias.json`)만 검증하던 테스트 2개를 제거(레포의 "삭제된 코드만 지키는 테스트는 삭제" 원칙 적용). RE 도구 9종 회귀 46/46 + 서버 180/180 통과.
-  - **C002 상태 재확인(loop-state.md #44-#48 재독)**: 입력 레이어는 이미 반증된 "마우스 클릭 신뢰성" 가설이 아니라 실제로는 서버측 0x0b07 NotifyMovedGrid 전달·클라 적용(`FUN_004bee20`→`FUN_00517cd0(0xb07)`→`FUN_00501e30(0x16)`)까지는 라이브로 확인됨(#46). 미해결 프론티어는 두 갈래: (1) 시각적 함대 이동/own-cell 갱신이 아직 미증명(own_cell watch가 실제 이동 지표가 아님, #46-#47에서 준비한 `logh7_0b07_location_watch.py`로 다음 라이브 패스 필요) — 이번에 그 도구 자체를 복구했으니 다음 라이브 세션에서 바로 쓸 수 있음. (2) 전술(tactics) 진입 경로는 `0x033b` 오프셋 수정(#01)으로 즉시크래시는 해소됐으나 GUI는 아직 미완성이며, 근본 불명 지점은 모드 셀렉터 `client+0x35f35a`/풀 writer 게이트 `client+0x126711==0`의 자연 트리거를 아직 못 찾음(`FUN_004b68f0`/`FUN_004c32a0`, #01 마지막 항목). "단일 패치 크래시 취약성"(G069 3번째 재점검 항목)은 이번 패스에서 다루지 않음 — 다음 작업으로 남김.
+- 사용자 지시로 기존 작업트리 전체 삭제. `docs/`와 매뉴얼 PDF만 보존.
+- 삭제 직전 전체 스냅샷: 커밋 `5bd249c` — 이전 코드/도구 복원은 `git checkout 5bd249c -- <path>`.
+- 이전 사이클의 지식(와이어 프로토콜 해독, RE 결과, 갤럭시 데이터, 요구사항)은 `docs/`에 문서로 남아 있다. 코드는 전부 새로 작성한다.
 
-2026-07-05 G072 cp932 한글 채팅 패치 실제 적용(파일 자체 패치): G071에서 작성/드라이런만 했던 `RE/tools/logh7_chat_cp932_korean_patch.py`를 실제 설치 `.omo/work/logh7-installed/exe/G7MTClient.exe`(git 추적본)에 in-place로 적용. 절차: 적용 전 SHA256 기록(`bd19263c...`) → 세션 스크래치 백업 → 패치 스크립트로 스크래치 사본 생성·바이트 검증(`cmp -l`로 VA `0x76e3fc` 9바이트 영역 외 전체 파일 바이트 100% 동일 확인) → 검증된 사본을 라이브 파일에 복사. 결과 SHA256 `24eb7c09...`. 되돌리기는 git 추적 파일이므로 `git checkout -- .omo/work/logh7-installed/exe/G7MTClient.exe`로 즉시 가능(별도 백업 파일을 레포에 커밋하지 않음). 아직 미완료: 인게임 실주행(로그인→채팅→한글 정상 표시) 검증 — `RE/tools/logh7_ui_explorer.py`의 기본 `start`가 요구하는 `G7MTClient.playable.exe`가 G070/RE정리로 삭제되어 없으므로 `--no-patch`로 방금 패치한 설치본을 그대로 구동해야 함; 아직 미실행.
+## 소스 오브 트루스
 
-2026-07-04 G071 G070 삭제 후속 정리 + cp932 패치 스크립트: `client-unity/` 삭제(G070) 직후 `npm --prefix server test`에서 12개 회귀 발견 — 여러 생성기 모듈(`server/src/server/logh7-unity-*.mjs` 등)이 `server/content/generated/*.json` 정본 출력과 함께 `client-unity/Assets/StreamingAssets/logh7/...`로 dual-write하던 것이 원인. 조치: (1) 전적으로 Unity 산출물(삭제된 C# 스크립트)만 검증하던 테스트 3종(`logh7-unity-client-surface`/`logh7-unity-scene-surface`/`logh7-unity-validation-scene`)과 그 전용 모듈 2종(`logh7-unity-streamingassets-export.mjs`/`logh7-unity-runtime-data.mjs`, 관련 `tools/*` 포함)을 완전 삭제 — 대응하는 `package.json` 스크립트(`catalog:unity-streamingassets-export`/`export:unity-runtime-data`)도 함께 제거; (2) 나머지 dual-write 모듈들(`logh7-ui-scene-remaster-gameplay-boundary`/`logh7-remaster-provenance-manifest`/`logh7-gameplay-contract-boundary`/`logh7-ui-scene-catalog`/`logh7-unity-source-pack-manifest`/`logh7-unity-asset-source-truth`/`logh7-unity-bootstrap-manifest`/`logh7-original-ui-image-export.mjs`)에서 `client-unity/` 쓰기 경로(`DEFAULT_UNITY_OUT` 상수+관련 파라미터)를 제거하고 `server/content/generated/*.json` 단일 정본 출력만 남김; (3) 남은 참조는 모두 주석/라벨/가드설정/읽기전용 입력으로 실쓰기 없음 확인. 결과: 회귀 0건, 전체 180/180 통과. 또한 P0-03 cp932 한글 채팅 해저드 진단 확정 및 패치 스크립트 작성: `RE/tools/logh7_chat_cp932_korean_patch.py` — `G7MTClient.exe`의 `FUN_004eac60`/`FUN_004eb100`/`FUN_00516bf0`가 `setlocale(LC_ALL,"Japanese")`(cp932) 후 mbstowcs 변환을 수행해 cp949 한글 채팅 바이트를 깨뜨림; VA `0x0076e3fc`(파일 오프셋 `0x36e3fc`)의 9바이트 `"Japanese\0"` 리터럴을 동일 길이 `"Korean\0"`(cp949)로 교체하는 동일-길이 in-place 패치로, 캐이브 삽입 불필요(직전 가설이던 `CreateFontA` charset 바이트·`0x5d5290` 코드케이브는 모두 반증됨: charset은 두 호출 모두 DEFAULT_CHARSET=1, 0x5d5290은 export 전체에서 참조 0건). 스크래치 사본 대상 드라이런으로 바이트 정합 검증 완료; 실제 설치 EXE에는 아직 미적용(라이브 테스트 필요).
+- `artifacts/logh7-cd/Logh7.bin|.cue` — https://archive.org/details/logh-7 CD 이미지 (md5 검증 완료: `bf87c6a8...`/`8784...`, gitignored — 없으면 재다운로드)
+- `docs/reference/*.pdf` — 공식 매뉴얼 5종 (게임 규칙의 근거)
+- `docs/logh7-requirements-current.md`, `docs/logh7-architecture-operations-current.md` — 이전 사이클 지식 베이스 (역사적 참고 — 코드 경로 언급은 리셋 전 기준이므로 신뢰하지 말 것)
+- `docs/logh7-document-index-current.md` — 구 문서 분류 인덱스
 
-2026-07-04 G070 Unity 클라이언트 삭제(사용자 명시적 "완전 삭제" 결정): `client-unity/` 작업트리 완전 제거. 스테이징된 2026-07-03/04 메달 리마스터 아트를 포함해 삭제 직전 상태를 커밋 `dbf3b43`(보존)에 전량 보존한 뒤 커밋 `ca24dd3`(제거, 9226 files deleted)로 작업트리에서 삭제했다. G069의 "RE 완료 후 Unity 재이식" 장기 목표는 유지되나, 재이식 시점에는 `client-unity/` 전체를 git 히스토리에서 되살려야 한다(현재 작업트리에 없음). 이 문서와 `.claude/CLAUDE.md`/`AGENTS.md`/`docs/logh7-architecture-operations-current.md`/`docs/logh7-requirements-current.md`/`docs/logh7-document-index-current.md`의 기존 Unity 증거/진행 항목들(G0xx)은 모두 과거 기록으로만 취급하며 재현 불가하다(빌드 산출물·에디터 테스트 등 재현하려면 먼저 `client-unity/`를 git에서 복원해야 함).
+## 개발 규칙
 
-2026-07-04 G069 방향 전환(사용자 명시적 재오픈): Unity 경로 잠정 중단, **레거시 클라이언트(`G7MTClient.exe`) 직접 수정을 현재 주 경로로 재개**. RE 완료 후 Unity 재이식이 장기 목표(사용자: "나중에 이거 RE가 전부 끝나고 돌아갈때 옮겨야 겠어"). Runtime Boundary의 "EXE changes are legacy-oracle/mod-only and require a current plan explicitly reopening that path"는 본 항목으로 충족됨 — 지금부터 EXE 직접 패치가 정규 구현 경로다. 재개 전 재점검 필요: C002(마우스클릭→커맨드 미도달), cp932 한글 채팅 인코딩, 단일 패치 크래시 취약성. 상세: `docs/logh7-requirements-current.md`/`docs/logh7-architecture-operations-current.md`/`.omo/plans/logh7-internal-validation-plan.md` 동일 날짜 항목.
-
-2026-07-04 G068: 로비 게이트가 원본 spot 배경(EXE 기본 bg005, P0)+施設内ロビー 패널(P1)+실서버 `/api/lobby` 슬롯으로 렌더. 수출 도구에 JPG byte-copy 모드 추가(fileCount 17). 회귀 195/195. 증거 `g068-player-lobby-original-bg-20260704.png`.
-
-2026-07-04 G067: 원본 로그인 화면에서 실서버(`serve:session`) 로그인 E2E 검증(ok+token만 게이트 전진, 원본 상태 문자열 P0). 오라클 반증: 설치본 클라는 부트 로고 스플래시 미표시 → 로고 시퀀스 슬라이스 보류. 회귀 194/194.
-
-2026-07-04 G066 원본 로그인 화면 픽셀 패러티: Unity 로그인 이전 게이트는 원본 `title.tga` 디코드 배경(`export:original-ui-images`, StreamingAssets fileCount 16) 위 원본 좌표 위젯으로 렌더된다. 증거 `.omo/ulw-loop/evidence/g066-player-legacy-login-20260704.png`. 이후 씬도 동일한 원본-화면-재현 방식으로 전환한다.
-
-2026-07-04 G048 Unity scene-panel manifest slice: panel text is now loaded from `logh7-unity-scene-surface-panels.json`, not hardcoded in C#; StreamingAssets export fileCount is 15 and canonical promotion remains blocked.
-
-2026-07-04 Unity scene-panel slice: current Unity player builds and shows 10 distinct scene catalog surface panels; evidence contact sheet is `.omo/ulw-loop/evidence/g047-scene-panel-surfaces-compact-20260704/contact-sheet.png`. Treat as development surface only; canonical promotion remains blocked.
-
-## LOGH VII Current Startup Rule
-
-Apply `.omo/rules/logh7-capability-harness.md` after reading the three current entrypoint docs. The harness routes matched LazyCodex/OMO, Superpowers, gstack, LOGH7, CodeGraph/LSP/Git Bash/ast-grep, and Compound Engineering capabilities, but it does not change normal runtime boundaries.
-
-For LOGH VII planning or development, start from these three current documents only:
-
-1. `docs/logh7-requirements-current.md`
-2. `docs/logh7-architecture-operations-current.md`
-3. `.omo/plans/logh7-internal-validation-plan.md`
-
-Then use `docs/logh7-document-index-current.md` to decide which older docs are current references, evidence, superseded, or archive references. Do not treat old handoffs or status docs as current guidance unless the current docs point to them.
-
-## Work Unit Documentation Sync
-
-At the end of every work unit, update documentation automatically:
-
-- Add new requirements, decisions, evidence links, commands, risks, and doc-index entries.
-- Modify current requirements, architecture/operations guidance, validation-plan steps, and entrypoint rules when behavior or scope changes.
-- Prune stale duplicate guidance and old status claims that no longer describe the current path.
-- Delete or retire invalid current-path guidance, especially forced/preseeded character flows or developer-only harnesses presented as normal operation.
-
-Update `docs/logh7-developer-dashboard.html` whenever status, release phase, scope, evidence, blockers, progress percentage, or remaining tasks change. The dashboard is derived from current docs and is not a fourth startup authority document.
-
-Apply this to:
-
-- `docs/logh7-requirements-current.md`
-- `docs/logh7-architecture-operations-current.md`
-- `.omo/plans/logh7-internal-validation-plan.md`
-- `docs/logh7-document-index-current.md`
-- `docs/logh7-developer-dashboard.html` when development status changes
-- `AGENTS.md`
-- `CLAUDE.md`
-- `.claude/CLAUDE.md`
-
-Current development objective (2026-07-03): prioritize asset/data mining and game-logic reimplementation over legacy-client modification. Treat the original client, Archive.org `https://archive.org/download/logh-7`, manuals, extracted resources, and traces as evidence/oracle inputs; build canonical data/spec pipelines and gameplay logic from them.
-
-Current bootstrap commands: `npm --prefix server test`, `npm --prefix server run inventory:sources`, `npm --prefix server run catalog:mdx`, `npm --prefix server run catalog:null-galaxy`, `npm --prefix server run catalog:tcf`, `npm --prefix server run catalog:tcf-portraits`, `npm --prefix server run export:tcf-portraits -- --limit-per-archive 2`, and `npm --prefix server run verify:source`. `catalog:mdx` writes `server/content/generated/logh7-mdx-catalog.json`; `catalog:null-galaxy` writes `server/content/generated/logh7-null-galaxy-template.json`; `catalog:tcf` writes `server/content/generated/logh7-face-tcf-catalog.json`; `catalog:tcf-portraits` writes `server/content/generated/logh7-face-portrait-catalog.json`; `export:tcf-portraits` writes controlled BMP samples under `.omo/ulw-loop/evidence/tcf-portrait-bmp-sample/`; `inventory:sources` should find preserved installed data; `verify:source` reports `artifact-root-missing` until Archive.org BIN/CUE files are downloaded under `artifacts/logh7-cd`.
-
-EXE changes are legacy-oracle/mod-only and require a current plan explicitly reopening that path. Do not restore Python builders, JSON patch descriptors, generated client-copy stacks, or old direct-client helpers as normal implementation.
-
-## Runtime Boundary
-
-- Data/spec developer inventories sources, extracts assets/manual rules, regenerates catalogs.
-- Gameplay logic developer implements rules against canonical fixtures and tests.
-- Unity client developer consumes generated manifests/catalogs; legacy-client diagnostics remain oracle-only.
-
-## Skill and CodeGraph Rule
-
-Use matching skills before ad hoc work. CodeGraph is mandatory first for code location, call-path, subsystem, and blast-radius questions when `.codegraph/` exists; confirm exhaustive answers with `rg` or direct reads. Use `find-skills` when a needed capability is missing.
-
-If a matching skill is not installed in the active environment, attempt installation at development start with `find-skills` or `npx skills add <owner/repo@skill> -y`; if install fails, record command/output and fallback path.
-
-## LazyCodex, Superpowers, gstack, and Compound Harness
-
-Treat the full capability stack as routing rules for every LOGH VII work unit:
-
-- LazyCodex/OMO: use `init-deep`, `ulw-plan`, `start-work`, `ulw-loop`, Hephaestus/ultrawork, hooks, model routing, CodeGraph, git_bash, LSP, and other MCP tools when the work shape matches. Evidence-bound RED->GREEN plus real-surface QA remains mandatory.
-- Superpowers: use matching process skills, especially `using-superpowers`, `brainstorming`, `writing-plans`, `test-driven-development`, `systematic-debugging`, `verification-before-completion`, and review/worktree/subagent skills when host policy permits.
-- gstack: route planning, QA, review, CSO/security, docs, design, deploy, learning, and retrospective needs through the gstack router or specific gstack role skill.
-- Compound Engineering: every completed work unit records plan, work, review, compound, repeat; capture the mistake or near-miss, root cause, reusable guard, storage location, enforcing future check, and whether it will be caught automatically next time.
-- If any matching capability is unavailable, host-forbidden, or unsuitable, record the attempted lookup/use and fallback in the work notes.
-
-## Blocked-Loop Rule
-
-Do not spend tokens repeating the same blocked route. After three same-symptom failures or two no-new-evidence investigation paths, pivot or write a concise blocker report with evidence and the next different strategy.
-
-## macOS Development
-
-Keep server, web/community, tests, documentation, and Docker Compose service work developable on macOS. Original D3D8 client live QA remains Windows-only; macOS developers should use Docker Desktop or OrbStack for service work.
-
-## Remastering and Modding
-
-Remastering and modding are first-class planning tracks. Original assets stay canonical fallback; remaster/mod packs must be optional, reversible, manifest-driven, provenance-labeled, and conflict-checked. Public mod distribution is later scope.
-
-Installed project helpers include `image-upscaling`, `game-assets`, `game-3d-assets`, `game-engine`, `multiplayer-game`, `pdf`, `smart-ocr`, and `meshy-3d-generation`; use them only as sourcebook/remaster/prototype/pattern aids. LOGH7 skills and client evidence stay authoritative. If a narrower skill is missing, run `find-skills` and install only high-fit candidates at development start; record unsuitable search results.
-
-## Completion Gate
-
-Do not close a work unit after implementation review alone. Completion requires implementation, verification, review, `/cso` when security-relevant, [Compound Engineering](https://every.to/guides/compound-engineering) learning capture, and updated docs.
-## Latest Unity Visual Build Evidence
-
-As of 2026-07-04, Unity `6000.5.2f1` builds the current prototype player at `client-unity/Builds/Windows/LOGH7RevivalUnity.exe`. Evidence: `.omo/ulw-loop/evidence/codex-unity-windows-build-final2-20260704.log`, `.omo/ulw-loop/evidence/codex-unity-player-window-screenshot-final-20260704.png`, `.omo/ulw-loop/evidence/codex-unity-validation-scene-screenshot-20260704.png`. The visible scope is still a shell/session/data-preview surface.
-
-G045 evidence: `.omo/ulw-loop/evidence/g045-player-clickthrough-strategic-map-20260704.png` proves real mouse-click progression to Strategic Map; `.omo/ulw-loop/evidence/g045-player-edge-strategic-blocked-20260704.png` proves direct Strategic Map is blocked at Boot.
-
-G046 evidence: `.omo/ulw-loop/evidence/g046-player-scene-tactics-switch-20260704.png` proves the Unity player consumes the UI scene catalog and selects `tactics` after prerequisites; `.omo/ulw-loop/evidence/g046-player-scene-tactics-blocked-20260704.png` proves `tactics` stays blocked from Boot.
-
-## 모델 역할 분담: Advisor / Worker
-
-너는 Advisor다. 판단에 집중하고, 구현 노동은 Worker에게 위임하라.
-
-Advisor(너, 메인 세션)가 직접 하는 일:
-요구사항 분석, 작업 분해, 설계 결정
-Worker에게 줄 작업 브리프 작성
-결과 검증: diff 직접 확인, 테스트 직접 실행
-최종 커밋 승인, 사용자 보고
-
-Worker(Opus 서브에이전트)에게 위임하는 일:
-코드 작성과 수정, 테스트 작성 등 구현 작업 전부
-Agent 도구로 위임하고 model은 "opus"를 지정한다
-서로 독립적인 작업은 병렬로 위임한다
-
-브리프 기준:
-네가 이미 파악한 컨텍스트를 담아 Worker가 재탐색하지 않게 하라
-파일 경로, 프로젝트 컨벤션, 알려진 함정, 완료 기준(통과해야 할 테스트)을 포함하라
-
-경계:
-Worker의 완료 보고를 그대로 믿지 마라. diff와 테스트로 직접 확인한 뒤 승인하라
-검증 실패는 수정 브리프로 재위임하라. 직접 수정은 사소한 마무리에만 허용된다
-한두 줄 수정처럼 위임 오버헤드가 더 큰 작업은 직접 처리해도 된다
+- **CodeGraph 필수**: `.codegraph/`가 있으면 코드 위치/호출경로/영향범위 질문은 codegraph 먼저, rg로 확인.
+- **Blocked-Loop Rule**: 같은 증상 3회 실패 또는 새 증거 없는 조사 2회면 접근을 전환하고 블로커 보고서를 쓴다.
+- 코드 주석은 한글로 쓴다 (캐논 일본어 용어·바이너리 오프셋은 원문 유지).
+- 라이브 검증 없이 완료 주장 금지. 테스트 출력·스크린샷 등 증거를 남긴다.

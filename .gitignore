@@ -1,88 +1,22 @@
-# ============================================================
-# LOGH VII 루트 레포 — 소스 + RE 인덱스만 추적 (다른 노트북 작업 지속용)
-# 전체 ~23GB 중 git 대상은 소스/문서/도구 + .omo/ghidra(25MB RE 디컴파일 인덱스).
-# 거대 바이너리(client 설치본 3.2GB, .omo 세션 18GB)와 비밀(계정DB/.env)은 제외 — 별도 전송.
-# ============================================================
+# 원본 CD 이미지 (218MB, GitHub 한도 초과 — archive.org에서 재다운로드 가능)
+/artifacts/
 
-# --- 거대 일회성 작업물/세션 (재생성 가능, git 부적합) ---
-# 단, 라이브 RE에 필요한 것만 화이트리스트: ghidra(RE인덱스) + work/logh7-installed(하네스가
-# 구동하는 설치게임) + work/logh7-ko-overlay(G7MTClient.playable.exe + ko 오버레이).
-/.omo/*
-!/.omo/ghidra/
-!/.omo/work/
-/.omo/work/*
-!/.omo/work/logh7-installed/
-!/.omo/work/logh7-ko-overlay/
+# 훅/플러그인 런타임 상태 (자동 재생성)
 /.omc/
 /.bkit/
-/artifacts/
-/client/
-RE/artifacts/
 
-# .codex: 프로젝트 agents/skills는 추적, 로컬 인증/설정/캐시만 제외
-.codex/config.toml
-.codex/auth.json
-.codex/*.lock
-.codex/.tmp/
-.codex/log/
-.codex/history.jsonl
+# CodeGraph 인덱스 (codegraph init로 재생성)
+/.codegraph/
 
-# 원본 게임 CD 덤프 (GitHub 100MB 한도 초과, 작업 지속에 불필요 — 별도 전송)
-*.iso
-# 대용량 생성 리뷰 HTML (재생성 가능)
-**/idkit/review.html
-
-# RE/ 내 대용량/정션/중복 (정션은 /e/.omo 18GB를 끌어옴)
-RE/.omo
-RE/.omc
-RE/weights/
-RE/gfpgan/
-RE/dist/
-
-# --- 의존성/빌드/캐시 ---
+# 의존성/빌드/캐시
 node_modules/
 dist/
 build/
 __pycache__/
 *.pyc
-.ruff_cache/
-.pytest_cache/
-.playwright/
-playwright-report/
-test-results/
-.venv/
-venv/
 
-# --- 런타임 상태 / DB (재생성, 일부는 비밀) ---
-**/state/
-**/logh7-runtime/
+# 런타임 상태 / 비밀
+.env
 *.sqlite
 *.sqlite-shm
 *.sqlite-wal
-*.db
-
-# --- 비밀 (전송 금지) ---
-.env
-.env.*
-!.env.example
-*.key
-*.pem
-*.pfx
-
-# --- 다운로드 폰트 바이너리 (매니페스트만 추적) ---
-**/fonts/**/*.ttf
-**/fonts/**/*.otf
-**/fonts/**/*.zip
-
-# --- OS/기타 ---
-*.log
-*.stackdump
-.DS_Store
-Thumbs.db
-
-# --- Windows 예약 디바이스 이름 파일 (git 인덱싱 불가) ---
-NUL
-**/NUL
-CON
-PRN
-AUX

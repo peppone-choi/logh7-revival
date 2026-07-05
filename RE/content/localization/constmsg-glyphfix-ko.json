@@ -1,9 +1,0 @@
-{
-  "_note": "CP949-safe fixes for CP932-only glyph bytes that leaked into the Korean constmsg overlay and render as broken glyphs in-world.",
-  "translations": {
-    "1373": "/",
-    "1374": "※",
-    "1395": "%s                    %6d%s",
-    "1396": "%s                 %3d%s"
-  }
-}
