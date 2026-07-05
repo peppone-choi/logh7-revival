@@ -4,6 +4,28 @@ import time
 from typing import Any
 
 
+def _force_foreground(hwnd: int) -> None:
+    """Bare SetForegroundWindow silently no-ops when the caller isn't already the
+    foreground process (Windows focus-stealing prevention) — the window still paints,
+    but the client's input gate (FUN_00500580) never sees it as focused, so synthetic
+    mouse clicks never register (C002 root cause, live-confirmed 2026-07-05: repeated
+    dismiss/login clicks drew fine but never reached the server). AttachThreadInput to
+    the current foreground window's thread first is the standard OS-level workaround."""
+    import ctypes
+
+    user32 = ctypes.windll.user32
+    kernel32 = ctypes.windll.kernel32
+    fg_hwnd = user32.GetForegroundWindow()
+    cur_thread = kernel32.GetCurrentThreadId()
+    fg_thread = user32.GetWindowThreadProcessId(fg_hwnd, None)
+    attached = bool(fg_thread) and fg_thread != cur_thread and user32.AttachThreadInput(cur_thread, fg_thread, True)
+    try:
+        user32.SetForegroundWindow(hwnd)
+    finally:
+        if attached:
+            user32.AttachThreadInput(cur_thread, fg_thread, False)
+
+
 def find_client_window(win32gui: Any, win32process: Any, pid: int) -> int:
     deadline = time.time() + 8
     while time.time() < deadline:
@@ -24,17 +46,7 @@ def find_client_window(win32gui: Any, win32process: Any, pid: int) -> int:
 
 
 def login(win32api: Any, win32con: Any, win32gui: Any, hwnd: int) -> None:
-    foreground_errors: tuple[type[BaseException], ...] = (OSError,)
-    try:
-        import pywintypes
-    except ImportError:
-        pass
-    else:
-        foreground_errors = (OSError, pywintypes.error)
-    try:
-        win32gui.SetForegroundWindow(hwnd)
-    except foreground_errors:
-        pass
+    _force_foreground(hwnd)
     time.sleep(0.3)
     # 좌표 정정(2026-06-25): 창모드 client 영역 644x484 기준 로그인 폼 위치.
     # 이전 (325,333)/(325,360)/(323,389)는 어긋나 ID칸을 빗나갔다(라이브 격자 측정).
@@ -42,10 +54,32 @@ def login(win32api: Any, win32con: Any, win32gui: Any, hwnd: int) -> None:
     # Close it first, then type the legacy default account without the old first-key duplicate.
     _click(win32api, win32con, win32gui, hwnd, 452, 293)
     _click(win32api, win32con, win32gui, hwnd, 374, 290)
+    # The client persists the last-entered account text across restarts (custom-drawn
+    # field, not a native edit control — no EM_SETSEL to select-all). Live-confirmed
+    # 2026-07-05: leftover text from a prior run kept accumulating ("ginei00" typed
+    # twice became "inei00ginei00") because nothing ever cleared the field first.
+    _clear_field(win32api, win32con)
     _type_text(win32con, win32gui, hwnd, "ginei00", win32api, compensate_first=False)
     _click(win32api, win32con, win32gui, hwnd, 376, 318)
+    _clear_field(win32api, win32con)
     _type_text(win32con, win32gui, hwnd, "dummy", win32api)
     _click(win32api, win32con, win32gui, hwnd, 352, 347)
+
+
+def _clear_field(win32api: Any, win32con: Any, *, max_chars: int = 24) -> None:
+    """Erase up to max_chars of pre-existing text via hardware backspace before typing."""
+    keyup = getattr(win32con, "KEYEVENTF_KEYUP", 0x0002)
+    vk_back = getattr(win32con, "VK_BACK", 0x08)
+    vk_end = getattr(win32con, "VK_END", 0x23)
+    win32api.keybd_event(vk_end, 0, 0, 0)
+    time.sleep(0.01)
+    win32api.keybd_event(vk_end, 0, keyup, 0)
+    time.sleep(0.05)
+    for _ in range(max_chars):
+        win32api.keybd_event(vk_back, 0, 0, 0)
+        time.sleep(0.01)
+        win32api.keybd_event(vk_back, 0, keyup, 0)
+        time.sleep(0.02)
 
 
 def _click(win32api: Any, win32con: Any, win32gui: Any, hwnd: int, x: int, y: int) -> None:
@@ -61,10 +95,9 @@ def _click(win32api: Any, win32con: Any, win32gui: Any, hwnd: int, x: int, y: in
     """
     # 포커스 선행: 클라 입력 객체(FUN_00500580)가 GetFocus 게이트를 보므로 마우스 클릭은 창 포커스가
     # 있어야 active 플래그를 채운다(--hw 키는 keybd_event라 포커스 무관이었지만 마우스는 다름).
-    try:
-        win32gui.SetForegroundWindow(hwnd)
-    except Exception:
-        pass
+    # 배경 프로세스의 bare SetForegroundWindow는 Windows 포커스 스틸링 방지에 막혀 조용히 no-op되므로
+    # (2026-07-05 라이브 재현: 클릭은 그려지나 서버에 한 번도 도달 안 함), AttachThreadInput 우회 필요.
+    _force_foreground(hwnd)
     time.sleep(0.05)
     # 좌표 정합: 클라는 GetCursorPos(screen)→ScreenToClient 후 client 좌표로 hit-test하므로,
     # client 좌표 (x,y)를 ClientToScreen으로 screen 좌표화해 주입한다(타이틀바/보더 오프셋 제거).

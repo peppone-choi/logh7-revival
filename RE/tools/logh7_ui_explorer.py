@@ -78,7 +78,7 @@ from tools.logh7_ui_flow import (
     run_create_character_flow,
     run_login_flow,
 )
-from tools.logh7_window_login import _click, _type_text, find_client_window, login
+from tools.logh7_window_login import _click, _force_foreground, _type_text, find_client_window, login
 
 ROOT = REPO_ROOT
 CLIENT_EXE = INSTALLED_CLIENT_EXE
@@ -748,13 +748,6 @@ def _observe(state: dict[str, Any], session: Path, label: str, settle: float) ->
     return report
 
 
-def _foreground_errors() -> tuple[type[BaseException], ...]:
-    try:
-        import pywintypes  # type: ignore[import-not-found]
-    except ImportError:
-        return (OSError,)
-    return (OSError, pywintypes.error)
-
 
 class _ExplorerFlowDriver:
     def __init__(self, state: dict[str, Any], session: Path) -> None:
@@ -767,10 +760,7 @@ class _ExplorerFlowDriver:
         import win32gui  # type: ignore[import-not-found]
 
         hwnd = _resolve_hwnd(self._state)
-        try:
-            win32gui.SetForegroundWindow(hwnd)
-        except _foreground_errors():
-            pass
+        _force_foreground(hwnd)
         time.sleep(0.2)
         _click(win32api, win32con, win32gui, hwnd, x, y)
         report = _observe(self._state, self._session, label, settle=settle)
@@ -782,10 +772,7 @@ class _ExplorerFlowDriver:
         import win32gui  # type: ignore[import-not-found]
 
         hwnd = _resolve_hwnd(self._state)
-        try:
-            win32gui.SetForegroundWindow(hwnd)
-        except _foreground_errors():
-            pass
+        _force_foreground(hwnd)
         time.sleep(0.2)
         compensate_first = label == "login-account-text" and os.environ.get("LOGH_UI_TEXT_COMPENSATE_FIRST") == "1"
         sent_text = _type_text(win32con, win32gui, hwnd, value, compensate_first=compensate_first)
@@ -1111,10 +1098,7 @@ def cmd_click(args: argparse.Namespace) -> int:
     session: Path = args.session
     state = _load_session(session)
     hwnd = _resolve_hwnd(state)
-    try:
-        win32gui.SetForegroundWindow(hwnd)
-    except Exception:  # noqa: BLE001
-        pass
+    _force_foreground(hwnd)
     time.sleep(0.2)
     if args.right:
         # 좌표 정합: (x,y)를 client 좌표로 보고 ClientToScreen으로 screen 좌표화한다.
@@ -1148,10 +1132,7 @@ def cmd_key(args: argparse.Namespace) -> int:
     vk = VK_NAMES.get(token, None)
     if vk is None:
         vk = int(args.vk, 0)
-    try:
-        win32gui.SetForegroundWindow(hwnd)
-    except Exception:  # noqa: BLE001
-        pass
+    _force_foreground(hwnd)
     time.sleep(0.2)
     hw = getattr(args, "hw", False)
     if hw:
@@ -1179,10 +1160,7 @@ def cmd_text(args: argparse.Namespace) -> int:
     session: Path = args.session
     state = _load_session(session)
     hwnd = _resolve_hwnd(state)
-    try:
-        win32gui.SetForegroundWindow(hwnd)
-    except Exception:  # noqa: BLE001
-        pass
+    _force_foreground(hwnd)
     time.sleep(0.2)
     _type_text(win32con, win32gui, hwnd, args.value)
     report = _observe(state, session, args.label or "text", settle=args.settle)
