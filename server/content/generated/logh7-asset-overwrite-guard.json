@@ -1,0 +1,196 @@
+{
+  "id": "logh7-asset-overwrite-guard",
+  "generatedAt": "2026-07-03T19:47:19.939Z",
+  "policy": "original-assets-read-only-remasters-reversible",
+  "protectedOriginalRoots": [
+    {
+      "path": "client-unity/Assets/ArtSource/original",
+      "writePolicy": "read-only-fallback"
+    },
+    {
+      "path": ".omo/work/logh7-installed",
+      "writePolicy": "read-only-fallback"
+    },
+    {
+      "path": "RE/.omo/work/logh7-cd-extract",
+      "writePolicy": "read-only-fallback"
+    },
+    {
+      "path": "server/content/original-data",
+      "writePolicy": "read-only-fallback"
+    },
+    {
+      "path": "RE/content/original-data",
+      "writePolicy": "read-only-fallback"
+    }
+  ],
+  "allowedRemasterRoots": [
+    {
+      "path": "client-unity/Assets/ArtSource/remaster",
+      "writePolicy": "remaster-output"
+    },
+    {
+      "path": "client-unity/Assets/ArtSource/reference",
+      "writePolicy": "remaster-output"
+    },
+    {
+      "path": "client-unity/Assets/ArtSource/concept",
+      "writePolicy": "remaster-output"
+    }
+  ],
+  "remasterArtifacts": [
+    {
+      "id": "alliance-medal-upscale",
+      "path": "server/content/generated/logh7-alliance-medal-upscale-manifest.json",
+      "outputs": [
+        {
+          "path": "client-unity/Assets/ArtSource/remaster/alliance-medals-4x/m_f001_4x.png",
+          "overwritesOriginal": false,
+          "allowed": true
+        },
+        {
+          "path": "client-unity/Assets/ArtSource/remaster/alliance-medals-4x/m_f002_4x.png",
+          "overwritesOriginal": false,
+          "allowed": true
+        },
+        {
+          "path": "client-unity/Assets/ArtSource/remaster/alliance-medals-4x/m_f003_4x.png",
+          "overwritesOriginal": false,
+          "allowed": true
+        },
+        {
+          "path": "client-unity/Assets/ArtSource/remaster/alliance-medals-4x/m_f004_4x.png",
+          "overwritesOriginal": false,
+          "allowed": true
+        },
+        {
+          "path": "client-unity/Assets/ArtSource/remaster/alliance-medals-4x/m_f005_4x.png",
+          "overwritesOriginal": false,
+          "allowed": true
+        },
+        {
+          "path": "client-unity/Assets/ArtSource/remaster/alliance-medals-4x/m_f006_4x.png",
+          "overwritesOriginal": false,
+          "allowed": true
+        },
+        {
+          "path": "client-unity/Assets/ArtSource/remaster/alliance-medals-4x/m_f007_4x.png",
+          "overwritesOriginal": false,
+          "allowed": true
+        },
+        {
+          "path": "client-unity/Assets/ArtSource/remaster/alliance-medals-4x/m_f008_4x.png",
+          "overwritesOriginal": false,
+          "allowed": true
+        },
+        {
+          "path": "client-unity/Assets/ArtSource/remaster/alliance-medals-4x/m_f009_4x.png",
+          "overwritesOriginal": false,
+          "allowed": true
+        },
+        {
+          "path": "client-unity/Assets/ArtSource/remaster/alliance-medals-4x/m_f010_4x.png",
+          "overwritesOriginal": false,
+          "allowed": true
+        },
+        {
+          "path": "client-unity/Assets/ArtSource/remaster/alliance-medals-4x/m_f011_4x.png",
+          "overwritesOriginal": false,
+          "allowed": true
+        },
+        {
+          "path": "client-unity/Assets/ArtSource/remaster/alliance-medals-4x/m_f012_4x.png",
+          "overwritesOriginal": false,
+          "allowed": true
+        },
+        {
+          "path": "client-unity/Assets/ArtSource/remaster/alliance-medals-4x/m_f013_4x.png",
+          "overwritesOriginal": false,
+          "allowed": true
+        },
+        {
+          "path": "client-unity/Assets/ArtSource/remaster/alliance-medals-4x/m_f014_4x.png",
+          "overwritesOriginal": false,
+          "allowed": true
+        },
+        {
+          "path": "client-unity/Assets/ArtSource/remaster/alliance-medals-4x/m_f015_4x.png",
+          "overwritesOriginal": false,
+          "allowed": true
+        }
+      ],
+      "status": "present",
+      "size": 8720,
+      "sha1": "61c3846e42dfc30653a244d5324fe19874e7b938",
+      "manifestId": "logh7-alliance-medal-upscale-manifest"
+    },
+    {
+      "id": "alliance-medal-redraw",
+      "path": "server/content/generated/logh7-alliance-medal-redraw-manifest.json",
+      "outputs": [],
+      "status": "present",
+      "size": 9530,
+      "sha1": "5aacac8599b15d4d8aa3b9d32455ca5c68f58155",
+      "manifestId": "logh7-alliance-medal-redraw-manifest"
+    },
+    {
+      "id": "alliance-foundation-medal-redraw",
+      "path": "server/content/generated/logh7-alliance-foundation-medal-redraw-manifest.json",
+      "outputs": [],
+      "status": "present",
+      "size": 2775,
+      "sha1": "0a53f31257696b4cb900cd0b3521874fa5334a00",
+      "manifestId": "logh7-alliance-foundation-medal-redraw-manifest"
+    },
+    {
+      "id": "imperial-medal-source-lock",
+      "path": "server/content/generated/logh7-imperial-medal-source-lock-manifest.json",
+      "outputs": [
+        {
+          "path": "client-unity/Assets/ArtSource/remaster/imperial-medal-prototypes-1024/779-expeditionary-campaign-source-locked-crest-ship-prototype.png",
+          "overwritesOriginal": false,
+          "allowed": true
+        }
+      ],
+      "status": "present",
+      "size": 142251,
+      "sha1": "f83c73eaa69f966ac291ab7c21e981abccad03b1",
+      "manifestId": "logh7-imperial-medal-source-lock-manifest"
+    },
+    {
+      "id": "imperial-crest-mask",
+      "path": "server/content/generated/logh7-imperial-crest-mask-manifest.json",
+      "outputs": [
+        {
+          "path": "client-unity/Assets/ArtSource/reference/imperial-crest/logh7-imperial-double-eagle-mask-gold.png",
+          "overwritesOriginal": false,
+          "allowed": true
+        },
+        {
+          "path": "client-unity/Assets/ArtSource/reference/imperial-crest/logh7-imperial-double-eagle-mask-silver.png",
+          "overwritesOriginal": false,
+          "allowed": true
+        },
+        {
+          "path": "client-unity/Assets/ArtSource/reference/imperial-crest/logh7-imperial-double-eagle-mask-white.png",
+          "overwritesOriginal": false,
+          "allowed": true
+        }
+      ],
+      "status": "present",
+      "size": 1268,
+      "sha1": "72d9a0dcc79496d3a49f7cf6136d84ee10c83e85",
+      "manifestId": "logh7-imperial-double-eagle-mask-manifest"
+    },
+    {
+      "id": "empire-ship-reference",
+      "path": "server/content/generated/logh7-empire-ship-reference-manifest.json",
+      "outputs": [],
+      "status": "present",
+      "size": 6869,
+      "sha1": "4f4c4a4a2a193209ee2dcebed52158d9ee4a333f",
+      "manifestId": "logh7-empire-ship-reference-manifest"
+    }
+  ],
+  "violationCount": 0
+}

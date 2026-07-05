@@ -1,0 +1,293 @@
+{
+  "id": "logh7-galaxy-trust-crosscheck",
+  "generatedAt": "2026-07-04T03:33:26.140Z",
+  "purpose": "Prevent existing galaxy positions, star colors, planet lists, passable cells, and generated catalogs from being treated as canonical before cross-source proof.",
+  "canonicalPromotion": "blocked-until-cross-source-confirmed",
+  "trustPolicy": {
+    "promotionAllowed": false,
+    "requiredEvidence": [
+      "originalCdExtract",
+      "manualPdfStarChart",
+      "reverseEngineeringEvidence",
+      "liveClientOrWireEvidence"
+    ],
+    "rule": "Existing generated or derived galaxy data remains suspect until cross-source confirmation is recorded."
+  },
+  "mandatoryWatchCategories": [
+    {
+      "id": "systemPositions",
+      "labelKo": "성계 위치",
+      "reportImmediately": true
+    }
+  ],
+  "sourceGroups": [
+    {
+      "id": "systemPositions",
+      "labelKo": "성계 위치",
+      "reportImmediately": true,
+      "canonicalStatus": "suspect-cross-check-required",
+      "promotionAllowed": false,
+      "sources": [
+        {
+          "path": "server/content/galaxy.json",
+          "canonicalStatus": "suspect-cross-check-required",
+          "promotionAllowed": false,
+          "status": "present",
+          "size": 111672,
+          "sha1": "e456c16059fe496af2283a48e620e15bd2f8eac1",
+          "manifestId": null,
+          "manifestStatus": null,
+          "recordCount": 85
+        },
+        {
+          "path": "RE/content/galaxy.json",
+          "canonicalStatus": "suspect-cross-check-required",
+          "promotionAllowed": false,
+          "status": "present",
+          "size": 107344,
+          "sha1": "b1a793165998eb3acc74c40ef640c1810c7df5ec",
+          "manifestId": null,
+          "manifestStatus": null,
+          "recordCount": 85
+        },
+        {
+          "path": "server/content/galaxy-raster-star-centers.json",
+          "canonicalStatus": "suspect-cross-check-required",
+          "promotionAllowed": false,
+          "status": "present",
+          "size": 61721,
+          "sha1": "53a8c63394ce2e8487c627d4dcfa50a527dbd25d",
+          "manifestId": null,
+          "manifestStatus": null,
+          "recordCount": 80
+        },
+        {
+          "path": "RE/content/galaxy-raster-star-centers.json",
+          "canonicalStatus": "suspect-cross-check-required",
+          "promotionAllowed": false,
+          "status": "present",
+          "size": 61721,
+          "sha1": "53a8c63394ce2e8487c627d4dcfa50a527dbd25d",
+          "manifestId": null,
+          "manifestStatus": null,
+          "recordCount": 80
+        },
+        {
+          "path": "docs/reference/gin7manual-saved-starchart.pdf",
+          "canonicalStatus": "suspect-cross-check-required",
+          "promotionAllowed": false,
+          "status": "present",
+          "size": 2055571,
+          "sha1": "a30e5686c5dc349d925f1d0d592937f3d6c3cacb"
+        }
+      ]
+    },
+    {
+      "id": "starColors",
+      "labelKo": "항성 색상",
+      "reportImmediately": false,
+      "canonicalStatus": "suspect-cross-check-required",
+      "promotionAllowed": false,
+      "sources": [
+        {
+          "path": "server/content/extracted/model-galaxy-stars.json",
+          "canonicalStatus": "suspect-cross-check-required",
+          "promotionAllowed": false,
+          "status": "present",
+          "size": 4835,
+          "sha1": "3bdc0b6c468cea74b185fdd5b6d5cc3abbaabacc",
+          "manifestId": null,
+          "manifestStatus": null,
+          "recordCount": 79
+        },
+        {
+          "path": "RE/content/extracted/model-galaxy-stars.json",
+          "canonicalStatus": "suspect-cross-check-required",
+          "promotionAllowed": false,
+          "status": "present",
+          "size": 4835,
+          "sha1": "3bdc0b6c468cea74b185fdd5b6d5cc3abbaabacc",
+          "manifestId": null,
+          "manifestStatus": null,
+          "recordCount": 79
+        },
+        {
+          "path": "server/content/generated/logh7-null-galaxy-template.json",
+          "canonicalStatus": "suspect-cross-check-required",
+          "promotionAllowed": false,
+          "status": "present",
+          "size": 12412,
+          "sha1": "3590f673fff2d1e324383204937bb5870bfb615f",
+          "manifestId": "logh7-null-galaxy-template",
+          "manifestStatus": null,
+          "recordCount": 79
+        }
+      ]
+    },
+    {
+      "id": "planetLists",
+      "labelKo": "행성 목록",
+      "reportImmediately": false,
+      "canonicalStatus": "suspect-cross-check-required",
+      "promotionAllowed": false,
+      "sources": [
+        {
+          "path": "server/content/galaxy.json",
+          "canonicalStatus": "suspect-cross-check-required",
+          "promotionAllowed": false,
+          "status": "present",
+          "size": 111672,
+          "sha1": "e456c16059fe496af2283a48e620e15bd2f8eac1",
+          "manifestId": null,
+          "manifestStatus": null,
+          "recordCount": 85
+        },
+        {
+          "path": "RE/content/galaxy.json",
+          "canonicalStatus": "suspect-cross-check-required",
+          "promotionAllowed": false,
+          "status": "present",
+          "size": 107344,
+          "sha1": "b1a793165998eb3acc74c40ef640c1810c7df5ec",
+          "manifestId": null,
+          "manifestStatus": null,
+          "recordCount": 85
+        },
+        {
+          "path": "server/content/extracted/model-planets.json",
+          "canonicalStatus": "suspect-cross-check-required",
+          "promotionAllowed": false,
+          "status": "present",
+          "size": 34524,
+          "sha1": "6ede11fc3ca4fd9803fe489ccadc056ea01b7f0a",
+          "manifestId": null,
+          "manifestStatus": null,
+          "recordCount": 107
+        },
+        {
+          "path": "RE/content/extracted/model-planets.json",
+          "canonicalStatus": "suspect-cross-check-required",
+          "promotionAllowed": false,
+          "status": "present",
+          "size": 34524,
+          "sha1": "6ede11fc3ca4fd9803fe489ccadc056ea01b7f0a",
+          "manifestId": null,
+          "manifestStatus": null,
+          "recordCount": 107
+        },
+        {
+          "path": "server/content/names/planets-ko.json",
+          "canonicalStatus": "suspect-cross-check-required",
+          "promotionAllowed": false,
+          "status": "present",
+          "size": 42123,
+          "sha1": "c41cfd213337bf3525f73fe12b34e5429281a00b",
+          "manifestId": null,
+          "manifestStatus": null,
+          "recordCount": 281
+        }
+      ]
+    },
+    {
+      "id": "passableCells",
+      "labelKo": "통행 가능 셀",
+      "reportImmediately": false,
+      "canonicalStatus": "suspect-cross-check-required",
+      "promotionAllowed": false,
+      "sources": [
+        {
+          "path": "server/content/galaxy-passable-cells.json",
+          "canonicalStatus": "suspect-cross-check-required",
+          "promotionAllowed": false,
+          "status": "present",
+          "size": 10076,
+          "sha1": "9287f5eb00e68b49a251339e08ddb7f5c98fecf6",
+          "manifestId": null,
+          "manifestStatus": null,
+          "recordCount": 3628
+        },
+        {
+          "path": "RE/content/galaxy-passable-cells.json",
+          "canonicalStatus": "suspect-cross-check-required",
+          "promotionAllowed": false,
+          "status": "present",
+          "size": 7185,
+          "sha1": "77b281e111bb509a5d5a6a40c6d005cd9c1a0e68",
+          "manifestId": null,
+          "manifestStatus": null,
+          "recordCount": 3627
+        },
+        {
+          "path": "server/content/galaxy-adjacency.json",
+          "canonicalStatus": "suspect-cross-check-required",
+          "promotionAllowed": false,
+          "status": "present",
+          "size": 36347,
+          "sha1": "ad920171bf720007f6ed3a9ff37672088499c718",
+          "manifestId": null,
+          "manifestStatus": null,
+          "recordCount": null
+        },
+        {
+          "path": "RE/content/galaxy-adjacency.json",
+          "canonicalStatus": "suspect-cross-check-required",
+          "promotionAllowed": false,
+          "status": "present",
+          "size": 36347,
+          "sha1": "ad920171bf720007f6ed3a9ff37672088499c718",
+          "manifestId": null,
+          "manifestStatus": null,
+          "recordCount": null
+        }
+      ]
+    },
+    {
+      "id": "generatedCatalogs",
+      "labelKo": "생성 카탈로그",
+      "reportImmediately": false,
+      "canonicalStatus": "suspect-cross-check-required",
+      "promotionAllowed": false,
+      "sources": [
+        {
+          "path": "server/content/generated/logh7-current-content-crosscheck.json",
+          "canonicalStatus": "suspect-cross-check-required",
+          "promotionAllowed": false,
+          "status": "present",
+          "size": 22015,
+          "sha1": "c26167f1ead365da31a973ff9807322b9ac78c4b",
+          "manifestId": "logh7-current-content-crosscheck",
+          "manifestStatus": "blocked-until-cross-source-confirmed",
+          "recordCount": 43
+        },
+        {
+          "path": "server/content/generated/logh7-server-servable-data-family.json",
+          "canonicalStatus": "suspect-cross-check-required",
+          "promotionAllowed": false,
+          "status": "present",
+          "size": 22294,
+          "sha1": "4c0beb949a6bf8e56396792c99c2222e7203cd92",
+          "manifestId": "logh7-server-servable-data-family",
+          "manifestStatus": null,
+          "recordCount": 15
+        },
+        {
+          "path": "server/content/generated/logh7-hidden-data-watchlist.json",
+          "canonicalStatus": "suspect-cross-check-required",
+          "promotionAllowed": false,
+          "status": "present",
+          "size": 10372,
+          "sha1": "928f857ec4d4ec5f5b0ff4e6d1cfcf4480bea623",
+          "manifestId": "logh7-hidden-data-watchlist",
+          "manifestStatus": "reported",
+          "recordCount": null
+        }
+      ]
+    }
+  ],
+  "confirmedNewHiddenData": {
+    "systemPositions": [],
+    "starColors": [],
+    "planetLists": [],
+    "passableCells": []
+  }
+}

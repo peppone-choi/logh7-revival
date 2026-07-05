@@ -1,0 +1,126 @@
+{
+  "_source": "gin7 manual page image .omo/work/manual-pages-101/page024.png (printed footer '23') + verbatim text layer .omo/work/manual-pages-101/uncovered-texts.json key '24'",
+  "_grade": "P1",
+  "_confidence_notes": [
+    "Text layer key '24' carries printed footer page number '23' (text-layer index runs one ahead of printed page).",
+    "Page covers ④ 操艦パネル (flagship energy allocation, 6 channels) and the start of ⑤ システムアイコン (情報アイコン: 7 information windows).",
+    "No numeric values (total energy amount, allocation steps, ranges, recovery rates, speeds) appear on this page; only qualitative rules. None invented.",
+    "WARP: page states withdrawal REQUIRES warp allocation, and MAX allocation enables withdrawal from outside the tactical-map circle (円外から撤退). Whether non-max allocation permits withdrawal from inside the circle is not stated on this page.",
+    "SHIELD: '4方向に対応したシールド回復力' — recovery of shield lost to hits (被弾により減少した分); per-direction split mechanics beyond '4 directions' not detailed here.",
+    "情報ウィンドウ list is verbatim: キャラクター情報/旗艦情報/戦隊情報/部隊情報/惑星要塞情報/国家情報/地形情報 の7種類 (text layer shows 'キャラク/ター情報' split across a line break)."
+  ],
+  "flagshipControlPanel": {
+    "term": "操艦パネル",
+    "ko": "조함 패널",
+    "panelIndexOnPage": "④",
+    "description": "Operating this panel changes the energy allocation to your own flagship (自分の旗艦に対するエネルギーの振り分け).",
+    "totalEnergyRule": {
+      "term": "総エネルギー量は限られています",
+      "ko": "총 에너지량은 한정되어 있어 상황에 따라 배분이 필요",
+      "rule": "Total energy amount is fixed/limited; reallocation among channels is required per situation.",
+      "totalAmountValue": null
+    },
+    "channels": [
+      {
+        "term": "BEAM",
+        "ko": "빔",
+        "effect": "主にレーザー兵器の出力を変更 — mainly changes laser-weapon output.",
+        "raiseAllocation": "攻撃力の増加やエネルギー充填速度の短縮 — increases attack power and shortens energy charge (recharge) time.",
+        "affects": [
+          "laserAttackPower",
+          "energyChargeSpeed"
+        ]
+      },
+      {
+        "term": "GUN",
+        "ko": "건",
+        "effect": "主にガン兵器の出力を変更 — mainly changes gun-weapon output.",
+        "raiseAllocation": "攻撃力を高める — raises attack power.",
+        "affects": [
+          "gunAttackPower"
+        ]
+      },
+      {
+        "term": "SHIELD",
+        "ko": "실드",
+        "effect": "旗艦の4方向に対応したシールド回復力を変更 — changes shield recovery power corresponding to the flagship's 4 directions.",
+        "raiseAllocation": "振り分けた部分は、被弾により減少した分のシールドを回復 — allocated portion recovers shield reduced by taking hits.",
+        "directions": 4,
+        "affects": [
+          "shieldRecovery4Directions"
+        ]
+      },
+      {
+        "term": "ENGINE",
+        "ko": "엔진",
+        "effect": "戦術ゲーム中の移動速度を変更 — changes movement speed during the tactical game.",
+        "affects": [
+          "tacticalMoveSpeed"
+        ]
+      },
+      {
+        "term": "WARP",
+        "ko": "워프",
+        "effect": "戦術ゲームからの撤退に必要 — required for withdrawal (retreat) from the tactical game.",
+        "maxAllocation": "最大値を割り振る事で、戦術ゲームマップの円外から撤退を行う事が出来ます — allocating the maximum value enables withdrawal from outside the tactical-map circle (円外).",
+        "requiredForRetreat": true,
+        "affects": [
+          "retreatCapability"
+        ]
+      },
+      {
+        "term": "SENSOR",
+        "ko": "센서",
+        "effect": "戦術ゲームにおける索敵力が変更 — changes detection (索敵) power in the tactical game.",
+        "raiseAllocation": "より遠くのユニットの発見率が上がります — discovery rate of more distant units rises.",
+        "affects": [
+          "detectionRange",
+          "unitDiscoveryRate"
+        ]
+      }
+    ]
+  },
+  "systemIcons": {
+    "term": "システムアイコン",
+    "ko": "시스템 아이콘",
+    "panelIndexOnPage": "⑤",
+    "description": "ゲームの基本的な操作を行うボタン — buttons for basic game operations.",
+    "informationIcon": {
+      "term": "情報アイコン",
+      "ko": "정보 아이콘",
+      "action": "左クリックで情報ウィンドウを表示 — left click displays an information window.",
+      "informationWindowCount": 7,
+      "informationWindows": [
+        {
+          "term": "キャラクター情報",
+          "ko": "캐릭터 정보"
+        },
+        {
+          "term": "旗艦情報",
+          "ko": "기함 정보"
+        },
+        {
+          "term": "戦隊情報",
+          "ko": "전대 정보"
+        },
+        {
+          "term": "部隊情報",
+          "ko": "부대 정보"
+        },
+        {
+          "term": "惑星要塞情報",
+          "ko": "행성·요새 정보"
+        },
+        {
+          "term": "国家情報",
+          "ko": "국가 정보"
+        },
+        {
+          "term": "地形情報",
+          "ko": "지형 정보"
+        }
+      ]
+    }
+  },
+  "_mining_notes": "비워둔/명시 없음 항목: (1) 총 에너지량의 수치 — 페이지에 '総エネルギー量は限られています'만 있고 값 명시 없음(totalAmountValue=null). (2) 각 채널의 배분 단계/최소·최대 수치, 공격력·충전속도·회복량·이동속도·색적거리의 구체 수치 — 전부 명시 없음. (3) WARP 비최대 배분 시 원(円) 안에서의 철퇴 가능 여부 — 명시 없음(최대 배분=원 밖 철퇴만 명시). (4) SHIELD 4방향의 방향별 개별 배분 방식 상세 — '4方向に対応した'까지만 명시. (5) 시스템 아이콘의 정보 아이콘 외 다른 버튼들 — 이 페이지 범위 밖(다음 페이지). OCR 불확실: 텍스트 레이어에서 'キャラクター情報'가 'キャラク/ター情報'로 줄바꿈 분할되어 있으나 7종 목록·개수(7種類)와 정합하므로 확실. 텍스트 레이어 키 '24' = 인쇄 페이지 번호 23."
+}

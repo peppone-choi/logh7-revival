@@ -1,0 +1,18 @@
+{
+  "name": "example-skirmish",
+  "description": "Phase C 시나리오 포맷 예제 — 커스텀 시작상태를 데이터로 정의하는 법. 캐논 데이터가 아니라 포맷 시연용 소규모 교전. 실 캐논 801-07 시작은 검증된 배치 데이터로 별도 출하 예정.",
+  "clockStartMs": 0,
+  "systems": [
+    { "name": "오딘", "faction": "empire", "planets": [{ "name": "오딘", "orbit": 1 }] },
+    { "name": "하이네센", "faction": "alliance", "planets": [{ "name": "하이네센", "orbit": 1 }] }
+  ],
+  "fleets": [
+    { "id": 1001, "owner": 1, "faction": 1, "commander": 0, "cell": 40, "supply": 100 },
+    { "id": 2001, "owner": 2, "faction": 2, "commander": 0, "cell": 1240, "supply": 100 }
+  ],
+  "ships": [
+    { "id": 110001, "owner": 1, "faction": 1, "shipClass": "battleship", "x": 0, "y": 0, "z": 0 },
+    { "id": 210001, "owner": 2, "faction": 2, "shipClass": "battleship", "x": 1000, "y": 0, "z": 0 }
+  ],
+  "troops": []
+}

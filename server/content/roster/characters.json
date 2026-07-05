@@ -1,0 +1,1887 @@
+{
+ "_source": "manual roster (VII duty-holders) + IV EX known-faction + canon majors; 8 innate abilities (archetype+individual, NOT rank-derived), canon overrides",
+ "_note": "abilities innate, rank-independent; real IV/VI stat extraction in progress (ivex-stats.json) | real IV EX stats injected for mapped principals (ivex-stats.json)",
+ "characters": [
+  {
+   "name_ja": "フリードリヒⅣ世",
+   "name_romaji": "Friedrich IV",
+   "faction": "empire",
+   "rank_ja": "",
+   "kind": "emperor",
+   "post_ja": "皇帝",
+   "source": "manual",
+   "stats": {
+    "tochi": 72,
+    "seiji": 95,
+    "unei": 93,
+    "joho": 92,
+    "shiki": 111,
+    "kido": 101,
+    "kogeki": 105,
+    "bogyo": 81
+   }
+  },
+  {
+   "name_ja": "クラーゼン",
+   "name_romaji": "Klasen",
+   "faction": "empire",
+   "rank_ja": "元帥",
+   "kind": "military",
+   "post_ja": "幕僚総監",
+   "source": "manual",
+   "stats": {
+    "tochi": 90,
+    "seiji": 60,
+    "unei": 60,
+    "joho": 93,
+    "shiki": 55,
+    "kido": 89,
+    "kogeki": 62,
+    "bogyo": 87
+   }
+  },
+  {
+   "name_ja": "リヒテンラーデ",
+   "name_romaji": "Lichtenlade",
+   "faction": "empire",
+   "rank_ja": "",
+   "kind": "politician",
+   "post_ja": "帝国宰相",
+   "source": "manual",
+   "stats": {
+    "tochi": 107,
+    "seiji": 105,
+    "unei": 67,
+    "joho": 116,
+    "shiki": 70,
+    "kido": 87,
+    "kogeki": 40,
+    "bogyo": 48
+   }
+  },
+  {
+   "name_ja": "ゲルラッハ",
+   "name_romaji": "Gerlach",
+   "faction": "empire",
+   "rank_ja": "",
+   "kind": "politician",
+   "post_ja": "財務尚書",
+   "source": "manual",
+   "stats": {
+    "tochi": 73,
+    "seiji": 75,
+    "unei": 91,
+    "joho": 62,
+    "shiki": 64,
+    "kido": 83,
+    "kogeki": 81,
+    "bogyo": 40
+   }
+  },
+  {
+   "name_ja": "レムシャイト",
+   "name_romaji": "Remscheid",
+   "faction": "empire",
+   "rank_ja": "",
+   "kind": "politician",
+   "post_ja": "フェザーン駐在高等弁務官",
+   "source": "manual",
+   "stats": {
+    "tochi": 95,
+    "seiji": 96,
+    "unei": 65,
+    "joho": 80,
+    "shiki": 40,
+    "kido": 41,
+    "kogeki": 40,
+    "bogyo": 85
+   }
+  },
+  {
+   "name_ja": "エーレンベルグ",
+   "name_romaji": "Ehrenberg",
+   "faction": "empire",
+   "rank_ja": "元帥",
+   "kind": "military",
+   "post_ja": "軍務尚書",
+   "source": "manual",
+   "stats": {
+    "tochi": 51,
+    "seiji": 89,
+    "unei": 86,
+    "joho": 65,
+    "shiki": 61,
+    "kido": 85,
+    "kogeki": 99,
+    "bogyo": 60
+   }
+  },
+  {
+   "name_ja": "ハウプト",
+   "name_romaji": "Haupt",
+   "faction": "empire",
+   "rank_ja": "大将",
+   "kind": "military",
+   "post_ja": "軍務省人事局長",
+   "source": "manual",
+   "stats": {
+    "tochi": 73,
+    "seiji": 68,
+    "unei": 64,
+    "joho": 90,
+    "shiki": 88,
+    "kido": 65,
+    "kogeki": 94,
+    "bogyo": 52
+   }
+  },
+  {
+   "name_ja": "シュタインホフ",
+   "name_romaji": "Steinhof",
+   "faction": "empire",
+   "rank_ja": "元帥",
+   "kind": "military",
+   "post_ja": "統帥本部総長",
+   "source": "ivex-real",
+   "stats": {
+    "tochi": 58,
+    "seiji": 93,
+    "joho": 90,
+    "kido": 43,
+    "shiki": 47,
+    "unei": 43,
+    "kogeki": 38,
+    "bogyo": 42
+   },
+   "iv_id": 34
+  },
+  {
+   "name_ja": "アーベントロート",
+   "name_romaji": "Abendroth",
+   "faction": "empire",
+   "rank_ja": "中将",
+   "kind": "military",
+   "post_ja": "統帥本部作戦二課課長",
+   "source": "manual",
+   "stats": {
+    "tochi": 67,
+    "seiji": 76,
+    "unei": 52,
+    "joho": 83,
+    "shiki": 103,
+    "kido": 56,
+    "kogeki": 89,
+    "bogyo": 91
+   }
+  },
+  {
+   "name_ja": "G.ミュッケンベルガー",
+   "name_romaji": "G. Muckenberger",
+   "faction": "empire",
+   "rank_ja": "元帥",
+   "kind": "military",
+   "post_ja": "宇宙艦隊司令長官",
+   "source": "manual",
+   "stats": {
+    "tochi": 104,
+    "seiji": 59,
+    "unei": 84,
+    "joho": 55,
+    "shiki": 79,
+    "kido": 82,
+    "kogeki": 91,
+    "bogyo": 65
+   }
+  },
+  {
+   "name_ja": "グライフス",
+   "name_romaji": "Greifs",
+   "faction": "empire",
+   "rank_ja": "上級大将",
+   "kind": "military",
+   "post_ja": "宇宙艦隊総参謀長",
+   "source": "manual",
+   "stats": {
+    "tochi": 96,
+    "seiji": 88,
+    "unei": 55,
+    "joho": 73,
+    "shiki": 85,
+    "kido": 65,
+    "kogeki": 105,
+    "bogyo": 108
+   }
+  },
+  {
+   "name_ja": "オッペンハイマー",
+   "name_romaji": "Oppenheimer",
+   "faction": "empire",
+   "rank_ja": "大将",
+   "kind": "military",
+   "post_ja": "憲兵総監",
+   "source": "manual",
+   "stats": {
+    "tochi": 60,
+    "seiji": 79,
+    "unei": 99,
+    "joho": 50,
+    "shiki": 62,
+    "kido": 76,
+    "kogeki": 92,
+    "bogyo": 83
+   }
+  },
+  {
+   "name_ja": "オフレッサー",
+   "name_romaji": "Ofresser",
+   "faction": "empire",
+   "rank_ja": "上級大将",
+   "kind": "military",
+   "post_ja": "装甲擲弾兵総監",
+   "source": "ivex-real",
+   "stats": {
+    "tochi": 9,
+    "seiji": 4,
+    "joho": 2,
+    "kido": 8,
+    "shiki": 4,
+    "unei": 18,
+    "kogeki": 100,
+    "bogyo": 8
+   },
+   "iv_id": 11
+  },
+  {
+   "name_ja": "シャフト",
+   "name_romaji": "Schaft",
+   "faction": "empire",
+   "rank_ja": "大将",
+   "kind": "military",
+   "post_ja": "科学技術総監",
+   "source": "manual",
+   "stats": {
+    "tochi": 85,
+    "seiji": 52,
+    "unei": 84,
+    "joho": 94,
+    "shiki": 96,
+    "kido": 88,
+    "kogeki": 72,
+    "bogyo": 75
+   }
+  },
+  {
+   "name_ja": "ローエングラム",
+   "name_romaji": "Lohengramm",
+   "faction": "empire",
+   "rank_ja": "中将",
+   "kind": "military",
+   "post_ja": "第２艦隊",
+   "source": "ivex-real",
+   "stats": {
+    "tochi": 101,
+    "seiji": 32,
+    "joho": 93,
+    "kido": 70,
+    "shiki": 93,
+    "unei": 96,
+    "kogeki": 74,
+    "bogyo": 95
+   },
+   "iv_id": 81
+  },
+  {
+   "name_ja": "メルカッツ",
+   "name_romaji": "Merkatz",
+   "faction": "empire",
+   "rank_ja": "大将",
+   "kind": "military",
+   "post_ja": "第３艦隊",
+   "source": "ivex-real",
+   "stats": {
+    "tochi": 86,
+    "seiji": 33,
+    "joho": 63,
+    "kido": 77,
+    "shiki": 92,
+    "unei": 98,
+    "kogeki": 72,
+    "bogyo": 95
+   },
+   "iv_id": 85
+  },
+  {
+   "name_ja": "シュターデン",
+   "name_romaji": "Staden",
+   "faction": "empire",
+   "rank_ja": "中将",
+   "kind": "military",
+   "post_ja": "第４艦隊",
+   "source": "ivex-real",
+   "stats": {
+    "tochi": 38,
+    "seiji": 86,
+    "joho": 55,
+    "kido": 27,
+    "shiki": 72,
+    "unei": 56,
+    "kogeki": 35,
+    "bogyo": 58
+   },
+   "iv_id": 36
+  },
+  {
+   "name_ja": "フォーゲル",
+   "name_romaji": "Vogel",
+   "faction": "empire",
+   "rank_ja": "中将",
+   "kind": "military",
+   "post_ja": "第５艦隊",
+   "source": "manual",
+   "stats": {
+    "tochi": 54,
+    "seiji": 45,
+    "unei": 86,
+    "joho": 53,
+    "shiki": 66,
+    "kido": 87,
+    "kogeki": 53,
+    "bogyo": 87
+   }
+  },
+  {
+   "name_ja": "ヒルデスハイム",
+   "name_romaji": "Hildesheim",
+   "faction": "empire",
+   "rank_ja": "中将",
+   "kind": "military",
+   "post_ja": "第６艦隊",
+   "source": "manual",
+   "stats": {
+    "tochi": 66,
+    "seiji": 78,
+    "unei": 52,
+    "joho": 81,
+    "shiki": 97,
+    "kido": 87,
+    "kogeki": 53,
+    "bogyo": 82
+   }
+  },
+  {
+   "name_ja": "キルヒアイス",
+   "name_romaji": "Kircheis",
+   "faction": "empire",
+   "rank_ja": "少佐",
+   "kind": "military",
+   "post_ja": "司令官副官",
+   "source": "ivex-real",
+   "stats": {
+    "tochi": 98,
+    "seiji": 57,
+    "joho": 64,
+    "kido": 72,
+    "shiki": 92,
+    "unei": 86,
+    "kogeki": 84,
+    "bogyo": 88
+   },
+   "iv_id": 15
+  },
+  {
+   "name_ja": "ランズベルク",
+   "name_romaji": "Landsberg",
+   "faction": "empire",
+   "rank_ja": "中将",
+   "kind": "military",
+   "post_ja": "第８艦隊",
+   "source": "manual",
+   "stats": {
+    "tochi": 73,
+    "seiji": 50,
+    "unei": 100,
+    "joho": 58,
+    "shiki": 101,
+    "kido": 91,
+    "kogeki": 91,
+    "bogyo": 80
+   }
+  },
+  {
+   "name_ja": "フレーゲル",
+   "name_romaji": "Flegel",
+   "faction": "empire",
+   "rank_ja": "中将",
+   "kind": "military",
+   "post_ja": "第１０艦隊",
+   "source": "ivex-real",
+   "stats": {
+    "tochi": 19,
+    "seiji": 8,
+    "joho": 36,
+    "kido": 20,
+    "shiki": 42,
+    "unei": 23,
+    "kogeki": 35,
+    "bogyo": 39
+   },
+   "iv_id": 73
+  },
+  {
+   "name_ja": "ゼークト",
+   "name_romaji": "Seeckt",
+   "faction": "empire",
+   "rank_ja": "大将",
+   "kind": "military",
+   "post_ja": "第１２艦隊",
+   "source": "ivex-real",
+   "stats": {
+    "tochi": 72,
+    "seiji": 31,
+    "joho": 24,
+    "kido": 61,
+    "shiki": 76,
+    "unei": 79,
+    "kogeki": 48,
+    "bogyo": 75
+   },
+   "iv_id": 44
+  },
+  {
+   "name_ja": "グリューネマン",
+   "name_romaji": "Grunemann",
+   "faction": "empire",
+   "rank_ja": "少将",
+   "kind": "military",
+   "post_ja": "第４巡察隊",
+   "source": "ivex-real",
+   "stats": {
+    "tochi": 70,
+    "seiji": 41,
+    "joho": 31,
+    "kido": 64,
+    "shiki": 60,
+    "unei": 58,
+    "kogeki": 59,
+    "bogyo": 65
+   },
+   "iv_id": 22
+  },
+  {
+   "name_ja": "ディッタースドルフ",
+   "name_romaji": "Dittersdorf",
+   "faction": "empire",
+   "rank_ja": "少将",
+   "kind": "military",
+   "post_ja": "第５巡察隊",
+   "source": "manual",
+   "stats": {
+    "tochi": 68,
+    "seiji": 47,
+    "unei": 46,
+    "joho": 71,
+    "shiki": 101,
+    "kido": 78,
+    "kogeki": 110,
+    "bogyo": 57
+   }
+  },
+  {
+   "name_ja": "ホフマイスター",
+   "name_romaji": "Hofmeister",
+   "faction": "empire",
+   "rank_ja": "少将",
+   "kind": "military",
+   "post_ja": "第２９巡察隊",
+   "source": "manual",
+   "stats": {
+    "tochi": 75,
+    "seiji": 77,
+    "unei": 57,
+    "joho": 67,
+    "shiki": 81,
+    "kido": 59,
+    "kogeki": 91,
+    "bogyo": 58
+   }
+  },
+  {
+   "name_ja": "グルーゼンシュテルン",
+   "name_romaji": "",
+   "faction": "empire",
+   "rank_ja": "少将",
+   "kind": "military",
+   "post_ja": "第４４巡察隊",
+   "source": "manual",
+   "stats": {
+    "tochi": 94,
+    "seiji": 44,
+    "unei": 85,
+    "joho": 45,
+    "shiki": 73,
+    "kido": 107,
+    "kogeki": 101,
+    "bogyo": 57
+   }
+  },
+  {
+   "name_ja": "ミッターマイヤー",
+   "name_romaji": "Mittermeyer",
+   "faction": "empire",
+   "rank_ja": "少将",
+   "kind": "military",
+   "post_ja": "第５３巡察隊",
+   "source": "ivex-real",
+   "stats": {
+    "tochi": 94,
+    "seiji": 36,
+    "joho": 74,
+    "kido": 100,
+    "shiki": 93,
+    "unei": 84,
+    "kogeki": 76,
+    "bogyo": 84
+   },
+   "iv_id": 80
+  },
+  {
+   "name_ja": "ロイエンタール",
+   "name_romaji": "Reuenthal",
+   "faction": "empire",
+   "rank_ja": "少将",
+   "kind": "military",
+   "post_ja": "第５４巡察隊",
+   "source": "ivex-real",
+   "stats": {
+    "tochi": 92,
+    "seiji": 57,
+    "joho": 74,
+    "kido": 73,
+    "shiki": 83,
+    "unei": 91,
+    "kogeki": 78,
+    "bogyo": 91
+   },
+   "iv_id": 98
+  },
+  {
+   "name_ja": "レンネンカンプ",
+   "name_romaji": "Lennenkampf",
+   "faction": "empire",
+   "rank_ja": "少将",
+   "kind": "military",
+   "post_ja": "第５５巡察隊",
+   "source": "ivex-real",
+   "stats": {
+    "tochi": 85,
+    "seiji": 45,
+    "joho": 52,
+    "kido": 62,
+    "shiki": 74,
+    "unei": 84,
+    "kogeki": 72,
+    "bogyo": 85
+   },
+   "iv_id": 97
+  },
+  {
+   "name_ja": "シュトックハウゼン",
+   "name_romaji": "Stockhausen",
+   "faction": "empire",
+   "rank_ja": "上級大将",
+   "kind": "military",
+   "post_ja": "要塞司令官",
+   "source": "manual",
+   "stats": {
+    "tochi": 97,
+    "seiji": 50,
+    "unei": 66,
+    "joho": 58,
+    "shiki": 90,
+    "kido": 61,
+    "kogeki": 98,
+    "bogyo": 72
+   }
+  },
+  {
+   "name_ja": "サンフォード",
+   "name_romaji": "Sanford",
+   "faction": "alliance",
+   "rank_ja": "",
+   "kind": "politician",
+   "post_ja": "議長",
+   "source": "manual",
+   "stats": {
+    "tochi": 91,
+    "seiji": 107,
+    "unei": 111,
+    "joho": 79,
+    "shiki": 77,
+    "kido": 62,
+    "kogeki": 59,
+    "bogyo": 40
+   }
+  },
+  {
+   "name_ja": "トリューニヒト",
+   "name_romaji": "Trunicht",
+   "faction": "alliance",
+   "rank_ja": "",
+   "kind": "politician",
+   "post_ja": "国防委員長",
+   "source": "manual",
+   "stats": {
+    "tochi": 103,
+    "seiji": 75,
+    "unei": 90,
+    "joho": 68,
+    "shiki": 61,
+    "kido": 40,
+    "kogeki": 40,
+    "bogyo": 43
+   }
+  },
+  {
+   "name_ja": "レベロ",
+   "name_romaji": "Lebello",
+   "faction": "alliance",
+   "rank_ja": "",
+   "kind": "politician",
+   "post_ja": "財政委員長",
+   "source": "manual",
+   "stats": {
+    "tochi": 65,
+    "seiji": 97,
+    "unei": 85,
+    "joho": 65,
+    "shiki": 40,
+    "kido": 62,
+    "kogeki": 40,
+    "bogyo": 68
+   }
+  },
+  {
+   "name_ja": "ホワン",
+   "name_romaji": "Huang",
+   "faction": "alliance",
+   "rank_ja": "",
+   "kind": "politician",
+   "post_ja": "人的資源委員長",
+   "source": "manual",
+   "stats": {
+    "tochi": 86,
+    "seiji": 116,
+    "unei": 83,
+    "joho": 103,
+    "shiki": 40,
+    "kido": 90,
+    "kogeki": 61,
+    "bogyo": 66
+   }
+  },
+  {
+   "name_ja": "ウィンザー",
+   "name_romaji": "Winser",
+   "faction": "alliance",
+   "rank_ja": "",
+   "kind": "politician",
+   "post_ja": "情報交通委員長",
+   "source": "manual",
+   "stats": {
+    "tochi": 112,
+    "seiji": 72,
+    "unei": 119,
+    "joho": 116,
+    "shiki": 52,
+    "kido": 40,
+    "kogeki": 83,
+    "bogyo": 56
+   }
+  },
+  {
+   "name_ja": "ヘンスロー",
+   "name_romaji": "Henslow",
+   "faction": "alliance",
+   "rank_ja": "",
+   "kind": "politician",
+   "post_ja": "フェザーン駐在弁務官",
+   "source": "manual",
+   "stats": {
+    "tochi": 93,
+    "seiji": 90,
+    "unei": 84,
+    "joho": 88,
+    "shiki": 59,
+    "kido": 40,
+    "kogeki": 84,
+    "bogyo": 56
+   }
+  },
+  {
+   "name_ja": "シトレ",
+   "name_romaji": "Sithole",
+   "faction": "alliance",
+   "rank_ja": "元帥",
+   "kind": "military",
+   "post_ja": "統合作戦本部長",
+   "source": "ivex-real",
+   "stats": {
+    "tochi": 90,
+    "seiji": 58,
+    "joho": 58,
+    "kido": 65,
+    "shiki": 65,
+    "unei": 88,
+    "kogeki": 57,
+    "bogyo": 75
+   },
+   "iv_id": 123
+  },
+  {
+   "name_ja": "ドーソン",
+   "name_romaji": "Dawson",
+   "faction": "alliance",
+   "rank_ja": "大将",
+   "kind": "military",
+   "post_ja": "統合作戦本部第一次長",
+   "source": "ivex-real",
+   "stats": {
+    "tochi": 60,
+    "seiji": 92,
+    "joho": 74,
+    "kido": 32,
+    "shiki": 30,
+    "unei": 36,
+    "kogeki": 48,
+    "bogyo": 33
+   },
+   "iv_id": 129
+  },
+  {
+   "name_ja": "ロックウェル",
+   "name_romaji": "Rockwell",
+   "faction": "alliance",
+   "rank_ja": "大将",
+   "kind": "military",
+   "post_ja": "後方勤務本部長",
+   "source": "manual",
+   "stats": {
+    "tochi": 73,
+    "seiji": 85,
+    "unei": 101,
+    "joho": 98,
+    "shiki": 85,
+    "kido": 58,
+    "kogeki": 75,
+    "bogyo": 100
+   }
+  },
+  {
+   "name_ja": "グローブナー",
+   "name_romaji": "Grosvenor",
+   "faction": "alliance",
+   "rank_ja": "大将",
+   "kind": "military",
+   "post_ja": "人事部長",
+   "source": "manual",
+   "stats": {
+    "tochi": 85,
+    "seiji": 95,
+    "unei": 55,
+    "joho": 50,
+    "shiki": 62,
+    "kido": 100,
+    "kogeki": 94,
+    "bogyo": 69
+   }
+  },
+  {
+   "name_ja": "ブロンズ",
+   "name_romaji": "Bronze",
+   "faction": "alliance",
+   "rank_ja": "中将",
+   "kind": "military",
+   "post_ja": "情報部長",
+   "source": "manual",
+   "stats": {
+    "tochi": 50,
+    "seiji": 71,
+    "unei": 102,
+    "joho": 70,
+    "shiki": 88,
+    "kido": 103,
+    "kogeki": 69,
+    "bogyo": 71
+   }
+  },
+  {
+   "name_ja": "ロボス",
+   "name_romaji": "Lobos",
+   "faction": "alliance",
+   "rank_ja": "元帥",
+   "kind": "military",
+   "post_ja": "宇宙艦隊司令長官",
+   "source": "ivex-real",
+   "stats": {
+    "tochi": 86,
+    "seiji": 39,
+    "joho": 55,
+    "kido": 68,
+    "shiki": 75,
+    "unei": 82,
+    "kogeki": 54,
+    "bogyo": 79
+   },
+   "iv_id": 164
+  },
+  {
+   "name_ja": "D.グリーンヒル",
+   "name_romaji": "D. Greenhill",
+   "faction": "alliance",
+   "rank_ja": "大将",
+   "kind": "military",
+   "post_ja": "宇宙艦隊総参謀長",
+   "source": "ivex-real",
+   "stats": {
+    "tochi": 81,
+    "seiji": 98,
+    "joho": 85,
+    "kido": 46,
+    "shiki": 48,
+    "unei": 60,
+    "kogeki": 53,
+    "bogyo": 55
+   },
+   "iv_id": 114
+  },
+  {
+   "name_ja": "クブルスリー",
+   "name_romaji": "Kubersly",
+   "faction": "alliance",
+   "rank_ja": "中将",
+   "kind": "military",
+   "post_ja": "第１艦隊",
+   "source": "manual",
+   "stats": {
+    "tochi": 57,
+    "seiji": 62,
+    "unei": 100,
+    "joho": 56,
+    "shiki": 66,
+    "kido": 56,
+    "kogeki": 55,
+    "bogyo": 77
+   }
+  },
+  {
+   "name_ja": "パエッタ",
+   "name_romaji": "Paetta",
+   "faction": "alliance",
+   "rank_ja": "中将",
+   "kind": "military",
+   "post_ja": "第２艦隊",
+   "source": "manual",
+   "stats": {
+    "tochi": 84,
+    "seiji": 74,
+    "unei": 96,
+    "joho": 53,
+    "shiki": 98,
+    "kido": 98,
+    "kogeki": 95,
+    "bogyo": 105
+   }
+  },
+  {
+   "name_ja": "ルフェーブル",
+   "name_romaji": "Lefebvre",
+   "faction": "alliance",
+   "rank_ja": "中将",
+   "kind": "military",
+   "post_ja": "第３艦隊",
+   "source": "manual",
+   "stats": {
+    "tochi": 107,
+    "seiji": 48,
+    "unei": 92,
+    "joho": 61,
+    "shiki": 98,
+    "kido": 69,
+    "kogeki": 95,
+    "bogyo": 101
+   }
+  },
+  {
+   "name_ja": "パストーレ",
+   "name_romaji": "Pastolle",
+   "faction": "alliance",
+   "rank_ja": "中将",
+   "kind": "military",
+   "post_ja": "第４艦隊",
+   "source": "manual",
+   "stats": {
+    "tochi": 94,
+    "seiji": 65,
+    "unei": 58,
+    "joho": 78,
+    "shiki": 66,
+    "kido": 72,
+    "kogeki": 89,
+    "bogyo": 80
+   }
+  },
+  {
+   "name_ja": "タナンチャイ",
+   "name_romaji": "",
+   "faction": "alliance",
+   "rank_ja": "少将",
+   "kind": "military",
+   "post_ja": "第４艦隊",
+   "source": "manual",
+   "stats": {
+    "tochi": 71,
+    "seiji": 97,
+    "unei": 55,
+    "joho": 85,
+    "shiki": 98,
+    "kido": 61,
+    "kogeki": 80,
+    "bogyo": 75
+   }
+  },
+  {
+   "name_ja": "ビュコック",
+   "name_romaji": "Bucock",
+   "faction": "alliance",
+   "rank_ja": "中将",
+   "kind": "military",
+   "post_ja": "第５艦隊",
+   "source": "manual",
+   "stats": {
+    "tochi": 108,
+    "seiji": 82,
+    "unei": 88,
+    "joho": 92,
+    "shiki": 110,
+    "kido": 85,
+    "kogeki": 95,
+    "bogyo": 112
+   }
+  },
+  {
+   "name_ja": "モンシャルマン",
+   "name_romaji": "",
+   "faction": "alliance",
+   "rank_ja": "少将",
+   "kind": "military",
+   "post_ja": "第５艦隊",
+   "source": "manual",
+   "stats": {
+    "tochi": 93,
+    "seiji": 52,
+    "unei": 66,
+    "joho": 52,
+    "shiki": 69,
+    "kido": 65,
+    "kogeki": 55,
+    "bogyo": 90
+   }
+  },
+  {
+   "name_ja": "ムーア",
+   "name_romaji": "Moore",
+   "faction": "alliance",
+   "rank_ja": "中将",
+   "kind": "military",
+   "post_ja": "第６艦隊",
+   "source": "manual",
+   "stats": {
+    "tochi": 77,
+    "seiji": 50,
+    "unei": 85,
+    "joho": 90,
+    "shiki": 82,
+    "kido": 98,
+    "kogeki": 58,
+    "bogyo": 108
+   }
+  },
+  {
+   "name_ja": "ホーウッド",
+   "name_romaji": "Hawood",
+   "faction": "alliance",
+   "rank_ja": "中将",
+   "kind": "military",
+   "post_ja": "第７艦隊",
+   "source": "manual",
+   "stats": {
+    "tochi": 74,
+    "seiji": 96,
+    "unei": 87,
+    "joho": 99,
+    "shiki": 108,
+    "kido": 99,
+    "kogeki": 58,
+    "bogyo": 105
+   }
+  },
+  {
+   "name_ja": "アップルトン",
+   "name_romaji": "Appleton",
+   "faction": "alliance",
+   "rank_ja": "中将",
+   "kind": "military",
+   "post_ja": "第８艦隊",
+   "source": "manual",
+   "stats": {
+    "tochi": 98,
+    "seiji": 46,
+    "unei": 57,
+    "joho": 87,
+    "shiki": 58,
+    "kido": 96,
+    "kogeki": 94,
+    "bogyo": 64
+   }
+  },
+  {
+   "name_ja": "アル・サレム",
+   "name_romaji": "Al-Salem",
+   "faction": "alliance",
+   "rank_ja": "中将",
+   "kind": "military",
+   "post_ja": "第９艦隊",
+   "source": "manual",
+   "stats": {
+    "tochi": 88,
+    "seiji": 41,
+    "unei": 57,
+    "joho": 64,
+    "shiki": 82,
+    "kido": 71,
+    "kogeki": 99,
+    "bogyo": 85
+   }
+  },
+  {
+   "name_ja": "アーメド",
+   "name_romaji": "Ahmed",
+   "faction": "alliance",
+   "rank_ja": "少将",
+   "kind": "military",
+   "post_ja": "第９艦隊",
+   "source": "manual",
+   "stats": {
+    "tochi": 82,
+    "seiji": 93,
+    "unei": 60,
+    "joho": 84,
+    "shiki": 85,
+    "kido": 69,
+    "kogeki": 105,
+    "bogyo": 48
+   }
+  },
+  {
+   "name_ja": "ウランフ",
+   "name_romaji": "Ulanhu",
+   "faction": "alliance",
+   "rank_ja": "中将",
+   "kind": "military",
+   "post_ja": "第１０艦隊",
+   "source": "ivex-real",
+   "stats": {
+    "tochi": 84,
+    "seiji": 39,
+    "joho": 57,
+    "kido": 76,
+    "shiki": 94,
+    "unei": 75,
+    "kogeki": 73,
+    "bogyo": 94
+   },
+   "iv_id": 106
+  },
+  {
+   "name_ja": "モートン",
+   "name_romaji": "Morton",
+   "faction": "alliance",
+   "rank_ja": "少将",
+   "kind": "military",
+   "post_ja": "第１０艦隊",
+   "source": "manual",
+   "stats": {
+    "tochi": 97,
+    "seiji": 85,
+    "unei": 74,
+    "joho": 89,
+    "shiki": 59,
+    "kido": 92,
+    "kogeki": 81,
+    "bogyo": 87
+   }
+  },
+  {
+   "name_ja": "チェン",
+   "name_romaji": "Chen",
+   "faction": "alliance",
+   "rank_ja": "少将",
+   "kind": "military",
+   "post_ja": "第１０艦隊",
+   "source": "manual",
+   "stats": {
+    "tochi": 103,
+    "seiji": 56,
+    "unei": 62,
+    "joho": 86,
+    "shiki": 61,
+    "kido": 69,
+    "kogeki": 83,
+    "bogyo": 101
+   }
+  },
+  {
+   "name_ja": "ホーランド",
+   "name_romaji": "Holland",
+   "faction": "alliance",
+   "rank_ja": "中将",
+   "kind": "military",
+   "post_ja": "第１１艦隊",
+   "source": "manual",
+   "stats": {
+    "tochi": 96,
+    "seiji": 78,
+    "unei": 70,
+    "joho": 101,
+    "shiki": 106,
+    "kido": 61,
+    "kogeki": 95,
+    "bogyo": 82
+   }
+  },
+  {
+   "name_ja": "ボロディン",
+   "name_romaji": "Borodin",
+   "faction": "alliance",
+   "rank_ja": "中将",
+   "kind": "military",
+   "post_ja": "第１２艦隊",
+   "source": "ivex-real",
+   "stats": {
+    "tochi": 82,
+    "seiji": 28,
+    "joho": 58,
+    "kido": 78,
+    "shiki": 91,
+    "unei": 79,
+    "kogeki": 75,
+    "bogyo": 85
+   },
+   "iv_id": 149
+  },
+  {
+   "name_ja": "カールセン",
+   "name_romaji": "Carlsen",
+   "faction": "alliance",
+   "rank_ja": "少将",
+   "kind": "military",
+   "post_ja": "第１１巡察隊",
+   "source": "manual",
+   "stats": {
+    "tochi": 86,
+    "seiji": 96,
+    "unei": 59,
+    "joho": 104,
+    "shiki": 91,
+    "kido": 63,
+    "kogeki": 74,
+    "bogyo": 76
+   }
+  },
+  {
+   "name_ja": "マリネッティ",
+   "name_romaji": "Marinetti",
+   "faction": "alliance",
+   "rank_ja": "准将",
+   "kind": "military",
+   "post_ja": "第１６巡察隊",
+   "source": "ivex-real",
+   "stats": {
+    "tochi": 56,
+    "seiji": 48,
+    "joho": 37,
+    "kido": 73,
+    "shiki": 77,
+    "unei": 73,
+    "kogeki": 56,
+    "bogyo": 78
+   },
+   "iv_id": 151
+  },
+  {
+   "name_ja": "コナリー",
+   "name_romaji": "Connery",
+   "faction": "alliance",
+   "rank_ja": "少将",
+   "kind": "military",
+   "post_ja": "第１６巡察隊",
+   "source": "manual",
+   "stats": {
+    "tochi": 52,
+    "seiji": 55,
+    "unei": 102,
+    "joho": 68,
+    "shiki": 56,
+    "kido": 65,
+    "kogeki": 94,
+    "bogyo": 89
+   }
+  },
+  {
+   "name_ja": "アラルコン",
+   "name_romaji": "Alarcon",
+   "faction": "alliance",
+   "rank_ja": "少将",
+   "kind": "military",
+   "post_ja": "第２１巡察隊",
+   "source": "manual",
+   "stats": {
+    "tochi": 92,
+    "seiji": 67,
+    "unei": 65,
+    "joho": 72,
+    "shiki": 109,
+    "kido": 85,
+    "kogeki": 58,
+    "bogyo": 78
+   }
+  },
+  {
+   "name_ja": "ザーニアル",
+   "name_romaji": "",
+   "faction": "alliance",
+   "rank_ja": "准将",
+   "kind": "military",
+   "post_ja": "第２６巡察隊",
+   "source": "manual",
+   "stats": {
+    "tochi": 101,
+    "seiji": 98,
+    "unei": 64,
+    "joho": 88,
+    "shiki": 66,
+    "kido": 91,
+    "kogeki": 59,
+    "bogyo": 68
+   }
+  },
+  {
+   "name_ja": "ルグランジュ",
+   "name_romaji": "Lagrange",
+   "faction": "alliance",
+   "rank_ja": "少将",
+   "kind": "military",
+   "post_ja": "第３１巡察隊",
+   "source": "manual",
+   "stats": {
+    "tochi": 62,
+    "seiji": 93,
+    "unei": 69,
+    "joho": 69,
+    "shiki": 102,
+    "kido": 93,
+    "kogeki": 75,
+    "bogyo": 81
+   }
+  },
+  {
+   "name_ja": "デッシュ",
+   "name_romaji": "Desch",
+   "faction": "alliance",
+   "rank_ja": "准将",
+   "kind": "military",
+   "post_ja": "第３６巡察隊",
+   "source": "manual",
+   "stats": {
+    "tochi": 106,
+    "seiji": 72,
+    "unei": 73,
+    "joho": 58,
+    "shiki": 89,
+    "kido": 69,
+    "kogeki": 79,
+    "bogyo": 103
+   }
+  },
+  {
+   "name_ja": "マスカーニ",
+   "name_romaji": "Mascagni",
+   "faction": "alliance",
+   "rank_ja": "准将",
+   "kind": "military",
+   "post_ja": "第４６巡察隊",
+   "source": "manual",
+   "stats": {
+    "tochi": 92,
+    "seiji": 85,
+    "unei": 77,
+    "joho": 58,
+    "shiki": 100,
+    "kido": 74,
+    "kogeki": 90,
+    "bogyo": 95
+   }
+  },
+  {
+   "name_ja": "グエン",
+   "name_romaji": "Nguyen",
+   "faction": "alliance",
+   "rank_ja": "准将",
+   "kind": "military",
+   "post_ja": "第５６巡察隊",
+   "source": "manual",
+   "stats": {
+    "tochi": 58,
+    "seiji": 58,
+    "unei": 63,
+    "joho": 70,
+    "shiki": 96,
+    "kido": 85,
+    "kogeki": 102,
+    "bogyo": 78
+   }
+  },
+  {
+   "name_ja": "アイゼナッハ",
+   "name_romaji": "",
+   "faction": "empire",
+   "rank_ja": "",
+   "kind": "military",
+   "post_ja": "",
+   "source": "ivex",
+   "stats": {
+    "tochi": 61,
+    "seiji": 55,
+    "unei": 67,
+    "joho": 71,
+    "shiki": 87,
+    "kido": 104,
+    "kogeki": 74,
+    "bogyo": 64
+   }
+  },
+  {
+   "name_ja": "アッテンボロー",
+   "name_romaji": "Attenborough",
+   "faction": "alliance",
+   "rank_ja": "",
+   "kind": "military",
+   "post_ja": "",
+   "source": "ivex-real",
+   "stats": {
+    "tochi": 72,
+    "seiji": 34,
+    "joho": 64,
+    "kido": 85,
+    "shiki": 89,
+    "unei": 83,
+    "kogeki": 50,
+    "bogyo": 81
+   },
+   "iv_id": 100
+  },
+  {
+   "name_ja": "アンスバッハ",
+   "name_romaji": "Ansbach",
+   "faction": "empire",
+   "rank_ja": "",
+   "kind": "military",
+   "post_ja": "",
+   "source": "ivex-real",
+   "stats": {
+    "tochi": 58,
+    "seiji": 92,
+    "joho": 89,
+    "kido": 60,
+    "shiki": 63,
+    "unei": 58,
+    "kogeki": 45,
+    "bogyo": 36
+   },
+   "iv_id": 4
+  },
+  {
+   "name_ja": "オーベルシュタイン",
+   "name_romaji": "Oberstein",
+   "faction": "empire",
+   "rank_ja": "",
+   "kind": "military",
+   "post_ja": "",
+   "source": "ivex-real",
+   "stats": {
+    "tochi": 52,
+    "seiji": 99,
+    "joho": 98,
+    "kido": 18,
+    "shiki": 20,
+    "unei": 21,
+    "kogeki": 20,
+    "bogyo": 29
+   },
+   "iv_id": 10
+  },
+  {
+   "name_ja": "キャゼルヌ",
+   "name_romaji": "Caselnes",
+   "faction": "alliance",
+   "rank_ja": "",
+   "kind": "military",
+   "post_ja": "",
+   "source": "ivex",
+   "stats": {
+    "tochi": 89,
+    "seiji": 46,
+    "unei": 54,
+    "joho": 50,
+    "shiki": 108,
+    "kido": 89,
+    "kogeki": 72,
+    "bogyo": 90
+   }
+  },
+  {
+   "name_ja": "グリーンヒル",
+   "name_romaji": "Greenhill",
+   "faction": "alliance",
+   "rank_ja": "",
+   "kind": "military",
+   "post_ja": "",
+   "source": "ivex-real",
+   "stats": {
+    "tochi": 81,
+    "seiji": 98,
+    "joho": 85,
+    "kido": 46,
+    "shiki": 48,
+    "unei": 60,
+    "kogeki": 53,
+    "bogyo": 55
+   },
+   "iv_id": 114
+  },
+  {
+   "name_ja": "ケスラー",
+   "name_romaji": "Kessler",
+   "faction": "empire",
+   "rank_ja": "",
+   "kind": "military",
+   "post_ja": "",
+   "source": "ivex-real",
+   "stats": {
+    "tochi": 93,
+    "seiji": 75,
+    "joho": 86,
+    "kido": 52,
+    "shiki": 73,
+    "unei": 62,
+    "kogeki": 69,
+    "bogyo": 58
+   },
+   "iv_id": 28
+  },
+  {
+   "name_ja": "ケンプ",
+   "name_romaji": "Kempff",
+   "faction": "empire",
+   "rank_ja": "",
+   "kind": "military",
+   "post_ja": "",
+   "source": "ivex-real",
+   "stats": {
+    "tochi": 90,
+    "seiji": 20,
+    "joho": 36,
+    "kido": 85,
+    "shiki": 96,
+    "unei": 80,
+    "kogeki": 81,
+    "bogyo": 100
+   },
+   "iv_id": 29
+  },
+  {
+   "name_ja": "コーネフ",
+   "name_romaji": "",
+   "faction": "alliance",
+   "rank_ja": "",
+   "kind": "military",
+   "post_ja": "",
+   "source": "ivex-real",
+   "stats": {
+    "tochi": 59,
+    "seiji": 91,
+    "joho": 86,
+    "kido": 38,
+    "shiki": 29,
+    "unei": 35,
+    "kogeki": 40,
+    "bogyo": 34
+   },
+   "iv_id": 118
+  },
+  {
+   "name_ja": "シェーンコップ",
+   "name_romaji": "Schonkopp",
+   "faction": "alliance",
+   "rank_ja": "",
+   "kind": "military",
+   "post_ja": "",
+   "source": "ivex-real",
+   "stats": {
+    "tochi": 20,
+    "seiji": 32,
+    "joho": 18,
+    "kido": 34,
+    "shiki": 27,
+    "unei": 33,
+    "kogeki": 100,
+    "bogyo": 20
+   },
+   "iv_id": 122
+  },
+  {
+   "name_ja": "シュタインメッツ",
+   "name_romaji": "Steinmetz",
+   "faction": "empire",
+   "rank_ja": "",
+   "kind": "military",
+   "post_ja": "",
+   "source": "ivex-real",
+   "stats": {
+    "tochi": 71,
+    "seiji": 90,
+    "joho": 95,
+    "kido": 66,
+    "shiki": 80,
+    "unei": 82,
+    "kogeki": 45,
+    "bogyo": 65
+   },
+   "iv_id": 35
+  },
+  {
+   "name_ja": "チュン",
+   "name_romaji": "",
+   "faction": "alliance",
+   "rank_ja": "",
+   "kind": "military",
+   "post_ja": "",
+   "source": "ivex",
+   "stats": {
+    "tochi": 94,
+    "seiji": 98,
+    "unei": 82,
+    "joho": 64,
+    "shiki": 87,
+    "kido": 91,
+    "kogeki": 58,
+    "bogyo": 102
+   }
+  },
+  {
+   "name_ja": "パトリチェフ",
+   "name_romaji": "",
+   "faction": "alliance",
+   "rank_ja": "",
+   "kind": "military",
+   "post_ja": "",
+   "source": "ivex",
+   "stats": {
+    "tochi": 67,
+    "seiji": 76,
+    "unei": 67,
+    "joho": 48,
+    "shiki": 103,
+    "kido": 77,
+    "kogeki": 72,
+    "bogyo": 101
+   }
+  },
+  {
+   "name_ja": "ビッテンフェルト",
+   "name_romaji": "Bittenfeld",
+   "faction": "empire",
+   "rank_ja": "",
+   "kind": "military",
+   "post_ja": "",
+   "source": "ivex-real",
+   "stats": {
+    "tochi": 75,
+    "seiji": 22,
+    "joho": 38,
+    "kido": 80,
+    "shiki": 100,
+    "unei": 55,
+    "kogeki": 75,
+    "bogyo": 88
+   },
+   "iv_id": 62
+  },
+  {
+   "name_ja": "ファーレンハイト",
+   "name_romaji": "Fahrenheit",
+   "faction": "empire",
+   "rank_ja": "",
+   "kind": "military",
+   "post_ja": "",
+   "source": "ivex-real",
+   "stats": {
+    "tochi": 80,
+    "seiji": 27,
+    "joho": 37,
+    "kido": 86,
+    "shiki": 94,
+    "unei": 67,
+    "kogeki": 75,
+    "bogyo": 91
+   },
+   "iv_id": 65
+  },
+  {
+   "name_ja": "フィッシャー",
+   "name_romaji": "",
+   "faction": "alliance",
+   "rank_ja": "",
+   "kind": "military",
+   "post_ja": "",
+   "source": "ivex-real",
+   "stats": {
+    "tochi": 56,
+    "seiji": 41,
+    "joho": 45,
+    "kido": 100,
+    "shiki": 72,
+    "unei": 59,
+    "kogeki": 55,
+    "bogyo": 72
+   },
+   "iv_id": 139
+  },
+  {
+   "name_ja": "フォーク",
+   "name_romaji": "",
+   "faction": "alliance",
+   "rank_ja": "",
+   "kind": "military",
+   "post_ja": "",
+   "source": "ivex",
+   "stats": {
+    "tochi": 96,
+    "seiji": 73,
+    "unei": 98,
+    "joho": 46,
+    "shiki": 107,
+    "kido": 81,
+    "kogeki": 81,
+    "bogyo": 53
+   }
+  },
+  {
+   "name_ja": "ブルームハルト",
+   "name_romaji": "",
+   "faction": "alliance",
+   "rank_ja": "",
+   "kind": "military",
+   "post_ja": "",
+   "source": "ivex",
+   "stats": {
+    "tochi": 89,
+    "seiji": 92,
+    "unei": 52,
+    "joho": 72,
+    "shiki": 71,
+    "kido": 103,
+    "kogeki": 54,
+    "bogyo": 65
+   }
+  },
+  {
+   "name_ja": "ポプラン",
+   "name_romaji": "Poplan",
+   "faction": "alliance",
+   "rank_ja": "",
+   "kind": "military",
+   "post_ja": "",
+   "source": "ivex-real",
+   "stats": {
+    "tochi": 8,
+    "seiji": 5,
+    "joho": 12,
+    "kido": 39,
+    "shiki": 28,
+    "unei": 19,
+    "kogeki": 52,
+    "bogyo": 100
+   },
+   "iv_id": 148
+  },
+  {
+   "name_ja": "ミュッケンベルガー",
+   "name_romaji": "",
+   "faction": "empire",
+   "rank_ja": "",
+   "kind": "military",
+   "post_ja": "",
+   "source": "ivex",
+   "stats": {
+    "tochi": 52,
+    "seiji": 80,
+    "unei": 71,
+    "joho": 60,
+    "shiki": 103,
+    "kido": 67,
+    "kogeki": 80,
+    "bogyo": 74
+   }
+  },
+  {
+   "name_ja": "ミュラー",
+   "name_romaji": "Muller",
+   "faction": "empire",
+   "rank_ja": "",
+   "kind": "military",
+   "post_ja": "",
+   "source": "ivex-real",
+   "stats": {
+    "tochi": 82,
+    "seiji": 25,
+    "joho": 54,
+    "kido": 68,
+    "shiki": 71,
+    "unei": 101,
+    "kogeki": 81,
+    "bogyo": 82
+   },
+   "iv_id": 83
+  },
+  {
+   "name_ja": "ムライ",
+   "name_romaji": "Murai",
+   "faction": "alliance",
+   "rank_ja": "",
+   "kind": "military",
+   "post_ja": "",
+   "source": "ivex-real",
+   "stats": {
+    "tochi": 58,
+    "seiji": 96,
+    "joho": 88,
+    "kido": 45,
+    "shiki": 40,
+    "unei": 72,
+    "kogeki": 48,
+    "bogyo": 45
+   },
+   "iv_id": 154
+  },
+  {
+   "name_ja": "メックリンガー",
+   "name_romaji": "Mecklinger",
+   "faction": "empire",
+   "rank_ja": "",
+   "kind": "military",
+   "post_ja": "",
+   "source": "ivex-real",
+   "stats": {
+    "tochi": 64,
+    "seiji": 96,
+    "joho": 92,
+    "kido": 61,
+    "shiki": 72,
+    "unei": 60,
+    "kogeki": 40,
+    "bogyo": 51
+   },
+   "iv_id": 84
+  },
+  {
+   "name_ja": "ルッツ",
+   "name_romaji": "Lutz",
+   "faction": "empire",
+   "rank_ja": "",
+   "kind": "military",
+   "post_ja": "",
+   "source": "ivex-real",
+   "stats": {
+    "tochi": 81,
+    "seiji": 23,
+    "joho": 49,
+    "kido": 86,
+    "shiki": 89,
+    "unei": 85,
+    "kogeki": 85,
+    "bogyo": 92
+   },
+   "iv_id": 92
+  },
+  {
+   "name_ja": "ワーレン",
+   "name_romaji": "Wahlen",
+   "faction": "empire",
+   "rank_ja": "",
+   "kind": "military",
+   "post_ja": "",
+   "source": "ivex-real",
+   "stats": {
+    "tochi": 84,
+    "seiji": 30,
+    "joho": 64,
+    "kido": 82,
+    "shiki": 87,
+    "unei": 89,
+    "kogeki": 80,
+    "bogyo": 90
+   },
+   "iv_id": 99
+  },
+  {
+   "name_ja": "ミューゼル",
+   "name_romaji": "von Musel",
+   "faction": "empire",
+   "rank_ja": "",
+   "kind": "military",
+   "post_ja": "",
+   "source": "canon",
+   "stats": {
+    "tochi": 120,
+    "seiji": 85,
+    "unei": 95,
+    "joho": 92,
+    "shiki": 120,
+    "kido": 110,
+    "kogeki": 118,
+    "bogyo": 105
+   }
+  },
+  {
+   "name_ja": "ヤン",
+   "name_romaji": "Yang Wen-li",
+   "faction": "alliance",
+   "rank_ja": "",
+   "kind": "military",
+   "post_ja": "",
+   "source": "ivex-real",
+   "stats": {
+    "tochi": 100,
+    "seiji": 17,
+    "joho": 83,
+    "kido": 63,
+    "shiki": 97,
+    "unei": 100,
+    "kogeki": 37,
+    "bogyo": 74
+   },
+   "iv_id": 156
+  }
+ ]
+}

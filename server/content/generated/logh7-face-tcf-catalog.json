@@ -1,0 +1,262 @@
+{
+  "id": "logh7-face-tcf-catalog",
+  "sourceRoot": ".omo/work/logh7-installed/data/image/Face",
+  "status": "present",
+  "archiveCount": 7,
+  "archives": [
+    {
+      "path": "gaf.tcf",
+      "name": "gaf.tcf",
+      "group": "G-group-player",
+      "size": 55508,
+      "sha1": "86ba9ca305f4358cf59cf7f15d94c78ea078ba2e",
+      "magic": "badacabe",
+      "headerHex": "badacabeb6debbc0b0dd90ea9770b9de8145",
+      "magicOk": true
+    },
+    {
+      "path": "gam.tcf",
+      "name": "gam.tcf",
+      "group": "G-group-player",
+      "size": 277340,
+      "sha1": "de00dd03321d230f4c039ee9302d0ebdf5e12ba5",
+      "magic": "badacabe",
+      "headerHex": "badacabeb6debbc0b0dd90ea9770b9de8145",
+      "magicOk": true
+    },
+    {
+      "path": "gef.tcf",
+      "name": "gef.tcf",
+      "group": "G-group-player",
+      "size": 332638,
+      "sha1": "3896d64dc36e855ff361075397a9e9a52a9b9a4c",
+      "magic": "badacabe",
+      "headerHex": "badacabeb6debbc0b0dd90ea9770b9de8145",
+      "magicOk": true
+    },
+    {
+      "path": "gem.tcf",
+      "name": "gem.tcf",
+      "group": "G-group-player",
+      "size": 1663390,
+      "sha1": "a764656502eb9b27748d436bbf0ef9e294c81d59",
+      "magic": "badacabe",
+      "headerHex": "badacabeb6debbc0b0dd90ea9770b9de8145",
+      "magicOk": true
+    },
+    {
+      "path": "o.tcf",
+      "name": "o.tcf",
+      "group": "O-group-canon",
+      "size": 154100,
+      "sha1": "2beda86171b7efa69ae31996233f5b39a714d937",
+      "magic": "badacabe",
+      "headerHex": "badacabeb6debbc0b0dd90ea9770b9de8145",
+      "magicOk": true
+    },
+    {
+      "path": "oam.tcf",
+      "name": "oam.tcf",
+      "group": "O-group-canon",
+      "size": 665546,
+      "sha1": "534af45aedcbf2a741adf0d11663b5cd732e8a32",
+      "magic": "badacabe",
+      "headerHex": "badacabeb6debbc0b0dd90ea9770b9de8145",
+      "magicOk": true
+    },
+    {
+      "path": "oem.tcf",
+      "name": "oem.tcf",
+      "group": "O-group-canon",
+      "size": 973246,
+      "sha1": "9d38c7a793060cd016a6273fb40c9fa495aabb2a",
+      "magic": "badacabe",
+      "headerHex": "badacabeb6debbc0b0dd90ea9770b9de8145",
+      "magicOk": true
+    }
+  ],
+  "archiveGroups": {
+    "G-group-player": 4,
+    "O-group-canon": 3
+  },
+  "hed": {
+    "path": "tcf.hed",
+    "size": 10840,
+    "sha1": "ba615901594f1a25cfb4088574171cd7a02bac8e",
+    "slotCount": 1355,
+    "usedSlotCount": 669,
+    "zeroSlotCount": 686,
+    "firstUsedSlots": [
+      {
+        "index": 1,
+        "offset": 50,
+        "size": 6162
+      },
+      {
+        "index": 2,
+        "offset": 6212,
+        "size": 6162
+      },
+      {
+        "index": 3,
+        "offset": 12374,
+        "size": 6162
+      },
+      {
+        "index": 4,
+        "offset": 18536,
+        "size": 6162
+      },
+      {
+        "index": 5,
+        "offset": 24698,
+        "size": 6162
+      },
+      {
+        "index": 6,
+        "offset": 30860,
+        "size": 6162
+      },
+      {
+        "index": 7,
+        "offset": 37022,
+        "size": 6082
+      },
+      {
+        "index": 8,
+        "offset": 43104,
+        "size": 6162
+      },
+      {
+        "index": 9,
+        "offset": 49266,
+        "size": 6162
+      },
+      {
+        "index": 10,
+        "offset": 55428,
+        "size": 6162
+      },
+      {
+        "index": 11,
+        "offset": 61590,
+        "size": 6162
+      },
+      {
+        "index": 12,
+        "offset": 67752,
+        "size": 6162
+      }
+    ],
+    "sizeHistogram": {
+      "6002": 3,
+      "6082": 4,
+      "6162": 536,
+      "6212": 4,
+      "24698": 4,
+      "43184": 4,
+      "61510": 1,
+      "61670": 2,
+      "79996": 1,
+      "80156": 2,
+      "98482": 1,
+      "98642": 2,
+      "116968": 1,
+      "117128": 2,
+      "135454": 1,
+      "135614": 2,
+      "153940": 1,
+      "154100": 2,
+      "172426": 1,
+      "172586": 2,
+      "190912": 1,
+      "191072": 2,
+      "209398": 1,
+      "209558": 2,
+      "227884": 1,
+      "228044": 2,
+      "246370": 1,
+      "246530": 2,
+      "264856": 1,
+      "265016": 2,
+      "283342": 1,
+      "283502": 1,
+      "301828": 1,
+      "301988": 1,
+      "320314": 1,
+      "320474": 1,
+      "338960": 1,
+      "357446": 1,
+      "375932": 1,
+      "394338": 1,
+      "412504": 1,
+      "430990": 1,
+      "449476": 1,
+      "467962": 1,
+      "486448": 1,
+      "504934": 1,
+      "523420": 1,
+      "541906": 1,
+      "560392": 1,
+      "578878": 1,
+      "597364": 1,
+      "615850": 1,
+      "634336": 1,
+      "652822": 1,
+      "671308": 1,
+      "689794": 1,
+      "708280": 1,
+      "726766": 1,
+      "745252": 1,
+      "763738": 1,
+      "782224": 1,
+      "800710": 1,
+      "819196": 1,
+      "837682": 1,
+      "856168": 1,
+      "874654": 1,
+      "893140": 1,
+      "911626": 1,
+      "930112": 1,
+      "948598": 1,
+      "967084": 1,
+      "985570": 1,
+      "1004056": 1,
+      "1022542": 1,
+      "1041028": 1,
+      "1059514": 1,
+      "1078000": 1,
+      "1096486": 1,
+      "1114972": 1,
+      "1133458": 1,
+      "1151944": 1,
+      "1170430": 1,
+      "1188916": 1,
+      "1207402": 1,
+      "1225888": 1,
+      "1244374": 1,
+      "1262860": 1,
+      "1281346": 1,
+      "1299832": 1,
+      "1318318": 1,
+      "1336804": 1,
+      "1355290": 1,
+      "1373776": 1,
+      "1392262": 1,
+      "1410748": 1,
+      "1429234": 1,
+      "1447720": 1,
+      "1466206": 1,
+      "1484692": 1,
+      "1503178": 1,
+      "1521664": 1,
+      "1540150": 1,
+      "1558636": 1,
+      "1577122": 1,
+      "1595608": 1,
+      "1614094": 1,
+      "1632580": 1,
+      "1651066": 1
+    }
+  }
+}

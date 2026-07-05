@@ -1,0 +1,378 @@
+{
+  "id": "logh7-rank-promotion-catalog",
+  "source": {
+    "manualPath": "server/content/manual/ranks-promotion.json",
+    "source": "gin7 manual pp.33-37,46 via logh7-manual-canon.md §5 (PDF-verified pp.33/34/35 = PDF idx 33/34/35)",
+    "evidenceGrade": "P1",
+    "confidenceNotes": [
+      "Mechanics, the five ladder-ordering laws, personnel-authority tiers, promotion/demotion rules, and the two point systems are all verbatim from the manual and PDF-verified against gin7manual.pdf page-index 33/34/35.",
+      "Headcount caps (5.4) are from the manual digest table (p35); the cap numbers themselves were NOT re-read off the PDF table cells (the p35 PDF idx page rendered the authority table but not the cap table cells), so the six cap counts carry _uncertain on the count value only — the rank names are P1.",
+      "Full 14-rank ladder: the manual digest only names 元帥/上級大将/大将/中将/少将/准将 + '大佐以下'. The rank strings 大佐..曹長 are P1 shipped (org-posts.json 別表 min/max_rank_ja). The lowest enlisted ranks (軍曹/兵長 etc.) below 曹長 are NOT attested in the manual digest and are marked _uncertain; the ladder here lists the 13 manual-attested rank names. The '14 階級' count from the task spec is treated as approximate.",
+      "Fame-point COST of selecting an original character: manual states it is consumed (消費する, p34) but gives NO numeric amount — cost value marked _uncertain/null.",
+      "Flagship-change (5.7) is manual-stated as a provisional spec.",
+      "Alliance does NOT use 上級大将 (rank absent on alliance side per caps table).",
+      "Complements imperial-titles.json (peerage/作位) and org-posts.json (post capacity & min/max rank); does NOT duplicate them — this file holds the RANK ladder, caps, point systems, and promotion mechanics."
+    ],
+    "inferencePolicy": "normalize explicit manual rank ladder and headcount caps; preserve promotion/fame uncertainty"
+  },
+  "rankCount": 13,
+  "ranks": [
+    {
+      "id": "marshal",
+      "sourceIndex": 0,
+      "tier": 1,
+      "names": {
+        "ja": "元帥",
+        "en": "Marshal",
+        "ko": "원수"
+      },
+      "empireOnly": false,
+      "autoPromoteTier": false,
+      "factionAvailability": {
+        "empire": true,
+        "alliance": true
+      },
+      "headcountCapByFaction": {
+        "empire": 5,
+        "alliance": 5
+      },
+      "capSource": "rank-specific",
+      "note": null
+    },
+    {
+      "id": "senior-admiral",
+      "sourceIndex": 1,
+      "tier": 2,
+      "names": {
+        "ja": "上級大将",
+        "en": "Senior Admiral",
+        "ko": "상급대장"
+      },
+      "empireOnly": true,
+      "autoPromoteTier": false,
+      "factionAvailability": {
+        "empire": true,
+        "alliance": false
+      },
+      "headcountCapByFaction": {
+        "empire": 5,
+        "alliance": null
+      },
+      "capSource": "rank-specific",
+      "note": "Alliance does not use this rank."
+    },
+    {
+      "id": "admiral",
+      "sourceIndex": 2,
+      "tier": 3,
+      "names": {
+        "ja": "大将",
+        "en": "Admiral",
+        "ko": "대장"
+      },
+      "empireOnly": false,
+      "autoPromoteTier": false,
+      "factionAvailability": {
+        "empire": true,
+        "alliance": true
+      },
+      "headcountCapByFaction": {
+        "empire": 10,
+        "alliance": 10
+      },
+      "capSource": "rank-specific",
+      "note": null
+    },
+    {
+      "id": "vice-admiral",
+      "sourceIndex": 3,
+      "tier": 4,
+      "names": {
+        "ja": "中将",
+        "en": "Vice Admiral",
+        "ko": "중장"
+      },
+      "empireOnly": false,
+      "autoPromoteTier": false,
+      "factionAvailability": {
+        "empire": true,
+        "alliance": true
+      },
+      "headcountCapByFaction": {
+        "empire": 20,
+        "alliance": 20
+      },
+      "capSource": "rank-specific",
+      "note": null
+    },
+    {
+      "id": "rear-admiral",
+      "sourceIndex": 4,
+      "tier": 5,
+      "names": {
+        "ja": "少将",
+        "en": "Rear Admiral",
+        "ko": "소장"
+      },
+      "empireOnly": false,
+      "autoPromoteTier": false,
+      "factionAvailability": {
+        "empire": true,
+        "alliance": true
+      },
+      "headcountCapByFaction": {
+        "empire": 40,
+        "alliance": 40
+      },
+      "capSource": "rank-specific",
+      "note": null
+    },
+    {
+      "id": "brigadier",
+      "sourceIndex": 5,
+      "tier": 6,
+      "names": {
+        "ja": "准将",
+        "en": "Brigadier",
+        "ko": "준장"
+      },
+      "empireOnly": false,
+      "autoPromoteTier": false,
+      "factionAvailability": {
+        "empire": true,
+        "alliance": true
+      },
+      "headcountCapByFaction": {
+        "empire": 80,
+        "alliance": 80
+      },
+      "capSource": "rank-specific",
+      "note": null
+    },
+    {
+      "id": "colonel",
+      "sourceIndex": 6,
+      "tier": 7,
+      "names": {
+        "ja": "大佐",
+        "en": "Colonel",
+        "ko": "대령"
+      },
+      "empireOnly": false,
+      "autoPromoteTier": true,
+      "factionAvailability": {
+        "empire": true,
+        "alliance": true
+      },
+      "headcountCapByFaction": {
+        "empire": "unlimited",
+        "alliance": "unlimited"
+      },
+      "capSource": "colonel-and-below",
+      "note": null
+    },
+    {
+      "id": "lt-colonel",
+      "sourceIndex": 7,
+      "tier": 8,
+      "names": {
+        "ja": "中佐",
+        "en": "Lt. Colonel",
+        "ko": "중령"
+      },
+      "empireOnly": false,
+      "autoPromoteTier": true,
+      "factionAvailability": {
+        "empire": true,
+        "alliance": true
+      },
+      "headcountCapByFaction": {
+        "empire": "unlimited",
+        "alliance": "unlimited"
+      },
+      "capSource": "colonel-and-below",
+      "note": null
+    },
+    {
+      "id": "major",
+      "sourceIndex": 8,
+      "tier": 9,
+      "names": {
+        "ja": "少佐",
+        "en": "Major",
+        "ko": "소령"
+      },
+      "empireOnly": false,
+      "autoPromoteTier": true,
+      "factionAvailability": {
+        "empire": true,
+        "alliance": true
+      },
+      "headcountCapByFaction": {
+        "empire": "unlimited",
+        "alliance": "unlimited"
+      },
+      "capSource": "colonel-and-below",
+      "note": null
+    },
+    {
+      "id": "captain",
+      "sourceIndex": 9,
+      "tier": 10,
+      "names": {
+        "ja": "大尉",
+        "en": "Captain",
+        "ko": "대위"
+      },
+      "empireOnly": false,
+      "autoPromoteTier": true,
+      "factionAvailability": {
+        "empire": true,
+        "alliance": true
+      },
+      "headcountCapByFaction": {
+        "empire": "unlimited",
+        "alliance": "unlimited"
+      },
+      "capSource": "colonel-and-below",
+      "note": null
+    },
+    {
+      "id": "1st-lieutenant",
+      "sourceIndex": 10,
+      "tier": 11,
+      "names": {
+        "ja": "中尉",
+        "en": "1st Lieutenant",
+        "ko": "중위"
+      },
+      "empireOnly": false,
+      "autoPromoteTier": true,
+      "factionAvailability": {
+        "empire": true,
+        "alliance": true
+      },
+      "headcountCapByFaction": {
+        "empire": "unlimited",
+        "alliance": "unlimited"
+      },
+      "capSource": "colonel-and-below",
+      "note": null
+    },
+    {
+      "id": "2nd-lieutenant",
+      "sourceIndex": 11,
+      "tier": 12,
+      "names": {
+        "ja": "少尉",
+        "en": "2nd Lieutenant",
+        "ko": "소위"
+      },
+      "empireOnly": false,
+      "autoPromoteTier": true,
+      "factionAvailability": {
+        "empire": true,
+        "alliance": true
+      },
+      "headcountCapByFaction": {
+        "empire": "unlimited",
+        "alliance": "unlimited"
+      },
+      "capSource": "colonel-and-below",
+      "note": null
+    },
+    {
+      "id": "sergeant-major",
+      "sourceIndex": 12,
+      "tier": 13,
+      "names": {
+        "ja": "曹長",
+        "en": "Sergeant Major",
+        "ko": "상사"
+      },
+      "empireOnly": false,
+      "autoPromoteTier": true,
+      "factionAvailability": {
+        "empire": true,
+        "alliance": true
+      },
+      "headcountCapByFaction": {
+        "empire": "unlimited",
+        "alliance": "unlimited"
+      },
+      "capSource": "colonel-and-below",
+      "note": "Lowest manual-attested rank (org-posts 士官学校教官 min_rank)."
+    }
+  ],
+  "personnelAuthority": {
+    "selfRankChange": "A character may request a change to their own rank via 提案 (proposal) — promotion/demotion is itself a personnel command.",
+    "tiers": [
+      {
+        "sourceIndex": 0,
+        "rankBandJa": "元帥",
+        "empireAuthorityJa": "皇帝",
+        "empireAuthorityEn": "Emperor",
+        "allianceAuthorityJa": "国防委員長",
+        "allianceAuthorityEn": "National Defense Committee Chair",
+        "uncertain": true,
+        "note": "Alliance 元帥-tier authority holder is extraction-uncertain in the digest."
+      },
+      {
+        "sourceIndex": 1,
+        "rankBandJa": "上級大将～准将",
+        "empireAuthorityJa": "軍務尚書",
+        "empireAuthorityEn": "Minister of Military Affairs",
+        "allianceAuthorityJa": "国防委員長",
+        "allianceAuthorityEn": "National Defense Committee Chair",
+        "uncertain": false,
+        "note": null
+      },
+      {
+        "sourceIndex": 2,
+        "rankBandJa": "大佐以下",
+        "empireAuthorityJa": "軍務省人事局長",
+        "empireAuthorityEn": "Military Affairs Ministry Personnel Bureau Director",
+        "allianceAuthorityJa": "国防委員会人事局長",
+        "allianceAuthorityEn": "National Defense Committee Personnel Bureau Director",
+        "uncertain": false,
+        "note": null
+      }
+    ]
+  },
+  "manualRules": {
+    "promotionEffects": [
+      "Character is inserted at the BOTTOM (最下位) of the next-rank-up ladder.",
+      "功績 (merit) automatically resets to 0.",
+      "Loses ALL 職務権限カード (post/authority cards) EXCEPT 個人 (personal) / 艦長 (captain) / 封土 (fief)."
+    ],
+    "demotionEffects": [
+      "Character is inserted at the BOTTOM (最下位) of the next-rank-down ladder.",
+      "功績 (merit) automatically set to 100.",
+      "Loses ALL 職務権限カード EXCEPT 個人 / 艦長 / 封土."
+    ],
+    "autoPromotionMonthly": {
+      "_desc": "Real-time monthly auto-promotion (大佐以下 only), p34.",
+      "scope": "大佐以下 (Colonel and below)",
+      "trigger": "1st day of each REAL-WORLD month",
+      "rule": "The #1-ranked character on each affected rank ladder is automatically promoted (no command input required)."
+    },
+    "famePointCost": null,
+    "famePointCostUnresolved": true,
+    "flagshipChangeUncertain": true,
+    "appointmentAuthorityRules": [
+      "Authority flows TOP-DOWN through the post hierarchy; a higher post holds both 任命 (appoint) and 罷免 (dismiss) over lower posts.",
+      "Every post except the apex is dismissable — even a post held by an original character.",
+      "Appointment validation: the target's rank must be WITHIN the post's allowed rank range (org-posts min_rank_ja..max_rank_ja) AND STRICTLY LOWER than the appointer's own rank."
+    ]
+  },
+  "summary": {
+    "empireOnlyCount": 1,
+    "autoPromoteTierCount": 7,
+    "headcountCaps": {
+      "numericRankCount": 6,
+      "unlimitedRankCount": 7,
+      "unavailableFactionCellCount": 1,
+      "uncertain": true
+    }
+  }
+}

@@ -1,0 +1,1010 @@
+[
+  {
+    "char_id": 1,
+    "name_kr": "Ｄ．그린힐",
+    "cmd_class": 5,
+    "branch": 4,
+    "faction": "alliance",
+    "face_res": 101,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_001_alliance.png"
+  },
+  {
+    "char_id": 2,
+    "name_kr": "Ｆ．그린힐",
+    "cmd_class": 3,
+    "branch": 3,
+    "faction": "alliance",
+    "face_res": 102,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_002_alliance.png"
+  },
+  {
+    "char_id": 3,
+    "name_kr": "Ｉ．코네프",
+    "cmd_class": 3,
+    "branch": 2,
+    "faction": "alliance",
+    "face_res": 103,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_003_alliance.png"
+  },
+  {
+    "char_id": 4,
+    "name_kr": "아이제나흐",
+    "cmd_class": 4,
+    "branch": 2,
+    "faction": "empire",
+    "face_res": 104,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_004_empire.png"
+  },
+  {
+    "char_id": 5,
+    "name_kr": "아인헨도르프",
+    "cmd_class": 4,
+    "branch": 3,
+    "faction": "unknown",
+    "face_res": 105,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_005_unknown.png"
+  },
+  {
+    "char_id": 7,
+    "name_kr": "어텐보로",
+    "cmd_class": 3,
+    "branch": 1,
+    "faction": "alliance",
+    "face_res": 107,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_007_alliance.png"
+  },
+  {
+    "char_id": 8,
+    "name_kr": "애플턴",
+    "cmd_class": 4,
+    "branch": 2,
+    "faction": "alliance",
+    "face_res": 108,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_008_alliance.png"
+  },
+  {
+    "char_id": 10,
+    "name_kr": "알．살렘",
+    "cmd_class": 4,
+    "branch": 4,
+    "faction": "unknown",
+    "face_res": 110,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_010_unknown.png"
+  },
+  {
+    "char_id": 11,
+    "name_kr": "알트린겐",
+    "cmd_class": 4,
+    "branch": 3,
+    "faction": "unknown",
+    "face_res": 111,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_011_unknown.png"
+  },
+  {
+    "char_id": 12,
+    "name_kr": "안스바흐",
+    "cmd_class": 5,
+    "branch": 2,
+    "faction": "empire",
+    "face_res": 112,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_012_empire.png"
+  },
+  {
+    "char_id": 14,
+    "name_kr": "위티",
+    "cmd_class": 2,
+    "branch": 3,
+    "faction": "unknown",
+    "face_res": 114,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_014_unknown.png"
+  },
+  {
+    "char_id": 15,
+    "name_kr": "베라",
+    "cmd_class": 4,
+    "branch": 4,
+    "faction": "unknown",
+    "face_res": 115,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_015_unknown.png"
+  },
+  {
+    "char_id": 17,
+    "name_kr": "우란푸",
+    "cmd_class": 4,
+    "branch": 1,
+    "faction": "alliance",
+    "face_res": 117,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_017_alliance.png"
+  },
+  {
+    "char_id": 19,
+    "name_kr": "에를라흐",
+    "cmd_class": 5,
+    "branch": 3,
+    "faction": "unknown",
+    "face_res": 119,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_019_unknown.png"
+  },
+  {
+    "char_id": 20,
+    "name_kr": "오이겐",
+    "cmd_class": 4,
+    "branch": 4,
+    "faction": "unknown",
+    "face_res": 120,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_020_unknown.png"
+  },
+  {
+    "char_id": 22,
+    "name_kr": "오베르슈타인",
+    "cmd_class": 1,
+    "branch": 2,
+    "faction": "empire",
+    "face_res": 122,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_022_empire.png"
+  },
+  {
+    "char_id": 23,
+    "name_kr": "올라우",
+    "cmd_class": 4,
+    "branch": 4,
+    "faction": "unknown",
+    "face_res": 123,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_023_unknown.png"
+  },
+  {
+    "char_id": 24,
+    "name_kr": "칼센",
+    "cmd_class": 4,
+    "branch": 1,
+    "faction": "unknown",
+    "face_res": 124,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_024_unknown.png"
+  },
+  {
+    "char_id": 25,
+    "name_kr": "캄프버",
+    "cmd_class": 4,
+    "branch": 1,
+    "faction": "unknown",
+    "face_res": 125,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_025_unknown.png"
+  },
+  {
+    "char_id": 26,
+    "name_kr": "카르나프",
+    "cmd_class": 3,
+    "branch": 0,
+    "faction": "unknown",
+    "face_res": 126,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_026_unknown.png"
+  },
+  {
+    "char_id": 27,
+    "name_kr": "키슬링",
+    "cmd_class": 2,
+    "branch": 3,
+    "faction": "unknown",
+    "face_res": 127,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_027_unknown.png"
+  },
+  {
+    "char_id": 28,
+    "name_kr": "캬젤느",
+    "cmd_class": 3,
+    "branch": 4,
+    "faction": "alliance",
+    "face_res": 128,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_028_alliance.png"
+  },
+  {
+    "char_id": 29,
+    "name_kr": "키르히아이스",
+    "cmd_class": 2,
+    "branch": 2,
+    "faction": "empire",
+    "face_res": 129,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_029_empire.png"
+  },
+  {
+    "char_id": 32,
+    "name_kr": "크내프슈타인",
+    "cmd_class": 4,
+    "branch": 3,
+    "faction": "unknown",
+    "face_res": 132,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_032_unknown.png"
+  },
+  {
+    "char_id": 33,
+    "name_kr": "쿠브르슬리",
+    "cmd_class": 2,
+    "branch": 2,
+    "faction": "alliance",
+    "face_res": 133,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_033_alliance.png"
+  },
+  {
+    "char_id": 35,
+    "name_kr": "그뤼네만",
+    "cmd_class": 4,
+    "branch": 3,
+    "faction": "empire",
+    "face_res": 135,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_035_empire.png"
+  },
+  {
+    "char_id": 37,
+    "name_kr": "그릴팔처",
+    "cmd_class": 4,
+    "branch": 4,
+    "faction": "empire",
+    "face_res": 137,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_037_empire.png"
+  },
+  {
+    "char_id": 39,
+    "name_kr": "그레브너",
+    "cmd_class": 4,
+    "branch": 0,
+    "faction": "unknown",
+    "face_res": 139,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_039_unknown.png"
+  },
+  {
+    "char_id": 42,
+    "name_kr": "케슬러",
+    "cmd_class": 2,
+    "branch": 2,
+    "faction": "empire",
+    "face_res": 142,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_042_empire.png"
+  },
+  {
+    "char_id": 44,
+    "name_kr": "켐프",
+    "cmd_class": 3,
+    "branch": 0,
+    "faction": "empire",
+    "face_res": 144,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_044_empire.png"
+  },
+  {
+    "char_id": 45,
+    "name_kr": "코네프",
+    "cmd_class": 2,
+    "branch": 3,
+    "faction": "alliance",
+    "face_res": 145,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_045_alliance.png"
+  },
+  {
+    "char_id": 47,
+    "name_kr": "코넬리",
+    "cmd_class": 4,
+    "branch": 2,
+    "faction": "unknown",
+    "face_res": 147,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_047_unknown.png"
+  },
+  {
+    "char_id": 51,
+    "name_kr": "쇤코프",
+    "cmd_class": 3,
+    "branch": 1,
+    "faction": "alliance",
+    "face_res": 151,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_051_alliance.png"
+  },
+  {
+    "char_id": 52,
+    "name_kr": "통합작전본부장 시토레원수",
+    "cmd_class": 2,
+    "branch": 4,
+    "faction": "unknown",
+    "face_res": 152,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_052_unknown.png"
+  },
+  {
+    "char_id": 55,
+    "name_kr": "슈마허",
+    "cmd_class": 5,
+    "branch": 1,
+    "faction": "unknown",
+    "face_res": 155,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_055_unknown.png"
+  },
+  {
+    "char_id": 56,
+    "name_kr": "슈타덴",
+    "cmd_class": 5,
+    "branch": 4,
+    "faction": "empire",
+    "face_res": 156,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_056_empire.png"
+  },
+  {
+    "char_id": 58,
+    "name_kr": "슈트라이트",
+    "cmd_class": 4,
+    "branch": 4,
+    "faction": "empire",
+    "face_res": 158,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_058_empire.png"
+  },
+  {
+    "char_id": 59,
+    "name_kr": "슈트라우스",
+    "cmd_class": 4,
+    "branch": 3,
+    "faction": "unknown",
+    "face_res": 159,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_059_unknown.png"
+  },
+  {
+    "char_id": 60,
+    "name_kr": "슈나이더",
+    "cmd_class": 4,
+    "branch": 3,
+    "faction": "unknown",
+    "face_res": 160,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_060_unknown.png"
+  },
+  {
+    "char_id": 61,
+    "name_kr": "쉬라",
+    "cmd_class": 4,
+    "branch": 3,
+    "faction": "unknown",
+    "face_res": 161,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_061_unknown.png"
+  },
+  {
+    "char_id": 63,
+    "name_kr": "진처",
+    "cmd_class": 3,
+    "branch": 1,
+    "faction": "unknown",
+    "face_res": 163,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_063_unknown.png"
+  },
+  {
+    "char_id": 65,
+    "name_kr": "스토크스",
+    "cmd_class": 5,
+    "branch": 1,
+    "faction": "unknown",
+    "face_res": 165,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_065_unknown.png"
+  },
+  {
+    "char_id": 66,
+    "name_kr": "젝트",
+    "cmd_class": 4,
+    "branch": 0,
+    "faction": "empire",
+    "face_res": 166,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_066_empire.png"
+  },
+  {
+    "char_id": 67,
+    "name_kr": "존넨페르스",
+    "cmd_class": 4,
+    "branch": 3,
+    "faction": "unknown",
+    "face_res": 167,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_067_unknown.png"
+  },
+  {
+    "char_id": 69,
+    "name_kr": "첸",
+    "cmd_class": 4,
+    "branch": 3,
+    "faction": "unknown",
+    "face_res": 169,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_069_unknown.png"
+  },
+  {
+    "char_id": 71,
+    "name_kr": "딕켈",
+    "cmd_class": 4,
+    "branch": 3,
+    "faction": "empire",
+    "face_res": 171,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_071_empire.png"
+  },
+  {
+    "char_id": 72,
+    "name_kr": "디터스도르프",
+    "cmd_class": 4,
+    "branch": 3,
+    "faction": "unknown",
+    "face_res": 172,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_072_unknown.png"
+  },
+  {
+    "char_id": 74,
+    "name_kr": "투르나이젠",
+    "cmd_class": 3,
+    "branch": 0,
+    "faction": "unknown",
+    "face_res": 174,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_074_unknown.png"
+  },
+  {
+    "char_id": 75,
+    "name_kr": "국방위원장 트류니히트",
+    "cmd_class": -1,
+    "branch": 3,
+    "faction": "unknown",
+    "face_res": 175,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_075_unknown.png"
+  },
+  {
+    "char_id": 76,
+    "name_kr": "드로이젠",
+    "cmd_class": 3,
+    "branch": 1,
+    "faction": "unknown",
+    "face_res": 176,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_076_unknown.png"
+  },
+  {
+    "char_id": 80,
+    "name_kr": "바이에르라인",
+    "cmd_class": 3,
+    "branch": 1,
+    "faction": "unknown",
+    "face_res": 180,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_080_unknown.png"
+  },
+  {
+    "char_id": 81,
+    "name_kr": "파에타",
+    "cmd_class": 1,
+    "branch": 3,
+    "faction": "alliance",
+    "face_res": 181,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_081_alliance.png"
+  },
+  {
+    "char_id": 82,
+    "name_kr": "바그다슈",
+    "cmd_class": 0,
+    "branch": 2,
+    "faction": "alliance",
+    "face_res": 182,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_082_alliance.png"
+  },
+  {
+    "char_id": 83,
+    "name_kr": "파스트레",
+    "cmd_class": 1,
+    "branch": 1,
+    "faction": "unknown",
+    "face_res": 183,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_083_unknown.png"
+  },
+  {
+    "char_id": 84,
+    "name_kr": "파트리체프",
+    "cmd_class": 3,
+    "branch": 1,
+    "faction": "alliance",
+    "face_res": 184,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_084_alliance.png"
+  },
+  {
+    "char_id": 85,
+    "name_kr": "파트리켄",
+    "cmd_class": 4,
+    "branch": 3,
+    "faction": "unknown",
+    "face_res": 185,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_085_unknown.png"
+  },
+  {
+    "char_id": 86,
+    "name_kr": "바르트하우저",
+    "cmd_class": 4,
+    "branch": 1,
+    "faction": "unknown",
+    "face_res": 186,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_086_unknown.png"
+  },
+  {
+    "char_id": 87,
+    "name_kr": "하르바슈타트",
+    "cmd_class": 4,
+    "branch": 1,
+    "faction": "empire",
+    "face_res": 187,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_087_empire.png"
+  },
+  {
+    "char_id": 88,
+    "name_kr": "비텐펠트",
+    "cmd_class": 2,
+    "branch": 0,
+    "faction": "empire",
+    "face_res": 188,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_088_empire.png"
+  },
+  {
+    "char_id": 89,
+    "name_kr": "뷔로",
+    "cmd_class": 3,
+    "branch": 4,
+    "faction": "empire",
+    "face_res": 189,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_089_empire.png"
+  },
+  {
+    "char_id": 90,
+    "name_kr": "뷰코크",
+    "cmd_class": 3,
+    "branch": 2,
+    "faction": "alliance",
+    "face_res": 190,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_090_alliance.png"
+  },
+  {
+    "char_id": 92,
+    "name_kr": "뷘쳐",
+    "cmd_class": 4,
+    "branch": 3,
+    "faction": "unknown",
+    "face_res": 192,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_092_unknown.png"
+  },
+  {
+    "char_id": 93,
+    "name_kr": "힐데스하임",
+    "cmd_class": 5,
+    "branch": 0,
+    "faction": "empire",
+    "face_res": 193,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_093_empire.png"
+  },
+  {
+    "char_id": 94,
+    "name_kr": "비로라이넨",
+    "cmd_class": 1,
+    "branch": 3,
+    "faction": "alliance",
+    "face_res": 194,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_094_alliance.png"
+  },
+  {
+    "char_id": 95,
+    "name_kr": "파렌하이트",
+    "cmd_class": 3,
+    "branch": 1,
+    "faction": "empire",
+    "face_res": 195,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_095_empire.png"
+  },
+  {
+    "char_id": 96,
+    "name_kr": "파이펠",
+    "cmd_class": 4,
+    "branch": 0,
+    "faction": "unknown",
+    "face_res": 196,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_096_unknown.png"
+  },
+  {
+    "char_id": 97,
+    "name_kr": "핏셔",
+    "cmd_class": 3,
+    "branch": 3,
+    "faction": "alliance",
+    "face_res": 197,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_097_alliance.png"
+  },
+  {
+    "char_id": 98,
+    "name_kr": "프세네거",
+    "cmd_class": 4,
+    "branch": 2,
+    "faction": "unknown",
+    "face_res": 198,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_098_unknown.png"
+  },
+  {
+    "char_id": 99,
+    "name_kr": "페르너",
+    "cmd_class": 0,
+    "branch": 2,
+    "faction": "unknown",
+    "face_res": 199,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_099_unknown.png"
+  },
+  {
+    "char_id": 100,
+    "name_kr": "포크",
+    "cmd_class": 5,
+    "branch": 4,
+    "faction": "unknown",
+    "face_res": 200,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_100_unknown.png"
+  },
+  {
+    "char_id": 101,
+    "name_kr": "포겔",
+    "cmd_class": 5,
+    "branch": 3,
+    "faction": "empire",
+    "face_res": 201,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_101_empire.png"
+  },
+  {
+    "char_id": 104,
+    "name_kr": "브라우히츠",
+    "cmd_class": 4,
+    "branch": 0,
+    "faction": "unknown",
+    "face_res": 204,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_104_unknown.png"
+  },
+  {
+    "char_id": 105,
+    "name_kr": "브라운슈바이크",
+    "cmd_class": 5,
+    "branch": 4,
+    "faction": "empire",
+    "face_res": 205,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_105_empire.png"
+  },
+  {
+    "char_id": 108,
+    "name_kr": "프레겔",
+    "cmd_class": 5,
+    "branch": 0,
+    "faction": "empire",
+    "face_res": 208,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_108_empire.png"
+  },
+  {
+    "char_id": 110,
+    "name_kr": "베르겐그륀",
+    "cmd_class": 3,
+    "branch": 1,
+    "faction": "empire",
+    "face_res": 210,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_110_empire.png"
+  },
+  {
+    "char_id": 111,
+    "name_kr": "호우드",
+    "cmd_class": 4,
+    "branch": 3,
+    "faction": "alliance",
+    "face_res": 211,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_111_alliance.png"
+  },
+  {
+    "char_id": 113,
+    "name_kr": "포플란",
+    "cmd_class": 3,
+    "branch": 3,
+    "faction": "alliance",
+    "face_res": 213,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_113_alliance.png"
+  },
+  {
+    "char_id": 114,
+    "name_kr": "호르츠바우어",
+    "cmd_class": 4,
+    "branch": 3,
+    "faction": "unknown",
+    "face_res": 214,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_114_unknown.png"
+  },
+  {
+    "char_id": 115,
+    "name_kr": "보로딘",
+    "cmd_class": 2,
+    "branch": 3,
+    "faction": "alliance",
+    "face_res": 215,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_115_alliance.png"
+  },
+  {
+    "char_id": 120,
+    "name_kr": "마리노",
+    "cmd_class": 3,
+    "branch": 3,
+    "faction": "unknown",
+    "face_res": 220,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_120_unknown.png"
+  },
+  {
+    "char_id": 122,
+    "name_kr": "미터마이어",
+    "cmd_class": 2,
+    "branch": 1,
+    "faction": "empire",
+    "face_res": 222,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_122_empire.png"
+  },
+  {
+    "char_id": 123,
+    "name_kr": "로엔그람",
+    "cmd_class": 2,
+    "branch": 1,
+    "faction": "empire",
+    "face_res": 223,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_123_empire.png"
+  },
+  {
+    "char_id": 124,
+    "name_kr": "뮈켄베르거",
+    "cmd_class": 4,
+    "branch": 3,
+    "faction": "empire",
+    "face_res": 224,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_124_empire.png"
+  },
+  {
+    "char_id": 125,
+    "name_kr": "뮐러",
+    "cmd_class": 2,
+    "branch": 1,
+    "faction": "empire",
+    "face_res": 225,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_125_empire.png"
+  },
+  {
+    "char_id": 128,
+    "name_kr": "무어",
+    "cmd_class": 4,
+    "branch": 0,
+    "faction": "alliance",
+    "face_res": 228,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_128_alliance.png"
+  },
+  {
+    "char_id": 129,
+    "name_kr": "무라이",
+    "cmd_class": 3,
+    "branch": 4,
+    "faction": "alliance",
+    "face_res": 229,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_129_alliance.png"
+  },
+  {
+    "char_id": 130,
+    "name_kr": "메크링거",
+    "cmd_class": 4,
+    "branch": 4,
+    "faction": "empire",
+    "face_res": 230,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_130_empire.png"
+  },
+  {
+    "char_id": 131,
+    "name_kr": "메르카츠",
+    "cmd_class": 4,
+    "branch": 2,
+    "faction": "empire",
+    "face_res": 231,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_131_empire.png"
+  },
+  {
+    "char_id": 132,
+    "name_kr": "모튼",
+    "cmd_class": 2,
+    "branch": 3,
+    "faction": "unknown",
+    "face_res": 232,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_132_unknown.png"
+  },
+  {
+    "char_id": 133,
+    "name_kr": "양",
+    "cmd_class": 3,
+    "branch": 2,
+    "faction": "alliance",
+    "face_res": 233,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_133_alliance.png"
+  },
+  {
+    "char_id": 135,
+    "name_kr": "라이블",
+    "cmd_class": 4,
+    "branch": 3,
+    "faction": "unknown",
+    "face_res": 235,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_135_unknown.png"
+  },
+  {
+    "char_id": 136,
+    "name_kr": "라오",
+    "cmd_class": 3,
+    "branch": 4,
+    "faction": "unknown",
+    "face_res": 236,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_136_unknown.png"
+  },
+  {
+    "char_id": 137,
+    "name_kr": "랏프",
+    "cmd_class": 4,
+    "branch": 2,
+    "faction": "unknown",
+    "face_res": 237,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_137_unknown.png"
+  },
+  {
+    "char_id": 138,
+    "name_kr": "란즈베르크",
+    "cmd_class": 5,
+    "branch": 4,
+    "faction": "empire",
+    "face_res": 238,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_138_empire.png"
+  },
+  {
+    "char_id": 140,
+    "name_kr": "리텐하임",
+    "cmd_class": 5,
+    "branch": 4,
+    "faction": "empire",
+    "face_res": 240,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_140_empire.png"
+  },
+  {
+    "char_id": 142,
+    "name_kr": "르그랑쥬",
+    "cmd_class": 5,
+    "branch": 0,
+    "faction": "unknown",
+    "face_res": 242,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_142_unknown.png"
+  },
+  {
+    "char_id": 143,
+    "name_kr": "루츠",
+    "cmd_class": 3,
+    "branch": 0,
+    "faction": "empire",
+    "face_res": 243,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_143_empire.png"
+  },
+  {
+    "char_id": 144,
+    "name_kr": "르페브르",
+    "cmd_class": 4,
+    "branch": 3,
+    "faction": "unknown",
+    "face_res": 244,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_144_unknown.png"
+  },
+  {
+    "char_id": 145,
+    "name_kr": "레오폴트",
+    "cmd_class": 4,
+    "branch": 3,
+    "faction": "unknown",
+    "face_res": 245,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_145_unknown.png"
+  },
+  {
+    "char_id": 147,
+    "name_kr": "렌넨캄프",
+    "cmd_class": 4,
+    "branch": 3,
+    "faction": "empire",
+    "face_res": 247,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_147_empire.png"
+  },
+  {
+    "char_id": 148,
+    "name_kr": "로이엔탈",
+    "cmd_class": 3,
+    "branch": 2,
+    "faction": "empire",
+    "face_res": 248,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_148_empire.png"
+  },
+  {
+    "char_id": 150,
+    "name_kr": "로보스",
+    "cmd_class": 2,
+    "branch": 3,
+    "faction": "alliance",
+    "face_res": 250,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_150_alliance.png"
+  },
+  {
+    "char_id": 151,
+    "name_kr": "바렌",
+    "cmd_class": 4,
+    "branch": 1,
+    "faction": "empire",
+    "face_res": 251,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_151_empire.png"
+  },
+  {
+    "char_id": 165,
+    "name_kr": "통수본부총장 슈타인호프원수",
+    "cmd_class": 5,
+    "branch": 4,
+    "faction": "unknown",
+    "face_res": 265,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_165_unknown.png"
+  },
+  {
+    "char_id": 168,
+    "name_kr": "뤼케",
+    "cmd_class": 3,
+    "branch": 3,
+    "faction": "unknown",
+    "face_res": 268,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_168_unknown.png"
+  },
+  {
+    "char_id": 170,
+    "name_kr": "국무상서 리히텐라데 후",
+    "cmd_class": -1,
+    "branch": 3,
+    "faction": "unknown",
+    "face_res": 270,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_170_unknown.png"
+  },
+  {
+    "char_id": 175,
+    "name_kr": "암즈도르프",
+    "cmd_class": 2,
+    "branch": 3,
+    "faction": "unknown",
+    "face_res": 275,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_175_unknown.png"
+  },
+  {
+    "char_id": 177,
+    "name_kr": "산데르스",
+    "cmd_class": 3,
+    "branch": 3,
+    "faction": "unknown",
+    "face_res": 277,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_177_unknown.png"
+  },
+  {
+    "char_id": 178,
+    "name_kr": "레켄도르프",
+    "cmd_class": 3,
+    "branch": 3,
+    "faction": "unknown",
+    "face_res": 278,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_178_unknown.png"
+  },
+  {
+    "char_id": 179,
+    "name_kr": "뮈젤",
+    "cmd_class": 2,
+    "branch": 1,
+    "faction": "empire",
+    "face_res": 279,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_179_empire.png"
+  },
+  {
+    "char_id": 180,
+    "name_kr": "라인하르트",
+    "cmd_class": 2,
+    "branch": 1,
+    "faction": "empire",
+    "face_res": 280,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_180_empire.png"
+  },
+  {
+    "char_id": 181,
+    "name_kr": "키르히아이스",
+    "cmd_class": 2,
+    "branch": 2,
+    "faction": "empire",
+    "face_res": 281,
+    "file": "content\\roster\\idkit\\vi-labeled\\vi_181_empire.png"
+  }
+]

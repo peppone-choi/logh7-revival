@@ -1,0 +1,279 @@
+{
+  "_source": "gin7manual-alt.pdf physical pp.32-34 / printed pp.31-33; rendered and checked via tmp/manual_alt_render/alt-32.png..alt-34.png",
+  "_grade": "P1",
+  "_note": "Alternate manual contains the clearest canonical place/facility/spot table. Use this as facility/spot content and command-target conditions. Spot ids are server-side stable seeds, not recovered client catalog ids.",
+  "spotTypes": [
+    {
+      "id": "free",
+      "ja": "自由スポット",
+      "ko": "자유 스팟",
+      "rule": "誰でも自由に出入りできます。",
+      "access": "anyone"
+    },
+    {
+      "id": "restricted",
+      "ja": "制限スポット",
+      "ko": "제한 스팟",
+      "rule": "この場所を所有するキャラクターが入室許可としている場合にのみ、自由に出入りできます。",
+      "access": "owner-permission"
+    },
+    {
+      "id": "rank_limited",
+      "ja": "階級限定スポット",
+      "ko": "계급 제한 스팟",
+      "rule": "一定以上の階級を有しているキャラクターのみ、自由に出入りできます。",
+      "access": "rank-gated"
+    },
+    {
+      "id": "guarded",
+      "ja": "警戒スポット",
+      "ko": "경계 스팟",
+      "rule": "入る度に自動的に検問を受けます。逮捕命令が出されているキャラクターが入ると、逮捕イベントが発生する場合があります。",
+      "access": "inspection"
+    },
+    {
+      "id": "closed",
+      "ja": "閉鎖スポット",
+      "ko": "폐쇄 스팟",
+      "rule": "逮捕された場合に監禁される場所であり、このスポットから他の場所に移動することはできません。",
+      "access": "detention"
+    }
+  ],
+  "facilities": [
+    {
+      "id": "government_office",
+      "ja": "政庁",
+      "ko": "정청",
+      "description": "その惑星の政治的中枢。惑星に対する内政命令を入力することができる。",
+      "commandDomains": ["politics", "domestic"],
+      "spots": [
+        { "id": "government_lobby", "ja": "ロビー", "type": "guarded" },
+        { "id": "government_office_room", "ja": "各キャラクターの執務室", "type": "restricted" },
+        { "id": "government_conference_room", "ja": "会議室", "type": "free" },
+        { "id": "detention_room", "ja": "拘禁室", "type": "closed" }
+      ]
+    },
+    {
+      "id": "defense_headquarters",
+      "ja": "防衛司令部",
+      "ko": "방위사령부",
+      "description": "その惑星の軍事的中枢。惑星に対する軍事命令を入力することができる。",
+      "commandDomains": ["operations", "military"],
+      "spots": [
+        { "id": "defense_lobby", "ja": "ロビー", "type": "guarded" },
+        { "id": "defense_office_room", "ja": "各キャラクターの執務室", "type": "restricted" }
+      ]
+    },
+    {
+      "id": "central_square",
+      "ja": "中央広場",
+      "ko": "중앙광장",
+      "description": "特に機能はない場所。",
+      "spots": [{ "id": "square", "ja": "広場", "type": "free" }]
+    },
+    {
+      "id": "park",
+      "ja": "公園",
+      "ko": "공원",
+      "description": "特に機能はない場所。",
+      "spots": [{ "id": "park", "ja": "公園", "type": "free" }]
+    },
+    {
+      "id": "spaceport",
+      "ja": "宇宙港",
+      "ko": "우주항",
+      "description": "旗艦ユニットへの乗船、旗艦ユニットからの下船を行う場所。出入港の管理も行う。",
+      "commandDomains": ["movement", "embark", "disembark"],
+      "spots": [
+        { "id": "spaceport_lobby", "ja": "ロビー", "type": "guarded" },
+        { "id": "route_control_center", "ja": "航路管理センター", "type": "free" },
+        { "id": "flagship_pier", "ja": "各旗艦ユニットの桟橋", "type": "restricted" }
+      ]
+    },
+    {
+      "id": "energy_plant",
+      "ja": "エネルギープラント",
+      "ko": "에너지 플랜트",
+      "description": "惑星内の各施設にエネルギーを供給する施設。",
+      "commandDomains": ["logistics", "energy"],
+      "spots": [{ "id": "energy_management_center", "ja": "管理センター", "type": "free" }]
+    },
+    {
+      "id": "resource_mining_plant",
+      "ja": "資源採掘プラント",
+      "ko": "자원채굴 플랜트",
+      "description": "惑星内の鉱山から資源を採掘する施設。",
+      "commandDomains": ["logistics", "resources"],
+      "spots": [{ "id": "resource_management_center", "ja": "管理センター", "type": "free" }]
+    },
+    {
+      "id": "munitions_factory",
+      "ja": "軍需工場",
+      "ko": "군수공장",
+      "description": "軍需物資を生産する施設。",
+      "commandDomains": ["logistics", "supplies"],
+      "spots": [{ "id": "munitions_management_center", "ja": "管理センター", "type": "free" }]
+    },
+    {
+      "id": "agricultural_plant",
+      "ja": "農業プラント",
+      "ko": "농업 플랜트",
+      "description": "食料を生産する施設。",
+      "commandDomains": ["logistics", "food"],
+      "spots": [{ "id": "agriculture_management_center", "ja": "管理センター", "type": "free" }]
+    },
+    {
+      "id": "arsenal",
+      "ja": "造兵工廠",
+      "ko": "조병공창",
+      "description": "艦艇ユニットを生産する施設。",
+      "commandDomains": ["logistics", "ship-production"],
+      "spots": [{ "id": "arsenal_management_center", "ja": "管理センター", "type": "free" }]
+    },
+    {
+      "id": "training_ground",
+      "ja": "訓練所",
+      "ko": "훈련소",
+      "description": "人員ユニットを訓練する施設。",
+      "commandDomains": ["logistics", "troop-training"],
+      "spots": [{ "id": "training_management_center", "ja": "管理センター", "type": "free" }]
+    },
+    {
+      "id": "warehouse",
+      "ja": "倉庫",
+      "ko": "창고",
+      "description": "資源／軍需物資／食料を保管する施設。",
+      "commandDomains": ["logistics", "storage"],
+      "spots": [{ "id": "warehouse_management_center", "ja": "管理センター", "type": "free" }]
+    },
+    {
+      "id": "mooring_station",
+      "ja": "係留所",
+      "ko": "계류소",
+      "description": "艦艇ユニットを保管する施設。",
+      "commandDomains": ["logistics", "ship-storage"],
+      "spots": [{ "id": "mooring_management_center", "ja": "管理センター", "type": "free" }]
+    },
+    {
+      "id": "barracks",
+      "ja": "兵舎",
+      "ko": "병사",
+      "description": "訓練を終えた人員ユニットを保管する施設。",
+      "commandDomains": ["logistics", "troop-storage"],
+      "spots": [{ "id": "barracks_management_center", "ja": "管理センター", "type": "free" }]
+    },
+    {
+      "id": "anti_air_battery",
+      "ja": "対空砲台",
+      "ko": "대공포대",
+      "description": "上陸しようとする敵艦艇を攻撃する施設。",
+      "commandDomains": ["defense", "anti-air"],
+      "spots": [{ "id": "air_defense_command", "ja": "防空司令部", "type": "free" }]
+    },
+    {
+      "id": "downtown",
+      "ja": "繁華街",
+      "ko": "번화가",
+      "description": "酒場等のある場所。",
+      "spots": [
+        { "id": "senior_officers_club", "ja": "高級士官クラブ", "type": "restricted" },
+        { "id": "officers_club", "ja": "士官クラブ", "type": "restricted" },
+        { "id": "bar", "ja": "酒場", "type": "free" }
+      ]
+    },
+    {
+      "id": "residential_district",
+      "ja": "居住区",
+      "ko": "거주구",
+      "description": "この惑星出身者の自宅がある。",
+      "spots": [{ "id": "home", "ja": "自宅", "type": "restricted" }]
+    },
+    {
+      "id": "hotel",
+      "ja": "ホテル",
+      "ko": "호텔",
+      "description": "この惑星外の出身者の居室がある。",
+      "spots": [
+        { "id": "hotel_lobby", "ja": "ロビー", "type": "free" },
+        { "id": "hotel_room", "ja": "居室", "type": "restricted" }
+      ]
+    },
+    {
+      "id": "mansion",
+      "ja": "邸宅",
+      "ko": "저택",
+      "description": "爵位を有する貴族が首都に有する。加えて、封土を有する貴族は各封土にも有する。",
+      "spots": [
+        { "id": "mansion_lobby", "ja": "ロビー", "type": "guarded" },
+        { "id": "great_hall", "ja": "大広間", "type": "free" },
+        { "id": "mansion_room", "ja": "居室", "type": "restricted" },
+        { "id": "hunting_ground", "ja": "猟場", "type": "free" }
+      ]
+    },
+    {
+      "id": "broadcast_station",
+      "ja": "放送局",
+      "ko": "방송국",
+      "description": "演説を行うことができる。",
+      "commandDomains": ["politics", "speech"],
+      "spots": [{ "id": "broadcast_lobby", "ja": "ロビー", "type": "free" }]
+    },
+    {
+      "id": "officer_academy",
+      "ja": "士官学校",
+      "ko": "사관학교",
+      "description": "キャラクターのパラメータを向上させるコマンドを実行できる。",
+      "commandDomains": ["personal", "training", "lecture"],
+      "spots": [
+        { "id": "academy_lobby", "ja": "ロビー", "type": "guarded" },
+        { "id": "classroom", "ja": "教室", "type": "restricted" },
+        { "id": "simulation_room", "ja": "シミュレーションルーム", "type": "restricted" }
+      ]
+    }
+  ],
+  "movementCommands": [
+    {
+      "id": "warp_navigation",
+      "ja": "ワープ航行",
+      "card": "艦長カード",
+      "scope": "between strategic grids",
+      "targetKind": "gridCell",
+      "condition": "星系グリッドに入る場合には、一度、隣接するグリッドにワープする必要があります。"
+    },
+    {
+      "id": "make_port",
+      "ja": "寄港",
+      "card": "艦長カード",
+      "scope": "between planets in the same star system",
+      "targetKind": "planet"
+    },
+    {
+      "id": "long_distance_move",
+      "ja": "遠距離移動",
+      "card": "個人カード",
+      "scope": "between facilities on the same planet",
+      "targetKind": "facility"
+    },
+    {
+      "id": "short_distance_move",
+      "ja": "近距離移動",
+      "card": "個人カード",
+      "scope": "between spots/rooms inside the same facility",
+      "targetKind": "spot"
+    }
+  ],
+  "logoutLocations": [
+    {
+      "id": "home_or_room",
+      "ja": "自宅/ホテル（居室）/居住区（居室）",
+      "rule": "戦死することはありませんが、オフライン中に逮捕される可能性があります。また、人事コマンドの対象にもなります。この場所でログアウトした場合は、他の場所への移動は行われません。",
+      "sourcePage": "alt physical p8"
+    },
+    {
+      "id": "flagship_unit",
+      "ja": "旗艦ユニットの中",
+      "rule": "旗艦ユニットが惑星/要塞に駐留している状態であれば、オフライン中に戦術ゲームが発生しても戦死する可能性はありません。宇宙空間で戦術ゲームが発生した場合、AI が代行します。",
+      "sourcePage": "alt physical p8"
+    }
+  ]
+}

@@ -1,0 +1,220 @@
+{
+  "id": "logh7-alliance-medal-upscale-manifest",
+  "sourceDir": "E:/logh7-revival/client-unity/Assets/ArtSource/original/medals",
+  "outputDir": "E:/logh7-revival/client-unity/Assets/ArtSource/remaster/alliance-medals-4x",
+  "scale": 4,
+  "method": "Pillow LANCZOS resize plus light UnsharpMask; AI upscale not available in this environment",
+  "entryCount": 15,
+  "entries": [
+    {
+      "source": "E:/logh7-revival/client-unity/Assets/ArtSource/original/medals/m_f001.png",
+      "output": "E:/logh7-revival/client-unity/Assets/ArtSource/remaster/alliance-medals-4x/m_f001_4x.png",
+      "sourceSha256": "04948f94ecdff5d19512f3172db3648e352093725a4d2f38d3f3af0be8ea2b13",
+      "outputSha256": "12946016bdd695a87c8fcb6a65e7579972afe13532ae60ac1f641e310a2b3212",
+      "sourceSize": {
+        "width": 80,
+        "height": 80
+      },
+      "outputSize": {
+        "width": 320,
+        "height": 320
+      }
+    },
+    {
+      "source": "E:/logh7-revival/client-unity/Assets/ArtSource/original/medals/m_f002.png",
+      "output": "E:/logh7-revival/client-unity/Assets/ArtSource/remaster/alliance-medals-4x/m_f002_4x.png",
+      "sourceSha256": "6e3b31c5ddf78b9eca639fb9aca30a63338e7287b30b325d530921105732e4bd",
+      "outputSha256": "8645d30dd85d8a7fd0a61b7413b8be7e4412450fe388fb5aa464867e91476d47",
+      "sourceSize": {
+        "width": 80,
+        "height": 80
+      },
+      "outputSize": {
+        "width": 320,
+        "height": 320
+      }
+    },
+    {
+      "source": "E:/logh7-revival/client-unity/Assets/ArtSource/original/medals/m_f003.png",
+      "output": "E:/logh7-revival/client-unity/Assets/ArtSource/remaster/alliance-medals-4x/m_f003_4x.png",
+      "sourceSha256": "c262a189d43bc428f650a74a32fbe895b410223aa16d20631333c9403a9fcb4c",
+      "outputSha256": "3ad96310c03eee7b4822410d35df29541a7f42e2776dd98497e17da4d9feb6c1",
+      "sourceSize": {
+        "width": 80,
+        "height": 80
+      },
+      "outputSize": {
+        "width": 320,
+        "height": 320
+      }
+    },
+    {
+      "source": "E:/logh7-revival/client-unity/Assets/ArtSource/original/medals/m_f004.png",
+      "output": "E:/logh7-revival/client-unity/Assets/ArtSource/remaster/alliance-medals-4x/m_f004_4x.png",
+      "sourceSha256": "b8a08b1195f4030a76818229bc3e1f361713d1b582b9302522e9eaf73604c10a",
+      "outputSha256": "d57628bedbed0ea361a3c232d9ed7470de2db5d5385ede804985b42ee1105022",
+      "sourceSize": {
+        "width": 80,
+        "height": 80
+      },
+      "outputSize": {
+        "width": 320,
+        "height": 320
+      }
+    },
+    {
+      "source": "E:/logh7-revival/client-unity/Assets/ArtSource/original/medals/m_f005.png",
+      "output": "E:/logh7-revival/client-unity/Assets/ArtSource/remaster/alliance-medals-4x/m_f005_4x.png",
+      "sourceSha256": "155b2468a9a368e38f90a18e3f508f45be275c92e7fd1031c96d08f4aab82d62",
+      "outputSha256": "e7fcea4530d26c98ec491551c509786285ccf2dfd046bf68a48fdee6ed5db8d4",
+      "sourceSize": {
+        "width": 80,
+        "height": 80
+      },
+      "outputSize": {
+        "width": 320,
+        "height": 320
+      }
+    },
+    {
+      "source": "E:/logh7-revival/client-unity/Assets/ArtSource/original/medals/m_f006.png",
+      "output": "E:/logh7-revival/client-unity/Assets/ArtSource/remaster/alliance-medals-4x/m_f006_4x.png",
+      "sourceSha256": "fc00f7be9690c10660f2f9ab0559ba9a619286937faa5dd91bdc021cae2f4323",
+      "outputSha256": "6bd0cc4c6828b11cbdd32a3813beee861976922fe296b793c93bd2b254f74b84",
+      "sourceSize": {
+        "width": 80,
+        "height": 80
+      },
+      "outputSize": {
+        "width": 320,
+        "height": 320
+      }
+    },
+    {
+      "source": "E:/logh7-revival/client-unity/Assets/ArtSource/original/medals/m_f007.png",
+      "output": "E:/logh7-revival/client-unity/Assets/ArtSource/remaster/alliance-medals-4x/m_f007_4x.png",
+      "sourceSha256": "f813743c30d66a03f954f4ed560caef5e0975d6cd46828a0eaa2f2c684706f2a",
+      "outputSha256": "61a8a8fa0f494d2b0e266f94d411e67a74080cc999499acbe928b6c1a604b19f",
+      "sourceSize": {
+        "width": 80,
+        "height": 80
+      },
+      "outputSize": {
+        "width": 320,
+        "height": 320
+      }
+    },
+    {
+      "source": "E:/logh7-revival/client-unity/Assets/ArtSource/original/medals/m_f008.png",
+      "output": "E:/logh7-revival/client-unity/Assets/ArtSource/remaster/alliance-medals-4x/m_f008_4x.png",
+      "sourceSha256": "55ded2d08d9087aeca3e25605111d5e1c14b974b0220f704902c25cdb4753aa5",
+      "outputSha256": "085f9978367365ea27e7290df7362b5efa7e205e5161879711d9a13536b52d27",
+      "sourceSize": {
+        "width": 80,
+        "height": 80
+      },
+      "outputSize": {
+        "width": 320,
+        "height": 320
+      }
+    },
+    {
+      "source": "E:/logh7-revival/client-unity/Assets/ArtSource/original/medals/m_f009.png",
+      "output": "E:/logh7-revival/client-unity/Assets/ArtSource/remaster/alliance-medals-4x/m_f009_4x.png",
+      "sourceSha256": "35b7abc50d1ce38870a55d5a4fe36e61da10211476a7afa8417d1833e1c003b3",
+      "outputSha256": "55f9774defbaaed51b8b236a44c0b51379646af384417ea982b432cab3b1042a",
+      "sourceSize": {
+        "width": 80,
+        "height": 80
+      },
+      "outputSize": {
+        "width": 320,
+        "height": 320
+      }
+    },
+    {
+      "source": "E:/logh7-revival/client-unity/Assets/ArtSource/original/medals/m_f010.png",
+      "output": "E:/logh7-revival/client-unity/Assets/ArtSource/remaster/alliance-medals-4x/m_f010_4x.png",
+      "sourceSha256": "6244ca25b7ca0750b401aa63d4f011908110ce820999c0ca5bff44896216a163",
+      "outputSha256": "0dbc45dc36e8896286a4d6e0fc18ea90c2d03d5b2864a09c5dc55b92dacdc29f",
+      "sourceSize": {
+        "width": 80,
+        "height": 80
+      },
+      "outputSize": {
+        "width": 320,
+        "height": 320
+      }
+    },
+    {
+      "source": "E:/logh7-revival/client-unity/Assets/ArtSource/original/medals/m_f011.png",
+      "output": "E:/logh7-revival/client-unity/Assets/ArtSource/remaster/alliance-medals-4x/m_f011_4x.png",
+      "sourceSha256": "b062da28ef8953f25da05dd4a174f746ebebe8f91662f1058cc1df7335922a3d",
+      "outputSha256": "9af10eb1aeb4bc0e38ea4dab13edc4c134421e666c69122b7c68e017ab001b78",
+      "sourceSize": {
+        "width": 80,
+        "height": 80
+      },
+      "outputSize": {
+        "width": 320,
+        "height": 320
+      }
+    },
+    {
+      "source": "E:/logh7-revival/client-unity/Assets/ArtSource/original/medals/m_f012.png",
+      "output": "E:/logh7-revival/client-unity/Assets/ArtSource/remaster/alliance-medals-4x/m_f012_4x.png",
+      "sourceSha256": "c27e37dd6037be527291bc76a9a8ecf8319e854d29001531b1fc1af07982d746",
+      "outputSha256": "5e051e3a97dcb3b013905124caa1017a3f1daea4c4029e7edd7ca319914c23c7",
+      "sourceSize": {
+        "width": 80,
+        "height": 80
+      },
+      "outputSize": {
+        "width": 320,
+        "height": 320
+      }
+    },
+    {
+      "source": "E:/logh7-revival/client-unity/Assets/ArtSource/original/medals/m_f013.png",
+      "output": "E:/logh7-revival/client-unity/Assets/ArtSource/remaster/alliance-medals-4x/m_f013_4x.png",
+      "sourceSha256": "191a65e1c132d065ae4f80f3eda4eef58bf9c20d22f8cfaf95ed6e28d64348d7",
+      "outputSha256": "c385f36977ee4fa121369b2d08198979b8a1eb120968b253d1d4956bd6cc055c",
+      "sourceSize": {
+        "width": 80,
+        "height": 80
+      },
+      "outputSize": {
+        "width": 320,
+        "height": 320
+      }
+    },
+    {
+      "source": "E:/logh7-revival/client-unity/Assets/ArtSource/original/medals/m_f014.png",
+      "output": "E:/logh7-revival/client-unity/Assets/ArtSource/remaster/alliance-medals-4x/m_f014_4x.png",
+      "sourceSha256": "a3359ffc15d7e195b50f8defd1fc15c8aca7d86ad695b1accacbf2d94e13e275",
+      "outputSha256": "b0c1aa1a0426b163dde8765163d18478692e0c2e42fee8fea8a1a708f932b39d",
+      "sourceSize": {
+        "width": 80,
+        "height": 80
+      },
+      "outputSize": {
+        "width": 320,
+        "height": 320
+      }
+    },
+    {
+      "source": "E:/logh7-revival/client-unity/Assets/ArtSource/original/medals/m_f015.png",
+      "output": "E:/logh7-revival/client-unity/Assets/ArtSource/remaster/alliance-medals-4x/m_f015_4x.png",
+      "sourceSha256": "4503f83359b8a6620b8104a0dfa184f5fcc6f23c21de23f3481dbc45f1f42534",
+      "outputSha256": "a2d7ef0bded92aedfccb8f8356606ca134e2253deebb7b62898f5c0df5eb2801",
+      "sourceSize": {
+        "width": 80,
+        "height": 80
+      },
+      "outputSize": {
+        "width": 320,
+        "height": 320
+      }
+    }
+  ]
+}

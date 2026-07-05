@@ -1,0 +1,134 @@
+[
+ {
+  "file": "data/model/Space/s000.mdx",
+  "name": "s000",
+  "ext": "mdx",
+  "size": 16508,
+  "node_count": 2,
+  "nodes": [
+   "000:Layer1",
+   "000:Layer2"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\g\\Stage\\Space\\objects\\000.lwo",
+   "W:\\Gin7\\CG\\g\\Stage\\Space\\images\\neb000.bmp",
+   "W:\\Gin7\\CG\\g\\Stage\\Space\\images\\star000.bmp",
+   "W:\\Gin7\\CG\\g\\Stage\\Space\\images\\neb000_a.bmp"
+  ]
+ },
+ {
+  "file": "data/model/Space/s001.mdx",
+  "name": "s001",
+  "ext": "mdx",
+  "size": 15524,
+  "node_count": 1,
+  "nodes": [
+   "001:Layer1"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\g\\Stage\\Space\\objects\\001.lwo",
+   "W:\\Gin7\\CG\\g\\Stage\\Space\\images\\neb001.bmp",
+   "W:\\Gin7\\CG\\g\\Stage\\Space\\images\\star000.bmp",
+   "W:\\Gin7\\CG\\g\\Stage\\Space\\images\\neb000_a.bmp"
+  ]
+ },
+ {
+  "file": "data/model/Space/s002.mdx",
+  "name": "s002",
+  "ext": "mdx",
+  "size": 15524,
+  "node_count": 1,
+  "nodes": [
+   "002:Layer1"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\g\\Stage\\Space\\objects\\002.lwo",
+   "W:\\Gin7\\CG\\g\\Stage\\Space\\images\\neb002.bmp",
+   "W:\\Gin7\\CG\\g\\Stage\\Space\\images\\star000.bmp",
+   "W:\\Gin7\\CG\\g\\Stage\\Space\\images\\neb000_a.bmp"
+  ]
+ },
+ {
+  "file": "data/model/Space/s003.mdx",
+  "name": "s003",
+  "ext": "mdx",
+  "size": 15524,
+  "node_count": 1,
+  "nodes": [
+   "003:Layer1"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\g\\Stage\\Space\\objects\\003.lwo",
+   "W:\\Gin7\\CG\\g\\Stage\\Space\\images\\neb003.bmp",
+   "W:\\Gin7\\CG\\g\\Stage\\Space\\images\\star000.bmp",
+   "W:\\Gin7\\CG\\g\\Stage\\Space\\images\\neb000_a.bmp"
+  ]
+ },
+ {
+  "file": "data/model/Space/s004.mdx",
+  "name": "s004",
+  "ext": "mdx",
+  "size": 15524,
+  "node_count": 1,
+  "nodes": [
+   "004:Layer1"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\g\\Stage\\Space\\objects\\004.lwo",
+   "W:\\Gin7\\CG\\g\\Stage\\Space\\images\\neb004.bmp",
+   "W:\\Gin7\\CG\\g\\Stage\\Space\\images\\star000.bmp",
+   "W:\\Gin7\\CG\\g\\Stage\\Space\\images\\neb000_a.bmp"
+  ]
+ },
+ {
+  "file": "data/model/Space/s005.mdx",
+  "name": "s005",
+  "ext": "mdx",
+  "size": 15524,
+  "node_count": 1,
+  "nodes": [
+   "005:Layer1"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\g\\Stage\\Space\\objects\\005.lwo",
+   "W:\\Gin7\\CG\\g\\Stage\\Space\\images\\neb005.bmp",
+   "W:\\Gin7\\CG\\g\\Stage\\Space\\images\\star000.bmp",
+   "W:\\Gin7\\CG\\g\\Stage\\Space\\images\\neb000_a.bmp"
+  ]
+ },
+ {
+  "file": "data/model/Space/s006.mdx",
+  "name": "s006",
+  "ext": "mdx",
+  "size": 15524,
+  "node_count": 1,
+  "nodes": [
+   "006:Layer1"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\g\\Stage\\Space\\objects\\006.lwo",
+   "W:\\Gin7\\CG\\g\\Stage\\Space\\images\\neb006.bmp",
+   "W:\\Gin7\\CG\\g\\Stage\\Space\\images\\star000.bmp",
+   "W:\\Gin7\\CG\\g\\Stage\\Space\\images\\neb000_a.bmp"
+  ]
+ },
+ {
+  "file": "data/model/Space/space.mdx",
+  "name": "space",
+  "ext": "mdx",
+  "size": 39558,
+  "node_count": 2,
+  "nodes": [
+   "s004:Layer1",
+   "s004:Layer2"
+  ],
+  "assets": [
+   "W:\\Gin7\\CG\\g\\Stage\\Space\\objects\\s004.lwo",
+   "W:\\Gin7\\CG\\g\\Stage\\B_board\\objects\\bbfs_000.lwo",
+   "W:\\Gin7\\CG\\g\\Stage\\Space\\images\\neb004.bmp",
+   "W:\\Gin7\\CG\\g\\Stage\\Space\\images\\star000.bmp",
+   "W:\\Gin7\\CG\\g\\Stage\\Space\\images\\neb000_a.bmp",
+   "W:\\Gin7\\CG\\g\\Stage\\B_board\\images\\bbfs000.bmp"
+  ]
+ }
+]

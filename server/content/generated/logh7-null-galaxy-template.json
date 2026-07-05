@@ -1,0 +1,609 @@
+{
+  "id": "logh7-null-galaxy-template",
+  "source": {
+    "mdxCatalogId": "logh7-mdx-catalog",
+    "mdxPath": "strategy/Null_galaxy.mdx",
+    "mdxSha1": "807fe8b07a2b3a4d1951f366faffb353ca55ae3c",
+    "evidenceGrade": "P0-extracted-asset",
+    "positionStatus": "not-in-mdx",
+    "note": "Null_galaxy.mdx provides star template node names and spectral classes only. Canonical star positions remain manual/PDF-derived evidence."
+  },
+  "headerNodeCount": 85,
+  "starCount": 79,
+  "spectralClasses": {
+    "A": 7,
+    "B": 5,
+    "F": 8,
+    "G": 19,
+    "K": 17,
+    "M": 21,
+    "O": 2
+  },
+  "stars": [
+    {
+      "ordinal": 1,
+      "spectralClass": "G",
+      "nodeName": "star_01_G",
+      "mdxNodeIndex": 0,
+      "mdxOffset": 88
+    },
+    {
+      "ordinal": 2,
+      "spectralClass": "O",
+      "nodeName": "star_02_O",
+      "mdxNodeIndex": 1,
+      "mdxOffset": 320
+    },
+    {
+      "ordinal": 3,
+      "spectralClass": "F",
+      "nodeName": "star_03_F",
+      "mdxNodeIndex": 2,
+      "mdxOffset": 552
+    },
+    {
+      "ordinal": 4,
+      "spectralClass": "A",
+      "nodeName": "star_04_A",
+      "mdxNodeIndex": 3,
+      "mdxOffset": 784
+    },
+    {
+      "ordinal": 5,
+      "spectralClass": "A",
+      "nodeName": "star_05_A",
+      "mdxNodeIndex": 4,
+      "mdxOffset": 1016
+    },
+    {
+      "ordinal": 6,
+      "spectralClass": "G",
+      "nodeName": "star_06_G",
+      "mdxNodeIndex": 5,
+      "mdxOffset": 1248
+    },
+    {
+      "ordinal": 7,
+      "spectralClass": "B",
+      "nodeName": "star_07_B",
+      "mdxNodeIndex": 6,
+      "mdxOffset": 1480
+    },
+    {
+      "ordinal": 8,
+      "spectralClass": "M",
+      "nodeName": "star_08_M",
+      "mdxNodeIndex": 7,
+      "mdxOffset": 1712
+    },
+    {
+      "ordinal": 9,
+      "spectralClass": "G",
+      "nodeName": "star_09_G",
+      "mdxNodeIndex": 8,
+      "mdxOffset": 1944
+    },
+    {
+      "ordinal": 10,
+      "spectralClass": "B",
+      "nodeName": "star_10_B",
+      "mdxNodeIndex": 9,
+      "mdxOffset": 2176
+    },
+    {
+      "ordinal": 11,
+      "spectralClass": "G",
+      "nodeName": "star_11_G",
+      "mdxNodeIndex": 10,
+      "mdxOffset": 2408
+    },
+    {
+      "ordinal": 12,
+      "spectralClass": "G",
+      "nodeName": "star_12_G",
+      "mdxNodeIndex": 11,
+      "mdxOffset": 2640
+    },
+    {
+      "ordinal": 13,
+      "spectralClass": "K",
+      "nodeName": "star_13_K",
+      "mdxNodeIndex": 12,
+      "mdxOffset": 2872
+    },
+    {
+      "ordinal": 14,
+      "spectralClass": "F",
+      "nodeName": "star_14_F",
+      "mdxNodeIndex": 13,
+      "mdxOffset": 3104
+    },
+    {
+      "ordinal": 15,
+      "spectralClass": "M",
+      "nodeName": "star_15_M",
+      "mdxNodeIndex": 14,
+      "mdxOffset": 3336
+    },
+    {
+      "ordinal": 16,
+      "spectralClass": "K",
+      "nodeName": "star_16_K",
+      "mdxNodeIndex": 15,
+      "mdxOffset": 3568
+    },
+    {
+      "ordinal": 17,
+      "spectralClass": "K",
+      "nodeName": "star_17_K",
+      "mdxNodeIndex": 16,
+      "mdxOffset": 3800
+    },
+    {
+      "ordinal": 18,
+      "spectralClass": "A",
+      "nodeName": "star_18_A",
+      "mdxNodeIndex": 17,
+      "mdxOffset": 4032
+    },
+    {
+      "ordinal": 19,
+      "spectralClass": "K",
+      "nodeName": "star_19_K",
+      "mdxNodeIndex": 18,
+      "mdxOffset": 4264
+    },
+    {
+      "ordinal": 20,
+      "spectralClass": "G",
+      "nodeName": "star_20_G",
+      "mdxNodeIndex": 19,
+      "mdxOffset": 4496
+    },
+    {
+      "ordinal": 21,
+      "spectralClass": "M",
+      "nodeName": "star_21_M",
+      "mdxNodeIndex": 20,
+      "mdxOffset": 4728
+    },
+    {
+      "ordinal": 22,
+      "spectralClass": "M",
+      "nodeName": "star_22_M",
+      "mdxNodeIndex": 21,
+      "mdxOffset": 4960
+    },
+    {
+      "ordinal": 23,
+      "spectralClass": "M",
+      "nodeName": "star_23_M",
+      "mdxNodeIndex": 22,
+      "mdxOffset": 5192
+    },
+    {
+      "ordinal": 24,
+      "spectralClass": "F",
+      "nodeName": "star_24_F",
+      "mdxNodeIndex": 23,
+      "mdxOffset": 5424
+    },
+    {
+      "ordinal": 25,
+      "spectralClass": "M",
+      "nodeName": "star_25_M",
+      "mdxNodeIndex": 24,
+      "mdxOffset": 5656
+    },
+    {
+      "ordinal": 26,
+      "spectralClass": "K",
+      "nodeName": "star_26_K",
+      "mdxNodeIndex": 25,
+      "mdxOffset": 5888
+    },
+    {
+      "ordinal": 27,
+      "spectralClass": "G",
+      "nodeName": "star_27_G",
+      "mdxNodeIndex": 26,
+      "mdxOffset": 6120
+    },
+    {
+      "ordinal": 28,
+      "spectralClass": "G",
+      "nodeName": "star_28_G",
+      "mdxNodeIndex": 27,
+      "mdxOffset": 6352
+    },
+    {
+      "ordinal": 29,
+      "spectralClass": "K",
+      "nodeName": "star_29_K",
+      "mdxNodeIndex": 28,
+      "mdxOffset": 6584
+    },
+    {
+      "ordinal": 30,
+      "spectralClass": "M",
+      "nodeName": "star_30_M",
+      "mdxNodeIndex": 29,
+      "mdxOffset": 6816
+    },
+    {
+      "ordinal": 31,
+      "spectralClass": "M",
+      "nodeName": "star_31_M",
+      "mdxNodeIndex": 30,
+      "mdxOffset": 7048
+    },
+    {
+      "ordinal": 32,
+      "spectralClass": "K",
+      "nodeName": "star_32_K",
+      "mdxNodeIndex": 31,
+      "mdxOffset": 7280
+    },
+    {
+      "ordinal": 33,
+      "spectralClass": "G",
+      "nodeName": "star_33_G",
+      "mdxNodeIndex": 32,
+      "mdxOffset": 7512
+    },
+    {
+      "ordinal": 34,
+      "spectralClass": "G",
+      "nodeName": "star_34_G",
+      "mdxNodeIndex": 33,
+      "mdxOffset": 7744
+    },
+    {
+      "ordinal": 35,
+      "spectralClass": "M",
+      "nodeName": "star_35_M",
+      "mdxNodeIndex": 34,
+      "mdxOffset": 7976
+    },
+    {
+      "ordinal": 36,
+      "spectralClass": "M",
+      "nodeName": "star_36_M",
+      "mdxNodeIndex": 35,
+      "mdxOffset": 8208
+    },
+    {
+      "ordinal": 37,
+      "spectralClass": "K",
+      "nodeName": "star_37_K",
+      "mdxNodeIndex": 36,
+      "mdxOffset": 8440
+    },
+    {
+      "ordinal": 38,
+      "spectralClass": "K",
+      "nodeName": "star_38_K",
+      "mdxNodeIndex": 37,
+      "mdxOffset": 8672
+    },
+    {
+      "ordinal": 39,
+      "spectralClass": "B",
+      "nodeName": "star_39_B",
+      "mdxNodeIndex": 38,
+      "mdxOffset": 8904
+    },
+    {
+      "ordinal": 40,
+      "spectralClass": "G",
+      "nodeName": "star_40_G",
+      "mdxNodeIndex": 39,
+      "mdxOffset": 9136
+    },
+    {
+      "ordinal": 41,
+      "spectralClass": "G",
+      "nodeName": "star_41_G",
+      "mdxNodeIndex": 40,
+      "mdxOffset": 9368
+    },
+    {
+      "ordinal": 42,
+      "spectralClass": "G",
+      "nodeName": "star_42_G",
+      "mdxNodeIndex": 41,
+      "mdxOffset": 9600
+    },
+    {
+      "ordinal": 43,
+      "spectralClass": "G",
+      "nodeName": "star_43_G",
+      "mdxNodeIndex": 42,
+      "mdxOffset": 9832
+    },
+    {
+      "ordinal": 44,
+      "spectralClass": "M",
+      "nodeName": "star_44_M",
+      "mdxNodeIndex": 43,
+      "mdxOffset": 10064
+    },
+    {
+      "ordinal": 45,
+      "spectralClass": "G",
+      "nodeName": "star_45_G",
+      "mdxNodeIndex": 44,
+      "mdxOffset": 10296
+    },
+    {
+      "ordinal": 46,
+      "spectralClass": "G",
+      "nodeName": "star_46_G",
+      "mdxNodeIndex": 45,
+      "mdxOffset": 10528
+    },
+    {
+      "ordinal": 47,
+      "spectralClass": "M",
+      "nodeName": "star_47_M",
+      "mdxNodeIndex": 46,
+      "mdxOffset": 10760
+    },
+    {
+      "ordinal": 48,
+      "spectralClass": "M",
+      "nodeName": "star_48_M",
+      "mdxNodeIndex": 47,
+      "mdxOffset": 10992
+    },
+    {
+      "ordinal": 49,
+      "spectralClass": "M",
+      "nodeName": "star_49_M",
+      "mdxNodeIndex": 48,
+      "mdxOffset": 11224
+    },
+    {
+      "ordinal": 50,
+      "spectralClass": "K",
+      "nodeName": "star_50_K",
+      "mdxNodeIndex": 49,
+      "mdxOffset": 11456
+    },
+    {
+      "ordinal": 51,
+      "spectralClass": "K",
+      "nodeName": "star_51_K",
+      "mdxNodeIndex": 50,
+      "mdxOffset": 11688
+    },
+    {
+      "ordinal": 52,
+      "spectralClass": "M",
+      "nodeName": "star_52_M",
+      "mdxNodeIndex": 51,
+      "mdxOffset": 11920
+    },
+    {
+      "ordinal": 53,
+      "spectralClass": "M",
+      "nodeName": "star_53_M",
+      "mdxNodeIndex": 52,
+      "mdxOffset": 12152
+    },
+    {
+      "ordinal": 54,
+      "spectralClass": "M",
+      "nodeName": "star_54_M",
+      "mdxNodeIndex": 53,
+      "mdxOffset": 12384
+    },
+    {
+      "ordinal": 55,
+      "spectralClass": "M",
+      "nodeName": "star_55_M",
+      "mdxNodeIndex": 54,
+      "mdxOffset": 12616
+    },
+    {
+      "ordinal": 56,
+      "spectralClass": "G",
+      "nodeName": "star_56_G",
+      "mdxNodeIndex": 55,
+      "mdxOffset": 12848
+    },
+    {
+      "ordinal": 57,
+      "spectralClass": "K",
+      "nodeName": "star_57_K",
+      "mdxNodeIndex": 56,
+      "mdxOffset": 13080
+    },
+    {
+      "ordinal": 58,
+      "spectralClass": "F",
+      "nodeName": "star_58_F",
+      "mdxNodeIndex": 57,
+      "mdxOffset": 13312
+    },
+    {
+      "ordinal": 59,
+      "spectralClass": "K",
+      "nodeName": "star_59_K",
+      "mdxNodeIndex": 58,
+      "mdxOffset": 13544
+    },
+    {
+      "ordinal": 60,
+      "spectralClass": "K",
+      "nodeName": "star_60_K",
+      "mdxNodeIndex": 59,
+      "mdxOffset": 13776
+    },
+    {
+      "ordinal": 61,
+      "spectralClass": "G",
+      "nodeName": "star_61_G",
+      "mdxNodeIndex": 60,
+      "mdxOffset": 14008
+    },
+    {
+      "ordinal": 62,
+      "spectralClass": "K",
+      "nodeName": "star_62_K",
+      "mdxNodeIndex": 61,
+      "mdxOffset": 14240
+    },
+    {
+      "ordinal": 63,
+      "spectralClass": "A",
+      "nodeName": "star_63_A",
+      "mdxNodeIndex": 62,
+      "mdxOffset": 14472
+    },
+    {
+      "ordinal": 64,
+      "spectralClass": "F",
+      "nodeName": "star_64_F",
+      "mdxNodeIndex": 63,
+      "mdxOffset": 14704
+    },
+    {
+      "ordinal": 65,
+      "spectralClass": "M",
+      "nodeName": "star_65_M",
+      "mdxNodeIndex": 64,
+      "mdxOffset": 14936
+    },
+    {
+      "ordinal": 66,
+      "spectralClass": "K",
+      "nodeName": "star_66_K",
+      "mdxNodeIndex": 65,
+      "mdxOffset": 15168
+    },
+    {
+      "ordinal": 67,
+      "spectralClass": "A",
+      "nodeName": "star_67_A",
+      "mdxNodeIndex": 66,
+      "mdxOffset": 15400
+    },
+    {
+      "ordinal": 68,
+      "spectralClass": "M",
+      "nodeName": "star_68_M",
+      "mdxNodeIndex": 67,
+      "mdxOffset": 15632
+    },
+    {
+      "ordinal": 69,
+      "spectralClass": "F",
+      "nodeName": "star_69_F",
+      "mdxNodeIndex": 68,
+      "mdxOffset": 15864
+    },
+    {
+      "ordinal": 70,
+      "spectralClass": "B",
+      "nodeName": "star_70_B",
+      "mdxNodeIndex": 69,
+      "mdxOffset": 16096
+    },
+    {
+      "ordinal": 71,
+      "spectralClass": "F",
+      "nodeName": "star_71_F",
+      "mdxNodeIndex": 70,
+      "mdxOffset": 16328
+    },
+    {
+      "ordinal": 72,
+      "spectralClass": "A",
+      "nodeName": "star_72_A",
+      "mdxNodeIndex": 71,
+      "mdxOffset": 16560
+    },
+    {
+      "ordinal": 73,
+      "spectralClass": "F",
+      "nodeName": "star_73_F",
+      "mdxNodeIndex": 72,
+      "mdxOffset": 16792
+    },
+    {
+      "ordinal": 74,
+      "spectralClass": "M",
+      "nodeName": "star_74_M",
+      "mdxNodeIndex": 73,
+      "mdxOffset": 17024
+    },
+    {
+      "ordinal": 75,
+      "spectralClass": "O",
+      "nodeName": "star_75_O",
+      "mdxNodeIndex": 74,
+      "mdxOffset": 17256
+    },
+    {
+      "ordinal": 76,
+      "spectralClass": "B",
+      "nodeName": "star_76_B",
+      "mdxNodeIndex": 75,
+      "mdxOffset": 17488
+    },
+    {
+      "ordinal": 77,
+      "spectralClass": "A",
+      "nodeName": "star_77_A",
+      "mdxNodeIndex": 76,
+      "mdxOffset": 17720
+    },
+    {
+      "ordinal": 78,
+      "spectralClass": "K",
+      "nodeName": "star_78_K",
+      "mdxNodeIndex": 77,
+      "mdxOffset": 17952
+    },
+    {
+      "ordinal": 79,
+      "spectralClass": "G",
+      "nodeName": "star_79_G",
+      "mdxNodeIndex": 78,
+      "mdxOffset": 18184
+    }
+  ],
+  "nonStarTemplateNodes": [
+    {
+      "index": 79,
+      "offset": 18416,
+      "name": "bh_01"
+    },
+    {
+      "index": 80,
+      "offset": 18648,
+      "name": "bh_02"
+    },
+    {
+      "index": 81,
+      "offset": 18880,
+      "name": "bh_03"
+    },
+    {
+      "index": 82,
+      "offset": 19112,
+      "name": "ns_01"
+    },
+    {
+      "index": 83,
+      "offset": 19344,
+      "name": "ns_02"
+    },
+    {
+      "index": 84,
+      "offset": 19576,
+      "name": "ns_03"
+    }
+  ]
+}

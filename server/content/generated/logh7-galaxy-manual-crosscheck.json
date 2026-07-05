@@ -1,0 +1,1024 @@
+{
+ "id": "logh7-galaxy-manual-crosscheck",
+ "status": "suspect-cross-check-required",
+ "canonicalPromotion": "blocked-until-cross-source-confirmed",
+ "policy": "manual-chart axis alone cannot promote system positions; CD/RE/live-wire axes must independently agree",
+ "generatedAt": "2026-07-04",
+ "detectionProvenance": {
+  "sourcePdf": "docs/reference/gin7manual.pdf",
+  "sourcePdfSha256": "ff9b7b638582febba723413d9956f4166aecbc20746cb35bb4afddcef9515080",
+  "page": 101,
+  "renderDpi": 300,
+  "renderEvidence": ".omo/ulw-loop/evidence/g047-manual-p101-render-300dpi.png",
+  "method": "fresh independent extraction (G047): exact-palette bubble label detection (alliance BGR 128,255,128 / empire 255,255,0 / fezzan 0,255,255), V-channel median-subtracted glow blobs excluding bubbles/border megastructures, one dot per nearest bubble within 160px",
+  "knownBias": "glow centroid shifted ~(-4,+42.5)px by bubble occlusion; absorbed into fitted grid origin",
+  "independence": "does not reuse 2026-06-21 page101-bg.jpg pixels or its origin/pitch constants",
+  "evidenceGrade": "P1-manual-chart"
+ },
+ "gridFit": {
+  "pitchPx": 29.15,
+  "originPx": [
+   195,
+   519
+  ],
+  "hits": 68,
+  "dotCount": 76,
+  "detectorBiasNote": "glow centroid biased ~(-4,+42.5)px by bubble occlusion; absorbed into origin"
+ },
+ "chartLabelCounts": {
+  "alliance": 40,
+  "empire": 39,
+  "fezzan": 1,
+  "total": 80
+ },
+ "summary": {
+  "galaxySystemCount": 85,
+  "starDotCount": 76,
+  "exactMatchCount": 68,
+  "nearMissCount": 6,
+  "anomalousDotCount": 2,
+  "factionMismatchCount": 0,
+  "chartAbsentSystemCount": 17
+ },
+ "matchedSystems": [
+  {
+   "system": "マローヴィア",
+   "cell": [
+    24,
+    2
+   ],
+   "dotFaction": "alliance",
+   "galaxyFaction": "alliance",
+   "factionMatch": true,
+   "residualCells": 0.453
+  },
+  {
+   "system": "ハダト",
+   "cell": [
+    25,
+    6
+   ],
+   "dotFaction": "alliance",
+   "galaxyFaction": "alliance",
+   "factionMatch": true,
+   "residualCells": 0.545
+  },
+  {
+   "system": "ダゴン",
+   "cell": [
+    40,
+    6
+   ],
+   "dotFaction": "alliance",
+   "galaxyFaction": "alliance",
+   "factionMatch": true,
+   "residualCells": 0.209
+  },
+  {
+   "system": "ファラーファラ",
+   "cell": [
+    18,
+    7
+   ],
+   "dotFaction": "alliance",
+   "galaxyFaction": "alliance",
+   "factionMatch": true,
+   "residualCells": 0.497
+  },
+  {
+   "system": "エルゴン",
+   "cell": [
+    35,
+    8
+   ],
+   "dotFaction": "alliance",
+   "galaxyFaction": "alliance",
+   "factionMatch": true,
+   "residualCells": 0.285
+  },
+  {
+   "system": "アスターテ",
+   "cell": [
+    43,
+    11
+   ],
+   "dotFaction": "alliance",
+   "galaxyFaction": "alliance",
+   "factionMatch": true,
+   "residualCells": 0.279
+  },
+  {
+   "system": "ロフォーテン",
+   "cell": [
+    13,
+    11
+   ],
+   "dotFaction": "alliance",
+   "galaxyFaction": "alliance",
+   "factionMatch": true,
+   "residualCells": 0.592
+  },
+  {
+   "system": "ドーリア",
+   "cell": [
+    30,
+    12
+   ],
+   "dotFaction": "alliance",
+   "galaxyFaction": "alliance",
+   "factionMatch": true,
+   "residualCells": 0.476
+  },
+  {
+   "system": "シロン",
+   "cell": [
+    6,
+    14
+   ],
+   "dotFaction": "alliance",
+   "galaxyFaction": "alliance",
+   "factionMatch": true,
+   "residualCells": 0.349
+  },
+  {
+   "system": "ケリム",
+   "cell": [
+    18,
+    14
+   ],
+   "dotFaction": "alliance",
+   "galaxyFaction": "alliance",
+   "factionMatch": true,
+   "residualCells": 0.68
+  },
+  {
+   "system": "ティアマト",
+   "cell": [
+    40,
+    15
+   ],
+   "dotFaction": "alliance",
+   "galaxyFaction": "alliance",
+   "factionMatch": true,
+   "residualCells": 0.286
+  },
+  {
+   "system": "ジャムシード",
+   "cell": [
+    25,
+    16
+   ],
+   "dotFaction": "alliance",
+   "galaxyFaction": "alliance",
+   "factionMatch": true,
+   "residualCells": 0.632
+  },
+  {
+   "system": "エル・ファシル",
+   "cell": [
+    32,
+    17
+   ],
+   "dotFaction": "alliance",
+   "galaxyFaction": "alliance",
+   "factionMatch": true,
+   "residualCells": 0.572
+  },
+  {
+   "system": "アルレスハイム",
+   "cell": [
+    44,
+    19
+   ],
+   "dotFaction": "alliance",
+   "galaxyFaction": "alliance",
+   "factionMatch": true,
+   "residualCells": 0.553
+  },
+  {
+   "system": "ルンビーニ",
+   "cell": [
+    5,
+    20
+   ],
+   "dotFaction": "alliance",
+   "galaxyFaction": "alliance",
+   "factionMatch": true,
+   "residualCells": 0.645
+  },
+  {
+   "system": "バーラト",
+   "cell": [
+    14,
+    20
+   ],
+   "dotFaction": "alliance",
+   "galaxyFaction": "alliance",
+   "factionMatch": true,
+   "residualCells": 0.659
+  },
+  {
+   "system": "リューカス",
+   "cell": [
+    24,
+    24
+   ],
+   "dotFaction": "alliance",
+   "galaxyFaction": "alliance",
+   "factionMatch": true,
+   "residualCells": 0.859
+  },
+  {
+   "system": "パランティア",
+   "cell": [
+    44,
+    25
+   ],
+   "dotFaction": "alliance",
+   "galaxyFaction": "alliance",
+   "factionMatch": true,
+   "residualCells": 0.632
+  },
+  {
+   "system": "ランテマリオ",
+   "cell": [
+    34,
+    25
+   ],
+   "dotFaction": "alliance",
+   "galaxyFaction": "alliance",
+   "factionMatch": true,
+   "residualCells": 0.495
+  },
+  {
+   "system": "フォルセティ",
+   "cell": [
+    41,
+    25
+   ],
+   "dotFaction": "alliance",
+   "galaxyFaction": "alliance",
+   "factionMatch": true,
+   "residualCells": 0.361
+  },
+  {
+   "system": "タナトス",
+   "cell": [
+    9,
+    27
+   ],
+   "dotFaction": "alliance",
+   "galaxyFaction": "alliance",
+   "factionMatch": true,
+   "residualCells": 0.519
+  },
+  {
+   "system": "バーミリオン",
+   "cell": [
+    22,
+    28
+   ],
+   "dotFaction": "alliance",
+   "galaxyFaction": "alliance",
+   "factionMatch": true,
+   "residualCells": 0.846
+  },
+  {
+   "system": "マル・アデッタ",
+   "cell": [
+    38,
+    29
+   ],
+   "dotFaction": "alliance",
+   "galaxyFaction": "alliance",
+   "factionMatch": true,
+   "residualCells": 0.277
+  },
+  {
+   "system": "ファイアザード",
+   "cell": [
+    43,
+    29
+   ],
+   "dotFaction": "alliance",
+   "galaxyFaction": "alliance",
+   "factionMatch": true,
+   "residualCells": 0.21
+  },
+  {
+   "system": "タッシリ",
+   "cell": [
+    27,
+    30
+   ],
+   "dotFaction": "alliance",
+   "galaxyFaction": "alliance",
+   "factionMatch": true,
+   "residualCells": 0.668
+  },
+  {
+   "system": "シャンダルーア",
+   "cell": [
+    39,
+    33
+   ],
+   "dotFaction": "alliance",
+   "galaxyFaction": "alliance",
+   "factionMatch": true,
+   "residualCells": 0.19
+  },
+  {
+   "system": "リオ・ヴェルデ",
+   "cell": [
+    11,
+    33
+   ],
+   "dotFaction": "alliance",
+   "galaxyFaction": "alliance",
+   "factionMatch": true,
+   "residualCells": 0.276
+  },
+  {
+   "system": "ガンダルヴァ",
+   "cell": [
+    33,
+    34
+   ],
+   "dotFaction": "alliance",
+   "galaxyFaction": "alliance",
+   "factionMatch": true,
+   "residualCells": 0.46
+  },
+  {
+   "system": "ポレヴィト",
+   "cell": [
+    44,
+    38
+   ],
+   "dotFaction": "alliance",
+   "galaxyFaction": "alliance",
+   "factionMatch": true,
+   "residualCells": 0.093
+  },
+  {
+   "system": "トリプラ",
+   "cell": [
+    26,
+    39
+   ],
+   "dotFaction": "alliance",
+   "galaxyFaction": "alliance",
+   "factionMatch": true,
+   "residualCells": 0.47
+  },
+  {
+   "system": "バラトループ",
+   "cell": [
+    39,
+    41
+   ],
+   "dotFaction": "alliance",
+   "galaxyFaction": "alliance",
+   "factionMatch": true,
+   "residualCells": 0.018
+  },
+  {
+   "system": "ポリスーン",
+   "cell": [
+    18,
+    46
+   ],
+   "dotFaction": "alliance",
+   "galaxyFaction": "alliance",
+   "factionMatch": true,
+   "residualCells": 0.637
+  },
+  {
+   "system": "シュパーラ",
+   "cell": [
+    27,
+    46
+   ],
+   "dotFaction": "alliance",
+   "galaxyFaction": "alliance",
+   "factionMatch": true,
+   "residualCells": 0.634
+  },
+  {
+   "system": "シリウス",
+   "cell": [
+    80,
+    1
+   ],
+   "dotFaction": "empire",
+   "galaxyFaction": "empire",
+   "factionMatch": true,
+   "residualCells": 0.121
+  },
+  {
+   "system": "太陽系",
+   "cell": [
+    76,
+    3
+   ],
+   "dotFaction": "empire",
+   "galaxyFaction": "empire",
+   "factionMatch": true,
+   "residualCells": 0.108
+  },
+  {
+   "system": "ヴェガ",
+   "cell": [
+    80,
+    4
+   ],
+   "dotFaction": "empire",
+   "galaxyFaction": "empire",
+   "factionMatch": true,
+   "residualCells": 0.146
+  },
+  {
+   "system": "ビルロスト",
+   "cell": [
+    64,
+    5
+   ],
+   "dotFaction": "empire",
+   "galaxyFaction": "empire",
+   "factionMatch": true,
+   "residualCells": 0.391
+  },
+  {
+   "system": "ボルソルン",
+   "cell": [
+    68,
+    7
+   ],
+   "dotFaction": "empire",
+   "galaxyFaction": "empire",
+   "factionMatch": true,
+   "residualCells": 0.416
+  },
+  {
+   "system": "カストロプ",
+   "cell": [
+    92,
+    8
+   ],
+   "dotFaction": "empire",
+   "galaxyFaction": "empire",
+   "factionMatch": true,
+   "residualCells": 0.579
+  },
+  {
+   "system": "ヴィレンシュタイン",
+   "cell": [
+    85,
+    9
+   ],
+   "dotFaction": "empire",
+   "galaxyFaction": "empire",
+   "factionMatch": true,
+   "residualCells": 0.522
+  },
+  {
+   "system": "リンダーホーフ",
+   "cell": [
+    78,
+    11
+   ],
+   "dotFaction": "empire",
+   "galaxyFaction": "empire",
+   "factionMatch": true,
+   "residualCells": 0.218
+  },
+  {
+   "system": "アムリッツァ",
+   "cell": [
+    61,
+    12
+   ],
+   "dotFaction": "empire",
+   "galaxyFaction": "empire",
+   "factionMatch": true,
+   "residualCells": 0.688
+  },
+  {
+   "system": "ドヴェルグ",
+   "cell": [
+    68,
+    12
+   ],
+   "dotFaction": "empire",
+   "galaxyFaction": "empire",
+   "factionMatch": true,
+   "residualCells": 0.438
+  },
+  {
+   "system": "ハインスベルク",
+   "cell": [
+    88,
+    15
+   ],
+   "dotFaction": "empire",
+   "galaxyFaction": "empire",
+   "factionMatch": true,
+   "residualCells": 0.674
+  },
+  {
+   "system": "ヤヴァンハール",
+   "cell": [
+    71,
+    15
+   ],
+   "dotFaction": "empire",
+   "galaxyFaction": "empire",
+   "factionMatch": true,
+   "residualCells": 0.545
+  },
+  {
+   "system": "ヴァンステイド",
+   "cell": [
+    63,
+    18
+   ],
+   "dotFaction": "empire",
+   "galaxyFaction": "empire",
+   "factionMatch": true,
+   "residualCells": 0.846
+  },
+  {
+   "system": "アルタイル",
+   "cell": [
+    70,
+    21
+   ],
+   "dotFaction": "empire",
+   "galaxyFaction": "empire",
+   "factionMatch": true,
+   "residualCells": 0.609
+  },
+  {
+   "system": "ルイトポルディング",
+   "cell": [
+    96,
+    24
+   ],
+   "dotFaction": "empire",
+   "galaxyFaction": "empire",
+   "factionMatch": true,
+   "residualCells": 0.76
+  },
+  {
+   "system": "ヴァルハラ",
+   "cell": [
+    88,
+    25
+   ],
+   "dotFaction": "empire",
+   "galaxyFaction": "empire",
+   "factionMatch": true,
+   "residualCells": 0.913
+  },
+  {
+   "system": "トラーバッハ",
+   "cell": [
+    64,
+    26
+   ],
+   "dotFaction": "empire",
+   "galaxyFaction": "empire",
+   "factionMatch": true,
+   "residualCells": 0.711
+  },
+  {
+   "system": "アルヴィース",
+   "cell": [
+    76,
+    28
+   ],
+   "dotFaction": "empire",
+   "galaxyFaction": "empire",
+   "factionMatch": true,
+   "residualCells": 0.391
+  },
+  {
+   "system": "アスガルド",
+   "cell": [
+    93,
+    30
+   ],
+   "dotFaction": "empire",
+   "galaxyFaction": "empire",
+   "factionMatch": true,
+   "residualCells": 0.688
+  },
+  {
+   "system": "ウォームスガウ",
+   "cell": [
+    99,
+    30
+   ],
+   "dotFaction": "empire",
+   "galaxyFaction": "empire",
+   "factionMatch": true,
+   "residualCells": 0.526
+  },
+  {
+   "system": "シャンタウ",
+   "cell": [
+    88,
+    32
+   ],
+   "dotFaction": "empire",
+   "galaxyFaction": "empire",
+   "factionMatch": true,
+   "residualCells": 0.452
+  },
+  {
+   "system": "アルメントフベール",
+   "cell": [
+    64,
+    33
+   ],
+   "dotFaction": "empire",
+   "galaxyFaction": "empire",
+   "factionMatch": true,
+   "residualCells": 0.498
+  },
+  {
+   "system": "アルテナ",
+   "cell": [
+    81,
+    33
+   ],
+   "dotFaction": "empire",
+   "galaxyFaction": "empire",
+   "factionMatch": true,
+   "residualCells": 0.123
+  },
+  {
+   "system": "フレイア",
+   "cell": [
+    70,
+    34
+   ],
+   "dotFaction": "empire",
+   "galaxyFaction": "empire",
+   "factionMatch": true,
+   "residualCells": 0.368
+  },
+  {
+   "system": "ヴィンスティンゲン",
+   "cell": [
+    98,
+    35
+   ],
+   "dotFaction": "empire",
+   "galaxyFaction": "empire",
+   "factionMatch": true,
+   "residualCells": 0.479
+  },
+  {
+   "system": "ヴァルデマール",
+   "cell": [
+    88,
+    38
+   ],
+   "dotFaction": "empire",
+   "galaxyFaction": "empire",
+   "factionMatch": true,
+   "residualCells": 0.544
+  },
+  {
+   "system": "ヴィッテルスバッハ",
+   "cell": [
+    94,
+    38
+   ],
+   "dotFaction": "empire",
+   "galaxyFaction": "empire",
+   "factionMatch": true,
+   "residualCells": 0.509
+  },
+  {
+   "system": "アイゼンヘルツ",
+   "cell": [
+    57,
+    38
+   ],
+   "dotFaction": "empire",
+   "galaxyFaction": "empire",
+   "factionMatch": true,
+   "residualCells": 0.49
+  },
+  {
+   "system": "ヨーツンヘイム",
+   "cell": [
+    63,
+    40
+   ],
+   "dotFaction": "empire",
+   "galaxyFaction": "empire",
+   "factionMatch": true,
+   "residualCells": 0.448
+  },
+  {
+   "system": "ランメルスベルク",
+   "cell": [
+    89,
+    43
+   ],
+   "dotFaction": "empire",
+   "galaxyFaction": "empire",
+   "factionMatch": true,
+   "residualCells": 0.516
+  },
+  {
+   "system": "ブラウンシュヴァイク",
+   "cell": [
+    67,
+    44
+   ],
+   "dotFaction": "empire",
+   "galaxyFaction": "empire",
+   "factionMatch": true,
+   "residualCells": 0.347
+  },
+  {
+   "system": "リッテンハイム",
+   "cell": [
+    82,
+    44
+   ],
+   "dotFaction": "empire",
+   "galaxyFaction": "empire",
+   "factionMatch": true,
+   "residualCells": 0.248
+  },
+  {
+   "system": "キフォイザー",
+   "cell": [
+    73,
+    45
+   ],
+   "dotFaction": "empire",
+   "galaxyFaction": "empire",
+   "factionMatch": true,
+   "residualCells": 0.333
+  },
+  {
+   "system": "バルドル",
+   "cell": [
+    77,
+    47
+   ],
+   "dotFaction": "empire",
+   "galaxyFaction": "empire",
+   "factionMatch": true,
+   "residualCells": 0.151
+  },
+  {
+   "system": "フォルゲン",
+   "cell": [
+    61,
+    47
+   ],
+   "dotFaction": "empire",
+   "galaxyFaction": "empire",
+   "factionMatch": true,
+   "residualCells": 0.631
+  }
+ ],
+ "nearMisses": [
+  {
+   "dotCell": [
+    41,
+    20
+   ],
+   "faction": "alliance",
+   "nearestSystem": "ドラゴニア",
+   "distanceCells": 0.55
+  },
+  {
+   "dotCell": [
+    22,
+    35
+   ],
+   "faction": "alliance",
+   "nearestSystem": "ライガール",
+   "distanceCells": 0.65
+  },
+  {
+   "dotCell": [
+    54,
+    13
+   ],
+   "faction": "empire",
+   "nearestSystem": "イゼルローン",
+   "distanceCells": 1.66
+  },
+  {
+   "dotCell": [
+    93,
+    15
+   ],
+   "faction": "empire",
+   "nearestSystem": "ヴァナヘイム",
+   "distanceCells": 0.95
+  },
+  {
+   "dotCell": [
+    89,
+    19
+   ],
+   "faction": "empire",
+   "nearestSystem": "ニヴルヘイム",
+   "distanceCells": 0.84
+  },
+  {
+   "dotCell": [
+    51,
+    38
+   ],
+   "faction": "fezzan",
+   "nearestSystem": "フェザーン",
+   "distanceCells": 1.52
+  }
+ ],
+ "anomalousDots": [
+  {
+   "dotCell": [
+    11,
+    28
+   ],
+   "faction": "alliance",
+   "nearestSystem": "タナトス",
+   "distanceCells": 2.75
+  },
+  {
+   "dotCell": [
+    37,
+    46
+   ],
+   "faction": "alliance",
+   "nearestSystem": "メルカルト",
+   "distanceCells": 3.76
+  }
+ ],
+ "chartAbsentSystems": [
+  {
+   "system": "エリューセラ",
+   "cell": [
+    7,
+    34
+   ],
+   "nearMissCandidate": false,
+   "needsOtherEvidenceAxis": true
+  },
+  {
+   "system": "ライガール",
+   "cell": [
+    21,
+    35
+   ],
+   "nearMissCandidate": true,
+   "needsOtherEvidenceAxis": true
+  },
+  {
+   "system": "シヴァ",
+   "cell": [
+    31,
+    4
+   ],
+   "nearMissCandidate": false,
+   "needsOtherEvidenceAxis": true
+  },
+  {
+   "system": "メルカルト",
+   "cell": [
+    34,
+    45
+   ],
+   "nearMissCandidate": false,
+   "needsOtherEvidenceAxis": true
+  },
+  {
+   "system": "ドラゴニア",
+   "cell": [
+    41,
+    19
+   ],
+   "nearMissCandidate": true,
+   "needsOtherEvidenceAxis": true
+  },
+  {
+   "system": "アルトミュール",
+   "cell": [
+    46,
+    14
+   ],
+   "nearMissCandidate": false,
+   "needsOtherEvidenceAxis": true
+  },
+  {
+   "system": "ヴァンフリート",
+   "cell": [
+    46,
+    12
+   ],
+   "nearMissCandidate": false,
+   "needsOtherEvidenceAxis": true
+  },
+  {
+   "system": "フェザーン",
+   "cell": [
+    51,
+    37
+   ],
+   "nearMissCandidate": true,
+   "needsOtherEvidenceAxis": true
+  },
+  {
+   "system": "イゼルローン",
+   "cell": [
+    53,
+    12
+   ],
+   "nearMissCandidate": true,
+   "needsOtherEvidenceAxis": true
+  },
+  {
+   "system": "ヴェルラ",
+   "cell": [
+    83,
+    23
+   ],
+   "nearMissCandidate": false,
+   "needsOtherEvidenceAxis": true
+  },
+  {
+   "system": "ニヴルヘイム",
+   "cell": [
+    89,
+    18
+   ],
+   "nearMissCandidate": true,
+   "needsOtherEvidenceAxis": true
+  },
+  {
+   "system": "ヴァナヘイム",
+   "cell": [
+    94,
+    15
+   ],
+   "nearMissCandidate": true,
+   "needsOtherEvidenceAxis": true
+  },
+  {
+   "system": "アンウレガルラ",
+   "cell": [
+    30,
+    7
+   ],
+   "nearMissCandidate": false,
+   "needsOtherEvidenceAxis": true
+  },
+  {
+   "system": "ケープホーン",
+   "cell": [
+    16,
+    42
+   ],
+   "nearMissCandidate": false,
+   "needsOtherEvidenceAxis": true
+  },
+  {
+   "system": "コブラヴェルデ",
+   "cell": [
+    22,
+    38
+   ],
+   "nearMissCandidate": false,
+   "needsOtherEvidenceAxis": true
+  },
+  {
+   "system": "ニーベルング",
+   "cell": [
+    76,
+    18
+   ],
+   "nearMissCandidate": false,
+   "needsOtherEvidenceAxis": true
+  },
+  {
+   "system": "モンサルヴァール",
+   "cell": [
+    36,
+    36
+   ],
+   "nearMissCandidate": false,
+   "needsOtherEvidenceAxis": true
+  }
+ ]
+}

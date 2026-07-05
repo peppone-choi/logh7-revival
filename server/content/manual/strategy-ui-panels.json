@@ -1,0 +1,159 @@
+{
+  "_source": "gin7 manual page image .omo/work/manual-pages-101/page020.png (printed footer page 19) + text layer .omo/work/manual-pages-101/uncovered-texts.json key \"20\"",
+  "_grade": "P1",
+  "_confidence_notes": [
+    "Page body text verified against the embedded text layer (uncovered-texts.json['20']); body items ②〜⑥ are verbatim.",
+    "The 職務権限カード screenshot inset is a low-resolution game capture NOT covered by the text layer; its caption '1日あたり400の功績がもらえます。分類は無効です。' and command button labels were read visually from the PNG and are marked _uncertain where legibility is imperfect.",
+    "The page shows only items ②〜⑥ of a numbered strategy-screen legend; item ① (presumably メインビュー) is on the previous page and is not asserted here.",
+    "No numeric values appear on this page other than the screenshot's '1日あたり400の功績' and the '7種類' count of information windows. No CP costs, ranges, or timings are stated."
+  ],
+  "strategyScreenElements": [
+    {
+      "index": 2,
+      "term": "銀河マップ",
+      "ko": "은하 맵",
+      "description": "銀河の全体図を表示します。(은하 전체 지도를 표시)",
+      "areaCursor": {
+        "term": "エリアカーソル",
+        "ko": "에리어 커서",
+        "shape": "四角形の白線 (사각형 흰 선)",
+        "meaning": "メインビューの表示範囲を表す (메인 뷰의 표시 범위를 나타냄)",
+        "interaction": "エリアカーソルをドラッグすることで、メインビューの表示範囲を変更できる (드래그로 메인 뷰 표시 범위 변경)"
+      }
+    },
+    {
+      "index": 3,
+      "term": "情報ビュー",
+      "ko": "정보 뷰",
+      "description": "自分が使用しているキャラクターの簡易情報が表示されます。(자기 캐릭터의 간이 정보 표시)",
+      "crossReference": "『キャラクターのパラメータについて』"
+    },
+    {
+      "index": 4,
+      "term": "【職務権限カード】タブ",
+      "ko": "[직무권한카드] 탭",
+      "openAction": "タブを左クリックするとプルアップメニューで自分が保有している職務権限カードの一覧が表示される (탭 좌클릭 → 풀업 메뉴로 보유 직무권한카드 목록 표시)",
+      "commandExecutionPath": "各コマンドの実行は、この職務権限カードから行う。リストより役職名を左クリックすると、その職務権限カードが表示される。(모든 커맨드 실행은 직무권한카드에서 수행; 목록에서 직책명 좌클릭 → 해당 카드 표시)",
+      "proposalOrderPath": "提案/命令についてもこのボタンを左クリックすることによって実行できる (제안/명령도 이 버튼 좌클릭으로 실행)",
+      "screenshotInset": {
+        "_uncertain": true,
+        "cardShown": {
+          "term": "同盟・艦長カード",
+          "ko": "동맹·함장 카드"
+        },
+        "cardText": {
+          "ja": "1日あたり400の功績がもらえます。分類は無効です。",
+          "ko": "하루당 공적 400을 받습니다. 분류는 무효입니다.",
+          "dailyMeritPoints": 400,
+          "_uncertain_note": "스크린샷 캡션 시각 판독; '分類は無効です' 부분 저해상도"
+        },
+        "commandButtonsVisible": [
+          {
+            "term": "ワープ航行",
+            "ko": "워프 항행"
+          },
+          {
+            "term": "燃料補給",
+            "ko": "연료 보급",
+            "_uncertain": true
+          },
+          {
+            "term": "星系内航行",
+            "ko": "성계 내 항행"
+          },
+          {
+            "term": "航宙訓練",
+            "ko": "항주 훈련",
+            "_uncertain": true
+          },
+          {
+            "term": "戦略退散",
+            "ko": "판독 불확실 (전략 관련 버튼)",
+            "_uncertain": true
+          },
+          {
+            "term": "態勢変更",
+            "ko": "태세 변경",
+            "_uncertain": true
+          }
+        ],
+        "otherUiVisible": [
+          {
+            "term": "命令／提案",
+            "ko": "명령/제안 버튼"
+          },
+          {
+            "term": "メンバーリスト",
+            "ko": "멤버 리스트"
+          }
+        ]
+      }
+    },
+    {
+      "index": 5,
+      "term": "【同スポットキャラクター】タブ",
+      "ko": "[동일 스폿 캐릭터] 탭",
+      "openAction": "タブを左クリックするとプルアップメニューが開き、現在自分がいるスポットと一緒のスポットにいる全てのキャラクターを表示する (같은 스폿에 있는 모든 캐릭터 표시)",
+      "useCase": "スポット画面にキャラクターの顔CGが表示しきれない場合や、顔CGが表示されないスポット等で利用できる (얼굴 CG가 다 표시되지 않거나 표시되지 않는 스폿에서 활용)"
+    },
+    {
+      "index": 6,
+      "term": "システムアイコン",
+      "ko": "시스템 아이콘",
+      "description": "ゲームの基本的な操作を行うボタン (게임 기본 조작 버튼)",
+      "icons": [
+        {
+          "term": "メッセンジャーアイコン",
+          "ko": "메신저 아이콘",
+          "action": "左クリックでメッセンジャーウィンドウを表示",
+          "crossReference": "『メッセンジャーについて』"
+        },
+        {
+          "term": "情報アイコン",
+          "ko": "정보 아이콘",
+          "action": "左クリックで情報ウィンドウを表示",
+          "informationWindowKinds": {
+            "count": 7,
+            "list": [
+              {
+                "term": "キャラクター情報",
+                "ko": "캐릭터 정보"
+              },
+              {
+                "term": "旗艦情報",
+                "ko": "기함 정보"
+              },
+              {
+                "term": "戦隊情報",
+                "ko": "전대 정보"
+              },
+              {
+                "term": "部隊情報",
+                "ko": "부대 정보"
+              },
+              {
+                "term": "惑星要塞情報",
+                "ko": "행성·요새 정보"
+              },
+              {
+                "term": "国家情報",
+                "ko": "국가 정보"
+              },
+              {
+                "term": "地形情報",
+                "ko": "지형 정보"
+              }
+            ]
+          }
+        },
+        {
+          "term": "メールアイコン",
+          "ko": "메일 아이콘",
+          "action": "左クリックでメールウィンドウを表示。メールボックスに新着メールがある場合はアイコンが変化する (신착 메일 시 아이콘 변화)",
+          "crossReference": "『メールについて』"
+        }
+      ]
+    }
+  ],
+  "_mining_notes": "OCR/판독 불확실: (1) 職務権限カード 스크린샷 인셋은 텍스트 레이어에 없어 시각 판독 — 카드명 '同盟・艦長カード', 캡션 '1日あたり400の功績がもらえます。分類は無効です。'(뒷문장 저해상도), 커맨드 버튼 6개 중 'ワープ航行'/'星系内航行'만 확실하고 '燃料補給'/'航宙訓練'/'戦略退散(?)'/'態勢変更(?)'는 불확실 표시. 명시 없음: (2) 페이지 항목 ①(메인뷰 추정)은 이전 페이지에 있어 미수록. (3) 공적 400의 조건/분류 규칙 상세, 정보윈도우 7종의 내용, 커맨드별 CP 비용·수치 규칙은 이 페이지에 없음 — 창작하지 않고 비움. (4) 銀河マップ 에리어커서 외 좌표/스케일 수치 없음."
+}

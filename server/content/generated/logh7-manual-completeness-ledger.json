@@ -1,0 +1,630 @@
+{
+ "id": "logh7-manual-completeness-ledger",
+ "generatedAt": "2026-07-04",
+ "status": "manual-read-complete-all-gaps-mined",
+ "canonicalPromotion": "blocked-until-cross-source-confirmed",
+ "source": {
+  "manual101": {
+   "path": "docs/reference/gin7manual.pdf",
+   "pages": 101,
+   "note": "성계도 포함 101p판; 내용 마이닝 기준판"
+  },
+  "manualCd": {
+   "path": ".omo/work/logh7-cd-extract/iso-root/銀英伝７マニュアル.pdf",
+   "pages": 69,
+   "note": "CD 원본판; 성계도 페이지 없음"
+  }
+ },
+ "coverage": {
+  "catalogClaimedPages": [
+   9,
+   10,
+   11,
+   12,
+   13,
+   14,
+   15,
+   16,
+   17,
+   18,
+   26,
+   27,
+   28,
+   29,
+   30,
+   31,
+   32,
+   33,
+   34,
+   35,
+   36,
+   37,
+   38,
+   39,
+   40,
+   41,
+   42,
+   43,
+   44,
+   45,
+   46,
+   47,
+   48,
+   49,
+   50,
+   51,
+   52,
+   53,
+   54,
+   55,
+   56,
+   57,
+   58,
+   59,
+   60,
+   61,
+   62,
+   63,
+   64,
+   65,
+   66,
+   67,
+   79,
+   80,
+   81,
+   82,
+   83,
+   84,
+   85,
+   86,
+   87,
+   88,
+   89,
+   90,
+   91,
+   92,
+   93,
+   94,
+   95,
+   96,
+   97,
+   98,
+   99,
+   100,
+   101
+  ],
+  "uncoveredPagesRead": [
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   19,
+   20,
+   21,
+   22,
+   23,
+   24,
+   25,
+   68,
+   69,
+   70,
+   71,
+   72,
+   73,
+   74,
+   75,
+   76,
+   77,
+   78
+  ],
+  "method": "G048 workflow: 26개 미커버 페이지를 7개 에이전트가 이미지+텍스트로 정독, 기존 17개 manual 카탈로그와 대조"
+ },
+ "pages": [
+  {
+   "page": 1,
+   "title": "表紙(銀河英雄伝説VII 操作マニュアル, BOTHTEC, Oct 07,2004, インターネット専用ゲーム)",
+   "domains": [
+    "cover"
+   ],
+   "alreadyCoveredBy": [],
+   "miningGap": "none",
+   "gapPriority": "none"
+  },
+  {
+   "page": 2,
+   "title": "Contents(目次1: はじめに/ゲームを始める前に/Chapter1 ゲームの概要)",
+   "domains": [
+    "toc"
+   ],
+   "alreadyCoveredBy": [],
+   "miningGap": "none",
+   "gapPriority": "none"
+  },
+  {
+   "page": 3,
+   "title": "Contents(目次2: Chapter2 ゲーム画面と操作方法/Chapter3 戦略ゲーム)",
+   "domains": [
+    "toc"
+   ],
+   "alreadyCoveredBy": [],
+   "miningGap": "none",
+   "gapPriority": "none"
+  },
+  {
+   "page": 4,
+   "title": "Contents(目次3: Chapter4 戦術ゲーム)",
+   "domains": [
+    "toc"
+   ],
+   "alreadyCoveredBy": [],
+   "miningGap": "none",
+   "gapPriority": "none"
+  },
+  {
+   "page": 5,
+   "title": "はじめに/ご注意(ゲーム概要紹介: 多人数オンライン戦略級シミュレーション, 全キャラクターをユーザーが担当, 戦術ゲームはシリーズ初のRTS型; 免責・著作権注意)",
+   "domains": [
+    "intro",
+    "legal-notice"
+   ],
+   "alreadyCoveredBy": [],
+   "miningGap": "none",
+   "gapPriority": "none"
+  },
+  {
+   "page": 6,
+   "title": "ゲームを始める前に／動作環境（対応OS・CPU・メモリ・DirectX 8.1 要件表）",
+   "domains": [
+    "installation",
+    "system-requirements"
+   ],
+   "alreadyCoveredBy": [],
+   "miningGap": "none",
+   "gapPriority": "none"
+  },
+  {
+   "page": 7,
+   "title": "ゲームのインストール／ゲームのアンインストール（InstallShield 手順）",
+   "domains": [
+    "installation"
+   ],
+   "alreadyCoveredBy": [],
+   "miningGap": "none",
+   "gapPriority": "none"
+  },
+  {
+   "page": 8,
+   "title": "ゲームにログイン（サーバの選択）／ゲームからログアウト（ログアウト場所別ルール）",
+   "domains": [
+    "session",
+    "login",
+    "logout-offline-rules",
+    "place-facilities"
+   ],
+   "alreadyCoveredBy": [
+    "place-facilities.json"
+   ],
+   "miningGap": "place-facilities.json logoutLocations가 핵심 2개 장소는 담고 있으나 세부 3건 누락: (1) ログイン절의 서버 선택 규칙 — '1つのサーバには帝国軍/同盟軍のどちらかのデータを作成することができます'(서버당 제국군 또는 동맹군 한쪽 진영 캐릭터 데이터만 생성 가능) — session-rules.json에도 없음; (2) 旗艦ユニット 규칙의 나머지 — 오프라인 전술게임에서 주둔 중인 惑星/要塞가 함락되면 기함 유닛의 주둔 상태가 해제될 수 있음 + AI 대행은 '現在未実装' 주석 + 기함 내 로그아웃 시에도 체포 가능성과 인사 커맨드 대상이 됨; (3) 'その他' 장소 규칙 — 그 외 장소에서 오프라인이 되어도 원칙적으로 캐릭터는 그 장소에 계속 머무름. 또한 로그아웃 상태에서도 캐릭터가 서버 내에서 행동을 계속한다는 총칙(오프라인 지속 시뮬레이션)이 어느 카탈로그에도 명시 항목으로 없음.",
+   "gapPriority": "P1",
+   "minedInto": "server/content/manual/session-offline-rules.json",
+   "gapStatus": "mined-2026-07-04"
+  },
+  {
+   "page": 19,
+   "title": "Chapter2 ゲーム画面と操作方法 — 戦略ゲーム画面(メインビュー・グリッド・スクロール/ズーム)",
+   "domains": [
+    "strategy-ui",
+    "grid-system",
+    "input-controls"
+   ],
+   "alreadyCoveredBy": [
+    "terrain-navigability.json"
+   ],
+   "miningGap": "戦略画面 7요소 레이아웃(①メインビュー ②銀河マップ ③情報ビュー ④職務権限カード탭 ⑤メンバーリスト/同スポットキャラクター탭 ⑥システムアイコン ⑦チャットウィンドウ)과 메인뷰 UI 동작 규칙이 카탈로그에 없음: 마우스커서 화면가장자리 이동시 4방향 자동스크롤, 마우스휠 확대/축소(앞=축소, 뒤=확대). 그리드 1변=100광년·전략이동 그리드 단위는 terrain-navigability.json에 이미 있음. 전술게임의 직무권한 커맨드 입력도 이 메인뷰에서 수행한다는 규칙 미수록.",
+   "gapPriority": "P2",
+   "minedInto": "server/content/manual/strategy-screen-layout.json",
+   "gapStatus": "mined-2026-07-04"
+  },
+  {
+   "page": 20,
+   "title": "戦略画面 요소 상세 — 銀河マップ(エリアカーソル)・情報ビュー・職務権限カードタブ・同スポットキャラクタータブ・システムアイコン(情報ウィンドウ7種)",
+   "domains": [
+    "strategy-ui",
+    "cards",
+    "info-windows",
+    "messenger-mail"
+   ],
+   "alreadyCoveredBy": [
+    "character-params.json",
+    "cards-cp-orgs.json",
+    "terrain-navigability.json"
+   ],
+   "miningGap": "미수록 구체 데이터: (a) 스크린샷의 同盟・艦長カード 툴팁 '1G日あたり400の功績がもらえます。分類は無効' — 함장카드 일일 공적 400 수치가 어느 카탈로그에도 없음(canon-initial-cards/logistics-economy 부재 확인); (b) 情報アイコン으로 열 수 있는 정보윈도우 7종 목록(キャラクター情報/旗艦情報/戦隊情報/部隊情報/惑星要塞情報/国家情報/地形情報); (c) 銀河マップ 에리어커서 드래그로 메인뷰 표시범위 변경; (d) 同スポットキャラクター탭 = 같은 스폿 전 캐릭터 표시(顔CG 미표시 스폿 대용); (e) 職務権限カード탭 풀업메뉴에서 커맨드 실행·提案/命令 실행 UI 경로(카드 시스템 자체는 cards-cp-orgs 수록). 스크린샷 카드 버튼(ワープ航行/燃料補給/星系内航行/航宙訓練/戦略移動/態勢変更)은 strategy-commands 계열과 중복.",
+   "gapPriority": "P1",
+   "minedInto": "server/content/manual/strategy-ui-panels.json",
+   "gapStatus": "mined-2026-07-04"
+  },
+  {
+   "page": 21,
+   "title": "システムアイコン(ゲーム終了・サウンド設定・ゲーム設定)とチャットウィンドウ",
+   "domains": [
+    "strategy-ui",
+    "system-menu",
+    "chat"
+   ],
+   "alreadyCoveredBy": [],
+   "miningGap": "시스템윈도우 항목 3종(ゲーム終了/サウンド設定/ゲーム設定)과 채팅윈도우 구조 규칙(같은 스폿 사람들의 메시지 표시, 上段=시스템메시지·下段=채팅메시지 2단 구성)이 카탈로그 미수록. 게임 규칙보다는 클라이언트 UI 사양이라 우선도 낮음.",
+   "gapPriority": "P2",
+   "minedInto": "server/content/manual/system-menu-chat.json",
+   "gapStatus": "mined-2026-07-04"
+  },
+  {
+   "page": 22,
+   "title": "戦術ゲーム画面 — メイン画面 기본조작(左クリック/左ダブルクリック/左ドラッグ 선택 규칙)",
+   "domains": [
+    "tactical-ui",
+    "input-controls",
+    "unit-selection"
+   ],
+   "alreadyCoveredBy": [
+    "combat-rules.json"
+   ],
+   "miningGap": "전술맵 유닛 선택 입력 시맨틱이 미수록: 좌클릭=유닛 선택(이미 선택된 유닛 재클릭=해제, 빈 공간 클릭=전체 선택해제); 좌더블클릭 A)기함유닛 더블클릭=コマンドレンジサークル 내 모든 예하유닛 일괄선택, B)자기 기함 외 유닛 더블클릭=카메라 해당 유닛으로 이동; 좌드래그=사각 러버밴드 내 유닛 전체선택. コマンドレンジサークル 자체 규칙은 combat-rules.json에 있으나 이 선택 입력 규칙은 없음. 전술화면 요소(②レーダー ④操艦パネル ③コマンドウィンドウ ⑤시스템아이콘 ⑥채팅)도 레이아웃 카탈로그 부재. 전술 게임로직/클라 재구현(C002 계열)에 직접 필요.",
+   "gapPriority": "P1",
+   "minedInto": "server/content/manual/tactical-input-selection.json",
+   "gapStatus": "mined-2026-07-04"
+  },
+  {
+   "page": 23,
+   "title": "戦術ゲーム画面の操作（マウス/キー操作・レーダー画面・コマンドパネル）",
+   "domains": [
+    "tactical-combat",
+    "ui-controls",
+    "camera"
+   ],
+   "alreadyCoveredBy": [],
+   "miningGap": "전술맵 입력 바인딩·UI 규칙 미카탈로그: Ctrl+좌클릭=추가선택/개별해제(이미 선택된 유닛만 해제), 우클릭+화면가장자리=4방향 스크롤, 우더블클릭=자기 기함 위치로 카메라, 우드래그=카메라 회전, 휠=확대/축소(앞=확대), [F4]=3D/2D 뷰 전환, [Space]=카메라 추종 ON/OFF. ②레이더 화면=그리드 전체 표시·「△」=자기 기함 위치/방향·레이더 클릭=카메라 이동. ③커맨드패널=명령 가능한 커맨드만 활성(불가 커맨드는 클릭 불가) — 커맨드 자체는 combat-rules.json에 있으나 활성/비활성 게이팅·입력 바인딩은 없음.",
+   "gapPriority": "P2",
+   "minedInto": "server/content/manual/tactical-input-bindings.json",
+   "gapStatus": "mined-2026-07-04"
+  },
+  {
+   "page": 24,
+   "title": "戦術ゲーム画面 ④操艦パネル（エネルギー配分 BEAM/GUN/SHIELD/ENGINE/WARP/SENSOR）・⑤システムアイコン（情報ウィンドウ7種）",
+   "domains": [
+    "tactical-combat",
+    "flagship-energy-allocation",
+    "ui-controls"
+   ],
+   "alreadyCoveredBy": [],
+   "miningGap": "기함 에너지 배분(操艦パネル) 시스템 전체가 미카탈로그(combat-rules.json에는 [SENSOR] allocation 언급 1줄과 撤退命令의 레이더권 밖 조건만 존재): 총 에너지량 고정, 6채널 배분 — [BEAM]=레이저병기 출력(공격력 증가+에너지 충전속도 단축), [GUN]=건병기 공격력, [SHIELD]=기함 4방향별 실드 회복력(피탄 감소분 회복), [ENGINE]=전술게임 이동속도, [WARP]=철퇴 필수(최대치 배분 시 전술맵 원 밖에서 철퇴 가능 — combat-rules의 철퇴 조건에 WARP 최대배분 요건 누락), [SENSOR]=색적력(원거리 유닛 발견율 상승). 또한 정보 아이콘의 정보 윈도우 7종(캐릭터/기함/전대/부대/혹성요새/국가/지형 정보) 목록 미카탈로그.",
+   "gapPriority": "P1",
+   "minedInto": "server/content/manual/flagship-energy-allocation.json",
+   "gapStatus": "mined-2026-07-04"
+  },
+  {
+   "page": 25,
+   "title": "戦術ゲーム画面 ⑤システムアイコン（システム/メッセンジャー）・⑥チャットウィンドウ（全体/艦隊/同陣営）",
+   "domains": [
+    "tactical-combat",
+    "chat",
+    "ui-controls"
+   ],
+   "alreadyCoveredBy": [],
+   "miningGap": "전술게임 채팅 라우팅 규칙 미카탈로그(서버 채팅 스코프 구현에 필요): 채팅창 상단=시스템 메시지/하단=채팅 메시지 2단 구성, 배신처 3채널 버튼 — 【全体】=적아 구분 없이 같은 전술게임 참가자 전원, 【艦隊】=함대 소속 시 같은 함대 멤버만, 【同陣営】=같은 전술게임 참가 아군 세력만. 시스템 윈도우 기능(게임 종료/사운드 설정/게임 설정)과 메신저 윈도우 열기도 미카탈로그(클라 UI 수준).",
+   "gapPriority": "P2",
+   "minedInto": "server/content/manual/tactical-chat-routing.json",
+   "gapStatus": "mined-2026-07-04"
+  },
+  {
+   "page": 68,
+   "title": "別表 戦略コマンド一覧表(作戦コマンド: ワープ航行〜武力鎮圧)",
+   "domains": [
+    "strategy-commands",
+    "cp-costs"
+   ],
+   "alreadyCoveredBy": [
+    "strategy-commands.json"
+   ],
+   "miningGap": "none",
+   "gapPriority": "none"
+  },
+  {
+   "page": 69,
+   "title": "別表 戦略コマンド一覧表(作戦コマンド続き: 分列行進〜陸戦隊撤収、個人コマンド: 遠距離移動〜受講)",
+   "domains": [
+    "strategy-commands",
+    "cp-costs",
+    "personal-commands"
+   ],
+   "alreadyCoveredBy": [
+    "strategy-commands.json"
+   ],
+   "miningGap": "none",
+   "gapPriority": "none"
+  },
+  {
+   "page": 70,
+   "title": "別表 戦略コマンド一覧表(個人コマンド続き: 兵棋演習〜旗艦購入、指揮コマンド: 作戦計画〜部隊結成)",
+   "domains": [
+    "strategy-commands",
+    "cp-costs",
+    "coup-commands",
+    "command-orders"
+   ],
+   "alreadyCoveredBy": [
+    "strategy-commands.json"
+   ],
+   "miningGap": "none",
+   "gapPriority": "none"
+  },
+  {
+   "page": 71,
+   "title": "別表 戦略コマンド一覧表(指揮コマンド続き: 部隊解散〜輸送中止、兵站コマンド: 完全修理〜割当、人事コマンド: 昇進・抜擢)",
+   "domains": [
+    "strategy-commands",
+    "cp-costs",
+    "logistics-commands",
+    "personnel-commands"
+   ],
+   "alreadyCoveredBy": [
+    "strategy-commands.json"
+   ],
+   "miningGap": "none",
+   "gapPriority": "none"
+  },
+  {
+   "page": 72,
+   "title": "戦略コマンド一覧(人事コマンド後半: 降等・叙爵・叙勲・任命・罷免・辞任・封土授与・封土直轄 / 政治コマンド前半: 夜会・狩猟・会談・談話 — CP費用・待機/実行時間・効果)",
+   "domains": [
+    "strategy-commands",
+    "personnel",
+    "politics"
+   ],
+   "alreadyCoveredBy": [
+    "strategy-commands.json"
+   ],
+   "miningGap": "none",
+   "gapPriority": "none"
+  },
+  {
+   "page": 73,
+   "title": "戦略コマンド一覧(政治コマンド後半: 演説・国家目標・納入率変更・関税率変更・分配・処断・外交・統治目標 / 諜報コマンド前半: 一斉捜索・逮捕許可・執行命令・逮捕命令 — CP費用・効果)",
+   "domains": [
+    "strategy-commands",
+    "politics",
+    "intelligence"
+   ],
+   "alreadyCoveredBy": [
+    "strategy-commands.json"
+   ],
+   "miningGap": "none",
+   "gapPriority": "none"
+  },
+  {
+   "page": 74,
+   "title": "戦略コマンド一覧(諜報コマンド後半: 査閲・襲撃・監視・潜入工作・脱出工作・情報工作・破壊工作・煽動工作・侵入工作・帰還工作 — CP費用・効果)",
+   "domains": [
+    "strategy-commands",
+    "intelligence",
+    "espionage"
+   ],
+   "alreadyCoveredBy": [
+    "strategy-commands.json"
+   ],
+   "miningGap": "none",
+   "gapPriority": "none"
+  },
+  {
+   "page": 75,
+   "title": "部隊初期配置情報(帝国軍/同盟軍の艦隊12・巡察隊・地上部隊の初期配置星系/惑星・要塞テーブル)",
+   "domains": [
+    "initial-deployment",
+    "fleets",
+    "patrol-units",
+    "ground-units"
+   ],
+   "alreadyCoveredBy": [
+    "troops-deployment.json"
+   ],
+   "miningGap": "none",
+   "gapPriority": "none"
+  },
+  {
+   "page": 76,
+   "title": "自動生産品目一覧表(1/3) — 帝国軍/同盟軍 星系・惑星別自動生産品目(艦艇/乗組員/陸戦兵ユニット種別)",
+   "domains": [
+    "production",
+    "planets",
+    "units",
+    "economy"
+   ],
+   "alreadyCoveredBy": [
+    "../auto-production.json (server/content/auto-production.json)",
+    "troops-deployment.json",
+    "logistics-economy.json"
+   ],
+   "miningGap": "none",
+   "gapPriority": "none"
+  },
+  {
+   "page": 77,
+   "title": "自動生産品目一覧表(2/3) — 帝国軍(続)/同盟軍(続) 惑星別自動生産品目",
+   "domains": [
+    "production",
+    "planets",
+    "units",
+    "economy"
+   ],
+   "alreadyCoveredBy": [
+    "../auto-production.json (server/content/auto-production.json)",
+    "troops-deployment.json",
+    "logistics-economy.json"
+   ],
+   "miningGap": "none",
+   "gapPriority": "none"
+  },
+  {
+   "page": 78,
+   "title": "自動生産品目一覧表(3/3) — 帝国軍(続: ビルロスト~ルイトポルディング) 惑星別自動生産品目",
+   "domains": [
+    "production",
+    "planets",
+    "units",
+    "economy"
+   ],
+   "alreadyCoveredBy": [
+    "../auto-production.json (server/content/auto-production.json)",
+    "troops-deployment.json",
+    "logistics-economy.json"
+   ],
+   "miningGap": "none",
+   "gapPriority": "none"
+  }
+ ],
+ "miningGaps": [
+  {
+   "page": 8,
+   "title": "ゲームにログイン（サーバの選択）／ゲームからログアウト（ログアウト場所別ルール）",
+   "domains": [
+    "session",
+    "login",
+    "logout-offline-rules",
+    "place-facilities"
+   ],
+   "alreadyCoveredBy": [
+    "place-facilities.json"
+   ],
+   "miningGap": "place-facilities.json logoutLocations가 핵심 2개 장소는 담고 있으나 세부 3건 누락: (1) ログイン절의 서버 선택 규칙 — '1つのサーバには帝国軍/同盟軍のどちらかのデータを作成することができます'(서버당 제국군 또는 동맹군 한쪽 진영 캐릭터 데이터만 생성 가능) — session-rules.json에도 없음; (2) 旗艦ユニット 규칙의 나머지 — 오프라인 전술게임에서 주둔 중인 惑星/要塞가 함락되면 기함 유닛의 주둔 상태가 해제될 수 있음 + AI 대행은 '現在未実装' 주석 + 기함 내 로그아웃 시에도 체포 가능성과 인사 커맨드 대상이 됨; (3) 'その他' 장소 규칙 — 그 외 장소에서 오프라인이 되어도 원칙적으로 캐릭터는 그 장소에 계속 머무름. 또한 로그아웃 상태에서도 캐릭터가 서버 내에서 행동을 계속한다는 총칙(오프라인 지속 시뮬레이션)이 어느 카탈로그에도 명시 항목으로 없음.",
+   "gapPriority": "P1"
+  },
+  {
+   "page": 19,
+   "title": "Chapter2 ゲーム画面と操作方法 — 戦略ゲーム画面(メインビュー・グリッド・スクロール/ズーム)",
+   "domains": [
+    "strategy-ui",
+    "grid-system",
+    "input-controls"
+   ],
+   "alreadyCoveredBy": [
+    "terrain-navigability.json"
+   ],
+   "miningGap": "戦略画面 7요소 레이아웃(①メインビュー ②銀河マップ ③情報ビュー ④職務権限カード탭 ⑤メンバーリスト/同スポットキャラクター탭 ⑥システムアイコン ⑦チャットウィンドウ)과 메인뷰 UI 동작 규칙이 카탈로그에 없음: 마우스커서 화면가장자리 이동시 4방향 자동스크롤, 마우스휠 확대/축소(앞=축소, 뒤=확대). 그리드 1변=100광년·전략이동 그리드 단위는 terrain-navigability.json에 이미 있음. 전술게임의 직무권한 커맨드 입력도 이 메인뷰에서 수행한다는 규칙 미수록.",
+   "gapPriority": "P2"
+  },
+  {
+   "page": 20,
+   "title": "戦略画面 요소 상세 — 銀河マップ(エリアカーソル)・情報ビュー・職務権限カードタブ・同スポットキャラクタータブ・システムアイコン(情報ウィンドウ7種)",
+   "domains": [
+    "strategy-ui",
+    "cards",
+    "info-windows",
+    "messenger-mail"
+   ],
+   "alreadyCoveredBy": [
+    "character-params.json",
+    "cards-cp-orgs.json",
+    "terrain-navigability.json"
+   ],
+   "miningGap": "미수록 구체 데이터: (a) 스크린샷의 同盟・艦長カード 툴팁 '1G日あたり400の功績がもらえます。分類は無効' — 함장카드 일일 공적 400 수치가 어느 카탈로그에도 없음(canon-initial-cards/logistics-economy 부재 확인); (b) 情報アイコン으로 열 수 있는 정보윈도우 7종 목록(キャラクター情報/旗艦情報/戦隊情報/部隊情報/惑星要塞情報/国家情報/地形情報); (c) 銀河マップ 에리어커서 드래그로 메인뷰 표시범위 변경; (d) 同スポットキャラクター탭 = 같은 스폿 전 캐릭터 표시(顔CG 미표시 스폿 대용); (e) 職務権限カード탭 풀업메뉴에서 커맨드 실행·提案/命令 실행 UI 경로(카드 시스템 자체는 cards-cp-orgs 수록). 스크린샷 카드 버튼(ワープ航行/燃料補給/星系内航行/航宙訓練/戦略移動/態勢変更)은 strategy-commands 계열과 중복.",
+   "gapPriority": "P1"
+  },
+  {
+   "page": 21,
+   "title": "システムアイコン(ゲーム終了・サウンド設定・ゲーム設定)とチャットウィンドウ",
+   "domains": [
+    "strategy-ui",
+    "system-menu",
+    "chat"
+   ],
+   "alreadyCoveredBy": [],
+   "miningGap": "시스템윈도우 항목 3종(ゲーム終了/サウンド設定/ゲーム設定)과 채팅윈도우 구조 규칙(같은 스폿 사람들의 메시지 표시, 上段=시스템메시지·下段=채팅메시지 2단 구성)이 카탈로그 미수록. 게임 규칙보다는 클라이언트 UI 사양이라 우선도 낮음.",
+   "gapPriority": "P2"
+  },
+  {
+   "page": 22,
+   "title": "戦術ゲーム画面 — メイン画面 기본조작(左クリック/左ダブルクリック/左ドラッグ 선택 규칙)",
+   "domains": [
+    "tactical-ui",
+    "input-controls",
+    "unit-selection"
+   ],
+   "alreadyCoveredBy": [
+    "combat-rules.json"
+   ],
+   "miningGap": "전술맵 유닛 선택 입력 시맨틱이 미수록: 좌클릭=유닛 선택(이미 선택된 유닛 재클릭=해제, 빈 공간 클릭=전체 선택해제); 좌더블클릭 A)기함유닛 더블클릭=コマンドレンジサークル 내 모든 예하유닛 일괄선택, B)자기 기함 외 유닛 더블클릭=카메라 해당 유닛으로 이동; 좌드래그=사각 러버밴드 내 유닛 전체선택. コマンドレンジサークル 자체 규칙은 combat-rules.json에 있으나 이 선택 입력 규칙은 없음. 전술화면 요소(②レーダー ④操艦パネル ③コマンドウィンドウ ⑤시스템아이콘 ⑥채팅)도 레이아웃 카탈로그 부재. 전술 게임로직/클라 재구현(C002 계열)에 직접 필요.",
+   "gapPriority": "P1"
+  },
+  {
+   "page": 23,
+   "title": "戦術ゲーム画面の操作（マウス/キー操作・レーダー画面・コマンドパネル）",
+   "domains": [
+    "tactical-combat",
+    "ui-controls",
+    "camera"
+   ],
+   "alreadyCoveredBy": [],
+   "miningGap": "전술맵 입력 바인딩·UI 규칙 미카탈로그: Ctrl+좌클릭=추가선택/개별해제(이미 선택된 유닛만 해제), 우클릭+화면가장자리=4방향 스크롤, 우더블클릭=자기 기함 위치로 카메라, 우드래그=카메라 회전, 휠=확대/축소(앞=확대), [F4]=3D/2D 뷰 전환, [Space]=카메라 추종 ON/OFF. ②레이더 화면=그리드 전체 표시·「△」=자기 기함 위치/방향·레이더 클릭=카메라 이동. ③커맨드패널=명령 가능한 커맨드만 활성(불가 커맨드는 클릭 불가) — 커맨드 자체는 combat-rules.json에 있으나 활성/비활성 게이팅·입력 바인딩은 없음.",
+   "gapPriority": "P2"
+  },
+  {
+   "page": 24,
+   "title": "戦術ゲーム画面 ④操艦パネル（エネルギー配分 BEAM/GUN/SHIELD/ENGINE/WARP/SENSOR）・⑤システムアイコン（情報ウィンドウ7種）",
+   "domains": [
+    "tactical-combat",
+    "flagship-energy-allocation",
+    "ui-controls"
+   ],
+   "alreadyCoveredBy": [],
+   "miningGap": "기함 에너지 배분(操艦パネル) 시스템 전체가 미카탈로그(combat-rules.json에는 [SENSOR] allocation 언급 1줄과 撤退命令의 레이더권 밖 조건만 존재): 총 에너지량 고정, 6채널 배분 — [BEAM]=레이저병기 출력(공격력 증가+에너지 충전속도 단축), [GUN]=건병기 공격력, [SHIELD]=기함 4방향별 실드 회복력(피탄 감소분 회복), [ENGINE]=전술게임 이동속도, [WARP]=철퇴 필수(최대치 배분 시 전술맵 원 밖에서 철퇴 가능 — combat-rules의 철퇴 조건에 WARP 최대배분 요건 누락), [SENSOR]=색적력(원거리 유닛 발견율 상승). 또한 정보 아이콘의 정보 윈도우 7종(캐릭터/기함/전대/부대/혹성요새/국가/지형 정보) 목록 미카탈로그.",
+   "gapPriority": "P1"
+  },
+  {
+   "page": 25,
+   "title": "戦術ゲーム画面 ⑤システムアイコン（システム/メッセンジャー）・⑥チャットウィンドウ（全体/艦隊/同陣営）",
+   "domains": [
+    "tactical-combat",
+    "chat",
+    "ui-controls"
+   ],
+   "alreadyCoveredBy": [],
+   "miningGap": "전술게임 채팅 라우팅 규칙 미카탈로그(서버 채팅 스코프 구현에 필요): 채팅창 상단=시스템 메시지/하단=채팅 메시지 2단 구성, 배신처 3채널 버튼 — 【全体】=적아 구분 없이 같은 전술게임 참가자 전원, 【艦隊】=함대 소속 시 같은 함대 멤버만, 【同陣営】=같은 전술게임 참가 아군 세력만. 시스템 윈도우 기능(게임 종료/사운드 설정/게임 설정)과 메신저 윈도우 열기도 미카탈로그(클라 UI 수준).",
+   "gapPriority": "P2"
+  }
+ ],
+ "summary": {
+  "totalPages": 101,
+  "catalogCoveredPages": 75,
+  "workflowReadPages": 26,
+  "gapCount": 8,
+  "p1Gaps": [
+   8,
+   20,
+   22,
+   24
+  ],
+  "p2Gaps": [
+   19,
+   21,
+   23,
+   25
+  ],
+  "p1GapsMined": [
+   "session-offline-rules.json",
+   "strategy-ui-panels.json",
+   "tactical-input-selection.json",
+   "flagship-energy-allocation.json"
+  ],
+  "remainingGaps": [],
+  "p2GapsMined": [
+   "strategy-screen-layout.json",
+   "system-menu-chat.json",
+   "tactical-input-bindings.json",
+   "tactical-chat-routing.json"
+  ]
+ }
+}

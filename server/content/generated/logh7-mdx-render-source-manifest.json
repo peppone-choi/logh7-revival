@@ -1,0 +1,101 @@
+{
+  "id": "logh7-mdx-render-source-manifest",
+  "generatedAt": "2026-07-03T18:27:50.509Z",
+  "purpose": "Prepare original LOGH VII Imperial Ship/GE MDX data as remaster medal ship-art sources.",
+  "imperialCrest": {
+    "required": true,
+    "reference": "client-unity/Assets/ArtSource/reference/logh7-imperial-double-eagle-reference.jpg",
+    "mask": "client-unity/Assets/ArtSource/reference/imperial-crest/logh7-imperial-double-eagle-mask-gold.png",
+    "policy": "Imperial medals must carry this crest source or an explicitly traced derivative."
+  },
+  "sourceRoot": ".omo/work/logh7-installed",
+  "productionPolicy": "Do not use thumbnail silhouettes for final large medal ship art; render or extract original Ship/GE MDX sources first.",
+  "targets": [
+    {
+      "file": "data/model/Ship/GE/EH001.mdx",
+      "sourcePath": ".omo/work/logh7-installed/data/model/Ship/GE/EH001.mdx",
+      "sha256": "31bc4de737d411c9c78192f63709207d5a9a58d44177bb8df78fd0a993acfbb2",
+      "size": 246026,
+      "nodeCount": 23,
+      "nodeNames": [
+        "EH001x:Layer1",
+        "ENGINE_01",
+        "ENGINE_02",
+        "ENGINE_03",
+        "ENGINE_04",
+        "FR_01",
+        "FR_02",
+        "FL_01",
+        "FL_02",
+        "RR_01",
+        "RR_02",
+        "RL_01",
+        "RL_02",
+        "FF_01",
+        "FF_02",
+        "FF_03",
+        "FF_04",
+        "MISSILE_01",
+        "GUN_01",
+        "GUN_02",
+        "LASER_01",
+        "BEAM_01",
+        "BEAM_03"
+      ],
+      "authoringModelReferences": [
+        "D\\objects\\EH001\\EH001x.lwo"
+      ],
+      "imageReferences": [
+        "D\\images\\EH001.bmp",
+        "D\\images\\meca_tile2.bmp",
+        "D\\images\\EH001_bump.tga"
+      ],
+      "locatedTextureAssets": [
+        {
+          "reference": "D\\images\\EH001.bmp",
+          "file": "data/model/images/Hi/EH001.BMP",
+          "sha256": "b72dc4149f2f33ff2ff45c519440178ce8772cf5e3e1fb6deeed2f8f74ab184f",
+          "size": 263222
+        },
+        {
+          "reference": "D\\images\\meca_tile2.bmp",
+          "file": "data/model/images/Hi/meca_tile2.bmp",
+          "sha256": "115ebce1058488a2d38b9019d6271e59d8daa4fb3f09a106ee41bcb34ce323de",
+          "size": 66614
+        },
+        {
+          "reference": "D\\images\\EH001.bmp",
+          "file": "data/model/images/Lo/EH001.bmp",
+          "sha256": "2c20e9292ef1c228b641206456c32e93414e9dd7b21cf9a3276f60e8d5fd4c12",
+          "size": 17462
+        },
+        {
+          "reference": "D\\images\\meca_tile2.bmp",
+          "file": "data/model/images/Lo/meca_tile2.bmp",
+          "sha256": "f3ffb376e5d3299a6c0859bcc4a38d8754f35342454a69a7f04c865d405b6780",
+          "size": 12342
+        },
+        {
+          "reference": "D\\images\\EH001.bmp",
+          "file": "data/model/images/Mid/EH001.bmp",
+          "sha256": "82187a8912e80eaf335cce7946ec58c1cfb88f86944c8ede44380e457d63a38f",
+          "size": 66614
+        },
+        {
+          "reference": "D\\images\\meca_tile2.bmp",
+          "file": "data/model/images/Mid/meca_tile2.bmp",
+          "sha256": "2e2fa50037413305902288359d085b78b5c1119f8dea3a3a79d7f07803c5d757",
+          "size": 49206
+        }
+      ],
+      "missingTextureAssets": [
+        "D\\images\\EH001_bump.tga"
+      ],
+      "missingAuthoringAssets": [
+        "D\\objects\\EH001\\EH001x.lwo"
+      ],
+      "renderability": "mdx-source-present-textures-found-authoring-lwo-missing",
+      "productionGate": "Do not use thumbnail proof art for this hull until MDX geometry extraction or renderer output is verified."
+    }
+  ]
+}

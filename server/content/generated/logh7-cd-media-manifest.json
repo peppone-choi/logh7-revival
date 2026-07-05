@@ -1,0 +1,80 @@
+{
+  "id": "logh7-cd-media",
+  "sourceId": "logh7-archive-org",
+  "sourceUrl": "https://archive.org/download/logh-7",
+  "mediaRoot": "artifacts/logh7-cd",
+  "workRoot": ".omo/work/logh7-cd-extract",
+  "media": {
+    "status": "verified",
+    "files": [
+      {
+        "name": "Logh7.bin",
+        "path": "artifacts/logh7-cd/Logh7.bin",
+        "status": "verified",
+        "expected": {
+          "name": "Logh7.bin",
+          "source": "original",
+          "size": 229070688,
+          "md5": "bf87c6a8cb068f05625737377a07b09d",
+          "sha1": "80e261e9d84c81bca622c99d9cbdc47a2154c1a8",
+          "crc32": "a93aadd8",
+          "format": "Unknown"
+        },
+        "actual": {
+          "name": "Logh7.bin",
+          "size": 229070688,
+          "md5": "bf87c6a8cb068f05625737377a07b09d",
+          "sha1": "80e261e9d84c81bca622c99d9cbdc47a2154c1a8"
+        },
+        "mismatches": []
+      },
+      {
+        "name": "Logh7.cue",
+        "path": "artifacts/logh7-cd/Logh7.cue",
+        "status": "verified",
+        "expected": {
+          "name": "Logh7.cue",
+          "source": "original",
+          "size": 71,
+          "md5": "878418e704a913f7baac67b38b10e680",
+          "sha1": "9bff4ea17ca6ff7b088440bd7f8a5206cd2dfe81",
+          "crc32": "391b93fa",
+          "format": "Cue Sheet"
+        },
+        "actual": {
+          "name": "Logh7.cue",
+          "size": 71,
+          "md5": "878418e704a913f7baac67b38b10e680",
+          "sha1": "9bff4ea17ca6ff7b088440bd7f8a5206cd2dfe81"
+        },
+        "mismatches": []
+      }
+    ]
+  },
+  "iso": {
+    "status": "converted",
+    "path": ".omo/work/logh7-cd-extract/Logh7_mode2_2048.iso",
+    "sectors": 97394,
+    "inputBytes": 229070688,
+    "outputBytes": 199462912,
+    "sha1": "fbd7e3a685802116519ae0d23006c97d383b7737"
+  },
+  "extraction": {
+    "isoRoot": {
+      "status": "present",
+      "path": ".omo/work/logh7-cd-extract/iso-root",
+      "fileCount": 25,
+      "totalBytes": 199030313
+    },
+    "installshieldRoot": {
+      "status": "present",
+      "path": ".omo/work/logh7-cd-extract/installshield-root",
+      "fileCount": 2207,
+      "totalBytes": 321825815
+    }
+  },
+  "canonicalPromotion": {
+    "status": "blocked-pending-crosscheck",
+    "reason": "CD-derived data is source evidence, not canonical game data until family-specific cross-checks pass"
+  }
+}

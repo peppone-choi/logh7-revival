@@ -1,0 +1,873 @@
+{
+  "id": "logh7-current-content-crosscheck",
+  "generatedAt": "2026-07-04T04:20:33.596Z",
+  "purpose": "Inventory current LOGH VII content evidence before any canonical promotion.",
+  "canonicalPromotion": "blocked-until-cross-source-confirmed",
+  "canonicalPromotionRule": "server/content, RE/content, installed data, generated catalogs, and diagnostic evidence stay suspect until a datum is cross-checked across independent authority sources.",
+  "mandatoryWatchCategories": [
+    {
+      "id": "systemPositions",
+      "labelKo": "성계 위치",
+      "reportImmediately": true
+    },
+    {
+      "id": "originalCharacterRoster",
+      "labelKo": "오리지널 캐릭터 로스터",
+      "reportImmediately": true
+    }
+  ],
+  "sourceRoots": [
+    {
+      "id": "serverContent",
+      "path": "server/content",
+      "kind": "current server data and generated catalogs",
+      "status": "present",
+      "canonicalStatus": "suspect-cross-check-required",
+      "fileCount": 1158,
+      "directoryCount": 21
+    },
+    {
+      "id": "reContent",
+      "path": "RE/content",
+      "kind": "reverse-engineering workspace content",
+      "status": "present",
+      "canonicalStatus": "suspect-cross-check-required",
+      "fileCount": 1102,
+      "directoryCount": 20
+    },
+    {
+      "id": "installedGame",
+      "path": ".omo/work/logh7-installed",
+      "kind": "installed original game payload",
+      "status": "present",
+      "canonicalStatus": "suspect-cross-check-required",
+      "fileCount": 2194,
+      "directoryCount": 56
+    },
+    {
+      "id": "ghidraEvidence",
+      "path": "RE/.omo/work/ghidra",
+      "kind": "Ghidra reverse-engineering evidence",
+      "status": "missing",
+      "canonicalStatus": "suspect-cross-check-required"
+    },
+    {
+      "id": "manualOcrEvidence",
+      "path": "RE/.omo/work/manual",
+      "kind": "manual and OCR evidence",
+      "status": "missing",
+      "canonicalStatus": "suspect-cross-check-required"
+    },
+    {
+      "id": "liveEvidence",
+      "path": "RE/.omo/work/live",
+      "kind": "live client oracle evidence",
+      "status": "missing",
+      "canonicalStatus": "suspect-cross-check-required"
+    },
+    {
+      "id": "wireEvidence",
+      "path": "RE/.omo/work/wire",
+      "kind": "wire protocol evidence",
+      "status": "missing",
+      "canonicalStatus": "suspect-cross-check-required"
+    }
+  ],
+  "generatedCatalogs": {
+    "path": "server/content/generated",
+    "status": "present",
+    "count": 46,
+    "files": [
+      {
+        "path": "server/content/generated/logh7-alliance-foundation-medal-redraw-manifest.json",
+        "canonicalStatus": "suspect-cross-check-required",
+        "size": 2775,
+        "status": "present",
+        "keys": [
+          "id",
+          "method",
+          "qualityNote",
+          "entryCount",
+          "entries"
+        ],
+        "counts": {}
+      },
+      {
+        "path": "server/content/generated/logh7-alliance-medal-redraw-manifest.json",
+        "canonicalStatus": "suspect-cross-check-required",
+        "size": 9530,
+        "status": "present",
+        "keys": [
+          "id",
+          "sourceSheet",
+          "method",
+          "qualityNote",
+          "entryCount",
+          "entries"
+        ],
+        "counts": {}
+      },
+      {
+        "path": "server/content/generated/logh7-alliance-medal-upscale-manifest.json",
+        "canonicalStatus": "suspect-cross-check-required",
+        "size": 8720,
+        "status": "present",
+        "keys": [
+          "id",
+          "sourceDir",
+          "outputDir",
+          "scale",
+          "method",
+          "entryCount",
+          "entries"
+        ],
+        "counts": {}
+      },
+      {
+        "path": "server/content/generated/logh7-asset-overwrite-guard.json",
+        "canonicalStatus": "suspect-cross-check-required",
+        "size": 6629,
+        "status": "present",
+        "keys": [
+          "id",
+          "generatedAt",
+          "policy",
+          "protectedOriginalRoots",
+          "allowedRemasterRoots",
+          "remasterArtifacts",
+          "violationCount"
+        ],
+        "counts": {}
+      },
+      {
+        "path": "server/content/generated/logh7-cd-media-manifest.json",
+        "canonicalStatus": "suspect-cross-check-required",
+        "size": 2352,
+        "status": "present",
+        "keys": [
+          "id",
+          "sourceId",
+          "sourceUrl",
+          "mediaRoot",
+          "workRoot",
+          "media",
+          "iso",
+          "extraction",
+          "canonicalPromotion"
+        ],
+        "counts": {}
+      },
+      {
+        "path": "server/content/generated/logh7-current-content-crosscheck.json",
+        "canonicalStatus": "suspect-cross-check-required",
+        "size": 23321,
+        "status": "present",
+        "keys": [
+          "id",
+          "generatedAt",
+          "purpose",
+          "canonicalPromotion",
+          "canonicalPromotionRule",
+          "mandatoryWatchCategories",
+          "sourceRoots",
+          "generatedCatalogs"
+        ],
+        "counts": {
+          "sourceRootsCount": 7
+        }
+      },
+      {
+        "path": "server/content/generated/logh7-empire-ship-reference-manifest.json",
+        "canonicalStatus": "suspect-cross-check-required",
+        "size": 6869,
+        "status": "present",
+        "keys": [
+          "id",
+          "method",
+          "selectionRationale",
+          "entries",
+          "contactSheet"
+        ],
+        "counts": {}
+      },
+      {
+        "path": "server/content/generated/logh7-face-portrait-catalog.json",
+        "canonicalStatus": "suspect-cross-check-required",
+        "size": 626526,
+        "status": "present",
+        "keys": [
+          "id",
+          "sourceRoot",
+          "status",
+          "storage",
+          "hed",
+          "archiveCount",
+          "archives",
+          "totals"
+        ],
+        "counts": {
+          "archiveCount": 7
+        }
+      },
+      {
+        "path": "server/content/generated/logh7-face-tcf-catalog.json",
+        "canonicalStatus": "suspect-cross-check-required",
+        "size": 5533,
+        "status": "present",
+        "keys": [
+          "id",
+          "sourceRoot",
+          "status",
+          "archiveCount",
+          "archives",
+          "archiveGroups",
+          "hed"
+        ],
+        "counts": {
+          "archiveCount": 7
+        }
+      },
+      {
+        "path": "server/content/generated/logh7-formula-provenance-guard.json",
+        "canonicalStatus": "suspect-cross-check-required",
+        "size": 8838,
+        "status": "present",
+        "keys": [
+          "id",
+          "generatedAt",
+          "purpose",
+          "canonicalPromotion",
+          "canonicalFormulaRecords",
+          "unresolvedFormulaCount",
+          "requiredEvidence",
+          "forbiddenRuntimeUse",
+          "domains"
+        ],
+        "counts": {}
+      },
+      {
+        "path": "server/content/generated/logh7-galaxy-manual-crosscheck.json",
+        "canonicalStatus": "suspect-cross-check-required",
+        "size": 17896,
+        "status": "present",
+        "keys": [
+          "id",
+          "status",
+          "canonicalPromotion",
+          "policy",
+          "generatedAt",
+          "detectionProvenance",
+          "gridFit",
+          "chartLabelCounts",
+          "summary",
+          "matchedSystems",
+          "nearMisses",
+          "anomalousDots"
+        ],
+        "counts": {}
+      },
+      {
+        "path": "server/content/generated/logh7-galaxy-trust-crosscheck.json",
+        "canonicalStatus": "suspect-cross-check-required",
+        "size": 10015,
+        "status": "present",
+        "keys": [
+          "id",
+          "generatedAt",
+          "purpose",
+          "canonicalPromotion",
+          "trustPolicy",
+          "mandatoryWatchCategories",
+          "sourceGroups",
+          "confirmedNewHiddenData"
+        ],
+        "counts": {}
+      },
+      {
+        "path": "server/content/generated/logh7-gameplay-contract-boundary.json",
+        "canonicalStatus": "suspect-cross-check-required",
+        "size": 10913,
+        "status": "present",
+        "keys": [
+          "id",
+          "generatedAt",
+          "canonicalPromotion",
+          "purpose",
+          "normalRuntimeBoundary",
+          "guardrails",
+          "formulaGuard",
+          "serverDataFamily",
+          "implementedEvidenceBackedRules",
+          "unresolvedFormulaLocks",
+          "counts"
+        ],
+        "counts": {}
+      },
+      {
+        "path": "server/content/generated/logh7-hidden-data-candidates.json",
+        "canonicalStatus": "suspect-cross-check-required",
+        "size": 13597500,
+        "status": "present",
+        "keys": [
+          "id",
+          "status",
+          "candidatePolicy",
+          "sources",
+          "signatureSummary",
+          "candidates"
+        ],
+        "counts": {}
+      },
+      {
+        "path": "server/content/generated/logh7-hidden-data-classification.json",
+        "canonicalStatus": "suspect-cross-check-required",
+        "size": 22636654,
+        "status": "present",
+        "keys": [
+          "id",
+          "status",
+          "candidateSourceId",
+          "inputCandidateCount",
+          "summary",
+          "dedupGroups",
+          "records",
+          "promotionPolicy"
+        ],
+        "counts": {
+          "recordsCount": 37047
+        }
+      },
+      {
+        "path": "server/content/generated/logh7-hidden-data-watchlist.json",
+        "canonicalStatus": "suspect-cross-check-required",
+        "size": 10372,
+        "status": "present",
+        "keys": [
+          "id",
+          "status",
+          "policy",
+          "inputs",
+          "summary",
+          "categories"
+        ],
+        "counts": {
+          "categoriesCount": 2
+        }
+      },
+      {
+        "path": "server/content/generated/logh7-imperial-crest-mask-manifest.json",
+        "canonicalStatus": "suspect-cross-check-required",
+        "size": 1268,
+        "status": "present",
+        "keys": [
+          "id",
+          "source",
+          "sourceSha256",
+          "method",
+          "outputs"
+        ],
+        "counts": {}
+      },
+      {
+        "path": "server/content/generated/logh7-imperial-medal-corrected-prototype-manifest.json",
+        "canonicalStatus": "suspect-cross-check-required",
+        "size": 2325,
+        "status": "present",
+        "keys": [
+          "id",
+          "method",
+          "policy",
+          "entries"
+        ],
+        "counts": {}
+      },
+      {
+        "path": "server/content/generated/logh7-imperial-medal-source-lock-manifest.json",
+        "canonicalStatus": "suspect-cross-check-required",
+        "size": 143506,
+        "status": "present",
+        "keys": [
+          "id",
+          "generatedAt",
+          "purpose",
+          "sourceLock",
+          "proofThumbnail",
+          "prototype",
+          "renderQueue"
+        ],
+        "counts": {}
+      },
+      {
+        "path": "server/content/generated/logh7-logistics-allocation-catalog.json",
+        "canonicalStatus": "suspect-cross-check-required",
+        "size": 2968,
+        "status": "present",
+        "keys": [
+          "id",
+          "source",
+          "unitTypeCount",
+          "roleCount",
+          "unitTypes",
+          "roles",
+          "summary"
+        ],
+        "counts": {}
+      },
+      {
+        "path": "server/content/generated/logh7-manual-completeness-ledger.json",
+        "canonicalStatus": "suspect-cross-check-required",
+        "size": 26990,
+        "status": "present",
+        "keys": [
+          "id",
+          "generatedAt",
+          "status",
+          "canonicalPromotion",
+          "source",
+          "coverage",
+          "pages",
+          "miningGaps",
+          "summary"
+        ],
+        "counts": {}
+      },
+      {
+        "path": "server/content/generated/logh7-mdx-catalog.json",
+        "canonicalStatus": "suspect-cross-check-required",
+        "size": 816181,
+        "status": "present",
+        "keys": [
+          "id",
+          "sourceRoot",
+          "status",
+          "fileCount",
+          "files",
+          "categories"
+        ],
+        "counts": {
+          "filesCount": 406,
+          "fileCount": 406
+        }
+      },
+      {
+        "path": "server/content/generated/logh7-mdx-render-source-manifest.json",
+        "canonicalStatus": "suspect-cross-check-required",
+        "size": 3553,
+        "status": "present",
+        "keys": [
+          "id",
+          "generatedAt",
+          "purpose",
+          "imperialCrest",
+          "sourceRoot",
+          "productionPolicy",
+          "targets"
+        ],
+        "counts": {}
+      },
+      {
+        "path": "server/content/generated/logh7-medal-art-brief.json",
+        "canonicalStatus": "suspect-cross-check-required",
+        "size": 75097,
+        "status": "present",
+        "keys": [
+          "id",
+          "generatedAt",
+          "sourceCatalog",
+          "policy",
+          "summary",
+          "allianceEmblemReference",
+          "alliance",
+          "empire"
+        ],
+        "counts": {}
+      },
+      {
+        "path": "server/content/generated/logh7-medal-mining-catalog.json",
+        "canonicalStatus": "suspect-cross-check-required",
+        "size": 94462,
+        "status": "present",
+        "keys": [
+          "id",
+          "generatedAt",
+          "source",
+          "summary",
+          "imperialEmblem",
+          "medals"
+        ],
+        "counts": {}
+      },
+      {
+        "path": "server/content/generated/logh7-null-galaxy-template.json",
+        "canonicalStatus": "suspect-cross-check-required",
+        "size": 12412,
+        "status": "present",
+        "keys": [
+          "id",
+          "source",
+          "headerNodeCount",
+          "starCount",
+          "spectralClasses",
+          "stars",
+          "nonStarTemplateNodes"
+        ],
+        "counts": {}
+      },
+      {
+        "path": "server/content/generated/logh7-operation-catalog.json",
+        "canonicalStatus": "suspect-cross-check-required",
+        "size": 8972,
+        "status": "present",
+        "keys": [
+          "id",
+          "source",
+          "purposeCount",
+          "purposeIds",
+          "purposes",
+          "planFieldCount",
+          "planFields",
+          "planningEffect",
+          "commandPointCost",
+          "restrictions",
+          "duration",
+          "results"
+        ],
+        "counts": {}
+      },
+      {
+        "path": "server/content/generated/logh7-portrait-full-export-manifest.json",
+        "canonicalStatus": "suspect-cross-check-required",
+        "size": 282005,
+        "status": "present",
+        "keys": [
+          "id",
+          "sourceCatalog",
+          "sourceRoot",
+          "outDir",
+          "limitPerArchive",
+          "outputCount",
+          "outputs"
+        ],
+        "counts": {}
+      },
+      {
+        "path": "server/content/generated/logh7-rank-promotion-catalog.json",
+        "canonicalStatus": "suspect-cross-check-required",
+        "size": 11468,
+        "status": "present",
+        "keys": [
+          "id",
+          "source",
+          "rankCount",
+          "ranks",
+          "personnelAuthority",
+          "manualRules",
+          "summary"
+        ],
+        "counts": {}
+      },
+      {
+        "path": "server/content/generated/logh7-record-candidate-crosscheck.json",
+        "canonicalStatus": "suspect-cross-check-required",
+        "size": 3647,
+        "status": "present",
+        "keys": [
+          "id",
+          "status",
+          "policy",
+          "inputs",
+          "summary",
+          "systemPositions",
+          "originalCharacterRoster"
+        ],
+        "counts": {}
+      },
+      {
+        "path": "server/content/generated/logh7-record-candidate-scan.json",
+        "canonicalStatus": "suspect-cross-check-required",
+        "size": 7404,
+        "status": "present",
+        "keys": [
+          "id",
+          "status",
+          "policy",
+          "sources",
+          "summary",
+          "categories"
+        ],
+        "counts": {}
+      },
+      {
+        "path": "server/content/generated/logh7-remaster-provenance-manifest.json",
+        "canonicalStatus": "suspect-cross-check-required",
+        "size": 25172,
+        "status": "present",
+        "keys": [
+          "id",
+          "generatedAt",
+          "canonicalPromotion",
+          "streamingAssetsTarget",
+          "packs"
+        ],
+        "counts": {}
+      },
+      {
+        "path": "server/content/generated/logh7-runtime-boundary-manifest.json",
+        "canonicalStatus": "suspect-cross-check-required",
+        "size": 3447,
+        "status": "present",
+        "keys": [
+          "id",
+          "generatedAt",
+          "productClient",
+          "policy",
+          "normalRuntime",
+          "diagnosticOnly",
+          "preseedPolicy",
+          "patchPolicy",
+          "runtimeInputs"
+        ],
+        "counts": {}
+      },
+      {
+        "path": "server/content/generated/logh7-scene-inventory.json",
+        "canonicalStatus": "suspect-cross-check-required",
+        "size": 50112,
+        "status": "present",
+        "keys": [
+          "id",
+          "status",
+          "policy",
+          "sourcePolicy",
+          "summary",
+          "scenes"
+        ],
+        "counts": {}
+      },
+      {
+        "path": "server/content/generated/logh7-server-servable-data-family.json",
+        "canonicalStatus": "suspect-cross-check-required",
+        "size": 22294,
+        "status": "present",
+        "keys": [
+          "id",
+          "generatedAt",
+          "purpose",
+          "canonicalPromotionRule",
+          "mandatoryWatchCategories",
+          "families"
+        ],
+        "counts": {
+          "familiesCount": 15
+        }
+      },
+      {
+        "path": "server/content/generated/logh7-ship-stat-catalog.json",
+        "canonicalStatus": "suspect-cross-check-required",
+        "size": 199929,
+        "status": "present",
+        "keys": [
+          "id",
+          "source",
+          "poolFields",
+          "shipCount",
+          "summary",
+          "ships"
+        ],
+        "counts": {}
+      },
+      {
+        "path": "server/content/generated/logh7-ship-thumbnail-import-manifest.json",
+        "canonicalStatus": "suspect-cross-check-required",
+        "size": 17260,
+        "status": "present",
+        "keys": [
+          "id",
+          "generatedAt",
+          "provenance",
+          "sourceRoot",
+          "count",
+          "entries"
+        ],
+        "counts": {
+          "count": 79
+        }
+      },
+      {
+        "path": "server/content/generated/logh7-strategy-command-catalog.json",
+        "canonicalStatus": "suspect-cross-check-required",
+        "size": 47598,
+        "status": "present",
+        "keys": [
+          "id",
+          "source",
+          "commandCount",
+          "categoryCount",
+          "summary",
+          "categories",
+          "commands"
+        ],
+        "counts": {
+          "categoriesCount": 7
+        }
+      },
+      {
+        "path": "server/content/generated/logh7-test-decision-guard.json",
+        "canonicalStatus": "suspect-cross-check-required",
+        "size": 5414,
+        "status": "present",
+        "keys": [
+          "id",
+          "generatedAt",
+          "purpose",
+          "canonicalPromotion",
+          "nodePolicy",
+          "nodeSurfaces",
+          "unityPolicy",
+          "normalRuntimeBoundary",
+          "enforcementRules"
+        ],
+        "counts": {}
+      },
+      {
+        "path": "server/content/generated/logh7-ui-scene-catalog.json",
+        "canonicalStatus": "suspect-cross-check-required",
+        "size": 5878,
+        "status": "present",
+        "keys": [
+          "id",
+          "generatedAt",
+          "canonicalPromotion",
+          "streamingAssetsTarget",
+          "inputs",
+          "runtimePolicy",
+          "summary",
+          "surfaces"
+        ],
+        "counts": {}
+      },
+      {
+        "path": "server/content/generated/logh7-ui-scene-remaster-gameplay-boundary.json",
+        "canonicalStatus": "suspect-cross-check-required",
+        "size": 5423,
+        "status": "present",
+        "keys": [
+          "id",
+          "generatedAt",
+          "canonicalPromotion",
+          "streamingAssetsTarget",
+          "inputs",
+          "uiSceneCatalog",
+          "remasterPackSchema",
+          "originalAssetContracts",
+          "gameplayContractBoundary",
+          "unityRuntimeContract",
+          "policy"
+        ],
+        "counts": {}
+      },
+      {
+        "path": "server/content/generated/logh7-ulw-evidence-20260703-inventory.json",
+        "canonicalStatus": "suspect-cross-check-required",
+        "size": 16721,
+        "status": "present",
+        "keys": [
+          "id",
+          "generatedAt",
+          "targetEvidenceDate",
+          "targetGlob",
+          "selfAuditExclusionPrefix",
+          "canonicalPromotion",
+          "status",
+          "fileCount",
+          "excludedSelfAuditFileCount",
+          "totalBytes",
+          "categoryCounts",
+          "files"
+        ],
+        "counts": {
+          "filesCount": 52,
+          "fileCount": 52
+        }
+      },
+      {
+        "path": "server/content/generated/logh7-unity-asset-source-truth.json",
+        "canonicalStatus": "suspect-cross-check-required",
+        "size": 6098,
+        "status": "present",
+        "keys": [
+          "id",
+          "generatedAt",
+          "purpose",
+          "canonicalPromotion",
+          "manualDragAsSourceTruthAllowed",
+          "manualAuthorityClaims",
+          "violationCount",
+          "sourceTruthInputs",
+          "unityRuntimeConsumers",
+          "unityAssetRoles",
+          "reproducibilityRules",
+          "canonicalStatus"
+        ],
+        "counts": {}
+      },
+      {
+        "path": "server/content/generated/logh7-unity-bootstrap-manifest.json",
+        "canonicalStatus": "suspect-cross-check-required",
+        "size": 8008,
+        "status": "present",
+        "keys": [
+          "id",
+          "status",
+          "generatedAt",
+          "unity",
+          "authority",
+          "runtime",
+          "canonicalPromotion",
+          "remasterPacks",
+          "generatedInputs",
+          "outputs"
+        ],
+        "counts": {}
+      },
+      {
+        "path": "server/content/generated/logh7-unity-source-pack-manifest.json",
+        "canonicalStatus": "suspect-cross-check-required",
+        "size": 23822,
+        "status": "present",
+        "keys": [
+          "id",
+          "generatedAt",
+          "unity",
+          "streamingAssetsTarget",
+          "canonicalPromotion",
+          "inputs",
+          "verifiedRecords",
+          "originalFallbackPack",
+          "remasterPacks"
+        ],
+        "counts": {}
+      },
+      {
+        "path": "server/content/generated/logh7-unity-streamingassets-export.json",
+        "canonicalStatus": "suspect-cross-check-required",
+        "size": 5593,
+        "status": "present",
+        "keys": [
+          "id",
+          "deterministic",
+          "canonicalPromotion",
+          "streamingAssetsRoot",
+          "streamingAssetsTarget",
+          "sourcePack",
+          "summary",
+          "files",
+          "originalFallbackAssets"
+        ],
+        "counts": {
+          "filesCount": 14
+        }
+      }
+    ]
+  }
+}

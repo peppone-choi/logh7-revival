@@ -1,0 +1,877 @@
+{
+ "_purpose": "Hardcoded EXE .rsrc UI strings (launcher/app menu + dialogs) as a localization source. Fill text_ko then patch the .rsrc (Resource Hacker / a .rsrc patcher) — separate from the MsgDat/String.txt (in-game) localization. See docs/logh7-font-remaster.md §7.",
+ "_source": "content/extracted/binary-strings-G7MTClient.json (.rsrc dialog/menu/stringtable)",
+ "_count": 145,
+ "strings": [
+  {
+   "va_off": 3945806,
+   "restype": "rsrc.menu",
+   "text_ja": "ﾌｧｲﾙ(&F)",
+   "text_ko": null
+  },
+  {
+   "va_off": 3945824,
+   "restype": "rsrc.menu",
+   "text_ja": "ｱﾌﾟﾘｹｰｼｮﾝの終了(&X)",
+   "text_ko": null
+  },
+  {
+   "va_off": 3945862,
+   "restype": "rsrc.menu",
+   "text_ja": "ﾍﾙﾌﾟ(&H)",
+   "text_ko": null
+  },
+  {
+   "va_off": 3945882,
+   "restype": "rsrc.menu",
+   "text_ja": "銀河英雄伝説Ⅶ のﾊﾞｰｼﾞｮﾝ情報(&A)...",
+   "text_ko": null
+  },
+  {
+   "va_off": 3946048,
+   "restype": "rsrc.dialog",
+   "text_ja": "À胈",
+   "text_ko": null
+  },
+  {
+   "va_off": 3946062,
+   "restype": "rsrc.dialog",
+   "text_ja": "ë7",
+   "text_ko": null
+  },
+  {
+   "va_off": 3946070,
+   "restype": "rsrc.dialog",
+   "text_ja": "銀河英雄伝説Ⅶβのﾊﾞｰｼﾞｮﾝ情報",
+   "text_ko": null
+  },
+  {
+   "va_off": 3946110,
+   "restype": "rsrc.dialog",
+   "text_ja": "ＭＳ Ｐゴシック",
+   "text_ko": null
+  },
+  {
+   "va_off": 3946156,
+   "restype": "rsrc.dialog",
+   "text_ja": "倂",
+   "text_ko": null
+  },
+  {
+   "va_off": 3946172,
+   "restype": "rsrc.dialog",
+   "text_ja": "￿￿Version 1.0",
+   "text_ko": null
+  },
+  {
+   "va_off": 3946220,
+   "restype": "rsrc.dialog",
+   "text_ja": "￿￿(C)2004 Bothtec,Inc.",
+   "text_ko": null
+  },
+  {
+   "va_off": 3946290,
+   "restype": "rsrc.dialog",
+   "text_ja": "￿OK",
+   "text_ko": null
+  },
+  {
+   "va_off": 3949224,
+   "restype": "rsrc.dialog",
+   "text_ja": "Ä胈",
+   "text_ko": null
+  },
+  {
+   "va_off": 3949238,
+   "restype": "rsrc.dialog",
+   "text_ja": "·F",
+   "text_ko": null
+  },
+  {
+   "va_off": 3949246,
+   "restype": "rsrc.dialog",
+   "text_ja": "新規",
+   "text_ko": null
+  },
+  {
+   "va_off": 3949254,
+   "restype": "rsrc.dialog",
+   "text_ja": "MS Shell Dlg",
+   "text_ko": null
+  },
+  {
+   "va_off": 3949296,
+   "restype": "rsrc.dialog",
+   "text_ja": "￿￿新規(&N)",
+   "text_ko": null
+  },
+  {
+   "va_off": 3949332,
+   "restype": "rsrc.dialog",
+   "text_ja": "}1d￿",
+   "text_ko": null
+  },
+  {
+   "va_off": 3949398,
+   "restype": "rsrc.dialog",
+   "text_ja": "￿ｷｬﾝｾﾙ",
+   "text_ko": null
+  },
+  {
+   "va_off": 3949424,
+   "restype": "rsrc.dialog",
+   "text_ja": "+(",
+   "text_ko": null
+  },
+  {
+   "va_off": 3949432,
+   "restype": "rsrc.dialog",
+   "text_ja": "￿ﾍﾙﾌﾟ(&H)",
+   "text_ko": null
+  },
+  {
+   "va_off": 3950344,
+   "restype": "rsrc.stringtable",
+   "text_ja": "5銀河英雄伝説Ⅶ",
+   "text_ko": null
+  },
+  {
+   "va_off": 3950364,
+   "restype": "rsrc.stringtable",
+   "text_ja": "G7MTCl",
+   "text_ko": null
+  },
+  {
+   "va_off": 3950382,
+   "restype": "rsrc.stringtable",
+   "text_ja": "G7MTClient.Document",
+   "text_ko": null
+  },
+  {
+   "va_off": 3950422,
+   "restype": "rsrc.stringtable",
+   "text_ja": "G7MTCl Document",
+   "text_ko": null
+  },
+  {
+   "va_off": 3950490,
+   "restype": "rsrc.stringtable",
+   "text_ja": "銀河英雄伝説Ⅶ",
+   "text_ko": null
+  },
+  {
+   "va_off": 3950506,
+   "restype": "rsrc.stringtable",
+   "text_ja": "ﾚﾃﾞｨ",
+   "text_ko": null
+  },
+  {
+   "va_off": 3950618,
+   "restype": "rsrc.stringtable",
+   "text_ja": "新規にﾌｧｲﾙを作成",
+   "text_ko": null
+  },
+  {
+   "va_off": 3950640,
+   "restype": "rsrc.stringtable",
+   "text_ja": "新規ﾌｧｲﾙ",
+   "text_ko": null
+  },
+  {
+   "va_off": 3950654,
+   "restype": "rsrc.stringtable",
+   "text_ja": "既存のﾌｧｲﾙを開く",
+   "text_ko": null
+  },
+  {
+   "va_off": 3950676,
+   "restype": "rsrc.stringtable",
+   "text_ja": "開く",
+   "text_ko": null
+  },
+  {
+   "va_off": 3950682,
+   "restype": "rsrc.stringtable",
+   "text_ja": "作業中のﾌｧｲﾙを閉じる",
+   "text_ko": null
+  },
+  {
+   "va_off": 3950708,
+   "restype": "rsrc.stringtable",
+   "text_ja": "閉じる",
+   "text_ko": null
+  },
+  {
+   "va_off": 3950716,
+   "restype": "rsrc.stringtable",
+   "text_ja": "作業中のﾌｧｲﾙを上書きして保存",
+   "text_ko": null
+  },
+  {
+   "va_off": 3950750,
+   "restype": "rsrc.stringtable",
+   "text_ja": "保存",
+   "text_ko": null
+  },
+  {
+   "va_off": 3950756,
+   "restype": "rsrc.stringtable",
+   "text_ja": "作業中のﾌｧｲﾙを新しい名前で保存",
+   "text_ko": null
+  },
+  {
+   "va_off": 3950792,
+   "restype": "rsrc.stringtable",
+   "text_ja": "名前をつけて保存",
+   "text_ko": null
+  },
+  {
+   "va_off": 3950994,
+   "restype": "rsrc.stringtable",
+   "text_ja": "指定のﾌｧｲﾙを開く",
+   "text_ko": null
+  },
+  {
+   "va_off": 3951530,
+   "restype": "rsrc.stringtable",
+   "text_ja": "選択範囲を消去",
+   "text_ko": null
+  },
+  {
+   "va_off": 3951546,
+   "restype": "rsrc.stringtable",
+   "text_ja": "消去",
+   "text_ko": null
+  },
+  {
+   "va_off": 3951552,
+   "restype": "rsrc.stringtable",
+   "text_ja": "すべて消去",
+   "text_ko": null
+  },
+  {
+   "va_off": 3951576,
+   "restype": "rsrc.stringtable",
+   "text_ja": "選択範囲をｺﾋﾟｰしてｸﾘｯﾌﾟﾎﾞｰﾄﾞに保存",
+   "text_ko": null
+  },
+  {
+   "va_off": 3951626,
+   "restype": "rsrc.stringtable",
+   "text_ja": "ｺﾋﾟｰ",
+   "text_ko": null
+  },
+  {
+   "va_off": 3951636,
+   "restype": "rsrc.stringtable",
+   "text_ja": "選択範囲を切り取ってｸﾘｯﾌﾟﾎﾞｰﾄﾞに保存",
+   "text_ko": null
+  },
+  {
+   "va_off": 3951684,
+   "restype": "rsrc.stringtable",
+   "text_ja": "切り取り",
+   "text_ko": null
+  },
+  {
+   "va_off": 3951694,
+   "restype": "rsrc.stringtable",
+   "text_ja": "指定した文字列の検索",
+   "text_ko": null
+  },
+  {
+   "va_off": 3951716,
+   "restype": "rsrc.stringtable",
+   "text_ja": "検索",
+   "text_ko": null
+  },
+  {
+   "va_off": 3951722,
+   "restype": "rsrc.stringtable",
+   "text_ja": "ｸﾘｯﾌﾟﾎﾞｰﾄﾞの内容を貼り付け",
+   "text_ko": null
+  },
+  {
+   "va_off": 3951760,
+   "restype": "rsrc.stringtable",
+   "text_ja": "貼り付け",
+   "text_ko": null
+  },
+  {
+   "va_off": 3951774,
+   "restype": "rsrc.stringtable",
+   "text_ja": "直前に行った動作を繰り返す",
+   "text_ko": null
+  },
+  {
+   "va_off": 3951802,
+   "restype": "rsrc.stringtable",
+   "text_ja": "繰り返し",
+   "text_ko": null
+  },
+  {
+   "va_off": 3951812,
+   "restype": "rsrc.stringtable",
+   "text_ja": "指定した文字列を他の文字列で置換",
+   "text_ko": null
+  },
+  {
+   "va_off": 3951846,
+   "restype": "rsrc.stringtable",
+   "text_ja": "置換",
+   "text_ko": null
+  },
+  {
+   "va_off": 3951852,
+   "restype": "rsrc.stringtable",
+   "text_ja": "ﾌｧｲﾙ内のすべてを選択",
+   "text_ko": null
+  },
+  {
+   "va_off": 3951878,
+   "restype": "rsrc.stringtable",
+   "text_ja": "すべて選択",
+   "text_ko": null
+  },
+  {
+   "va_off": 3951890,
+   "restype": "rsrc.stringtable",
+   "text_ja": "直前に行った動作を元に戻す",
+   "text_ko": null
+  },
+  {
+   "va_off": 3951918,
+   "restype": "rsrc.stringtable",
+   "text_ja": "元に戻す",
+   "text_ko": null
+  },
+  {
+   "va_off": 3951956,
+   "restype": "rsrc.stringtable",
+   "text_ja": "繰り返す",
+   "text_ko": null
+  },
+  {
+   "va_off": 3951476,
+   "restype": "rsrc.stringtable",
+   "text_ja": "作業中のｳｨﾝﾄﾞｳを分割",
+   "text_ko": null
+  },
+  {
+   "va_off": 3951504,
+   "restype": "rsrc.stringtable",
+   "text_ja": "分割",
+   "text_ko": null
+  },
+  {
+   "va_off": 3950832,
+   "restype": "rsrc.stringtable",
+   "text_ja": "%ﾌﾟﾛｸﾞﾗﾑの情報、ﾊﾞｰｼﾞｮﾝそして著作権を表示",
+   "text_ko": null
+  },
+  {
+   "va_off": 3950890,
+   "restype": "rsrc.stringtable",
+   "text_ja": "ﾊﾞｰｼﾞｮﾝ情報",
+   "text_ko": null
+  },
+  {
+   "va_off": 3950910,
+   "restype": "rsrc.stringtable",
+   "text_ja": "ｱﾌﾟﾘｹｰｼｮﾝを終了し、ﾌｧｲﾙの保存を指示",
+   "text_ko": null
+  },
+  {
+   "va_off": 3950960,
+   "restype": "rsrc.stringtable",
+   "text_ja": "終了",
+   "text_ko": null
+  },
+  {
+   "va_off": 3951346,
+   "restype": "rsrc.stringtable",
+   "text_ja": "次のｳｨﾝﾄﾞｳに切り替える",
+   "text_ko": null
+  },
+  {
+   "va_off": 3951376,
+   "restype": "rsrc.stringtable",
+   "text_ja": "次のﾍﾟｲﾝ",
+   "text_ko": null
+  },
+  {
+   "va_off": 3951390,
+   "restype": "rsrc.stringtable",
+   "text_ja": "前のｳｨﾝﾄﾞｳに切り替える",
+   "text_ko": null
+  },
+  {
+   "va_off": 3951420,
+   "restype": "rsrc.stringtable",
+   "text_ja": "前のﾍﾟｲﾝ",
+   "text_ko": null
+  },
+  {
+   "va_off": 3950546,
+   "restype": "rsrc.stringtable",
+   "text_ja": "EXT",
+   "text_ko": null
+  },
+  {
+   "va_off": 3950554,
+   "restype": "rsrc.stringtable",
+   "text_ja": "CAP",
+   "text_ko": null
+  },
+  {
+   "va_off": 3950562,
+   "restype": "rsrc.stringtable",
+   "text_ja": "NUM",
+   "text_ko": null
+  },
+  {
+   "va_off": 3950570,
+   "restype": "rsrc.stringtable",
+   "text_ja": "SCRL",
+   "text_ko": null
+  },
+  {
+   "va_off": 3950580,
+   "restype": "rsrc.stringtable",
+   "text_ja": "上書",
+   "text_ko": null
+  },
+  {
+   "va_off": 3950586,
+   "restype": "rsrc.stringtable",
+   "text_ja": "記録",
+   "text_ko": null
+  },
+  {
+   "va_off": 3950592,
+   "restype": "rsrc.stringtable",
+   "text_ja": "ｶﾅ",
+   "text_ko": null
+  },
+  {
+   "va_off": 3951978,
+   "restype": "rsrc.stringtable",
+   "text_ja": "ｳｨﾝﾄﾞｳのｻｲｽﾞを変更",
+   "text_ko": null
+  },
+  {
+   "va_off": 3952008,
+   "restype": "rsrc.stringtable",
+   "text_ja": "ｳｨﾝﾄﾞｳの位置を変更",
+   "text_ko": null
+  },
+  {
+   "va_off": 3952034,
+   "restype": "rsrc.stringtable",
+   "text_ja": "ｳｨﾝﾄﾞｳを最小化する",
+   "text_ko": null
+  },
+  {
+   "va_off": 3952060,
+   "restype": "rsrc.stringtable",
+   "text_ja": "ｳｨﾝﾄﾞｳを最大化する",
+   "text_ko": null
+  },
+  {
+   "va_off": 3952146,
+   "restype": "rsrc.stringtable",
+   "text_ja": "作業中のｳｨﾝﾄﾞｳを閉じ、変更したﾌｧｲﾙの保存を指示",
+   "text_ko": null
+  },
+  {
+   "va_off": 3952230,
+   "restype": "rsrc.stringtable",
+   "text_ja": "ｳｨﾝﾄﾞｳを通常のｻｲｽﾞに戻す",
+   "text_ko": null
+  },
+  {
+   "va_off": 3952266,
+   "restype": "rsrc.stringtable",
+   "text_ja": "ｱﾌﾟﾘｹｰｼｮﾝの切り替え",
+   "text_ko": null
+  },
+  {
+   "va_off": 3952328,
+   "restype": "rsrc.stringtable",
+   "text_ja": "名前を付けて保存",
+   "text_ko": null
+  },
+  {
+   "va_off": 3952346,
+   "restype": "rsrc.stringtable",
+   "text_ja": "すべてのﾌｧｲﾙ (*.*)",
+   "text_ko": null
+  },
+  {
+   "va_off": 3952376,
+   "restype": "rsrc.stringtable",
+   "text_ja": "無題",
+   "text_ko": null
+  },
+  {
+   "va_off": 3952386,
+   "restype": "rsrc.stringtable",
+   "text_ja": "無題のﾌｧｲﾙ",
+   "text_ko": null
+  },
+  {
+   "va_off": 3952428,
+   "restype": "rsrc.stringtable",
+   "text_ja": "非表示(&H)",
+   "text_ko": null
+  },
+  {
+   "va_off": 3952474,
+   "restype": "rsrc.stringtable",
+   "text_ja": "ｴﾗｰ ﾒｯｾｰｼﾞはありません。",
+   "text_ko": null
+  },
+  {
+   "va_off": 3952510,
+   "restype": "rsrc.stringtable",
+   "text_ja": "ｻﾎﾟｰﾄされていない操作を実行しました。",
+   "text_ko": null
+  },
+  {
+   "va_off": 3952554,
+   "restype": "rsrc.stringtable",
+   "text_ja": "必要なﾘｿｰｽを利用できませんでした。",
+   "text_ko": null
+  },
+  {
+   "va_off": 3952594,
+   "restype": "rsrc.stringtable",
+   "text_ja": "ﾒﾓﾘが不足しています。",
+   "text_ko": null
+  },
+  {
+   "va_off": 3952620,
+   "restype": "rsrc.stringtable",
+   "text_ja": "不明なｴﾗｰが発生しました。",
+   "text_ko": null
+  },
+  {
+   "va_off": 3952674,
+   "restype": "rsrc.stringtable",
+   "text_ja": "無効なﾌｧｲﾙ名です。",
+   "text_ko": null
+  },
+  {
+   "va_off": 3952698,
+   "restype": "rsrc.stringtable",
+   "text_ja": "ﾄﾞｷｭﾒﾝﾄを開くことに失敗しました。",
+   "text_ko": null
+  },
+  {
+   "va_off": 3952740,
+   "restype": "rsrc.stringtable",
+   "text_ja": "ﾄﾞｷｭﾒﾝﾄの保存に失敗しました。",
+   "text_ko": null
+  },
+  {
+   "va_off": 3952778,
+   "restype": "rsrc.stringtable",
+   "text_ja": "%1 への変更を保存しますか?",
+   "text_ko": null
+  },
+  {
+   "va_off": 3952810,
+   "restype": "rsrc.stringtable",
+   "text_ja": "空のﾄﾞｷｭﾒﾝﾄの作成に失敗しました。",
+   "text_ko": null
+  },
+  {
+   "va_off": 3952852,
+   "restype": "rsrc.stringtable",
+   "text_ja": "ﾌｧｲﾙが大きすぎて開けません。",
+   "text_ko": null
+  },
+  {
+   "va_off": 3952886,
+   "restype": "rsrc.stringtable",
+   "text_ja": "印刷ｼﾞｮﾌﾞを開始できませんでした。",
+   "text_ko": null
+  },
+  {
+   "va_off": 3952926,
+   "restype": "rsrc.stringtable",
+   "text_ja": "ﾍﾙﾌﾟの起動に失敗しました。",
+   "text_ko": null
+  },
+  {
+   "va_off": 3952958,
+   "restype": "rsrc.stringtable",
+   "text_ja": "ｱﾌﾟﾘｹｰｼｮﾝの内部ｴﾗｰです。",
+   "text_ko": null
+  },
+  {
+   "va_off": 3952996,
+   "restype": "rsrc.stringtable",
+   "text_ja": "ｺﾏﾝﾄﾞの実行に失敗しました。",
+   "text_ko": null
+  },
+  {
+   "va_off": 3953030,
+   "restype": "rsrc.stringtable",
+   "text_ja": "ﾒﾓﾘ不足のため実行できません。=ｼｽﾃﾑ ﾚｼﾞｽﾄﾘ ｴﾝﾄﾘは削除されています。また、INI ﾌｧｲﾙがある場合は、INI ﾌｧｲﾙも削除されました。/一部のｼｽﾃﾑ ﾚｼﾞｽﾄﾘ ｴﾝﾄﾘ (または INI ﾌｧｲﾙ) は削除されませんでした。,このﾌﾟﾛｸﾞﾗﾑにはﾌｧｲﾙ %s が必要ですがこのｼｽﾃﾑ上に見つかりませんでした。Wこのﾌﾟﾛｸﾞﾗﾑは欠落ｴｸｽﾎﾟｰﾄ %s にﾌｧｲﾙ %s 内でﾘﾝｸされています。このｺﾝﾋﾟｭｰﾀは互換性のないﾊﾞｰｼﾞｮﾝの %s を含んでいる可能性があります。",
+   "text_ko": null
+  },
+  {
+   "va_off": 3954090,
+   "restype": "rsrc.stringtable",
+   "text_ja": "整数を入力してください。",
+   "text_ko": null
+  },
+  {
+   "va_off": 3954116,
+   "restype": "rsrc.stringtable",
+   "text_ja": "数字を入力してください。",
+   "text_ko": null
+  },
+  {
+   "va_off": 3954142,
+   "restype": "rsrc.stringtable",
+   "text_ja": "%1 から %2 までの整数を入力してください。",
+   "text_ko": null
+  },
+  {
+   "va_off": 3954192,
+   "restype": "rsrc.stringtable",
+   "text_ja": "%1 から %2 までの数字を入力してください。",
+   "text_ko": null
+  },
+  {
+   "va_off": 3954242,
+   "restype": "rsrc.stringtable",
+   "text_ja": "%1 文字以内で入力してください。",
+   "text_ko": null
+  },
+  {
+   "va_off": 3954278,
+   "restype": "rsrc.stringtable",
+   "text_ja": "ﾎﾞﾀﾝを選択してください。",
+   "text_ko": null
+  },
+  {
+   "va_off": 3954308,
+   "restype": "rsrc.stringtable",
+   "text_ja": "0 から 255 までの整数を入力してください。",
+   "text_ko": null
+  },
+  {
+   "va_off": 3954358,
+   "restype": "rsrc.stringtable",
+   "text_ja": "正の整数を入力してください。",
+   "text_ko": null
+  },
+  {
+   "va_off": 3954388,
+   "restype": "rsrc.stringtable",
+   "text_ja": "日付/時刻を入力してください。",
+   "text_ko": null
+  },
+  {
+   "va_off": 3954420,
+   "restype": "rsrc.stringtable",
+   "text_ja": "通貨型を入力してください。",
+   "text_ko": null
+  },
+  {
+   "va_off": 3953682,
+   "restype": "rsrc.stringtable",
+   "text_ja": "予期しないﾌｧｲﾙ形式です。,%1",
+   "text_ko": null
+  },
+  {
+   "va_off": 3953718,
+   "restype": "rsrc.stringtable",
+   "text_ja": "このﾌｧｲﾙが見つかりません。",
+   "text_ko": null
+  },
+  {
+   "va_off": 3953750,
+   "restype": "rsrc.stringtable",
+   "text_ja": "ﾊﾟｽとﾌｧｲﾙ名が正しいかどうか確認してださい。",
+   "text_ko": null
+  },
+  {
+   "va_off": 3953802,
+   "restype": "rsrc.stringtable",
+   "text_ja": "出力先のﾃﾞｨｽｸ ﾄﾞﾗｲﾌﾞの空き容量が不足しています。",
+   "text_ko": null
+  },
+  {
+   "va_off": 3953864,
+   "restype": "rsrc.stringtable",
+   "text_ja": "%1 は使用中のため、読み取れません。",
+   "text_ko": null
+  },
+  {
+   "va_off": 3953904,
+   "restype": "rsrc.stringtable",
+   "text_ja": "%1 は使用中または読み取り専用のため、書き込めません。",
+   "text_ko": null
+  },
+  {
+   "va_off": 3953962,
+   "restype": "rsrc.stringtable",
+   "text_ja": "%1 の読み取り中に予期しないｴﾗｰが発生しました。",
+   "text_ko": null
+  },
+  {
+   "va_off": 3954016,
+   "restype": "rsrc.stringtable",
+   "text_ja": "%1 の書き込み中に予期しないｴﾗｰが発生しました。",
+   "text_ko": null
+  },
+  {
+   "va_off": 3953578,
+   "restype": "rsrc.stringtable",
+   "text_ja": "書き込み専用ﾌﾟﾛﾊﾟﾃｨからは読み取れません。",
+   "text_ko": null
+  },
+  {
+   "va_off": 3953628,
+   "restype": "rsrc.stringtable",
+   "text_ja": "読み取り専用ﾌﾟﾛﾊﾟﾃｨには書き込めません。",
+   "text_ko": null
+  },
+  {
+   "va_off": 3955570,
+   "restype": "rsrc.stringtable",
+   "text_ja": "ﾒｰﾙ ｼｽﾃﾑ ｻﾎﾟｰﾄを読み込めません。",
+   "text_ko": null
+  },
+  {
+   "va_off": 3955618,
+   "restype": "rsrc.stringtable",
+   "text_ja": "ﾒｰﾙ ｼｽﾃﾑ DLL が無効です。",
+   "text_ko": null
+  },
+  {
+   "va_off": 3955658,
+   "restype": "rsrc.stringtable",
+   "text_ja": "ﾒｰﾙの送信に失敗しました。",
+   "text_ko": null
+  },
+  {
+   "va_off": 3954466,
+   "restype": "rsrc.stringtable",
+   "text_ja": "ｴﾗｰはありませんでした。",
+   "text_ko": null
+  },
+  {
+   "va_off": 3954494,
+   "restype": "rsrc.stringtable",
+   "text_ja": "%1 へのｱｸｾｽ中に不明なｴﾗｰが発生しました。",
+   "text_ko": null
+  },
+  {
+   "va_off": 3954546,
+   "restype": "rsrc.stringtable",
+   "text_ja": "%1 が見つかりませんでした。",
+   "text_ko": null
+  },
+  {
+   "va_off": 3954578,
+   "restype": "rsrc.stringtable",
+   "text_ja": "%1 には無効なﾊﾟｽが含まれています。",
+   "text_ko": null
+  },
+  {
+   "va_off": 3954620,
+   "restype": "rsrc.stringtable",
+   "text_ja": "開いているﾌｧｲﾙが多すぎるため、%1 を開けませんでした。",
+   "text_ko": null
+  },
+  {
+   "va_off": 3954682,
+   "restype": "rsrc.stringtable",
+   "text_ja": "%1 へのｱｸｾｽは拒否されました。",
+   "text_ko": null
+  },
+  {
+   "va_off": 3954720,
+   "restype": "rsrc.stringtable",
+   "text_ja": "%1 へ無効なﾌｧｲﾙ ﾊﾝﾄﾞﾙが関連付けられていました。",
+   "text_ko": null
+  },
+  {
+   "va_off": 3954782,
+   "restype": "rsrc.stringtable",
+   "text_ja": "現在のﾃﾞｨﾚｸﾄﾘ %1 は削除できませんでした。 %1 を作成できませんでした。そのﾃﾞｨﾚｸﾄﾘはいっぱいです。",
+   "text_ko": null
+  },
+  {
+   "va_off": 3954902,
+   "restype": "rsrc.stringtable",
+   "text_ja": "%1 のｼｰｸに失敗しました。#%1 へのｱｸｾｽ中にﾊｰﾄﾞｳｪｱ I/O ｴﾗｰが報告されました。",
+   "text_ko": null
+  },
+  {
+   "va_off": 3955006,
+   "restype": "rsrc.stringtable",
+   "text_ja": "%1 へのｱｸｾｽ中に共有違反が発生しました。",
+   "text_ko": null
+  },
+  {
+   "va_off": 3955054,
+   "restype": "rsrc.stringtable",
+   "text_ja": "%1 へのｱｸｾｽ中にﾛｯｸ違反が発生しました。",
+   "text_ko": null
+  },
+  {
+   "va_off": 3955104,
+   "restype": "rsrc.stringtable",
+   "text_ja": "%1 へのｱｸｾｽ中にﾃﾞｨｽｸがいっぱいになりました。",
+   "text_ko": null
+  },
+  {
+   "va_off": 3955162,
+   "restype": "rsrc.stringtable",
+   "text_ja": "%1 の末尾以降にｱｸｾｽしようとしました。",
+   "text_ko": null
+  },
+  {
+   "va_off": 3955290,
+   "restype": "rsrc.stringtable",
+   "text_ja": "%1 の読み取り中に書き込もうとしました。",
+   "text_ko": null
+  },
+  {
+   "va_off": 3955380,
+   "restype": "rsrc.stringtable",
+   "text_ja": "%1 へ書き込み中に読み取ろうとしました。",
+   "text_ko": null
+  },
+  {
+   "va_off": 3955424,
+   "restype": "rsrc.stringtable",
+   "text_ja": "%1 の形式が正しくありません。",
+   "text_ko": null
+  },
+  {
+   "va_off": 3955458,
+   "restype": "rsrc.stringtable",
+   "text_ja": "%1 は予期しないｵﾌﾞｼﾞｪｸﾄを含んでいます。",
+   "text_ko": null
+  },
+  {
+   "va_off": 3955510,
+   "restype": "rsrc.stringtable",
+   "text_ja": "%1 は不正なｽｷｰﾏを含んでいます。",
+   "text_ko": null
+  },
+  {
+   "va_off": 3955714,
+   "restype": "rsrc.stringtable",
+   "text_ja": "ﾋﾟｸｾﾙ",
+   "text_ko": null
+  }
+ ]
+}

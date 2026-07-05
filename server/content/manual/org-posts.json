@@ -1,0 +1,975 @@
+{
+  "_source": "gin7 manual 別表 組織構成表",
+  "empire": [
+    {
+      "post_ja": "皇帝",
+      "org_ja": "皇宮",
+      "capacity": 1,
+      "min_rank_ja": "",
+      "max_rank_ja": "",
+      "holder_kind": "emperor"
+    },
+    {
+      "post_ja": "帝国軍最高司令官",
+      "org_ja": "皇宮",
+      "capacity": 1,
+      "min_rank_ja": "元帥",
+      "max_rank_ja": "元帥",
+      "holder_kind": "military"
+    },
+    {
+      "post_ja": "幕僚総監",
+      "org_ja": "皇宮",
+      "capacity": 1,
+      "min_rank_ja": "元帥",
+      "max_rank_ja": "元帥",
+      "holder_kind": "military"
+    },
+    {
+      "post_ja": "大本営参謀",
+      "org_ja": "皇宮",
+      "capacity": 10,
+      "min_rank_ja": "准将",
+      "max_rank_ja": "元帥",
+      "holder_kind": "military"
+    },
+    {
+      "post_ja": "帝国宰相",
+      "org_ja": "皇宮",
+      "capacity": 1,
+      "min_rank_ja": "元帥",
+      "max_rank_ja": "元帥",
+      "holder_kind": "politician"
+    },
+    {
+      "post_ja": "国務尚書",
+      "org_ja": "内閣",
+      "capacity": 1,
+      "min_rank_ja": "元帥",
+      "max_rank_ja": "元帥",
+      "holder_kind": "politician"
+    },
+    {
+      "post_ja": "内務尚書",
+      "org_ja": "内閣",
+      "capacity": 1,
+      "min_rank_ja": "",
+      "max_rank_ja": "",
+      "holder_kind": "politician"
+    },
+    {
+      "post_ja": "財務尚書",
+      "org_ja": "内閣",
+      "capacity": 1,
+      "min_rank_ja": "",
+      "max_rank_ja": "",
+      "holder_kind": "politician"
+    },
+    {
+      "post_ja": "宮内尚書",
+      "org_ja": "内閣",
+      "capacity": 1,
+      "min_rank_ja": "",
+      "max_rank_ja": "",
+      "holder_kind": "politician"
+    },
+    {
+      "post_ja": "司法尚書",
+      "org_ja": "内閣",
+      "capacity": 1,
+      "min_rank_ja": "",
+      "max_rank_ja": "",
+      "holder_kind": "politician"
+    },
+    {
+      "post_ja": "典礼尚書",
+      "org_ja": "内閣",
+      "capacity": 1,
+      "min_rank_ja": "",
+      "max_rank_ja": "",
+      "holder_kind": "politician"
+    },
+    {
+      "post_ja": "科学尚書",
+      "org_ja": "内閣",
+      "capacity": 1,
+      "min_rank_ja": "",
+      "max_rank_ja": "",
+      "holder_kind": "politician"
+    },
+    {
+      "post_ja": "内閣書記官長",
+      "org_ja": "内閣",
+      "capacity": 1,
+      "min_rank_ja": "",
+      "max_rank_ja": "",
+      "holder_kind": "politician"
+    },
+    {
+      "post_ja": "フェザーン駐在高等弁務官",
+      "org_ja": "内閣",
+      "capacity": 1,
+      "min_rank_ja": "",
+      "max_rank_ja": "",
+      "holder_kind": "politician"
+    },
+    {
+      "post_ja": "フェザーン駐在補佐官",
+      "org_ja": "駐フェザーン弁務官事務所",
+      "capacity": 1,
+      "min_rank_ja": "",
+      "max_rank_ja": "",
+      "holder_kind": "politician"
+    },
+    {
+      "post_ja": "フェザーン駐在武官",
+      "org_ja": "駐フェザーン弁務官事務所",
+      "capacity": 1,
+      "min_rank_ja": "少尉",
+      "max_rank_ja": "元帥",
+      "holder_kind": "military"
+    },
+    {
+      "post_ja": "軍務尚書",
+      "org_ja": "軍務省",
+      "capacity": 1,
+      "min_rank_ja": "元帥",
+      "max_rank_ja": "元帥",
+      "holder_kind": "military"
+    },
+    {
+      "post_ja": "軍務省次官",
+      "org_ja": "軍務省",
+      "capacity": 1,
+      "min_rank_ja": "上級大将",
+      "max_rank_ja": "元帥",
+      "holder_kind": "military"
+    },
+    {
+      "post_ja": "軍務省人事局長",
+      "org_ja": "軍務省",
+      "capacity": 1,
+      "min_rank_ja": "中将",
+      "max_rank_ja": "元帥",
+      "holder_kind": "military"
+    },
+    {
+      "post_ja": "軍務省調査局長",
+      "org_ja": "軍務省",
+      "capacity": 1,
+      "min_rank_ja": "中将",
+      "max_rank_ja": "元帥",
+      "holder_kind": "military"
+    },
+    {
+      "post_ja": "軍務省参事官",
+      "org_ja": "軍務省",
+      "capacity": 10,
+      "min_rank_ja": "准将",
+      "max_rank_ja": "元帥",
+      "holder_kind": "military"
+    },
+    {
+      "post_ja": "統帥本部総長",
+      "org_ja": "統帥本部",
+      "capacity": 1,
+      "min_rank_ja": "元帥",
+      "max_rank_ja": "元帥",
+      "holder_kind": "military"
+    },
+    {
+      "post_ja": "統帥本部次長",
+      "org_ja": "統帥本部",
+      "capacity": 1,
+      "min_rank_ja": "上級大将",
+      "max_rank_ja": "元帥",
+      "holder_kind": "military"
+    },
+    {
+      "post_ja": "統帥本部作戦一課課長",
+      "org_ja": "統帥本部",
+      "capacity": 1,
+      "min_rank_ja": "大将",
+      "max_rank_ja": "元帥",
+      "holder_kind": "military"
+    },
+    {
+      "post_ja": "統帥本部作戦二課課長",
+      "org_ja": "統帥本部",
+      "capacity": 1,
+      "min_rank_ja": "中将",
+      "max_rank_ja": "元帥",
+      "holder_kind": "military"
+    },
+    {
+      "post_ja": "統帥本部作戦三課課長",
+      "org_ja": "統帥本部",
+      "capacity": 1,
+      "min_rank_ja": "少将",
+      "max_rank_ja": "元帥",
+      "holder_kind": "military"
+    },
+    {
+      "post_ja": "統帥本部監察官",
+      "org_ja": "統帥本部",
+      "capacity": 10,
+      "min_rank_ja": "准将",
+      "max_rank_ja": "元帥",
+      "holder_kind": "military"
+    },
+    {
+      "post_ja": "宇宙艦隊司令長官",
+      "org_ja": "宇宙艦隊司令部",
+      "capacity": 1,
+      "min_rank_ja": "元帥",
+      "max_rank_ja": "元帥",
+      "holder_kind": "military"
+    },
+    {
+      "post_ja": "宇宙艦隊副司令長官",
+      "org_ja": "宇宙艦隊司令部",
+      "capacity": 1,
+      "min_rank_ja": "元帥",
+      "max_rank_ja": "元帥",
+      "holder_kind": "military"
+    },
+    {
+      "post_ja": "宇宙艦隊総参謀長",
+      "org_ja": "宇宙艦隊司令部",
+      "capacity": 1,
+      "min_rank_ja": "中将",
+      "max_rank_ja": "元帥",
+      "holder_kind": "military"
+    },
+    {
+      "post_ja": "宇宙艦隊参謀",
+      "org_ja": "宇宙艦隊司令部",
+      "capacity": 10,
+      "min_rank_ja": "准将",
+      "max_rank_ja": "元帥",
+      "holder_kind": "military"
+    },
+    {
+      "post_ja": "憲兵総監",
+      "org_ja": "憲兵本部",
+      "capacity": 1,
+      "min_rank_ja": "上級大将",
+      "max_rank_ja": "元帥",
+      "holder_kind": "military"
+    },
+    {
+      "post_ja": "憲兵副総監",
+      "org_ja": "憲兵本部",
+      "capacity": 1,
+      "min_rank_ja": "中将",
+      "max_rank_ja": "元帥",
+      "holder_kind": "military"
+    },
+    {
+      "post_ja": "装甲擲弾兵総監",
+      "org_ja": "装甲擲弾兵総監部",
+      "capacity": 1,
+      "min_rank_ja": "上級大将",
+      "max_rank_ja": "元帥",
+      "holder_kind": "military"
+    },
+    {
+      "post_ja": "装甲擲弾兵副総監",
+      "org_ja": "装甲擲弾兵総監部",
+      "capacity": 1,
+      "min_rank_ja": "中将",
+      "max_rank_ja": "元帥",
+      "holder_kind": "military"
+    },
+    {
+      "post_ja": "科学技術総監",
+      "org_ja": "科学技術総監部",
+      "capacity": 1,
+      "min_rank_ja": "上級大将",
+      "max_rank_ja": "元帥",
+      "holder_kind": "military"
+    },
+    {
+      "post_ja": "士官学校長",
+      "org_ja": "帝国軍士官学校",
+      "capacity": 1,
+      "min_rank_ja": "大将",
+      "max_rank_ja": "元帥",
+      "holder_kind": "military"
+    },
+    {
+      "post_ja": "士官学校教官",
+      "org_ja": "帝国軍士官学校",
+      "capacity": 10,
+      "min_rank_ja": "曹長",
+      "max_rank_ja": "元帥",
+      "holder_kind": "military"
+    },
+    {
+      "post_ja": "艦隊司令官",
+      "org_ja": "艦隊",
+      "capacity": 1,
+      "min_rank_ja": "中将",
+      "max_rank_ja": "元帥",
+      "holder_kind": "military"
+    },
+    {
+      "post_ja": "艦隊副司令官",
+      "org_ja": "艦隊",
+      "capacity": 1,
+      "min_rank_ja": "少将",
+      "max_rank_ja": "元帥",
+      "holder_kind": "military"
+    },
+    {
+      "post_ja": "艦隊参謀長",
+      "org_ja": "艦隊",
+      "capacity": 1,
+      "min_rank_ja": "少将",
+      "max_rank_ja": "元帥",
+      "holder_kind": "military"
+    },
+    {
+      "post_ja": "艦隊参謀",
+      "org_ja": "艦隊",
+      "capacity": 6,
+      "min_rank_ja": "大尉",
+      "max_rank_ja": "元帥",
+      "holder_kind": "military"
+    },
+    {
+      "post_ja": "艦隊司令官副官",
+      "org_ja": "艦隊",
+      "capacity": 1,
+      "min_rank_ja": "中尉",
+      "max_rank_ja": "元帥",
+      "holder_kind": "military"
+    },
+    {
+      "post_ja": "輸送艦隊司令官",
+      "org_ja": "輸送艦隊",
+      "capacity": 1,
+      "min_rank_ja": "中将",
+      "max_rank_ja": "元帥",
+      "holder_kind": "military"
+    },
+    {
+      "post_ja": "輸送艦隊副司令官",
+      "org_ja": "輸送艦隊",
+      "capacity": 1,
+      "min_rank_ja": "少将",
+      "max_rank_ja": "元帥",
+      "holder_kind": "military"
+    },
+    {
+      "post_ja": "輸送艦隊司令官副官",
+      "org_ja": "輸送艦隊",
+      "capacity": 1,
+      "min_rank_ja": "中尉",
+      "max_rank_ja": "元帥",
+      "holder_kind": "military"
+    },
+    {
+      "post_ja": "巡察隊司令",
+      "org_ja": "巡察隊",
+      "capacity": 1,
+      "min_rank_ja": "准将",
+      "max_rank_ja": "元帥",
+      "holder_kind": "military"
+    },
+    {
+      "post_ja": "巡察隊副司令",
+      "org_ja": "巡察隊",
+      "capacity": 1,
+      "min_rank_ja": "准将",
+      "max_rank_ja": "元帥",
+      "holder_kind": "military"
+    },
+    {
+      "post_ja": "巡察隊司令副官",
+      "org_ja": "巡察隊",
+      "capacity": 1,
+      "min_rank_ja": "中尉",
+      "max_rank_ja": "元帥",
+      "holder_kind": "military"
+    },
+    {
+      "post_ja": "地上部隊指揮官",
+      "org_ja": "地上部隊",
+      "capacity": 1,
+      "min_rank_ja": "少佐",
+      "max_rank_ja": "元帥",
+      "holder_kind": "military"
+    },
+    {
+      "post_ja": "要塞司令官",
+      "org_ja": "要塞",
+      "capacity": 1,
+      "min_rank_ja": "中将",
+      "max_rank_ja": "元帥",
+      "holder_kind": "military"
+    },
+    {
+      "post_ja": "要塞守備隊指揮官",
+      "org_ja": "要塞",
+      "capacity": 1,
+      "min_rank_ja": "少佐",
+      "max_rank_ja": "元帥",
+      "holder_kind": "military"
+    },
+    {
+      "post_ja": "要塞事務総監",
+      "org_ja": "要塞",
+      "capacity": 1,
+      "min_rank_ja": "少将",
+      "max_rank_ja": "元帥",
+      "holder_kind": "military"
+    },
+    {
+      "post_ja": "惑星総督",
+      "org_ja": "首都惑星を除く各惑星",
+      "capacity": 1,
+      "min_rank_ja": "准将",
+      "max_rank_ja": "元帥",
+      "holder_kind": "either"
+    },
+    {
+      "post_ja": "惑星守備隊指揮官",
+      "org_ja": "防衛司令部",
+      "capacity": 1,
+      "min_rank_ja": "少佐",
+      "max_rank_ja": "元帥",
+      "holder_kind": "military"
+    },
+    {
+      "post_ja": "帝都防衛司令官",
+      "org_ja": "政庁",
+      "capacity": 1,
+      "min_rank_ja": "大将",
+      "max_rank_ja": "元帥",
+      "holder_kind": "military"
+    },
+    {
+      "post_ja": "近衛兵総監",
+      "org_ja": "防衛司令部",
+      "capacity": 1,
+      "min_rank_ja": "上級大将",
+      "max_rank_ja": "元帥",
+      "holder_kind": "military"
+    },
+    {
+      "post_ja": "諜報官",
+      "org_ja": "統合偵察局",
+      "capacity": 50,
+      "min_rank_ja": "少尉",
+      "max_rank_ja": "大佐",
+      "holder_kind": "military"
+    }
+  ],
+  "alliance": [
+    {
+      "post_ja": "議長",
+      "capacity": 1,
+      "min_rank_ja": "",
+      "max_rank_ja": "",
+      "org_ja": "最高評議会",
+      "holder_kind": "politician"
+    },
+    {
+      "post_ja": "副議長",
+      "capacity": 1,
+      "min_rank_ja": "",
+      "max_rank_ja": "",
+      "org_ja": "最高評議会",
+      "holder_kind": "politician"
+    },
+    {
+      "post_ja": "国務委員長",
+      "capacity": 1,
+      "min_rank_ja": "",
+      "max_rank_ja": "",
+      "org_ja": "最高評議会",
+      "holder_kind": "politician"
+    },
+    {
+      "post_ja": "国防委員長",
+      "capacity": 1,
+      "min_rank_ja": "",
+      "max_rank_ja": "",
+      "org_ja": "最高評議会",
+      "holder_kind": "politician"
+    },
+    {
+      "post_ja": "財政委員長",
+      "capacity": 1,
+      "min_rank_ja": "",
+      "max_rank_ja": "",
+      "org_ja": "最高評議会",
+      "holder_kind": "politician"
+    },
+    {
+      "post_ja": "法秩序委員長",
+      "capacity": 1,
+      "min_rank_ja": "",
+      "max_rank_ja": "",
+      "org_ja": "最高評議会",
+      "holder_kind": "politician"
+    },
+    {
+      "post_ja": "天然資源委員長",
+      "capacity": 1,
+      "min_rank_ja": "",
+      "max_rank_ja": "",
+      "org_ja": "最高評議会",
+      "holder_kind": "politician"
+    },
+    {
+      "post_ja": "人的資源委員長",
+      "capacity": 1,
+      "min_rank_ja": "",
+      "max_rank_ja": "",
+      "org_ja": "最高評議会",
+      "holder_kind": "politician"
+    },
+    {
+      "post_ja": "経済開発委員長",
+      "capacity": 1,
+      "min_rank_ja": "",
+      "max_rank_ja": "",
+      "org_ja": "最高評議会",
+      "holder_kind": "politician"
+    },
+    {
+      "post_ja": "地域社会開発委員長",
+      "capacity": 1,
+      "min_rank_ja": "",
+      "max_rank_ja": "",
+      "org_ja": "最高評議会",
+      "holder_kind": "politician"
+    },
+    {
+      "post_ja": "情報交通委員長",
+      "capacity": 1,
+      "min_rank_ja": "",
+      "max_rank_ja": "",
+      "org_ja": "最高評議会",
+      "holder_kind": "politician"
+    },
+    {
+      "post_ja": "書記",
+      "capacity": 1,
+      "min_rank_ja": "",
+      "max_rank_ja": "",
+      "org_ja": "最高評議会",
+      "holder_kind": "politician"
+    },
+    {
+      "post_ja": "フェザーン駐在弁務官",
+      "capacity": 1,
+      "min_rank_ja": "",
+      "max_rank_ja": "",
+      "org_ja": "駐フェザーン弁務官事務所",
+      "holder_kind": "politician"
+    },
+    {
+      "post_ja": "フェザーン駐在補佐官",
+      "capacity": 1,
+      "min_rank_ja": "",
+      "max_rank_ja": "",
+      "org_ja": "駐フェザーン弁務官事務所",
+      "holder_kind": "politician"
+    },
+    {
+      "post_ja": "フェザーン駐在武官",
+      "capacity": 1,
+      "min_rank_ja": "少尉",
+      "max_rank_ja": "元帥",
+      "org_ja": "駐フェザーン弁務官事務所",
+      "holder_kind": "military"
+    },
+    {
+      "post_ja": "統合作戦本部長",
+      "capacity": 1,
+      "min_rank_ja": "",
+      "max_rank_ja": "元帥",
+      "org_ja": "統合作戦本部",
+      "holder_kind": "military"
+    },
+    {
+      "post_ja": "統合作戦本部第一次長",
+      "capacity": 1,
+      "min_rank_ja": "大将",
+      "max_rank_ja": "元帥",
+      "org_ja": "統合作戦本部",
+      "holder_kind": "military"
+    },
+    {
+      "post_ja": "統合作戦本部第二次長",
+      "capacity": 1,
+      "min_rank_ja": "大将",
+      "max_rank_ja": "元帥",
+      "org_ja": "統合作戦本部",
+      "holder_kind": "military"
+    },
+    {
+      "post_ja": "統合作戦本部第三次長",
+      "capacity": 1,
+      "min_rank_ja": "大将",
+      "max_rank_ja": "元帥",
+      "org_ja": "統合作戦本部",
+      "holder_kind": "military"
+    },
+    {
+      "post_ja": "統合作戦本部参事官",
+      "capacity": 10,
+      "min_rank_ja": "准将",
+      "max_rank_ja": "元帥",
+      "org_ja": "統合作戦本部",
+      "holder_kind": "military"
+    },
+    {
+      "post_ja": "陸戦総監部長",
+      "capacity": 1,
+      "min_rank_ja": "中将",
+      "max_rank_ja": "元帥",
+      "org_ja": "統合作戦本部",
+      "holder_kind": "military"
+    },
+    {
+      "post_ja": "後方勤務本部長",
+      "capacity": 1,
+      "min_rank_ja": "大将",
+      "max_rank_ja": "元帥",
+      "org_ja": "後方勤務本部",
+      "holder_kind": "military"
+    },
+    {
+      "post_ja": "後方勤務本部次長",
+      "capacity": 1,
+      "min_rank_ja": "中将",
+      "max_rank_ja": "元帥",
+      "org_ja": "後方勤務本部",
+      "holder_kind": "military"
+    },
+    {
+      "post_ja": "後方勤務本部参事官",
+      "capacity": 10,
+      "min_rank_ja": "准将",
+      "max_rank_ja": "元帥",
+      "org_ja": "後方勤務本部",
+      "holder_kind": "military"
+    },
+    {
+      "post_ja": "科学技術本部長",
+      "capacity": 1,
+      "min_rank_ja": "中将",
+      "max_rank_ja": "元帥",
+      "org_ja": "国防委員会",
+      "holder_kind": "military"
+    },
+    {
+      "post_ja": "憲兵司令官",
+      "capacity": 1,
+      "min_rank_ja": "准将",
+      "max_rank_ja": "元帥",
+      "org_ja": "国防委員会",
+      "holder_kind": "military"
+    },
+    {
+      "post_ja": "査閲部長",
+      "capacity": 1,
+      "min_rank_ja": "中将",
+      "max_rank_ja": "元帥",
+      "org_ja": "国防委員会",
+      "holder_kind": "military"
+    },
+    {
+      "post_ja": "戦略部長",
+      "capacity": 1,
+      "min_rank_ja": "中将",
+      "max_rank_ja": "元帥",
+      "org_ja": "国防委員会",
+      "holder_kind": "military"
+    },
+    {
+      "post_ja": "人事部長",
+      "capacity": 1,
+      "min_rank_ja": "中将",
+      "max_rank_ja": "元帥",
+      "org_ja": "国防委員会",
+      "holder_kind": "military"
+    },
+    {
+      "post_ja": "防衛部長",
+      "capacity": 1,
+      "min_rank_ja": "中将",
+      "max_rank_ja": "元帥",
+      "org_ja": "国防委員会",
+      "holder_kind": "military"
+    },
+    {
+      "post_ja": "情報部長",
+      "capacity": 1,
+      "min_rank_ja": "少将",
+      "max_rank_ja": "元帥",
+      "org_ja": "国防委員会",
+      "holder_kind": "military"
+    },
+    {
+      "post_ja": "通信部長",
+      "capacity": 1,
+      "min_rank_ja": "少将",
+      "max_rank_ja": "元帥",
+      "org_ja": "国防委員会",
+      "holder_kind": "military"
+    },
+    {
+      "post_ja": "装備部長",
+      "capacity": 1,
+      "min_rank_ja": "少将",
+      "max_rank_ja": "元帥",
+      "org_ja": "国防委員会",
+      "holder_kind": "military"
+    },
+    {
+      "post_ja": "施設部長",
+      "capacity": 1,
+      "min_rank_ja": "少将",
+      "max_rank_ja": "元帥",
+      "org_ja": "国防委員会",
+      "holder_kind": "military"
+    },
+    {
+      "post_ja": "経理部長",
+      "capacity": 1,
+      "min_rank_ja": "少将",
+      "max_rank_ja": "元帥",
+      "org_ja": "国防委員会",
+      "holder_kind": "military"
+    },
+    {
+      "post_ja": "教育部長",
+      "capacity": 1,
+      "min_rank_ja": "少将",
+      "max_rank_ja": "元帥",
+      "org_ja": "国防委員会",
+      "holder_kind": "military"
+    },
+    {
+      "post_ja": "衛生部長",
+      "capacity": 1,
+      "min_rank_ja": "少将",
+      "max_rank_ja": "元帥",
+      "org_ja": "国防委員会",
+      "holder_kind": "military"
+    },
+    {
+      "post_ja": "宇宙艦隊司令長官",
+      "capacity": 1,
+      "min_rank_ja": "",
+      "max_rank_ja": "元帥",
+      "org_ja": "宇宙艦隊司令部",
+      "holder_kind": "military"
+    },
+    {
+      "post_ja": "宇宙艦隊副司令長官",
+      "capacity": 1,
+      "min_rank_ja": "大将",
+      "max_rank_ja": "元帥",
+      "org_ja": "宇宙艦隊司令部",
+      "holder_kind": "military"
+    },
+    {
+      "post_ja": "宇宙艦隊総参謀長",
+      "capacity": 1,
+      "min_rank_ja": "中将",
+      "max_rank_ja": "元帥",
+      "org_ja": "宇宙艦隊司令部",
+      "holder_kind": "military"
+    },
+    {
+      "post_ja": "宇宙艦隊参謀",
+      "capacity": 1,
+      "min_rank_ja": "准将",
+      "max_rank_ja": "元帥",
+      "org_ja": "宇宙艦隊司令部",
+      "holder_kind": "military"
+    },
+    {
+      "post_ja": "士官学校長",
+      "capacity": 1,
+      "min_rank_ja": "中将",
+      "max_rank_ja": "元帥",
+      "org_ja": "同盟軍士官学校",
+      "holder_kind": "military"
+    },
+    {
+      "post_ja": "士官学校教官",
+      "capacity": 10,
+      "min_rank_ja": "曹長",
+      "max_rank_ja": "元帥",
+      "org_ja": "同盟軍士官学校",
+      "holder_kind": "military"
+    },
+    {
+      "post_ja": "艦隊司令官",
+      "capacity": 1,
+      "min_rank_ja": "少将",
+      "max_rank_ja": "元帥",
+      "org_ja": "艦隊",
+      "holder_kind": "military"
+    },
+    {
+      "post_ja": "艦隊副司令官",
+      "capacity": 1,
+      "min_rank_ja": "准将",
+      "max_rank_ja": "元帥",
+      "org_ja": "艦隊",
+      "holder_kind": "military"
+    },
+    {
+      "post_ja": "艦隊参謀長",
+      "capacity": 1,
+      "min_rank_ja": "准将",
+      "max_rank_ja": "元帥",
+      "org_ja": "艦隊",
+      "holder_kind": "military"
+    },
+    {
+      "post_ja": "艦隊参謀",
+      "capacity": 6,
+      "min_rank_ja": "大尉",
+      "max_rank_ja": "元帥",
+      "org_ja": "艦隊",
+      "holder_kind": "military"
+    },
+    {
+      "post_ja": "艦隊司令官副官",
+      "capacity": 1,
+      "min_rank_ja": "中尉",
+      "max_rank_ja": "元帥",
+      "org_ja": "艦隊",
+      "holder_kind": "military"
+    },
+    {
+      "post_ja": "輸送艦隊司令官",
+      "capacity": 1,
+      "min_rank_ja": "准将",
+      "max_rank_ja": "元帥",
+      "org_ja": "輸送艦隊",
+      "holder_kind": "military"
+    },
+    {
+      "post_ja": "輸送艦隊副司令官",
+      "capacity": 1,
+      "min_rank_ja": "大佐",
+      "max_rank_ja": "元帥",
+      "org_ja": "輸送艦隊",
+      "holder_kind": "military"
+    },
+    {
+      "post_ja": "輸送艦隊司令官副官",
+      "capacity": 1,
+      "min_rank_ja": "中尉",
+      "max_rank_ja": "元帥",
+      "org_ja": "輸送艦隊",
+      "holder_kind": "military"
+    },
+    {
+      "post_ja": "巡察隊司令",
+      "capacity": 1,
+      "min_rank_ja": "准将",
+      "max_rank_ja": "元帥",
+      "org_ja": "巡察隊",
+      "holder_kind": "military"
+    },
+    {
+      "post_ja": "巡察隊副司令",
+      "capacity": 1,
+      "min_rank_ja": "大佐",
+      "max_rank_ja": "元帥",
+      "org_ja": "巡察隊",
+      "holder_kind": "military"
+    },
+    {
+      "post_ja": "巡察隊司令副官",
+      "capacity": 1,
+      "min_rank_ja": "中尉",
+      "max_rank_ja": "元帥",
+      "org_ja": "巡察隊",
+      "holder_kind": "military"
+    },
+    {
+      "post_ja": "地上部隊指揮官",
+      "capacity": 1,
+      "min_rank_ja": "少佐",
+      "max_rank_ja": "元帥",
+      "org_ja": "地上部隊",
+      "holder_kind": "military"
+    },
+    {
+      "post_ja": "要塞司令官",
+      "capacity": 1,
+      "min_rank_ja": "中将",
+      "max_rank_ja": "元帥",
+      "org_ja": "要塞",
+      "holder_kind": "military"
+    },
+    {
+      "post_ja": "要塞守備隊指揮官",
+      "capacity": 1,
+      "min_rank_ja": "少佐",
+      "max_rank_ja": "元帥",
+      "org_ja": "要塞",
+      "holder_kind": "military"
+    },
+    {
+      "post_ja": "要塞事務総監",
+      "capacity": 1,
+      "min_rank_ja": "大佐",
+      "max_rank_ja": "元帥",
+      "org_ja": "要塞",
+      "holder_kind": "military"
+    },
+    {
+      "post_ja": "知事",
+      "capacity": 1,
+      "min_rank_ja": "",
+      "max_rank_ja": "",
+      "org_ja": "首都惑星を除く各惑星",
+      "holder_kind": "politician"
+    },
+    {
+      "post_ja": "防衛司令部 惑星守備隊指揮官",
+      "capacity": 1,
+      "min_rank_ja": "少佐",
+      "max_rank_ja": "元帥",
+      "org_ja": "首都惑星を除く各惑星",
+      "holder_kind": "military"
+    },
+    {
+      "post_ja": "首都司政官",
+      "capacity": 1,
+      "min_rank_ja": "",
+      "max_rank_ja": "",
+      "org_ja": "首都惑星",
+      "holder_kind": "politician"
+    },
+    {
+      "post_ja": "防衛司令部 首都防衛指揮官",
+      "capacity": 1,
+      "min_rank_ja": "大佐",
+      "max_rank_ja": "元帥",
+      "org_ja": "首都惑星",
+      "holder_kind": "military"
+    },
+    {
+      "post_ja": "諜報官",
+      "capacity": 50,
+      "min_rank_ja": "少尉",
+      "max_rank_ja": "大佐",
+      "org_ja": "戦略作戦局",
+      "holder_kind": "military"
+    }
+  ]
+}

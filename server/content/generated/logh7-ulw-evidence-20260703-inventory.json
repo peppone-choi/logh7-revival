@@ -1,0 +1,441 @@
+{
+  "id": "logh7-ulw-evidence-inventory",
+  "generatedAt": "2026-07-03T21:07:13.065Z",
+  "targetEvidenceDate": "20260703",
+  "targetGlob": ".omo/ulw-loop/evidence/*20260703*",
+  "selfAuditExclusionPrefix": "g014-",
+  "canonicalPromotion": "blocked-until-cross-source-confirmed",
+  "status": "present",
+  "fileCount": 52,
+  "excludedSelfAuditFileCount": 2,
+  "totalBytes": 60234049,
+  "categoryCounts": {
+    "cdExtraction": 9,
+    "hiddenData": 7,
+    "recordCandidates": 10,
+    "scenes": 3,
+    "serverTests": 6,
+    "unity": 5,
+    "tcfPortraits": 3,
+    "sourceArchive": 3,
+    "other": 6
+  },
+  "files": [
+    {
+      "name": "cd-extract-tool-20260703.log",
+      "path": ".omo/ulw-loop/evidence/cd-extract-tool-20260703.log",
+      "extension": ".log",
+      "category": "cdExtraction",
+      "size": 2494,
+      "sha256": "05624380f9de403de76eb13a6a87680045e485d0fa25bb002862eade2314996a"
+    },
+    {
+      "name": "cd-extraction-inventory-20260703.log",
+      "path": ".omo/ulw-loop/evidence/cd-extraction-inventory-20260703.log",
+      "extension": ".log",
+      "category": "cdExtraction",
+      "size": 4483,
+      "sha256": "018281caa1c50b6c3f1be7384bd23f00c2afb004e69d365bd93446b868b1c742"
+    },
+    {
+      "name": "cd-hidden-green-tests-20260703.log",
+      "path": ".omo/ulw-loop/evidence/cd-hidden-green-tests-20260703.log",
+      "extension": ".log",
+      "category": "cdExtraction",
+      "size": 6459,
+      "sha256": "70a4503c12f8636975eadf81f2f5bd27669cde86d1c7aca385cee84e59cfa6a2"
+    },
+    {
+      "name": "cd-hidden-red-tests-20260703.log",
+      "path": ".omo/ulw-loop/evidence/cd-hidden-red-tests-20260703.log",
+      "extension": ".log",
+      "category": "cdExtraction",
+      "size": 8279,
+      "sha256": "7b2e33c407e6dc7ee7f7098f33a57dec2f932398b9fea19718384d8dc0fa8d3c"
+    },
+    {
+      "name": "cd-installed-filetype-inventory-20260703.log",
+      "path": ".omo/ulw-loop/evidence/cd-installed-filetype-inventory-20260703.log",
+      "extension": ".log",
+      "category": "cdExtraction",
+      "size": 8849,
+      "sha256": "981c2e749a1a0a0143305e2528f78cfcab4140c0271a0acebf159d62294553d1"
+    },
+    {
+      "name": "cd-installshield-extract-20260703.log",
+      "path": ".omo/ulw-loop/evidence/cd-installshield-extract-20260703.log",
+      "extension": ".log",
+      "category": "cdExtraction",
+      "size": 257154,
+      "sha256": "93a96ea0dca5482e34367bff77c02e91a37c544cc76514b86768fd4b227c8df0"
+    },
+    {
+      "name": "cd-iso-extract-7z-20260703.log",
+      "path": ".omo/ulw-loop/evidence/cd-iso-extract-7z-20260703.log",
+      "extension": ".log",
+      "category": "cdExtraction",
+      "size": 520,
+      "sha256": "80a723b25d75fcec34b3daca74f6e3ee6735e8f77f60069cedc54930e977d272"
+    },
+    {
+      "name": "cd-raw-signature-scan-20260703.log",
+      "path": ".omo/ulw-loop/evidence/cd-raw-signature-scan-20260703.log",
+      "extension": ".log",
+      "category": "cdExtraction",
+      "size": 3616,
+      "sha256": "bcbc62e9c0b7504f79ab00812d24f1effb0bc5e77e988776f728a3a5e50fd6e0"
+    },
+    {
+      "name": "cd-vs-installed-hash-compare-20260703.log",
+      "path": ".omo/ulw-loop/evidence/cd-vs-installed-hash-compare-20260703.log",
+      "extension": ".log",
+      "category": "cdExtraction",
+      "size": 35902,
+      "sha256": "a49a1f9040eaacb696b0d22489bc1ac9014574d9b37da39d0cdbbd255052c92d"
+    },
+    {
+      "name": "g003-complete-attempt-20260703.log",
+      "path": ".omo/ulw-loop/evidence/g003-complete-attempt-20260703.log",
+      "extension": ".log",
+      "category": "other",
+      "size": 3148,
+      "sha256": "7ef7124a60d06fd0724ea90c8c9e421f2d4a2b8ab6390e77a6218fe511628272"
+    },
+    {
+      "name": "g003-criteria-status-20260703.json",
+      "path": ".omo/ulw-loop/evidence/g003-criteria-status-20260703.json",
+      "extension": ".json",
+      "category": "other",
+      "size": 2557,
+      "sha256": "a9305b07beb374d88260ff03b1797510cedf62b2588ad544b7949448bbac85b9"
+    },
+    {
+      "name": "hidden-data-classify-20260703.log",
+      "path": ".omo/ulw-loop/evidence/hidden-data-classify-20260703.log",
+      "extension": ".log",
+      "category": "hiddenData",
+      "size": 22636813,
+      "sha256": "93e601540d4f3e963ee6e3631d7f81f5a30d6097ffd901cb510fc22ffc7ed38e"
+    },
+    {
+      "name": "hidden-data-classify-green-tests-20260703.log",
+      "path": ".omo/ulw-loop/evidence/hidden-data-classify-green-tests-20260703.log",
+      "extension": ".log",
+      "category": "hiddenData",
+      "size": 6765,
+      "sha256": "676635674cc8c9e2ddfa3bde16ad861c2558082deefee9d60448ea35f173ef49"
+    },
+    {
+      "name": "hidden-data-classify-red-tests-20260703.log",
+      "path": ".omo/ulw-loop/evidence/hidden-data-classify-red-tests-20260703.log",
+      "extension": ".log",
+      "category": "hiddenData",
+      "size": 7682,
+      "sha256": "90bb993ff8af19bfd45af9c4d0335c1630792883a9d251a512b9acfbf326b762"
+    },
+    {
+      "name": "hidden-data-classify-rerun-20260703.log",
+      "path": ".omo/ulw-loop/evidence/hidden-data-classify-rerun-20260703.log",
+      "extension": ".log",
+      "category": "hiddenData",
+      "size": 22636813,
+      "sha256": "93e601540d4f3e963ee6e3631d7f81f5a30d6097ffd901cb510fc22ffc7ed38e"
+    },
+    {
+      "name": "hidden-data-scan-20260703.log",
+      "path": ".omo/ulw-loop/evidence/hidden-data-scan-20260703.log",
+      "extension": ".log",
+      "category": "hiddenData",
+      "size": 13597647,
+      "sha256": "e76d8d4ce4d3b5d5db8fbfc7339d746fa0dd658667a50471dceabf3f291b8113"
+    },
+    {
+      "name": "hidden-data-watchlist-20260703.log",
+      "path": ".omo/ulw-loop/evidence/hidden-data-watchlist-20260703.log",
+      "extension": ".log",
+      "category": "hiddenData",
+      "size": 10542,
+      "sha256": "987049d3c1c1d0c54cb79ea6f1d13b4a2e6b508643446b6489abee44ddfcf13a"
+    },
+    {
+      "name": "hidden-data-watchlist-rerun-20260703.log",
+      "path": ".omo/ulw-loop/evidence/hidden-data-watchlist-rerun-20260703.log",
+      "extension": ".log",
+      "category": "hiddenData",
+      "size": 10542,
+      "sha256": "987049d3c1c1d0c54cb79ea6f1d13b4a2e6b508643446b6489abee44ddfcf13a"
+    },
+    {
+      "name": "logistics-allocation-catalog-run-20260703.log",
+      "path": ".omo/ulw-loop/evidence/logistics-allocation-catalog-run-20260703.log",
+      "extension": ".log",
+      "category": "other",
+      "size": 3145,
+      "sha256": "8242e1c488146920d49696d6420164199438fcda975c1451bfd710708021fa35"
+    },
+    {
+      "name": "operation-state-reducer-20260703.log",
+      "path": ".omo/ulw-loop/evidence/operation-state-reducer-20260703.log",
+      "extension": ".log",
+      "category": "other",
+      "size": 2100,
+      "sha256": "56138799a6a250f100be44d1da625596442a8164bb4a4ae340ded2a17c840776"
+    },
+    {
+      "name": "operations-catalog-run-20260703.log",
+      "path": ".omo/ulw-loop/evidence/operations-catalog-run-20260703.log",
+      "extension": ".log",
+      "category": "other",
+      "size": 9118,
+      "sha256": "cae8bec6503511d980a93840a65d58071f1ab90ddabcb2bca984a26a3dc57738"
+    },
+    {
+      "name": "record-candidate-byte-dump-20260703.log",
+      "path": ".omo/ulw-loop/evidence/record-candidate-byte-dump-20260703.log",
+      "extension": ".log",
+      "category": "recordCandidates",
+      "size": 1761,
+      "sha256": "26616f4e3759dff4d0031c595f74cd2ecc65a7256d612f308325d3465041291f"
+    },
+    {
+      "name": "record-candidate-constmsg-character-text-20260703.log",
+      "path": ".omo/ulw-loop/evidence/record-candidate-constmsg-character-text-20260703.log",
+      "extension": ".log",
+      "category": "recordCandidates",
+      "size": 1081,
+      "sha256": "0e0c35e578bb9dedfc61dbe6a13f496b6f06a96eb27eaa2327c03659954b0eed"
+    },
+    {
+      "name": "record-candidate-constmsg-text-20260703.log",
+      "path": ".omo/ulw-loop/evidence/record-candidate-constmsg-text-20260703.log",
+      "extension": ".log",
+      "category": "recordCandidates",
+      "size": 3111,
+      "sha256": "3c1f0b107991232383d2af5068c4a06fb8a0cf1f0382f4d32d18da967579dac1"
+    },
+    {
+      "name": "record-candidate-crosscheck-green-20260703.log",
+      "path": ".omo/ulw-loop/evidence/record-candidate-crosscheck-green-20260703.log",
+      "extension": ".log",
+      "category": "recordCandidates",
+      "size": 382,
+      "sha256": "dedae9e54962568edf2b81fe1d53220e43a7bd969b5b0b22cdf984526d062199"
+    },
+    {
+      "name": "record-candidate-crosscheck-red-20260703.log",
+      "path": ".omo/ulw-loop/evidence/record-candidate-crosscheck-red-20260703.log",
+      "extension": ".log",
+      "category": "recordCandidates",
+      "size": 1389,
+      "sha256": "aca70a3069ad0bb8b615573869228f2b0df1ad0880feeb7ddf6d92d8fee22289"
+    },
+    {
+      "name": "record-candidate-crosscheck-run-20260703.log",
+      "path": ".omo/ulw-loop/evidence/record-candidate-crosscheck-run-20260703.log",
+      "extension": ".log",
+      "category": "recordCandidates",
+      "size": 3823,
+      "sha256": "08a72e3b968e8a3da34e2c2c414cdc4388eb4cd4cc9c78109b3fdb1e98f49008"
+    },
+    {
+      "name": "record-candidate-scan-green-20260703.log",
+      "path": ".omo/ulw-loop/evidence/record-candidate-scan-green-20260703.log",
+      "extension": ".log",
+      "category": "recordCandidates",
+      "size": 358,
+      "sha256": "2f3ec794017baa69c4e39265aadf54c40c633a4cba42035f082be8a99602d738"
+    },
+    {
+      "name": "record-candidate-scan-red-20260703.log",
+      "path": ".omo/ulw-loop/evidence/record-candidate-scan-red-20260703.log",
+      "extension": ".log",
+      "category": "recordCandidates",
+      "size": 1353,
+      "sha256": "a281d616d61b4c22cd7c8ea0005bdab887f862cb012f1bb79c4eef548d600739"
+    },
+    {
+      "name": "record-candidate-scan-rerun-20260703.log",
+      "path": ".omo/ulw-loop/evidence/record-candidate-scan-rerun-20260703.log",
+      "extension": ".log",
+      "category": "recordCandidates",
+      "size": 7562,
+      "sha256": "8677cde01ba66eb35384a22452212d6f0f89003a7063775557e1fe1524a16c65"
+    },
+    {
+      "name": "record-candidate-scan-run-20260703.log",
+      "path": ".omo/ulw-loop/evidence/record-candidate-scan-run-20260703.log",
+      "extension": ".log",
+      "category": "recordCandidates",
+      "size": 7562,
+      "sha256": "8677cde01ba66eb35384a22452212d6f0f89003a7063775557e1fe1524a16c65"
+    },
+    {
+      "name": "scene-inventory-green-20260703.log",
+      "path": ".omo/ulw-loop/evidence/scene-inventory-green-20260703.log",
+      "extension": ".log",
+      "category": "scenes",
+      "size": 273,
+      "sha256": "3a2e73bdd552e7937b1a51c18b92958f59a9196f4e18ec3fdde878b823b749d3"
+    },
+    {
+      "name": "scene-inventory-red-20260703.log",
+      "path": ".omo/ulw-loop/evidence/scene-inventory-red-20260703.log",
+      "extension": ".log",
+      "category": "scenes",
+      "size": 1317,
+      "sha256": "3baafb66262abac79e0420585fa9380984c41d32cd8dad807175825696254b74"
+    },
+    {
+      "name": "scene-inventory-run-20260703.log",
+      "path": ".omo/ulw-loop/evidence/scene-inventory-run-20260703.log",
+      "extension": ".log",
+      "category": "scenes",
+      "size": 39637,
+      "sha256": "c8c878eb9481720bd49614d097dbe62d1360fb33df7f2a9225edb6364dd0778d"
+    },
+    {
+      "name": "server-test-after-docs-20260703.log",
+      "path": ".omo/ulw-loop/evidence/server-test-after-docs-20260703.log",
+      "extension": ".log",
+      "category": "serverTests",
+      "size": 6370,
+      "sha256": "933a508bb8bd6d715eedfbe207f476914dba91c786cea673af72266bfed14e3a"
+    },
+    {
+      "name": "server-test-cd-hidden-20260703.log",
+      "path": ".omo/ulw-loop/evidence/server-test-cd-hidden-20260703.log",
+      "extension": ".log",
+      "category": "serverTests",
+      "size": 6379,
+      "sha256": "2c8b668dc506a0cfa1e96511b29b716562d578a744a41731ab782aa0bd4a9da5"
+    },
+    {
+      "name": "server-test-hidden-watchlist-20260703.log",
+      "path": ".omo/ulw-loop/evidence/server-test-hidden-watchlist-20260703.log",
+      "extension": ".log",
+      "category": "serverTests",
+      "size": 7017,
+      "sha256": "c999dca7f6e68b9d761c6f9dbbae8ebff8a50dfc469cb7e626d4ea93d2ec92ed"
+    },
+    {
+      "name": "server-test-record-candidates-20260703.log",
+      "path": ".omo/ulw-loop/evidence/server-test-record-candidates-20260703.log",
+      "extension": ".log",
+      "category": "serverTests",
+      "size": 7265,
+      "sha256": "0e264614c774315dda58ce46c4327f15e62d08a85cbd60ea6eb8994946ae81e5"
+    },
+    {
+      "name": "server-test-record-crosscheck-20260703.log",
+      "path": ".omo/ulw-loop/evidence/server-test-record-crosscheck-20260703.log",
+      "extension": ".log",
+      "category": "serverTests",
+      "size": 7537,
+      "sha256": "c481188825a0e92852d2da974ebe6a0df62cc644872bc3822dc1765035cfbdaf"
+    },
+    {
+      "name": "server-test-scene-inventory-20260703.log",
+      "path": ".omo/ulw-loop/evidence/server-test-scene-inventory-20260703.log",
+      "extension": ".log",
+      "category": "serverTests",
+      "size": 7970,
+      "sha256": "988254e9106d794e7fa2fe823cdf8b86a2f9a7d20a787d71ba7d562ed4946d70"
+    },
+    {
+      "name": "ship-stat-catalog-run-20260703.log",
+      "path": ".omo/ulw-loop/evidence/ship-stat-catalog-run-20260703.log",
+      "extension": ".log",
+      "category": "other",
+      "size": 200075,
+      "sha256": "bfb71d5fa3d2ca2be6e819f9704e37b4d2323d1155488e67970f390fb5796ce2"
+    },
+    {
+      "name": "source-inventory-20260703.log",
+      "path": ".omo/ulw-loop/evidence/source-inventory-20260703.log",
+      "extension": ".log",
+      "category": "sourceArchive",
+      "size": 9507,
+      "sha256": "9b8ad12de6e5ee966acdcb0b29f4fcb0a86985d87863f2c9705ce6990f3d29f3"
+    },
+    {
+      "name": "source-verify-20260703.log",
+      "path": ".omo/ulw-loop/evidence/source-verify-20260703.log",
+      "extension": ".log",
+      "category": "sourceArchive",
+      "size": 266,
+      "sha256": "95c32b6c2ff035cfe95285f68dc3dec02d5c2fe0a73ceee660b9610703ad2a01"
+    },
+    {
+      "name": "source-verify-from-archive-download-20260703.log",
+      "path": ".omo/ulw-loop/evidence/source-verify-from-archive-download-20260703.log",
+      "extension": ".log",
+      "category": "sourceArchive",
+      "size": 996,
+      "sha256": "38aa55c394f3688860af4bac154334e3061481e2a2d8035fc438ce72781d5ee0"
+    },
+    {
+      "name": "tcf-archive-catalog-run-20260703.log",
+      "path": ".omo/ulw-loop/evidence/tcf-archive-catalog-run-20260703.log",
+      "extension": ".log",
+      "category": "tcfPortraits",
+      "size": 5670,
+      "sha256": "a34703735590c03b985f462a0e059f94542cca5333aeb121763bea528f2254ca"
+    },
+    {
+      "name": "tcf-portrait-bmp-export-20260703.log",
+      "path": ".omo/ulw-loop/evidence/tcf-portrait-bmp-export-20260703.log",
+      "extension": ".log",
+      "category": "tcfPortraits",
+      "size": 4190,
+      "sha256": "0239f033773929131338dc3746cdaaeb0c27ab2969ae6b1b5215fb66ac37847c"
+    },
+    {
+      "name": "tcf-portrait-catalog-run-20260703.log",
+      "path": ".omo/ulw-loop/evidence/tcf-portrait-catalog-run-20260703.log",
+      "extension": ".log",
+      "category": "tcfPortraits",
+      "size": 626700,
+      "sha256": "b1652a887992b031aa1b824e52c6ba711538cc76d6fb0562b9fffcb8fb82d417"
+    },
+    {
+      "name": "unity-bootstrap-green-20260703.log",
+      "path": ".omo/ulw-loop/evidence/unity-bootstrap-green-20260703.log",
+      "extension": ".log",
+      "category": "unity",
+      "size": 389,
+      "sha256": "5056b4dc5603e4b0bf31f24b18e8fe1b13b6ef2e0d3c609d7e59e890f00fc71c"
+    },
+    {
+      "name": "unity-bootstrap-red-20260703.log",
+      "path": ".omo/ulw-loop/evidence/unity-bootstrap-red-20260703.log",
+      "extension": ".log",
+      "category": "unity",
+      "size": 1371,
+      "sha256": "b6a109c1588215770d753c6d8be26587b1390626d1b24a3f5f6e87bf47836360"
+    },
+    {
+      "name": "unity-runtime-data-red-20260703.log",
+      "path": ".omo/ulw-loop/evidence/unity-runtime-data-red-20260703.log",
+      "extension": ".log",
+      "category": "unity",
+      "size": 1335,
+      "sha256": "9da0265da4a752415d5480048cee72488e9a6a0e9f70eb63777a1dcddbbddefe"
+    },
+    {
+      "name": "unity-scene-placeholder-export-20260703.log",
+      "path": ".omo/ulw-loop/evidence/unity-scene-placeholder-export-20260703.log",
+      "extension": ".log",
+      "category": "unity",
+      "size": 353,
+      "sha256": "64caacdd287f3323b9490ea7f90358901c67f102a22fbf7ecb7bbd20413aa479"
+    },
+    {
+      "name": "unity-scene-resource-re-20260703.md",
+      "path": ".omo/ulw-loop/evidence/unity-scene-resource-re-20260703.md",
+      "extension": ".md",
+      "category": "unity",
+      "size": 16422,
+      "sha256": "593effbe649e326292b0a799cfc66287d24ec1071efc2d276f12917a26e2b150"
+    }
+  ]
+}
