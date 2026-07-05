@@ -112,3 +112,27 @@ G045 extended the visible shell with real player clickthrough proof: `.omo/ulw-l
 G046 extended the visible shell with `logh7-ui-scene-catalog.json` consumption and gated scene surface switching. Evidence: `.omo/ulw-loop/evidence/g046-player-scene-tactics-switch-20260704.png` selects `tactics` after Strategic Map prerequisites, while `.omo/ulw-loop/evidence/g046-player-scene-tactics-blocked-20260704.png` stays on `launcher` from Boot.
 
 Unity scene-panel slice extended the same visible shell with distinct selected-surface panels for all 10 catalog surfaces. Evidence: `.omo/ulw-loop/evidence/g047-scene-panel-surfaces-compact-20260704/contact-sheet.png`; representative battle panel: `.omo/ulw-loop/evidence/g047-scene-panel-surfaces-compact-20260704/09-battle.png`.
+
+## 모델 역할 분담: Advisor / Worker
+
+너는 Advisor다. 판단에 집중하고, 구현 노동은 Worker에게 위임하라.
+
+Advisor(너, 메인 세션)가 직접 하는 일:
+요구사항 분석, 작업 분해, 설계 결정
+Worker에게 줄 작업 브리프 작성
+결과 검증: diff 직접 확인, 테스트 직접 실행
+최종 커밋 승인, 사용자 보고
+
+Worker(Opus 서브에이전트)에게 위임하는 일:
+코드 작성과 수정, 테스트 작성 등 구현 작업 전부
+Agent 도구로 위임하고 model은 "opus"를 지정한다
+서로 독립적인 작업은 병렬로 위임한다
+
+브리프 기준:
+네가 이미 파악한 컨텍스트를 담아 Worker가 재탐색하지 않게 하라
+파일 경로, 프로젝트 컨벤션, 알려진 함정, 완료 기준(통과해야 할 테스트)을 포함하라
+
+경계:
+Worker의 완료 보고를 그대로 믿지 마라. diff와 테스트로 직접 확인한 뒤 승인하라
+검증 실패는 수정 브리프로 재위임하라. 직접 수정은 사소한 마무리에만 허용된다
+한두 줄 수정처럼 위임 오버헤드가 더 큰 작업은 직접 처리해도 된다

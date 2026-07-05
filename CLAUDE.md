@@ -1,5 +1,7 @@
 # logh7-revival Claude Entry
 
+2026-07-05 G076 로그인 확인 버튼 좌표 재교정 시도 → 3회 동일증상으로 블록, Blocked-Loop Rule 적용 후 피벗: `(352,347)`가 제출 버튼이 아니라는 G075 발견을 좇아 실제 버튼 위치를 픽셀 분석(색상 밴드 검출)으로 재추정했으나, 검출된 두 후보 좌표(로그인 폼 하단 버튼 라벨 "갑금긑갑"/"핗뻽" 각각의 중심으로 계산한 클라 좌표 `(318,339)`와 `(318,405)`) 모두 클릭 시 서버 로그에 로그인 시도가 단 한 번도 찍히지 않고 매번 ID 콤보의 "NO DATA" 드롭다운만 재오픈됨을 라이브로 3회 재현(좌표 A 1회+좌표 B 1회, 세션 재시작 후에도 재현) — 스크린샷 픽셀 좌표(창 전체 캡처, chrome 오프셋 +3/+49 가정)와 실제 클릭 주입 좌표 공간이 어긋나 있을 가능성(DPI 스케일링 등)을 배제 못함. 부수 재확인: 열린 드롭다운에 Escape를 누르면 닫히지 않고 "NO DATA" 라벨이 깨진 한글 조각으로 재렌더링되는 현상이 이번에도 재현(G075와 동일) — 여전히 cp932 관련 여부 미판단, 판단 보류 유지. Blocked-Loop Rule(3회 동일증상)에 따라 좌표 추측 접근은 중단. 다음 다른 전략 필요: (1) DPI/스케일링 배율 확인 후 스크린샷↔클릭 좌표 공간 일치 여부부터 검증, 또는 (2) `FUN_00507f20`류 버튼 히트테스트 코드를 Ghidra로 직접 RE해 정확한 클라이언트 좌표 사각형을 정적으로 확정. cp932 인게임 실주행 QA는 이 블로커 해소 전까지 계속 이월.
+
 2026-07-05 G075 cp932 패치 인게임 실주행 QA 착수 + C002 근본원인 2건 라이브 확정·수정: 실제 설치 EXE(`--no-patch`)로 로그인 화면까지 자동화 재현 중 클릭이 서버에 단 한 번도 도달하지 않는 것을 발견, 근본원인 조사 결과 (1) `logh7_ui_explorer.py`/`logh7_window_login.py`의 모든 `SetForegroundWindow` 호출이 백그라운드 프로세스에서 조용히 no-op되는 Windows 포커스 스틸링 방지에 막혀 있었음(예외를 삼켜서 실패가 안 보였음) — `AttachThreadInput` 우회를 쓰는 공용 헬퍼 `_force_foreground()`로 6개 호출부 전부 교체, 라이브로 키보드 입력(ID/PW 필드 타이핑)이 실제로 먹히는 것까지 확인. (2) ID 콤보 필드가 재시작 간에도 이전 입력을 유지(네이티브 edit 컨트롤이 아닌 커스텀 위젯이라 EM_SETSEL 불가)해 매 시도마다 텍스트가 누적(`"ginei00"`×2 → `"inei00ginei00"`)되던 것을 발견, 타이핑 전 하드웨어 백스페이스로 지우는 `_clear_field()`를 추가해 필드가 항상 깨끗하게 `"ginei00"`만 남도록 수정. 두 수정 모두 RE 도구 회귀 32/32 통과. 그러나 "로그인 제출" 좌표로 알려진 `(352,347)`는 실제로는 제출 버튼이 아니라 ID 콤보의 드롭다운을 다시 여는 좌표였음이 라이브로 드러남(클릭하면 NO DATA 목록이 재오픈됨) — 진짜 로그인/확인 버튼의 정확한 좌표는 아직 미상(추정 좌표만 있음, `logh7_window_login.py`의 좌표 테이블 자체가 재교정 필요). cp932 패치의 실제 한글 채팅 검증은 이 좌표 재교정 이후로 계속 이월. 부수 관찰: 콤보 드롭다운을 Escape로 다시 열면 원래 "NO DATA"(정상 ASCII) 라벨이 깨진 한글 조각으로 재렌더링되는 현상을 목격 — cp932 인코딩과 관련 있을 수도 있고 단순 리드로우 버그일 수도 있어 별도 확인 필요(현재는 판단 보류).
 
 2026-07-05 G074 "단일 패치 크래시 취약성"(G069 3번째 재점검 항목) 정적 점검: `RE/tools/client_patches/`는 실제로 존재하지 않음(정당하게 삭제된 JSON 패치 디스크립터 프레임워크) — `RE/tools/logh7_runtime_patch_apply.py`의 다중-패치셋 순차적용 로직(`allBeforeOk`/`alreadyApplied` 가드) 자체는 코드로 남아있지만, 로드할 디스크립터가 0개이므로 현재 이 프레임워크로 실제 크래시를 유발할 방법이 없음(호출해도 빈 리스트로 즉시 no-op). 따라서 이 항목이 원래 가리켰던 "다중 Frida 런타임 패치 중 일부만 적용됐을 때의 크래시"는 현재 지분이 없다. 유일하게 라이브인 실제 EXE 파일 패치는 G072 cp932 9바이트 치환 하나뿐이며, 다른 패치와 조합되지 않는 단일 변경이라 조합 크래시 리스크가 없음(git-tracked라 `git checkout --`로 즉시 롤백 가능). G069 재점검 3항목(C002/cp932/단일패치크래시) 중 이 항목은 이것으로 종결. 남은 미완료: cp932 패치의 인게임 실주행 QA(로그인→채팅→한글표시, `ui_explorer --no-patch` 필요)는 아직 미실행 — 다음 라이브 세션 과제.
@@ -111,3 +113,27 @@ As of 2026-07-04, Unity `6000.5.2f1` builds the current prototype player at `cli
 G045 evidence: `.omo/ulw-loop/evidence/g045-player-clickthrough-strategic-map-20260704.png` proves real mouse-click progression to Strategic Map; `.omo/ulw-loop/evidence/g045-player-edge-strategic-blocked-20260704.png` proves direct Strategic Map is blocked at Boot.
 
 G046 evidence: `.omo/ulw-loop/evidence/g046-player-scene-tactics-switch-20260704.png` proves the Unity player consumes the UI scene catalog and selects `tactics` after prerequisites; `.omo/ulw-loop/evidence/g046-player-scene-tactics-blocked-20260704.png` proves `tactics` stays blocked from Boot.
+
+## 모델 역할 분담: Advisor / Worker
+
+너는 Advisor다. 판단에 집중하고, 구현 노동은 Worker에게 위임하라.
+
+Advisor(너, 메인 세션)가 직접 하는 일:
+요구사항 분석, 작업 분해, 설계 결정
+Worker에게 줄 작업 브리프 작성
+결과 검증: diff 직접 확인, 테스트 직접 실행
+최종 커밋 승인, 사용자 보고
+
+Worker(Opus 서브에이전트)에게 위임하는 일:
+코드 작성과 수정, 테스트 작성 등 구현 작업 전부
+Agent 도구로 위임하고 model은 "opus"를 지정한다
+서로 독립적인 작업은 병렬로 위임한다
+
+브리프 기준:
+네가 이미 파악한 컨텍스트를 담아 Worker가 재탐색하지 않게 하라
+파일 경로, 프로젝트 컨벤션, 알려진 함정, 완료 기준(통과해야 할 테스트)을 포함하라
+
+경계:
+Worker의 완료 보고를 그대로 믿지 마라. diff와 테스트로 직접 확인한 뒤 승인하라
+검증 실패는 수정 브리프로 재위임하라. 직접 수정은 사소한 마무리에만 허용된다
+한두 줄 수정처럼 위임 오버헤드가 더 큰 작업은 직접 처리해도 된다
