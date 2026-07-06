@@ -1,0 +1,182 @@
+{
+  "id": "logh7-five-extra-systems-audit-20260705",
+  "generatedAt": "2026-07-05T07:32:50.164903+00:00",
+  "question": "Are the five systems absent from manual/raster star points actually added elsewhere?",
+  "answer": "Yes as names: they exist in freshly decoded constmsg records. No as page-101 points: they are absent from manual annotations and raster star centers. Current coordinates are P3 virtual overlay entries whose referenced source file is missing in this workspace.",
+  "counts": {
+    "galaxySystems": 85,
+    "manualPage101Annotations": 80,
+    "rasterStarCenters": 80,
+    "galaxyOnlyByName": 5
+  },
+  "galaxySourceNote": "gin7manualsaved.pdf special Text annotations (80 system labels; cx/cy only) + page-101 raster star-dot centers; canonical roster = 85 constmsg group-0x18 systems. 80 systems have P1 manual/raster coordinates. Five constmsg-P0 systems (13/32/34/52/75) use MINIMAP_P3_VIRTUAL_OVERLAY grid coordinates, P3 virtual planets, and P3 virtual stellar colors for the playable server overlay; they are not original server/manual data. sub45 タンホイザーゲート is a gate label, not a star system.",
+  "coordinateSourceExpected": "RE/.omo/ghidra/minimap/minimap_missing_system_assignment_p3_v2.json",
+  "coordinateSourceExistsInWorkspace": false,
+  "extraSystems": [
+    {
+      "system": "アンウレガルラ",
+      "constmsgRecord": 1416,
+      "contentId": 13,
+      "faction": "alliance",
+      "manualPage101AnnotationPresent": false,
+      "rasterStarCenterPresent": false,
+      "manualOrRasterDotEvidence": false,
+      "canonColRow": [
+        30,
+        7
+      ],
+      "canonGameColRow": [
+        31,
+        8
+      ],
+      "coordinateSource": "RE/.omo/ghidra/minimap/minimap_missing_system_assignment_p3_v2.json",
+      "coordinateSourceExistsInWorkspace": false,
+      "nameAuthority": "constmsg-group-0x18-P0",
+      "planetAuthority": "P3_VIRTUAL_DESIGN",
+      "positionAuthority": "MINIMAP_P3_VIRTUAL_OVERLAY",
+      "page": null,
+      "rect": null,
+      "canonDot": [
+        null,
+        null
+      ],
+      "canonPixel": [
+        null,
+        null
+      ],
+      "classification": "constmsg-backed extra system; not a manual page-101 star dot; P3 overlay coordinate currently not reproducible from present workspace source file"
+    },
+    {
+      "system": "ケープホーン",
+      "constmsgRecord": 1435,
+      "contentId": 32,
+      "faction": "alliance",
+      "manualPage101AnnotationPresent": false,
+      "rasterStarCenterPresent": false,
+      "manualOrRasterDotEvidence": false,
+      "canonColRow": [
+        16,
+        42
+      ],
+      "canonGameColRow": [
+        17,
+        43
+      ],
+      "coordinateSource": "RE/.omo/ghidra/minimap/minimap_missing_system_assignment_p3_v2.json",
+      "coordinateSourceExistsInWorkspace": false,
+      "nameAuthority": "constmsg-group-0x18-P0",
+      "planetAuthority": "P3_VIRTUAL_DESIGN",
+      "positionAuthority": "MINIMAP_P3_VIRTUAL_OVERLAY",
+      "page": null,
+      "rect": null,
+      "canonDot": [
+        null,
+        null
+      ],
+      "canonPixel": [
+        null,
+        null
+      ],
+      "classification": "constmsg-backed extra system; not a manual page-101 star dot; P3 overlay coordinate currently not reproducible from present workspace source file"
+    },
+    {
+      "system": "コブラヴェルデ",
+      "constmsgRecord": 1437,
+      "contentId": 34,
+      "faction": "alliance",
+      "manualPage101AnnotationPresent": false,
+      "rasterStarCenterPresent": false,
+      "manualOrRasterDotEvidence": false,
+      "canonColRow": [
+        22,
+        38
+      ],
+      "canonGameColRow": [
+        23,
+        39
+      ],
+      "coordinateSource": "RE/.omo/ghidra/minimap/minimap_missing_system_assignment_p3_v2.json",
+      "coordinateSourceExistsInWorkspace": false,
+      "nameAuthority": "constmsg-group-0x18-P0",
+      "planetAuthority": "P3_VIRTUAL_DESIGN",
+      "positionAuthority": "MINIMAP_P3_VIRTUAL_OVERLAY",
+      "page": null,
+      "rect": null,
+      "canonDot": [
+        null,
+        null
+      ],
+      "canonPixel": [
+        null,
+        null
+      ],
+      "classification": "constmsg-backed extra system; not a manual page-101 star dot; P3 overlay coordinate currently not reproducible from present workspace source file"
+    },
+    {
+      "system": "ニーベルング",
+      "constmsgRecord": 1455,
+      "contentId": 52,
+      "faction": "empire",
+      "manualPage101AnnotationPresent": false,
+      "rasterStarCenterPresent": false,
+      "manualOrRasterDotEvidence": false,
+      "canonColRow": [
+        76,
+        18
+      ],
+      "canonGameColRow": [
+        77,
+        19
+      ],
+      "coordinateSource": "RE/.omo/ghidra/minimap/minimap_missing_system_assignment_p3_v2.json",
+      "coordinateSourceExistsInWorkspace": false,
+      "nameAuthority": "constmsg-group-0x18-P0",
+      "planetAuthority": "P3_VIRTUAL_DESIGN",
+      "positionAuthority": "MINIMAP_P3_VIRTUAL_OVERLAY",
+      "page": null,
+      "rect": null,
+      "canonDot": [
+        null,
+        null
+      ],
+      "canonPixel": [
+        null,
+        null
+      ],
+      "classification": "constmsg-backed extra system; not a manual page-101 star dot; P3 overlay coordinate currently not reproducible from present workspace source file"
+    },
+    {
+      "system": "モンサルヴァール",
+      "constmsgRecord": 1478,
+      "contentId": 75,
+      "faction": "alliance",
+      "manualPage101AnnotationPresent": false,
+      "rasterStarCenterPresent": false,
+      "manualOrRasterDotEvidence": false,
+      "canonColRow": [
+        36,
+        36
+      ],
+      "canonGameColRow": [
+        37,
+        37
+      ],
+      "coordinateSource": "RE/.omo/ghidra/minimap/minimap_missing_system_assignment_p3_v2.json",
+      "coordinateSourceExistsInWorkspace": false,
+      "nameAuthority": "constmsg-group-0x18-P0",
+      "planetAuthority": "P3_VIRTUAL_DESIGN",
+      "positionAuthority": "MINIMAP_P3_VIRTUAL_OVERLAY",
+      "page": null,
+      "rect": null,
+      "canonDot": [
+        null,
+        null
+      ],
+      "canonPixel": [
+        null,
+        null
+      ],
+      "classification": "constmsg-backed extra system; not a manual page-101 star dot; P3 overlay coordinate currently not reproducible from present workspace source file"
+    }
+  ]
+}

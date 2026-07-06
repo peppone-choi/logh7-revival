@@ -1,6 +1,6 @@
 {
   "id": "logh7-stat-tables-catalog",
-  "generatedAt": "2026-07-05T05:26:01.361Z",
+  "generatedAt": "2026-07-05T07:25:17.561Z",
   "gameRoot": "artifacts/logh7-install/____________s___/____",
   "scopeNote": "data/ 트리에서 msgdat/*.dat 제외 전 바이너리 테이블. bmp/tga/jpg/png/wav/ogg/mdx는 자산으로 별도 트랙.",
   "tables": [

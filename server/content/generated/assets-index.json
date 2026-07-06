@@ -2,7 +2,7 @@
  "provenance": {
   "source": "artifacts/logh7-install/<게임설치트리>/data (원본 CD Logh7.bin 설치본)",
   "generator": "tools/extract/build-assets-index.mjs",
-  "generatedAt": "2026-07-05T05:19:15.163Z",
+  "generatedAt": "2026-07-05T07:25:24.025Z",
   "note": "이미지 해상도는 bmp/tga/png/jpg 헤더 직접 파싱; mdx/mds는 선두 16바이트 hex만 기록(포맷 미해독)"
  },
  "totals": {

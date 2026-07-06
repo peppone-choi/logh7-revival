@@ -1,0 +1,13 @@
+{
+  "name": "logh7-server",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "description": "은하영웅전설 VII 부활 — 원본 클라이언트용 자체 권위 서버(from scratch, docs/reference 와이어 스펙 근거)",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "test": "node --test"
+  }
+}

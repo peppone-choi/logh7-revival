@@ -1,0 +1,2356 @@
+{
+  "id": "logh7-roster-v2-seed-20260705",
+  "generatedAt": "2026-07-05T07:56:09.262163+00:00",
+  "scope": "Recovery seed for roster-v2: source union and trust audit shell, not final canonical roster.",
+  "sourceFiles": {
+    "characterRoster": "server/content/character-roster.json",
+    "officialRoster": "server/content/roster/official-roster.json",
+    "communityCharacters": "server/content/roster/characters.json",
+    "portraitIdentities": "server/content/roster/portrait-identities.json",
+    "portraitComplete": "server/content/character-portraits-complete.json",
+    "canonFaceRegistry": "server/content/canon-face-registry.json"
+  },
+  "sourceCounts": {
+    "characterRoster": 99,
+    "officialRoster": 12,
+    "communityCharacters": 97,
+    "portraitIdentities": 0,
+    "portraitComplete": 99,
+    "canonFaceRegistry": 0
+  },
+  "uniqueNameCount": 188,
+  "entriesWithMultiSource": 98,
+  "entriesWithConflicts": 0,
+  "portraitCatalog": {
+    "generatedPortraitCount": 669,
+    "generatedPortraitFailures": 0,
+    "completePortraitCount": 99
+  },
+  "waybackCharaAnchors": [
+    {
+      "path": "artifacts/gineiden-archive/files/www.gineiden.com/picture/chara/085.jpg",
+      "size": 4033,
+      "sha256": "2da727658e07205c4c5424c687f39ae34749dbe647d6c310054ce108191e2244",
+      "status": "deferred-pixel-match-after-roster-v2-canonical-face-map"
+    },
+    {
+      "path": "artifacts/gineiden-archive/files/www.gineiden.com/picture/chara/206.jpg",
+      "size": 4279,
+      "sha256": "6cbf6b1889a5cd8eb965b9ba298b5ee45ca9b2038a8f0ed2171a633cd9444a72",
+      "status": "deferred-pixel-match-after-roster-v2-canonical-face-map"
+    }
+  ],
+  "trustPolicy": [
+    "P0/P1 source records win over web/community labels.",
+    "Wayback chara anchors 085.jpg and 206.jpg are held until roster-v2 face map exists, then pixel-match only.",
+    "Conflicts are exposed, not silently resolved, in this seed."
+  ],
+  "entries": [
+    {
+      "name": "Abendroth",
+      "sourceCount": 1,
+      "sources": [
+        "portraitComplete"
+      ],
+      "recordRefs": {
+        "portraitComplete": 8
+      },
+      "conflicts": []
+    },
+    {
+      "name": "Ahmed",
+      "sourceCount": 1,
+      "sources": [
+        "portraitComplete"
+      ],
+      "recordRefs": {
+        "portraitComplete": 55
+      },
+      "conflicts": []
+    },
+    {
+      "name": "Al-Salem",
+      "sourceCount": 1,
+      "sources": [
+        "portraitComplete"
+      ],
+      "recordRefs": {
+        "portraitComplete": 54
+      },
+      "conflicts": []
+    },
+    {
+      "name": "Alarcon",
+      "sourceCount": 1,
+      "sources": [
+        "portraitComplete"
+      ],
+      "recordRefs": {
+        "portraitComplete": 64
+      },
+      "conflicts": []
+    },
+    {
+      "name": "Ansbach",
+      "sourceCount": 1,
+      "sources": [
+        "portraitComplete"
+      ],
+      "recordRefs": {
+        "portraitComplete": 72
+      },
+      "conflicts": []
+    },
+    {
+      "name": "Appleton",
+      "sourceCount": 1,
+      "sources": [
+        "portraitComplete"
+      ],
+      "recordRefs": {
+        "portraitComplete": 53
+      },
+      "conflicts": []
+    },
+    {
+      "name": "Attenborough",
+      "sourceCount": 1,
+      "sources": [
+        "portraitComplete"
+      ],
+      "recordRefs": {
+        "portraitComplete": 71
+      },
+      "conflicts": []
+    },
+    {
+      "name": "Bittenfeld",
+      "sourceCount": 1,
+      "sources": [
+        "portraitComplete"
+      ],
+      "recordRefs": {
+        "portraitComplete": 83
+      },
+      "conflicts": []
+    },
+    {
+      "name": "Borodin",
+      "sourceCount": 1,
+      "sources": [
+        "portraitComplete"
+      ],
+      "recordRefs": {
+        "portraitComplete": 60
+      },
+      "conflicts": []
+    },
+    {
+      "name": "Bronze",
+      "sourceCount": 1,
+      "sources": [
+        "portraitComplete"
+      ],
+      "recordRefs": {
+        "portraitComplete": 41
+      },
+      "conflicts": []
+    },
+    {
+      "name": "Bucock",
+      "sourceCount": 1,
+      "sources": [
+        "portraitComplete"
+      ],
+      "recordRefs": {
+        "portraitComplete": 49
+      },
+      "conflicts": []
+    },
+    {
+      "name": "Carlsen",
+      "sourceCount": 1,
+      "sources": [
+        "portraitComplete"
+      ],
+      "recordRefs": {
+        "portraitComplete": 61
+      },
+      "conflicts": []
+    },
+    {
+      "name": "Caselnes",
+      "sourceCount": 1,
+      "sources": [
+        "portraitComplete"
+      ],
+      "recordRefs": {
+        "portraitComplete": 74
+      },
+      "conflicts": []
+    },
+    {
+      "name": "Chen",
+      "sourceCount": 1,
+      "sources": [
+        "portraitComplete"
+      ],
+      "recordRefs": {
+        "portraitComplete": 58
+      },
+      "conflicts": []
+    },
+    {
+      "name": "Connery",
+      "sourceCount": 1,
+      "sources": [
+        "portraitComplete"
+      ],
+      "recordRefs": {
+        "portraitComplete": 63
+      },
+      "conflicts": []
+    },
+    {
+      "name": "D. Greenhill",
+      "sourceCount": 1,
+      "sources": [
+        "portraitComplete"
+      ],
+      "recordRefs": {
+        "portraitComplete": 43
+      },
+      "conflicts": []
+    },
+    {
+      "name": "D.グリーンヒル",
+      "sourceCount": 2,
+      "sources": [
+        "characterRoster",
+        "communityCharacters"
+      ],
+      "recordRefs": {
+        "characterRoster": 43,
+        "communityCharacters": 43
+      },
+      "conflicts": []
+    },
+    {
+      "name": "Dawson",
+      "sourceCount": 1,
+      "sources": [
+        "portraitComplete"
+      ],
+      "recordRefs": {
+        "portraitComplete": 38
+      },
+      "conflicts": []
+    },
+    {
+      "name": "Desch",
+      "sourceCount": 1,
+      "sources": [
+        "portraitComplete"
+      ],
+      "recordRefs": {
+        "portraitComplete": 67
+      },
+      "conflicts": []
+    },
+    {
+      "name": "Dittersdorf",
+      "sourceCount": 1,
+      "sources": [
+        "portraitComplete"
+      ],
+      "recordRefs": {
+        "portraitComplete": 24
+      },
+      "conflicts": []
+    },
+    {
+      "name": "Ehrenberg",
+      "sourceCount": 1,
+      "sources": [
+        "portraitComplete"
+      ],
+      "recordRefs": {
+        "portraitComplete": 5
+      },
+      "conflicts": []
+    },
+    {
+      "name": "Fahrenheit",
+      "sourceCount": 1,
+      "sources": [
+        "portraitComplete"
+      ],
+      "recordRefs": {
+        "portraitComplete": 84
+      },
+      "conflicts": []
+    },
+    {
+      "name": "Flegel",
+      "sourceCount": 1,
+      "sources": [
+        "portraitComplete"
+      ],
+      "recordRefs": {
+        "portraitComplete": 21
+      },
+      "conflicts": []
+    },
+    {
+      "name": "Friedrich IV",
+      "sourceCount": 1,
+      "sources": [
+        "portraitComplete"
+      ],
+      "recordRefs": {
+        "portraitComplete": 0
+      },
+      "conflicts": []
+    },
+    {
+      "name": "G. Muckenberger",
+      "sourceCount": 1,
+      "sources": [
+        "portraitComplete"
+      ],
+      "recordRefs": {
+        "portraitComplete": 9
+      },
+      "conflicts": []
+    },
+    {
+      "name": "G.ミュッケンベルガー",
+      "sourceCount": 2,
+      "sources": [
+        "characterRoster",
+        "communityCharacters"
+      ],
+      "recordRefs": {
+        "characterRoster": 9,
+        "communityCharacters": 9
+      },
+      "conflicts": []
+    },
+    {
+      "name": "Gerlach",
+      "sourceCount": 1,
+      "sources": [
+        "portraitComplete"
+      ],
+      "recordRefs": {
+        "portraitComplete": 3
+      },
+      "conflicts": []
+    },
+    {
+      "name": "Greenhill",
+      "sourceCount": 1,
+      "sources": [
+        "portraitComplete"
+      ],
+      "recordRefs": {
+        "portraitComplete": 75
+      },
+      "conflicts": []
+    },
+    {
+      "name": "Greifs",
+      "sourceCount": 1,
+      "sources": [
+        "portraitComplete"
+      ],
+      "recordRefs": {
+        "portraitComplete": 10
+      },
+      "conflicts": []
+    },
+    {
+      "name": "Grosvenor",
+      "sourceCount": 1,
+      "sources": [
+        "portraitComplete"
+      ],
+      "recordRefs": {
+        "portraitComplete": 40
+      },
+      "conflicts": []
+    },
+    {
+      "name": "Grunemann",
+      "sourceCount": 1,
+      "sources": [
+        "portraitComplete"
+      ],
+      "recordRefs": {
+        "portraitComplete": 23
+      },
+      "conflicts": []
+    },
+    {
+      "name": "Haupt",
+      "sourceCount": 1,
+      "sources": [
+        "portraitComplete"
+      ],
+      "recordRefs": {
+        "portraitComplete": 6
+      },
+      "conflicts": []
+    },
+    {
+      "name": "Hawood",
+      "sourceCount": 1,
+      "sources": [
+        "portraitComplete"
+      ],
+      "recordRefs": {
+        "portraitComplete": 52
+      },
+      "conflicts": []
+    },
+    {
+      "name": "Henslow",
+      "sourceCount": 1,
+      "sources": [
+        "portraitComplete"
+      ],
+      "recordRefs": {
+        "portraitComplete": 36
+      },
+      "conflicts": []
+    },
+    {
+      "name": "Hildesheim",
+      "sourceCount": 1,
+      "sources": [
+        "portraitComplete"
+      ],
+      "recordRefs": {
+        "portraitComplete": 18
+      },
+      "conflicts": []
+    },
+    {
+      "name": "Hofmeister",
+      "sourceCount": 1,
+      "sources": [
+        "portraitComplete"
+      ],
+      "recordRefs": {
+        "portraitComplete": 25
+      },
+      "conflicts": []
+    },
+    {
+      "name": "Holland",
+      "sourceCount": 1,
+      "sources": [
+        "portraitComplete"
+      ],
+      "recordRefs": {
+        "portraitComplete": 59
+      },
+      "conflicts": []
+    },
+    {
+      "name": "Huang",
+      "sourceCount": 1,
+      "sources": [
+        "portraitComplete"
+      ],
+      "recordRefs": {
+        "portraitComplete": 34
+      },
+      "conflicts": []
+    },
+    {
+      "name": "Kempff",
+      "sourceCount": 1,
+      "sources": [
+        "portraitComplete"
+      ],
+      "recordRefs": {
+        "portraitComplete": 77
+      },
+      "conflicts": []
+    },
+    {
+      "name": "Kessler",
+      "sourceCount": 1,
+      "sources": [
+        "portraitComplete"
+      ],
+      "recordRefs": {
+        "portraitComplete": 76
+      },
+      "conflicts": []
+    },
+    {
+      "name": "Kircheis",
+      "sourceCount": 1,
+      "sources": [
+        "portraitComplete"
+      ],
+      "recordRefs": {
+        "portraitComplete": 19
+      },
+      "conflicts": []
+    },
+    {
+      "name": "Klasen",
+      "sourceCount": 1,
+      "sources": [
+        "portraitComplete"
+      ],
+      "recordRefs": {
+        "portraitComplete": 1
+      },
+      "conflicts": []
+    },
+    {
+      "name": "Kubersly",
+      "sourceCount": 1,
+      "sources": [
+        "portraitComplete"
+      ],
+      "recordRefs": {
+        "portraitComplete": 44
+      },
+      "conflicts": []
+    },
+    {
+      "name": "Lagrange",
+      "sourceCount": 1,
+      "sources": [
+        "portraitComplete"
+      ],
+      "recordRefs": {
+        "portraitComplete": 66
+      },
+      "conflicts": []
+    },
+    {
+      "name": "Landsberg",
+      "sourceCount": 1,
+      "sources": [
+        "portraitComplete"
+      ],
+      "recordRefs": {
+        "portraitComplete": 20
+      },
+      "conflicts": []
+    },
+    {
+      "name": "Lebello",
+      "sourceCount": 1,
+      "sources": [
+        "portraitComplete"
+      ],
+      "recordRefs": {
+        "portraitComplete": 33
+      },
+      "conflicts": []
+    },
+    {
+      "name": "Lefebvre",
+      "sourceCount": 1,
+      "sources": [
+        "portraitComplete"
+      ],
+      "recordRefs": {
+        "portraitComplete": 46
+      },
+      "conflicts": []
+    },
+    {
+      "name": "Lennenkampf",
+      "sourceCount": 1,
+      "sources": [
+        "portraitComplete"
+      ],
+      "recordRefs": {
+        "portraitComplete": 29
+      },
+      "conflicts": []
+    },
+    {
+      "name": "Lichtenlade",
+      "sourceCount": 1,
+      "sources": [
+        "portraitComplete"
+      ],
+      "recordRefs": {
+        "portraitComplete": 2
+      },
+      "conflicts": []
+    },
+    {
+      "name": "Lobos",
+      "sourceCount": 1,
+      "sources": [
+        "portraitComplete"
+      ],
+      "recordRefs": {
+        "portraitComplete": 42
+      },
+      "conflicts": []
+    },
+    {
+      "name": "Lohengramm",
+      "sourceCount": 1,
+      "sources": [
+        "portraitComplete"
+      ],
+      "recordRefs": {
+        "portraitComplete": 14
+      },
+      "conflicts": []
+    },
+    {
+      "name": "Lutz",
+      "sourceCount": 1,
+      "sources": [
+        "portraitComplete"
+      ],
+      "recordRefs": {
+        "portraitComplete": 93
+      },
+      "conflicts": []
+    },
+    {
+      "name": "Marinetti",
+      "sourceCount": 1,
+      "sources": [
+        "portraitComplete"
+      ],
+      "recordRefs": {
+        "portraitComplete": 62
+      },
+      "conflicts": []
+    },
+    {
+      "name": "Mascagni",
+      "sourceCount": 1,
+      "sources": [
+        "portraitComplete"
+      ],
+      "recordRefs": {
+        "portraitComplete": 68
+      },
+      "conflicts": []
+    },
+    {
+      "name": "Mecklinger",
+      "sourceCount": 1,
+      "sources": [
+        "portraitComplete"
+      ],
+      "recordRefs": {
+        "portraitComplete": 92
+      },
+      "conflicts": []
+    },
+    {
+      "name": "Merkatz",
+      "sourceCount": 1,
+      "sources": [
+        "portraitComplete"
+      ],
+      "recordRefs": {
+        "portraitComplete": 15
+      },
+      "conflicts": []
+    },
+    {
+      "name": "Mittermeyer",
+      "sourceCount": 1,
+      "sources": [
+        "portraitComplete"
+      ],
+      "recordRefs": {
+        "portraitComplete": 27
+      },
+      "conflicts": []
+    },
+    {
+      "name": "Moore",
+      "sourceCount": 1,
+      "sources": [
+        "portraitComplete"
+      ],
+      "recordRefs": {
+        "portraitComplete": 51
+      },
+      "conflicts": []
+    },
+    {
+      "name": "Morton",
+      "sourceCount": 1,
+      "sources": [
+        "portraitComplete"
+      ],
+      "recordRefs": {
+        "portraitComplete": 57
+      },
+      "conflicts": []
+    },
+    {
+      "name": "Muller",
+      "sourceCount": 1,
+      "sources": [
+        "portraitComplete"
+      ],
+      "recordRefs": {
+        "portraitComplete": 90
+      },
+      "conflicts": []
+    },
+    {
+      "name": "Murai",
+      "sourceCount": 1,
+      "sources": [
+        "portraitComplete"
+      ],
+      "recordRefs": {
+        "portraitComplete": 91
+      },
+      "conflicts": []
+    },
+    {
+      "name": "Negroponti",
+      "sourceCount": 1,
+      "sources": [
+        "portraitComplete"
+      ],
+      "recordRefs": {
+        "portraitComplete": 97
+      },
+      "conflicts": []
+    },
+    {
+      "name": "Nguyen",
+      "sourceCount": 1,
+      "sources": [
+        "portraitComplete"
+      ],
+      "recordRefs": {
+        "portraitComplete": 69
+      },
+      "conflicts": []
+    },
+    {
+      "name": "Oberstein",
+      "sourceCount": 1,
+      "sources": [
+        "portraitComplete"
+      ],
+      "recordRefs": {
+        "portraitComplete": 73
+      },
+      "conflicts": []
+    },
+    {
+      "name": "Ofresser",
+      "sourceCount": 1,
+      "sources": [
+        "portraitComplete"
+      ],
+      "recordRefs": {
+        "portraitComplete": 12
+      },
+      "conflicts": []
+    },
+    {
+      "name": "Oppenheimer",
+      "sourceCount": 1,
+      "sources": [
+        "portraitComplete"
+      ],
+      "recordRefs": {
+        "portraitComplete": 11
+      },
+      "conflicts": []
+    },
+    {
+      "name": "Otho von Braunschweig",
+      "sourceCount": 1,
+      "sources": [
+        "portraitComplete"
+      ],
+      "recordRefs": {
+        "portraitComplete": 98
+      },
+      "conflicts": []
+    },
+    {
+      "name": "Paetta",
+      "sourceCount": 1,
+      "sources": [
+        "portraitComplete"
+      ],
+      "recordRefs": {
+        "portraitComplete": 45
+      },
+      "conflicts": []
+    },
+    {
+      "name": "Pastolle",
+      "sourceCount": 1,
+      "sources": [
+        "portraitComplete"
+      ],
+      "recordRefs": {
+        "portraitComplete": 47
+      },
+      "conflicts": []
+    },
+    {
+      "name": "Poplan",
+      "sourceCount": 1,
+      "sources": [
+        "portraitComplete"
+      ],
+      "recordRefs": {
+        "portraitComplete": 88
+      },
+      "conflicts": []
+    },
+    {
+      "name": "Remscheid",
+      "sourceCount": 1,
+      "sources": [
+        "portraitComplete"
+      ],
+      "recordRefs": {
+        "portraitComplete": 4
+      },
+      "conflicts": []
+    },
+    {
+      "name": "Reuenthal",
+      "sourceCount": 1,
+      "sources": [
+        "portraitComplete"
+      ],
+      "recordRefs": {
+        "portraitComplete": 28
+      },
+      "conflicts": []
+    },
+    {
+      "name": "Rockwell",
+      "sourceCount": 1,
+      "sources": [
+        "portraitComplete"
+      ],
+      "recordRefs": {
+        "portraitComplete": 39
+      },
+      "conflicts": []
+    },
+    {
+      "name": "Sanford",
+      "sourceCount": 1,
+      "sources": [
+        "portraitComplete"
+      ],
+      "recordRefs": {
+        "portraitComplete": 31
+      },
+      "conflicts": []
+    },
+    {
+      "name": "Schaft",
+      "sourceCount": 1,
+      "sources": [
+        "portraitComplete"
+      ],
+      "recordRefs": {
+        "portraitComplete": 13
+      },
+      "conflicts": []
+    },
+    {
+      "name": "Schonkopp",
+      "sourceCount": 1,
+      "sources": [
+        "portraitComplete"
+      ],
+      "recordRefs": {
+        "portraitComplete": 79
+      },
+      "conflicts": []
+    },
+    {
+      "name": "Seeckt",
+      "sourceCount": 1,
+      "sources": [
+        "portraitComplete"
+      ],
+      "recordRefs": {
+        "portraitComplete": 22
+      },
+      "conflicts": []
+    },
+    {
+      "name": "Sithole",
+      "sourceCount": 1,
+      "sources": [
+        "portraitComplete"
+      ],
+      "recordRefs": {
+        "portraitComplete": 37
+      },
+      "conflicts": []
+    },
+    {
+      "name": "Staden",
+      "sourceCount": 1,
+      "sources": [
+        "portraitComplete"
+      ],
+      "recordRefs": {
+        "portraitComplete": 16
+      },
+      "conflicts": []
+    },
+    {
+      "name": "Steinhof",
+      "sourceCount": 1,
+      "sources": [
+        "portraitComplete"
+      ],
+      "recordRefs": {
+        "portraitComplete": 7
+      },
+      "conflicts": []
+    },
+    {
+      "name": "Steinmetz",
+      "sourceCount": 1,
+      "sources": [
+        "portraitComplete"
+      ],
+      "recordRefs": {
+        "portraitComplete": 80
+      },
+      "conflicts": []
+    },
+    {
+      "name": "Stockhausen",
+      "sourceCount": 1,
+      "sources": [
+        "portraitComplete"
+      ],
+      "recordRefs": {
+        "portraitComplete": 30
+      },
+      "conflicts": []
+    },
+    {
+      "name": "Trunicht",
+      "sourceCount": 1,
+      "sources": [
+        "portraitComplete"
+      ],
+      "recordRefs": {
+        "portraitComplete": 32
+      },
+      "conflicts": []
+    },
+    {
+      "name": "Ulanhu",
+      "sourceCount": 1,
+      "sources": [
+        "portraitComplete"
+      ],
+      "recordRefs": {
+        "portraitComplete": 56
+      },
+      "conflicts": []
+    },
+    {
+      "name": "Vogel",
+      "sourceCount": 1,
+      "sources": [
+        "portraitComplete"
+      ],
+      "recordRefs": {
+        "portraitComplete": 17
+      },
+      "conflicts": []
+    },
+    {
+      "name": "Wahlen",
+      "sourceCount": 1,
+      "sources": [
+        "portraitComplete"
+      ],
+      "recordRefs": {
+        "portraitComplete": 94
+      },
+      "conflicts": []
+    },
+    {
+      "name": "Winser",
+      "sourceCount": 1,
+      "sources": [
+        "portraitComplete"
+      ],
+      "recordRefs": {
+        "portraitComplete": 35
+      },
+      "conflicts": []
+    },
+    {
+      "name": "Yang Wen-li",
+      "sourceCount": 1,
+      "sources": [
+        "portraitComplete"
+      ],
+      "recordRefs": {
+        "portraitComplete": 96
+      },
+      "conflicts": []
+    },
+    {
+      "name": "von Musel",
+      "sourceCount": 1,
+      "sources": [
+        "portraitComplete"
+      ],
+      "recordRefs": {
+        "portraitComplete": 95
+      },
+      "conflicts": []
+    },
+    {
+      "name": "アイゼナッハ",
+      "sourceCount": 3,
+      "sources": [
+        "characterRoster",
+        "communityCharacters",
+        "portraitComplete"
+      ],
+      "recordRefs": {
+        "characterRoster": 70,
+        "communityCharacters": 70,
+        "portraitComplete": 70
+      },
+      "conflicts": []
+    },
+    {
+      "name": "アッテンボロー",
+      "sourceCount": 2,
+      "sources": [
+        "characterRoster",
+        "communityCharacters"
+      ],
+      "recordRefs": {
+        "characterRoster": 71,
+        "communityCharacters": 71
+      },
+      "conflicts": []
+    },
+    {
+      "name": "アップルトン",
+      "sourceCount": 2,
+      "sources": [
+        "characterRoster",
+        "communityCharacters"
+      ],
+      "recordRefs": {
+        "characterRoster": 53,
+        "communityCharacters": 53
+      },
+      "conflicts": []
+    },
+    {
+      "name": "アラルコン",
+      "sourceCount": 2,
+      "sources": [
+        "characterRoster",
+        "communityCharacters"
+      ],
+      "recordRefs": {
+        "characterRoster": 64,
+        "communityCharacters": 64
+      },
+      "conflicts": []
+    },
+    {
+      "name": "アル・サレム",
+      "sourceCount": 2,
+      "sources": [
+        "characterRoster",
+        "communityCharacters"
+      ],
+      "recordRefs": {
+        "characterRoster": 54,
+        "communityCharacters": 54
+      },
+      "conflicts": []
+    },
+    {
+      "name": "アンスバッハ",
+      "sourceCount": 2,
+      "sources": [
+        "characterRoster",
+        "communityCharacters"
+      ],
+      "recordRefs": {
+        "characterRoster": 72,
+        "communityCharacters": 72
+      },
+      "conflicts": []
+    },
+    {
+      "name": "アーベントロート",
+      "sourceCount": 2,
+      "sources": [
+        "characterRoster",
+        "communityCharacters"
+      ],
+      "recordRefs": {
+        "characterRoster": 8,
+        "communityCharacters": 8
+      },
+      "conflicts": []
+    },
+    {
+      "name": "アーメド",
+      "sourceCount": 2,
+      "sources": [
+        "characterRoster",
+        "communityCharacters"
+      ],
+      "recordRefs": {
+        "characterRoster": 55,
+        "communityCharacters": 55
+      },
+      "conflicts": []
+    },
+    {
+      "name": "ウィンザー",
+      "sourceCount": 2,
+      "sources": [
+        "characterRoster",
+        "communityCharacters"
+      ],
+      "recordRefs": {
+        "characterRoster": 35,
+        "communityCharacters": 35
+      },
+      "conflicts": []
+    },
+    {
+      "name": "ウランフ",
+      "sourceCount": 2,
+      "sources": [
+        "characterRoster",
+        "communityCharacters"
+      ],
+      "recordRefs": {
+        "characterRoster": 56,
+        "communityCharacters": 56
+      },
+      "conflicts": []
+    },
+    {
+      "name": "エーレンベルグ",
+      "sourceCount": 2,
+      "sources": [
+        "characterRoster",
+        "communityCharacters"
+      ],
+      "recordRefs": {
+        "characterRoster": 5,
+        "communityCharacters": 5
+      },
+      "conflicts": []
+    },
+    {
+      "name": "オッペンハイマー",
+      "sourceCount": 2,
+      "sources": [
+        "characterRoster",
+        "communityCharacters"
+      ],
+      "recordRefs": {
+        "characterRoster": 11,
+        "communityCharacters": 11
+      },
+      "conflicts": []
+    },
+    {
+      "name": "オフレッサー",
+      "sourceCount": 3,
+      "sources": [
+        "characterRoster",
+        "communityCharacters",
+        "officialRoster"
+      ],
+      "recordRefs": {
+        "characterRoster": 12,
+        "officialRoster": 4,
+        "communityCharacters": 12
+      },
+      "conflicts": []
+    },
+    {
+      "name": "オーベルシュタイン",
+      "sourceCount": 2,
+      "sources": [
+        "characterRoster",
+        "communityCharacters"
+      ],
+      "recordRefs": {
+        "characterRoster": 73,
+        "communityCharacters": 73
+      },
+      "conflicts": []
+    },
+    {
+      "name": "カールセン",
+      "sourceCount": 2,
+      "sources": [
+        "characterRoster",
+        "communityCharacters"
+      ],
+      "recordRefs": {
+        "characterRoster": 61,
+        "communityCharacters": 61
+      },
+      "conflicts": []
+    },
+    {
+      "name": "キャゼルヌ",
+      "sourceCount": 3,
+      "sources": [
+        "characterRoster",
+        "communityCharacters",
+        "officialRoster"
+      ],
+      "recordRefs": {
+        "characterRoster": 74,
+        "officialRoster": 7,
+        "communityCharacters": 74
+      },
+      "conflicts": []
+    },
+    {
+      "name": "キルヒアイス",
+      "sourceCount": 2,
+      "sources": [
+        "characterRoster",
+        "communityCharacters"
+      ],
+      "recordRefs": {
+        "characterRoster": 19,
+        "communityCharacters": 19
+      },
+      "conflicts": []
+    },
+    {
+      "name": "クブルスリー",
+      "sourceCount": 2,
+      "sources": [
+        "characterRoster",
+        "communityCharacters"
+      ],
+      "recordRefs": {
+        "characterRoster": 44,
+        "communityCharacters": 44
+      },
+      "conflicts": []
+    },
+    {
+      "name": "クラーゼン",
+      "sourceCount": 2,
+      "sources": [
+        "characterRoster",
+        "communityCharacters"
+      ],
+      "recordRefs": {
+        "characterRoster": 1,
+        "communityCharacters": 1
+      },
+      "conflicts": []
+    },
+    {
+      "name": "グエン",
+      "sourceCount": 2,
+      "sources": [
+        "characterRoster",
+        "communityCharacters"
+      ],
+      "recordRefs": {
+        "characterRoster": 69,
+        "communityCharacters": 69
+      },
+      "conflicts": []
+    },
+    {
+      "name": "グライフス",
+      "sourceCount": 2,
+      "sources": [
+        "characterRoster",
+        "communityCharacters"
+      ],
+      "recordRefs": {
+        "characterRoster": 10,
+        "communityCharacters": 10
+      },
+      "conflicts": []
+    },
+    {
+      "name": "グリューネマン",
+      "sourceCount": 2,
+      "sources": [
+        "characterRoster",
+        "communityCharacters"
+      ],
+      "recordRefs": {
+        "characterRoster": 23,
+        "communityCharacters": 23
+      },
+      "conflicts": []
+    },
+    {
+      "name": "グリーンヒル",
+      "sourceCount": 2,
+      "sources": [
+        "characterRoster",
+        "communityCharacters"
+      ],
+      "recordRefs": {
+        "characterRoster": 75,
+        "communityCharacters": 75
+      },
+      "conflicts": []
+    },
+    {
+      "name": "グルーゼンシュテルン",
+      "sourceCount": 3,
+      "sources": [
+        "characterRoster",
+        "communityCharacters",
+        "portraitComplete"
+      ],
+      "recordRefs": {
+        "characterRoster": 26,
+        "communityCharacters": 26,
+        "portraitComplete": 26
+      },
+      "conflicts": []
+    },
+    {
+      "name": "グローブナー",
+      "sourceCount": 2,
+      "sources": [
+        "characterRoster",
+        "communityCharacters"
+      ],
+      "recordRefs": {
+        "characterRoster": 40,
+        "communityCharacters": 40
+      },
+      "conflicts": []
+    },
+    {
+      "name": "ケスラー",
+      "sourceCount": 3,
+      "sources": [
+        "characterRoster",
+        "communityCharacters",
+        "officialRoster"
+      ],
+      "recordRefs": {
+        "characterRoster": 76,
+        "officialRoster": 2,
+        "communityCharacters": 76
+      },
+      "conflicts": []
+    },
+    {
+      "name": "ケンプ",
+      "sourceCount": 2,
+      "sources": [
+        "characterRoster",
+        "communityCharacters"
+      ],
+      "recordRefs": {
+        "characterRoster": 77,
+        "communityCharacters": 77
+      },
+      "conflicts": []
+    },
+    {
+      "name": "ゲルラッハ",
+      "sourceCount": 2,
+      "sources": [
+        "characterRoster",
+        "communityCharacters"
+      ],
+      "recordRefs": {
+        "characterRoster": 3,
+        "communityCharacters": 3
+      },
+      "conflicts": []
+    },
+    {
+      "name": "コナリー",
+      "sourceCount": 2,
+      "sources": [
+        "characterRoster",
+        "communityCharacters"
+      ],
+      "recordRefs": {
+        "characterRoster": 63,
+        "communityCharacters": 63
+      },
+      "conflicts": []
+    },
+    {
+      "name": "コーネフ",
+      "sourceCount": 3,
+      "sources": [
+        "characterRoster",
+        "communityCharacters",
+        "portraitComplete"
+      ],
+      "recordRefs": {
+        "characterRoster": 78,
+        "communityCharacters": 78,
+        "portraitComplete": 78
+      },
+      "conflicts": []
+    },
+    {
+      "name": "サンフォード",
+      "sourceCount": 2,
+      "sources": [
+        "characterRoster",
+        "communityCharacters"
+      ],
+      "recordRefs": {
+        "characterRoster": 31,
+        "communityCharacters": 31
+      },
+      "conflicts": []
+    },
+    {
+      "name": "ザーニアル",
+      "sourceCount": 3,
+      "sources": [
+        "characterRoster",
+        "communityCharacters",
+        "portraitComplete"
+      ],
+      "recordRefs": {
+        "characterRoster": 65,
+        "communityCharacters": 65,
+        "portraitComplete": 65
+      },
+      "conflicts": []
+    },
+    {
+      "name": "シェーンコップ",
+      "sourceCount": 3,
+      "sources": [
+        "characterRoster",
+        "communityCharacters",
+        "officialRoster"
+      ],
+      "recordRefs": {
+        "characterRoster": 79,
+        "officialRoster": 8,
+        "communityCharacters": 79
+      },
+      "conflicts": []
+    },
+    {
+      "name": "シトレ",
+      "sourceCount": 2,
+      "sources": [
+        "characterRoster",
+        "communityCharacters"
+      ],
+      "recordRefs": {
+        "characterRoster": 37,
+        "communityCharacters": 37
+      },
+      "conflicts": []
+    },
+    {
+      "name": "シャフト",
+      "sourceCount": 2,
+      "sources": [
+        "characterRoster",
+        "communityCharacters"
+      ],
+      "recordRefs": {
+        "characterRoster": 13,
+        "communityCharacters": 13
+      },
+      "conflicts": []
+    },
+    {
+      "name": "シュタインホフ",
+      "sourceCount": 2,
+      "sources": [
+        "characterRoster",
+        "communityCharacters"
+      ],
+      "recordRefs": {
+        "characterRoster": 7,
+        "communityCharacters": 7
+      },
+      "conflicts": []
+    },
+    {
+      "name": "シュタインメッツ",
+      "sourceCount": 2,
+      "sources": [
+        "characterRoster",
+        "communityCharacters"
+      ],
+      "recordRefs": {
+        "characterRoster": 80,
+        "communityCharacters": 80
+      },
+      "conflicts": []
+    },
+    {
+      "name": "シュターデン",
+      "sourceCount": 2,
+      "sources": [
+        "characterRoster",
+        "communityCharacters"
+      ],
+      "recordRefs": {
+        "characterRoster": 16,
+        "communityCharacters": 16
+      },
+      "conflicts": []
+    },
+    {
+      "name": "シュトックハウゼン",
+      "sourceCount": 2,
+      "sources": [
+        "characterRoster",
+        "communityCharacters"
+      ],
+      "recordRefs": {
+        "characterRoster": 30,
+        "communityCharacters": 30
+      },
+      "conflicts": []
+    },
+    {
+      "name": "ゼークト",
+      "sourceCount": 2,
+      "sources": [
+        "characterRoster",
+        "communityCharacters"
+      ],
+      "recordRefs": {
+        "characterRoster": 22,
+        "communityCharacters": 22
+      },
+      "conflicts": []
+    },
+    {
+      "name": "タナンチャイ",
+      "sourceCount": 3,
+      "sources": [
+        "characterRoster",
+        "communityCharacters",
+        "portraitComplete"
+      ],
+      "recordRefs": {
+        "characterRoster": 48,
+        "communityCharacters": 48,
+        "portraitComplete": 48
+      },
+      "conflicts": []
+    },
+    {
+      "name": "チェン",
+      "sourceCount": 2,
+      "sources": [
+        "characterRoster",
+        "communityCharacters"
+      ],
+      "recordRefs": {
+        "characterRoster": 58,
+        "communityCharacters": 58
+      },
+      "conflicts": []
+    },
+    {
+      "name": "チュン",
+      "sourceCount": 3,
+      "sources": [
+        "characterRoster",
+        "communityCharacters",
+        "portraitComplete"
+      ],
+      "recordRefs": {
+        "characterRoster": 81,
+        "communityCharacters": 81,
+        "portraitComplete": 81
+      },
+      "conflicts": []
+    },
+    {
+      "name": "ディッタースドルフ",
+      "sourceCount": 2,
+      "sources": [
+        "characterRoster",
+        "communityCharacters"
+      ],
+      "recordRefs": {
+        "characterRoster": 24,
+        "communityCharacters": 24
+      },
+      "conflicts": []
+    },
+    {
+      "name": "デッシュ",
+      "sourceCount": 2,
+      "sources": [
+        "characterRoster",
+        "communityCharacters"
+      ],
+      "recordRefs": {
+        "characterRoster": 67,
+        "communityCharacters": 67
+      },
+      "conflicts": []
+    },
+    {
+      "name": "トリューニヒト",
+      "sourceCount": 3,
+      "sources": [
+        "characterRoster",
+        "communityCharacters",
+        "officialRoster"
+      ],
+      "recordRefs": {
+        "characterRoster": 32,
+        "officialRoster": 9,
+        "communityCharacters": 32
+      },
+      "conflicts": []
+    },
+    {
+      "name": "ドーソン",
+      "sourceCount": 2,
+      "sources": [
+        "characterRoster",
+        "communityCharacters"
+      ],
+      "recordRefs": {
+        "characterRoster": 38,
+        "communityCharacters": 38
+      },
+      "conflicts": []
+    },
+    {
+      "name": "ネグロポンティ",
+      "sourceCount": 2,
+      "sources": [
+        "characterRoster",
+        "officialRoster"
+      ],
+      "recordRefs": {
+        "characterRoster": 97,
+        "officialRoster": 10
+      },
+      "conflicts": []
+    },
+    {
+      "name": "ハウプト",
+      "sourceCount": 2,
+      "sources": [
+        "characterRoster",
+        "communityCharacters"
+      ],
+      "recordRefs": {
+        "characterRoster": 6,
+        "communityCharacters": 6
+      },
+      "conflicts": []
+    },
+    {
+      "name": "パエッタ",
+      "sourceCount": 2,
+      "sources": [
+        "characterRoster",
+        "communityCharacters"
+      ],
+      "recordRefs": {
+        "characterRoster": 45,
+        "communityCharacters": 45
+      },
+      "conflicts": []
+    },
+    {
+      "name": "パストーレ",
+      "sourceCount": 2,
+      "sources": [
+        "characterRoster",
+        "communityCharacters"
+      ],
+      "recordRefs": {
+        "characterRoster": 47,
+        "communityCharacters": 47
+      },
+      "conflicts": []
+    },
+    {
+      "name": "パトリチェフ",
+      "sourceCount": 3,
+      "sources": [
+        "characterRoster",
+        "communityCharacters",
+        "portraitComplete"
+      ],
+      "recordRefs": {
+        "characterRoster": 82,
+        "communityCharacters": 82,
+        "portraitComplete": 82
+      },
+      "conflicts": []
+    },
+    {
+      "name": "ヒルデスハイム",
+      "sourceCount": 2,
+      "sources": [
+        "characterRoster",
+        "communityCharacters"
+      ],
+      "recordRefs": {
+        "characterRoster": 18,
+        "communityCharacters": 18
+      },
+      "conflicts": []
+    },
+    {
+      "name": "ビッテンフェルト",
+      "sourceCount": 2,
+      "sources": [
+        "characterRoster",
+        "communityCharacters"
+      ],
+      "recordRefs": {
+        "characterRoster": 83,
+        "communityCharacters": 83
+      },
+      "conflicts": []
+    },
+    {
+      "name": "ビュコック",
+      "sourceCount": 2,
+      "sources": [
+        "characterRoster",
+        "communityCharacters"
+      ],
+      "recordRefs": {
+        "characterRoster": 49,
+        "communityCharacters": 49
+      },
+      "conflicts": []
+    },
+    {
+      "name": "ファーレンハイト",
+      "sourceCount": 2,
+      "sources": [
+        "characterRoster",
+        "communityCharacters"
+      ],
+      "recordRefs": {
+        "characterRoster": 84,
+        "communityCharacters": 84
+      },
+      "conflicts": []
+    },
+    {
+      "name": "フィッシャー",
+      "sourceCount": 3,
+      "sources": [
+        "characterRoster",
+        "communityCharacters",
+        "portraitComplete"
+      ],
+      "recordRefs": {
+        "characterRoster": 85,
+        "communityCharacters": 85,
+        "portraitComplete": 85
+      },
+      "conflicts": []
+    },
+    {
+      "name": "フォーク",
+      "sourceCount": 3,
+      "sources": [
+        "characterRoster",
+        "communityCharacters",
+        "portraitComplete"
+      ],
+      "recordRefs": {
+        "characterRoster": 86,
+        "communityCharacters": 86,
+        "portraitComplete": 86
+      },
+      "conflicts": []
+    },
+    {
+      "name": "フォーゲル",
+      "sourceCount": 2,
+      "sources": [
+        "characterRoster",
+        "communityCharacters"
+      ],
+      "recordRefs": {
+        "characterRoster": 17,
+        "communityCharacters": 17
+      },
+      "conflicts": []
+    },
+    {
+      "name": "フリードリヒIV世",
+      "sourceCount": 1,
+      "sources": [
+        "officialRoster"
+      ],
+      "recordRefs": {
+        "officialRoster": 3
+      },
+      "conflicts": []
+    },
+    {
+      "name": "フリードリヒⅣ世",
+      "sourceCount": 2,
+      "sources": [
+        "characterRoster",
+        "communityCharacters"
+      ],
+      "recordRefs": {
+        "characterRoster": 0,
+        "communityCharacters": 0
+      },
+      "conflicts": []
+    },
+    {
+      "name": "フレーゲル",
+      "sourceCount": 2,
+      "sources": [
+        "characterRoster",
+        "communityCharacters"
+      ],
+      "recordRefs": {
+        "characterRoster": 21,
+        "communityCharacters": 21
+      },
+      "conflicts": []
+    },
+    {
+      "name": "ブラウンシュヴァイク",
+      "sourceCount": 1,
+      "sources": [
+        "characterRoster"
+      ],
+      "recordRefs": {
+        "characterRoster": 98
+      },
+      "conflicts": []
+    },
+    {
+      "name": "ブルームハルト",
+      "sourceCount": 3,
+      "sources": [
+        "characterRoster",
+        "communityCharacters",
+        "portraitComplete"
+      ],
+      "recordRefs": {
+        "characterRoster": 87,
+        "communityCharacters": 87,
+        "portraitComplete": 87
+      },
+      "conflicts": []
+    },
+    {
+      "name": "ブロンズ",
+      "sourceCount": 2,
+      "sources": [
+        "characterRoster",
+        "communityCharacters"
+      ],
+      "recordRefs": {
+        "characterRoster": 41,
+        "communityCharacters": 41
+      },
+      "conflicts": []
+    },
+    {
+      "name": "ヘンスロー",
+      "sourceCount": 2,
+      "sources": [
+        "characterRoster",
+        "communityCharacters"
+      ],
+      "recordRefs": {
+        "characterRoster": 36,
+        "communityCharacters": 36
+      },
+      "conflicts": []
+    },
+    {
+      "name": "ホフマイスター",
+      "sourceCount": 2,
+      "sources": [
+        "characterRoster",
+        "communityCharacters"
+      ],
+      "recordRefs": {
+        "characterRoster": 25,
+        "communityCharacters": 25
+      },
+      "conflicts": []
+    },
+    {
+      "name": "ホワン",
+      "sourceCount": 2,
+      "sources": [
+        "characterRoster",
+        "communityCharacters"
+      ],
+      "recordRefs": {
+        "characterRoster": 34,
+        "communityCharacters": 34
+      },
+      "conflicts": []
+    },
+    {
+      "name": "ホーウッド",
+      "sourceCount": 2,
+      "sources": [
+        "characterRoster",
+        "communityCharacters"
+      ],
+      "recordRefs": {
+        "characterRoster": 52,
+        "communityCharacters": 52
+      },
+      "conflicts": []
+    },
+    {
+      "name": "ホーランド",
+      "sourceCount": 2,
+      "sources": [
+        "characterRoster",
+        "communityCharacters"
+      ],
+      "recordRefs": {
+        "characterRoster": 59,
+        "communityCharacters": 59
+      },
+      "conflicts": []
+    },
+    {
+      "name": "ボロディン",
+      "sourceCount": 2,
+      "sources": [
+        "characterRoster",
+        "communityCharacters"
+      ],
+      "recordRefs": {
+        "characterRoster": 60,
+        "communityCharacters": 60
+      },
+      "conflicts": []
+    },
+    {
+      "name": "ポプラン",
+      "sourceCount": 2,
+      "sources": [
+        "characterRoster",
+        "communityCharacters"
+      ],
+      "recordRefs": {
+        "characterRoster": 88,
+        "communityCharacters": 88
+      },
+      "conflicts": []
+    },
+    {
+      "name": "マスカーニ",
+      "sourceCount": 2,
+      "sources": [
+        "characterRoster",
+        "communityCharacters"
+      ],
+      "recordRefs": {
+        "characterRoster": 68,
+        "communityCharacters": 68
+      },
+      "conflicts": []
+    },
+    {
+      "name": "マリネッティ",
+      "sourceCount": 2,
+      "sources": [
+        "characterRoster",
+        "communityCharacters"
+      ],
+      "recordRefs": {
+        "characterRoster": 62,
+        "communityCharacters": 62
+      },
+      "conflicts": []
+    },
+    {
+      "name": "ミッターマイヤー",
+      "sourceCount": 3,
+      "sources": [
+        "characterRoster",
+        "communityCharacters",
+        "officialRoster"
+      ],
+      "recordRefs": {
+        "characterRoster": 27,
+        "officialRoster": 1,
+        "communityCharacters": 27
+      },
+      "conflicts": []
+    },
+    {
+      "name": "ミュッケンベルガー",
+      "sourceCount": 3,
+      "sources": [
+        "characterRoster",
+        "communityCharacters",
+        "portraitComplete"
+      ],
+      "recordRefs": {
+        "characterRoster": 89,
+        "communityCharacters": 89,
+        "portraitComplete": 89
+      },
+      "conflicts": []
+    },
+    {
+      "name": "ミュラー",
+      "sourceCount": 2,
+      "sources": [
+        "characterRoster",
+        "communityCharacters"
+      ],
+      "recordRefs": {
+        "characterRoster": 90,
+        "communityCharacters": 90
+      },
+      "conflicts": []
+    },
+    {
+      "name": "ミューゼル",
+      "sourceCount": 2,
+      "sources": [
+        "characterRoster",
+        "communityCharacters"
+      ],
+      "recordRefs": {
+        "characterRoster": 95,
+        "communityCharacters": 95
+      },
+      "conflicts": []
+    },
+    {
+      "name": "ムライ",
+      "sourceCount": 2,
+      "sources": [
+        "characterRoster",
+        "communityCharacters"
+      ],
+      "recordRefs": {
+        "characterRoster": 91,
+        "communityCharacters": 91
+      },
+      "conflicts": []
+    },
+    {
+      "name": "ムーア",
+      "sourceCount": 2,
+      "sources": [
+        "characterRoster",
+        "communityCharacters"
+      ],
+      "recordRefs": {
+        "characterRoster": 51,
+        "communityCharacters": 51
+      },
+      "conflicts": []
+    },
+    {
+      "name": "メックリンガー",
+      "sourceCount": 2,
+      "sources": [
+        "characterRoster",
+        "communityCharacters"
+      ],
+      "recordRefs": {
+        "characterRoster": 92,
+        "communityCharacters": 92
+      },
+      "conflicts": []
+    },
+    {
+      "name": "メルカッツ",
+      "sourceCount": 2,
+      "sources": [
+        "characterRoster",
+        "communityCharacters"
+      ],
+      "recordRefs": {
+        "characterRoster": 15,
+        "communityCharacters": 15
+      },
+      "conflicts": []
+    },
+    {
+      "name": "モンシャルマン",
+      "sourceCount": 3,
+      "sources": [
+        "characterRoster",
+        "communityCharacters",
+        "portraitComplete"
+      ],
+      "recordRefs": {
+        "characterRoster": 50,
+        "communityCharacters": 50,
+        "portraitComplete": 50
+      },
+      "conflicts": []
+    },
+    {
+      "name": "モートン",
+      "sourceCount": 2,
+      "sources": [
+        "characterRoster",
+        "communityCharacters"
+      ],
+      "recordRefs": {
+        "characterRoster": 57,
+        "communityCharacters": 57
+      },
+      "conflicts": []
+    },
+    {
+      "name": "ヤン",
+      "sourceCount": 3,
+      "sources": [
+        "characterRoster",
+        "communityCharacters",
+        "officialRoster"
+      ],
+      "recordRefs": {
+        "characterRoster": 96,
+        "officialRoster": 6,
+        "communityCharacters": 96
+      },
+      "conflicts": []
+    },
+    {
+      "name": "ラインハルト",
+      "sourceCount": 1,
+      "sources": [
+        "officialRoster"
+      ],
+      "recordRefs": {
+        "officialRoster": 0
+      },
+      "conflicts": []
+    },
+    {
+      "name": "ランズベルク",
+      "sourceCount": 2,
+      "sources": [
+        "characterRoster",
+        "communityCharacters"
+      ],
+      "recordRefs": {
+        "characterRoster": 20,
+        "communityCharacters": 20
+      },
+      "conflicts": []
+    },
+    {
+      "name": "リヒテンラーデ",
+      "sourceCount": 2,
+      "sources": [
+        "characterRoster",
+        "communityCharacters"
+      ],
+      "recordRefs": {
+        "characterRoster": 2,
+        "communityCharacters": 2
+      },
+      "conflicts": []
+    },
+    {
+      "name": "ルグランジュ",
+      "sourceCount": 2,
+      "sources": [
+        "characterRoster",
+        "communityCharacters"
+      ],
+      "recordRefs": {
+        "characterRoster": 66,
+        "communityCharacters": 66
+      },
+      "conflicts": []
+    },
+    {
+      "name": "ルッツ",
+      "sourceCount": 2,
+      "sources": [
+        "characterRoster",
+        "communityCharacters"
+      ],
+      "recordRefs": {
+        "characterRoster": 93,
+        "communityCharacters": 93
+      },
+      "conflicts": []
+    },
+    {
+      "name": "ルフェーブル",
+      "sourceCount": 2,
+      "sources": [
+        "characterRoster",
+        "communityCharacters"
+      ],
+      "recordRefs": {
+        "characterRoster": 46,
+        "communityCharacters": 46
+      },
+      "conflicts": []
+    },
+    {
+      "name": "レベロ",
+      "sourceCount": 3,
+      "sources": [
+        "characterRoster",
+        "communityCharacters",
+        "officialRoster"
+      ],
+      "recordRefs": {
+        "characterRoster": 33,
+        "officialRoster": 11,
+        "communityCharacters": 33
+      },
+      "conflicts": []
+    },
+    {
+      "name": "レムシャイト",
+      "sourceCount": 3,
+      "sources": [
+        "characterRoster",
+        "communityCharacters",
+        "officialRoster"
+      ],
+      "recordRefs": {
+        "characterRoster": 4,
+        "officialRoster": 5,
+        "communityCharacters": 4
+      },
+      "conflicts": []
+    },
+    {
+      "name": "レンネンカンプ",
+      "sourceCount": 2,
+      "sources": [
+        "characterRoster",
+        "communityCharacters"
+      ],
+      "recordRefs": {
+        "characterRoster": 29,
+        "communityCharacters": 29
+      },
+      "conflicts": []
+    },
+    {
+      "name": "ロイエンタール",
+      "sourceCount": 2,
+      "sources": [
+        "characterRoster",
+        "communityCharacters"
+      ],
+      "recordRefs": {
+        "characterRoster": 28,
+        "communityCharacters": 28
+      },
+      "conflicts": []
+    },
+    {
+      "name": "ロックウェル",
+      "sourceCount": 2,
+      "sources": [
+        "characterRoster",
+        "communityCharacters"
+      ],
+      "recordRefs": {
+        "characterRoster": 39,
+        "communityCharacters": 39
+      },
+      "conflicts": []
+    },
+    {
+      "name": "ロボス",
+      "sourceCount": 2,
+      "sources": [
+        "characterRoster",
+        "communityCharacters"
+      ],
+      "recordRefs": {
+        "characterRoster": 42,
+        "communityCharacters": 42
+      },
+      "conflicts": []
+    },
+    {
+      "name": "ローエングラム",
+      "sourceCount": 2,
+      "sources": [
+        "characterRoster",
+        "communityCharacters"
+      ],
+      "recordRefs": {
+        "characterRoster": 14,
+        "communityCharacters": 14
+      },
+      "conflicts": []
+    },
+    {
+      "name": "ワーレン",
+      "sourceCount": 2,
+      "sources": [
+        "characterRoster",
+        "communityCharacters"
+      ],
+      "recordRefs": {
+        "characterRoster": 94,
+        "communityCharacters": 94
+      },
+      "conflicts": []
+    }
+  ]
+}

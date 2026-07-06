@@ -1,0 +1,1065 @@
+{
+  "source": {
+    "exe": "E:\\logh7-revival\\artifacts\\logh7-install\\____________s___\\____\\exe\\g7mtclient.exe",
+    "imageBase": "0x400000",
+    "sections": [
+      {
+        "name": ".text",
+        "vaStart": "0x1000",
+        "rawSize": 2531328
+      },
+      {
+        "name": ".rdata",
+        "vaStart": "0x26b000",
+        "rawSize": 995328
+      },
+      {
+        "name": ".data",
+        "vaStart": "0x35e000",
+        "rawSize": 405504
+      },
+      {
+        "name": ".data1",
+        "vaStart": "0x2f53000",
+        "rawSize": 4096
+      },
+      {
+        "name": ".rsrc",
+        "vaStart": "0x2f54000",
+        "rawSize": 16384
+      }
+    ]
+  },
+  "targetCounts": [
+    85,
+    86,
+    281,
+    300
+  ],
+  "pointerTables": {
+    "count": 16,
+    "candidates": [
+      {
+        "section": ".data",
+        "rva": "0x374b68",
+        "fileOffset": "0x374b68",
+        "count": 362,
+        "nearTarget": 300,
+        "sampleStrings": [
+          "/../data/model/Ship/GE/EM001.mdx",
+          "/../data/model/Ship/GE/EM001.mdx",
+          "/../data/model/Ship/GE/EM002.mdx",
+          "/../data/model/Ship/GE/EM003.mdx",
+          "/../data/model/Ship/GE/EM004.mdx",
+          "/../data/model/Ship/GE/EM005.mdx",
+          "/../data/model/Ship/GE/EM006.mdx",
+          "/../data/model/Ship/GE/EM007.mdx",
+          "/../data/model/Ship/GE/EM008.mdx",
+          "/../data/model/Ship/GE/EM009.mdx",
+          "/../data/model/Ship/GE/EM010.mdx",
+          "/../data/model/Ship/GE/EM011.mdx"
+        ],
+        "encGuess": "cp932"
+      },
+      {
+        "section": ".data",
+        "rva": "0x35f95c",
+        "fileOffset": "0x35f95c",
+        "count": 182,
+        "nearTarget": 86,
+        "sampleStrings": [
+          "RequestTime",
+          "ResponseTime",
+          "RequestStaticInformationInstitution",
+          "ResponseStaticInformationInstitution",
+          "RequestStaticInformationCard",
+          "ResponseStaticInformationCard",
+          "RequestStaticInformationCardCommand",
+          "ResponseStaticInformationCardCommand",
+          "RequestStaticInformationPowerDistribution",
+          "ResponseStaticInformationPowerDistribution",
+          "RequestStaticInformationUnitShip",
+          "ResponseStaticInformationUnitShip"
+        ],
+        "encGuess": "cp932"
+      },
+      {
+        "section": ".data",
+        "rva": "0x368fb4",
+        "fileOffset": "0x368fb4",
+        "count": 134,
+        "nearTarget": 86,
+        "sampleStrings": [
+          "CommandMoveShip",
+          "CommandTurnShip",
+          "CommandParallelMoveShip",
+          "CommandReverseShip",
+          "CommandWarpShip",
+          "CommandAttackShip",
+          "CommandShootShip",
+          "CommandFight",
+          "CommandSuggestion",
+          "CommandEncourageFlagship",
+          "CommandStop",
+          "CommandAdmission"
+        ],
+        "encGuess": "cp932"
+      },
+      {
+        "section": ".rdata",
+        "rva": "0x27a4d0",
+        "fileOffset": "0x27a4d0",
+        "count": 120,
+        "nearTarget": 86,
+        "sampleStrings": [
+          "Bogus message code %d",
+          "Sorry, there are legal restrictions on arithmetic coding",
+          "ALIGN_TYPE is wrong, please fix",
+          "MAX_ALLOC_CHUNK is wrong, please fix",
+          "Bogus buffer control mode",
+          "Invalid component ID %d in SOS",
+          "IDCT output block size %d not supported",
+          "Bogus input colorspace",
+          "Bogus JPEG colorspace",
+          "Bogus marker length",
+          "Wrong JPEG library version: library is %d, caller expects %d",
+          "Sampling factors too large for interleaved scan"
+        ],
+        "encGuess": "cp932"
+      },
+      {
+        "section": ".data",
+        "rva": "0x38b4a8",
+        "fileOffset": "0x38b4a8",
+        "count": 72,
+        "nearTarget": 85,
+        "sampleStrings": [
+          "SysNotifyInvalidMessage",
+          "SysLoginRequest",
+          "SysLoginOK",
+          "SysLoginNG",
+          "SysNotifyHost",
+          "SysRequestInformationAccount",
+          "SysResponseInformationAccount",
+          "SysCommandLogoutAccount",
+          "SysSessionRequestSessionState",
+          "SysSessionResponseSessionState",
+          "SysSessionCommandStateComplete",
+          "SysSessionNotifyInformationSession"
+        ],
+        "encGuess": "cp932"
+      },
+      {
+        "section": ".data",
+        "rva": "0x367220",
+        "fileOffset": "0x367220",
+        "count": 64,
+        "nearTarget": 85,
+        "sampleStrings": [
+          "RequestWorldInitialize",
+          "ResponseWorldInitialize",
+          "RequestGridInitialize",
+          "ResponseGridInitialize",
+          "RequestInformationMailAddress",
+          "ResponseInformationMailAddress",
+          "RequestInformationMessengerStatus",
+          "ResponseInformationMessengerStatus",
+          "TransactionInformationMailBegin",
+          "TransactionInformationMailEnd",
+          "NotifyInformationMail",
+          "CommandExchangeMailAddress"
+        ],
+        "encGuess": "cp932"
+      },
+      {
+        "section": ".data",
+        "rva": "0x3b54ac",
+        "fileOffset": "0x3b54ac",
+        "count": 44,
+        "nearTarget": 85,
+        "sampleStrings": [
+          "No error",
+          "Operation not permitted",
+          "No such file or directory",
+          "No such process",
+          "Interrupted function call",
+          "Input/output error",
+          "No such device or address",
+          "Arg list too long",
+          "Exec format error",
+          "Bad file descriptor",
+          "No child processes",
+          "Resource temporarily unavailable"
+        ],
+        "encGuess": "cp932"
+      },
+      {
+        "section": ".data",
+        "rva": "0x3b4728",
+        "fileOffset": "0x3b4728",
+        "count": 43,
+        "nearTarget": 85,
+        "sampleStrings": [
+          "Sun",
+          "Mon",
+          "Tue",
+          "Wed",
+          "Thu",
+          "Fri",
+          "Sat",
+          "Sunday",
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday"
+        ],
+        "encGuess": "cp932"
+      },
+      {
+        "section": ".data",
+        "rva": "0x38a8b8",
+        "fileOffset": "0x38a8b8",
+        "count": 32,
+        "nearTarget": 85,
+        "sampleStrings": [
+          "TransactionSimpleDataBegin",
+          "TransactionSimpleDataEnd",
+          "NotifySimpleInformationCharacter",
+          "NotifySimpleInformationOutfit",
+          "NotifySimpleInformationBase",
+          "NotifySimpleInformationGrid",
+          "NotifySimpleInformationStrategy",
+          "NotifySimpleInformationUnit",
+          "NotifySimpleInformationCard",
+          "NotifySimpleInformationRank",
+          "NotifySimpleInformationRankingCharacter",
+          "NotifySimpleInformationCompletenessSupplyOutfit"
+        ],
+        "encGuess": "cp932"
+      },
+      {
+        "section": ".data",
+        "rva": "0x364a10",
+        "fileOffset": "0x364a10",
+        "count": 30,
+        "nearTarget": 85,
+        "sampleStrings": [
+          "CommandChangeTaxRate",
+          "CommandInstitutionBuild",
+          "CommandInstitutionPause",
+          "CommandInstitutionReOperation",
+          "CommandInstitutionDestroy",
+          "CommandInstitutionBuildShip",
+          "CommandInstitutionBuildShipStop",
+          "CommandCollectionSoldier",
+          "CommandChangeBudgetRate",
+          "CommandBaseSearch",
+          "CommandEngineBuild",
+          "CommandChangeBaseMessage"
+        ],
+        "encGuess": "cp932"
+      },
+      {
+        "section": ".data",
+        "rva": "0x37951c",
+        "fileOffset": "0x37951c",
+        "count": 29,
+        "nearTarget": 85,
+        "sampleStrings": [
+          "TYPE_SPECIAL_FLAGSHIP",
+          "TYPE_SHIELD_SHIP",
+          "TYPE_CIVILIAN_SHIP",
+          "TYPE_BATTLE_SHIP",
+          "TYPE_HIGHSPEED_BATTLE_SHIP",
+          "TYPE_CRUISE_SHIP",
+          "TYPE_DESTROYER_SHIP",
+          "TYPE_BATTLE_MOTHER_SHIP",
+          "TYPE_LIGHTNING_MOTHER_SHIP",
+          "TYPE_MANEUVER_SHIP",
+          "TYPE_TRANSPORT_SHIP",
+          "TYPE_TROOP_TRANSPORT_SHIP"
+        ],
+        "encGuess": "cp932"
+      },
+      {
+        "section": ".data",
+        "rva": "0x36658c",
+        "fileOffset": "0x36658c",
+        "count": 28,
+        "nearTarget": 85,
+        "sampleStrings": [
+          "CommandMoveBase",
+          "CommandMoveGrid",
+          "CommandSupplyFuel",
+          "CommandSearch",
+          "CommandUnloadTroop",
+          "CommandLoadTroop",
+          "CommandSwitchMode",
+          "NotifyMovedGrid",
+          "NotifyLeaveOutGrid",
+          "NotifyEnterGridBegin",
+          "NotifyEnterGridEnd",
+          "NotifyMovedBase"
+        ],
+        "encGuess": "cp932"
+      },
+      {
+        "section": ".data",
+        "rva": "0x388e04",
+        "fileOffset": "0x388e04",
+        "count": 26,
+        "nearTarget": 85,
+        "sampleStrings": [
+          "CommandCompletenessRepair",
+          "CommandCompletenessSupply",
+          "CommandReorganization",
+          "NotifyReorganizationBegin",
+          "NotifyReorganizationEnd",
+          "CommandSupplement",
+          "NotifySupplementBegin",
+          "NotifySupplementEnd",
+          "CommandCarryingInOut",
+          "NotifyCarryingBegin",
+          "NotifyCarryingEnd",
+          "CommandAssignment"
+        ],
+        "encGuess": "cp932"
+      },
+      {
+        "section": ".data",
+        "rva": "0x371c84",
+        "fileOffset": "0x371c84",
+        "count": 25,
+        "nearTarget": 85,
+        "sampleStrings": [
+          "専用旗艦",
+          "盾艦",
+          "民間船",
+          "戦艦",
+          "高速戦艦",
+          "巡航艦",
+          "駆逐艦",
+          "戦闘艇母艦",
+          "雷撃艇母艦",
+          "工作艦",
+          "輸送艦",
+          "兵員輸送艦"
+        ],
+        "encGuess": "cp932"
+      },
+      {
+        "section": ".data",
+        "rva": "0x3651b8",
+        "fileOffset": "0x3651b8",
+        "count": 24,
+        "nearTarget": 85,
+        "sampleStrings": [
+          "RequestInformationRankUp",
+          "ResponseInformationRankUp",
+          "RequestInformationEmptySeat",
+          "ResponseInformationEmptySeat",
+          "CommandRankUp",
+          "CommandSpeciallyRankUp",
+          "CommandRankDown",
+          "CommandCardAppointment",
+          "CommandCardDismisal",
+          "CommandCardResignation",
+          "NotifyCardLoss",
+          "NotifyCardLossMovedSpot"
+        ],
+        "encGuess": "cp932"
+      },
+      {
+        "section": ".data",
+        "rva": "0x365c88",
+        "fileOffset": "0x365c88",
+        "count": 24,
+        "nearTarget": 85,
+        "sampleStrings": [
+          "LobbyLoginRequest",
+          "LobbyLoginOK",
+          "LobbyLoginNG",
+          "LobbyRequestInformationCharacterCharge",
+          "LobbyResponseInformationCharacterCharge",
+          "LobbyRequestInformationSession",
+          "LobbyResponseInformationSession",
+          "LobbyCommandExtensionCharacterCharge",
+          "LobbyCommandDeleteCharacter",
+          "LobbySessionLoginRequest",
+          "LobbySessionLoginOK",
+          "LobbySessionLoginNG"
+        ],
+        "encGuess": "cp932"
+      }
+    ]
+  },
+  "numericStrideTables": {
+    "count": 860,
+    "topByTargetProximity": [
+      {
+        "section": ".data",
+        "stride": 11,
+        "rva": "0x3a07f3",
+        "fileOffset": "0x3a07f3",
+        "count": 300,
+        "nearTarget": 300,
+        "delta": 0,
+        "first3RecordsHex": "763900000000000000000000000000000000000000000000000000000000000000"
+      },
+      {
+        "section": ".rdata",
+        "stride": 3,
+        "rva": "0x3380c8",
+        "fileOffset": "0x3380c8",
+        "count": 281,
+        "nearTarget": 281,
+        "delta": 0,
+        "first3RecordsHex": "ffffb01db21dffffb3"
+      },
+      {
+        "section": ".rdata",
+        "stride": 5,
+        "rva": "0x322cbe",
+        "fileOffset": "0x322cbe",
+        "count": 281,
+        "nearTarget": 281,
+        "delta": 0,
+        "first3RecordsHex": "0000d6100400d7100000d7100000d7"
+      },
+      {
+        "section": ".rdata",
+        "stride": 9,
+        "rva": "0x272992",
+        "fileOffset": "0x272992",
+        "count": 281,
+        "nearTarget": 281,
+        "delta": 0,
+        "first3RecordsHex": "803f000000000000000000000000000000000000803f0000000000"
+      },
+      {
+        "section": ".rdata",
+        "stride": 22,
+        "rva": "0x2948a4",
+        "fileOffset": "0x2948a4",
+        "count": 281,
+        "nearTarget": 281,
+        "delta": 0,
+        "first3RecordsHex": "4222702243226d226c226e22342231226b224422222a212a242a2a2a232a292a21292e2a322a312a342a332a402a3f2a422a412a502a522a512a542a582a532a2c29"
+      },
+      {
+        "section": ".data",
+        "stride": 14,
+        "rva": "0x39f584",
+        "fileOffset": "0x39f584",
+        "count": 281,
+        "nearTarget": 281,
+        "delta": 0,
+        "first3RecordsHex": "20206f54322c207639000000000000000000000000000000000000000000000000000000000000000000"
+      },
+      {
+        "section": ".data",
+        "stride": 14,
+        "rva": "0x3a1582",
+        "fileOffset": "0x3a1582",
+        "count": 281,
+        "nearTarget": 281,
+        "delta": 0,
+        "first3RecordsHex": "203b204f626a656374207370616365204c6967687420766563746f720000000000000000000000000000"
+      },
+      {
+        "section": ".data",
+        "stride": 14,
+        "rva": "0x3a66c6",
+        "fileOffset": "0x3a66c6",
+        "count": 281,
+        "nearTarget": 281,
+        "delta": 0,
+        "first3RecordsHex": "300d0a616464206f54342c2072312c206330352e78000000000000000000000000000000000000000000"
+      },
+      {
+        "section": ".rdata",
+        "stride": 2,
+        "rva": "0x2892ca",
+        "fileOffset": "0x2892ca",
+        "count": 86,
+        "nearTarget": 86,
+        "delta": 0,
+        "first3RecordsHex": "000000000000"
+      },
+      {
+        "section": ".rdata",
+        "stride": 2,
+        "rva": "0x2ca10a",
+        "fileOffset": "0x2ca10a",
+        "count": 86,
+        "nearTarget": 86,
+        "delta": 0,
+        "first3RecordsHex": "8e358d354337"
+      },
+      {
+        "section": ".rdata",
+        "stride": 2,
+        "rva": "0x304da6",
+        "fileOffset": "0x304da6",
+        "count": 86,
+        "nearTarget": 86,
+        "delta": 0,
+        "first3RecordsHex": "71d472d46ad8"
+      },
+      {
+        "section": ".rdata",
+        "stride": 4,
+        "rva": "0x281e9c",
+        "fileOffset": "0x281e9c",
+        "count": 86,
+        "nearTarget": 86,
+        "delta": 0,
+        "first3RecordsHex": "00000000ffffffffd4f56000"
+      },
+      {
+        "section": ".rdata",
+        "stride": 4,
+        "rva": "0x30432c",
+        "fileOffset": "0x30432c",
+        "count": 86,
+        "nearTarget": 86,
+        "delta": 0,
+        "first3RecordsHex": "a6c6a7c6a8c6a9c6aac6abc6"
+      },
+      {
+        "section": ".rdata",
+        "stride": 4,
+        "rva": "0x32abac",
+        "fileOffset": "0x32abac",
+        "count": 86,
+        "nearTarget": 86,
+        "delta": 0,
+        "first3RecordsHex": "00cf00d000d100d200bc00d3"
+      },
+      {
+        "section": ".rdata",
+        "stride": 6,
+        "rva": "0x2861b6",
+        "fileOffset": "0x2861b6",
+        "count": 86,
+        "nearTarget": 86,
+        "delta": 0,
+        "first3RecordsHex": "00f60000a30000000000000000e200000000"
+      },
+      {
+        "section": ".rdata",
+        "stride": 6,
+        "rva": "0x2c3806",
+        "fileOffset": "0x2c3806",
+        "count": 86,
+        "nearTarget": 86,
+        "delta": 0,
+        "first3RecordsHex": "55b34fb34db351b356b3f9b3f8b306b403b4"
+      },
+      {
+        "section": ".rdata",
+        "stride": 6,
+        "rva": "0x329968",
+        "fileOffset": "0x329968",
+        "count": 86,
+        "nearTarget": 86,
+        "delta": 0,
+        "first3RecordsHex": "00000000008dabbdbea6a700000000000000"
+      },
+      {
+        "section": ".rdata",
+        "stride": 12,
+        "rva": "0x2788cc",
+        "fileOffset": "0x2788cc",
+        "count": 86,
+        "nearTarget": 86,
+        "delta": 0,
+        "first3RecordsHex": "db0fc94035fa8e3ce12e65420000803f000000000000000000000000000000000000803f"
+      },
+      {
+        "section": ".rdata",
+        "stride": 13,
+        "rva": "0x322484",
+        "fileOffset": "0x322484",
+        "count": 86,
+        "nearTarget": 86,
+        "delta": 0,
+        "first3RecordsHex": "ae0f0000ae0f0000ae0f0000ae0f2012b10f0000b10f0000b10f00e0b40f0000b40f0000b40f00"
+      },
+      {
+        "section": ".rdata",
+        "stride": 14,
+        "rva": "0x35b036",
+        "fileOffset": "0x35b036",
+        "count": 86,
+        "nearTarget": 86,
+        "delta": 0,
+        "first3RecordsHex": "0000a0c135003cb026005cb835000000000000000000aec1350054b7260000b535000000000000000000"
+      },
+      {
+        "section": ".rdata",
+        "stride": 18,
+        "rva": "0x2a291a",
+        "fileOffset": "0x2a291a",
+        "count": 86,
+        "nearTarget": 86,
+        "delta": 0,
+        "first3RecordsHex": "0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003705000c160a000000"
+      },
+      {
+        "section": ".rdata",
+        "stride": 18,
+        "rva": "0x318934",
+        "fileOffset": "0x318934",
+        "count": 86,
+        "nearTarget": 86,
+        "delta": 0,
+        "first3RecordsHex": "0000000000000000000000000000000000000000000056fe000000000000000000000000000000000000000000000000000000000000"
+      },
+      {
+        "section": ".rdata",
+        "stride": 22,
+        "rva": "0x30a39e",
+        "fileOffset": "0x30a39e",
+        "count": 86,
+        "nearTarget": 86,
+        "delta": 0,
+        "first3RecordsHex": "bcb67eb9e2e0e3e0c0e87db9a1b9a2b9cfe4cee4e5bbe6bbd0e4bfe8e8bb69bee7bb5cc0c1e86bbe6abec2e8c5e8c3e8c4e86cbe61c05fc05ec05dec60c05cec4bef"
+      },
+      {
+        "section": ".rdata",
+        "stride": 37,
+        "rva": "0x32732a",
+        "fileOffset": "0x32732a",
+        "count": 86,
+        "nearTarget": 86,
+        "delta": 0,
+        "first3RecordsHex": "06d63dd677d6abd6e2d615d74ed78dd7fdff0001020405060708090a0b0c0d0e0f10111213141516191a1b1c1d1e20212224252628292a2b2c2d2e31000203040506070a0b0d0e0f101112131415161718191a1b1c1e1f202122232627292a2b2f303132333600020304050607090a"
+      },
+      {
+        "section": ".rdata",
+        "stride": 46,
+        "rva": "0x287dfa",
+        "fileOffset": "0x287dfa",
+        "count": 86,
+        "nearTarget": 86,
+        "delta": 0,
+        "first3RecordsHex": "c2c3c4c5c6c7c8c9cacbcccdcecfd0d1d2d3d4d5d6d7d8d9da0000000000e0e1e2e3e4e5e6e7e8e9eaebecedeeeff0f1f200000000000000000000000000b0b1b2b3b4b5b6b7b8b9a50000c00000000000000000000000f400000000f300000000000000f500f90000000000000000fa000000000000fe0000000000000000000000f700000000000000"
+      },
+      {
+        "section": ".rdata",
+        "stride": 46,
+        "rva": "0x30cfa2",
+        "fileOffset": "0x30cfa2",
+        "count": 86,
+        "nearTarget": 86,
+        "delta": 0,
+        "first3RecordsHex": "05b208b20bb20cb214b215b217b219b220b234b23cb258b25cb260b268b269b274b275b27cb284b285b289b290b291b294b298b299b29ab2a0b2a1b2a3b2a5b2a6b2aab2acb2b0b2b4b2c8b2c9b2ccb2d0b2d2b2d8b2d9b2dbb2ddb2e2b2e4b2e5b2e6b2e8b2ebb2ecb2edb2eeb2efb2f3b2f4b2f5b2f7b2f8b2f9b2fab2fbb2ffb200b301b304b308b3"
+      },
+      {
+        "section": ".rdata",
+        "stride": 56,
+        "rva": "0x282300",
+        "fileOffset": "0x282300",
+        "count": 86,
+        "nearTarget": 86,
+        "delta": 0,
+        "first3RecordsHex": "0000c64200401cc6d0ba6100a0b76100d0b7610000b86100c0b96100d0b96100e0b96100f0b9610000ba610010bb6100cee75f00cee75f00cee75f00cee75f00cee75f00cee75f00cee75f00cee75f0070856100f0bd6100c0bd610080bd610060bd610030bd610000bd610020be610000bf610030c0610090be6100a0be6100a0c06100cee75f00cee75f00cee75f00cee75f00cee75f00cee75f00cee75f00cee75f00cee75f00"
+      },
+      {
+        "section": ".rdata",
+        "stride": 57,
+        "rva": "0x2757e2",
+        "fileOffset": "0x2757e2",
+        "count": 86,
+        "nearTarget": 86,
+        "delta": 0,
+        "first3RecordsHex": "0000000000000000803f000000000000000000000000000000000000803f000000000000000000000000000000000000803f000000000000000000000000db0f4940db0fc94035fa8e3ce12e65420000803f000000000000000000000000000000000000803f000000000000000000000000000000000000803f000000000000000000000000000000000000803f00000000000000000000000000000000ffffffff000000000000000000"
+      },
+      {
+        "section": ".data",
+        "stride": 2,
+        "rva": "0x3be318",
+        "fileOffset": "0x3be318",
+        "count": 86,
+        "nearTarget": 86,
+        "delta": 0,
+        "first3RecordsHex": "ffffffff0400"
+      },
+      {
+        "section": ".data",
+        "stride": 32,
+        "rva": "0x399940",
+        "fileOffset": "0x399940",
+        "count": 86,
+        "nearTarget": 86,
+        "delta": 0,
+        "first3RecordsHex": "000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+      },
+      {
+        "section": ".data",
+        "stride": 33,
+        "rva": "0x399943",
+        "fileOffset": "0x399943",
+        "count": 86,
+        "nearTarget": 86,
+        "delta": 0,
+        "first3RecordsHex": "000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+      },
+      {
+        "section": ".data",
+        "stride": 39,
+        "rva": "0x3a07f8",
+        "fileOffset": "0x3a07f8",
+        "count": 86,
+        "nearTarget": 86,
+        "delta": 0,
+        "first3RecordsHex": "000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+      },
+      {
+        "section": ".data",
+        "stride": 43,
+        "rva": "0x397572",
+        "fileOffset": "0x397572",
+        "count": 86,
+        "nearTarget": 86,
+        "delta": 0,
+        "first3RecordsHex": "000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+      },
+      {
+        "section": ".data",
+        "stride": 44,
+        "rva": "0x39a598",
+        "fileOffset": "0x39a598",
+        "count": 86,
+        "nearTarget": 86,
+        "delta": 0,
+        "first3RecordsHex": "000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+      },
+      {
+        "section": ".data",
+        "stride": 45,
+        "rva": "0x39d58e",
+        "fileOffset": "0x39d58e",
+        "count": 86,
+        "nearTarget": 86,
+        "delta": 0,
+        "first3RecordsHex": "000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+      },
+      {
+        "section": ".data",
+        "stride": 46,
+        "rva": "0x3932a4",
+        "fileOffset": "0x3932a4",
+        "count": 86,
+        "nearTarget": 86,
+        "delta": 0,
+        "first3RecordsHex": "000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+      },
+      {
+        "section": ".data",
+        "stride": 46,
+        "rva": "0x3984c2",
+        "fileOffset": "0x3984c2",
+        "count": 86,
+        "nearTarget": 86,
+        "delta": 0,
+        "first3RecordsHex": "203b2054616e67656e74205370616365204c6967687420766563746f720d0a6d6f7620206f54322c2076313000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+      },
+      {
+        "section": ".data",
+        "stride": 46,
+        "rva": "0x39d59e",
+        "fileOffset": "0x39d59e",
+        "count": 86,
+        "nearTarget": 86,
+        "delta": 0,
+        "first3RecordsHex": "000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+      },
+      {
+        "section": ".data",
+        "stride": 47,
+        "rva": "0x393268",
+        "fileOffset": "0x393268",
+        "count": 86,
+        "nearTarget": 86,
+        "delta": 0,
+        "first3RecordsHex": "2c2076392e78792020203b204261736520546578747572650d0a00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+      },
+      {
+        "section": ".data",
+        "stride": 47,
+        "rva": "0x3984d7",
+        "fileOffset": "0x3984d7",
+        "count": 86,
+        "nearTarget": 86,
+        "delta": 0,
+        "first3RecordsHex": "7420766563746f720d0a6d6f7620206f54322c2076313000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+      },
+      {
+        "section": ".data",
+        "stride": 48,
+        "rva": "0x3a9720",
+        "fileOffset": "0x3a9720",
+        "count": 86,
+        "nearTarget": 86,
+        "delta": 0,
+        "first3RecordsHex": "2b2032345d0d0a6d6164207231312c2072312c2076312e792c207231310d0a3b88ca927582cc95cf8ab782520d0a6d6f762061302e782c2076322e7a0d0a6d3478332072312c2076302c20635b61302e78202b2032345d0d0a6d6164207231312c2072312c2076312e7a2c207231310d0a3b88ca927582cc95cf8ab782530d0a6d6f762061302e782c2076322e770d0a"
+      },
+      {
+        "section": ".rdata",
+        "stride": 2,
+        "rva": "0x31764c",
+        "fileOffset": "0x31764c",
+        "count": 85,
+        "nearTarget": 85,
+        "delta": 0,
+        "first3RecordsHex": "6b0000006b00"
+      },
+      {
+        "section": ".rdata",
+        "stride": 2,
+        "rva": "0x322b04",
+        "fileOffset": "0x322b04",
+        "count": 85,
+        "nearTarget": 85,
+        "delta": 0,
+        "first3RecordsHex": "b0100000b010"
+      },
+      {
+        "section": ".rdata",
+        "stride": 2,
+        "rva": "0x33fbbe",
+        "fileOffset": "0x33fbbe",
+        "count": 85,
+        "nearTarget": 85,
+        "delta": 0,
+        "first3RecordsHex": "630000000000"
+      },
+      {
+        "section": ".rdata",
+        "stride": 3,
+        "rva": "0x288f10",
+        "fileOffset": "0x288f10",
+        "count": 85,
+        "nearTarget": 85,
+        "delta": 0,
+        "first3RecordsHex": "e71efd00e31eee1ec0"
+      },
+      {
+        "section": ".rdata",
+        "stride": 3,
+        "rva": "0x33f1fc",
+        "fileOffset": "0x33f1fc",
+        "count": 85,
+        "nearTarget": 85,
+        "delta": 0,
+        "first3RecordsHex": "ffffffffffffffffff"
+      },
+      {
+        "section": ".rdata",
+        "stride": 4,
+        "rva": "0x2cb474",
+        "fileOffset": "0x2cb474",
+        "count": 85,
+        "nearTarget": 85,
+        "delta": 0,
+        "first3RecordsHex": "87b38cb382b36bb3a0b39ab3"
+      },
+      {
+        "section": ".rdata",
+        "stride": 5,
+        "rva": "0x322b10",
+        "fileOffset": "0x322b10",
+        "count": 85,
+        "nearTarget": 85,
+        "delta": 0,
+        "first3RecordsHex": "b0100000b0100000b0100000b010c8"
+      },
+      {
+        "section": ".rdata",
+        "stride": 5,
+        "rva": "0x331a3e",
+        "fileOffset": "0x331a3e",
+        "count": 85,
+        "nearTarget": 85,
+        "delta": 0,
+        "first3RecordsHex": "a903ac03af03ffffffffffffb103ff"
+      },
+      {
+        "section": ".rdata",
+        "stride": 5,
+        "rva": "0x336eda",
+        "fileOffset": "0x336eda",
+        "count": 85,
+        "nearTarget": 85,
+        "delta": 0,
+        "first3RecordsHex": "ffffb018ffffb118b218b318b418b5"
+      },
+      {
+        "section": ".rdata",
+        "stride": 5,
+        "rva": "0x339270",
+        "fileOffset": "0x339270",
+        "count": 85,
+        "nearTarget": 85,
+        "delta": 0,
+        "first3RecordsHex": "b122b222ffffffffffffb322b422ff"
+      },
+      {
+        "section": ".rdata",
+        "stride": 6,
+        "rva": "0x3196a2",
+        "fileOffset": "0x3196a2",
+        "count": 85,
+        "nearTarget": 85,
+        "delta": 0,
+        "first3RecordsHex": "54256625572560256c2563255a2569255d25"
+      },
+      {
+        "section": ".rdata",
+        "stride": 7,
+        "rva": "0x27be21",
+        "fileOffset": "0x27be21",
+        "count": 85,
+        "nearTarget": 85,
+        "delta": 0,
+        "first3RecordsHex": "0000000100000005000000060000000e0000000f00"
+      },
+      {
+        "section": ".rdata",
+        "stride": 7,
+        "rva": "0x3322f8",
+        "fileOffset": "0x3322f8",
+        "count": 85,
+        "nearTarget": 85,
+        "delta": 0,
+        "first3RecordsHex": "ffffaa06ab06ad06ffffffffb006b306b606ffffff"
+      },
+      {
+        "section": ".rdata",
+        "stride": 8,
+        "rva": "0x27e428",
+        "fileOffset": "0x27e428",
+        "count": 85,
+        "nearTarget": 85,
+        "delta": 0,
+        "first3RecordsHex": "00e2670030e4670038010000000000000000000000000000"
+      },
+      {
+        "section": ".rdata",
+        "stride": 10,
+        "rva": "0x328970",
+        "fileOffset": "0x328970",
+        "count": 85,
+        "nearTarget": 85,
+        "delta": 0,
+        "first3RecordsHex": "b8b9babbbcbdc4c5c6c7c8c9cacbcccdcecfd0d1d2d3d4d5d6d7d8d9dadb"
+      },
+      {
+        "section": ".rdata",
+        "stride": 11,
+        "rva": "0x3365f0",
+        "fileOffset": "0x3365f0",
+        "count": 85,
+        "nearTarget": 85,
+        "delta": 0,
+        "first3RecordsHex": "ffff98169916ffffffffffffffffffff9a169b16ffff9e16ffffffffffffa116a2"
+      },
+      {
+        "section": ".rdata",
+        "stride": 14,
+        "rva": "0x31c816",
+        "fileOffset": "0x31c816",
+        "count": 85,
+        "nearTarget": 85,
+        "delta": 0,
+        "first3RecordsHex": "0000809f000000e0000040e0000080e00000c0e0000000e1000040e1000080e10000c0e1000000e20000"
+      },
+      {
+        "section": ".rdata",
+        "stride": 15,
+        "rva": "0x26fb78",
+        "fileOffset": "0x26fb78",
+        "count": 85,
+        "nearTarget": 85,
+        "delta": 0,
+        "first3RecordsHex": "000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+      },
+      {
+        "section": ".rdata",
+        "stride": 15,
+        "rva": "0x2741aa",
+        "fileOffset": "0x2741aa",
+        "count": 85,
+        "nearTarget": 85,
+        "delta": 0,
+        "first3RecordsHex": "000031000000000000003200000000000000330000000000000034000000000000003500000000000000360000"
+      }
+    ]
+  },
+  "verdicts": {
+    "_method": "pefile stride+pointer+float32 sweep of .rdata/.data, cross-checked vs galaxy.json (85 sys/300 planets) and cp932/utf16 name search",
+    "systemNames": {
+      "verdict": "absent-in-exe",
+      "evidence": "cp932/utf16-le search of 8 distinctive katakana system names: only フェザーン found (utf16, .data 0x38ce60, incidental UI string). No 85/86-count pointer/string table. Names authoritative via constmsg grp 0x18."
+    },
+    "systemCoords": {
+      "verdict": "absent-in-exe / manual-derived-in-galaxyjson",
+      "evidence": "No count-85/86 int16 or float32 coordinate-pair table survives inspection. All 86-count int16 runs are noise inside float/code data; only float run near target (0x313908, run 281) is a monotonic math LUT (x~=y, 0.01->64071), not scattered coords. galaxy.json cx/cy are gin7manualsaved.pdf raster-derived, not binary."
+    },
+    "systemType_spectral": {
+      "verdict": "absent-as-clean-table",
+      "evidence": "prior objectTable claim @0x2c1755 (3B/rec byte2=spectral) does NOT validate: dump shows byte0==byte2 repeats and no coherent enum column. Spectral label strings live in constmsg grp71; per-system assignment not found as EXE table."
+    },
+    "planetNames": {
+      "verdict": "absent-in-exe",
+      "evidence": "300 planet katakana names not found as string/pointer table in EXE (name pointer tables that exist are ship .mdx paths, protocol enum names, C-lib strings)."
+    },
+    "planetCoords": {
+      "verdict": "absent-in-exe",
+      "evidence": "no surviving count-281/300 coordinate table; 300-count int16 hit (0x3a07f3 stride11) and 281 float run are noise/LUT."
+    },
+    "planetType": {
+      "verdict": "absent-in-exe",
+      "evidence": "no enum-byte table of count 281/300 identified."
+    },
+    "serverAuthoritativeCorroboration": {
+      "evidence": "protocol enum-name table @.data 0x367220 contains RequestWorldInitialize/ResponseWorldInitialize + RequestGridInitialize/ResponseGridInitialize; @0x368fb4 CommandMoveShip family. Galaxy/grid geometry delivered by server at runtime (MMO), consistent with absence of static galaxy tables in client EXE."
+    },
+    "valuableByproduct_protocolEnumTables": [
+      {
+        "name": "Sys* login/session",
+        "section": ".data",
+        "rva": "0x38b4a8",
+        "count": 72,
+        "enc": "cp932"
+      },
+      {
+        "name": "World/Grid/Mail init",
+        "section": ".data",
+        "rva": "0x367220",
+        "count": 64
+      },
+      {
+        "name": "Command* ship ops",
+        "section": ".data",
+        "rva": "0x368fb4",
+        "count": 134
+      },
+      {
+        "name": "Request/Response Static/Unit",
+        "section": ".data",
+        "rva": "0x35f95c",
+        "count": 182
+      },
+      {
+        "name": "Ship model .mdx path table",
+        "section": ".data",
+        "rva": "0x374b68",
+        "count": 362,
+        "note": "/../data/model/Ship/GE/EM###.mdx"
+      }
+    ]
+  }
+}

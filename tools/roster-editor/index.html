@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LOGH VII 인물 데이터 편집기</title>
+<style>
+  :root{--bg:#14171c;--panel:#1a1f27;--card:#1e232b;--edge:#2c333d;--fg:#e6e9ee;--mut:#8b95a3;--acc:#5b9dff;--ok:#3ecf8e;--warn:#ffcc55}
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{margin:0;background:var(--bg);color:var(--fg);font:13px/1.4 system-ui,"Segoe UI",sans-serif;display:flex;flex-direction:column}
+  header{background:#11141a;border-bottom:1px solid var(--edge);padding:8px 14px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+  header h1{font-size:14px;margin:0;font-weight:600}
+  input,select,textarea{background:var(--card);color:var(--fg);border:1px solid var(--edge);border-radius:6px;padding:5px 7px;font:inherit}
+  input:focus,select:focus,textarea:focus{outline:1px solid var(--acc);border-color:var(--acc)}
+  .pill{background:var(--card);border:1px solid var(--edge);border-radius:999px;padding:3px 9px;font-size:12px;color:var(--mut)}
+  #status{margin-left:auto;font-size:12px;color:var(--mut);min-width:130px;text-align:right}
+  #status.ok{color:var(--ok)} #status.saving{color:var(--warn)} #status.err{color:#ff6b6b}
+  #main{flex:1;display:flex;min-height:0}
+  #list{width:300px;flex:none;border-right:1px solid var(--edge);overflow-y:auto;background:var(--panel)}
+  .li{display:flex;gap:8px;align-items:center;padding:5px 8px;cursor:pointer;border-bottom:1px solid #23293200}
+  .li:hover{background:#232932}
+  .li.sel{background:#26324a}
+  .li img{width:34px;height:42px;image-rendering:pixelated;background:#0c0e12;border:1px solid var(--edge);border-radius:3px;flex:none}
+  .li .n{font-weight:700;width:34px;flex:none;color:var(--mut)}
+  .li.named .nm{color:var(--ok)}
+  .li .nm{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  #detail{flex:1;overflow-y:auto;padding:16px 20px}
+  #detail .head{display:flex;gap:16px;align-items:flex-start;margin-bottom:14px}
+  #detail .head img{width:128px;height:160px;image-rendering:pixelated;background:#0c0e12;border:1px solid var(--edge);border-radius:6px;flex:none}
+  #detail .head .hn{font-size:22px;font-weight:700}
+  #detail .head .meta{color:var(--mut);font-size:12px;line-height:1.7;margin-top:4px}
+  .grp{border:1px solid var(--edge);border-radius:8px;padding:10px 12px;margin-bottom:12px;background:var(--panel)}
+  .grp h3{margin:0 0 8px;font-size:12px;color:var(--acc);font-weight:600;letter-spacing:.03em}
+  .fields{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:8px}
+  .f{display:flex;flex-direction:column;gap:2px}
+  .f label{font-size:11px;color:var(--fg);font-weight:600}
+  .f .desc{font-size:10px;color:var(--mut);line-height:1.3;margin:-1px 0 1px}
+  .ab .fields{grid-template-columns:repeat(auto-fill,minmax(120px,1fr))}
+  .ab input{text-align:center;font-weight:600}
+  textarea{width:100%;resize:vertical;min-height:40px}
+  .extra .row{display:flex;gap:6px;margin-bottom:4px}
+  .extra .row input:first-child{width:90px;flex:none}
+  .extra .row input{flex:1}
+  .addbtn,.del{background:none;border:1px dashed var(--edge);color:var(--mut);border-radius:6px;padding:4px 8px;cursor:pointer;font-size:12px}
+  .del{border:none} .addbtn:hover{color:var(--acc);border-color:var(--acc)} .del:hover{color:#ff6b6b}
+  .empty{color:var(--mut);padding:40px;text-align:center}
+</style>
+</head>
+<body>
+<header>
+  <h1>LOGH VII 인물 데이터 편집기</h1>
+  <input id="search" placeholder="검색: 번호·이름·팩션" style="min-width:200px">
+  <select id="ffilter"><option value="">전체 팩션</option></select>
+  <label class="pill"><input type="checkbox" id="unnamedOnly" style="vertical-align:-1px"> 미명명만</label>
+  <span class="pill" id="progress">0 / 0</span>
+  <span id="status">로드 중…</span>
+</header>
+<datalist id="candidates"></datalist>
+<datalist id="planets"></datalist>
+<datalist id="shipmodels"></datalist>
+<datalist id="flagships"></datalist>
+<div id="main">
+  <div id="list"></div>
+  <div id="detail"><div class="empty">왼쪽에서 인물을 선택하세요.</div></div>
+</div>
+
+<script>
+const $=s=>document.querySelector(s);
+let DOC=null, SEL=null, SAVE_TIMER=null;
+
+// 게임 실제 캐릭터 레코드 필드 (RE 증거: FUN_00407260/0042bff0/00419300 + 매뉴얼 카탈로그)
+// docs/reference/legacy-evidence/logh7-character-record-wire.md, server/content/roster/ranks.json,
+// server/content/manual/{imperial-titles,character-params}.json
+// desc = 그 필드가 게임에서 무슨 값인지. enum은 한글 라벨을 저장(정수 인코딩은 서버가 매핑 — 잘못된 인덱스 방지).
+// 진영(power)·분류(classification)에 따라 옵션이 동적으로 바뀌는 필드는 options를 함수로 준다.
+const RANK_EMPIRE=['원수','상급대장','대장','중장','소장','준장','대령','중령','소령','대위','중위','소위','준위','병장'];
+const RANK_ALLIANCE=['원수','대장','중장','소장','준장','대령','중령','소령','대위','중위','소위','준위','상사','중사'];
+function powerOf(c){ return c.power||''; }
+function rankOptions(c){
+  // RE 결론: rank 슬롯은 모든 캐릭터에 항상 존재. "정치가=계급 없음"은 파서/표시 근거가 없어
+  // 강제하지 않고 「무관/해당없음」을 선택지로만 제공(정치가일 때 맨 앞에 배치).
+  const p=powerOf(c);
+  const ladder = p==='제국' ? RANK_EMPIRE : p==='동맹' ? RANK_ALLIANCE : [...new Set([...RANK_EMPIRE,...RANK_ALLIANCE])];
+  const none='무관/해당없음';
+  return c.classification==='정치가' ? [none,'',...ladder] : ['',...ladder,none];
+}
+function titleOptions(c){
+  // 작위(爵位)는 제국 전용 (매뉴얼: Empire only)
+  if(powerOf(c)==='제국') return ['','공작','후작','백작','자작','남작','제국기사','평민'];
+  return ['해당없음 (제국 전용)'];
+}
+function originOptions(c){
+  // 出自(출자/혈통)는 진영별 값이 다름 (character-params.json 出自)
+  const p=powerOf(c);
+  if(p==='제국') return ['','귀족','제국기사','평민','망명자'];
+  if(p==='동맹') return ['','시민','망명자'];
+  return ['','귀족','제국기사','평민','시민','망명자'];
+}
+const SCHEMA=[
+ {group:'신원 (identity)', cls:'', fields:[
+   {k:'lastname',label:'성 (姓, 원문)',type:'text',list:true,desc:'성 — 원문(카타카나/독일어식). 예: ミッターマイヤー'},
+   {k:'firstname',label:'이름 (名, 원문)',type:'text',desc:'이름 — 원문. 예: ウォルフガング'},
+   {k:'lastname_ko',label:'성 (한글)',type:'text',desc:'성 한글 표기. 예: 미터마이어'},
+   {k:'firstname_ko',label:'이름 (한글)',type:'text',desc:'이름 한글 표기. 예: 볼프강'},
+   {k:'power',label:'세력·국적 (勢力)',type:'select',options:['','제국','동맹','페잔 자치령','지구교','망명자/기타'],rerender:true,desc:'소속 세력. 이 값이 계급·작위·출자 선택지를 결정한다'},
+   {k:'classification',label:'분류 (分類)',type:'select',options:['','군인','정치가'],rerender:true,desc:'군인=계급 있음 / 정치가=군 계급 없음. 계급칸 적용 여부를 결정'},
+   {k:'rank',label:'계급 (階級)',type:'select',options:rankOptions,desc:'군 계급. 진영별 사다리가 다르고, 정치가는 「무관/해당없음」'},
+   {k:'title',label:'작위 (爵位)',type:'select',options:titleOptions,desc:'귀족 작위 — 제국 전용(공작~평민). 동맹은 해당없음'},
+   {k:'blood',label:'출자·혈통 (出自)',type:'select',options:originOptions,desc:'출신 계층. 제국: 귀족/제국기사/평민/망명자, 동맹: 시민/망명자'},
+   {k:'sex',label:'성별 (性別)',type:'select',options:['','남','여'],desc:'성별 — 초상화 아틀라스(남/여 O군)와 일치시킬 것'},
+   {k:'birth_month',label:'출생월 (誕生月)',type:'number',desc:'출생 월 (1~12). 제국은 제국력, 동맹은 우주력으로 표시'},
+   {k:'birth_day',label:'출생일 (誕生日)',type:'number',desc:'출생 일 (1~31)'},
+ ]},
+ {group:'관계/거점 (relations)', cls:'', fields:[
+   {k:'return_base',label:'귀환 행성 (帰還惑星)',type:'text',list2:'planets',desc:'격침 시 귀환/리스폰하는 행성 (char+0x18). 2004 공식패치가 出身地(고향)를 이 개념으로 통합 — 미설정 시 서버가 출신지로 폴백'},
+   {k:'rival',label:'라이벌 (ライバル)',type:'text',list:true,desc:'라이벌로 지정한 다른 인물 (char+0x78 = 인물 참조). 로스터에서 선택'},
+ ]},
+ {group:'能力8 (ability_8 — PCP정치계열4 + MCP군사계열4)', cls:'ab', fields:[
+   {k:'a_leadership',label:'통솔 (統率)',type:'number',desc:'PCP·시민 지지 획득 용이'},
+   {k:'a_politics',label:'정치 (政治)',type:'number',desc:'PCP·정치/행정 영향력'},
+   {k:'a_operation',label:'운용 (運用)',type:'number',desc:'PCP·행성 통치에 영향'},
+   {k:'a_intel',label:'정보 (情報)',type:'number',desc:'PCP·스파이 활동·색적 능력'},
+   {k:'a_command',label:'지휘 (指揮)',type:'number',desc:'MCP·예하 함선 반응속도·지휘범위'},
+   {k:'a_mobility',label:'기동 (機動)',type:'number',desc:'MCP·조함 민첩성·역진 속도'},
+   {k:'a_attack',label:'공격 (攻撃)',type:'number',desc:'MCP·함대 공격력 / 방어전 시 대함방어'},
+   {k:'a_defense',label:'방어 (防御)',type:'number',desc:'MCP·함대 방어력 / 방어전 시 대점령방어'},
+ ]},
+ {group:'함선/특수 (flagship + special)', cls:'', fields:[
+   {k:'bonus_point',label:'보너스포인트 (ボーナス)',type:'number',desc:'육성 보너스 포인트 (능력치 배분 여유분)'},
+   {k:'special_ability_num',label:'특수능력 수 (特殊能力)',type:'number',desc:'보유 특수능력 개수 (아래 목록 항목 수)'},
+   {k:'special_abilities',label:'특수능력 목록 (特殊能力)',type:'text',desc:'특수능력을 쉼표로 나열 (최대 80). 예: 用兵の妙, 補給軽減'},
+   {k:'flagship_unique',label:'기함 유형',type:'select',options:['','표준 함선','고유 기함(전용 모델)'],rerender:true,desc:'표준 함선을 기함으로 쓰는가, 아니면 브륀힐트처럼 전용 3D 모델을 가진 고유 기함인가'},
+   {k:'flagship_type',label:'기함 대분류 (旗艦種別)',type:'select',options:['','전함','고속전함','순항함','타격순항함','정찰순항함','구축함','고속정','전투정모함','뇌격정모함','공작함','수송함','병력수송함','양륙함','민간선 / 상선'],desc:'기함 대분류 艦種 (char+0x5c, u8). 매뉴얼 14 함종. flagship_kind/name과 독립'},
+   {k:'flagship_kind',label:'기함 모델·함종 (旗艦艦種)',type:'text',list2:'shipmodels',desc:'세부 함종 또는 전용 3D 모델 코드 (char+0x5e, u16, 273종). 고유 기함이면 여기에 모델 코드(진영 태그 포함) 지정, 표준함이면 함종'},
+   {k:'flagship_name',label:'기함 고유명 (旗艦名)',type:'text',list2:'flagships',desc:'기함 고유명 (char+0x60, UCS-2, 최대 13자). 정본 45종 자동완성(브륀힐트/휘페리온 등). 대분류·모델과 독립이라 자유 조합 가능'},
+ ]},
+ {group:'파생/런타임 (ResponseInformationCharacter — 진행 중 변동값)', cls:'', fields:[
+   {k:'point',label:'포인트 (point)',type:'number',desc:'보유 포인트 (게임 내 자원)'},
+   {k:'experience',label:'경험치 (経験)',type:'number',desc:'경험치 (전투·활동 누적, 100마다 능력+1)'},
+   {k:'influence',label:'영향력 (影響力)',type:'number',desc:'세력 내 정치적 발언권'},
+   {k:'stamina',label:'체력 (体力)',type:'number',desc:'건강·활동 가능도'},
+   {k:'achievement',label:'공적 (功績)',type:'number',desc:'현 계급 내 전공 누계 → 상대순위로 승진/강등'},
+   {k:'fame',label:'명성 (名声)',type:'number',desc:'세력 내 명성치 (진행 중 변동, 초기값만 지정)'},
+   {k:'money',label:'자금 (資金)',type:'number',desc:'보유 자금 (진행 중 변동, 초기값만 지정)'},
+   {k:'spot',label:'현재 위치 (spot)',type:'text',list2:'planets',desc:'현재 위치한 성계/거점 (char+0x1c, u32). 진행 중 변동값 — 리스폰 위치(귀환 행성)와는 별개'},
+ ]},
+];
+
+function esc(s){return String(s??'').replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]))}
+function dispName(x){ const c=x.char||{}; const ja=[c.lastname,c.firstname].filter(Boolean).join(' '); return ja || (x.name&&x.name!==String(x.num)?x.name:''); }
+function isNamed(x){ return !!dispName(x); }
+
+async function boot(){
+  const [r,c]=await Promise.all([
+    fetch('/api/roster').then(x=>x.json()),
+    fetch('/api/candidates').then(x=>x.json()).catch(()=>[])
+  ]);
+  DOC=r;
+  const opts=arr=>(arr||[]).map(n=>`<option value="${esc(n)}">`).join('');
+  // rival(인물 참조) 자동완성 = 로스터에서 이름이 채워진 인물들(일본어명+한글명 모두)
+  const nm=new Set();
+  for(const x of DOC.roster){ const c2=x.char||{};
+    for(const v of [dispName(x), [c2.lastname_ko,c2.firstname_ko].filter(Boolean).join(' ')]) if(v) nm.add(v); }
+  $('#candidates').innerHTML=opts([...nm]);
+  $('#planets').innerHTML=opts(c.planets);
+  $('#shipmodels').innerHTML=opts(c.shipmodels);
+  $('#flagships').innerHTML=opts(c.flagships);
+  const facs=[...new Set(DOC.roster.map(x=>x.faction))];
+  $('#ffilter').innerHTML+=facs.map(f=>`<option>${esc(f)}</option>`).join('');
+  renderList();
+  setStatus('ok','불러옴 ✓');
+}
+
+function renderList(){
+  const q=$('#search').value.trim().toLowerCase();
+  const ff=$('#ffilter').value, un=$('#unnamedOnly').checked;
+  const box=$('#list'); box.innerHTML='';
+  let shown=0;
+  for(const x of DOC.roster){
+    if(ff && x.faction!==ff) continue;
+    if(un && isNamed(x)) continue;
+    if(q && !`${x.num} ${dispName(x)} ${x.slotId} ${x.faction}`.toLowerCase().includes(q)) continue;
+    const li=document.createElement('div');
+    li.className='li'+(isNamed(x)?' named':'')+(SEL===x?' sel':'');
+    li.innerHTML=`<img loading="lazy" src="/portraits/${esc(x.slotId)}.png"><span class="n">#${x.num}</span><span class="nm">${esc(dispName(x)||'—')}</span>`;
+    li.onclick=()=>select(x);
+    box.appendChild(li); shown++;
+  }
+  const named=DOC.roster.filter(isNamed).length;
+  $('#progress').textContent=`명명 ${named} / ${DOC.roster.length} (표시 ${shown})`;
+}
+
+function select(x){
+  SEL=x; renderList(); renderDetail();
+}
+
+function field(x,f){
+  const c=x.char;
+  const wrap=document.createElement('div'); wrap.className='f';
+  const lab=document.createElement('label'); lab.textContent=f.label; if(f.desc)lab.title=f.desc; wrap.appendChild(lab);
+  if(f.desc){ const dd=document.createElement('div'); dd.className='desc'; dd.textContent=f.desc; wrap.appendChild(dd); }
+  let inp;
+  if(f.type==='select'){
+    inp=document.createElement('select');
+    let opts=typeof f.options==='function'?f.options(c):f.options;
+    const cur=c[f.k]||'';
+    if(cur && !opts.includes(cur)) opts=[...opts,cur]; // 현재값이 목록 밖이면 보존
+    inp.innerHTML=opts.map(o=>`<option${o===cur?' selected':''}>${esc(o)}</option>`).join('');
+  } else {
+    inp=document.createElement('input'); inp.type=f.type==='number'?'number':'text';
+    if(f.list)inp.setAttribute('list','candidates');
+    if(f.list2)inp.setAttribute('list',f.list2); // ships/planets datalist
+    inp.value=c[f.k]??'';
+  }
+  inp.addEventListener('input',()=>{
+    c[f.k]=f.type==='number'?(inp.value===''?'':Number(inp.value)):inp.value;
+    if(f.k.startsWith('lastname')||f.k==='firstname'){ renderList(); }
+    if(f.rerender){ renderDetail(); } // power/classification 변경 시 종속 드롭다운 갱신
+    queueSave();
+  });
+  wrap.appendChild(inp); return wrap;
+}
+
+function renderDetail(){
+  const x=SEL; const d=$('#detail');
+  if(!x){ d.innerHTML='<div class="empty">왼쪽에서 인물을 선택하세요.</div>'; return; }
+  x.char=x.char||{};
+  d.innerHTML='';
+  const head=document.createElement('div'); head.className='head';
+  head.innerHTML=`<img src="/portraits/${esc(x.slotId)}.png"><div><div class="hn">#${x.num} ${esc(dispName(x)||'(무명)')}</div>
+    <div class="meta" title="게임 데이터에서 확정된 값 — 편집 불가 앵커">
+      <b>#${x.num}</b> = 순번(자리표시자). 실명 채우면 바뀜<br>
+      <b>slotId</b> ${esc(x.slotId)} — 초상화 파일명(고정)<br>
+      <b>atlas</b> ${esc(x.atlas)} · <b>faceIndex</b> ${x.faceIndex} — 초상화 아틀라스·칸 위치<br>
+      <b>팩션힌트</b> ${esc(x.faction)} — 아틀라스로 추정한 소속(참고용)<br>
+      <span style="color:var(--acc)">↑ 위는 게임에서 확정된 값. 아래 폼을 채워주세요.</span>
+    </div></div>`;
+  d.appendChild(head);
+  for(const g of SCHEMA){
+    const sec=document.createElement('div'); sec.className='grp '+g.cls;
+    sec.innerHTML=`<h3>${esc(g.group)}</h3>`;
+    const fs=document.createElement('div'); fs.className='fields';
+    for(const f of g.fields) fs.appendChild(field(x,f));
+    sec.appendChild(fs); d.appendChild(sec);
+  }
+  // 메모 + 임의 필드
+  const notes=document.createElement('div'); notes.className='grp';
+  notes.innerHTML='<h3>메모 & 임의 필드</h3>';
+  const ta=document.createElement('textarea'); ta.placeholder='메모'; ta.value=x.char.notes||'';
+  ta.addEventListener('input',()=>{ x.char.notes=ta.value; queueSave(); });
+  notes.appendChild(ta);
+  const ex=document.createElement('div'); ex.className='extra'; notes.appendChild(ex);
+  x.char.extra=x.char.extra||{};
+  const drawExtra=()=>{ ex.innerHTML='';
+    for(const [k,v] of Object.entries(x.char.extra)){
+      const row=document.createElement('div'); row.className='row';
+      row.innerHTML=`<input value="${esc(k)}"><input value="${esc(v)}"><button class="del">✕</button>`;
+      const [ki,vi]=row.querySelectorAll('input');
+      vi.addEventListener('input',()=>{x.char.extra[k]=vi.value;queueSave();});
+      ki.addEventListener('change',()=>{const nk=ki.value.trim();if(nk&&nk!==k){x.char.extra[nk]=x.char.extra[k];delete x.char.extra[k];drawExtra();queueSave();}});
+      row.querySelector('.del').onclick=()=>{delete x.char.extra[k];drawExtra();queueSave();};
+      ex.appendChild(row);
+    }};
+  drawExtra();
+  const add=document.createElement('button'); add.className='addbtn'; add.textContent='+ 임의 필드';
+  add.onclick=()=>{let i=1;while(x.char.extra['필드'+i])i++;x.char.extra['필드'+i]='';drawExtra();};
+  notes.appendChild(add); d.appendChild(notes);
+}
+
+function setStatus(cls,msg){const s=$('#status');s.className=cls;s.textContent=msg;}
+function queueSave(){ setStatus('saving','저장 중…'); clearTimeout(SAVE_TIMER); SAVE_TIMER=setTimeout(save,350); }
+async function save(){
+  try{
+    const res=await fetch('/api/roster',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(DOC,null,1)});
+    const j=await res.json();
+    if(j.ok) setStatus('ok','저장됨 ✓ '+new Date().toTimeString().slice(0,8));
+    else setStatus('err','저장 실패: '+j.error);
+  }catch(e){ setStatus('err','저장 오류: '+e); }
+}
+
+// 키보드: ↑↓ 목록 이동
+addEventListener('keydown',e=>{
+  if((e.key==='ArrowDown'||e.key==='ArrowUp') && SEL && document.activeElement.tagName!=='INPUT' && document.activeElement.tagName!=='TEXTAREA'){
+    const vis=[...$('#list').querySelectorAll('.li')];
+    const i=DOC.roster.indexOf(SEL); const dir=e.key==='ArrowDown'?1:-1;
+    const nx=DOC.roster[i+dir]; if(nx){select(nx);e.preventDefault();}
+  }
+});
+$('#search').addEventListener('input',renderList);
+$('#ffilter').addEventListener('change',renderList);
+$('#unnamedOnly').addEventListener('change',renderList);
+addEventListener('beforeunload',()=>{ if(SAVE_TIMER){clearTimeout(SAVE_TIMER);navigator.sendBeacon('/api/roster',JSON.stringify(DOC,null,1));}});
+boot().catch(e=>setStatus('err','로드 실패: '+e));
+</script>
+</body>
+</html>

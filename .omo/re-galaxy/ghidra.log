@@ -1,0 +1,295 @@
+INFO  Using log config file: jar:file:/C:/Users/user/AppData/Local/Programs/Ghidra/ghidra_12.1.2_PUBLIC/Ghidra/Framework/Generic/lib/Generic.jar!/generic.log4j.xml (LoggingInitialization)  
+INFO  Using log file: C:\Users\user\AppData\Roaming\ghidra\ghidra_12.1.2_PUBLIC\application.log (LoggingInitialization)  
+INFO  Loading user preferences: C:\Users\user\AppData\Roaming\ghidra\ghidra_12.1.2_PUBLIC\preferences (Preferences)  
+INFO  Searching for classes... (ClassSearcher)  
+INFO  Class search complete (1516 ms) (ClassSearcher)  
+INFO  Initializing SSL Context (DefaultSSLContextInitializer)  
+INFO  Initializing Random Number Generator... (SecureRandomFactory)  
+INFO  Random Number Generator initialization complete: SHA1PRNG (SecureRandomFactory)  
+INFO  Trust manager disabled, cacerts have not been set (DefaultTrustManagerFactory)  
+INFO  Headless startup complete (4716 ms) (AnalyzeHeadless)  
+INFO  Class searcher loaded 59 extension points (20 false positives) (ClassSearcher)  
+INFO  HEADLESS Script Paths:
+    C:\Users\user\AppData\Local\Programs\Ghidra\ghidra_12.1.2_PUBLIC\Ghidra\Features\BytePatterns\ghidra_scripts
+    C:\Users\user\AppData\Local\Programs\Ghidra\ghidra_12.1.2_PUBLIC\Ghidra\Features\GnuDemangler\ghidra_scripts
+    C:\Users\user\AppData\Local\Programs\Ghidra\ghidra_12.1.2_PUBLIC\Ghidra\Processors\PIC\ghidra_scripts
+    C:\Users\user\AppData\Local\Programs\Ghidra\ghidra_12.1.2_PUBLIC\Ghidra\Features\FileFormats\ghidra_scripts
+    C:\Users\user\AppData\Local\Programs\Ghidra\ghidra_12.1.2_PUBLIC\Ghidra\Features\VersionTracking\ghidra_scripts
+    C:\Users\user\AppData\Local\Programs\Ghidra\ghidra_12.1.2_PUBLIC\Ghidra\Processors\JVM\ghidra_scripts
+    C:\Users\user\AppData\Local\Programs\Ghidra\ghidra_12.1.2_PUBLIC\Ghidra\Processors\DATA\ghidra_scripts
+    C:\Users\user\AppData\Local\Programs\Ghidra\ghidra_12.1.2_PUBLIC\Ghidra\Features\WildcardAssembler\ghidra_scripts
+    C:\Users\user\AppData\Local\Programs\Ghidra\ghidra_12.1.2_PUBLIC\Ghidra\Processors\Atmel\ghidra_scripts
+    C:\Users\user\AppData\Local\Programs\Ghidra\ghidra_12.1.2_PUBLIC\Ghidra\Features\SwiftDemangler\ghidra_scripts
+    C:\Users\user\AppData\Local\Programs\Ghidra\ghidra_12.1.2_PUBLIC\Ghidra\Features\PDB\ghidra_scripts
+    C:\Users\user\AppData\Local\Programs\Ghidra\ghidra_12.1.2_PUBLIC\Ghidra\Features\BSim\ghidra_scripts
+    C:\Users\user\AppData\Local\Programs\Ghidra\ghidra_12.1.2_PUBLIC\Ghidra\Debug\Debugger\ghidra_scripts
+    C:\Users\user\AppData\Local\Programs\Ghidra\ghidra_12.1.2_PUBLIC\Ghidra\Features\FunctionID\ghidra_scripts
+    C:\Users\user\AppData\Local\Programs\Ghidra\ghidra_12.1.2_PUBLIC\Ghidra\Processors\8051\ghidra_scripts
+    C:\Users\user\AppData\Local\Programs\Ghidra\ghidra_12.1.2_PUBLIC\Ghidra\Features\Base\ghidra_scripts
+    C:\Users\user\AppData\Local\Programs\Ghidra\ghidra_12.1.2_PUBLIC\Ghidra\Features\Decompiler\ghidra_scripts
+    C:\Users\user\AppData\Local\Programs\Ghidra\ghidra_12.1.2_PUBLIC\Ghidra\Features\PyGhidra\ghidra_scripts
+    C:\Users\user\AppData\Local\Programs\Ghidra\ghidra_12.1.2_PUBLIC\Ghidra\Features\SystemEmulation\ghidra_scripts
+    C:\Users\user\AppData\Local\Programs\Ghidra\ghidra_12.1.2_PUBLIC\Ghidra\Debug\Debugger-rmi-trace\ghidra_scripts
+    C:\Users\user\AppData\Local\Programs\Ghidra\ghidra_12.1.2_PUBLIC\Ghidra\Features\DecompilerDependent\ghidra_scripts
+    C:\Users\user\AppData\Local\Programs\Ghidra\ghidra_12.1.2_PUBLIC\Ghidra\Features\MicrosoftCodeAnalyzer\ghidra_scripts
+    E:\logh7-revival\.omo\re-galaxy (HeadlessAnalyzer)  
+INFO  HEADLESS: execution starts (HeadlessAnalyzer)  
+INFO  Creating project: C:\Users\user\AppData\Local\Temp\ghidra-logh7\logh7proj (HeadlessAnalyzer)  
+INFO  Creating project: C:\Users\user\AppData\Local\Temp\ghidra-logh7\logh7proj (DefaultProject)  
+INFO  REPORT: Processing input files:  (HeadlessAnalyzer)  
+INFO       project: C:\Users\user\AppData\Local\Temp\ghidra-logh7\logh7proj (HeadlessAnalyzer)  
+INFO  IMPORTING: file:///E:/logh7-revival/.omo/re-galaxy/g7mtclient.exe (HeadlessAnalyzer)  
+INFO  Using Loader: Portable Executable (PE) (ProgramLoader)  
+INFO  Using Language/Compiler: x86:LE:32:default:windows (ProgramLoader)  
+INFO  Using Library Search Path: [., C:\Windows\SysWOW64, C:\Users\user\.jdks\openjdk-21.0.2\bin, C:\Windows\Sun\Java\bin, C:\Windows\system32, C:\Windows, C:\Users\user\.local\bin, C:\home\peppone\.npm-global, C:\Users\user\bin, C:\Program Files\Git\mingw64\bin, C:\Program Files\Git\usr\local\bin, C:\Program Files\Git\usr\bin, C:\Users\user\AppData\Roaming\Code\User\globalStorage\github.copilot-chat\debugCommand, C:\Users\user\AppData\Roaming\Code\User\globalStorage\github.copilot-chat\copilotCli, C:\Program Files (x86)\VMware\VMware Workstation\bin, E:\cuda\bin, E:\cuda\libnvvp, C:\Windows\System32\Wbem, C:\Windows\System32\WindowsPowerShell\v1.0, C:\Windows\System32\OpenSSH, C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR, C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common, C:\Program Files\dotnet, C:\Program Files\Bandizip, C:\Program Files\Microsoft SQL Server\150\Tools\Binn, C:\Program Files\Git\cmd, C:\Program Files\Redis, C:\Program Files\Git LFS, C:\Program Files\NVIDIA Corporation\Nsight Compute 2024.2.0, C:\Users\user\AppData\Roaming\nvm, C:\Program Files\nodejs, C:\Program Files\k6, C:\ProgramData\chocolatey\bin, C:\Program Files\Go\bin, C:\Users\user\AppData\Local\Programs\cursor\resources\app\bin, C:\Program Files\Filestar, C:\ProgramData\Filestar\aliases, C:\Program Files\Amazon\AWSCLIV2, C:\Program Files\Docker\Docker\resources\bin, C:\Program Files\GitHub CLI, C:\Program Files\Tailscale, C:\Program Files (x86)\kaitai-struct-compiler\bin, C:\Scoop\apps\elixir\current\bin, C:\Scoop\apps\llvm\current\bin, C:\Scoop\apps\dotnet-sdk\current, C:\Scoop\apps\ruby\current\bin, C:\Scoop\apps\ruby\current\gems\bin, C:\Users\user\AppData\Local\codegraph\current\bin, C:\Users\user\.kimi-code\bin, C:\Users\user\AppData\Local\Programs\Python\Python311\Scripts, C:\Users\user\AppData\Local\Programs\Python\Python311, C:\Users\user\AppData\Local\Programs\Python\Python310\Scripts, C:\Users\user\AppData\Local\Programs\Python\Python310, bin, C:\Scoop\shims, C:\Users\user\AppData\Local\Microsoft\WindowsApps, C:\Users\user\AppData\Local\JetBrains\Toolbox\scripts, C:\Users\user\AppData\Local\Programs\Microsoft VS Code\bin, C:\Users\user\AppData\Roaming\npm, C:\Users\user\.dotnet\tools, C:\Users\user\AppData\Local\GitHubDesktop\bin, C:\ProgramData\Bluebird Room No.8\GitHubDesktop\bin, C:\Users\user\AppData\Local\Google\Cloud SDK\google-cloud-sdk\bin, E:\cuda\include, E:\cuda\lib, C:\Users\user\AppData\Local\Programs\Ollama, C:\Users\user\go\bin, C:\Users\user\AppData\Local\Programs\Kiro\bin, C:\Users\user\AppData\Local\Programs\Windsurf\bin, C:\Users\user\AppData\Local\Programs\Antigravity\bin, C:\Users\user\.bun\bin, C:\Users\user\AppData\Local\Programs\Ghidra\ghidra_12.1.2_PUBLIC, C:\Users\user\AppData\Local\Programs\Ghidra\ghidra_12.1.2_PUBLIC\support, C:\Users\user\AppData\Local\Microsoft\WinGet\Links, E:\logh7-revival\.omo\toolchain\x64dbg\release, C:\Users\user\AppData\Roaming\Python\Python311\Scripts, C:\Program Files\Git\usr\bin\vendor_perl, C:\Program Files\Git\usr\bin\core_perl, C:\Users\user\.claude\plugins\cache\bkit-marketplace\bkit\2.0.5\bin, C:\Users\user\.claude\plugins\cache\ponytail\ponytail\4.7.0\bin, C:\Users\user\.claude\plugins\cache\fablize\fablize\2.1.0\bin, C:\Users\user\.claude\plugins\cache\gptaku-plugins\pumasi\1.11.4\bin, C:\Users\user\.claude\plugins\cache\im-not-ai\humanize-korean\1.5.0\bin, C:\Users\user\.claude\skills\hoi4-modding\bin] (ProgramLoader)  
+WARN  Invalid or missing function at 5bff1b7c (ExportDataDirectory)  
+INFO  TLS callbacks at 52083754 (TLSDirectory)  
+WARN  Invalid or missing function at 4d513020 (ExportDataDirectory)  
+INFO  TLS callbacks at 68f051c0 (TLSDirectory)  
+INFO  TLS callbacks at 1000701c (TLSDirectory)  
+WARN  Invalid or missing function at 10085b88 (ExportDataDirectory)  
+INFO  TLS callbacks at 6982dbe8 (TLSDirectory)  
+WARN  Invalid or missing function at 69d616e4 (ExportDataDirectory)  
+WARN  Invalid or missing function at 69e9f8f8 (ExportDataDirectory)  
+INFO  TLS callbacks at 4cc821ac (TLSDirectory)  
+WARN  Invalid or missing function at 4ccd8d54 (ExportDataDirectory)  
+WARN  Invalid or missing function at 4f7c43d4 (ExportDataDirectory)  
+INFO  Additional info:
+Loading file:///E:/logh7-revival/.omo/re-galaxy/g7mtclient.exe?MD5=098499b66faae66ee3535c204d5f245d...
+------------------------------------------------
+
+Searching 71 paths for library ADVAPI32.DLL...
+Loading file:///C:/Windows/SysWOW64/advapi32.dll?MD5=950c6d7d9ee5088375a96ae8436eaa70...
+Using existing exports file: C:\Users\user\AppData\Roaming\ghidra\ghidra_12.1.2_PUBLIC\symbols\win32\advapi32.exports
+Library not saved to project.
+------------------------------------------------
+
+Searching 71 paths for library COMCTL32.DLL...
+Loading file:///C:/Windows/SysWOW64/comctl32.dll?MD5=c2e7629502fe19e0dae65293dbccfda7...
+Using existing exports file: C:\Users\user\AppData\Roaming\ghidra\ghidra_12.1.2_PUBLIC\symbols\win32\comctl32.exports
+Library not saved to project.
+------------------------------------------------
+
+Searching 71 paths for library COMDLG32.DLL...
+Loading file:///C:/Windows/SysWOW64/comdlg32.dll?MD5=61669f14874b236d3bdbf0a6cbb5345d...
+Using existing exports file: C:\Users\user\AppData\Roaming\ghidra\ghidra_12.1.2_PUBLIC\symbols\win32\comdlg32.exports
+Library not saved to project.
+------------------------------------------------
+
+Searching 71 paths for library D3D8.DLL...
+Loading file:///C:/Windows/SysWOW64/d3d8.dll?MD5=8002a9c20dddf36bf7cb58330e73ba58...
+Using existing exports file: C:\Users\user\AppData\Roaming\ghidra\ghidra_12.1.2_PUBLIC\symbols\win32\d3d8.exports
+Library not saved to project.
+------------------------------------------------
+
+Searching 71 paths for library DINPUT8.DLL...
+Loading file:///C:/Windows/SysWOW64/dinput8.dll?MD5=ce3b1bf2da18b3f90a08b147a5243724...
+Using existing exports file: C:\Users\user\AppData\Roaming\ghidra\ghidra_12.1.2_PUBLIC\symbols\win32\dinput8.exports
+Library not saved to project.
+------------------------------------------------
+
+Searching 71 paths for library DSOUND.DLL...
+Loading file:///C:/Windows/SysWOW64/dsound.dll?MD5=0eaa0a38ccc37fd279495071724f1275...
+[dsound.dll]: failed to create WEVTResource at 510f9498: Failed to resolve data length for WEVTResource
+Using existing exports file: C:\Users\user\AppData\Roaming\ghidra\ghidra_12.1.2_PUBLIC\symbols\win32\dsound.exports
+Library not saved to project.
+------------------------------------------------
+
+Searching 71 paths for library GDI32.DLL...
+Loading file:///C:/Windows/SysWOW64/gdi32.dll?MD5=294936e7ad3113e4281a46be514daf3d...
+Using existing exports file: C:\Users\user\AppData\Roaming\ghidra\ghidra_12.1.2_PUBLIC\symbols\win32\gdi32.exports
+Library not saved to project.
+------------------------------------------------
+
+Searching 71 paths for library IMM32.DLL...
+Loading file:///C:/Windows/SysWOW64/imm32.dll?MD5=12174dbd6b22177a9cb71ecc9122e141...
+Using existing exports file: C:\Users\user\AppData\Roaming\ghidra\ghidra_12.1.2_PUBLIC\symbols\win32\imm32.exports
+Library not saved to project.
+------------------------------------------------
+
+Searching 71 paths for library KERNEL32.DLL...
+Loading file:///C:/Windows/SysWOW64/kernel32.dll?MD5=0ce1f5f3d23f51b9ecfd453e34ca0af7...
+Using existing exports file: C:\Users\user\AppData\Roaming\ghidra\ghidra_12.1.2_PUBLIC\symbols\win32\kernel32.exports
+Library not saved to project.
+------------------------------------------------
+
+Searching 71 paths for library MSACM32.DLL...
+Loading file:///C:/Windows/SysWOW64/msacm32.dll?MD5=7a1a1be3450bd9755d0091b86745b9da...
+Using existing exports file: C:\Users\user\AppData\Roaming\ghidra\ghidra_12.1.2_PUBLIC\symbols\win32\msacm32.exports
+Library not saved to project.
+------------------------------------------------
+
+Searching 71 paths for library OLE32.DLL...
+Loading file:///C:/Windows/SysWOW64/ole32.dll?MD5=0c99de30cc1bc2997ebf5b7ca4b54fe8...
+[ole32.dll]: failed to create WEVTResource at 68fc5218: Failed to resolve data length for WEVTResource
+Using existing exports file: C:\Users\user\AppData\Roaming\ghidra\ghidra_12.1.2_PUBLIC\symbols\win32\ole32.exports
+Library not saved to project.
+------------------------------------------------
+
+Searching 71 paths for library OLEAUT32.DLL...
+Loading file:///C:/Windows/SysWOW64/oleaut32.dll?MD5=96b3f5be7d92458fb909620f918a1f63...
+Using existing exports file: C:\Users\user\AppData\Roaming\ghidra\ghidra_12.1.2_PUBLIC\symbols\win32\oleaut32.exports
+Library not saved to project.
+------------------------------------------------
+
+Searching 71 paths for library OLEDLG.DLL...
+Loading file:///C:/Windows/SysWOW64/oledlg.dll?MD5=b5bb1bfb8e269d0f1d1d93784a2855f3...
+Using existing exports file: C:\Users\user\AppData\Roaming\ghidra\ghidra_12.1.2_PUBLIC\symbols\win32\oledlg.exports
+Library not saved to project.
+------------------------------------------------
+
+Searching 71 paths for library OLEPRO32.DLL...
+Loading file:///C:/Windows/SysWOW64/olepro32.dll?MD5=5225c577ce1ec1fa4acb3421228b745b...
+Using existing exports file: C:\Users\user\AppData\Roaming\ghidra\ghidra_12.1.2_PUBLIC\symbols\win32\olepro32.exports
+Library not saved to project.
+------------------------------------------------
+
+Searching 71 paths for library SHELL32.DLL...
+Loading file:///C:/Windows/SysWOW64/shell32.dll?MD5=2d8941f8841854eb9705097a01b6f3f3...
+Using existing exports file: C:\Users\user\AppData\Roaming\ghidra\ghidra_12.1.2_PUBLIC\symbols\win32\shell32.exports
+Library not saved to project.
+------------------------------------------------
+
+Searching 71 paths for library USER32.DLL...
+Loading file:///C:/Windows/SysWOW64/user32.dll?MD5=0927ed96558e5b2392df6cf7582f2655...
+[user32.dll]: failed to create WEVTResource at 69eb6a70: Failed to resolve data length for WEVTResource
+Using existing exports file: C:\Users\user\AppData\Roaming\ghidra\ghidra_12.1.2_PUBLIC\symbols\win32\user32.exports
+Library not saved to project.
+------------------------------------------------
+
+Searching 71 paths for library WINMM.DLL...
+Loading file:///C:/Windows/SysWOW64/winmm.dll?MD5=cd17feff84b207001e3c3f4020bd33a5...
+[winmm.dll]: failed to create WEVTResource at 4f0a1310: Failed to resolve data length for WEVTResource
+Using existing exports file: C:\Users\user\AppData\Roaming\ghidra\ghidra_12.1.2_PUBLIC\symbols\win32\winmm.exports
+Library not saved to project.
+------------------------------------------------
+
+Searching 71 paths for library WINSPOOL.DRV...
+Loading file:///C:/Windows/SysWOW64/winspool.drv?MD5=16c8ebb063088674a56fb3bae5616651...
+[winspool.drv]: failed to create WEVTResource at 4cce14b8: Failed to resolve data length for WEVTResource
+Using existing exports file: C:\Users\user\AppData\Roaming\ghidra\ghidra_12.1.2_PUBLIC\symbols\win32\winspool.exports
+Library not saved to project.
+------------------------------------------------
+
+Searching 71 paths for library WS2_32.DLL...
+Loading file:///C:/Windows/SysWOW64/ws2_32.dll?MD5=fc4a6145ddd1b64983e8700601c71fc6...
+[ws2_32.dll]: failed to create WEVTResource at 4f7cc4b8: Failed to resolve data length for WEVTResource
+Using existing exports file: C:\Users\user\AppData\Roaming\ghidra\ghidra_12.1.2_PUBLIC\symbols\win32\ws2_32.exports
+Library not saved to project.
+------------------------------------------------
+
+Applying C:\Users\user\AppData\Roaming\ghidra\ghidra_12.1.2_PUBLIC\symbols\win32\winmm.exports
+Applying C:\Users\user\AppData\Roaming\ghidra\ghidra_12.1.2_PUBLIC\symbols\win32\dinput8.exports
+Applying C:\Users\user\AppData\Roaming\ghidra\ghidra_12.1.2_PUBLIC\symbols\win32\kernel32.exports
+Applying C:\Users\user\AppData\Roaming\ghidra\ghidra_12.1.2_PUBLIC\symbols\win32\user32.exports
+Applying C:\Users\user\AppData\Roaming\ghidra\ghidra_12.1.2_PUBLIC\symbols\win32\gdi32.exports
+Applying C:\Users\user\AppData\Roaming\ghidra\ghidra_12.1.2_PUBLIC\symbols\win32\comdlg32.exports
+Applying C:\Users\user\AppData\Roaming\ghidra\ghidra_12.1.2_PUBLIC\symbols\win32\advapi32.exports
+Applying C:\Users\user\AppData\Roaming\ghidra\ghidra_12.1.2_PUBLIC\symbols\win32\imm32.exports
+Applying C:\Users\user\AppData\Roaming\ghidra\ghidra_12.1.2_PUBLIC\symbols\win32\dsound.exports
+Applying C:\Users\user\AppData\Roaming\ghidra\ghidra_12.1.2_PUBLIC\symbols\win32\comctl32.exports
+Applying C:\Users\user\AppData\Roaming\ghidra\ghidra_12.1.2_PUBLIC\symbols\win32\oledlg.exports
+Applying C:\Users\user\AppData\Roaming\ghidra\ghidra_12.1.2_PUBLIC\symbols\win32\olepro32.exports
+Applying C:\Users\user\AppData\Roaming\ghidra\ghidra_12.1.2_PUBLIC\symbols\win32\ws2_32.exports
+Applying C:\Users\user\AppData\Roaming\ghidra\ghidra_12.1.2_PUBLIC\symbols\win32\msacm32.exports
+Applying C:\Users\user\AppData\Roaming\ghidra\ghidra_12.1.2_PUBLIC\symbols\win32\d3d8.exports
+Applying C:\Users\user\AppData\Roaming\ghidra\ghidra_12.1.2_PUBLIC\symbols\win32\winspool.exports
+Applying C:\Users\user\AppData\Roaming\ghidra\ghidra_12.1.2_PUBLIC\symbols\win32\shell32.exports
+Applying C:\Users\user\AppData\Roaming\ghidra\ghidra_12.1.2_PUBLIC\symbols\win32\ole32.exports
+Applying C:\Users\user\AppData\Roaming\ghidra\ghidra_12.1.2_PUBLIC\symbols\win32\oleaut32.exports
+Linking the External Programs of 'g7mtclient.exe' to imported libraries...
+  [WINMM.DLL] -> not found in project
+  [DINPUT8.DLL] -> not found in project
+  [KERNEL32.DLL] -> not found in project
+  [USER32.DLL] -> not found in project
+  [GDI32.DLL] -> not found in project
+  [COMDLG32.DLL] -> not found in project
+  [ADVAPI32.DLL] -> not found in project
+  [IMM32.DLL] -> not found in project
+  [DSOUND.DLL] -> not found in project
+  [COMCTL32.DLL] -> not found in project
+  [OLEDLG.DLL] -> not found in project
+  [OLEPRO32.DLL] -> not found in project
+  [WS2_32.DLL] -> not found in project
+  [MSACM32.DLL] -> not found in project
+  [D3D8.DLL] -> not found in project
+  [WINSPOOL.DRV] -> not found in project
+  [SHELL32.DLL] -> not found in project
+  [OLE32.DLL] -> not found in project
+  [OLEAUT32.DLL] -> not found in project
+------------------------------------------------
+
+ (ProgramLoader)  
+INFO  IMPORTING: Loaded 0 additional files (HeadlessAnalyzer)  
+INFO  ANALYZING all memory and code: file:///E:/logh7-revival/.omo/re-galaxy/g7mtclient.exe (HeadlessAnalyzer)  
+WARN  Ignoring leading '_' chars on no-return name '___raise_securityfailure' specified in file: C:\Users\user\AppData\Local\Programs\Ghidra\ghidra_12.1.2_PUBLIC\Ghidra\Features\Base\data\PEFunctionsThatDoNotReturn (NoReturnFunctionAnalyzer)  
+WARN  Ignoring leading '_' chars on no-return name '___report_rangecheckfailure' specified in file: C:\Users\user\AppData\Local\Programs\Ghidra\ghidra_12.1.2_PUBLIC\Ghidra\Features\Base\data\PEFunctionsThatDoNotReturn (NoReturnFunctionAnalyzer)  
+INFO  Skipping PDB processing: missing PDB information in program metadata (PdbUniversalAnalyzer)  
+INFO  Packed database cache: C:\Users\user\AppData\Local\ghidra\packed-db-cache (PackedDatabaseCache)  
+ERROR Invalid PNG data at 0067bb94 (PngDataType)  
+INFO  Unprocessed TypeDescriptor: void * (TypeDescriptorModel)  
+INFO  Unprocessed TypeDescriptor: void * (TypeDescriptorModel)  
+INFO  Unprocessed TypeDescriptor: void * (TypeDescriptorModel)  
+INFO  Unprocessed TypeDescriptor: void * (TypeDescriptorModel)  
+INFO  Applied data type archive: windows_vs12_32 (ApplyDataArchiveAnalyzer)  
+INFO  Applied data type archive: windows_vs12_32 (ApplyDataArchiveAnalyzer)  
+INFO  -----------------------------------------------------
+    ASCII Strings                              2.460 secs
+    Apply Data Archives                        0.709 secs
+    Call Convention ID                         0.003 secs
+    Call-Fixup Installer                       0.500 secs
+    Create Address Tables                      2.148 secs
+    Create Address Tables - One Time           4.447 secs
+    Create Function                           12.937 secs
+    Data Reference                             5.455 secs
+    Decompiler Switch Analysis                83.012 secs
+    Demangler Microsoft                        0.593 secs
+    Disassemble                               11.533 secs
+    Disassemble Entry Points                   0.147 secs
+    Embedded Media                             0.236 secs
+    External Entry References                  0.000 secs
+    Function ID                                9.151 secs
+    Function Start Pre Search                  0.056 secs
+    Function Start Search                      0.476 secs
+    Function Start Search After Code           0.242 secs
+    Function Start Search After Data           0.306 secs
+    Function Start Search delayed - One Time   0.065 secs
+    Non-Returning Functions - Discovered       4.158 secs
+    Non-Returning Functions - Known            0.022 secs
+    PDB Universal                              0.008 secs
+    Reference                                  4.588 secs
+    Scalar Operand References                  5.565 secs
+    Shared Return Calls                        5.441 secs
+    Stack                                     29.233 secs
+    Subroutine References                     16.050 secs
+    Subroutine References - One Time           0.034 secs
+    Windows x86 PE Exception Handling         10.623 secs
+    Windows x86 PE RTTI Analyzer               4.278 secs
+    Windows x86 Thread Environment Block (TEB) Analyzer     0.029 secs
+    WindowsResourceReference                  81.076 secs
+    X86 Function Callee Purge                  8.687 secs
+    x86 Constant Reference Analyzer           28.440 secs
+-----------------------------------------------------
+     Total Time   332 secs
+-----------------------------------------------------
+ (AutoAnalysisManager)  
+INFO  REPORT: Analysis succeeded for file: file:///E:/logh7-revival/.omo/re-galaxy/g7mtclient.exe (HeadlessAnalyzer)  
+INFO  REPORT: Execute script: ExportGalaxy.py  (HeadlessAnalyzer)  
+ERROR REPORT SCRIPT ERROR: ExportGalaxy.py : Ghidra was not started with PyGhidra. Python is not available (HeadlessAnalyzer) ghidra.app.script.GhidraScriptLoadException: Ghidra was not started with PyGhidra. Python is not available
+	at ghidra.pyghidra.PyGhidraScriptProvider.getScriptInstance(PyGhidraScriptProvider.java:75)
+	at ghidra.app.util.headless.HeadlessAnalyzer.runScriptsList(HeadlessAnalyzer.java:927)
+	at ghidra.app.util.headless.HeadlessAnalyzer.analyzeProgram(HeadlessAnalyzer.java:1097)
+	at ghidra.app.util.headless.HeadlessAnalyzer.processFileWithImport(HeadlessAnalyzer.java:1595)
+	at ghidra.app.util.headless.HeadlessAnalyzer.processWithLoader(HeadlessAnalyzer.java:1755)
+	at ghidra.app.util.headless.HeadlessAnalyzer.processWithImport(HeadlessAnalyzer.java:1696)
+	at ghidra.app.util.headless.HeadlessAnalyzer.processWithImport(HeadlessAnalyzer.java:1780)
+	at ghidra.app.util.headless.HeadlessAnalyzer.processLocal(HeadlessAnalyzer.java:464)
+	at ghidra.app.util.headless.AnalyzeHeadless.launch(AnalyzeHeadless.java:199)
+	at ghidra.GhidraLauncher.launch(GhidraLauncher.java:81)
+	at ghidra.Ghidra.main(Ghidra.java:54)
+ 
+INFO  ANALYZING changes made by post scripts: file:///E:/logh7-revival/.omo/re-galaxy/g7mtclient.exe (HeadlessAnalyzer)  
+INFO  REPORT: Post-analysis succeeded for file: file:///E:/logh7-revival/.omo/re-galaxy/g7mtclient.exe (HeadlessAnalyzer)  
+INFO  /g7mtclient.exe: file created (PepponeChoi) (LocalFileSystem)  
+INFO  REPORT: Save succeeded for: /g7mtclient.exe (logh7proj:/g7mtclient.exe) (HeadlessAnalyzer)  
+INFO  REPORT: Import succeeded (HeadlessAnalyzer)  

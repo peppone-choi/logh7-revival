@@ -1,6 +1,6 @@
 {
  "id": "logh7-models",
- "generatedAt": "2026-07-05T05:37:40.456Z",
+ "generatedAt": "2026-07-05T07:25:16.686Z",
  "sourceRoot": "E:/logh7-revival/artifacts/logh7-install/____________s___/____/data/model",
  "format": "LOGH7 자체 포맷: 직렬화된 C++ 씬그래프 메모리 이미지 (LightWave .lwo 익스포트 산물, 리틀엔디안). 헤더=(stale ptr,count)x10, 노드 디렉토리 stride 0xE8. 좌표 하드코딩 없음(logh7-mdx-no-hardcoded-coords).",
  "counts": {

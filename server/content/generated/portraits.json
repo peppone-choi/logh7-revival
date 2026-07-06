@@ -1,6 +1,6 @@
 {
   "id": "logh7-portraits",
-  "generatedAt": "2026-07-05T05:29:06.683Z",
+  "generatedAt": "2026-07-05T07:25:17.495Z",
   "generator": "tools/extract/logh7_decode_tcf_portraits.mjs",
   "provenance": {
     "sourceRoot": "artifacts/logh7-install/____________s___/____/data/image/face",

@@ -1,0 +1,131 @@
+### STRING galaxy.mdx -> 1 instance(s)
+  data @ 0x772174
+     xref from 0x4d3e6a  in FUN_004d3bd0 @0x4d3bd0
+### STRING null_galaxy -> 0 instance(s)
+### STRING p%03d_low.mdx -> 1 instance(s)
+  data @ 0x7720d8
+     xref from 0x4d464c  in FUN_004d3bd0 @0x4d3bd0
+### STRING fs%03d_low.mdx -> 1 instance(s)
+  data @ 0x772090
+     xref from 0x4d477e  in FUN_004d3bd0 @0x4d3bd0
+### STRING fixedstar= -> 1 instance(s)
+  data @ 0x760c8c
+     xref from 0x413479  in FUN_004133f0 @0x4133f0
+### STRING planet_num= -> 1 instance(s)
+  data @ 0x761dac
+     xref from 0x44620c  (no func)
+     xref from 0x446349  (no func)
+     xref from 0x443b06  (no func)
+     xref from 0x443c49  (no func)
+     xref from 0x4440cf  (no func)
+     xref from 0x44420b  (no func)
+### STRING class_= -> 1 instance(s)
+  data @ 0x760e0c
+     xref from 0x414b5c  (no func)
+### STRING revolution_radius= -> 1 instance(s)
+  data @ 0x760df8
+     xref from 0x425f5e  in FUN_00425c20 @0x425c20
+     xref from 0x414b7a  (no func)
+### STRING habitability= -> 1 instance(s)
+  data @ 0x760e6c
+     xref from 0x416717  (no func)
+### STRING area= -> 1 instance(s)
+  data @ 0x76a5e0
+     xref from 0x497fd8  in FUN_00497f10 @0x497f10
+     xref from 0x4a18e8  in FUN_004a1820 @0x4a1820
+### STRING grid_index= -> 1 instance(s)
+  data @ 0x761cb4
+     xref from 0x457c78  in FUN_00457a30 @0x457a30
+     xref from 0x457dfe  in FUN_00457a30 @0x457a30
+     xref from 0x4581b2  in FUN_00457a30 @0x457a30
+     xref from 0x458350  in FUN_00457a30 @0x457a30
+     xref from 0x477cc0  in FUN_00477a90 @0x477a90
+     xref from 0x477e3d  in FUN_00477a90 @0x477a90
+     xref from 0x45c1f0  in FUN_0045bf50 @0x45bf50
+     xref from 0x45c376  in FUN_0045bf50 @0x45bf50
+     xref from 0x45c727  in FUN_0045bf50 @0x45bf50
+     xref from 0x45c8cb  in FUN_0045bf50 @0x45bf50
+     xref from 0x4641c4  in FUN_00463f30 @0x463f30
+     xref from 0x46434a  in FUN_00463f30 @0x463f30
+     xref from 0x4646fb  in FUN_00463f30 @0x463f30
+     xref from 0x46489f  in FUN_00463f30 @0x463f30
+     xref from 0x42c529  in FUN_0042bff0 @0x42bff0
+     xref from 0x42c6c7  in FUN_0042bff0 @0x42bff0
+     xref from 0x467650  in FUN_00467420 @0x467420
+     xref from 0x4677cd  in FUN_00467420 @0x467420
+     xref from 0x47f984  in FUN_0047f6f0 @0x47f6f0
+     xref from 0x47fb0a  in FUN_0047f6f0 @0x47f6f0
+     xref from 0x47febb  in FUN_0047f6f0 @0x47f6f0
+     xref from 0x48005f  in FUN_0047f6f0 @0x47f6f0
+     xref from 0x472ad6  in FUN_00472890 @0x472890
+     xref from 0x472c5c  in FUN_00472890 @0x472890
+     xref from 0x45f1c0  in FUN_0045ef90 @0x45ef90
+     xref from 0x45f33d  in FUN_0045ef90 @0x45ef90
+     xref from 0x46a3e0  in FUN_0046a1b0 @0x46a1b0
+     xref from 0x46a55d  in FUN_0046a1b0 @0x46a1b0
+     xref from 0x46a90b  in FUN_0046a1b0 @0x46a1b0
+     xref from 0x46aaaf  in FUN_0046a1b0 @0x46a1b0
+     xref from 0x452920  in FUN_004526f0 @0x4526f0
+     xref from 0x452a9d  in FUN_004526f0 @0x4526f0
+     xref from 0x452e4b  in FUN_004526f0 @0x4526f0
+     xref from 0x452fef  in FUN_004526f0 @0x4526f0
+     xref from 0x46db9c  in FUN_0046d960 @0x46d960
+     xref from 0x46dd19  in FUN_0046d960 @0x46d960
+     xref from 0x475cd0  in FUN_00475a30 @0x475a30
+     xref from 0x475e56  in FUN_00475a30 @0x475a30
+     xref from 0x476207  in FUN_00475a30 @0x475a30
+     xref from 0x4763ab  in FUN_00475a30 @0x475a30
+     xref from 0x45dcf0  in FUN_0045dac0 @0x45dac0
+     xref from 0x45de6d  in FUN_0045dac0 @0x45dac0
+     xref from 0x479680  in FUN_00479450 @0x479450
+     xref from 0x4797fd  in FUN_00479450 @0x479450
+     xref from 0x4616d4  in FUN_00461440 @0x461440
+     xref from 0x46185a  in FUN_00461440 @0x461440
+     xref from 0x461c0b  in FUN_00461440 @0x461440
+     xref from 0x461daf  in FUN_00461440 @0x461440
+     xref from 0x4557fc  in FUN_004555c0 @0x4555c0
+     xref from 0x455979  in FUN_004555c0 @0x4555c0
+     xref from 0x459916  in FUN_004596d0 @0x4596d0
+     xref from 0x459a9c  in FUN_004596d0 @0x4596d0
+     xref from 0x488e50  in FUN_00488bb0 @0x488bb0
+     xref from 0x488fd6  in FUN_00488bb0 @0x488bb0
+     xref from 0x489387  in FUN_00488bb0 @0x488bb0
+     xref from 0x48952b  in FUN_00488bb0 @0x488bb0
+     xref from 0x48c2d4  in FUN_0048c040 @0x48c040
+     xref from 0x48c45a  in FUN_0048c040 @0x48c040
+     xref from 0x48c80b  in FUN_0048c040 @0x48c040
+     xref from 0x48c9af  in FUN_0048c040 @0x48c040
+     xref from 0x46c260  in FUN_0046c030 @0x46c030
+     xref from 0x46c3dd  in FUN_0046c030 @0x46c030
+     xref from 0x454350  in FUN_00454120 @0x454120
+     xref from 0x4544cd  in FUN_00454120 @0x454120
+     xref from 0x47c504  in FUN_0047c270 @0x47c270
+     xref from 0x47c68a  in FUN_0047c270 @0x47c270
+     xref from 0x47ca3b  in FUN_0047c270 @0x47c270
+     xref from 0x47cbdf  in FUN_0047c270 @0x47c270
+     xref from 0x450490  in FUN_00450260 @0x450260
+     xref from 0x45060d  in FUN_00450260 @0x450260
+     xref from 0x4709b8  in FUN_00470770 @0x470770
+     xref from 0x470b3e  in FUN_00470770 @0x470770
+     xref from 0x470ef2  in FUN_00470770 @0x470770
+     xref from 0x471090  in FUN_00470770 @0x470770
+     xref from 0x483f37  (no func)
+     xref from 0x4840ce  (no func)
+     xref from 0x5677c6  (no func)
+     xref from 0x567960  (no func)
+     xref from 0x55d39b  (no func)
+     xref from 0x55d532  (no func)
+     xref from 0x5632f0  (no func)
+     xref from 0x56274b  (no func)
+     xref from 0x563b1a  (no func)
+     xref from 0x56194c  (no func)
+     xref from 0x561ae6  (no func)
+     xref from 0x5659f2  (no func)
+     xref from 0x565b89  (no func)
+     xref from 0x55e0c3  (no func)
+     xref from 0x55e84d  (no func)
+### STRING start_year= -> 1 instance(s)
+  data @ 0x761e4c
+     xref from 0x446032  (no func)
+     xref from 0x44391d  (no func)
+     xref from 0x443edd  (no func)

@@ -1,0 +1,2078 @@
+{
+ "source": {
+  "exe_path": "E:\\logh7-revival\\artifacts\\logh7-install\\____________s___\\____\\exe\\g7mtclient.exe",
+  "file_size": 3956736,
+  "note": "1차 소스 EXE 바이트 직접 스캔. 이전 사이클 JSON 비참조."
+ },
+ "total_strings": 480245,
+ "category_counts": {
+  "uncategorized": 477264,
+  "ui_text": 1176,
+  "format_string": 849,
+  "file_path": 820,
+  "person_name_candidate_katakana": 120,
+  "ship_name_candidate": 115,
+  "place_name_candidate": 31,
+  "rank_military": 2,
+  "string_txt_reference": 1
+ },
+ "categories": {
+  "uncategorized": {
+   "count": 477264,
+   "examples": [
+    {
+     "offset_hex": "0x0",
+     "encoding": "cp932",
+     "section": "(header/overlay)",
+     "text": "MZ"
+    },
+    {
+     "offset_hex": "0x44",
+     "encoding": "utf16le",
+     "section": "(header/overlay)",
+     "text": "됀촉렡"
+    },
+    {
+     "offset_hex": "0x4e",
+     "encoding": "utf16le",
+     "section": "(header/overlay)",
+     "text": "桔獩瀠潲牧浡挠湡潮"
+    },
+    {
+     "offset_hex": "0x62",
+     "encoding": "utf16le",
+     "section": "(header/overlay)",
+     "text": "敢爠湵椠"
+    },
+    {
+     "offset_hex": "0x70",
+     "encoding": "utf16le",
+     "section": "(header/overlay)",
+     "text": "潭敤"
+    },
+    {
+     "offset_hex": "0x80",
+     "encoding": "cp932",
+     "section": "(header/overlay)",
+     "text": "嘲1m"
+    },
+    {
+     "offset_hex": "0x80",
+     "encoding": "utf16le",
+     "section": "(header/overlay)",
+     "text": "続洱"
+    },
+    {
+     "offset_hex": "0x86",
+     "encoding": "cp932",
+     "section": "(header/overlay)",
+     "text": "_>"
+    },
+    {
+     "offset_hex": "0x8a",
+     "encoding": "cp932",
+     "section": "(header/overlay)",
+     "text": "_>"
+    },
+    {
+     "offset_hex": "0x8e",
+     "encoding": "cp932",
+     "section": "(header/overlay)",
+     "text": "_>"
+    },
+    {
+     "offset_hex": "0x92",
+     "encoding": "cp932",
+     "section": "(header/overlay)",
+     "text": "S>"
+    },
+    {
+     "offset_hex": "0x96",
+     "encoding": "cp932",
+     "section": "(header/overlay)",
+     "text": "_>"
+    },
+    {
+     "offset_hex": "0x99",
+     "encoding": "cp932",
+     "section": "(header/overlay)",
+     "text": "?U>"
+    },
+    {
+     "offset_hex": "0x9e",
+     "encoding": "cp932",
+     "section": "(header/overlay)",
+     "text": "_>]"
+    },
+    {
+     "offset_hex": "0xa2",
+     "encoding": "cp932",
+     "section": "(header/overlay)",
+     "text": "Q>"
+    },
+    {
+     "offset_hex": "0xa6",
+     "encoding": "cp932",
+     "section": "(header/overlay)",
+     "text": "_>6"
+    },
+    {
+     "offset_hex": "0xaa",
+     "encoding": "cp932",
+     "section": "(header/overlay)",
+     "text": "U>"
+    },
+    {
+     "offset_hex": "0xae",
+     "encoding": "cp932",
+     "section": "(header/overlay)",
+     "text": "_>"
+    },
+    {
+     "offset_hex": "0xb2",
+     "encoding": "cp932",
+     "section": "(header/overlay)",
+     "text": "L>"
+    },
+    {
+     "offset_hex": "0xb6",
+     "encoding": "cp932",
+     "section": "(header/overlay)",
+     "text": "_>"
+    },
+    {
+     "offset_hex": "0xb9",
+     "encoding": "cp932",
+     "section": "(header/overlay)",
+     "text": "?T>"
+    },
+    {
+     "offset_hex": "0xbe",
+     "encoding": "cp932",
+     "section": "(header/overlay)",
+     "text": "_>"
+    },
+    {
+     "offset_hex": "0xc1",
+     "encoding": "cp932",
+     "section": "(header/overlay)",
+     "text": "?L>"
+    },
+    {
+     "offset_hex": "0xc6",
+     "encoding": "cp932",
+     "section": "(header/overlay)",
+     "text": "_>"
+    },
+    {
+     "offset_hex": "0xca",
+     "encoding": "cp932",
+     "section": "(header/overlay)",
+     "text": "L>"
+    },
+    {
+     "offset_hex": "0xce",
+     "encoding": "cp932",
+     "section": "(header/overlay)",
+     "text": "_>"
+    },
+    {
+     "offset_hex": "0xd2",
+     "encoding": "cp932",
+     "section": "(header/overlay)",
+     "text": "^>"
+    },
+    {
+     "offset_hex": "0xd6",
+     "encoding": "cp932",
+     "section": "(header/overlay)",
+     "text": "_>$?F>"
+    },
+    {
+     "offset_hex": "0xde",
+     "encoding": "cp932",
+     "section": "(header/overlay)",
+     "text": "_>"
+    },
+    {
+     "offset_hex": "0xe1",
+     "encoding": "cp932",
+     "section": "(header/overlay)",
+     "text": "?C>"
+    },
+    {
+     "offset_hex": "0xe6",
+     "encoding": "cp932",
+     "section": "(header/overlay)",
+     "text": "_>"
+    },
+    {
+     "offset_hex": "0xea",
+     "encoding": "cp932",
+     "section": "(header/overlay)",
+     "text": "_>"
+    },
+    {
+     "offset_hex": "0xee",
+     "encoding": "cp932",
+     "section": "(header/overlay)",
+     "text": "_>\"<M>"
+    },
+    {
+     "offset_hex": "0xf6",
+     "encoding": "cp932",
+     "section": "(header/overlay)",
+     "text": "_>"
+    },
+    {
+     "offset_hex": "0xf9",
+     "encoding": "cp932",
+     "section": "(header/overlay)",
+     "text": "?B>"
+    },
+    {
+     "offset_hex": "0xfe",
+     "encoding": "cp932",
+     "section": "(header/overlay)",
+     "text": "_>f"
+    },
+    {
+     "offset_hex": "0x102",
+     "encoding": "cp932",
+     "section": "(header/overlay)",
+     "text": "Y>"
+    },
+    {
+     "offset_hex": "0x106",
+     "encoding": "cp932",
+     "section": "(header/overlay)",
+     "text": "_>6"
+    },
+    {
+     "offset_hex": "0x10a",
+     "encoding": "cp932",
+     "section": "(header/overlay)",
+     "text": "T>!"
+    },
+    {
+     "offset_hex": "0x10e",
+     "encoding": "cp932",
+     "section": "(header/overlay)",
+     "text": "_>Rich"
+    },
+    {
+     "offset_hex": "0x110",
+     "encoding": "utf16le",
+     "section": "(header/overlay)",
+     "text": "楒档"
+    },
+    {
+     "offset_hex": "0x116",
+     "encoding": "cp932",
+     "section": "(header/overlay)",
+     "text": "_>"
+    },
+    {
+     "offset_hex": "0x128",
+     "encoding": "cp932",
+     "section": "(header/overlay)",
+     "text": "PE"
+    },
+    {
+     "offset_hex": "0x131",
+     "encoding": "cp932",
+     "section": "(header/overlay)",
+     "text": "檜@"
+    },
+    {
+     "offset_hex": "0x146",
+     "encoding": "utf16le",
+     "section": "(header/overlay)",
+     "text": "&퀀"
+    },
+    {
+     "offset_hex": "0x158",
+     "encoding": "utf16le",
+     "section": "(header/overlay)",
+     "text": "뀀&"
+    },
+    {
+     "offset_hex": "0x1a8",
+     "encoding": "utf16le",
+     "section": "(header/overlay)",
+     "text": "꽸5"
+    },
+    {
+     "offset_hex": "0x1b4",
+     "encoding": "cp932",
+     "section": "(header/overlay)",
+     "text": "0<"
+    },
+    {
+     "offset_hex": "0x200",
+     "encoding": "utf16le",
+     "section": "(header/overlay)",
+     "text": "뀀&"
+    },
+    {
+     "offset_hex": "0x220",
+     "encoding": "cp932",
+     "section": "(header/overlay)",
+     "text": ".text"
+    }
+   ]
+  },
+  "ui_text": {
+   "count": 1176,
+   "examples": [
+    {
+     "offset_hex": "0x4d",
+     "encoding": "cp932",
+     "section": "(header/overlay)",
+     "text": "!This program cannot be run in DOS mode."
+    },
+    {
+     "offset_hex": "0x1b7562",
+     "encoding": "cp932",
+     "section": ".text",
+     "text": "No["
+    },
+    {
+     "offset_hex": "0x1ce4a5",
+     "encoding": "cp932",
+     "section": ".text",
+     "text": "oK"
+    },
+    {
+     "offset_hex": "0x1d838f",
+     "encoding": "cp932",
+     "section": ".text",
+     "text": "oK "
+    },
+    {
+     "offset_hex": "0x1d839d",
+     "encoding": "cp932",
+     "section": ".text",
+     "text": "ok@"
+    },
+    {
+     "offset_hex": "0x1d8416",
+     "encoding": "cp932",
+     "section": ".text",
+     "text": "ok"
+    },
+    {
+     "offset_hex": "0x1d8550",
+     "encoding": "cp932",
+     "section": ".text",
+     "text": "oK("
+    },
+    {
+     "offset_hex": "0x1d8576",
+     "encoding": "cp932",
+     "section": ".text",
+     "text": "okH"
+    },
+    {
+     "offset_hex": "0x1d85fe",
+     "encoding": "cp932",
+     "section": ".text",
+     "text": "ok"
+    },
+    {
+     "offset_hex": "0x270904",
+     "encoding": "cp932",
+     "section": ".rdata",
+     "text": "NO TABLE"
+    },
+    {
+     "offset_hex": "0x270910",
+     "encoding": "cp932",
+     "section": ".rdata",
+     "text": "NO DATA"
+    },
+    {
+     "offset_hex": "0x27909c",
+     "encoding": "cp932",
+     "section": ".rdata",
+     "text": "Device does not support this Usage/ResType"
+    },
+    {
+     "offset_hex": "0x27927c",
+     "encoding": "cp932",
+     "section": ".rdata",
+     "text": "File does not contain a cube texture"
+    },
+    {
+     "offset_hex": "0x279643",
+     "encoding": "cp932",
+     "section": ".rdata",
+     "text": "Do you want to invoke the debugger?"
+    },
+    {
+     "offset_hex": "0x2796dc",
+     "encoding": "cp932",
+     "section": ".rdata",
+     "text": "LoadBMP: JPEG compression not supported"
+    },
+    {
+     "offset_hex": "0x279778",
+     "encoding": "cp932",
+     "section": ".rdata",
+     "text": "read error"
+    },
+    {
+     "offset_hex": "0x2797c0",
+     "encoding": "cp932",
+     "section": ".rdata",
+     "text": "LoadDDS: Partial cubemaps not supported."
+    },
+    {
+     "offset_hex": "0x2798bc",
+     "encoding": "cp932",
+     "section": ".rdata",
+     "text": "No suitable image filter found"
+    },
+    {
+     "offset_hex": "0x2798fc",
+     "encoding": "cp932",
+     "section": ".rdata",
+     "text": "Could not lock surface"
+    },
+    {
+     "offset_hex": "0x279954",
+     "encoding": "cp932",
+     "section": ".rdata",
+     "text": "Could not lock volume"
+    },
+    {
+     "offset_hex": "0x27996c",
+     "encoding": "cp932",
+     "section": ".rdata",
+     "text": "Cannot lock non-dynamic vidmem volumes"
+    },
+    {
+     "offset_hex": "0x279dcc",
+     "encoding": "cp932",
+     "section": ".rdata",
+     "text": "(INFO) Using 3DNow Instructions"
+    },
+    {
+     "offset_hex": "0x279ec4",
+     "encoding": "cp932",
+     "section": ".rdata",
+     "text": "%s(%d) : (Assembly Error) %s"
+    },
+    {
+     "offset_hex": "0x279ee4",
+     "encoding": "cp932",
+     "section": ".rdata",
+     "text": "%s(%d) : (Assembly Error) statement incomplete"
+    },
+    {
+     "offset_hex": "0x279f14",
+     "encoding": "cp932",
+     "section": ".rdata",
+     "text": "%s(%d) : (Assembly Error) constant definition in shader body"
+    },
+    {
+     "offset_hex": "0x279f58",
+     "encoding": "cp932",
+     "section": ".rdata",
+     "text": "%s(%d) : (Assembly Error) shader version expected"
+    },
+    {
+     "offset_hex": "0x279f8c",
+     "encoding": "cp932",
+     "section": ".rdata",
+     "text": "syntax error"
+    },
+    {
+     "offset_hex": "0x27a130",
+     "encoding": "cp932",
+     "section": ".rdata",
+     "text": "nop"
+    },
+    {
+     "offset_hex": "0x27a250",
+     "encoding": "cp932",
+     "section": ".rdata",
+     "text": "preprocessor directives are not supported"
+    },
+    {
+     "offset_hex": "0x27a284",
+     "encoding": "cp932",
+     "section": ".rdata",
+     "text": "Internal assembler error! %d"
+    },
+    {
+     "offset_hex": "0x27a2a8",
+     "encoding": "cp932",
+     "section": ".rdata",
+     "text": "coissue not supported in vertex shaders"
+    },
+    {
+     "offset_hex": "0x27a344",
+     "encoding": "cp932",
+     "section": ".rdata",
+     "text": "complement cannot be used with other modifiers"
+    },
+    {
+     "offset_hex": "0x27a374",
+     "encoding": "cp932",
+     "section": ".rdata",
+     "text": "complement not supported in vertex shaders"
+    },
+    {
+     "offset_hex": "0x27a3a0",
+     "encoding": "cp932",
+     "section": ".rdata",
+     "text": "negate and divide modifiers cannot be combined"
+    },
+    {
+     "offset_hex": "0x27a3d0",
+     "encoding": "cp932",
+     "section": ".rdata",
+     "text": "constant modifiers not supported in ps.1.4"
+    },
+    {
+     "offset_hex": "0x27a420",
+     "encoding": "cp932",
+     "section": ".rdata",
+     "text": "Could not read data from source"
+    },
+    {
+     "offset_hex": "0x27a440",
+     "encoding": "cp932",
+     "section": ".rdata",
+     "text": "Error assembling shader"
+    },
+    {
+     "offset_hex": "0x27a760",
+     "encoding": "cp932",
+     "section": ".rdata",
+     "text": "Warning: unknown JFIF revision number %d.%02d"
+    },
+    {
+     "offset_hex": "0x27a86c",
+     "encoding": "cp932",
+     "section": ".rdata",
+     "text": "Unknown Adobe color transform code %d"
+    },
+    {
+     "offset_hex": "0x27a9f8",
+     "encoding": "cp932",
+     "section": ".rdata",
+     "text": "Smoothing not supported with nonstandard sampling ratios"
+    },
+    {
+     "offset_hex": "0x27ab50",
+     "encoding": "cp932",
+     "section": ".rdata",
+     "text": "Unknown JFIF minor revision number %d.%02d"
+    },
+    {
+     "offset_hex": "0x27ab7c",
+     "encoding": "cp932",
+     "section": ".rdata",
+     "text": "Warning: thumbnail image size does not match data length %u"
+    },
+    {
+     "offset_hex": "0x27accc",
+     "encoding": "cp932",
+     "section": ".rdata",
+     "text": "Unknown APP14 marker (not Adobe), length %u"
+    },
+    {
+     "offset_hex": "0x27acf8",
+     "encoding": "cp932",
+     "section": ".rdata",
+     "text": "Unknown APP0 marker (not JFIF), length %u"
+    },
+    {
+     "offset_hex": "0x27b028",
+     "encoding": "cp932",
+     "section": ".rdata",
+     "text": "Cannot quantize to more than %d colors"
+    },
+    {
+     "offset_hex": "0x27b050",
+     "encoding": "cp932",
+     "section": ".rdata",
+     "text": "Cannot quantize to fewer than %d colors"
+    },
+    {
+     "offset_hex": "0x27b078",
+     "encoding": "cp932",
+     "section": ".rdata",
+     "text": "Cannot quantize more than %d color components"
+    },
+    {
+     "offset_hex": "0x27b0c8",
+     "encoding": "cp932",
+     "section": ".rdata",
+     "text": "Not a JPEG file: starts with 0x%02x 0x%02x"
+    },
+    {
+     "offset_hex": "0x27b0f4",
+     "encoding": "cp932",
+     "section": ".rdata",
+     "text": "Quantization table 0x%02x was not defined"
+    },
+    {
+     "offset_hex": "0x27b120",
+     "encoding": "cp932",
+     "section": ".rdata",
+     "text": "JPEG datastream contains no image"
+    }
+   ]
+  },
+  "format_string": {
+   "count": 849,
+   "examples": [
+    {
+     "offset_hex": "0x22877",
+     "encoding": "cp932",
+     "section": ".text",
+     "text": "%u"
+    },
+    {
+     "offset_hex": "0x54577",
+     "encoding": "cp932",
+     "section": ".text",
+     "text": "%X"
+    },
+    {
+     "offset_hex": "0x7831c",
+     "encoding": "cp932",
+     "section": ".text",
+     "text": "%f"
+    },
+    {
+     "offset_hex": "0xafba8",
+     "encoding": "cp932",
+     "section": ".text",
+     "text": "%p'|"
+    },
+    {
+     "offset_hex": "0xafc0b",
+     "encoding": "cp932",
+     "section": ".text",
+     "text": "%x'|"
+    },
+    {
+     "offset_hex": "0xb771f",
+     "encoding": "cp932",
+     "section": ".text",
+     "text": "% 稠"
+    },
+    {
+     "offset_hex": "0xbebaa",
+     "encoding": "cp932",
+     "section": ".text",
+     "text": "%f"
+    },
+    {
+     "offset_hex": "0xc7aa2",
+     "encoding": "cp932",
+     "section": ".text",
+     "text": "h/%f"
+    },
+    {
+     "offset_hex": "0xc8dee",
+     "encoding": "cp932",
+     "section": ".text",
+     "text": "hH%f"
+    },
+    {
+     "offset_hex": "0xc8ef8",
+     "encoding": "cp932",
+     "section": ".text",
+     "text": "hh%f"
+    },
+    {
+     "offset_hex": "0xce35a",
+     "encoding": "cp932",
+     "section": ".text",
+     "text": "%f"
+    },
+    {
+     "offset_hex": "0xce8e4",
+     "encoding": "cp932",
+     "section": ".text",
+     "text": "%f"
+    },
+    {
+     "offset_hex": "0xceed4",
+     "encoding": "cp932",
+     "section": ".text",
+     "text": "%f"
+    },
+    {
+     "offset_hex": "0xd57fc",
+     "encoding": "cp932",
+     "section": ".text",
+     "text": "%X畴"
+    },
+    {
+     "offset_hex": "0xd6fc1",
+     "encoding": "cp932",
+     "section": ".text",
+     "text": "%p詛"
+    },
+    {
+     "offset_hex": "0xd771e",
+     "encoding": "cp932",
+     "section": ".text",
+     "text": "%l詛"
+    },
+    {
+     "offset_hex": "0xd77df",
+     "encoding": "cp932",
+     "section": ".text",
+     "text": "%l詛"
+    },
+    {
+     "offset_hex": "0xeee02",
+     "encoding": "cp932",
+     "section": ".text",
+     "text": "%p"
+    },
+    {
+     "offset_hex": "0xeee81",
+     "encoding": "cp932",
+     "section": ".text",
+     "text": "%p"
+    },
+    {
+     "offset_hex": "0xeef8d",
+     "encoding": "cp932",
+     "section": ".text",
+     "text": "%p"
+    },
+    {
+     "offset_hex": "0xf02e6",
+     "encoding": "cp932",
+     "section": ".text",
+     "text": "%X畴"
+    },
+    {
+     "offset_hex": "0xf033c",
+     "encoding": "cp932",
+     "section": ".text",
+     "text": "%X畴"
+    },
+    {
+     "offset_hex": "0xf4472",
+     "encoding": "cp932",
+     "section": ".text",
+     "text": "%4麈"
+    },
+    {
+     "offset_hex": "0xf6d82",
+     "encoding": "cp932",
+     "section": ".text",
+     "text": "%4"
+    },
+    {
+     "offset_hex": "0xf82e6",
+     "encoding": "cp932",
+     "section": ".text",
+     "text": "%4"
+    },
+    {
+     "offset_hex": "0xf9ea6",
+     "encoding": "cp932",
+     "section": ".text",
+     "text": "%f"
+    },
+    {
+     "offset_hex": "0xfeab7",
+     "encoding": "cp932",
+     "section": ".text",
+     "text": "%I"
+    },
+    {
+     "offset_hex": "0xffd83",
+     "encoding": "cp932",
+     "section": ".text",
+     "text": "%c"
+    },
+    {
+     "offset_hex": "0x1067dc",
+     "encoding": "cp932",
+     "section": ".text",
+     "text": "%pL!"
+    },
+    {
+     "offset_hex": "0x113050",
+     "encoding": "cp932",
+     "section": ".text",
+     "text": "%x"
+    },
+    {
+     "offset_hex": "0x11a5c7",
+     "encoding": "cp932",
+     "section": ".text",
+     "text": "%p"
+    },
+    {
+     "offset_hex": "0x148a37",
+     "encoding": "cp932",
+     "section": ".text",
+     "text": "%4"
+    },
+    {
+     "offset_hex": "0x166fdb",
+     "encoding": "cp932",
+     "section": ".text",
+     "text": "%x"
+    },
+    {
+     "offset_hex": "0x18c7d9",
+     "encoding": "cp932",
+     "section": ".text",
+     "text": "%X"
+    },
+    {
+     "offset_hex": "0x18f9da",
+     "encoding": "cp932",
+     "section": ".text",
+     "text": "%ppg"
+    },
+    {
+     "offset_hex": "0x19f947",
+     "encoding": "cp932",
+     "section": ".text",
+     "text": "%x"
+    },
+    {
+     "offset_hex": "0x1b7a9e",
+     "encoding": "cp932",
+     "section": ".text",
+     "text": "%x["
+    },
+    {
+     "offset_hex": "0x1c7881",
+     "encoding": "cp932",
+     "section": ".text",
+     "text": "(%p"
+    },
+    {
+     "offset_hex": "0x1c9944",
+     "encoding": "cp932",
+     "section": ".text",
+     "text": "%x"
+    },
+    {
+     "offset_hex": "0x1c99c1",
+     "encoding": "cp932",
+     "section": ".text",
+     "text": "%x"
+    },
+    {
+     "offset_hex": "0x1c9a18",
+     "encoding": "cp932",
+     "section": ".text",
+     "text": "%x"
+    },
+    {
+     "offset_hex": "0x1d5353",
+     "encoding": "cp932",
+     "section": ".text",
+     "text": "n%4"
+    },
+    {
+     "offset_hex": "0x1d562c",
+     "encoding": "cp932",
+     "section": ".text",
+     "text": "n%4"
+    },
+    {
+     "offset_hex": "0x1d572f",
+     "encoding": "cp932",
+     "section": ".text",
+     "text": "n%d"
+    },
+    {
+     "offset_hex": "0x1dd40b",
+     "encoding": "cp932",
+     "section": ".text",
+     "text": "%d"
+    },
+    {
+     "offset_hex": "0x1fdedd",
+     "encoding": "cp932",
+     "section": ".text",
+     "text": "%fマ"
+    },
+    {
+     "offset_hex": "0x200e45",
+     "encoding": "cp932",
+     "section": ".text",
+     "text": "u%f"
+    },
+    {
+     "offset_hex": "0x20682c",
+     "encoding": "cp932",
+     "section": ".text",
+     "text": "t%It"
+    },
+    {
+     "offset_hex": "0x207736",
+     "encoding": "cp932",
+     "section": ".text",
+     "text": ">%uM畿"
+    },
+    {
+     "offset_hex": "0x20c40b",
+     "encoding": "cp932",
+     "section": ".text",
+     "text": "%4"
+    }
+   ]
+  },
+  "ship_name_candidate": {
+   "count": 115,
+   "examples": [
+    {
+     "offset_hex": "0xba444",
+     "encoding": "cp932",
+     "section": ".text",
+     "text": "号L"
+    },
+    {
+     "offset_hex": "0xbc0b6",
+     "encoding": "cp932",
+     "section": ".text",
+     "text": "号侈C"
+    },
+    {
+     "offset_hex": "0xbc14e",
+     "encoding": "cp932",
+     "section": ".text",
+     "text": "号C"
+    },
+    {
+     "offset_hex": "0xbc1de",
+     "encoding": "cp932",
+     "section": ".text",
+     "text": "号41C"
+    },
+    {
+     "offset_hex": "0xbc215",
+     "encoding": "cp932",
+     "section": ".text",
+     "text": "号@1C"
+    },
+    {
+     "offset_hex": "0xbc24e",
+     "encoding": "cp932",
+     "section": ".text",
+     "text": "号L1C"
+    },
+    {
+     "offset_hex": "0xbc27b",
+     "encoding": "cp932",
+     "section": ".text",
+     "text": "号T1C"
+    },
+    {
+     "offset_hex": "0xbc4d4",
+     "encoding": "cp932",
+     "section": ".text",
+     "text": "号hイ"
+    },
+    {
+     "offset_hex": "0xbd745",
+     "encoding": "cp932",
+     "section": ".text",
+     "text": "号4$C"
+    },
+    {
+     "offset_hex": "0xbd806",
+     "encoding": "cp932",
+     "section": ".text",
+     "text": "号ptH"
+    },
+    {
+     "offset_hex": "0xbe359",
+     "encoding": "cp932",
+     "section": ".text",
+     "text": "dW|1S号"
+    },
+    {
+     "offset_hex": "0xc025a",
+     "encoding": "cp932",
+     "section": ".text",
+     "text": "vr号<"
+    },
+    {
+     "offset_hex": "0xc0476",
+     "encoding": "cp932",
+     "section": ".text",
+     "text": "号t"
+    },
+    {
+     "offset_hex": "0xc9adb",
+     "encoding": "cp932",
+     "section": ".text",
+     "text": "晃 R号"
+    },
+    {
+     "offset_hex": "0xc9d01",
+     "encoding": "cp932",
+     "section": ".text",
+     "text": "ι 号"
+    },
+    {
+     "offset_hex": "0xca644",
+     "encoding": "cp932",
+     "section": ".text",
+     "text": "号h"
+    },
+    {
+     "offset_hex": "0xca93e",
+     "encoding": "cp932",
+     "section": ".text",
+     "text": "逆$0号"
+    },
+    {
+     "offset_hex": "0xe346c",
+     "encoding": "cp932",
+     "section": ".text",
+     "text": "R号"
+    },
+    {
+     "offset_hex": "0xe3517",
+     "encoding": "cp932",
+     "section": ".text",
+     "text": "AtmSW号"
+    },
+    {
+     "offset_hex": "0xe57cb",
+     "encoding": "cp932",
+     "section": ".text",
+     "text": "L=号"
+    },
+    {
+     "offset_hex": "0xee381",
+     "encoding": "cp932",
+     "section": ".text",
+     "text": "R号$"
+    },
+    {
+     "offset_hex": "0xf2044",
+     "encoding": "cp932",
+     "section": ".text",
+     "text": "SU号"
+    },
+    {
+     "offset_hex": "0xf2603",
+     "encoding": "cp932",
+     "section": ".text",
+     "text": "V逆$ 号"
+    },
+    {
+     "offset_hex": "0xf2684",
+     "encoding": "cp932",
+     "section": ".text",
+     "text": "W号"
+    },
+    {
+     "offset_hex": "0xf2888",
+     "encoding": "cp932",
+     "section": ".text",
+     "text": "R号"
+    },
+    {
+     "offset_hex": "0xf29cb",
+     "encoding": "cp932",
+     "section": ".text",
+     "text": "P号4"
+    },
+    {
+     "offset_hex": "0xf319d",
+     "encoding": "cp932",
+     "section": ".text",
+     "text": "亀$ R号"
+    },
+    {
+     "offset_hex": "0xf31ae",
+     "encoding": "cp932",
+     "section": ".text",
+     "text": "起`亀察δHR号"
+    },
+    {
+     "offset_hex": "0xf6d09",
+     "encoding": "cp932",
+     "section": ".text",
+     "text": "R号"
+    },
+    {
+     "offset_hex": "0xfaff9",
+     "encoding": "cp932",
+     "section": ".text",
+     "text": "号8Y"
+    },
+    {
+     "offset_hex": "0xfb016",
+     "encoding": "cp932",
+     "section": ".text",
+     "text": "号8"
+    },
+    {
+     "offset_hex": "0xfbb0b",
+     "encoding": "cp932",
+     "section": ".text",
+     "text": "号d"
+    },
+    {
+     "offset_hex": "0x10125f",
+     "encoding": "cp932",
+     "section": ".text",
+     "text": "号$|"
+    },
+    {
+     "offset_hex": "0x1014fe",
+     "encoding": "cp932",
+     "section": ".text",
+     "text": "号$|"
+    },
+    {
+     "offset_hex": "0x10699e",
+     "encoding": "cp932",
+     "section": ".text",
+     "text": "PQR号"
+    },
+    {
+     "offset_hex": "0x10790e",
+     "encoding": "cp932",
+     "section": ".text",
+     "text": "号,3"
+    },
+    {
+     "offset_hex": "0x108ed2",
+     "encoding": "cp932",
+     "section": ".text",
+     "text": "号"
+    },
+    {
+     "offset_hex": "0x108f37",
+     "encoding": "cp932",
+     "section": ".text",
+     "text": "号"
+    },
+    {
+     "offset_hex": "0x10b5cf",
+     "encoding": "cp932",
+     "section": ".text",
+     "text": "好$tPQR号"
+    },
+    {
+     "offset_hex": "0x10b940",
+     "encoding": "cp932",
+     "section": ".text",
+     "text": "号,"
+    },
+    {
+     "offset_hex": "0x11a685",
+     "encoding": "cp932",
+     "section": ".text",
+     "text": "R号"
+    },
+    {
+     "offset_hex": "0x11c2af",
+     "encoding": "cp932",
+     "section": ".text",
+     "text": "号 "
+    },
+    {
+     "offset_hex": "0x122a3a",
+     "encoding": "cp932",
+     "section": ".text",
+     "text": "亀$8号"
+    },
+    {
+     "offset_hex": "0x122a49",
+     "encoding": "cp932",
+     "section": ".text",
+     "text": "亀$8号"
+    },
+    {
+     "offset_hex": "0x122a5c",
+     "encoding": "cp932",
+     "section": ".text",
+     "text": "亀$8号"
+    },
+    {
+     "offset_hex": "0x1687a1",
+     "encoding": "cp932",
+     "section": ".text",
+     "text": "R号"
+    },
+    {
+     "offset_hex": "0x16a5ed",
+     "encoding": "cp932",
+     "section": ".text",
+     "text": "号`KL"
+    },
+    {
+     "offset_hex": "0x16a66b",
+     "encoding": "cp932",
+     "section": ".text",
+     "text": "号l"
+    },
+    {
+     "offset_hex": "0x16a77c",
+     "encoding": "cp932",
+     "section": ".text",
+     "text": "号XSX"
+    },
+    {
+     "offset_hex": "0x16a7b6",
+     "encoding": "cp932",
+     "section": ".text",
+     "text": "号X"
+    }
+   ]
+  },
+  "file_path": {
+   "count": 820,
+   "examples": [
+    {
+     "offset_hex": "0x2708e8",
+     "encoding": "cp932",
+     "section": ".rdata",
+     "text": "constmsg.dat"
+    },
+    {
+     "offset_hex": "0x2708f8",
+     "encoding": "cp932",
+     "section": ".rdata",
+     "text": "g7sw.dat"
+    },
+    {
+     "offset_hex": "0x279684",
+     "encoding": "cp932",
+     "section": ".rdata",
+     "text": "kernel32.dll"
+    },
+    {
+     "offset_hex": "0x2796b4",
+     "encoding": "cp932",
+     "section": ".rdata",
+     "text": "d3d8d.dll"
+    },
+    {
+     "offset_hex": "0x2796d0",
+     "encoding": "cp932",
+     "section": ".rdata",
+     "text": "d3d8.dll"
+    },
+    {
+     "offset_hex": "0x27e8e0",
+     "encoding": "cp932",
+     "section": ".rdata",
+     "text": "COMCTL32.DLL"
+    },
+    {
+     "offset_hex": "0x2809a5",
+     "encoding": "cp932",
+     "section": ".rdata",
+     "text": "ole32.dll"
+    },
+    {
+     "offset_hex": "0x281e70",
+     "encoding": "cp932",
+     "section": ".rdata",
+     "text": "user32.dll"
+    },
+    {
+     "offset_hex": "0x35b872",
+     "encoding": "cp932",
+     "section": ".rdata",
+     "text": "WINMM.dll"
+    },
+    {
+     "offset_hex": "0x35b87c",
+     "encoding": "cp932",
+     "section": ".rdata",
+     "text": "d3dxof.dll"
+    },
+    {
+     "offset_hex": "0x35b89e",
+     "encoding": "cp932",
+     "section": ".rdata",
+     "text": "DINPUT8.dll"
+    },
+    {
+     "offset_hex": "0x35bbce",
+     "encoding": "cp932",
+     "section": ".rdata",
+     "text": "KERNEL32.dll"
+    },
+    {
+     "offset_hex": "0x35bf22",
+     "encoding": "cp932",
+     "section": ".rdata",
+     "text": "USER32.dll"
+    },
+    {
+     "offset_hex": "0x35c062",
+     "encoding": "cp932",
+     "section": ".rdata",
+     "text": "GDI32.dll"
+    },
+    {
+     "offset_hex": "0x35c080",
+     "encoding": "cp932",
+     "section": ".rdata",
+     "text": "comdlg32.dll"
+    },
+    {
+     "offset_hex": "0x35c0e0",
+     "encoding": "cp932",
+     "section": ".rdata",
+     "text": "ADVAPI32.dll"
+    },
+    {
+     "offset_hex": "0x35c18a",
+     "encoding": "cp932",
+     "section": ".rdata",
+     "text": "IMM32.dll"
+    },
+    {
+     "offset_hex": "0x35c194",
+     "encoding": "cp932",
+     "section": ".rdata",
+     "text": "DSOUND.dll"
+    },
+    {
+     "offset_hex": "0x35c1a0",
+     "encoding": "cp932",
+     "section": ".rdata",
+     "text": "COMCTL32.dll"
+    },
+    {
+     "offset_hex": "0x35c1ae",
+     "encoding": "cp932",
+     "section": ".rdata",
+     "text": "oledlg.dll"
+    },
+    {
+     "offset_hex": "0x35c1ba",
+     "encoding": "cp932",
+     "section": ".rdata",
+     "text": "OLEPRO32.DLL"
+    },
+    {
+     "offset_hex": "0x35c1c8",
+     "encoding": "cp932",
+     "section": ".rdata",
+     "text": "WS2_32.dll"
+    },
+    {
+     "offset_hex": "0x35c250",
+     "encoding": "cp932",
+     "section": ".rdata",
+     "text": "MSACM32.dll"
+    },
+    {
+     "offset_hex": "0x35c26e",
+     "encoding": "cp932",
+     "section": ".rdata",
+     "text": "d3d8.dll"
+    },
+    {
+     "offset_hex": "0x35d466",
+     "encoding": "cp932",
+     "section": ".rdata",
+     "text": "SHELL32.dll"
+    },
+    {
+     "offset_hex": "0x35d5bc",
+     "encoding": "cp932",
+     "section": ".rdata",
+     "text": "ole32.dll"
+    },
+    {
+     "offset_hex": "0x35d5c6",
+     "encoding": "cp932",
+     "section": ".rdata",
+     "text": "OLEAUT32.dll"
+    },
+    {
+     "offset_hex": "0x36d490",
+     "encoding": "cp932",
+     "section": ".data",
+     "text": "../data/sound/SE/W_NOISE.wav"
+    },
+    {
+     "offset_hex": "0x36d590",
+     "encoding": "cp932",
+     "section": ".data",
+     "text": "../data/sound/SE/Sound01.wav"
+    },
+    {
+     "offset_hex": "0x36d690",
+     "encoding": "cp932",
+     "section": ".data",
+     "text": "../data/sound/SE/Sound02.wav"
+    },
+    {
+     "offset_hex": "0x36d790",
+     "encoding": "cp932",
+     "section": ".data",
+     "text": "../data/sound/SE/cursor.wav"
+    },
+    {
+     "offset_hex": "0x36d890",
+     "encoding": "cp932",
+     "section": ".data",
+     "text": "../data/sound/SE/warp1.wav"
+    },
+    {
+     "offset_hex": "0x36d990",
+     "encoding": "cp932",
+     "section": ".data",
+     "text": "../data/sound/SE/fengine.wav"
+    },
+    {
+     "offset_hex": "0x36da90",
+     "encoding": "cp932",
+     "section": ".data",
+     "text": "../data/sound/SE/bburn.wav"
+    },
+    {
+     "offset_hex": "0x36db90",
+     "encoding": "cp932",
+     "section": ".data",
+     "text": "../data/sound/SE/attack3.wav"
+    },
+    {
+     "offset_hex": "0x36dc90",
+     "encoding": "cp932",
+     "section": ".data",
+     "text": "../data/sound/SE/attack2.wav"
+    },
+    {
+     "offset_hex": "0x36dd90",
+     "encoding": "cp932",
+     "section": ".data",
+     "text": "../data/sound/SE/attack5.wav"
+    },
+    {
+     "offset_hex": "0x36de90",
+     "encoding": "cp932",
+     "section": ".data",
+     "text": "../data/sound/SE/attack1.wav"
+    },
+    {
+     "offset_hex": "0x36df90",
+     "encoding": "cp932",
+     "section": ".data",
+     "text": "../data/sound/SE/missile.wav"
+    },
+    {
+     "offset_hex": "0x36e090",
+     "encoding": "cp932",
+     "section": ".data",
+     "text": "../data/sound/SE/exp3.wav"
+    },
+    {
+     "offset_hex": "0x36ee4c",
+     "encoding": "cp932",
+     "section": ".data",
+     "text": "G7MTClient.exe"
+    },
+    {
+     "offset_hex": "0x371f88",
+     "encoding": "cp932",
+     "section": ".data",
+     "text": "../data/image/strategy/grid_glow.bmp"
+    },
+    {
+     "offset_hex": "0x371fb0",
+     "encoding": "cp932",
+     "section": ".data",
+     "text": "../data/image/strategy/bh_light.bmp"
+    },
+    {
+     "offset_hex": "0x371fd4",
+     "encoding": "cp932",
+     "section": ".data",
+     "text": "../data/image/strategy/bh_flare.bmp"
+    },
+    {
+     "offset_hex": "0x371ff8",
+     "encoding": "cp932",
+     "section": ".data",
+     "text": "../data/image/strategy/bh_moya.tga"
+    },
+    {
+     "offset_hex": "0x37201c",
+     "encoding": "cp932",
+     "section": ".data",
+     "text": "../data/model/strategy/bh_wave.mdx"
+    },
+    {
+     "offset_hex": "0x372040",
+     "encoding": "cp932",
+     "section": ".data",
+     "text": "../data/model/strategy/bh_core.mdx"
+    },
+    {
+     "offset_hex": "0x3720b8",
+     "encoding": "cp932",
+     "section": ".data",
+     "text": "../data/model/strategy/06.mdx"
+    },
+    {
+     "offset_hex": "0x3720fc",
+     "encoding": "cp932",
+     "section": ".data",
+     "text": "../data/image/senryaku_panel/senryaku_mainpanel.tga"
+    },
+    {
+     "offset_hex": "0x372130",
+     "encoding": "cp932",
+     "section": ".data",
+     "text": "../data/model/strategy/grid.mdx"
+    }
+   ]
+  },
+  "person_name_candidate_katakana": {
+   "count": 120,
+   "examples": [
+    {
+     "offset_hex": "0x289638",
+     "encoding": "utf16le",
+     "section": ".rdata",
+     "text": "ァアィイゥウェエォオカガキギクグケゲコゴサザシジスズセゼソゾタダチヂッツヅテデトドナニヌネノハバパヒビピフブプヘベペホボポマミムメモャヤュユョヨラリルレロヮワヰヱヲンヴヵヶ"
+    },
+    {
+     "offset_hex": "0x2990a4",
+     "encoding": "utf16le",
+     "section": ".rdata",
+     "text": "ァアィイゥウェエォオカガキギクグケゲコゴサザシジスズセゼソゾタダチヂッツヅテデトドナニヌネノハバパヒビピフブプヘベペホボポマミムメモャヤュユョヨラリルレロヮワヰヱヲンヴヵヶ"
+    },
+    {
+     "offset_hex": "0x29b511",
+     "encoding": "cp932",
+     "section": ".rdata",
+     "text": "ゲゼソ"
+    },
+    {
+     "offset_hex": "0x2a21af",
+     "encoding": "cp932",
+     "section": ".rdata",
+     "text": "ゾウゥ"
+    },
+    {
+     "offset_hex": "0x2bc018",
+     "encoding": "utf16le",
+     "section": ".rdata",
+     "text": "オァェ"
+    },
+    {
+     "offset_hex": "0x2bc36c",
+     "encoding": "utf16le",
+     "section": ".rdata",
+     "text": "ビダ"
+    },
+    {
+     "offset_hex": "0x2bc378",
+     "encoding": "utf16le",
+     "section": ".rdata",
+     "text": "ボパト"
+    },
+    {
+     "offset_hex": "0x2bc886",
+     "encoding": "utf16le",
+     "section": ".rdata",
+     "text": "ヶュリョ"
+    },
+    {
+     "offset_hex": "0x2bdb34",
+     "encoding": "utf16le",
+     "section": ".rdata",
+     "text": "ムゾ"
+    },
+    {
+     "offset_hex": "0x30cb40",
+     "encoding": "utf16le",
+     "section": ".rdata",
+     "text": "ァアィイゥウェエォオカガキギクグケゲコゴサザシジスズセゼソゾタダチヂッツヅテデトドナニヌネノハバパヒビピフブプヘベペホボポマミムメモャヤュユョヨラリルレロヮワヰヱヲンヴヵヶ"
+    },
+    {
+     "offset_hex": "0x31bd6e",
+     "encoding": "utf16le",
+     "section": ".rdata",
+     "text": "スセ"
+    },
+    {
+     "offset_hex": "0x33cdb4",
+     "encoding": "utf16le",
+     "section": ".rdata",
+     "text": "アパート"
+    },
+    {
+     "offset_hex": "0x33cdbe",
+     "encoding": "utf16le",
+     "section": ".rdata",
+     "text": "アルファ"
+    },
+    {
+     "offset_hex": "0x33cdc8",
+     "encoding": "utf16le",
+     "section": ".rdata",
+     "text": "アンペア"
+    },
+    {
+     "offset_hex": "0x33cdd2",
+     "encoding": "utf16le",
+     "section": ".rdata",
+     "text": "アール"
+    },
+    {
+     "offset_hex": "0x33cdda",
+     "encoding": "utf16le",
+     "section": ".rdata",
+     "text": "イニング"
+    },
+    {
+     "offset_hex": "0x33cde4",
+     "encoding": "utf16le",
+     "section": ".rdata",
+     "text": "インチ"
+    },
+    {
+     "offset_hex": "0x33cdec",
+     "encoding": "utf16le",
+     "section": ".rdata",
+     "text": "ウォン"
+    },
+    {
+     "offset_hex": "0x33cdf4",
+     "encoding": "utf16le",
+     "section": ".rdata",
+     "text": "エスクード"
+    },
+    {
+     "offset_hex": "0x33ce00",
+     "encoding": "utf16le",
+     "section": ".rdata",
+     "text": "エーカー"
+    },
+    {
+     "offset_hex": "0x33ce0a",
+     "encoding": "utf16le",
+     "section": ".rdata",
+     "text": "オンス"
+    },
+    {
+     "offset_hex": "0x33ce12",
+     "encoding": "utf16le",
+     "section": ".rdata",
+     "text": "オーム"
+    },
+    {
+     "offset_hex": "0x33ce1a",
+     "encoding": "utf16le",
+     "section": ".rdata",
+     "text": "カイリ"
+    },
+    {
+     "offset_hex": "0x33ce22",
+     "encoding": "utf16le",
+     "section": ".rdata",
+     "text": "カラット"
+    },
+    {
+     "offset_hex": "0x33ce2c",
+     "encoding": "utf16le",
+     "section": ".rdata",
+     "text": "カロリー"
+    },
+    {
+     "offset_hex": "0x33ce36",
+     "encoding": "utf16le",
+     "section": ".rdata",
+     "text": "ガロン"
+    },
+    {
+     "offset_hex": "0x33ce3e",
+     "encoding": "utf16le",
+     "section": ".rdata",
+     "text": "ガンマ"
+    },
+    {
+     "offset_hex": "0x33ce46",
+     "encoding": "utf16le",
+     "section": ".rdata",
+     "text": "ギガ"
+    },
+    {
+     "offset_hex": "0x33ce4c",
+     "encoding": "utf16le",
+     "section": ".rdata",
+     "text": "ギニー"
+    },
+    {
+     "offset_hex": "0x33ce54",
+     "encoding": "utf16le",
+     "section": ".rdata",
+     "text": "キュリー"
+    },
+    {
+     "offset_hex": "0x33ce5e",
+     "encoding": "utf16le",
+     "section": ".rdata",
+     "text": "ギルダー"
+    },
+    {
+     "offset_hex": "0x33ce68",
+     "encoding": "utf16le",
+     "section": ".rdata",
+     "text": "キロ"
+    },
+    {
+     "offset_hex": "0x33ce6e",
+     "encoding": "utf16le",
+     "section": ".rdata",
+     "text": "キログラム"
+    },
+    {
+     "offset_hex": "0x33ce7a",
+     "encoding": "utf16le",
+     "section": ".rdata",
+     "text": "キロメートル"
+    },
+    {
+     "offset_hex": "0x33ce88",
+     "encoding": "utf16le",
+     "section": ".rdata",
+     "text": "キロワット"
+    },
+    {
+     "offset_hex": "0x33ce94",
+     "encoding": "utf16le",
+     "section": ".rdata",
+     "text": "グラム"
+    },
+    {
+     "offset_hex": "0x33ce9c",
+     "encoding": "utf16le",
+     "section": ".rdata",
+     "text": "グラムトン"
+    },
+    {
+     "offset_hex": "0x33cea8",
+     "encoding": "utf16le",
+     "section": ".rdata",
+     "text": "クルゼイロ"
+    },
+    {
+     "offset_hex": "0x33ceb4",
+     "encoding": "utf16le",
+     "section": ".rdata",
+     "text": "クローネ"
+    },
+    {
+     "offset_hex": "0x33cebe",
+     "encoding": "utf16le",
+     "section": ".rdata",
+     "text": "ケース"
+    },
+    {
+     "offset_hex": "0x33cec6",
+     "encoding": "utf16le",
+     "section": ".rdata",
+     "text": "コルナ"
+    },
+    {
+     "offset_hex": "0x33cece",
+     "encoding": "utf16le",
+     "section": ".rdata",
+     "text": "コーポ"
+    },
+    {
+     "offset_hex": "0x33ced6",
+     "encoding": "utf16le",
+     "section": ".rdata",
+     "text": "サイクル"
+    },
+    {
+     "offset_hex": "0x33cee0",
+     "encoding": "utf16le",
+     "section": ".rdata",
+     "text": "サンチーム"
+    },
+    {
+     "offset_hex": "0x33ceec",
+     "encoding": "utf16le",
+     "section": ".rdata",
+     "text": "シリング"
+    },
+    {
+     "offset_hex": "0x33cef6",
+     "encoding": "utf16le",
+     "section": ".rdata",
+     "text": "センチ"
+    },
+    {
+     "offset_hex": "0x33cefe",
+     "encoding": "utf16le",
+     "section": ".rdata",
+     "text": "セント"
+    },
+    {
+     "offset_hex": "0x33cf06",
+     "encoding": "utf16le",
+     "section": ".rdata",
+     "text": "ダース"
+    },
+    {
+     "offset_hex": "0x33cf0e",
+     "encoding": "utf16le",
+     "section": ".rdata",
+     "text": "デシ"
+    },
+    {
+     "offset_hex": "0x33cf14",
+     "encoding": "utf16le",
+     "section": ".rdata",
+     "text": "ドル"
+    }
+   ]
+  },
+  "place_name_candidate": {
+   "count": 31,
+   "examples": [
+    {
+     "offset_hex": "0x371250",
+     "encoding": "cp932",
+     "section": ".data",
+     "text": "惑星を検出出来なかった、バグでしょう"
+    },
+    {
+     "offset_hex": "0x371dec",
+     "encoding": "cp932",
+     "section": ".data",
+     "text": "要塞"
+    },
+    {
+     "offset_hex": "0x371df4",
+     "encoding": "cp932",
+     "section": ".data",
+     "text": "惑星"
+    },
+    {
+     "offset_hex": "0x384ea8",
+     "encoding": "cp932",
+     "section": ".data",
+     "text": "惑星を複数は選択できない仕様ですので"
+    },
+    {
+     "offset_hex": "0x38bbfb",
+     "encoding": "cp932",
+     "section": ".data",
+     "text": "宇宙空間にいる場合は、まず星系グリッドの拠点に向かって航行してください。"
+    },
+    {
+     "offset_hex": "0x38bce5",
+     "encoding": "cp932",
+     "section": ".data",
+     "text": "宇宙空間にいる場合は、まず星系グリッドの拠点に向かって航行してください。"
+    },
+    {
+     "offset_hex": "0x38be7f",
+     "encoding": "cp932",
+     "section": ".data",
+     "text": "選択可能な拠点のある星系グリッドにワープしてください。"
+    },
+    {
+     "offset_hex": "0x38c6d0",
+     "encoding": "utf16le",
+     "section": ".data",
+     "text": "同陣営の惑星&直轄封土の惑星"
+    },
+    {
+     "offset_hex": "0x38c7b0",
+     "encoding": "utf16le",
+     "section": ".data",
+     "text": "惑星/要塞に存在するスポット＆警戒スポット"
+    },
+    {
+     "offset_hex": "0x38c9d4",
+     "encoding": "utf16le",
+     "section": ".data",
+     "text": "＜'輸送先惑星名'用＞"
+    },
+    {
+     "offset_hex": "0x38ca8c",
+     "encoding": "utf16le",
+     "section": ".data",
+     "text": "当該惑星に在庫の輸送パッケージ&選択惑星が輸送先に設定されているパッケージ"
+    },
+    {
+     "offset_hex": "0x38cbb8",
+     "encoding": "utf16le",
+     "section": ".data",
+     "text": "選択惑星/要塞にある部隊用ストック"
+    },
+    {
+     "offset_hex": "0x38cbdc",
+     "encoding": "utf16le",
+     "section": ".data",
+     "text": "同陣営の惑星/要塞&同星系内に敵陣惑星/要塞無し&軍需物資/いずれかのユニットを在庫"
+    },
+    {
+     "offset_hex": "0x38cc34",
+     "encoding": "utf16le",
+     "section": ".data",
+     "text": "同一惑星/要塞に存在する人物"
+    },
+    {
+     "offset_hex": "0x38cde4",
+     "encoding": "utf16le",
+     "section": ".data",
+     "text": "惑星/要塞に存在する施設"
+    },
+    {
+     "offset_hex": "0x38ce00",
+     "encoding": "utf16le",
+     "section": ".data",
+     "text": "他陣営の惑星/要塞&コマンド実行星系から1000光年以内&コマンド実行星系から1000光年以内にフェザーン有りの場合"
+    },
+    {
+     "offset_hex": "0x38ce98",
+     "encoding": "utf16le",
+     "section": ".data",
+     "text": "自陣営の惑星/要塞&コマンド実行星系から1000光年以内&コマンド実行星系から1000光年以内にフェザーン有りの場合"
+    },
+    {
+     "offset_hex": "0x38d0bc",
+     "encoding": "utf16le",
+     "section": ".data",
+     "text": "同陣営の惑星/要塞&封土以外"
+    },
+    {
+     "offset_hex": "0x38d0dc",
+     "encoding": "utf16le",
+     "section": ".data",
+     "text": "同陣営の惑星/要塞"
+    },
+    {
+     "offset_hex": "0x38d0f0",
+     "encoding": "utf16le",
+     "section": ".data",
+     "text": "非逮捕者&弁明を選択済みの人物&同惑星の拘禁室に存在"
+    },
+    {
+     "offset_hex": "0x38d17c",
+     "encoding": "utf16le",
+     "section": ".data",
+     "text": "同陣営の惑星/要塞&統治目標を掲げていない惑星/要塞&封土以外"
+    },
+    {
+     "offset_hex": "0x38d1d0",
+     "encoding": "utf16le",
+     "section": ".data",
+     "text": "自陣と敵陣惑星の混在する星系&コマンド実行星系より500光年以内"
+    },
+    {
+     "offset_hex": "0x38d308",
+     "encoding": "utf16le",
+     "section": ".data",
+     "text": "選択惑星/要塞の在庫が部隊枠の下限数以上＆"
+    },
+    {
+     "offset_hex": "0x38d35c",
+     "encoding": "utf16le",
+     "section": ".data",
+     "text": "同陣営の惑星＆同陣営の要塞＆同星系内に敵陣惑星無し＆同星系内に敵陣要塞無し＆"
+    },
+    {
+     "offset_hex": "0x38d3d0",
+     "encoding": "utf16le",
+     "section": ".data",
+     "text": "いずれかの惑星/要塞駐留中の部隊&いずれのキャラも属していない状態の部隊"
+    },
+    {
+     "offset_hex": "0x38d41c",
+     "encoding": "utf16le",
+     "section": ".data",
+     "text": "同陣営の惑星/要塞&同星系内に敵陣惑星/要塞無し"
+    },
+    {
+     "offset_hex": "0x38d450",
+     "encoding": "utf16le",
+     "section": ".data",
+     "text": "同陣営の惑星/要塞&同星系内に敵陣惑星/要塞無し&輸送元に指定されていない"
+    },
+    {
+     "offset_hex": "0x38d4ac",
+     "encoding": "cp932",
+     "section": ".data",
+     "text": "星系内宇宙"
+    },
+    {
+     "offset_hex": "0x38d4c8",
+     "encoding": "cp932",
+     "section": ".data",
+     "text": "%s星系"
+    },
+    {
+     "offset_hex": "0x38d6ec",
+     "encoding": "cp932",
+     "section": ".data",
+     "text": "サーバーログがヌルで返りました(星系内航行)"
+    },
+    {
+     "offset_hex": "0x38d9a8",
+     "encoding": "utf16le",
+     "section": ".data",
+     "text": "自由惑星同盟"
+    }
+   ]
+  },
+  "string_txt_reference": {
+   "count": 1,
+   "examples": [
+    {
+     "offset_hex": "0x373fe4",
+     "encoding": "cp932",
+     "section": ".data",
+     "text": "String.txt"
+    }
+   ]
+  },
+  "rank_military": {
+   "count": 2,
+   "examples": [
+    {
+     "offset_hex": "0x38893c",
+     "encoding": "cp932",
+     "section": ".data",
+     "text": "帝国軍巡査隊（ラインハルト元帥）"
+    },
+    {
+     "offset_hex": "0x38cfe8",
+     "encoding": "utf16le",
+     "section": ".data",
+     "text": "准将以上＆政治家"
+    }
+   ]
+  }
+ },
+ "string_txt_load_clues": [
+  {
+   "offset_hex": "0x373fe4",
+   "encoding": "cp932",
+   "section": ".data",
+   "text": "String.txt"
+  }
+ ]
+}

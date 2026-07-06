@@ -1,0 +1,678 @@
+{
+  "source": {
+    "exe": "E:\\logh7-revival\\artifacts\\logh7-install\\____________s___\\____\\exe\\g7mtclient.exe",
+    "exeSizeBytes": 3956736,
+    "imageBase": "0x400000"
+  },
+  "resources": {
+    "count": 39,
+    "outputDir": "exe-resources",
+    "entries": [
+      {
+        "type": "CURSOR",
+        "name": "4",
+        "langId": 1041,
+        "rva": "0x2f55aa8",
+        "size": 308,
+        "file": "exe-resources/CURSOR_4_1041.bin",
+        "sha256_first16": "02000200280000002000000040000000"
+      },
+      {
+        "type": "CURSOR",
+        "name": "5",
+        "langId": 1041,
+        "rva": "0x2f55be0",
+        "size": 180,
+        "file": "exe-resources/CURSOR_5_1041.bin",
+        "sha256_first16": "01000100280000001000000020000000"
+      },
+      {
+        "type": "BITMAP",
+        "name": "26567",
+        "langId": 1041,
+        "rva": "0x2f55cc0",
+        "size": 1508,
+        "file": "exe-resources/BITMAP_26567_1041.bin",
+        "sha256_first16": "28000000460000002700000001000400"
+      },
+      {
+        "type": "BITMAP",
+        "name": "30994",
+        "langId": 1041,
+        "rva": "0x2f56398",
+        "size": 184,
+        "file": "exe-resources/BITMAP_30994_1041.bin",
+        "sha256_first16": "280000000c0000000a00000001000400"
+      },
+      {
+        "type": "BITMAP",
+        "name": "30995",
+        "langId": 1041,
+        "rva": "0x2f56450",
+        "size": 364,
+        "file": "exe-resources/BITMAP_30995_1041.bin",
+        "sha256_first16": "28000000270000000d00000001000400"
+      },
+      {
+        "type": "BITMAP",
+        "name": "30996",
+        "langId": 1041,
+        "rva": "0x2f565c0",
+        "size": 324,
+        "file": "exe-resources/BITMAP_30996_1041.bin",
+        "sha256_first16": "28000000210000000b00000001000400"
+      },
+      {
+        "type": "ICON",
+        "name": "1",
+        "langId": 1041,
+        "rva": "0x2f54850",
+        "size": 2216,
+        "file": "exe-resources/ICON_1_1041.bin",
+        "sha256_first16": "28000000200000004000000001000800"
+      },
+      {
+        "type": "ICON",
+        "name": "2",
+        "langId": 1041,
+        "rva": "0x2f55110",
+        "size": 744,
+        "file": "exe-resources/ICON_2_1041.bin",
+        "sha256_first16": "28000000200000004000000001000400"
+      },
+      {
+        "type": "ICON",
+        "name": "3",
+        "langId": 1041,
+        "rva": "0x2f553f8",
+        "size": 296,
+        "file": "exe-resources/ICON_3_1041.bin",
+        "sha256_first16": "28000000100000002000000001000400"
+      },
+      {
+        "type": "MENU",
+        "name": "128",
+        "langId": 1041,
+        "rva": "0x2f55548",
+        "size": 138,
+        "file": "exe-resources/MENU_128_1041.bin",
+        "sha256_first16": "0000000010008cff67ff72ff99ff2800"
+      },
+      {
+        "type": "DIALOG",
+        "name": "100",
+        "langId": 1041,
+        "rva": "0x2f55640",
+        "size": 254,
+        "file": "exe-resources/DIALOG_100_1041.bin",
+        "sha256_first16": "c000c88000000000040000000000eb00"
+      },
+      {
+        "type": "DIALOG",
+        "name": "30721",
+        "langId": 1041,
+        "rva": "0x2f562a8",
+        "size": 234,
+        "file": "exe-resources/DIALOG_30721_1041.bin",
+        "sha256_first16": "c400c88000000000050009001a00b700"
+      },
+      {
+        "type": "STRING",
+        "name": "9",
+        "langId": 1041,
+        "rva": "0x2f56708",
+        "size": 138,
+        "file": "exe-resources/STRING_9_1041.bin",
+        "sha256_first16": "35008092b36cf182c4961d4fac8a6621"
+      },
+      {
+        "type": "STRING",
+        "name": "3585",
+        "langId": 1041,
+        "rva": "0x2f56798",
+        "size": 54,
+        "file": "exe-resources/STRING_3585_1041.bin",
+        "sha256_first16": "07008092b36cf182c4961d4fac8a6621"
+      },
+      {
+        "type": "STRING",
+        "name": "3601",
+        "langId": 1041,
+        "rva": "0x2f56818",
+        "size": 214,
+        "file": "exe-resources/STRING_3601_1041.bin",
+        "sha256_first16": "1100b0658f896b308cff67ff72ff99ff"
+      },
+      {
+        "type": "STRING",
+        "name": "3602",
+        "langId": 1041,
+        "rva": "0x2f56990",
+        "size": 352,
+        "file": "exe-resources/STRING_3602_1041.bin",
+        "sha256_first16": "0a0007639a5b6e308cff67ff72ff99ff"
+      },
+      {
+        "type": "STRING",
+        "name": "3603",
+        "langId": 1041,
+        "rva": "0x2f56ba8",
+        "size": 442,
+        "file": "exe-resources/STRING_3603_1041.bin",
+        "sha256_first16": "0a0078909e62c47bf2569230886dbb53"
+      },
+      {
+        "type": "STRING",
+        "name": "3604",
+        "langId": 1041,
+        "rva": "0x2f56b68",
+        "size": 64,
+        "file": "exe-resources/STRING_3604_1041.bin",
+        "sha256_first16": "0000000000000000000010005c4f6d69"
+      },
+      {
+        "type": "STRING",
+        "name": "3605",
+        "langId": 1041,
+        "rva": "0x2f568f0",
+        "size": 160,
+        "file": "exe-resources/STRING_3605_1041.bin",
+        "sha256_first16": "25008cff9fff9bff78ff9eff97ff91ff"
+      },
+      {
+        "type": "STRING",
+        "name": "3606",
+        "langId": 1041,
+        "rva": "0x2f56af0",
+        "size": 116,
+        "file": "exe-resources/STRING_3606_1041.bin",
+        "sha256_first16": "1500216b6e3073ff68ff9dff84ff9eff"
+      },
+      {
+        "type": "STRING",
+        "name": "3697",
+        "langId": 1041,
+        "rva": "0x2f567d0",
+        "size": 70,
+        "file": "exe-resources/STRING_3697_1041.bin",
+        "sha256_first16": "03004500580054000300430041005000"
+      },
+      {
+        "type": "STRING",
+        "name": "3825",
+        "langId": 1041,
+        "rva": "0x2f56d68",
+        "size": 244,
+        "file": "exe-resources/STRING_3825_1041.bin",
+        "sha256_first16": "0e0073ff68ff9dff84ff9eff73ff6e30"
+      },
+      {
+        "type": "STRING",
+        "name": "3826",
+        "langId": 1041,
+        "rva": "0x2f56e60",
+        "size": 94,
+        "file": "exe-resources/STRING_3826_1041.bin",
+        "sha256_first16": "00000000110073ff68ff9dff84ff9eff"
+      },
+      {
+        "type": "STRING",
+        "name": "3841",
+        "langId": 1041,
+        "rva": "0x2f56ec0",
+        "size": 98,
+        "file": "exe-resources/STRING_3841_1041.bin",
+        "sha256_first16": "02008b954f3008000d544d529230d84e"
+      },
+      {
+        "type": "STRING",
+        "name": "3842",
+        "langId": 1041,
+        "rva": "0x2f56f28",
+        "size": 46,
+        "file": "exe-resources/STRING_3842_1041.bin",
+        "sha256_first16": "000007005e9768883a79280026004800"
+      },
+      {
+        "type": "STRING",
+        "name": "3843",
+        "langId": 1041,
+        "rva": "0x2f56f58",
+        "size": 198,
+        "file": "exe-resources/STRING_3843_1041.bin",
+        "sha256_first16": "110074ff97ff70ff200092ff6fff7eff"
+      },
+      {
+        "type": "STRING",
+        "name": "3857",
+        "langId": 1041,
+        "rva": "0x2f57020",
+        "size": 878,
+        "file": "exe-resources/STRING_3857_1041.bin",
+        "sha256_first16": "0b002171b9526a308cff67ff72ff99ff"
+      },
+      {
+        "type": "STRING",
+        "name": "3858",
+        "langId": 1041,
+        "rva": "0x2f575a8",
+        "size": 370,
+        "file": "exe-resources/STRING_3858_1041.bin",
+        "sha256_first16": "0c0074657065923065519b5257306630"
+      },
+      {
+        "type": "STRING",
+        "name": "3859",
+        "langId": 1041,
+        "rva": "0x2f57410",
+        "size": 406,
+        "file": "exe-resources/STRING_3859_1041.bin",
+        "sha256_first16": "0e00884e1f6757306a3044308cff67ff"
+      },
+      {
+        "type": "STRING",
+        "name": "3865",
+        "langId": 1041,
+        "rva": "0x2f57390",
+        "size": 126,
+        "file": "exe-resources/STRING_3865_1041.bin",
+        "sha256_first16": "00000000000000000000000000000000"
+      },
+      {
+        "type": "STRING",
+        "name": "3866",
+        "langId": 1041,
+        "rva": "0x2f57b70",
+        "size": 144,
+        "file": "exe-resources/STRING_3866_1041.bin",
+        "sha256_first16": "170092ff70ff99ff20007cff7dff83ff"
+      },
+      {
+        "type": "STRING",
+        "name": "3867",
+        "langId": 1041,
+        "rva": "0x2f57720",
+        "size": 744,
+        "file": "exe-resources/STRING_3867_1041.bin",
+        "sha256_first16": "0d0074ff97ff70ff6f3042308a307e30"
+      },
+      {
+        "type": "STRING",
+        "name": "3868",
+        "langId": 1041,
+        "rva": "0x2f57a08",
+        "size": 356,
+        "file": "exe-resources/STRING_3868_1041.bin",
+        "sha256_first16": "0d0074ff97ff70ff6f3042308a307e30"
+      },
+      {
+        "type": "STRING",
+        "name": "3869",
+        "langId": 1041,
+        "rva": "0x2f57c00",
+        "size": 42,
+        "file": "exe-resources/STRING_3869_1041.bin",
+        "sha256_first16": "05008bff9fff78ff7eff99ff00000000"
+      },
+      {
+        "type": "ACCELERATOR",
+        "name": "128",
+        "langId": 1041,
+        "rva": "0x2f555d8",
+        "size": 104,
+        "file": "exe-resources/ACCELERATOR_128_1041.bin",
+        "sha256_first16": "09004e0000e1000009004f0001e10000"
+      },
+      {
+        "type": "GROUP_CURSOR",
+        "name": "30977",
+        "langId": 1041,
+        "rva": "0x2f55c98",
+        "size": 34,
+        "file": "exe-resources/GROUP_CURSOR_30977_1041.bin",
+        "sha256_first16": "00000200020020004000010001003401"
+      },
+      {
+        "type": "GROUP_ICON",
+        "name": "128",
+        "langId": 1041,
+        "rva": "0x2f550f8",
+        "size": 20,
+        "file": "exe-resources/GROUP_ICON_128_1041.bin",
+        "sha256_first16": "0000010001002020000001000800a808"
+      },
+      {
+        "type": "GROUP_ICON",
+        "name": "129",
+        "langId": 1041,
+        "rva": "0x2f55520",
+        "size": 34,
+        "file": "exe-resources/GROUP_ICON_129_1041.bin",
+        "sha256_first16": "0000010002002020100001000400e802"
+      },
+      {
+        "type": "VERSION",
+        "name": "1",
+        "langId": 1041,
+        "rva": "0x2f55740",
+        "size": 868,
+        "file": "exe-resources/VERSION_1_1041.bin",
+        "sha256_first16": "640334000000560053005f0056004500"
+      }
+    ]
+  },
+  "knownTables": {
+    "objectTable_0x0313": {
+      "name": "objectTable_0x0313",
+      "provenance": "docs/logh7-loop-state.md 저널#46/#88 RE 지식 (clientBase+0x2c1755, 3바이트/레코드: byte0=라벨 byte1=type byte2=분광형/faction폴백)",
+      "imageBase": "0x400000",
+      "assumedClientBaseOffset": "0x2c1755",
+      "rva": "0x2c1755",
+      "containingSection": ".rdata",
+      "fileOffset": "0x2c1755",
+      "stride": 3,
+      "sampledRecordCount": 240,
+      "first10Records": [
+        {
+          "idx": 0,
+          "label": 96,
+          "type": 219,
+          "spectral": 96
+        },
+        {
+          "idx": 1,
+          "label": 148,
+          "type": 100,
+          "spectral": 149
+        },
+        {
+          "idx": 2,
+          "label": 101,
+          "type": 136,
+          "spectral": 101
+        },
+        {
+          "idx": 3,
+          "label": 141,
+          "type": 101,
+          "spectral": 236
+        },
+        {
+          "idx": 4,
+          "label": 105,
+          "type": 238,
+          "spectral": 105
+        },
+        {
+          "idx": 5,
+          "label": 241,
+          "type": 105,
+          "spectral": 46
+        },
+        {
+          "idx": 6,
+          "label": 108,
+          "type": 73,
+          "spectral": 108
+        },
+        {
+          "idx": 7,
+          "label": 95,
+          "type": 110,
+          "spectral": 209
+        },
+        {
+          "idx": 8,
+          "label": 110,
+          "type": 203,
+          "spectral": 110
+        },
+        {
+          "idx": 9,
+          "label": 133,
+          "type": 115,
+          "spectral": 29
+        }
+      ],
+      "first3RecordsHex": "60db60946495658865"
+    },
+    "faceResolverRange": {
+      "name": "face_resolver_range_1_597",
+      "provenance": "docs/reference/legacy-evidence/logh7-face-code-conversion.md: 'flat face number 1..597 -> data/image/Face/<NNN>.tga'",
+      "note": "597/598 즉치값이 CMP/즉치 데이터로 등장하는 .text 내 위치 후보 목록 (검증 필요 - 다수 오탐 가능, 함수 문맥 없이는 확정 불가)",
+      "candidateCount": 14,
+      "candidates": [
+        {
+          "immediateValue": 597,
+          "rva": "0x5b8be",
+          "fileOffset": "0x5b8be",
+          "contextHex": "00003c040f865502000025ff00000050"
+        },
+        {
+          "immediateValue": 597,
+          "rva": "0xc0e06",
+          "fileOffset": "0xc0e06",
+          "contextHex": "671200570f84550200008b7c242c8b47"
+        },
+        {
+          "immediateValue": 597,
+          "rva": "0xd1053",
+          "fileOffset": "0xd1053",
+          "contextHex": "00396e0c0f84550200008b0e518d9424"
+        },
+        {
+          "immediateValue": 597,
+          "rva": "0x117e9d",
+          "fileOffset": "0x117e9d",
+          "contextHex": "24187e6f81f9550200007f678bc199be"
+        },
+        {
+          "immediateValue": 597,
+          "rva": "0x1acfa1",
+          "fileOffset": "0x1acfa1",
+          "contextHex": "c07c0733c0e9550200008b43048bb058"
+        },
+        {
+          "immediateValue": 597,
+          "rva": "0x1e1f04",
+          "fileOffset": "0x1e1f04",
+          "contextHex": "33ff3bc50f86550200008b542420896c"
+        },
+        {
+          "immediateValue": 598,
+          "rva": "0x73a71",
+          "fileOffset": "0x73a71",
+          "contextHex": "8a033c040f865602000025ff00000050"
+        },
+        {
+          "immediateValue": 598,
+          "rva": "0x7a5d4",
+          "fileOffset": "0x7a5d4",
+          "contextHex": "45003c040f865602000025ff00000050"
+        },
+        {
+          "immediateValue": 598,
+          "rva": "0x86bf1",
+          "fileOffset": "0x86bf1",
+          "contextHex": "8a033c040f865602000025ff00000050"
+        },
+        {
+          "immediateValue": 598,
+          "rva": "0xaf082",
+          "fileOffset": "0xaf082",
+          "contextHex": "515c85c00f8c560200005733ff8b4658"
+        },
+        {
+          "immediateValue": 598,
+          "rva": "0xb6569",
+          "fileOffset": "0xb6569",
+          "contextHex": "e8a8240100e95602000053b9784b2102"
+        },
+        {
+          "immediateValue": 598,
+          "rva": "0xbdad9",
+          "fileOffset": "0xbdad9",
+          "contextHex": "e8384a0000e9560200006858f57600e8"
+        },
+        {
+          "immediateValue": 598,
+          "rva": "0xe6246",
+          "fileOffset": "0xe6246",
+          "contextHex": "ff5e5b8bcde8560200005fb0015d83c4"
+        },
+        {
+          "immediateValue": 598,
+          "rva": "0x1b728b",
+          "fileOffset": "0x1b728b",
+          "contextHex": "bee0030000e9560200008d45f0508bce"
+        }
+      ]
+    }
+  },
+  "strideArrayCandidates": [
+    {
+      "section": ".data",
+      "stride": 8,
+      "startOffsetInSection": "0x52088",
+      "rva": "0x3b0088",
+      "fileOffset": "0x3b0088",
+      "recordCount": 754,
+      "first3RecordsHex": "000000000000000000000000000000000000000000000000"
+    },
+    {
+      "section": ".data",
+      "stride": 12,
+      "startOffsetInSection": "0x5208c",
+      "rva": "0x3b008c",
+      "fileOffset": "0x3b008c",
+      "recordCount": 503,
+      "first3RecordsHex": "000000000000000000000000000000000000000000000000000000000000000000000000"
+    },
+    {
+      "section": ".rdata",
+      "stride": 8,
+      "startOffsetInSection": "0xb1120",
+      "rva": "0x31c120",
+      "fileOffset": "0x31c120",
+      "recordCount": 472,
+      "first3RecordsHex": "c00000000001000040010000c00100004002000080020000"
+    },
+    {
+      "section": ".data",
+      "stride": 16,
+      "startOffsetInSection": "0x52090",
+      "rva": "0x3b0090",
+      "fileOffset": "0x3b0090",
+      "recordCount": 377,
+      "first3RecordsHex": "000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+    },
+    {
+      "section": ".rdata",
+      "stride": 12,
+      "startOffsetInSection": "0xb1120",
+      "rva": "0x31c120",
+      "fileOffset": "0x31c120",
+      "recordCount": 315,
+      "first3RecordsHex": "c00000000001000040010000c00100004002000080020000c00200000004000040040000"
+    },
+    {
+      "section": ".data",
+      "stride": 20,
+      "startOffsetInSection": "0x52094",
+      "rva": "0x3b0094",
+      "fileOffset": "0x3b0094",
+      "recordCount": 301,
+      "first3RecordsHex": "000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+    },
+    {
+      "section": ".data",
+      "stride": 24,
+      "startOffsetInSection": "0x52098",
+      "rva": "0x3b0098",
+      "fileOffset": "0x3b0098",
+      "recordCount": 251,
+      "first3RecordsHex": "000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+    },
+    {
+      "section": ".rdata",
+      "stride": 16,
+      "startOffsetInSection": "0xb1120",
+      "rva": "0x31c120",
+      "fileOffset": "0x31c120",
+      "recordCount": 236,
+      "first3RecordsHex": "c00000000001000040010000c00100004002000080020000c00200000004000040040000801e0000c01e000000210000"
+    },
+    {
+      "section": ".rdata",
+      "stride": 20,
+      "startOffsetInSection": "0x3a5c",
+      "rva": "0x26ea5c",
+      "fileOffset": "0x26ea5c",
+      "recordCount": 192,
+      "first3RecordsHex": "00000000000000000000803f000000000000000000000000000000000000803f000000000000000000000000000000000000803f0000000000000000"
+    },
+    {
+      "section": ".data",
+      "stride": 32,
+      "startOffsetInSection": "0x520a0",
+      "rva": "0x3b00a0",
+      "fileOffset": "0x3b00a0",
+      "recordCount": 188,
+      "first3RecordsHex": "000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+    },
+    {
+      "section": ".rdata",
+      "stride": 24,
+      "startOffsetInSection": "0xb1120",
+      "rva": "0x31c120",
+      "fileOffset": "0x31c120",
+      "recordCount": 158,
+      "first3RecordsHex": "c00000000001000040010000c00100004002000080020000c00200000004000040040000801e0000c01e0000002100004021000080210000c0210000402400004025000000270000"
+    },
+    {
+      "section": ".data",
+      "stride": 40,
+      "startOffsetInSection": "0x520a8",
+      "rva": "0x3b00a8",
+      "fileOffset": "0x3b00a8",
+      "recordCount": 150,
+      "first3RecordsHex": "000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+    },
+    {
+      "section": ".data",
+      "stride": 48,
+      "startOffsetInSection": "0x520b0",
+      "rva": "0x3b00b0",
+      "fileOffset": "0x3b00b0",
+      "recordCount": 125,
+      "first3RecordsHex": "000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+    },
+    {
+      "section": ".rdata",
+      "stride": 32,
+      "startOffsetInSection": "0xb1120",
+      "rva": "0x31c120",
+      "fileOffset": "0x31c120",
+      "recordCount": 118,
+      "first3RecordsHex": "c00000000001000040010000c00100004002000080020000c00200000004000040040000801e0000c01e0000002100004021000080210000c0210000402400004025000000270000802e0000c02e0000002f0000003000004030000080300000"
+    },
+    {
+      "section": ".rdata",
+      "stride": 40,
+      "startOffsetInSection": "0x5988",
+      "rva": "0x270988",
+      "fileOffset": "0x270988",
+      "recordCount": 116,
+      "first3RecordsHex": "000000000000000000000000000000000000803f000000000000000000000000000000000000803f00000000000000000000000000000000ffffffff000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+    },
+    {
+      "section": ".rdata",
+      "stride": 48,
+      "startOffsetInSection": "0xbee0",
+      "rva": "0x276ee0",
+      "fileOffset": "0x276ee0",
+      "recordCount": 82,
+      "first3RecordsHex": "000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+    }
+  ]
+}

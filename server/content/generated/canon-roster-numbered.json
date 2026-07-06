@@ -1,0 +1,2918 @@
+{
+ "id": "logh7-canon-roster-numbered",
+ "generatedAt": "2026-07-05",
+ "note": "게임 데이터 O군 초상화 291슬롯에 순번(1~291) 자리표시자 이름 부여. name 필드는 임시 번호 — 실명 매칭은 외부(아는 분)가 portraitPng를 보고 채운다. 순서: oem(제국남)→oam(동맹남)→o(기타), 각 아틀라스 내 faceIndex 오름차순.",
+ "count": 291,
+ "roster": [
+  {
+   "num": 1,
+   "name": "1",
+   "slotId": "oem-f001",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 1,
+   "portraitPng": "server/content/generated/portraits/oem-f001.png",
+   "extra": {}
+  },
+  {
+   "num": 2,
+   "name": "2",
+   "slotId": "oem-f002",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 2,
+   "portraitPng": "server/content/generated/portraits/oem-f002.png",
+   "extra": {}
+  },
+  {
+   "num": 3,
+   "name": "3",
+   "slotId": "oem-f003",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 3,
+   "portraitPng": "server/content/generated/portraits/oem-f003.png",
+   "extra": {}
+  },
+  {
+   "num": 4,
+   "name": "4",
+   "slotId": "oem-f004",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 4,
+   "portraitPng": "server/content/generated/portraits/oem-f004.png",
+   "extra": {}
+  },
+  {
+   "num": 5,
+   "name": "5",
+   "slotId": "oem-f005",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 5,
+   "portraitPng": "server/content/generated/portraits/oem-f005.png",
+   "extra": {}
+  },
+  {
+   "num": 6,
+   "name": "6",
+   "slotId": "oem-f006",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 6,
+   "portraitPng": "server/content/generated/portraits/oem-f006.png",
+   "extra": {}
+  },
+  {
+   "num": 7,
+   "name": "7",
+   "slotId": "oem-f007",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 7,
+   "portraitPng": "server/content/generated/portraits/oem-f007.png",
+   "extra": {}
+  },
+  {
+   "num": 8,
+   "name": "8",
+   "slotId": "oem-f008",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 8,
+   "portraitPng": "server/content/generated/portraits/oem-f008.png",
+   "extra": {}
+  },
+  {
+   "num": 9,
+   "name": "9",
+   "slotId": "oem-f009",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 9,
+   "portraitPng": "server/content/generated/portraits/oem-f009.png",
+   "extra": {}
+  },
+  {
+   "num": 10,
+   "name": "10",
+   "slotId": "oem-f010",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 10,
+   "portraitPng": "server/content/generated/portraits/oem-f010.png",
+   "extra": {}
+  },
+  {
+   "num": 11,
+   "name": "11",
+   "slotId": "oem-f011",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 11,
+   "portraitPng": "server/content/generated/portraits/oem-f011.png",
+   "extra": {}
+  },
+  {
+   "num": 12,
+   "name": "12",
+   "slotId": "oem-f012",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 12,
+   "portraitPng": "server/content/generated/portraits/oem-f012.png",
+   "extra": {}
+  },
+  {
+   "num": 13,
+   "name": "13",
+   "slotId": "oem-f013",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 13,
+   "portraitPng": "server/content/generated/portraits/oem-f013.png",
+   "extra": {}
+  },
+  {
+   "num": 14,
+   "name": "14",
+   "slotId": "oem-f014",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 14,
+   "portraitPng": "server/content/generated/portraits/oem-f014.png",
+   "extra": {}
+  },
+  {
+   "num": 15,
+   "name": "15",
+   "slotId": "oem-f015",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 15,
+   "portraitPng": "server/content/generated/portraits/oem-f015.png",
+   "extra": {}
+  },
+  {
+   "num": 16,
+   "name": "16",
+   "slotId": "oem-f016",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 16,
+   "portraitPng": "server/content/generated/portraits/oem-f016.png",
+   "extra": {}
+  },
+  {
+   "num": 17,
+   "name": "17",
+   "slotId": "oem-f017",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 17,
+   "portraitPng": "server/content/generated/portraits/oem-f017.png",
+   "extra": {}
+  },
+  {
+   "num": 18,
+   "name": "18",
+   "slotId": "oem-f018",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 18,
+   "portraitPng": "server/content/generated/portraits/oem-f018.png",
+   "extra": {}
+  },
+  {
+   "num": 19,
+   "name": "19",
+   "slotId": "oem-f019",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 19,
+   "portraitPng": "server/content/generated/portraits/oem-f019.png",
+   "extra": {}
+  },
+  {
+   "num": 20,
+   "name": "20",
+   "slotId": "oem-f020",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 20,
+   "portraitPng": "server/content/generated/portraits/oem-f020.png",
+   "extra": {}
+  },
+  {
+   "num": 21,
+   "name": "21",
+   "slotId": "oem-f021",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 21,
+   "portraitPng": "server/content/generated/portraits/oem-f021.png",
+   "extra": {}
+  },
+  {
+   "num": 22,
+   "name": "22",
+   "slotId": "oem-f022",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 22,
+   "portraitPng": "server/content/generated/portraits/oem-f022.png",
+   "extra": {}
+  },
+  {
+   "num": 23,
+   "name": "23",
+   "slotId": "oem-f023",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 23,
+   "portraitPng": "server/content/generated/portraits/oem-f023.png",
+   "extra": {}
+  },
+  {
+   "num": 24,
+   "name": "24",
+   "slotId": "oem-f024",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 24,
+   "portraitPng": "server/content/generated/portraits/oem-f024.png",
+   "extra": {}
+  },
+  {
+   "num": 25,
+   "name": "25",
+   "slotId": "oem-f025",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 25,
+   "portraitPng": "server/content/generated/portraits/oem-f025.png",
+   "extra": {}
+  },
+  {
+   "num": 26,
+   "name": "26",
+   "slotId": "oem-f026",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 26,
+   "portraitPng": "server/content/generated/portraits/oem-f026.png",
+   "extra": {}
+  },
+  {
+   "num": 27,
+   "name": "27",
+   "slotId": "oem-f027",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 27,
+   "portraitPng": "server/content/generated/portraits/oem-f027.png",
+   "extra": {}
+  },
+  {
+   "num": 28,
+   "name": "28",
+   "slotId": "oem-f028",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 28,
+   "portraitPng": "server/content/generated/portraits/oem-f028.png",
+   "extra": {}
+  },
+  {
+   "num": 29,
+   "name": "29",
+   "slotId": "oem-f029",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 29,
+   "portraitPng": "server/content/generated/portraits/oem-f029.png",
+   "extra": {}
+  },
+  {
+   "num": 30,
+   "name": "30",
+   "slotId": "oem-f030",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 30,
+   "portraitPng": "server/content/generated/portraits/oem-f030.png",
+   "extra": {}
+  },
+  {
+   "num": 31,
+   "name": "31",
+   "slotId": "oem-f031",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 31,
+   "portraitPng": "server/content/generated/portraits/oem-f031.png",
+   "extra": {}
+  },
+  {
+   "num": 32,
+   "name": "32",
+   "slotId": "oem-f032",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 32,
+   "portraitPng": "server/content/generated/portraits/oem-f032.png",
+   "extra": {}
+  },
+  {
+   "num": 33,
+   "name": "33",
+   "slotId": "oem-f033",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 33,
+   "portraitPng": "server/content/generated/portraits/oem-f033.png",
+   "extra": {}
+  },
+  {
+   "num": 34,
+   "name": "34",
+   "slotId": "oem-f034",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 34,
+   "portraitPng": "server/content/generated/portraits/oem-f034.png",
+   "extra": {}
+  },
+  {
+   "num": 35,
+   "name": "35",
+   "slotId": "oem-f035",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 35,
+   "portraitPng": "server/content/generated/portraits/oem-f035.png",
+   "extra": {}
+  },
+  {
+   "num": 36,
+   "name": "36",
+   "slotId": "oem-f036",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 36,
+   "portraitPng": "server/content/generated/portraits/oem-f036.png",
+   "extra": {}
+  },
+  {
+   "num": 37,
+   "name": "37",
+   "slotId": "oem-f037",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 37,
+   "portraitPng": "server/content/generated/portraits/oem-f037.png",
+   "extra": {}
+  },
+  {
+   "num": 38,
+   "name": "38",
+   "slotId": "oem-f038",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 38,
+   "portraitPng": "server/content/generated/portraits/oem-f038.png",
+   "extra": {}
+  },
+  {
+   "num": 39,
+   "name": "39",
+   "slotId": "oem-f039",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 39,
+   "portraitPng": "server/content/generated/portraits/oem-f039.png",
+   "extra": {}
+  },
+  {
+   "num": 40,
+   "name": "40",
+   "slotId": "oem-f040",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 40,
+   "portraitPng": "server/content/generated/portraits/oem-f040.png",
+   "extra": {}
+  },
+  {
+   "num": 41,
+   "name": "41",
+   "slotId": "oem-f041",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 41,
+   "portraitPng": "server/content/generated/portraits/oem-f041.png",
+   "extra": {}
+  },
+  {
+   "num": 42,
+   "name": "42",
+   "slotId": "oem-f042",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 42,
+   "portraitPng": "server/content/generated/portraits/oem-f042.png",
+   "extra": {}
+  },
+  {
+   "num": 43,
+   "name": "43",
+   "slotId": "oem-f043",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 43,
+   "portraitPng": "server/content/generated/portraits/oem-f043.png",
+   "extra": {}
+  },
+  {
+   "num": 44,
+   "name": "44",
+   "slotId": "oem-f044",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 44,
+   "portraitPng": "server/content/generated/portraits/oem-f044.png",
+   "extra": {}
+  },
+  {
+   "num": 45,
+   "name": "45",
+   "slotId": "oem-f045",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 45,
+   "portraitPng": "server/content/generated/portraits/oem-f045.png",
+   "extra": {}
+  },
+  {
+   "num": 46,
+   "name": "46",
+   "slotId": "oem-f046",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 46,
+   "portraitPng": "server/content/generated/portraits/oem-f046.png",
+   "extra": {}
+  },
+  {
+   "num": 47,
+   "name": "47",
+   "slotId": "oem-f047",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 47,
+   "portraitPng": "server/content/generated/portraits/oem-f047.png",
+   "extra": {}
+  },
+  {
+   "num": 48,
+   "name": "48",
+   "slotId": "oem-f048",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 48,
+   "portraitPng": "server/content/generated/portraits/oem-f048.png",
+   "extra": {}
+  },
+  {
+   "num": 49,
+   "name": "49",
+   "slotId": "oem-f049",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 49,
+   "portraitPng": "server/content/generated/portraits/oem-f049.png",
+   "extra": {}
+  },
+  {
+   "num": 50,
+   "name": "50",
+   "slotId": "oem-f050",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 50,
+   "portraitPng": "server/content/generated/portraits/oem-f050.png",
+   "extra": {}
+  },
+  {
+   "num": 51,
+   "name": "51",
+   "slotId": "oem-f051",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 51,
+   "portraitPng": "server/content/generated/portraits/oem-f051.png",
+   "extra": {}
+  },
+  {
+   "num": 52,
+   "name": "52",
+   "slotId": "oem-f052",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 52,
+   "portraitPng": "server/content/generated/portraits/oem-f052.png",
+   "extra": {}
+  },
+  {
+   "num": 53,
+   "name": "53",
+   "slotId": "oem-f053",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 53,
+   "portraitPng": "server/content/generated/portraits/oem-f053.png",
+   "extra": {}
+  },
+  {
+   "num": 54,
+   "name": "54",
+   "slotId": "oem-f054",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 54,
+   "portraitPng": "server/content/generated/portraits/oem-f054.png",
+   "extra": {}
+  },
+  {
+   "num": 55,
+   "name": "55",
+   "slotId": "oem-f055",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 55,
+   "portraitPng": "server/content/generated/portraits/oem-f055.png",
+   "extra": {}
+  },
+  {
+   "num": 56,
+   "name": "56",
+   "slotId": "oem-f056",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 56,
+   "portraitPng": "server/content/generated/portraits/oem-f056.png",
+   "extra": {}
+  },
+  {
+   "num": 57,
+   "name": "57",
+   "slotId": "oem-f057",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 57,
+   "portraitPng": "server/content/generated/portraits/oem-f057.png",
+   "extra": {}
+  },
+  {
+   "num": 58,
+   "name": "58",
+   "slotId": "oem-f058",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 58,
+   "portraitPng": "server/content/generated/portraits/oem-f058.png",
+   "extra": {}
+  },
+  {
+   "num": 59,
+   "name": "59",
+   "slotId": "oem-f059",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 59,
+   "portraitPng": "server/content/generated/portraits/oem-f059.png",
+   "extra": {}
+  },
+  {
+   "num": 60,
+   "name": "60",
+   "slotId": "oem-f060",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 60,
+   "portraitPng": "server/content/generated/portraits/oem-f060.png",
+   "extra": {}
+  },
+  {
+   "num": 61,
+   "name": "61",
+   "slotId": "oem-f061",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 61,
+   "portraitPng": "server/content/generated/portraits/oem-f061.png",
+   "extra": {}
+  },
+  {
+   "num": 62,
+   "name": "62",
+   "slotId": "oem-f062",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 62,
+   "portraitPng": "server/content/generated/portraits/oem-f062.png",
+   "extra": {}
+  },
+  {
+   "num": 63,
+   "name": "63",
+   "slotId": "oem-f063",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 63,
+   "portraitPng": "server/content/generated/portraits/oem-f063.png",
+   "extra": {}
+  },
+  {
+   "num": 64,
+   "name": "64",
+   "slotId": "oem-f064",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 64,
+   "portraitPng": "server/content/generated/portraits/oem-f064.png",
+   "extra": {}
+  },
+  {
+   "num": 65,
+   "name": "65",
+   "slotId": "oem-f065",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 65,
+   "portraitPng": "server/content/generated/portraits/oem-f065.png",
+   "extra": {}
+  },
+  {
+   "num": 66,
+   "name": "66",
+   "slotId": "oem-f066",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 66,
+   "portraitPng": "server/content/generated/portraits/oem-f066.png",
+   "extra": {}
+  },
+  {
+   "num": 67,
+   "name": "67",
+   "slotId": "oem-f067",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 67,
+   "portraitPng": "server/content/generated/portraits/oem-f067.png",
+   "extra": {}
+  },
+  {
+   "num": 68,
+   "name": "68",
+   "slotId": "oem-f068",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 68,
+   "portraitPng": "server/content/generated/portraits/oem-f068.png",
+   "extra": {}
+  },
+  {
+   "num": 69,
+   "name": "69",
+   "slotId": "oem-f069",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 69,
+   "portraitPng": "server/content/generated/portraits/oem-f069.png",
+   "extra": {}
+  },
+  {
+   "num": 70,
+   "name": "70",
+   "slotId": "oem-f070",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 70,
+   "portraitPng": "server/content/generated/portraits/oem-f070.png",
+   "extra": {}
+  },
+  {
+   "num": 71,
+   "name": "71",
+   "slotId": "oem-f071",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 71,
+   "portraitPng": "server/content/generated/portraits/oem-f071.png",
+   "extra": {}
+  },
+  {
+   "num": 72,
+   "name": "72",
+   "slotId": "oem-f072",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 72,
+   "portraitPng": "server/content/generated/portraits/oem-f072.png",
+   "extra": {}
+  },
+  {
+   "num": 73,
+   "name": "73",
+   "slotId": "oem-f073",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 73,
+   "portraitPng": "server/content/generated/portraits/oem-f073.png",
+   "extra": {}
+  },
+  {
+   "num": 74,
+   "name": "74",
+   "slotId": "oem-f074",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 74,
+   "portraitPng": "server/content/generated/portraits/oem-f074.png",
+   "extra": {}
+  },
+  {
+   "num": 75,
+   "name": "75",
+   "slotId": "oem-f075",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 75,
+   "portraitPng": "server/content/generated/portraits/oem-f075.png",
+   "extra": {}
+  },
+  {
+   "num": 76,
+   "name": "76",
+   "slotId": "oem-f076",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 76,
+   "portraitPng": "server/content/generated/portraits/oem-f076.png",
+   "extra": {}
+  },
+  {
+   "num": 77,
+   "name": "77",
+   "slotId": "oem-f077",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 77,
+   "portraitPng": "server/content/generated/portraits/oem-f077.png",
+   "extra": {}
+  },
+  {
+   "num": 78,
+   "name": "78",
+   "slotId": "oem-f078",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 78,
+   "portraitPng": "server/content/generated/portraits/oem-f078.png",
+   "extra": {}
+  },
+  {
+   "num": 79,
+   "name": "79",
+   "slotId": "oem-f079",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 79,
+   "portraitPng": "server/content/generated/portraits/oem-f079.png",
+   "extra": {}
+  },
+  {
+   "num": 80,
+   "name": "80",
+   "slotId": "oem-f080",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 80,
+   "portraitPng": "server/content/generated/portraits/oem-f080.png",
+   "extra": {}
+  },
+  {
+   "num": 81,
+   "name": "81",
+   "slotId": "oem-f081",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 81,
+   "portraitPng": "server/content/generated/portraits/oem-f081.png",
+   "extra": {}
+  },
+  {
+   "num": 82,
+   "name": "82",
+   "slotId": "oem-f082",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 82,
+   "portraitPng": "server/content/generated/portraits/oem-f082.png",
+   "extra": {}
+  },
+  {
+   "num": 83,
+   "name": "83",
+   "slotId": "oem-f083",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 83,
+   "portraitPng": "server/content/generated/portraits/oem-f083.png",
+   "extra": {}
+  },
+  {
+   "num": 84,
+   "name": "84",
+   "slotId": "oem-f084",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 84,
+   "portraitPng": "server/content/generated/portraits/oem-f084.png",
+   "extra": {}
+  },
+  {
+   "num": 85,
+   "name": "85",
+   "slotId": "oem-f085",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 85,
+   "portraitPng": "server/content/generated/portraits/oem-f085.png",
+   "extra": {}
+  },
+  {
+   "num": 86,
+   "name": "86",
+   "slotId": "oem-f086",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 86,
+   "portraitPng": "server/content/generated/portraits/oem-f086.png",
+   "extra": {}
+  },
+  {
+   "num": 87,
+   "name": "87",
+   "slotId": "oem-f087",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 87,
+   "portraitPng": "server/content/generated/portraits/oem-f087.png",
+   "extra": {}
+  },
+  {
+   "num": 88,
+   "name": "88",
+   "slotId": "oem-f088",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 88,
+   "portraitPng": "server/content/generated/portraits/oem-f088.png",
+   "extra": {}
+  },
+  {
+   "num": 89,
+   "name": "89",
+   "slotId": "oem-f089",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 89,
+   "portraitPng": "server/content/generated/portraits/oem-f089.png",
+   "extra": {}
+  },
+  {
+   "num": 90,
+   "name": "90",
+   "slotId": "oem-f090",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 90,
+   "portraitPng": "server/content/generated/portraits/oem-f090.png",
+   "extra": {}
+  },
+  {
+   "num": 91,
+   "name": "91",
+   "slotId": "oem-f091",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 91,
+   "portraitPng": "server/content/generated/portraits/oem-f091.png",
+   "extra": {}
+  },
+  {
+   "num": 92,
+   "name": "92",
+   "slotId": "oem-f092",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 92,
+   "portraitPng": "server/content/generated/portraits/oem-f092.png",
+   "extra": {}
+  },
+  {
+   "num": 93,
+   "name": "93",
+   "slotId": "oem-f093",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 93,
+   "portraitPng": "server/content/generated/portraits/oem-f093.png",
+   "extra": {}
+  },
+  {
+   "num": 94,
+   "name": "94",
+   "slotId": "oem-f094",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 94,
+   "portraitPng": "server/content/generated/portraits/oem-f094.png",
+   "extra": {}
+  },
+  {
+   "num": 95,
+   "name": "95",
+   "slotId": "oem-f095",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 95,
+   "portraitPng": "server/content/generated/portraits/oem-f095.png",
+   "extra": {}
+  },
+  {
+   "num": 96,
+   "name": "96",
+   "slotId": "oem-f096",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 96,
+   "portraitPng": "server/content/generated/portraits/oem-f096.png",
+   "extra": {}
+  },
+  {
+   "num": 97,
+   "name": "97",
+   "slotId": "oem-f097",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 97,
+   "portraitPng": "server/content/generated/portraits/oem-f097.png",
+   "extra": {}
+  },
+  {
+   "num": 98,
+   "name": "98",
+   "slotId": "oem-f098",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 98,
+   "portraitPng": "server/content/generated/portraits/oem-f098.png",
+   "extra": {}
+  },
+  {
+   "num": 99,
+   "name": "99",
+   "slotId": "oem-f099",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 99,
+   "portraitPng": "server/content/generated/portraits/oem-f099.png",
+   "extra": {}
+  },
+  {
+   "num": 100,
+   "name": "100",
+   "slotId": "oem-f100",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 100,
+   "portraitPng": "server/content/generated/portraits/oem-f100.png",
+   "extra": {}
+  },
+  {
+   "num": 101,
+   "name": "101",
+   "slotId": "oem-f101",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 101,
+   "portraitPng": "server/content/generated/portraits/oem-f101.png",
+   "extra": {}
+  },
+  {
+   "num": 102,
+   "name": "102",
+   "slotId": "oem-f102",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 102,
+   "portraitPng": "server/content/generated/portraits/oem-f102.png",
+   "extra": {}
+  },
+  {
+   "num": 103,
+   "name": "103",
+   "slotId": "oem-f103",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 103,
+   "portraitPng": "server/content/generated/portraits/oem-f103.png",
+   "extra": {}
+  },
+  {
+   "num": 104,
+   "name": "104",
+   "slotId": "oem-f104",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 104,
+   "portraitPng": "server/content/generated/portraits/oem-f104.png",
+   "extra": {}
+  },
+  {
+   "num": 105,
+   "name": "105",
+   "slotId": "oem-f105",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 105,
+   "portraitPng": "server/content/generated/portraits/oem-f105.png",
+   "extra": {}
+  },
+  {
+   "num": 106,
+   "name": "106",
+   "slotId": "oem-f106",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 106,
+   "portraitPng": "server/content/generated/portraits/oem-f106.png",
+   "extra": {}
+  },
+  {
+   "num": 107,
+   "name": "107",
+   "slotId": "oem-f107",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 107,
+   "portraitPng": "server/content/generated/portraits/oem-f107.png",
+   "extra": {}
+  },
+  {
+   "num": 108,
+   "name": "108",
+   "slotId": "oem-f108",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 108,
+   "portraitPng": "server/content/generated/portraits/oem-f108.png",
+   "extra": {}
+  },
+  {
+   "num": 109,
+   "name": "109",
+   "slotId": "oem-f109",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 109,
+   "portraitPng": "server/content/generated/portraits/oem-f109.png",
+   "extra": {}
+  },
+  {
+   "num": 110,
+   "name": "110",
+   "slotId": "oem-f110",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 110,
+   "portraitPng": "server/content/generated/portraits/oem-f110.png",
+   "extra": {}
+  },
+  {
+   "num": 111,
+   "name": "111",
+   "slotId": "oem-f111",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 111,
+   "portraitPng": "server/content/generated/portraits/oem-f111.png",
+   "extra": {}
+  },
+  {
+   "num": 112,
+   "name": "112",
+   "slotId": "oem-f112",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 112,
+   "portraitPng": "server/content/generated/portraits/oem-f112.png",
+   "extra": {}
+  },
+  {
+   "num": 113,
+   "name": "113",
+   "slotId": "oem-f113",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 113,
+   "portraitPng": "server/content/generated/portraits/oem-f113.png",
+   "extra": {}
+  },
+  {
+   "num": 114,
+   "name": "114",
+   "slotId": "oem-f114",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 114,
+   "portraitPng": "server/content/generated/portraits/oem-f114.png",
+   "extra": {}
+  },
+  {
+   "num": 115,
+   "name": "115",
+   "slotId": "oem-f115",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 115,
+   "portraitPng": "server/content/generated/portraits/oem-f115.png",
+   "extra": {}
+  },
+  {
+   "num": 116,
+   "name": "116",
+   "slotId": "oem-f116",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 116,
+   "portraitPng": "server/content/generated/portraits/oem-f116.png",
+   "extra": {}
+  },
+  {
+   "num": 117,
+   "name": "117",
+   "slotId": "oem-f117",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 117,
+   "portraitPng": "server/content/generated/portraits/oem-f117.png",
+   "extra": {}
+  },
+  {
+   "num": 118,
+   "name": "118",
+   "slotId": "oem-f118",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 118,
+   "portraitPng": "server/content/generated/portraits/oem-f118.png",
+   "extra": {}
+  },
+  {
+   "num": 119,
+   "name": "119",
+   "slotId": "oem-f119",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 119,
+   "portraitPng": "server/content/generated/portraits/oem-f119.png",
+   "extra": {}
+  },
+  {
+   "num": 120,
+   "name": "120",
+   "slotId": "oem-f120",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 120,
+   "portraitPng": "server/content/generated/portraits/oem-f120.png",
+   "extra": {}
+  },
+  {
+   "num": 121,
+   "name": "121",
+   "slotId": "oem-f121",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 121,
+   "portraitPng": "server/content/generated/portraits/oem-f121.png",
+   "extra": {}
+  },
+  {
+   "num": 122,
+   "name": "122",
+   "slotId": "oem-f122",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 122,
+   "portraitPng": "server/content/generated/portraits/oem-f122.png",
+   "extra": {}
+  },
+  {
+   "num": 123,
+   "name": "123",
+   "slotId": "oem-f123",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 123,
+   "portraitPng": "server/content/generated/portraits/oem-f123.png",
+   "extra": {}
+  },
+  {
+   "num": 124,
+   "name": "124",
+   "slotId": "oem-f124",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 124,
+   "portraitPng": "server/content/generated/portraits/oem-f124.png",
+   "extra": {}
+  },
+  {
+   "num": 125,
+   "name": "125",
+   "slotId": "oem-f125",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 125,
+   "portraitPng": "server/content/generated/portraits/oem-f125.png",
+   "extra": {}
+  },
+  {
+   "num": 126,
+   "name": "126",
+   "slotId": "oem-f126",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 126,
+   "portraitPng": "server/content/generated/portraits/oem-f126.png",
+   "extra": {}
+  },
+  {
+   "num": 127,
+   "name": "127",
+   "slotId": "oem-f127",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 127,
+   "portraitPng": "server/content/generated/portraits/oem-f127.png",
+   "extra": {}
+  },
+  {
+   "num": 128,
+   "name": "128",
+   "slotId": "oem-f128",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 128,
+   "portraitPng": "server/content/generated/portraits/oem-f128.png",
+   "extra": {}
+  },
+  {
+   "num": 129,
+   "name": "129",
+   "slotId": "oem-f129",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 129,
+   "portraitPng": "server/content/generated/portraits/oem-f129.png",
+   "extra": {}
+  },
+  {
+   "num": 130,
+   "name": "130",
+   "slotId": "oem-f130",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 130,
+   "portraitPng": "server/content/generated/portraits/oem-f130.png",
+   "extra": {}
+  },
+  {
+   "num": 131,
+   "name": "131",
+   "slotId": "oem-f131",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 131,
+   "portraitPng": "server/content/generated/portraits/oem-f131.png",
+   "extra": {}
+  },
+  {
+   "num": 132,
+   "name": "132",
+   "slotId": "oem-f132",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 132,
+   "portraitPng": "server/content/generated/portraits/oem-f132.png",
+   "extra": {}
+  },
+  {
+   "num": 133,
+   "name": "133",
+   "slotId": "oem-f133",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 133,
+   "portraitPng": "server/content/generated/portraits/oem-f133.png",
+   "extra": {}
+  },
+  {
+   "num": 134,
+   "name": "134",
+   "slotId": "oem-f134",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 134,
+   "portraitPng": "server/content/generated/portraits/oem-f134.png",
+   "extra": {}
+  },
+  {
+   "num": 135,
+   "name": "135",
+   "slotId": "oem-f135",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 135,
+   "portraitPng": "server/content/generated/portraits/oem-f135.png",
+   "extra": {}
+  },
+  {
+   "num": 136,
+   "name": "136",
+   "slotId": "oem-f136",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 136,
+   "portraitPng": "server/content/generated/portraits/oem-f136.png",
+   "extra": {}
+  },
+  {
+   "num": 137,
+   "name": "137",
+   "slotId": "oem-f137",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 137,
+   "portraitPng": "server/content/generated/portraits/oem-f137.png",
+   "extra": {}
+  },
+  {
+   "num": 138,
+   "name": "138",
+   "slotId": "oem-f138",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 138,
+   "portraitPng": "server/content/generated/portraits/oem-f138.png",
+   "extra": {}
+  },
+  {
+   "num": 139,
+   "name": "139",
+   "slotId": "oem-f139",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 139,
+   "portraitPng": "server/content/generated/portraits/oem-f139.png",
+   "extra": {}
+  },
+  {
+   "num": 140,
+   "name": "140",
+   "slotId": "oem-f140",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 140,
+   "portraitPng": "server/content/generated/portraits/oem-f140.png",
+   "extra": {}
+  },
+  {
+   "num": 141,
+   "name": "141",
+   "slotId": "oem-f141",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 141,
+   "portraitPng": "server/content/generated/portraits/oem-f141.png",
+   "extra": {}
+  },
+  {
+   "num": 142,
+   "name": "142",
+   "slotId": "oem-f142",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 142,
+   "portraitPng": "server/content/generated/portraits/oem-f142.png",
+   "extra": {}
+  },
+  {
+   "num": 143,
+   "name": "143",
+   "slotId": "oem-f143",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 143,
+   "portraitPng": "server/content/generated/portraits/oem-f143.png",
+   "extra": {}
+  },
+  {
+   "num": 144,
+   "name": "144",
+   "slotId": "oem-f144",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 144,
+   "portraitPng": "server/content/generated/portraits/oem-f144.png",
+   "extra": {}
+  },
+  {
+   "num": 145,
+   "name": "145",
+   "slotId": "oem-f145",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 145,
+   "portraitPng": "server/content/generated/portraits/oem-f145.png",
+   "extra": {}
+  },
+  {
+   "num": 146,
+   "name": "146",
+   "slotId": "oem-f146",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 146,
+   "portraitPng": "server/content/generated/portraits/oem-f146.png",
+   "extra": {}
+  },
+  {
+   "num": 147,
+   "name": "147",
+   "slotId": "oem-f147",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 147,
+   "portraitPng": "server/content/generated/portraits/oem-f147.png",
+   "extra": {}
+  },
+  {
+   "num": 148,
+   "name": "148",
+   "slotId": "oem-f148",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 148,
+   "portraitPng": "server/content/generated/portraits/oem-f148.png",
+   "extra": {}
+  },
+  {
+   "num": 149,
+   "name": "149",
+   "slotId": "oem-f149",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 149,
+   "portraitPng": "server/content/generated/portraits/oem-f149.png",
+   "extra": {}
+  },
+  {
+   "num": 150,
+   "name": "150",
+   "slotId": "oem-f150",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 150,
+   "portraitPng": "server/content/generated/portraits/oem-f150.png",
+   "extra": {}
+  },
+  {
+   "num": 151,
+   "name": "151",
+   "slotId": "oem-f151",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 151,
+   "portraitPng": "server/content/generated/portraits/oem-f151.png",
+   "extra": {}
+  },
+  {
+   "num": 152,
+   "name": "152",
+   "slotId": "oem-f152",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 152,
+   "portraitPng": "server/content/generated/portraits/oem-f152.png",
+   "extra": {}
+  },
+  {
+   "num": 153,
+   "name": "153",
+   "slotId": "oem-f153",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 153,
+   "portraitPng": "server/content/generated/portraits/oem-f153.png",
+   "extra": {}
+  },
+  {
+   "num": 154,
+   "name": "154",
+   "slotId": "oem-f154",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 154,
+   "portraitPng": "server/content/generated/portraits/oem-f154.png",
+   "extra": {}
+  },
+  {
+   "num": 155,
+   "name": "155",
+   "slotId": "oem-f155",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 155,
+   "portraitPng": "server/content/generated/portraits/oem-f155.png",
+   "extra": {}
+  },
+  {
+   "num": 156,
+   "name": "156",
+   "slotId": "oem-f156",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 156,
+   "portraitPng": "server/content/generated/portraits/oem-f156.png",
+   "extra": {}
+  },
+  {
+   "num": 157,
+   "name": "157",
+   "slotId": "oem-f157",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 157,
+   "portraitPng": "server/content/generated/portraits/oem-f157.png",
+   "extra": {}
+  },
+  {
+   "num": 158,
+   "name": "158",
+   "slotId": "oem-f158",
+   "atlas": "oem.tcf",
+   "faction": "帝国(제국) 남성",
+   "faceIndex": 158,
+   "portraitPng": "server/content/generated/portraits/oem-f158.png",
+   "extra": {}
+  },
+  {
+   "num": 159,
+   "name": "159",
+   "slotId": "oam-f001",
+   "atlas": "oam.tcf",
+   "faction": "同盟(동맹) 남성",
+   "faceIndex": 1,
+   "portraitPng": "server/content/generated/portraits/oam-f001.png",
+   "extra": {}
+  },
+  {
+   "num": 160,
+   "name": "160",
+   "slotId": "oam-f002",
+   "atlas": "oam.tcf",
+   "faction": "同盟(동맹) 남성",
+   "faceIndex": 2,
+   "portraitPng": "server/content/generated/portraits/oam-f002.png",
+   "extra": {}
+  },
+  {
+   "num": 161,
+   "name": "161",
+   "slotId": "oam-f003",
+   "atlas": "oam.tcf",
+   "faction": "同盟(동맹) 남성",
+   "faceIndex": 3,
+   "portraitPng": "server/content/generated/portraits/oam-f003.png",
+   "extra": {}
+  },
+  {
+   "num": 162,
+   "name": "162",
+   "slotId": "oam-f004",
+   "atlas": "oam.tcf",
+   "faction": "同盟(동맹) 남성",
+   "faceIndex": 4,
+   "portraitPng": "server/content/generated/portraits/oam-f004.png",
+   "extra": {}
+  },
+  {
+   "num": 163,
+   "name": "163",
+   "slotId": "oam-f005",
+   "atlas": "oam.tcf",
+   "faction": "同盟(동맹) 남성",
+   "faceIndex": 5,
+   "portraitPng": "server/content/generated/portraits/oam-f005.png",
+   "extra": {}
+  },
+  {
+   "num": 164,
+   "name": "164",
+   "slotId": "oam-f006",
+   "atlas": "oam.tcf",
+   "faction": "同盟(동맹) 남성",
+   "faceIndex": 6,
+   "portraitPng": "server/content/generated/portraits/oam-f006.png",
+   "extra": {}
+  },
+  {
+   "num": 165,
+   "name": "165",
+   "slotId": "oam-f007",
+   "atlas": "oam.tcf",
+   "faction": "同盟(동맹) 남성",
+   "faceIndex": 7,
+   "portraitPng": "server/content/generated/portraits/oam-f007.png",
+   "extra": {}
+  },
+  {
+   "num": 166,
+   "name": "166",
+   "slotId": "oam-f008",
+   "atlas": "oam.tcf",
+   "faction": "同盟(동맹) 남성",
+   "faceIndex": 8,
+   "portraitPng": "server/content/generated/portraits/oam-f008.png",
+   "extra": {}
+  },
+  {
+   "num": 167,
+   "name": "167",
+   "slotId": "oam-f009",
+   "atlas": "oam.tcf",
+   "faction": "同盟(동맹) 남성",
+   "faceIndex": 9,
+   "portraitPng": "server/content/generated/portraits/oam-f009.png",
+   "extra": {}
+  },
+  {
+   "num": 168,
+   "name": "168",
+   "slotId": "oam-f010",
+   "atlas": "oam.tcf",
+   "faction": "同盟(동맹) 남성",
+   "faceIndex": 10,
+   "portraitPng": "server/content/generated/portraits/oam-f010.png",
+   "extra": {}
+  },
+  {
+   "num": 169,
+   "name": "169",
+   "slotId": "oam-f011",
+   "atlas": "oam.tcf",
+   "faction": "同盟(동맹) 남성",
+   "faceIndex": 11,
+   "portraitPng": "server/content/generated/portraits/oam-f011.png",
+   "extra": {}
+  },
+  {
+   "num": 170,
+   "name": "170",
+   "slotId": "oam-f012",
+   "atlas": "oam.tcf",
+   "faction": "同盟(동맹) 남성",
+   "faceIndex": 12,
+   "portraitPng": "server/content/generated/portraits/oam-f012.png",
+   "extra": {}
+  },
+  {
+   "num": 171,
+   "name": "171",
+   "slotId": "oam-f013",
+   "atlas": "oam.tcf",
+   "faction": "同盟(동맹) 남성",
+   "faceIndex": 13,
+   "portraitPng": "server/content/generated/portraits/oam-f013.png",
+   "extra": {}
+  },
+  {
+   "num": 172,
+   "name": "172",
+   "slotId": "oam-f014",
+   "atlas": "oam.tcf",
+   "faction": "同盟(동맹) 남성",
+   "faceIndex": 14,
+   "portraitPng": "server/content/generated/portraits/oam-f014.png",
+   "extra": {}
+  },
+  {
+   "num": 173,
+   "name": "173",
+   "slotId": "oam-f015",
+   "atlas": "oam.tcf",
+   "faction": "同盟(동맹) 남성",
+   "faceIndex": 15,
+   "portraitPng": "server/content/generated/portraits/oam-f015.png",
+   "extra": {}
+  },
+  {
+   "num": 174,
+   "name": "174",
+   "slotId": "oam-f016",
+   "atlas": "oam.tcf",
+   "faction": "同盟(동맹) 남성",
+   "faceIndex": 16,
+   "portraitPng": "server/content/generated/portraits/oam-f016.png",
+   "extra": {}
+  },
+  {
+   "num": 175,
+   "name": "175",
+   "slotId": "oam-f017",
+   "atlas": "oam.tcf",
+   "faction": "同盟(동맹) 남성",
+   "faceIndex": 17,
+   "portraitPng": "server/content/generated/portraits/oam-f017.png",
+   "extra": {}
+  },
+  {
+   "num": 176,
+   "name": "176",
+   "slotId": "oam-f018",
+   "atlas": "oam.tcf",
+   "faction": "同盟(동맹) 남성",
+   "faceIndex": 18,
+   "portraitPng": "server/content/generated/portraits/oam-f018.png",
+   "extra": {}
+  },
+  {
+   "num": 177,
+   "name": "177",
+   "slotId": "oam-f019",
+   "atlas": "oam.tcf",
+   "faction": "同盟(동맹) 남성",
+   "faceIndex": 19,
+   "portraitPng": "server/content/generated/portraits/oam-f019.png",
+   "extra": {}
+  },
+  {
+   "num": 178,
+   "name": "178",
+   "slotId": "oam-f020",
+   "atlas": "oam.tcf",
+   "faction": "同盟(동맹) 남성",
+   "faceIndex": 20,
+   "portraitPng": "server/content/generated/portraits/oam-f020.png",
+   "extra": {}
+  },
+  {
+   "num": 179,
+   "name": "179",
+   "slotId": "oam-f021",
+   "atlas": "oam.tcf",
+   "faction": "同盟(동맹) 남성",
+   "faceIndex": 21,
+   "portraitPng": "server/content/generated/portraits/oam-f021.png",
+   "extra": {}
+  },
+  {
+   "num": 180,
+   "name": "180",
+   "slotId": "oam-f022",
+   "atlas": "oam.tcf",
+   "faction": "同盟(동맹) 남성",
+   "faceIndex": 22,
+   "portraitPng": "server/content/generated/portraits/oam-f022.png",
+   "extra": {}
+  },
+  {
+   "num": 181,
+   "name": "181",
+   "slotId": "oam-f023",
+   "atlas": "oam.tcf",
+   "faction": "同盟(동맹) 남성",
+   "faceIndex": 23,
+   "portraitPng": "server/content/generated/portraits/oam-f023.png",
+   "extra": {}
+  },
+  {
+   "num": 182,
+   "name": "182",
+   "slotId": "oam-f024",
+   "atlas": "oam.tcf",
+   "faction": "同盟(동맹) 남성",
+   "faceIndex": 24,
+   "portraitPng": "server/content/generated/portraits/oam-f024.png",
+   "extra": {}
+  },
+  {
+   "num": 183,
+   "name": "183",
+   "slotId": "oam-f025",
+   "atlas": "oam.tcf",
+   "faction": "同盟(동맹) 남성",
+   "faceIndex": 25,
+   "portraitPng": "server/content/generated/portraits/oam-f025.png",
+   "extra": {}
+  },
+  {
+   "num": 184,
+   "name": "184",
+   "slotId": "oam-f026",
+   "atlas": "oam.tcf",
+   "faction": "同盟(동맹) 남성",
+   "faceIndex": 26,
+   "portraitPng": "server/content/generated/portraits/oam-f026.png",
+   "extra": {}
+  },
+  {
+   "num": 185,
+   "name": "185",
+   "slotId": "oam-f027",
+   "atlas": "oam.tcf",
+   "faction": "同盟(동맹) 남성",
+   "faceIndex": 27,
+   "portraitPng": "server/content/generated/portraits/oam-f027.png",
+   "extra": {}
+  },
+  {
+   "num": 186,
+   "name": "186",
+   "slotId": "oam-f028",
+   "atlas": "oam.tcf",
+   "faction": "同盟(동맹) 남성",
+   "faceIndex": 28,
+   "portraitPng": "server/content/generated/portraits/oam-f028.png",
+   "extra": {}
+  },
+  {
+   "num": 187,
+   "name": "187",
+   "slotId": "oam-f029",
+   "atlas": "oam.tcf",
+   "faction": "同盟(동맹) 남성",
+   "faceIndex": 29,
+   "portraitPng": "server/content/generated/portraits/oam-f029.png",
+   "extra": {}
+  },
+  {
+   "num": 188,
+   "name": "188",
+   "slotId": "oam-f030",
+   "atlas": "oam.tcf",
+   "faction": "同盟(동맹) 남성",
+   "faceIndex": 30,
+   "portraitPng": "server/content/generated/portraits/oam-f030.png",
+   "extra": {}
+  },
+  {
+   "num": 189,
+   "name": "189",
+   "slotId": "oam-f031",
+   "atlas": "oam.tcf",
+   "faction": "同盟(동맹) 남성",
+   "faceIndex": 31,
+   "portraitPng": "server/content/generated/portraits/oam-f031.png",
+   "extra": {}
+  },
+  {
+   "num": 190,
+   "name": "190",
+   "slotId": "oam-f032",
+   "atlas": "oam.tcf",
+   "faction": "同盟(동맹) 남성",
+   "faceIndex": 32,
+   "portraitPng": "server/content/generated/portraits/oam-f032.png",
+   "extra": {}
+  },
+  {
+   "num": 191,
+   "name": "191",
+   "slotId": "oam-f033",
+   "atlas": "oam.tcf",
+   "faction": "同盟(동맹) 남성",
+   "faceIndex": 33,
+   "portraitPng": "server/content/generated/portraits/oam-f033.png",
+   "extra": {}
+  },
+  {
+   "num": 192,
+   "name": "192",
+   "slotId": "oam-f034",
+   "atlas": "oam.tcf",
+   "faction": "同盟(동맹) 남성",
+   "faceIndex": 34,
+   "portraitPng": "server/content/generated/portraits/oam-f034.png",
+   "extra": {}
+  },
+  {
+   "num": 193,
+   "name": "193",
+   "slotId": "oam-f035",
+   "atlas": "oam.tcf",
+   "faction": "同盟(동맹) 남성",
+   "faceIndex": 35,
+   "portraitPng": "server/content/generated/portraits/oam-f035.png",
+   "extra": {}
+  },
+  {
+   "num": 194,
+   "name": "194",
+   "slotId": "oam-f036",
+   "atlas": "oam.tcf",
+   "faction": "同盟(동맹) 남성",
+   "faceIndex": 36,
+   "portraitPng": "server/content/generated/portraits/oam-f036.png",
+   "extra": {}
+  },
+  {
+   "num": 195,
+   "name": "195",
+   "slotId": "oam-f037",
+   "atlas": "oam.tcf",
+   "faction": "同盟(동맹) 남성",
+   "faceIndex": 37,
+   "portraitPng": "server/content/generated/portraits/oam-f037.png",
+   "extra": {}
+  },
+  {
+   "num": 196,
+   "name": "196",
+   "slotId": "oam-f038",
+   "atlas": "oam.tcf",
+   "faction": "同盟(동맹) 남성",
+   "faceIndex": 38,
+   "portraitPng": "server/content/generated/portraits/oam-f038.png",
+   "extra": {}
+  },
+  {
+   "num": 197,
+   "name": "197",
+   "slotId": "oam-f039",
+   "atlas": "oam.tcf",
+   "faction": "同盟(동맹) 남성",
+   "faceIndex": 39,
+   "portraitPng": "server/content/generated/portraits/oam-f039.png",
+   "extra": {}
+  },
+  {
+   "num": 198,
+   "name": "198",
+   "slotId": "oam-f040",
+   "atlas": "oam.tcf",
+   "faction": "同盟(동맹) 남성",
+   "faceIndex": 40,
+   "portraitPng": "server/content/generated/portraits/oam-f040.png",
+   "extra": {}
+  },
+  {
+   "num": 199,
+   "name": "199",
+   "slotId": "oam-f041",
+   "atlas": "oam.tcf",
+   "faction": "同盟(동맹) 남성",
+   "faceIndex": 41,
+   "portraitPng": "server/content/generated/portraits/oam-f041.png",
+   "extra": {}
+  },
+  {
+   "num": 200,
+   "name": "200",
+   "slotId": "oam-f042",
+   "atlas": "oam.tcf",
+   "faction": "同盟(동맹) 남성",
+   "faceIndex": 42,
+   "portraitPng": "server/content/generated/portraits/oam-f042.png",
+   "extra": {}
+  },
+  {
+   "num": 201,
+   "name": "201",
+   "slotId": "oam-f043",
+   "atlas": "oam.tcf",
+   "faction": "同盟(동맹) 남성",
+   "faceIndex": 43,
+   "portraitPng": "server/content/generated/portraits/oam-f043.png",
+   "extra": {}
+  },
+  {
+   "num": 202,
+   "name": "202",
+   "slotId": "oam-f044",
+   "atlas": "oam.tcf",
+   "faction": "同盟(동맹) 남성",
+   "faceIndex": 44,
+   "portraitPng": "server/content/generated/portraits/oam-f044.png",
+   "extra": {}
+  },
+  {
+   "num": 203,
+   "name": "203",
+   "slotId": "oam-f045",
+   "atlas": "oam.tcf",
+   "faction": "同盟(동맹) 남성",
+   "faceIndex": 45,
+   "portraitPng": "server/content/generated/portraits/oam-f045.png",
+   "extra": {}
+  },
+  {
+   "num": 204,
+   "name": "204",
+   "slotId": "oam-f046",
+   "atlas": "oam.tcf",
+   "faction": "同盟(동맹) 남성",
+   "faceIndex": 46,
+   "portraitPng": "server/content/generated/portraits/oam-f046.png",
+   "extra": {}
+  },
+  {
+   "num": 205,
+   "name": "205",
+   "slotId": "oam-f047",
+   "atlas": "oam.tcf",
+   "faction": "同盟(동맹) 남성",
+   "faceIndex": 47,
+   "portraitPng": "server/content/generated/portraits/oam-f047.png",
+   "extra": {}
+  },
+  {
+   "num": 206,
+   "name": "206",
+   "slotId": "oam-f048",
+   "atlas": "oam.tcf",
+   "faction": "同盟(동맹) 남성",
+   "faceIndex": 48,
+   "portraitPng": "server/content/generated/portraits/oam-f048.png",
+   "extra": {}
+  },
+  {
+   "num": 207,
+   "name": "207",
+   "slotId": "oam-f049",
+   "atlas": "oam.tcf",
+   "faction": "同盟(동맹) 남성",
+   "faceIndex": 49,
+   "portraitPng": "server/content/generated/portraits/oam-f049.png",
+   "extra": {}
+  },
+  {
+   "num": 208,
+   "name": "208",
+   "slotId": "oam-f050",
+   "atlas": "oam.tcf",
+   "faction": "同盟(동맹) 남성",
+   "faceIndex": 50,
+   "portraitPng": "server/content/generated/portraits/oam-f050.png",
+   "extra": {}
+  },
+  {
+   "num": 209,
+   "name": "209",
+   "slotId": "oam-f051",
+   "atlas": "oam.tcf",
+   "faction": "同盟(동맹) 남성",
+   "faceIndex": 51,
+   "portraitPng": "server/content/generated/portraits/oam-f051.png",
+   "extra": {}
+  },
+  {
+   "num": 210,
+   "name": "210",
+   "slotId": "oam-f052",
+   "atlas": "oam.tcf",
+   "faction": "同盟(동맹) 남성",
+   "faceIndex": 52,
+   "portraitPng": "server/content/generated/portraits/oam-f052.png",
+   "extra": {}
+  },
+  {
+   "num": 211,
+   "name": "211",
+   "slotId": "oam-f053",
+   "atlas": "oam.tcf",
+   "faction": "同盟(동맹) 남성",
+   "faceIndex": 53,
+   "portraitPng": "server/content/generated/portraits/oam-f053.png",
+   "extra": {}
+  },
+  {
+   "num": 212,
+   "name": "212",
+   "slotId": "oam-f054",
+   "atlas": "oam.tcf",
+   "faction": "同盟(동맹) 남성",
+   "faceIndex": 54,
+   "portraitPng": "server/content/generated/portraits/oam-f054.png",
+   "extra": {}
+  },
+  {
+   "num": 213,
+   "name": "213",
+   "slotId": "oam-f055",
+   "atlas": "oam.tcf",
+   "faction": "同盟(동맹) 남성",
+   "faceIndex": 55,
+   "portraitPng": "server/content/generated/portraits/oam-f055.png",
+   "extra": {}
+  },
+  {
+   "num": 214,
+   "name": "214",
+   "slotId": "oam-f056",
+   "atlas": "oam.tcf",
+   "faction": "同盟(동맹) 남성",
+   "faceIndex": 56,
+   "portraitPng": "server/content/generated/portraits/oam-f056.png",
+   "extra": {}
+  },
+  {
+   "num": 215,
+   "name": "215",
+   "slotId": "oam-f057",
+   "atlas": "oam.tcf",
+   "faction": "同盟(동맹) 남성",
+   "faceIndex": 57,
+   "portraitPng": "server/content/generated/portraits/oam-f057.png",
+   "extra": {}
+  },
+  {
+   "num": 216,
+   "name": "216",
+   "slotId": "oam-f058",
+   "atlas": "oam.tcf",
+   "faction": "同盟(동맹) 남성",
+   "faceIndex": 58,
+   "portraitPng": "server/content/generated/portraits/oam-f058.png",
+   "extra": {}
+  },
+  {
+   "num": 217,
+   "name": "217",
+   "slotId": "oam-f059",
+   "atlas": "oam.tcf",
+   "faction": "同盟(동맹) 남성",
+   "faceIndex": 59,
+   "portraitPng": "server/content/generated/portraits/oam-f059.png",
+   "extra": {}
+  },
+  {
+   "num": 218,
+   "name": "218",
+   "slotId": "oam-f060",
+   "atlas": "oam.tcf",
+   "faction": "同盟(동맹) 남성",
+   "faceIndex": 60,
+   "portraitPng": "server/content/generated/portraits/oam-f060.png",
+   "extra": {}
+  },
+  {
+   "num": 219,
+   "name": "219",
+   "slotId": "oam-f061",
+   "atlas": "oam.tcf",
+   "faction": "同盟(동맹) 남성",
+   "faceIndex": 61,
+   "portraitPng": "server/content/generated/portraits/oam-f061.png",
+   "extra": {}
+  },
+  {
+   "num": 220,
+   "name": "220",
+   "slotId": "oam-f062",
+   "atlas": "oam.tcf",
+   "faction": "同盟(동맹) 남성",
+   "faceIndex": 62,
+   "portraitPng": "server/content/generated/portraits/oam-f062.png",
+   "extra": {}
+  },
+  {
+   "num": 221,
+   "name": "221",
+   "slotId": "oam-f063",
+   "atlas": "oam.tcf",
+   "faction": "同盟(동맹) 남성",
+   "faceIndex": 63,
+   "portraitPng": "server/content/generated/portraits/oam-f063.png",
+   "extra": {}
+  },
+  {
+   "num": 222,
+   "name": "222",
+   "slotId": "oam-f064",
+   "atlas": "oam.tcf",
+   "faction": "同盟(동맹) 남성",
+   "faceIndex": 64,
+   "portraitPng": "server/content/generated/portraits/oam-f064.png",
+   "extra": {}
+  },
+  {
+   "num": 223,
+   "name": "223",
+   "slotId": "oam-f065",
+   "atlas": "oam.tcf",
+   "faction": "同盟(동맹) 남성",
+   "faceIndex": 65,
+   "portraitPng": "server/content/generated/portraits/oam-f065.png",
+   "extra": {}
+  },
+  {
+   "num": 224,
+   "name": "224",
+   "slotId": "oam-f066",
+   "atlas": "oam.tcf",
+   "faction": "同盟(동맹) 남성",
+   "faceIndex": 66,
+   "portraitPng": "server/content/generated/portraits/oam-f066.png",
+   "extra": {}
+  },
+  {
+   "num": 225,
+   "name": "225",
+   "slotId": "oam-f067",
+   "atlas": "oam.tcf",
+   "faction": "同盟(동맹) 남성",
+   "faceIndex": 67,
+   "portraitPng": "server/content/generated/portraits/oam-f067.png",
+   "extra": {}
+  },
+  {
+   "num": 226,
+   "name": "226",
+   "slotId": "oam-f068",
+   "atlas": "oam.tcf",
+   "faction": "同盟(동맹) 남성",
+   "faceIndex": 68,
+   "portraitPng": "server/content/generated/portraits/oam-f068.png",
+   "extra": {}
+  },
+  {
+   "num": 227,
+   "name": "227",
+   "slotId": "oam-f069",
+   "atlas": "oam.tcf",
+   "faction": "同盟(동맹) 남성",
+   "faceIndex": 69,
+   "portraitPng": "server/content/generated/portraits/oam-f069.png",
+   "extra": {}
+  },
+  {
+   "num": 228,
+   "name": "228",
+   "slotId": "oam-f070",
+   "atlas": "oam.tcf",
+   "faction": "同盟(동맹) 남성",
+   "faceIndex": 70,
+   "portraitPng": "server/content/generated/portraits/oam-f070.png",
+   "extra": {}
+  },
+  {
+   "num": 229,
+   "name": "229",
+   "slotId": "oam-f071",
+   "atlas": "oam.tcf",
+   "faction": "同盟(동맹) 남성",
+   "faceIndex": 71,
+   "portraitPng": "server/content/generated/portraits/oam-f071.png",
+   "extra": {}
+  },
+  {
+   "num": 230,
+   "name": "230",
+   "slotId": "oam-f072",
+   "atlas": "oam.tcf",
+   "faction": "同盟(동맹) 남성",
+   "faceIndex": 72,
+   "portraitPng": "server/content/generated/portraits/oam-f072.png",
+   "extra": {}
+  },
+  {
+   "num": 231,
+   "name": "231",
+   "slotId": "oam-f073",
+   "atlas": "oam.tcf",
+   "faction": "同盟(동맹) 남성",
+   "faceIndex": 73,
+   "portraitPng": "server/content/generated/portraits/oam-f073.png",
+   "extra": {}
+  },
+  {
+   "num": 232,
+   "name": "232",
+   "slotId": "oam-f074",
+   "atlas": "oam.tcf",
+   "faction": "同盟(동맹) 남성",
+   "faceIndex": 74,
+   "portraitPng": "server/content/generated/portraits/oam-f074.png",
+   "extra": {}
+  },
+  {
+   "num": 233,
+   "name": "233",
+   "slotId": "oam-f075",
+   "atlas": "oam.tcf",
+   "faction": "同盟(동맹) 남성",
+   "faceIndex": 75,
+   "portraitPng": "server/content/generated/portraits/oam-f075.png",
+   "extra": {}
+  },
+  {
+   "num": 234,
+   "name": "234",
+   "slotId": "oam-f076",
+   "atlas": "oam.tcf",
+   "faction": "同盟(동맹) 남성",
+   "faceIndex": 76,
+   "portraitPng": "server/content/generated/portraits/oam-f076.png",
+   "extra": {}
+  },
+  {
+   "num": 235,
+   "name": "235",
+   "slotId": "oam-f077",
+   "atlas": "oam.tcf",
+   "faction": "同盟(동맹) 남성",
+   "faceIndex": 77,
+   "portraitPng": "server/content/generated/portraits/oam-f077.png",
+   "extra": {}
+  },
+  {
+   "num": 236,
+   "name": "236",
+   "slotId": "oam-f078",
+   "atlas": "oam.tcf",
+   "faction": "同盟(동맹) 남성",
+   "faceIndex": 78,
+   "portraitPng": "server/content/generated/portraits/oam-f078.png",
+   "extra": {}
+  },
+  {
+   "num": 237,
+   "name": "237",
+   "slotId": "oam-f079",
+   "atlas": "oam.tcf",
+   "faction": "同盟(동맹) 남성",
+   "faceIndex": 79,
+   "portraitPng": "server/content/generated/portraits/oam-f079.png",
+   "extra": {}
+  },
+  {
+   "num": 238,
+   "name": "238",
+   "slotId": "oam-f080",
+   "atlas": "oam.tcf",
+   "faction": "同盟(동맹) 남성",
+   "faceIndex": 80,
+   "portraitPng": "server/content/generated/portraits/oam-f080.png",
+   "extra": {}
+  },
+  {
+   "num": 239,
+   "name": "239",
+   "slotId": "oam-f081",
+   "atlas": "oam.tcf",
+   "faction": "同盟(동맹) 남성",
+   "faceIndex": 81,
+   "portraitPng": "server/content/generated/portraits/oam-f081.png",
+   "extra": {}
+  },
+  {
+   "num": 240,
+   "name": "240",
+   "slotId": "oam-f082",
+   "atlas": "oam.tcf",
+   "faction": "同盟(동맹) 남성",
+   "faceIndex": 82,
+   "portraitPng": "server/content/generated/portraits/oam-f082.png",
+   "extra": {}
+  },
+  {
+   "num": 241,
+   "name": "241",
+   "slotId": "oam-f083",
+   "atlas": "oam.tcf",
+   "faction": "同盟(동맹) 남성",
+   "faceIndex": 83,
+   "portraitPng": "server/content/generated/portraits/oam-f083.png",
+   "extra": {}
+  },
+  {
+   "num": 242,
+   "name": "242",
+   "slotId": "oam-f084",
+   "atlas": "oam.tcf",
+   "faction": "同盟(동맹) 남성",
+   "faceIndex": 84,
+   "portraitPng": "server/content/generated/portraits/oam-f084.png",
+   "extra": {}
+  },
+  {
+   "num": 243,
+   "name": "243",
+   "slotId": "oam-f085",
+   "atlas": "oam.tcf",
+   "faction": "同盟(동맹) 남성",
+   "faceIndex": 85,
+   "portraitPng": "server/content/generated/portraits/oam-f085.png",
+   "extra": {}
+  },
+  {
+   "num": 244,
+   "name": "244",
+   "slotId": "oam-f086",
+   "atlas": "oam.tcf",
+   "faction": "同盟(동맹) 남성",
+   "faceIndex": 86,
+   "portraitPng": "server/content/generated/portraits/oam-f086.png",
+   "extra": {}
+  },
+  {
+   "num": 245,
+   "name": "245",
+   "slotId": "oam-f087",
+   "atlas": "oam.tcf",
+   "faction": "同盟(동맹) 남성",
+   "faceIndex": 87,
+   "portraitPng": "server/content/generated/portraits/oam-f087.png",
+   "extra": {}
+  },
+  {
+   "num": 246,
+   "name": "246",
+   "slotId": "oam-f088",
+   "atlas": "oam.tcf",
+   "faction": "同盟(동맹) 남성",
+   "faceIndex": 88,
+   "portraitPng": "server/content/generated/portraits/oam-f088.png",
+   "extra": {}
+  },
+  {
+   "num": 247,
+   "name": "247",
+   "slotId": "oam-f089",
+   "atlas": "oam.tcf",
+   "faction": "同盟(동맹) 남성",
+   "faceIndex": 89,
+   "portraitPng": "server/content/generated/portraits/oam-f089.png",
+   "extra": {}
+  },
+  {
+   "num": 248,
+   "name": "248",
+   "slotId": "oam-f090",
+   "atlas": "oam.tcf",
+   "faction": "同盟(동맹) 남성",
+   "faceIndex": 90,
+   "portraitPng": "server/content/generated/portraits/oam-f090.png",
+   "extra": {}
+  },
+  {
+   "num": 249,
+   "name": "249",
+   "slotId": "oam-f091",
+   "atlas": "oam.tcf",
+   "faction": "同盟(동맹) 남성",
+   "faceIndex": 91,
+   "portraitPng": "server/content/generated/portraits/oam-f091.png",
+   "extra": {}
+  },
+  {
+   "num": 250,
+   "name": "250",
+   "slotId": "oam-f092",
+   "atlas": "oam.tcf",
+   "faction": "同盟(동맹) 남성",
+   "faceIndex": 92,
+   "portraitPng": "server/content/generated/portraits/oam-f092.png",
+   "extra": {}
+  },
+  {
+   "num": 251,
+   "name": "251",
+   "slotId": "oam-f093",
+   "atlas": "oam.tcf",
+   "faction": "同盟(동맹) 남성",
+   "faceIndex": 93,
+   "portraitPng": "server/content/generated/portraits/oam-f093.png",
+   "extra": {}
+  },
+  {
+   "num": 252,
+   "name": "252",
+   "slotId": "oam-f094",
+   "atlas": "oam.tcf",
+   "faction": "同盟(동맹) 남성",
+   "faceIndex": 94,
+   "portraitPng": "server/content/generated/portraits/oam-f094.png",
+   "extra": {}
+  },
+  {
+   "num": 253,
+   "name": "253",
+   "slotId": "oam-f095",
+   "atlas": "oam.tcf",
+   "faction": "同盟(동맹) 남성",
+   "faceIndex": 95,
+   "portraitPng": "server/content/generated/portraits/oam-f095.png",
+   "extra": {}
+  },
+  {
+   "num": 254,
+   "name": "254",
+   "slotId": "oam-f096",
+   "atlas": "oam.tcf",
+   "faction": "同盟(동맹) 남성",
+   "faceIndex": 96,
+   "portraitPng": "server/content/generated/portraits/oam-f096.png",
+   "extra": {}
+  },
+  {
+   "num": 255,
+   "name": "255",
+   "slotId": "oam-f097",
+   "atlas": "oam.tcf",
+   "faction": "同盟(동맹) 남성",
+   "faceIndex": 97,
+   "portraitPng": "server/content/generated/portraits/oam-f097.png",
+   "extra": {}
+  },
+  {
+   "num": 256,
+   "name": "256",
+   "slotId": "oam-f098",
+   "atlas": "oam.tcf",
+   "faction": "同盟(동맹) 남성",
+   "faceIndex": 98,
+   "portraitPng": "server/content/generated/portraits/oam-f098.png",
+   "extra": {}
+  },
+  {
+   "num": 257,
+   "name": "257",
+   "slotId": "oam-f099",
+   "atlas": "oam.tcf",
+   "faction": "同盟(동맹) 남성",
+   "faceIndex": 99,
+   "portraitPng": "server/content/generated/portraits/oam-f099.png",
+   "extra": {}
+  },
+  {
+   "num": 258,
+   "name": "258",
+   "slotId": "oam-f100",
+   "atlas": "oam.tcf",
+   "faction": "同盟(동맹) 남성",
+   "faceIndex": 100,
+   "portraitPng": "server/content/generated/portraits/oam-f100.png",
+   "extra": {}
+  },
+  {
+   "num": 259,
+   "name": "259",
+   "slotId": "oam-f101",
+   "atlas": "oam.tcf",
+   "faction": "同盟(동맹) 남성",
+   "faceIndex": 101,
+   "portraitPng": "server/content/generated/portraits/oam-f101.png",
+   "extra": {}
+  },
+  {
+   "num": 260,
+   "name": "260",
+   "slotId": "oam-f102",
+   "atlas": "oam.tcf",
+   "faction": "同盟(동맹) 남성",
+   "faceIndex": 102,
+   "portraitPng": "server/content/generated/portraits/oam-f102.png",
+   "extra": {}
+  },
+  {
+   "num": 261,
+   "name": "261",
+   "slotId": "oam-f103",
+   "atlas": "oam.tcf",
+   "faction": "同盟(동맹) 남성",
+   "faceIndex": 103,
+   "portraitPng": "server/content/generated/portraits/oam-f103.png",
+   "extra": {}
+  },
+  {
+   "num": 262,
+   "name": "262",
+   "slotId": "oam-f104",
+   "atlas": "oam.tcf",
+   "faction": "同盟(동맹) 남성",
+   "faceIndex": 104,
+   "portraitPng": "server/content/generated/portraits/oam-f104.png",
+   "extra": {}
+  },
+  {
+   "num": 263,
+   "name": "263",
+   "slotId": "oam-f105",
+   "atlas": "oam.tcf",
+   "faction": "同盟(동맹) 남성",
+   "faceIndex": 105,
+   "portraitPng": "server/content/generated/portraits/oam-f105.png",
+   "extra": {}
+  },
+  {
+   "num": 264,
+   "name": "264",
+   "slotId": "oam-f106",
+   "atlas": "oam.tcf",
+   "faction": "同盟(동맹) 남성",
+   "faceIndex": 106,
+   "portraitPng": "server/content/generated/portraits/oam-f106.png",
+   "extra": {}
+  },
+  {
+   "num": 265,
+   "name": "265",
+   "slotId": "oam-f107",
+   "atlas": "oam.tcf",
+   "faction": "同盟(동맹) 남성",
+   "faceIndex": 107,
+   "portraitPng": "server/content/generated/portraits/oam-f107.png",
+   "extra": {}
+  },
+  {
+   "num": 266,
+   "name": "266",
+   "slotId": "oam-f108",
+   "atlas": "oam.tcf",
+   "faction": "同盟(동맹) 남성",
+   "faceIndex": 108,
+   "portraitPng": "server/content/generated/portraits/oam-f108.png",
+   "extra": {}
+  },
+  {
+   "num": 267,
+   "name": "267",
+   "slotId": "o-f001",
+   "atlas": "o.tcf",
+   "faction": "기타/미분류",
+   "faceIndex": 1,
+   "portraitPng": "server/content/generated/portraits/o-f001.png",
+   "extra": {}
+  },
+  {
+   "num": 268,
+   "name": "268",
+   "slotId": "o-f002",
+   "atlas": "o.tcf",
+   "faction": "기타/미분류",
+   "faceIndex": 2,
+   "portraitPng": "server/content/generated/portraits/o-f002.png",
+   "extra": {}
+  },
+  {
+   "num": 269,
+   "name": "269",
+   "slotId": "o-f003",
+   "atlas": "o.tcf",
+   "faction": "기타/미분류",
+   "faceIndex": 3,
+   "portraitPng": "server/content/generated/portraits/o-f003.png",
+   "extra": {}
+  },
+  {
+   "num": 270,
+   "name": "270",
+   "slotId": "o-f004",
+   "atlas": "o.tcf",
+   "faction": "기타/미분류",
+   "faceIndex": 4,
+   "portraitPng": "server/content/generated/portraits/o-f004.png",
+   "extra": {}
+  },
+  {
+   "num": 271,
+   "name": "271",
+   "slotId": "o-f005",
+   "atlas": "o.tcf",
+   "faction": "기타/미분류",
+   "faceIndex": 5,
+   "portraitPng": "server/content/generated/portraits/o-f005.png",
+   "extra": {}
+  },
+  {
+   "num": 272,
+   "name": "272",
+   "slotId": "o-f006",
+   "atlas": "o.tcf",
+   "faction": "기타/미분류",
+   "faceIndex": 6,
+   "portraitPng": "server/content/generated/portraits/o-f006.png",
+   "extra": {}
+  },
+  {
+   "num": 273,
+   "name": "273",
+   "slotId": "o-f011",
+   "atlas": "o.tcf",
+   "faction": "기타/미분류",
+   "faceIndex": 11,
+   "portraitPng": "server/content/generated/portraits/o-f011.png",
+   "extra": {}
+  },
+  {
+   "num": 274,
+   "name": "274",
+   "slotId": "o-f012",
+   "atlas": "o.tcf",
+   "faction": "기타/미분류",
+   "faceIndex": 12,
+   "portraitPng": "server/content/generated/portraits/o-f012.png",
+   "extra": {}
+  },
+  {
+   "num": 275,
+   "name": "275",
+   "slotId": "o-f013",
+   "atlas": "o.tcf",
+   "faction": "기타/미분류",
+   "faceIndex": 13,
+   "portraitPng": "server/content/generated/portraits/o-f013.png",
+   "extra": {}
+  },
+  {
+   "num": 276,
+   "name": "276",
+   "slotId": "o-f014",
+   "atlas": "o.tcf",
+   "faction": "기타/미분류",
+   "faceIndex": 14,
+   "portraitPng": "server/content/generated/portraits/o-f014.png",
+   "extra": {}
+  },
+  {
+   "num": 277,
+   "name": "277",
+   "slotId": "o-f021",
+   "atlas": "o.tcf",
+   "faction": "기타/미분류",
+   "faceIndex": 21,
+   "portraitPng": "server/content/generated/portraits/o-f021.png",
+   "extra": {}
+  },
+  {
+   "num": 278,
+   "name": "278",
+   "slotId": "o-f022",
+   "atlas": "o.tcf",
+   "faction": "기타/미분류",
+   "faceIndex": 22,
+   "portraitPng": "server/content/generated/portraits/o-f022.png",
+   "extra": {}
+  },
+  {
+   "num": 279,
+   "name": "279",
+   "slotId": "o-f023",
+   "atlas": "o.tcf",
+   "faction": "기타/미분류",
+   "faceIndex": 23,
+   "portraitPng": "server/content/generated/portraits/o-f023.png",
+   "extra": {}
+  },
+  {
+   "num": 280,
+   "name": "280",
+   "slotId": "o-f041",
+   "atlas": "o.tcf",
+   "faction": "기타/미분류",
+   "faceIndex": 41,
+   "portraitPng": "server/content/generated/portraits/o-f041.png",
+   "extra": {}
+  },
+  {
+   "num": 281,
+   "name": "281",
+   "slotId": "o-f042",
+   "atlas": "o.tcf",
+   "faction": "기타/미분류",
+   "faceIndex": 42,
+   "portraitPng": "server/content/generated/portraits/o-f042.png",
+   "extra": {}
+  },
+  {
+   "num": 282,
+   "name": "282",
+   "slotId": "o-f043",
+   "atlas": "o.tcf",
+   "faction": "기타/미분류",
+   "faceIndex": 43,
+   "portraitPng": "server/content/generated/portraits/o-f043.png",
+   "extra": {}
+  },
+  {
+   "num": 283,
+   "name": "283",
+   "slotId": "o-f044",
+   "atlas": "o.tcf",
+   "faction": "기타/미분류",
+   "faceIndex": 44,
+   "portraitPng": "server/content/generated/portraits/o-f044.png",
+   "extra": {}
+  },
+  {
+   "num": 284,
+   "name": "284",
+   "slotId": "o-f051",
+   "atlas": "o.tcf",
+   "faction": "기타/미분류",
+   "faceIndex": 51,
+   "portraitPng": "server/content/generated/portraits/o-f051.png",
+   "extra": {}
+  },
+  {
+   "num": 285,
+   "name": "285",
+   "slotId": "o-f052",
+   "atlas": "o.tcf",
+   "faction": "기타/미분류",
+   "faceIndex": 52,
+   "portraitPng": "server/content/generated/portraits/o-f052.png",
+   "extra": {}
+  },
+  {
+   "num": 286,
+   "name": "286",
+   "slotId": "o-f061",
+   "atlas": "o.tcf",
+   "faction": "기타/미분류",
+   "faceIndex": 61,
+   "portraitPng": "server/content/generated/portraits/o-f061.png",
+   "extra": {}
+  },
+  {
+   "num": 287,
+   "name": "287",
+   "slotId": "o-f062",
+   "atlas": "o.tcf",
+   "faction": "기타/미분류",
+   "faceIndex": 62,
+   "portraitPng": "server/content/generated/portraits/o-f062.png",
+   "extra": {}
+  },
+  {
+   "num": 288,
+   "name": "288",
+   "slotId": "o-f063",
+   "atlas": "o.tcf",
+   "faction": "기타/미분류",
+   "faceIndex": 63,
+   "portraitPng": "server/content/generated/portraits/o-f063.png",
+   "extra": {}
+  },
+  {
+   "num": 289,
+   "name": "289",
+   "slotId": "o-f071",
+   "atlas": "o.tcf",
+   "faction": "기타/미분류",
+   "faceIndex": 71,
+   "portraitPng": "server/content/generated/portraits/o-f071.png",
+   "extra": {}
+  },
+  {
+   "num": 290,
+   "name": "290",
+   "slotId": "o-f072",
+   "atlas": "o.tcf",
+   "faction": "기타/미분류",
+   "faceIndex": 72,
+   "portraitPng": "server/content/generated/portraits/o-f072.png",
+   "extra": {}
+  },
+  {
+   "num": 291,
+   "name": "291",
+   "slotId": "o-f073",
+   "atlas": "o.tcf",
+   "faction": "기타/미분류",
+   "faceIndex": 73,
+   "portraitPng": "server/content/generated/portraits/o-f073.png",
+   "extra": {}
+  }
+ ]
+}

@@ -1,0 +1,5377 @@
+{
+ "id": "logh7-gamedata-roster-seed",
+ "generatedAt": "2026-07-05",
+ "scope": "게임 데이터(CD/EXE/초상화) 자체에서만 유도. 외부 인명목록 미포함.",
+ "keyFinding": "클라이언트(g7mtclient.exe + data/ 전체 bmp/tga/mdx/dat/tcf)에는 캐릭터 인명 로스터가 저장돼 있지 않다. EXE SJIS 전수스캔에서 canon 성씨 15종 중 ラインハルト 1건(UI문자열)만 검출, msgdat 20파일은 $x 변수 UI템플릿, String.txt는 CD에 부재(한글화 오버라이드 파일). 결론: 인명은 서버 권위(0x0323 런타임 전달). 게임 데이터에서 유도 가능한 canon 신호는 O군 초상화 슬롯뿐(얼굴 픽셀, 이름표 없음).",
+ "appearsCriterion": "O군(oem/oam/o) 초상화 슬롯 보유 = 게임이 렌더링하는 canon 캐릭터(등장).",
+ "counts": {
+  "gameCanonPortraitSlots_O": 291,
+  "playerCreationFaces_G": 378,
+  "perAtlas": {
+   "gaf.tcf": 9,
+   "gam.tcf": 45,
+   "gef.tcf": 54,
+   "gem.tcf": 270,
+   "o.tcf": 25,
+   "oam.tcf": 108,
+   "oem.tcf": 158
+  }
+ },
+ "unresolved": "슬롯번호↔인명 매핑(face-number 문제) 미해결 — 공식 gineiden chara/NNN 갤러리 픽셀매칭 필요.",
+ "gameCanonRoster_portraitSlots": [
+  {
+   "slotId": "oem-f001",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 1,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f002",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 2,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f003",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 3,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f004",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 4,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f005",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 5,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f006",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 6,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f007",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 7,
+   "w": 63,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f008",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 8,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f009",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 9,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f010",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 10,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f011",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 11,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f012",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 12,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f013",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 13,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f014",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 14,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f015",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 15,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f016",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 16,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f017",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 17,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f018",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 18,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f019",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 19,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f020",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 20,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f021",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 21,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f022",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 22,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f023",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 23,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f024",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 24,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f025",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 25,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f026",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 26,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f027",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 27,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f028",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 28,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f029",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 29,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f030",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 30,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f031",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 31,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f032",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 32,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f033",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 33,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f034",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 34,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f035",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 35,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f036",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 36,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f037",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 37,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f038",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 38,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f039",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 39,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f040",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 40,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f041",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 41,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f042",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 42,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f043",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 43,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f044",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 44,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f045",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 45,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f046",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 46,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f047",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 47,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f048",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 48,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f049",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 49,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f050",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 50,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f051",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 51,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f052",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 52,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f053",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 53,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f054",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 54,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f055",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 55,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f056",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 56,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f057",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 57,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f058",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 58,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f059",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 59,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f060",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 60,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f061",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 61,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f062",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 62,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f063",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 63,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f064",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 64,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f065",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 65,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f066",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 66,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f067",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 67,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f068",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 68,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f069",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 69,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f070",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 70,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f071",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 71,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f072",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 72,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f073",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 73,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f074",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 74,
+   "w": 63,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f075",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 75,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f076",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 76,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f077",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 77,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f078",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 78,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f079",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 79,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f080",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 80,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f081",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 81,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f082",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 82,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f083",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 83,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f084",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 84,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f085",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 85,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f086",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 86,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f087",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 87,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f088",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 88,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f089",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 89,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f090",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 90,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f091",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 91,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f092",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 92,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f093",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 93,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f094",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 94,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f095",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 95,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f096",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 96,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f097",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 97,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f098",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 98,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f099",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 99,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f100",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 100,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f101",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 101,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f102",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 102,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f103",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 103,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f104",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 104,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f105",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 105,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f106",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 106,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f107",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 107,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f108",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 108,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f109",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 109,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f110",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 110,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f111",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 111,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f112",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 112,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f113",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 113,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f114",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 114,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f115",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 115,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f116",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 116,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f117",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 117,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f118",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 118,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f119",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 119,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f120",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 120,
+   "w": 63,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f121",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 121,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f122",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 122,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f123",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 123,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f124",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 124,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f125",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 125,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f126",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 126,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f127",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 127,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f128",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 128,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f129",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 129,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f130",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 130,
+   "w": 62,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f131",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 131,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f132",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 132,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f133",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 133,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f134",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 134,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f135",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 135,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f136",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 136,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f137",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 137,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f138",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 138,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f139",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 139,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f140",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 140,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f141",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 141,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f142",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 142,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f143",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 143,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f144",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 144,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f145",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 145,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f146",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 146,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f147",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 147,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f148",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 148,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f149",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 149,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f150",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 150,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f151",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 151,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f152",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 152,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f153",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 153,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f154",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 154,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f155",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 155,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f156",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 156,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f157",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 157,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oem-f158",
+   "atlas": "oem.tcf",
+   "group": "O",
+   "faceIndex": 158,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oam-f001",
+   "atlas": "oam.tcf",
+   "group": "O",
+   "faceIndex": 1,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oam-f002",
+   "atlas": "oam.tcf",
+   "group": "O",
+   "faceIndex": 2,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oam-f003",
+   "atlas": "oam.tcf",
+   "group": "O",
+   "faceIndex": 3,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oam-f004",
+   "atlas": "oam.tcf",
+   "group": "O",
+   "faceIndex": 4,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oam-f005",
+   "atlas": "oam.tcf",
+   "group": "O",
+   "faceIndex": 5,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oam-f006",
+   "atlas": "oam.tcf",
+   "group": "O",
+   "faceIndex": 6,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oam-f007",
+   "atlas": "oam.tcf",
+   "group": "O",
+   "faceIndex": 7,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oam-f008",
+   "atlas": "oam.tcf",
+   "group": "O",
+   "faceIndex": 8,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oam-f009",
+   "atlas": "oam.tcf",
+   "group": "O",
+   "faceIndex": 9,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oam-f010",
+   "atlas": "oam.tcf",
+   "group": "O",
+   "faceIndex": 10,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oam-f011",
+   "atlas": "oam.tcf",
+   "group": "O",
+   "faceIndex": 11,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oam-f012",
+   "atlas": "oam.tcf",
+   "group": "O",
+   "faceIndex": 12,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oam-f013",
+   "atlas": "oam.tcf",
+   "group": "O",
+   "faceIndex": 13,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oam-f014",
+   "atlas": "oam.tcf",
+   "group": "O",
+   "faceIndex": 14,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oam-f015",
+   "atlas": "oam.tcf",
+   "group": "O",
+   "faceIndex": 15,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oam-f016",
+   "atlas": "oam.tcf",
+   "group": "O",
+   "faceIndex": 16,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oam-f017",
+   "atlas": "oam.tcf",
+   "group": "O",
+   "faceIndex": 17,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oam-f018",
+   "atlas": "oam.tcf",
+   "group": "O",
+   "faceIndex": 18,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oam-f019",
+   "atlas": "oam.tcf",
+   "group": "O",
+   "faceIndex": 19,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oam-f020",
+   "atlas": "oam.tcf",
+   "group": "O",
+   "faceIndex": 20,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oam-f021",
+   "atlas": "oam.tcf",
+   "group": "O",
+   "faceIndex": 21,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oam-f022",
+   "atlas": "oam.tcf",
+   "group": "O",
+   "faceIndex": 22,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oam-f023",
+   "atlas": "oam.tcf",
+   "group": "O",
+   "faceIndex": 23,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oam-f024",
+   "atlas": "oam.tcf",
+   "group": "O",
+   "faceIndex": 24,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oam-f025",
+   "atlas": "oam.tcf",
+   "group": "O",
+   "faceIndex": 25,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oam-f026",
+   "atlas": "oam.tcf",
+   "group": "O",
+   "faceIndex": 26,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oam-f027",
+   "atlas": "oam.tcf",
+   "group": "O",
+   "faceIndex": 27,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oam-f028",
+   "atlas": "oam.tcf",
+   "group": "O",
+   "faceIndex": 28,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oam-f029",
+   "atlas": "oam.tcf",
+   "group": "O",
+   "faceIndex": 29,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oam-f030",
+   "atlas": "oam.tcf",
+   "group": "O",
+   "faceIndex": 30,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oam-f031",
+   "atlas": "oam.tcf",
+   "group": "O",
+   "faceIndex": 31,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oam-f032",
+   "atlas": "oam.tcf",
+   "group": "O",
+   "faceIndex": 32,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oam-f033",
+   "atlas": "oam.tcf",
+   "group": "O",
+   "faceIndex": 33,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oam-f034",
+   "atlas": "oam.tcf",
+   "group": "O",
+   "faceIndex": 34,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oam-f035",
+   "atlas": "oam.tcf",
+   "group": "O",
+   "faceIndex": 35,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oam-f036",
+   "atlas": "oam.tcf",
+   "group": "O",
+   "faceIndex": 36,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oam-f037",
+   "atlas": "oam.tcf",
+   "group": "O",
+   "faceIndex": 37,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oam-f038",
+   "atlas": "oam.tcf",
+   "group": "O",
+   "faceIndex": 38,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oam-f039",
+   "atlas": "oam.tcf",
+   "group": "O",
+   "faceIndex": 39,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oam-f040",
+   "atlas": "oam.tcf",
+   "group": "O",
+   "faceIndex": 40,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oam-f041",
+   "atlas": "oam.tcf",
+   "group": "O",
+   "faceIndex": 41,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oam-f042",
+   "atlas": "oam.tcf",
+   "group": "O",
+   "faceIndex": 42,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oam-f043",
+   "atlas": "oam.tcf",
+   "group": "O",
+   "faceIndex": 43,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oam-f044",
+   "atlas": "oam.tcf",
+   "group": "O",
+   "faceIndex": 44,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oam-f045",
+   "atlas": "oam.tcf",
+   "group": "O",
+   "faceIndex": 45,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oam-f046",
+   "atlas": "oam.tcf",
+   "group": "O",
+   "faceIndex": 46,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oam-f047",
+   "atlas": "oam.tcf",
+   "group": "O",
+   "faceIndex": 47,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oam-f048",
+   "atlas": "oam.tcf",
+   "group": "O",
+   "faceIndex": 48,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oam-f049",
+   "atlas": "oam.tcf",
+   "group": "O",
+   "faceIndex": 49,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oam-f050",
+   "atlas": "oam.tcf",
+   "group": "O",
+   "faceIndex": 50,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oam-f051",
+   "atlas": "oam.tcf",
+   "group": "O",
+   "faceIndex": 51,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oam-f052",
+   "atlas": "oam.tcf",
+   "group": "O",
+   "faceIndex": 52,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oam-f053",
+   "atlas": "oam.tcf",
+   "group": "O",
+   "faceIndex": 53,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oam-f054",
+   "atlas": "oam.tcf",
+   "group": "O",
+   "faceIndex": 54,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oam-f055",
+   "atlas": "oam.tcf",
+   "group": "O",
+   "faceIndex": 55,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oam-f056",
+   "atlas": "oam.tcf",
+   "group": "O",
+   "faceIndex": 56,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oam-f057",
+   "atlas": "oam.tcf",
+   "group": "O",
+   "faceIndex": 57,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oam-f058",
+   "atlas": "oam.tcf",
+   "group": "O",
+   "faceIndex": 58,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oam-f059",
+   "atlas": "oam.tcf",
+   "group": "O",
+   "faceIndex": 59,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oam-f060",
+   "atlas": "oam.tcf",
+   "group": "O",
+   "faceIndex": 60,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oam-f061",
+   "atlas": "oam.tcf",
+   "group": "O",
+   "faceIndex": 61,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oam-f062",
+   "atlas": "oam.tcf",
+   "group": "O",
+   "faceIndex": 62,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oam-f063",
+   "atlas": "oam.tcf",
+   "group": "O",
+   "faceIndex": 63,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oam-f064",
+   "atlas": "oam.tcf",
+   "group": "O",
+   "faceIndex": 64,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oam-f065",
+   "atlas": "oam.tcf",
+   "group": "O",
+   "faceIndex": 65,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oam-f066",
+   "atlas": "oam.tcf",
+   "group": "O",
+   "faceIndex": 66,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oam-f067",
+   "atlas": "oam.tcf",
+   "group": "O",
+   "faceIndex": 67,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oam-f068",
+   "atlas": "oam.tcf",
+   "group": "O",
+   "faceIndex": 68,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oam-f069",
+   "atlas": "oam.tcf",
+   "group": "O",
+   "faceIndex": 69,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oam-f070",
+   "atlas": "oam.tcf",
+   "group": "O",
+   "faceIndex": 70,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oam-f071",
+   "atlas": "oam.tcf",
+   "group": "O",
+   "faceIndex": 71,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oam-f072",
+   "atlas": "oam.tcf",
+   "group": "O",
+   "faceIndex": 72,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oam-f073",
+   "atlas": "oam.tcf",
+   "group": "O",
+   "faceIndex": 73,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oam-f074",
+   "atlas": "oam.tcf",
+   "group": "O",
+   "faceIndex": 74,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oam-f075",
+   "atlas": "oam.tcf",
+   "group": "O",
+   "faceIndex": 75,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oam-f076",
+   "atlas": "oam.tcf",
+   "group": "O",
+   "faceIndex": 76,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oam-f077",
+   "atlas": "oam.tcf",
+   "group": "O",
+   "faceIndex": 77,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oam-f078",
+   "atlas": "oam.tcf",
+   "group": "O",
+   "faceIndex": 78,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oam-f079",
+   "atlas": "oam.tcf",
+   "group": "O",
+   "faceIndex": 79,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oam-f080",
+   "atlas": "oam.tcf",
+   "group": "O",
+   "faceIndex": 80,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oam-f081",
+   "atlas": "oam.tcf",
+   "group": "O",
+   "faceIndex": 81,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oam-f082",
+   "atlas": "oam.tcf",
+   "group": "O",
+   "faceIndex": 82,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oam-f083",
+   "atlas": "oam.tcf",
+   "group": "O",
+   "faceIndex": 83,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oam-f084",
+   "atlas": "oam.tcf",
+   "group": "O",
+   "faceIndex": 84,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oam-f085",
+   "atlas": "oam.tcf",
+   "group": "O",
+   "faceIndex": 85,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oam-f086",
+   "atlas": "oam.tcf",
+   "group": "O",
+   "faceIndex": 86,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oam-f087",
+   "atlas": "oam.tcf",
+   "group": "O",
+   "faceIndex": 87,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oam-f088",
+   "atlas": "oam.tcf",
+   "group": "O",
+   "faceIndex": 88,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oam-f089",
+   "atlas": "oam.tcf",
+   "group": "O",
+   "faceIndex": 89,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oam-f090",
+   "atlas": "oam.tcf",
+   "group": "O",
+   "faceIndex": 90,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oam-f091",
+   "atlas": "oam.tcf",
+   "group": "O",
+   "faceIndex": 91,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oam-f092",
+   "atlas": "oam.tcf",
+   "group": "O",
+   "faceIndex": 92,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oam-f093",
+   "atlas": "oam.tcf",
+   "group": "O",
+   "faceIndex": 93,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oam-f094",
+   "atlas": "oam.tcf",
+   "group": "O",
+   "faceIndex": 94,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oam-f095",
+   "atlas": "oam.tcf",
+   "group": "O",
+   "faceIndex": 95,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oam-f096",
+   "atlas": "oam.tcf",
+   "group": "O",
+   "faceIndex": 96,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oam-f097",
+   "atlas": "oam.tcf",
+   "group": "O",
+   "faceIndex": 97,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oam-f098",
+   "atlas": "oam.tcf",
+   "group": "O",
+   "faceIndex": 98,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oam-f099",
+   "atlas": "oam.tcf",
+   "group": "O",
+   "faceIndex": 99,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oam-f100",
+   "atlas": "oam.tcf",
+   "group": "O",
+   "faceIndex": 100,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oam-f101",
+   "atlas": "oam.tcf",
+   "group": "O",
+   "faceIndex": 101,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oam-f102",
+   "atlas": "oam.tcf",
+   "group": "O",
+   "faceIndex": 102,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oam-f103",
+   "atlas": "oam.tcf",
+   "group": "O",
+   "faceIndex": 103,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oam-f104",
+   "atlas": "oam.tcf",
+   "group": "O",
+   "faceIndex": 104,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oam-f105",
+   "atlas": "oam.tcf",
+   "group": "O",
+   "faceIndex": 105,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oam-f106",
+   "atlas": "oam.tcf",
+   "group": "O",
+   "faceIndex": 106,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oam-f107",
+   "atlas": "oam.tcf",
+   "group": "O",
+   "faceIndex": 107,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "oam-f108",
+   "atlas": "oam.tcf",
+   "group": "O",
+   "faceIndex": 108,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "o-f001",
+   "atlas": "o.tcf",
+   "group": "O",
+   "faceIndex": 1,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "o-f002",
+   "atlas": "o.tcf",
+   "group": "O",
+   "faceIndex": 2,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "o-f003",
+   "atlas": "o.tcf",
+   "group": "O",
+   "faceIndex": 3,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "o-f004",
+   "atlas": "o.tcf",
+   "group": "O",
+   "faceIndex": 4,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "o-f005",
+   "atlas": "o.tcf",
+   "group": "O",
+   "faceIndex": 5,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "o-f006",
+   "atlas": "o.tcf",
+   "group": "O",
+   "faceIndex": 6,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "o-f011",
+   "atlas": "o.tcf",
+   "group": "O",
+   "faceIndex": 11,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "o-f012",
+   "atlas": "o.tcf",
+   "group": "O",
+   "faceIndex": 12,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "o-f013",
+   "atlas": "o.tcf",
+   "group": "O",
+   "faceIndex": 13,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "o-f014",
+   "atlas": "o.tcf",
+   "group": "O",
+   "faceIndex": 14,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "o-f021",
+   "atlas": "o.tcf",
+   "group": "O",
+   "faceIndex": 21,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "o-f022",
+   "atlas": "o.tcf",
+   "group": "O",
+   "faceIndex": 22,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "o-f023",
+   "atlas": "o.tcf",
+   "group": "O",
+   "faceIndex": 23,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "o-f041",
+   "atlas": "o.tcf",
+   "group": "O",
+   "faceIndex": 41,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "o-f042",
+   "atlas": "o.tcf",
+   "group": "O",
+   "faceIndex": 42,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "o-f043",
+   "atlas": "o.tcf",
+   "group": "O",
+   "faceIndex": 43,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "o-f044",
+   "atlas": "o.tcf",
+   "group": "O",
+   "faceIndex": 44,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "o-f051",
+   "atlas": "o.tcf",
+   "group": "O",
+   "faceIndex": 51,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "o-f052",
+   "atlas": "o.tcf",
+   "group": "O",
+   "faceIndex": 52,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "o-f061",
+   "atlas": "o.tcf",
+   "group": "O",
+   "faceIndex": 61,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "o-f062",
+   "atlas": "o.tcf",
+   "group": "O",
+   "faceIndex": 62,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "o-f063",
+   "atlas": "o.tcf",
+   "group": "O",
+   "faceIndex": 63,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "o-f071",
+   "atlas": "o.tcf",
+   "group": "O",
+   "faceIndex": 71,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "o-f072",
+   "atlas": "o.tcf",
+   "group": "O",
+   "faceIndex": 72,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "o-f073",
+   "atlas": "o.tcf",
+   "group": "O",
+   "faceIndex": 73,
+   "w": 64,
+   "h": 80
+  }
+ ],
+ "playerCreationFaces": [
+  {
+   "slotId": "gem-f001-v0",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 1,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f001-v1",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 1,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f001-v2",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 1,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f002-v0",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 2,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f002-v1",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 2,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f002-v2",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 2,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f003-v0",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 3,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f003-v1",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 3,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f003-v2",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 3,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f004-v0",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 4,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f004-v1",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 4,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f004-v2",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 4,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f005-v0",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 5,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f005-v1",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 5,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f005-v2",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 5,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f006-v0",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 6,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f006-v1",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 6,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f006-v2",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 6,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f007-v0",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 7,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f007-v1",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 7,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f007-v2",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 7,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f008-v0",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 8,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f008-v1",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 8,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f008-v2",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 8,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f009-v0",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 9,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f009-v1",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 9,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f009-v2",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 9,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f010-v0",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 10,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f010-v1",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 10,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f010-v2",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 10,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f011-v0",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 11,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f011-v1",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 11,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f011-v2",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 11,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f012-v0",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 12,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f012-v1",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 12,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f012-v2",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 12,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f013-v0",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 13,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f013-v1",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 13,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f013-v2",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 13,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f014-v0",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 14,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f014-v1",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 14,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f014-v2",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 14,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f015-v0",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 15,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f015-v1",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 15,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f015-v2",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 15,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f016-v0",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 16,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f016-v1",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 16,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f016-v2",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 16,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f017-v0",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 17,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f017-v1",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 17,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f017-v2",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 17,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f018-v0",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 18,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f018-v1",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 18,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f018-v2",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 18,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f019-v0",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 19,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f019-v1",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 19,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f019-v2",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 19,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f020-v0",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 20,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f020-v1",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 20,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f020-v2",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 20,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f021-v0",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 21,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f021-v1",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 21,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f021-v2",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 21,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f022-v0",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 22,
+   "w": 63,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f022-v1",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 22,
+   "w": 62,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f022-v2",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 22,
+   "w": 62,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f023-v0",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 23,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f023-v1",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 23,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f023-v2",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 23,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f024-v0",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 24,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f024-v1",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 24,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f024-v2",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 24,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f025-v0",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 25,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f025-v1",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 25,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f025-v2",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 25,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f026-v0",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 26,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f026-v1",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 26,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f026-v2",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 26,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f027-v0",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 27,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f027-v1",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 27,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f027-v2",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 27,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f028-v0",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 28,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f028-v1",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 28,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f028-v2",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 28,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f029-v0",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 29,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f029-v1",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 29,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f029-v2",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 29,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f030-v0",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 30,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f030-v1",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 30,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f030-v2",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 30,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f031-v0",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 31,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f031-v1",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 31,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f031-v2",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 31,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f032-v0",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 32,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f032-v1",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 32,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f032-v2",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 32,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f033-v0",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 33,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f033-v1",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 33,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f033-v2",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 33,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f034-v0",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 34,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f034-v1",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 34,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f034-v2",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 34,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f035-v0",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 35,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f035-v1",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 35,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f035-v2",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 35,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f036-v0",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 36,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f036-v1",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 36,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f036-v2",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 36,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f037-v0",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 37,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f037-v1",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 37,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f037-v2",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 37,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f038-v0",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 38,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f038-v1",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 38,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f038-v2",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 38,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f039-v0",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 39,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f039-v1",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 39,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f039-v2",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 39,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f040-v0",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 40,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f040-v1",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 40,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f040-v2",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 40,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f041-v0",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 41,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f041-v1",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 41,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f041-v2",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 41,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f042-v0",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 42,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f042-v1",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 42,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f042-v2",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 42,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f043-v0",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 43,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f043-v1",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 43,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f043-v2",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 43,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f044-v0",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 44,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f044-v1",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 44,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f044-v2",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 44,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f045-v0",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 45,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f045-v1",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 45,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f045-v2",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 45,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f046-v0",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 46,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f046-v1",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 46,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f046-v2",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 46,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f047-v0",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 47,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f047-v1",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 47,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f047-v2",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 47,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f048-v0",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 48,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f048-v1",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 48,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f048-v2",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 48,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f049-v0",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 49,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f049-v1",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 49,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f049-v2",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 49,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f050-v0",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 50,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f050-v1",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 50,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f050-v2",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 50,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f051-v0",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 51,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f051-v1",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 51,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f051-v2",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 51,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f052-v0",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 52,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f052-v1",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 52,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f052-v2",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 52,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f053-v0",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 53,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f053-v1",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 53,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f053-v2",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 53,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f054-v0",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 54,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f054-v1",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 54,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f054-v2",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 54,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f055-v0",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 55,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f055-v1",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 55,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f055-v2",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 55,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f056-v0",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 56,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f056-v1",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 56,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f056-v2",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 56,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f057-v0",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 57,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f057-v1",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 57,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f057-v2",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 57,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f058-v0",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 58,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f058-v1",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 58,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f058-v2",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 58,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f059-v0",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 59,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f059-v1",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 59,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f059-v2",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 59,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f060-v0",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 60,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f060-v1",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 60,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f060-v2",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 60,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f061-v0",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 61,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f061-v1",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 61,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f061-v2",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 61,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f062-v0",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 62,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f062-v1",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 62,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f062-v2",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 62,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f063-v0",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 63,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f063-v1",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 63,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f063-v2",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 63,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f064-v0",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 64,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f064-v1",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 64,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f064-v2",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 64,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f065-v0",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 65,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f065-v1",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 65,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f065-v2",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 65,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f066-v0",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 66,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f066-v1",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 66,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f066-v2",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 66,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f067-v0",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 67,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f067-v1",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 67,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f067-v2",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 67,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f068-v0",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 68,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f068-v1",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 68,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f068-v2",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 68,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f069-v0",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 69,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f069-v1",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 69,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f069-v2",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 69,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f070-v0",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 70,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f070-v1",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 70,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f070-v2",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 70,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f071-v0",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 71,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f071-v1",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 71,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f071-v2",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 71,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f072-v0",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 72,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f072-v1",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 72,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f072-v2",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 72,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f073-v0",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 73,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f073-v1",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 73,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f073-v2",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 73,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f074-v0",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 74,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f074-v1",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 74,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f074-v2",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 74,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f075-v0",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 75,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f075-v1",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 75,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f075-v2",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 75,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f076-v0",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 76,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f076-v1",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 76,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f076-v2",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 76,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f077-v0",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 77,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f077-v1",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 77,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f077-v2",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 77,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f078-v0",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 78,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f078-v1",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 78,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f078-v2",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 78,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f079-v0",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 79,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f079-v1",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 79,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f079-v2",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 79,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f080-v0",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 80,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f080-v1",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 80,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f080-v2",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 80,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f081-v0",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 81,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f081-v1",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 81,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f081-v2",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 81,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f082-v0",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 82,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f082-v1",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 82,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f082-v2",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 82,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f083-v0",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 83,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f083-v1",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 83,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f083-v2",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 83,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f084-v0",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 84,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f084-v1",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 84,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f084-v2",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 84,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f085-v0",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 85,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f085-v1",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 85,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f085-v2",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 85,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f086-v0",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 86,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f086-v1",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 86,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f086-v2",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 86,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f087-v0",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 87,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f087-v1",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 87,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f087-v2",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 87,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f088-v0",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 88,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f088-v1",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 88,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f088-v2",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 88,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f089-v0",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 89,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f089-v1",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 89,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f089-v2",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 89,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f090-v0",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 90,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f090-v1",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 90,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gem-f090-v2",
+   "atlas": "gem.tcf",
+   "group": "G",
+   "faceIndex": 90,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gef-f001-v0",
+   "atlas": "gef.tcf",
+   "group": "G",
+   "faceIndex": 1,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gef-f001-v1",
+   "atlas": "gef.tcf",
+   "group": "G",
+   "faceIndex": 1,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gef-f001-v2",
+   "atlas": "gef.tcf",
+   "group": "G",
+   "faceIndex": 1,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gef-f002-v0",
+   "atlas": "gef.tcf",
+   "group": "G",
+   "faceIndex": 2,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gef-f002-v1",
+   "atlas": "gef.tcf",
+   "group": "G",
+   "faceIndex": 2,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gef-f002-v2",
+   "atlas": "gef.tcf",
+   "group": "G",
+   "faceIndex": 2,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gef-f003-v0",
+   "atlas": "gef.tcf",
+   "group": "G",
+   "faceIndex": 3,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gef-f003-v1",
+   "atlas": "gef.tcf",
+   "group": "G",
+   "faceIndex": 3,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gef-f003-v2",
+   "atlas": "gef.tcf",
+   "group": "G",
+   "faceIndex": 3,
+   "w": 62,
+   "h": 80
+  },
+  {
+   "slotId": "gef-f004-v0",
+   "atlas": "gef.tcf",
+   "group": "G",
+   "faceIndex": 4,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gef-f004-v1",
+   "atlas": "gef.tcf",
+   "group": "G",
+   "faceIndex": 4,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gef-f004-v2",
+   "atlas": "gef.tcf",
+   "group": "G",
+   "faceIndex": 4,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gef-f005-v0",
+   "atlas": "gef.tcf",
+   "group": "G",
+   "faceIndex": 5,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gef-f005-v1",
+   "atlas": "gef.tcf",
+   "group": "G",
+   "faceIndex": 5,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gef-f005-v2",
+   "atlas": "gef.tcf",
+   "group": "G",
+   "faceIndex": 5,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gef-f006-v0",
+   "atlas": "gef.tcf",
+   "group": "G",
+   "faceIndex": 6,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gef-f006-v1",
+   "atlas": "gef.tcf",
+   "group": "G",
+   "faceIndex": 6,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gef-f006-v2",
+   "atlas": "gef.tcf",
+   "group": "G",
+   "faceIndex": 6,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gef-f007-v0",
+   "atlas": "gef.tcf",
+   "group": "G",
+   "faceIndex": 7,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gef-f007-v1",
+   "atlas": "gef.tcf",
+   "group": "G",
+   "faceIndex": 7,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gef-f007-v2",
+   "atlas": "gef.tcf",
+   "group": "G",
+   "faceIndex": 7,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gef-f008-v0",
+   "atlas": "gef.tcf",
+   "group": "G",
+   "faceIndex": 8,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gef-f008-v1",
+   "atlas": "gef.tcf",
+   "group": "G",
+   "faceIndex": 8,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gef-f008-v2",
+   "atlas": "gef.tcf",
+   "group": "G",
+   "faceIndex": 8,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gef-f009-v0",
+   "atlas": "gef.tcf",
+   "group": "G",
+   "faceIndex": 9,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gef-f009-v1",
+   "atlas": "gef.tcf",
+   "group": "G",
+   "faceIndex": 9,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gef-f009-v2",
+   "atlas": "gef.tcf",
+   "group": "G",
+   "faceIndex": 9,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gef-f010-v0",
+   "atlas": "gef.tcf",
+   "group": "G",
+   "faceIndex": 10,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gef-f010-v1",
+   "atlas": "gef.tcf",
+   "group": "G",
+   "faceIndex": 10,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gef-f010-v2",
+   "atlas": "gef.tcf",
+   "group": "G",
+   "faceIndex": 10,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gef-f011-v0",
+   "atlas": "gef.tcf",
+   "group": "G",
+   "faceIndex": 11,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gef-f011-v1",
+   "atlas": "gef.tcf",
+   "group": "G",
+   "faceIndex": 11,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gef-f011-v2",
+   "atlas": "gef.tcf",
+   "group": "G",
+   "faceIndex": 11,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gef-f012-v0",
+   "atlas": "gef.tcf",
+   "group": "G",
+   "faceIndex": 12,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gef-f012-v1",
+   "atlas": "gef.tcf",
+   "group": "G",
+   "faceIndex": 12,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gef-f012-v2",
+   "atlas": "gef.tcf",
+   "group": "G",
+   "faceIndex": 12,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gef-f013-v0",
+   "atlas": "gef.tcf",
+   "group": "G",
+   "faceIndex": 13,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gef-f013-v1",
+   "atlas": "gef.tcf",
+   "group": "G",
+   "faceIndex": 13,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gef-f013-v2",
+   "atlas": "gef.tcf",
+   "group": "G",
+   "faceIndex": 13,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gef-f014-v0",
+   "atlas": "gef.tcf",
+   "group": "G",
+   "faceIndex": 14,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gef-f014-v1",
+   "atlas": "gef.tcf",
+   "group": "G",
+   "faceIndex": 14,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gef-f014-v2",
+   "atlas": "gef.tcf",
+   "group": "G",
+   "faceIndex": 14,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gef-f015-v0",
+   "atlas": "gef.tcf",
+   "group": "G",
+   "faceIndex": 15,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gef-f015-v1",
+   "atlas": "gef.tcf",
+   "group": "G",
+   "faceIndex": 15,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gef-f015-v2",
+   "atlas": "gef.tcf",
+   "group": "G",
+   "faceIndex": 15,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gef-f016-v0",
+   "atlas": "gef.tcf",
+   "group": "G",
+   "faceIndex": 16,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gef-f016-v1",
+   "atlas": "gef.tcf",
+   "group": "G",
+   "faceIndex": 16,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gef-f016-v2",
+   "atlas": "gef.tcf",
+   "group": "G",
+   "faceIndex": 16,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gef-f017-v0",
+   "atlas": "gef.tcf",
+   "group": "G",
+   "faceIndex": 17,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gef-f017-v1",
+   "atlas": "gef.tcf",
+   "group": "G",
+   "faceIndex": 17,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gef-f017-v2",
+   "atlas": "gef.tcf",
+   "group": "G",
+   "faceIndex": 17,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gef-f018-v0",
+   "atlas": "gef.tcf",
+   "group": "G",
+   "faceIndex": 18,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gef-f018-v1",
+   "atlas": "gef.tcf",
+   "group": "G",
+   "faceIndex": 18,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gef-f018-v2",
+   "atlas": "gef.tcf",
+   "group": "G",
+   "faceIndex": 18,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gam-f001-v0",
+   "atlas": "gam.tcf",
+   "group": "G",
+   "faceIndex": 1,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gam-f001-v1",
+   "atlas": "gam.tcf",
+   "group": "G",
+   "faceIndex": 1,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gam-f001-v2",
+   "atlas": "gam.tcf",
+   "group": "G",
+   "faceIndex": 1,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gam-f002-v0",
+   "atlas": "gam.tcf",
+   "group": "G",
+   "faceIndex": 2,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gam-f002-v1",
+   "atlas": "gam.tcf",
+   "group": "G",
+   "faceIndex": 2,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gam-f002-v2",
+   "atlas": "gam.tcf",
+   "group": "G",
+   "faceIndex": 2,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gam-f003-v0",
+   "atlas": "gam.tcf",
+   "group": "G",
+   "faceIndex": 3,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gam-f003-v1",
+   "atlas": "gam.tcf",
+   "group": "G",
+   "faceIndex": 3,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gam-f003-v2",
+   "atlas": "gam.tcf",
+   "group": "G",
+   "faceIndex": 3,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gam-f004-v0",
+   "atlas": "gam.tcf",
+   "group": "G",
+   "faceIndex": 4,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gam-f004-v1",
+   "atlas": "gam.tcf",
+   "group": "G",
+   "faceIndex": 4,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gam-f004-v2",
+   "atlas": "gam.tcf",
+   "group": "G",
+   "faceIndex": 4,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gam-f005-v0",
+   "atlas": "gam.tcf",
+   "group": "G",
+   "faceIndex": 5,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gam-f005-v1",
+   "atlas": "gam.tcf",
+   "group": "G",
+   "faceIndex": 5,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gam-f005-v2",
+   "atlas": "gam.tcf",
+   "group": "G",
+   "faceIndex": 5,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gam-f006-v0",
+   "atlas": "gam.tcf",
+   "group": "G",
+   "faceIndex": 6,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gam-f006-v1",
+   "atlas": "gam.tcf",
+   "group": "G",
+   "faceIndex": 6,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gam-f006-v2",
+   "atlas": "gam.tcf",
+   "group": "G",
+   "faceIndex": 6,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gam-f007-v0",
+   "atlas": "gam.tcf",
+   "group": "G",
+   "faceIndex": 7,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gam-f007-v1",
+   "atlas": "gam.tcf",
+   "group": "G",
+   "faceIndex": 7,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gam-f007-v2",
+   "atlas": "gam.tcf",
+   "group": "G",
+   "faceIndex": 7,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gam-f008-v0",
+   "atlas": "gam.tcf",
+   "group": "G",
+   "faceIndex": 8,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gam-f008-v1",
+   "atlas": "gam.tcf",
+   "group": "G",
+   "faceIndex": 8,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gam-f008-v2",
+   "atlas": "gam.tcf",
+   "group": "G",
+   "faceIndex": 8,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gam-f009-v0",
+   "atlas": "gam.tcf",
+   "group": "G",
+   "faceIndex": 9,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gam-f009-v1",
+   "atlas": "gam.tcf",
+   "group": "G",
+   "faceIndex": 9,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gam-f009-v2",
+   "atlas": "gam.tcf",
+   "group": "G",
+   "faceIndex": 9,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gam-f010-v0",
+   "atlas": "gam.tcf",
+   "group": "G",
+   "faceIndex": 10,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gam-f010-v1",
+   "atlas": "gam.tcf",
+   "group": "G",
+   "faceIndex": 10,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gam-f010-v2",
+   "atlas": "gam.tcf",
+   "group": "G",
+   "faceIndex": 10,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gam-f011-v0",
+   "atlas": "gam.tcf",
+   "group": "G",
+   "faceIndex": 11,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gam-f011-v1",
+   "atlas": "gam.tcf",
+   "group": "G",
+   "faceIndex": 11,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gam-f011-v2",
+   "atlas": "gam.tcf",
+   "group": "G",
+   "faceIndex": 11,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gam-f012-v0",
+   "atlas": "gam.tcf",
+   "group": "G",
+   "faceIndex": 12,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gam-f012-v1",
+   "atlas": "gam.tcf",
+   "group": "G",
+   "faceIndex": 12,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gam-f012-v2",
+   "atlas": "gam.tcf",
+   "group": "G",
+   "faceIndex": 12,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gam-f013-v0",
+   "atlas": "gam.tcf",
+   "group": "G",
+   "faceIndex": 13,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gam-f013-v1",
+   "atlas": "gam.tcf",
+   "group": "G",
+   "faceIndex": 13,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gam-f013-v2",
+   "atlas": "gam.tcf",
+   "group": "G",
+   "faceIndex": 13,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gam-f014-v0",
+   "atlas": "gam.tcf",
+   "group": "G",
+   "faceIndex": 14,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gam-f014-v1",
+   "atlas": "gam.tcf",
+   "group": "G",
+   "faceIndex": 14,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gam-f014-v2",
+   "atlas": "gam.tcf",
+   "group": "G",
+   "faceIndex": 14,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gam-f015-v0",
+   "atlas": "gam.tcf",
+   "group": "G",
+   "faceIndex": 15,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gam-f015-v1",
+   "atlas": "gam.tcf",
+   "group": "G",
+   "faceIndex": 15,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gam-f015-v2",
+   "atlas": "gam.tcf",
+   "group": "G",
+   "faceIndex": 15,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gaf-f001-v0",
+   "atlas": "gaf.tcf",
+   "group": "G",
+   "faceIndex": 1,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gaf-f001-v1",
+   "atlas": "gaf.tcf",
+   "group": "G",
+   "faceIndex": 1,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gaf-f001-v2",
+   "atlas": "gaf.tcf",
+   "group": "G",
+   "faceIndex": 1,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gaf-f002-v0",
+   "atlas": "gaf.tcf",
+   "group": "G",
+   "faceIndex": 2,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gaf-f002-v1",
+   "atlas": "gaf.tcf",
+   "group": "G",
+   "faceIndex": 2,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gaf-f002-v2",
+   "atlas": "gaf.tcf",
+   "group": "G",
+   "faceIndex": 2,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gaf-f003-v0",
+   "atlas": "gaf.tcf",
+   "group": "G",
+   "faceIndex": 3,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gaf-f003-v1",
+   "atlas": "gaf.tcf",
+   "group": "G",
+   "faceIndex": 3,
+   "w": 64,
+   "h": 80
+  },
+  {
+   "slotId": "gaf-f003-v2",
+   "atlas": "gaf.tcf",
+   "group": "G",
+   "faceIndex": 3,
+   "w": 64,
+   "h": 80
+  }
+ ]
+}

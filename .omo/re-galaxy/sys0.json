@@ -1,0 +1,160 @@
+[
+ {
+  "system": "ルンビーニ",
+  "planets": [
+   {
+    "name": "バクタプール",
+    "orbit": 1
+   },
+   {
+    "name": "カライヤ",
+    "orbit": 2
+   },
+   {
+    "name": "バドガオン",
+    "orbit": 3
+   }
+  ],
+  "fortresses": [],
+  "rect": [
+   249.18018,
+   52.316888,
+   269.18019,
+   74.31689
+  ],
+  "page": 101,
+  "faction": "alliance",
+  "cx": 259.2,
+  "cy": 63.3,
+  "in_iv_ex": true,
+  "is_corridor": 0,
+  "canonCol": 5,
+  "canonRow": 20,
+  "canonDotX": 257.856,
+  "canonDotY": 759.725,
+  "canonLineMarkerX": 259.201,
+  "canonLineMarkerY": 776.414,
+  "canonLineMarkerCol": 3,
+  "canonLineMarkerRow": 22,
+  "canonGameCol": 6,
+  "canonGameRow": 21,
+  "canonPixelX": 82.275,
+  "canonPixelY": 257.856,
+  "canonColorRgb": [
+   168,
+   62,
+   11
+  ],
+  "canonColorHue": 19.5,
+  "spectralClass": "K",
+  "spectralClassSource": "page101-bg actual star disk color after local background subtraction; center pixel alone is not used"
+ },
+ {
+  "system": "シロン",
+  "planets": [
+   {
+    "name": "ネプティス",
+    "orbit": 1
+   },
+   {
+    "name": "ジャライン",
+    "orbit": 2
+   },
+   {
+    "name": "アヌビス",
+    "orbit": 3
+   },
+   {
+    "name": "オシリス",
+    "orbit": 4
+   }
+  ],
+  "fortresses": [],
+  "rect": [
+   207.65015,
+   58.874269,
+   227.65015,
+   80.87427
+  ],
+  "page": 101,
+  "faction": "alliance",
+  "cx": 217.7,
+  "cy": 69.9,
+  "in_iv_ex": false,
+  "is_corridor": 0,
+  "canonCol": 6,
+  "canonRow": 14,
+  "canonDotX": 214.45,
+  "canonDotY": 752.428,
+  "canonLineMarkerX": 217.671,
+  "canonLineMarkerY": 769.857,
+  "canonLineMarkerCol": 4,
+  "canonLineMarkerRow": 16,
+  "canonGameCol": 7,
+  "canonGameRow": 15,
+  "canonPixelX": 89.572,
+  "canonPixelY": 214.45,
+  "canonColorRgb": [
+   171,
+   118,
+   46
+  ],
+  "canonColorHue": 34.6,
+  "spectralClass": "G",
+  "spectralClassSource": "page101-bg actual star disk color after local background subtraction; center pixel alone is not used"
+ },
+ {
+  "system": "エリューセラ",
+  "planets": [
+   {
+    "name": "コルテラッツォ",
+    "orbit": 1
+   },
+   {
+    "name": "ポンテ・クレパルド",
+    "orbit": 2
+   },
+   {
+    "name": "クルッキド",
+    "orbit": 3
+   },
+   {
+    "name": "アンドロス",
+    "orbit": 4
+   }
+  ],
+  "fortresses": [],
+  "rect": [
+   341.52986,
+   67.61743,
+   361.52986,
+   89.617427
+  ],
+  "page": 101,
+  "faction": "alliance",
+  "cx": 351.5,
+  "cy": 78.6,
+  "in_iv_ex": true,
+  "is_corridor": 0,
+  "canonCol": 7,
+  "canonRow": 34,
+  "canonDotX": 351.15,
+  "canonDotY": 745.038,
+  "canonLineMarkerX": 351.551,
+  "canonLineMarkerY": 761.114,
+  "canonLineMarkerCol": 5,
+  "canonLineMarkerRow": 35,
+  "canonGameCol": 8,
+  "canonGameRow": 35,
+  "canonPixelX": 96.962,
+  "canonPixelY": 351.15,
+  "canonColorRgb": [
+   179,
+   107,
+   40
+  ],
+  "canonColorHue": 28.9,
+  "spectralClass": "G",
+  "spectralClassSource": "page101-bg actual star disk color after local background subtraction; center pixel alone is not used"
+ }
+]
