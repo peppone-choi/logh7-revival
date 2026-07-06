@@ -1,0 +1,859 @@
+{
+ "_source": "data/model/strategy/null_galaxy.mdx 씬그래프 노드 transform(꼬리 float 섹션)",
+ "_layout": "노드 디렉토리 @0x58 stride 0xE8(232B); 꼬리 transform 섹션 @0x15cbe stride 324B(0x144), X@+0 Y@+72(둘 다 float32, 0.25배수). Z축 없음(2D 맵).",
+ "_verdict": "coords-recoverable",
+ "_axis_note": "MDX X: +우/-좌 (index1-39 양수=제국측, 40-79 음수=동맹측). Y: 화면 상하 미확정(플립 가능).",
+ "count": 85,
+ "nodes": [
+  {
+   "index": 1,
+   "name": "star_01_G",
+   "kind": "star",
+   "spectral": "G",
+   "x": 18.75,
+   "y": 0.25,
+   "z": 0.0,
+   "parent": -1
+  },
+  {
+   "index": 2,
+   "name": "star_02_O",
+   "kind": "star",
+   "spectral": "O",
+   "x": 15.25,
+   "y": -3.75,
+   "z": 0.0,
+   "parent": -1
+  },
+  {
+   "index": 3,
+   "name": "star_03_F",
+   "kind": "star",
+   "spectral": "F",
+   "x": 21.25,
+   "y": 4.75,
+   "z": 0.0,
+   "parent": -1
+  },
+  {
+   "index": 4,
+   "name": "star_04_A",
+   "kind": "star",
+   "spectral": "A",
+   "x": 19.25,
+   "y": 3.25,
+   "z": 0.0,
+   "parent": -1
+  },
+  {
+   "index": 5,
+   "name": "star_05_A",
+   "kind": "star",
+   "spectral": "A",
+   "x": 20.75,
+   "y": -2.25,
+   "z": 0.0,
+   "parent": -1
+  },
+  {
+   "index": 6,
+   "name": "star_06_G",
+   "kind": "star",
+   "spectral": "G",
+   "x": 17.25,
+   "y": 7.75,
+   "z": 0.0,
+   "parent": -1
+  },
+  {
+   "index": 7,
+   "name": "star_07_B",
+   "kind": "star",
+   "spectral": "B",
+   "x": 9.75,
+   "y": -4.25,
+   "z": 0.0,
+   "parent": -1
+  },
+  {
+   "index": 8,
+   "name": "star_08_M",
+   "kind": "star",
+   "spectral": "M",
+   "x": 6.25,
+   "y": 3.25,
+   "z": 0.0,
+   "parent": -1
+  },
+  {
+   "index": 9,
+   "name": "star_09_G",
+   "kind": "star",
+   "spectral": "G",
+   "x": 20.75,
+   "y": 8.25,
+   "z": 0.0,
+   "parent": -1
+  },
+  {
+   "index": 10,
+   "name": "star_10_B",
+   "kind": "star",
+   "spectral": "B",
+   "x": 18.75,
+   "y": -3.25,
+   "z": 0.0,
+   "parent": -1
+  },
+  {
+   "index": 11,
+   "name": "star_11_G",
+   "kind": "star",
+   "spectral": "G",
+   "x": 8.25,
+   "y": -9.25,
+   "z": 0.0,
+   "parent": -1
+  },
+  {
+   "index": 12,
+   "name": "star_12_G",
+   "kind": "star",
+   "spectral": "G",
+   "x": 15.75,
+   "y": -9.25,
+   "z": 0.0,
+   "parent": -1
+  },
+  {
+   "index": 13,
+   "name": "star_13_K",
+   "kind": "star",
+   "spectral": "K",
+   "x": 8.75,
+   "y": 8.75,
+   "z": 0.0,
+   "parent": -1
+  },
+  {
+   "index": 14,
+   "name": "star_14_F",
+   "kind": "star",
+   "spectral": "F",
+   "x": 6.25,
+   "y": -7.25,
+   "z": 0.0,
+   "parent": -1
+  },
+  {
+   "index": 15,
+   "name": "star_15_M",
+   "kind": "star",
+   "spectral": "M",
+   "x": 6.75,
+   "y": -3.75,
+   "z": 0.0,
+   "parent": -1
+  },
+  {
+   "index": 16,
+   "name": "star_16_K",
+   "kind": "star",
+   "spectral": "K",
+   "x": 10.25,
+   "y": 4.75,
+   "z": 0.0,
+   "parent": -1
+  },
+  {
+   "index": 17,
+   "name": "star_17_K",
+   "kind": "star",
+   "spectral": "K",
+   "x": 3.75,
+   "y": -6.25,
+   "z": 0.0,
+   "parent": -1
+  },
+  {
+   "index": 18,
+   "name": "star_18_A",
+   "kind": "star",
+   "spectral": "A",
+   "x": 11.25,
+   "y": -9.75,
+   "z": 0.0,
+   "parent": -1
+  },
+  {
+   "index": 19,
+   "name": "star_19_K",
+   "kind": "star",
+   "spectral": "K",
+   "x": 8.75,
+   "y": 6.25,
+   "z": 0.0,
+   "parent": -1
+  },
+  {
+   "index": 20,
+   "name": "star_20_G",
+   "kind": "star",
+   "spectral": "G",
+   "x": 6.75,
+   "y": -0.25,
+   "z": 0.0,
+   "parent": -1
+  },
+  {
+   "index": 21,
+   "name": "star_21_M",
+   "kind": "star",
+   "spectral": "M",
+   "x": 6.75,
+   "y": 9.75,
+   "z": 0.0,
+   "parent": -1
+  },
+  {
+   "index": 22,
+   "name": "star_22_M",
+   "kind": "star",
+   "spectral": "M",
+   "x": 5.25,
+   "y": -10.75,
+   "z": 0.0,
+   "parent": -1
+  },
+  {
+   "index": 23,
+   "name": "star_23_M",
+   "kind": "star",
+   "spectral": "M",
+   "x": 5.25,
+   "y": 6.25,
+   "z": 0.0,
+   "parent": -1
+  },
+  {
+   "index": 24,
+   "name": "star_24_F",
+   "kind": "star",
+   "spectral": "F",
+   "x": 12.75,
+   "y": -1.25,
+   "z": 0.0,
+   "parent": -1
+  },
+  {
+   "index": 25,
+   "name": "star_25_M",
+   "kind": "star",
+   "spectral": "M",
+   "x": 1.75,
+   "y": 6.25,
+   "z": 0.0,
+   "parent": -1
+  },
+  {
+   "index": 26,
+   "name": "star_26_K",
+   "kind": "star",
+   "spectral": "K",
+   "x": 13.25,
+   "y": -10.75,
+   "z": 0.0,
+   "parent": -1
+  },
+  {
+   "index": 27,
+   "name": "star_27_G",
+   "kind": "star",
+   "spectral": "G",
+   "x": 13.75,
+   "y": 6.75,
+   "z": 0.0,
+   "parent": -1
+  },
+  {
+   "index": 28,
+   "name": "star_28_G",
+   "kind": "star",
+   "spectral": "G",
+   "x": 12.75,
+   "y": 10.75,
+   "z": 0.0,
+   "parent": -1
+  },
+  {
+   "index": 29,
+   "name": "star_29_K",
+   "kind": "star",
+   "spectral": "K",
+   "x": 14.75,
+   "y": 11.75,
+   "z": 0.0,
+   "parent": -1
+  },
+  {
+   "index": 30,
+   "name": "star_30_M",
+   "kind": "star",
+   "spectral": "M",
+   "x": 14.75,
+   "y": 10.25,
+   "z": 0.0,
+   "parent": -1
+  },
+  {
+   "index": 31,
+   "name": "star_31_M",
+   "kind": "star",
+   "spectral": "M",
+   "x": 9.75,
+   "y": 1.75,
+   "z": 0.0,
+   "parent": -1
+  },
+  {
+   "index": 32,
+   "name": "star_32_K",
+   "kind": "star",
+   "spectral": "K",
+   "x": 18.75,
+   "y": -6.25,
+   "z": 0.0,
+   "parent": -1
+  },
+  {
+   "index": 33,
+   "name": "star_33_G",
+   "kind": "star",
+   "spectral": "G",
+   "x": 21.25,
+   "y": -6.25,
+   "z": 0.0,
+   "parent": -1
+  },
+  {
+   "index": 34,
+   "name": "star_34_G",
+   "kind": "star",
+   "spectral": "G",
+   "x": 23.25,
+   "y": -4.75,
+   "z": 0.0,
+   "parent": -1
+  },
+  {
+   "index": 35,
+   "name": "star_35_M",
+   "kind": "star",
+   "spectral": "M",
+   "x": 18.75,
+   "y": 4.75,
+   "z": 0.0,
+   "parent": -1
+  },
+  {
+   "index": 36,
+   "name": "star_36_M",
+   "kind": "star",
+   "spectral": "M",
+   "x": 22.25,
+   "y": 0.75,
+   "z": 0.0,
+   "parent": -1
+  },
+  {
+   "index": 37,
+   "name": "star_37_K",
+   "kind": "star",
+   "spectral": "K",
+   "x": 23.75,
+   "y": -2.25,
+   "z": 0.0,
+   "parent": -1
+  },
+  {
+   "index": 38,
+   "name": "star_38_K",
+   "kind": "star",
+   "spectral": "K",
+   "x": 19.25,
+   "y": -8.75,
+   "z": 0.0,
+   "parent": -1
+  },
+  {
+   "index": 39,
+   "name": "star_39_B",
+   "kind": "star",
+   "spectral": "B",
+   "x": 16.25,
+   "y": 1.25,
+   "z": 0.0,
+   "parent": -1
+  },
+  {
+   "index": 40,
+   "name": "star_40_G",
+   "kind": "star",
+   "spectral": "G",
+   "x": -17.25,
+   "y": 2.25,
+   "z": 0.0,
+   "parent": -1
+  },
+  {
+   "index": 41,
+   "name": "star_41_G",
+   "kind": "star",
+   "spectral": "G",
+   "x": -15.25,
+   "y": 5.25,
+   "z": 0.0,
+   "parent": -1
+  },
+  {
+   "index": 42,
+   "name": "star_42_G",
+   "kind": "star",
+   "spectral": "G",
+   "x": -19.75,
+   "y": -0.75,
+   "z": 0.0,
+   "parent": -1
+  },
+  {
+   "index": 43,
+   "name": "star_43_G",
+   "kind": "star",
+   "spectral": "G",
+   "x": -20.75,
+   "y": -4.25,
+   "z": 0.0,
+   "parent": -1
+  },
+  {
+   "index": 44,
+   "name": "star_44_M",
+   "kind": "star",
+   "spectral": "M",
+   "x": -13.75,
+   "y": -1.25,
+   "z": 0.0,
+   "parent": -1
+  },
+  {
+   "index": 45,
+   "name": "star_45_G",
+   "kind": "star",
+   "spectral": "G",
+   "x": -12.25,
+   "y": 4.25,
+   "z": 0.0,
+   "parent": -1
+  },
+  {
+   "index": 46,
+   "name": "star_46_G",
+   "kind": "star",
+   "spectral": "G",
+   "x": -21.25,
+   "y": 5.25,
+   "z": 0.0,
+   "parent": -1
+  },
+  {
+   "index": 47,
+   "name": "star_47_M",
+   "kind": "star",
+   "spectral": "M",
+   "x": -18.75,
+   "y": -3.75,
+   "z": 0.0,
+   "parent": -1
+  },
+  {
+   "index": 48,
+   "name": "star_48_M",
+   "kind": "star",
+   "spectral": "M",
+   "x": -11.25,
+   "y": -2.25,
+   "z": 0.0,
+   "parent": -1
+  },
+  {
+   "index": 49,
+   "name": "star_49_M",
+   "kind": "star",
+   "spectral": "M",
+   "x": -11.75,
+   "y": -6.75,
+   "z": 0.0,
+   "parent": -1
+  },
+  {
+   "index": 50,
+   "name": "star_50_K",
+   "kind": "star",
+   "spectral": "K",
+   "x": -8.25,
+   "y": -4.25,
+   "z": 0.0,
+   "parent": -1
+  },
+  {
+   "index": 51,
+   "name": "star_51_K",
+   "kind": "star",
+   "spectral": "K",
+   "x": -12.75,
+   "y": 0.75,
+   "z": 0.0,
+   "parent": -1
+  },
+  {
+   "index": 52,
+   "name": "star_52_M",
+   "kind": "star",
+   "spectral": "M",
+   "x": -21.75,
+   "y": 2.25,
+   "z": 0.0,
+   "parent": -1
+  },
+  {
+   "index": 53,
+   "name": "star_53_M",
+   "kind": "star",
+   "spectral": "M",
+   "x": -13.75,
+   "y": -4.75,
+   "z": 0.0,
+   "parent": -1
+  },
+  {
+   "index": 54,
+   "name": "star_54_M",
+   "kind": "star",
+   "spectral": "M",
+   "x": -7.75,
+   "y": 0.25,
+   "z": 0.0,
+   "parent": -1
+  },
+  {
+   "index": 55,
+   "name": "star_55_M",
+   "kind": "star",
+   "spectral": "M",
+   "x": -12.25,
+   "y": 9.25,
+   "z": 0.0,
+   "parent": -1
+  },
+  {
+   "index": 56,
+   "name": "star_56_G",
+   "kind": "star",
+   "spectral": "G",
+   "x": -17.75,
+   "y": 6.75,
+   "z": 0.0,
+   "parent": -1
+  },
+  {
+   "index": 57,
+   "name": "star_57_K",
+   "kind": "star",
+   "spectral": "K",
+   "x": -7.25,
+   "y": 8.25,
+   "z": 0.0,
+   "parent": -1
+  },
+  {
+   "index": 58,
+   "name": "star_58_F",
+   "kind": "star",
+   "spectral": "F",
+   "x": -7.75,
+   "y": -9.75,
+   "z": 0.0,
+   "parent": -1
+  },
+  {
+   "index": 59,
+   "name": "star_59_K",
+   "kind": "star",
+   "spectral": "K",
+   "x": -5.75,
+   "y": -1.75,
+   "z": 0.0,
+   "parent": -1
+  },
+  {
+   "index": 60,
+   "name": "star_60_K",
+   "kind": "star",
+   "spectral": "K",
+   "x": -9.75,
+   "y": 6.25,
+   "z": 0.0,
+   "parent": -1
+  },
+  {
+   "index": 61,
+   "name": "star_61_G",
+   "kind": "star",
+   "spectral": "G",
+   "x": -8.75,
+   "y": 3.75,
+   "z": 0.0,
+   "parent": -1
+  },
+  {
+   "index": 62,
+   "name": "star_62_K",
+   "kind": "star",
+   "spectral": "K",
+   "x": -11.25,
+   "y": -10.25,
+   "z": 0.0,
+   "parent": -1
+  },
+  {
+   "index": 63,
+   "name": "star_63_A",
+   "kind": "star",
+   "spectral": "A",
+   "x": -2.75,
+   "y": -6.25,
+   "z": 0.0,
+   "parent": -1
+  },
+  {
+   "index": 64,
+   "name": "star_64_F",
+   "kind": "star",
+   "spectral": "F",
+   "x": -15.25,
+   "y": 8.75,
+   "z": 0.0,
+   "parent": -1
+  },
+  {
+   "index": 65,
+   "name": "star_65_M",
+   "kind": "star",
+   "spectral": "M",
+   "x": -15.25,
+   "y": -10.25,
+   "z": 0.0,
+   "parent": -1
+  },
+  {
+   "index": 66,
+   "name": "star_66_K",
+   "kind": "star",
+   "spectral": "K",
+   "x": -4.75,
+   "y": 9.25,
+   "z": 0.0,
+   "parent": -1
+  },
+  {
+   "index": 67,
+   "name": "star_67_A",
+   "kind": "star",
+   "spectral": "A",
+   "x": -9.25,
+   "y": 10.25,
+   "z": 0.0,
+   "parent": -1
+  },
+  {
+   "index": 68,
+   "name": "star_68_M",
+   "kind": "star",
+   "spectral": "M",
+   "x": -4.75,
+   "y": 4.75,
+   "z": 0.0,
+   "parent": -1
+  },
+  {
+   "index": 69,
+   "name": "star_69_F",
+   "kind": "star",
+   "spectral": "F",
+   "x": -3.25,
+   "y": 6.75,
+   "z": 0.0,
+   "parent": -1
+  },
+  {
+   "index": 70,
+   "name": "star_70_B",
+   "kind": "star",
+   "spectral": "B",
+   "x": -1.75,
+   "y": 6.25,
+   "z": 0.0,
+   "parent": -1
+  },
+  {
+   "index": 71,
+   "name": "star_71_F",
+   "kind": "star",
+   "spectral": "F",
+   "x": -2.75,
+   "y": 2.75,
+   "z": 0.0,
+   "parent": -1
+  },
+  {
+   "index": 72,
+   "name": "star_72_A",
+   "kind": "star",
+   "spectral": "A",
+   "x": -2.75,
+   "y": 0.25,
+   "z": 0.0,
+   "parent": -1
+  },
+  {
+   "index": 73,
+   "name": "star_73_F",
+   "kind": "star",
+   "spectral": "F",
+   "x": -3.25,
+   "y": -1.75,
+   "z": 0.0,
+   "parent": -1
+  },
+  {
+   "index": 74,
+   "name": "star_74_M",
+   "kind": "star",
+   "spectral": "M",
+   "x": -5.25,
+   "y": -7.75,
+   "z": 0.0,
+   "parent": -1
+  },
+  {
+   "index": 75,
+   "name": "star_75_O",
+   "kind": "star",
+   "spectral": "O",
+   "x": -5.25,
+   "y": -3.75,
+   "z": 0.0,
+   "parent": -1
+  },
+  {
+   "index": 76,
+   "name": "star_76_B",
+   "kind": "star",
+   "spectral": "B",
+   "x": -4.25,
+   "y": 2.75,
+   "z": 0.0,
+   "parent": -1
+  },
+  {
+   "index": 77,
+   "name": "star_77_A",
+   "kind": "star",
+   "spectral": "A",
+   "x": -1.75,
+   "y": 5.25,
+   "z": 0.0,
+   "parent": -1
+  },
+  {
+   "index": 78,
+   "name": "star_78_K",
+   "kind": "star",
+   "spectral": "K",
+   "x": -12.75,
+   "y": 11.25,
+   "z": 0.0,
+   "parent": -1
+  },
+  {
+   "index": 79,
+   "name": "star_79_G",
+   "kind": "star",
+   "spectral": "G",
+   "x": 0.75,
+   "y": -6.25,
+   "z": 0.0,
+   "parent": -1
+  },
+  {
+   "index": 80,
+   "name": "bh_01",
+   "kind": "blackhole",
+   "spectral": null,
+   "x": 5.25,
+   "y": -2.75,
+   "z": 0.0,
+   "parent": -1
+  },
+  {
+   "index": 81,
+   "name": "bh_02",
+   "kind": "blackhole",
+   "spectral": null,
+   "x": -13.25,
+   "y": -6.25,
+   "z": 0.0,
+   "parent": -1
+  },
+  {
+   "index": 82,
+   "name": "bh_03",
+   "kind": "blackhole",
+   "spectral": null,
+   "x": -9.25,
+   "y": 8.25,
+   "z": 0.0,
+   "parent": -1
+  },
+  {
+   "index": 83,
+   "name": "ns_01",
+   "kind": "neutron_star",
+   "spectral": null,
+   "x": 12.75,
+   "y": 3.25,
+   "z": 0.0,
+   "parent": -1
+  },
+  {
+   "index": 84,
+   "name": "ns_02",
+   "kind": "neutron_star",
+   "spectral": null,
+   "x": -6.25,
+   "y": -5.25,
+   "z": 0.0,
+   "parent": -1
+  },
+  {
+   "index": 85,
+   "name": "ns_03",
+   "kind": "neutron_star",
+   "spectral": null,
+   "x": -16.25,
+   "y": -8.25,
+   "z": 0.0,
+   "parent": -1
+  }
+ ]
+}
