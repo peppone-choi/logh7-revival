@@ -1,0 +1,188 @@
+
+=== messages_0.dat rec=594 ne=98 groups=97 ===
+  [4] $r10$$xcommand$日時：$xdate$
+$xproposer$（$xcpp$+$xinfluence$消費）
+  [7] $r10$$xcommand$日時：$xdate$
+$xproposer$（$xcpp$+$xinfluence$消費）
+  [10] $r10$$xcommand$日時：$xdate$
+$xproposer$（$xcpp$+$xinfluence$消費）
+  [13] $r10$$xcommand$日時：$xdate$
+$xproposer$（$xcpp$+$xinfluence$消費）
+   HUNT フェザーン: 1 in ids ['220']
+   HUNT 惑星: 1 in ids ['504']
+   HUNT 星系: 1 in ids ['327']
+
+=== messages_1.dat rec=594 ne=252 groups=97 ===
+  [0] $r10$$yname$$ytitleprioritya$、このような提案はいかがでしょうか？
+$r1$$yname$$
+  [1] $r10$了解いたしました。
+$r1$了解いたしました。$yname$$ytitleprioritya$の意図するところ
+  [2] $r10$このような命令は承服しかねます。
+$r1$小官は承服しかねます。$yname$$ytitleprioritya
+  [3] $r10$お引き取り下さい。国家の大事に私情を交えるわけにはまいりませんので。
+$r1$お引き取り下さい。$yname$
+   HUNT フェザーン: 3 in ids ['185', '186', '225']
+   HUNT 惑星: 1 in ids ['221']
+   HUNT 地形: 2 in ids ['403', '407']
+
+=== messages_2.dat rec=594 ne=148 groups=97 ===
+  [0] $r10$この件に関して卿はどう思うか？
+$r1$このようにしようと思うが、卿の意見は？
+$r1$この件に関しては卿はど
+  [1] $r10$卿の主張は当然だ。卿の言うとおりにしよう。
+$r1$$yyou$の言うとおりのようだ。
+$r1$$yyou$の
+  [2] $r10$卿の言いたいことは、わかっているつもりだが……。
+$r1$卿の意図するところも、わからぬわけではないが……。
+
+  [3] $r10$この提案は却下だ！　卿は、私がこの程度の策をも考えつかないと思っているのか？
+$r1$この提案は却下だ！　卿は
+   HUNT フェザーン: 2 in ids ['561', '563']
+   HUNT 惑星: 1 in ids ['561']
+
+=== messages_3.dat rec=594 ne=256 groups=97 ===
+  [0] $r10$$yname$$yrank$に以下の命令を発令する。
+$r1$卿には、このようにしてもらおうか。
+$r1$卿に
+  [1] $r10$$yname$$yrank$の意見には聞くべき点がある。
+$r1$なるほど、卿の見識の広さはよくわかった。その
+  [2] $r10$卿の提案は却下する。卿の意見には、見るべきものはないようだな。
+$r1$卿の提案は却下する。この提案にはかなり
+  [3] $r10$さがれ！　$yrank$ごとき下賎の輩が何を言うか！
+$r1$この提案は却下だ！　$yname$$yrank$
+   HUNT オーディン: 1 in ids ['584']
+   HUNT ハイネセン: 1 in ids ['114']
+   HUNT フェザーン: 5 in ids ['151', '205', '231', '233', '234']
+   HUNT 惑星: 27 in ids ['100', '101', '105', '108', '110', '111', '112', '113', '114', '115']
+   HUNT 地形: 1 in ids ['414']
+   HUNT 星系: 1 in ids ['204']
+
+=== messages_4.dat rec=594 ne=103 groups=97 ===
+  [0] $r10$$yname$$ytitleprioritya$、この様な提案はいかがでしょうか？
+$r1$$yname$$y
+  [1] $r10$卿の提案を許可しよう。この提案は、軍にとって非常に有意義だ。
+$r1$卿の提案を許可しよう。この提案は、軍にと
+  [2] $r10$$yname$$ytitleprioritya$の提案は却下せざるを得ませんな。この件は、一個人の意思によって
+  [3] $r10$このような提案をなされても、了承するわけにはまいりませんな。小官にも、帝国に対する責務というものがありますので
+   HUNT ハイネセン: 2 in ids ['54', '79']
+
+=== messages_5.dat rec=594 ne=85 groups=97 ===
+  [0] $r10$$yname$$yrank$に以下の事項の実行をお願いしたい。
+$r1$この件に関して、$yname$$yra
+  [1] $r10$$r1$なるほど、$yname$$yrank$の言うとおりだな。
+$r1$$yname$$yrank$の提案は
+  [2] $r10$残念ながら、卿の提案は却下せざるをえない。もう少し時機を選ぶべきだったな。
+$r1$卿の提案は有効なものだと認
+  [3] $r10$卿も知っておろうが、この件は卿が関知せざるべき事項なのだ。よって、卿の意見を聞く必要はない。
+$r1$卿の提案
+
+=== messages_6.dat rec=594 ne=117 groups=97 ===
+  [0] $r10$帝国のためには、この提案が非常に重要な意味を持つのだ。
+$r1$これが帝国のためであることは、卿にもわかってい
+  [1] $r10$うむ。卿の言うとおりだな。
+$r1$なるほど、卿の提案こそ、真に帝国を憂うる者の言葉だ。
+  [2] $r10$$yname$$ytitle$の提案は緊急に行うべきものとも思えない。残念ながら却下せざるを得ないな。
+$r1
+  [3] $r10$残念ながら、それは無理な話だな。お引き取り願おう。
+$r1$無理を言うな！　帝国は卿の私有物ではないのだぞ。
+
+   HUNT ハイネセン: 2 in ids ['54', '79']
+
+=== messages_7.dat rec=594 ne=91 groups=97 ===
+  [0] $r10$恐れ多い事ではありますが、以下の事項につきまして、陛下の御聖断を仰ぎたく思います。
+$r1$恐れながら、陛下に
+  [1] $r10$御意。
+$r1$御意。陛下の御心に沿うように致します。
+  [2] $r10$陛下、恐れ多き事ですが、この件は御再考いただけないでしょうか。
+$r1$陛下、私は陛下の忠臣として、諫言いたし
+  [3] $r10$なりませぬ。本職は身命を賭して諫止いたしますぞ！
+$r1$なりませぬ。陛下御自ら、帝国の秩序を乱されるおつもり
+   HUNT フェザーン: 2 in ids ['185', '186']
+
+=== messages_8.dat rec=594 ne=102 groups=97 ===
+  [0] $r10$$yname$$ytitlepriorityb$に命ずる。
+$r1$$yname$$ytitlepriorit
+  [1] $r10$わかった。覚えておこう。
+$r1$わかった。いつもながら、$yname$$ytitlepriorityb$の提
+  [2] $r10$だめだ。$yname$$ytitlepriorityb$よ、卿の提案は卿の職分を外れておる。
+$r1$だめだ。
+  [3] $r10$下がれ。戯れ言など聞きたくない。
+$r1$慮外者めが！　余は小人の意見など求めていないのだ。
+   HUNT フェザーン: 1 in ids ['151']
+   HUNT 惑星: 12 in ids ['139', '140', '141', '155', '156', '157', '158', '159', '160', '170']
+
+=== messages_com_0.dat rec=174 ne=159 groups=96 ===
+  [0] おめでとうございます。あなたの功績が認められ、$com_mrank$に昇進しました。
+  [1] $com_xfullname$を$com_xrank$に抜擢します。
+コマンドポイント320MCP消費。
+0G時間待機の
+  [2] おめでとうございます。あなたの功績が認められ、$com_mrank$に抜擢されました。
+  [3] $com_xfullname$を$com_xrank$に降等します。
+コマンドポイント160MCP消費。
+0G時間待機の
+   HUNT フェザーン: 3 in ids ['43', '44', '47']
+   HUNT 惑星: 17 in ids ['14', '15', '16', '17', '28', '29', '32', '48', '49', '56']
+
+=== messages_com_1.dat rec=174 ne=12 groups=96 ===
+  [18] 開催日時：帝国暦000年00月00日00：00
+参加者：”参加者名”（最大23人）
+  [20] 開催日時：帝国暦000年00月00日00：00
+参加者：”参加者名”（最大23人）
+  [22] 会談内容：”人物名”を”話題”
+開催日時：宇宙暦000年00月00日00：00
+参加者：”参加者名”（最大8人）
+  [24] 会談内容：”人物名”を”話題”
+開催日時：宇宙暦000年00月00日00：00
+参加者：”参加者名”（最大8人）
+   HUNT 惑星: 1 in ids ['103']
+
+=== messages_tac_0.dat rec=75 ne=0 groups=20 ===
+
+=== messages_tac_1.dat rec=75 ne=55 groups=20 ===
+  [0] $r10$総司令部へ意見具申せよ。「敵情に変化あり。現在遂行中の$ymissionexecution$を$ymissio
+  [1] 　
+  [2] 　
+  [3] $r10$総司令部より入電。「$yyou$の具申を承認。現在遂行中の$ymissionexecution$を$ymiss
+
+=== messages_tac_2.dat rec=75 ne=30 groups=20 ===
+  [0] $r10$総司令部へ意見具申せよ。「敵情に変化あり。現在遂行中の$ymissionexecution$を$ymissio
+  [1] $r10$$yfleet$$ysquadron$より入電。「敵情に変化あり。現在遂行中の$ymissionexecuti
+  [2] $r10$わかった。$yname$$yrank$に承認すると伝えろ。
+  [3] $r10$総司令部より入電。「$yyou$の具申を承認。現在遂行中の$ymissionexecution$を$ymiss
+
+=== messages_tac_3.dat rec=75 ne=43 groups=20 ===
+  [0] 　
+  [1] $r10$$yfleet$$ysquadron$より入電。「敵情に変化あり。現在遂行中の$ymissionexecuti
+  [2] $r10$わかった。$yname$$yrank$に承認すると伝えろ。
+  [3] 　
+   HUNT 星系: 1 in ids ['11']
+
+=== messages_tac_4.dat rec=75 ne=20 groups=20 ===
+  [0] $r10$総司令部へ意見具申だ。「敵情に変化あり。現在遂行中の$ymissionexecution$を$ymission
+  [1] 　
+  [2] 　
+  [3] $r10$総司令部より入電。「$yyou$の具申を承認。現在遂行中の$ymissionexecution$を$ymiss
+
+=== messages_tac_5.dat rec=75 ne=15 groups=20 ===
+  [0] 　
+  [1] $r10$$yfleet$$ysquadron$より入電。「敵情に変化あり。現在遂行中の$ymissionexecuti
+  [2] $r10$わかった。$yname$$yrank$に承認すると伝えろ。
+  [3] 　
+
+=== messages_tac_6.dat rec=75 ne=15 groups=20 ===
+  [0] $r10$総司令部へ意見具申せよ。「敵情に変化あり。現在遂行中の$ymissionexecution$を$ymissio
+  [1] $r10$$yfleet$$ysquadron$より入電。「敵情に変化あり。現在遂行中の$ymissionexecuti
+  [2] $r10$わかった。$yname$$yrank$に承認すると伝えろ。
+  [3] $r10$総司令部より入電。「$yyou$の具申を承認。現在遂行中の$ymissionexecution$を$ymiss
+
+=== messages_tac_7.dat rec=75 ne=15 groups=20 ===
+  [0] $r10$総司令部へ意見具申せよ。「敵情に変化あり。現在遂行中の$ymissionexecution$を$ymissio
+  [1] 　
+  [2] 　
+  [3] $r10$総司令部より入電。「$yyou$の具申を承認。現在遂行中の$ymissionexecution$を$ymiss
+
+=== messages_tac_8.dat rec=75 ne=19 groups=20 ===
+  [0] 　
+  [1] $r10$$yfleet$$ysquadron$より入電。「敵情に変化あり。現在遂行中の$ymissionexecuti
+  [2] $r10$わかった。$yname$$yrank$に承認すると伝えよ。
+  [3] 　

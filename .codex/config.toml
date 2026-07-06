@@ -1,0 +1,16 @@
+[mcp_servers.context7]
+command = "cmd"
+args = [
+    "/c",
+    "npx -y @upstash/context7-mcp",
+]
+
+[mcp_servers.filesystem]
+command = "cmd"
+args = [
+    "/c",
+    'npx -y @modelcontextprotocol/server-filesystem E:\logh7-revival',
+]
+
+[mcp_servers.github]
+url = "https://api.githubcopilot.com/mcp/"
