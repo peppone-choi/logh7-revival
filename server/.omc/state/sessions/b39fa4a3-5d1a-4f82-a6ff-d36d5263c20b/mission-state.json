@@ -1,0 +1,179 @@
+{
+  "updatedAt": "2026-07-07T08:35:07.900Z",
+  "missions": [
+    {
+      "id": "session:b39fa4a3-5d1a-4f82-a6ff-d36d5263c20b:none",
+      "source": "session",
+      "name": "none",
+      "objective": "Session mission",
+      "createdAt": "2026-07-07T06:47:33.401Z",
+      "updatedAt": "2026-07-07T08:35:07.900Z",
+      "status": "done",
+      "workerCount": 12,
+      "taskCounts": {
+        "total": 12,
+        "pending": 0,
+        "blocked": 0,
+        "inProgress": 0,
+        "completed": 12,
+        "failed": 0
+      },
+      "agents": [
+        {
+          "name": "login-ok-response:alogin-",
+          "role": "login-ok-response",
+          "ownership": "alogin-ok-response-d859b1a41a8556d6",
+          "status": "done",
+          "currentStep": null,
+          "latestUpdate": "completed",
+          "completedSummary": null,
+          "updatedAt": "2026-07-07T08:04:29.338Z"
+        },
+        {
+          "name": "tool-inventory-harness:atool-i",
+          "role": "tool-inventory-harness",
+          "ownership": "atool-inventory-harness-df893102d49675c3",
+          "status": "done",
+          "currentStep": null,
+          "latestUpdate": "completed",
+          "completedSummary": null,
+          "updatedAt": "2026-07-07T07:02:12.348Z"
+        },
+        {
+          "name": "tool-inventory-system:atool-i",
+          "role": "tool-inventory-system",
+          "ownership": "atool-inventory-system-8084db9e23f3d7a3",
+          "status": "done",
+          "currentStep": null,
+          "latestUpdate": "completed",
+          "completedSummary": null,
+          "updatedAt": "2026-07-07T07:02:33.979Z"
+        },
+        {
+          "name": "runner:a57d79f",
+          "role": "runner",
+          "ownership": "a57d79f100f9f8e56",
+          "status": "done",
+          "currentStep": null,
+          "latestUpdate": "completed",
+          "completedSummary": null,
+          "updatedAt": "2026-07-07T07:07:12.264Z"
+        },
+        {
+          "name": "live-qa:a233766",
+          "role": "live-qa",
+          "ownership": "a23376625e3e9fd52",
+          "status": "done",
+          "currentStep": null,
+          "latestUpdate": "completed",
+          "completedSummary": null,
+          "updatedAt": "2026-07-07T07:47:01.927Z"
+        },
+        {
+          "name": "Explore:a32768a",
+          "role": "Explore",
+          "ownership": "a32768a8940569e3d",
+          "status": "done",
+          "currentStep": null,
+          "latestUpdate": "completed",
+          "completedSummary": null,
+          "updatedAt": "2026-07-07T07:19:18.223Z"
+        },
+        {
+          "name": "general-purpose:ac13b05",
+          "role": "general-purpose",
+          "ownership": "ac13b051bf9f5d8e0",
+          "status": "done",
+          "currentStep": null,
+          "latestUpdate": "completed",
+          "completedSummary": null,
+          "updatedAt": "2026-07-07T07:20:30.319Z"
+        },
+        {
+          "name": "wire-engineer:a8d068e",
+          "role": "wire-engineer",
+          "ownership": "a8d068efe80da64ea",
+          "status": "done",
+          "currentStep": null,
+          "latestUpdate": "completed",
+          "completedSummary": null,
+          "updatedAt": "2026-07-07T07:41:32.801Z"
+        },
+        {
+          "name": "server-dev:a38e279",
+          "role": "server-dev",
+          "ownership": "a38e27973987ada55",
+          "status": "done",
+          "currentStep": null,
+          "latestUpdate": "completed",
+          "completedSummary": null,
+          "updatedAt": "2026-07-07T07:47:57.118Z"
+        },
+        {
+          "name": "re-analyst:a776fdd",
+          "role": "re-analyst",
+          "ownership": "a776fdd55dce19d62",
+          "status": "done",
+          "currentStep": null,
+          "latestUpdate": "Marked as stale during unmatched stop reconciliation - exceed...",
+          "completedSummary": "Marked as stale during unmatched stop reconciliation - exceed...",
+          "updatedAt": "2026-07-07T08:12:21.560Z"
+        },
+        {
+          "name": "executor:a251ecf",
+          "role": "executor",
+          "ownership": "a251ecf3515ebce03",
+          "status": "done",
+          "currentStep": null,
+          "latestUpdate": "completed",
+          "completedSummary": null,
+          "updatedAt": "2026-07-07T07:53:09.573Z"
+        },
+        {
+          "name": "server-dev:a7f9781",
+          "role": "server-dev",
+          "ownership": "a7f97814e058023af",
+          "status": "done",
+          "currentStep": null,
+          "latestUpdate": "completed",
+          "completedSummary": null,
+          "updatedAt": "2026-07-07T08:35:07.900Z"
+        }
+      ],
+      "timeline": [
+        {
+          "id": "session-stop:a39adc3116b88754f:2026-07-07T08:04:29.338Z",
+          "at": "2026-07-07T08:04:29.338Z",
+          "kind": "completion",
+          "agent": "login-ok-response:alogin-",
+          "detail": "completed",
+          "sourceKey": "session-stop:a39adc3116b88754f"
+        },
+        {
+          "id": "session-stop:a776fdd55dce19d62:2026-07-07T08:12:21.560Z",
+          "at": "2026-07-07T08:12:21.560Z",
+          "kind": "completion",
+          "agent": "re-analyst:a776fdd",
+          "detail": "Marked as stale during unmatched stop reconciliation - exceeded timeout",
+          "sourceKey": "session-stop:a776fdd55dce19d62"
+        },
+        {
+          "id": "session-start:a7f97814e058023af:2026-07-07T08:27:57.973Z",
+          "at": "2026-07-07T08:27:57.973Z",
+          "kind": "update",
+          "agent": "server-dev:a7f9781",
+          "detail": "started server-dev:a7f9781",
+          "sourceKey": "session-start:a7f97814e058023af"
+        },
+        {
+          "id": "session-stop:a7f97814e058023af:2026-07-07T08:35:07.900Z",
+          "at": "2026-07-07T08:35:07.900Z",
+          "kind": "completion",
+          "agent": "server-dev:a7f9781",
+          "detail": "completed",
+          "sourceKey": "session-stop:a7f97814e058023af"
+        }
+      ]
+    }
+  ]
+}

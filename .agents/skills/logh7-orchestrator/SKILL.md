@@ -13,8 +13,8 @@ description: "LOGH VII(은하영웅전설 VII) 부활 프로젝트의 작업 오
 - 기존 산출물(`server/`) 존재 여부로 초기/후속/부분 재실행 판별.
 - ⚠️ docs의 코드 경로 언급은 리셋(2026-07-05) 전 기준 — 역사적 발견은 신뢰하되 파일 경로는 재확인.
 
-## 에이전트 팀 (`.Codex/agents/`) — Advisor Strategy 적용
-모델은 호출 시점에 계층화: 기계적 실행(파싱/스윕/단순검증)=sonnet, 판단(RE해석/설계/근본원인)=opus. 실행자가 막히면 opus 조언자에 판단 질문만 짧게 물어 재개(태스크당 ~3회). 상세는 루트 AGENTS.md "Advisor Strategy".
+## 에이전트 팀 (`.claude/agents/` / `.codex/agents/`) - Codex Advisor Strategy 적용
+Claude 하네스 역할 정의는 Codex에서도 그대로 쓴다. 모델은 호출 시점에 계층화한다: 기계적 실행(파싱/스윕/단순검증)=`gpt-5.3-codex-spark` 또는 `gpt-5.4-mini`, 일반 개발=`gpt-5.4`/`gpt-5.4-mini`, 어려운 판단(RE해석/설계/근본원인/최종판정)=메인 Advisor `gpt-5.5 high/xhigh`. 실행자가 막히면 작업 전체를 최고 모델에 넘기지 말고 판단 질문만 짧게 뽑아 Advisor가 결정한다. 상세는 `docs/logh7-codex-harness-loop.md`.
 | 에이전트 | 역할 | 주요 스킬 |
 |---|---|---|
 | extract-miner | CD 자산·데이터 추출 → 정본 카탈로그 | — |
@@ -33,7 +33,7 @@ localizer ─────┘                                        │
                                                         └─▶ localizer(인게임 한글 검증)
 ```
 - 독립 수집(추출·RE·현지화 원문)은 서브에이전트 병렬. 통합·검증은 순차.
-- 모델 지정: 기계적 스테이지 `model: "sonnet"`(effort low), 판단 스테이지만 `model: "opus"`.
+- 모델 지정: 기계적 스테이지 `model: "gpt-5.3-codex-spark"` 또는 `model: "gpt-5.4-mini"`, 일반 개발 `model: "gpt-5.4"`/`"gpt-5.4-mini"`, 판단은 메인 Advisor `gpt-5.5 high/xhigh`.
 
 ## 마일스톤 (순서)
 1. CD 추출 + 정본 카탈로그 (extract-miner)

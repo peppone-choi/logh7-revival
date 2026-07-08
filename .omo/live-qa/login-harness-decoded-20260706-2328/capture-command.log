@@ -1,0 +1,10 @@
+{
+  "sessionId": "login-harness-decoded-20260706-2328",
+  "sessionDir": "E:\\logh7-revival\\.omo\\captures\\login-harness-decoded-20260706-2328",
+  "outputPath": "E:\\logh7-revival\\.omo\\captures\\login-harness-decoded-20260706-2328\\capture.pcapng",
+  "manifestPath": "E:\\logh7-revival\\.omo\\captures\\login-harness-decoded-20260706-2328\\capture.manifest.json",
+  "exitCode": 0,
+  "signal": null,
+  "tsharkPath": "C:\\Program Files\\Wireshark\\tshark.exe",
+  "dumpcapPath": "C:\\Program Files\\Wireshark\\dumpcap.exe"
+}

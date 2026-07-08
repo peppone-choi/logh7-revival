@@ -1,0 +1,5 @@
+{"query":"0x006122c0","address":"0x6122c0","program":"g7mtclient.exe","found":true,"name":"FUN_006122c0","entry":"0x6122c0","size":271,"decompileOk":true,"error":"","outPath":"E:\\logh7-revival\\.omo\\re-targeted\\login-postkey-candidates\\0x6122c0_FUN_006122c0.c"}
+{"query":"0x004ac700","address":"0x4ac700","program":"g7mtclient.exe","found":false}
+{"query":"0x00612510","address":"0x612510","program":"g7mtclient.exe","found":true,"name":"FUN_00612510","entry":"0x612510","size":16,"decompileOk":true,"error":"","outPath":"E:\\logh7-revival\\.omo\\re-targeted\\login-postkey-candidates\\0x612510_FUN_00612510.c"}
+{"query":"0x006140c0","address":"0x6140c0","program":"g7mtclient.exe","found":false}
+{"query":"0x004ad780","address":"0x4ad780","program":"g7mtclient.exe","found":true,"name":"FUN_004ad780","entry":"0x4ad780","size":788,"decompileOk":true,"error":"","outPath":"E:\\logh7-revival\\.omo\\re-targeted\\login-postkey-candidates\\0x4ad780_FUN_004ad780.c"}

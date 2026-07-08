@@ -1,0 +1,42 @@
+2026-07-06 22:18:06 INFO  (LoggingInitialization) Using log config file: jar:file:/C:/Users/user/AppData/Local/Programs/Ghidra/ghidra_12.1.2_PUBLIC/Ghidra/Framework/Generic/lib/Generic.jar!/generic.log4j.xml  
+2026-07-06 22:18:06 INFO  (LoggingInitialization) Using log file: E:\logh7-revival\.omo\re-targeted\child-codec-neighborhood\headless.log  
+2026-07-06 22:18:06 DEBUG (GhidraObjectInputFilter) Including serial input filter: FileSystem/data/client.rmi.serial.filter  
+2026-07-06 22:18:06 INFO  (Preferences) Loading user preferences: C:\Users\user\AppData\Roaming\ghidra\ghidra_12.1.2_PUBLIC\preferences  
+2026-07-06 22:18:06 INFO  (ClassSearcher) Searching for classes...  
+2026-07-06 22:18:07 INFO  (ClassSearcher) Class search complete (698 ms)  
+2026-07-06 22:18:07 INFO  (DefaultSSLContextInitializer) Initializing SSL Context  
+2026-07-06 22:18:07 INFO  (SecureRandomFactory) Initializing Random Number Generator...  
+2026-07-06 22:18:07 INFO  (SecureRandomFactory) Random Number Generator initialization complete: SHA1PRNG  
+2026-07-06 22:18:07 INFO  (DefaultTrustManagerFactory) Trust manager disabled, cacerts have not been set  
+2026-07-06 22:18:08 INFO  (AnalyzeHeadless) Headless startup complete (2383 ms)  
+2026-07-06 22:18:08 INFO  (ClassSearcher) Class searcher loaded 59 extension points (20 false positives)  
+2026-07-06 22:18:08 INFO  (HeadlessAnalyzer) HEADLESS Script Paths:
+    C:\Users\user\AppData\Local\Programs\Ghidra\ghidra_12.1.2_PUBLIC\Ghidra\Features\BytePatterns\ghidra_scripts
+    C:\Users\user\AppData\Local\Programs\Ghidra\ghidra_12.1.2_PUBLIC\Ghidra\Features\GnuDemangler\ghidra_scripts
+    C:\Users\user\AppData\Local\Programs\Ghidra\ghidra_12.1.2_PUBLIC\Ghidra\Processors\PIC\ghidra_scripts
+    C:\Users\user\AppData\Local\Programs\Ghidra\ghidra_12.1.2_PUBLIC\Ghidra\Features\FileFormats\ghidra_scripts
+    C:\Users\user\AppData\Local\Programs\Ghidra\ghidra_12.1.2_PUBLIC\Ghidra\Features\VersionTracking\ghidra_scripts
+    C:\Users\user\AppData\Local\Programs\Ghidra\ghidra_12.1.2_PUBLIC\Ghidra\Processors\JVM\ghidra_scripts
+    C:\Users\user\AppData\Local\Programs\Ghidra\ghidra_12.1.2_PUBLIC\Ghidra\Processors\DATA\ghidra_scripts
+    C:\Users\user\AppData\Local\Programs\Ghidra\ghidra_12.1.2_PUBLIC\Ghidra\Features\WildcardAssembler\ghidra_scripts
+    C:\Users\user\AppData\Local\Programs\Ghidra\ghidra_12.1.2_PUBLIC\Ghidra\Processors\Atmel\ghidra_scripts
+    C:\Users\user\AppData\Local\Programs\Ghidra\ghidra_12.1.2_PUBLIC\Ghidra\Features\SwiftDemangler\ghidra_scripts
+    C:\Users\user\AppData\Local\Programs\Ghidra\ghidra_12.1.2_PUBLIC\Ghidra\Features\PDB\ghidra_scripts
+    C:\Users\user\AppData\Local\Programs\Ghidra\ghidra_12.1.2_PUBLIC\Ghidra\Features\BSim\ghidra_scripts
+    C:\Users\user\AppData\Local\Programs\Ghidra\ghidra_12.1.2_PUBLIC\Ghidra\Debug\Debugger\ghidra_scripts
+    C:\Users\user\AppData\Local\Programs\Ghidra\ghidra_12.1.2_PUBLIC\Ghidra\Features\FunctionID\ghidra_scripts
+    C:\Users\user\AppData\Local\Programs\Ghidra\ghidra_12.1.2_PUBLIC\Ghidra\Processors\8051\ghidra_scripts
+    C:\Users\user\AppData\Local\Programs\Ghidra\ghidra_12.1.2_PUBLIC\Ghidra\Features\Base\ghidra_scripts
+    C:\Users\user\AppData\Local\Programs\Ghidra\ghidra_12.1.2_PUBLIC\Ghidra\Features\Decompiler\ghidra_scripts
+    C:\Users\user\AppData\Local\Programs\Ghidra\ghidra_12.1.2_PUBLIC\Ghidra\Features\PyGhidra\ghidra_scripts
+    C:\Users\user\AppData\Local\Programs\Ghidra\ghidra_12.1.2_PUBLIC\Ghidra\Features\SystemEmulation\ghidra_scripts
+    C:\Users\user\AppData\Local\Programs\Ghidra\ghidra_12.1.2_PUBLIC\Ghidra\Debug\Debugger-rmi-trace\ghidra_scripts
+    C:\Users\user\AppData\Local\Programs\Ghidra\ghidra_12.1.2_PUBLIC\Ghidra\Features\DecompilerDependent\ghidra_scripts
+    E:\logh7-revival\tools\re
+    C:\Users\user\AppData\Local\Programs\Ghidra\ghidra_12.1.2_PUBLIC\Ghidra\Features\MicrosoftCodeAnalyzer\ghidra_scripts  
+2026-07-06 22:18:08 INFO  (HeadlessAnalyzer) HEADLESS: execution starts  
+2026-07-06 22:18:08 INFO  (HeadlessAnalyzer) Opening existing project: C:\Users\user\AppData\Local\Temp\logh7-ghidra-targeted-java-v2\G7MTClientTargetedJavaV2  
+2026-07-06 22:18:08 INFO  (HeadlessProject) Opening project: C:\Users\user\AppData\Local\Temp\logh7-ghidra-targeted-java-v2\G7MTClientTargetedJavaV2  
+2026-07-06 22:18:10 INFO  (HeadlessAnalyzer) REPORT: Processing read-only project file: /g7mtclient.exe  
+2026-07-06 22:18:10 INFO  (HeadlessAnalyzer) REPORT: Execute script: Logh7ExportSelectedDecomp.java 'E:\logh7-revival\.omo\re-targeted\child-codec-neighborhood' '0x00613f20' '0x00613f60' '0x00613fc0' '0x00614040' '0x00614060' '0x00614460' '0x006147e0' '0x00614810' '0x00614a20' '0x00614aa0' '0x00614be0' '0x00614c30' '0x00614c70'   
+2026-07-06 22:18:10 INFO  (HeadlessAnalyzer) SCRIPT: E:\logh7-revival\tools\re\Logh7ExportSelectedDecomp.java  

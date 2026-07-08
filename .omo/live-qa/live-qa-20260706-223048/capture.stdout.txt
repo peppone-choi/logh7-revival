@@ -1,0 +1,11 @@
+﻿{
+  "sessionId": "live-qa-20260706-223048",
+  "sessionDir": "E:\\logh7-revival\\.omo\\captures\\live-qa-20260706-223048",
+  "outputPath": "E:\\logh7-revival\\.omo\\captures\\live-qa-20260706-223048\\capture.pcapng",
+  "manifestPath": "E:\\logh7-revival\\.omo\\captures\\live-qa-20260706-223048\\capture.manifest.json",
+  "exitCode": 0,
+  "signal": null,
+  "tsharkPath": "C:\\Program Files\\Wireshark\\tshark.exe",
+  "dumpcapPath": "C:\\Program Files\\Wireshark\\dumpcap.exe"
+}
+

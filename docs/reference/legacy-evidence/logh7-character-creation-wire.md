@@ -451,6 +451,113 @@ live-client QA and deeper recovery of original server defaults, not the basic ha
 
 PE pointer tables: lobby `0x765cb8` (12×u32), account `0x75ecb4` (9×u32).
 
+## 8. CONFIRMED S→C wire layouts for character-select (static RE, 2026-07-07)
+
+Both responses are **FIXED-SIZE little-endian raw structs**, message32-wrapped
+`[u32 LE 0][u16 BE code][body]`. Evidence chain (g7mtclient.exe, Ghidra 12.1.2):
+
+- `FUN_004b8b00(code, …)` (receive-size table): sets `*param_4` = fixed byte size,
+  `*param_3 = 0`, `return 1` for both codes → **FIXED RAW**, not a length-prefixed stream.
+  Entries: `0x1001 → 0x1c0 (448)`, `0x2004 → 0x6dc (1756)`, `0x0323 → 0x2d4 (724)`.
+- `FUN_004ba2b0` master dispatcher raw-copies the body verbatim into a clientBase struct:
+  `0x1001` → `0x70` dwords (448 B) to `+0x3584a4`; `0x2004` → `0x1b7` dwords (1756 B) to `+0x35975c`.
+- Field offsets/types come from the structured (de)serializers that walk the same struct:
+  `FUN_00409190` for 0x1001, `FUN_0043fd60` for 0x2004. In those walkers the vtable methods
+  decode types: `call *(vt+0x24)`=read **u8**, `*(vt+0x20)`=read **u16**, `*(vt+0x1c)`=read **u32**,
+  `FUN_00610420(p,1,0,2)`=read **1-byte** bitfield/bool. Name fields are `[u8 len][u16[N] UTF-16LE]`
+  **fixed slots** inside the raw image (len ≤ slot-count; slot is always the full N×2 bytes on the wire).
+
+### 8.1 `0x1001` ResponseInformationAccount — 448 B (0x1c0) — CONFIRMED
+Evidence: `FUN_004ba2b0`@0x4ba2b0 case 0x1001 (raw 0x70dw→+0x3584a4); `FUN_00409190`@0x409190 field walk.
+
+```
+off    type            field
+0x000  u8              state
+0x004  u32             fame
+0x008  u8              extension_character_count            (≤2)
+0x00c  extension_character[ i ] , base = 0x00c + i*0xcc  (stride 204):
+   +0x00 u32           session_id
+   +0x04 u8            power
+   +0x05 u8            camp
+   +0x06 u8            generated
+   +0x07 u8            sex
+   +0x08 u8            birthday_month
+   +0x09 u8            birthday_day
+   +0x0c u32           begin_session_age
+   +0x10 u8            state
+   +0x12 u16[8]        ability_8                             (16 B)
+   +0x22 u8  +0x24 u16[13]   lastname       (len@+0x22, slot 26 B)
+   +0x3e u8  +0x40 u16[13]   firstname
+   +0x5a u8  +0x5c u16[13]   display_name
+   +0x76 u8  +0x78 u16[13]   titlename
+   +0x92 u8  +0x94 u16[13]   flagship_name
+   +0xae u8            blood
+   +0xaf u8            rank
+   +0xb0 u32           face
+   +0xb4 u8            ending_count
+   +0xb8 u32           already_evaluation
+   +0xbc u32           final_evaluation
+   +0xc0 u32           already_fame
+   +0xc4 u32           final_fame
+   +0xc8 u8            friendship
+0x1a4  u32             (unnamed, DAT_0075edfc)
+0x1a8  u8              entry_character_count                 (≤5)
+0x1ac  u32[5]          entry_character_id                    (committed-char ids)
+= 0x1c0 (448)
+```
+Semantics: `extension_character[≤2]` = full draft-character records; `entry_character[≤5]` =
+committed-character **ids only** (their full data arrives via 0x2004 / 0x0323).
+
+### 8.2 `0x2004` LobbyResponseInformationCharacterCharge — 1756 B (0x6dc) — CONFIRMED framing + card record
+Evidence: `FUN_004b8b00` size 0x6dc; `FUN_004ba2b0`@0x4ba2b0 case 0x2004 (raw 0x1b7dw→+0x35975c);
+`FUN_0043fd60`@0x43fd60 field walk (count gate `*param_1 < 3`; entry loop stride `0x36c`, base `+4`).
+
+Top framing (arith-verified `4 + 2*0x36c = 0x6dc`):
+```
+0x000  u8    information_count            (≤2; gate `< 3`)
+0x001  u8[3] pad
+0x004  InformationCharacterCharge[ i ] , base = 0x004 + i*0x36c   (stride 0x36c = 876)
+```
+Each 876-B `InformationCharacterCharge` record (offsets are within-record `o`, i.e. add `4 + i*0x36c`):
+```
+o=0x004  InformationSession (primary/current session-character) sub-record:
+         +0x004 u16 ; +0x006 u8 ; +0x007 u8 name_len(≤13) +0x008 u16[13] name ;
+         +0x022 u8 len(≤65) +0x024 u16[65] longtext ; +0x0a8 u32 ;
+         +0x0c0 SessionPower[2] (stride 0x48): each u8 fields + u32×3 + u8 count(≤1) +
+                {name[u8+u16[13]], u16, bitfield, u8×4, u16×2, u32×3} ;
+         +0x13c u8 count(≤1) + {u16,u16,u32,u32,u32}@+0x140
+o=0x150  next_session inner InformationCharacterCharge  (u8 count(≤1)@0x150; mirror of primary
+         at +0x154.., SessionPower[2]@+0x200 stride 0x48, +0x28c u8 count(≤1)+20B) — “next_session”
+o=0x2a0  u8 (bitfield)
+o=0x2a1  u8 charged_character_count            (≤2)  ← drives the visible card(s)
+o=0x2a4  ChargedCharacter card fields  (full character, mirrors 0x1001 extension_character):
+         +0x2a4 u32 session_id
+         +0x2a8 u8  ; +0x2a9 u8  ; +0x2aa u8 ; +0x2ab u8 ; +0x2ac u8 ; +0x2ad u8
+                 (power/camp/sex/generated/birthday-ish bytes + a status byte — see NOTE)
+         +0x2b0 u32 (age/begin)
+         +0x2b4 u8  (bitfield/state)
+         +0x2b6 u16[8]  ability_8                (16 B)
+         +0x2c6 u8 len(≤13) +0x2c8 u16[13]  lastname
+         +0x2e2 u8 len(≤13) +0x2e4 u16[13]  firstname
+         +0x2fe u8 len(≤13) +0x300 u16[13]  display_name
+         +0x31a u8 len(≤13) +0x31c u16[13]  titlename
+         +0x336 u8 len(≤13) +0x338 u16[13]  flagship_name
+         +0x352 u8 blood
+         +0x353 u8 rank
+         +0x354 u32 face
+         +0x358 u8 count(≤1) + {u32,u32,u32,u32}@+0x35c   (ending/evaluation sub)
+o=0x36c  (record end)
+```
+**미확정 (next probe):** which exact byte in `+0x2a8..+0x2ad` is the card **enable/status**
+(§5 says card shows when `status ∈ {1,2}`). All six are single-byte fields read consecutively; the
+walker gives offsets but not names. Probe: decompile the card-render/enable gate in the
+`FUN_00594f20` scene FSM (or `FUN_00409190`-style INF serializer for
+`InformationChargedCharacter`) to read the label at each offset, **or** live-capture one real 0x2004
+and diff the six bytes against a known-enabled card. Server-side safe default: emit the primary
+character into `charged_character[0]` with the status byte = 1, zero the rest of the 1756-B image.
+
+---
+
 ## Related docs
 - `docs/logh7-character-record-wire.md` — the 0x0323/CommandGenerate SEND-form field table (overlaps §2).
 - `docs/logh7-info-records-wire.md` — 724-byte 0x0323 inbound record, base/planet records.

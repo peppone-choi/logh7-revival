@@ -1,0 +1,10 @@
+{
+  "session": "E:\\logh7-revival\\.omo\\ui-explorer\\login-harness-smoke-20260706-2255",
+  "exe": "E:\\logh7-revival\\artifacts\\logh7-install\\____________s___\\____\\exe\\g7mtclient.exe",
+  "clientPid": 43408,
+  "hwnd": 5509830,
+  "startedAt": "2026-07-06T23:13:40.499593+09:00",
+  "titleSubstring": null,
+  "stoppedAt": "2026-07-06T23:17:59.339392+09:00",
+  "clientStopped": true
+}

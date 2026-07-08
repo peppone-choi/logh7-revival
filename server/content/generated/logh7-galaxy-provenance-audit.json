@@ -1,0 +1,146 @@
+{
+  "id": "logh7-galaxy-provenance-audit",
+  "generatedAt": "2026-07-06T13:50:57.995Z",
+  "readyForUse": true,
+  "checks": {
+    "galaxyJson": {
+      "path": "server\\content\\galaxy.json",
+      "exists": true,
+      "sizeBytes": 103120,
+      "counts": {
+        "systemsTotal": 85,
+        "gameMdxCount": 79,
+        "manualOnlyCount": 1,
+        "virtualOverlayCount": 5,
+        "withGameXYCount": 79
+      },
+      "expectedCounts": {
+        "systemsTotal": 85,
+        "gameMdxCount": 79,
+        "manualOnlyCount": 1,
+        "virtualOverlayCount": 5,
+        "withGameXYCount": 79
+      },
+      "mismatches": []
+    },
+    "nullGalaxyMdx": {
+      "path": "artifacts\\logh7-install\\____________s___\\____\\data\\model\\strategy\\null_galaxy.mdx",
+      "exists": true,
+      "sizeBytes": 120558,
+      "mtime": "2026-07-05T05:07:13.886Z",
+      "ctime": "2026-07-05T05:07:13.886Z",
+      "sha256": "073f96eee8ce514eab9f57a991e1b7906cb3ea08c8d647beda4548bdd3652283"
+    },
+    "obsidianNote": {
+      "path": "E:/obsidian-tech-vault/1. 프로젝트/은하영웅전설 7 리바이벌/갤럭시 좌표 발견 (null_galaxy.mdx).md",
+      "exists": true,
+      "sizeBytes": 4904,
+      "mtime": "2026-07-06T06:25:47.695Z",
+      "sha256": "31ed994ec868e48692aa81cca3a03d7506f4e80f55d93cc626b66cee3298efcf",
+      "keyLineHits": [
+        {
+          "term": "null_galaxy.mdx",
+          "hitCount": 2,
+          "hits": [
+            {
+              "line": 8,
+              "text": "# 갤럭시 좌표 정본 발견 — null_galaxy.mdx"
+            },
+            {
+              "line": 10,
+              "text": "> 한 줄 결론: **성계 좌표·분광형의 게임 정본은 EXE가 아니라 자산 파일 `data/model/strategy/null_galaxy.mdx`(바이너리 씬그래프)에 있었다.** 매뉴얼 PDF는 이 게임 원본을 <1px로 재현한 것으로 독립 확증됐다."
+            }
+          ]
+        },
+        {
+          "term": "79",
+          "hitCount": 8,
+          "hits": [
+            {
+              "line": 31,
+              "text": "- **좌표**: 꼬리 transform 85레코드. X∈[−21.75, 23.75], Y∈[−10.75, 11.75], **전부 0.25 배수 = 그리드 양자화**, Z축 없음(2D 맵). 85노드 = 성계 79(`star_<NN>_<class>`) + 블랙홀 3 + 중성자성 3."
+            },
+            {
+              "line": 32,
+              "text": "- **분광형**: mdx 노드명 태그(O/B/A/F/G/K/M)가 정본. galaxy.json의 PDF 색상추정값은 **79중 35개 오류**. 결정적 근거: PDF는 O형 0개인데 mdx는 O형 2개를 정확히 명명."
+            },
+            {
+              "line": 36,
+              "text": "mdx 79별 ↔ galaxy.json 매뉴얼 cx/cy 79성계를 강체 정합했더니 **순수 90° 회전 하나**로 맞았다 (numpy 없이 정규방정식으로 독립 재계산):"
+            },
+            {
+              "line": 38,
+              "text": "- 아핀 적합 **R² = 0.99990 / 0.99998**, rmse **< 1px**, 79성계 1:1"
+            },
+            {
+              "line": 47,
+              "text": "| 매뉴얼 + 게임 둘 다 | 79 | mdx 좌표 확정 |"
+            },
+            {
+              "line": 56,
+              "text": "- 매칭 79성계에 `gameX`/`gameY`(mdx 0.25 그리드 원본), 교체된 `spectralClass`, `spectralClassSource=\"game-mdx:...\"`, `coordProvenance=\"game-mdx:...\"` 추가."
+            },
+            {
+              "line": 59,
+              "text": "- self-check 통과: game-mdx 79, O형=2, 분광형 히스토그램 M21/G19/F8/K17/A7/O2/B5."
+            },
+            {
+              "line": 66,
+              "text": "- 함종 179 (grp85)"
+            }
+          ]
+        },
+        {
+          "term": "フォルセティ",
+          "hitCount": 2,
+          "hits": [
+            {
+              "line": 48,
+              "text": "| 매뉴얼만 (フォルセティ) | 1 | 매뉴얼 좌표만, mdx 별노드 없음 |"
+            },
+            {
+              "line": 57,
+              "text": "- 미매칭: フォルセティ→`manual-page101`, 좌표없는 5→`virtual-overlay-P3`."
+            }
+          ]
+        },
+        {
+          "term": "virtual-overlay",
+          "hitCount": 1,
+          "hits": [
+            {
+              "line": 57,
+              "text": "- 미매칭: フォルセティ→`manual-page101`, 좌표없는 5→`virtual-overlay-P3`."
+            }
+          ]
+        },
+        {
+          "term": "_specialBodies",
+          "hitCount": 1,
+          "hits": [
+            {
+              "line": 58,
+              "text": "- 최상위 `_galaxy_provenance` 오브젝트 + `_specialBodies.bodies`(6천체 화면 투영좌표)."
+            }
+          ]
+        },
+        {
+          "term": "special-body",
+          "hitCount": 0,
+          "hits": []
+        },
+        {
+          "term": "specialBodies",
+          "hitCount": 1,
+          "hits": [
+            {
+              "line": 58,
+              "text": "- 최상위 `_galaxy_provenance` 오브젝트 + `_specialBodies.bodies`(6천체 화면 투영좌표)."
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "notes": []
+}

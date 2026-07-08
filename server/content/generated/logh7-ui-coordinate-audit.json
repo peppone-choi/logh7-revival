@@ -1,0 +1,609 @@
+{
+  "id": "logh7-ui-coordinate-audit",
+  "generatedAt": "2026-07-06T12:12:22.122Z",
+  "policy": {
+    "premise": "UI 좌표는 창 위치/해상도/EXE 해시/패치 상태에 묶인다. 숫자만 있으면 정본이 아니다.",
+    "promotionRule": "좌표 승격은 스크린샷 또는 라이브 캡처, EXE 해시, 창 모드, 클릭 대상 결과가 함께 있을 때만 한다."
+  },
+  "summary": {
+    "sourceCount": 8,
+    "missingSources": [],
+    "coordinateCandidateCount": 34,
+    "brokenEvidenceRefCount": 6,
+    "uiCatalogImageCount": 116
+  },
+  "sources": [
+    {
+      "path": "docs/reference/legacy-evidence/logh7-ui-coordinate-map.md",
+      "grade": "legacy-live-doc",
+      "exists": true,
+      "parseOk": true,
+      "sizeBytes": 5030,
+      "coordinateCandidateCount": 14,
+      "jsonCoordinates": [],
+      "textCoordinates": [
+        {
+          "raw": "(352, 347)",
+          "values": [
+            352,
+            347
+          ]
+        },
+        {
+          "raw": "(574, 407)",
+          "values": [
+            574,
+            407
+          ]
+        },
+        {
+          "raw": "(575, 465)",
+          "values": [
+            575,
+            465
+          ]
+        },
+        {
+          "raw": "(575, 523)",
+          "values": [
+            575,
+            523
+          ]
+        },
+        {
+          "raw": "(1105, 742)",
+          "values": [
+            1105,
+            742
+          ]
+        },
+        {
+          "raw": "(1090, 425)",
+          "values": [
+            1090,
+            425
+          ]
+        },
+        {
+          "raw": "(1021, 464)",
+          "values": [
+            1021,
+            464
+          ]
+        },
+        {
+          "raw": "(1021, 580)",
+          "values": [
+            1021,
+            580
+          ]
+        },
+        {
+          "raw": "(1184, 731)",
+          "values": [
+            1184,
+            731
+          ]
+        },
+        {
+          "raw": "(1015, 596)",
+          "values": [
+            1015,
+            596
+          ]
+        },
+        {
+          "raw": "(1080, 462)",
+          "values": [
+            1080,
+            462
+          ]
+        },
+        {
+          "raw": "(1080, 543)",
+          "values": [
+            1080,
+            543
+          ]
+        },
+        {
+          "raw": "(444, 344)",
+          "values": [
+            444,
+            344
+          ]
+        },
+        {
+          "raw": "(781, 506)",
+          "values": [
+            781,
+            506
+          ]
+        }
+      ],
+      "evidenceRefCount": 1,
+      "brokenEvidenceRefCount": 1,
+      "refs": [
+        {
+          "ref": ".omo/ui-explorer/lobby-confirm-inset-bc5e-final-20260629/shots/022-register.png",
+          "exists": false,
+          "candidates": [
+            ".omo/ui-explorer/lobby-confirm-inset-bc5e-final-20260629/shots/022-register.png"
+          ]
+        }
+      ],
+      "brokenRefs": [
+        {
+          "ref": ".omo/ui-explorer/lobby-confirm-inset-bc5e-final-20260629/shots/022-register.png",
+          "exists": false,
+          "candidates": [
+            ".omo/ui-explorer/lobby-confirm-inset-bc5e-final-20260629/shots/022-register.png"
+          ]
+        }
+      ],
+      "caution": "legacy coordinate requires matching EXE hash, window mode, resolution, and screenshot proof before use"
+    },
+    {
+      "path": "docs/reference/legacy-evidence/logh7-original-ui-reference-2026-06-23.md",
+      "grade": "visual-reference-doc",
+      "exists": true,
+      "parseOk": true,
+      "sizeBytes": 6122,
+      "coordinateCandidateCount": 0,
+      "jsonCoordinates": [],
+      "textCoordinates": [],
+      "evidenceRefCount": 1,
+      "brokenEvidenceRefCount": 1,
+      "refs": [
+        {
+          "ref": ".omo/reference/CATALOG.md",
+          "exists": false,
+          "candidates": [
+            ".omo/reference/CATALOG.md"
+          ]
+        }
+      ],
+      "brokenRefs": [
+        {
+          "ref": ".omo/reference/CATALOG.md",
+          "exists": false,
+          "candidates": [
+            ".omo/reference/CATALOG.md"
+          ]
+        }
+      ],
+      "caution": "legacy coordinate requires matching EXE hash, window mode, resolution, and screenshot proof before use"
+    },
+    {
+      "path": "docs/reference/legacy-evidence/logh7-lobby-char-delete-2026-06-26.md",
+      "grade": "legacy-live-doc",
+      "exists": true,
+      "parseOk": true,
+      "sizeBytes": 4517,
+      "coordinateCandidateCount": 6,
+      "jsonCoordinates": [],
+      "textCoordinates": [
+        {
+          "raw": "(150,200)",
+          "values": [
+            150,
+            200
+          ]
+        },
+        {
+          "raw": "(150,255)",
+          "values": [
+            150,
+            255
+          ]
+        },
+        {
+          "raw": "(150,375)",
+          "values": [
+            150,
+            375
+          ]
+        },
+        {
+          "raw": "(150,435)",
+          "values": [
+            150,
+            435
+          ]
+        },
+        {
+          "raw": "(150,495)",
+          "values": [
+            150,
+            495
+          ]
+        },
+        {
+          "raw": "(150,375)",
+          "values": [
+            150,
+            375
+          ]
+        }
+      ],
+      "evidenceRefCount": 0,
+      "brokenEvidenceRefCount": 0,
+      "refs": [],
+      "brokenRefs": [],
+      "caution": "legacy coordinate requires matching EXE hash, window mode, resolution, and screenshot proof before use"
+    },
+    {
+      "path": "server/content/manual/strategy-screen-layout.json",
+      "grade": "manual-derived-layout",
+      "exists": true,
+      "parseOk": true,
+      "sizeBytes": 6901,
+      "coordinateCandidateCount": 7,
+      "jsonCoordinates": [
+        {
+          "path": "layoutElements.0.index",
+          "value": 1
+        },
+        {
+          "path": "layoutElements.1.index",
+          "value": 2
+        },
+        {
+          "path": "layoutElements.2.index",
+          "value": 3
+        },
+        {
+          "path": "layoutElements.3.index",
+          "value": 4
+        },
+        {
+          "path": "layoutElements.4.index",
+          "value": 5
+        },
+        {
+          "path": "layoutElements.5.index",
+          "value": 6
+        },
+        {
+          "path": "layoutElements.6.index",
+          "value": 7
+        }
+      ],
+      "textCoordinates": [],
+      "evidenceRefCount": 1,
+      "brokenEvidenceRefCount": 1,
+      "refs": [
+        {
+          "ref": ".omo/work/manual-pages-101/page019.png",
+          "exists": false,
+          "candidates": [
+            ".omo/work/manual-pages-101/page019.png"
+          ]
+        }
+      ],
+      "brokenRefs": [
+        {
+          "ref": ".omo/work/manual-pages-101/page019.png",
+          "exists": false,
+          "candidates": [
+            ".omo/work/manual-pages-101/page019.png"
+          ]
+        }
+      ],
+      "caution": "manual layout describes UI roles; do not use as click coordinate without live calibration"
+    },
+    {
+      "path": "server/content/manual/strategy-ui-panels.json",
+      "grade": "manual-derived-layout",
+      "exists": true,
+      "parseOk": true,
+      "sizeBytes": 7997,
+      "coordinateCandidateCount": 5,
+      "jsonCoordinates": [
+        {
+          "path": "strategyScreenElements.0.index",
+          "value": 2
+        },
+        {
+          "path": "strategyScreenElements.1.index",
+          "value": 3
+        },
+        {
+          "path": "strategyScreenElements.2.index",
+          "value": 4
+        },
+        {
+          "path": "strategyScreenElements.3.index",
+          "value": 5
+        },
+        {
+          "path": "strategyScreenElements.4.index",
+          "value": 6
+        }
+      ],
+      "textCoordinates": [],
+      "evidenceRefCount": 2,
+      "brokenEvidenceRefCount": 2,
+      "refs": [
+        {
+          "ref": ".omo/work/manual-pages-101/page020.png",
+          "exists": false,
+          "candidates": [
+            ".omo/work/manual-pages-101/page020.png"
+          ]
+        },
+        {
+          "ref": ".omo/work/manual-pages-101/uncovered-texts.json",
+          "exists": false,
+          "candidates": [
+            ".omo/work/manual-pages-101/uncovered-texts.json"
+          ]
+        }
+      ],
+      "brokenRefs": [
+        {
+          "ref": ".omo/work/manual-pages-101/page020.png",
+          "exists": false,
+          "candidates": [
+            ".omo/work/manual-pages-101/page020.png"
+          ]
+        },
+        {
+          "ref": ".omo/work/manual-pages-101/uncovered-texts.json",
+          "exists": false,
+          "candidates": [
+            ".omo/work/manual-pages-101/uncovered-texts.json"
+          ]
+        }
+      ],
+      "caution": "manual layout describes UI roles; do not use as click coordinate without live calibration"
+    },
+    {
+      "path": "server/content/generated/logh7-ui-scene-catalog.json",
+      "grade": "generated-scene-catalog",
+      "exists": true,
+      "parseOk": true,
+      "sizeBytes": 6105,
+      "coordinateCandidateCount": 0,
+      "jsonCoordinates": [],
+      "textCoordinates": [],
+      "evidenceRefCount": 1,
+      "brokenEvidenceRefCount": 0,
+      "refs": [
+        {
+          "ref": "server/content/generated/logh7-scene-inventory.json",
+          "exists": true,
+          "candidates": [
+            "server/content/generated/logh7-scene-inventory.json"
+          ]
+        }
+      ],
+      "brokenRefs": [],
+      "caution": "legacy coordinate requires matching EXE hash, window mode, resolution, and screenshot proof before use"
+    },
+    {
+      "path": "server/content/generated/logh7-original-ui-image-manifest.json",
+      "grade": "generated-visual-manifest",
+      "exists": true,
+      "parseOk": true,
+      "sizeBytes": 1492,
+      "coordinateCandidateCount": 2,
+      "jsonCoordinates": [
+        {
+          "path": "items.0.tga.width",
+          "value": 640
+        },
+        {
+          "path": "items.0.tga.height",
+          "value": 480
+        }
+      ],
+      "textCoordinates": [],
+      "evidenceRefCount": 1,
+      "brokenEvidenceRefCount": 1,
+      "refs": [
+        {
+          "ref": ".omo/work/logh7-installed/data/image/spot/bg005.jpg",
+          "exists": false,
+          "candidates": [
+            ".omo/work/logh7-installed/data/image/spot/bg005.jpg"
+          ]
+        }
+      ],
+      "brokenRefs": [
+        {
+          "ref": ".omo/work/logh7-installed/data/image/spot/bg005.jpg",
+          "exists": false,
+          "candidates": [
+            ".omo/work/logh7-installed/data/image/spot/bg005.jpg"
+          ]
+        }
+      ],
+      "caution": "legacy coordinate requires matching EXE hash, window mode, resolution, and screenshot proof before use"
+    },
+    {
+      "path": "server/content/generated/logh7-ui-scene-remaster-gameplay-boundary.json",
+      "grade": "remaster-boundary",
+      "exists": true,
+      "parseOk": true,
+      "sizeBytes": 5578,
+      "coordinateCandidateCount": 0,
+      "jsonCoordinates": [],
+      "textCoordinates": [],
+      "evidenceRefCount": 6,
+      "brokenEvidenceRefCount": 0,
+      "refs": [
+        {
+          "ref": "server/content/generated/logh7-empire-ship-reference-manifest.json",
+          "exists": true,
+          "candidates": [
+            "server/content/generated/logh7-empire-ship-reference-manifest.json"
+          ]
+        },
+        {
+          "ref": "server/content/generated/logh7-imperial-crest-mask-manifest.json",
+          "exists": true,
+          "candidates": [
+            "server/content/generated/logh7-imperial-crest-mask-manifest.json"
+          ]
+        },
+        {
+          "ref": "server/content/generated/logh7-operation-catalog.json",
+          "exists": true,
+          "candidates": [
+            "server/content/generated/logh7-operation-catalog.json"
+          ]
+        },
+        {
+          "ref": "server/content/generated/logh7-remaster-provenance-manifest.json",
+          "exists": true,
+          "candidates": [
+            "server/content/generated/logh7-remaster-provenance-manifest.json"
+          ]
+        },
+        {
+          "ref": "server/content/generated/logh7-runtime-boundary-manifest.json",
+          "exists": true,
+          "candidates": [
+            "server/content/generated/logh7-runtime-boundary-manifest.json"
+          ]
+        },
+        {
+          "ref": "server/content/generated/logh7-scene-inventory.json",
+          "exists": true,
+          "candidates": [
+            "server/content/generated/logh7-scene-inventory.json"
+          ]
+        }
+      ],
+      "brokenRefs": [],
+      "caution": "legacy coordinate requires matching EXE hash, window mode, resolution, and screenshot proof before use"
+    }
+  ],
+  "uiCatalogImages": [
+    "docs/reference/ui-catalog/4gamer.net/08a50b_20040123223724_9.jpg",
+    "docs/reference/ui-catalog/4gamer.net/0a235e_20030924222608_7.jpg",
+    "docs/reference/ui-catalog/4gamer.net/15ffc2_20040123223724_1.jpg",
+    "docs/reference/ui-catalog/4gamer.net/16ac59_20040123223724_3.jpg",
+    "docs/reference/ui-catalog/4gamer.net/1b0d4e_20040427162045_4.jpg",
+    "docs/reference/ui-catalog/4gamer.net/24be39_20030927063935_8.jpg",
+    "docs/reference/ui-catalog/4gamer.net/30a172_20040427162045_6.jpg",
+    "docs/reference/ui-catalog/4gamer.net/3205fd_20040427162045_2.jpg",
+    "docs/reference/ui-catalog/4gamer.net/3761b0_20030924222608_1.jpg",
+    "docs/reference/ui-catalog/4gamer.net/3da49d_20030924222608_9.jpg",
+    "docs/reference/ui-catalog/4gamer.net/3f626f_20040427162045_3.jpg",
+    "docs/reference/ui-catalog/4gamer.net/4ee847_20030927063935_7.jpg",
+    "docs/reference/ui-catalog/4gamer.net/5670c9_20040123223724_4.jpg",
+    "docs/reference/ui-catalog/4gamer.net/613ca1_20030929024654.jpg",
+    "docs/reference/ui-catalog/4gamer.net/6412a5_20030924222608_5.jpg",
+    "docs/reference/ui-catalog/4gamer.net/64cd06_20040123223724_7.jpg",
+    "docs/reference/ui-catalog/4gamer.net/690443_20030927063935_9.jpg",
+    "docs/reference/ui-catalog/4gamer.net/76d070_20040227203229.jpg",
+    "docs/reference/ui-catalog/4gamer.net/76d502_20040218211020.jpg",
+    "docs/reference/ui-catalog/4gamer.net/8ef19d_20030927063935_6.jpg",
+    "docs/reference/ui-catalog/4gamer.net/92f302_20030924222608_4.jpg",
+    "docs/reference/ui-catalog/4gamer.net/98a78d_20030927063935_4.jpg",
+    "docs/reference/ui-catalog/4gamer.net/9f37be_20030927063935_5.jpg",
+    "docs/reference/ui-catalog/4gamer.net/a6b82b_20030924222608_2.jpg",
+    "docs/reference/ui-catalog/4gamer.net/a8c2ea_20030924222608_6.jpg",
+    "docs/reference/ui-catalog/4gamer.net/b204fd_20040427162045_5.jpg",
+    "docs/reference/ui-catalog/4gamer.net/b2a169_20040213224015.jpg",
+    "docs/reference/ui-catalog/4gamer.net/c22849_20040123223724_6.jpg",
+    "docs/reference/ui-catalog/4gamer.net/c25be7_20040427162045_1.jpg",
+    "docs/reference/ui-catalog/4gamer.net/d3c7d4_20040123223724_8.jpg",
+    "docs/reference/ui-catalog/4gamer.net/d5b790_20030924222608_8.jpg",
+    "docs/reference/ui-catalog/4gamer.net/dcdcb1_20030924222608_3.jpg",
+    "docs/reference/ui-catalog/4gamer.net/ecfe7e_20040123223724_2.jpg",
+    "docs/reference/ui-catalog/4gamer.net/f26143_20040123223724_5.jpg",
+    "docs/reference/ui-catalog/4gamer.net/fd10b6_20030927063935_1.jpg",
+    "docs/reference/ui-catalog/cdn.gamemeca.com/023d59_en005.jpg",
+    "docs/reference/ui-catalog/cdn.gamemeca.com/053630_uu2.jpg",
+    "docs/reference/ui-catalog/cdn.gamemeca.com/0ddd2b_uu1.jpg",
+    "docs/reference/ui-catalog/cdn.gamemeca.com/0e7836_galaxy_00.jpg",
+    "docs/reference/ui-catalog/cdn.gamemeca.com/146cac_en001.jpg",
+    "docs/reference/ui-catalog/cdn.gamemeca.com/396106_japan-online-img-8.jpg",
+    "docs/reference/ui-catalog/cdn.gamemeca.com/4214cc_uu2.jpg",
+    "docs/reference/ui-catalog/cdn.gamemeca.com/431f46_uu1.jpg",
+    "docs/reference/ui-catalog/cdn.gamemeca.com/4f0f7c__1.JPG",
+    "docs/reference/ui-catalog/cdn.gamemeca.com/53a412_en011.jpg",
+    "docs/reference/ui-catalog/cdn.gamemeca.com/6749be_en010.jpg",
+    "docs/reference/ui-catalog/cdn.gamemeca.com/7912eb_uu1.jpg",
+    "docs/reference/ui-catalog/cdn.gamemeca.com/b739e9_uu3.jpg",
+    "docs/reference/ui-catalog/cdn.gamemeca.com/b87e87_en004.jpg",
+    "docs/reference/ui-catalog/cdn.gamemeca.com/b9bf89_saaaap_1.jpg",
+    "docs/reference/ui-catalog/cdn.gamemeca.com/c7dfb3_saaaap_2.jpg",
+    "docs/reference/ui-catalog/cdn.gamemeca.com/ee6e53_en008.jpg",
+    "docs/reference/ui-catalog/cdn.gamemeca.com/f0e0cb_japan-online-img-9.jpg",
+    "docs/reference/ui-catalog/cdn.gamemeca.com/f38c76_1.jpg",
+    "docs/reference/ui-catalog/dengekionline.com/239ff0_6712_20030924_05_gineiden04.jpg",
+    "docs/reference/ui-catalog/dengekionline.com/394457_7589_20040216_04_gineiden.jpg",
+    "docs/reference/ui-catalog/dengekionline.com/887d53_6712_20030924_05_gineiden03.jpg",
+    "docs/reference/ui-catalog/game.watch.impress.co.jp/01592a_gin03.jpg",
+    "docs/reference/ui-catalog/game.watch.impress.co.jp/32f043_ginei01.jpg",
+    "docs/reference/ui-catalog/game.watch.impress.co.jp/4a0bc2_gin11.jpg",
+    "docs/reference/ui-catalog/game.watch.impress.co.jp/4a6156_ginei07.jpg",
+    "docs/reference/ui-catalog/game.watch.impress.co.jp/4aa325_gin02.jpg",
+    "docs/reference/ui-catalog/game.watch.impress.co.jp/4fb4aa_ginei04.jpg",
+    "docs/reference/ui-catalog/game.watch.impress.co.jp/501271_ginei05.jpg",
+    "docs/reference/ui-catalog/game.watch.impress.co.jp/7a71e3_ginei02.jpg",
+    "docs/reference/ui-catalog/game.watch.impress.co.jp/7bd4c2_ginei03.jpg",
+    "docs/reference/ui-catalog/game.watch.impress.co.jp/7c6ba2_ginei06.jpg",
+    "docs/reference/ui-catalog/game.watch.impress.co.jp/7df98b_gin09.jpg",
+    "docs/reference/ui-catalog/game.watch.impress.co.jp/8c179d_ginei04.jpg",
+    "docs/reference/ui-catalog/game.watch.impress.co.jp/8f8a73_gin12.jpg",
+    "docs/reference/ui-catalog/game.watch.impress.co.jp/923239_ginei01.jpg",
+    "docs/reference/ui-catalog/game.watch.impress.co.jp/ae1da8_gin10.jpg",
+    "docs/reference/ui-catalog/game.watch.impress.co.jp/b3dc18_ginei03.jpg",
+    "docs/reference/ui-catalog/game.watch.impress.co.jp/c45f85_ginei01.jpg",
+    "docs/reference/ui-catalog/game.watch.impress.co.jp/cd9acc_ginei03.jpg",
+    "docs/reference/ui-catalog/game.watch.impress.co.jp/d405b9_gin07.jpg",
+    "docs/reference/ui-catalog/game.watch.impress.co.jp/d41663_ginei08.jpg",
+    "docs/reference/ui-catalog/game.watch.impress.co.jp/d7c420_ginei04.jpg",
+    "docs/reference/ui-catalog/game.watch.impress.co.jp/e75788_ginei02.jpg",
+    "docs/reference/ui-catalog/game.watch.impress.co.jp/e869e0_gin08.jpg",
+    "docs/reference/ui-catalog/game.watch.impress.co.jp/ec408c_ginei05.jpg",
+    "docs/reference/ui-catalog/game.watch.impress.co.jp/f594ae_ginei06.jpg",
+    "docs/reference/ui-catalog/game.watch.impress.co.jp/f843b0_ginei02.jpg",
+    "docs/reference/ui-catalog/gamemeca/en001.jpg",
+    "docs/reference/ui-catalog/gamemeca/en004.jpg",
+    "docs/reference/ui-catalog/gamemeca/en005.jpg",
+    "docs/reference/ui-catalog/gamemeca/en008.jpg",
+    "docs/reference/ui-catalog/gamemeca/en010.jpg",
+    "docs/reference/ui-catalog/gamemeca/en011.jpg",
+    "docs/reference/ui-catalog/gamemeca/uu1.jpg",
+    "docs/reference/ui-catalog/gamemeca/uu2.jpg",
+    "docs/reference/ui-catalog/gamemeca/uu3.jpg",
+    "docs/reference/ui-catalog/image.itmedia.co.jp/1f9304_gi03.jpg",
+    "docs/reference/ui-catalog/image.itmedia.co.jp/4cdb5e_gi05.jpg",
+    "docs/reference/ui-catalog/image.itmedia.co.jp/a3d55c_gi08.jpg",
+    "docs/reference/ui-catalog/image.itmedia.co.jp/ab1dcb_gi02.jpg",
+    "docs/reference/ui-catalog/image.itmedia.co.jp/d7bb74_gi01.jpg",
+    "docs/reference/ui-catalog/toshichan.my.coocan.jp/0285b9_tactics.jpg",
+    "docs/reference/ui-catalog/toshichan.my.coocan.jp/0572d0_tactics2.jpg",
+    "docs/reference/ui-catalog/toshichan.my.coocan.jp/0a2715_stay.jpg",
+    "docs/reference/ui-catalog/toshichan.my.coocan.jp/140660_card.jpg",
+    "docs/reference/ui-catalog/toshichan.my.coocan.jp/318cd7_captain.jpg",
+    "docs/reference/ui-catalog/toshichan.my.coocan.jp/6a7297_search.jpg",
+    "docs/reference/ui-catalog/toshichan.my.coocan.jp/74fcc3_strategy.jpg",
+    "docs/reference/ui-catalog/toshichan.my.coocan.jp/80952a_lobby.jpg",
+    "docs/reference/ui-catalog/toshichan.my.coocan.jp/8b7313_rader.jpg",
+    "docs/reference/ui-catalog/toshichan.my.coocan.jp/8dabea_compnel2.jpg",
+    "docs/reference/ui-catalog/toshichan.my.coocan.jp/976091_map.jpg",
+    "docs/reference/ui-catalog/toshichan.my.coocan.jp/c8858b_compnel1.jpg",
+    "docs/reference/ui-catalog/toshichan.my.coocan.jp/cc01e5_warp.jpg",
+    "docs/reference/ui-catalog/toshichan.my.coocan.jp/d1e080_compnel3.jpg",
+    "docs/reference/ui-catalog/toshichan.my.coocan.jp/ddcc72_status.jpg",
+    "docs/reference/ui-catalog/toshichan.my.coocan.jp/e39b6b_chat.jpg",
+    "docs/reference/ui-catalog/toshichan.my.coocan.jp/e80459_personal.jpg",
+    "docs/reference/ui-catalog/toshichan.my.coocan.jp/f16bfa_panel.jpg",
+    "docs/reference/ui-catalog/toshichan.my.coocan.jp/f84aa5_return.jpg"
+  ],
+  "nextLiveQaChecklist": [
+    "record EXE sha256 before UI coordinate capture",
+    "record window mode and client rectangle",
+    "capture screenshot before click",
+    "click center and edge cases for each target",
+    "capture screenshot/log after click to prove target result",
+    "store coordinates only with source screenshot/session id"
+  ]
+}

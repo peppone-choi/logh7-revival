@@ -1,0 +1,17 @@
+﻿{
+    "session":  "live-qa-20260706-223048",
+    "exe":  "E:\\logh7-revival\\artifacts\\logh7-install\\____________s___\\____\\exe\\g7mtclient.exe",
+    "evidenceDir":  "E:\\logh7-revival\\.omo\\live-qa\\live-qa-20260706-223048",
+    "capturePid":  1104,
+    "captureExitCode":  0,
+    "clientPid":  42796,
+    "clientStartedAt":  "2026-07-06T22:30:49.8998603+09:00",
+    "desktopScreenshot":  "E:\\logh7-revival\\.omo\\live-qa\\live-qa-20260706-223048\\desktop-after-launch.png",
+    "captureManifest":  "E:\\logh7-revival\\.omo\\captures\\live-qa-20260706-223048\\capture.manifest.json",
+    "capturePcap":  "E:\\logh7-revival\\.omo\\captures\\live-qa-20260706-223048\\capture.pcapng",
+    "captureStdout":  "E:\\logh7-revival\\.omo\\live-qa\\live-qa-20260706-223048\\capture.stdout.txt",
+    "captureStderr":  "E:\\logh7-revival\\.omo\\live-qa\\live-qa-20260706-223048\\capture.stderr.txt",
+    "remainingG7MTClient":  [
+
+                            ]
+}

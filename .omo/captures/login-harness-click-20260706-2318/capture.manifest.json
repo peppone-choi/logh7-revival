@@ -1,0 +1,38 @@
+{
+  "schema": "logh7-live-capture-manifest-v1",
+  "sessionId": "login-harness-click-20260706-2318",
+  "captureRoot": "E:\\logh7-revival\\.omo\\captures",
+  "startTimestamp": "2026-07-06T14:18:30.809Z",
+  "endTimestamp": "2026-07-06T14:19:50.872Z",
+  "outputPath": "E:\\logh7-revival\\.omo\\captures\\login-harness-click-20260706-2318\\capture.pcapng",
+  "exitCode": 0,
+  "command": [
+    "C:\\Program Files\\Wireshark\\dumpcap.exe",
+    "-i",
+    "\\Device\\NPF_Loopback",
+    "-w",
+    "E:\\logh7-revival\\.omo\\captures\\login-harness-click-20260706-2318\\capture.pcapng",
+    "-a",
+    "duration:80",
+    "-f",
+    "port 47900"
+  ],
+  "tools": {
+    "tshark": {
+      "path": "C:\\Program Files\\Wireshark\\tshark.exe",
+      "version": "TShark (Wireshark) 4.4.6 (v4.4.6-0-gaebb20483889)."
+    },
+    "dumpcap": {
+      "path": "C:\\Program Files\\Wireshark\\dumpcap.exe",
+      "version": "Dumpcap (Wireshark) 4.4.6 (v4.4.6-0-gaebb20483889)."
+    }
+  },
+  "interface": {
+    "arg": "\\Device\\NPF_Loopback",
+    "explicit": true
+  },
+  "filter": "port 47900",
+  "notes": [
+    "Capturing on 'Adapter for loopback traffic capture'\r\nFile: E:\\logh7-revival\\.omo\\captures\\login-harness-click-20260706-2318\\capture.pcapng\r\n\rPackets captured: 0\r\nPackets received/dropped on interface 'Adapter for loopback traffic capture': 0/0 (pcap:0/dumpcap:0/flushed:0/ps_ifdrop:0) (0.0%)"
+  ]
+}

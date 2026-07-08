@@ -1,0 +1,7 @@
+{
+  "tool_name": "Bash",
+  "tool_input_preview": "{\"command\":\"rtk git diff --stat HEAD -- server/src/server/logh7-login-harness-server.mjs 2>&1; echo \\\"---DISPATCH---\\\"; rtk grep -n \\\"lobbyAccount\\\\|handleLobbyInner\\\\|buildLobbyLoginOkFrame\\\\|decodeL...",
+  "error": "Exit code 2\n\n---DISPATCH---\nrg: server/src/server/logh7-login-harness-server.mjs: IO error for operation on server/src/server/logh7-login-harness-server.mjs: 지정된 경로를 찾을 수 없습니다. (os error 3)\n0 matches for 'lobbyAccount\\|handleLobbyInner\\|buildLobbyLoginOkFrame\\|decodeLobbyLoginRequest\\|LOBBY_SESSION_INIT\\|LOBBY_LOGIN'",
+  "timestamp": "2026-07-07T08:35:56.481Z",
+  "retry_count": 1
+}

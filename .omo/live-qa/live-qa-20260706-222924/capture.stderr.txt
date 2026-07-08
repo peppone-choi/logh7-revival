@@ -1,0 +1,2 @@
+﻿dumpcap was not found. Pass --dumpcap <full path> or add it to PATH.
+

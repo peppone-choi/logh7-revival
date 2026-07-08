@@ -1,0 +1,7 @@
+{"ts":"2026-07-06T14:24:28.172Z","event":"connection-opened","connectionId":1,"remoteAddress":"127.0.0.1","remotePort":4135}
+{"ts":"2026-07-06T14:24:28.174Z","event":"frame-received","connectionId":1,"codeHex":"0x0034","length":26,"bodyBytes":24,"rawFrameHex":"001a0034c3ed2650412607ad5ee7ca3cfabab27b854c2a18791415c2"}
+{"ts":"2026-07-06T14:24:28.188Z","event":"phase3-sent","connectionId":1,"codeHex":"0x0035","mode":"replayed","transportKeySource":"legacy-default","decipherKeySource":"legacy-default","phase1KeyBytes":16,"sequence":1,"frameBytes":36}
+{"ts":"2026-07-06T14:24:28.193Z","event":"frame-received","connectionId":1,"codeHex":"0x0036","length":10,"bodyBytes":8,"rawFrameHex":"000a003629af89de470c6280"}
+{"ts":"2026-07-06T14:24:28.194Z","event":"frame-received","connectionId":1,"codeHex":"0x0030","length":50,"bodyBytes":48,"rawFrameHex":"003200302d5bc345046b671a8ca21311646391e597ecd2d2eb63558a840b4047bcb92b335b818257179701cdcae31fbe5d7a5231"}
+{"ts":"2026-07-06T14:34:05.313Z","event":"socket-error","connectionId":1,"message":"read ECONNRESET"}
+{"ts":"2026-07-06T14:34:05.314Z","event":"connection-closed","connectionId":1,"hadError":true}

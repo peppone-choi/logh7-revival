@@ -1,0 +1,42 @@
+{
+  "version": 1,
+  "entries": {
+    "79a93d4a2f8f50b95f852280616242fee1855dc99a3c75211917f55e72e95fae": {
+      "last_emitted_at_ms": 1783413334934,
+      "message": "Use parallel execution for independent tasks. Use run_in_background for long operations (npm install, builds, tests)."
+    },
+    "445ed27a3872b681d98190bae61ccb84954e1bc4e140df5370be958dee776b3a": {
+      "last_emitted_at_ms": 1783413086345,
+      "message": "Verify changes work after editing. Test functionality before marking complete."
+    },
+    "466399dafa2d20f60587180bad0a07358eb7f2bce724df0ff682f038ad33f5ad": {
+      "last_emitted_at_ms": 1783412887019,
+      "message": "Read multiple files in parallel when possible for faster analysis."
+    },
+    "0367de57be6c45ab59a7b3091a7ca2fc0b46c9f0a7116a1c23642e1235a5e1b7": {
+      "last_emitted_at_ms": 1783412877422,
+      "message": "Spawning agent: server-dev (opus) | Task: Wire lobby router into harness server"
+    },
+    "459c54e5f35d6a58dcd90d2aecc21fa6d1f35d241bc5b134c506f87dc7b6d67b": {
+      "last_emitted_at_ms": 1783412800552,
+      "message": "Combine searches in parallel when investigating multiple patterns."
+    },
+    "56c7bac1ca84090a999f6555a440b4707966ea81a3ab2dc10e09d3abae3bd6ba": {
+      "last_emitted_at_ms": 1783410504768,
+      "message": "Spawning agent: oh-my-claudecode:executor (sonnet) [BACKGROUND] | Task: Add hardware input path to tooling"
+    },
+    "99410cc4ce67f0e0b807d06293bf83062de26a3af2d5453069763c392af27bdc": {
+      "last_emitted_at_ms": 1783410475209,
+      "message": "Spawning agent: executor (sonnet) [BACKGROUND] | Task: Add hardware input path to tooling"
+    },
+    "6fe5df4aa258cd96018ec5b5e522af6a97e540686d084482b9410ac0346e4b4f": {
+      "last_emitted_at_ms": 1783410213557,
+      "message": "Spawning agent: re-analyst (opus) [BACKGROUND] | Task: RE account roster + card list layout"
+    },
+    "cd8ae5c2523de3fbf06d8360d94ecbca1aa327f4746afa25f7b135ac65c399a7": {
+      "last_emitted_at_ms": 1783410191175,
+      "message": "Spawning agent: server-dev (sonnet) [BACKGROUND] | Task: Wire lobby character session handler"
+    }
+  },
+  "updated_at": "2026-07-07T08:35:34.934Z"
+}

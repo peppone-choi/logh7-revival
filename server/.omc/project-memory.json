@@ -1,0 +1,248 @@
+{
+  "version": "1.0.0",
+  "lastScanned": 1783407480187,
+  "projectRoot": "E:\\logh7-revival\\server",
+  "techStack": {
+    "languages": [
+      {
+        "name": "JavaScript/TypeScript",
+        "version": ">=20",
+        "confidence": "high",
+        "markers": [
+          "package.json"
+        ]
+      }
+    ],
+    "frameworks": [],
+    "packageManager": "npm",
+    "runtime": "Node.js 20"
+  },
+  "build": {
+    "buildCommand": null,
+    "testCommand": "npm test",
+    "lintCommand": null,
+    "devCommand": null,
+    "scripts": {
+      "test": "node --test"
+    }
+  },
+  "conventions": {
+    "namingStyle": null,
+    "importStyle": null,
+    "testPattern": null,
+    "fileOrganization": null
+  },
+  "structure": {
+    "isMonorepo": false,
+    "workspaces": [],
+    "mainDirectories": [
+      "src",
+      "tests"
+    ],
+    "gitBranches": {
+      "defaultBranch": "main",
+      "branchingStrategy": null
+    }
+  },
+  "customNotes": [],
+  "directoryMap": {
+    "content": {
+      "path": "content",
+      "purpose": null,
+      "fileCount": 14,
+      "lastAccessed": 1783407480161,
+      "keyFiles": [
+        "auto-production.json",
+        "canon-face-registry.json",
+        "character-portraits-complete.json",
+        "character-portraits.json",
+        "character-roster.json"
+      ]
+    },
+    "src": {
+      "path": "src",
+      "purpose": "Source code",
+      "fileCount": 0,
+      "lastAccessed": 1783407480162,
+      "keyFiles": []
+    },
+    "tests": {
+      "path": "tests",
+      "purpose": "Test files",
+      "fileCount": 9,
+      "lastAccessed": 1783407480168,
+      "keyFiles": [
+        "exe-patch.test.mjs",
+        "logh7-capture.test.mjs",
+        "logh7-child-codec.test.mjs",
+        "logh7-envelope-0030.test.mjs",
+        "logh7-frame-stream.test.mjs"
+      ]
+    }
+  },
+  "hotPaths": [
+    {
+      "path": "src/server/logh7-login-harness-server.mjs",
+      "accessCount": 13,
+      "lastAccessed": 1783413131857,
+      "type": "file"
+    },
+    {
+      "path": "src/server/logh7-character-codec.mjs",
+      "accessCount": 8,
+      "lastAccessed": 1783413176797,
+      "type": "file"
+    },
+    {
+      "path": "C:/Users/user/AppData/Local/Temp/claude/E--logh7-revival/b39fa4a3-5d1a-4f82-a6ff-d36d5263c20b/scratchpad/targeted-decomp.c",
+      "accessCount": 6,
+      "lastAccessed": 1783411024930,
+      "type": "file"
+    },
+    {
+      "path": "src/server/logh7-envelope-0030.mjs",
+      "accessCount": 4,
+      "lastAccessed": 1783412920166,
+      "type": "file"
+    },
+    {
+      "path": "src/server/logh7-login-response.mjs",
+      "accessCount": 4,
+      "lastAccessed": 1783412920775,
+      "type": "file"
+    },
+    {
+      "path": "src/server/logh7-transport-0030.mjs",
+      "accessCount": 3,
+      "lastAccessed": 1783410196316,
+      "type": "file"
+    },
+    {
+      "path": "C:/Users/user/.claude/settings.json",
+      "accessCount": 2,
+      "lastAccessed": 1783407572262,
+      "type": "file"
+    },
+    {
+      "path": "src/server/logh7-child-codec.mjs",
+      "accessCount": 2,
+      "lastAccessed": 1783409030550,
+      "type": "file"
+    },
+    {
+      "path": "C:/Users/user/.claude/projects/E--logh7-revival/memory/fable-cost-haiku-preference-2026-07-07.md",
+      "accessCount": 2,
+      "lastAccessed": 1783409153629,
+      "type": "file"
+    },
+    {
+      "path": "tests/logh7-character-codec.test.mjs",
+      "accessCount": 2,
+      "lastAccessed": 1783410201211,
+      "type": "file"
+    },
+    {
+      "path": "C:/Users/user/AppData/Local/Temp/claude/E--logh7-revival/b39fa4a3-5d1a-4f82-a6ff-d36d5263c20b/scratchpad/DecompAddrs2.java",
+      "accessCount": 2,
+      "lastAccessed": 1783411363097,
+      "type": "file"
+    },
+    {
+      "path": "src/server/logh7-lobby-session.mjs",
+      "accessCount": 2,
+      "lastAccessed": 1783412890066,
+      "type": "file"
+    },
+    {
+      "path": "src/server/logh7-character-store.mjs",
+      "accessCount": 2,
+      "lastAccessed": 1783412921351,
+      "type": "file"
+    },
+    {
+      "path": "C:/Users/user/.claude/projects/E--logh7-revival/memory/logh7-tool-inventory-2026-07-07.md",
+      "accessCount": 1,
+      "lastAccessed": 1783408066730,
+      "type": "file"
+    },
+    {
+      "path": "C:/Users/user/.claude/projects/E--logh7-revival/memory/MEMORY.md",
+      "accessCount": 1,
+      "lastAccessed": 1783408075988,
+      "type": "file"
+    },
+    {
+      "path": "package.json",
+      "accessCount": 1,
+      "lastAccessed": 1783408350276,
+      "type": "file"
+    },
+    {
+      "path": "src/server/logh7-frame-stream.mjs",
+      "accessCount": 1,
+      "lastAccessed": 1783408666831,
+      "type": "file"
+    },
+    {
+      "path": "src/server/logh7-gin7-credential.mjs",
+      "accessCount": 1,
+      "lastAccessed": 1783408667366,
+      "type": "file"
+    },
+    {
+      "path": "tests/logh7-login-response.test.mjs",
+      "accessCount": 1,
+      "lastAccessed": 1783409069252,
+      "type": "file"
+    },
+    {
+      "path": "tests/logh7-transport-0030.test.mjs",
+      "accessCount": 1,
+      "lastAccessed": 1783410206139,
+      "type": "file"
+    },
+    {
+      "path": "tests/logh7-character-store.test.mjs",
+      "accessCount": 1,
+      "lastAccessed": 1783410376177,
+      "type": "file"
+    },
+    {
+      "path": "tests/logh7-lobby-session.test.mjs",
+      "accessCount": 1,
+      "lastAccessed": 1783410431951,
+      "type": "file"
+    },
+    {
+      "path": "C:/Users/user/AppData/Local/Temp/claude/E--logh7-revival/b39fa4a3-5d1a-4f82-a6ff-d36d5263c20b/scratchpad/DecompAddrs.java",
+      "accessCount": 1,
+      "lastAccessed": 1783410500100,
+      "type": "file"
+    },
+    {
+      "path": "C:/Users/user/AppData/Local/Temp/claude/E--logh7-revival/b39fa4a3-5d1a-4f82-a6ff-d36d5263c20b/scratchpad/targeted-decomp2.c",
+      "accessCount": 1,
+      "lastAccessed": 1783411680900,
+      "type": "file"
+    },
+    {
+      "path": "src/server/logh7-lobby-login.mjs",
+      "accessCount": 1,
+      "lastAccessed": 1783412890506,
+      "type": "file"
+    },
+    {
+      "path": "tests/logh7-login-harness-server.test.mjs",
+      "accessCount": 1,
+      "lastAccessed": 1783412921503,
+      "type": "file"
+    },
+    {
+      "path": "tests/logh7-lobby-harness-dispatch.test.mjs",
+      "accessCount": 1,
+      "lastAccessed": 1783413243154,
+      "type": "file"
+    }
+  ],
+  "userDirectives": []
+}

@@ -1,0 +1,20 @@
+{"event":"harness-listening","host":"127.0.0.1","port":47900,"address":{"address":"127.0.0.1","family":"IPv4","port":47900},"tracePath":"E:\\logh7-revival\\.omo\\live-qa\\login-hw-20260707\\trace.jsonl"}
+{"ts":"2026-07-07T08:02:27.550Z","event":"connection-opened","connectionId":1,"remoteAddress":"127.0.0.1","remotePort":8466}
+{"ts":"2026-07-07T08:02:27.552Z","event":"frame-received","connectionId":1,"codeHex":"0x0034","length":26,"bodyBytes":24,"rawFrameHex":"001a003415405354c8f0bb201c45a4191fd6c9fdfd6e65c7545a8f7c"}
+{"ts":"2026-07-07T08:02:27.563Z","event":"phase3-sent","connectionId":1,"codeHex":"0x0035","mode":"replayed","transportKeySource":"legacy-default","decipherKeySource":"legacy-default","phase1KeyBytes":16,"sequence":1,"frameBytes":36}
+{"ts":"2026-07-07T08:02:27.565Z","event":"frame-received","connectionId":1,"codeHex":"0x0036","length":10,"bodyBytes":8,"rawFrameHex":"000a003629af89de470c6280"}
+{"ts":"2026-07-07T08:02:27.565Z","event":"frame-received","connectionId":1,"codeHex":"0x0030","length":58,"bodyBytes":56,"rawFrameHex":"003a00309dca89b1453a0c8efddd28637b0b5453508faddd4f2f67c3762b77f22913ee322e7b028a6f60ce4b4ddf9f3ff5d46845ee91e901a9e36c65"}
+{"ts":"2026-07-07T08:02:27.573Z","event":"0030-decoded","connectionId":1,"id":1,"innerLen":41,"checksum":18287,"innerCodeHex":"0x7000","credential":{"magic":"GIN7","version":1,"flags":0,"account":"test01","accountUnits":7,"passwordUnits":7,"passwordRedacted":true}}
+{"ts":"2026-07-07T08:02:27.588Z","event":"login-response-sent","connectionId":1,"id":1,"keysetupCodeHex":"0x0031","redirectCodeHex":"0x7001","keysetupFrameBytes":60,"redirectFrameBytes":36,"gin7KeyHex":"47494e370001000000070074006500730074003000310000070070006100730073003900390000"}
+{"ts":"2026-07-07T08:02:27.591Z","event":"peer-fin","connectionId":1}
+{"ts":"2026-07-07T08:02:27.593Z","event":"connection-closed","connectionId":1,"hadError":false}
+{"ts":"2026-07-07T08:02:27.593Z","event":"connection-opened","connectionId":2,"remoteAddress":"127.0.0.1","remotePort":8467}
+{"ts":"2026-07-07T08:02:27.598Z","event":"frame-received","connectionId":2,"codeHex":"0x0034","length":26,"bodyBytes":24,"rawFrameHex":"001a00349b4595f8b8ab02d57aa2facbb11e0691df1e6cc0f191d0f3"}
+{"ts":"2026-07-07T08:02:27.605Z","event":"phase3-sent","connectionId":2,"codeHex":"0x0035","mode":"replayed","transportKeySource":"legacy-default","decipherKeySource":"legacy-default","phase1KeyBytes":16,"sequence":1,"frameBytes":36}
+{"ts":"2026-07-07T08:02:27.612Z","event":"frame-received","connectionId":2,"codeHex":"0x0036","length":10,"bodyBytes":8,"rawFrameHex":"000a003629af89de470c6280"}
+{"ts":"2026-07-07T08:02:27.612Z","event":"frame-received","connectionId":2,"codeHex":"0x0030","length":18,"bodyBytes":16,"rawFrameHex":"00120030b31d38bab06cb8bbb27f87228de90d41"}
+{"ts":"2026-07-07T08:02:27.620Z","event":"0030-decoded","connectionId":2,"id":1,"innerLen":6,"checksum":9728,"innerCodeHex":"0x0020"}
+{"ts":"2026-07-07T08:02:27.621Z","event":"frame-received","connectionId":2,"codeHex":"0x0030","length":42,"bodyBytes":40,"rawFrameHex":"002a00308473d390b5cd7edf085369325f1abf312374faad996c230e9654df07b30dc515cf6ec37a3783e112"}
+{"ts":"2026-07-07T08:02:27.629Z","event":"0030-decoded","connectionId":2,"id":2,"innerLen":25,"checksum":24889,"innerCodeHex":"0x2000"}
+{"ts":"2026-07-07T08:04:21.962Z","event":"socket-error","connectionId":2,"message":"read ECONNRESET"}
+{"ts":"2026-07-07T08:04:21.962Z","event":"connection-closed","connectionId":2,"hadError":true}

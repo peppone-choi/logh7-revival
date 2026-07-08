@@ -1,0 +1,45 @@
+{
+  "id": "logh7-exe-patch-manifest",
+  "schemaVersion": 1,
+  "status": "gate-only",
+  "purpose": "Required reversible EXE patch gate before any direct LOGH VII client change is promoted.",
+  "targetExe": {
+    "name": "G7MTClient.exe",
+    "sha256": "bd19263c10decc3d58373165a82d42a9267868400d407da87d5f4f4109ab6e16",
+    "imageBase": null,
+    "pathHints": [
+      "artifacts/logh7-install/**/exe/g7mtclient.exe",
+      ".omo/re-galaxy/g7mtclient.exe"
+    ]
+  },
+  "policy": {
+    "sameLengthOnly": true,
+    "requireOriginalBytes": true,
+    "requireRollbackBytes": true,
+    "supportsDryRun": true
+  },
+  "patches": [
+    {
+      "id": "login-server-ip-loopback-20260706",
+      "sourceExeSha256": "bd19263c10decc3d58373165a82d42a9267868400d407da87d5f4f4109ab6e16",
+      "addressKind": "offset",
+      "offset": 3599932,
+      "originalBytes": "3230322e382e38302e313739",
+      "patchedBytes": "3132372e302e302e31000000",
+      "rollbackBytes": "3230322e382e38302e313739",
+      "reason": "Redirect original login endpoint 202.8.80.179 to local harness 127.0.0.1 for live restoration testing."
+    }
+  ],
+  "schemaExample": {
+    "patch": {
+      "id": "example-reconfirmed-patch",
+      "sourceExeSha256": "bd19263c10decc3d58373165a82d42a9267868400d407da87d5f4f4109ab6e16",
+      "addressKind": "offset",
+      "offset": 0,
+      "originalBytes": "00",
+      "patchedBytes": "90",
+      "rollbackBytes": "00",
+      "reason": "replace with RE-confirmed patch data"
+    }
+  }
+}

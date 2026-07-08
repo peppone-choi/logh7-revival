@@ -1,0 +1,38 @@
+{
+  "schema": "logh7-live-capture-manifest-v1",
+  "sessionId": "live-qa-20260706-223048",
+  "captureRoot": "E:\\logh7-revival\\.omo\\captures",
+  "startTimestamp": "2026-07-06T13:30:49.123Z",
+  "endTimestamp": "2026-07-06T13:31:04.273Z",
+  "outputPath": "E:\\logh7-revival\\.omo\\captures\\live-qa-20260706-223048\\capture.pcapng",
+  "exitCode": 0,
+  "command": [
+    "C:\\Program Files\\Wireshark\\dumpcap.exe",
+    "-i",
+    "11",
+    "-w",
+    "E:\\logh7-revival\\.omo\\captures\\live-qa-20260706-223048\\capture.pcapng",
+    "-a",
+    "duration:15",
+    "-f",
+    "port 47900"
+  ],
+  "tools": {
+    "tshark": {
+      "path": "C:\\Program Files\\Wireshark\\tshark.exe",
+      "version": "TShark (Wireshark) 4.4.6 (v4.4.6-0-gaebb20483889)."
+    },
+    "dumpcap": {
+      "path": "C:\\Program Files\\Wireshark\\dumpcap.exe",
+      "version": "Dumpcap (Wireshark) 4.4.6 (v4.4.6-0-gaebb20483889)."
+    }
+  },
+  "interface": {
+    "arg": "11",
+    "explicit": true
+  },
+  "filter": "port 47900",
+  "notes": [
+    "Capturing on 'Adapter for loopback traffic capture'\r\nFile: E:\\logh7-revival\\.omo\\captures\\live-qa-20260706-223048\\capture.pcapng\r\n\rPackets captured: 0\r\nPackets received/dropped on interface 'Adapter for loopback traffic capture': 0/0 (pcap:0/dumpcap:0/flushed:0/ps_ifdrop:0) (0.0%)"
+  ]
+}

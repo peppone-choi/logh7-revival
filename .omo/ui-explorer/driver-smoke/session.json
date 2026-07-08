@@ -1,0 +1,10 @@
+{
+  "session": "E:\\logh7-revival\\.omo\\ui-explorer\\driver-smoke",
+  "exe": "E:\\logh7-revival\\artifacts\\logh7-install\\____________s___\\____\\exe\\g7mtclient.exe",
+  "clientPid": 47252,
+  "hwnd": 11866430,
+  "startedAt": "2026-07-06T22:39:35.699113+09:00",
+  "titleSubstring": null,
+  "stoppedAt": "2026-07-06T22:41:34.284650+09:00",
+  "clientStopped": true
+}

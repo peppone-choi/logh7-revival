@@ -32,7 +32,7 @@
 **트리거:** logh7 관련 작업(자산추출/RE/프로토콜/서버/한글화/라이브QA) 요청 시 `logh7-orchestrator` 스킬 사용. 단순 질문은 직접 응답.
 
 **설치된 스택:**
-- 에이전트 팀: `.Codex/agents/` (extract-miner, re-analyst, wire-engineer, server-dev, localizer, live-qa — 전원 opus)
+- 에이전트 팀: `.codex/agents/` (extract-miner, re-analyst, wire-engineer, server-dev, localizer, live-qa - 호출 시 Codex 모델 계층화)
 - 스킬: binary-triage(RE), test-driven-development, verification-before-completion, systematic-debugging, humanize-korean, humanizer, grammar-checker, style-guide, karpathy-guidelines
 - 플러그인: gptaku(insane-search/design/review/research 등 14종), harness
 - 인덱스: codegraph(`.codegraph/`)
@@ -56,10 +56,10 @@ Anthropic Fable 5 프롬프팅 가이드 반영:
 ## Advisor Strategy (Codex.com/blog/the-advisor-strategy)
 
 실행자-조언자 역전 구조로 비용 대비 지능 극대화. 큰 모델이 오케스트레이션하고 작은 모델에 위임하는 대신, 작은 모델이 실행을 주도하고 큰 모델은 판단만 조언한다:
-- **실행자 계층화**: 기계적/반복 작업(전수 파싱, 인덱싱, 파일 스윕, 단순 대조 검증)은 sonnet(초경량은 haiku) 실행자로. 어려운 판단(RE 구조 해석, 프로토콜 설계, 근본원인 진단, 최종 판정)만 opus.
-- **조언자 패턴**: 실행자가 막히면 태스크를 통째로 opus에 재위임하지 말고, 판단 질문만 추출해 opus 에이전트에 짧게 물어(계획 400~700토큰 수준) 그 지시로 실행자가 재개. 조언 호출 횟수 제한(태스크당 ~3회).
-- **Workflow 적용**: agent() 호출 시 mechanical 스테이지는 `model: 'sonnet', effort: 'low'`, 판정/설계 스테이지만 opus 상위 effort.
-- **에이전트 팀 적용**: `.Codex/agents/` frontmatter의 `model: opus` 전원 지정을 폐기 — 역할별 실행 모델은 호출 시점에 계층화해 지정.
+- **실행자 계층화(Codex)**: 기계적/반복 작업(전수 파싱, 인덱싱, 파일 스윕, 단순 대조 검증)은 `gpt-5.3-codex-spark` 또는 `gpt-5.4-mini` 실행자로. 일반 개발 Worker는 `gpt-5.4`/`gpt-5.4-mini`. 어려운 판단(RE 구조 해석, 프로토콜 설계, 근본원인 진단, 최종 판정)은 메인 Advisor `gpt-5.5 high/xhigh`.
+- **조언자 패턴**: 실행자가 막히면 태스크를 통째로 최고 모델에 재위임하지 말고, 판단 질문만 추출해 Advisor급 모델에 짧게 물어(계획 400~700토큰 수준) 그 지시로 실행자가 재개. 조언 호출 횟수 제한(태스크당 ~3회).
+- **Workflow 적용**: `spawn_agent` 호출 시 mechanical 스테이지는 `model: "gpt-5.3-codex-spark"` 또는 `model: "gpt-5.4-mini"`, 일반 개발은 `gpt-5.4`/`gpt-5.4-mini`, 판정/설계는 메인 세션에서 처리한다.
+- **에이전트 팀 적용**: `.codex/agents/`는 역할 프롬프트만 보유한다. 모델은 호출 시점에 계층화해 지정한다.
 
 모델 역할 분담: Advisor / Worker
 
@@ -71,9 +71,9 @@ Worker에게 줄 작업 브리프 작성
 결과 검증: diff 직접 확인, 테스트 직접 실행
 최종 커밋 승인, 사용자 보고
 
-Worker(Opus 서브에이전트)에게 위임하는 일:
+Worker(Codex 서브에이전트)에게 위임하는 일:
 코드 작성과 수정, 테스트 작성 등 구현 작업 전부
-Agent 도구로 위임하고 model은 "opus"를 지정한다
+Agent 도구로 위임하고 작업 성격에 맞춰 `gpt-5.4`, `gpt-5.4-mini`, `gpt-5.3-codex-spark`를 지정한다
 서로 독립적인 작업은 병렬로 위임한다
 
 브리프 기준:
