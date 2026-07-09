@@ -124,12 +124,47 @@ export function createWorldSession({
   }
 
   /**
+   * account 로 등록된 세션 플레이어를 찾는다(재접속 재바인딩용).
+   * 실제 캐릭터 보유 플레이어를 우선, 없으면 create-pending 이라도 반환(가드가 거부).
+   */
+  function findSessionPlayerByAccount(accountId) {
+    if (!accountId) return null;
+    const acct = String(accountId);
+    let fallback = null;
+    for (const p of players.values()) {
+      if (p.accountId !== acct) continue;
+      if (!p.createPending && p.characterId > 0) return p;
+      if (!fallback) fallback = p;
+    }
+    return fallback;
+  }
+
+  /**
    * 월드 진입: 필수 info 레코드 방출 + inWorld=true.
    * SSGameLogin(0x0205) 또는 명시적 enter 호출로 사용.
+   *
+   * 실클라는 월드 진입 시 로비 소켓을 닫고 새 소켓으로 재접속하므로 connectionId 가
+   * 세션로그인 때와 달라진다. 현재 connectionId 에 플레이어가 없으면 account 로
+   * 등록된 세션 플레이어를 찾아 현재 connectionId 로 재바인딩한다(플레이어 맵 키 이동).
    */
-  function enterWorld({ connectionId, characterId } = {}) {
-    const player = players.get(connectionId);
-    // 캐릭터/세션 자동 생성 금지. handleSessionLogin 으로 등록된 플레이어만 월드 진입.
+  function enterWorld({ connectionId, characterId, accountId } = {}) {
+    let player = players.get(connectionId);
+    if (!player) {
+      const rebind = findSessionPlayerByAccount(accountId);
+      if (rebind) {
+        const fromConnectionId = rebind.connectionId;
+        players.delete(fromConnectionId);
+        rebind.connectionId = connectionId;
+        players.set(connectionId, rebind);
+        logEvent('world-rebind', connectionId, {
+          fromConnectionId,
+          accountId: rebind.accountId,
+          characterId: rebind.characterId,
+        });
+        player = rebind;
+      }
+    }
+    // 캐릭터/세션 자동 생성 금지. handleSessionLogin 으로 등록된(또는 재바인딩된) 플레이어만 월드 진입.
     if (!player) {
       throw new Error(
         `enterWorld: no session player for connection ${connectionId} — refuse synthetic character`,
@@ -245,7 +280,7 @@ export function createWorldSession({
     }
 
     if (code === CODE_SS_GAME_LOGIN_REQ) {
-      const { emits, codes, player } = enterWorld({ connectionId });
+      const { emits, codes, player } = enterWorld({ connectionId, accountId });
       return {
         kind: 'world-enter',
         player,

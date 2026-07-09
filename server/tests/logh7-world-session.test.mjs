@@ -94,6 +94,76 @@ test('0x0205 SSGameLoginRequest batch emits 0x0206 before 0x0204', () => {
   assert.ok(i206 < i204, `0x0206 (@${i206}) must precede 0x0204 (@${i204})`);
 });
 
+test('reconnect: enterWorld on a new connectionId rebinds session player by account', () => {
+  // 실클라는 월드 진입 시 로비 소켓(conn2)을 닫고 새 소켓(conn3)으로 재접속한다.
+  // handleSessionLogin 은 플레이어를 conn2 에 등록했지만 enterWorld 는 conn3 에서 온다.
+  // account 기준으로 세션 플레이어를 찾아 현재 connectionId 로 재바인딩해야 한다.
+  const world = createWorldSession();
+  const req = Buffer.alloc(10);
+  req.writeUInt16BE(0x2009, 0);
+  req.writeUInt32LE(1, 2);
+  req.writeUInt32LE(7, 6);
+  world.handleSessionLogin({
+    connectionId: 2,
+    accountId: 'inei00',
+    inner: req,
+    character: { id: 7, unitId: 3, cell: 2588 },
+  });
+  // conn2 는 닫혔고 conn3 으로 0x0205/enterWorld 도착 — account 로 재바인딩
+  const req205 = Buffer.alloc(2);
+  req205.writeUInt16BE(CODE_SS_GAME_LOGIN_REQ, 0);
+  const result = world.handleWorldInner({ connectionId: 3, accountId: 'inei00', inner: req205 });
+  assert.equal(result.kind, 'world-enter');
+  assert.equal(result.player.connectionId, 3);
+  assert.equal(result.player.characterId, 7);
+  assert.equal(result.player.inWorld, true);
+  // 플레이어 맵도 conn3 으로 이동, conn2 는 비워짐
+  assert.equal(world.getPlayer(3)?.characterId, 7);
+  assert.equal(world.getPlayer(2), null);
+});
+
+test('reconnect guard: unknown account on new connection still refuses synthetic character', () => {
+  const world = createWorldSession();
+  const req = Buffer.alloc(10);
+  req.writeUInt16BE(0x2009, 0);
+  req.writeUInt32LE(1, 2);
+  req.writeUInt32LE(7, 6);
+  world.handleSessionLogin({
+    connectionId: 2,
+    accountId: 'inei00',
+    inner: req,
+    character: { id: 7, unitId: 3, cell: 2588 },
+  });
+  // 미상 account 의 새 연결은 재바인딩 대상 없음 → 예외 유지
+  assert.throws(
+    () => world.enterWorld({ connectionId: 9, accountId: 'ghost99' }),
+    /no session player/,
+  );
+  // account 자체가 미상(null)이면 여전히 거부
+  assert.throws(
+    () => world.enterWorld({ connectionId: 9 }),
+    /no session player/,
+  );
+});
+
+test('reconnect guard: create-pending account cannot enter world on rebind', () => {
+  // account 는 알지만 실제 캐릭터 없이 create-pending 만 등록된 경우 월드 진입 거부.
+  const world = createWorldSession();
+  const short = Buffer.alloc(4);
+  short.writeUInt16BE(0x2009, 0);
+  short.writeUInt16LE(1, 2);
+  world.handleSessionLogin({
+    connectionId: 2,
+    accountId: 'inei00',
+    inner: short,
+    character: null,
+  });
+  assert.throws(
+    () => world.enterWorld({ connectionId: 3, accountId: 'inei00' }),
+    /create-pending/,
+  );
+});
+
 test('authoritative move updates cell and notifies both sessions', () => {
   const world = createWorldSession();
   world.seedPlayer({ connectionId: 1, characterId: 1, unitId: 1, cell: 2588, inWorld: true });
