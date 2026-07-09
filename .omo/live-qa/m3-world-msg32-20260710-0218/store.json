@@ -1,0 +1,25 @@
+{
+  "accounts": {
+    "inei00": [
+      {
+        "id": 1,
+        "power": 2,
+        "camp": 2,
+        "blood": 1,
+        "sex": 0,
+        "generated": 1,
+        "lastname": "Reinhard",
+        "firstname": "Lohengramm",
+        "face": 305419896,
+        "ability8": [80, 75, 70, 65, 60, 55, 50, 45],
+        "bonusPoint": 0,
+        "specialAbilityNum": 0,
+        "title": 0,
+        "rank": 13,
+        "charState": 1,
+        "age": 20
+      }
+    ]
+  },
+  "nextId": 2
+}

@@ -1,5 +1,14 @@
 # LOGH VII 루프 상태
 
+## M3 돌파: 씬 전환 성공 + NOW LOADING 도달 — 마지막 블로커는 connectionId 키잉 (2026-07-10)
+
+- **두 수정(0x200a msg32 + 0x0206-before-0x0204)이 실효.** 실클라가 캐릭터 선택 침묵을 **완전히 뚫고** 씬 전환 → **"NOW LOADING — Legend of the Galactic Heroes" 월드 로드 화면(기함 3D 렌더)** 도달. 전략맵 직전 단계. 증거: `.omo/live-qa/m3-world-msg32-20260710-0218/shots/DECISIVE-now-loading-hung-0x0205-no-session-player.png`.
+- **재접속 모델 재확인(정정)**: 클라는 0x200a(msg32) 수신 시 **로비 소켓(conn2)을 닫고 새 소켓(conn3)으로 월드 세션 재접속**한다. re-analyst의 원래 재접속 FSM(states 0x30~0x35)이 맞았고, 직전 실패는 **오직 0x200a raw 드롭** 때문이었다(동일-endpoint 소켓 재사용 가설은 틀림 — 클라는 새 TCP를 연다). 실측 시퀀스: `conn2 0x2009→0x200a(msg32)→conn2 close → conn3: 0x0200→0x0201→0x0205`.
+- **마지막 블로커(진전이 드러낸 자체 버그)**: `enterWorld: no session player for connection 3`. 월드 세션이 플레이어를 **TCP connectionId로 키잉**하는데, `handleSessionLogin`은 conn2에 등록, 클라는 conn3로 재접속 → `enterWorld({connectionId:3})`이 conn3 player 맵 비어 예외. 이전엔 침묵으로 여기 못 왔던 다음 계층 버그.
+  - 위치: `logh7-world-session.mjs:133-137`(enterWorld no-player throw), 호출 `:247-259`(handleWorldInner CODE_SS_GAME_LOGIN_REQ), dispatch `playable-server.mjs:479-485`.
+  - **수정 방향**: 월드 플레이어를 connectionId가 아니라 **account(또는 0x200a token)** 기준 추적. 0x0205 도착 시 서버는 이미 account 앎(`ss-login-ok-sent account:"inei00"`, `lastLobbyAccount` 폴백) → player 없으면 그 account 캐릭터로 재등록 후 enterWorld. 합성 캐릭터 금지 가드는 유지(실 시드 캐릭터를 가진 known account만 재진입 허용).
+- **다음**: server-dev가 재접속-재등록 구현 → 0x0205→0x0206(선두)+0x0204+0x0323/0x0325 흐름 → NOW LOADING이 전략맵으로 완료 예상 → live-qa 최종 재검증. 검증된 좌표: 게임개시 125,191 / 캐릭터카드 655,305.
+
 ## M3 완전 재조정: message32 프레이밍 + 0x0206-before-0x0204 (2026-07-10, RE 확정)
 
 - **recv 필터 `FUN_004ae0d0`(mps 메시지 콜백, vtable 0x66e0f0)로 전체 메커니즘 규명.** 두 고확신 수정:
