@@ -1,0 +1,16 @@
+{
+  "name": "get_theme",
+  "description": "Get details of a specific tweakcn theme",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "themeName": {
+        "type": "string",
+        "description": "Name or ID of the theme to retrieve"
+      }
+    },
+    "required": [
+      "themeName"
+    ]
+  }
+}

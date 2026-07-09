@@ -42,6 +42,8 @@
 |---|---|---|---|
 | 2026-07-05 | 초기 구성 | 전체 | 리셋 후 재시작 |
 | 2026-07-05 | Advisor Strategy 도입 | agents frontmatter model 제거, 호출시 계층화 | 비용 대비 지능 최적화(claude.com/blog/the-advisor-strategy) |
+| 2026-07-09 | Fable 오케스트레이션 4계층 전역 설치 | `~/.claude/fable/` (지침·deep-reasoner/runner·sonnet→Opus 리매핑·PreToolUse 강제 게이트), 토글 `fable on/off/status` | successwiki.io 가이드 적용 — 권고를 물리 차단으로 |
+| 2026-07-09 | 플러그인·스킬 추가 | oh-my-claudecode, gptaku(pumasi/insane-loop/insane-harness/insane-review), 프로젝트 스킬(ghidra/protocol-reverse-engineering/rev-frida/find-skills) | 오케스트레이션·RE 도구 보강 |
 
 ## Fable 5 운영 전략
 
@@ -66,9 +68,13 @@ Anthropic Fable 5 프롬프팅 가이드 반영:
 ## Advisor Strategy (claude.com/blog/the-advisor-strategy)
 
 실행자-조언자 역전 구조로 비용 대비 지능 극대화. 큰 모델이 오케스트레이션하고 작은 모델에 위임하는 대신, 작은 모델이 실행을 주도하고 큰 모델은 판단만 조언한다:
-- **실행자 계층화**: 기계적/반복 작업(전수 파싱, 인덱싱, 파일 스윕, 단순 대조 검증)은 sonnet(초경량은 haiku) 실행자로. 어려운 판단(RE 구조 해석, 프로토콜 설계, 근본원인 진단, 최종 판정)만 opus.
-- **조언자 패턴**: 실행자가 막히면 태스크를 통째로 opus에 재위임하지 말고, 판단 질문만 추출해 opus 에이전트에 짧게 물어(계획 400~700토큰 수준) 그 지시로 실행자가 재개. 조언 호출 횟수 제한(태스크당 ~3회).
-- **Workflow 적용**: agent() 호출 시 mechanical 스테이지는 `model: 'sonnet', effort: 'low'`, 판정/설계 스테이지만 opus 상위 effort.
+- **Sonnet 등급 폐지 — Opus 아니면 Haiku** (2026-07-09 갱신, 토큰 예산 압박). 위임 시점에 복잡도만 보고 고른다.
+  - **opus**: 설계 결정(아키텍처·프로토콜·스키마), 근본원인 진단(가설이 여러 개인 버그), 여러 파일·계층 맥락 추론이 필요한 구현, 명세가 모호해 무엇을 만들지부터 정해야 하는 작업, 최종 판정. 순수 사고는 `deep-reasoner`(effort max), 구현이 섞이면 opus 실행 에이전트.
+  - **haiku**: 그 외 전부 — 지침이 명확한 구현·수정·리팩터링·테스트(`worker`), 명령 실행·빌드·조회·전수 파싱·파일 스윕(`runner`).
+  - 애매하면 haiku 먼저. 실패를 기다렸다 opus로 올리는 게 아니라 위임 전에 복잡도로 가른다.
+- **조언자 패턴**: 실행자가 막히면 태스크를 통째로 opus에 재위임하지 말고, 판단 질문만 추출해 opus 에이전트(`deep-reasoner`)에 짧게 물어(계획 400~700토큰 수준) 그 지시로 실행자가 재개. 조언 호출 횟수 제한(태스크당 ~3회).
+- **Workflow 적용**: agent() 호출 시 실행 스테이지는 `model: 'haiku', effort: 'low'~'medium'`, 판정/설계 스테이지만 opus 상위 effort. model 생략 금지 — 생략하면 세션 모델(Fable)을 상속한다.
+- **전역 스위치**: `fable on`이면 `ANTHROPIC_DEFAULT_SONNET_MODEL=claude-haiku-4-5`로 sonnet 고정 서브에이전트(OMC 실행 에이전트 등)까지 haiku로 강등된다.
 - **에이전트 팀 적용**: `.claude/agents/` frontmatter의 `model: opus` 전원 지정을 폐기 — 역할별 실행 모델은 호출 시점에 계층화해 지정.
 
 모델 역할 분담: Advisor / Worker
