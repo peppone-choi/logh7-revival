@@ -129,6 +129,8 @@ export function createPlayableServer({
     ?? createCharacterStore(characterStorePath ?? DEFAULT_CHARACTERS_PATH);
   const resolvedWorld = worldSession ?? createWorldSession({
     worldRedirect: { ip: host === '0.0.0.0' ? '127.0.0.1' : host, port, token: 1 },
+    // 0x0323 world-enter 레코드를 실 시드 캐릭터로 채우도록 스토어 주입(빈 테이블 크래시 해소).
+    characterStore: resolvedCharacterStore,
   });
 
   const resolvedTransportKey = resolveKey(transportKey, 'LOGH_TRANSPORT_KEY_HEX', LEGACY_TRANSPORT_KEY_HEX);

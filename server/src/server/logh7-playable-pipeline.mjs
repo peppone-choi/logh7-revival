@@ -237,7 +237,8 @@ export function runLoginWorldMpSequence({
   }
 
   const store = createCharacterStore(resolvedStore);
-  const world = createWorldSession({ defaultCell: 2588 });
+  // 0x0323 을 실 시드 캐릭터로 채우도록 스토어 주입(빈 오브젝트 테이블 크래시 해소).
+  const world = createWorldSession({ defaultCell: 2588, characterStore: store });
 
   const login = runLoginSuccessPath({ accountsPath });
   if (!login.ok) throw new Error(`login failed: ${login.reason}`);

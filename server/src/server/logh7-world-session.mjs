@@ -34,6 +34,9 @@ import {
 export function createWorldSession({
   defaultCell = 2588,
   worldRedirect = { ip: '127.0.0.1', port: 47900, token: 1 },
+  // 시드 캐릭터 조회용(선택). enterWorld 가 0x0323 을 실 캐릭터로 채우는 데 사용한다.
+  // 없으면 세션 로그인 때 캐시된 플레이어 필드로 폴백(하위호환).
+  characterStore = null,
 } = {}) {
   /** @type {Map<number, WorldPlayer>} */
   const players = new Map();
@@ -182,16 +185,31 @@ export function createWorldSession({
     p.createPending = false;
     p.inWorld = true;
 
+    // 0x0323 실 캐릭터 조회(빈 오브젝트 테이블 크래시 해소): characterStore 가 있으면
+    // account 의 실 시드 캐릭터를 characterId 로 찾아 실값(power/ability/이름)을 인코딩한다.
+    // 스토어가 없거나 조회 실패면 세션 로그인 때 캐시된 플레이어 필드로 폴백.
+    let seed = null;
+    if (characterStore && typeof characterStore.getCharacters === 'function' && p.accountId) {
+      try {
+        const chars = characterStore.getCharacters(p.accountId) ?? [];
+        seed = chars.find((c) => Number(c?.id) === Number(p.characterId)) ?? chars[0] ?? null;
+      } catch {
+        seed = null;
+      }
+    }
+    const seedAbilities = Array.isArray(seed?.ability8) ? seed.ability8 : null;
+
     const emits = buildWorldEntryInners({
       characterId: p.characterId,
       gridUnitId: p.unitId,
       unitCell: p.cell,
-      power: p.power ?? 0,
+      power: seed?.power ?? p.power ?? 0,
       spot: 1,
-      lastname: p.lastname ?? '',
-      firstname: p.firstname ?? '',
-      face: Number.isInteger(p.face) ? p.face : 0,
-      rank: Number.isInteger(p.rank) ? p.rank : 0,
+      lastname: seed?.lastname ?? p.lastname ?? '',
+      firstname: seed?.firstname ?? p.firstname ?? '',
+      face: Number.isInteger(seed?.face) ? seed.face : (Number.isInteger(p.face) ? p.face : 0),
+      rank: Number.isInteger(seed?.rank) ? seed.rank : (Number.isInteger(p.rank) ? p.rank : 0),
+      abilities: seedAbilities,
       officerCount: Number.isInteger(p.officerCount) ? p.officerCount : 0,
     });
     logEvent('world-enter', connectionId, {

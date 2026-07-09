@@ -35,6 +35,34 @@ test('enterWorld emits character/unit records and marks inWorld', () => {
   assert.equal(world.getPlayer(1).inWorld, true);
 });
 
+test('enterWorld encodes real seed character from characterStore into 0x0323 (crash fix)', () => {
+  // 전략맵 크래시 해소: 0x0323 이 빈 스텁이 아니라 characterStore 의 실 시드 캐릭터여야
+  // 클라 오브젝트 테이블(clientBase+0xc)이 채워지고 focus lookup 이 성공한다.
+  const characterStore = {
+    getCharacters: (acct) =>
+      acct === 'inei00'
+        ? [{
+            id: 7,
+            power: 2,
+            lastname: 'Reinhard',
+            firstname: 'Lohengramm',
+            face: 3,
+            rank: 0x20,
+            ability8: [90, 85, 80, 75, 70, 65, 60, 55],
+          }]
+        : [],
+  };
+  const world = createWorldSession({ characterStore });
+  world.seedPlayer({ connectionId: 1, accountId: 'inei00', characterId: 7, unitId: 8, inWorld: false });
+  const { emits } = world.enterWorld({ connectionId: 1, accountId: 'inei00' });
+  const charRec = emits.find((i) => readMsg32Code(i) === CODE_INFO_CHARACTER);
+  assert.ok(charRec, '0x0323 present');
+  const body = msg32Body(charRec);
+  assert.equal(body.readUInt32LE(0x00), 7, 'real characterId from store');
+  assert.equal(body.readUInt8(0x04), 2, 'real power/faction from store (not 0 stub)');
+  assert.equal(body.readUInt16LE(0x188), 90, 'real ability[0] from store');
+});
+
 test('0x2009 create-pending (no character) returns 0x200a without inventing char', () => {
   const world = createWorldSession();
   const short = Buffer.alloc(4);

@@ -20,6 +20,8 @@ import {
   CODE_LOBBY_SESSION_LOGIN_OK,
   buildInformationCharacterInner,
   buildInformationUnitInner,
+  buildStaticInformationGridInner,
+  buildStaticInformationGridTypeInner,
   buildSsCharacterIdInner,
   buildSsLoginOkInner,
   buildSsGameLoginOkInner,
@@ -261,6 +263,87 @@ test('buildAdmissionResponseInner: 0x0f02 → plain 0x0f03 GridInitialize OK (st
 test('isAdmissionRequestCode(0x0f02) true; response opcode 0x0f03 is not a request', () => {
   assert.equal(isAdmissionRequestCode(0x0f02), true);
   assert.equal(isAdmissionRequestCode(0x0f03), false);
+});
+
+// ─── 0x0315 유효 RLE 그리드 (전략맵 크래시 해소) ────────────────────────────────
+//
+// RE 확정 포맷(FUN_004abbb0): body 0x138c 고정.
+//   [u8 width=100][u8 height=50][u16LE rleLen][RLE: (u8 runLen, u8 cellType)…][0 패딩]
+// 제약: ΣrunLen == 5000(=100×50). rleLen = RLE 스트림 바이트 수, 1 < rleLen < 0x1389.
+// cellType 은 systemId 가 아니라 0x0313 팔레트 인덱스 — 빈 우주는 전부 0.
+
+test('0x0315 static grid: [100][50][u16LE rleLen][RLE] with ΣrunLen=5000, 5004B body', () => {
+  const inner = buildStaticInformationGridInner({ cells: [] });
+  assert.equal(readMsg32Code(inner), 0x0315);
+  const body = msg32Body(inner);
+  assert.equal(body.length, 0x138c, 'fixed 5004B body');
+  assert.equal(body.readUInt8(0), 100, 'width=100');
+  assert.equal(body.readUInt8(1), 50, 'height=50');
+  const rleLen = body.readUInt16LE(2); // u16 LE (RE 확정)
+  assert.ok(rleLen > 1 && rleLen < 0x1389, `rleLen ${rleLen} in (1, 0x1389)`);
+  assert.equal(rleLen % 2, 0, 'RLE is (runLen,cellType) pairs → even byte count');
+  // RLE 디코드: ΣrunLen 은 정확히 100×50 = 5000 이어야 렌더러 워킹그리드가 채워진다.
+  let sumRun = 0;
+  for (let i = 0; i + 1 < rleLen; i += 2) {
+    const runLen = body.readUInt8(4 + i);
+    const cellType = body.readUInt8(4 + i + 1);
+    assert.ok(runLen >= 1, 'runLen >= 1');
+    assert.equal(cellType, 0, 'empty universe → cellType 0');
+    sumRun += runLen;
+  }
+  assert.equal(sumRun, 5000, 'ΣrunLen == 100*50');
+});
+
+test('0x0315 places a cell type marker while preserving ΣrunLen=5000', () => {
+  // unitCell 마커가 있어도 전체 셀 커버리지(ΣrunLen=5000)는 불변이어야 한다.
+  const inner = buildStaticInformationGridInner({ cells: [{ cell: 2588, value: 3 }] });
+  const body = msg32Body(inner);
+  assert.equal(body.length, 0x138c);
+  const rleLen = body.readUInt16LE(2);
+  let sumRun = 0;
+  let sawMarker = false;
+  for (let i = 0; i + 1 < rleLen; i += 2) {
+    sumRun += body.readUInt8(4 + i);
+    if (body.readUInt8(4 + i + 1) === 3) sawMarker = true;
+  }
+  assert.equal(sumRun, 5000, 'ΣrunLen invariant with marker');
+  assert.ok(sawMarker, 'cellType=3 marker present in RLE stream');
+});
+
+test('0x0313 grid-type palette is full 0x138c with count byte (empty=0)', () => {
+  const inner = buildStaticInformationGridTypeInner({ objects: [] });
+  assert.equal(readMsg32Code(inner), 0x0313);
+  const body = msg32Body(inner);
+  assert.equal(body.length, 0x138c, 'fixed 5004B (over-read safe)');
+  assert.equal(body.readUInt8(0), 0, 'empty palette count=0');
+});
+
+// ─── 0x0323 실 캐릭터 (빈 오브젝트 테이블 크래시 해소) ──────────────────────────
+//
+// RE 확정(loop-state M3): 전략맵 렌더러 크래시(0x0058f83a FUN_0058ee70)는 빈 오브젝트
+// 테이블(clientBase+0xc) 때문. 그 테이블을 채우는 레코드 = 0x0323 ResponseInformationCharacter.
+// world-enter 0x0323 이 빈 스텁이 아니라 플레이어 실 캐릭터(id/power/ability 실값)여야 한다.
+
+test('world entry 0x0323 carries real seed character stats (registerable object, not empty stub)', () => {
+  const emits = buildWorldEntryInners({
+    characterId: 42,
+    gridUnitId: 7,
+    power: 2, // 진영(제국) — 0 스텁 아님
+    lastname: 'Reinhard',
+    firstname: 'Lohengramm',
+    face: 3,
+    rank: 0x20,
+    abilities: [90, 85, 80, 75, 70, 65, 60, 55],
+  });
+  const charRec = emits.find((i) => readMsg32Code(i) === CODE_INFO_CHARACTER);
+  assert.ok(charRec, '0x0323 present in world-entry batch');
+  const body = msg32Body(charRec);
+  assert.equal(body.length, CODE_INFO_CHARACTER_BYTES);
+  assert.equal(body.readUInt32LE(0x00), 42, 'real characterId (focus lookup key)');
+  assert.equal(body.readUInt32LE(0x24), 7, 'real gridUnitId');
+  assert.equal(body.readUInt8(0x04), 2, 'real power/faction (not 0 stub)');
+  assert.equal(body.readUInt16LE(0x188), 90, 'real ability[0] forwarded');
+  assert.equal(body.readUInt16LE(0x188 + 4 * 7), 55, 'real ability[7] forwarded');
 });
 
 test('isAdmissionRequestCode covers every static-info req (incl. 신규 0x0308/0x030c), rejects non-admission', () => {

@@ -446,9 +446,15 @@ export function buildGridInitOkInner({ status = 1 } = {}) {
 // ─── 0x0315 Static grid RLE (빈 보드 또는 cell 배치) ──────────────────────────
 
 /**
- * 전략 셀 그리드. FUN_004abbb0: [u8 w][u8 h][u16 BE rleByteCount]{run,value}...
- * 고정 수신 크기 0x138c. 기본 100×50 전부 0 (성계 마커 없음 — 좌표 날조 금지).
- * unitCell 이 주어지면 해당 cell 에 systemId 값(기본 3) 1칸만 배치.
+ * 전략 셀 그리드 (RE 확정 FUN_004abbb0):
+ *   [u8 width=100][u8 height=50][u16 LE rleLen][RLE: (u8 runLen, u8 cellType)…][0 패딩]
+ * 고정 수신 크기 0x138c(5004). rleLen = RLE 스트림 바이트 수(1<rleLen<0x1389).
+ *
+ * ★불변식: ΣrunLen == width*height == 5000. 각 (runLen,cellType) 쌍이 runLen개 셀을
+ *   cellType 으로 채운다. 렌더러 워킹그리드(clientBase+0x2c03cc)를 +y*100+x 로 채우려면
+ *   전체 5000셀 커버리지가 필수 — 부족하면 빈 워킹그리드 역참조로 크래시.
+ * cellType 은 systemId 가 아니라 0x0313 팔레트 인덱스. 빈 우주는 전부 0.
+ * unitCell(cells[])이 주어지면 해당 cell 을 cellType 값(기본 3)으로 1칸 배치(ΣrunLen 불변).
  */
 export function buildStaticInformationGridInner({
   width = STRATEGIC_GRID_W,
@@ -481,7 +487,7 @@ export function buildStaticInformationGridInner({
   const payload = Buffer.alloc(CODE_STATIC_GRID_BYTES);
   payload.writeUInt8(w, 0);
   payload.writeUInt8(h, 1);
-  payload.writeUInt16BE(rle.length & 0xffff, 2);
+  payload.writeUInt16LE(rle.length & 0xffff, 2); // rleLen u16 LE (RE 확정 FUN_004abbb0)
   rle.copy(payload, 4, 0, Math.min(rle.length, CODE_STATIC_GRID_BYTES - 4));
   return buildMsg32Inner(CODE_STATIC_GRID, payload);
 }
@@ -693,6 +699,7 @@ export function buildWorldEntryInners({
   firstname = '',
   face = 0,
   rank = 0,
+  abilities = null,
   serverTime = 0x40000000,
   includeEmptyGrid = true,
   placeUnitCellOnGrid = true,
@@ -718,6 +725,7 @@ export function buildWorldEntryInners({
       firstname,
       face,
       rank,
+      abilities: Array.isArray(abilities) && abilities.length ? abilities : null,
       officerCount,
     }),
     buildInformationUnitInner({
