@@ -1,5 +1,19 @@
 # LOGH VII 루프 상태
 
+## M3 수정 확정: 누락된 0x201 SSLoginOK가 씬 전환 게이트 (2026-07-10, RE)
+
+- **근본원인 한 줄**(re-analyst Ghidra 확정): 서버가 **0x201 SSLoginOK 응답을 누락**. 씬 전환 게이트 플래그 `0x35837d`는 **오직 0x201만** 세팅(dispatcher case 0x201: `[0x358375]=1; [0x35837d]=1`). 클라 state 0x35(CERTIFICATION_SS, `FUN_0051bf90`)가 이 플래그를 폴링 → 1이면 월드 상태(`DAT_02217398`)로 전이. 서버는 0x206+월드레코드를 보냈으나 0x201이 없어 클라가 캐릭터 선택에 잔류.
+- **연결 모델(확정)**: 클라는 **연결 싱글톤 1개**(`DAT_007c25f4`)만 사용. 0x200a 리다이렉트가 로비와 **동일 host:port**(127.0.0.1:47900)면 **같은 소켓 재사용**(conn3·mps 크립토 재핸드셰이크 불필요, 라이브 일치). 서버는 별도 SS 리스너 불필요.
+- **SS 핸드셰이크 시퀀스(정본, states 0x30~0x35)**:
+  1. 0x30 LB2SS: C→S 0x2009 SessionLogin(u16 sessionId) → S→C 0x200a([u32 addr][u16 port][u32 token], flag 0x35837c=1)
+  2. 0x32 CONNECT_SS: 동일 endpoint면 소켓 재사용, on-connect 콜백이 token 핸드셰이크 프레임 송신
+  3. 0x34 CERT_SS: C→S **0x200 GameLogin**(body: "GIN7"+u16 0x57('W')+account, LG 로그인과 동일 포맷) → 기대 S→C **0x201 SSLoginOK**
+  4. 0x35: flag 0x35837d(0x201이 세팅) 확인 → 월드 상태 전이
+- **필수 순서**: `0x200 수신 → **0x201 SSLoginOK**(→0x35837d, 씬 전이) → 0x206 SSGameLoginOK(→0x35837e, 월드 파이프라인 활성) → 월드레코드 8종(0x204/0x323/0x325/0x301/0x0f01/0x0f03/0x315) → 전략맵 렌더`.
+- **왜 인라인 실패**: 프레임 디싱크 아님(레코드는 정상 버퍼링, 0x35837e도 세팅됨). 오직 **0x201 누락**으로 씬 상태머신이 state 0x35에서 정지.
+- **server-dev 수정(정확)**: 현재 `[0x200a → world records + 0x206]`에서 **클라의 0x200 GameLogin 수신 시 0x201 SSLoginOK(최소 1바이트 성공 플래그, dispatcher가 param_3[0]만 읽음)를 0x206·월드레코드 이전에 삽입**. 위치: `logh7-playable-server.mjs:463-479`, `logh7-world-session.mjs:59-119`.
+- **다음**: server-dev가 0x201 삽입 구현(TDD) → live-qa 월드 진입 재검증.
+
 ## M3 근본원인: 월드 진입은 SS-tier 재접속 필요 — 서버 인라인 숏컷이 씬 전환 미유발 (2026-07-10)
 
 - **라이브 결과**(`.omo/live-qa/m3-world-entry-20260710-0048/`): 시드 캐릭터로 로그인→로비 해제→**캐릭터 선택까지 완전 정상**(Reinhard 統率80 렌더). 그러나 캐릭터 선택 후 **월드 씬으로 전환 안 됨** — 전략맵/성계/함대 미렌더, 선택 화면에 머묾. `DECISIVE-STOP-character-select-no-world-transition.png`.
