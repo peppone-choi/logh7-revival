@@ -1,5 +1,13 @@
 # LOGH VII 루프 상태
 
+## M3 재바인딩 성공 → 다음 게이트: 월드 진입 후 어드미션 핸드셰이크(0x0304→0x0305 등) (2026-07-10)
+
+- **재바인딩 수정 작동 확인**(`.omo/live-qa/m3-strategic-map-20260710-0234/`): `enterWorld: no session player` 예외 소멸. 실클라가 캐릭터 선택→월드 진입 프로토콜 완주, **8종 월드레코드가 conn3로 정본 순서 방출**: `0x0206→0x0204→0x0323→0x0325→0x0301→0x0f01→0x0f03→0x0315`(codes 518,516,803,805,769,3841,3843,789 — 정본 일치). (참고: `world-rebind` 이벤트는 안 뜸 — conn3의 0x0200 로그인이 이미 conn3 키로 플레이어 등록해 재바인딩 가드 단락. 진입은 정상, 더 견고한 경로.)
+- **다음 블로커**: 월드레코드 수신 직후 클라가 **0x0304**(2바이트, 페이로드 없음, post-world-entry 어드미션 요청) 송신 → 서버 미처리("handleLobbyInner: 알 수 없는 코드 0x0304") → 클라가 0x0305 응답 대기하며 **NOW LOADING 영구 정지**.
+- **답은 문서에 있음(RE 불필요)**: `docs/reference/restored-from-git/logh7-inworld-progress.md` — 이전 사이클(리셋 전)은 이 지점을 통과해 전략맵을 렌더했다. 정상 부트스트랩 어드미션 핸드셰이크: `0x0205→0x0206`, **`0x0304→0x0305`(빈 InformationSession walker 응답, L1232)**, `0x0306→0x0307`, `0x0314→0x0315`, `0x0312→0x0313`, `0x0f02`. 리셋 때 `logh7-world-session.mjs` `handleWorldInner`에 이 핸드셰이크 재구현이 누락됨(현재 0x0205/0x0b01/0x0f1c/0x2009만 라우팅).
+- **수정(server-dev)**: `handleWorldInner`(L258~)에 월드 진입 후 어드미션 코드 라우팅 추가. 최소 착수=0x0304→빈 0x0305. 후속=0x0306→0x0307, 0x0314→0x0315, 0x0312→0x0313. 정확한 포맷은 `logh7-inworld-progress.md`·`logh7-render-interaction-contract.md`(0x0322→0x0323, 0x034e→0x034f 등)에 기록됨.
+- **진척 요약**: M3 정지점이 캐릭터선택 → NOW LOADING → (씬전환·레코드완주) → **어드미션 핸드셰이크**로 스테이지별 전진 중. 로그인~월드레코드 방출까지 전 구간 실클라 통과.
+
 ## M3 돌파: 씬 전환 성공 + NOW LOADING 도달 — 마지막 블로커는 connectionId 키잉 (2026-07-10)
 
 - **두 수정(0x200a msg32 + 0x0206-before-0x0204)이 실효.** 실클라가 캐릭터 선택 침묵을 **완전히 뚫고** 씬 전환 → **"NOW LOADING — Legend of the Galactic Heroes" 월드 로드 화면(기함 3D 렌더)** 도달. 전략맵 직전 단계. 증거: `.omo/live-qa/m3-world-msg32-20260710-0218/shots/DECISIVE-now-loading-hung-0x0205-no-session-player.png`.
