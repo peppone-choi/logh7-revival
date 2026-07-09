@@ -1,5 +1,14 @@
 # LOGH VII 루프 상태
 
+## M3 크래시 해소 → 다음: 미배선 어드미션 코드 0x0308 (포괄 배선 필요) (2026-07-10)
+
+- **크래시 완전 해소**(`.omo/live-qa/m3-crashfix-20260710-0319/`): 풀사이즈 0채움 body로 클라가 어드미션 응답 8개를 무사 수신, 프로세스 생존. `MAXREACHED-nowloading-clean-no-crash.png`(크래시 다이얼로그 없는 깨끗한 NOW LOADING) vs 직전 크래시 화면 대조로 확정.
+- **훨씬 전진한 어드미션열**(conn 월드): `0x0304→0x0306→0x0314→0x0312→0x030a→0x0310→0x030e→0x031c→0x0308(정지)`. 앞 8개는 전부 `kind=admission` 풀사이즈 응답 정상 수신.
+- **새 정지: 0x0308** — `buildAdmissionResponseInner`(world-records.mjs:583)에 case 없음 → lobby 라우터로 새어 "알 수 없는 코드" → 응답 미전송 → 클라 0x0309 영구 대기. **크기는 이미 표에 있음(0x0309=0x55c=1372B).**
+- **패턴 확립(기계적)**: static-info 요청→응답 = req(짝수)→resp(req+1, 홀수), 응답 크기는 `STATIC_INFO_BODY_SIZES`에 전부 등재. 관측된 요청 전체(0x0304/0x0306/0x0308/0x030a/0x030c/0x030e/0x0310/0x0312/0x0314/0x031c) → 응답(0x0305~0x031d)을 **포괄 배선**하면 static-info 어드미션 버스트 일괄 해결(라이브 왕복 절약). 프레이밍 로직은 이번에 검증됨.
+- **다음**: server-dev가 static-info req→resp 쌍 포괄 배선 → live-qa 재검증(전략맵 렌더 또는 static-info 이후 새 계열 코드).
+- 하네스 노트: 클라 첫 기동 시 로그인 직후 조용히 종료되는 flaky 관측(재기동 시 정상, M3와 무관한 기동 불안정).
+
 ## M3 크래시 확정: static-info는 고정크기 프레이밍 — 풀사이즈 0채움 body 필요 (2026-07-10, RE)
 
 - **RE 확정**(re-analyst, 클라 사이저 `FUN_004b8b00` + enqueue `FUN_004b8850` + dispatcher `FUN_004ba2b0` + walker `FUN_004c4a10` 4곳 교차): 0x0305 크래시는 walker 헤더/count 문제가 **아니라 고정크기 프레이밍 over-read**. 클라가 opcode별 **하드코딩 고정크기**를 사이저에서 얻어 `malloc(size)` 후 **길이검사 없이 그 크기만큼 recv 버퍼에서 복사**. 빈 body(0바이트)면 21KB(0x520a) over-read → 매핑 안 된 페이지 → access violation → CRT "abnormal termination".
