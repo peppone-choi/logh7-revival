@@ -24,7 +24,8 @@ import {
 } from './logh7-child-codec.mjs';
 
 export const KEYSETUP_INNER_CODE = 0x0031; // inner key-setup (클라 라우터 fast-path)
-export const REDIRECT_INNER_CODE = 0x7001; // S->C 로비 redirect
+export const REDIRECT_INNER_CODE = 0x7001; // S->C 로비 redirect (LGLoginOK)
+export const LOGIN_NG_INNER_CODE = 0x7002; // S->C LGLoginNG (fail-closed)
 
 // 검증된 127.0.0.1:47900 redirect 프레임의 원형(REDIRECT_TEMPLATE_HEX, 5bd249c login-protocol).
 // [u16BE 0x7001][u16 0][u32 0][u32BE ip@8][u16BE port@12][u16 0][u32BE token@16][u16 0]
@@ -83,6 +84,18 @@ function encrypt0030Frame({ tables, key, body }) {
 }
 
 /**
+ * 0x7002 LGLoginNG raw inner. G120: body 최소 필드 — [u16BE 0x7002][u8 status].
+ * @param {{ status?: number }} [options]
+ * @returns {Buffer}
+ */
+export function buildLoginNgInner({ status = 1 } = {}) {
+  const inner = Buffer.alloc(4);
+  inner.writeUInt16BE(LOGIN_NG_INNER_CODE, 0);
+  inner.writeUInt8(status & 0xff, 2);
+  return inner;
+}
+
+/**
  * GIN7 자격증명(inner 0x7000)이 실린 복호 body 로부터 로그인 성공 응답 프레임 쌍을 만든다.
  * @param {{ decodedBody: Buffer, decipherKey: Buffer, redirectInner?: Buffer, tables?: object }} options
  * @returns {{ keysetupFrame: Buffer, redirectFrame: Buffer, gin7KeyHex: string }}
@@ -108,4 +121,25 @@ export function buildLoginResponseFrames({ decodedBody, decipherKey, redirectInn
   });
 
   return { keysetupFrame, redirectFrame, gin7KeyHex: gin7Key.toString('hex') };
+}
+
+/**
+ * 로그인 거부: decipherKey 로 암호화한 단일 0x7002 프레임 (성공 쌍을 보내지 않음 = fail-closed).
+ * @param {{ decodedBody: Buffer, decipherKey: Buffer, status?: number, tables?: object }} options
+ * @returns {{ ngFrame: Buffer, innerCode: number }}
+ */
+export function buildLoginNgResponseFrame({
+  decodedBody,
+  decipherKey,
+  status = 1,
+  tables = loadChildCodecTables(),
+}) {
+  const parsed = parse0030Body(decodedBody);
+  const ngInner = buildLoginNgInner({ status });
+  const ngFrame = encrypt0030Frame({
+    tables,
+    key: decipherKey,
+    body: build0030Body({ id: parsed.id, inner: ngInner }),
+  });
+  return { ngFrame, innerCode: LOGIN_NG_INNER_CODE };
 }

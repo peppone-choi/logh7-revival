@@ -67,8 +67,14 @@ function build0030Frame({ id, inner, phase1Key, tables }) {
 }
 
 // DECIPHER_KEY 로 복호해 0x0030 inner 를 꺼낸다(S→C 응답 검증).
+// 로비는 subheaderLen=4이므로 parseTransportFrame이 잘못된 위치에서 code를 읽는다.
+// raw frame: [u16BE len][u16BE 0][u16BE 0][u16BE 0x0030][enc] (lobi subheaderLen=4)
+// parseTransportFrame: code = raw.readUInt16BE(2) = 0 (subheader!), body = raw.subarray(4)
+// frame.body: [u16BE 0][u16BE 0x0030][enc] (offset 4부터)
+// 실제 enc는 frame.body[4:]부터 (u16BE 0 + u16BE 0x0030 = 4 bytes를 건너뜀)
 function decodeResponseInner(frame, tables) {
-  const decoded = decryptBuffer(frame.body, expandChildCodecKey(DECIPHER_KEY, tables));
+  const encBody = frame.body.subarray(4); // skip subheader padding (u16BE 0) + code (u16BE 0x0030)
+  const decoded = decryptBuffer(encBody, expandChildCodecKey(DECIPHER_KEY, tables));
   return parse0030Body(decoded).inner;
 }
 
@@ -143,11 +149,12 @@ test('conn2 lobby dispatch: 0x0020 무응답, 0x2000→0x2001, 0x1000→0x1001(4
     // 0x0020 이 무응답이면 첫 응답=0x2001, 둘째=0x1001. (총 2프레임)
     const [resp2001, resp1001] = await readFrames(socket, 2);
 
-    // 0x2001 LobbyLoginOK: raw inner [u16BE 0x2001][u16BE 0]
+    // 0x2001 LobbyLoginOK: message32 format [u32LE 0][u16BE 0x2001][status...]
     const inner2001 = decodeResponseInner(resp2001, baseTables);
-    assert.equal(inner2001.readUInt16BE(0), 0x2001);
-    assert.equal(inner2001.length, 4);
-    assert.equal(inner2001.readUInt16BE(2), 0); // status OK
+    assert.equal(inner2001.readUInt32LE(0), 0);
+    assert.equal(inner2001.readUInt16BE(4), 0x2001);
+    assert.equal(inner2001.length, 9); // message32 header + 1 byte status + 2 bytes pad
+    assert.equal(inner2001[6], 0); // status OK
 
     // 0x1001 ResponseInformationAccount: message32 [u32LE 0][u16BE 0x1001][448B body]
     const inner1001 = decodeResponseInner(resp1001, baseTables);

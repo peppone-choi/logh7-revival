@@ -513,91 +513,201 @@ export function encodeResponseInfoAccount(account = {}, chars = []) {
 }
 
 // ─── 0x2004 LobbyResponseInformationCharacterCharge ──────────────────────────
+//
+// ★정본: 고정 0x36c 슬롯이 아니라 compact sequential stream (5bd249c G136).
+// body 크기 cap = 0x6dc (FUN_004b8b00). count@0, records from offset 1.
+// 카드 enable 조건: status∈{1,2}, card_kind=2, selectable_detail≠0.
 
-/** 고정크기 바이트 이미지 크기 (body only) */
+/** 수신 버퍼 cap (body only) */
 export const LOBBY_CHAR_CARD_LIST_SIZE = 0x6dc; // 1756 B
 
-const INFO_CHARGE_STRIDE   = 0x36c; // InformationCharacterCharge stride (876 B)
-const INFO_CHARGE_BASE_OFF = 0x004; // 첫 레코드 시작
-const CHARGED_CHAR_OFF     = 0x2a4; // ChargedCharacter card → record-relative offset
+const LOBBY_CC_NAME_UNITS = 0x0d;
+const LOBBY_CC_DESC_UNITS = 0x41;
+const LOBBY_CC_GATE_PREFIX = 0x22;
+const LOBBY_CC_DETAIL_NAME_UNITS = 0x0d;
+const LOBBY_CC_CARD_KIND = 2;
+const LOBBY_CC_SELECTABLE = 1;
+const LOBBY_CC_AGE_SEC_PER_YEAR = 0x01e13380;
+
+function writeLobbyUtf16FieldBE(target, cursor, value, maxUnits) {
+  const bodyUnits = [...String(value ?? '')].slice(0, Math.max(0, maxUnits - 1));
+  const units = [...bodyUnits, '\0'];
+  target.writeUInt8(units.length, cursor);
+  let next = cursor + 1;
+  for (const unit of units) {
+    target.writeUInt16BE(unit.codePointAt(0) ?? 0, next);
+    next += 2;
+  }
+  return next;
+}
+
+function writeLobbyUtf16FieldLE(target, cursor, value, maxUnits) {
+  const units = [...String(value ?? ''), '\0'].slice(0, maxUnits);
+  target.writeUInt8(units.length, cursor);
+  let next = cursor + 1;
+  for (const unit of units) {
+    target.writeUInt16LE(unit.codePointAt(0) ?? 0, next);
+    next += 2;
+  }
+  return next;
+}
+
+function writeLobbyChargedCharacterDetail(payload, cursor, record) {
+  payload.writeUInt32BE(record.id >>> 0, cursor); cursor += 4;
+  payload.writeUInt8(record.power & 0xff, cursor); cursor += 1;
+  payload.writeUInt8(record.camp & 0xff, cursor); cursor += 1;
+  payload.writeUInt8(record.generated & 0xff, cursor); cursor += 1;
+  payload.writeUInt8(record.sex & 0xff, cursor); cursor += 1;
+  payload.writeUInt8(record.bdayMonth & 0xff, cursor); cursor += 1;
+  payload.writeUInt8(record.bdayDay & 0xff, cursor); cursor += 1;
+  payload.writeUInt32BE(record.ageSeconds >>> 0, cursor); cursor += 4;
+  payload.writeUInt8(record.state & 0xff, cursor); cursor += 1;
+  for (const ability of record.abilities) {
+    payload.writeUInt16BE(ability & 0xffff, cursor);
+    cursor += 2;
+  }
+  cursor = writeLobbyUtf16FieldBE(payload, cursor, record.lastname, LOBBY_CC_DETAIL_NAME_UNITS);
+  cursor = writeLobbyUtf16FieldBE(payload, cursor, record.firstname, LOBBY_CC_DETAIL_NAME_UNITS);
+  cursor = writeLobbyUtf16FieldBE(payload, cursor, record.displayName, LOBBY_CC_DETAIL_NAME_UNITS);
+  return cursor;
+}
+
+function writeLobbyCharacterChargeRecord(payload, cursor, record) {
+  payload.writeUInt16LE(record.id & 0xffff, cursor); cursor += 2;
+  payload.writeUInt8(record.status & 0xff, cursor); cursor += 1;
+  cursor = writeLobbyUtf16FieldBE(payload, cursor, record.name, LOBBY_CC_NAME_UNITS);
+  cursor = writeLobbyUtf16FieldBE(payload, cursor, record.description, LOBBY_CC_DESC_UNITS);
+  cursor += LOBBY_CC_GATE_PREFIX; // zero-filled by alloc
+  payload.writeUInt8(LOBBY_CC_CARD_KIND, cursor); cursor += 1;
+  payload.writeUInt8(LOBBY_CC_SELECTABLE, cursor); cursor += 1;
+  return writeLobbyChargedCharacterDetail(payload, cursor, record);
+}
 
 /**
- * 0x2004 LobbyResponseInformationCharacterCharge 인코더
- *
- * 1756-byte 고정크기 LE 바이트 이미지를 빌드 후 message32 래핑 반환.
- * 근거: [CW]§8.2 FUN_004b8b00→0x6dc; FUN_0043fd60 필드 워크.
- *
- * 미확정: +0x2a8..0x2ad 6개 u8 중 카드 enable/status 바이트 위치.
- * 서버세이프 기본값: charged_character[0].첫째u8=1(활성화), 나머지 zero.
- * 이 가정은 코드 주석 및 테스트에 명시; RE 추가 확인 후 수정 예정.
- *
- * 레이아웃 (body):
- *   0x000 u8 information_count(≤2) · 0x001~0x003 pad
- *   0x004 + i*0x36c: InformationCharacterCharge[i] (stride 876)
- *     o=0x000~0x2a0: primary+next session (zero; 추후 구현)
- *     o=0x2a1: u8 charged_character_count · o=0x2a2~0x2a3: pad
- *     o=0x2a4: ChargedCharacter (0x1001 extension_character와 동형, friendship 없음)
- *       +00 u32 sid · +04~09 6×u8(status 미확정) · +0c u32 age
- *       +10 u8 · +12 u16[8] ability
- *       +22/+3e/+5a/+76/+92 이름×5(28B each) · +ae blood · +af rank
- *       +b0 u32 face · +b4 u8 count · +b8~c4 u32×4(evals)
- *
+ * 0x2004 인코더 — compact stream (정본) + 0x6dc zero-pad body.
  * @param {import('./logh7-character-store.mjs').CharRecord[]} chars
- * @returns {Buffer} message32 inner [u32 LE 0][u16 BE 0x2004][1756B body]
+ * @returns {Buffer} message32
  */
 export function encodeLobbyCharCardList(chars = []) {
-  const buf = Buffer.alloc(LOBBY_CHAR_CARD_LIST_SIZE); // zero-filled
+  const payload = Buffer.alloc(LOBBY_CHAR_CARD_LIST_SIZE);
+  const list = (chars ?? []).slice(0, 2);
+  payload.writeUInt8(list.length, 0);
+  let cursor = 1;
+  for (const c of list) {
+    const id = Number(c.id) || 0;
+    if (id <= 0) continue;
+    const lastname = String(c.lastname ?? '');
+    const firstname = String(c.firstname ?? '');
+    const display = String(c.display ?? ((lastname + firstname) || `Char${id}`));
+    const ab = Array.isArray(c.ability8) ? c.ability8.slice(0, 8) : [];
+    while (ab.length < 8) ab.push(0);
+    const ageYears = Number.isFinite(c.age) ? Number(c.age) : 18;
+    const record = {
+      id,
+      status: 1, // selectable (G136: status 1|2)
+      name: display,
+      description: display,
+      power: (c.power ?? 1) & 0xff,
+      camp: (c.camp ?? c.power ?? 1) & 0xff,
+      generated: (c.generated ?? 1) & 0xff,
+      sex: (c.sex ?? 0) & 0xff,
+      bdayMonth: (c.bdayMonth ?? 1) & 0xff,
+      bdayDay: (c.bdayDay ?? 1) & 0xff,
+      ageSeconds: (Math.max(0, ageYears) * LOBBY_CC_AGE_SEC_PER_YEAR) >>> 0,
+      state: (c.charState ?? 1) & 0xff,
+      abilities: ab.map((v) => (v ?? 0) & 0xffff),
+      lastname,
+      firstname,
+      displayName: display,
+    };
+    cursor = writeLobbyCharacterChargeRecord(payload, cursor, record);
+  }
+  return buildMsg32Inner(CODE_LOBBY_RESP_INFO_CHAR, payload);
+}
 
-  const infos = chars.slice(0, 2); // information_count ≤ 2
-  buf[0x000] = infos.length;
-  // 0x001~0x003: pad
+/**
+ * 0x2006 LobbyResponseInformationSession — FUN_00444900 packed stream + 0x5304 고정.
+ *
+ * 정본 (5bd249c codec/scenario-session.mjs, RE 2026-06-16):
+ *   [u8 lead=0][u8 count]
+ *   per record:
+ *     [u16 LE session_id][u8 status 1|2]
+ *     [u8 name_units≤13][u16LE × units]          ← unit count, NUL 미포함
+ *     [u8 begin_day_units≤65][u16LE × units]
+ *     [u32 LE term]
+ *     2× power: [u8 id][u32 d0][u32 d1][u32 d2][u8 pend]
+ *               pend×{ [u8 super_man_len][u16×][ending body 23B] }
+ *     [u8 ending] ending×{ 16B }
+ *
+ * 간소 빌더(name+description 만)는 begin_day 다음에 올 term/power 를 생략해
+ * 파서가 0 selectable row 로 빠짐 → 세션 피커에 카드가 안 뜸.
+ */
+export const LOBBY_SESSION_LIST_SIZE = 0x5304; // 21252 B
+const SESSION_NAME_MAX_UNITS = 13;
+const SESSION_BEGIN_DAY_MAX_UNITS = 65;
+const SESSION_POWER_COUNT = 2;
+const SESSION_SUPER_MAN_MAX_UNITS = 13;
 
-  for (let i = 0; i < infos.length; i++) {
-    const c       = infos[i];
-    const recBase = INFO_CHARGE_BASE_OFF + i * INFO_CHARGE_STRIDE;
+/** [u8 unitCount][u16BE chars] — unit count only, no NUL (FUN_00444900).
+ *  라이브 정본(2026-07-01): sessionId LE + 텍스트 BE 혼합. */
+function writeSessionPstr16(payload, cursor, str, maxUnits) {
+  const units = [...String(str ?? '')].slice(0, maxUnits);
+  payload.writeUInt8(units.length, cursor);
+  let c = cursor + 1;
+  for (const ch of units) {
+    payload.writeUInt16BE((ch.codePointAt(0) ?? 0) & 0xffff, c);
+    c += 2;
+  }
+  return c;
+}
 
-    // o=0x000~0x2a0: primary_session + next_session → zero (서버세이프 기본값)
+function writePackedSessionRecord(payload, cursor, rec) {
+  let c = cursor;
+  payload.writeUInt16LE((rec.sessionId ?? 1) & 0xffff, c); c += 2;
+  payload.writeUInt8((rec.status ?? 1) & 0xff, c); c += 1;
+  c = writeSessionPstr16(payload, c, rec.name ?? rec.sessionName ?? 'LOGH VII', SESSION_NAME_MAX_UNITS);
+  // description 별칭 → begin_day (구 간소 빌더 호환)
+  const beginDay = rec.beginDay ?? rec.begin_day ?? rec.description ?? 'UC 796';
+  c = writeSessionPstr16(payload, c, beginDay, SESSION_BEGIN_DAY_MAX_UNITS);
+  payload.writeUInt32LE((rec.term ?? 0) >>> 0, c); c += 4;
 
-    // o=0x2a1: charged_character_count
-    buf[recBase + 0x2a1] = 1; // 카드 1장 활성화
-    // +0x2a2, +0x2a3: pad
-
-    // o=0x2a4: ChargedCharacter card
-    const cb = recBase + CHARGED_CHAR_OFF; // card base (절대 buf 오프셋)
-
-    buf.writeUInt32LE((c.id       ?? 0) >>> 0, cb + 0x00); // u32 sid
-    // +0x04~+0x09: 6×u8 (미확정 status 바이트)
-    // 서버세이프 기본값: 첫 번째 u8=1(카드 활성화 추정), 나머지 0
-    // [UNCONFIRMED: CW§8.2 "six single-byte fields read consecutively; names not known"]
-    buf[cb + 0x04] = 1; // status 추정값 (활성화)
-    // cb+0x05~0x09: 이미 0
-    // +0x0a, +0x0b: pad (u32 정렬)
-    buf.writeUInt32LE((c.age      ?? 0) >>> 0, cb + 0x0c); // u32 age
-    buf[cb + 0x10] = (c.charState ?? 0) & 0xff;            // u8
-    // +0x11: pad
-    const ab = c.ability8 ?? [0, 0, 0, 0, 0, 0, 0, 0];
-    for (let j = 0; j < 8; j++) {
-      buf.writeUInt16LE((ab[j] ?? 0) & 0xffff, cb + 0x12 + j * 2);
+  const powers = Array.isArray(rec.powers) ? rec.powers : [];
+  for (let k = 0; k < SESSION_POWER_COUNT; k += 1) {
+    const p = powers[k] ?? {};
+    payload.writeUInt8((p.id ?? k + 1) & 0xff, c); c += 1;
+    payload.writeUInt32LE((p.d0 ?? 0) >>> 0, c); c += 4;
+    payload.writeUInt32LE((p.d1 ?? 0) >>> 0, c); c += 4;
+    payload.writeUInt32LE((p.d2 ?? 0) >>> 0, c); c += 4;
+    const leader = String(p.superMan ?? p.super_man ?? '');
+    const hasLeader = [...leader].length > 0;
+    payload.writeUInt8(hasLeader ? 1 : 0, c); c += 1;
+    if (hasLeader) {
+      c = writeSessionPstr16(payload, c, leader, SESSION_SUPER_MAN_MAX_UNITS);
+      c += 2 + 1 + 1 + 1 + 1 + 1 + 2 + 2 + 4 + 4 + 4; // ending body zeros
     }
-    writeNameFieldFixed(buf, cb + 0x22, c.lastname     ?? '');
-    writeNameFieldFixed(buf, cb + 0x3e, c.firstname    ?? '');
-    writeNameFieldFixed(buf, cb + 0x5a, c.display      ?? '');
-    writeNameFieldFixed(buf, cb + 0x76, c.titleName    ?? '');
-    writeNameFieldFixed(buf, cb + 0x92, c.flagshipName ?? '');
-
-    buf[cb + 0xae] = (c.blood     ?? 0) & 0xff;            // u8 blood
-    buf[cb + 0xaf] = (c.rank      ?? 0) & 0xff;            // u8 rank
-    buf.writeUInt32LE((c.face     ?? 0) >>> 0, cb + 0xb0); // u32 face
-    buf[cb + 0xb4] = (c.endingCount ?? 0) & 0xff;         // u8 count
-    // +0xb5~0xb7: pad
-    buf.writeUInt32LE((c.eval0    ?? 0) >>> 0, cb + 0xb8); // u32 eval0
-    buf.writeUInt32LE((c.eval1    ?? 0) >>> 0, cb + 0xbc); // u32 eval1
-    buf.writeUInt32LE((c.eval2    ?? 0) >>> 0, cb + 0xc0); // u32 eval2
-    buf.writeUInt32LE((c.charFame ?? 0) >>> 0, cb + 0xc4); // u32 eval3/char_fame
-    // cb+0xc8 = recBase+0x36c → record boundary ✓ (0x1001의 friendship 없음)
   }
 
-  return buildMsg32Inner(CODE_LOBBY_RESP_INFO_CHAR, buf);
+  const ending = (rec.ending ?? 0) ? 1 : 0;
+  payload.writeUInt8(ending, c); c += 1;
+  if (ending) {
+    c += 2 + 2 + 4 + 4 + 4;
+  }
+  return c;
+}
+
+export function encodeLobbySessionList({
+  sessions = [{ sessionId: 1, status: 1, name: 'LOGH VII', beginDay: 'UC 796' }],
+} = {}) {
+  const records = (sessions ?? []).slice(0, 0x40);
+  const body = Buffer.alloc(LOBBY_SESSION_LIST_SIZE);
+  body.writeUInt8(0, 0); // leading raw byte
+  body.writeUInt8(records.length, 1);
+  let cursor = 2;
+  for (const r of records) {
+    cursor = writePackedSessionRecord(body, cursor, r);
+    if (cursor >= LOBBY_SESSION_LIST_SIZE) break;
+  }
+  return buildMsg32Inner(CODE_LOBBY_RESP_INFO_SESSION, body);
 }
 
 // ─── 보조: inner 코드 읽기 ─────────────────────────────────────────────────

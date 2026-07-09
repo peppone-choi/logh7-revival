@@ -27,6 +27,7 @@
 import {
   build0030Body,
   frame0030,
+  frame0030WithSubheader,
 } from './logh7-envelope-0030.mjs';
 import {
   encryptBuffer,
@@ -105,8 +106,10 @@ export function decodeLobbyLoginRequest(inner) {
 }
 
 /**
- * 0x2001 LobbyLoginOK inner 조립.  [u16BE 0x2001][u16BE status].  status 0 = OK.
- * 근거: Input_LobbyLoginOK::input_from_stream(0x0043f830)은 코드 뒤 2바이트만 읽는다(raw inner).
+ * 0x2001 LobbyLoginOK raw inner.  [u16BE 0x2001][u16BE status].  status 0 = OK.
+ * 근거: Input_LobbyLoginOK::input_from_stream(0x0043f830)은 코드 뒤 2바이트만 읽는다.
+ * 주의: 실클라 conn2 수신 경로는 message32 래퍼가 필요(G122). 와이어 송신은
+ *       buildLobbyLoginOkMessage32Inner / buildLobbyLoginOkFrame 를 쓴다.
  * @param {{ status?: number }} [options]
  * @returns {Buffer}  4바이트 raw inner (message32 래핑 아님)
  */
@@ -114,6 +117,23 @@ export function buildLobbyLoginOkInner({ status = 0 } = {}) {
   const inner = Buffer.alloc(4);
   inner.writeUInt16BE(CODE_LOBBY_LOGIN_OK, 0);
   inner.writeUInt16BE(status & 0xffff, 2);
+  return inner;
+}
+
+/**
+ * 0x2001 LobbyLoginOK message32 inner (실클라 기본).
+ * 레이아웃: [u32 LE 0][u16 BE 0x2001][u8 status][u8 0][u8 0]
+ * 근거: 5bd249c buildLobbyLoginOkPayload(format=message32) + 라이브 플래그
+ *       LOGH_LOBBY_OK_FORMAT=message32. bare raw 는 conn2 enqueue 에 도달하지 못함(G122).
+ * @param {{ status?: number }} [options]
+ * @returns {Buffer}  9바이트 message32 inner
+ */
+export function buildLobbyLoginOkMessage32Inner({ status = 0 } = {}) {
+  const inner = Buffer.alloc(9);
+  inner.writeUInt32LE(0, 0);
+  inner.writeUInt16BE(CODE_LOBBY_LOGIN_OK, 4);
+  inner[6] = status & 0xff;
+  // [7],[8] pad 0 — Input_LobbyLoginOK 는 코드 뒤 2바이트(status+pad)만 읽음
   return inner;
 }
 
@@ -133,15 +153,28 @@ export function buildLobbyLoginNgInner({ status = 1 } = {}) {
  * S→C 로비 로그인 응답을 완성된 0x0030 TCP 프레임으로 만든다.
  * conn2 재핸드셰이크에서 서버가 정한 decipherKey(클라가 수신 복호에 쓰는 키)로 암호화한다.
  *
- * 참고: 봉투 body(8+innerLen)는 8바이트 배수가 아닐 수 있으므로 child-codec 암호화 전에
- *       zero-pad 한다(login-response 와 동일). id 는 수신 0x2000 프레임의 id 를 그대로 싣는다.
+ * 기본 inner = message32. 기본 subheaderLen = 4 (conn2 라우터 필수).
+ * format:'raw' / subheaderLen:0 은 A/B·유닛테스트 용.
  *
- * @param {{ id: number, decipherKey: Buffer, tables?: object, status?: number, inner?: Buffer }} options
- * @returns {Buffer}  [u16BE len][u16BE 0x0030][enc body]
+ * @param {{ id: number, decipherKey: Buffer, tables?: object, status?: number, inner?: Buffer, format?: 'message32'|'raw', subheaderLen?: number }} options
+ * @returns {Buffer}
  */
-export function buildLobbyLoginOkFrame({ id, decipherKey, tables = loadChildCodecTables(), status = 0, inner }) {
-  const okInner = inner ?? buildLobbyLoginOkInner({ status });
+export function buildLobbyLoginOkFrame({
+  id,
+  decipherKey,
+  tables = loadChildCodecTables(),
+  status = 0,
+  inner,
+  format = 'message32',
+  subheaderLen = 4,
+} = {}) {
+  const okInner = inner
+    ?? (format === 'raw'
+      ? buildLobbyLoginOkInner({ status })
+      : buildLobbyLoginOkMessage32Inner({ status }));
   const body = build0030Body({ id: id >>> 0, inner: okInner });
   const schedule = expandChildCodecKey(decipherKey, tables);
-  return frame0030(encryptBuffer(pad8(body), schedule));
+  const enc = encryptBuffer(pad8(body), schedule);
+  if (subheaderLen > 0) return frame0030WithSubheader(enc, subheaderLen);
+  return frame0030(enc);
 }

@@ -13,8 +13,12 @@ import {
   expandChildCodecKey,
   loadChildCodecTables,
 } from '../src/server/logh7-child-codec.mjs';
-import { deframe0030, parse0030Body, readInnerCode } from '../src/server/logh7-envelope-0030.mjs';
-import { decode0030Frame } from '../src/server/logh7-transport-0030.mjs';
+import {
+  deframe0030,
+  parse0030Body,
+  readInnerCode,
+  unwrap0030Frame,
+} from '../src/server/logh7-envelope-0030.mjs';
 import {
   CODE_LOBBY_SESSION_INIT,
   CODE_LOBBY_LOGIN_REQUEST,
@@ -22,6 +26,7 @@ import {
   decodeLobbySessionInit,
   decodeLobbyLoginRequest,
   buildLobbyLoginOkInner,
+  buildLobbyLoginOkMessage32Inner,
   buildLobbyLoginOkFrame,
 } from '../src/server/logh7-lobby-login.mjs';
 import { handleLobbyInner } from '../src/server/logh7-lobby-session.mjs';
@@ -99,19 +104,25 @@ test('buildLobbyLoginOkInner → raw [u16BE 0x2001][u16BE 0]', () => {
   assert.equal(inner.toString('hex'), '20010000');
 });
 
-test('buildLobbyLoginOkFrame → decipherKey 복호 시 0x2001 왕복', () => {
-  const key = recoverPhase1Key(PHASE1_FRAME_0034);
-  const { id } = decodeClientInner(FRAME_2000, key);
-  const frame = buildLobbyLoginOkFrame({ id, decipherKey: LEGACY_DECIPHER_KEY, tables });
-
-  // 프레임 골격: [u16BE len][u16BE 0x0030][enc]
-  assert.equal(frame.readUInt16BE(2), 0x0030);
-
-  // 클라가 decipherKey 로 복호했을 때 inner 0x2001 이 나와야 한다.
-  const parsed = decode0030Frame(frame, expandChildCodecKey(LEGACY_DECIPHER_KEY, tables));
-  assert.equal(parsed.id, id); // 수신 0x2000 의 id 를 그대로 echo
-  assert.equal(readInnerCode(parsed.inner), CODE_LOBBY_LOGIN_OK);
-  assert.equal(parsed.inner.readUInt16BE(2), 0); // status 0 = OK
+test('buildLobbyLoginOkFrame subheader4 decrypts to message32 0x2001', () => {
+  const { id } = decodeClientInner(FRAME_2000, recoverPhase1Key(PHASE1_FRAME_0034));
+  const frame = buildLobbyLoginOkFrame({
+    id,
+    decipherKey: LEGACY_DECIPHER_KEY,
+    tables,
+    format: 'message32',
+    subheaderLen: 4,
+  });
+  const { subheaderLen, encBody } = unwrap0030Frame(frame);
+  assert.equal(subheaderLen, 4);
+  const body = decryptBuffer(encBody, expandChildCodecKey(LEGACY_DECIPHER_KEY, tables));
+  // pad8 가능 — parse0030Body 가 innerLen 으로 자름
+  const parsed = parse0030Body(body);
+  assert.equal(parsed.id, id);
+  // message32: [u32 0][u16 BE 0x2001][status...]
+  assert.equal(parsed.inner.readUInt32LE(0), 0);
+  assert.equal(parsed.inner.readUInt16BE(4), CODE_LOBBY_LOGIN_OK);
+  assert.equal(parsed.inner[6], 0);
 });
 
 // ─── handleLobbyInner 라우팅 ──────────────────────────────────────────────────
@@ -122,11 +133,12 @@ test('handleLobbyInner: 0x0020 → null(무응답)', () => {
   assert.equal(handleLobbyInner(inner, 'test01', null), null);
 });
 
-test('handleLobbyInner: 0x2000 → raw 0x2001 LobbyLoginOK inner', () => {
+test('handleLobbyInner: 0x2000 → message32 0x2001 LobbyLoginOK', () => {
   const key = recoverPhase1Key(PHASE1_FRAME_0034);
   const { inner } = decodeClientInner(FRAME_2000, key);
   const resp = handleLobbyInner(inner, 'test01', null);
   assert.ok(Buffer.isBuffer(resp));
-  assert.equal(resp.readUInt16BE(0), CODE_LOBBY_LOGIN_OK);
-  assert.equal(resp.readUInt16BE(2), 0);
+  const expect = buildLobbyLoginOkMessage32Inner({ status: 0 });
+  assert.equal(resp.toString('hex'), expect.toString('hex'));
+  assert.equal(resp.readUInt16BE(4), CODE_LOBBY_LOGIN_OK);
 });
