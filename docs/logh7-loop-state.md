@@ -1,5 +1,22 @@
 # LOGH VII 루프 상태
 
+## ✅ M3 수정 확정: 0x0323 flagship(+0x24) = 0x0325 unit id(+0x04) 정합 (2026-07-10, RE+Frida)
+
+**정적(FUN_004c2a80 디컴파일)+동적(Frida)+문서(info-records-wire) 삼중 확정.** NOW LOADING 해제 = 선택 캐릭터의 flagship이 유닛과 링크되어 `FUN_004c2c80(0)`이 플레이어 오브젝트를 빌드하는 것.
+
+- **링크 조건**: `FUN_004c2a80`이 char 배열(clientBase+0x36a8b4, stride 0x2d4) 순회 → 선택 char(char+0x00 == clientBase+0x3584a0) 발견 → **char+0x24(flagship, u32)** 를 unit 배열(clientBase+0x41a368, stride **0x58**, count u16@clientBase+0x41a364)의 **unit+0x00(id, u32)** 과 대조 → 일치 unit 존재 시 `FUN_004c2c80(0)` 호출 → 오브젝트 테이블(clientBase+0xc) 빌드 → NOW LOADING 해제.
+- **와이어 오프셋(server-dev 구현용, dispatcher case 0x323/0x325 + 문서 교차)**:
+  | 필드 | 0x0030 body offset | 
+  |---|---|
+  | 0x0323 char.id | +0x00 (u32) |
+  | **0x0323 char.flagship (grid-unit id)** | **+0x24 (u32)** ← 채워야 |
+  | **0x0325 unit count** | **+0x00 (u16)** ≥1 |
+  | **0x0325 unit[k].id** | **+0x04 + k*0x58 (u32)** |
+- **정합 규칙**: `0x0323 body[0x24] (flagship) == 0x0325 body[0x04] (unit[0].id)` AND `0x0325 body[0] (count) ≥ 1`.
+- **bVar1은 게이트 아님**(정정): bVar1=true는 선택 char 찾으면 세팅되나 그 효과(에러출력)는 param_2==0 분기에만 있고 0x0b0a 경로는 param_2=1이라 무관. **실블로커 = flagship↔unit 불일치로 FUN_004c2c80(0) 미호출**. Frida bVar1=0은 부수현상.
+- **char 중복(id=1 ×2) 무관**: flagship만 채우면 해소(중복 정리는 권장, 블로커 아님). **내 ×2 refresh는 되돌려 0x0323 1회로.**
+- **server-dev 수정**: (1) 0x0325에 유닛 ≥1개(실 unit id, body+0x04), (2) 선택 캐릭터 0x0323 body+0x24(flagship)에 그 unit id, (3) 0x0323 캐릭터당 1회(×2 되돌림). Frida 도구(`_frida_worldload_probe.js`)로 FUN_004c2c80 호출·오브젝트 테이블 빌드 검증.
+
 ## ★ M3 Frida 돌파: 근본원인 = 0x0323 char↔flagship↔unit 링크 실패 (2026-07-10, 동적확정)
 
 **Frida 동적 계측이 5개 정적 가설 반증 후 블로커를 결정적으로 규명.** frida 17.11이 g7mtclient.exe(D3D8, ASLR off, ImageBase 0x400000)에 정상 attach.
