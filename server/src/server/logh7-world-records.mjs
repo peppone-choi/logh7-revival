@@ -875,15 +875,15 @@ export function buildWorldReadyPushInners({
   if (includeEarlyGridType) {
     inners.push(buildStaticInformationGridTypeInner({ objects: DEFAULT_SECTOR_GRID_TYPES }));
   }
-  // 계약 순서(render-contract L102) + A6 FIX(inworld-progress P7):
-  //   0x0b09(begin) → [0x0325 유닛 + 0x0323 캐릭터] refresh ×2 → 0x0b0a(end) → 0x0f03.
-  // ★×2 재전송(P7 FIX A "re-send 0x0325 + 0x0323 BETWEEN 0x0b09 and 0x0b0a"): FUN_004c2a80(1)이
-  //   0x0b0a 에서 플레이어 슬롯 엔티티(clientBase+0xc)를 빌드하려면 유닛/캐릭터 레코드가 begin/end
-  //   사이에 resident 여야 한다. 클라 Field_Import 완료 타이밍(mode==2) 편차로 1회 refresh 는
-  //   0x0b0a 처리 시점에 미도달할 수 있어 두 번 방출(refresh ×2)로 resident 를 보장한다.
+  // 계약 순서(render-contract L102) + M3 정합 수정:
+  //   0x0b09(begin) → 0x0325(유닛) + 0x0323(캐릭터) → 0x0b0a(end) → 0x0f03. 각 정확히 1회.
+  // ★정합이 NOW LOADING 을 해제한다(docs/logh7-loop-state.md "0x0323 flagship(+0x24)=0x0325
+  //   unit id(+0x04) 정합"): 클라 FUN_004c2a80 은 begin/end 사이에서 char.flagship(+0x24)을
+  //   unit id(+0x04)와 링크해 플레이어 오브젝트(clientBase+0xc)를 빌드한다. makeChar 의
+  //   gridUnitId 와 makeUnit 의 unitId 는 동일 `unitId` 라서 flagship==unit[0].id 가 성립한다.
+  //   이전 P7 ×2 재전송은 정합이 아니라 타이밍 추측이었다 — 링크가 성립하면 1회로 충분하며,
+  //   중복 방출은 불필요한 중복 스텁일 뿐이라 각 레코드 1회로 되돌린다.
   inners.push(buildNotifyEnterGridBeginInner({ value: gridBeginValue }));
-  inners.push(makeUnit());
-  if (hasChar) inners.push(makeChar());
   inners.push(makeUnit());
   if (hasChar) inners.push(makeChar());
   inners.push(buildNotifyEnterGridEndInner({ value: gridEndValue }));

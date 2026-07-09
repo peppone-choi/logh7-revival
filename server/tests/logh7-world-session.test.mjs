@@ -498,17 +498,17 @@ test('full login→roster→world→move pipeline (shipped codecs) dual-session'
 //   0x0b09(begin) → 0x0325(유닛) + 0x0323(캐릭터 refresh) → 0x0b0a(end, 렌더 트리거) → 0x0f03(GridInit OK).
 // 순서 엄수: 0x0f03(월드초기화)는 반드시 0x0b0a 이후 (render-contract: 조기 push 크래시).
 
-test('buildWorldReadyPushInners refreshes 0x0325×2+0x0323×2 inside 0x0b09/0x0b0a (P7 FIX A)', () => {
-  // A6 FIX(inworld-progress P7): FUN_004c2a80(1)이 0x0b0a 에서 플레이어 슬롯 엔티티를 빌드하려면
-  // 유닛/캐릭터 레코드가 begin/end 사이에 resident 여야 한다. 클라 Field_Import(mode==2) 타이밍
-  // 편차로 1회 refresh 는 미도달할 수 있어 ×2 재전송("re-send 0x0325 + 0x0323 BETWEEN 0x0b09/0x0b0a").
+test('buildWorldReadyPushInners pushes 0x0325×1 + 0x0323×1 inside 0x0b09/0x0b0a with flagship↔unit alignment', () => {
+  // M3 수정 확정(docs/logh7-loop-state.md "0x0323 flagship(+0x24)=0x0325 unit id(+0x04) 정합"):
+  // 클라 FUN_004c2a80 는 선택 char 의 flagship(+0x24)을 unit id(+0x04)와 링크해 플레이어 오브젝트를
+  // 빌드한다. 링크가 성립하면 오브젝트 테이블(clientBase+0xc)이 채워져 NOW LOADING 이 해제된다.
+  // 이전 P7 ×2 재전송은 정합이 아니라 타이밍 추측이었고 중복 스텁을 만든다 — 각 레코드 정확히 1회로
+  // 되돌리되 정합(flagship==unit id)과 count≥1 을 계약으로 고정한다.
   const inners = buildWorldReadyPushInners({ unitId: 8, unitCell: 2588, commander: 5 });
   const codes = inners.map((i) => readMsg32Code(i));
-  // 계약 순서(render-contract L102) + ×2 재전송: begin → [unit,char]×2 → end → grid-init OK.
+  // 계약 순서(render-contract L102): begin → 0x0325(유닛) + 0x0323(캐릭터) → end → grid-init OK.
   assert.deepEqual(codes, [
     CODE_NOTIFY_ENTER_GRID_BEGIN,
-    CODE_INFO_UNIT,
-    CODE_INFO_CHARACTER,
     CODE_INFO_UNIT,
     CODE_INFO_CHARACTER,
     CODE_NOTIFY_ENTER_GRID_END,
@@ -517,21 +517,33 @@ test('buildWorldReadyPushInners refreshes 0x0325×2+0x0323×2 inside 0x0b09/0x0b
   const iBegin = codes.indexOf(CODE_NOTIFY_ENTER_GRID_BEGIN);
   const iEnd = codes.indexOf(CODE_NOTIFY_ENTER_GRID_END);
   const iInit = codes.indexOf(CODE_GRID_INIT_OK);
-  // ×2 재전송 검증: 유닛/캐릭터 각 2회, 전부 begin/end 사이.
-  assert.equal(codes.filter((c) => c === CODE_INFO_UNIT).length, 2, '0x0325 refreshed ×2');
-  assert.equal(codes.filter((c) => c === CODE_INFO_CHARACTER).length, 2, '0x0323 refreshed ×2');
+  // 각 정확히 1회 (×2 아님 — 중복 스텁 방지)
+  assert.equal(codes.filter((c) => c === CODE_INFO_UNIT).length, 1, '0x0325 exactly once');
+  assert.equal(codes.filter((c) => c === CODE_INFO_CHARACTER).length, 1, '0x0323 exactly once');
   for (let i = 0; i < codes.length; i += 1) {
     if (codes[i] === CODE_INFO_UNIT || codes[i] === CODE_INFO_CHARACTER) {
       assert.ok(i > iBegin && i < iEnd, `refresh @${i} must sit between begin/end`);
     }
   }
   assert.ok(iInit > iEnd, '0x0f03 world-init must come AFTER 0x0b0a (early push crashes)');
+  // ★정합: 0x0323 flagship(body+0x24) == 0x0325 unit[0].id(body+0x04) AND 0x0325 count≥1.
+  const unitRec = inners.find((i) => readMsg32Code(i) === CODE_INFO_UNIT);
+  const charRec = inners.find((i) => readMsg32Code(i) === CODE_INFO_CHARACTER);
+  const unitBody = msg32Body(unitRec);
+  const charBody = msg32Body(charRec);
+  assert.ok(unitBody.readUInt16LE(0x00) >= 1, '0x0325 count ≥ 1 (unit array non-empty)');
+  assert.equal(unitBody.readUInt32LE(0x04), 8, 'unit[0].id(+0x04) = real fleet id');
+  assert.equal(
+    charBody.readUInt32LE(0x24),
+    unitBody.readUInt32LE(0x04),
+    'char flagship(+0x24) must equal unit[0].id(+0x04) — client char→flagship→unit link',
+  );
 });
 
-test('buildWorldReadyPushInners without commander still refreshes 0x0325×2 (no char)', () => {
+test('buildWorldReadyPushInners without commander still pushes 0x0325×1 (no char record)', () => {
   const inners = buildWorldReadyPushInners({ unitId: 8, unitCell: 2588, commander: 0 });
   const codes = inners.map((i) => readMsg32Code(i));
-  assert.equal(codes.filter((c) => c === CODE_INFO_UNIT).length, 2, '0x0325 ×2 even w/o commander');
+  assert.equal(codes.filter((c) => c === CODE_INFO_UNIT).length, 1, '0x0325 exactly once w/o commander');
   assert.equal(codes.filter((c) => c === CODE_INFO_CHARACTER).length, 0, '0x0323 requires commander>0');
 });
 
@@ -549,7 +561,7 @@ test('buildWorldReadyPushInners requires a real unitId (no synthetic id)', () =>
   assert.throws(() => buildWorldReadyPushInners({ unitId: 0 }));
 });
 
-test('handleWorldInner 0x0314 appends world-ready push after 0x0315 for in-world player', () => {
+test('handleWorldInner 0x0314 appends world-ready push (0x0325×1+0x0323×1) with flagship↔unit alignment', () => {
   const world = createWorldSession();
   world.seedPlayer({ connectionId: 1, characterId: 5, unitId: 8, cell: 2588, inWorld: true });
   const req = Buffer.alloc(2);
@@ -559,22 +571,27 @@ test('handleWorldInner 0x0314 appends world-ready push after 0x0315 for in-world
   const codes = result.responses.map((r) => readMsg32Code(r.inner));
   // 0x0315 reactive 응답이 선두, 그 뒤 계약 순서(render-contract L102) world-ready push 시퀀스.
   assert.equal(codes[0], 0x0315, 'first response is the reactive static-grid 0x0315');
-  // ×2 재전송(P7 FIX A): begin → [unit,char]×2 → end → grid-init OK.
+  // 각 1회: begin → [unit, char] → end → grid-init OK.
   assert.deepEqual(codes.slice(1), [
     CODE_NOTIFY_ENTER_GRID_BEGIN,
-    CODE_INFO_UNIT,
-    CODE_INFO_CHARACTER,
     CODE_INFO_UNIT,
     CODE_INFO_CHARACTER,
     CODE_NOTIFY_ENTER_GRID_END,
     CODE_GRID_INIT_OK,
   ]);
-  // 불변식(계약 L102): 0x0325/0x0323 refresh 는 begin/end 사이(각 ×2), 0x0f03 은 그 뒤.
-  assert.equal(codes.filter((c) => c === CODE_INFO_UNIT).length, 2, '0x0325 ×2');
-  assert.equal(codes.filter((c) => c === CODE_INFO_CHARACTER).length, 2, '0x0323 ×2');
+  // 불변식(계약 L102): 0x0325/0x0323 refresh 는 begin/end 사이(각 1회), 0x0f03 은 그 뒤.
+  assert.equal(codes.filter((c) => c === CODE_INFO_UNIT).length, 1, '0x0325 exactly once');
+  assert.equal(codes.filter((c) => c === CODE_INFO_CHARACTER).length, 1, '0x0323 exactly once');
   assert.ok(codes.indexOf(CODE_INFO_UNIT) > codes.indexOf(CODE_NOTIFY_ENTER_GRID_BEGIN));
   assert.ok(codes.lastIndexOf(CODE_INFO_CHARACTER) < codes.indexOf(CODE_NOTIFY_ENTER_GRID_END));
   assert.ok(codes.indexOf(CODE_GRID_INIT_OK) > codes.indexOf(CODE_NOTIFY_ENTER_GRID_END));
+  // ★정합: flagship(+0x24) == unit[0].id(+0x04) == player.unitId(8), count≥1.
+  const inners = result.responses.map((r) => r.inner);
+  const unitBody = msg32Body(inners.find((i) => readMsg32Code(i) === CODE_INFO_UNIT));
+  const charBody = msg32Body(inners.find((i) => readMsg32Code(i) === CODE_INFO_CHARACTER));
+  assert.ok(unitBody.readUInt16LE(0x00) >= 1, '0x0325 count ≥ 1');
+  assert.equal(unitBody.readUInt32LE(0x04), 8, 'unit[0].id = player.unitId');
+  assert.equal(charBody.readUInt32LE(0x24), unitBody.readUInt32LE(0x04), 'flagship == unit id');
   // 모든 응답은 이 connection 으로만, message32 로.
   for (const r of result.responses) {
     assert.deepEqual(r.targets, [1]);

@@ -280,10 +280,11 @@ test('playable server boots twice and serves login+world+move sequence', async (
       }
     };
 
-    // 0x0314 → 0x0315 + world-ready push(0x0b09 → 0x0325×2 + 0x0323×2 → 0x0b0a → 0x0f03, ~111KB).
-    //   P7 FIX A ×2 재전송: FUN_004c2a80(1)이 0x0b0a 에서 슬롯 엔티티를 빌드하려면 유닛/캐릭터
-    //   레코드가 begin/end 사이에 resident 여야 한다(refresh ×2 로 보장). 대용량 버스트라 여러 TCP
-    //   청크로 쪼개지므로 단일 파서로 0x0f03(push 종료)까지 수집한다.
+    // 0x0314 → 0x0315 + world-ready push(0x0b09 → 0x0325 + 0x0323 → 0x0b0a → 0x0f03, ~55KB).
+    //   M3 정합 수정: begin/end 사이에서 char.flagship(+0x24)==unit id(+0x04) 링크가 성립하면
+    //   FUN_004c2a80 이 플레이어 오브젝트를 빌드한다 — 각 레코드 1회로 충분(이전 P7 ×2 는 타이밍
+    //   추측·중복 스텁이라 되돌림). 대용량 버스트라 여러 TCP 청크로 쪼개지므로 단일 파서로
+    //   0x0f03(push 종료)까지 수집한다.
     const gridReq = Buffer.alloc(2);
     gridReq.writeUInt16BE(0x0314, 0);
     socket.write(build0030Transport({ phase1Key, id: reactiveId, inner: gridReq, tables }));
@@ -291,17 +292,30 @@ test('playable server boots twice and serves login+world+move sequence', async (
     const pushFrames = await collectUntilCode(0x0f03, 10000);
     const pushCodes = pushFrames.map(decodeInnerCode);
     assert.equal(pushCodes[0], 0x0315, `boot ${boot} 0x0314 send-ring must yield 0x0315 first`);
-    // 계약 순서: begin → [0x0325,0x0323]×2(refresh) → 0x0b0a(end) → 0x0f03. begin/end 사이 refresh 검증.
+    // 계약 순서: begin → [0x0325, 0x0323](각 1회) → 0x0b0a(end) → 0x0f03. begin/end 사이 검증.
     const iBeg = pushCodes.indexOf(0x0b09);
     const iEnd = pushCodes.indexOf(0x0b0a);
     assert.ok(iBeg > 0 && iEnd > iBeg, `boot ${boot} grid-enter begin/end present`);
-    assert.equal(pushCodes.filter((c) => c === 0x0325).length, 2, `boot ${boot} 0x0325 refreshed ×2`);
-    assert.equal(pushCodes.filter((c) => c === 0x0323).length, 2, `boot ${boot} 0x0323 refreshed ×2`);
+    assert.equal(pushCodes.filter((c) => c === 0x0325).length, 1, `boot ${boot} 0x0325 exactly once`);
+    assert.equal(pushCodes.filter((c) => c === 0x0323).length, 1, `boot ${boot} 0x0323 exactly once`);
     for (let k = 0; k < pushCodes.length; k += 1) {
       if (pushCodes[k] === 0x0325 || pushCodes[k] === 0x0323) {
         assert.ok(k > iBeg && k < iEnd, `boot ${boot} refresh frame @${k} between begin/end`);
       }
     }
+    // ★정합(TCP 레벨): 0x0323 flagship(body+0x24) == 0x0325 unit[0].id(body+0x04), count≥1.
+    const decodeInnerBody = (fr) => {
+      const dec = decryptBuffer(fr.body.subarray(4), expandChildCodecKey(DECIPHER_KEY, tables));
+      return parse0030Body(dec).inner.subarray(6); // message32 body (skip [u32 0][u16 code])
+    };
+    const unitBody = decodeInnerBody(pushFrames.find((fr) => decodeInnerCode(fr) === 0x0325));
+    const charBody = decodeInnerBody(pushFrames.find((fr) => decodeInnerCode(fr) === 0x0323));
+    assert.ok(unitBody.readUInt16LE(0x00) >= 1, `boot ${boot} 0x0325 count ≥ 1`);
+    assert.equal(
+      charBody.readUInt32LE(0x24),
+      unitBody.readUInt32LE(0x04),
+      `boot ${boot} char flagship(+0x24) must equal unit[0].id(+0x04)`,
+    );
 
     // move 0x0b01 (push 완전 소진 후이므로 소켓은 move 응답만 남는다)
     const player = server.worldSession.getPlayer(1);
