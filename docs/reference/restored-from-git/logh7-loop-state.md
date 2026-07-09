@@ -1,21 +1,5 @@
 # LOGH VII 루프 상태
 
-## M1.6 달성: 실클라 로그인 → 로비 진입 라이브 증거 확보 (2026-07-09)
-
-- **결론**: 원본 클라 `g7mtclient.exe`가 자체 서버(`logh7-playable-server.mjs`, 127.0.0.1:47900)에 붙어 계정 `inei00`으로 로그인하고 **로비 화면까지 실제 렌더링**되었다. 2026-07-07 conn2가 `0x2000` 무응답으로 죽던 블로커는 해소됨.
-- **증거** (`.omo/live-qa/m16-login-lobby-20260709-2201/`):
-  - `trace.jsonl` — conn1: `0x0034→0x0035→0x0036→0x7000(GIN7, authOk=true)→login-response-sent(keysetup 0x0031 + redirect 0x7001)→peer-fin(clean)`; conn2: `0x0020(무응답)→0x2000→lobby-login-ok-sent(0x2001, message32)→0x2003(1762B)/0x2005(21258B) 클라 자발 요청→세션 유지, ECONNRESET 0건`.
-  - `ui-session/shots/01-login-before.png` (GDI 로그인 화면), `03-lobby-live.png` (D3D8 PrintWindow, 8메뉴 + サーバーからのお知らせ 패널).
-- **정본 판정**: 실클라가 서버 로비 프레임을 수용·파싱·렌더했으므로 서버 와이어 출력이 정본. 로비 우측 お知らせ 텍스트는 서버 0x2003/0x2005가 담아 보낸 공지 문자열(`characterCount=0`과 정합) — 클라가 서버 콘텐츠를 정상 표시한 추가 증거.
-- **테스트 정합**: 로비 S→C 프레임의 4바이트 subheader(`frame0030WithSubheader`) 도입으로 낡은 테스트 2건(`logh7-lobby-harness-dispatch.test.mjs`, `logh7-playable-server.test.mjs`)이 복호 오프셋 미스킵으로 실패하던 것을 `.subarray(4)` 오프셋 정정으로 수리. 서버 코드는 무수정(실클라가 정본 증명). 전체 스위트 **159/159 통과**.
-- **다음 검증 축**: `inei00`에 캐릭터가 0개라 월드 진입은 미확인. 다음 라이브 QA = 캐릭터 생성(0x1008 경로) → 월드 세션 진입(서버는 이미 0x2009→0x200a create-pending까지 응답).
-
-## M0.5 감사 재실행: 갤럭시 GREEN, broken-ref는 리셋 전 잔재 (2026-07-09)
-
-- `audit_galaxy_provenance.mjs`: `readyForUse=true`, 85 성계 / 게임좌표 79 + 매뉴얼전용 1(フォルセティ) + 가상오버레이 5, MDX 대조 미스매치 **0**, 좌표변환 90° 회전 R²=0.99990. 로드맵의 "5성계 좌표 미확정, 날조 금지" 규칙과 정합.
-- `audit_data_decode.mjs`: 170 엔트리, 파싱에러 0, reviewQueue 60(브로큰-레퍼런스 59). 진단 결과 broken refs 732건은 전부 (a) 리셋 전 경로 잔재이거나 (c) 서버 비소비 외부/클라 에셋 경로. portrait 매니페스트 1068 refs = Unity 에셋 경로, 서버 미참조. **수리 대상 없음 — 감사 이력으로 유지가 정답.**
-- `audit_exe_re_coverage.mjs`: 11,593 함수 중 351 문서화(3.0%). 서버 차단 도메인(transport-login 92, character-lobby 101, strategic-map 115)은 집중 해석돼 진행 병목 아님.
-
 ## 18px-ish readable font canonical build (2026-06-30)
 
 - User requested the client font be made larger than the current readable-font build; 16px-ish was still too small.
