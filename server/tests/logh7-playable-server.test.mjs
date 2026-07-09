@@ -237,15 +237,14 @@ test('playable server boots twice and serves login+world+move sequence', async (
       `boot ${boot} admission 0x0304 must yield 0x0305`,
     );
 
-    // ★send-ring 순차 검증: 클라가 요청-응답 4종을 하나씩 요청 → 매칭 응답이 ring 배수.
-    //   0x0300→0x0301, 0x0f00→0x0f01, 0x0f02→0x0f03, 0x0314→0x0315.
+    // ★send-ring 순차 검증: 클라가 요청-응답을 하나씩 요청 → 매칭 응답이 ring 배수.
+    //   0x0300→0x0301, 0x0f00→0x0f01, 0x0f02→0x0f03 (각 단일 프레임).
     // 전체 트랜스포트 경유로 각 요청이 정확히 매칭 응답을 받는지 확인(라우터가 lobby 로 새지 않음).
     let reactiveId = 56;
     for (const [reqCode, respCode] of [
       [0x0300, 0x0301],
       [0x0f00, 0x0f01],
       [0x0f02, 0x0f03],
-      [0x0314, 0x0315],
     ]) {
       const req = Buffer.alloc(2);
       req.writeUInt16BE(reqCode, 0);
@@ -259,7 +258,52 @@ test('playable server boots twice and serves login+world+move sequence', async (
       );
     }
 
-    // move 0x0b01
+    // ★단일 파서로 프레임을 code 목표까지 순차 수집(부분 프레임 손실 없이 소켓 스트림 소진).
+    //   readFrames 는 반환 시 내부 파서(부분 프레임 잔여)를 버리므로, 대용량 버스트를 쪼갠
+    //   readFrames(1) 뒤 새 파서로 이어 읽으면 프레이밍이 어긋난다. 여기선 하나의 파서로
+    //   목표 코드(예: 0x0f03=push 종료)까지 읽어 그 문제를 피한다.
+    const collectUntilCode = async (wantCode, timeoutMs = 10000) => {
+      const parser = createFrameStreamParser();
+      const deadline = Date.now() + timeoutMs;
+      const out = [];
+      for (;;) {
+        const remaining = deadline - Date.now();
+        if (remaining <= 0) throw new Error(`timeout waiting for 0x${wantCode.toString(16)} (got ${out.length})`);
+        const chunk = await Promise.race([
+          once(socket, 'data').then(([c]) => c),
+          new Promise((_, rej) => setTimeout(() => rej(new Error('socket data timeout')), remaining)),
+        ]);
+        for (const fr of parser.push(chunk)) {
+          out.push(fr);
+          if (decodeInnerCode(fr) === wantCode) return out;
+        }
+      }
+    };
+
+    // 0x0314 → 0x0315 + world-ready push(0x0b09 → 0x0325×2 + 0x0323×2 → 0x0b0a → 0x0f03, ~111KB).
+    //   P7 FIX A ×2 재전송: FUN_004c2a80(1)이 0x0b0a 에서 슬롯 엔티티를 빌드하려면 유닛/캐릭터
+    //   레코드가 begin/end 사이에 resident 여야 한다(refresh ×2 로 보장). 대용량 버스트라 여러 TCP
+    //   청크로 쪼개지므로 단일 파서로 0x0f03(push 종료)까지 수집한다.
+    const gridReq = Buffer.alloc(2);
+    gridReq.writeUInt16BE(0x0314, 0);
+    socket.write(build0030Transport({ phase1Key, id: reactiveId, inner: gridReq, tables }));
+    reactiveId += 1;
+    const pushFrames = await collectUntilCode(0x0f03, 10000);
+    const pushCodes = pushFrames.map(decodeInnerCode);
+    assert.equal(pushCodes[0], 0x0315, `boot ${boot} 0x0314 send-ring must yield 0x0315 first`);
+    // 계약 순서: begin → [0x0325,0x0323]×2(refresh) → 0x0b0a(end) → 0x0f03. begin/end 사이 refresh 검증.
+    const iBeg = pushCodes.indexOf(0x0b09);
+    const iEnd = pushCodes.indexOf(0x0b0a);
+    assert.ok(iBeg > 0 && iEnd > iBeg, `boot ${boot} grid-enter begin/end present`);
+    assert.equal(pushCodes.filter((c) => c === 0x0325).length, 2, `boot ${boot} 0x0325 refreshed ×2`);
+    assert.equal(pushCodes.filter((c) => c === 0x0323).length, 2, `boot ${boot} 0x0323 refreshed ×2`);
+    for (let k = 0; k < pushCodes.length; k += 1) {
+      if (pushCodes[k] === 0x0325 || pushCodes[k] === 0x0323) {
+        assert.ok(k > iBeg && k < iEnd, `boot ${boot} refresh frame @${k} between begin/end`);
+      }
+    }
+
+    // move 0x0b01 (push 완전 소진 후이므로 소켓은 move 응답만 남는다)
     const player = server.worldSession.getPlayer(1);
     assert.ok(player && player.inWorld, `boot ${boot} player in world`);
     const moveInner = Buffer.alloc(10);
@@ -267,8 +311,8 @@ test('playable server boots twice and serves login+world+move sequence', async (
     moveInner.writeUInt32LE(player.unitId, 2);
     moveInner.writeUInt32LE(2700 + boot, 6);
     socket.write(build0030Transport({ phase1Key, id: 6, inner: moveInner, tables }));
-    const moveFrames = await readFrames(socket, 1, 3000);
-    const moveBody = decryptBuffer(moveFrames[0].body.subarray(4), expandChildCodecKey(DECIPHER_KEY, tables));
+    const [moveFrame] = await collectUntilCode(0x0b07, 6000);
+    const moveBody = decryptBuffer(moveFrame.body.subarray(4), expandChildCodecKey(DECIPHER_KEY, tables));
     const moveParsed = parse0030Body(moveBody);
     assert.equal(moveParsed.inner.readUInt16BE(4), 0x0b07);
     assert.equal(server.worldSession.getPlayer(1).cell, 2700 + boot);

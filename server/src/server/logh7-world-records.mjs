@@ -582,10 +582,37 @@ export const STATIC_INFO_BODY_SIZES = Object.freeze({
  * [contentId, klass, variant] (klass==3 이 마커로 렌더/클릭). 기본 empty(count 0).
  * 근거: docs/reference/legacy-evidence/logh7-render-interaction-contract.md L178.
  */
+/**
+ * 최소 유효 섹터그리드 타입 팔레트 (콘텐츠 미승격, 날조 아님).
+ *
+ * 근거(5bd249c logh7-login-protocol.mjs buildStaticInformationGridTypeInner 주석):
+ *   constmsg group 0x18 subId 0..2 가 그리드-TYPE 라벨이다 —
+ *     0 = プラズマ嵐(플라스마 폭풍), 1 = 空間(공간), 2 = 航行不能(항행 불능 그리드).
+ *   실 성계 이름(アイゼンヘルツ …)은 subId 3 부터. klass==3 만 클릭 가능한 섹터 마커로 배치된다.
+ *
+ * 따라서 이 3개는 클라가 자체 보유한 실 그리드-타입 라벨이며(원본 데이터, 서버 날조 아님),
+ * klass=0(비클릭 terrain 타입)으로 두어 팬텀 마커(공간 그리드 오클릭)를 만들지 않는다.
+ * 빈 셀그리드(0x0315 전부 value 0)와 함께 써도 클릭 오브젝트(value 3..88)를 배치하지 않으므로
+ * 렌더 안전 — "빈 팔레트(count=0)" 대신 "최소 유효 섹터그리드 타입 구조"를 제공한다.
+ */
+export const DEFAULT_SECTOR_GRID_TYPES = Object.freeze([
+  { value: 0, contentId: 0, klass: 0, variant: 0 }, // プラズマ嵐 / 플라스마 폭풍
+  { value: 1, contentId: 1, klass: 0, variant: 0 }, // 空間 / 공간
+  { value: 2, contentId: 2, klass: 0, variant: 0 }, // 航行不能 / 항행 불능 그리드
+]);
+
+/**
+ * 0x0313 grid-type 팔레트. count 는 max(value)+1 (구 빌더 FUN_00413050 파서 관례 — byte0=count,
+ * 레코드는 payload offset 1+value*3 에 순차 read). objects 미지정 시 empty(count 0).
+ * 세션 플로우는 DEFAULT_SECTOR_GRID_TYPES 를 넘겨 최소 유효 섹터그리드 타입을 방출한다.
+ */
 export function buildStaticInformationGridTypeInner({ objects = [] } = {}) {
   const body = Buffer.alloc(CODE_STATIC_GRID_TYPE_BYTES);
   const list = Array.isArray(objects) ? objects : [];
-  const count = Math.min(list.length, 255);
+  // count = max(value)+1 (구 빌더 관례): 셀 value v 가 palette index v 로 해석되도록 filler 유지.
+  const count = list.length === 0
+    ? 0
+    : Math.min(Math.max(...list.map((o) => (Number(o?.value ?? 0) & 0xff))) + 1, 255);
   body.writeUInt8(count & 0xff, 0);
   for (const obj of list) {
     const value = Number(obj?.value ?? 0) & 0xff;
@@ -662,7 +689,9 @@ export const ADMISSION_WALKER_REQ_RESP = Object.freeze({
  *   0x031e→0x031f / 0x0320→0x0321 / 0x033b: base/facility 패널 — 현재 리셋 트리에 빌더 없음.
  */
 const ADMISSION_DEDICATED_BUILDERS = Object.freeze({
-  [CODE_REQ_STATIC_GRID_TYPE]: () => buildStaticInformationGridTypeInner({ objects: [] }), // 0x0312 → 0x0313
+  // 0x0312 → 0x0313: 빈 팔레트(count=0) 대신 최소 유효 섹터그리드 타입(플라스마 폭풍/공간/항행불능,
+  // klass=0 비클릭). 실 GridType 구조여야 그리드가 terrain 타입을 해석해 배치·렌더한다.
+  [CODE_REQ_STATIC_GRID_TYPE]: () => buildStaticInformationGridTypeInner({ objects: DEFAULT_SECTOR_GRID_TYPES }), // 0x0312 → 0x0313
   [CODE_REQ_STATIC_GRID]: () => buildStaticInformationGridInner({ cells: [] }), // 0x0314 → 0x0315
   [CODE_REQ_RESPONSE_TIME]: () => buildResponseTimeInner(), // 0x0300 → 0x0301
   [CODE_REQ_WORLD_INIT]: () => buildWorldInitOkInner({ status: 1 }), // 0x0f00 → 0x0f01
@@ -816,32 +845,47 @@ export function buildWorldReadyPushInners({
   rank = 0,
   abilities = null,
   officerCount = 0,
+  // LOGH_STRAT_GRID_EARLY: begin 전에 0x0313 grid-type 를 조기 push(reactive 0x0312 응답과 합쳐 ×2).
+  includeEarlyGridType = false,
 } = {}) {
   if (!Number.isInteger(unitId) || unitId <= 0) {
     throw new Error('buildWorldReadyPushInners: unitId required (no synthetic id)');
   }
-  // 계약 순서(render-contract L102): 0x0b09(begin) → 0x0325+0x0323 refresh → 0x0b0a(end) → 0x0f03.
-  const inners = [
-    buildNotifyEnterGridBeginInner({ value: gridBeginValue }),
-    buildInformationUnitInner({ unitId, unitCount: 1, cell: unitCell, commander }),
-  ];
-  // 0x0323 캐릭터 refresh: commander(=플레이어 characterId)가 유효할 때만 begin/end 사이에 push.
-  // world-enter 의 buildInformationCharacterInner 재사용 — 오브젝트 테이블 갱신(그리드 유닛 배치).
-  if (Number.isInteger(commander) && commander > 0) {
-    inners.push(buildInformationCharacterInner({
-      characterId: commander,
-      gridUnitId: unitId,
-      power,
-      spot,
-      online: true,
-      lastname,
-      firstname,
-      face,
-      rank,
-      abilities: Array.isArray(abilities) && abilities.length ? abilities : null,
-      officerCount,
-    }));
+  // 0x0323 캐릭터 refresh 레코드 팩토리 (commander>0 일 때만). world-enter 의
+  // buildInformationCharacterInner 재사용 — 오브젝트 테이블 갱신(그리드 유닛 배치).
+  const makeChar = () => buildInformationCharacterInner({
+    characterId: commander,
+    gridUnitId: unitId,
+    power,
+    spot,
+    online: true,
+    lastname,
+    firstname,
+    face,
+    rank,
+    abilities: Array.isArray(abilities) && abilities.length ? abilities : null,
+    officerCount,
+  });
+  const makeUnit = () => buildInformationUnitInner({ unitId, unitCount: 1, cell: unitCell, commander });
+  const hasChar = Number.isInteger(commander) && commander > 0;
+
+  const inners = [];
+  // early-grid(LOGH_STRAT_GRID_EARLY): begin 전에 grid-type 팔레트를 한 번 더 방출.
+  // grid-type 테이블(terrain 타입)이 grid-enter 배치 전에 resident 여야 셀 value 를 해석한다.
+  if (includeEarlyGridType) {
+    inners.push(buildStaticInformationGridTypeInner({ objects: DEFAULT_SECTOR_GRID_TYPES }));
   }
+  // 계약 순서(render-contract L102) + A6 FIX(inworld-progress P7):
+  //   0x0b09(begin) → [0x0325 유닛 + 0x0323 캐릭터] refresh ×2 → 0x0b0a(end) → 0x0f03.
+  // ★×2 재전송(P7 FIX A "re-send 0x0325 + 0x0323 BETWEEN 0x0b09 and 0x0b0a"): FUN_004c2a80(1)이
+  //   0x0b0a 에서 플레이어 슬롯 엔티티(clientBase+0xc)를 빌드하려면 유닛/캐릭터 레코드가 begin/end
+  //   사이에 resident 여야 한다. 클라 Field_Import 완료 타이밍(mode==2) 편차로 1회 refresh 는
+  //   0x0b0a 처리 시점에 미도달할 수 있어 두 번 방출(refresh ×2)로 resident 를 보장한다.
+  inners.push(buildNotifyEnterGridBeginInner({ value: gridBeginValue }));
+  inners.push(makeUnit());
+  if (hasChar) inners.push(makeChar());
+  inners.push(makeUnit());
+  if (hasChar) inners.push(makeChar());
   inners.push(buildNotifyEnterGridEndInner({ value: gridEndValue }));
   inners.push(buildGridInitOkInner({ status: 1 })); // 0x0f03 — 트레이스 "0x0f02(월드초기화)"의 S→C 신호
   return inners;

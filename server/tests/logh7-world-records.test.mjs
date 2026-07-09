@@ -22,6 +22,7 @@ import {
   buildInformationUnitInner,
   buildStaticInformationGridInner,
   buildStaticInformationGridTypeInner,
+  DEFAULT_SECTOR_GRID_TYPES,
   buildSsCharacterIdInner,
   buildSsLoginOkInner,
   buildSsGameLoginOkInner,
@@ -270,10 +271,27 @@ test('buildAdmissionResponseInner: each admission request → full-size static-i
       assert.ok(body.every((b) => b === 0), `0x${resp.toString(16)} zero-filled empty table`);
     }
   }
-  // 0x0313 grid-type: payload[0]=count=0 (empty)
-  assert.equal(msg32Body(buildAdmissionResponseInner(0x0312)).readUInt8(0), 0);
+  // 0x0313 grid-type: payload[0]=count=3 (실 섹터그리드 타입 팔레트 — 플라스마 폭풍/공간/항행불능).
+  assert.equal(msg32Body(buildAdmissionResponseInner(0x0312)).readUInt8(0), 3);
   // 미확인 코드는 여전히 null
   assert.equal(buildAdmissionResponseInner(0x7abc), null);
+});
+
+test('DEFAULT_SECTOR_GRID_TYPES: minimal valid non-clickable sector grid-type palette', () => {
+  // 근거(5bd249c grid-type builder 주석): constmsg group 0x18 subId 0..2 = 그리드-TYPE 라벨
+  //   (0 플라스마 폭풍 / 1 공간 / 2 항행불능). klass 3 만 클릭 마커 → 0 은 비클릭 terrain 타입.
+  const inner = buildStaticInformationGridTypeInner({ objects: DEFAULT_SECTOR_GRID_TYPES });
+  const body = msg32Body(inner);
+  assert.equal(readMsg32Code(inner), 0x0313);
+  assert.equal(body.length, 0x138c, 'fixed 5004B (over-read safe)');
+  assert.equal(body.readUInt8(0), 3, 'count = max(value)+1 = 3');
+  for (let v = 0; v < 3; v += 1) {
+    const off = 1 + v * 3;
+    assert.equal(body.readUInt8(off), v, `contentId[${v}] = grid-type label subId`);
+    assert.equal(body.readUInt8(off + 1), 0, `klass[${v}] = 0 (non-clickable, no phantom marker)`);
+  }
+  // 콘텐츠 미승격: 클릭 오브젝트(value 3..88)는 하나도 없음.
+  assert.equal(DEFAULT_SECTOR_GRID_TYPES.every((o) => o.klass !== 3), true);
 });
 
 test('buildAdmissionResponseInner: 0x0f02 → plain 0x0f03 GridInitialize OK (status=1)', () => {
