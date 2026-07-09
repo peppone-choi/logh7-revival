@@ -1,6 +1,6 @@
 {
   "id": "logh7-data-decode-audit",
-  "generatedAt": "2026-07-06T12:53:07.935Z",
+  "generatedAt": "2026-07-09T12:57:40.141Z",
   "policy": {
     "premise": "기존 JSON은 정본으로 신뢰하지 않는다. 원천 파일, 해시, 재생성 스크립트, 증거 문서가 확인된 항목만 다음 구현 입력으로 승격한다.",
     "output": "이 파일은 재해독 작업 큐와 증거 결손을 만들기 위한 감사 산출물이다. 게임 런타임 정본 데이터가 아니다."
@@ -64,7 +64,7 @@
       "exists": true,
       "type": "file",
       "sizeBytes": 3956736,
-      "sha256": "bd19263c10decc3d58373165a82d42a9267868400d407da87d5f4f4109ab6e16"
+      "sha256": "95d8ed11f521b1588ab59af6969e49c47010f4b3dbaff2de93d15e876031515d"
     },
     {
       "id": "launcher-exe",
@@ -99,11 +99,11 @@
       "kind": "official-manual-pdf-directory",
       "exists": true,
       "type": "directory",
-      "fileCount": 276,
-      "totalBytes": 29585636,
+      "fileCount": 381,
+      "totalBytes": 31958272,
       "byExt": {
         ".pdf": 5,
-        ".md": 133,
+        ".md": 238,
         ".json": 1,
         ".jpg": 117,
         ".txt": 1,
@@ -113,10 +113,10 @@
     }
   ],
   "jsonSummary": {
-    "total": 169,
+    "total": 170,
     "parseErrors": 0,
-    "withEvidenceKeys": 149,
-    "withBrokenPathRefs": 134,
+    "withEvidenceKeys": 150,
+    "withBrokenPathRefs": 135,
     "byCategory": {
       "server/content/auto-production.json": 1,
       "server/content/canon-face-registry.json": 1,
@@ -131,7 +131,7 @@
       "server/content/galaxy-passable-cells.json": 1,
       "server/content/galaxy-raster-star-centers.json": 1,
       "server/content/galaxy.json": 1,
-      "server/content/generated": 66,
+      "server/content/generated": 67,
       "server/content/initial-deployment.json": 1,
       "server/content/localization": 4,
       "server/content/manual": 25,
@@ -148,7 +148,7 @@
       "extracted-broken-reference-review": 17,
       "extracted-needs-redecode": 7,
       "extracted-source-described": 1,
-      "generated-broken-reference-review": 58,
+      "generated-broken-reference-review": 59,
       "generated-source-described": 7,
       "generated-source-hash-backed": 1,
       "needs-redecode": 6,
@@ -156,7 +156,7 @@
     }
   },
   "extractorSummary": {
-    "total": 23,
+    "total": 24,
     "files": [
       {
         "path": "tools/extract/audit_data_decode.mjs",
@@ -218,6 +218,16 @@
           "artifacts/logh7-install/____________s___/____/exe/g7mtclient.exe",
           "docs/reference/legacy-evidence",
           "server/content/generated/logh7-exe-re-coverage-audit.json"
+        ]
+      },
+      {
+        "path": "tools/extract/audit_galaxy_provenance.mjs",
+        "sizeBytes": 6629,
+        "mentionedPaths": [
+          "artifacts/logh7-install/____________s___/____/data/model/strategy/null_galaxy.mdx",
+          "server/content/galaxy.json",
+          "server/content/generated",
+          "server/content/generated/logh7-galaxy-provenance-audit.json"
         ]
       },
       {
@@ -1087,7 +1097,7 @@
         "pdfs"
       ],
       "pathRefCount": 647,
-      "brokenPathRefCount": 446,
+      "brokenPathRefCount": 444,
       "samplePathRefs": [
         {
           "ref": "**String.txt**:",
@@ -9996,6 +10006,95 @@
       "trust": "generated-broken-reference-review"
     },
     {
+      "path": "server/content/generated/logh7-galaxy-provenance-audit.json",
+      "category": "server/content/generated",
+      "sizeBytes": 5149,
+      "parseOk": true,
+      "topLevelType": "object",
+      "topLevelCount": 5,
+      "evidenceKeyCount": 5,
+      "evidenceKeys": [
+        "gameMdxCount",
+        "generatedAt",
+        "manualOnlyCount",
+        "nullGalaxyMdx",
+        "sha256"
+      ],
+      "pathRefCount": 7,
+      "brokenPathRefCount": 4,
+      "samplePathRefs": [
+        {
+          "ref": ".md",
+          "exists": false,
+          "resolvedAs": ".md",
+          "candidateRefs": []
+        },
+        {
+          "ref": "artifacts/logh7-install/____________s___/____/data/model/strategy/null_galaxy.mdx",
+          "exists": true,
+          "resolvedAs": "artifacts/logh7-install/____________s___/____/data/model/strategy/null_galaxy.mdx",
+          "matchedRef": "artifacts/logh7-install/____________s___/____/data/model/strategy/null_galaxy.mdx"
+        },
+        {
+          "ref": "data/model/strategy/null_galaxy.mdx",
+          "exists": true,
+          "resolvedAs": "artifacts/logh7-install/____________s___/____/data/model/strategy/null_galaxy.mdx",
+          "matchedRef": "data/model/strategy/null_galaxy.mdx"
+        },
+        {
+          "ref": "galaxy.json",
+          "exists": false,
+          "resolvedAs": "galaxy.json",
+          "candidateRefs": []
+        },
+        {
+          "ref": "galaxy.json의",
+          "exists": false,
+          "resolvedAs": "galaxy.json의",
+          "candidateRefs": []
+        },
+        {
+          "ref": "null_galaxy.mdx",
+          "exists": false,
+          "resolvedAs": "null_galaxy.mdx",
+          "candidateRefs": []
+        },
+        {
+          "ref": "server/content/galaxy.json",
+          "exists": true,
+          "resolvedAs": "server/content/galaxy.json",
+          "matchedRef": "server/content/galaxy.json"
+        }
+      ],
+      "brokenPathRefs": [
+        {
+          "ref": ".md",
+          "exists": false,
+          "resolvedAs": ".md",
+          "candidateRefs": []
+        },
+        {
+          "ref": "galaxy.json",
+          "exists": false,
+          "resolvedAs": "galaxy.json",
+          "candidateRefs": []
+        },
+        {
+          "ref": "galaxy.json의",
+          "exists": false,
+          "resolvedAs": "galaxy.json의",
+          "candidateRefs": []
+        },
+        {
+          "ref": "null_galaxy.mdx",
+          "exists": false,
+          "resolvedAs": "null_galaxy.mdx",
+          "candidateRefs": []
+        }
+      ],
+      "trust": "generated-broken-reference-review"
+    },
+    {
       "path": "server/content/generated/logh7-imperial-crest-mask-manifest.json",
       "category": "server/content/generated",
       "sizeBytes": 1268,
@@ -10182,84 +10281,6 @@
           "ref": "constmsg.dat",
           "exists": false,
           "resolvedAs": "constmsg.dat",
-          "candidateRefs": []
-        }
-      ],
-      "trust": "generated-broken-reference-review"
-    },
-    {
-      "path": "server/content/generated/logh7-rank-promotion-catalog.json",
-      "category": "server/content/generated",
-      "sizeBytes": 11846,
-      "parseOk": true,
-      "topLevelType": "object",
-      "topLevelCount": 7,
-      "evidenceKeyCount": 6,
-      "evidenceKeys": [
-        "capSource",
-        "evidenceGrade",
-        "manualPath",
-        "manualRules",
-        "source",
-        "sourceIndex"
-      ],
-      "pathRefCount": 5,
-      "brokenPathRefCount": 4,
-      "samplePathRefs": [
-        {
-          "ref": "gin7manual.pdf",
-          "exists": false,
-          "resolvedAs": "gin7manual.pdf",
-          "candidateRefs": []
-        },
-        {
-          "ref": "imperial-titles.json",
-          "exists": false,
-          "resolvedAs": "imperial-titles.json",
-          "candidateRefs": []
-        },
-        {
-          "ref": "logh7-manual-canon.md",
-          "exists": false,
-          "resolvedAs": "logh7-manual-canon.md",
-          "candidateRefs": []
-        },
-        {
-          "ref": "org-posts.json",
-          "exists": false,
-          "resolvedAs": "org-posts.json",
-          "candidateRefs": []
-        },
-        {
-          "ref": "server/content/manual/ranks-promotion.json",
-          "exists": true,
-          "resolvedAs": "server/content/manual/ranks-promotion.json",
-          "matchedRef": "server/content/manual/ranks-promotion.json"
-        }
-      ],
-      "brokenPathRefs": [
-        {
-          "ref": "gin7manual.pdf",
-          "exists": false,
-          "resolvedAs": "gin7manual.pdf",
-          "candidateRefs": []
-        },
-        {
-          "ref": "imperial-titles.json",
-          "exists": false,
-          "resolvedAs": "imperial-titles.json",
-          "candidateRefs": []
-        },
-        {
-          "ref": "logh7-manual-canon.md",
-          "exists": false,
-          "resolvedAs": "logh7-manual-canon.md",
-          "candidateRefs": []
-        },
-        {
-          "ref": "org-posts.json",
-          "exists": false,
-          "resolvedAs": "org-posts.json",
           "candidateRefs": []
         }
       ],
@@ -15625,7 +15646,7 @@
         "pdfs"
       ],
       "pathRefCount": 647,
-      "brokenPathRefCount": 446,
+      "brokenPathRefCount": 444,
       "samplePathRefs": [
         {
           "ref": "**String.txt**:",
@@ -15999,7 +16020,7 @@
     {
       "path": "server/content/generated/logh7-exe-patch-manifest.json",
       "category": "server/content/generated",
-      "sizeBytes": 997,
+      "sizeBytes": 1665,
       "parseOk": true,
       "topLevelType": "object",
       "topLevelCount": 8,
@@ -16578,6 +16599,95 @@
           "ref": "page101-bg.jpg",
           "exists": false,
           "resolvedAs": "page101-bg.jpg",
+          "candidateRefs": []
+        }
+      ],
+      "trust": "generated-broken-reference-review"
+    },
+    {
+      "path": "server/content/generated/logh7-galaxy-provenance-audit.json",
+      "category": "server/content/generated",
+      "sizeBytes": 5149,
+      "parseOk": true,
+      "topLevelType": "object",
+      "topLevelCount": 5,
+      "evidenceKeyCount": 5,
+      "evidenceKeys": [
+        "gameMdxCount",
+        "generatedAt",
+        "manualOnlyCount",
+        "nullGalaxyMdx",
+        "sha256"
+      ],
+      "pathRefCount": 7,
+      "brokenPathRefCount": 4,
+      "samplePathRefs": [
+        {
+          "ref": ".md",
+          "exists": false,
+          "resolvedAs": ".md",
+          "candidateRefs": []
+        },
+        {
+          "ref": "artifacts/logh7-install/____________s___/____/data/model/strategy/null_galaxy.mdx",
+          "exists": true,
+          "resolvedAs": "artifacts/logh7-install/____________s___/____/data/model/strategy/null_galaxy.mdx",
+          "matchedRef": "artifacts/logh7-install/____________s___/____/data/model/strategy/null_galaxy.mdx"
+        },
+        {
+          "ref": "data/model/strategy/null_galaxy.mdx",
+          "exists": true,
+          "resolvedAs": "artifacts/logh7-install/____________s___/____/data/model/strategy/null_galaxy.mdx",
+          "matchedRef": "data/model/strategy/null_galaxy.mdx"
+        },
+        {
+          "ref": "galaxy.json",
+          "exists": false,
+          "resolvedAs": "galaxy.json",
+          "candidateRefs": []
+        },
+        {
+          "ref": "galaxy.json의",
+          "exists": false,
+          "resolvedAs": "galaxy.json의",
+          "candidateRefs": []
+        },
+        {
+          "ref": "null_galaxy.mdx",
+          "exists": false,
+          "resolvedAs": "null_galaxy.mdx",
+          "candidateRefs": []
+        },
+        {
+          "ref": "server/content/galaxy.json",
+          "exists": true,
+          "resolvedAs": "server/content/galaxy.json",
+          "matchedRef": "server/content/galaxy.json"
+        }
+      ],
+      "brokenPathRefs": [
+        {
+          "ref": ".md",
+          "exists": false,
+          "resolvedAs": ".md",
+          "candidateRefs": []
+        },
+        {
+          "ref": "galaxy.json",
+          "exists": false,
+          "resolvedAs": "galaxy.json",
+          "candidateRefs": []
+        },
+        {
+          "ref": "galaxy.json의",
+          "exists": false,
+          "resolvedAs": "galaxy.json의",
+          "candidateRefs": []
+        },
+        {
+          "ref": "null_galaxy.mdx",
+          "exists": false,
+          "resolvedAs": "null_galaxy.mdx",
           "candidateRefs": []
         }
       ],

@@ -1,6 +1,6 @@
 {
   "id": "logh7-exe-re-coverage-audit",
-  "generatedAt": "2026-07-06T12:12:22.751Z",
+  "generatedAt": "2026-07-09T12:57:54.766Z",
   "policy": {
     "premise": "EXE 모든 기능 RE는 함수/도메인 단위로 추적한다. 문서명 또는 과거 결론만으로 구현 완료를 주장하지 않는다.",
     "promotionRule": "서버 구현으로 승격하려면 함수 주소, 디컴파일/라이브 경로, wire/data 소비자, 테스트 또는 라이브 증거가 필요하다."
@@ -9,7 +9,7 @@
     "path": "artifacts/logh7-install/____________s___/____/exe/g7mtclient.exe",
     "exists": true,
     "sizeBytes": 3956736,
-    "sha256": "bd19263c10decc3d58373165a82d42a9267868400d407da87d5f4f4109ab6e16"
+    "sha256": "95d8ed11f521b1588ab59af6969e49c47010f4b3dbaff2de93d15e876031515d"
   },
   "sourceArtifacts": [
     {
@@ -23,8 +23,8 @@
   ],
   "summary": {
     "functionCount": 11593,
-    "documentedFunctionCount": 352,
-    "undocumentedFunctionCount": 11241,
+    "documentedFunctionCount": 351,
+    "undocumentedFunctionCount": 11242,
     "reDocCount": 131,
     "reDocsWithAddresses": 85,
     "domainsWithDocs": {
@@ -2115,8 +2115,8 @@
     },
     {
       "path": "docs/reference/legacy-evidence/logh7-character-creation-wire.md",
-      "sizeBytes": 28741,
-      "addressCount": 33,
+      "sizeBytes": 34718,
+      "addressCount": 34,
       "sampleAddresses": [
         "FUN_00405720",
         "FUN_00405ea0",
@@ -2129,6 +2129,7 @@
         "FUN_0043fd60",
         "FUN_00446b10",
         "FUN_004b78a0",
+        "FUN_004b8b00",
         "FUN_004ba2b0",
         "FUN_004be760",
         "FUN_004be780",
@@ -2146,8 +2147,7 @@
         "FUN_00595e00",
         "FUN_005960b0",
         "FUN_00596130",
-        "FUN_00597b20",
-        "FUN_00597ea0"
+        "FUN_00597b20"
       ],
       "domains": [
         "transport-login",
