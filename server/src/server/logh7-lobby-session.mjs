@@ -24,8 +24,13 @@ import {
   CODE_CMD_EXTENSION_CHARGE,
   CODE_CMD_GENERATE_CHARGE,
   CODE_LOBBY_CMD_DELETE_CHAR,
+  CODE_LOBBY_REQ_INFO_CHAR,
+  CODE_LOBBY_REQ_INFO_SESSION,
   decodeReqInfoAccount,
   encodeResponseInfoAccount,
+  encodeLobbyCharCardList,
+  encodeLobbySessionList, // kept for tests/compat
+  decodeLobbyReqInfoChar,
   decodeOriginalCharReq,
   encodeOriginalCharOk,
   decodeExtensionCharReq,
@@ -41,8 +46,9 @@ import {
   CODE_LOBBY_LOGIN_REQUEST,
   decodeLobbySessionInit,
   decodeLobbyLoginRequest,
-  buildLobbyLoginOkInner,
+  buildLobbyLoginOkMessage32Inner,
 } from './logh7-lobby-login.mjs';
+import { buildInformationSessionInner } from './codec/scenario-session.mjs';
 
 // ─── 내부 헬퍼 ────────────────────────────────────────────────────────────────
 
@@ -81,6 +87,12 @@ export function handleLobbyInner(inner, accountId, store) {
     case CODE_REQ_INFO_ACCOUNT:
       return _handleReqInfoAccount(inner, accountId, store);
 
+    case CODE_LOBBY_REQ_INFO_CHAR:
+      return _handleReqInfoChar(inner, accountId, store);
+
+    case CODE_LOBBY_REQ_INFO_SESSION:
+      return _handleReqInfoSession(inner, accountId, store);
+
     case CODE_REQ_CHAR_ENTRY_STATE:
       return _handleReqCharEntryState(inner);
 
@@ -115,14 +127,13 @@ function _handleLobbySessionInit(inner) {
 
 // ─── 0x2000 LobbyLoginRequest → 0x2001 LobbyLoginOK ──────────────────────────
 //
-// GIN7 version 4 자격증명(LE). 서버는 0x2001 LobbyLoginOK(raw inner [u16BE 0x2001][u16BE 0])
-// 를 회신해야 클라가 다음 단계(0x1000 계정 로스터 요청)로 진행한다.
-// ★반환값은 message32 래핑이 아닌 raw inner 다(Input_LobbyLoginOK 는 코드 뒤 2바이트만 읽음).
-// 전송 계층이 이 inner 를 0x0030 봉투로 감싸 decipherKey 로 암호화한다
-// (buildLobbyLoginOkFrame 사용 또는 세션 전송 경로에서 동일 처리).
+// GIN7 version 4 자격증명(LE). 서버는 0x2001 LobbyLoginOK 를 회신해야 클라가
+// 다음 단계(0x1000 / 0x2003 / 0x2005 …)로 진행한다.
+// ★실클라 conn2 수신 경로 = message32 (G122, LOGH_LOBBY_OK_FORMAT=message32).
+// bare raw 는 enqueue 미도달 → 로그인 화면 고착/튕김.
 function _handleLobbyLoginRequest(inner) {
   decodeLobbyLoginRequest(inner); // GIN7 v4 자격증명 검증(account 추출; 세션 바인딩은 전송 계층 책임)
-  return buildLobbyLoginOkInner({ status: 0 });
+  return buildLobbyLoginOkMessage32Inner({ status: 0 });
 }
 
 // ─── 0x1000 RequestInformationAccount → 0x1001 ────────────────────────────────
@@ -134,6 +145,55 @@ function _handleReqInfoAccount(inner, accountId, store) {
   // 근거: [CW]§8.1 RE 확정 레이아웃 (encodeResponseInfoAccount 참조)
   const chars = store.getCharacters(accountId);
   return encodeResponseInfoAccount({}, chars);
+}
+
+// ─── 0x2003 LobbyRequestInformationCharacterCharge → 0x2004 ───────────────────
+// 로비 캐릭터 카드 목록. 라이브 성공 경로: 0x2001 이후 클라가 0x2003 요청.
+function _handleReqInfoChar(inner, accountId, store) {
+  decodeLobbyReqInfoChar(inner);
+  const chars = store?.getCharacters?.(accountId) ?? [];
+  return encodeLobbyCharCardList(chars);
+}
+
+// ─── 0x2005 LobbyRequestInformationSession → 0x2006 ───────────────────────────
+// 정본 stream: leading byte + count + records(status 1|2 선택 가능).
+function _handleReqInfoSession(inner) {
+  if (!inner || inner.length < 2) throw new RangeError('0x2005 inner too short');
+  const code = inner.readUInt16BE(0);
+  if (code !== CODE_LOBBY_REQ_INFO_SESSION) {
+    throw new RangeError(`0x2005 expected, got 0x${code.toString(16)}`);
+  }
+  // 정본 packed 0x2006 (scenario-session / FUN_00444900). status 1|2 = selectable.
+  // 라이브 근거(2026-06-25 journal #2): 新キャラクターの作成 → 세션 picker 2행 → 더블클릭.
+  // createScenarioState 기본(LOGH VII / UC 796 / power 1·2)과 동일 계열.
+  return buildInformationSessionInner({
+    sessions: [
+      {
+        sessionId: 1,
+        status: 1,
+        name: 'LOGH VII',
+        beginDay: 'UC 796',
+        term: 0,
+        ending: 0,
+        powers: [
+          { id: 1, superMan: '', d0: 0, d1: 0, d2: 0 },
+          { id: 2, superMan: '', d0: 0, d1: 0, d2: 0 },
+        ],
+      },
+      {
+        sessionId: 2,
+        status: 1,
+        name: 'LOGH7-B',
+        beginDay: 'UC 797',
+        term: 0,
+        ending: 0,
+        powers: [
+          { id: 1, superMan: '', d0: 0, d1: 0, d2: 0 },
+          { id: 2, superMan: '', d0: 0, d1: 0, d2: 0 },
+        ],
+      },
+    ],
+  });
 }
 
 // ─── 0x1004 RequestCharEntryState → 0x1005 ────────────────────────────────────

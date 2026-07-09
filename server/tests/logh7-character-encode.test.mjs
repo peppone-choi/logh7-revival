@@ -167,83 +167,42 @@ test('encodeLobbyCharCardList: information_count=1 설정됨', () => {
   assert.equal(b[0x000], 1, 'information_count=1');
 });
 
-// charged_character_count @ record+0x2a1
-test('encodeLobbyCharCardList: charged_character_count@0x2a1=1', () => {
-  const b = body(encodeLobbyCharCardList([{ id: 1 }]));
-  const recBase = 0x004 + 0 * 0x36c;
-  assert.equal(b[recBase + 0x2a1], 1, 'charged_character_count=1');
+// compact stream 정본: record starts at offset 1
+// [u16LE id][u8 status=1][utf16BE name]…
+test('encodeLobbyCharCardList stream: id/status at offset 1', () => {
+  const b = body(encodeLobbyCharCardList([{ id: 0xcafe, lastname: 'Reinhard' }]));
+  assert.equal(b[0], 1, 'count');
+  assert.equal(b.readUInt16LE(1), 0xcafe, 'id');
+  assert.equal(b[3], 1, 'status=1 selectable');
 });
 
-// ChargedCharacter sid @ record+0x2a4
-test('encodeLobbyCharCardList: ChargedCharacter sid@record+0x2a4', () => {
-  const b = body(encodeLobbyCharCardList([{ id: 0xcafe }]));
-  const recBase = 0x004;
-  assert.equal(b.readUInt32LE(recBase + 0x2a4 + 0x00), 0xcafe, 'sid');
+test('encodeLobbyCharCardList stream: name length after status', () => {
+  const b = body(encodeLobbyCharCardList([{ id: 1, lastname: 'Reinhard', firstname: '' }]));
+  // name field = display "Reinhard" → units len = 8 chars + NUL = 9
+  assert.equal(b[4], 9, 'name units incl NUL');
+  assert.equal(b.readUInt16BE(5), 'R'.charCodeAt(0));
 });
 
-// face @ record+0x354 (= card+0xb0)
-test('encodeLobbyCharCardList: face@record+0x354 (card+0xb0)', () => {
-  const b = body(encodeLobbyCharCardList([{ id: 1, face: 0x87654321 }]));
-  const recBase = 0x004;
-  assert.equal(b.readUInt32LE(recBase + 0x354), 0x87654321, 'face');
+test('encodeLobbyCharCardList stream: two records count=2', () => {
+  const b = body(encodeLobbyCharCardList([
+    { id: 1, lastname: 'A' },
+    { id: 2, lastname: 'B' },
+  ]));
+  assert.equal(b[0], 2);
+  assert.equal(b.readUInt16LE(1), 1);
 });
 
-// 서버세이프 status 바이트 검증 [UNCONFIRMED 기본값]
-test('encodeLobbyCharCardList: status byte @ card+0x04 = 1 (서버세이프 기본값, 미확정)', () => {
-  const b = body(encodeLobbyCharCardList([{ id: 1 }]));
-  const recBase = 0x004;
-  const cb = recBase + 0x2a4;
-  // 미확정: +0x04가 status 바이트라는 가정. RE 추가 확인 필요.
-  assert.equal(b[cb + 0x04], 1, 'status 추정값=1');
-  // 나머지 5바이트 = 0
-  for (let i = 1; i < 6; i++) {
-    assert.equal(b[cb + 0x04 + i], 0, `status 나머지 u8[${i}]=0`);
-  }
+test('encodeLobbyCharCardList stream: empty keeps zeros after count', () => {
+  const b = body(encodeLobbyCharCardList([]));
+  assert.equal(b[0], 0);
+  assert.equal(b[1], 0);
+  assert.equal(b[2], 0);
 });
 
-// lastname 이름 필드 @record+0x2c6 (= card+0x22)
-test('encodeLobbyCharCardList: lastname 슬롯 @record+0x2c6', () => {
-  const b = body(encodeLobbyCharCardList([{ id: 1, lastname: 'Reinhard' }]));
-  const recBase = 0x004;
-  const fieldOff = recBase + 0x2c6; // = recBase + 0x2a4 + 0x22
-  assert.equal(b[fieldOff],     8,      'len=8');
-  assert.equal(b[fieldOff + 1], 0,      'pad=0');
-  assert.equal(b.readUInt16LE(fieldOff + 2), 'R'.charCodeAt(0), "'R' u16 LE");
-});
-
-// 이름 필드 오프셋 간격 검증 (0x2004에서도 0x1c=28)
-test('encodeLobbyCharCardList: 이름 필드 오프셋 간격 0x1c=28 (0x2c6→0x2e2→...)', () => {
-  const nameAbsOffsets = [0x2c6, 0x2e2, 0x2fe, 0x31a, 0x336]; // record-relative
-  for (let i = 0; i < nameAbsOffsets.length - 1; i++) {
-    assert.equal(nameAbsOffsets[i + 1] - nameAbsOffsets[i], 0x1c,
-      `간격 [${i}→${i+1}]`);
-  }
-  assert.equal(0x336 + 0x1c, 0x352, 'flagship 끝+0x1c = blood 오프셋 0x352');
-});
-
-// blood/rank @ record+0x352/0x353
-test('encodeLobbyCharCardList: blood@0x352, rank@0x353', () => {
-  const b = body(encodeLobbyCharCardList([{ id: 1, blood: 3, rank: 0x0d }]));
-  const recBase = 0x004;
-  assert.equal(b[recBase + 0x352], 3,    'blood');
-  assert.equal(b[recBase + 0x353], 0x0d, 'rank');
-});
-
-// record 경계: recBase + 0x36c 이후는 0 (두 번째 record 없을 때)
-test('encodeLobbyCharCardList: information_count=1 시 두 번째 레코드 영역 zero', () => {
-  const b = body(encodeLobbyCharCardList([{ id: 1 }]));
-  const secondRecStart = 0x004 + 0x36c;
-  // information_count=1이므로 두 번째 레코드는 zero-filled
-  assert.equal(b[secondRecStart], 0, '두 번째 레코드 zero');
-});
-
-// 두 번째 InformationCharacterCharge (stride 0x36c)
-test('encodeLobbyCharCardList: InformationCharacterCharge[1] stride=0x36c', () => {
-  const b = body(encodeLobbyCharCardList([{ id: 1, face: 0xaaaa }, { id: 2, face: 0xbbbb }]));
-  const rec0Base = 0x004 + 0 * 0x36c;
-  const rec1Base = 0x004 + 1 * 0x36c;
-  assert.equal(b.readUInt32LE(rec0Base + 0x2a4 + 0xb0), 0xaaaa, 'rec0.face');
-  assert.equal(b.readUInt32LE(rec1Base + 0x2a4 + 0xb0), 0xbbbb, 'rec1.face');
+// 이름 필드 유닛 간격 상수 검증 (문서 0x1c 슬롯과 별개 — stream 필드 길이 cap)
+test('encodeLobbyCharCardList stream: body still 0x6dc cap', () => {
+  const b = body(encodeLobbyCharCardList([{ id: 1, lastname: 'Yang', firstname: 'Wenli' }]));
+  assert.equal(b.length, 0x6dc);
 });
 
 // ─── §3 lobby session 통합: 0x1001 핸들러 결과 검증 ─────────────────────────

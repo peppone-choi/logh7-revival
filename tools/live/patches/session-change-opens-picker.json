@@ -1,0 +1,27 @@
+{
+  "exe": "E:\\logh7-revival\\artifacts\\logh7-install\\____________s___\\____\\exe\\g7mtclient.exe",
+  "backup": "E:\\logh7-revival\\artifacts\\logh7-install\\____________s___\\____\\exe\\g7mtclient.exe.bak-pre-session-picker",
+  "patches": [
+    {
+      "name": "session-change-opens-picker",
+      "va": 5352941,
+      "original_hex": "683c677800c7450416000000e8a275070083c404e9570c0000",
+      "patched_hex": "e981ffffff9090909090909090909090909090909090909090",
+      "rationale": "FUN_0051a370 case 0x1c no-op -> jmp case 0x19 picker init 0x0051ad73; 2026-07-01 live-verified",
+      "status": "applied",
+      "fileOffset": 1158637
+    },
+    {
+      "name": "sjis-charset",
+      "va": 4910571,
+      "status": "already",
+      "fileOffset": 716267
+    },
+    {
+      "name": "sjis-charset",
+      "va": 4918167,
+      "status": "already",
+      "fileOffset": 723863
+    }
+  ]
+}

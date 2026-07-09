@@ -5,12 +5,13 @@
   "purpose": "Required reversible EXE patch gate before any direct LOGH VII client change is promoted.",
   "targetExe": {
     "name": "G7MTClient.exe",
-    "sha256": "bd19263c10decc3d58373165a82d42a9267868400d407da87d5f4f4109ab6e16",
+    "sha256": "2848be76a7662e25159353463bdfd8ff2f270ac5845ef4cea62983443c155345",
     "imageBase": null,
     "pathHints": [
       "artifacts/logh7-install/**/exe/g7mtclient.exe",
       ".omo/re-galaxy/g7mtclient.exe"
-    ]
+    ],
+    "note": "2026-07-09 install tree EXE already contains ASCII 127.0.0.1 @ offset 3599932 and 47900 @ 3599924 (loopback applied)."
   },
   "policy": {
     "sameLengthOnly": true,
@@ -20,14 +21,14 @@
   },
   "patches": [
     {
-      "id": "login-server-ip-loopback-20260706",
-      "sourceExeSha256": "bd19263c10decc3d58373165a82d42a9267868400d407da87d5f4f4109ab6e16",
+      "id": "login-server-ip-loopback-already-applied",
+      "sourceExeSha256": "2848be76a7662e25159353463bdfd8ff2f270ac5845ef4cea62983443c155345",
       "addressKind": "offset",
       "offset": 3599932,
-      "originalBytes": "3230322e382e38302e313739",
+      "originalBytes": "3132372e302e302e31000000",
       "patchedBytes": "3132372e302e302e31000000",
-      "rollbackBytes": "3230322e382e38302e313739",
-      "reason": "Redirect original login endpoint 202.8.80.179 to local harness 127.0.0.1 for live restoration testing."
+      "rollbackBytes": "3132372e302e302e31000000",
+      "reason": "Document current install EXE loopback state (no-op patch; original 202.8.80.179 already replaced)."
     }
   ],
   "schemaExample": {

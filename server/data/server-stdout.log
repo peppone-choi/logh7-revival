@@ -1,0 +1,5 @@
+{"ts":"2026-07-09T04:46:45.855Z","event":"server-listening","address":{"address":"0.0.0.0","family":"IPv4","port":47900}}
+{"event":"playable-runtime-ready","address":{"address":"0.0.0.0","family":"IPv4","port":47900},"dbPath":"E:\\logh7-revival\\server\\data\\logh7.sqlite","architecture":"3-tier-cqrs-orm"}
+{"ts":"2026-07-09T04:46:47.821Z","event":"connection-opened","connectionId":1,"remoteAddress":"127.0.0.1","remotePort":12037}
+{"ts":"2026-07-09T04:46:48.834Z","event":"peer-fin","connectionId":1}
+{"ts":"2026-07-09T04:46:48.846Z","event":"connection-closed","connectionId":1,"hadError":false}

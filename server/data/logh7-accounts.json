@@ -1,0 +1,12 @@
+{
+  "accounts": [
+    {
+      "accountId": "inei00",
+      "password": "dummy"
+    },
+    {
+      "accountId": "dummy",
+      "password": "dummy"
+    }
+  ]
+}

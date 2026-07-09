@@ -1,0 +1,8 @@
+{
+  "name": "list_themes",
+  "description": "List available tweakcn themes",
+  "inputSchema": {
+    "type": "object",
+    "properties": {}
+  }
+}

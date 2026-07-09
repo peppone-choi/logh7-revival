@@ -87,6 +87,39 @@ export function frame0030(encBody) {
   return out;
 }
 
+/**
+ * conn2(로비) S→C 0x0030 프레임.
+ * 근거(5bd249c auth-server buildEncrypted0030Frame + RE):
+ *   로비 연결 transport+0x12 = 4 → 라우터가 code 를 offset+4 에서 읽음.
+ *   프레임: [u16BE len][subheaderLen zero][u16BE 0x0030][enc]
+ *   len = subheaderLen + 2 + enc.length
+ * 로그인 conn1 은 subheaderLen=0 (frame0030). 기본 로비 = 4.
+ */
+export function frame0030WithSubheader(encBody, subheaderLen = 4) {
+  const enc = Buffer.isBuffer(encBody) ? encBody : Buffer.from(encBody);
+  const sh = Math.max(0, subheaderLen | 0);
+  const out = Buffer.alloc(4 + sh + enc.length); // zero-filled subheader
+  out.writeUInt16BE(sh + 2 + enc.length, 0);
+  out.writeUInt16BE(TRANSPORT_CODE_0030, 2 + sh);
+  enc.copy(out, 4 + sh);
+  return out;
+}
+
+/** subheader 유무 자동 판별 후 enc body 슬라이스 (테스트/디코드 보조) */
+export function unwrap0030Frame(frame) {
+  const raw = Buffer.isBuffer(frame) ? frame : Buffer.from(frame);
+  if (raw.length < 4) throw new RangeError('0030 frame too short');
+  const len = raw.readUInt16BE(0);
+  // subheader 0: code@2, subheader 4: code@6
+  if (raw.readUInt16BE(2) === TRANSPORT_CODE_0030) {
+    return { subheaderLen: 0, encBody: raw.subarray(4, 2 + len) };
+  }
+  if (raw.length >= 8 && raw.readUInt16BE(6) === TRANSPORT_CODE_0030) {
+    return { subheaderLen: 4, encBody: raw.subarray(8, 2 + len) };
+  }
+  throw new RangeError('0030 transport code not found at offset 2 or 6');
+}
+
 // 프레임에서 transport code 와 암호화 body 를 벗겨낸다(스트림 파서 보조).
 export function deframe0030(frame) {
   if (frame.length < 4) throw new RangeError(`0030 frame ${frame.length} < 4`);
