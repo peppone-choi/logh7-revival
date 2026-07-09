@@ -1,5 +1,20 @@
 # LOGH VII 루프 상태
 
+## ✅ M3 블로커 해법 발견: 서버가 world-ready 시퀀스를 PUSH해야 (KNOWN-SUCCESS 트레이스) (2026-07-10)
+
+- **축 전환 성공**: 이전 사이클(리셋 전, 전략맵 렌더 성공) 트레이스를 문서 채굴해 답 확보 — 정적 RE 반복이 아닌 KNOWN-SUCCESS 근거.
+- **성공 시퀀스**(`docs/reference/restored-from-git/logh7-live-world-entry-2026-06-23.md:9`): 클라 그리드 요청(0x0314→0x0315) **직후 서버가 능동 PUSH**:
+  ```
+  0x0323×2 (캐릭터) → 0x0325×2 (유닛/함대) → 0x0b09/0x0b0a (그리드진입 준비/확정)
+   → 0x0f02 (월드초기화 push ★NOW LOADING 해제★) → 0x0f06/0x0f07 (재동기/필드 갱신)
+  ```
+- **핵심**: 클라가 3요청(0x0304/0x0306/0x0314) 후 멈추는 건 **정상 — 서버의 world-ready push를 기다리는 상태.** `0x0f02 NotifyWorldLocation` push가 NOW LOADING을 종료하고 전략맵 렌더를 시작한다. 우리 서버는 이 push 시퀀스를 안 보내 클라가 영구 대기.
+- **타이밍 주의**: `render-interaction-contract`가 "조기 0x0f02 push는 클라 크래시" 경고 → 0x0f02는 **그리드진입(0x0b09/0x0b0a) 이후**에 와야. 순서 준수 필수.
+- **0x0325 유닛**: 성공 트레이스는 0x0325×2를 실었다. `logh7-inworld-backlog.md:45` "strategic fleet 0x0325 stub" — 최소라도 유닛 엔티티 필요할 수 있음.
+- **이전 사이클 0x0304 버그(참고, 우리는 이미 회피)**: 그땐 0x0304를 non-empty StaticInformationCard로 응답해 walk가 아예 안 됐고, 수정=empty 0x0305 응답(env-gate). **우리 서버는 이미 buildEmptyWalkerInner(0x0305)로 empty 응답** → 그래서 walk가 3까지는 진행됨. 우리 남은 갭은 그 다음 **서버 push 시퀀스 부재**.
+- **server-dev 지침**: 클라가 world-enter+그리드 요청을 마친 시점(0x0314 수신 후 또는 짧은 지연)에 서버가 순서대로 push: `0x0325(유닛)→0x0b09→0x0b0a→0x0f02(월드초기화)→0x0f06→0x0f07`. 각 빌더 존재 여부 확인(0x0325 있음, 0x0b09/0x0b0a/0x0f02/0x0f06/0x0f07은 확인 필요, 없으면 restored 문서 포맷 근거로). 0x0f02가 0x0b09 이후 오도록 순서 엄수.
+- **다음**: server-dev가 push 시퀀스 구현 → live-qa로 0x0f02 후 NOW LOADING 해제·전략맵 렌더 검증.
+
 ## ⛔ M3 블로커 리포트: 전략맵 렌더 — send-ring 이론 반증, 축 전환 필요 (2026-07-10)
 
 **Blocked-Loop 발동**: 전략맵 렌더 실패 동일 증상(0x0304→0x0306→0x0314 후 NOW LOADING 정지)이 2개 수정(유효 그리드, pre-push 제거)에도 불변 → 새 증거 없는 축 소진. 리포트 후 접근 전환.
