@@ -1,0 +1,8 @@
+APPCRASH g7mtclient.exe v1.0.0.1 ts=0x40779eb8
+exception=0xc0000005 (access violation)
+fault offset=0x0018f83a  (module g7mtclient.exe; VA 0x0058f83a)
+faulting PID=0x7fc (2044)
+report ID=e59c2c6b-8f48-455c-bfdb-d0c64cc502e4
+dump=\?\C:\ProgramData\Microsoft\Windows\wer\Temp\WER4516.tmp.dmp
+DOC MATCH: docs/logh7-loop-state.md:2797 -> FUN_0058ee70, previously triggered by 0x0f1f NotifyTactics with empty prerequisites.
+CONTEXT: crash occurred ~2.16s after 0x0f02->0x0f03 + final 0x0300->0x0301. NO 0x0f1f emitted this run. Reached via grid/strategic-map init path.

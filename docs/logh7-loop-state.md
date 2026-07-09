@@ -1,5 +1,13 @@
 # LOGH VII 루프 상태
 
+## M3 마일스톤: 핸드셰이크 완주 → 크래시는 빈 그리드 콘텐츠(0x0315 RLE 필요) (2026-07-10)
+
+- **핸드셰이크 완주**(`.omo/live-qa/m3-gridinit-20260710-0408/`): 0x0f02→0x0f03 배선으로 클라가 **전체 어드미션+world-init 핸드셰이크를 opcode 정지 없이 완주**. 시퀀스: world-enter 8종 → static-info 10종(0x0304~0x030c) → 0x0300→0x0301 → 0x0f00→0x0f01 → **0x0f02→0x0f03(정지 해소, 재전송 0)** → 0x0300 → **크래시**. "알 수 없는 코드" 0건, 서버 unhandled/error 0건.
+- **크래시 = 콘텐츠 이슈(배선 아님)**: 핸드셰이크 완주 ~2.16초 후 클라 **APPCRASH 0xc0000005 access violation, fault VA `0x0058f83a`**(module g7mtclient.exe, `FUN_0058ee70`). 이 오프셋은 문서에 실재(`loop-state:2797`, `restored-from-git/logh7-tactical-033b-fix-2026-06-30.md:97`) — 전략맵 렌더러가 **빈/널 그리드 테이블 역참조** 크래시 지점. 이번엔 0x0f1f 방출 안 했으므로 **0x0f03 이후 그리드 초기화 경로 재진입**이 원인.
+- **근본원인**: 서버 그리드 응답이 전부 빈 스텁 — 0x0f03 status-only, 0x0313 grid-type `objects:[]`, 0x0315 grid `cells:[]`. 클라가 셀/오브젝트 없이 렌더 루틴 진입 → 널 크래시. 위치 `logh7-world-records.mjs:637-641`.
+- **성격 전환(중요)**: **프로토콜 핸드셰이크 계층은 사실상 완료. 이제 콘텐츠(갤럭시 맵) 계층.** 로드맵 M3.5 KEYSTONE "갤럭시 RLE 맵 0x0315(100×50, cell=systemId)"가 바로 이 지점. **갤럭시 정본은 이미 GREEN**(85성계/79좌표, M0.5 audit) — 데이터 보유, 0x0315에 RLE 인코딩만 필요.
+- **다음 축**: (a) re-analyst로 `FUN_0058ee70`(0x0058f83a) 디컴파일 → 역참조하는 정확한 테이블과 그것을 채우는 레코드(0x0315 grid cells / 0x0313 grid-type / 0x0f03 body) + 0x0315 RLE 포맷(100×50 cell=systemId, roadmap) 확정, (b) server-dev가 GREEN 갤럭시 데이터를 0x0315 RLE로 인코딩(빈 cells→실 systemId 맵). 크래시 회피 최소 = 렌더러가 비어있지 않은 테이블 받기.
+
 ## M3 0x0300/0x0f00 배선 검증 → 다음 정지: 0x0f02 (클라 요청, 문서 정정) (2026-07-10)
 
 - **검증 성공**(`.omo/live-qa/m3-worldinit-20260710-0351/`): 0x0300→0x0301, 0x0f00→0x0f01 배선으로 클라가 2코드 더 전진. "알 수 없는 코드 0x0300/0x0f00" 소멸. 크래시 없음.
