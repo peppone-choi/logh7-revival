@@ -46,6 +46,7 @@ import {
   CODE_TX_SIMPLE_DATA_BEGIN,
   buildSsLoginOkInner,
   buildCharacterRosterTransaction,
+  isAdmissionRequestCode,
 } from './logh7-world-records.mjs';
 import { CODE_REQ_INFO_ACCOUNT } from './logh7-character-codec.mjs';
 import { buildPhase3ResponseFromPhase1Frame } from './logh7-login-harness-server.mjs';
@@ -431,6 +432,9 @@ export function createPlayableServer({
               || innerCode === CODE_SS_GAME_LOGIN_REQ
               || innerCode === CODE_CMD_MOVE_GRID
               || innerCode === CODE_CMD_GRID_CHAT
+              // 월드 진입 후 어드미션 핸드셰이크(0x0304/0x0306/0x0312/0x0314/0x030a/0x030e/0x0310).
+              // 이걸 로비 라우터로 흘리면 handleLobbyInner 가 null 반환 → 응답 없음 → NOW LOADING 정지.
+              || isAdmissionRequestCode(innerCode)
             ) {
               // 월드 권위 경로
               let character = null;

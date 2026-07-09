@@ -94,6 +94,84 @@ test('0x0205 SSGameLoginRequest batch emits 0x0206 before 0x0204', () => {
   assert.ok(i206 < i204, `0x0206 (@${i206}) must precede 0x0204 (@${i204})`);
 });
 
+// ─── 월드 진입 후 어드미션 핸드셰이크 (NOW LOADING 해제) ────────────────────────
+// 근거: docs/reference/restored-from-git/logh7-inworld-progress.md P27/P29 라이브 트레이스.
+// 8종 월드레코드 수신 후 클라가 0x0304(2B, 페이로드 없음)를 보낸다. 이전엔
+// handleWorldInner 가 라우팅 안 해 "알 수 없는 코드 0x0304" → NOW LOADING 영구 정지.
+
+test('handleWorldInner routes admission 0x0304 → empty 0x0305 walker', () => {
+  const world = createWorldSession();
+  world.seedPlayer({ connectionId: 1, characterId: 5, unitId: 8, inWorld: true });
+  const req = Buffer.alloc(2);
+  req.writeUInt16BE(0x0304, 0);
+  const result = world.handleWorldInner({ connectionId: 1, accountId: 'a', inner: req });
+  assert.ok(result, '0x0304 must be routed (not null)');
+  assert.equal(result.kind, 'admission');
+  assert.equal(result.responses.length, 1);
+  assert.equal(readMsg32Code(result.responses[0].inner), 0x0305);
+  assert.deepEqual(result.responses[0].targets, [1]);
+  assert.equal(result.responses[0].isMsg32, true);
+});
+
+test('handleWorldInner routes admission 0x0306 → 0x0307', () => {
+  const world = createWorldSession();
+  world.seedPlayer({ connectionId: 1, characterId: 5, unitId: 8, inWorld: true });
+  const req = Buffer.alloc(2);
+  req.writeUInt16BE(0x0306, 0);
+  const result = world.handleWorldInner({ connectionId: 1, accountId: 'a', inner: req });
+  assert.ok(result, '0x0306 must be routed');
+  assert.equal(result.kind, 'admission');
+  assert.equal(readMsg32Code(result.responses[0].inner), 0x0307);
+});
+
+test('handleWorldInner routes admission 0x0314 → 0x0315 (empty static grid)', () => {
+  const world = createWorldSession();
+  world.seedPlayer({ connectionId: 1, characterId: 5, unitId: 8, inWorld: true });
+  const req = Buffer.alloc(2);
+  req.writeUInt16BE(0x0314, 0);
+  const result = world.handleWorldInner({ connectionId: 1, accountId: 'a', inner: req });
+  assert.ok(result, '0x0314 must be routed');
+  assert.equal(readMsg32Code(result.responses[0].inner), 0x0315);
+  // 문서(logh7-render-interaction-contract L179): 고정 5004B [u8 w][u8 h][u16BE rle]...
+  // 비-empty 0x0315 는 world-init walk 를 멈춘다(P1) → 어드미션 재요청엔 empty grid.
+  assert.equal(msg32Body(result.responses[0].inner).length, 0x138c);
+});
+
+test('handleWorldInner routes admission 0x0312 → 0x0313 (grid-type object table, count=0)', () => {
+  const world = createWorldSession();
+  world.seedPlayer({ connectionId: 1, characterId: 5, unitId: 8, inWorld: true });
+  const req = Buffer.alloc(2);
+  req.writeUInt16BE(0x0312, 0);
+  const result = world.handleWorldInner({ connectionId: 1, accountId: 'a', inner: req });
+  assert.ok(result, '0x0312 must be routed');
+  assert.equal(readMsg32Code(result.responses[0].inner), 0x0313);
+  // 문서(L178): 고정 5004B; payload[0]=count. empty = count 0.
+  const body = msg32Body(result.responses[0].inner);
+  assert.equal(body.length, 0x138c);
+  assert.equal(body.readUInt8(0), 0);
+});
+
+test('handleWorldInner admission works with message32-framed request too', () => {
+  // 클라 재구성 경로: message32 [u32LE 0][u16BE code][body]
+  const world = createWorldSession();
+  world.seedPlayer({ connectionId: 1, characterId: 5, unitId: 8, inWorld: true });
+  const req = Buffer.alloc(6);
+  req.writeUInt32LE(0, 0);
+  req.writeUInt16BE(0x0304, 4);
+  const result = world.handleWorldInner({ connectionId: 1, accountId: 'a', inner: req });
+  assert.ok(result);
+  assert.equal(readMsg32Code(result.responses[0].inner), 0x0305);
+});
+
+test('handleWorldInner still returns null for a genuinely unknown code', () => {
+  const world = createWorldSession();
+  world.seedPlayer({ connectionId: 1, characterId: 5, unitId: 8, inWorld: true });
+  const req = Buffer.alloc(2);
+  req.writeUInt16BE(0x7abc, 0);
+  const result = world.handleWorldInner({ connectionId: 1, accountId: 'a', inner: req });
+  assert.equal(result, null);
+});
+
 test('reconnect: enterWorld on a new connectionId rebinds session player by account', () => {
   // 실클라는 월드 진입 시 로비 소켓(conn2)을 닫고 새 소켓(conn3)으로 재접속한다.
   // handleSessionLogin 은 플레이어를 conn2 에 등록했지만 enterWorld 는 conn3 에서 온다.

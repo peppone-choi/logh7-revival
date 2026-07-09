@@ -483,6 +483,97 @@ export function buildStaticInformationGridInner({
   return buildMsg32Inner(CODE_STATIC_GRID, payload);
 }
 
+// ─── 월드 진입 후 어드미션 핸드셰이크 (NOW LOADING 해제) ──────────────────────
+//
+// 근거: docs/reference/restored-from-git/logh7-inworld-progress.md (P27/P29 라이브 트레이스)
+//   8종 월드레코드 수신 후 클라 부트스트랩 요청열:
+//     0x0304→0x0305, 0x0306→0x0307, 0x0314→0x0315, 0x0312→0x0313,
+//     0x030a→0x030b, 0x030e→0x030f, 0x0310→0x0311 (+ 0x031c→0x031d 는 별도 static-base)
+//   요청은 페이로드 없는 2B [u16BE code]. 서버가 대응 응답(code+1)을 안 주면 클라가
+//   NOW LOADING 에서 영구 정지한다.
+//
+// 응답 포맷 확정도:
+//   0x0313 ResponseStaticInformationGridType — 문서 확정 (render-interaction-contract L178):
+//     고정 5004B, payload[0]=count, 레코드는 1 + value*3 에 [contentId, klass, variant].
+//   0x0315 ResponseStaticInformationGrid — 문서 확정 (L179): 기존 buildStaticInformationGridInner.
+//   0x0305/0x0307/0x030b/0x030f/0x0311 — 바디 포맷 문서 미확정. "빈 walker"(코드만) 최소 응답.
+//     (P1 라이브: empty walker 응답은 decode no-op → walk 안 멈춤. 안전.)
+
+export const CODE_REQ_SESSION_WALKER = 0x0304; // C→S
+export const CODE_RESP_SESSION_WALKER = 0x0305; // S→C (빈 InformationSession walker)
+export const CODE_REQ_DUTY_WALKER = 0x0306;
+export const CODE_RESP_DUTY_WALKER = 0x0307;
+export const CODE_REQ_ADMISSION_030A = 0x030a;
+export const CODE_RESP_ADMISSION_030B = 0x030b;
+export const CODE_REQ_ADMISSION_030E = 0x030e;
+export const CODE_RESP_ADMISSION_030F = 0x030f;
+export const CODE_REQ_ADMISSION_0310 = 0x0310;
+export const CODE_RESP_ADMISSION_0311 = 0x0311;
+export const CODE_REQ_STATIC_GRID_TYPE = 0x0312; // C→S ResponseStaticInformationGridType 요청
+export const CODE_STATIC_GRID_TYPE = 0x0313; // S→C
+export const CODE_STATIC_GRID_TYPE_BYTES = 0x138c; // 5004 (0x0315 와 동일 고정 크기)
+export const CODE_REQ_STATIC_GRID = 0x0314; // C→S ResponseStaticInformationGrid 요청
+
+/**
+ * 0x0313 ResponseStaticInformationGridType (고정 5004B).
+ * 문서 확정 포맷: payload[0]=count; 각 map object value v 에 대해 1 + v*3 위치에
+ * [contentId, klass, variant] (klass==3 이 마커로 렌더/클릭). 기본 empty(count 0).
+ * 근거: docs/reference/legacy-evidence/logh7-render-interaction-contract.md L178.
+ */
+export function buildStaticInformationGridTypeInner({ objects = [] } = {}) {
+  const body = Buffer.alloc(CODE_STATIC_GRID_TYPE_BYTES);
+  const list = Array.isArray(objects) ? objects : [];
+  const count = Math.min(list.length, 255);
+  body.writeUInt8(count & 0xff, 0);
+  for (const obj of list) {
+    const value = Number(obj?.value ?? 0) & 0xff;
+    const off = 1 + value * 3;
+    if (off + 3 > body.length) continue;
+    body.writeUInt8((obj.contentId ?? 0) & 0xff, off);
+    body.writeUInt8((obj.klass ?? 0) & 0xff, off + 1);
+    body.writeUInt8((obj.variant ?? 0) & 0xff, off + 2);
+  }
+  return buildMsg32Inner(CODE_STATIC_GRID_TYPE, body);
+}
+
+/**
+ * 빈 walker/ack 응답 (코드만, body 없음). 바디 포맷 미확정 어드미션 응답용.
+ * P1 라이브: empty walker 응답은 클라 decode no-op → world-init walk 를 멈추지 않는다.
+ */
+export function buildEmptyWalkerInner(code) {
+  return buildMsg32Inner(code & 0xffff, Buffer.alloc(0));
+}
+
+/**
+ * 어드미션 요청 code → 응답 빌더 매핑. handleWorldInner 가 사용.
+ * 문서 확정 응답(0x0313/0x0315)만 실제 바디, 나머지는 빈 walker(최소 응답).
+ */
+export function buildAdmissionResponseInner(reqCode) {
+  switch (reqCode) {
+    case CODE_REQ_SESSION_WALKER: // 0x0304 → 0x0305 (빈 InformationSession walker, 미확정)
+      return buildEmptyWalkerInner(CODE_RESP_SESSION_WALKER);
+    case CODE_REQ_DUTY_WALKER: // 0x0306 → 0x0307 (빈 walker, 미확정)
+      return buildEmptyWalkerInner(CODE_RESP_DUTY_WALKER);
+    case CODE_REQ_ADMISSION_030A: // 0x030a → 0x030b (빈 ack, 미확정)
+      return buildEmptyWalkerInner(CODE_RESP_ADMISSION_030B);
+    case CODE_REQ_ADMISSION_030E: // 0x030e → 0x030f (빈 ack, 미확정)
+      return buildEmptyWalkerInner(CODE_RESP_ADMISSION_030F);
+    case CODE_REQ_ADMISSION_0310: // 0x0310 → 0x0311 (빈 ack, 미확정)
+      return buildEmptyWalkerInner(CODE_RESP_ADMISSION_0311);
+    case CODE_REQ_STATIC_GRID_TYPE: // 0x0312 → 0x0313 (문서 확정 포맷, empty content)
+      return buildStaticInformationGridTypeInner({ objects: [] });
+    case CODE_REQ_STATIC_GRID: // 0x0314 → 0x0315 (문서 확정, empty grid — 비-empty 는 walk stall)
+      return buildStaticInformationGridInner({ cells: [] });
+    default:
+      return null;
+  }
+}
+
+/** 어드미션 요청 코드 여부 */
+export function isAdmissionRequestCode(code) {
+  return buildAdmissionResponseInner(code) != null;
+}
+
 // ─── 월드 진입 시퀀스 (RE 최소 + 초기화 OK) ───────────────────────────────────
 
 /**

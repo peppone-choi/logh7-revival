@@ -16,6 +16,8 @@ import {
   CODE_LOBBY_SESSION_LOGIN_REQ,
   CODE_SS_GAME_LOGIN_REQ,
   listWorldEntryCodes,
+  buildAdmissionResponseInner,
+  readMsg32Code,
 } from './logh7-world-records.mjs';
 
 /**
@@ -321,6 +323,20 @@ export function createWorldSession({
             isMsg32: true,
           },
         ],
+      };
+    }
+
+    // 월드 진입 후 어드미션 핸드셰이크 (NOW LOADING 해제).
+    // 8종 월드레코드 수신 후 클라가 0x0304/0x0306/0x0312/0x0314/0x030a/0x030e/0x0310 등
+    // 페이로드 없는 부트스트랩 요청을 보낸다. 대응 응답(code+1)을 안 주면 영구 정지.
+    // 근거: docs/reference/restored-from-git/logh7-inworld-progress.md P27/P29.
+    const admissionInner = buildAdmissionResponseInner(code);
+    if (admissionInner) {
+      return {
+        kind: 'admission',
+        reqCode: code,
+        respCode: readMsg32Code(admissionInner),
+        responses: [{ targets: [connectionId], inner: admissionInner, isMsg32: true }],
       };
     }
 

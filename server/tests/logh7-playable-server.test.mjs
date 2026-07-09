@@ -211,6 +211,18 @@ test('playable server boots twice and serves login+world+move sequence', async (
     assert.ok(idx323 > idx206, `boot ${boot} world records after 0x206`);
     assert.ok(decodedCodes.includes(0x0325), `boot ${boot} missing 0x0325`);
 
+    // 어드미션 핸드셰이크: 월드 진입 후 클라가 0x0304(2B, 페이로드 없음)를 보낸다.
+    // 서버가 0x0305 를 안 주면 클라는 NOW LOADING 에서 정지. 전체 트랜스포트 경유로 검증.
+    const admissionReq = Buffer.alloc(2);
+    admissionReq.writeUInt16BE(0x0304, 0);
+    socket.write(build0030Transport({ phase1Key, id: 55, inner: admissionReq, tables }));
+    const admissionFrames = await readFrames(socket, 1, 4000);
+    assert.equal(
+      decodeInnerCode(admissionFrames[0]),
+      0x0305,
+      `boot ${boot} admission 0x0304 must yield 0x0305`,
+    );
+
     // move 0x0b01
     const player = server.worldSession.getPlayer(1);
     assert.ok(player && player.inWorld, `boot ${boot} player in world`);
