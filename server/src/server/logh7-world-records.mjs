@@ -488,7 +488,8 @@ export function buildStaticInformationGridInner({
 /**
  * 월드 세션 진입 S→C 레코드 열 (RE 근거, 미확정 바디 날조 없음).
  *
- * 순서:
+ * 순서 (RE: 0x0206 이 월드 파이프라인 활성 0x35837e → 레코드가 흐른다):
+ *   0x0206 SSGameLoginOK (선두)
  *   0x0204 선택 캐릭터 id
  *   0x0323 캐릭터 레코드 (724B)
  *   0x0325 유닛 테이블 (고정 52804B, 최소 count+id)
@@ -496,7 +497,6 @@ export function buildStaticInformationGridInner({
  *   0x0f01 WorldInitialize OK (status=1)
  *   0x0f03 GridInitialize OK (status=1)
  *   0x0315 Static grid (100×50 RLE, 기본 empty; unitCell 있으면 1마커)
- *   0x0206 SSGameLoginOK
  *
  * 0x031d/0x031f base 바디는 오프셋 미확정 → 생략 (fail-closed).
  */
@@ -528,6 +528,8 @@ export function buildWorldEntryInners({
     throw new Error('buildWorldEntryInners: gridUnitId required');
   }
   const emits = [
+    // 0x0206 을 선두로: 월드 파이프라인 활성(0x35837e) 후 레코드가 흐른다 (RE 순서).
+    buildSsGameLoginOkInner({ status: 1 }),
     buildSsCharacterIdInner({ characterId }),
     buildInformationCharacterInner({
       characterId,
@@ -557,7 +559,6 @@ export function buildWorldEntryInners({
       : [];
     emits.push(buildStaticInformationGridInner({ cells }));
   }
-  emits.push(buildSsGameLoginOkInner({ status: 1 }));
   return emits;
 }
 

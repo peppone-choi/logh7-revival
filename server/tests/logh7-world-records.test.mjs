@@ -92,8 +92,11 @@ test('world entry emits required codes with proven sizes', () => {
   assert.ok(codes.includes(0x0f01));
   assert.ok(codes.includes(0x0f03));
   assert.ok(codes.includes(0x0315));
-  assert.equal(msg32Body(emits[1]).length, 0x2d4);
-  assert.equal(msg32Body(emits[2]).length, 0xce44);
+  // 코드로 조회 (0x0206 이 선두라 위치 고정 금지)
+  const charRec = emits.find((i) => listWorldEntryCodes([i])[0] === CODE_INFO_CHARACTER);
+  const unitRec = emits.find((i) => listWorldEntryCodes([i])[0] === CODE_INFO_UNIT);
+  assert.equal(msg32Body(charRec).length, 0x2d4);
+  assert.equal(msg32Body(unitRec).length, 0xce44);
   const grid = emits.find((i) => listWorldEntryCodes([i])[0] === 0x0315);
   assert.equal(msg32Body(grid).length, 0x138c);
   assert.equal(msg32Body(emits.find((i) => listWorldEntryCodes([i])[0] === 0x0f01))[0], 1);

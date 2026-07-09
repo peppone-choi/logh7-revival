@@ -325,20 +325,47 @@ export function createPlayableServer({
                 });
               }
             } else if (innerCode === CODE_SS_LOGIN_REQ) {
-              // 세션 서버 재접속: 0x200a 리다이렉트 이후 0x0200 SSLoginRequest.
-              // 생성 경로 라이브(2026-07-09): 0x0201 없으면 공지 복귀.
+              // 0x0200 GameLogin: 씬 전환 게이트다 (RE 확정).
+              // 0x200a 리다이렉트 후 같은 소켓으로 도착하며, 응답 순서는
+              //   0x0201 SSLoginOK  → 클라 씬 전환 플래그 0x35837d 세팅 (state 0x35 탈출)
+              //   0x0206 SSGameLoginOK + 월드레코드 7종 → 전략맵 렌더
+              // 0x0201 이 반드시 0x0206·월드레코드보다 먼저여야 한다.
               if (!lobbyAccount && lastLobbyAccount) lobbyAccount = lastLobbyAccount;
-              const replyId = takeReplyId(parsed0030.id >>> 0);
-              const okInner = buildSsLoginOkInner({ status: 0 });
-              sendInner(socket, connectionId, replyId, okInner);
+              // 1) 0x0201 SSLoginOK — body 1바이트 성공 플래그(=1). dispatcher 가 param_3[0] 소비.
+              let lastId = takeReplyId(parsed0030.id >>> 0);
+              const okInner = buildSsLoginOkInner({ status: 1 });
+              sendInner(socket, connectionId, lastId, okInner);
               writeTrace({
                 event: 'ss-login-ok-sent',
                 connectionId,
-                replyId,
+                replyId: lastId,
                 account: lobbyAccount,
                 requestInnerBytes: parsed0030.innerLen,
                 responseHex: okInner.toString('hex'),
               });
+              // 2) 0x0206 + 월드레코드: 0x2009 에서 등록된 플레이어를 월드에 진입.
+              //    (0x2009 는 0x200a 만 보내고 월드 진입은 여기로 이연 — RE 확정.)
+              const worldPlayer = resolvedWorld.getPlayer(connectionId);
+              if (worldPlayer && !worldPlayer.createPending && worldPlayer.characterId > 0) {
+                const entered = resolvedWorld.enterWorld({ connectionId });
+                for (const emit of entered.emits) {
+                  lastId = takeReplyId(lastId);
+                  sendInner(socket, connectionId, lastId, emit);
+                }
+                writeTrace({
+                  event: 'ss-world-enter-sent',
+                  connectionId,
+                  after: '0x0201',
+                  codes: entered.codes,
+                  frames: entered.emits.length,
+                });
+              } else {
+                writeTrace({
+                  event: 'ss-login-ok-no-world',
+                  connectionId,
+                  reason: worldPlayer ? 'create-pending' : 'no-session-player',
+                });
+              }
               // 로스터 트랜잭션은 C→S 0x1200 요청에만 응답 (중복 푸시 시 클라 루프/추첨 실패 유발).
             } else if (innerCode === CODE_TX_SIMPLE_DATA_BEGIN) {
               // 라이브 생성 경로: 클라가 0x1001 직후 C→S 0x1200(31B) 송신.
@@ -460,23 +487,16 @@ export function createPlayableServer({
                   responseHex: Buffer.from(login.responseInner).toString('hex'),
                   innerHex: Buffer.from(parsed0030.inner).toString('hex'),
                 });
-                // 기존 캐릭 로그인만 월드 진입. 생성 경로(createPending)는 0x200a 만 —
-                // 클라가 8단계 생성 폼으로 진행하고 0x1008 을 보내게 둔다.
-                if (!login.createPending && login.player?.characterId > 0) {
-                  const entered = resolvedWorld.enterWorld({ connectionId });
-                  for (const emit of entered.emits) {
-                    result.responses.push({
-                      targets: [connectionId],
-                      inner: emit,
-                      isMsg32: true,
-                    });
-                  }
-                  result.codes = entered.codes;
-                  result.kind = 'session-login+world-enter';
-                } else {
-                  result.kind = 'session-login-create-pending';
-                  result.codes = [0x200a];
-                }
+                // 0x2009 는 0x200a 리다이렉트만 보낸다. 월드 진입(0x0206+레코드)은
+                // 클라가 이어 보내는 0x0200 GameLogin 응답에서 0x0201 직후에 처리한다.
+                // RE 확정: 0x2009 에 월드레코드를 인라인 푸시하면 씬 전환 게이트(0x35837d)를
+                // 세팅하는 0x0201 이 없어 클라가 캐릭터 선택 화면에 잔류한다.
+                // handleSessionLogin 이 기존캐릭이면 플레이어를 등록해 두므로,
+                // 0x0200 핸들러의 enterWorld({connectionId}) 가 그 상태를 사용한다.
+                result.codes = [0x200a];
+                result.kind = login.createPending
+                  ? 'session-login-create-pending'
+                  : 'session-login-redirect';
               } else {
                 result = resolvedWorld.handleWorldInner({
                   connectionId,
