@@ -1,5 +1,16 @@
 # LOGH VII 루프 상태
 
+## M3 크래시 확정: 빈 오브젝트 테이블(0x0323) — 그리드 아님 (2026-07-10, RE)
+
+- **정정**: 전략맵 크래시(0x0058f83a `FUN_0058ee70`)는 그리드 셀이 아니라 **빈 오브젝트 테이블** 때문. 크래시 바이트 검증 `8b 0d 80 00 00 00` = `MOV ECX,[0x00000080]`(널 페이지 절대 read). 직전 `FUN_004c7290(focusId)`가 오브젝트 테이블(clientBase+0xc, 600엔트리 stride 0x370)에서 focus id를 못 찾으면 0 반환 → JNZ 미통과 → 버그난 분기 크래시.
+- **그 테이블을 채우는 레코드 = `0x0323 ResponseInformationCharacter`**(dispatcher case 0x323 → `FUN_004c2c80` → clientBase+0xc 오브젝트 등록). **현재 0x0323이 빈 스텁이라 테이블이 비어 크래시.** 그리드 셀(0x0315)은 빈 셀도 non-null 반환(`FUN_004c8b70`)이라 직접 원인 아님.
+- **크래시 해소 = 0x0323에 플레이어 실 캐릭터(count≥1, 실레코드)**. 시드 캐릭터가 스토어에 있으니 world-enter의 0x0323을 실 캐릭터로 인코딩.
+- **0x0315 StaticInformationGrid RLE 포맷(FUN_004abbb0 확정)**: body 0x138c 고정. `[u8 width=100][u8 height=50][u16 rleLen(1<rleLen<0x1389)][RLE: (u8 runLen, u8 cellType)…]`. 각 쌍이 runLen개 셀을 cellType으로. **제약 ΣrunLen==5000(=100×50)**, 나머지 0패딩. **cellType은 systemId 아님 = 0x0313 팔레트 인덱스**(stride 3, clientBase+0x2c1755). (로드맵 "cell=systemId"는 부정확 — cell=타입인덱스, 시스템 위치는 별도 오버레이.) 워킹그리드 clientBase+0x2c03cc, 렌더러 `+y*100+x`.
+- **0x0313 StaticInformationGridType 팔레트**: 와이어 0x138c, 실사용 301B. `[u8 count][3바이트 타입레코드×N]`, clientBase+0x2c1754. 빈 우주 zero-fill 안전(cellType 0→type[0]).
+- **FUN_004c5350**(그리드 활성, 1회): 0x0315(5004B)+0x0313(5004B) 워킹테이블 복사 — 둘 다 풀 고정크기여야(over-read도 방지).
+- **server-dev 지침**: (1) **0x0323 플레이어 실 캐릭터**(크래시 게이트), (2) 0x0315 유효 RLE(빈 우주=전부 type0, 예 (250,0)×20=5000), (3) 0x0313 팔레트 최소(zero-fill). 크래시 해소 후 갤럭시 GREEN 데이터를 0x0315 RLE에 실 systemId-타입으로 인코딩(별도).
+- **미확정 축**: focus id가 플레이어 본인 오브젝트인지 커서 오브젝트인지 완전 확정 못 함 — 0x0323 플레이어 캐릭터로 해소 안 되면 다음 축은 map cursor/selection focus 상태 추적.
+
 ## M3 마일스톤: 핸드셰이크 완주 → 크래시는 빈 그리드 콘텐츠(0x0315 RLE 필요) (2026-07-10)
 
 - **핸드셰이크 완주**(`.omo/live-qa/m3-gridinit-20260710-0408/`): 0x0f02→0x0f03 배선으로 클라가 **전체 어드미션+world-init 핸드셰이크를 opcode 정지 없이 완주**. 시퀀스: world-enter 8종 → static-info 10종(0x0304~0x030c) → 0x0300→0x0301 → 0x0f00→0x0f01 → **0x0f02→0x0f03(정지 해소, 재전송 0)** → 0x0300 → **크래시**. "알 수 없는 코드" 0건, 서버 unhandled/error 0건.
