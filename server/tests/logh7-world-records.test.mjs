@@ -246,6 +246,23 @@ test('buildAdmissionResponseInner: each admission request → full-size static-i
   assert.equal(buildAdmissionResponseInner(0x7abc), null);
 });
 
+test('buildAdmissionResponseInner: 0x0f02 → plain 0x0f03 GridInitialize OK (status=1)', () => {
+  // 라이브 정정: 클라가 0x0f02 를 요청으로 보낸다 (문서는 push 로 기술).
+  // 근거: loop-state P28/P30 "0x0f02(→0x0f03)"; inworld-progress L869 "plain 0x0f03".
+  // 응답 = buildGridInitOkInner (status=1). 최소 페이로드(rich 주입은 회귀 위험).
+  const inner = buildAdmissionResponseInner(0x0f02);
+  assert.ok(inner, '0x0f02 must route (not null)');
+  assert.equal(readMsg32Code(inner), 0x0f03);
+  const body = msg32Body(inner);
+  assert.equal(body.length, 1, '0x0f03 plain OK body = 1B status');
+  assert.equal(body.readUInt8(0), 1, 'status=1 필수 (client+0x35f357 미초기화 방지)');
+});
+
+test('isAdmissionRequestCode(0x0f02) true; response opcode 0x0f03 is not a request', () => {
+  assert.equal(isAdmissionRequestCode(0x0f02), true);
+  assert.equal(isAdmissionRequestCode(0x0f03), false);
+});
+
 test('isAdmissionRequestCode covers every static-info req (incl. 신규 0x0308/0x030c), rejects non-admission', () => {
   const reqCodes = [
     0x0304, 0x0306, 0x0308, 0x030a, 0x030c, 0x030e, 0x0310, 0x0312, 0x0314, 0x031c,

@@ -62,6 +62,7 @@ export const CODE_REQ_RESPONSE_TIME = 0x0300; // C→S RequestResponseTime → 0
 export const CODE_RESP_TIME = 0x0301; // S→C ResponseTime — 4B LE start time
 export const CODE_REQ_WORLD_INIT = 0x0f00; // C→S RequestWorldInitialize → 0x0f01
 export const CODE_WORLD_INIT_OK = 0x0f01; // ResponseWorldInitialize_OK → client+0x35f356
+export const CODE_REQ_GRID_INIT = 0x0f02; // C→S RequestGridInitialize → 0x0f03 (라이브 정정: push 아님)
 export const CODE_GRID_INIT_OK = 0x0f03; // ResponseGridInitialize_OK → client+0x35f357
 export const CODE_STATIC_GRID = 0x0315; // ResponseStaticInformationGrid RLE, fixed 0x138c
 export const CODE_STATIC_GRID_BYTES = 0x138c; // 5004
@@ -608,21 +609,36 @@ export const ADMISSION_WALKER_REQ_RESP = Object.freeze({
  *   0x0312→0x0313 · 0x0314→0x0315 : static-info 그리드(헤더 채움 5004B)
  *   0x0300→0x0301 : RequestResponseTime → ResponseTime (4B LE start time)
  *   0x0f00→0x0f01 : RequestWorldInitialize → WorldInitialize OK (status=1)
+ *   0x0f02→0x0f03 : RequestGridInitialize → GridInitialize OK (status=1)
  *
- * 근거: docs/reference/restored-from-git/logh7-inworld-progress.md P28/P30 라이브 트레이스 —
- *   static-info 완주 후 0x0308→0x0309, 0x030c→0x030d, 0x0300→0x0301, 0x0f00→0x0f01, 0x0f02 push
- *   순으로 흘러 strategic HUD 도달(Now Loading 아님). 응답 포맷은 기존 RE 빌더 재사용(날조 없음):
- *   buildResponseTimeInner / buildWorldInitOkInner(status=1, WORLD_OK_STATUS_CODES · client+0x35f356).
+ * 근거: docs/reference/restored-from-git/logh7-inworld-progress.md P28/P30 라이브 트레이스 +
+ *   docs/logh7-loop-state.md P28/P30 시퀀스 (static-info→0x0300→0x0f00→0x0f02(→0x0f03)→0x0f06(→0x0f07)):
+ *   static-info 완주 후 0x0300→0x0301, 0x0f00→0x0f01, 0x0f02→0x0f03 순으로 흘러 strategic HUD 도달
+ *   (Now Loading 아님). 응답 포맷은 기존 RE 빌더 재사용(날조 없음):
+ *   buildResponseTimeInner / buildWorldInitOkInner(status=1) / buildGridInitOkInner(status=1).
+ *
+ * ★0x0f02 라이브 정정: 문서는 0x0f02 를 "서버 push" 로 기술했으나 실측상 클라가 0x0f02 를
+ *   요청으로 보낸다(inworld-progress L716 "0x0f02 plus …/0x0f03", L869 "0x0f02 fell back to a
+ *   plain 0x0f03"; loop-state P28/P30 "0x0f02(→0x0f03)"). 따라서 req→resp(→0x0f03)로 배선.
+ *   응답은 최소(plain 0x0f03, status=1, WORLD_OK_STATUS_CODES · client+0x35f357). 조기 rich
+ *   0x0f02 위치/스탯 주입은 라이브 회귀 위험이라 분리(render-interaction-contract L27/L124-128).
  *
  * 이 맵의 code 는 isAdmissionRequestCode 로도 잡혀 playable-server 가 world 로 라우팅한다.
  * 미배선 시 lobby 라우터로 새어 응답 없음 → 클라가 code+1 응답을 무한 대기(NOW LOADING 정지).
- * 0x0f02(server push) / 0x0f06→0x0f07 은 이 트리 내 응답 포맷 근거 없음 → 배선 안 함(다음 라이브 특정).
+ *
+ * 근거 없어 배선 안 한 후속 코드(다음 라이브 특정 대상 — 추측 응답 금지, 크래시/황제 위험):
+ *   0x0f06→0x0f07 (messenger-stat tick): 0x0f07 바이트 포맷 미확정. 검증자가 0x0f07 P0
+ *     오승격 적발(loop-state journal). render-contract 는 라이브 관측(P1/P2)만 기록·레이아웃 없음.
+ *   0x0f04→0x0f05 / 0x0f08→0x0f09: UI 아이콘 트리거(부트스트랩 아님)·트리 내 빌더/포맷 없음.
+ *   0x0322→0x0323 / 0x034e→0x034f: 월드 진입 후 메뉴 PULL 리드(NOW LOADING 정지 경로 아님).
+ *   0x031e→0x031f / 0x0320→0x0321 / 0x033b: base/facility 패널 — 현재 리셋 트리에 빌더 없음.
  */
 const ADMISSION_DEDICATED_BUILDERS = Object.freeze({
   [CODE_REQ_STATIC_GRID_TYPE]: () => buildStaticInformationGridTypeInner({ objects: [] }), // 0x0312 → 0x0313
   [CODE_REQ_STATIC_GRID]: () => buildStaticInformationGridInner({ cells: [] }), // 0x0314 → 0x0315
   [CODE_REQ_RESPONSE_TIME]: () => buildResponseTimeInner(), // 0x0300 → 0x0301
   [CODE_REQ_WORLD_INIT]: () => buildWorldInitOkInner({ status: 1 }), // 0x0f00 → 0x0f01
+  [CODE_REQ_GRID_INIT]: () => buildGridInitOkInner({ status: 1 }), // 0x0f02 → 0x0f03 (plain OK)
 });
 
 /**

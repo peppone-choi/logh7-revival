@@ -218,6 +218,47 @@ test('isAdmissionRequestCode(0x0f00) is true (world-init handshake routes to wor
   assert.equal(isAdmissionRequestCode(0x0f00), true);
 });
 
+// ─── 0x0f02 → 0x0f03 (GridInitialize) ─────────────────────────────────────────
+// 라이브 정정: 문서는 0x0f02 를 서버 push 로 기술했으나 실측상 클라가 0x0f02 를
+// 요청으로 보낸다. 근거:
+//   docs/logh7-loop-state.md P28/P30: static-info→0x0300→0x0f00→0x0f02(→0x0f03)→…
+//   docs/reference/restored-from-git/logh7-inworld-progress.md L869 "0x0f02 fell back
+//     to a plain 0x0f03", L716 "0x0f02 plus 0x0204/0x0325/0x0323/0x0f03".
+// 응답은 기존 빌더 buildGridInitOkInner (status=1, WORLD_OK_STATUS_CODES, client+0x35f357).
+// 페이로드는 최소(plain 0x0f03) — 조기 rich 0x0f02 주입은 회귀 위험(render-contract L27/L124).
+
+test('handleWorldInner routes 0x0f02 RequestGridInitialize → 0x0f03 GridInitialize OK (status=1)', () => {
+  const world = createWorldSession();
+  world.seedPlayer({ connectionId: 1, characterId: 5, unitId: 8, inWorld: true });
+  const req = Buffer.alloc(2);
+  req.writeUInt16BE(0x0f02, 0);
+  const result = world.handleWorldInner({ connectionId: 1, accountId: 'a', inner: req });
+  assert.ok(result, '0x0f02 must be routed (not null — else it leaks to lobby, NOW LOADING stall)');
+  assert.equal(result.kind, 'admission');
+  assert.equal(result.responses.length, 1);
+  assert.equal(readMsg32Code(result.responses[0].inner), 0x0f03);
+  // plain 0x0f03: status=1 (WORLD_OK_STATUS_CODES 필수), 1B body
+  assert.equal(msg32Body(result.responses[0].inner).length, 1);
+  assert.equal(msg32Body(result.responses[0].inner).readUInt8(0), 1);
+  assert.deepEqual(result.responses[0].targets, [1]);
+  assert.equal(result.responses[0].isMsg32, true);
+});
+
+test('handleWorldInner routes 0x0f02 when message32-framed too', () => {
+  const world = createWorldSession();
+  world.seedPlayer({ connectionId: 1, characterId: 5, unitId: 8, inWorld: true });
+  const req = Buffer.alloc(6);
+  req.writeUInt32LE(0, 0);
+  req.writeUInt16BE(0x0f02, 4);
+  const result = world.handleWorldInner({ connectionId: 1, accountId: 'a', inner: req });
+  assert.ok(result);
+  assert.equal(readMsg32Code(result.responses[0].inner), 0x0f03);
+});
+
+test('isAdmissionRequestCode(0x0f02) is true so playable-server routes it to world (not lobby)', () => {
+  assert.equal(isAdmissionRequestCode(0x0f02), true);
+});
+
 test('handleWorldInner still returns null for a genuinely unknown code', () => {
   const world = createWorldSession();
   world.seedPlayer({ connectionId: 1, characterId: 5, unitId: 8, inWorld: true });
