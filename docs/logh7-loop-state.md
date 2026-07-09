@@ -1,5 +1,14 @@
 # LOGH VII 루프 상태
 
+## ⛔ M3 결정적 재특성화: 로더는 내부 메모리 폴링 — 5가설 반증, RE 필요 (2026-07-10)
+
+- **×2 refresh(P7 A6) 경험적 기각**(`.omo/live-qa/m3-x2refresh-20260710-0731/`): 0x0325/0x0323을 begin/end 사이 ×2 재전송(responseCount 8, early-grid 시 9) 실제 배달됐으나 **NOW LOADING 정지 불변**. config A(기본)/B(LOGH_STRAT_GRID_EARLY=1) 둘 다 정지.
+- **★결정적 새 증거**: 클라의 월드 단계 요청 opcode는 **정확히 3개(0x0304/0x0306/0x0314)뿐**, 그 후 **완전 침묵**(0x0312 grid-type 요청조차 없음, ECONNRESET 없이 연결 유지·프로세스 생존). → **로더가 와이어 응답을 기다리는 게 아니라 내부 메모리 상태(레코드/엔티티/플래그)를 폴링**하며 스핀. 현재 push(8/9 레코드)가 그 내부 조건을 만족 못 시킴.
+- **반증된 5가설(재시도 금지)**: (1) send-ring 상관/pre-push, (2) world-ready push 존재, (3) 계약순서(begin→0x0325+0x0323→end), (4) ×2 refresh(P7 A6), (5) 실 섹터그리드 팔레트. 전부 라이브 정지 불변.
+- **유일한 결정적 질문(RE)**: 클라 NOW LOADING 로더 상태머신(`FUN_004c2a80` 및 NOW LOADING 종료 분기)이 **로딩 플래그를 클리어하는 정확한 메모리 조건**은 무엇인가 — 어느 clientBase+offset이 무슨 값이어야 하고, 그걸 어느 수신 레코드(0x0325 유닛? 0x0323 캐릭터? 0x0313 타입? 0x031d base? 특정 카운트/슬롯?)가 세팅하는가. 현재 push가 채우는 오브젝트 테이블(clientBase+0xc)이 로더가 검사하는 슬롯/타입과 불일치할 가능성.
+- **하네스 버그(별도)**: `tools/live/_m2_launch.mjs`가 characterStore 자동 시드 안 함 → 신규 evdir에서 characterCount:0. 시드 store 수동 복사로 우회. 이전 evidence(0558/0617)의 responseCount:6은 **stale 서버 코드**였음(×2 fix 미검증). 현재 커밋(1de662a3)은 responseCount 8 확인.
+- **다음**: re-analyst로 NOW LOADING 종료 메모리 조건 확정 → 그 레코드/필드를 정확히 채워 정지 해소.
+
 ## ⛔⛔ M3 통합 상태 + 최종 블로커: 정적정보 데이터 체인 부재 (2026-07-10)
 
 **Blocked-Loop 근본 전환**: 전략맵 렌더 실패(NOW LOADING 정지) 동일 증상이 push 변형 4회(유효 그리드 / pre-push 제거 / world-ready push / 계약순서 push)에 불변. push 순서·타이밍 축 소진 → 데이터 체인 축으로 전환.

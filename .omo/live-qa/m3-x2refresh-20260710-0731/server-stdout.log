@@ -1,0 +1,35 @@
+node:net:1940
+    const ex = new UVExceptionWithHostPort(err, 'listen', address, port);
+               ^
+
+Error: listen EADDRINUSE: address already in use 127.0.0.1:47900
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1{"ts":"2026-07-09T22:33:39.046Z","event":"connection-opened","connectionId":1,"remoteAddress":"127.0.0.1","remotePort":4130}
+{"ts":"2026-07-09T22:33:39.049Z","event":"frame-received","connectionId":1,"codeHex":"0x0034","length":26,"bodyBytes":24}
+{"ts":"2026-07-09T22:33:39.063Z","event":"phase3-sent","connectionId":1,"codeHex":"0x0035","phase1KeyBytes":16,"sequence":1}
+{"ts":"2026-07-09T22:33:39.070Z","event":"frame-received","connectionId":1,"codeHex":"0x0036","length":10,"bodyBytes":8}
+{"ts":"2026-07-09T22:33:39.079Z","event":"frame-received","connectionId":1,"codeHex":"0x0030","length":50,"bodyBytes":48}
+{"ts":"2026-07-09T22:33:39.087Z","event":"0030-decoded","connectionId":1,"id":1,"innerCodeHex":"0x7000","innerLen":39}
+{"ts":"2026-07-09T22:33:39.088Z","event":"login-credential","connectionId":1,"account":"inei00","authOk":true,"reason":null}
+{"ts":"2026-07-09T22:33:39.101Z","event":"login-response-sent","connectionId":1,"keysetupCodeHex":"0x0031","redirectCodeHex":"0x7001","gin7KeyHex":"47494e370001000000070069006e006500690030003000000600640075006d006d00790000"}
+{"ts":"2026-07-09T22:33:39.104Z","event":"peer-fin","connectionId":1}
+{"ts":"2026-07-09T22:33:39.105Z","event":"connection-closed","connectionId":1,"hadError":false}
+{"ts":"2026-07-09T22:33:39.105Z","event":"connection-opened","connectionId":2,"remoteAddress":"127.0.0.1","remotePort":4131}
+{"ts":"2026-07-09T22:33:39.111Z","event":"frame-received","connectionId":2,"codeHex":"0x0034","length":26,"bodyBytes":24}
+{"ts":"2026-07-09T22:33:39.117Z","event":"phase3-sent","connectionId":2,"codeHex":"0x0035","phase1KeyBytes":16,"sequence":1}
+{"ts":"2026-07-09T22:33:39.118Z","event":"frame-received","connectionId":2,"codeHex":"0x0036","length":10,"bodyBytes":8}
+{"ts":"2026-07-09T22:33:39.118Z","event":"frame-received","connectionId":2,"codeHex":"0x0030","length":18,"bodyBytes":16}
+{"ts":"2026-07-09T22:33:39.124Z","event":"0030-decoded","connectionId":2,"id":1,"innerCodeHex":"0x0020","innerLen":6}
+{"ts":"2026-07-09T22:33:39.124Z","event":"lobby-session-init","connectionId":2,"id":1}
+{"ts":"2026-07-09T22:33:39.124Z","event":"frame-received","connectionId":2,"codeHex":"0x0030","length":42,"bodyBytes":40}
+{"ts":"2026-07-09T22:33:39.131Z","event":"0030-decoded","connectionId":2,"id":2,"innerCodeHex":"0x2000","innerLen":25}
+{"ts":"2026-07-09T22:33:39.137Z","event":"lobby-login-ok-sent","connectionId":2,"account":"inei00","replyId":3,"okCodeHex":"0x2001","okFormat":"message32","subheaderLen":4,"characterCount":0}
+{"ts":"2026-07-09T22:33:49.878Z","event":"frame-received","connectionId":2,"codeHex":"0x0030","length":18,"bodyBytes":16}
+{"ts":"2026-07-09T22:33:49.884Z","event":"0030-decoded","connectionId":2,"id":3,"innerCodeHex":"0x2003","innerLen":2}
+{"ts":"2026-07-09T22:33:49.894Z","event":"lobby-response-sent","connectionId":2,"replyId":4,"requestInnerCodeHex":"0x2003","responseInnerBytes":1762}
+{"ts":"2026-07-09T22:33:49.902Z","event":"frame-received","connectionId":2,"codeHex":"0x0030","length":18,"bodyBytes":16}
+{"ts":"2026-07-09T22:33:49.910Z","event":"0030-decoded","connectionId":2,"id":4,"innerCodeHex":"0x2005","innerLen":3}
+{"ts":"2026-07-09T22:33:49.950Z","event":"lobby-response-sent","connectionId":2,"replyId":5,"requestInnerCodeHex":"0x2005","responseInnerBytes":21258}
+{"ts":"2026-07-09T22:33:49.965Z","event":"frame-received","connectionId":2,"codeHex":"0x0030","length":18,"bodyBytes":16}
+{"ts":"2026-07-09T22:33:49.972Z","event":"0030-decoded","connectionId":2,"id":5,"innerCodeHex":"0x2005","innerLen":3}
+{"ts":"2026-07-09T22:33:50.007Z","event":"lobby-response-sent","connectionId":2,"replyId":6,"requestInnerCodeHex":"0x2005","responseInnerBytes":21258}
