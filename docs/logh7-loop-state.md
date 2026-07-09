@@ -1,5 +1,13 @@
 # LOGH VII 루프 상태
 
+## M3 어드미션 완주 → 다음 정지: 0x0300 RequestResponseTime (2026-07-10)
+
+- **static-info 포괄 배선 검증 성공**(`.omo/live-qa/m3-admission-full-20260710-0334/`): 클라가 어드미션 요청 10종(0x0304/0x0306/0x0314/0x0312/0x030a/0x0310/0x030e/0x031c/**0x0308**/**0x030c**) 전부 통과("알 수 없는 코드" 없음), 신규 0x0308→0x0309·0x030c→0x030d 정상. 크래시 없음.
+- **새 정지: 0x0300**(클라 3회 재전송) — RequestResponseTime. 0x0301(ResponseTime, 4B LE start time, `world-records.mjs:61`)을 응답으로 기대. `handleWorldInner`에 0x0300 분기 없어 lobby 라우터로 새어 unhandled. (world-entry에서 0x0301이 unsolicited로 1회 나갔으나, 클라는 어드미션 후 **명시적 0x0300 요청**에 새 0x0301을 받아야 로딩 해제.)
+- **수정**: `handleWorldInner`(world-session.mjs:284~343)에 `code===0x0300` 분기 추가 → `buildResponseTimeInner()`(world-records.mjs:420 존재, import만) 반환. `isAdmissionRequestCode`/라우팅이 0x0300을 world로 잡도록. world-entry의 unsolicited 0x0301 emit은 유지(제거 금지).
+- **패턴**: 월드-init 핸드셰이크는 클라가 코드를 하나씩 요청하며 진행(수렴). 각 라이브가 한 스테이지 전진. 다음: 0x0300 후 추가 계열(0x0f02 notify 등) 나오는지 재검증.
+- 도달 최대 화면: `MAXREACHED-nowloading-stuck-0x0300.png`(크래시 없는 NOW LOADING).
+
 ## M3 크래시 해소 → 다음: 미배선 어드미션 코드 0x0308 (포괄 배선 필요) (2026-07-10)
 
 - **크래시 완전 해소**(`.omo/live-qa/m3-crashfix-20260710-0319/`): 풀사이즈 0채움 body로 클라가 어드미션 응답 8개를 무사 수신, 프로세스 생존. `MAXREACHED-nowloading-clean-no-crash.png`(크래시 다이얼로그 없는 깨끗한 NOW LOADING) vs 직전 크래시 화면 대조로 확정.
