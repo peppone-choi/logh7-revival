@@ -192,14 +192,21 @@ test('playable server boots twice and serves login+world+move sequence', async (
     const loginOkFrames = await readFrames(socket, 1, 4000);
     assert.equal(decodeInnerCode(loginOkFrames[0]), 0x0201, `boot ${boot} 0x201 SSLoginOK only`);
 
-    // 0x205 SSGameLoginRequest → 0x206 SSGameLoginOK(0x35837e) + 월드레코드 8종.
+    // 0x205 SSGameLoginRequest → 0x206 SSGameLoginOK(0x35837e) + unsolicited 테이블 채움 4종.
     // ★0x206 이 0x204·나머지 레코드보다 먼저 (recv 필터: 0x206 미세팅 시 0x204 드롭+0x205 재트리거).
+    //
+    // ★send-ring reactive화 (docs/logh7-loop-state.md "M3 정지 확정: request-response send-ring
+    // 상관 실패"): 실클라 로더는 엄격한 요청-응답 send-ring 파이프라인 — 요청 1개 송신 →
+    // 매칭 응답이 ring 엔트리 pop → 다음 요청. 예전 배치는 0x0301/0x0f01/0x0f03/0x0315 를 클라가
+    // 요청하기 전에 pre-push 해 ring 이 안 비워지고 로더가 NOW LOADING 에서 정지했다. 이제
+    // world-enter 배치는 unsolicited 4종(0x0206/0x0204/0x0323/0x0325)만 push 하고,
+    // 요청-응답 4종은 클라 후속 요청에 reactive 로 응답한다(아래 send-ring 검증).
     const gameLoginReq = Buffer.alloc(2);
     gameLoginReq.writeUInt16BE(0x0205, 0);
     socket.write(build0030Transport({ phase1Key, id: 5, inner: gameLoginReq, tables }));
-    // expect: world emits (0x206/204/323/325/301/f01/f03/315) = 8
-    const worldFrames = await readFrames(socket, 8, 8000);
-    assert.ok(worldFrames.length >= 8, `boot ${boot} world frames ${worldFrames.length}`);
+    // expect: world emits (0x206/0x204/0x323/0x325) = 4 (pre-push 요청-응답 코드 제거)
+    const worldFrames = await readFrames(socket, 4, 8000);
+    assert.ok(worldFrames.length >= 4, `boot ${boot} world frames ${worldFrames.length}`);
 
     const decodedCodes = worldFrames.map(decodeInnerCode);
     const idx206 = decodedCodes.indexOf(0x0206);
@@ -210,6 +217,13 @@ test('playable server boots twice and serves login+world+move sequence', async (
     assert.ok(idx204 > idx206, `boot ${boot} 0x204 after 0x206`);
     assert.ok(idx323 > idx206, `boot ${boot} world records after 0x206`);
     assert.ok(decodedCodes.includes(0x0325), `boot ${boot} missing 0x0325`);
+    // 요청-응답 코드는 배치에 pre-push 되면 안 된다 (ring 미배수 → 정지)
+    for (const banned of [0x0301, 0x0f01, 0x0f03, 0x0315]) {
+      assert.ok(
+        !decodedCodes.includes(banned),
+        `boot ${boot} world-enter must not pre-push 0x${banned.toString(16)}`,
+      );
+    }
 
     // 어드미션 핸드셰이크: 월드 진입 후 클라가 0x0304(2B, 페이로드 없음)를 보낸다.
     // 서버가 0x0305 를 안 주면 클라는 NOW LOADING 에서 정지. 전체 트랜스포트 경유로 검증.
@@ -222,6 +236,28 @@ test('playable server boots twice and serves login+world+move sequence', async (
       0x0305,
       `boot ${boot} admission 0x0304 must yield 0x0305`,
     );
+
+    // ★send-ring 순차 검증: 클라가 요청-응답 4종을 하나씩 요청 → 매칭 응답이 ring 배수.
+    //   0x0300→0x0301, 0x0f00→0x0f01, 0x0f02→0x0f03, 0x0314→0x0315.
+    // 전체 트랜스포트 경유로 각 요청이 정확히 매칭 응답을 받는지 확인(라우터가 lobby 로 새지 않음).
+    let reactiveId = 56;
+    for (const [reqCode, respCode] of [
+      [0x0300, 0x0301],
+      [0x0f00, 0x0f01],
+      [0x0f02, 0x0f03],
+      [0x0314, 0x0315],
+    ]) {
+      const req = Buffer.alloc(2);
+      req.writeUInt16BE(reqCode, 0);
+      socket.write(build0030Transport({ phase1Key, id: reactiveId, inner: req, tables }));
+      reactiveId += 1;
+      const frames = await readFrames(socket, 1, 4000);
+      assert.equal(
+        decodeInnerCode(frames[0]),
+        respCode,
+        `boot ${boot} send-ring 0x${reqCode.toString(16)} must yield 0x${respCode.toString(16)}`,
+      );
+    }
 
     // move 0x0b01
     const player = server.worldSession.getPlayer(1);

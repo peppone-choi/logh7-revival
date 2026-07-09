@@ -86,26 +86,54 @@ test('0x0f1c grid chat round-trips text via shipped builders/parsers', () => {
   assert.equal(decoded.channel, 1);
 });
 
-test('world entry emits required codes with proven sizes', () => {
+// ─── world-enter 배치: request-response 코드 pre-push 제거 (send-ring reactive화) ──
+//
+// send-ring RE (docs/logh7-loop-state.md "M3 정지 확정: request-response send-ring 상관 실패"):
+// 실클라 로더(FUN_004b76e0)는 엄격한 요청-응답 send-ring 파이프라인이다 — 요청 1개 송신 →
+// 매칭 응답이 ring 엔트리 pop → 다음 요청. 서버가 0x0301/0x0f01/0x0f03/0x0315 를 클라가
+// 요청하기 전에 pre-push 하면 그 시점 ring 에 매칭 엔트리가 없어 dispatch(데이터 저장)만 되고
+// ring 이 안 비워진다 → 이후 클라 요청이 영구 미pop → 로더 정지(NOW LOADING).
+// 따라서 world-enter 배치는 unsolicited 테이블 채움 4코드만 emit 하고, 요청-응답 4코드는
+// 어드미션 핸들러(buildAdmissionResponseInner)가 클라 후속 요청에 reactive 로 응답한다.
+
+test('world entry batch = unsolicited table-fill only (request-response codes removed)', () => {
   const emits = buildWorldEntryInners({ characterId: 3, gridUnitId: 9 });
   const codes = listWorldEntryCodes(emits);
-  // 0x0204, 0x0323, 0x0325, 0x0301, 0x0f01, 0x0f03, 0x0315, 0x0206
-  assert.ok(codes.includes(CODE_SS_CHARACTER_ID));
-  assert.ok(codes.includes(CODE_INFO_CHARACTER));
-  assert.ok(codes.includes(CODE_INFO_UNIT));
-  assert.ok(codes.includes(CODE_SS_GAME_LOGIN_OK));
-  assert.ok(codes.includes(0x0301));
-  assert.ok(codes.includes(0x0f01));
-  assert.ok(codes.includes(0x0f03));
-  assert.ok(codes.includes(0x0315));
-  // 코드로 조회 (0x0206 이 선두라 위치 고정 금지)
+  // 유지: unsolicited 테이블 채움 (클라가 워크에서 요청 안 함, ring 상관 대상 아님)
+  //   0x0206 SSGameLoginOK(0x0205 응답, 선두), 0x0204 캐릭터 id, 0x0323 캐릭 레코드,
+  //   0x0325 유닛 테이블
+  assert.deepEqual(codes, [
+    CODE_SS_GAME_LOGIN_OK,
+    CODE_SS_CHARACTER_ID,
+    CODE_INFO_CHARACTER,
+    CODE_INFO_UNIT,
+  ]);
+  // 제거: 요청-응답 4코드는 배치에 있으면 안 된다 (pre-push = ring 미배수 → 영구 정지)
+  for (const removed of [0x0301, 0x0f01, 0x0f03, 0x0315]) {
+    assert.ok(!codes.includes(removed), `0x${removed.toString(16)} must NOT be pre-pushed`);
+  }
+  // 유지 코드 크기 확정 (크래시 방지 앵커)
   const charRec = emits.find((i) => listWorldEntryCodes([i])[0] === CODE_INFO_CHARACTER);
   const unitRec = emits.find((i) => listWorldEntryCodes([i])[0] === CODE_INFO_UNIT);
   assert.equal(msg32Body(charRec).length, 0x2d4);
   assert.equal(msg32Body(unitRec).length, 0xce44);
-  const grid = emits.find((i) => listWorldEntryCodes([i])[0] === 0x0315);
+});
+
+test('reactive: request-response codes answered by admission handler, not world-enter batch', () => {
+  // 클라 후속 요청(0x0300/0x0f00/0x0f02/0x0314) → 매칭 응답이 ring 엔트리 pop.
+  // world-enter 배치가 아니라 여기서 응답해야 send-ring 이 순차 배수된다.
+  assert.equal(readMsg32Code(buildAdmissionResponseInner(0x0300)), 0x0301); // RequestResponseTime → ResponseTime
+  assert.equal(readMsg32Code(buildAdmissionResponseInner(0x0f00)), 0x0f01); // RequestWorldInitialize → OK
+  assert.equal(readMsg32Code(buildAdmissionResponseInner(0x0f02)), 0x0f03); // RequestGridInitialize → OK
+  // 0x0301 = 4B LE ResponseTime
+  assert.equal(msg32Body(buildAdmissionResponseInner(0x0300)).length, 4);
+  // 0x0f01 / 0x0f03 status=1 (WORLD_OK_STATUS_CODES, client+0x35f356/357 미초기화 방지)
+  assert.equal(msg32Body(buildAdmissionResponseInner(0x0f00)).readUInt8(0), 1);
+  assert.equal(msg32Body(buildAdmissionResponseInner(0x0f02)).readUInt8(0), 1);
+  // 0x0314 → 0x0315 유효 RLE 그리드(고정 5004B)
+  const grid = buildAdmissionResponseInner(0x0314);
+  assert.equal(readMsg32Code(grid), 0x0315);
   assert.equal(msg32Body(grid).length, 0x138c);
-  assert.equal(msg32Body(emits.find((i) => listWorldEntryCodes([i])[0] === 0x0f01))[0], 1);
 });
 
 test('0x0201 SSLoginOK is message32 with status byte', () => {

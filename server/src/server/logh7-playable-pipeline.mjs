@@ -294,22 +294,48 @@ export function runLoginWorldMpSequence({
 
   const entered = world.enterWorld({ connectionId: 1 });
   const codes = entered.codes;
+  // world-enter 배치는 unsolicited 테이블 채움 4코드만. 요청-응답 코드(0x0301/0x0f01/0x0f03/
+  // 0x0315)는 pre-push 시 send-ring 미배수로 로더 정지(NOW LOADING) → reactive 로 분리.
+  // 근거: docs/logh7-loop-state.md "M3 정지 확정: request-response send-ring 상관 실패".
   for (const need of [
+    CODE_SS_GAME_LOGIN_OK,
     CODE_SS_CHARACTER_ID,
     CODE_INFO_CHARACTER,
     CODE_INFO_UNIT,
-    CODE_SS_GAME_LOGIN_OK,
-    0x0301,
-    0x0f01,
-    0x0f03,
-    0x0315,
   ]) {
     if (!codes.includes(need)) throw new Error(`world entry missing 0x${need.toString(16)}`);
+  }
+  for (const banned of [0x0301, 0x0f01, 0x0f03, 0x0315]) {
+    if (codes.includes(banned)) {
+      throw new Error(`world entry must not pre-push request-response 0x${banned.toString(16)}`);
+    }
   }
   const charRec = entered.emits.find((i) => readMsg32Code(i) === CODE_INFO_CHARACTER);
   if (msg32Body(charRec).length !== 0x2d4) throw new Error('0x0323 size');
   const unitRec = entered.emits.find((i) => readMsg32Code(i) === CODE_INFO_UNIT);
   if (msg32Body(unitRec).length !== 0xce44) throw new Error('0x0325 size');
+
+  // reactive 검증: 클라 후속 요청 → 매칭 응답이 send-ring 엔트리 pop (순차 배수).
+  //   0x0300→0x0301, 0x0f00→0x0f01, 0x0f02→0x0f03, 0x0314→0x0315
+  const reactiveWorldCodes = [];
+  for (const [reqCode, respCode] of [
+    [0x0300, 0x0301],
+    [0x0f00, 0x0f01],
+    [0x0f02, 0x0f03],
+    [0x0314, 0x0315],
+  ]) {
+    const req = Buffer.alloc(2);
+    req.writeUInt16BE(reqCode, 0);
+    const res = world.handleWorldInner({ connectionId: 1, accountId, inner: req });
+    if (!res || res.responses.length === 0) {
+      throw new Error(`reactive 0x${reqCode.toString(16)} not routed (leaks to lobby → stall)`);
+    }
+    const got = readMsg32Code(res.responses[0].inner);
+    if (got !== respCode) {
+      throw new Error(`reactive 0x${reqCode.toString(16)} → 0x${got.toString(16)}, want 0x${respCode.toString(16)}`);
+    }
+    reactiveWorldCodes.push(respCode);
+  }
 
   let second = null;
   if (dualSessions) {
@@ -348,6 +374,7 @@ export function runLoginWorldMpSequence({
     rosterCode,
     worldEntryCodes: codes,
     worldEntryCodeHex: codes.map((c) => `0x${c.toString(16).padStart(4, '0')}`),
+    reactiveWorldCodes,
     move: {
       unitId: move.unitId,
       cell: move.cell,

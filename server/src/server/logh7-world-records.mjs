@@ -672,14 +672,21 @@ export function isAdmissionRequestCode(code) {
  * 월드 세션 진입 S→C 레코드 열 (RE 근거, 미확정 바디 날조 없음).
  *
  * 순서 (RE: 0x0206 이 월드 파이프라인 활성 0x35837e → 레코드가 흐른다):
- *   0x0206 SSGameLoginOK (선두)
+ *   0x0206 SSGameLoginOK (선두, 0x0205 응답)
  *   0x0204 선택 캐릭터 id
- *   0x0323 캐릭터 레코드 (724B)
+ *   0x0323 캐릭터 레코드 (724B — 오브젝트 테이블 채움, 렌더러 크래시 방지 필수)
  *   0x0325 유닛 테이블 (고정 52804B, 최소 count+id)
- *   0x0301 ResponseTime (비영)
- *   0x0f01 WorldInitialize OK (status=1)
- *   0x0f03 GridInitialize OK (status=1)
- *   0x0315 Static grid (100×50 RLE, 기본 empty; unitCell 있으면 1마커)
+ *
+ * 이 4코드는 클라가 워크에서 요청하지 않는 unsolicited 테이블 채움이라 push(ring 상관 대상 아님).
+ *
+ * ★send-ring reactive화 (docs/logh7-loop-state.md "M3 정지 확정: request-response send-ring
+ * 상관 실패"): 실클라 로더(FUN_004b76e0)는 엄격한 요청-응답 send-ring 파이프라인 —
+ * 요청 1개 송신 → 매칭 응답이 ring 엔트리 pop → 다음 요청, ring 이 빌 때만 다음 스텝 진행.
+ * 예전 배치는 0x0301/0x0f01/0x0f03/0x0315 를 클라가 요청하기 전에 pre-push 했는데, 그 시점
+ * ring 에 매칭 엔트리가 없어 dispatch(데이터 저장)만 되고 ring 이 안 비워져 로더가 영구 정지
+ * (NOW LOADING) 했다. 따라서 이 4코드는 배치에서 제거하고, 클라 후속 요청
+ * (0x0300→0x0301, 0x0f00→0x0f01, 0x0f02→0x0f03, 0x0314→0x0315)에 대해
+ * buildAdmissionResponseInner/ADMISSION_DEDICATED_BUILDERS 가 reactive 로 응답한다.
  *
  * 0x031d/0x031f base 바디는 오프셋 미확정 → 생략 (fail-closed).
  */
@@ -711,6 +718,8 @@ export function buildWorldEntryInners({
   if (!Number.isInteger(gridUnitId) || gridUnitId <= 0) {
     throw new Error('buildWorldEntryInners: gridUnitId required');
   }
+  // unsolicited 테이블 채움 4코드만 push. 요청-응답 4코드(0x0301/0x0f01/0x0f03/0x0315)는
+  // pre-push 시 send-ring 미배수로 로더 정지 → reactive 어드미션 핸들러로 분리(위 JSDoc 참조).
   const emits = [
     // 0x0206 을 선두로: 월드 파이프라인 활성(0x35837e) 후 레코드가 흐른다 (RE 순서).
     buildSsGameLoginOkInner({ status: 1 }),
@@ -734,16 +743,7 @@ export function buildWorldEntryInners({
       cell: unitCell,
       commander: characterId,
     }),
-    buildResponseTimeInner({ serverTime }),
-    buildWorldInitOkInner({ status: 1 }),
-    buildGridInitOkInner({ status: 1 }),
   ];
-  if (includeEmptyGrid) {
-    const cells = placeUnitCellOnGrid && Number.isInteger(unitCell)
-      ? [{ cell: unitCell, value: 3 }]
-      : [];
-    emits.push(buildStaticInformationGridInner({ cells }));
-  }
   return emits;
 }
 
