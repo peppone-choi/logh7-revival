@@ -352,8 +352,9 @@ export function createWorldSession({
     //   restored-from-git/logh7-live-world-entry-2026-06-23.md:9 성공 트레이스.
     // 클라는 실 0x0323+유효 그리드 상태에서 0x0304/0x0306/0x0314 3요청만 하고 NOW LOADING 에서
     // 정지(더는 0x0f00/0x0f02/0x0f06 미요청) — 서버의 그리드진입/월드초기화 push 대기. 클라 0x0314
-    // 직후(=0x0315 송신 직후) 순서대로 push: 0x0325 → 0x0b09 → 0x0b0a → 0x0f03(=트레이스 "0x0f02").
-    // 순서 엄수: 0x0f03(월드초기화)은 반드시 0x0b09/0x0b0a 이후(render-contract: 조기 push 크래시).
+    // 직후(=0x0315 송신 직후) 계약 순서(render-contract L102)로 push:
+    //   0x0b09(begin) → 0x0325(유닛) + 0x0323(캐릭터 refresh) → 0x0b0a(end) → 0x0f03(=트레이스 "0x0f02").
+    // 계약 핵심: 0x0325/0x0323 refresh 는 반드시 begin/end **사이**. 0x0f03 은 그 뒤(조기 push 크래시).
     if (code === CODE_REQ_STATIC_GRID) {
       const gridResp = buildAdmissionResponseInner(code); // 0x0315 (empty static grid)
       const responses = [{ targets: [connectionId], inner: gridResp, isMsg32: true }];
@@ -364,6 +365,14 @@ export function createWorldSession({
           unitId: player.unitId,
           unitCell: player.cell,
           commander: player.characterId,
+          // 0x0323 refresh(begin/end 사이): world-enter 와 동일하게 플레이어 실 시드 필드 전달.
+          power: player.power ?? 0,
+          spot: 1,
+          lastname: player.lastname ?? '',
+          firstname: player.firstname ?? '',
+          face: Number.isInteger(player.face) ? player.face : 0,
+          rank: Number.isInteger(player.rank) ? player.rank : 0,
+          officerCount: Number.isInteger(player.officerCount) ? player.officerCount : 0,
         });
         for (const inner of readyInners) {
           responses.push({ targets: [connectionId], inner, isMsg32: true });

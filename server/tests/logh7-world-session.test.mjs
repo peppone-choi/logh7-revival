@@ -473,27 +473,36 @@ test('full login→roster→world→move pipeline (shipped codecs) dual-session'
 
 // ─── 월드-ready push 시퀀스 (NOW LOADING 해제) ─────────────────────────────────
 // 근거: docs/logh7-loop-state.md "M3 블로커 해법 발견: 서버가 world-ready 시퀀스를 PUSH해야"
-//   + docs/reference/restored-from-git/logh7-live-world-entry-2026-06-23.md:9 성공 트레이스.
+//   + docs/reference/restored-from-git/logh7-live-world-entry-2026-06-23.md:9 성공 트레이스
+//   + docs/reference/legacy-evidence/logh7-render-interaction-contract.md:102 grid-enter 계약.
 // 클라가 0x0304/0x0306/0x0314 3요청 후 NOW LOADING 에서 정지 → 서버가 그리드진입+월드초기화를
-// 능동 push 해야 해제. 클라 0x0314(→0x0315) 직후 순서대로:
-//   0x0325(유닛) → 0x0b09(EnterGridBegin) → 0x0b0a(EnterGridEnd, 렌더 트리거) → 0x0f03(GridInit OK).
-// 순서 엄수: 0x0f03(월드초기화)는 반드시 0x0b09/0x0b0a 이후 (render-contract: 조기 push 크래시).
+// 능동 push 해야 해제. 계약(render-contract L102): "0x0b09/0x0b0a grid-enter begin/end,
+//   with 0x0325/0x0323 refreshed between begin/end". 즉 0x0325(유닛)와 0x0323(캐릭터 refresh)는
+//   반드시 begin/end 괄호 **사이**에 온다 — 유닛/오브젝트 테이블 갱신이 begin/end 안에서 일어나야
+//   그리드가 플레이어 유닛을 배치. 클라 0x0314(→0x0315) 직후 순서:
+//   0x0b09(begin) → 0x0325(유닛) + 0x0323(캐릭터 refresh) → 0x0b0a(end, 렌더 트리거) → 0x0f03(GridInit OK).
+// 순서 엄수: 0x0f03(월드초기화)는 반드시 0x0b0a 이후 (render-contract: 조기 push 크래시).
 
-test('buildWorldReadyPushInners emits 0x0325→0x0b09→0x0b0a→0x0f03 in strict order', () => {
+test('buildWorldReadyPushInners brackets 0x0325+0x0323 inside 0x0b09/0x0b0a (contract L102)', () => {
   const inners = buildWorldReadyPushInners({ unitId: 8, unitCell: 2588, commander: 5 });
   const codes = inners.map((i) => readMsg32Code(i));
+  // 계약 순서 (render-contract L102): begin → unit+char refresh → end → grid-init OK.
   assert.deepEqual(codes, [
-    CODE_INFO_UNIT,
     CODE_NOTIFY_ENTER_GRID_BEGIN,
+    CODE_INFO_UNIT,
+    CODE_INFO_CHARACTER,
     CODE_NOTIFY_ENTER_GRID_END,
     CODE_GRID_INIT_OK,
   ]);
-  const iUnit = codes.indexOf(CODE_INFO_UNIT);
   const iBegin = codes.indexOf(CODE_NOTIFY_ENTER_GRID_BEGIN);
+  const iUnit = codes.indexOf(CODE_INFO_UNIT);
+  const iChar = codes.indexOf(CODE_INFO_CHARACTER);
   const iEnd = codes.indexOf(CODE_NOTIFY_ENTER_GRID_END);
   const iInit = codes.indexOf(CODE_GRID_INIT_OK);
-  assert.ok(iUnit < iBegin, '0x0325 must precede 0x0b09');
-  assert.ok(iBegin < iEnd, '0x0b09 must precede 0x0b0a');
+  // 핵심 불변식(계약 L102): 0x0325/0x0323 refresh 는 반드시 begin/end **사이**.
+  assert.ok(iBegin < iUnit, '0x0b09(begin) must precede 0x0325');
+  assert.ok(iUnit < iEnd, '0x0325 must be refreshed BEFORE 0x0b0a(end)');
+  assert.ok(iBegin < iChar && iChar < iEnd, '0x0323 char refresh must sit between begin/end');
   assert.ok(iInit > iEnd, '0x0f03 world-init must come AFTER 0x0b0a (early push crashes)');
 });
 
@@ -509,15 +518,18 @@ test('handleWorldInner 0x0314 appends world-ready push after 0x0315 for in-world
   const result = world.handleWorldInner({ connectionId: 1, accountId: 'a', inner: req });
   assert.ok(result, '0x0314 must be routed');
   const codes = result.responses.map((r) => readMsg32Code(r.inner));
-  // 0x0315 reactive 응답이 선두, 그 뒤 world-ready push 시퀀스.
+  // 0x0315 reactive 응답이 선두, 그 뒤 계약 순서(render-contract L102) world-ready push 시퀀스.
   assert.equal(codes[0], 0x0315, 'first response is the reactive static-grid 0x0315');
   assert.deepEqual(codes.slice(1), [
-    CODE_INFO_UNIT,
     CODE_NOTIFY_ENTER_GRID_BEGIN,
+    CODE_INFO_UNIT,
+    CODE_INFO_CHARACTER,
     CODE_NOTIFY_ENTER_GRID_END,
     CODE_GRID_INIT_OK,
   ]);
-  // 순서 불변식: 0x0f03 이 0x0b09/0x0b0a 이후.
+  // 불변식(계약 L102): 0x0325/0x0323 refresh 는 begin/end 사이, 0x0f03 은 그 뒤.
+  assert.ok(codes.indexOf(CODE_INFO_UNIT) > codes.indexOf(CODE_NOTIFY_ENTER_GRID_BEGIN));
+  assert.ok(codes.indexOf(CODE_INFO_CHARACTER) < codes.indexOf(CODE_NOTIFY_ENTER_GRID_END));
   assert.ok(codes.indexOf(CODE_GRID_INIT_OK) > codes.indexOf(CODE_NOTIFY_ENTER_GRID_END));
   // 모든 응답은 이 connection 으로만, message32 로.
   for (const r of result.responses) {

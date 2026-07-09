@@ -781,8 +781,16 @@ export function buildWorldEntryInners({
 // 왜 push 인가: 실 0x0323+유효 그리드로 클라를 채우면 클라가 어드미션 3요청(0x0304/0x0306/0x0314)
 // 만 하고 NOW LOADING 에서 정지한다(더는 0x0f00/0x0f02/0x0f06 을 요청하지 않음). 이 상태는 정상 —
 // 서버의 그리드진입/월드초기화 능동 push 를 기다리는 것. 클라 0x0314 직후 이 시퀀스를 순서대로 push:
-//   0x0325(유닛 리프레시) → 0x0b09(EnterGridBegin) → 0x0b0a(EnterGridEnd, 렌더 트리거)
-//   → 0x0f03(GridInitialize OK, status=1).
+//   0x0b09(EnterGridBegin) → 0x0325(유닛 refresh) + 0x0323(캐릭터 refresh)
+//   → 0x0b0a(EnterGridEnd, 렌더 트리거) → 0x0f03(GridInitialize OK, status=1).
+//
+// ★ grid-enter 계약(render-contract L102): "0x0b09/0x0b0a grid-enter begin/end, with 0x0325/0x0323
+//   refreshed **between** begin/end". 즉 유닛/오브젝트 테이블 갱신(0x0325 유닛, 0x0323 캐릭터)은
+//   반드시 begin/end 괄호 **안**에서 일어나야 그리드가 begin/end 안에서 플레이어 유닛을 배치한다.
+//   0x0325 가 begin 밖(앞)이거나 0x0323 refresh 가 없으면 NOW LOADING 이 해제되지 않는다(라이브 확정).
+//   0x0323 = 플레이어 실 시드 캐릭터 레코드(world-enter 의 buildInformationCharacterInner 재사용).
+//   0x0b09/0x0b0a value=0 유지: value=1 은 char count 를 리셋(구코드 FIX A)하므로, count 리셋 없이
+//   begin(value=0) 뒤에 0x0323 을 refresh 해도 안전.
 //
 // ★"0x0f02" 정정(근거 기반): opcode-reference L234 + 구코드 login-session:149 확정 —
 //   0x0f02 는 RequestGridInitialize [C→S]. 이에 대한 S→C 신호는 0x0f03(ResponseGridInitialize_OK,
@@ -799,16 +807,44 @@ export function buildWorldReadyPushInners({
   commander = 0,
   gridBeginValue = 0,
   gridEndValue = 0,
+  // 0x0323 refresh 필드(begin/end 사이 캐릭터 레코드). commander 를 characterId 앵커로 사용.
+  power = 0,
+  spot = 1,
+  lastname = '',
+  firstname = '',
+  face = 0,
+  rank = 0,
+  abilities = null,
+  officerCount = 0,
 } = {}) {
   if (!Number.isInteger(unitId) || unitId <= 0) {
     throw new Error('buildWorldReadyPushInners: unitId required (no synthetic id)');
   }
-  return [
-    buildInformationUnitInner({ unitId, unitCount: 1, cell: unitCell, commander }),
+  // 계약 순서(render-contract L102): 0x0b09(begin) → 0x0325+0x0323 refresh → 0x0b0a(end) → 0x0f03.
+  const inners = [
     buildNotifyEnterGridBeginInner({ value: gridBeginValue }),
-    buildNotifyEnterGridEndInner({ value: gridEndValue }),
-    buildGridInitOkInner({ status: 1 }), // 0x0f03 — 트레이스 "0x0f02(월드초기화)"의 S→C 신호
+    buildInformationUnitInner({ unitId, unitCount: 1, cell: unitCell, commander }),
   ];
+  // 0x0323 캐릭터 refresh: commander(=플레이어 characterId)가 유효할 때만 begin/end 사이에 push.
+  // world-enter 의 buildInformationCharacterInner 재사용 — 오브젝트 테이블 갱신(그리드 유닛 배치).
+  if (Number.isInteger(commander) && commander > 0) {
+    inners.push(buildInformationCharacterInner({
+      characterId: commander,
+      gridUnitId: unitId,
+      power,
+      spot,
+      online: true,
+      lastname,
+      firstname,
+      face,
+      rank,
+      abilities: Array.isArray(abilities) && abilities.length ? abilities : null,
+      officerCount,
+    }));
+  }
+  inners.push(buildNotifyEnterGridEndInner({ value: gridEndValue }));
+  inners.push(buildGridInitOkInner({ status: 1 })); // 0x0f03 — 트레이스 "0x0f02(월드초기화)"의 S→C 신호
+  return inners;
 }
 
 /** 로그인/로비/월드 S→C 코드 인벤토리 (문서·구현 대조용) */
