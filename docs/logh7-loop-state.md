@@ -1,5 +1,26 @@
 # LOGH VII 루프 상태
 
+## ★ M3 Frida 돌파: 근본원인 = 0x0323 char↔flagship↔unit 링크 실패 (2026-07-10, 동적확정)
+
+**Frida 동적 계측이 5개 정적 가설 반증 후 블로커를 결정적으로 규명.** frida 17.11이 g7mtclient.exe(D3D8, ASLR off, ImageBase 0x400000)에 정상 attach.
+
+- **결정적 실측**(NOW LOADING 정지 시점, `FUN_004c2a80` 진입; 진짜 clientBase = __thiscall ECX, 예 0xeb90020 — 문서 offset은 imageBase 아닌 **런타임 게임상태 struct 포인터** 기준):
+  | 측정 | 값 | 판정 |
+  |---|---|---|
+  | 게임모드 clientBase+0x126711 | **0** | 게이트 통과(모드 가설 **반증**, 이전 mode=15는 wrong-base 허수) |
+  | FUN_004c2a80 호출 | **arg0=1 호출됨** | 경로 A(0x0b0a) 정상 진입 |
+  | FUN_004c2a80 리턴 bVar1 | **0 (실패)** | 월드 빌드 실패 |
+  | 월드 오브젝트 테이블 clientBase+0xc | **NULL** | 미구축→NOW LOADING 미해제 |
+  | 선택 char id clientBase+0x3584a0 | 1 | 0x0204 정상 |
+  | 0x0315 dispatch | **안 됨** | 링 경로 **무관**(반증) |
+- **클라 실제 처리 opcode 순서**(dispatcher arg0=opcode): `0x2001 0x2004 0x2006 0x200A 0x0201 0x0206 0x0323 0x0325 0x0204 0x0323 0x0325 0x0305 0x0307 0x0B09 0x0325 0x0323 0x0325 0x0323 0x0B0A 0x0F03` → **0x0B0A가 FUN_004c2a80(1) 직접 호출**. 순서 계약 이미 충족.
+- **★진짜 원인**: char 배열(clientBase+0x36a8b4, stride 0x2d4)에 **중복 스텁** — count=2인데 둘 다 id=1 중복, 대부분 0필드에 이름만. **char 레코드의 flagship 필드가 비어** char→flagship→unit(clientBase+0x41a368, 0x0325가 채움) 링크 실패 → bVar1=false. unit 배열엔 함대 있으나 char의 flagship 필드가 비어 링크 불가.
+- **경로 A/B·모드·링·0x0315 모두 원인 아님(라이브 확정)**. 유일 원인 = **0x0323 char 레코드 불완전 + 중복 push**.
+- **★내가 커밋한 ×2 refresh가 유해**: 0x0323 다중 push가 중복 스텁 생성. **0x0323은 정확히 1회, 실 flagship id를 채워** 0x0325 유닛 id와 정합되게 보내야.
+- **server-dev/wire-engineer 수정**: (1) 0x0323 char 레코드를 **캐릭터당 정확히 1회** push(×2 refresh 되돌림), (2) 레코드에 **id + flagship(함대) id + 스탯** 실채움, flagship id = 0x0325 unit 배열의 unit id **일치**. (3) 0x0325 유닛이 그 id로 존재.
+- **re-analyst 확정 요청(1개)**: FUN_004c2a80이 char 레코드(stride 0x2d4)의 **어느 필드를 flagship id로 읽어** unit 배열의 어느 필드와 대조해 bVar1을 세우는지 — 정확한 오프셋. (문서 char-record-wire.md: flagship_type/kind/name 필드 존재; RE 앞서 piVar5[9]=char+0x24 언급.)
+- **Frida 도구 추가**: `tools/live/_frida_worldload_drive.py/_probe.js/_base.js`(재사용 가능한 로더 계측). attach 성공, x64dbg 대안 불필요.
+
 ## M3 로더 트리거 확정 → 정적 한계, Frida 동적 분석 필요 (2026-07-10, RE)
 
 - **월드 로드 트리거 = `FUN_004c2a80`**(월드 오브젝트 테이블 clientBase+0xc 빌더), **2경로**:

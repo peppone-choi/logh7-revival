@@ -1,0 +1,42 @@
+[08:19:16] launch E:\logh7-revival\artifacts\logh7-install\____________s___\____\exe\g7mtclient.exe
+[08:19:16] client pid(spawn)=36644
+[08:19:17] window hwnd=0xe40a26 pid=36644
+[08:19:18] probe script = _frida_worldload_base.js
+[08:19:19] hooks loaded, ready=[{'ev': 'ready', 'base': '0x400000', 'size': 49643520}]
+[08:19:19] snap fail attach: unable to find method 'snap'
+[08:19:19] login screen 644x484 -> do_login
+[08:19:26] lobby-size reached at t+0s 1028x772 (splash may still show)
+[08:19:26] wait 9s for BOTHTEC splash to clear -> lobby menu
+[08:19:35] snap fail lobby: unable to find method 'snap'
+[08:19:36] click GAME_START client=(125, 191)
+[08:19:39] snap fail after-game-start: unable to find method 'snap'
+[08:19:40] click CHAR_CARD client=(657, 306)
+[08:19:41] snap fail after-char-card: unable to find method 'snap'
+[08:19:44] snap fail after-char-dbl: unable to find method 'snap'
+[08:19:44] === monitor world-load (45s) ===
+[08:19:44] snap fail mon+0s: unable to find method 'snap'
+[08:19:47] snap fail mon+2s: unable to find method 'snap'
+[08:19:49] snap fail mon+5s: unable to find method 'snap'
+[08:19:52] snap fail mon+7s: unable to find method 'snap'
+[08:19:54] snap fail mon+10s: unable to find method 'snap'
+[08:19:57] snap fail mon+12s: unable to find method 'snap'
+[08:19:59] snap fail mon+15s: unable to find method 'snap'
+[08:20:02] snap fail mon+17s: unable to find method 'snap'
+[08:20:04] snap fail mon+20s: unable to find method 'snap'
+[08:20:07] snap fail mon+22s: unable to find method 'snap'
+[08:20:09] snap fail mon+25s: unable to find method 'snap'
+[08:20:12] snap fail mon+27s: unable to find method 'snap'
+[08:20:14] snap fail mon+30s: unable to find method 'snap'
+[08:20:17] snap fail mon+32s: unable to find method 'snap'
+[08:20:19] snap fail mon+35s: unable to find method 'snap'
+[08:20:22] snap fail mon+37s: unable to find method 'snap'
+[08:20:24] snap fail mon+40s: unable to find method 'snap'
+[08:20:27] snap fail mon+42s: unable to find method 'snap'
+[08:20:29] snap fail final: unable to find method 'snap'
+[08:20:30] alive=True
+[08:20:30] === SUMMARY ===
+[08:20:30] FUN_004c2a80 calls: 1
+[08:20:30]   load-enter arg0=1 gamemode=None ring=None sel=None charCount=None
+[08:20:30]   load-leave arg0=None ret=0 gamemode=None ring=None
+[08:20:30] gamemode values seen: []
+[08:20:30] ring values seen: []
