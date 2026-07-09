@@ -1,5 +1,16 @@
 # LOGH VII 루프 상태
 
+## M3 push 발화 확인 → 순서 계약 위반: 0x0325/0x0323은 begin/end 사이 (2026-07-10)
+
+- **push 정상 발화 확인**(`.omo/live-qa/m3-worldready-20260710-0558/`): 클라 0x0314 요청에 서버가 5프레임 `[0x0315,0x0325,0x0b09,0x0b0a,0x0f03]` 정확히 송신(responseCount:5). 크래시 없음(클라 70초+ 생존). 그러나 **NOW LOADING 미해제**, 전략맵 미렌더.
+- **원인(render-contract L101 대조)**: `docs/reference/legacy-evidence/logh7-render-interaction-contract.md:101` 계약 = "0x0b09/0x0b0a grid-enter begin/end, **with 0x0325/0x0323 refreshed between begin/end**". 현재 push 위반:
+  - 현재: `0x0315 → 0x0325 → 0x0b09(begin) → 0x0b0a(end) → 0x0f03`. **0x0325가 괄호 밖(앞).**
+  - 괄호 안 **0x0323 정보-캐릭터 refresh 없음**.
+  - **0x0356 NotifyInformationCharacter compact stream 없음** — 계약상 네이티브 current-character 오브젝트(FUN_0042c7e0: characterId@0x04, gridUnitId@0x24, seatCount@0x250)를 세팅해야 그리드가 플레이어 유닛 배치·렌더.
+- **수정 순서(계약)**: `0x0315 → 0x0b09(begin) → 0x0325 + 0x0323(refresh) → 0x0b0a(end) → 0x0f03`. 0x0325를 괄호 안으로, 0x0323 refresh 추가. 위로도 안 되면 0x0356 배선(BE 수치/LE 이름문자열, 계약 명시), 그다음 gridBegin/End value에 실 spot/유닛수·0x0f06/0x0f07.
+- **버그 위치**: `logh7-world-records.mjs:796 buildWorldReadyPushInners`(순서), `logh7-world-session.mjs:357-376`(조립). 유닛 테스트 순서 불변식도 계약대로 갱신 필요(현재 구현을 굳힌 상태).
+- **다음**: server-dev가 push를 begin→(0x0325+0x0323)→end로 재배치 → live-qa 검증.
+
 ## ✅ M3 블로커 해법 발견: 서버가 world-ready 시퀀스를 PUSH해야 (KNOWN-SUCCESS 트레이스) (2026-07-10)
 
 - **축 전환 성공**: 이전 사이클(리셋 전, 전략맵 렌더 성공) 트레이스를 문서 채굴해 답 확보 — 정적 RE 반복이 아닌 KNOWN-SUCCESS 근거.
