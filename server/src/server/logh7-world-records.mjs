@@ -513,6 +513,33 @@ export const CODE_REQ_STATIC_GRID_TYPE = 0x0312; // C→S ResponseStaticInformat
 export const CODE_STATIC_GRID_TYPE = 0x0313; // S→C
 export const CODE_STATIC_GRID_TYPE_BYTES = 0x138c; // 5004 (0x0315 와 동일 고정 크기)
 export const CODE_REQ_STATIC_GRID = 0x0314; // C→S ResponseStaticInformationGrid 요청
+export const CODE_REQ_STATIC_BASE = 0x031c; // C→S ResponseStaticInformationBase 요청
+export const CODE_RESP_STATIC_BASE_031D = 0x031d; // S→C static-base (고정 21004B)
+
+/**
+ * static-info 어드미션 응답 opcode → body 바이트 크기 (클라 사이저 FUN_004b8b00 직접 인용, RE 확정).
+ *
+ * 왜 필요한가: 클라는 이 응답들을 "고정크기 프레이밍"으로 처리한다 — 사이저가 opcode별
+ * 고정크기를 반환하고, enqueue 가 길이검사 없이 그 크기만큼 recv 버퍼에서 복사한다.
+ * 서버가 빈(0바이트) body 로 응답하면 클라가 최대 21KB 앞으로 over-read → access violation
+ * ("abnormal program termination"). 따라서 이 표의 opcode 는 반드시 풀사이즈 body 로 응답한다.
+ *
+ * zero-fill 안전성(RE 확정): walker 가 고정 루프에서 body 로부터 count/포인터를 유도하지
+ * 않으므로 전부 0이면 "빈 테이블"로 무해하게 소비된다. 데이터 날조가 아니라 빈(0) 테이블이며,
+ * 실제 세션/캐릭터/맵 콘텐츠는 미승격이다.
+ */
+export const STATIC_INFO_BODY_SIZES = Object.freeze({
+  0x0305: 0x520a, // 21002 InformationSession walker
+  0x0307: 0xe5b2, // 58802 Duty walker
+  0x0309: 0x055c, // 1372
+  0x030b: 0x6d64, // 28004
+  0x030d: 0x0184, // 388
+  0x030f: 0x0034, // 52
+  0x0311: 0x01b0, // 432
+  0x0313: 0x138c, // 5004 (전용 빌더 buildStaticInformationGridTypeInner 로 헤더 채움)
+  0x0315: 0x138c, // 5004 (전용 빌더 buildStaticInformationGridInner 로 헤더 채움)
+  0x031d: 0x520c, // 21004 static-base
+});
 
 /**
  * 0x0313 ResponseStaticInformationGridType (고정 5004B).
@@ -537,11 +564,16 @@ export function buildStaticInformationGridTypeInner({ objects = [] } = {}) {
 }
 
 /**
- * 빈 walker/ack 응답 (코드만, body 없음). 바디 포맷 미확정 어드미션 응답용.
- * P1 라이브: empty walker 응답은 클라 decode no-op → world-init walk 를 멈추지 않는다.
+ * static-info 어드미션 응답 (opcode + 풀사이즈 0채움 body).
+ *
+ * STATIC_INFO_BODY_SIZES 에 있는 opcode 는 그 고정크기(RE 확정)만큼 0채움 body 를 낸다 —
+ * 빈 body 를 내면 클라 고정크기 프레이밍이 recv 버퍼를 over-read 해 크래시한다.
+ * zero=빈 테이블, 콘텐츠 미승격(데이터 날조 아님). Buffer.alloc 이라 0 초기화 보장
+ * (allocUnsafe 금지 — garbage 위험). 표에 없는 순수 ack 코드는 기존대로 빈 body 유지.
  */
 export function buildEmptyWalkerInner(code) {
-  return buildMsg32Inner(code & 0xffff, Buffer.alloc(0));
+  const size = STATIC_INFO_BODY_SIZES[code & 0xffff] ?? 0;
+  return buildMsg32Inner(code & 0xffff, Buffer.alloc(size));
 }
 
 /**
@@ -550,19 +582,21 @@ export function buildEmptyWalkerInner(code) {
  */
 export function buildAdmissionResponseInner(reqCode) {
   switch (reqCode) {
-    case CODE_REQ_SESSION_WALKER: // 0x0304 → 0x0305 (빈 InformationSession walker, 미확정)
+    case CODE_REQ_SESSION_WALKER: // 0x0304 → 0x0305 (풀사이즈 0채움 21002B, 빈 세션 테이블)
       return buildEmptyWalkerInner(CODE_RESP_SESSION_WALKER);
-    case CODE_REQ_DUTY_WALKER: // 0x0306 → 0x0307 (빈 walker, 미확정)
+    case CODE_REQ_DUTY_WALKER: // 0x0306 → 0x0307 (풀사이즈 0채움 58802B, 빈 duty 테이블)
       return buildEmptyWalkerInner(CODE_RESP_DUTY_WALKER);
-    case CODE_REQ_ADMISSION_030A: // 0x030a → 0x030b (빈 ack, 미확정)
+    case CODE_REQ_ADMISSION_030A: // 0x030a → 0x030b (풀사이즈 0채움 28004B)
       return buildEmptyWalkerInner(CODE_RESP_ADMISSION_030B);
-    case CODE_REQ_ADMISSION_030E: // 0x030e → 0x030f (빈 ack, 미확정)
+    case CODE_REQ_ADMISSION_030E: // 0x030e → 0x030f (풀사이즈 0채움 52B)
       return buildEmptyWalkerInner(CODE_RESP_ADMISSION_030F);
-    case CODE_REQ_ADMISSION_0310: // 0x0310 → 0x0311 (빈 ack, 미확정)
+    case CODE_REQ_ADMISSION_0310: // 0x0310 → 0x0311 (풀사이즈 0채움 432B)
       return buildEmptyWalkerInner(CODE_RESP_ADMISSION_0311);
-    case CODE_REQ_STATIC_GRID_TYPE: // 0x0312 → 0x0313 (문서 확정 포맷, empty content)
+    case CODE_REQ_STATIC_BASE: // 0x031c → 0x031d (풀사이즈 0채움 21004B, static-base)
+      return buildEmptyWalkerInner(CODE_RESP_STATIC_BASE_031D);
+    case CODE_REQ_STATIC_GRID_TYPE: // 0x0312 → 0x0313 (문서 확정 포맷, empty content, 5004B)
       return buildStaticInformationGridTypeInner({ objects: [] });
-    case CODE_REQ_STATIC_GRID: // 0x0314 → 0x0315 (문서 확정, empty grid — 비-empty 는 walk stall)
+    case CODE_REQ_STATIC_GRID: // 0x0314 → 0x0315 (문서 확정, empty grid 5004B — 비-empty 는 walk stall)
       return buildStaticInformationGridInner({ cells: [] });
     default:
       return null;

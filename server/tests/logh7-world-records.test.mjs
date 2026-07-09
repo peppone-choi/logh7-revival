@@ -28,6 +28,9 @@ import {
   buildGridChatInner,
   buildWorldEntryInners,
   buildLobbySessionLoginOkRaw,
+  buildAdmissionResponseInner,
+  buildEmptyWalkerInner,
+  STATIC_INFO_BODY_SIZES,
   decodeMoveGridCommand,
   decodeGridChatCommand,
   decodeLobbySessionLoginReq,
@@ -169,4 +172,73 @@ test('0x0b01 move command decode reads unitId and cell', () => {
   const cmd = decodeMoveGridCommand(inner);
   assert.equal(cmd.unitId, 11);
   assert.equal(cmd.cell, 3001);
+});
+
+// ─── static-info 어드미션: 풀사이즈 0채움 body (over-read 크래시 수정) ──────────
+//
+// 클라 사이저 FUN_004b8b00: static-info 응답은 opcode별 고정크기 프레이밍.
+// 빈 body 로 응답하면 클라가 recv 버퍼 앞으로 over-read → access violation.
+// 각 응답 opcode 의 body 는 반드시 표 크기 그대로여야 한다 (RE 확정).
+
+test('STATIC_INFO_BODY_SIZES matches client sizer FUN_004b8b00 (RE 확정)', () => {
+  assert.equal(STATIC_INFO_BODY_SIZES[0x0305], 0x520a);
+  assert.equal(STATIC_INFO_BODY_SIZES[0x0307], 0xe5b2);
+  assert.equal(STATIC_INFO_BODY_SIZES[0x0309], 0x055c);
+  assert.equal(STATIC_INFO_BODY_SIZES[0x030b], 0x6d64);
+  assert.equal(STATIC_INFO_BODY_SIZES[0x030d], 0x0184);
+  assert.equal(STATIC_INFO_BODY_SIZES[0x030f], 0x0034);
+  assert.equal(STATIC_INFO_BODY_SIZES[0x0311], 0x01b0);
+  assert.equal(STATIC_INFO_BODY_SIZES[0x0313], 0x138c);
+  assert.equal(STATIC_INFO_BODY_SIZES[0x0315], 0x138c);
+  assert.equal(STATIC_INFO_BODY_SIZES[0x031d], 0x520c);
+});
+
+test('buildEmptyWalkerInner emits full-size zero-filled body for static-info opcodes', () => {
+  for (const [opStr, size] of Object.entries(STATIC_INFO_BODY_SIZES)) {
+    const op = Number(opStr);
+    // 전용 빌더가 있는 0x0313/0x0315 는 별도 검증 (여기선 walker 경로만)
+    if (op === 0x0313 || op === 0x0315) continue;
+    const inner = buildEmptyWalkerInner(op);
+    assert.equal(readMsg32Code(inner), op);
+    const body = msg32Body(inner);
+    assert.equal(body.length, size, `0x${op.toString(16)} body size`);
+    assert.equal(inner.length, 6 + size, `0x${op.toString(16)} inner total`);
+    // 전부 0 (빈 테이블, 콘텐츠 미승격)
+    assert.ok(body.every((b) => b === 0), `0x${op.toString(16)} zero-filled`);
+  }
+});
+
+test('buildEmptyWalkerInner keeps empty body for pure-ack codes not in size table', () => {
+  const inner = buildEmptyWalkerInner(0x7abc);
+  assert.equal(readMsg32Code(inner), 0x7abc);
+  assert.equal(msg32Body(inner).length, 0);
+});
+
+test('buildAdmissionResponseInner: each admission request → full-size static-info response', () => {
+  const cases = [
+    { req: 0x0304, resp: 0x0305, size: 0x520a, allZero: true },
+    { req: 0x0306, resp: 0x0307, size: 0xe5b2, allZero: true },
+    { req: 0x030a, resp: 0x030b, size: 0x6d64, allZero: true },
+    { req: 0x030e, resp: 0x030f, size: 0x0034, allZero: true },
+    { req: 0x0310, resp: 0x0311, size: 0x01b0, allZero: true },
+    { req: 0x031c, resp: 0x031d, size: 0x520c, allZero: true },
+    // 전용 빌더: 고정 크기 동일, body 는 헤더 포함이라 all-zero 아님
+    { req: 0x0312, resp: 0x0313, size: 0x138c, allZero: false },
+    { req: 0x0314, resp: 0x0315, size: 0x138c, allZero: false },
+  ];
+  for (const { req, resp, size, allZero } of cases) {
+    const inner = buildAdmissionResponseInner(req);
+    assert.ok(inner, `0x${req.toString(16)} must route (not null)`);
+    assert.equal(readMsg32Code(inner), resp, `0x${req.toString(16)} → 0x${resp.toString(16)}`);
+    const body = msg32Body(inner);
+    assert.equal(body.length, size, `0x${resp.toString(16)} body size`);
+    assert.equal(inner.length, 6 + size, `0x${resp.toString(16)} inner total = 6 + N`);
+    if (allZero) {
+      assert.ok(body.every((b) => b === 0), `0x${resp.toString(16)} zero-filled empty table`);
+    }
+  }
+  // 0x0313 grid-type: payload[0]=count=0 (empty)
+  assert.equal(msg32Body(buildAdmissionResponseInner(0x0312)).readUInt8(0), 0);
+  // 미확인 코드는 여전히 null
+  assert.equal(buildAdmissionResponseInner(0x7abc), null);
 });
