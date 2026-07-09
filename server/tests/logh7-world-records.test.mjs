@@ -29,6 +29,7 @@ import {
   buildWorldEntryInners,
   buildLobbySessionLoginOkRaw,
   buildAdmissionResponseInner,
+  isAdmissionRequestCode,
   buildEmptyWalkerInner,
   STATIC_INFO_BODY_SIZES,
   decodeMoveGridCommand,
@@ -218,7 +219,9 @@ test('buildAdmissionResponseInner: each admission request → full-size static-i
   const cases = [
     { req: 0x0304, resp: 0x0305, size: 0x520a, allZero: true },
     { req: 0x0306, resp: 0x0307, size: 0xe5b2, allZero: true },
+    { req: 0x0308, resp: 0x0309, size: 0x055c, allZero: true }, // 신규(정지 원인)
     { req: 0x030a, resp: 0x030b, size: 0x6d64, allZero: true },
+    { req: 0x030c, resp: 0x030d, size: 0x0184, allZero: true }, // 신규
     { req: 0x030e, resp: 0x030f, size: 0x0034, allZero: true },
     { req: 0x0310, resp: 0x0311, size: 0x01b0, allZero: true },
     { req: 0x031c, resp: 0x031d, size: 0x520c, allZero: true },
@@ -241,4 +244,21 @@ test('buildAdmissionResponseInner: each admission request → full-size static-i
   assert.equal(msg32Body(buildAdmissionResponseInner(0x0312)).readUInt8(0), 0);
   // 미확인 코드는 여전히 null
   assert.equal(buildAdmissionResponseInner(0x7abc), null);
+});
+
+test('isAdmissionRequestCode covers every static-info req (incl. 신규 0x0308/0x030c), rejects non-admission', () => {
+  const reqCodes = [
+    0x0304, 0x0306, 0x0308, 0x030a, 0x030c, 0x030e, 0x0310, 0x0312, 0x0314, 0x031c,
+  ];
+  for (const req of reqCodes) {
+    assert.equal(isAdmissionRequestCode(req), true, `0x${req.toString(16)} must be admission req`);
+  }
+  // 신규 정지 원인 코드가 lobby 로 새지 않도록 명시 검증
+  assert.equal(isAdmissionRequestCode(0x0308), true);
+  assert.equal(isAdmissionRequestCode(0x030c), true);
+  // 응답(홀수) opcode 나 무관 코드는 어드미션 요청이 아님
+  assert.equal(isAdmissionRequestCode(0x0309), false);
+  assert.equal(isAdmissionRequestCode(0x030d), false);
+  assert.equal(isAdmissionRequestCode(0x2009), false);
+  assert.equal(isAdmissionRequestCode(0x7abc), false);
 });

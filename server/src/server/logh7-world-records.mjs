@@ -503,8 +503,12 @@ export const CODE_REQ_SESSION_WALKER = 0x0304; // C→S
 export const CODE_RESP_SESSION_WALKER = 0x0305; // S→C (빈 InformationSession walker)
 export const CODE_REQ_DUTY_WALKER = 0x0306;
 export const CODE_RESP_DUTY_WALKER = 0x0307;
+export const CODE_REQ_ADMISSION_0308 = 0x0308; // C→S (신규: 정지 원인 — case 없어 lobby 로 샜음)
+export const CODE_RESP_ADMISSION_0309 = 0x0309; // S→C 풀사이즈 0채움 1372B
 export const CODE_REQ_ADMISSION_030A = 0x030a;
 export const CODE_RESP_ADMISSION_030B = 0x030b;
+export const CODE_REQ_ADMISSION_030C = 0x030c; // C→S (신규)
+export const CODE_RESP_ADMISSION_030D = 0x030d; // S→C 풀사이즈 0채움 388B
 export const CODE_REQ_ADMISSION_030E = 0x030e;
 export const CODE_RESP_ADMISSION_030F = 0x030f;
 export const CODE_REQ_ADMISSION_0310 = 0x0310;
@@ -577,35 +581,49 @@ export function buildEmptyWalkerInner(code) {
 }
 
 /**
- * 어드미션 요청 code → 응답 빌더 매핑. handleWorldInner 가 사용.
- * 문서 확정 응답(0x0313/0x0315)만 실제 바디, 나머지는 빈 walker(최소 응답).
+ * static-info 어드미션 walker 요청 code → 응답 code 매핑 (req 짝수 → resp = req+1 홀수).
+ *
+ * 전부 buildEmptyWalkerInner 로 처리 — 응답 code 의 STATIC_INFO_BODY_SIZES 고정크기
+ * 0채움 body(빈 테이블). 클라 고정크기 프레이밍이 recv 버퍼를 over-read 하지 않도록
+ * 반드시 풀사이즈로 응답한다. 0x0308/0x030c 미배선 시 lobby 라우터로 새어 NOW LOADING 정지.
+ *
+ * 전용 빌더가 필요한 0x0312→0x0313 / 0x0314→0x0315 (헤더 채움)는 이 표에 넣지 않고
+ * buildAdmissionResponseInner 에서 별도 분기한다.
+ */
+export const ADMISSION_WALKER_REQ_RESP = Object.freeze({
+  [CODE_REQ_SESSION_WALKER]: CODE_RESP_SESSION_WALKER, // 0x0304 → 0x0305 (21002B)
+  [CODE_REQ_DUTY_WALKER]: CODE_RESP_DUTY_WALKER, // 0x0306 → 0x0307 (58802B)
+  [CODE_REQ_ADMISSION_0308]: CODE_RESP_ADMISSION_0309, // 0x0308 → 0x0309 (1372B, 신규)
+  [CODE_REQ_ADMISSION_030A]: CODE_RESP_ADMISSION_030B, // 0x030a → 0x030b (28004B)
+  [CODE_REQ_ADMISSION_030C]: CODE_RESP_ADMISSION_030D, // 0x030c → 0x030d (388B, 신규)
+  [CODE_REQ_ADMISSION_030E]: CODE_RESP_ADMISSION_030F, // 0x030e → 0x030f (52B)
+  [CODE_REQ_ADMISSION_0310]: CODE_RESP_ADMISSION_0311, // 0x0310 → 0x0311 (432B)
+  [CODE_REQ_STATIC_BASE]: CODE_RESP_STATIC_BASE_031D, // 0x031c → 0x031d (21004B)
+});
+
+/** 전용 빌더가 필요한 어드미션 요청 code (grid-type / grid, 헤더 채움 5004B) */
+const ADMISSION_DEDICATED_BUILDERS = Object.freeze({
+  [CODE_REQ_STATIC_GRID_TYPE]: () => buildStaticInformationGridTypeInner({ objects: [] }), // 0x0312 → 0x0313
+  [CODE_REQ_STATIC_GRID]: () => buildStaticInformationGridInner({ cells: [] }), // 0x0314 → 0x0315
+});
+
+/**
+ * 어드미션 요청 code → 응답 message32. handleWorldInner 가 사용.
+ * 전용 빌더(0x0313/0x0315)만 실제 바디, 나머지는 빈 walker(풀사이즈 0채움). 미배선은 null.
  */
 export function buildAdmissionResponseInner(reqCode) {
-  switch (reqCode) {
-    case CODE_REQ_SESSION_WALKER: // 0x0304 → 0x0305 (풀사이즈 0채움 21002B, 빈 세션 테이블)
-      return buildEmptyWalkerInner(CODE_RESP_SESSION_WALKER);
-    case CODE_REQ_DUTY_WALKER: // 0x0306 → 0x0307 (풀사이즈 0채움 58802B, 빈 duty 테이블)
-      return buildEmptyWalkerInner(CODE_RESP_DUTY_WALKER);
-    case CODE_REQ_ADMISSION_030A: // 0x030a → 0x030b (풀사이즈 0채움 28004B)
-      return buildEmptyWalkerInner(CODE_RESP_ADMISSION_030B);
-    case CODE_REQ_ADMISSION_030E: // 0x030e → 0x030f (풀사이즈 0채움 52B)
-      return buildEmptyWalkerInner(CODE_RESP_ADMISSION_030F);
-    case CODE_REQ_ADMISSION_0310: // 0x0310 → 0x0311 (풀사이즈 0채움 432B)
-      return buildEmptyWalkerInner(CODE_RESP_ADMISSION_0311);
-    case CODE_REQ_STATIC_BASE: // 0x031c → 0x031d (풀사이즈 0채움 21004B, static-base)
-      return buildEmptyWalkerInner(CODE_RESP_STATIC_BASE_031D);
-    case CODE_REQ_STATIC_GRID_TYPE: // 0x0312 → 0x0313 (문서 확정 포맷, empty content, 5004B)
-      return buildStaticInformationGridTypeInner({ objects: [] });
-    case CODE_REQ_STATIC_GRID: // 0x0314 → 0x0315 (문서 확정, empty grid 5004B — 비-empty 는 walk stall)
-      return buildStaticInformationGridInner({ cells: [] });
-    default:
-      return null;
-  }
+  const code = reqCode & 0xffff;
+  const dedicated = ADMISSION_DEDICATED_BUILDERS[code];
+  if (dedicated) return dedicated();
+  const respCode = ADMISSION_WALKER_REQ_RESP[code];
+  if (respCode == null) return null;
+  return buildEmptyWalkerInner(respCode);
 }
 
-/** 어드미션 요청 코드 여부 */
+/** 어드미션 요청 코드 여부 (미배선 신규 req 가 lobby 로 새지 않도록 라우터가 사용) */
 export function isAdmissionRequestCode(code) {
-  return buildAdmissionResponseInner(code) != null;
+  const c = code & 0xffff;
+  return c in ADMISSION_WALKER_REQ_RESP || c in ADMISSION_DEDICATED_BUILDERS;
 }
 
 // ─── 월드 진입 시퀀스 (RE 최소 + 초기화 OK) ───────────────────────────────────
