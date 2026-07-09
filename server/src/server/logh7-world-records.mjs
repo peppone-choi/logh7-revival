@@ -58,7 +58,9 @@ export const CODE_LOBBY_REQ_INFO_SESSION = 0x2005;
 export const CODE_LOBBY_RESP_INFO_SESSION = 0x2006;
 
 // 월드 초기화 / 시각 / 그리드 (FUN_004b8b00 sizes; G144 WORLD_OK status=1)
+export const CODE_REQ_RESPONSE_TIME = 0x0300; // C→S RequestResponseTime → 0x0301
 export const CODE_RESP_TIME = 0x0301; // S→C ResponseTime — 4B LE start time
+export const CODE_REQ_WORLD_INIT = 0x0f00; // C→S RequestWorldInitialize → 0x0f01
 export const CODE_WORLD_INIT_OK = 0x0f01; // ResponseWorldInitialize_OK → client+0x35f356
 export const CODE_GRID_INIT_OK = 0x0f03; // ResponseGridInitialize_OK → client+0x35f357
 export const CODE_STATIC_GRID = 0x0315; // ResponseStaticInformationGrid RLE, fixed 0x138c
@@ -601,10 +603,26 @@ export const ADMISSION_WALKER_REQ_RESP = Object.freeze({
   [CODE_REQ_STATIC_BASE]: CODE_RESP_STATIC_BASE_031D, // 0x031c → 0x031d (21004B)
 });
 
-/** 전용 빌더가 필요한 어드미션 요청 code (grid-type / grid, 헤더 채움 5004B) */
+/**
+ * 전용 빌더가 필요한 어드미션 / 월드-init 핸드셰이크 요청 code.
+ *   0x0312→0x0313 · 0x0314→0x0315 : static-info 그리드(헤더 채움 5004B)
+ *   0x0300→0x0301 : RequestResponseTime → ResponseTime (4B LE start time)
+ *   0x0f00→0x0f01 : RequestWorldInitialize → WorldInitialize OK (status=1)
+ *
+ * 근거: docs/reference/restored-from-git/logh7-inworld-progress.md P28/P30 라이브 트레이스 —
+ *   static-info 완주 후 0x0308→0x0309, 0x030c→0x030d, 0x0300→0x0301, 0x0f00→0x0f01, 0x0f02 push
+ *   순으로 흘러 strategic HUD 도달(Now Loading 아님). 응답 포맷은 기존 RE 빌더 재사용(날조 없음):
+ *   buildResponseTimeInner / buildWorldInitOkInner(status=1, WORLD_OK_STATUS_CODES · client+0x35f356).
+ *
+ * 이 맵의 code 는 isAdmissionRequestCode 로도 잡혀 playable-server 가 world 로 라우팅한다.
+ * 미배선 시 lobby 라우터로 새어 응답 없음 → 클라가 code+1 응답을 무한 대기(NOW LOADING 정지).
+ * 0x0f02(server push) / 0x0f06→0x0f07 은 이 트리 내 응답 포맷 근거 없음 → 배선 안 함(다음 라이브 특정).
+ */
 const ADMISSION_DEDICATED_BUILDERS = Object.freeze({
   [CODE_REQ_STATIC_GRID_TYPE]: () => buildStaticInformationGridTypeInner({ objects: [] }), // 0x0312 → 0x0313
   [CODE_REQ_STATIC_GRID]: () => buildStaticInformationGridInner({ cells: [] }), // 0x0314 → 0x0315
+  [CODE_REQ_RESPONSE_TIME]: () => buildResponseTimeInner(), // 0x0300 → 0x0301
+  [CODE_REQ_WORLD_INIT]: () => buildWorldInitOkInner({ status: 1 }), // 0x0f00 → 0x0f01
 });
 
 /**

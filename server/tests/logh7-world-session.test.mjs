@@ -12,6 +12,9 @@ import {
   CODE_SS_GAME_LOGIN_REQ,
   CODE_SS_GAME_LOGIN_OK,
   CODE_SS_CHARACTER_ID,
+  CODE_RESP_TIME,
+  CODE_WORLD_INIT_OK,
+  isAdmissionRequestCode,
   readMsg32Code,
   msg32Body,
 } from '../src/server/logh7-world-records.mjs';
@@ -161,6 +164,58 @@ test('handleWorldInner admission works with message32-framed request too', () =>
   const result = world.handleWorldInner({ connectionId: 1, accountId: 'a', inner: req });
   assert.ok(result);
   assert.equal(readMsg32Code(result.responses[0].inner), 0x0305);
+});
+
+// ─── static-info 완주 후 월드-init 핸드셰이크 (0x0300 / 0x0f00) ────────────────
+// 근거: docs/reference/restored-from-git/logh7-inworld-progress.md P28/P30 라이브 트레이스
+// (static-info 완주 후 0x0308→0x0309, 0x030c→0x030d, 0x0300→0x0301, 0x0f00→0x0f01, 0x0f02 push;
+//  strategic HUD 도달). 이전엔 0x0300 이 handleWorldInner 분기 없음 → lobby 로 새어 "알 수 없는
+//  코드" → 클라가 0x0301 응답 무한 대기(NOW LOADING 정지).
+
+test('handleWorldInner routes 0x0300 RequestResponseTime → 0x0301 ResponseTime', () => {
+  const world = createWorldSession();
+  world.seedPlayer({ connectionId: 1, characterId: 5, unitId: 8, inWorld: true });
+  const req = Buffer.alloc(2);
+  req.writeUInt16BE(0x0300, 0);
+  const result = world.handleWorldInner({ connectionId: 1, accountId: 'a', inner: req });
+  assert.ok(result, '0x0300 must be routed (not null — else it leaks to lobby)');
+  assert.equal(result.responses.length, 1);
+  assert.equal(readMsg32Code(result.responses[0].inner), CODE_RESP_TIME);
+  // 0x0301 body = 4B LE start time (buildResponseTimeInner 재사용)
+  assert.equal(msg32Body(result.responses[0].inner).length, 4);
+  assert.deepEqual(result.responses[0].targets, [1]);
+  assert.equal(result.responses[0].isMsg32, true);
+});
+
+test('handleWorldInner routes 0x0300 when message32-framed too', () => {
+  const world = createWorldSession();
+  world.seedPlayer({ connectionId: 1, characterId: 5, unitId: 8, inWorld: true });
+  const req = Buffer.alloc(6);
+  req.writeUInt32LE(0, 0);
+  req.writeUInt16BE(0x0300, 4);
+  const result = world.handleWorldInner({ connectionId: 1, accountId: 'a', inner: req });
+  assert.ok(result);
+  assert.equal(readMsg32Code(result.responses[0].inner), CODE_RESP_TIME);
+});
+
+test('isAdmissionRequestCode(0x0300) is true so playable-server routes it to world (not lobby)', () => {
+  assert.equal(isAdmissionRequestCode(0x0300), true);
+});
+
+test('handleWorldInner routes 0x0f00 RequestWorldInitialize → 0x0f01 WorldInitialize OK (status=1)', () => {
+  const world = createWorldSession();
+  world.seedPlayer({ connectionId: 1, characterId: 5, unitId: 8, inWorld: true });
+  const req = Buffer.alloc(2);
+  req.writeUInt16BE(0x0f00, 0);
+  const result = world.handleWorldInner({ connectionId: 1, accountId: 'a', inner: req });
+  assert.ok(result, '0x0f00 must be routed');
+  assert.equal(readMsg32Code(result.responses[0].inner), CODE_WORLD_INIT_OK);
+  // WORLD_OK_STATUS_CODES: status=1 필수 (client+0x35f356)
+  assert.equal(msg32Body(result.responses[0].inner).readUInt8(0), 1);
+});
+
+test('isAdmissionRequestCode(0x0f00) is true (world-init handshake routes to world)', () => {
+  assert.equal(isAdmissionRequestCode(0x0f00), true);
 });
 
 test('handleWorldInner still returns null for a genuinely unknown code', () => {
