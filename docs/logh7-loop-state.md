@@ -1,5 +1,18 @@
 # LOGH VII 루프 상태
 
+## M3 로더 트리거 확정 → 정적 한계, Frida 동적 분석 필요 (2026-07-10, RE)
+
+- **월드 로드 트리거 = `FUN_004c2a80`**(월드 오브젝트 테이블 clientBase+0xc 빌더), **2경로**:
+  - **경로 A(유력): `0x0b0a NotifyEnterGridEnd` → `FUN_004c2a80(1)`** — static walk 우회. **게임모드 `clientBase+0x126711` 게이트**: ==0→로드, ==2→0x0b09 body[0]==0일 때 로드, **그 외(1 등)→no-op→NOW LOADING 안 풀림.** 우리는 0x0b09 body[0]=0 송신 → **현재 모드값이 무엇인지가 0x0b0a 무동작의 직접 원인 후보.** 모드 세터는 정적 clean writer 미검출(미확정).
+  - 경로 B: static walk 완주(`FUN_004b76e0` step 0x10 → `FUN_004c2a80(0)`+0x35837f=1). 0x0315가 링(clientBase+0x357ec0) pop 못 해 step 1에 갇힘. **정적으론 0x0315가 0x0314 링 엔트리와 correlate돼 pop돼야 정상** → 라이브 미배수는 **런타임 dispatch/correlation 문제**(정적 RE 한계, Blocked-Loop).
+- **`FUN_004c2a80` 성공 선행조건**: 선택 char id `clientBase+0x3584a0`(0x0204가 세팅)가 char 배열 `clientBase+0x36a8b4`(stride 0x2d4, count +0x36a5dc; **0x0323이 채움**)에 존재해야 하고, 그 char의 flagship이 유닛 배열 `clientBase+0x41a368`(**0x0325가 채움**)의 유닛과 링크돼야 함(`bVar1=true`). **링크 불일치 시 월드 미완성.**
+- **정적 분석 한계 도달 → Frida 동적 훅 권고**(re-analyst): 확인할 것 —
+  1. `FUN_004ba2b0` 훅: 0x0315가 실제 dispatch/pop되는지, ringCount(0x357ec0) 추이.
+  2. `clientBase+0x126711`(게임모드) 값 덤프(0x0b0a 시점): 0/2 아니면 그게 0x0b0a no-op 원인.
+  3. `FUN_004c2a80` 훅: 호출 여부·인자(0/1)·bVar1(선택 char 발견) — 월드 빌드 시도/성공.
+  4. `FUN_004b78a0` 훅: 송신 selector/opcode·0x35837e 게이트.
+- **다음**: Frida 프로브(tools/live/_frida_*.py, rev-frida 스킬)로 위 4개 런타임 값 확보 → (모드 문제면 모드 세팅 트리거, 상관 문제면 0x0315 프레이밍, 링크 문제면 0x0323 flagship↔0x0325 유닛 id 정합) 중 확정. 정적→동적 방법론 전환.
+
 ## ⛔ M3 결정적 재특성화: 로더는 내부 메모리 폴링 — 5가설 반증, RE 필요 (2026-07-10)
 
 - **×2 refresh(P7 A6) 경험적 기각**(`.omo/live-qa/m3-x2refresh-20260710-0731/`): 0x0325/0x0323을 begin/end 사이 ×2 재전송(responseCount 8, early-grid 시 9) 실제 배달됐으나 **NOW LOADING 정지 불변**. config A(기본)/B(LOGH_STRAT_GRID_EARLY=1) 둘 다 정지.
