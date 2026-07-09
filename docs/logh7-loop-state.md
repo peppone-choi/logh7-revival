@@ -1,5 +1,14 @@
 # LOGH VII 루프 상태
 
+## M3 정지 확정: request-response send-ring 상관 실패 — 응답 pre-push 버그 (2026-07-10, RE)
+
+- **근본원인**(re-analyst, dispatcher tail `LAB_004bdd33` + 로더 `FUN_004b76e0`): 클라 로더는 **엄격한 요청-응답 send-ring 파이프라인**. 요청 1개 송신→매칭 응답이 ring 엔트리 pop→다음 요청. 로더는 **send-ring이 빌 때(`clientBase+0x357ec0==0`)만** 다음 스텝 진행. step 0x10 완주 시 `FUN_004c2a80(0)`+`0x35837f=1`→전략맵 렌더.
+- **버그 = 응답 pre-push**: world-enter 배치가 0x0315/0x0f01/0x0f03을 클라 요청 **전에** push → 그 시점 ring에 매칭 엔트리 없음 → dispatch(데이터 저장)만 되고 **ring 미배수**. 이후 클라가 0x0314 송신→ring 엔트리 생성but 0x0315는 이미 지나가 다시 안 옴→영구 미pop→로더 정지. (0x0305/0x0307은 reactive라 정상 pop→3요청 진행 후 0x0315 미pop으로 정지. 관측 일치.)
+- **그리드 콘텐츠 무관**: dispatcher case 0x315는 valid/invalid 동일 동작. cellType 0도 추가 의존성 없음. empty vs valid 차이는 그 버전의 push/reactive 구성 차이일 뿐 — **push면 무조건 정지**.
+- **수정(server-dev)**: static-info/world-init 응답을 **순수 reactive**로. world-enter 배치(`buildWorldEntryInners`)에서 **요청-응답 코드(0x0301/0x0f01/0x0f03/0x0315) pre-push 제거** — 이미 어드미션 핸들러에 reactive 배선됨(0x0300→0x0301, 0x0f00→0x0f01, 0x0f02→0x0f03, 0x0314→0x0315). 각 응답 풀 고정크기+message32. 클라가 하나씩 요청→하나씩 응답→매 스텝 ring 배수→step 0x10→NOW LOADING 해제.
+- **유지할 push(구분)**: 클라가 워크에서 **요청 안 하는** unsolicited 테이블 채움(0x0206 SSGameLoginOK[0x0205 응답], 0x0204 charID, **0x0323 char**, **0x0325 unit**)은 push 유지(ring 상관 대상 아님, dispatch만 되면 됨). **요청-응답 대상 0x030x/0x0f0x 응답만** reactive로.
+- **다음**: server-dev가 buildWorldEntryInners에서 0x0301/0x0f01/0x0f03/0x0315 제거 → live-qa로 NOW LOADING 해제·전략맵 렌더 검증.
+
 ## M3 크래시 해소 확인 → 유효 그리드가 워크 조기종료, NOW LOADING 정지 (2026-07-10)
 
 - **크래시 해소 확인**(`.omo/live-qa/m3-stratmap-render-20260710-0441/`): 0x0323 실 캐릭터 + 유효 0x0315 RLE 커밋 후, 직전 2.16초 만에 터지던 크래시(0x0058f83a) **미발생**. 클라 **55초+ 생존**, 새 WER 없음. 빈 오브젝트 테이블 널 역참조 실제로 차단됨.
