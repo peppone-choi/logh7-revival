@@ -1,5 +1,14 @@
 # LOGH VII 루프 상태
 
+## M2 게이트 라이브 확정 + 진짜 블로커 분리: 첫 생성은 오리지널 추첨(0x1006) (2026-07-09)
+
+- **라이브 확정**(`.omo/live-qa/m2-gate-confirm-20260709-2349/`): 계정 `inei00`에 캐릭터 1개 **프리시드**(스토어 JSON만, 코드 무수정)하니 0x2004 body[0]=1 → 로비 잠금 완전 해제. 「不具合…お待ち」 사라지고 ゲーム開始→캐릭터 선택 패널에 프리시드 캐릭이 이름(Reinhard/20歳)·능력치 8종(統率80…防御45, 시드값과 정확 일치)까지 렌더. `DECISIVE-lobby-unlocked-seeded.png`, `DECISIVE-character-select-seeded.png`.
+- **판정**: **0x2004 body[0]은 캐릭터 count**(ready-flag 아님). body[0]≥1이 로비 잠금 해제의 충분조건. 오프라인 결정론(빈=0 / 프리시드=1, 둘 다 1762B 고정, byte0만 상이) + 라이브 이중 확인. **가짜 count 주입 금지** — count=0 잠금은 클라의 "0캐릭" 정상 처리이고, 실제 캐릭이 1개 있으면 자연 해제됨.
+- **진짜 M2 블로커 분리**: 잠금 풀린 로비에서도 `新キャラクターの作成`(item1) 클릭 시 서버 프레임 0건·UI 무전환 = 로비 잠금과 **무관한 독립 블로커**. 원인: item1은 정적 배열 `{1,0,1,0,1,0,0,0}`의 **item1=0 = 정적 disable**. item0=ゲーム開始, item2=オリジナルキャラクター抽選(정적 enable).
+- **온보딩 경로 가설**: 빈 계정 첫 캐릭터는 커스텀 생성(0x1008, item1 disable)이 아니라 **item2 オリジナルキャラクター抽選 → 0x1006 CommandOriginalCharacterCharge**로 얻는다(원작 "오리지널 추첨" 메커닉과 정합). 서버 `_handleOriginalCharge`는 현재 **0x1006 echo만** 하고 캐릭터를 생성·영속하지 않음 → 다음 구현 갭. (0x1008 커스텀 생성은 item1을 enable하는 선행조건 확정 후 별도 트랙.)
+- **다음**: re-analyst로 item2 클릭이 emit하는 opcode/body·0x1006 추첨 왕복(클라가 무엇을 받고 로스터 재요청하는지)·item1 enable 조건 확정 → server-dev가 0x1006 핸들러를 실제 생성으로 구현 → live-qa 재검증.
+- 참고: 프리시드 캐릭 **선택→월드 진입**(0x2009→0x200a→월드)은 3분 예산으로 미실행, 다음 사이클 world-session 단독 검증 대상.
+
 ## M2 근본원인 확정: 로비 잠금 게이트는 0x2004 body[0]==0 (2026-07-09, RE)
 
 - **RE 확정**(re-analyst, Ghidra `FUN_0051a370` state 0x16 IntoLobbyMain 디컴파일): `if ((char)DAT_02216c88 == 0) setText(0x78677c "セッションサーバーの不具合につき…少々お待ちください")` — 여기서 `DAT_02216c88` = **0x2004 ResponseInformationCharacterCharge body[0]**(dispatcher case 0x2004가 `clientBase+0x35975c`에 0x6dc B 복사 → state 0x12 `FUN_0051be80`가 `DAT_02216c88`로 사본). 즉 **0x2004 body[0]==0 이면 클라가 캐릭터 패널을 "대기"로 잠근다.**
