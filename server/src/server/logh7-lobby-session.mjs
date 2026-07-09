@@ -49,6 +49,7 @@ import {
   buildLobbyLoginOkMessage32Inner,
 } from './logh7-lobby-login.mjs';
 import { buildInformationSessionInner } from './codec/scenario-session.mjs';
+import { getOriginalCandidate } from './logh7-original-candidates.mjs';
 
 // ─── 내부 헬퍼 ────────────────────────────────────────────────────────────────
 
@@ -97,7 +98,7 @@ export function handleLobbyInner(inner, accountId, store) {
       return _handleReqCharEntryState(inner);
 
     case CODE_CMD_ORIGINAL_CHARGE:
-      return _handleOriginalCharge(inner);
+      return _handleOriginalCharge(inner, accountId, store);
 
     case CODE_CMD_EXTENSION_CHARGE:
       return _handleExtensionCharge(inner);
@@ -215,9 +216,26 @@ function _handleReqCharEntryState(inner) {
 
 // ─── 0x1006 CommandOriginalCharacterCharge ────────────────────────────────────
 
-function _handleOriginalCharge(inner) {
-  const { charId } = decodeOriginalCharReq(inner);
-  return encodeOriginalCharOk({ charId });
+// 빈 계정의 첫 캐릭터 획득 경로(item2 オリジナルキャラクター抽選).
+// C→S body = [u32LE count][u32LE id×5]. count개의 후보 id 각각을 서버 후보 풀에서
+// 찾아 계정 스토어에 charge(영속). id 풀은 0x2006 세션 데이터가 광고한 것과 동일
+// (logh7-original-candidates.mjs 단일 진실원). 응답은 24B echo — 클라는 형식만
+// 맞으면 UI 이벤트 0x16 으로 성공 처리(§4.2). charge 로 body[0]≥1 이 되면 이후
+// 0x2003→0x2004 에서 로비 잠금이 풀린다.
+// ★후보 캐릭터 데이터는 정본 아님(잠정) — logh7-original-candidates.mjs 참고.
+function _handleOriginalCharge(inner, accountId, store) {
+  const { count, charIds } = decodeOriginalCharReq(inner);
+  for (const id of charIds) {
+    const cand = getOriginalCandidate(id);
+    if (!cand) continue; // 서버 후보 풀에 없는 id 는 무시(형식만 맞으면 클라는 성공 처리)
+    store.addCharacter(accountId, {
+      candidateId: cand.id,     // 어느 후보에서 왔는지(정합 추적)
+      power: cand.power,        // 진영 — 0x2004 카드 최소 필드(잠정)
+      camp: cand.power,
+      provisional: true,        // 정본 아님 표시
+    });
+  }
+  return encodeOriginalCharOk({ count, charIds });
 }
 
 // ─── 0x1007 CommandExtensionCharacterCharge ───────────────────────────────────

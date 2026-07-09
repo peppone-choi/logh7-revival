@@ -368,33 +368,45 @@ export function encodeExtensionCharOk({ count = 0, accepted = 1 } = {}) {
 
 /**
  * 0x1006 C→S CommandOriginalCharacterCharge 디코드
- * 근거: [SA] case 0x1006 → store 6 dwords (24 bytes) into +0x43241c
- *       [CW]§3 kind=0xb sends charId from FUN_00598940
- * 미확정: 6 dword 내 필드 레이아웃. charId가 첫 dword라고 추정.
+ * 근거(확정): docs/logh7-m2-character-creation-flow.md §4.1 — 24B 고정, sizer 0x18.
+ *   body = [u32LE count][u32LE char_id ×5]  (count=선택 수 1~5, 나머지 슬롯 0)
+ *   송신 FUN_00595ce0: 5슬롯 배열(미선택=-1)에서 비(-1) id를 모아 count와 송신.
  *
  * @param {Buffer} inner
- * @returns {{ charId: number, raw: number[] }} charId=추정값, raw=6 dwords
+ * @returns {{ count: number, charIds: number[], charId: number, raw: number[] }}
+ *   count = 선택 수, charIds = 유효 id(count개), charId/raw = 하위호환(첫 dword/6 dwords)
  */
 export function decodeOriginalCharReq(inner) {
   const body = innerBody(inner, CODE_CMD_ORIGINAL_CHARGE);
   if (body.length < 24) throw new RangeError('0x1006 body too short (< 24 bytes)');
   const raw = [];
   for (let i = 0; i < 6; i++) raw.push(body.readUInt32LE(i * 4));
-  return { charId: raw[0], raw }; // charId: 미확정, 첫 dword 추정
+  const count = raw[0];
+  const n = Math.min(Math.max(count, 0), MAX_ENTRY_CHARS); // 5슬롯 cap
+  const charIds = raw.slice(1, 1 + n); // count개의 후보 id
+  return { count, charIds, charId: raw[0], raw };
 }
 
 /**
- * 0x1006 S→C CommandOriginalCharacterCharge OK echo
- * 근거: [SA] case 0x1006 → FUN_004be760 → UI event 0x1006
- * 미확정: echo body. charId echo + status 형태 임시.
+ * 0x1006 S→C CommandOriginalCharacterCharge echo (24B)
+ * 근거(확정): §4.2 — dispatcher 가 24B 를 복사→UI 이벤트 0x16 post. 클라는 echo 내용
+ *   무관, 형식(24B)만 맞으면 "ORIGINAL_CHARGE_OK". 요청 body 를 그대로 echo 한다.
  *
- * @param {{ charId?: number }} fields
- * @returns {Buffer} message32 inner
+ * @param {{ count?: number, charIds?: number[], charId?: number }} fields
+ *   count/charIds 를 주면 [count][id×5] echo. 없으면 legacy charId 를 첫 dword 에.
+ * @returns {Buffer} message32 inner ([u32 0][u16 BE 0x1006][24B])
  */
-export function encodeOriginalCharOk({ charId = 0 } = {}) {
-  // 미확정: 6 dword echo body 레이아웃.
+export function encodeOriginalCharOk({ count, charIds, charId = 0 } = {}) {
   const body = Buffer.alloc(24);
-  body.writeUInt32LE(charId >>> 0, 0);
+  if (count != null || Array.isArray(charIds)) {
+    body.writeUInt32LE((count ?? 0) >>> 0, 0);
+    const ids = Array.isArray(charIds) ? charIds : [];
+    for (let i = 0; i < MAX_ENTRY_CHARS && i < ids.length; i++) {
+      body.writeUInt32LE((ids[i] ?? 0) >>> 0, 4 + i * 4);
+    }
+  } else {
+    body.writeUInt32LE(charId >>> 0, 0); // 하위호환: 첫 dword echo
+  }
   return buildMsg32Inner(CODE_CMD_ORIGINAL_CHARGE, body);
 }
 

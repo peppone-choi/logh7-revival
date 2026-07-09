@@ -2,6 +2,14 @@
  * LobbyResponseInformationSession (0x2006) packed builder — 5bd249c 정본 이식.
  * FUN_00444900 SEEK_CUR packed stream + 0x5304 body.
  */
+// 0x2006 세션 데이터가 광고하는 오리지널 추첨(0x1006) 후보 id 풀을 재수출한다.
+// 단일 진실원은 logh7-original-candidates.mjs. 0x1006 핸들러와 동일 풀을 공유하므로
+// 클라가 되돌려 보내는 char_id 가 서버 후보 id 와 정합한다.
+// (주의: 0x2006 packed 스트림 내 후보 캐릭터의 정확한 필드/stride(0x14c)는 RE 미확정
+//  — docs/logh7-m2-character-creation-flow.md §6. 따라서 id 정합은 이 공유 풀로
+//  서버측에서 강제한다. 잠정 후보 데이터는 정본 아님.)
+export { ORIGINAL_CANDIDATE_IDS } from '../logh7-original-candidates.mjs';
+
 export const LOBBY_RESP_INFO_SESSION_CODE = 0x2006;
 export const LOBBY_RESP_INFO_SESSION_PAYLOAD_BYTES = 0x5304;
 export const SESSION_NAME_MAX_UNITS = 13;
