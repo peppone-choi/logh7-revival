@@ -443,6 +443,28 @@ export function buildGridInitOkInner({ status = 1 } = {}) {
   return buildWorldOkStatusInner(CODE_GRID_INIT_OK, { status });
 }
 
+// ─── 0x0b09 / 0x0b0a NotifyEnterGrid Begin/End (그리드진입 = 렌더 트리거) ───────
+//
+// 근거 (5bd249c logh7-login-protocol.mjs:1197-1209, opcode-reference-2026-06-28.md L211-212):
+//   0x0b09 NotifyEnterGridBegin [S→C] 1바이트 body[0]=value — 그리드 진입 개시.
+//   0x0b0a NotifyEnterGridEnd   [S→C] 1바이트 body[0]=value — FUN_004c2a80(1)/FUN_004c32a0(1)
+//     그리드 배치를 트리거(플레이어 슬롯 월드 엔티티 생성 → PLAYER_INFO 링크 → 전략맵 렌더).
+//
+// ★value 선택: value=1 인 begin 은 클라 char-record count(clientBase+0x36a5dc)를 0으로 RESET 해
+//   직전 0x0325/0x0323 을 무효화한다(구코드 FIX A/G211). 검증된 안전 경로(구코드 0x0f06 grid-enter)는
+//   begin/end 모두 value=0 을 써 리셋 없이 배치만 트리거한다. 기본 0.
+export const CODE_NOTIFY_ENTER_GRID_BEGIN = 0x0b09;
+export const CODE_NOTIFY_ENTER_GRID_END = 0x0b0a;
+export const CODE_NOTIFY_ENTER_GRID_BYTES = 0x0001;
+
+export function buildNotifyEnterGridBeginInner({ value = 0 } = {}) {
+  return buildMsg32Inner(CODE_NOTIFY_ENTER_GRID_BEGIN, Buffer.from([value & 0xff]));
+}
+
+export function buildNotifyEnterGridEndInner({ value = 0 } = {}) {
+  return buildMsg32Inner(CODE_NOTIFY_ENTER_GRID_END, Buffer.from([value & 0xff]));
+}
+
 // ─── 0x0315 Static grid RLE (빈 보드 또는 cell 배치) ──────────────────────────
 
 /**
@@ -745,6 +767,48 @@ export function buildWorldEntryInners({
     }),
   ];
   return emits;
+}
+
+// ─── 월드-ready push 시퀀스 (NOW LOADING 해제) ────────────────────────────────
+//
+// 근거:
+//   docs/logh7-loop-state.md 최상단 "M3 블로커 해법 발견: 서버가 world-ready 시퀀스를 PUSH해야"
+//   docs/reference/restored-from-git/logh7-live-world-entry-2026-06-23.md:9 성공 트레이스
+//     (…0x0325 → 0x0b09/0x0b0a → 0x0f02(월드초기화) → 0x0f06/0x0f07)
+//   docs/reference/legacy-evidence/logh7-render-interaction-contract.md L27/L102
+//     (grid-enter begin/end + 조기 0x0f02 위치주입 크래시 경고 → 최소 레코드 유지)
+//
+// 왜 push 인가: 실 0x0323+유효 그리드로 클라를 채우면 클라가 어드미션 3요청(0x0304/0x0306/0x0314)
+// 만 하고 NOW LOADING 에서 정지한다(더는 0x0f00/0x0f02/0x0f06 을 요청하지 않음). 이 상태는 정상 —
+// 서버의 그리드진입/월드초기화 능동 push 를 기다리는 것. 클라 0x0314 직후 이 시퀀스를 순서대로 push:
+//   0x0325(유닛 리프레시) → 0x0b09(EnterGridBegin) → 0x0b0a(EnterGridEnd, 렌더 트리거)
+//   → 0x0f03(GridInitialize OK, status=1).
+//
+// ★"0x0f02" 정정(근거 기반): opcode-reference L234 + 구코드 login-session:149 확정 —
+//   0x0f02 는 RequestGridInitialize [C→S]. 이에 대한 S→C 신호는 0x0f03(ResponseGridInitialize_OK,
+//   client+0x35f357). 트레이스의 "0x0f02(월드초기화)"는 그리드-init 단계를 가리키며 서버가 실제 방출하는
+//   레코드는 0x0f03 이다(별도 S→C 0x0f02 바디는 존재/근거 없음 → 날조 금지). 순서 불변식(0x0f02 는
+//   0x0b09/0x0b0a 이후)은 0x0f03 을 grid-enter 뒤에 두어 충족한다.
+//
+// 미배선(근거 없어 제외, 추측 시 크래시/오승격 위험):
+//   0x0f06→0x0f07: 0x0f07(ResponseInformationMessengerStatus) 바디 포맷 미확정(검증자 P0 오승격 적발).
+//     구코드에선 클라 0x0f06 요청에 reactive 로만 응답했다 — unsolicited push 근거 없음.
+export function buildWorldReadyPushInners({
+  unitId,
+  unitCell = 2588,
+  commander = 0,
+  gridBeginValue = 0,
+  gridEndValue = 0,
+} = {}) {
+  if (!Number.isInteger(unitId) || unitId <= 0) {
+    throw new Error('buildWorldReadyPushInners: unitId required (no synthetic id)');
+  }
+  return [
+    buildInformationUnitInner({ unitId, unitCount: 1, cell: unitCell, commander }),
+    buildNotifyEnterGridBeginInner({ value: gridBeginValue }),
+    buildNotifyEnterGridEndInner({ value: gridEndValue }),
+    buildGridInitOkInner({ status: 1 }), // 0x0f03 — 트레이스 "0x0f02(월드초기화)"의 S→C 신호
+  ];
 }
 
 /** 로그인/로비/월드 S→C 코드 인벤토리 (문서·구현 대조용) */

@@ -17,7 +17,9 @@ import {
   CODE_SS_GAME_LOGIN_REQ,
   listWorldEntryCodes,
   buildAdmissionResponseInner,
+  buildWorldReadyPushInners,
   readMsg32Code,
+  CODE_REQ_STATIC_GRID,
 } from './logh7-world-records.mjs';
 
 /**
@@ -344,8 +346,37 @@ export function createWorldSession({
       };
     }
 
+    // 0x0314(RequestStaticInformationGrid) 처리: reactive 0x0315 응답 + world-ready push 시퀀스.
+    //
+    // 근거: docs/logh7-loop-state.md "M3 블로커 해법 발견: 서버가 world-ready 시퀀스를 PUSH해야" +
+    //   restored-from-git/logh7-live-world-entry-2026-06-23.md:9 성공 트레이스.
+    // 클라는 실 0x0323+유효 그리드 상태에서 0x0304/0x0306/0x0314 3요청만 하고 NOW LOADING 에서
+    // 정지(더는 0x0f00/0x0f02/0x0f06 미요청) — 서버의 그리드진입/월드초기화 push 대기. 클라 0x0314
+    // 직후(=0x0315 송신 직후) 순서대로 push: 0x0325 → 0x0b09 → 0x0b0a → 0x0f03(=트레이스 "0x0f02").
+    // 순서 엄수: 0x0f03(월드초기화)은 반드시 0x0b09/0x0b0a 이후(render-contract: 조기 push 크래시).
+    if (code === CODE_REQ_STATIC_GRID) {
+      const gridResp = buildAdmissionResponseInner(code); // 0x0315 (empty static grid)
+      const responses = [{ targets: [connectionId], inner: gridResp, isMsg32: true }];
+      const player = players.get(connectionId);
+      // 실 유닛을 보유한 in-world 플레이어에게만 push(합성 유닛 금지). 없으면 bare 0x0315 폴백.
+      if (player && player.unitId > 0 && player.characterId > 0) {
+        const readyInners = buildWorldReadyPushInners({
+          unitId: player.unitId,
+          unitCell: player.cell,
+          commander: player.characterId,
+        });
+        for (const inner of readyInners) {
+          responses.push({ targets: [connectionId], inner, isMsg32: true });
+        }
+        logEvent('world-ready-push', connectionId, {
+          codes: listWorldEntryCodes(readyInners),
+        });
+      }
+      return { kind: 'admission-world-ready', reqCode: code, responses };
+    }
+
     // 월드 진입 후 어드미션 핸드셰이크 (NOW LOADING 해제).
-    // 8종 월드레코드 수신 후 클라가 0x0304/0x0306/0x0312/0x0314/0x030a/0x030e/0x0310 등
+    // 8종 월드레코드 수신 후 클라가 0x0304/0x0306/0x0312/0x030a/0x030e/0x0310 등
     // 페이로드 없는 부트스트랩 요청을 보낸다. 대응 응답(code+1)을 안 주면 영구 정지.
     // 근거: docs/reference/restored-from-git/logh7-inworld-progress.md P27/P29.
     const admissionInner = buildAdmissionResponseInner(code);
