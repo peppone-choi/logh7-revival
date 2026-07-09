@@ -1,5 +1,25 @@
 # LOGH VII 루프 상태
 
+## M3 크래시 확정: static-info는 고정크기 프레이밍 — 풀사이즈 0채움 body 필요 (2026-07-10, RE)
+
+- **RE 확정**(re-analyst, 클라 사이저 `FUN_004b8b00` + enqueue `FUN_004b8850` + dispatcher `FUN_004ba2b0` + walker `FUN_004c4a10` 4곳 교차): 0x0305 크래시는 walker 헤더/count 문제가 **아니라 고정크기 프레이밍 over-read**. 클라가 opcode별 **하드코딩 고정크기**를 사이저에서 얻어 `malloc(size)` 후 **길이검사 없이 그 크기만큼 recv 버퍼에서 복사**. 빈 body(0바이트)면 21KB(0x520a) over-read → 매핑 안 된 페이지 → access violation → CRT "abnormal termination".
+- **정본 크기표(static-info 계열, 클라 사이저 switch 직접 인용)**:
+  | opcode | 이름 | body 크기 |
+  |---|---|---|
+  | 0x0305 | StaticInformationCard | 0x520a (21002) |
+  | 0x0307 | StaticInformationCardCom | 0xe5b2 (58802) |
+  | 0x0309 | StaticInformationPowerDivision | 0x55c (1372) |
+  | 0x030b | StaticInformationUnitShip | 0x6d64 (28004) |
+  | 0x030d | StaticInformationUnitTroop | 0x184 (388) |
+  | 0x030f | StaticInformationFighter | 0x34 (52) |
+  | 0x0311 | StaticInformationArms | 0x1b0 (432) |
+  | 0x0313 | StaticInformationGridType | 0x138c (5004) ✓이미 |
+  | 0x0315 | StaticInformationGrid | 0x138c (5004) ✓이미 |
+  | 0x031d | StaticInformationBase | 0x520c (21004) |
+- **zero-fill 안전**: walker `FUN_004c4a10`이 고정 300엔트리×24 루프에 clientBase/stack 상대 포인터만 쓰고 **body에서 count/포인터 유도 안 함** → 전부 0이면 빈 테이블을 무해 처리. 0x0313/0x0315가 이미 안 죽는 이유 = 이미 풀사이즈(5004B). **핵심: 빈/짧은 body 금지, opcode별 풀 고정크기 0채움이 정답.**
+- **server-dev 수정**: `buildEmptyWalkerInner(opcode)`를 opcode→size 룩업으로 바꿔 `[u32 0][u16 opcode][N바이트 0채움]`(N=위 표) 반환. static-info 계열 일괄 해결.
+- **다음**: server-dev 풀사이즈 0채움 구현 → live-qa 재검증(크래시 해소 후 전략맵 렌더 또는 다음 프론티어 코드).
+
 ## M3 어드미션 정지 해소 → 다음: 빈 0x0305가 클라 크래시, 최소 walker body 필요 (2026-07-10)
 
 - **진전**(`.omo/live-qa/m3-stratmap-final-20260710-0257/`): 어드미션 배선으로 0x0304 정지(freeze)는 해소. 그러나 서버가 보낸 **빈 0x0305(body 0바이트, `00000000 0305`)를 받은 즉시 클라 크래시** — VC++ 런타임 "abnormal program termination" 모달. 전략맵 미렌더. 실패 모드가 정지→크래시로 전진, 원인 0x0305 하나로 격리.
