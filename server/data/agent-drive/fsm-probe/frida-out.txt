@@ -1,0 +1,23 @@
+     ____
+    / _  |   Frida 17.11.0 - A world-class dynamic instrumentation toolkit
+   | (_| |
+    > _  |   Commands:
+   /_/ |_|       help      -> Displays the help system
+   . . . .       object?   -> Display information about 'object'
+   . . . .       exit/quit -> Exit
+   . . . .
+   . . . .   More info at https://frida.re/docs/home/
+   . . . .
+   . . . .   Connected to Local System (id=local)
+Attaching...
+hooked FSM_51a370
+hooked HIT_5015f0
+hooked MENU_502780
+hooked PREP_593cf0
+hooked SEL_593d90
+hooked RENDER_5946d0
+hooked CASE1C_51aded
+hooked CASE19_51ad73
+ready
+[Local::PID::45604 ]-> 
+Thank you for using Frida!

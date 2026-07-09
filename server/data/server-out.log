@@ -1,0 +1,2 @@
+{"ts":"2026-07-09T03:05:05.854Z","event":"server-listening","address":{"address":"127.0.0.1","family":"IPv4","port":47900}}
+{"event":"playable-runtime-ready","address":{"address":"127.0.0.1","family":"IPv4","port":47900},"dbPath":"E:\\logh7-revival\\server\\data\\logh7.sqlite","architecture":"3-tier-cqrs-orm"}
