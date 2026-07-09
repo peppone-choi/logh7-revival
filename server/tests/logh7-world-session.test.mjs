@@ -8,6 +8,10 @@ import { createWorldSession } from '../src/server/logh7-world-session.mjs';
 import {
   CODE_NOTIFY_MOVED_GRID,
   CODE_INFO_CHARACTER,
+  CODE_LOBBY_SESSION_LOGIN_OK,
+  CODE_SS_GAME_LOGIN_REQ,
+  CODE_SS_GAME_LOGIN_OK,
+  CODE_SS_CHARACTER_ID,
   readMsg32Code,
   msg32Body,
 } from '../src/server/logh7-world-records.mjs';
@@ -50,6 +54,44 @@ test('0x2009 create-pending (no character) returns 0x200a without inventing char
     () => world.enterWorld({ connectionId: 3 }),
     /create-pending/,
   );
+});
+
+test('existing-character session login returns 0x200a as message32 (not raw)', () => {
+  // M3: mps 트랜스포트는 인바운드 앱 메시지를 message32 유닛으로만 받는다.
+  // raw 0x200a 는 recv 콜백 도달 전 드롭 → 클라가 리다이렉트를 못 받아 침묵.
+  const world = createWorldSession();
+  const req = Buffer.alloc(10);
+  req.writeUInt16BE(0x2009, 0);
+  req.writeUInt32LE(1, 2);
+  req.writeUInt32LE(7, 6);
+  const login = world.handleSessionLogin({
+    connectionId: 1,
+    accountId: 'inei00',
+    inner: req,
+    character: { id: 7, unitId: 3, cell: 2588 },
+  });
+  assert.equal(login.createPending, false);
+  assert.equal(login.responseIsMsg32, true);
+  // message32: [u32LE 0][u16BE 0x200a][body]
+  assert.equal(login.responseInner.readUInt32LE(0), 0);
+  assert.equal(login.responseInner.readUInt16BE(4), CODE_LOBBY_SESSION_LOGIN_OK);
+});
+
+test('0x0205 SSGameLoginRequest batch emits 0x0206 before 0x0204', () => {
+  // M3: recv 필터가 0x0206(0x35837e) 미세팅 시 0x0204 를 드롭 → 0x0205 재트리거.
+  // 월드 진입 배치에서 0x0206 이 0x0204·나머지 레코드보다 먼저여야 한다.
+  const world = createWorldSession();
+  world.seedPlayer({ connectionId: 1, characterId: 5, unitId: 8, inWorld: false });
+  const req = Buffer.alloc(2);
+  req.writeUInt16BE(CODE_SS_GAME_LOGIN_REQ, 0);
+  const result = world.handleWorldInner({ connectionId: 1, accountId: 'a', inner: req });
+  assert.equal(result.kind, 'world-enter');
+  const codes = result.responses.map((r) => readMsg32Code(r.inner));
+  const i206 = codes.indexOf(CODE_SS_GAME_LOGIN_OK);
+  const i204 = codes.indexOf(CODE_SS_CHARACTER_ID);
+  assert.ok(i206 >= 0, '0x0206 present in batch');
+  assert.ok(i204 >= 0, '0x0204 present in batch');
+  assert.ok(i206 < i204, `0x0206 (@${i206}) must precede 0x0204 (@${i204})`);
 });
 
 test('authoritative move updates cell and notifies both sessions', () => {

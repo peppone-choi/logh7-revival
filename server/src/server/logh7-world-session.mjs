@@ -10,7 +10,6 @@ import {
   decodeMoveGridCommand,
   decodeGridChatCommand,
   decodeLobbySessionLoginReq,
-  buildLobbySessionLoginOkRaw,
   buildLobbySessionLoginOkInner,
   CODE_CMD_MOVE_GRID,
   CODE_CMD_GRID_CHAT,
@@ -112,12 +111,15 @@ export function createWorldSession({
     players.set(connectionId, player);
     logEvent('session-login', connectionId, { characterId, unitId, sessionId });
 
-    const redirect = buildLobbySessionLoginOkRaw(worldRedirect);
+    // M3 확정: mps 트랜스포트는 인바운드 앱 메시지를 message32 유닛으로만 받는다.
+    // raw 0x200a 는 recv 콜백 도달 전 드롭 → 클라가 리다이렉트를 못 받아 침묵(캐릭터 선택 잔류).
+    // 따라서 기존캐릭 경로도 message32 로 보낸다(create-pending 경로와 동일).
+    const redirect = buildLobbySessionLoginOkInner(worldRedirect);
     return {
       player,
       createPending: false,
-      responseInner: redirect, // raw 0x200a (로비 Input 경로)
-      responseIsMsg32: false,
+      responseInner: redirect, // message32 0x200a
+      responseIsMsg32: true,
     };
   }
 

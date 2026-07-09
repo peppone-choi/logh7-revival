@@ -184,21 +184,30 @@ test('playable server boots twice and serves login+world+move sequence', async (
     };
     assert.equal(decodeInnerCode(redirectFrames[0]), 0x200a, `boot ${boot} expected 0x200a redirect only`);
 
-    // 0x200 GameLogin (SS 게임로그인): 응답 순서 0x201 → 0x206 → 월드레코드
+    // 0x200 GameLogin (SS 게임로그인): 응답은 0x201 SSLoginOK 하나뿐 (씬 FSM 게이트).
+    // 월드레코드는 클라가 이어 보내는 0x205 SSGameLoginRequest 응답에서 흐른다 (RE 재조정).
     // inner: [u16BE 0x0200]["GIN7"][u16 0x0057 'W'] (RE: LG 로그인과 동일 포맷; 핸들러는 코드만 소비)
     const gameLogin = Buffer.from('020047494e370057', 'hex');
     socket.write(build0030Transport({ phase1Key, id: 4, inner: gameLogin, tables }));
-    // expect: 0x201 + world emits (0x206/204/323/325/301/f01/f03/315) = 9
-    const worldFrames = await readFrames(socket, 9, 8000);
-    assert.ok(worldFrames.length >= 9, `boot ${boot} world frames ${worldFrames.length}`);
+    const loginOkFrames = await readFrames(socket, 1, 4000);
+    assert.equal(decodeInnerCode(loginOkFrames[0]), 0x0201, `boot ${boot} 0x201 SSLoginOK only`);
+
+    // 0x205 SSGameLoginRequest → 0x206 SSGameLoginOK(0x35837e) + 월드레코드 8종.
+    // ★0x206 이 0x204·나머지 레코드보다 먼저 (recv 필터: 0x206 미세팅 시 0x204 드롭+0x205 재트리거).
+    const gameLoginReq = Buffer.alloc(2);
+    gameLoginReq.writeUInt16BE(0x0205, 0);
+    socket.write(build0030Transport({ phase1Key, id: 5, inner: gameLoginReq, tables }));
+    // expect: world emits (0x206/204/323/325/301/f01/f03/315) = 8
+    const worldFrames = await readFrames(socket, 8, 8000);
+    assert.ok(worldFrames.length >= 8, `boot ${boot} world frames ${worldFrames.length}`);
 
     const decodedCodes = worldFrames.map(decodeInnerCode);
-    const idx201 = decodedCodes.indexOf(0x0201);
     const idx206 = decodedCodes.indexOf(0x0206);
+    const idx204 = decodedCodes.indexOf(0x0204);
     const idx323 = decodedCodes.indexOf(0x0323);
-    // ★씬 전환 게이트: 0x201 SSLoginOK 가 반드시 첫 프레임, 0x206·월드레코드보다 먼저
-    assert.equal(idx201, 0, `boot ${boot} 0x201 must be first: ${decodedCodes.map((c) => c.toString(16))}`);
-    assert.ok(idx206 > idx201, `boot ${boot} 0x206 after 0x201`);
+    // ★월드 파이프라인 게이트: 0x206 SSGameLoginOK 가 첫 프레임, 0x204·레코드보다 먼저
+    assert.equal(idx206, 0, `boot ${boot} 0x206 must be first: ${decodedCodes.map((c) => c.toString(16))}`);
+    assert.ok(idx204 > idx206, `boot ${boot} 0x204 after 0x206`);
     assert.ok(idx323 > idx206, `boot ${boot} world records after 0x206`);
     assert.ok(decodedCodes.includes(0x0325), `boot ${boot} missing 0x0325`);
 
@@ -209,7 +218,7 @@ test('playable server boots twice and serves login+world+move sequence', async (
     moveInner.writeUInt16BE(0x0b01, 0);
     moveInner.writeUInt32LE(player.unitId, 2);
     moveInner.writeUInt32LE(2700 + boot, 6);
-    socket.write(build0030Transport({ phase1Key, id: 5, inner: moveInner, tables }));
+    socket.write(build0030Transport({ phase1Key, id: 6, inner: moveInner, tables }));
     const moveFrames = await readFrames(socket, 1, 3000);
     const moveBody = decryptBuffer(moveFrames[0].body.subarray(4), expandChildCodecKey(DECIPHER_KEY, tables));
     const moveParsed = parse0030Body(moveBody);

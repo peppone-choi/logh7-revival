@@ -286,7 +286,8 @@ export function runLoginWorldMpSequence({
       cell: 2588,
     },
   });
-  if (readInnerCode(session.responseInner) !== CODE_LOBBY_SESSION_LOGIN_OK) {
+  // 0x200a 는 message32 (M3 확정) — 코드가 offset 4 에 있다.
+  if (readMsg32Code(session.responseInner) !== CODE_LOBBY_SESSION_LOGIN_OK) {
     throw new Error('session login ok');
   }
 

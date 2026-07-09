@@ -325,47 +325,26 @@ export function createPlayableServer({
                 });
               }
             } else if (innerCode === CODE_SS_LOGIN_REQ) {
-              // 0x0200 GameLogin: 씬 전환 게이트다 (RE 확정).
-              // 0x200a 리다이렉트 후 같은 소켓으로 도착하며, 응답 순서는
-              //   0x0201 SSLoginOK  → 클라 씬 전환 플래그 0x35837d 세팅 (state 0x35 탈출)
-              //   0x0206 SSGameLoginOK + 월드레코드 7종 → 전략맵 렌더
-              // 0x0201 이 반드시 0x0206·월드레코드보다 먼저여야 한다.
+              // 0x0200 GameLogin: 씬 전환 FSM 게이트다 (RE 확정).
+              // message32 0x200a 리다이렉트 후 같은 소켓으로 도착. 여기서는 0x0201 만 응답한다.
+              //   0x0201 SSLoginOK → 클라 씬 FSM 통과(0x35837d/0x35837a) → 클라가 0x0205 송신
+              //   0x0205 응답에서 0x0206 SSGameLoginOK(0x35837e) → 0x0204 → 월드레코드 → 전략맵
+              // 월드레코드는 0x0205(handleWorldInner CODE_SS_GAME_LOGIN_REQ)에서 흐른다.
+              // 0x0200 에 인라인 푸시하면 0x0205 응답과 이중 송신되고, 0x0206-before-0x0204
+              // 순서를 클라 recv 필터에서 보장할 수 없다(0x0204 드롭 + 0x0205 재트리거 루프).
               if (!lobbyAccount && lastLobbyAccount) lobbyAccount = lastLobbyAccount;
-              // 1) 0x0201 SSLoginOK — body 1바이트 성공 플래그(=1). dispatcher 가 param_3[0] 소비.
-              let lastId = takeReplyId(parsed0030.id >>> 0);
+              const okId = takeReplyId(parsed0030.id >>> 0);
               const okInner = buildSsLoginOkInner({ status: 1 });
-              sendInner(socket, connectionId, lastId, okInner);
+              sendInner(socket, connectionId, okId, okInner);
               writeTrace({
                 event: 'ss-login-ok-sent',
                 connectionId,
-                replyId: lastId,
+                replyId: okId,
                 account: lobbyAccount,
                 requestInnerBytes: parsed0030.innerLen,
                 responseHex: okInner.toString('hex'),
+                note: 'world records deferred to 0x0205 SSGameLoginRequest',
               });
-              // 2) 0x0206 + 월드레코드: 0x2009 에서 등록된 플레이어를 월드에 진입.
-              //    (0x2009 는 0x200a 만 보내고 월드 진입은 여기로 이연 — RE 확정.)
-              const worldPlayer = resolvedWorld.getPlayer(connectionId);
-              if (worldPlayer && !worldPlayer.createPending && worldPlayer.characterId > 0) {
-                const entered = resolvedWorld.enterWorld({ connectionId });
-                for (const emit of entered.emits) {
-                  lastId = takeReplyId(lastId);
-                  sendInner(socket, connectionId, lastId, emit);
-                }
-                writeTrace({
-                  event: 'ss-world-enter-sent',
-                  connectionId,
-                  after: '0x0201',
-                  codes: entered.codes,
-                  frames: entered.emits.length,
-                });
-              } else {
-                writeTrace({
-                  event: 'ss-login-ok-no-world',
-                  connectionId,
-                  reason: worldPlayer ? 'create-pending' : 'no-session-player',
-                });
-              }
               // 로스터 트랜잭션은 C→S 0x1200 요청에만 응답 (중복 푸시 시 클라 루프/추첨 실패 유발).
             } else if (innerCode === CODE_TX_SIMPLE_DATA_BEGIN) {
               // 라이브 생성 경로: 클라가 0x1001 직후 C→S 0x1200(31B) 송신.
