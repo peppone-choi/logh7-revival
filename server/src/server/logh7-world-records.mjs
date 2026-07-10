@@ -45,6 +45,23 @@ export const CODE_INFO_UNIT = 0x0325; // S→C ResponseInformationUnit
 export const CODE_INFO_UNIT_BYTES = 0xce44; // 52804 fixed receive size
 export const CODE_INFO_UNIT_HEADER = 4; // [u16 count][u16 pad]
 export const CODE_INFO_UNIT_STRIDE = 0x58; // 88B element
+export const CODE_INFO_UNIT_MAX = 600; // 클라 파서 reject "information_size > 600" (0x763848)
+export const UNIT_BOATS_MAX = 10; // troop_units cap (FUN_00419ca0/FUN_00419fd0: "> 10")
+
+// 0x0325 유닛 레코드(0x58/88B) 필드 오프셋 — 요소 base B 상대. 레이아웃 P0(dual-parser proven,
+// FUN_00419ca0/FUN_00419fd0 동일 순서: *+0x1c=u32, *+0x20=u16, *+0x24=u8). 근거: 옛 proven
+// 5bd249c logh7-login-protocol.mjs UNIT_ELEM. id 만 role-pinned(앵커), 나머지 슬롯 value=P3.
+export const UNIT_ELEM = Object.freeze({
+  ID: 0x00, // u32 앵커 (== 0x0323 flagship+0x24, char↔unit 링크)
+  FACTION: 0x04, // u16
+  COMMANDER: 0x08, // u32
+  CELL: 0x0c, // u32 (row*100+col 전략 셀)
+  OWNER: 0x10, // u32
+  BOATS_COUNT: 0x14, // u8 (troop_units, cap 10, role-pinned)
+  BOATS_ARRAY: 0x18, // u32[] (role-pinned)
+  SPOT_RESOLVER_BASE: 0x40, // u32
+  MAP_SECTION: 0x48, // u16
+});
 export const CODE_NOTIFY_MOVED_GRID = 0x0b07; // S→C NotifyMovedGrid
 export const CODE_NOTIFY_MOVED_GRID_BYTES = 0x244; // 580
 export const CODE_NOTIFY_MOVED_GRID_MAX_UNITS = 70;
@@ -307,18 +324,49 @@ export function buildInformationCharacterInner({
 
 // ─── 0x0325 ResponseInformationUnit (최소 count+id) ───────────────────────────
 
-// 옛 proven 빌더(5bd249c buildInformationUnitRecordInner, fleets 미지정 minimal form) 바이트 충실 포팅.
-// 정본 minimal = count + unit[0].id 만 (commander/cell 미방출 — 옛 G164 world-load 경로가 그랬다).
-// cell/commander 파라미터는 호출부 호환 위해 받되 방출 안 함(옛 것과 byte-identical 유지).
-export function buildInformationUnitInner({ unitId = 1, unitCount = 1, cell = 0, commander = 0, wireEndian = 'be' } = {}) {
+// 옛 proven 빌더(5bd249c buildInformationUnitRecordInner) 바이트 충실 포팅.
+//
+// 두 형태:
+//   - minimal (fleets 미지정): count + unit[0].id 만. 옛 G164 world-load 경로와 byte-identical.
+//   - full (fleets 지정): 각 유닛의 0x58B 레코드를 UNIT_ELEM 레이아웃으로 채움. 빈 레지스트리
+//     (@0x7db3c8 activeCount=0) → 마커 클릭 null-deref 크래시 해소. fleets[0].id 는 반드시
+//     gridUnitId(=0x0323 flagship+0x24)여야 char↔unit 링크가 유지된다.
+// 프레이밍(count BE @0, unit[0] @ payload+4, 값 BE)은 라이브 검증된 현 관례 그대로 — full 도 동일.
+export function buildInformationUnitInner({
+  unitId = 1, unitCount = 1, cell = 0, commander = 0, wireEndian = 'be', fleets = null,
+} = {}) {
   const body = Buffer.alloc(CODE_INFO_UNIT_BYTES);
-  const count = Math.max(0, Math.min(unitCount, 600));
-  // header [u16 count][u16 pad] @0x00, unit[0].id @ payload+HEADER(4) (stride 0x58).
-  // count BE (1이 클라에서 1로 읽히게 — LE 는 256 팬텀). unit[0].id(+0x00)는 0x0323 flagship(+0x24)의
-  // 링크 대상 — "동일 바이트값" 되려면 둘 다 BE.
-  if (wireEndian === 'be') body.writeUInt16BE(count, 0);
-  else body.writeUInt16LE(count, 0);
-  writeWireU32(body, unitId, CODE_INFO_UNIT_HEADER + 0x00, wireEndian); // unit[0].id ★flagship 링크 대상
+  const writeU16 = (v, off) => (wireEndian === 'be' ? body.writeUInt16BE(v & 0xffff, off) : body.writeUInt16LE(v & 0xffff, off));
+  const list = Array.isArray(fleets) && fleets.length ? fleets : null;
+  if (!list) {
+    // minimal: header [u16 count][u16 pad] @0x00, unit[0].id @ payload+HEADER(4) (stride 0x58).
+    // count BE (1이 클라에서 1로 읽히게 — LE 는 256 팬텀). unit[0].id(+0x00)는 0x0323 flagship(+0x24)의
+    // 링크 대상 — "동일 바이트값" 되려면 둘 다 BE.
+    const count = Math.max(0, Math.min(unitCount, CODE_INFO_UNIT_MAX));
+    writeU16(count, 0);
+    writeWireU32(body, unitId, CODE_INFO_UNIT_HEADER + UNIT_ELEM.ID, wireEndian); // unit[0].id ★flagship 링크 대상
+    return buildMsg32Inner(CODE_INFO_UNIT, body);
+  }
+  // full: count + N개 0x58B 레코드. 고정 52804B 버퍼를 넘기지 않게 캡.
+  const count = Math.min(list.length, CODE_INFO_UNIT_MAX);
+  writeU16(count, 0);
+  for (let i = 0; i < count; i += 1) {
+    const base = CODE_INFO_UNIT_HEADER + i * CODE_INFO_UNIT_STRIDE;
+    if (base + CODE_INFO_UNIT_STRIDE > body.length) break;
+    const f = list[i] ?? {};
+    writeWireU32(body, f.id ?? 0, base + UNIT_ELEM.ID, wireEndian); // 앵커(P0)
+    writeU16(f.faction ?? 0, base + UNIT_ELEM.FACTION);
+    writeWireU32(body, f.commander ?? 0, base + UNIT_ELEM.COMMANDER, wireEndian);
+    writeWireU32(body, f.cell ?? 0, base + UNIT_ELEM.CELL, wireEndian);
+    writeWireU32(body, f.owner ?? 0, base + UNIT_ELEM.OWNER, wireEndian);
+    const boats = Array.isArray(f.boats) ? f.boats.slice(0, UNIT_BOATS_MAX) : [];
+    body.writeUInt8(boats.length & 0xff, base + UNIT_ELEM.BOATS_COUNT); // troop_units count (role-pinned)
+    for (let b = 0; b < boats.length; b += 1) {
+      writeWireU32(body, boats[b] ?? 0, base + UNIT_ELEM.BOATS_ARRAY + b * 4, wireEndian);
+    }
+    writeWireU32(body, f.spotResolverBase ?? 0, base + UNIT_ELEM.SPOT_RESOLVER_BASE, wireEndian);
+    writeU16(f.mapSection ?? 0, base + UNIT_ELEM.MAP_SECTION);
+  }
   return buildMsg32Inner(CODE_INFO_UNIT, body);
 }
 
@@ -809,6 +857,8 @@ export function buildWorldEntryInners({
   includeEmptyGrid = true,
   placeUnitCellOnGrid = true,
   officerCount = 0,
+  // 0x0325 유닛 레지스트리 충전용 전체 함대 목록(플레이어 unit[0] + NPC). 미지정 시 minimal(플레이어 1).
+  fleets = null,
 } = {}) {
   if (!Number.isInteger(characterId) || characterId <= 0) {
     throw new Error('buildWorldEntryInners: characterId required (no default id=1 / emperor trap)');
@@ -841,6 +891,7 @@ export function buildWorldEntryInners({
       unitCount: 1,
       cell: unitCell,
       commander: characterId,
+      fleets, // 지정 시 full 레코드(레지스트리 충전), 미지정 시 minimal
     }),
   ];
   return emits;
@@ -895,6 +946,8 @@ export function buildWorldReadyPushInners({
   officerCount = 0,
   // LOGH_STRAT_GRID_EARLY: begin 전에 0x0313 grid-type 를 조기 push(reactive 0x0312 응답과 합쳐 ×2).
   includeEarlyGridType = false,
+  // 0x0325 유닛 레지스트리 충전용 전체 함대 목록(begin/end 사이 refresh). 미지정 시 minimal.
+  fleets = null,
 } = {}) {
   if (!Number.isInteger(unitId) || unitId <= 0) {
     throw new Error('buildWorldReadyPushInners: unitId required (no synthetic id)');
@@ -915,7 +968,7 @@ export function buildWorldReadyPushInners({
     // seat count@0x24c 최소 1 (commander 자신 1행) — 0 이면 C002 유닛리스트 미렌더.
     officerCount: Math.max(1, officerCount),
   });
-  const makeUnit = () => buildInformationUnitInner({ unitId, unitCount: 1, cell: unitCell, commander });
+  const makeUnit = () => buildInformationUnitInner({ unitId, unitCount: 1, cell: unitCell, commander, fleets });
   const hasChar = Number.isInteger(commander) && commander > 0;
 
   const inners = [];
@@ -973,6 +1026,8 @@ export function buildGridInitializeSpawnInners({
   // 여기에 galaxy 데이터를 실어야 마커가 스테이징에 남는다(SPACE-only 면 galaxy 팔레트를 덮어씀).
   paletteObjects = null,
   staticCells = null,
+  // 0x0325 유닛 레지스트리 충전용 전체 함대 목록(플레이어 unit[0] + NPC). 미지정 시 minimal(플레이어 1).
+  fleets = null,
 } = {}) {
   if (!Number.isInteger(characterId) || characterId <= 0) {
     throw new Error('buildGridInitializeSpawnInners: characterId required (no default id=1 / emperor trap)');
@@ -983,8 +1038,9 @@ export function buildGridInitializeSpawnInners({
   const inners = [];
   // 1) 0x0204 선택 캐릭터 id (self-match 앵커: 0x0323 record[0](+0x00 BE)와 바이트 동일)
   inners.push(buildSsCharacterIdInner({ characterId }));
-  // 2) 0x0325 유닛 테이블 (unit gate 충족: count≥1, unit[0].id = flagship 링크)
-  inners.push(buildInformationUnitInner({ unitId, unitCount: 1, cell: unitCell, commander: characterId }));
+  // 2) 0x0325 유닛 테이블 (unit gate 충족: count≥1, unit[0].id = flagship 링크).
+  //    fleets 지정 시 full 레코드 N개(레지스트리 충전 → 마커 클릭 null-deref 해소).
+  inners.push(buildInformationUnitInner({ unitId, unitCount: 1, cell: unitCell, commander: characterId, fleets }));
   // 3) 0x0323 캐릭터 레코드 (char count 복구: 0x0f01 reset 후 1 로 되돌림. flagship(+0x24)=unitId 링크)
   inners.push(buildInformationCharacterInner({
     characterId,

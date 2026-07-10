@@ -29,6 +29,7 @@ import {
   getStrategicGridCells,
   getStrategicPaletteObjects,
 } from './logh7-galaxy-placement.mjs';
+import { buildDeploymentFleetList } from './logh7-deployment-units.mjs';
 
 /**
  * @typedef {{
@@ -216,12 +217,22 @@ export function createWorldSession({
     }
     const seedAbilities = Array.isArray(seed?.ability8) ? seed.ability8 : null;
 
+    // 0x0325 유닛 레지스트리 충전: 플레이어 unit[0] + NPC 초기 배치 함대(제국12+동맹12).
+    // 빈 레지스트리(@0x7db3c8 activeCount=0) → 마커 클릭 null-deref 크래시 해소.
+    const fleets = buildDeploymentFleetList({
+      unitId: p.unitId,
+      cell: p.cell,
+      characterId: p.characterId,
+      faction: seed?.power ?? p.power ?? 0,
+    });
+
     const emits = buildWorldEntryInners({
       characterId: p.characterId,
       gridUnitId: p.unitId,
       unitCell: p.cell,
       power: seed?.power ?? p.power ?? 0,
       spot: 1,
+      fleets,
       lastname: seed?.lastname ?? p.lastname ?? '',
       firstname: seed?.firstname ?? p.firstname ?? '',
       face: Number.isInteger(seed?.face) ? seed.face : (Number.isInteger(p.face) ? p.face : 0),
@@ -427,6 +438,14 @@ export function createWorldSession({
           // 정본 갤럭시 팔레트/셀 — 스폰 경로가 SPACE-only 로 스테이징을 덮어 마커를 지우지 않게 한다.
           paletteObjects: getStrategicPaletteObjects(),
           staticCells: getStrategicGridCells([{ cell: player.cell, value: 1 }]),
+          // 0x0325 유닛 레지스트리 충전(플레이어 unit[0] + NPC 함대) — 그리드진입 시 레지스트리를
+          // 실 유닛으로 채워 마커/오브젝트 클릭 null-deref(FUN_004c9a80) 크래시를 해소한다.
+          fleets: buildDeploymentFleetList({
+            unitId: player.unitId,
+            cell: player.cell,
+            characterId: player.characterId,
+            faction: player.power ?? 0,
+          }),
         });
         logEvent('grid-init-spawn', connectionId, { codes: listWorldEntryCodes(spawnInners) });
         return {
