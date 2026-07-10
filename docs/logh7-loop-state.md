@@ -2,7 +2,18 @@
 
 > **▶ RESUME (2026-07-10, 컨텍스트 압축 지점):** M1/M0.5/M2 완료. M3 = 원본 클라가 로그인~월드모드(NOW LOADING)까지 크래시 없이 도달, **전략맵 렌더만 미완**. 근본원인(0x0323 = packed BIG-ENDIAN) 확정 후 **서버 재작성 완료·커밋 64e5fd21 푸시됨** — 아래 첫 항목 참조. **다음 액션:** live-qa가 실클라+Frida로 전략맵 렌더 검증 중(struct[0x24]==unitId 링크·팬텀 유닛 없음·NOW LOADING 해제 스크린샷). 검증 하네스: `_m2_launch.mjs`+시드 store.json / `logh7_drive_robust.py login` / `_m2_click.py`(게임개시 125,191·카드 655,305). 서버 테스트 209/209. 규칙: 일 단위마다 커밋·푸시, 라이브 증거 없이 완료주장 금지.
 
-## ⚖️ M3 objTable 게이트 특정 + packed-BE vs aligned-LE 충돌 → 실측으로 방향 확정 중 (2026-07-10)
+## ✅ M3 방향 확정(실측): aligned-LE + 0x0204/0x0323 self-id 바이트오더 정합 — packed-BE는 오류 (2026-07-10)
+
+**live-qa 실측(`.omo/live-qa/m3-selfmatch-20260710-123433/frida-events.jsonl`)이 방향을 단정.** disp0323이 훅한 건 디스패처 FUN_004ba2b0, arg1=wire 버퍼.
+
+- **실측 wire 버퍼(0x53e4b10)**: id@0x00=`01 00 00 00`(LE 1), spot@0x1c=`01 00 00 00`, spot_owner@0x20=0, **flagship@0x24=`01 00 00 00`(LE 1)**, name_len@0x28=0, name@0x2a="796rd…"(UTF-16LE). → **aligned-LITTLE-ENDIAN 레이아웃**(flagship@0x24, packed의 0x20 아님). 클라가 정상 dispatch·파싱(id=1, flag=1).
+- **self-match 실패 실측**: self-id(clientBase+0x3584a0)=`00 00 00 01`(selLE=16777216), record[0]=`01 00 00 00`(idLE=1) → native 비교 16777216≠1 → mode-0 0회(c2c80_modes=[1,1,1,1,1,2]) → objTable=0x0 → NOW LOADING.
+- **판정**: 클라 0x0323 정본=**aligned-LE**(flagship@wire 0x24). **sentinel A/B의 packed-BE 해석은 오류**(그 런은 -4 드리프트를 엔디안으로 오독). re-analyst decompile(aligned-LE)과 이 실측 wire 버퍼 오프셋이 일치 — 2독립 증거.
+- **테스트 서버는 stale**: 실측 버퍼가 aligned-LE인데 현재 소스는 packed-BE(:242 `writeUInt32BE`) → 하네스가 구 코드 실행. 내 커밋 64e5fd21(packed-BE)은 **미검증·오류**.
+- **수정(방향 B)**: 0x0323/0x0325를 aligned-LE로 되돌린다(64e5fd21 revert). 0x0204는 이미 LE(:179) 유지 → self-id(LE 1)==record[0](LE 1) → self-match 통과. flagship@0x24 LE == unit id(wire+0x04) LE → 링크. **불변식 테스트 추가**: 0x0204 char-id 바이트 == 0x0323 record[0] 바이트.
+- 다음: server-dev revert+테스트→커밋→live-qa **현재 코드 실행 확인**하며 재검증(self-id==record[0], objTable slot0≠0, 전략맵 렌더).
+
+## ⚖️ (경과) objTable 게이트 특정 + packed-BE vs aligned-LE 충돌 → 실측으로 심판 (2026-07-10)
 
 **re-analyst 정적 RE(`docs/logh7-objtable-gate-re.md`)가 게이트를 특정했으나 결론이 sentinel A/B와 충돌 → live-qa 실측으로 심판 중.**
 
