@@ -2,7 +2,16 @@
 
 > **▶ RESUME (2026-07-10, 컨텍스트 압축 지점):** M1/M0.5/M2 완료. M3 = 원본 클라가 로그인~월드모드(NOW LOADING)까지 크래시 없이 도달, **전략맵 렌더만 미완**. 근본원인(0x0323 = packed BIG-ENDIAN) 확정 후 **서버 재작성 완료·커밋 64e5fd21 푸시됨** — 아래 첫 항목 참조. **다음 액션:** live-qa가 실클라+Frida로 전략맵 렌더 검증 중(struct[0x24]==unitId 링크·팬텀 유닛 없음·NOW LOADING 해제 스크린샷). 검증 하네스: `_m2_launch.mjs`+시드 store.json / `logh7_drive_robust.py login` / `_m2_click.py`(게임개시 125,191·카드 655,305). 서버 테스트 209/209. 규칙: 일 단위마다 커밋·푸시, 라이브 증거 없이 완료주장 금지.
 
-## ⛔ M3 G164 "이동"은 회귀 — 클라가 0x0f02 미도달. "이동" 아닌 "추가"로 재수정 (2026-07-10)
+## 🧱 M3 렌더 하드 월: objTable+그리드셀 다 충족해도 NOW LOADING 미해제 — 로딩 해제 트리거 미확정 (2026-07-10)
+
+**커밋 3a29c055(0x0314 복원+그리드셀) 라이브(`m3-grid-171112`, 프로브 attach 성공 gamemode=0):**
+- **다 충족**: self-match 통과, mode-0 발화(param2=0), **objTable slot0=0x6d616e01(채워짐)**, 그리드 셀 배치(0x0315 value=1), charCount=1, sel=1, ucnt=1.
+- **그런데 NOW LOADING 미해제**. 클라 수신 프레임(conn3): 0x0304→admission, 0x0306→admission, 0x0314→world-ready push(responseCount 6, 0x0f03 포함). **그 후 클라가 아무 요청도 안 보내고 정지**(48s 후 ECONNRESET=하네스 종료). 즉 데이터(objTable·grid)는 다 있는데 로딩 화면이 안 걷힘.
+- **미확정 = NOW LOADING→전략맵 전환 트리거.** FUN_004c2a80(objTable)만으론 부족. 로딩 상태머신이 무엇을 더 기다리는지(추가 메시지? 특정 플래그? admission walk 완주 0x0308~0x031c?) RE 필요.
+- **이 세션 M3 게이트 통과 이력(15+ 라운드)**: 로그인→로비→캐릭터→월드모드 진입·크래시제거·SS재접속·message32·account재바인딩·어드미션핸드셰이크·static-info over-read·world-init핸드셰이크·world-ready push·self-match(0x0204/0x0323 엔디안)·flagship링크·objTable·그리드셀. **남은 것 = 로딩 해제 1개.**
+- **결정 대기(사용자)**: (A) 로딩 해제 트리거 집중 RE, (B) M3 렌더 보류·타 전선 진행(한글화 구현 RE완료됨/문서), (C) 기타.
+
+## ⛔ (경과) M3 G164 "이동" 회귀 → "추가"로 재수정 (2026-07-10)
 
 **G164 커밋 e5d825e8(world-ready push를 0x0314→0x0f02 이동) 라이브(`m3-g164-163845`) = 회귀.**
 - **회귀**: 클라 수신 프레임이 0x0314까지만(0x0f02 없음). world-ready push를 0x0314에서 빼자 **클라가 0x0f02로 진행 못 함**. 직전 2cc17beb는 0x0f02 도달·mode-0·objTable 채웠는데, 이동이 그 진행을 깸.
