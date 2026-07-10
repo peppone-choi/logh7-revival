@@ -17,6 +17,8 @@ import {
   CODE_CMD_EXTENSION_CHARGE,
   CODE_CMD_GENERATE_CHARGE,
   CODE_LOBBY_CMD_DELETE_CHAR,
+  CODE_LOBBY_REQ_INFO_CHAR,
+  CODE_LOBBY_RESP_INFO_CHAR,
   encodeGenerateCharOk,
   decodeGenerateCharReq,
 } from '../src/server/logh7-character-codec.mjs';
@@ -171,6 +173,32 @@ test('0x1008 생성 후 store에 캐릭터 영속', () => {
   assert.equal(chars[0].lastname, 'Reinhard');
   assert.equal(chars[0].firstname, 'Lohengramm');
   assert.equal(chars[0].power, 2);
+});
+
+test('0x1008 OK body는 정확히 128B packed 스트림 (§3.2)', () => {
+  const store = makeTmpStore();
+  const resp = handleLobbyInner(makeReinhard(), 'acc1', store);
+  // message32 = [u32 0][u16 0x1008][128B body]
+  assert.equal(readResponseCode(resp), CODE_CMD_GENERATE_CHARGE);
+  assert.equal(responseBody(resp).length, 128);
+});
+
+test('0x1008 생성 → 이후 0x2003 재요청의 0x2004 count가 1로 증가 (로비 잠금 해제)', () => {
+  const store = makeTmpStore();
+
+  // 생성 전: 빈 계정 → 0x2004 count(body[0]) = 0
+  const before = handleLobbyInner(makeInner(CODE_LOBBY_REQ_INFO_CHAR), 'acc1', store);
+  assert.equal(readResponseCode(before), CODE_LOBBY_RESP_INFO_CHAR);
+  assert.equal(responseBody(before)[0], 0, '생성 전 information_count는 0이어야 함');
+
+  // 0x1008 커스텀 생성 (파싱→영속)
+  handleLobbyInner(makeReinhard(), 'acc1', store);
+  assert.equal(store.getCharacters('acc1').length, 1);
+
+  // 생성 후: 0x2003 재요청 → 0x2004 body[0] = information_count = 1
+  const after = handleLobbyInner(makeInner(CODE_LOBBY_REQ_INFO_CHAR), 'acc1', store);
+  assert.equal(readResponseCode(after), CODE_LOBBY_RESP_INFO_CHAR);
+  assert.equal(responseBody(after)[0], 1, '생성 후 information_count는 1이어야 로비 잠금이 풀림');
 });
 
 // ─── 0x2008 캐릭터 삭제 ────────────────────────────────────────────────────────
