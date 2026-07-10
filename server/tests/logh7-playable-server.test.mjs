@@ -238,13 +238,12 @@ test('playable server boots twice and serves login+world+move sequence', async (
     );
 
     // ★send-ring 순차 검증: 클라가 요청-응답을 하나씩 요청 → 매칭 응답이 ring 배수.
-    //   0x0300→0x0301, 0x0f00→0x0f01, 0x0f02→0x0f03 (각 단일 프레임).
-    // 전체 트랜스포트 경유로 각 요청이 정확히 매칭 응답을 받는지 확인(라우터가 lobby 로 새지 않음).
+    //   0x0300→0x0301, 0x0f00→0x0f01 (각 단일 프레임). 0x0f02 는 옛 G164 정본대로 스폰 버스트를
+    //   방출하므로 아래에서 별도 검증한다(0x0f00 이 0x0f02 보다 먼저여야 count 복구 순서가 성립).
     let reactiveId = 56;
     for (const [reqCode, respCode] of [
       [0x0300, 0x0301],
       [0x0f00, 0x0f01],
-      [0x0f02, 0x0f03],
     ]) {
       const req = Buffer.alloc(2);
       req.writeUInt16BE(reqCode, 0);
@@ -280,29 +279,40 @@ test('playable server boots twice and serves login+world+move sequence', async (
       }
     };
 
-    // 0x0314 → 0x0315 + world-ready push(0x0b09 → 0x0325 + 0x0323 → 0x0b0a → 0x0f03, ~55KB).
-    //   M3 정합 수정: begin/end 사이에서 char.flagship(+0x24)==unit id(+0x04) 링크가 성립하면
-    //   FUN_004c2a80 이 플레이어 오브젝트를 빌드한다 — 각 레코드 1회로 충분(이전 P7 ×2 는 타이밍
-    //   추측·중복 스텁이라 되돌림). 대용량 버스트라 여러 TCP 청크로 쪼개지므로 단일 파서로
-    //   0x0f03(push 종료)까지 수집한다.
+    // 0x0314 → bare reactive 0x0315 (스폰 push 는 0x0f02 로 이동 — 옛 G164 복원).
     const gridReq = Buffer.alloc(2);
     gridReq.writeUInt16BE(0x0314, 0);
     socket.write(build0030Transport({ phase1Key, id: reactiveId, inner: gridReq, tables }));
     reactiveId += 1;
+    const gridFrames = await readFrames(socket, 1, 4000);
+    assert.equal(
+      decodeInnerCode(gridFrames[0]),
+      0x0315,
+      `boot ${boot} 0x0314 send-ring must yield bare 0x0315 (no push)`,
+    );
+
+    // 0x0f02 RequestGridInitialize → 옛 G164 플레이어 스폰 버스트:
+    //   0x0204 → 0x0325 → 0x0323 → 0x0313 → 0x0315 → 0x0f03(맨 마지막, ~58KB).
+    //   직전 0x0f01 world-init reset 이 char count 를 0 으로 지웠으므로 여기서 0x0323 을 재전송해
+    //   count 를 1 로 복구하고, 0x0f03 이 gridInitialized 를 flip 해 렌더를 트리거한다. 대용량 버스트라
+    //   여러 TCP 청크로 쪼개지므로 단일 파서로 0x0f03(스폰 종료)까지 수집한다.
+    const gridInitReq = Buffer.alloc(2);
+    gridInitReq.writeUInt16BE(0x0f02, 0);
+    socket.write(build0030Transport({ phase1Key, id: reactiveId, inner: gridInitReq, tables }));
+    reactiveId += 1;
     const pushFrames = await collectUntilCode(0x0f03, 10000);
     const pushCodes = pushFrames.map(decodeInnerCode);
-    assert.equal(pushCodes[0], 0x0315, `boot ${boot} 0x0314 send-ring must yield 0x0315 first`);
-    // 계약 순서: begin → [0x0325, 0x0323](각 1회) → 0x0b0a(end) → 0x0f03. begin/end 사이 검증.
-    const iBeg = pushCodes.indexOf(0x0b09);
-    const iEnd = pushCodes.indexOf(0x0b0a);
-    assert.ok(iBeg > 0 && iEnd > iBeg, `boot ${boot} grid-enter begin/end present`);
+    // G164 순서: 0x0204(선두) → 0x0325 → 0x0323 → grid extras → 0x0f03(맨 마지막, 각 1회).
+    assert.equal(pushCodes[0], 0x0204, `boot ${boot} 0x0f02 spawn must start with 0x0204`);
+    assert.equal(pushCodes[pushCodes.length - 1], 0x0f03, `boot ${boot} 0x0f03 must be LAST`);
+    assert.equal(pushCodes.filter((c) => c === 0x0f03).length, 1, `boot ${boot} 0x0f03 exactly once`);
     assert.equal(pushCodes.filter((c) => c === 0x0325).length, 1, `boot ${boot} 0x0325 exactly once`);
     assert.equal(pushCodes.filter((c) => c === 0x0323).length, 1, `boot ${boot} 0x0323 exactly once`);
-    for (let k = 0; k < pushCodes.length; k += 1) {
-      if (pushCodes[k] === 0x0325 || pushCodes[k] === 0x0323) {
-        assert.ok(k > iBeg && k < iEnd, `boot ${boot} refresh frame @${k} between begin/end`);
-      }
-    }
+    // 0x0325 unit gate 가 0x0323(count 복구)보다 먼저.
+    assert.ok(
+      pushCodes.indexOf(0x0325) < pushCodes.indexOf(0x0323),
+      `boot ${boot} 0x0325 must precede 0x0323`,
+    );
     // ★정합(TCP 레벨, aligned BE): 0x0323 flagship(body+0x24 BE) == 0x0325 unit[0].id(body+0x04 BE), count≥1.
     const decodeInnerBody = (fr) => {
       const dec = decryptBuffer(fr.body.subarray(4), expandChildCodecKey(DECIPHER_KEY, tables));

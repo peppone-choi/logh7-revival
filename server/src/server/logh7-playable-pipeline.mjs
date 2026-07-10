@@ -316,7 +316,10 @@ export function runLoginWorldMpSequence({
   if (msg32Body(unitRec).length !== 0xce44) throw new Error('0x0325 size');
 
   // reactive 검증: 클라 후속 요청 → 매칭 응답이 send-ring 엔트리 pop (순차 배수).
-  //   0x0300→0x0301, 0x0f00→0x0f01, 0x0f02→0x0f03, 0x0314→0x0315
+  //   0x0300→0x0301, 0x0f00→0x0f01, 0x0f02→(G164 스폰…0x0f03 last), 0x0314→0x0315
+  // ★0x0f02(RequestGridInitialize)는 옛 G164 정본대로 첫 요청에서 플레이어 스폰
+  //   (0x0204+0x0325+0x0323 + grid extras)을 방출하고 0x0f03 을 맨 마지막에 둔다. 나머지 어드미션
+  //   코드는 단일 응답(응답 code == req+1)이다.
   const reactiveWorldCodes = [];
   for (const [reqCode, respCode] of [
     [0x0300, 0x0301],
@@ -330,9 +333,23 @@ export function runLoginWorldMpSequence({
     if (!res || res.responses.length === 0) {
       throw new Error(`reactive 0x${reqCode.toString(16)} not routed (leaks to lobby → stall)`);
     }
-    const got = readMsg32Code(res.responses[0].inner);
-    if (got !== respCode) {
-      throw new Error(`reactive 0x${reqCode.toString(16)} → 0x${got.toString(16)}, want 0x${respCode.toString(16)}`);
+    const codesOut = res.responses.map((r) => readMsg32Code(r.inner));
+    if (reqCode === 0x0f02) {
+      // G164 스폰: 0x0204/0x0325/0x0323 이 앞서고 0x0f03 이 맨 마지막.
+      const last = codesOut[codesOut.length - 1];
+      if (last !== 0x0f03) {
+        throw new Error(`reactive 0x0f02 last code 0x${last.toString(16)}, want 0x0f03 (must be LAST)`);
+      }
+      for (const need of [0x0204, 0x0325, 0x0323]) {
+        if (!codesOut.includes(need)) {
+          throw new Error(`reactive 0x0f02 G164 spawn missing 0x${need.toString(16)}`);
+        }
+      }
+    } else {
+      const got = codesOut[0];
+      if (got !== respCode) {
+        throw new Error(`reactive 0x${reqCode.toString(16)} → 0x${got.toString(16)}, want 0x${respCode.toString(16)}`);
+      }
     }
     reactiveWorldCodes.push(respCode);
   }

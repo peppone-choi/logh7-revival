@@ -17,9 +17,10 @@ import {
   CODE_SS_GAME_LOGIN_REQ,
   listWorldEntryCodes,
   buildAdmissionResponseInner,
-  buildWorldReadyPushInners,
+  buildGridInitializeSpawnInners,
   readMsg32Code,
   CODE_REQ_STATIC_GRID,
+  CODE_REQ_GRID_INIT,
 } from './logh7-world-records.mjs';
 
 /**
@@ -349,26 +350,24 @@ export function createWorldSession({
       };
     }
 
-    // 0x0314(RequestStaticInformationGrid) 처리: reactive 0x0315 응답 + world-ready push 시퀀스.
+    // 0x0f02(RequestGridInitialize) 처리: 옛 G164 플레이어 스폰 주입.
     //
-    // 근거: docs/logh7-loop-state.md "M3 블로커 해법 발견: 서버가 world-ready 시퀀스를 PUSH해야" +
-    //   restored-from-git/logh7-live-world-entry-2026-06-23.md:9 성공 트레이스.
-    // 클라는 실 0x0323+유효 그리드 상태에서 0x0304/0x0306/0x0314 3요청만 하고 NOW LOADING 에서
-    // 정지(더는 0x0f00/0x0f02/0x0f06 미요청) — 서버의 그리드진입/월드초기화 push 대기. 클라 0x0314
-    // 직후(=0x0315 송신 직후) 계약 순서(render-contract L102)로 push:
-    //   0x0b09(begin) → 0x0325(유닛) + 0x0323(캐릭터 refresh) → 0x0b0a(end) → 0x0f03(=트레이스 "0x0f02").
-    // 계약 핵심: 0x0325/0x0323 refresh 는 반드시 begin/end **사이**. 0x0f03 은 그 뒤(조기 push 크래시).
-    if (code === CODE_REQ_STATIC_GRID) {
-      const gridResp = buildAdmissionResponseInner(code); // 0x0315 (empty static grid)
-      const responses = [{ targets: [connectionId], inner: gridResp, isMsg32: true }];
+    // 근거: 5bd249c logh7-login-session.mjs line 2095~ G164 스폰 로직(정본) +
+    //   buildGridInitializeSpawnInners JSDoc.
+    // 첫 0x0f02 에서 플레이어 스폰(0x0204 + 0x0325 + 0x0323)을 방출하고 grid extras(0x0313 + 0x0315
+    // 플레이어 함대 cell) 를 이어, 0x0f03(GridInitialize_OK) ack 을 맨 마지막에 둔다.
+    //   - 직전 0x0f01 world-init reset 이 char count(client+0x36a5dc)를 0 으로 지운다. 여기서 0x0323 을
+    //     (재)전송해야 count 가 1 로 복구돼 HUD 렌더 전까지 살아남는다. 0x0f03 이 gridInitialized 를 flip →
+    //     FUN_004c2a80 이 count=1(0x0325 unit gate 충족)로 PLAYER_INFO 재빌드 → 크래시 스킵 → 렌더.
+    // 실 유닛을 보유한 in-world 플레이어의 첫 0x0f02 에만 주입(합성 유닛 금지, 재요청은 plain 0x0f03).
+    if (code === CODE_REQ_GRID_INIT) {
       const player = players.get(connectionId);
-      // 실 유닛을 보유한 in-world 플레이어에게만 push(합성 유닛 금지). 없으면 bare 0x0315 폴백.
-      if (player && player.unitId > 0 && player.characterId > 0) {
-        const readyInners = buildWorldReadyPushInners({
+      if (player && player.unitId > 0 && player.characterId > 0 && !player.gridInitSpawned) {
+        player.gridInitSpawned = true;
+        const spawnInners = buildGridInitializeSpawnInners({
+          characterId: player.characterId,
           unitId: player.unitId,
           unitCell: player.cell,
-          commander: player.characterId,
-          // 0x0323 refresh(begin/end 사이): world-enter 와 동일하게 플레이어 실 시드 필드 전달.
           power: player.power ?? 0,
           spot: 1,
           lastname: player.lastname ?? '',
@@ -376,16 +375,31 @@ export function createWorldSession({
           face: Number.isInteger(player.face) ? player.face : 0,
           rank: Number.isInteger(player.rank) ? player.rank : 0,
           officerCount: Number.isInteger(player.officerCount) ? player.officerCount : 0,
-          includeEarlyGridType: stratGridEarly,
         });
-        for (const inner of readyInners) {
-          responses.push({ targets: [connectionId], inner, isMsg32: true });
-        }
-        logEvent('world-ready-push', connectionId, {
-          codes: listWorldEntryCodes(readyInners),
-        });
+        const responses = spawnInners.map((inner) => ({ targets: [connectionId], inner, isMsg32: true }));
+        logEvent('grid-init-spawn', connectionId, { codes: listWorldEntryCodes(spawnInners) });
+        return { kind: 'grid-init-spawn', reqCode: code, responses };
       }
-      return { kind: 'admission-world-ready', reqCode: code, responses };
+      // 스폰 대상 아님(플레이어 없음 or 이미 스폰) → plain 0x0f03.
+      const okInner = buildAdmissionResponseInner(code);
+      return {
+        kind: 'admission',
+        reqCode: code,
+        respCode: readMsg32Code(okInner),
+        responses: [{ targets: [connectionId], inner: okInner, isMsg32: true }],
+      };
+    }
+
+    // 0x0314(RequestStaticInformationGrid) 처리: reactive 0x0315 응답(빈 static grid).
+    // world-ready 스폰 push 는 0x0314 가 아니라 0x0f02(G164)로 이동했다 — 위 CODE_REQ_GRID_INIT 참조.
+    if (code === CODE_REQ_STATIC_GRID) {
+      const gridResp = buildAdmissionResponseInner(code); // 0x0315 (empty static grid)
+      return {
+        kind: 'admission',
+        reqCode: code,
+        respCode: readMsg32Code(gridResp),
+        responses: [{ targets: [connectionId], inner: gridResp, isMsg32: true }],
+      };
     }
 
     // 월드 진입 후 어드미션 핸드셰이크 (NOW LOADING 해제).

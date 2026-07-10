@@ -936,6 +936,81 @@ export function buildWorldReadyPushInners({
   return inners;
 }
 
+// ─── G164 grid-init 스폰 시퀀스 (0x0f02 RequestGridInitialize 핸들러용) ─────────
+//
+// 근거: 5bd249c server/src/server/logh7-login-session.mjs line 2095~ G164 스폰 로직(정본).
+//
+// 옛 라이브 확정 타이밍: 플레이어 스폰(0x0204 + 0x0325 + 0x0323)을 0x0f02(RequestGridInitialize)
+// 핸들러에서 방출하고, 0x0f03(GridInitialize_OK) ack 을 맨 마지막에 둔다.
+//   - 이유: 직전 0x0f01(ResponseWorldInitialize_OK) world-init reset 이 char count(client+0x36a5dc)를
+//     0 으로 지운다. 그래서 0x0323 을 0x0f02 에서 (재)전송해야 count 가 1 로 복구돼 HUD 렌더 전까지
+//     살아남는다. 0x0f03 이 gridInitialized 를 flip → FUN_004c2a80 이 PLAYER_INFO 를 count=1
+//     (0x0325 가 unit gate 충족)로 재빌드 → FUN_004c7290 non-null → [0x80] 크래시 스킵 → 렌더.
+//   - 순서: (0x0204, 0x0325, 0x0323) 먼저 → grid extras(0x0313 grid-type + 0x0315 cell, 플레이어
+//     함대 cell 포함) → 0x0f03 맨 마지막.
+//
+// grid extras(옛 fleet-only 폴백): 함대를 klass-3 마커로 박지 않는다(오브젝트테이블에 함대 클래스가
+// 없어 klass-3 은 가짜 성계 dot 로 오인 렌더됨). 대신 grid-type 에 SPACE(항행 가능) 객체 하나를 두고,
+// 셀그리드의 플레이어 함대 cell 한 칸을 SPACE 로 채운다. 함대 자체 렌더/선택은 0x0325 unit 레코드가 담당.
+export function buildGridInitializeSpawnInners({
+  characterId,
+  unitId,
+  unitCell = 2588,
+  power = 0,
+  spot = 1,
+  lastname = '',
+  firstname = '',
+  face = 0,
+  rank = 0,
+  abilities = null,
+  officerCount = 0,
+} = {}) {
+  if (!Number.isInteger(characterId) || characterId <= 0) {
+    throw new Error('buildGridInitializeSpawnInners: characterId required (no default id=1 / emperor trap)');
+  }
+  if (!Number.isInteger(unitId) || unitId <= 0) {
+    throw new Error('buildGridInitializeSpawnInners: unitId required (no synthetic id)');
+  }
+  const inners = [];
+  // 1) 0x0204 선택 캐릭터 id (self-match 앵커: 0x0323 record[0](+0x00 BE)와 바이트 동일)
+  inners.push(buildSsCharacterIdInner({ characterId }));
+  // 2) 0x0325 유닛 테이블 (unit gate 충족: count≥1, unit[0].id = flagship 링크)
+  inners.push(buildInformationUnitInner({ unitId, unitCount: 1, cell: unitCell, commander: characterId }));
+  // 3) 0x0323 캐릭터 레코드 (char count 복구: 0x0f01 reset 후 1 로 되돌림. flagship(+0x24)=unitId 링크)
+  inners.push(buildInformationCharacterInner({
+    characterId,
+    gridUnitId: unitId,
+    power,
+    spot,
+    online: true,
+    lastname,
+    firstname,
+    face,
+    rank,
+    abilities: Array.isArray(abilities) && abilities.length ? abilities : null,
+    // seat count@0x24c 최소 1 (commander 자신 1행) — 0 이면 C002 유닛리스트 미렌더.
+    officerCount: Math.max(1, officerCount),
+  }));
+  // 4) grid extras: 0x0313 grid-type(SPACE 팔레트) → 0x0315 cell grid(플레이어 함대 cell = SPACE).
+  //    grid-type 이 셀그리드보다 먼저여야 클라가 셀 value 를 palette index 로 해석한다.
+  //    옛 fleet-only 폴백: SPACE(=1, 항행 가능·마커 없음) 값 하나로 grid-type/cell 을 구성한다
+  //    (함대를 klass-3 마커로 박으면 가짜 성계 dot 로 오인 렌더 — 함대 렌더는 0x0325 가 담당).
+  const TERRAIN_SPACE = 1; // 空間(항행 가능 빈 공간). byte1(klass)=1 → 비-마커.
+  const col = unitCell % STRATEGIC_GRID_W;
+  const row = Math.floor(unitCell / STRATEGIC_GRID_W);
+  inners.push(buildStaticInformationGridTypeInner({
+    objects: [{ value: TERRAIN_SPACE, contentId: TERRAIN_SPACE, klass: TERRAIN_SPACE, variant: 0 }],
+  }));
+  inners.push(buildStaticInformationGridInner({
+    width: STRATEGIC_GRID_W,
+    height: STRATEGIC_GRID_H,
+    cells: [{ col, row, value: TERRAIN_SPACE }],
+  }));
+  // 5) 0x0f03 GridInitialize_OK — 반드시 맨 마지막. 이게 gridInitialized 를 flip 해 렌더를 트리거한다.
+  inners.push(buildGridInitOkInner({ status: 1 }));
+  return inners;
+}
+
 /** 로그인/로비/월드 S→C 코드 인벤토리 (문서·구현 대조용) */
 export function listRequiredServerEmitCodes() {
   return {
