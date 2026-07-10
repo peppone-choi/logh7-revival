@@ -2,7 +2,16 @@
 
 > **▶ RESUME (2026-07-10, 컨텍스트 압축 지점):** M1/M0.5/M2 완료. M3 = 원본 클라가 로그인~월드모드(NOW LOADING)까지 크래시 없이 도달, **전략맵 렌더만 미완**. 근본원인(0x0323 = packed BIG-ENDIAN) 확정 후 **서버 재작성 완료·커밋 64e5fd21 푸시됨** — 아래 첫 항목 참조. **다음 액션:** live-qa가 실클라+Frida로 전략맵 렌더 검증 중(struct[0x24]==unitId 링크·팬텀 유닛 없음·NOW LOADING 해제 스크린샷). 검증 하네스: `_m2_launch.mjs`+시드 store.json / `logh7_drive_robust.py login` / `_m2_click.py`(게임개시 125,191·카드 655,305). 서버 테스트 209/209. 규칙: 일 단위마다 커밋·푸시, 라이브 증거 없이 완료주장 금지.
 
-## 🟡 M3 옛 빌더 포팅 결과: mode-0 발화·objTable 채워짐(링크 통과) — 렌더 블로커가 하류로 이동 (2026-07-10)
+## ⛔ M3 G164 "이동"은 회귀 — 클라가 0x0f02 미도달. "이동" 아닌 "추가"로 재수정 (2026-07-10)
+
+**G164 커밋 e5d825e8(world-ready push를 0x0314→0x0f02 이동) 라이브(`m3-g164-163845`) = 회귀.**
+- **회귀**: 클라 수신 프레임이 0x0314까지만(0x0f02 없음). world-ready push를 0x0314에서 빼자 **클라가 0x0f02로 진행 못 함**. 직전 2cc17beb는 0x0f02 도달·mode-0·objTable 채웠는데, 이동이 그 진행을 깸.
+- **프로브 무효**: Frida _frida_worldload_final.js가 이번 런 내내 gamemode=-1(attach 실패) → 렌더 판정 자체 무효. 프로브 신뢰성 재확인 필요.
+- **교훈**: 클라의 0x0314→0x0f02 진행이 0x0314 push에 의존. G164는 "이동"이 아니라 **"추가"**여야 함: 0x0314 push 복원(진행 유지) + 0x0323(및 0x0325)을 0x0f02에도 재전송(0x0f01 reset 후 count 생존). 양쪽 방출.
+- **최선 상태 = 2cc17beb**(0x0f02 도달·mode-0·objTable 채움, 단 NOW LOADING). 이 위에 0x0f02 count-생존만 추가.
+- 다음: server-dev가 0x0314 push 복원 + 0x0f02 additive 주입 → 작동 프로브로 재검증.
+
+## 🟡 (경과) M3 옛 빌더 포팅: mode-0·objTable 통과(링크 성립), 렌더 블로커 하류 이동 (2026-07-10)
 
 **옛 proven 빌더 전 필드 포팅(커밋 2cc17beb) 후 라이브(`m3-render-20260710-142040`):**
 - **진전**: `c2c80 param2=0(mode-0) 1회 + mode-1 4회` → **mode-0 발화**(self-match+flagship 링크 둘 다 통과해야만 호출). objTable slot0 기록됨. charCount=1, sel=1, ucnt=1.
