@@ -2,7 +2,27 @@
 
 > **▶ RESUME (2026-07-10, 컨텍스트 압축 지점):** M1/M0.5/M2 완료. M3 = 원본 클라가 로그인~월드모드(NOW LOADING)까지 크래시 없이 도달, **전략맵 렌더만 미완**. 근본원인(0x0323 = packed BIG-ENDIAN) 확정 후 **서버 재작성 완료·커밋 64e5fd21 푸시됨** — 아래 첫 항목 참조. **다음 액션:** live-qa가 실클라+Frida로 전략맵 렌더 검증 중(struct[0x24]==unitId 링크·팬텀 유닛 없음·NOW LOADING 해제 스크린샷). 검증 하네스: `_m2_launch.mjs`+시드 store.json / `logh7_drive_robust.py login` / `_m2_click.py`(게임개시 125,191·카드 655,305). 서버 테스트 209/209. 규칙: 일 단위마다 커밋·푸시, 라이브 증거 없이 완료주장 금지.
 
-## 🎯 M3 블로커 확정: 서버 3면 면책 — 0x0315 프레임 소켓 도착하나 클라 transport 파서가 드롭 (2026-07-10)
+## 🎯 M3 근본원인 = 0x0315 복호 keystream desync (checksum/id/innerLen 전부 무혐의) (2026-07-10)
+
+**wire-cmp(#78) 헤더 대조가 진짜 원인을 드러냄: verify 거부는 결과일 뿐, 원인은 복호(decrypt) 실패.**
+
+실 파이프라인 복호 헤더 표(서버 emit 기준, envelope=[u16BE cs][u32BE id][u16BE innerLen][u32LE 0][u16BE code][body]):
+| code | id | innerLen | body | checksum | csOk |
+|---|---|---|---|---|---|
+| 0x0323 | 8 | 730 | 724 | 0xf422 | ✓ |
+| 0x0325 | 9 | 52810 | 52804 | 0x66cd | ✓ |
+| 0x0305 | 27 | 21008 | 21002 | 0x0e51 | ✓ |
+| 0x0307 | 28 | 58808 | 58802 | 0xa3e6 | ✓ |
+| 0x0315 | 29 | 5010 | 5004 | 0xa9f4 | ✓ |
+
+- **세 후보 전부 무혐의**: id 27→28→29 단조(+0x20 윈도우 내), innerLen=inner 정확 일치, checksum self-consistent. 0x0307↔0x0315 유일 차이 = 값 자체뿐, 형식 결함 0.
+- **결정타**: 라이브 클라가 복호한 0x0315 body `d8c0 66000300 1503 00000000 84f70000` → cs=0xd8c0(서버 0xa9f4≠), id=0x66000300(서버 29≠, 카운터 불가능값), innerLen=0x1503(서버 5010≠), code=0x84f7(서버 0x315≠). **@8 msg32 leading zero만 정위치.** 즉 클라 복호 결과 3필드 전부 garbage → checksum이 garbage에 안 맞아 verify al=0.
+- **프레임 바이트는 정확 도착**(5032B=서버 rawFrame). 문제는 그 바이트를 클라가 복호할 때 keystream이 어긋남.
+- **최강 단서**: 0x0305/0x0307/0x0325 대형 프레임 복호 정상, **오직 0x0315만** garbage. 0x0315는 유일하게 world-session.mjs **전용 0x0314 핸들러 경로**(responses+isMsg32). 제네릭 admission 경로와 다른 암호화 상태/키/커넥션으로 keystream 연속성 깨는 서버 버그 의심.
+- **왜 byte-test(#75/220)는 통과?** 테스트 decodeFrame이 프레임마다 DECIPHER_KEY로 **독립 복호**(상태 미보존) → 연속성 깨짐을 못 잡음. 라이브 클라는 연속/상태 복호일 가능성.
+- 덤프 스크립트: 스크래치 `dump-0030-headers.mjs`. → server-dev가 전용 vs 제네릭 암호화 경로 대조(#79), re-analyst가 클라 복호 불변식(프레임독립 vs 연속) 확정(#77).
+
+## 🎯 (경과) 서버 3면 면책 — 0x0315 프레임 소켓 도착하나 클라 transport 파서가 드롭 (2026-07-10)
 
 **와이어탭(liveqa-dispatch, `tools/live/_ev/wiretap-192703/`)이 원인을 클라 파서로 확정.** 서버 3면 교차 면책:
 1. **서버 emit 바이트 정확** — 0x0304→0x0306→0x0314 연속 응답을 실 파이프라인(암호화·envelope·transport) 통과 후 단일 파서 소진 시 [0x0305,0x0307,0x0315] 정확 구조·크기(21002/58802/5004B)·잔여0·id단조 (테스트 `logh7-314-emit-bytes.test.mjs`, 220/220, 9dc4bf53).
