@@ -1,6 +1,30 @@
 # LOGH VII 루프 상태
 
-## ⛔ M3 최종 블로커(정제): FUN_004c2c80 호출되나 objTable 미빌드 + flagship 파싱오프셋 불일치 (2026-07-10, Frida)
+## ✅✅ M3 근본원인 최종확정: 0x0323 직렬화기 flagship 오프셋 drift (2026-07-10, RE)
+
+**진단 완결. "objTable NULL"은 오독, 진짜 버그는 서버 0x0323 필드 오프셋 어긋남.**
+
+- **objTable 오독 정정**: clientBase+0xc는 **포인터가 아니라 인라인 오브젝트 배열**(600엔트리, stride 0x370). `0x6d616e01`("\x01nam") = **정상 오브젝트 프리픽스**(object+0=type byte 1, +1=이름 "nam"). **플레이어 오브젝트는 이미 정상 write됨**(FUN_004c2c80 mode0 → clientBase+0xc에 0x370B 인라인 struct). Frida가 인라인 배열을 포인터로 오독.
+- **★진짜 버그: 서버 0x0323 직렬화기의 flagship 오프셋 drift.** 클라는 flagship을 **와이어 body offset 0x24 (u32 LE)**에서 읽는다(FUN_00419300 필드맵 + dispatcher case 0x323 identity 복사, +0x24 앞 가변필드 없음). 서버가 **±1 dword 어긋난 위치**에 써서 클라 record+0x24=0(값 1이 +0x20/+0x28로 감) → flagship 0이 unit과 정상 매칭 실패.
+- **클라 0x0323 레코드 필드맵(FUN_00419300 확정)** — 서버 직렬화기가 이 레이아웃과 정확히 일치해야:
+  | body off | 크기 | 필드 |
+  |---|---|---|
+  | +0x00 | u32 | character id |
+  | +0x04/05/06/07 | u8×4 | power / camp / state / (unlabeled) |
+  | +0x08 | u32 | begin_session_age |
+  | +0x0c/0x0d | u8×2 | birthday month/day |
+  | +0x10 | u32 | fame |
+  | **+0x14** | **u16** | **max_of_special (★+0x16~17 2B gap)** ← 유력 drift 지점 |
+  | +0x18 | u32 | return_base |
+  | +0x1c | u32 | spot |
+  | +0x20 | u32 | spot_owner |
+  | **+0x24** | **u32** | **flagship (grid-unit id)** ← 여기 실 unit id |
+  | +0x28~ | pstr | flagship_name (len u8 + u16×13) |
+- **정합 규칙**: `0x0323 body[0x24] (u32 LE, flagship) == 0x0325 body[0x04] (u32, unit[0].id)`, **≠0**, `0x0325 count(body+0, u16)≥1`. **유력 drift = +0x14 max_of_special을 u32로 쓰거나 +0x08~+0x20 필드 크기/개수 불일치.**
+- **server-dev 수정**: 서버 0x0323 직렬화기(buildInformationCharacterInner)를 위 클라 필드맵과 **필드별 대조**해 drift 제거 → flagship이 body+0x24 (u32 LE)에 실 unit id로 안착. 특히 +0x14를 u16(+2pad)로. 그 후 Frida로 char record+0x24 == unit id 확인.
+- **A3 미확정(수정 후 재검증)**: flagship 정상화 후에도 안 풀리면 FUN_004b68f0 world-load 완료→Field_Make→씬전환 경로 추적. 현 결정 블로커는 flagship drift.
+
+## ⛔ (해결됨) M3 최종 블로커(정제): objTable 오독 + flagship 오프셋 (2026-07-10, Frida)
 
 **정합 수정은 no-op였고 진단이 하류로 정제됨.** Frida 최종 검증(`.omo/live-qa/m3-frida-final-20260710-0857/`):
 - **수정 전후 char/unit 레코드 바이트 완전 동일**(`IDENTICAL record bytes: True`): `unitId = character.flagship ?? character.unitId ?? nextUnitId=1` 폴백이라 값이 커밋 전에도 이미 1. 정합 수정이 와이어 바이트를 안 바꿈. → **flagship↔unit 정합은 실블로커 아님.**
