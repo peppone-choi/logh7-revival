@@ -1,5 +1,7 @@
 # LOGH VII 루프 상태
 
+> **▶ RESUME (2026-07-10, 컨텍스트 압축 지점):** M1/M0.5/M2 완료. M3 = 원본 클라가 로그인~월드모드(NOW LOADING)까지 크래시 없이 도달, **전략맵 렌더만 미완**. 유일 블로커 = 0x0323 char 레코드가 클라 파서(**packed BIG-ENDIAN**)와 불일치(서버는 struct-정렬+LE). 정본 wire 테이블은 아래 첫 항목에 확정됨. **다음 액션:** server-dev가 `buildInformationCharacterInner`를 아래 정본 테이블(BE+packed, flagship@wire 0x20)로 재작성 중 → 완료 시 diff·npm test 검증→커밋→Frida live-qa(`tools/live/_frida_wire0323.js`, python은 `C:\Users\user\AppData\Local\Programs\Python\Python311\python.exe`)로 struct[0x24]==unitId·이름정상·전략맵 렌더 확인. 검증 하네스: `_m2_launch.mjs`+시드 store.json / `logh7_drive_robust.py login` / `_m2_click.py`(게임개시 125,191·카드 655,305). 서버 테스트 211/211. 원격 origin/main 64커밋 푸시됨. 규칙: 일 단위마다 커밋·푸시, 라이브 증거 없이 완료주장 금지.
+
 ## ✅✅✅✅✅ M3 정본 0x0323 WIRE 레이아웃 확정(sentinel A/B): packed BIG-ENDIAN (2026-07-10)
 
 **sentinel A/B 실측(`.omo/live-qa/m3-parser-map-20260710-1102/PARSER-MAP.txt`)이 두 결함을 바이트 단위 확정.** 각 필드에 유니크 마커(0x51..0x5a) 심고 클라 struct 랜딩을 Frida로 실측(env-gate LOGH_M5_SENTINEL, 캡처 후 원복·27테스트 통과).
