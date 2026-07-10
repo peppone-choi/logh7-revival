@@ -634,3 +634,74 @@ test('handleWorldInner 0x0314 without in-world player falls back to bare empty 0
   const grid = decodeStaticGrid(msg32Body(result.responses[0].inner));
   assert.equal(grid.cells.filter((v) => v !== 0).length, 0, 'empty board fallback');
 });
+
+// ─── 정적정보 워크 전 요청 응답 커버리지 + wire 크기 정합 (NOW LOADING 게이트) ────
+// 근거: docs/logh7-now-loading-gate-re.md §5 워크 전송 순서 표.
+// 클라 로더(FUN_004b76e0)는 각 요청의 짝 응답을 "정확한 코드 + 정확한 고정 크기"로 받아야
+// 대기 응답 큐(clientBase+0x357ec0)가 팝되어 다음 스텝으로 진행한다(FUN_004ba2b0 tail:
+// 코드 정확일치 + owner-id -1/self). 정적정보 응답 핸들러는 전부 owner-id=-1 이므로
+// stuck 은 오직 (A) 코드 불일치 또는 (B) 크기 불일치(recv 프레이밍 붕괴)로만 발생.
+// 아래 표는 워크의 전 요청→응답과 클라 사이저(FUN_004b8b00) 고정 body 크기를 잠근다.
+//
+// [req, resp, respBodyBytes] — §5 워크 전송 순서대로. 0x0314→0x0315 가 현재 블로커 지점.
+const STATIC_INFO_WALK = [
+  [0x0304, 0x0305, 0x520a], // InformationSession walker (21002B)
+  [0x0306, 0x0307, 0xe5b2], // Duty walker (58802B)
+  [0x0314, 0x0315, 0x138c], // ★ ResponseStaticInformationGrid (라이브 정지 지점, 5004B)
+  [0x0312, 0x0313, 0x138c], // ResponseStaticInformationGridType (5004B)
+  [0x030a, 0x030b, 0x6d64], // 28004B
+  [0x0310, 0x0311, 0x01b0], // 432B
+  [0x030e, 0x030f, 0x0034], // 52B
+  [0x031c, 0x031d, 0x520c], // static-base (21004B)
+  [0x0308, 0x0309, 0x055c], // 1372B
+  [0x030c, 0x030d, 0x0184], // 388B
+  [0x0300, 0x0301, 0x0004], // ResponseTime (4B LE start time)
+  [0x0f00, 0x0f01, 0x0001], // WorldInitialize_OK (status=1)
+  [0x0f02, 0x0f03, 0x0001], // GridInitialize_OK (status=1)
+];
+
+test('static-info walk: every walk request routes to its exact paired response with client-table wire size', () => {
+  for (const [req, resp, bytes] of STATIC_INFO_WALK) {
+    const world = createWorldSession();
+    world.seedPlayer({ connectionId: 1, characterId: 5, unitId: 8, cell: 2588, inWorld: true });
+    const reqBuf = Buffer.alloc(2);
+    reqBuf.writeUInt16BE(req, 0);
+    const result = world.handleWorldInner({ connectionId: 1, accountId: 'a', inner: reqBuf });
+    const rh = `0x${req.toString(16)}`;
+    const sh = `0x${resp.toString(16)}`;
+    assert.ok(result, `${rh} must be routed (not null — else it leaks to lobby → no response → NOW LOADING stall)`);
+    const frames = result.responses.map((r) => ({ code: readMsg32Code(r.inner), bytes: msg32Body(r.inner).length }));
+    const paired = frames.find((f) => f.code === resp);
+    assert.ok(paired, `${rh} → ${sh}: paired response present (got ${frames.map((f) => '0x' + f.code.toString(16)).join(',')})`);
+    assert.equal(paired.bytes, bytes, `${sh} body must be ${bytes}B (client fixed-size framing) — got ${paired.bytes}`);
+  }
+});
+
+test('static-info walk: pure reactive codes emit exactly one paired frame (no early-send desync)', () => {
+  // 0x0f02 만 의도적 스폰 버스트(G164, 다중 프레임 — 0x0f03 맨 마지막). 나머지는 요청당 정확히
+  // 1 프레임(짝 응답)이어야 한다. 조기전송(예: 0x0314 에 0x0f03 동봉)은 워크 큐 헤드가 기대하는
+  // 코드와 불일치해 매칭 실패 → 큐 안 비워짐 → 다음 스텝 정지(desync). 요청-응답 페어링 강제.
+  for (const [req, resp] of STATIC_INFO_WALK) {
+    if (req === 0x0f02) continue; // 의도적 스폰 버스트 — 별도 테스트가 순서/유일성 검증
+    const world = createWorldSession();
+    world.seedPlayer({ connectionId: 1, characterId: 5, unitId: 8, cell: 2588, inWorld: true });
+    const reqBuf = Buffer.alloc(2);
+    reqBuf.writeUInt16BE(req, 0);
+    const result = world.handleWorldInner({ connectionId: 1, accountId: 'a', inner: reqBuf });
+    const rh = `0x${req.toString(16)}`;
+    assert.equal(result.responses.length, 1, `${rh} emits exactly one reactive frame (no batch/early-send)`);
+    assert.equal(readMsg32Code(result.responses[0].inner), resp, `${rh} single frame = 0x${resp.toString(16)}`);
+  }
+});
+
+test('static-info walk: isAdmissionRequestCode true for all walk request codes (routed to world, not lobby)', () => {
+  // playable-server 는 isAdmissionRequestCode 로 world/lobby 라우팅을 가른다. false 면 lobby 로
+  // 새어 응답 없음 → 클라가 짝 응답을 무한 대기(NOW LOADING). 전 요청 코드가 world 로 가야 한다.
+  for (const [req] of STATIC_INFO_WALK) {
+    assert.equal(
+      isAdmissionRequestCode(req),
+      true,
+      `0x${req.toString(16)} must route to world (else lobby leak → no response → NOW LOADING)`,
+    );
+  }
+});
