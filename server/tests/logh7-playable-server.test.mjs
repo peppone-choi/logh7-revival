@@ -303,7 +303,7 @@ test('playable server boots twice and serves login+world+move sequence', async (
         assert.ok(k > iBeg && k < iEnd, `boot ${boot} refresh frame @${k} between begin/end`);
       }
     }
-    // ★정합(TCP 레벨): 0x0323 flagship(body+0x20) == 0x0325 unit[0].id(body+0x04), count≥1.
+    // ★정합(TCP 레벨): 0x0323 flagship(body+0x24) == 0x0325 unit[0].id(body+0x04), count≥1.
     const decodeInnerBody = (fr) => {
       const dec = decryptBuffer(fr.body.subarray(4), expandChildCodecKey(DECIPHER_KEY, tables));
       return parse0030Body(dec).inner.subarray(6); // message32 body (skip [u32 0][u16 code])
@@ -312,9 +312,9 @@ test('playable server boots twice and serves login+world+move sequence', async (
     const charBody = decodeInnerBody(pushFrames.find((fr) => decodeInnerCode(fr) === 0x0323));
     assert.ok(unitBody.readUInt16LE(0x00) >= 1, `boot ${boot} 0x0325 count ≥ 1`);
     assert.equal(
-      charBody.readUInt32LE(0x20),
+      charBody.readUInt32LE(0x24),
       unitBody.readUInt32LE(0x04),
-      `boot ${boot} char flagship(+0x20) must equal unit[0].id(+0x04)`,
+      `boot ${boot} char flagship(+0x24) must equal unit[0].id(+0x04)`,
     );
 
     // move 0x0b01 (push 완전 소진 후이므로 소켓은 move 응답만 남는다)
