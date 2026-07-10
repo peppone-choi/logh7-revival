@@ -1,6 +1,13 @@
 # LOGH VII 루프 상태
 
-> **▶ RESUME (2026-07-10, 컨텍스트 압축 지점):** M1/M0.5/M2 완료. M3 = 원본 클라가 로그인~월드모드(NOW LOADING)까지 크래시 없이 도달, **전략맵 렌더만 미완**. 유일 블로커 = 0x0323 char 레코드가 클라 파서(**packed BIG-ENDIAN**)와 불일치(서버는 struct-정렬+LE). 정본 wire 테이블은 아래 첫 항목에 확정됨. **다음 액션:** server-dev가 `buildInformationCharacterInner`를 아래 정본 테이블(BE+packed, flagship@wire 0x20)로 재작성 중 → 완료 시 diff·npm test 검증→커밋→Frida live-qa(`tools/live/_frida_wire0323.js`, python은 `C:\Users\user\AppData\Local\Programs\Python\Python311\python.exe`)로 struct[0x24]==unitId·이름정상·전략맵 렌더 확인. 검증 하네스: `_m2_launch.mjs`+시드 store.json / `logh7_drive_robust.py login` / `_m2_click.py`(게임개시 125,191·카드 655,305). 서버 테스트 211/211. 원격 origin/main 64커밋 푸시됨. 규칙: 일 단위마다 커밋·푸시, 라이브 증거 없이 완료주장 금지.
+> **▶ RESUME (2026-07-10, 컨텍스트 압축 지점):** M1/M0.5/M2 완료. M3 = 원본 클라가 로그인~월드모드(NOW LOADING)까지 크래시 없이 도달, **전략맵 렌더만 미완**. 근본원인(0x0323 = packed BIG-ENDIAN) 확정 후 **서버 재작성 완료·커밋 64e5fd21 푸시됨** — 아래 첫 항목 참조. **다음 액션:** live-qa가 실클라+Frida로 전략맵 렌더 검증 중(struct[0x24]==unitId 링크·팬텀 유닛 없음·NOW LOADING 해제 스크린샷). 검증 하네스: `_m2_launch.mjs`+시드 store.json / `logh7_drive_robust.py login` / `_m2_click.py`(게임개시 125,191·카드 655,305). 서버 테스트 209/209. 규칙: 일 단위마다 커밋·푸시, 라이브 증거 없이 완료주장 금지.
+
+## ✅ M3 서버 재작성 완료: 0x0323/0x0325 packed BE 방출 (커밋 64e5fd21, 2026-07-10)
+
+- `buildInformationCharacterInner` 정본 테이블대로 재작성: 멀티바이트 전부 **BE**, pad 제거(**packed**) — fame@0x0e, max_special@0x12, return_base@0x14, spot@0x18, spot_owner@0x1c, **flagship@0x20**, name_len@0x24, name@0x26(UTF-16 BE). 0x40 이후 미확정 필드는 0(날조 금지), 총 724B(0x2d4) 유지.
+- `buildInformationUnitInner`(0x0325)도 동계열 파서 정합으로 BE 통일(count u16BE·unit id u32BE·commander·cell). **주의: count까지 BE는 내부 정합 추론(RE 미확정)** — 라이브에서 팬텀 유닛 보이면 이 지점 최우선 재확인.
+- 폐기된 LOGH_FLAGSHIP_M4 env-gate 실험 제거. 전체 스위트 **209/209** (211→209는 env-gate 실험 테스트 제거분). 크로스-레코드 테스트가 flagship(0x20 BE)==0x0325 unit id(BE) 바이트 동일 링크를 잠금.
+- 다음: live-qa 라이브 판정(전략맵 렌더 = M3 완료 게이트).
 
 ## ✅✅✅✅✅ M3 정본 0x0323 WIRE 레이아웃 확정(sentinel A/B): packed BIG-ENDIAN (2026-07-10)
 
