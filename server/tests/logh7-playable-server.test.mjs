@@ -297,7 +297,7 @@ test('playable server boots twice and serves login+world+move sequence', async (
     const staticGridBody = decodeInnerBody(gridFrame);
     assert.equal(staticGridBody.length, 0x138c, `boot ${boot} 0x0315 fixed 5004B`);
     let staticPlaced = 0;
-    for (let off = 4, rEnd = 4 + staticGridBody.readUInt16LE(2); off + 1 < rEnd; off += 2) {
+    for (let off = 4, rEnd = 4 + staticGridBody.readUInt16BE(2); off + 1 < rEnd; off += 2) {
       if (staticGridBody.readUInt8(off + 1) !== 0) staticPlaced += staticGridBody.readUInt8(off);
     }
     assert.ok(staticPlaced >= 1, `boot ${boot} 0x0314 0x0315 must place ≥1 player fleet cell (not empty board)`);

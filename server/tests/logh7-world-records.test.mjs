@@ -335,20 +335,26 @@ test('isAdmissionRequestCode(0x0f02) true; response opcode 0x0f03 is not a reque
 
 // ─── 0x0315 유효 RLE 그리드 (전략맵 크래시 해소) ────────────────────────────────
 //
-// RE 확정 포맷(FUN_004abbb0): body 0x138c 고정.
-//   [u8 width=100][u8 height=50][u16LE rleLen][RLE: (u8 runLen, u8 cellType)…][0 패딩]
+// RE 확정 포맷: body 0x138c 고정.
+//   [u8 width=100][u8 height=50][u16BE rleLen][RLE: (u8 runLen, u8 cellType)…][0 패딩]
 // 제약: ΣrunLen == 5000(=100×50). rleLen = RLE 스트림 바이트 수, 1 < rleLen < 0x1389.
+// ★rleLen 은 BE (옛 proven 5bd249c writeUInt16BE): 클라 상류 입력 파서 FUN_004134e0 가
+//   스트림 헬퍼로 BE 읽어 유효범위(0<c<0x1389)를 게이트한다. LE 로 쓰면 40→0x2800(10240)
+//   처럼 범위 초과로 읽혀 dispatcher 도달 전 정지(G222). 하류 RLE 디코더 FUN_004abbb0 은
+//   이미 파싱된 버퍼를 host-order 로 소비하므로 상류 BE 가 정본.
 // cellType 은 systemId 가 아니라 0x0313 팔레트 인덱스 — 빈 우주는 전부 0.
 
-test('0x0315 static grid: [100][50][u16LE rleLen][RLE] with ΣrunLen=5000, 5004B body', () => {
+test('0x0315 static grid: [100][50][u16BE rleLen][RLE] with ΣrunLen=5000, 5004B body', () => {
   const inner = buildStaticInformationGridInner({ cells: [] });
   assert.equal(readMsg32Code(inner), 0x0315);
   const body = msg32Body(inner);
   assert.equal(body.length, 0x138c, 'fixed 5004B body');
   assert.equal(body.readUInt8(0), 100, 'width=100');
   assert.equal(body.readUInt8(1), 50, 'height=50');
-  const rleLen = body.readUInt16LE(2); // u16 LE (RE 확정)
+  const rleLen = body.readUInt16BE(2); // u16 BE (상류 파서 FUN_004134e0 게이트)
   assert.ok(rleLen > 1 && rleLen < 0x1389, `rleLen ${rleLen} in (1, 0x1389)`);
+  // LE 로 읽으면(=구 회귀) 상류 게이트를 넘는 범위초과 값이 나와야 함 — 회귀 재발 방지 앵커.
+  assert.ok(body.readUInt16LE(2) >= 0x1389, 'LE misread would exceed client upstream range gate');
   assert.equal(rleLen % 2, 0, 'RLE is (runLen,cellType) pairs → even byte count');
   // RLE 디코드: ΣrunLen 은 정확히 100×50 = 5000 이어야 렌더러 워킹그리드가 채워진다.
   let sumRun = 0;
@@ -367,7 +373,7 @@ test('0x0315 places a cell type marker while preserving ΣrunLen=5000', () => {
   const inner = buildStaticInformationGridInner({ cells: [{ cell: 2588, value: 3 }] });
   const body = msg32Body(inner);
   assert.equal(body.length, 0x138c);
-  const rleLen = body.readUInt16LE(2);
+  const rleLen = body.readUInt16BE(2);
   let sumRun = 0;
   let sawMarker = false;
   for (let i = 0; i + 1 < rleLen; i += 2) {

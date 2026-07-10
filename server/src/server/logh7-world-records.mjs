@@ -552,7 +552,11 @@ export function buildStaticInformationGridInner({
   const payload = Buffer.alloc(CODE_STATIC_GRID_BYTES);
   payload.writeUInt8(w, 0);
   payload.writeUInt8(h, 1);
-  payload.writeUInt16LE(rle.length & 0xffff, 2); // rleLen u16 LE (RE 확정 FUN_004abbb0)
+  // rleLen 은 BE — 클라 상류 입력 파서 FUN_004134e0 가 스트림 헬퍼로 BE 읽어 유효범위
+  // (0<c<0x1389=5001)를 게이트한다. LE 로 쓰면 40→BE-read 0x2800(10240)처럼 범위 초과로
+  // 읽혀 dispatcher 도달 전 정지(옛 라이브 판정 G222 / 옛 proven 5bd249c writeUInt16BE).
+  // 하류 RLE 디코더 FUN_004abbb0 은 이미 파싱된 버퍼를 host-order 로 소비하므로 상류 BE 가 정본.
+  payload.writeUInt16BE(rle.length & 0xffff, 2);
   rle.copy(payload, 4, 0, Math.min(rle.length, CODE_STATIC_GRID_BYTES - 4));
   return buildMsg32Inner(CODE_STATIC_GRID, payload);
 }
