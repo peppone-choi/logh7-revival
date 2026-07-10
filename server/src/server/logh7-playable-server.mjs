@@ -69,6 +69,16 @@ function codeHex(code) {
   return `0x${code.toString(16).padStart(4, '0')}`;
 }
 
+// 응답 inner 의 실제 방출 코드 추출 (message32 [u32 0][u16BE code] 또는 raw [u16BE code]).
+// admission trace 가 codes=null 로 남던 문제 해소 — 다음 라이브 캡처에서 무슨 코드를 실제로
+// 보냈는지(0x0315 등) 판독 가능하게 한다.
+function innerEmitCode(inner) {
+  const buf = Buffer.isBuffer(inner) ? inner : Buffer.from(inner);
+  if (buf.length >= 6 && buf.readUInt32LE(0) === 0) return buf.readUInt16BE(4);
+  if (buf.length >= 2) return buf.readUInt16BE(0);
+  return null;
+}
+
 function keyBytes(value) {
   if (Buffer.isBuffer(value)) return Buffer.from(value);
   if (typeof value === 'string') return Buffer.from(value, 'hex');
@@ -507,7 +517,10 @@ export function createPlayableServer({
                 event: 'world-response-sent',
                 connectionId,
                 kind: result.kind,
-                codes: result.codes ?? null,
+                // admission 은 result.codes 를 안 채운다 → 응답 inner 의 실제 코드를 유도해 남긴다.
+                codes: (result.codes ?? result.responses.map((r) => innerEmitCode(r.inner)))
+                  .map((c) => (typeof c === 'number' ? codeHex(c) : c)),
+                reqCode: result.reqCode != null ? codeHex(result.reqCode) : null,
                 responseCount: result.responses.length,
                 cell: result.cell ?? null,
                 text: result.text ?? null,
