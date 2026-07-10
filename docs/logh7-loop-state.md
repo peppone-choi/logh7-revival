@@ -1,6 +1,21 @@
 # LOGH VII 루프 상태
 
-## ✅ M3 수정 확정: 0x0323 flagship(+0x24) = 0x0325 unit id(+0x04) 정합 (2026-07-10, RE+Frida)
+## ⛔ M3 최종 블로커(정제): FUN_004c2c80 호출되나 objTable 미빌드 + flagship 파싱오프셋 불일치 (2026-07-10, Frida)
+
+**정합 수정은 no-op였고 진단이 하류로 정제됨.** Frida 최종 검증(`.omo/live-qa/m3-frida-final-20260710-0857/`):
+- **수정 전후 char/unit 레코드 바이트 완전 동일**(`IDENTICAL record bytes: True`): `unitId = character.flagship ?? character.unitId ?? nextUnitId=1` 폴백이라 값이 커밋 전에도 이미 1. 정합 수정이 와이어 바이트를 안 바꿈. → **flagship↔unit 정합은 실블로커 아님.**
+- **★결정적 신 증거**: **FUN_004c2c80(0)이 이미 호출됨**(3회, param_2=[1,1,0]) = 클라 링크는 이미 성립. 그런데 **objTable(clientBase+0xc)이 유효 포인터가 안 됨**(0x6d616e01="nam"). 즉 포커스빌드가 불려도 오브젝트가 안 써짐.
+- **flagship 파싱오프셋 불일치**: 서버는 flagship을 와이어 body+0x24=1로 쓰나 **클라 파싱 레코드+0x24는 0**; 값 1은 클라 레코드 **+0x20(BE)/+0x28(LE)**에 있음. `logh7-loop-state.md`의 "flagship@char+0x24"가 와이어 body 기준인지 클라 파싱 레코드 기준인지 혼동 — **0x0323 파서 FUN_00419300의 wire→record 필드 매핑이 non-trivial**(flat copy 아님).
+- gamemode=0(월드모드 진입 O), world-ready push(0x0b09/0x0b0a/0x0f03) 방출 확인(`admission-world-ready`), socket-error 1건 관측.
+
+### 정제된 두 가설 (다음 집중 조사 — 정적 한계라 Frida 병행)
+1. **objTable 모델 오류 or c2c80 하류 게이트**: FUN_004c2c80(0)이 실행돼도 clientBase+0xc가 유효 포인터가 안 됨. (a) "objTable=clientBase+0xc" 모델이 틀렸거나(다른 offset), (b) c2c80(0)이 오브젝트를 쓰려면 0x0323/0x0325 외 추가 입력/선행조건 필요. **FUN_004c2c80 내부(오브젝트를 어디에 쓰는지·무슨 선행조건 검사) 정적 추적 + Frida로 c2c80 리턴 후 어느 메모리가 써지는지.**
+2. **0x0323 wire→parsed-record 매핑**: 클라 0x0323 파서(FUN_00419300)가 flagship(parsed record+0x24)을 **와이어 body의 어느 오프셋에서** 읽는가. 서버가 그 정확한 와이어 오프셋에 unitId를 써야 클라 record+0x24가 non-zero가 됨. (현재 body+0x24는 파싱 후 +0x20/+0x28로 감.)
+
+### Frida 도구(검증됨, 재사용)
+`_frida_worldload_drive.py/_probe.js/_base.js/_final.js` — attach·FUN_004c2a80/c2c80 훅·objTable/char/unit 덤프. clientBase=FUN_004c2a80 진입 ECX.
+
+## ✅ (부분/무효) M3 수정: 0x0323 flagship(+0x24) = 0x0325 unit id(+0x04) 정합 (2026-07-10, RE+Frida)
 
 **정적(FUN_004c2a80 디컴파일)+동적(Frida)+문서(info-records-wire) 삼중 확정.** NOW LOADING 해제 = 선택 캐릭터의 flagship이 유닛과 링크되어 `FUN_004c2c80(0)`이 플레이어 오브젝트를 빌드하는 것.
 

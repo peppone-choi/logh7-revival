@@ -1,0 +1,44 @@
+[08:58:23] launch E:\logh7-revival\artifacts\logh7-install\____________s___\____\exe\g7mtclient.exe
+[08:58:23] client pid(spawn)=22092
+[08:58:24] window hwnd=0x1550a4e pid=22092
+[08:58:25] probe script = _frida_worldload_final.js
+[08:58:26] hooks loaded, ready=[{'ev': 'ready', 'base': '0x400000', 'fLoad': '0x4c2a80', 'fBuild': '0x4c2c80'}]
+[08:58:26] SNAP attach: gamemode=-1 ring=-1 sel=-1 charCount=-1
+[08:58:26] login screen 644x484 -> do_login
+[08:58:33] lobby-size reached at t+0s 1028x772 (splash may still show)
+[08:58:33] wait 9s for BOTHTEC splash to clear -> lobby menu
+[08:58:42] SNAP lobby: gamemode=-1 ring=-1 sel=-1 charCount=-1
+[08:58:43] click GAME_START client=(125, 191)
+[08:58:47] SNAP after-game-start: gamemode=-1 ring=-1 sel=-1 charCount=-1
+[08:58:47] click CHAR_CARD client=(657, 306)
+[08:58:48] SNAP after-char-card: gamemode=-1 ring=-1 sel=-1 charCount=-1
+[08:58:51] SNAP after-char-dbl: gamemode=0 ring=1 sel=16777216 charCount=1
+[08:58:51] === monitor world-load (45s) ===
+[08:58:51] SNAP mon+0s: gamemode=0 ring=1 sel=16777216 charCount=1
+[08:58:54] SNAP mon+2s: gamemode=0 ring=1 sel=16777216 charCount=1
+[08:58:56] SNAP mon+5s: gamemode=0 ring=1 sel=16777216 charCount=1
+[08:58:59] SNAP mon+7s: gamemode=0 ring=1 sel=16777216 charCount=1
+[08:59:01] SNAP mon+10s: gamemode=0 ring=1 sel=16777216 charCount=1
+[08:59:04] SNAP mon+12s: gamemode=0 ring=1 sel=16777216 charCount=1
+[08:59:06] SNAP mon+15s: gamemode=0 ring=1 sel=16777216 charCount=1
+[08:59:09] SNAP mon+17s: gamemode=0 ring=1 sel=16777216 charCount=1
+[08:59:11] SNAP mon+20s: gamemode=0 ring=1 sel=16777216 charCount=1
+[08:59:14] SNAP mon+22s: gamemode=0 ring=1 sel=16777216 charCount=1
+[08:59:16] SNAP mon+25s: gamemode=0 ring=1 sel=16777216 charCount=1
+[08:59:19] SNAP mon+27s: gamemode=0 ring=1 sel=16777216 charCount=1
+[08:59:21] SNAP mon+30s: gamemode=0 ring=1 sel=16777216 charCount=1
+[08:59:24] SNAP mon+32s: gamemode=0 ring=1 sel=16777216 charCount=1
+[08:59:27] SNAP mon+35s: gamemode=0 ring=1 sel=16777216 charCount=1
+[08:59:29] SNAP mon+37s: gamemode=0 ring=1 sel=16777216 charCount=1
+[08:59:32] SNAP mon+40s: gamemode=0 ring=1 sel=16777216 charCount=1
+[08:59:34] SNAP mon+42s: gamemode=0 ring=1 sel=16777216 charCount=1
+[08:59:37] SNAP final: gamemode=0 ring=1 sel=16777216 charCount=1
+[08:59:37] alive=True
+[08:59:37] dispatch total = 3
+[08:59:37] === SUMMARY ===
+[08:59:37] FUN_004c2a80 calls: 1
+[08:59:37]   load-enter arg0=1 gamemode=None ring=1 sel=None charCount=None
+[08:59:37]   load-leave arg0=None ret=0 gamemode=None ring=None
+[08:59:37] gamemode values seen: [-1, 0]
+[08:59:37] ring values seen: [-1, 1]
+[08:59:37] FINAL gamemode=0 ring=1 sel=16777216 charCount=1
