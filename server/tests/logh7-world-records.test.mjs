@@ -30,6 +30,7 @@ import {
   buildNotifyMovedGridInner,
   buildGridChatInner,
   buildWorldEntryInners,
+  buildWorldReadyPushInners,
   buildLobbySessionLoginOkRaw,
   buildAdmissionResponseInner,
   isAdmissionRequestCode,
@@ -390,6 +391,59 @@ test('world entry 0x0323 carries real seed character stats (registerable object,
   assert.equal(body.readUInt8(0x04), 2, 'real power/faction (not 0 stub)');
   assert.equal(body.readUInt16LE(0x188), 90, 'real ability[0] forwarded');
   assert.equal(body.readUInt16LE(0x188 + 4 * 7), 55, 'real ability[7] forwarded');
+});
+
+// ─── 0x0323 flagship 오프셋 anti-drift 불변식 (전략맵 NOW LOADING 해제) ──────────
+//
+// 근거: docs/logh7-loop-state.md "M3 근본원인: 0x0323 직렬화기 flagship 오프셋 drift" +
+//   클라 FUN_00419300 필드맵. 클라는 flagship 을 record body offset 0x24 (u32 LE)에서 읽고,
+//   0x0325 unit[0].id 는 body offset 0x04 에서 읽어 char↔unit 링크(FUN_004c2a80)를 만든다.
+//   flagship 이 ±1 dword(0x20/0x28) 로 밀리면 record+0x24=0 → 링크 실패 → NOW LOADING 정지.
+//
+// 이 테스트는 세 가지를 잠근다:
+//   (1) 크로스-레코드: 0x0323 flagship(+0x24) == 0x0325 unit[0].id(+0x04), 둘 다 ≠0.
+//   (2) anti-drift: flagship 은 정확히 0x24 에만. 인접 0x20(spot_owner)/0x28(flagship_name_len)
+//       dword 는 0 — flagship 이 ±1 dword 로 새지 않았음을 증명.
+//   (3) 앞 필드 정합: id@0x00, power@0x04, spot@0x1c 가 클라 필드맵대로 자리 지킴.
+test('0x0323 flagship lands at body+0x24 == 0x0325 unit id (+0x04), no ±1 dword drift', () => {
+  const emits = buildWorldEntryInners({ characterId: 42, gridUnitId: 7, power: 2, spot: 1 });
+  const charRec = emits.find((i) => readMsg32Code(i) === CODE_INFO_CHARACTER);
+  const unitRec = emits.find((i) => readMsg32Code(i) === CODE_INFO_UNIT);
+  assert.ok(charRec && unitRec, '0x0323 and 0x0325 both present');
+  const cb = msg32Body(charRec);
+  const ub = msg32Body(unitRec);
+
+  // 앞 필드 앵커 (클라 FUN_00419300 필드맵)
+  assert.equal(cb.readUInt32LE(0x00), 42, 'character id @ body+0x00');
+  assert.equal(cb.readUInt8(0x04), 2, 'power @ body+0x04');
+  assert.equal(cb.readUInt32LE(0x1c), 1, 'spot @ body+0x1c (not drifted)');
+
+  // flagship 정확히 0x24, unit id 정확히 0x04, 크로스-레코드 동일·≠0
+  const flagship = cb.readUInt32LE(0x24);
+  const unitId0 = ub.readUInt32LE(0x04);
+  assert.equal(flagship, 7, 'flagship (grid-unit id) @ body+0x24');
+  assert.equal(unitId0, 7, '0x0325 unit[0].id @ body+0x04');
+  assert.equal(flagship, unitId0, 'flagship(+0x24) == unit id(+0x04) — char↔unit link');
+  assert.notEqual(flagship, 0, 'flagship ≠ 0 (FUN_004c2a80 link requires non-zero)');
+
+  // anti-drift: flagship 이 ±1 dword(0x20/0x28)로 밀리지 않았음
+  assert.equal(cb.readUInt32LE(0x20), 0, 'body+0x20 (spot_owner) is 0 — flagship not −1 dword');
+  assert.equal(cb.readUInt32LE(0x28), 0, 'body+0x28 (flagship_name_len region) is 0 — flagship not +1 dword');
+  // 0x14 max_of_special 영역이 u32 로 넘쳐 0x18/0x1c 를 밀지 않았음(spot@0x1c 이미 검증됨)
+  assert.equal(cb.readUInt32LE(0x18), 0, 'body+0x18 (return_base) is 0 — max_of_special did not overflow');
+});
+
+test('grid-enter refresh (0x0b09/0x0325/0x0323/0x0b0a) keeps flagship(+0x24)==unit id(+0x04)', () => {
+  const inners = buildWorldReadyPushInners({ unitId: 11, commander: 5, power: 3, spot: 1 });
+  const charRec = inners.find((i) => readMsg32Code(i) === CODE_INFO_CHARACTER);
+  const unitRec = inners.find((i) => readMsg32Code(i) === CODE_INFO_UNIT);
+  assert.ok(charRec && unitRec, '0x0323/0x0325 present between grid-enter begin/end');
+  const flagship = msg32Body(charRec).readUInt32LE(0x24);
+  const unitId0 = msg32Body(unitRec).readUInt32LE(0x04);
+  assert.equal(flagship, 11, 'refresh flagship @ +0x24');
+  assert.equal(unitId0, 11, 'refresh unit id @ +0x04');
+  assert.equal(flagship, unitId0, 'refresh link flagship==unit id');
+  assert.notEqual(flagship, 0, 'refresh flagship ≠ 0');
 });
 
 test('isAdmissionRequestCode covers every static-info req (incl. 신규 0x0308/0x030c), rejects non-admission', () => {
