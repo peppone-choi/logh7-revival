@@ -1,6 +1,32 @@
 # LOGH VII 루프 상태
 
-## ★★ M3 진짜 근본원인(Frida 와이어 확정): 서버 직렬화기 ↔ 클라 인바운드 파서 엔디안+오프셋 불일치 (2026-07-10)
+## ✅✅✅ M3 정본 파서 테이블 확정(raw asm): 0x0323 = 고정 LITTLE-ENDIAN, flagship@wire+0x24 (2026-07-10)
+
+**실제 파서 = dispatcher case 0x323(`FUN_004ba2b0` @ 0x4ba574), raw asm이 전부 고정 LE native MOV 증명.** BE 가정 뒤집힘. `FUN_00419300`은 덤퍼(파서 아님, 0x4192d0 토글).
+
+- **정본 wire body → struct 테이블 (전부 LITTLE-ENDIAN 고정 오프셋)**:
+  | wire off | 타입 | 필드 | asm |
+  |---|---|---|---|
+  | 0x00 | u32 LE | id | `MOV ECX,[EBX]` |
+  | 0x04/0x05 | u8/u8 | power/camp | `MOV DX,[EBX+4]` |
+  | 0x06/0x07 | u8/u8 | state/(unlab) | |
+  | 0x08 | u32 LE | begin_session_age | `[EBX+8]` |
+  | 0x0c/0x0d | u8/u8 | bmonth/bday | |
+  | 0x10 | u32 LE | fame | `[EBX+0x10]` |
+  | **0x14** | **u16 LE** | **max_of_special (★0x16~17 2B 패딩)** | `MOV AX,[EBX+0x14]` |
+  | 0x18 | u32 LE | return_base | `[EBX+0x18]` |
+  | 0x1c | u32 LE | spot | `[EBX+0x1c]` |
+  | 0x20 | u32 LE | spot_owner | `[EBX+0x20]` |
+  | **0x24** | **u32 LE** | **flagship (grid-unit id) ★FUN_004c2a80** | `MOV ECX,[EBX+0x24]` |
+  | 0x28 | u8 | flagship_name_len | |
+  | 0x2a | u16×13 | flagship_name | |
+  | 0x44/0x48/0x4c | u32 LE | strategy/coup_conduct/coup | |
+- **+4 시프트 = 서버측 레이아웃 문제**(클라는 고정오프셋이라 시프트 안 함): 서버 buildInformationCharacterInner가 0x00~0x1c 구간에서 클라 기대보다 4B 초과로 써서 flagship이 물리 0x28로 밀림. 유력: **0x14 max_of_special(u16+2B 패딩)을 서버가 다르게 쓰거나 어느 필드를 BE로 씀.**
+- **엔디안(중요)**: 클라 case 0x323 전부 native LE. Frida "id BE로 보임"은 **서버가 BE로 쓰는 신호(서버 버그)**. 서버는 **모든 다중바이트 필드 LE** 강제. **와이어 프로토콜 전반이 LE** — 다른 월드레코드(0x0325 unit id=body+0x04 u32 LE 등)도 LE. (0x0315 RLE는 엔디안 무관.)
+- **server-dev 지침(buildInformationCharacterInner 정합)**: 모든 다중바이트 LE, 위 테이블에 **바이트 단위 정합**해 flagship이 물리 body[0x24]에 LE unitId로 안착. server-dev 앞선 "body[0x24]=unitId" 덤프 vs Frida 수신 0x28 = **실제 전송 바이트와 테이블 사이 4B 드리프트+BE 오염** → 실제 전송 프레임(post-framing)을 dump/Frida로 대조해 교정.
+- **검증**: `_dump0323_cmp.mjs`로 서버 실제 전송 body 물리 오프셋 확인, Frida `_frida_wire0323.js`로 클라 수신 struct+0x24==unitId, FUN_004c2a80 링크·objTable·NOW LOADING 해제.
+
+## (해결: LE로 정정) M3 Frida 와이어: 서버↔클라 엔디안+오프셋 (2026-07-10)
 
 **Frida 와이어 캡처(`.omo/live-qa/m3-frida-wire-20260710-0929/`)로 모순 결정 해결.** 어긋남 = **(b) 클라 파서 재배치**(서버 출력 정확·전송 무손상·중복 아님).
 
