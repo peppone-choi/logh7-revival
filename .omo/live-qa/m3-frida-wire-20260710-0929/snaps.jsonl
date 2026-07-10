@@ -1,0 +1,24 @@
+{"gamemode": -1, "ring": -1, "sel": -1, "charCount": -1, "objTable": "none", "c2c80": 0, "disp323": 0, "tag": "attach"}
+{"gamemode": -1, "ring": -1, "sel": -1, "charCount": -1, "objTable": "none", "c2c80": 0, "disp323": 0, "tag": "lobby"}
+{"gamemode": -1, "ring": -1, "sel": -1, "charCount": -1, "objTable": "none", "c2c80": 0, "disp323": 0, "tag": "after-game-start"}
+{"gamemode": -1, "ring": -1, "sel": -1, "charCount": -1, "objTable": "none", "c2c80": 0, "disp323": 0, "tag": "after-char-card"}
+{"gamemode": 0, "ring": 1, "sel": 16777216, "charCount": 1, "objTable": "?", "c2c80": 3, "disp323": 2, "dispAny": 17, "ucnt": 256, "char0flag": 0, "tag": "after-char-dbl"}
+{"gamemode": 0, "ring": 1, "sel": 16777216, "charCount": 1, "objTable": "?", "c2c80": 3, "disp323": 2, "dispAny": 17, "ucnt": 256, "char0flag": 0, "tag": "mon+0s"}
+{"gamemode": 0, "ring": 1, "sel": 16777216, "charCount": 1, "objTable": "?", "c2c80": 3, "disp323": 2, "dispAny": 17, "ucnt": 256, "char0flag": 0, "tag": "mon+2s"}
+{"gamemode": 0, "ring": 1, "sel": 16777216, "charCount": 1, "objTable": "?", "c2c80": 3, "disp323": 2, "dispAny": 17, "ucnt": 256, "char0flag": 0, "tag": "mon+5s"}
+{"gamemode": 0, "ring": 1, "sel": 16777216, "charCount": 1, "objTable": "?", "c2c80": 3, "disp323": 2, "dispAny": 17, "ucnt": 256, "char0flag": 0, "tag": "mon+7s"}
+{"gamemode": 0, "ring": 1, "sel": 16777216, "charCount": 1, "objTable": "?", "c2c80": 3, "disp323": 2, "dispAny": 17, "ucnt": 256, "char0flag": 0, "tag": "mon+10s"}
+{"gamemode": 0, "ring": 1, "sel": 16777216, "charCount": 1, "objTable": "?", "c2c80": 3, "disp323": 2, "dispAny": 17, "ucnt": 256, "char0flag": 0, "tag": "mon+12s"}
+{"gamemode": 0, "ring": 1, "sel": 16777216, "charCount": 1, "objTable": "?", "c2c80": 3, "disp323": 2, "dispAny": 17, "ucnt": 256, "char0flag": 0, "tag": "mon+15s"}
+{"gamemode": 0, "ring": 1, "sel": 16777216, "charCount": 1, "objTable": "?", "c2c80": 3, "disp323": 2, "dispAny": 17, "ucnt": 256, "char0flag": 0, "tag": "mon+17s"}
+{"gamemode": 0, "ring": 1, "sel": 16777216, "charCount": 1, "objTable": "?", "c2c80": 3, "disp323": 2, "dispAny": 17, "ucnt": 256, "char0flag": 0, "tag": "mon+20s"}
+{"gamemode": 0, "ring": 1, "sel": 16777216, "charCount": 1, "objTable": "?", "c2c80": 3, "disp323": 2, "dispAny": 17, "ucnt": 256, "char0flag": 0, "tag": "mon+22s"}
+{"gamemode": 0, "ring": 1, "sel": 16777216, "charCount": 1, "objTable": "?", "c2c80": 3, "disp323": 2, "dispAny": 17, "ucnt": 256, "char0flag": 0, "tag": "mon+25s"}
+{"gamemode": 0, "ring": 1, "sel": 16777216, "charCount": 1, "objTable": "?", "c2c80": 3, "disp323": 2, "dispAny": 17, "ucnt": 256, "char0flag": 0, "tag": "mon+27s"}
+{"gamemode": 0, "ring": 1, "sel": 16777216, "charCount": 1, "objTable": "?", "c2c80": 3, "disp323": 2, "dispAny": 17, "ucnt": 256, "char0flag": 0, "tag": "mon+30s"}
+{"gamemode": 0, "ring": 1, "sel": 16777216, "charCount": 1, "objTable": "?", "c2c80": 3, "disp323": 2, "dispAny": 17, "ucnt": 256, "char0flag": 0, "tag": "mon+32s"}
+{"gamemode": 0, "ring": 1, "sel": 16777216, "charCount": 1, "objTable": "?", "c2c80": 3, "disp323": 2, "dispAny": 17, "ucnt": 256, "char0flag": 0, "tag": "mon+35s"}
+{"gamemode": 0, "ring": 1, "sel": 16777216, "charCount": 1, "objTable": "?", "c2c80": 3, "disp323": 2, "dispAny": 17, "ucnt": 256, "char0flag": 0, "tag": "mon+37s"}
+{"gamemode": 0, "ring": 1, "sel": 16777216, "charCount": 1, "objTable": "?", "c2c80": 3, "disp323": 2, "dispAny": 17, "ucnt": 256, "char0flag": 0, "tag": "mon+40s"}
+{"gamemode": 0, "ring": 1, "sel": 16777216, "charCount": 1, "objTable": "?", "c2c80": 3, "disp323": 2, "dispAny": 17, "ucnt": 256, "char0flag": 0, "tag": "mon+42s"}
+{"gamemode": 0, "ring": 1, "sel": 16777216, "charCount": 1, "objTable": "?", "c2c80": 3, "disp323": 2, "dispAny": 17, "ucnt": 256, "char0flag": 0, "tag": "final"}

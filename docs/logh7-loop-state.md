@@ -1,6 +1,25 @@
 # LOGH VII 루프 상태
 
-## ✅✅ M3 근본원인 최종확정: 0x0323 직렬화기 flagship 오프셋 drift (2026-07-10, RE)
+## ★★ M3 진짜 근본원인(Frida 와이어 확정): 서버 직렬화기 ↔ 클라 인바운드 파서 엔디안+오프셋 불일치 (2026-07-10)
+
+**Frida 와이어 캡처(`.omo/live-qa/m3-frida-wire-20260710-0929/`)로 모순 결정 해결.** 어긋남 = **(b) 클라 파서 재배치**(서버 출력 정확·전송 무손상·중복 아님).
+
+- **클라 수신 0x0323 raw body(dispatcher case 0x323, char 배열 저장 전 실측)**:
+  ```
+  +0x00  00 00 00 01  id (BE 1)          +0x04  02 00 00 00  power=2  ← 여기까지 정렬
+  +0x1c  00 00 00 00  spot 소실          +0x20  00 00 00 01  서버 spot(0x1c)이 +4 밀림
+  +0x24  00 00 00 00  flagship=0 ★링크실패  +0x28  01 00 00 00  서버 gridUnitId(0x24)가 +4 밀림
+  ```
+- **두 가지 불일치 확정**:
+  1. **엔디안**: 서버 u32 LE ↔ **클라는 다중바이트 필드를 BIG-ENDIAN으로 읽음**(msg32 code가 writeUInt16BE인 것과 정합 — 이 와이어는 BE). id `00 00 00 01`(BE)로 도착.
+  2. **오프셋 +4 시프트**: id@0x00·power@0x04 정렬, but **0x1c부터 서버 dword가 클라 +4 위치로**(서버 0x1c→클라 0x20, 서버 0x24→클라 0x28). 클라 파서(input_from_stream)가 0x04~0x1c 구간에서 서버가 안 채운 dword 하나를 더 소비.
+- **★핵심 교훈**: 지금까지 근거 삼은 필드맵 `FUN_00419300`은 **디버그 덤퍼(프린터)이지 인바운드 파서가 아니다.** 실제 0x0323 인바운드 파서(`input_from_stream`, dispatcher case 0x323이 호출)의 레이아웃이 달라 그동안 오프셋 작업이 틀린 참조 위에 있었다. info-records-wire.md offset 표도 덤퍼 기준이라 인바운드와 어긋남이 실증됨.
+- **서버 실제 출력(정확)**: buildInformationCharacterInner가 id@0x00 LE, gridUnitId@0x24 LE 정위치. 서버 자체는 "자기 스펙대로" 맞으나 그 스펙이 **클라 인바운드 파서와 다름**.
+- **다음(정본 테이블 확보)**: re-analyst가 **0x0323 인바운드 파서 `input_from_stream`(FUN_00419300 아님)** 디컴파일 → wire→struct 오프셋/타입/**엔디안** 정본 테이블. 특히 0x04~0x1c의 +4 유발 필드와 u32 BE 여부. → wire-engineer/server-dev가 buildInformationCharacterInner를 BE+정본오프셋으로 교정(flagship이 클라 struct+0x24 안착) → Frida 재검증.
+- **주의(파급)**: 엔디안 문제가 0x0323만인지 world-record 전반(0x0325 등)인지 확인 필요 — 다중바이트 BE가 광범위하면 여러 직렬화기 영향.
+- Frida 도구 추가: `tools/live/_frida_wire0323.js`(디스패처 raw-body+링크판정), `tools/live/_dump0323_cmp.mjs`(서버 바이트 덤프).
+
+## (참조오류로 무효) M3 "직렬화기 flagship drift" — FUN_00419300은 덤퍼였음 (2026-07-10)
 
 **진단 완결. "objTable NULL"은 오독, 진짜 버그는 서버 0x0323 필드 오프셋 어긋남.**
 
