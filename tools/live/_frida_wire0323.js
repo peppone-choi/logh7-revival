@@ -65,7 +65,10 @@ Interceptor.attach(F_DISP, {
           off20:u32(s.ptr.add(0x20)), off20be:be32(s.ptr.add(0x20)),
           off24:u32(s.ptr.add(0x24)), off24be:be32(s.ptr.add(0x24)),
           off28:u32(s.ptr.add(0x28)), off28be:be32(s.ptr.add(0x28)),
-          hex:hx(s.ptr,0x40) });
+          // face=0x12345678@서버body0xf4 등 sentinel 포함하도록 0x120B
+          hex:hx(s.ptr,0x120),
+          // EBX-8 pre-context: msg32 헤더/prefix 가 앞에 있는지 확인
+          hexPre:hx(s.ptr.sub(8),0x48) });
       }
     }
     send({ ev:'disp0323', n:g_disp323,
@@ -88,7 +91,9 @@ function readWorld(bp){
       o20:u32(e.add(0x20)), o20be:be32(e.add(0x20)),
       flagLE:u32(e.add(OFF_FLAG)), flagBE:be32(e.add(OFF_FLAG)),
       o28:u32(e.add(0x28)), o28be:be32(e.add(0x28)),
-      hex:hx(e,0x40) });
+      // 0x120B: 서버 body 의 distinctive sentinel(face=0x12345678@0xf4, rank=13@0xd6,
+      // abilities@0x188 은 범위 밖)까지 포함해 서버 inner 와 offset 교차대조.
+      hex:hx(e,0x120) });
   }
   o.units=[];
   const un=(o.ucnt>=1&&o.ucnt<=16)?o.ucnt:4;
