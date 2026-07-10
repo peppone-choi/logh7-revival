@@ -189,123 +189,75 @@ export function buildSsGameLoginOkInner({ status = 1 } = {}) {
 
 // ─── 0x0323 ResponseInformationCharacter (724B) ───────────────────────────────
 
-function writePstr16Ucs2(payload, str, lenOff, charsOff) {
+/** pstr16: [u8 len][u16BE ×len] UTF-16 BIG-ENDIAN (정본 0x0323 flagship_name 계열) */
+function writePstr16Be(payload, str, lenOff, charsOff) {
   const codes = [...String(str ?? '')].slice(0, NAME_MAX);
   payload.writeUInt8(codes.length, lenOff);
   for (let i = 0; i < codes.length; i += 1) {
-    payload.writeUInt16LE(codes[i].charCodeAt(0) & 0xffff, charsOff + i * 2);
+    payload.writeUInt16BE(codes[i].charCodeAt(0) & 0xffff, charsOff + i * 2);
   }
 }
 
 /**
- * 최소 월드 로드용 0x0323. id@0x00 · flagship@0x24 가 앵커 (G164).
- * parentage 이름은 표시용으로만 채우며, 없는 필드는 0.
+ * 0x0323 ResponseInformationCharacter (724B) — 정본 wire = PACKED BIG-ENDIAN.
+ *
+ * 근본원인(Frida sentinel A/B 확정, 재조사 불필요): 클라 case 0x0323 파서는 body 를
+ * packed BIG-ENDIAN 으로 읽는다. 이전 struct-정렬 + little-endian 방출은 두 결함이 있었다:
+ *   (A) 멀티바이트 전 필드가 BE 여야 하는데 LE 로 나가 바이트가 뒤집혔다.
+ *   (B) 서버가 struct 정렬용 pad 2B×2(0x0e·0x16)를 wire 에 포함시켰다 — wire 는 packed 라
+ *       pad 가 없다. 그래서 return_base 이후 모든 필드가 +4 drift 해 flagship 이 0x24 로 밀렸고
+ *       링크(flagship==0x0325 unit[0].id)가 실패해 전략맵이 NOW LOADING 에서 정지했다.
+ *
+ * 정본 PACKED BE 레이아웃(pad 없음, 멀티바이트 전부 writeUInt*BE):
+ *   0x00 u32 id / 0x04 u8 power / 0x05 u8 camp / 0x06 u8 state / 0x07 u8 field07(0)
+ *   0x08 u32 begin_session_age / 0x0c u8 bday_month / 0x0d u8 bday_day
+ *   0x0e u32 fame / 0x12 u16 max_of_special / 0x14 u32 return_base
+ *   0x18 u32 spot / 0x1c u32 spot_owner
+ *   0x20 u32 flagship(=gridUnitId=0x0325 unit[0].id) ★char↔unit 링크 앵커
+ *   0x24 u8 flagship_name_len / 0x26 u16[13] flagship_name(UTF-16 BE)
+ * 0x40 이후(strategy/parentage/ability/cards)는 전부 미승격 0 (packed BE 실오프셋 미확정 →
+ * 날조 금지, 값 0). 총 크기 0x2d4(724B) 유지 — packed 로 앞이 4B 줄어 끝이 자연 0 패딩.
+ *
+ * 참고: lastname/firstname/face/rank/abilities/online/officerCount 등 구 표시필드 인자는
+ * 호출부 호환을 위해 받되(무시), 정본 BE 오프셋이 확정되기 전엔 방출하지 않는다.
  */
 export function buildInformationCharacterInner({
   characterId = 1,
   gridUnitId = 1,
   power = 1,
-  spot = 1,
-  online = true,
-  lastname = null,
-  firstname = null,
-  face = null,
-  rank = null,
-  abilities = null,
-  officerCount = null,
-  seatEntries = null,
-  stamina = 100,
-  // ── 정본 wire body 필드 (클라 case 0x323 raw-asm 확정 테이블, 전부 LITTLE-ENDIAN) ──
-  // docs/logh7-loop-state.md "M3 정본 파서 테이블 확정(raw asm): 0x0323 = 고정 LITTLE-ENDIAN".
-  // 미확정/미승격 필드는 기본 0 (날조 금지). flagship(0x24)=gridUnitId 가 char↔unit 링크 앵커.
   camp = 0,
   state = 0,
   beginSessionAge = 0,
   birthdayMonth = 0,
   birthdayDay = 0,
   fame = 0,
-  maxOfSpecial = 0, // u16 — u32 로 쓰면 0x16 pad/0x18 return_base 를 밀어 flagship drift 유발
+  maxOfSpecial = 0,
   returnBase = 0,
+  spot = 1,
   spotOwner = 0,
   flagshipName = null,
-  strategy = 0,
-  coupConduct = 0,
-  coup = 0,
 } = {}) {
   const body = Buffer.alloc(CODE_INFO_CHARACTER_BYTES);
-  // 클라 case 0x323 raw-asm 고정 오프셋 native MOV 레이아웃 (전부 LE). 정본 테이블 순서대로:
-  body.writeUInt32LE(characterId >>> 0, 0x00); // character id
+  // 정본 wire: PACKED BIG-ENDIAN (pad 없음). 멀티바이트 전부 writeUInt*BE.
+  body.writeUInt32BE(characterId >>> 0, 0x00); // id
   body.writeUInt8(power & 0xff, 0x04);         // power
   body.writeUInt8(camp & 0xff, 0x05);          // camp
   body.writeUInt8(state & 0xff, 0x06);         // state
-  // 0x07: pad (0)
-  body.writeUInt32LE(beginSessionAge >>> 0, 0x08); // begin_session_age
+  // 0x07 field07 = 0
+  body.writeUInt32BE(beginSessionAge >>> 0, 0x08); // begin_session_age
   body.writeUInt8(birthdayMonth & 0xff, 0x0c);     // birthday_month
   body.writeUInt8(birthdayDay & 0xff, 0x0d);       // birthday_day
-  // 0x0e: pad u16 (0)
-  body.writeUInt32LE(fame >>> 0, 0x10);            // fame
-  body.writeUInt16LE(maxOfSpecial & 0xffff, 0x14); // max_of_special (u16)
-  // 0x16: pad u16 (0)
-  body.writeUInt32LE(returnBase >>> 0, 0x18);      // return_base
-  body.writeUInt32LE(spot >>> 0, 0x1c);            // spot
-  body.writeUInt32LE(spotOwner >>> 0, 0x20);       // spot_owner
-  // ── 0x0323 flagship -4 위치 진단 실험 (env-gate) ──
-  // 클라가 struct+0x28 에서 읽는데 서버가 물리 0x24 에 쓰는 +4 어긋남을, flagship 을 물리
-  // 0x20 으로 -4 이동시켜 클라 struct[0x24]에 안착하는지로 확정한다. 근본수정 아님 —
-  // env off 가 기본(현행 0x24)이라 기존 동작·테스트 불변. 라이브 NOW LOADING 해제로 판정.
-  if (process.env.LOGH_FLAGSHIP_M4 === '1') {
-    body.writeUInt32LE(gridUnitId >>> 0, 0x20);    // 실험: flagship -4 (물리 0x20)
-    body.writeUInt32LE(0, 0x24);                   // 원래 위치 0x24 는 0
-  } else {
-    body.writeUInt32LE(gridUnitId >>> 0, 0x24);    // flagship (grid-unit id) ← 링크 앵커 (현행)
-  }
-  // 0x28 flagship_name_len / 0x2a flagship_name (UTF-16LE ×13) — 표시용, 없으면 0
+  body.writeUInt32BE(fame >>> 0, 0x0e);            // fame (packed — 0x0e pad 없음)
+  body.writeUInt16BE(maxOfSpecial & 0xffff, 0x12); // max_of_special (u16, packed)
+  body.writeUInt32BE(returnBase >>> 0, 0x14);      // return_base (packed — 0x16 pad 없음)
+  body.writeUInt32BE(spot >>> 0, 0x18);            // spot
+  body.writeUInt32BE(spotOwner >>> 0, 0x1c);       // spot_owner
+  body.writeUInt32BE(gridUnitId >>> 0, 0x20);      // flagship (grid-unit id) ★링크 앵커
+  // 0x24 flagship_name_len / 0x26 flagship_name (UTF-16 BE ×13) — 표시용, 없으면 0
   if (flagshipName != null && String(flagshipName).length > 0) {
-    writePstr16Ucs2(body, flagshipName, 0x28, 0x2a);
+    writePstr16Be(body, flagshipName, 0x24, 0x26);
   }
-  body.writeUInt32LE(strategy >>> 0, 0x44);        // strategy
-  body.writeUInt32LE(coupConduct >>> 0, 0x48);     // coup_conduct
-  body.writeUInt32LE(coup >>> 0, 0x4c);            // coup
-  if (online) body.writeUInt8(1, 0x64);
-  // 스탯 기본값 (전부 0이면 패널이 NO DATA 로 보이는 경우 방지)
-  const stats = Array.isArray(abilities) && abilities.length
-    ? abilities
-    : [50, 50, 50, 50, 50, 50, 50, 50];
-  for (let i = 0; i < 8; i += 1) {
-    body.writeUInt16LE((stats[i] ?? 50) & 0xffff, 0x188 + i * 4);
-  }
-  if (Number.isInteger(stamina)) body.writeUInt8(stamina & 0xff, 0x1a9);
-
-  const hasParentage =
-    lastname != null || firstname != null || Number.isInteger(face) || Number.isInteger(rank);
-  if (hasParentage) {
-    body.writeUInt8(1, 0x7d); // parentage_len
-    body.writeUInt8(1, 0x80); // truth
-    if (lastname != null) writePstr16Ucs2(body, lastname, 0x81, 0x82);
-    if (firstname != null) writePstr16Ucs2(body, firstname, 0x9c, 0x9e);
-    const display = [lastname, firstname].filter(Boolean).join(' ');
-    if (display) writePstr16Ucs2(body, display, 0xb8, 0xba);
-    if (Number.isInteger(rank)) body.writeUInt16LE(rank & 0xffff, 0xd6);
-    if (Number.isInteger(face)) body.writeUInt32LE(face >>> 0, 0xf4);
-  }
-
-  // card/officer count @0x24c — 0이면 유닛 리스트 패널 NO DATA (C002 RE)
-  const seats = Array.isArray(seatEntries)
-    ? seatEntries
-    : [{ character: characterId, role: 0 }];
-  const seatCount = Math.min(
-    seats.length || (Number.isInteger(officerCount) ? officerCount : 1),
-    16,
-  );
-  body.writeUInt8(Math.max(1, seatCount), 0x24c);
-  for (let i = 0; i < Math.max(1, seatCount); i += 1) {
-    const entry = seats[i] ?? { character: characterId, role: 0 };
-    const cid = Number(entry.character ?? entry.characterId ?? characterId) >>> 0;
-    const role = Number(entry.role ?? 0) >>> 0;
-    body.writeUInt32LE(cid, 0x254 + i * 8);
-    body.writeUInt32LE(role, 0x258 + i * 8);
-  }
-
+  // 0x40 이후: 미승격 0 (정본 packed BE 오프셋 미확정 → 방출 안 함).
   return buildMsg32Inner(CODE_INFO_CHARACTER, body);
 }
 
@@ -314,12 +266,15 @@ export function buildInformationCharacterInner({
 export function buildInformationUnitInner({ unitId = 1, unitCount = 1, cell = 0, commander = 0 } = {}) {
   const body = Buffer.alloc(CODE_INFO_UNIT_BYTES);
   const count = Math.max(0, Math.min(unitCount, 600));
-  body.writeUInt16LE(count, 0);
+  // 0x0325 도 0x0323 과 같은 info-record 파서 계열 → PACKED BIG-ENDIAN.
+  // count 를 BE 로 쓰지 않으면 클라가 count 를 뒤집어 읽어 팬텀 유닛을 순회한다(내부 정합).
+  // unit[0].id(+0x04)는 0x0323 flagship(+0x20)의 링크 대상 — "동일 바이트값" 되려면 둘 다 BE.
+  body.writeUInt16BE(count, 0);
   if (count > 0) {
     const base = CODE_INFO_UNIT_HEADER;
-    body.writeUInt32LE(unitId >>> 0, base + 0x00);
-    if (Number.isInteger(commander)) body.writeUInt32LE(commander >>> 0, base + 0x08);
-    if (Number.isInteger(cell)) body.writeUInt32LE(cell >>> 0, base + 0x0c);
+    body.writeUInt32BE(unitId >>> 0, base + 0x00);       // unit[0].id ★flagship 링크 대상
+    if (Number.isInteger(commander)) body.writeUInt32BE(commander >>> 0, base + 0x08);
+    if (Number.isInteger(cell)) body.writeUInt32BE(cell >>> 0, base + 0x0c);
   }
   return buildMsg32Inner(CODE_INFO_UNIT, body);
 }

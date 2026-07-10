@@ -44,29 +44,24 @@ import {
   msg32Body,
 } from '../src/server/logh7-world-records.mjs';
 
-test('0x0323 character record is message32 with 724B body and id/flagship anchors', () => {
-  const inner = buildInformationCharacterInner({
-    characterId: 7,
-    gridUnitId: 42,
-    lastname: 'Reinhard',
-    firstname: 'Lohengramm',
-    face: 1,
-  });
+test('0x0323 character record is message32 with 724B body and id/flagship anchors (packed BE)', () => {
+  // 정본 wire = packed BIG-ENDIAN (Frida sentinel A/B). id@0x00 BE, flagship@0x20 BE (packed, -4).
+  const inner = buildInformationCharacterInner({ characterId: 7, gridUnitId: 42 });
   assert.equal(readMsg32Code(inner), CODE_INFO_CHARACTER);
   const body = msg32Body(inner);
   assert.equal(body.length, CODE_INFO_CHARACTER_BYTES);
-  assert.equal(body.readUInt32LE(0x00), 7);
-  assert.equal(body.readUInt32LE(0x24), 42);
-  assert.equal(body.readUInt8(0x7d), 1); // parentage_len
+  assert.equal(body.readUInt32BE(0x00), 7);
+  assert.equal(body.readUInt32BE(0x20), 42);
 });
 
-test('0x0325 unit record is fixed 52804B with count and unit id', () => {
+test('0x0325 unit record is fixed 52804B with count and unit id (packed BE)', () => {
+  // 0x0325 도 info-record 계열 → packed BE (count·id). flagship(0x0323 +0x20)과 동일 BE 로 링크.
   const inner = buildInformationUnitInner({ unitId: 5, unitCount: 1, cell: 2588 });
   assert.equal(readMsg32Code(inner), CODE_INFO_UNIT);
   const body = msg32Body(inner);
   assert.equal(body.length, CODE_INFO_UNIT_BYTES);
-  assert.equal(body.readUInt16LE(0), 1);
-  assert.equal(body.readUInt32LE(4), 5);
+  assert.equal(body.readUInt16BE(0), 1);
+  assert.equal(body.readUInt32BE(4), 5);
 });
 
 test('0x0b07 NotifyMovedGrid is 580B with unit@0x14 LE', () => {
@@ -386,26 +381,26 @@ test('world entry 0x0323 carries real seed character stats (registerable object,
   assert.ok(charRec, '0x0323 present in world-entry batch');
   const body = msg32Body(charRec);
   assert.equal(body.length, CODE_INFO_CHARACTER_BYTES);
-  assert.equal(body.readUInt32LE(0x00), 42, 'real characterId (focus lookup key)');
-  assert.equal(body.readUInt32LE(0x24), 7, 'real gridUnitId');
+  // 정본 packed BE: id@0x00, flagship@0x20. power@0x04 는 u8(엔디안 무관).
+  assert.equal(body.readUInt32BE(0x00), 42, 'real characterId (focus lookup key)');
+  assert.equal(body.readUInt32BE(0x20), 7, 'real gridUnitId (flagship @0x20 BE, packed)');
   assert.equal(body.readUInt8(0x04), 2, 'real power/faction (not 0 stub)');
-  assert.equal(body.readUInt16LE(0x188), 90, 'real ability[0] forwarded');
-  assert.equal(body.readUInt16LE(0x188 + 4 * 7), 55, 'real ability[7] forwarded');
+  // ability/parentage 등 0x40 이후는 미승격 0 (정본 packed BE 실오프셋 미확정 → 날조 금지).
 });
 
 // ─── 0x0323 flagship 오프셋 anti-drift 불변식 (전략맵 NOW LOADING 해제) ──────────
 //
-// 근거: docs/logh7-loop-state.md "M3 근본원인: 0x0323 직렬화기 flagship 오프셋 drift" +
-//   클라 FUN_00419300 필드맵. 클라는 flagship 을 record body offset 0x24 (u32 LE)에서 읽고,
-//   0x0325 unit[0].id 는 body offset 0x04 에서 읽어 char↔unit 링크(FUN_004c2a80)를 만든다.
-//   flagship 이 ±1 dword(0x20/0x28) 로 밀리면 record+0x24=0 → 링크 실패 → NOW LOADING 정지.
+// 근거: Frida sentinel A/B — 클라 case 0x0323 파서는 body 를 packed BIG-ENDIAN 으로 읽는다.
+//   flagship 은 packed BE record body offset 0x20 (u32 BE)에서, 0x0325 unit[0].id 는 body
+//   offset 0x04(u32 BE)에서 읽어 char↔unit 링크(FUN_004c2a80)를 만든다. flagship 이 ±1 dword
+//   로 밀리거나 LE 로 뒤집히면 record+0x20≠unitId → 링크 실패 → NOW LOADING 정지.
 //
 // 이 테스트는 세 가지를 잠근다:
-//   (1) 크로스-레코드: 0x0323 flagship(+0x24) == 0x0325 unit[0].id(+0x04), 둘 다 ≠0.
-//   (2) anti-drift: flagship 은 정확히 0x24 에만. 인접 0x20(spot_owner)/0x28(flagship_name_len)
+//   (1) 크로스-레코드: 0x0323 flagship(+0x20 BE) == 0x0325 unit[0].id(+0x04 BE), 둘 다 ≠0.
+//   (2) anti-drift: flagship 은 정확히 0x20 에만. 인접 0x1c(spot_owner)/0x24(flagship_name_len)
 //       dword 는 0 — flagship 이 ±1 dword 로 새지 않았음을 증명.
-//   (3) 앞 필드 정합: id@0x00, power@0x04, spot@0x1c 가 클라 필드맵대로 자리 지킴.
-test('0x0323 flagship lands at body+0x24 == 0x0325 unit id (+0x04), no ±1 dword drift', () => {
+//   (3) 앞 필드 정합: id@0x00, power@0x04, spot@0x18 이 packed BE 테이블대로 자리 지킴.
+test('0x0323 flagship lands at body+0x20 (packed BE) == 0x0325 unit id (+0x04 BE), no drift', () => {
   const emits = buildWorldEntryInners({ characterId: 42, gridUnitId: 7, power: 2, spot: 1 });
   const charRec = emits.find((i) => readMsg32Code(i) === CODE_INFO_CHARACTER);
   const unitRec = emits.find((i) => readMsg32Code(i) === CODE_INFO_UNIT);
@@ -413,38 +408,38 @@ test('0x0323 flagship lands at body+0x24 == 0x0325 unit id (+0x04), no ±1 dword
   const cb = msg32Body(charRec);
   const ub = msg32Body(unitRec);
 
-  // 앞 필드 앵커 (클라 FUN_00419300 필드맵)
-  assert.equal(cb.readUInt32LE(0x00), 42, 'character id @ body+0x00');
+  // 앞 필드 앵커 (정본 packed BE): id@0x00 BE, power@0x04 u8, spot@0x18 BE (packed, -4)
+  assert.equal(cb.readUInt32BE(0x00), 42, 'character id @ body+0x00 BE');
   assert.equal(cb.readUInt8(0x04), 2, 'power @ body+0x04');
-  assert.equal(cb.readUInt32LE(0x1c), 1, 'spot @ body+0x1c (not drifted)');
+  assert.equal(cb.readUInt32BE(0x18), 1, 'spot @ body+0x18 BE (packed, not drifted)');
 
-  // flagship 정확히 0x24, unit id 정확히 0x04, 크로스-레코드 동일·≠0
-  const flagship = cb.readUInt32LE(0x24);
-  const unitId0 = ub.readUInt32LE(0x04);
-  assert.equal(flagship, 7, 'flagship (grid-unit id) @ body+0x24');
-  assert.equal(unitId0, 7, '0x0325 unit[0].id @ body+0x04');
-  assert.equal(flagship, unitId0, 'flagship(+0x24) == unit id(+0x04) — char↔unit link');
+  // flagship 정확히 0x20 BE, unit id 정확히 0x04 BE, 크로스-레코드 동일·≠0
+  const flagship = cb.readUInt32BE(0x20);
+  const unitId0 = ub.readUInt32BE(0x04);
+  assert.equal(flagship, 7, 'flagship (grid-unit id) @ body+0x20 BE');
+  assert.equal(unitId0, 7, '0x0325 unit[0].id @ body+0x04 BE');
+  assert.equal(flagship, unitId0, 'flagship(+0x20) == unit id(+0x04) — char↔unit link');
   assert.notEqual(flagship, 0, 'flagship ≠ 0 (FUN_004c2a80 link requires non-zero)');
 
-  // anti-drift: flagship 이 ±1 dword(0x20/0x28)로 밀리지 않았음
-  assert.equal(cb.readUInt32LE(0x20), 0, 'body+0x20 (spot_owner) is 0 — flagship not −1 dword');
-  assert.equal(cb.readUInt32LE(0x28), 0, 'body+0x28 (flagship_name_len region) is 0 — flagship not +1 dword');
-  // 0x14 max_of_special 영역이 u32 로 넘쳐 0x18/0x1c 를 밀지 않았음(spot@0x1c 이미 검증됨)
-  assert.equal(cb.readUInt32LE(0x18), 0, 'body+0x18 (return_base) is 0 — max_of_special did not overflow');
+  // anti-drift: 인접 dword 는 0 (packed 로 flagship 이 ±1 dword 로 밀리지 않았음)
+  assert.equal(cb.readUInt32BE(0x1c), 0, 'body+0x1c (spot_owner) is 0 — flagship not −1 dword');
+  assert.equal(cb.readUInt32BE(0x24), 0, 'body+0x24 (flagship_name_len region) is 0 — flagship not +1 dword');
+  // max_of_special(u16)이 return_base 를 밀지 않았음 (packed, pad 없음)
+  assert.equal(cb.readUInt32BE(0x14), 0, 'body+0x14 (return_base) is 0 — max_of_special is u16, no overflow');
 });
 
-// ─── 0x0323 정본 wire body 바이트 단위 정합 (클라 case 0x323 raw-asm 확정 테이블) ──
+// ─── 0x0323 정본 wire body 바이트 단위 정합 (packed BIG-ENDIAN, Frida sentinel A/B) ──
 //
-// 근거: docs/logh7-loop-state.md "M3 정본 파서 테이블 확정(raw asm): 0x0323 = 고정 LITTLE-ENDIAN".
-//   클라 dispatcher case 0x323 은 전부 고정 오프셋 native MOV (LITTLE-ENDIAN) 로 읽는다.
-//   서버 body 가 이 테이블과 바이트 단위로 일치해야 flagship(+0x24)==0x0325 unit[0].id(+0x04)
-//   링크(FUN_004c2a80)가 성립해 NOW LOADING 이 해제된다.
+// 근거: Frida sentinel A/B — 클라 case 0x0323 파서는 body 를 packed BIG-ENDIAN 으로 읽는다.
+//   pad 없음(packed): 0x0e·0x16 struct pad 를 wire 에 넣으면 return_base 이후 +4 drift.
+//   서버 body 가 이 packed BE 테이블과 바이트 단위로 일치해야 flagship(+0x20)==0x0325
+//   unit[0].id(+0x04) 링크(FUN_004c2a80)가 성립해 NOW LOADING 이 해제된다.
 //
-// 이 테스트는 각 필드에 서로 다른 값을 넣어 엔디안 오염/오프셋 drift/타입 오류(u16↔u32)를 잡는다.
-test('0x0323 canonical wire layout: every field LE at raw-asm offsets, max_of_special is u16', () => {
+// 이 테스트는 각 필드에 서로 다른 값을 넣어 엔디안 오염(LE)/오프셋 drift/타입 오류(u16↔u32)를 잡는다.
+test('0x0323 canonical wire layout: every multibyte field packed BIG-ENDIAN, max_of_special is u16', () => {
   const inner = buildInformationCharacterInner({
     characterId: 0x11223344,
-    gridUnitId: 0x0aabbccd, // flagship (grid-unit id) @0x24
+    gridUnitId: 0x0aabbccd, // flagship (grid-unit id) @0x20 BE
     power: 0x2a,
     camp: 2,
     state: 5,
@@ -452,53 +447,44 @@ test('0x0323 canonical wire layout: every field LE at raw-asm offsets, max_of_sp
     birthdayMonth: 4,
     birthdayDay: 26,
     fame: 0x0badf00d,
-    maxOfSpecial: 0x1234, // u16 — 반드시 0x16 pad / 0x18 return_base 를 밀지 않아야
+    maxOfSpecial: 0x1234, // u16 — packed 라 return_base 를 밀지 않아야
     returnBase: 0x55667788,
     spot: 0x0000dead,
     spotOwner: 0x0000beef,
-    strategy: 0x00112233,
-    coupConduct: 0x44556677,
-    coup: 0x08009900,
   });
   const b = msg32Body(inner);
   assert.equal(b.length, CODE_INFO_CHARACTER_BYTES);
 
-  // 0x00 id / 0x04 power / 0x05 camp / 0x06 state / 0x07 pad
-  assert.equal(b.readUInt32LE(0x00), 0x11223344, 'id@0x00 u32 LE');
+  // 0x00 id / 0x04 power / 0x05 camp / 0x06 state / 0x07 field07
+  assert.equal(b.readUInt32BE(0x00), 0x11223344, 'id@0x00 u32 BE');
   assert.equal(b.readUInt8(0x04), 0x2a, 'power@0x04 u8');
   assert.equal(b.readUInt8(0x05), 2, 'camp@0x05 u8');
   assert.equal(b.readUInt8(0x06), 5, 'state@0x06 u8');
-  assert.equal(b.readUInt8(0x07), 0, 'pad@0x07 == 0');
-  // 0x08 begin_session_age / 0x0c bday / 0x0e pad
-  assert.equal(b.readUInt32LE(0x08), 0x01020304, 'begin_session_age@0x08 u32 LE');
+  assert.equal(b.readUInt8(0x07), 0, 'field07@0x07 == 0');
+  // 0x08 begin_session_age / 0x0c bday (packed — 0x0e pad 없음)
+  assert.equal(b.readUInt32BE(0x08), 0x01020304, 'begin_session_age@0x08 u32 BE');
   assert.equal(b.readUInt8(0x0c), 4, 'birthday_month@0x0c u8');
   assert.equal(b.readUInt8(0x0d), 26, 'birthday_day@0x0d u8');
-  assert.equal(b.readUInt16LE(0x0e), 0, 'pad@0x0e == 0');
-  // 0x10 fame / 0x14 max_of_special (u16!) / 0x16 pad / 0x18 return_base
-  assert.equal(b.readUInt32LE(0x10), 0x0badf00d, 'fame@0x10 u32 LE');
-  assert.equal(b.readUInt16LE(0x14), 0x1234, 'max_of_special@0x14 u16 LE');
-  assert.equal(b.readUInt16LE(0x16), 0, 'pad@0x16 == 0 (max_of_special is u16, no overflow)');
-  assert.equal(b.readUInt32LE(0x18), 0x55667788, 'return_base@0x18 u32 LE');
-  // 0x1c spot / 0x20 spot_owner / 0x24 flagship — 링크 앵커 구간
-  assert.equal(b.readUInt32LE(0x1c), 0x0000dead, 'spot@0x1c u32 LE');
-  assert.equal(b.readUInt32LE(0x20), 0x0000beef, 'spot_owner@0x20 u32 LE');
-  assert.equal(b.readUInt32LE(0x24), 0x0aabbccd, 'flagship (grid-unit id)@0x24 u32 LE');
-  assert.notEqual(b.readUInt32LE(0x20), b.readUInt32LE(0x24), 'spot_owner@0x20 != flagship (no drift)');
-  // 0x44 strategy / 0x48 coup_conduct / 0x4c coup
-  assert.equal(b.readUInt32LE(0x44), 0x00112233, 'strategy@0x44 u32 LE');
-  assert.equal(b.readUInt32LE(0x48), 0x44556677, 'coup_conduct@0x48 u32 LE');
-  assert.equal(b.readUInt32LE(0x4c), 0x08009900, 'coup@0x4c u32 LE');
+  // 0x0e fame / 0x12 max_of_special (u16!) / 0x14 return_base — packed, pad 없음
+  assert.equal(b.readUInt32BE(0x0e), 0x0badf00d, 'fame@0x0e u32 BE (packed)');
+  assert.equal(b.readUInt16BE(0x12), 0x1234, 'max_of_special@0x12 u16 BE');
+  assert.equal(b.readUInt32BE(0x14), 0x55667788, 'return_base@0x14 u32 BE (packed, no pad drift)');
+  // 0x18 spot / 0x1c spot_owner / 0x20 flagship — 링크 앵커 구간
+  assert.equal(b.readUInt32BE(0x18), 0x0000dead, 'spot@0x18 u32 BE');
+  assert.equal(b.readUInt32BE(0x1c), 0x0000beef, 'spot_owner@0x1c u32 BE');
+  assert.equal(b.readUInt32BE(0x20), 0x0aabbccd, 'flagship (grid-unit id)@0x20 u32 BE');
+  assert.notEqual(b.readUInt32BE(0x1c), b.readUInt32BE(0x20), 'spot_owner@0x1c != flagship (no drift)');
 });
 
-test('grid-enter refresh (0x0b09/0x0325/0x0323/0x0b0a) keeps flagship(+0x24)==unit id(+0x04)', () => {
+test('grid-enter refresh (0x0b09/0x0325/0x0323/0x0b0a) keeps flagship(+0x20 BE)==unit id(+0x04 BE)', () => {
   const inners = buildWorldReadyPushInners({ unitId: 11, commander: 5, power: 3, spot: 1 });
   const charRec = inners.find((i) => readMsg32Code(i) === CODE_INFO_CHARACTER);
   const unitRec = inners.find((i) => readMsg32Code(i) === CODE_INFO_UNIT);
   assert.ok(charRec && unitRec, '0x0323/0x0325 present between grid-enter begin/end');
-  const flagship = msg32Body(charRec).readUInt32LE(0x24);
-  const unitId0 = msg32Body(unitRec).readUInt32LE(0x04);
-  assert.equal(flagship, 11, 'refresh flagship @ +0x24');
-  assert.equal(unitId0, 11, 'refresh unit id @ +0x04');
+  const flagship = msg32Body(charRec).readUInt32BE(0x20);
+  const unitId0 = msg32Body(unitRec).readUInt32BE(0x04);
+  assert.equal(flagship, 11, 'refresh flagship @ +0x20 BE');
+  assert.equal(unitId0, 11, 'refresh unit id @ +0x04 BE');
   assert.equal(flagship, unitId0, 'refresh link flagship==unit id');
   assert.notEqual(flagship, 0, 'refresh flagship ≠ 0');
 });
@@ -520,35 +506,6 @@ test('isAdmissionRequestCode covers every static-info req (incl. 신규 0x0308/0
   assert.equal(isAdmissionRequestCode(0x7abc), false);
 });
 
-// ─── 0x0323 flagship -4 위치 실험 (env-gate LOGH_FLAGSHIP_M4) ──────────────────
-// 진단 목적: 클라가 struct+0x28 에서 flagship 을 읽는데 서버는 물리 0x24 에 쓴다(+4 어긋남).
-// body 0x04~0x1c 구간의 4바이트 필드폭 불일치로 클라가 4바이트를 더 소비한다는 가설을,
-// flagship 을 물리 0x20 으로 -4 이동시켜 클라 struct[0x24]에 안착하는지로 확정한다.
-// 근본수정 아님 — env-gate 라 기본 동작·기존 테스트 불변. 라이브에서 NOW LOADING 해제 여부로 판정.
-test('LOGH_FLAGSHIP_M4=1: flagship moves to body+0x20, body+0x24 zeroed (-4 진단 실험)', () => {
-  const prev = process.env.LOGH_FLAGSHIP_M4;
-  process.env.LOGH_FLAGSHIP_M4 = '1';
-  try {
-    const inner = buildInformationCharacterInner({ characterId: 7, gridUnitId: 42 });
-    const body = msg32Body(inner);
-    assert.equal(body.length, CODE_INFO_CHARACTER_BYTES);
-    assert.equal(body.readUInt32LE(0x20), 42, '실험: flagship @ body+0x20 (-4)');
-    assert.equal(body.readUInt32LE(0x24), 0, '실험: 원래 위치 0x24 는 0');
-  } finally {
-    if (prev === undefined) delete process.env.LOGH_FLAGSHIP_M4;
-    else process.env.LOGH_FLAGSHIP_M4 = prev;
-  }
-});
-
-test('env off(default): flagship stays at body+0x24, 0x20 (spot_owner) is 0 (현행 불변)', () => {
-  const prev = process.env.LOGH_FLAGSHIP_M4;
-  delete process.env.LOGH_FLAGSHIP_M4;
-  try {
-    const inner = buildInformationCharacterInner({ characterId: 7, gridUnitId: 42 });
-    const body = msg32Body(inner);
-    assert.equal(body.readUInt32LE(0x24), 42, '기본: flagship @ body+0x24');
-    assert.equal(body.readUInt32LE(0x20), 0, '기본: 0x20 은 0 (drift 없음)');
-  } finally {
-    if (prev !== undefined) process.env.LOGH_FLAGSHIP_M4 = prev;
-  }
-});
+// ─── 0x0323 flagship -4 위치 실험(env-gate LOGH_FLAGSHIP_M4) 제거 ──────────────────
+// Frida sentinel A/B 로 정본 packed BE(flagship @0x20)가 확정되어 -4 진단 실험은 폐기.
+// 0x20 이 이제 정본 위치이며 무조건 flagship 을 담는다(위 canonical wire / anti-drift 테스트가 잠금).
