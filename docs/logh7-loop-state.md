@@ -2,6 +2,19 @@
 
 > **▶ RESUME (2026-07-10, 컨텍스트 압축 지점):** M1/M0.5/M2 완료. M3 = 원본 클라가 로그인~월드모드(NOW LOADING)까지 크래시 없이 도달, **전략맵 렌더만 미완**. 근본원인(0x0323 = packed BIG-ENDIAN) 확정 후 **서버 재작성 완료·커밋 64e5fd21 푸시됨** — 아래 첫 항목 참조. **다음 액션:** live-qa가 실클라+Frida로 전략맵 렌더 검증 중(struct[0x24]==unitId 링크·팬텀 유닛 없음·NOW LOADING 해제 스크린샷). 검증 하네스: `_m2_launch.mjs`+시드 store.json / `logh7_drive_robust.py login` / `_m2_click.py`(게임개시 125,191·카드 655,305). 서버 테스트 209/209. 규칙: 일 단위마다 커밋·푸시, 라이브 증거 없이 완료주장 금지.
 
+## ⚖️ M3 objTable 게이트 특정 + packed-BE vs aligned-LE 충돌 → 실측으로 방향 확정 중 (2026-07-10)
+
+**re-analyst 정적 RE(`docs/logh7-objtable-gate-re.md`)가 게이트를 특정했으나 결론이 sentinel A/B와 충돌 → live-qa 실측으로 심판 중.**
+
+- **게이트 특정(신뢰)**: 클라 `FUN_004c2a80` mode-0(objTable slot0=자기캐릭 기록)은 **self-match `char record[0](=char id, 레코드+0x00) == clientBase+0x3584a0(self-id)`** 성공 시에만 발화. self-id writer는 **0x0204(SSCharacterIDResponse)가 유일**(디컴 38156). 라이브 mode=2(self-match 실패, mode-0 0회)와 정합 → objTable 영구 빈 상태 → `FUN_004c7290` null → [0x80] null-page → NOW LOADING.
+- **엔디안 불일치(정적 근거)**: 서버 0x0204 characterId=`writeUInt32LE`(:179), 0x0323 record[0]=`writeUInt32BE`(:242). 클라가 둘 다 native 로드 → 값 어긋남.
+- **충돌**: re-analyst는 "0x0323 정본=struct-aligned LE(flagship@wire 0x24), 전부 LE로 되돌려라" 권고. 그러나 sentinel A/B는 packed-BE(flagship@wire 0x20)였고, 라이브(packed-BE 서버)에서 dispatch·flagship↔unit 링크 성립 확인됨. **되돌리기 방향이 둘**:
+  - **(A)** 0x0204만 BE로 (0x0323/0x0325 packed-BE 유지) — flagship이 실제 wire 0x20이면 정답.
+  - **(B)** 0x0323/0x0325 전부 aligned-LE로 되돌리기 — flagship이 wire 0x24면 정답.
+  - 판별점 = **flagship wire 위치 0x20(packed) vs 0x24(aligned)** 하나. sentinel(0x20)·decompile(0x24) 갈림.
+- **결정**: 되돌리기 전에 **실측**(사용자 "추측이 잘못된 방향으로 간다" 경고). live-qa가 현 packed-BE 서버에서 self-id·record[0]·flagship record[9]·unit[0] 정수/hex + 0x0323 raw wire 캡처 → 클라가 flagship을 wire 0x20에서 읽는지 0x24에서 읽는지로 A/B 확정. 0x0204 미송신이면 원인은 엔디안 아니라 "0x0204 안 옴"(방향 C).
+- **주의(재확인)**: 링크가 성립한 건 0x0323·0x0325가 **둘 다 BE**라 byteswap이 같기 때문. self-match만 실패한 건 0x0204만 LE라서 → 가설상 (A)가 최소수정. 단 flagship 위치 실측이 먼저.
+
 ## 🎯 M3 블로커 이동 확정: 로그인·char적재·링크까지 라이브 성공, 남은 벽 = FUN_004c2a80 내부 objTable 게이트 (2026-07-10)
 
 **live-qa 클린 재현런(`m3-stratmap-world-try1-120150`, 최초 발견 `-114006` 바이트 일치)이 packed-BE 재작성의 성과와 잔여 블로커를 확정.**
