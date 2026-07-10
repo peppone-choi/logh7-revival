@@ -2,6 +2,17 @@
 
 > **▶ RESUME (2026-07-10, 컨텍스트 압축 지점):** M1/M0.5/M2 완료. M3 = 원본 클라가 로그인~월드모드(NOW LOADING)까지 크래시 없이 도달, **전략맵 렌더만 미완**. 근본원인(0x0323 = packed BIG-ENDIAN) 확정 후 **서버 재작성 완료·커밋 64e5fd21 푸시됨** — 아래 첫 항목 참조. **다음 액션:** live-qa가 실클라+Frida로 전략맵 렌더 검증 중(struct[0x24]==unitId 링크·팬텀 유닛 없음·NOW LOADING 해제 스크린샷). 검증 하네스: `_m2_launch.mjs`+시드 store.json / `logh7_drive_robust.py login` / `_m2_click.py`(게임개시 125,191·카드 655,305). 서버 테스트 209/209. 규칙: 일 단위마다 커밋·푸시, 라이브 증거 없이 완료주장 금지.
 
+## 🎯 M3 블로커 이동 확정: 로그인·char적재·링크까지 라이브 성공, 남은 벽 = FUN_004c2a80 내부 objTable 게이트 (2026-07-10)
+
+**live-qa 클린 재현런(`m3-stratmap-world-try1-120150`, 최초 발견 `-114006` 바이트 일치)이 packed-BE 재작성의 성과와 잔여 블로커를 확정.**
+
+- **성과**: 0x0323 dispatch 2회(폐기 아님), char[0].flagship@struct+0x24=1=char id ✓, 0x0325 unit[0].id@+0x04=1(BE 정상 파싱, 팬텀 없음) ✓. **0x0323 packed-BE·0x0325 BE는 실클라 정상 확정 — 재조사 금지.**
+- **잔여 블로커(내부 게이트로 확정)**: `FUN_004c2a80(arg0=1)` **호출됨**(calls=1, 트리거 0x0b0a 정상) → 트리거 문제 아님. 진입 gamemode=0/ring=1/ccnt=1/ucnt=1인데 **objTable(clientBase+0xc, stride 0x370)=0x0**, 함수 실행 후에도 0. 빌더 `FUN_004c2c80` 5회(modes[1,1,1,1,2]) 돌았으나 objTable 미충전. **라이브 Frida로는 어느 분기서 0으로 빠지나 못 짚음 → re-analyst 정적 디컴파일 필요(진행 중, `docs/logh7-objtable-gate-re.md` 산출 예정).**
+- **후보 게이트**(라이브 관찰): clientBase+0x80 null-page read / focusId `FUN_004c7290` 반환 0 / gamemode·ring 플래그 / **flagship_name_len=0**(서버가 world-ready 경로서 이름 미탑재, struct+0x2a에 잔여바이트 "796rdLohengra…" 비침) → char 불완전 판정 가능성.
+- **서버 배치 대조**(트레이스): 0x0b09/0x0b0a·0x0313·0x0315·0x0323·0x0325 **어느 것도 완전 누락 아님**. 단 0x0315 그리드가 `cells:[]` **완전 빈 그리드**(logh7-world-records.mjs:695), 0x0313 일반 팔레트. 이전 사이클(5bd249c)은 0x0315에 성계/함대 cell 채웠음 — 게이트 관련성 RE로 확인 중.
+- **다음**: re-analyst가 게이트 조건 특정 → server-dev가 반영(0x0323/0x0325 엔디안 불변). 한글화는 별도 RE 선행(re-localize) 병렬.
+- **QA 하네스 수정(게임/서버 무변경)**: `tools/live/logh7_agent_drive.py`에 IME 차단(`ImmAssociateContext(hwnd,0)`)+완속타이핑+서버로그 account readback 재시도 — 자동 로그인 헛글자 문제 해결.
+
 ## 🔎 git 발굴(5bd249c 이전 사이클) — 0x0323 BE 교차확증 + 0x0325 BE는 회귀 리스크로 판정 (2026-07-10)
 
 이전 사이클 서버 코드(`5bd249c:server/src/server/logh7-login-protocol.mjs`)를 Explore로 발굴, 현 재작성본과 교차 검증:

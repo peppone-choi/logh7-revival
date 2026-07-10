@@ -214,7 +214,7 @@ def type_unicode(text: str):
         up.union.ki = KEYBDINPUT(0, ord(ch), KEYEVENTF_UNICODE | KEYEVENTF_KEYUP, 0, None)
         user32.SendInput(1, ctypes.byref(down), ctypes.sizeof(INPUT))
         user32.SendInput(1, ctypes.byref(up), ctypes.sizeof(INPUT))
-        time.sleep(0.04)
+        time.sleep(0.06)  # 게임 메시지 펌프가 유니코드 이벤트를 씹지 않게 완속
 
 
 def scale_pt(ref_w, ref_h, x, y, cw, ch):
@@ -245,25 +245,29 @@ def screenshot(hwnd: int, path: Path):
 
 def do_login(hwnd, account="inei00", password="dummy", shot_dir: Path | None = None):
     foreground(hwnd)
+    # IME 컴포지션 차단 — 헛글자 유입(예: "inei00"→"ehinei00") 방지. 창에서 IME
+    # 컨텍스트를 떼어내 한글/조합 입력이 SendInput 유니코드에 끼어들지 못하게 한다.
+    try:
+        ctypes.windll.imm32.ImmAssociateContext(hwnd, 0)
+    except Exception as e:
+        print(f"  IME detach skip: {e}")
     ox, oy, cw, ch = client_geometry(hwnd)
     print(f"login geometry client={cw}x{ch} origin=({ox},{oy})")
     if shot_dir:
         screenshot(hwnd, shot_dir / "01-login-before.png")
 
-    client_click(hwnd, LOGIN_REF, LOGIN_ID, cw, ch, ox, oy, "ID")
-    time.sleep(0.2)
-    # clear field
-    for _ in range(12):
-        type_unicode("\b")
-    type_unicode(account)
-    time.sleep(0.2)
+    # 커스텀 D3D8 입력(표준 EDIT 컨트롤 아님) — 필드 클릭 직후 포커스가 안정되기
+    # 전에 첫 키가 유실됨(선두 드롭). 넉넉한 settle + 클리어 후 1회 입력.
+    def enter_field(pt, text, label):
+        client_click(hwnd, LOGIN_REF, pt, cw, ch, ox, oy, label)
+        time.sleep(0.6)               # 포커스 안정 대기 (드롭 방지)
+        type_unicode("\b" * 16)       # 잔여 문자 클리어
+        time.sleep(0.15)
+        type_unicode(text)
+        time.sleep(0.3)
 
-    client_click(hwnd, LOGIN_REF, LOGIN_PW, cw, ch, ox, oy, "PW")
-    time.sleep(0.2)
-    for _ in range(12):
-        type_unicode("\b")
-    type_unicode(password)
-    time.sleep(0.2)
+    enter_field(LOGIN_ID, account, "ID")
+    enter_field(LOGIN_PW, password, "PW")
 
     client_click(hwnd, LOGIN_REF, LOGIN_BTN, cw, ch, ox, oy, "LOGIN")
     time.sleep(2.5)
