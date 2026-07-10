@@ -183,6 +183,32 @@ test('0x1008 OK body는 정확히 128B packed 스트림 (§3.2)', () => {
   assert.equal(responseBody(resp).length, 128);
 });
 
+// OK 스트림이 요청 필드를 에코하는지 wire 좌표(§2.2)에서 직접 디코드해 검증.
+// 헤더 오프셋: requestCategory@0x00(u32LE), accepted@0x04, power@0x05,
+//              blood@0x06, sex@0x07, lastname pstr16BE@0x08, firstname 이어서.
+function readPstr16BE(buf, off) {
+  const len = buf[off]; // 실자수 + NUL
+  const chars = [];
+  for (let i = 0; i < len - 1; i++) chars.push(buf.readUInt16BE(off + 1 + i * 2));
+  return { str: String.fromCharCode(...chars), next: off + 1 + (len - 1) * 2 };
+}
+
+test('0x1008 OK 스트림이 요청 필드를 에코함 (power/blood/sex/이름, §2.2)', () => {
+  const store = makeTmpStore();
+  const b = responseBody(handleLobbyInner(makeReinhard(), 'acc1', store));
+
+  assert.equal(b.readUInt32LE(0x00), 0, 'requestCategory echo');
+  assert.equal(b[0x04], 1, 'accepted=1');
+  assert.equal(b[0x05], 2, 'power echo (제국)');
+  assert.equal(b[0x06], 2, 'blood echo');
+  assert.equal(b[0x07], 0, 'sex echo');
+
+  const ln = readPstr16BE(b, 0x08);
+  assert.equal(ln.str, 'Reinhard', 'lastname echo (pstr16 BE)');
+  const fn = readPstr16BE(b, ln.next);
+  assert.equal(fn.str, 'Lohengramm', 'firstname echo (pstr16 BE)');
+});
+
 test('0x1008 생성 → 이후 0x2003 재요청의 0x2004 count가 1로 증가 (로비 잠금 해제)', () => {
   const store = makeTmpStore();
 
