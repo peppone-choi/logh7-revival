@@ -2,7 +2,13 @@
 
 > **▶ RESUME (2026-07-10, 컨텍스트 압축 지점):** M1/M0.5/M2 완료. M3 = 원본 클라가 로그인~월드모드(NOW LOADING)까지 크래시 없이 도달, **전략맵 렌더만 미완**. 근본원인(0x0323 = packed BIG-ENDIAN) 확정 후 **서버 재작성 완료·커밋 64e5fd21 푸시됨** — 아래 첫 항목 참조. **다음 액션:** live-qa가 실클라+Frida로 전략맵 렌더 검증 중(struct[0x24]==unitId 링크·팬텀 유닛 없음·NOW LOADING 해제 스크린샷). 검증 하네스: `_m2_launch.mjs`+시드 store.json / `logh7_drive_robust.py login` / `_m2_click.py`(게임개시 125,191·카드 655,305). 서버 테스트 209/209. 규칙: 일 단위마다 커밋·푸시, 라이브 증거 없이 완료주장 금지.
 
-## 🔁 M3 flagship 오프셋 Blocked-Loop → 옛 proven 빌더 바이트 그대로 포팅으로 전환 (2026-07-10)
+## 🟡 M3 옛 빌더 포팅 결과: mode-0 발화·objTable 채워짐(링크 통과) — 렌더 블로커가 하류로 이동 (2026-07-10)
+
+**옛 proven 빌더 전 필드 포팅(커밋 2cc17beb) 후 라이브(`m3-render-20260710-142040`):**
+- **진전**: `c2c80 param2=0(mode-0) 1회 + mode-1 4회` → **mode-0 발화**(self-match+flagship 링크 둘 다 통과해야만 호출). objTable slot0 기록됨. charCount=1, sel=1, ucnt=1.
+- **그러나 여전히 NOW LOADING**(99-final.png). flagship 값은 spot_owner 기본(=gridUnitId)으로 struct 0x20에 있어 링크 성립. 그런데 **char↔unit 링크·objTable을 넘어선 하류 렌더 게이트**가 남음.
+- **판단**: 4가지 인코딩(packed-BE/aligned-LE/aligned-BE/전필드포팅) 모두 렌더 실패했으나, 이번에 **블로커가 링크→하류로 이동**한 게 확인됨. 남은 후보: 그리드/섹터 데이터(0x0315 RLE 셀), 갤럭시 성계 배치, FUN_004c7290 이후 렌더 파이프라인이 요구하는 추가 데이터. **옛 코드는 0x0313/0x0315에 성계·함대 cell을 채웠음**(현재는 빈 그리드).
+- **다음 결정 필요**(사용자): (A) 옛 G164 전체 world-load 경로(record 빌더뿐 아니라 emission 순서+grid/galaxy 데이터) 복원, (B) objTable 이후 렌더 파이프라인 신규 RE, (C) M3 렌더 보류하고 타 전선(한글화 구현/M4 준비/문서) 진행 후 복귀.
 
 **aligned-BE 적용 후에도 렌더 실패(NOW LOADING). 진전: id=1·self-id=1·ucnt=1 정확, self-match 통과, 팬텀 해소. 그러나 flagship 값이 클라 struct 0x24 아닌 0x20에 앉음(0x24=0) → 링크 실패.**
 
