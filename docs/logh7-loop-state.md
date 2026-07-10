@@ -2,6 +2,15 @@
 
 > **▶ RESUME (2026-07-10, 컨텍스트 압축 지점):** M1/M0.5/M2 완료. M3 = 원본 클라가 로그인~월드모드(NOW LOADING)까지 크래시 없이 도달, **전략맵 렌더만 미완**. 근본원인(0x0323 = packed BIG-ENDIAN) 확정 후 **서버 재작성 완료·커밋 64e5fd21 푸시됨** — 아래 첫 항목 참조. **다음 액션:** live-qa가 실클라+Frida로 전략맵 렌더 검증 중(struct[0x24]==unitId 링크·팬텀 유닛 없음·NOW LOADING 해제 스크린샷). 검증 하네스: `_m2_launch.mjs`+시드 store.json / `logh7_drive_robust.py login` / `_m2_click.py`(게임개시 125,191·카드 655,305). 서버 테스트 209/209. 규칙: 일 단위마다 커밋·푸시, 라이브 증거 없이 완료주장 금지.
 
+## 🔎 git 발굴(5bd249c 이전 사이클) — 0x0323 BE 교차확증 + 0x0325 BE는 회귀 리스크로 판정 (2026-07-10)
+
+이전 사이클 서버 코드(`5bd249c:server/src/server/logh7-login-protocol.mjs`)를 Explore로 발굴, 현 재작성본과 교차 검증:
+
+- **0x0323**: `buildInformationCharacterRecordInner` — `wireEndian` 파라미터(be 옵션 존재)와 gridUnitId@0x24(native) 구조. 주석 "record[9]==unit id"(u32[9]=struct 0x24) — **sentinel 확정(flagship wire 0x20 packed→struct 0x24 안착)과 일관**.
+- **0x0325**: `buildInformationUnitRecordInner` — **기본값 native LE**(`[u16LE count][u16 pad][elem stride 0x58]`, id@+0x00, faction@+0x04 u16, commander@+0x08, cell@+0x0c, owner@+0x10, boats@+0x14/0x18, spotResolverBase@+0x40, mapSection@+0x48). 'parser-stream'(BE, base 2) 모드도 있었으나 기본 아님.
+- **판정: 64e5fd21의 0x0325 BE 통일은 회귀 리스크.** 근거: ① 이전 라이브 런들에서 LE 방출로 클라 FUN_004c2a80이 유닛 테이블 정상 소비, ② 이전 사이클 기본값 native LE, ③ count u16 0x0001을 BE로 보내면 클라 LE 읽기 시 256 팬텀 유닛. char↔unit 링크는 **파싱 후 정수값 비교**라 0x0323(BE)·0x0325(LE) 엔디안이 달라도 성립 — "동일 바이트값" 논리는 오류였다. → worker가 0x0325만 LE 복원 중 (0x0323 BE 불변).
+- 이전 사이클은 전략맵 렌더 관련 빌더(0x0315 RLE 격자·0x0313 오브젝트 테이블·80성계 마커·함대 마커, env 게이트)까지 보유 — M4 이후 참조 소스: `5bd249c:server/src/server/logh7-login-session.mjs`.
+
 ## ✅ M3 서버 재작성 완료: 0x0323/0x0325 packed BE 방출 (커밋 64e5fd21, 2026-07-10)
 
 - `buildInformationCharacterInner` 정본 테이블대로 재작성: 멀티바이트 전부 **BE**, pad 제거(**packed**) — fame@0x0e, max_special@0x12, return_base@0x14, spot@0x18, spot_owner@0x1c, **flagship@0x20**, name_len@0x24, name@0x26(UTF-16 BE). 0x40 이후 미확정 필드는 0(날조 금지), 총 724B(0x2d4) 유지.
