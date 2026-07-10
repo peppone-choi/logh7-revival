@@ -1,16 +1,31 @@
 # LOGH VII Revival Current Roadmap
 
-작성일: 2026-07-06 (현행화: 2026-07-07)
+작성일: 2026-07-06 (현행화: **2026-07-10**)
 
-## 현재 판정
+> 상세 실시간 저널은 [[logh7-loop-state]]. 캐릭터 생성 플로우는 [[logh7-m2-character-creation-flow]]. 이 페이지는 마일스톤 수준 현황만 유지한다.
 
-목표는 원본 클라이언트 + 자체 서버로 은하영웅전설 VII의 온라인 기능 전체를 되살리는 것이다. 2026-07-07 기준 서버 구현(`server/src/server/`): `logh7-transport-0030.mjs`(봉투/체크섬), `logh7-frame-stream.mjs`(TCP 스트림 분할/병합), `logh7-child-codec.mjs`(P/S 테이블·64비트 블록 암복호·key expansion), `logh7-gin7-credential.mjs`(GIN7 자격증명 파싱), `logh7-login-harness-server.mjs`(0x0034→0x0035 핸드셰이크, phase1 키 셋업, 0x0030 자격증명 복호, JSONL 트레이스). 테스트 44/44 통과 (`node --test tests/*.test.mjs`, 2026-07-07).
+## 현재 판정 (2026-07-10)
 
-미구현: 로그인 성공 응답(inner 0x7000 계열 login/session OK)과 실클라 라이브 로그인 증거, 그 이후 전부 — 캐릭터 작성/삭제/선택, 로비/월드, 전략맵, 전술맵, 전투, 명령, 제안, 채팅.
+목표는 원본 클라이언트 + 자체 서버로 은하영웅전설 VII의 온라인 기능 전체를 되살리는 것이다. **2026-07-07 이후 Phase 1·2·3 대부분을 실클라 라이브로 통과했다** — 아래 마일스톤 현황이 정본이고, 이 절 하단의 Phase별 "현재 상태" 문구 중 2026-07-07자 미구현 서술은 역사적 기록으로 남긴다(중복 갱신하지 않음).
+
+| 마일스톤 | 상태 | 근거 |
+|---|---|---|
+| **M1 로그인→로비** | ✅ 라이브 완료 | 실클라가 0x0034/0x0035/0x0036 핸드셰이크→GIN7 자격증명→0x7000 로그인OK→로비 렌더. `.omo/live-qa/m16-login-lobby-*` |
+| **M0.5 갤럭시 데이터** | ✅ GREEN 감사 | 80성계 정본, `null_galaxy.mdx` 좌표 복구 |
+| **M2 첫 캐릭터 획득** | ✅ 라이브 완료 | 빈 계정→오리지널 추첨(0x1006)→0x2004 count≥1→로비 해제. [[logh7-m2-character-creation-flow]] |
+| **M3 월드 진입** | 🟡 진행 — 전략맵 렌더만 미완 | 실클라가 로그인~월드모드(gamemode=0, NOW LOADING)까지 크래시 없이 도달. 0x0323 char 레코드가 **packed BIG-ENDIAN**임을 Frida로 확정, 서버 재작성(커밋 64e5fd21)해 dispatch·char적재·flagship↔unit 링크까지 라이브 성공. **남은 블로커 = NOW LOADING→전략맵 전환 게이트**(`FUN_004c2a80` objTable 미충전). git 5bd249c 이전 사이클은 0x0313/0x0315/0x0b09/0x0b0a로 채웠음 — 현 배치 누락분 RE 중 |
+| M4 전략맵 커맨드 | ⬜ 대기 | M3 렌더 완료 후 |
+| M5 전술·전투 | ⬜ 대기 | |
+| M6 채팅·한글화 | ⬜ RE 선행 중 | 한글화는 추측 금지 — re-analyst가 문자열/폰트/인코딩 경로 확정 후 착수([[logh7-localization-re-groundwork]]) |
+| M7 전체 회귀·운영 | ⬜ 대기 | |
 
 기존 `server/content/**/*.json`은 정본으로 신뢰하지 않는다. `tools/extract/audit_data_decode.mjs`가 현재 기준선이다.
 
 실행 루프는 `docs/logh7-codex-harness-loop.md`를 따른다. 각 작업은 계획 및 RE, 구현, 테스트, 라이브 확인 순서로 반복한다.
+
+---
+
+### (역사적) 2026-07-07 기준 서술 — 갱신하지 않음, M1~M3 진행으로 대체됨
 
 감사 결과(`server/content/generated/logh7-data-decode-audit.json`):
 
