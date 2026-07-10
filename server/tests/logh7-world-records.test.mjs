@@ -519,3 +519,36 @@ test('isAdmissionRequestCode covers every static-info req (incl. 신규 0x0308/0
   assert.equal(isAdmissionRequestCode(0x2009), false);
   assert.equal(isAdmissionRequestCode(0x7abc), false);
 });
+
+// ─── 0x0323 flagship -4 위치 실험 (env-gate LOGH_FLAGSHIP_M4) ──────────────────
+// 진단 목적: 클라가 struct+0x28 에서 flagship 을 읽는데 서버는 물리 0x24 에 쓴다(+4 어긋남).
+// body 0x04~0x1c 구간의 4바이트 필드폭 불일치로 클라가 4바이트를 더 소비한다는 가설을,
+// flagship 을 물리 0x20 으로 -4 이동시켜 클라 struct[0x24]에 안착하는지로 확정한다.
+// 근본수정 아님 — env-gate 라 기본 동작·기존 테스트 불변. 라이브에서 NOW LOADING 해제 여부로 판정.
+test('LOGH_FLAGSHIP_M4=1: flagship moves to body+0x20, body+0x24 zeroed (-4 진단 실험)', () => {
+  const prev = process.env.LOGH_FLAGSHIP_M4;
+  process.env.LOGH_FLAGSHIP_M4 = '1';
+  try {
+    const inner = buildInformationCharacterInner({ characterId: 7, gridUnitId: 42 });
+    const body = msg32Body(inner);
+    assert.equal(body.length, CODE_INFO_CHARACTER_BYTES);
+    assert.equal(body.readUInt32LE(0x20), 42, '실험: flagship @ body+0x20 (-4)');
+    assert.equal(body.readUInt32LE(0x24), 0, '실험: 원래 위치 0x24 는 0');
+  } finally {
+    if (prev === undefined) delete process.env.LOGH_FLAGSHIP_M4;
+    else process.env.LOGH_FLAGSHIP_M4 = prev;
+  }
+});
+
+test('env off(default): flagship stays at body+0x24, 0x20 (spot_owner) is 0 (현행 불변)', () => {
+  const prev = process.env.LOGH_FLAGSHIP_M4;
+  delete process.env.LOGH_FLAGSHIP_M4;
+  try {
+    const inner = buildInformationCharacterInner({ characterId: 7, gridUnitId: 42 });
+    const body = msg32Body(inner);
+    assert.equal(body.readUInt32LE(0x24), 42, '기본: flagship @ body+0x24');
+    assert.equal(body.readUInt32LE(0x20), 0, '기본: 0x20 은 0 (drift 없음)');
+  } finally {
+    if (prev !== undefined) process.env.LOGH_FLAGSHIP_M4 = prev;
+  }
+});

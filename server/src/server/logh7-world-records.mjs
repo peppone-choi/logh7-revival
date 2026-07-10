@@ -249,7 +249,16 @@ export function buildInformationCharacterInner({
   body.writeUInt32LE(returnBase >>> 0, 0x18);      // return_base
   body.writeUInt32LE(spot >>> 0, 0x1c);            // spot
   body.writeUInt32LE(spotOwner >>> 0, 0x20);       // spot_owner
-  body.writeUInt32LE(gridUnitId >>> 0, 0x24);      // flagship (grid-unit id) ← 링크 앵커
+  // ── 0x0323 flagship -4 위치 진단 실험 (env-gate) ──
+  // 클라가 struct+0x28 에서 읽는데 서버가 물리 0x24 에 쓰는 +4 어긋남을, flagship 을 물리
+  // 0x20 으로 -4 이동시켜 클라 struct[0x24]에 안착하는지로 확정한다. 근본수정 아님 —
+  // env off 가 기본(현행 0x24)이라 기존 동작·테스트 불변. 라이브 NOW LOADING 해제로 판정.
+  if (process.env.LOGH_FLAGSHIP_M4 === '1') {
+    body.writeUInt32LE(gridUnitId >>> 0, 0x20);    // 실험: flagship -4 (물리 0x20)
+    body.writeUInt32LE(0, 0x24);                   // 원래 위치 0x24 는 0
+  } else {
+    body.writeUInt32LE(gridUnitId >>> 0, 0x24);    // flagship (grid-unit id) ← 링크 앵커 (현행)
+  }
   // 0x28 flagship_name_len / 0x2a flagship_name (UTF-16LE ×13) — 표시용, 없으면 0
   if (flagshipName != null && String(flagshipName).length > 0) {
     writePstr16Ucs2(body, flagshipName, 0x28, 0x2a);
