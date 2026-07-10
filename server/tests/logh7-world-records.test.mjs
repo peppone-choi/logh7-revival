@@ -433,6 +433,63 @@ test('0x0323 flagship lands at body+0x24 == 0x0325 unit id (+0x04), no ±1 dword
   assert.equal(cb.readUInt32LE(0x18), 0, 'body+0x18 (return_base) is 0 — max_of_special did not overflow');
 });
 
+// ─── 0x0323 정본 wire body 바이트 단위 정합 (클라 case 0x323 raw-asm 확정 테이블) ──
+//
+// 근거: docs/logh7-loop-state.md "M3 정본 파서 테이블 확정(raw asm): 0x0323 = 고정 LITTLE-ENDIAN".
+//   클라 dispatcher case 0x323 은 전부 고정 오프셋 native MOV (LITTLE-ENDIAN) 로 읽는다.
+//   서버 body 가 이 테이블과 바이트 단위로 일치해야 flagship(+0x24)==0x0325 unit[0].id(+0x04)
+//   링크(FUN_004c2a80)가 성립해 NOW LOADING 이 해제된다.
+//
+// 이 테스트는 각 필드에 서로 다른 값을 넣어 엔디안 오염/오프셋 drift/타입 오류(u16↔u32)를 잡는다.
+test('0x0323 canonical wire layout: every field LE at raw-asm offsets, max_of_special is u16', () => {
+  const inner = buildInformationCharacterInner({
+    characterId: 0x11223344,
+    gridUnitId: 0x0aabbccd, // flagship (grid-unit id) @0x24
+    power: 0x2a,
+    camp: 2,
+    state: 5,
+    beginSessionAge: 0x01020304,
+    birthdayMonth: 4,
+    birthdayDay: 26,
+    fame: 0x0badf00d,
+    maxOfSpecial: 0x1234, // u16 — 반드시 0x16 pad / 0x18 return_base 를 밀지 않아야
+    returnBase: 0x55667788,
+    spot: 0x0000dead,
+    spotOwner: 0x0000beef,
+    strategy: 0x00112233,
+    coupConduct: 0x44556677,
+    coup: 0x08009900,
+  });
+  const b = msg32Body(inner);
+  assert.equal(b.length, CODE_INFO_CHARACTER_BYTES);
+
+  // 0x00 id / 0x04 power / 0x05 camp / 0x06 state / 0x07 pad
+  assert.equal(b.readUInt32LE(0x00), 0x11223344, 'id@0x00 u32 LE');
+  assert.equal(b.readUInt8(0x04), 0x2a, 'power@0x04 u8');
+  assert.equal(b.readUInt8(0x05), 2, 'camp@0x05 u8');
+  assert.equal(b.readUInt8(0x06), 5, 'state@0x06 u8');
+  assert.equal(b.readUInt8(0x07), 0, 'pad@0x07 == 0');
+  // 0x08 begin_session_age / 0x0c bday / 0x0e pad
+  assert.equal(b.readUInt32LE(0x08), 0x01020304, 'begin_session_age@0x08 u32 LE');
+  assert.equal(b.readUInt8(0x0c), 4, 'birthday_month@0x0c u8');
+  assert.equal(b.readUInt8(0x0d), 26, 'birthday_day@0x0d u8');
+  assert.equal(b.readUInt16LE(0x0e), 0, 'pad@0x0e == 0');
+  // 0x10 fame / 0x14 max_of_special (u16!) / 0x16 pad / 0x18 return_base
+  assert.equal(b.readUInt32LE(0x10), 0x0badf00d, 'fame@0x10 u32 LE');
+  assert.equal(b.readUInt16LE(0x14), 0x1234, 'max_of_special@0x14 u16 LE');
+  assert.equal(b.readUInt16LE(0x16), 0, 'pad@0x16 == 0 (max_of_special is u16, no overflow)');
+  assert.equal(b.readUInt32LE(0x18), 0x55667788, 'return_base@0x18 u32 LE');
+  // 0x1c spot / 0x20 spot_owner / 0x24 flagship — 링크 앵커 구간
+  assert.equal(b.readUInt32LE(0x1c), 0x0000dead, 'spot@0x1c u32 LE');
+  assert.equal(b.readUInt32LE(0x20), 0x0000beef, 'spot_owner@0x20 u32 LE');
+  assert.equal(b.readUInt32LE(0x24), 0x0aabbccd, 'flagship (grid-unit id)@0x24 u32 LE');
+  assert.notEqual(b.readUInt32LE(0x20), b.readUInt32LE(0x24), 'spot_owner@0x20 != flagship (no drift)');
+  // 0x44 strategy / 0x48 coup_conduct / 0x4c coup
+  assert.equal(b.readUInt32LE(0x44), 0x00112233, 'strategy@0x44 u32 LE');
+  assert.equal(b.readUInt32LE(0x48), 0x44556677, 'coup_conduct@0x48 u32 LE');
+  assert.equal(b.readUInt32LE(0x4c), 0x08009900, 'coup@0x4c u32 LE');
+});
+
 test('grid-enter refresh (0x0b09/0x0325/0x0323/0x0b0a) keeps flagship(+0x24)==unit id(+0x04)', () => {
   const inners = buildWorldReadyPushInners({ unitId: 11, commander: 5, power: 3, spot: 1 });
   const charRec = inners.find((i) => readMsg32Code(i) === CODE_INFO_CHARACTER);

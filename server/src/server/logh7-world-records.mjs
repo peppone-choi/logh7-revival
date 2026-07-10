@@ -215,12 +215,48 @@ export function buildInformationCharacterInner({
   officerCount = null,
   seatEntries = null,
   stamina = 100,
+  // ── 정본 wire body 필드 (클라 case 0x323 raw-asm 확정 테이블, 전부 LITTLE-ENDIAN) ──
+  // docs/logh7-loop-state.md "M3 정본 파서 테이블 확정(raw asm): 0x0323 = 고정 LITTLE-ENDIAN".
+  // 미확정/미승격 필드는 기본 0 (날조 금지). flagship(0x24)=gridUnitId 가 char↔unit 링크 앵커.
+  camp = 0,
+  state = 0,
+  beginSessionAge = 0,
+  birthdayMonth = 0,
+  birthdayDay = 0,
+  fame = 0,
+  maxOfSpecial = 0, // u16 — u32 로 쓰면 0x16 pad/0x18 return_base 를 밀어 flagship drift 유발
+  returnBase = 0,
+  spotOwner = 0,
+  flagshipName = null,
+  strategy = 0,
+  coupConduct = 0,
+  coup = 0,
 } = {}) {
   const body = Buffer.alloc(CODE_INFO_CHARACTER_BYTES);
-  body.writeUInt32LE(characterId >>> 0, 0x00);
-  body.writeUInt8(power & 0xff, 0x04);
-  body.writeUInt32LE(spot >>> 0, 0x1c);
-  body.writeUInt32LE(gridUnitId >>> 0, 0x24);
+  // 클라 case 0x323 raw-asm 고정 오프셋 native MOV 레이아웃 (전부 LE). 정본 테이블 순서대로:
+  body.writeUInt32LE(characterId >>> 0, 0x00); // character id
+  body.writeUInt8(power & 0xff, 0x04);         // power
+  body.writeUInt8(camp & 0xff, 0x05);          // camp
+  body.writeUInt8(state & 0xff, 0x06);         // state
+  // 0x07: pad (0)
+  body.writeUInt32LE(beginSessionAge >>> 0, 0x08); // begin_session_age
+  body.writeUInt8(birthdayMonth & 0xff, 0x0c);     // birthday_month
+  body.writeUInt8(birthdayDay & 0xff, 0x0d);       // birthday_day
+  // 0x0e: pad u16 (0)
+  body.writeUInt32LE(fame >>> 0, 0x10);            // fame
+  body.writeUInt16LE(maxOfSpecial & 0xffff, 0x14); // max_of_special (u16)
+  // 0x16: pad u16 (0)
+  body.writeUInt32LE(returnBase >>> 0, 0x18);      // return_base
+  body.writeUInt32LE(spot >>> 0, 0x1c);            // spot
+  body.writeUInt32LE(spotOwner >>> 0, 0x20);       // spot_owner
+  body.writeUInt32LE(gridUnitId >>> 0, 0x24);      // flagship (grid-unit id) ← 링크 앵커
+  // 0x28 flagship_name_len / 0x2a flagship_name (UTF-16LE ×13) — 표시용, 없으면 0
+  if (flagshipName != null && String(flagshipName).length > 0) {
+    writePstr16Ucs2(body, flagshipName, 0x28, 0x2a);
+  }
+  body.writeUInt32LE(strategy >>> 0, 0x44);        // strategy
+  body.writeUInt32LE(coupConduct >>> 0, 0x48);     // coup_conduct
+  body.writeUInt32LE(coup >>> 0, 0x4c);            // coup
   if (online) body.writeUInt8(1, 0x64);
   // 스탯 기본값 (전부 0이면 패널이 NO DATA 로 보이는 경우 방지)
   const stats = Array.isArray(abilities) && abilities.length
