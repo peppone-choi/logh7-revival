@@ -66,7 +66,7 @@ test('enterWorld encodes real seed character from characterStore into 0x0323 (cr
   const body = msg32Body(charRec);
   assert.equal(body.readUInt32LE(0x00), 7, 'real characterId from store');
   assert.equal(body.readUInt8(0x04), 2, 'real power/faction from store (not 0 stub)');
-  assert.equal(body.readUInt16LE(0x188), 90, 'real ability[0] from store');
+  assert.equal(body.readUInt16LE(0x184), 90, 'real ability[0] from store (구 0x188, -4 정렬)');
 });
 
 test('0x2009 create-pending (no character) returns 0x200a without inventing char', () => {
@@ -526,7 +526,7 @@ test('buildWorldReadyPushInners pushes 0x0325×1 + 0x0323×1 inside 0x0b09/0x0b0
     }
   }
   assert.ok(iInit > iEnd, '0x0f03 world-init must come AFTER 0x0b0a (early push crashes)');
-  // ★정합: 0x0323 flagship(body+0x24) == 0x0325 unit[0].id(body+0x04) AND 0x0325 count≥1.
+  // ★정합: 0x0323 flagship(body+0x20) == 0x0325 unit[0].id(body+0x04) AND 0x0325 count≥1.
   const unitRec = inners.find((i) => readMsg32Code(i) === CODE_INFO_UNIT);
   const charRec = inners.find((i) => readMsg32Code(i) === CODE_INFO_CHARACTER);
   const unitBody = msg32Body(unitRec);
@@ -534,9 +534,9 @@ test('buildWorldReadyPushInners pushes 0x0325×1 + 0x0323×1 inside 0x0b09/0x0b0
   assert.ok(unitBody.readUInt16LE(0x00) >= 1, '0x0325 count ≥ 1 (unit array non-empty)');
   assert.equal(unitBody.readUInt32LE(0x04), 8, 'unit[0].id(+0x04) = real fleet id');
   assert.equal(
-    charBody.readUInt32LE(0x24),
+    charBody.readUInt32LE(0x20),
     unitBody.readUInt32LE(0x04),
-    'char flagship(+0x24) must equal unit[0].id(+0x04) — client char→flagship→unit link',
+    'char flagship(+0x20) must equal unit[0].id(+0x04) — client char→flagship→unit link',
   );
 });
 
@@ -585,13 +585,13 @@ test('handleWorldInner 0x0314 appends world-ready push (0x0325×1+0x0323×1) wit
   assert.ok(codes.indexOf(CODE_INFO_UNIT) > codes.indexOf(CODE_NOTIFY_ENTER_GRID_BEGIN));
   assert.ok(codes.lastIndexOf(CODE_INFO_CHARACTER) < codes.indexOf(CODE_NOTIFY_ENTER_GRID_END));
   assert.ok(codes.indexOf(CODE_GRID_INIT_OK) > codes.indexOf(CODE_NOTIFY_ENTER_GRID_END));
-  // ★정합: flagship(+0x24) == unit[0].id(+0x04) == player.unitId(8), count≥1.
+  // ★정합: flagship(+0x20) == unit[0].id(+0x04) == player.unitId(8), count≥1.
   const inners = result.responses.map((r) => r.inner);
   const unitBody = msg32Body(inners.find((i) => readMsg32Code(i) === CODE_INFO_UNIT));
   const charBody = msg32Body(inners.find((i) => readMsg32Code(i) === CODE_INFO_CHARACTER));
   assert.ok(unitBody.readUInt16LE(0x00) >= 1, '0x0325 count ≥ 1');
   assert.equal(unitBody.readUInt32LE(0x04), 8, 'unit[0].id = player.unitId');
-  assert.equal(charBody.readUInt32LE(0x24), unitBody.readUInt32LE(0x04), 'flagship == unit id');
+  assert.equal(charBody.readUInt32LE(0x20), unitBody.readUInt32LE(0x04), 'flagship == unit id');
   // 모든 응답은 이 connection 으로만, message32 로.
   for (const r of result.responses) {
     assert.deepEqual(r.targets, [1]);

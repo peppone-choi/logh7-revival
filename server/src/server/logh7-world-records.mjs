@@ -198,8 +198,16 @@ function writePstr16Ucs2(payload, str, lenOff, charsOff) {
 }
 
 /**
- * 최소 월드 로드용 0x0323. id@0x00 · flagship@0x24 가 앵커 (G164).
+ * 최소 월드 로드용 0x0323. id@0x00 · flagship@0x20 가 앵커 (G164).
  * parentage 이름은 표시용으로만 채우며, 없는 필드는 0.
+ *
+ * ── flagship 이후 전 필드 -4 정렬 (전략맵 NOW LOADING 근본수정) ──
+ * A/B 실험(LOGH_FLAGSHIP_M4)으로 서버 body 가 클라 와이어보다 flagship 이후 +4 밀려있음이
+ * 증명됐다: 서버가 spot@0x1c 다음에 클라 와이어에 없는 여분 필드(spot_owner@0x20, 값 0)를
+ * 써서 flagship 및 그 이후 이름/스탯 전부를 +4 로 밀어 malformed 로 만들었다. spot_owner 를
+ * 제거하고 flagship(0x24→0x20) 이후 모든 필드를 -4 시프트해 클라 와이어(spot@0x1c →
+ * flagship@0x20 → name_len@0x24 → name@0x26 → …)와 바이트 단위로 정렬한다.
+ * 레코드 총 크기는 0x2d4(724B) 불변 — 시프트로 비는 끝 4바이트는 0 패딩.
  */
 export function buildInformationCharacterInner({
   characterId = 1,
@@ -217,7 +225,7 @@ export function buildInformationCharacterInner({
   stamina = 100,
   // ── 정본 wire body 필드 (클라 case 0x323 raw-asm 확정 테이블, 전부 LITTLE-ENDIAN) ──
   // docs/logh7-loop-state.md "M3 정본 파서 테이블 확정(raw asm): 0x0323 = 고정 LITTLE-ENDIAN".
-  // 미확정/미승격 필드는 기본 0 (날조 금지). flagship(0x24)=gridUnitId 가 char↔unit 링크 앵커.
+  // 미확정/미승격 필드는 기본 0 (날조 금지). flagship(0x20)=gridUnitId 가 char↔unit 링크 앵커.
   camp = 0,
   state = 0,
   beginSessionAge = 0,
@@ -226,7 +234,6 @@ export function buildInformationCharacterInner({
   fame = 0,
   maxOfSpecial = 0, // u16 — u32 로 쓰면 0x16 pad/0x18 return_base 를 밀어 flagship drift 유발
   returnBase = 0,
-  spotOwner = 0,
   flagshipName = null,
   strategy = 0,
   coupConduct = 0,
@@ -248,48 +255,40 @@ export function buildInformationCharacterInner({
   // 0x16: pad u16 (0)
   body.writeUInt32LE(returnBase >>> 0, 0x18);      // return_base
   body.writeUInt32LE(spot >>> 0, 0x1c);            // spot
-  body.writeUInt32LE(spotOwner >>> 0, 0x20);       // spot_owner
-  // ── 0x0323 flagship -4 위치 진단 실험 (env-gate) ──
-  // 클라가 struct+0x28 에서 읽는데 서버가 물리 0x24 에 쓰는 +4 어긋남을, flagship 을 물리
-  // 0x20 으로 -4 이동시켜 클라 struct[0x24]에 안착하는지로 확정한다. 근본수정 아님 —
-  // env off 가 기본(현행 0x24)이라 기존 동작·테스트 불변. 라이브 NOW LOADING 해제로 판정.
-  if (process.env.LOGH_FLAGSHIP_M4 === '1') {
-    body.writeUInt32LE(gridUnitId >>> 0, 0x20);    // 실험: flagship -4 (물리 0x20)
-    body.writeUInt32LE(0, 0x24);                   // 원래 위치 0x24 는 0
-  } else {
-    body.writeUInt32LE(gridUnitId >>> 0, 0x24);    // flagship (grid-unit id) ← 링크 앵커 (현행)
-  }
-  // 0x28 flagship_name_len / 0x2a flagship_name (UTF-16LE ×13) — 표시용, 없으면 0
+  // ── flagship 이후 전 필드 -4 정렬: spot_owner(구 0x20) 제거, flagship 및 이후 전부 -4 ──
+  // 클라 와이어: spot@0x1c → flagship@0x20 → name_len@0x24 → name@0x26 → …
+  body.writeUInt32LE(gridUnitId >>> 0, 0x20);      // flagship (grid-unit id) ← 링크 앵커 (구 0x24)
+  // 0x24 flagship_name_len / 0x26 flagship_name (UTF-16LE ×13) — 표시용, 없으면 0 (구 0x28/0x2a)
   if (flagshipName != null && String(flagshipName).length > 0) {
-    writePstr16Ucs2(body, flagshipName, 0x28, 0x2a);
+    writePstr16Ucs2(body, flagshipName, 0x24, 0x26);
   }
-  body.writeUInt32LE(strategy >>> 0, 0x44);        // strategy
-  body.writeUInt32LE(coupConduct >>> 0, 0x48);     // coup_conduct
-  body.writeUInt32LE(coup >>> 0, 0x4c);            // coup
-  if (online) body.writeUInt8(1, 0x64);
-  // 스탯 기본값 (전부 0이면 패널이 NO DATA 로 보이는 경우 방지)
+  body.writeUInt32LE(strategy >>> 0, 0x40);        // strategy (구 0x44)
+  body.writeUInt32LE(coupConduct >>> 0, 0x44);     // coup_conduct (구 0x48)
+  body.writeUInt32LE(coup >>> 0, 0x48);            // coup (구 0x4c)
+  if (online) body.writeUInt8(1, 0x60);            // online (구 0x64)
+  // 스탯 기본값 (전부 0이면 패널이 NO DATA 로 보이는 경우 방지) — 0x184 (구 0x188)
   const stats = Array.isArray(abilities) && abilities.length
     ? abilities
     : [50, 50, 50, 50, 50, 50, 50, 50];
   for (let i = 0; i < 8; i += 1) {
-    body.writeUInt16LE((stats[i] ?? 50) & 0xffff, 0x188 + i * 4);
+    body.writeUInt16LE((stats[i] ?? 50) & 0xffff, 0x184 + i * 4);
   }
-  if (Number.isInteger(stamina)) body.writeUInt8(stamina & 0xff, 0x1a9);
+  if (Number.isInteger(stamina)) body.writeUInt8(stamina & 0xff, 0x1a5); // 구 0x1a9
 
   const hasParentage =
     lastname != null || firstname != null || Number.isInteger(face) || Number.isInteger(rank);
   if (hasParentage) {
-    body.writeUInt8(1, 0x7d); // parentage_len
-    body.writeUInt8(1, 0x80); // truth
-    if (lastname != null) writePstr16Ucs2(body, lastname, 0x81, 0x82);
-    if (firstname != null) writePstr16Ucs2(body, firstname, 0x9c, 0x9e);
+    body.writeUInt8(1, 0x79); // parentage_len (구 0x7d)
+    body.writeUInt8(1, 0x7c); // truth (구 0x80)
+    if (lastname != null) writePstr16Ucs2(body, lastname, 0x7d, 0x7e);   // 구 0x81/0x82
+    if (firstname != null) writePstr16Ucs2(body, firstname, 0x98, 0x9a); // 구 0x9c/0x9e
     const display = [lastname, firstname].filter(Boolean).join(' ');
-    if (display) writePstr16Ucs2(body, display, 0xb8, 0xba);
-    if (Number.isInteger(rank)) body.writeUInt16LE(rank & 0xffff, 0xd6);
-    if (Number.isInteger(face)) body.writeUInt32LE(face >>> 0, 0xf4);
+    if (display) writePstr16Ucs2(body, display, 0xb4, 0xb6);             // 구 0xb8/0xba
+    if (Number.isInteger(rank)) body.writeUInt16LE(rank & 0xffff, 0xd2); // 구 0xd6
+    if (Number.isInteger(face)) body.writeUInt32LE(face >>> 0, 0xf0);    // 구 0xf4
   }
 
-  // card/officer count @0x24c — 0이면 유닛 리스트 패널 NO DATA (C002 RE)
+  // card/officer count @0x248 — 0이면 유닛 리스트 패널 NO DATA (C002 RE) (구 0x24c)
   const seats = Array.isArray(seatEntries)
     ? seatEntries
     : [{ character: characterId, role: 0 }];
@@ -297,13 +296,13 @@ export function buildInformationCharacterInner({
     seats.length || (Number.isInteger(officerCount) ? officerCount : 1),
     16,
   );
-  body.writeUInt8(Math.max(1, seatCount), 0x24c);
+  body.writeUInt8(Math.max(1, seatCount), 0x248);
   for (let i = 0; i < Math.max(1, seatCount); i += 1) {
     const entry = seats[i] ?? { character: characterId, role: 0 };
     const cid = Number(entry.character ?? entry.characterId ?? characterId) >>> 0;
     const role = Number(entry.role ?? 0) >>> 0;
-    body.writeUInt32LE(cid, 0x254 + i * 8);
-    body.writeUInt32LE(role, 0x258 + i * 8);
+    body.writeUInt32LE(cid, 0x250 + i * 8);   // 구 0x254
+    body.writeUInt32LE(role, 0x254 + i * 8);  // 구 0x258
   }
 
   return buildMsg32Inner(CODE_INFO_CHARACTER, body);

@@ -56,8 +56,8 @@ test('0x0323 character record is message32 with 724B body and id/flagship anchor
   const body = msg32Body(inner);
   assert.equal(body.length, CODE_INFO_CHARACTER_BYTES);
   assert.equal(body.readUInt32LE(0x00), 7);
-  assert.equal(body.readUInt32LE(0x24), 42);
-  assert.equal(body.readUInt8(0x7d), 1); // parentage_len
+  assert.equal(body.readUInt32LE(0x20), 42); // flagship (구 0x24, -4 정렬)
+  assert.equal(body.readUInt8(0x79), 1); // parentage_len (구 0x7d)
 });
 
 test('0x0325 unit record is fixed 52804B with count and unit id', () => {
@@ -387,25 +387,27 @@ test('world entry 0x0323 carries real seed character stats (registerable object,
   const body = msg32Body(charRec);
   assert.equal(body.length, CODE_INFO_CHARACTER_BYTES);
   assert.equal(body.readUInt32LE(0x00), 42, 'real characterId (focus lookup key)');
-  assert.equal(body.readUInt32LE(0x24), 7, 'real gridUnitId');
+  assert.equal(body.readUInt32LE(0x20), 7, 'real gridUnitId (flagship @0x20, -4 정렬)');
   assert.equal(body.readUInt8(0x04), 2, 'real power/faction (not 0 stub)');
-  assert.equal(body.readUInt16LE(0x188), 90, 'real ability[0] forwarded');
-  assert.equal(body.readUInt16LE(0x188 + 4 * 7), 55, 'real ability[7] forwarded');
+  assert.equal(body.readUInt16LE(0x184), 90, 'real ability[0] forwarded (구 0x188)');
+  assert.equal(body.readUInt16LE(0x184 + 4 * 7), 55, 'real ability[7] forwarded');
 });
 
-// ─── 0x0323 flagship 오프셋 anti-drift 불변식 (전략맵 NOW LOADING 해제) ──────────
+// ─── 0x0323 flagship 오프셋 정렬 불변식 (전략맵 NOW LOADING 근본수정) ──────────
 //
-// 근거: docs/logh7-loop-state.md "M3 근본원인: 0x0323 직렬화기 flagship 오프셋 drift" +
-//   클라 FUN_00419300 필드맵. 클라는 flagship 을 record body offset 0x24 (u32 LE)에서 읽고,
-//   0x0325 unit[0].id 는 body offset 0x04 에서 읽어 char↔unit 링크(FUN_004c2a80)를 만든다.
-//   flagship 이 ±1 dword(0x20/0x28) 로 밀리면 record+0x24=0 → 링크 실패 → NOW LOADING 정지.
+// 근거: A/B 실험(구 LOGH_FLAGSHIP_M4)으로 서버 body 가 클라 와이어보다 flagship 이후 +4 밀려
+//   있음이 증명됨 — 서버가 spot@0x1c 다음에 클라 와이어에 없는 여분 필드(spot_owner, 값 0)를
+//   써서 flagship·이름·스탯 전부를 +4 로 밀어 malformed 로 만들었다. spot_owner 를 제거하고
+//   flagship(0x24→0x20) 이후 모든 필드를 -4 시프트해 클라 와이어와 정렬한다.
+//   클라 와이어: spot@0x1c → flagship@0x20 → name_len@0x24 → name@0x26 → ….
+//   0x0325 unit[0].id 는 body offset 0x04. char↔unit 링크(FUN_004c2a80)는 flagship==unit id.
 //
-// 이 테스트는 세 가지를 잠근다:
-//   (1) 크로스-레코드: 0x0323 flagship(+0x24) == 0x0325 unit[0].id(+0x04), 둘 다 ≠0.
-//   (2) anti-drift: flagship 은 정확히 0x24 에만. 인접 0x20(spot_owner)/0x28(flagship_name_len)
-//       dword 는 0 — flagship 이 ±1 dword 로 새지 않았음을 증명.
+// 이 테스트는 네 가지를 잠근다:
+//   (1) 크로스-레코드: 0x0323 flagship(+0x20) == 0x0325 unit[0].id(+0x04), 둘 다 ≠0.
+//   (2) anti-drift: flagship 은 정확히 0x20 에만. spot_owner 잔재 없음 — spot@0x1c 바로 뒤가 flagship.
 //   (3) 앞 필드 정합: id@0x00, power@0x04, spot@0x1c 가 클라 필드맵대로 자리 지킴.
-test('0x0323 flagship lands at body+0x24 == 0x0325 unit id (+0x04), no ±1 dword drift', () => {
+//   (4) 크기 불변: body 총 0x2d4(724B).
+test('0x0323 flagship lands at body+0x20 == 0x0325 unit id (+0x04), -4 aligned (no spot_owner)', () => {
   const emits = buildWorldEntryInners({ characterId: 42, gridUnitId: 7, power: 2, spot: 1 });
   const charRec = emits.find((i) => readMsg32Code(i) === CODE_INFO_CHARACTER);
   const unitRec = emits.find((i) => readMsg32Code(i) === CODE_INFO_UNIT);
@@ -413,22 +415,24 @@ test('0x0323 flagship lands at body+0x24 == 0x0325 unit id (+0x04), no ±1 dword
   const cb = msg32Body(charRec);
   const ub = msg32Body(unitRec);
 
-  // 앞 필드 앵커 (클라 FUN_00419300 필드맵)
+  // 크기 불변 (클라가 고정 0x2d4 기대)
+  assert.equal(cb.length, CODE_INFO_CHARACTER_BYTES, 'char body 총 0x2d4 (724B) 불변');
+
+  // 앞 필드 앵커 (flagship 이전은 시프트 없음)
   assert.equal(cb.readUInt32LE(0x00), 42, 'character id @ body+0x00');
   assert.equal(cb.readUInt8(0x04), 2, 'power @ body+0x04');
   assert.equal(cb.readUInt32LE(0x1c), 1, 'spot @ body+0x1c (not drifted)');
 
-  // flagship 정확히 0x24, unit id 정확히 0x04, 크로스-레코드 동일·≠0
-  const flagship = cb.readUInt32LE(0x24);
+  // flagship 정확히 0x20 (spot 바로 뒤, spot_owner 제거됨), unit id 0x04, 크로스-레코드 동일·≠0
+  const flagship = cb.readUInt32LE(0x20);
   const unitId0 = ub.readUInt32LE(0x04);
-  assert.equal(flagship, 7, 'flagship (grid-unit id) @ body+0x24');
+  assert.equal(flagship, 7, 'flagship (grid-unit id) @ body+0x20');
   assert.equal(unitId0, 7, '0x0325 unit[0].id @ body+0x04');
-  assert.equal(flagship, unitId0, 'flagship(+0x24) == unit id(+0x04) — char↔unit link');
+  assert.equal(flagship, unitId0, 'flagship(+0x20) == unit id(+0x04) — char↔unit link');
   assert.notEqual(flagship, 0, 'flagship ≠ 0 (FUN_004c2a80 link requires non-zero)');
 
-  // anti-drift: flagship 이 ±1 dword(0x20/0x28)로 밀리지 않았음
-  assert.equal(cb.readUInt32LE(0x20), 0, 'body+0x20 (spot_owner) is 0 — flagship not −1 dword');
-  assert.equal(cb.readUInt32LE(0x28), 0, 'body+0x28 (flagship_name_len region) is 0 — flagship not +1 dword');
+  // anti-drift: 구 0x24(spot_owner 있을 때 flagship 위치)는 이제 name_len 구간 = 0
+  assert.equal(cb.readUInt32LE(0x24), 0, 'body+0x24 (flagship_name_len region) is 0 — no +4 drift');
   // 0x14 max_of_special 영역이 u32 로 넘쳐 0x18/0x1c 를 밀지 않았음(spot@0x1c 이미 검증됨)
   assert.equal(cb.readUInt32LE(0x18), 0, 'body+0x18 (return_base) is 0 — max_of_special did not overflow');
 });
@@ -441,10 +445,10 @@ test('0x0323 flagship lands at body+0x24 == 0x0325 unit id (+0x04), no ±1 dword
 //   링크(FUN_004c2a80)가 성립해 NOW LOADING 이 해제된다.
 //
 // 이 테스트는 각 필드에 서로 다른 값을 넣어 엔디안 오염/오프셋 drift/타입 오류(u16↔u32)를 잡는다.
-test('0x0323 canonical wire layout: every field LE at raw-asm offsets, max_of_special is u16', () => {
+test('0x0323 canonical wire layout: every field LE at -4 aligned offsets, max_of_special is u16', () => {
   const inner = buildInformationCharacterInner({
     characterId: 0x11223344,
-    gridUnitId: 0x0aabbccd, // flagship (grid-unit id) @0x24
+    gridUnitId: 0x0aabbccd, // flagship (grid-unit id) @0x20 (-4 정렬, 구 0x24)
     power: 0x2a,
     camp: 2,
     state: 5,
@@ -455,7 +459,6 @@ test('0x0323 canonical wire layout: every field LE at raw-asm offsets, max_of_sp
     maxOfSpecial: 0x1234, // u16 — 반드시 0x16 pad / 0x18 return_base 를 밀지 않아야
     returnBase: 0x55667788,
     spot: 0x0000dead,
-    spotOwner: 0x0000beef,
     strategy: 0x00112233,
     coupConduct: 0x44556677,
     coup: 0x08009900,
@@ -479,15 +482,15 @@ test('0x0323 canonical wire layout: every field LE at raw-asm offsets, max_of_sp
   assert.equal(b.readUInt16LE(0x14), 0x1234, 'max_of_special@0x14 u16 LE');
   assert.equal(b.readUInt16LE(0x16), 0, 'pad@0x16 == 0 (max_of_special is u16, no overflow)');
   assert.equal(b.readUInt32LE(0x18), 0x55667788, 'return_base@0x18 u32 LE');
-  // 0x1c spot / 0x20 spot_owner / 0x24 flagship — 링크 앵커 구간
+  // 0x1c spot / 0x20 flagship (spot_owner 제거, -4 정렬) — 링크 앵커 구간
   assert.equal(b.readUInt32LE(0x1c), 0x0000dead, 'spot@0x1c u32 LE');
-  assert.equal(b.readUInt32LE(0x20), 0x0000beef, 'spot_owner@0x20 u32 LE');
-  assert.equal(b.readUInt32LE(0x24), 0x0aabbccd, 'flagship (grid-unit id)@0x24 u32 LE');
-  assert.notEqual(b.readUInt32LE(0x20), b.readUInt32LE(0x24), 'spot_owner@0x20 != flagship (no drift)');
-  // 0x44 strategy / 0x48 coup_conduct / 0x4c coup
-  assert.equal(b.readUInt32LE(0x44), 0x00112233, 'strategy@0x44 u32 LE');
-  assert.equal(b.readUInt32LE(0x48), 0x44556677, 'coup_conduct@0x48 u32 LE');
-  assert.equal(b.readUInt32LE(0x4c), 0x08009900, 'coup@0x4c u32 LE');
+  assert.equal(b.readUInt32LE(0x20), 0x0aabbccd, 'flagship (grid-unit id)@0x20 u32 LE (구 0x24)');
+  assert.notEqual(b.readUInt32LE(0x1c), b.readUInt32LE(0x20), 'spot@0x1c != flagship (인접, no drift)');
+  assert.equal(b.readUInt32LE(0x24), 0, 'name_len region@0x24 == 0 (flagshipName 없음)');
+  // 0x40 strategy / 0x44 coup_conduct / 0x48 coup (-4 정렬, 구 0x44/0x48/0x4c)
+  assert.equal(b.readUInt32LE(0x40), 0x00112233, 'strategy@0x40 u32 LE');
+  assert.equal(b.readUInt32LE(0x44), 0x44556677, 'coup_conduct@0x44 u32 LE');
+  assert.equal(b.readUInt32LE(0x48), 0x08009900, 'coup@0x48 u32 LE');
 });
 
 test('grid-enter refresh (0x0b09/0x0325/0x0323/0x0b0a) keeps flagship(+0x24)==unit id(+0x04)', () => {
@@ -495,9 +498,9 @@ test('grid-enter refresh (0x0b09/0x0325/0x0323/0x0b0a) keeps flagship(+0x24)==un
   const charRec = inners.find((i) => readMsg32Code(i) === CODE_INFO_CHARACTER);
   const unitRec = inners.find((i) => readMsg32Code(i) === CODE_INFO_UNIT);
   assert.ok(charRec && unitRec, '0x0323/0x0325 present between grid-enter begin/end');
-  const flagship = msg32Body(charRec).readUInt32LE(0x24);
+  const flagship = msg32Body(charRec).readUInt32LE(0x20);
   const unitId0 = msg32Body(unitRec).readUInt32LE(0x04);
-  assert.equal(flagship, 11, 'refresh flagship @ +0x24');
+  assert.equal(flagship, 11, 'refresh flagship @ +0x20 (-4 정렬)');
   assert.equal(unitId0, 11, 'refresh unit id @ +0x04');
   assert.equal(flagship, unitId0, 'refresh link flagship==unit id');
   assert.notEqual(flagship, 0, 'refresh flagship ≠ 0');
@@ -520,35 +523,15 @@ test('isAdmissionRequestCode covers every static-info req (incl. 신규 0x0308/0
   assert.equal(isAdmissionRequestCode(0x7abc), false);
 });
 
-// ─── 0x0323 flagship -4 위치 실험 (env-gate LOGH_FLAGSHIP_M4) ──────────────────
-// 진단 목적: 클라가 struct+0x28 에서 flagship 을 읽는데 서버는 물리 0x24 에 쓴다(+4 어긋남).
-// body 0x04~0x1c 구간의 4바이트 필드폭 불일치로 클라가 4바이트를 더 소비한다는 가설을,
-// flagship 을 물리 0x20 으로 -4 이동시켜 클라 struct[0x24]에 안착하는지로 확정한다.
-// 근본수정 아님 — env-gate 라 기본 동작·기존 테스트 불변. 라이브에서 NOW LOADING 해제 여부로 판정.
-test('LOGH_FLAGSHIP_M4=1: flagship moves to body+0x20, body+0x24 zeroed (-4 진단 실험)', () => {
-  const prev = process.env.LOGH_FLAGSHIP_M4;
-  process.env.LOGH_FLAGSHIP_M4 = '1';
-  try {
-    const inner = buildInformationCharacterInner({ characterId: 7, gridUnitId: 42 });
-    const body = msg32Body(inner);
-    assert.equal(body.length, CODE_INFO_CHARACTER_BYTES);
-    assert.equal(body.readUInt32LE(0x20), 42, '실험: flagship @ body+0x20 (-4)');
-    assert.equal(body.readUInt32LE(0x24), 0, '실험: 원래 위치 0x24 는 0');
-  } finally {
-    if (prev === undefined) delete process.env.LOGH_FLAGSHIP_M4;
-    else process.env.LOGH_FLAGSHIP_M4 = prev;
-  }
-});
-
-test('env off(default): flagship stays at body+0x24, 0x20 (spot_owner) is 0 (현행 불변)', () => {
-  const prev = process.env.LOGH_FLAGSHIP_M4;
-  delete process.env.LOGH_FLAGSHIP_M4;
-  try {
-    const inner = buildInformationCharacterInner({ characterId: 7, gridUnitId: 42 });
-    const body = msg32Body(inner);
-    assert.equal(body.readUInt32LE(0x24), 42, '기본: flagship @ body+0x24');
-    assert.equal(body.readUInt32LE(0x20), 0, '기본: 0x20 은 0 (drift 없음)');
-  } finally {
-    if (prev !== undefined) process.env.LOGH_FLAGSHIP_M4 = prev;
-  }
+// ─── 0x0323 flagship -4 정렬 근본수정 회귀 잠금 (구 env-gate LOGH_FLAGSHIP_M4 대체) ──
+// A/B 실험(env-gate)이 flagship=wire[0x20] 을 증명한 뒤 근본수정으로 대체됨: spot_owner 제거 +
+// flagship 이후 전 필드 -4. 이 테스트는 spot@0x1c 유지 + flagship@0x20 + 구 0x24=0(name_len) +
+// 크기 0x2d4 불변을 잠근다.
+test('0x0323 default layout: flagship @body+0x20, spot@0x1c 유지, 0x24 zeroed, size 0x2d4', () => {
+  const inner = buildInformationCharacterInner({ characterId: 7, gridUnitId: 42, spot: 3 });
+  const body = msg32Body(inner);
+  assert.equal(body.length, CODE_INFO_CHARACTER_BYTES, 'body 총 0x2d4 (724B) 불변');
+  assert.equal(body.readUInt32LE(0x1c), 3, 'spot @ body+0x1c 유지 (flagship 이전 시프트 없음)');
+  assert.equal(body.readUInt32LE(0x20), 42, 'flagship @ body+0x20 (-4 정렬, 구 0x24)');
+  assert.equal(body.readUInt32LE(0x24), 0, 'body+0x24 (구 flagship 위치, 이제 name_len) == 0');
 });
