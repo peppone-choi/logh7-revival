@@ -2,7 +2,19 @@
 
 > **▶ RESUME (2026-07-10, 컨텍스트 압축 지점):** M1/M0.5/M2 완료. M3 = 원본 클라가 로그인~월드모드(NOW LOADING)까지 크래시 없이 도달, **전략맵 렌더만 미완**. 근본원인(0x0323 = packed BIG-ENDIAN) 확정 후 **서버 재작성 완료·커밋 64e5fd21 푸시됨** — 아래 첫 항목 참조. **다음 액션:** live-qa가 실클라+Frida로 전략맵 렌더 검증 중(struct[0x24]==unitId 링크·팬텀 유닛 없음·NOW LOADING 해제 스크린샷). 검증 하네스: `_m2_launch.mjs`+시드 store.json / `logh7_drive_robust.py login` / `_m2_click.py`(게임개시 125,191·카드 655,305). 서버 테스트 209/209. 규칙: 일 단위마다 커밋·푸시, 라이브 증거 없이 완료주장 금지.
 
-## ✅ M3 방향 확정(실측): aligned-LE + 0x0204/0x0323 self-id 바이트오더 정합 — packed-BE는 오류 (2026-07-10)
+## ⚠️ M3 aligned-LE 결과: self-match 통과했으나 렌더 실패 — 클라는 wire를 BIG-ENDIAN으로 읽음 (2026-07-10)
+
+**live-qa 렌더 검증(`m3-render-20260710-125959`, 현재 코드 939c13bb 실행 확인)이 self-match 돌파 + 새 블로커 노출.**
+
+- **전진**: self-id와 record[0] 정합 → `c2c80_modes=[1,1,0]`에 **mode-0 발화**(지난번 [1,1,1,1,1,2]엔 없었음), objTable slot0=0x6d616e01(≠0). self-match 게이트는 뚫림.
+- **그러나 렌더 실패**(99-final.png = NOW LOADING). 결정적 새 증거:
+  - **`ucnt=256`**: 서버 0x0325 count=1(writeUInt16LE=[01 00])을 클라가 256(0x0100)으로 읽음 → **클라는 u16을 BIG-ENDIAN으로 읽는다**(1→256). 팬텀 유닛.
+  - **char id=16777216**(0x01000000): 서버 id=1(LE=[01 00 00 00])을 클라가 BE로 읽어 0x01000000. → **클라는 u32도 BIG-ENDIAN으로 읽는다**.
+- **재해석**: 클라는 **wire를 network-order(BIG-ENDIAN)로 읽는다.** self-match가 통과한 건 0x0204·0x0323을 둘 다 LE로 보내 클라가 똑같이 byteswap(16777216)해 값이 우연히 같아진 것 — 정합만 되고 값은 틀림. flagship이 memory 0x24=0(값 1이 0x20에 옴)·count 팬텀으로 링크/유닛 깨짐 → 렌더 실패.
+- **혼란 원인**: 런마다 코드버전 혼용 + byteswap 미인지. packed-BE(64e5fd21)는 endian은 맞고(BE) position이 틀림(packed), aligned-LE(939c13bb)는 position 후보 맞고 endian이 틀림(LE). **정답 후보 = struct-aligned BIG-ENDIAN**(pad 유지 + BE), 단 미확정.
+- **결정(Blocked-Loop)**: 추측 반복 중단. **현재 코드에서 sentinel A/B로 0x0323/0x0325/0x0204 전 필드의 wire→struct 오프셋+엔디안을 한 번에 확정** → 그 맵으로 서버 1회 수정 → 1회 검증. self-match는 "둘이 같기만 하면" 통과하므로, 진짜 목표는 flagship·unit·count가 클라가 읽는 정확한 값이 되게 하는 것.
+
+## ✅ (경과) M3 방향: aligned-LE + self-id 정합 시도 — self-match는 뚫었으나 endian이 BE로 판명 (2026-07-10)
 
 **live-qa 실측(`.omo/live-qa/m3-selfmatch-20260710-123433/frida-events.jsonl`)이 방향을 단정.** disp0323이 훅한 건 디스패처 FUN_004ba2b0, arg1=wire 버퍼.
 
