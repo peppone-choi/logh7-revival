@@ -1,7 +1,7 @@
 // 정적 세계 시드 로더 검증 — 스키마 확장·멱등·provenance·카탈로그 조회
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtemp, rm } from 'node:fs/promises';
+import { mkdtemp, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
@@ -128,6 +128,51 @@ test('world seed: GameApplication boots with static world and exposes catalog', 
     }
   } finally {
     try { app.close(); } catch { /* already closed */ }
+    await rm(dir, { recursive: true, force: true });
+  }
+});
+
+test('npc drop-in: absent/empty is safe, partial file merges losslessly (source=external)', async () => {
+  const { dir, connection } = await freshDb();
+  try {
+    const { db } = connection;
+    const canonCount = () => db.prepare("SELECT COUNT(*) AS c FROM canon_characters").get().c;
+    const externalCount = () =>
+      db.prepare("SELECT COUNT(*) AS c FROM canon_characters WHERE source = 'external'").get().c;
+
+    // 1) 파일 미존재 → 캐논 99만, 에러 아님
+    loadWorldSeed({ connection, seedDir: DEFAULT_SEED_DIR, npcPath: join(dir, 'nope.json') });
+    assert.equal(canonCount(), 99);
+    assert.equal(externalCount(), 0);
+
+    // 2) 빈 배열 → 여전히 99, 에러 아님
+    const emptyPath = join(dir, 'npc-empty.json');
+    await writeFile(emptyPath, JSON.stringify({ characters: [] }), 'utf8');
+    loadWorldSeed({ connection, seedDir: DEFAULT_SEED_DIR, npcPath: emptyPath, force: true });
+    assert.equal(canonCount(), 99);
+
+    // 3) 부분 레코드(필드 일부만) + 한글 이름 → 무손실 병합, source=external
+    const partialPath = join(dir, 'npc-characters.json');
+    await writeFile(partialPath, JSON.stringify({
+      provenance: 'external test author',
+      characters: [
+        { id: 'npc-90001', faction: 'empire', powerId: 2, name_kr: '김제독',
+          lastname: '김', firstname: '제독', ability8: [10, 20, 30, 40, 50, 60, 70, 80] },
+        { id: 'npc-90002', name_kr: '이참모', lastname: '이', firstname: '참모' },
+      ],
+    }), 'utf8');
+    loadWorldSeed({ connection, seedDir: DEFAULT_SEED_DIR, npcPath: partialPath, force: true });
+    assert.equal(canonCount(), 101, '99 canon + 2 external');
+    assert.equal(externalCount(), 2);
+
+    const kim = db.prepare("SELECT name_kr, ability8_json FROM canon_characters WHERE id = 'npc-90001'").get();
+    assert.equal(kim.name_kr, '김제독', 'Korean name preserved (UTF-16LE on wire)');
+    assert.deepEqual(JSON.parse(kim.ability8_json), [10, 20, 30, 40, 50, 60, 70, 80]);
+
+    // 캐논 오염 없음
+    assert.equal(db.prepare("SELECT COUNT(*) AS c FROM canon_characters WHERE source = 'canon'").get().c, 99);
+  } finally {
+    connection.close();
     await rm(dir, { recursive: true, force: true });
   }
 });

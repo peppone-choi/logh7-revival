@@ -324,3 +324,60 @@ function loadCanonCharacters(db, seedDir) {
   }
   recordProvenance(db, 'characters.json', 'characters.json', doc, doc.characters.length);
 }
+
+// 외부 작성 NPC 무명 슬롯 드롭인. 캐논과 동일 스키마를 canon_characters 에 멱등 병합.
+// - 파일 미존재/빈 배열 → 안전(캐논만, 에러 아님).
+// - wrapper({ characters:[...] }) 또는 bare 배열 둘 다 수용.
+// - source='external' 라벨. id 는 캐논 slug 와 범위 분리(외부는 npc-* 권장).
+// - 데이터 무변조: 원본 레코드 전체를 data_json 에 보존.
+function loadNpcCharacters(db, npcPath) {
+  if (!npcPath || !existsSync(npcPath)) {
+    recordProvenance(db, NPC_FILE, NPC_FILE, { provenance: 'absent (no external NPC drop-in)' }, 0);
+    return;
+  }
+  const doc = JSON.parse(readFileSync(npcPath, 'utf8'));
+  const records = Array.isArray(doc) ? doc : (doc.characters ?? []);
+  const stmt = db.prepare(
+    `INSERT INTO canon_characters(
+       id, source, faction, power_id, kind, sex, name_ja, name_romaji, name_kr,
+       lastname, firstname, rank_code, post, face, ability8_json, unit, flagship, data_json
+     ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+     ON CONFLICT(id) DO UPDATE SET
+       source=excluded.source, faction=excluded.faction, power_id=excluded.power_id,
+       kind=excluded.kind, sex=excluded.sex, name_ja=excluded.name_ja,
+       name_romaji=excluded.name_romaji, name_kr=excluded.name_kr,
+       lastname=excluded.lastname, firstname=excluded.firstname, rank_code=excluded.rank_code,
+       post=excluded.post, face=excluded.face, ability8_json=excluded.ability8_json,
+       unit=excluded.unit, flagship=excluded.flagship, data_json=excluded.data_json`,
+  );
+  for (const c of records) {
+    if (c == null || c.id == null) continue;
+    stmt.run(
+      String(c.id),
+      'external',
+      c.faction ?? null,
+      c.powerId ?? null,
+      c.kind ?? null,
+      c.sex ?? null,
+      c.name_ja ?? null,
+      c.name_romaji ?? null,
+      c.name_kr ?? null,
+      c.lastname ?? null,
+      c.firstname ?? null,
+      c.rankCode ?? null,
+      c.post ?? null,
+      c.face ?? null,
+      JSON.stringify(c.ability8 ?? null),
+      c.unit ?? null,
+      c.flagship ?? null,
+      JSON.stringify(c),
+    );
+  }
+  recordProvenance(
+    db,
+    NPC_FILE,
+    npcPath,
+    { provenance: doc.provenance ?? 'external NPC drop-in', generatedAt: doc.generatedAt },
+    records.length,
+  );
+}

@@ -1,6 +1,6 @@
 {
   "id": "logh7-db-seed-manifest",
-  "generatedAt": "2026-07-10T16:14:35.434Z",
+  "generatedAt": "2026-07-10T16:47:43.050Z",
   "builder": "server/tools/build-db-seed.mjs",
   "catalogs": [
     {
@@ -17,7 +17,7 @@
     },
     {
       "file": "characters.json",
-      "bytes": 104425
+      "bytes": 114658
     },
     {
       "file": "galaxy-systems.json",

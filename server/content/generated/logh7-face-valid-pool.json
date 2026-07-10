@@ -1,0 +1,43 @@
+{
+  "id": "logh7-face-valid-pool",
+  "purpose": "익명 얼굴 인덱스 풀. face(u32) 값이 어떤 TCF 컨테이너+슬롯으로 해석돼 크래시 없이 초상 하나를 렌더하는지의 카테고리별 유효 범위. 정체성 매핑이 아니다 — '이 얼굴 = 이 인물' 주장 없음.",
+  "provenance": [
+    "docs/reference/legacy-evidence/logh7-face-id-encoding.md (FUN_00592c30→FUN_005924c0 composite 디코드)",
+    "docs/reference/legacy-evidence/logh7-face-code-conversion.md (자릿수 필드 → 아틀라스 접두문자 O/E/M/F/G)",
+    "server/content/generated/logh7-face-tcf-catalog.json (아틀라스 7종 tcf + tcf.hed 669 used slots)"
+  ],
+  "wireField": "0x0323 캐릭터 레코드 @0xf4 (u32 face) / 0x1008 커스텀 생성 face 필드. logh7-character-codec.mjs.",
+  "encoding": {
+    "note": "face 값을 10진 자릿수 필드로 분해해 아틀라스 {O|G}{E|A}{M|F} 선택 + 아틀라스 내 local index.",
+    "fields": {
+      "M": "n / 1000000        → 0=O(Original, 캐논/NPC), 1=G(Generate, 플레이어 생성)",
+      "d5": "(n % 1000000)/100000 → 0=Empire, 1=Alliance",
+      "d4": "(n % 100000)/10000  → 0=Male, 1=Female",
+      "local_index": "n % 1000   → 아틀라스 내 슬롯 인덱스"
+    },
+    "faceValueFormula": "face_value = atlasBase + local_index",
+    "renderPath": "클라 Path2(FUN_00592c30→FUN_005924c0)가 선택 아틀라스의 local-index-th 영역을 그린다. Path1(FUN_00517e70, flat NNN→Face/NNN.tga)은 tga 미탑재로 unknownface 폴백.",
+    "crashSafety": "local_index가 아틀라스 상한(cap) 이내면 loader가 영역을 로드 → 크래시 없음. 상한 초과 시 unknownface 폴백(역시 크래시 없음). 빈 슬롯은 blank 렌더(크래시 아님)."
+  },
+  "anchors": {
+    "note": "라이브 렌더로 확인된 유효값(정체성 아님).",
+    "emperorCard": { "face": 0, "atlas": "oem", "localIndex": 0, "evidence": "docs/reference/restored-from-git/logh7-loop-state.md:350 — 황제 placeholder 카드/초상 렌더(크래시 없음)" }
+  },
+  "categories": [
+    { "key": "empire-male-officer",   "atlas": "oem", "faction": "empire",   "sex": "male",   "rankGroup": "officer(O)", "base": 0,       "indexCap": 199, "faceValueRange": [0, 199],       "tcfSlots": 201, "tcfFile": "oem.tcf", "usable": true,  "note": "제국 남성 士官. 캐논 제국 제독/관료 다수 여기." },
+    { "key": "alliance-male-officer", "atlas": "oam", "faction": "alliance", "sex": "male",   "rankGroup": "officer(O)", "base": 100000,  "indexCap": 95,  "faceValueRange": [100000, 100095], "tcfSlots": 96,  "tcfFile": "oam.tcf", "usable": true,  "note": "동맹 남성 士官. 캐논 동맹 제독/정치가 다수 여기." },
+    { "key": "misc-female",           "atlas": "o",   "faction": "any",      "sex": "female", "rankGroup": "officer(O)", "base": 10000,   "indexCap": 99,  "faceValueRange": [10000, 10099],   "tcfSlots": 100, "tcfFile": "o.tcf",   "usable": true,  "note": "여성/기타. 캐논 여성 소수." },
+    { "key": "empire-male-general",   "atlas": "gem", "faction": "empire",   "sex": "male",   "rankGroup": "general(G)", "base": 1000000, "indexCap": 99,  "faceValueRange": [1000000, 1000099], "tcfSlots": null, "tcfFile": "gem.tcf", "usable": "player-generate", "note": "G-group=플레이어 생성용. 캐논 NPC엔 O-group 권장." },
+    { "key": "empire-female-general", "atlas": "gef", "faction": "empire",   "sex": "female", "rankGroup": "general(G)", "base": 1010000, "indexCap": 31,  "faceValueRange": [1010000, 1010031], "tcfSlots": null, "tcfFile": "gef.tcf", "usable": "player-generate", "note": "G-group." },
+    { "key": "alliance-male-general", "atlas": "gam", "faction": "alliance", "sex": "male",   "rankGroup": "general(G)", "base": 1100000, "indexCap": 99,  "faceValueRange": [1100000, 1100099], "tcfSlots": null, "tcfFile": "gam.tcf", "usable": "player-generate", "note": "G-group." },
+    { "key": "alliance-female-general","atlas": "gaf","faction": "alliance", "sex": "female", "rankGroup": "general(G)", "base": 1110000, "indexCap": 31,  "faceValueRange": [1110000, 1110031], "tcfSlots": null, "tcfFile": "gaf.tcf", "usable": "player-generate", "note": "G-group." }
+  ],
+  "assignmentPolicy": {
+    "identity": "정체성 미확정 — 어떤 face 값도 특정 인물을 뜻하지 않는다. AI분류·초상복원 기반 정체성 매핑은 폐기.",
+    "canonNpc": "캐논/서버 NPC는 O-group(oem/oam/o)에서 진영·성별로 컨테이너를 고르고 local_index를 상한 이내 배정(순차/임의 OK).",
+    "playerGenerate": "플레이어 생성 캐릭터는 클라가 G-group(gem/gef/gam/gaf)을 쓸 수 있음.",
+    "fallback": "값 미정이면 unknownface(크래시 없음).",
+    "seedUsage": "server/data/seed/characters.json 전원이 이 정책으로 placeholder face 배정됨(faceIdentityConfirmed=false)."
+  },
+  "openCalibration": "local_index → tcf.hed 슬롯의 아틀라스별 정확한 remap(런타임 테이블 this+0x2a60/+0x2d80)은 바이트-확정 안 됨. 즉 '특정 index가 정확히 어느 초상'인지는 라이브 렌더 캘리브레이션(live-qa) 필요. 그러나 아틀라스 SELECTION과 cap-이내 크래시-안전성은 확정. 특정 정체성이 목적이 아니므로 placeholder 용도엔 충분."
+}
