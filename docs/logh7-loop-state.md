@@ -2,7 +2,19 @@
 
 > **▶ RESUME (2026-07-10, 컨텍스트 압축 지점):** M1/M0.5/M2 완료. M3 = 원본 클라가 로그인~월드모드(NOW LOADING)까지 크래시 없이 도달, **전략맵 렌더만 미완**. 근본원인(0x0323 = packed BIG-ENDIAN) 확정 후 **서버 재작성 완료·커밋 64e5fd21 푸시됨** — 아래 첫 항목 참조. **다음 액션:** live-qa가 실클라+Frida로 전략맵 렌더 검증 중(struct[0x24]==unitId 링크·팬텀 유닛 없음·NOW LOADING 해제 스크린샷). 검증 하네스: `_m2_launch.mjs`+시드 store.json / `logh7_drive_robust.py login` / `_m2_click.py`(게임개시 125,191·카드 655,305). 서버 테스트 209/209. 규칙: 일 단위마다 커밋·푸시, 라이브 증거 없이 완료주장 금지.
 
-## 🎯 워크 정지 실측 확정: 클라가 0x0315 기다림, 서버 0x0315(코드·크기 정확) 보내도 큐 미팝 (2026-07-10)
+## 🎯 M3 블로커 3중 협공 확정: 0x0315는 클라에 아예 안 착지 — 서버 전용핸들러 emit 경로 의심 (2026-07-10)
+
+**세 갈래 실측이 원인 후보를 하나로 좁혔다:**
+
+1. **정적 RE(re-loadgate, `docs/logh7-now-loading-gate-re.md` 갱신):** 0x0315 핸들러의 팝 경로는 0x0305와 100% 동일(local_1c=-1, 같은 goto LAB_004bdd33). RLE 디코더(FUN_004abbb0)도 팝 방해 불가. **디스패치만 되면 무조건 팝** → 미팝의 유일한 원인 = 0x315가 디스패처에 도달하지 못함. 클라는 길이필드가 아닌 **코드→고정크기 테이블(FUN_004b8b00)**로 recv 프레이밍(desync 위험).
+2. **서버측 감사 2건(스크래치 `audit2.mjs`/`verify-envelope-framing.mjs`):** ① 워크 응답 12코드 emit msg32 바디 길이 **전부 클라 hex 테이블과 일치**(0x0307=58802✓, 0x0315=5004✓, inner=body+6). ② envelope-0030 len 규약(len=2+encBody) 정확, 0x0307도 u16 한계 내. **빌더·envelope 단품 면책.**
+3. **라이브 디스패치 프로브(liveqa-dispatch, `tools/live/_ev/dispatch-185649/`):** FUN_004ba2b0 훅 — 디스패치 시퀀스 0x323→0x325→0x305→0x307 후 **영구 침묵(총 12회 고정), 0x315는 0회**. 클라 recv 큐(+0x3552b8) **완전 empty**. 서버 trace는 0x0314에 `responseCount=1` 전송 주장.
+
+**종합: 서버가 "보냈다"는 0x0314 응답이 클라 recv 레이어에 착지하지 않는다.** 결정적 단서 — 팝된 0x0305/0x0307은 `buildAdmissionResponseInner` **제네릭 walker 경로**, 미달 0x0315(와 0x0313)는 world-session.mjs **전용 핸들러 경로**(responses 배열+isMsg32). 두 경로의 파이프라인 처리 차이(미전송 분기/이중포장/child-codec)가 유력. → srv-314emit(server-dev)이 두 경로 최종 소켓 바이트 대조·수정 중 (태스크 #75).
+
+**부수 성과:** 커스텀 생성(item1/0x1008) 서버측 완결 — 정통 EXE(9c97de2a)는 item1 이미 enable(패치 불요, re-custom 정정), 0x1008 OK는 이미 128B packed 규격, 에코 필드 테스트 잠금(e02328b6, 219/219). 남은 것 = 라이브 위저드 검증.
+
+## 🎯 (경과) 워크 정지 실측 확정: 클라가 0x0315 기다림, 서버 0x0315(코드·크기 정확) 보내도 큐 미팝 (2026-07-10)
 
 **liveqa-walkstate Frida 실측(`server/data/m3-walkstate-20260710-182104`) — 클라 워크 큐 직접 읽음:**
 ```
