@@ -2,7 +2,21 @@
 
 > **▶ RESUME (2026-07-10, 컨텍스트 압축 지점):** M1/M0.5/M2 완료. M3 = 원본 클라가 로그인~월드모드(NOW LOADING)까지 크래시 없이 도달, **전략맵 렌더만 미완**. 근본원인(0x0323 = packed BIG-ENDIAN) 확정 후 **서버 재작성 완료·커밋 64e5fd21 푸시됨** — 아래 첫 항목 참조. **다음 액션:** live-qa가 실클라+Frida로 전략맵 렌더 검증 중(struct[0x24]==unitId 링크·팬텀 유닛 없음·NOW LOADING 해제 스크린샷). 검증 하네스: `_m2_launch.mjs`+시드 store.json / `logh7_drive_robust.py login` / `_m2_click.py`(게임개시 125,191·카드 655,305). 서버 테스트 209/209. 규칙: 일 단위마다 커밋·푸시, 라이브 증거 없이 완료주장 금지.
 
-## 🎯 M3 근본원인 = 0x0315 복호 keystream desync (checksum/id/innerLen 전부 무혐의) (2026-07-10)
+## 🎯 M3 유력 원인(옛 proven) = 0x0315 RLE-카운트 엔디안 회귀 LE→BE (2026-07-10)
+
+**git-arch가 리셋 전 git 발굴로 최고권위 증거(옛 라이브 검증 코드+문서) 제시 — decrypt-desync 가설을 대체하는 유력 리드.**
+
+- **위치**: `server/src/server/logh7-world-records.mjs:555` 현재 `writeUInt16LE(rle.length, 2)`. 옛 proven `5bd249c:server/src/server/logh7-login-protocol.mjs` L625 = `writeUInt16BE`. **엔디안 회귀.**
+- **옛 라이브 판정 G222**(`5bd249c:docs/reference/legacy-evidence/logh7-strategic-map-wire.md` §4, 2026-06-16): "LE로 쓰면 클라 상류 파서 **FUN_004134e0**가 galaxy grid count=**0x4601(17921)**로 읽어 유효범위(0<c<0x1389=5001) 초과 → **dispatcher 전 정지**. BE면 0x0315/0x0313 dispatcher arm 실행."
+- **증상 정확 부합**: 이 u16 RLE-카운트 필드는 **0x0315(buildStaticInformationGridInner)에만** 존재(0x0305/0x0307/0x0323/0x0325엔 없음, 0x0313은 u8). → "0x0315만 거부, recv큐 미적재, dispatcher 미도달"과 일치. 봉투 checksum/id는 옛↔현 완전 동일(원인 아님).
+- **현재 주석 오류**: "RE 확정 FUN_004abbb0"은 하류 RLE 디코더만 보고 상류 BE-read(FUN_004134e0)를 놓친 실수(git-arch 지적).
+- **전략맵 도달 이력 정정**: 옛 코드도 렌더 완주는 **미달**(cb35b43c "M3 렌더만 미완", 5bd249c 문서 "strategy HUD unchecked"). login→로비→월드-init(NOW LOADING 해제)까지만 라이브 확인. 즉 BE가 이 증상은 풀지만 렌더까지 보장은 미확정.
+
+**wire-cmp "복호 garbage"와의 긴장**: RLE 엔디안 버그는 inner 깊숙한 값 하나만 틀리게 할 뿐 봉투 헤더까지 garbage로 못 만든다. wire-cmp가 짚은 "@8 msg32 zero만 정위치"는 복호 구조가 사실 정렬됨(완전 desync면 @8도 랜덤)을 시사 → git-arch 쪽 지지. wire-cmp의 라이브 캡처 garbage 해석이 오독일 가능성. srv-cipher가 child-codec 상태성으로 별도 cipher버그 유무 최종 판정(상태없으면 desync 불가 → BE가 유일 원인).
+
+**액션**: srv-cipher가 LE→BE 수정+테스트, 이어 liveqa가 FUN_004134e0 count·dispatcher 진입 라이브 검증. (#79)
+
+## 🎯 (경과) 복호 keystream desync 가설 — wire-cmp #78 (2026-07-10)
 
 **wire-cmp(#78) 헤더 대조가 진짜 원인을 드러냄: verify 거부는 결과일 뿐, 원인은 복호(decrypt) 실패.**
 
