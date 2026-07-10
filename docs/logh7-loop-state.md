@@ -2,7 +2,19 @@
 
 > **▶ RESUME (2026-07-10, 컨텍스트 압축 지점):** M1/M0.5/M2 완료. M3 = 원본 클라가 로그인~월드모드(NOW LOADING)까지 크래시 없이 도달, **전략맵 렌더만 미완**. 근본원인(0x0323 = packed BIG-ENDIAN) 확정 후 **서버 재작성 완료·커밋 64e5fd21 푸시됨** — 아래 첫 항목 참조. **다음 액션:** live-qa가 실클라+Frida로 전략맵 렌더 검증 중(struct[0x24]==unitId 링크·팬텀 유닛 없음·NOW LOADING 해제 스크린샷). 검증 하네스: `_m2_launch.mjs`+시드 store.json / `logh7_drive_robust.py login` / `_m2_click.py`(게임개시 125,191·카드 655,305). 서버 테스트 209/209. 규칙: 일 단위마다 커밋·푸시, 라이브 증거 없이 완료주장 금지.
 
-## ⚠️ M3 aligned-LE 결과: self-match 통과했으나 렌더 실패 — 클라는 wire를 BIG-ENDIAN으로 읽음 (2026-07-10)
+## ✅✅ M3 정답 확정(옛 렌더코드 + 라이브 실측 수렴): aligned + BIG-ENDIAN + 0x0204도 BE + seat count@0x24c (2026-07-10)
+
+**초기화 전 실제 렌더된 코드(5bd249c) 발굴 + 라이브 BE 실측 두 독립 증거 수렴.** 사용자 증언("초기화 전 실행됨") 근거.
+
+- **옛 G164 렌더 경로 호출부(정답)**: `auth-server.mjs:2613/2658` `buildInformationCharacterRecordInner({...r, wireEndian:'be'})`, `login-session.mjs:2297/2434` `buildSsCharacterIdResponseInner({characterId, wireEndian:'be'})`. → **0x0323·0x0204 둘 다 BIG-ENDIAN.**
+- **옛 0x0323 정본 빌더(`login-protocol.mjs:224`)**: 724B fixed, **aligned**. id@0x00 BE, power@0x04/camp@0x05/state@0x06, spot@0x1c BE, spot_owner@0x20 BE, **flagship/gridUnitId@0x24 BE(앵커)**, ability@0x188(LE, 0무방), stamina@0x1a9, **seat/card count u8@0x24c + entries@0x254 stride8 {char u32 BE, role u32 BE}**. seat count가 FUN_004c2c80→PLAYER_INFO+0x270 유닛리스트 행수(C002 패널). id/flagship/spot/spot_owner/seat=writeWireU32(BE), fame/pcp/mcp/ability=고정 LE(대부분 0).
+- **옛 0x0325(`login-protocol.mjs:504`)**: header[u16 count][u16 pad], unit[0]@+4, stride 0x58. wireEndian='be'(호출부 확인). count BE, unit[0].id@+0 BE(=gridUnitId=flagship).
+- **옛 0x0204(`login-protocol.mjs:213`)**: characterId, wireEndian='be'.
+- **내 실수 규명**: objtable 게이트에서 방향 B(0x0323→LE, 0x0204 LE 유지) 택함 → 오답. 정답은 **방향 A(0x0323 BE 유지 + 0x0204도 BE)**. 내 두 시도는 각각 position(aligned 0x24)·endian(BE) 중 하나씩만 맞음. packed-BE(64e5fd21)=endian맞고 position틀림(0x20), aligned-LE(939c13bb)=position맞고 endian틀림(LE). **정답=aligned+BE.**
+- **추가 누락**: 내 최근 두 버전이 **seat count@0x24c를 통째로 빠뜨림**(0x40 이후 0처리). 유닛리스트 데이터라 렌더에 필요.
+- **수정 지시(server-dev)**: 현 0x0323/0x0325/0x0204를 옛 proven 빌더(5bd249c login-protocol.mjs) 바이트와 동일하게 — aligned+BE, flagship@0x24 BE, 0x0204 BE, seat count@0x24c(≥1). 불변식 테스트 both-LE→both-BE 갱신. → live 렌더 확인.
+
+## (경과) M3 aligned-LE: self-match 통과했으나 렌더 실패 — 클라는 wire를 BIG-ENDIAN으로 읽음 (2026-07-10)
 
 **live-qa 렌더 검증(`m3-render-20260710-125959`, 현재 코드 939c13bb 실행 확인)이 self-match 돌파 + 새 블로커 노출.**
 
