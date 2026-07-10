@@ -2,7 +2,16 @@
 
 > **▶ RESUME (2026-07-10, 컨텍스트 압축 지점):** M1/M0.5/M2 완료. M3 = 원본 클라가 로그인~월드모드(NOW LOADING)까지 크래시 없이 도달, **전략맵 렌더만 미완**. 근본원인(0x0323 = packed BIG-ENDIAN) 확정 후 **서버 재작성 완료·커밋 64e5fd21 푸시됨** — 아래 첫 항목 참조. **다음 액션:** live-qa가 실클라+Frida로 전략맵 렌더 검증 중(struct[0x24]==unitId 링크·팬텀 유닛 없음·NOW LOADING 해제 스크린샷). 검증 하네스: `_m2_launch.mjs`+시드 store.json / `logh7_drive_robust.py login` / `_m2_click.py`(게임개시 125,191·카드 655,305). 서버 테스트 209/209. 규칙: 일 단위마다 커밋·푸시, 라이브 증거 없이 완료주장 금지.
 
-## ✅✅ M3 정답 확정(옛 렌더코드 + 라이브 실측 수렴): aligned + BIG-ENDIAN + 0x0204도 BE + seat count@0x24c (2026-07-10)
+## 🔁 M3 flagship 오프셋 Blocked-Loop → 옛 proven 빌더 바이트 그대로 포팅으로 전환 (2026-07-10)
+
+**aligned-BE 적용 후에도 렌더 실패(NOW LOADING). 진전: id=1·self-id=1·ucnt=1 정확, self-match 통과, 팬텀 해소. 그러나 flagship 값이 클라 struct 0x24 아닌 0x20에 앉음(0x24=0) → 링크 실패.**
+
+- **하네스는 현재 코드 실행 확인**: `_m2_launch.mjs`가 `server/src/server/logh7-playable-server.mjs`를 ESM import(stale 아님). 클라가 수신 시 byteswap(BE wire→host LE) 후 디스패처가 봄.
+- **디스패처 wire 버퍼(post-byteswap) 이상징후**: 값 1이 0x20에(0x1c=0, 0x24=0), **pad 자리 0x0e=0x48·0x16=0x49 비-0 이상값**. 내 sparse 재구현(fame/pcp/mcp/ability/parentage/seat 등 옛 코드가 채우던 필드를 0으로 둠)이 클라 파서/byteswap 정합을 깬 것으로 판단.
+- **판단(Blocked-Loop, 오프셋 역산 다수 라운드 실패)**: 처음부터 재구현한 sparse 빌더로 씨름 중단. 사용자 지시("초기화 전 실행됨")대로 **실제 렌더된 옛 빌더(5bd249c `login-protocol.mjs`)를 바이트 그대로 포팅**. `buildInformationCharacterRecordInner`(wireEndian='be' 호출)·`buildInformationUnitRecordInner`(be)·`buildSsCharacterIdResponseInner`(be)를 현재 코드에 충실 이식 — 옛 코드가 쓰던 전 필드 포함.
+- 검증: 포팅 후 wire 바이트가 옛 빌더 출력과 동일한지 대조 + live 렌더.
+
+## ✅✅ (경과) M3 정답 방향: aligned + BIG-ENDIAN + 0x0204도 BE + seat count@0x24c (옛 렌더코드 확증) (2026-07-10)
 
 **초기화 전 실제 렌더된 코드(5bd249c) 발굴 + 라이브 BE 실측 두 독립 증거 수렴.** 사용자 증언("초기화 전 실행됨") 근거.
 
