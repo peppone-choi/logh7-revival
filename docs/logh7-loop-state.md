@@ -1,6 +1,14 @@
 # LOGH VII 루프 상태
 
-## ✅✅✅✅ M3 +4 드리프트 A/B 확정: body 0x04~0x1c 여분 4B 필드가 전 후속필드 오염 (2026-07-10)
+## ⛔ M3 회귀: spot_owner 제거(-4 시프트)가 0x0323 dispatch를 죽임 → 되돌림 (2026-07-10)
+
+- **회귀 확정**(`.omo/live-qa/m3-final-render-20260710-1040/` + 재현 `-b-1044`): spot_owner 제거 + flagship 이후 -4 시프트(커밋 d0d3c1c5) 상태에서 실클라가 **0x0323을 아예 dispatch 안 함**(FUN_004ba2b0 case 0x323 호출 0회, M4는 2회). char table 빈 채(ccnt=0) 월드로드 → NOW LOADING. **커밋 f1f7af3a로 되돌림**(flagship@0x24 = dispatch 작동 상태 복원, 211/211).
+- **원인(추정)**: 클라 world-ready 배치는 msg32 inner를 **코드별 고정크기로 순차 소비**(선두 u32=0, length 아님). 0x0323 레코드의 -4 재배치가 배치 이터레이터를 desync시켜 0x0323 코드에 못 닿게 함. flagship 슬롯 A/B(-4)는 맞았으나 **name 등 후속 필드의 실제 와이어 레이아웃이 균일 -4가 아님** → 전체 파싱 붕괴.
+- **모순 정리**: M4 A/B는 flagship=wire[0x20] 증명(struct[0x24] 안착). 그러나 name+후속을 함께 -4하면 dispatch 붕괴. 즉 **flagship은 0x20이 맞지만 그 뒤 필드 간격이 다름** — 0x0323 실제 와이어 레이아웃이 지금까지 참조한 어느 테이블(덤퍼 FUN_00419300, dispatcher case 0x323 read)과도 다르다. **클라 배치 이터레이터/실제 파서를 Frida로 봐야 확정.**
+- **확정된 것**: (a) +4 드리프트 실존(A/B), (b) flagship 정본 wire 위치=0x20, (c) 균일 -4는 아님(회귀), (d) 프레임/헤더 아님(power 정렬), (e) 서버 송출은 계약대로 정확.
+- **다음 축(수정 담당)**: Frida로 **클라 0x0b09 배치 핸들러 + 0x0323 실제 파서**를 훅해 (1) 배치 이터레이터가 0x0325/0x0b09/0x0323 각 레코드를 몇 바이트로 소비하는지, (2) 0x0323 파서가 flagship·name·각 필드를 wire 어느 오프셋에서 읽는지 **바이트별** 확정. 그 정본 레이아웃으로 buildInformationCharacterInner 재작성(flagship@0x20 유지 + name/후속을 실제 간격으로). 210/210 테스트는 클라 배치파서를 모델링 못 하므로 **Frida 정합이 유일 검증**.
+
+## ✅✅✅✅ (부분) M3 +4 드리프트 A/B 확정: flagship 정본 wire=0x20, 후속은 균일 -4 아님 (2026-07-10)
 
 **A/B 실험(`.omo/live-qa/m3-flagshipm4-20260710-1023/`)이 +4를 결정 확정.** LOGH_FLAGSHIP_M4 env-gate로 flagship 물리위치를 body[0x24]↔[0x20] 토글:
 | flagship 서버 위치 | 클라 struct[0x24] (FUN_004c2a80 링크슬롯) |

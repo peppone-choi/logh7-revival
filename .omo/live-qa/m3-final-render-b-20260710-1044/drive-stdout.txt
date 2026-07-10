@@ -1,0 +1,60 @@
+[10:44:55] launch E:\logh7-revival\artifacts\logh7-install\____________s___\____\exe\g7mtclient.exe
+[10:44:55] client pid(spawn)=46708
+[10:44:56] window hwnd=0x950ce2 pid=46708
+[10:44:58] probe script = _frida_wire0323.js
+[10:44:59] hooks loaded, ready=[{'ev': 'ready', 'base': '0x400000', 'fDisp': '0x4ba2b0', 'fLoad': '0x4c2a80', 'fBuild': '0x4c2c80'}]
+[10:44:59] SNAP attach: gamemode=-1 ring=-1 sel=-1 charCount=-1
+  shot .omo\live-qa\m3-final-render-b-20260710-1044\shots\01-login.png (650, 533)
+[10:44:59] login screen 644x484 -> do_login
+login geometry client=644x484 origin=(3,46)
+  shot .omo\live-qa\m3-final-render-b-20260710-1044\shots\01-login-before.png (650, 533)
+  click ID client=(374,290) screen=(377,336)
+  click PW client=(376,318) screen=(379,364)
+  click LOGIN client=(352,347) screen=(355,393)
+  shot .omo\live-qa\m3-final-render-b-20260710-1044\shots\02-after-login.png (1024, 768)
+[10:45:06] lobby-size reached at t+0s 1028x772 (splash may still show)
+[10:45:06] wait 9s for BOTHTEC splash to clear -> lobby menu
+[10:45:15] SNAP lobby: gamemode=-1 ring=-1 sel=-1 charCount=-1
+  shot .omo\live-qa\m3-final-render-b-20260710-1044\shots\02-lobby.png (1028, 772)
+[10:45:16] click GAME_START client=(125, 191)
+[10:45:19] SNAP after-game-start: gamemode=-1 ring=-1 sel=-1 charCount=-1
+  shot .omo\live-qa\m3-final-render-b-20260710-1044\shots\03-game-start.png (1028, 772)
+[10:45:19] click CHAR_CARD client=(657, 306)
+[10:45:21] SNAP after-char-card: gamemode=-1 ring=-1 sel=-1 charCount=-1
+  shot .omo\live-qa\m3-final-render-b-20260710-1044\shots\04-char-card.png (1028, 772)
+[10:45:24] SNAP after-char-dbl: gamemode=0 ring=1 sel=16777216 charCount=0
+  shot .omo\live-qa\m3-final-render-b-20260710-1044\shots\05-char-dbl.png (1028, 772)
+[10:45:24] === monitor world-load (45s) ===
+[10:45:24] SNAP mon+0s: gamemode=0 ring=1 sel=16777216 charCount=0
+[10:45:27] SNAP mon+2s: gamemode=0 ring=1 sel=16777216 charCount=0
+[10:45:29] SNAP mon+5s: gamemode=0 ring=1 sel=16777216 charCount=0
+[10:45:32] SNAP mon+7s: gamemode=0 ring=1 sel=16777216 charCount=0
+  shot .omo\live-qa\m3-final-render-b-20260710-1044\shots\06-mon-7s.png (1028, 772)
+[10:45:34] SNAP mon+10s: gamemode=0 ring=1 sel=16777216 charCount=0
+[10:45:37] SNAP mon+12s: gamemode=0 ring=1 sel=16777216 charCount=0
+[10:45:39] SNAP mon+15s: gamemode=0 ring=1 sel=16777216 charCount=0
+  shot .omo\live-qa\m3-final-render-b-20260710-1044\shots\07-mon-15s.png (1028, 772)
+[10:45:42] SNAP mon+17s: gamemode=0 ring=1 sel=16777216 charCount=0
+[10:45:44] SNAP mon+20s: gamemode=0 ring=1 sel=16777216 charCount=0
+[10:45:47] SNAP mon+22s: gamemode=0 ring=1 sel=16777216 charCount=0
+  shot .omo\live-qa\m3-final-render-b-20260710-1044\shots\08-mon-22s.png (1028, 772)
+[10:45:49] SNAP mon+25s: gamemode=0 ring=1 sel=16777216 charCount=0
+[10:45:52] SNAP mon+27s: gamemode=0 ring=1 sel=16777216 charCount=0
+[10:45:54] SNAP mon+30s: gamemode=0 ring=1 sel=16777216 charCount=0
+  shot .omo\live-qa\m3-final-render-b-20260710-1044\shots\09-mon-30s.png (1028, 772)
+[10:45:57] SNAP mon+32s: gamemode=0 ring=1 sel=16777216 charCount=0
+[10:45:59] SNAP mon+35s: gamemode=0 ring=1 sel=16777216 charCount=0
+[10:46:02] SNAP mon+37s: gamemode=0 ring=1 sel=16777216 charCount=0
+  shot .omo\live-qa\m3-final-render-b-20260710-1044\shots\10-mon-37s.png (1028, 772)
+[10:46:04] SNAP mon+40s: gamemode=0 ring=1 sel=16777216 charCount=0
+[10:46:07] SNAP mon+42s: gamemode=0 ring=1 sel=16777216 charCount=0
+[10:46:09] SNAP final: gamemode=0 ring=1 sel=16777216 charCount=0
+  shot .omo\live-qa\m3-final-render-b-20260710-1044\shots\99-final.png (1028, 772)
+[10:46:09] alive=True
+[10:46:09] dispatch total = 0
+[10:46:09] === SUMMARY ===
+[10:46:09] FUN_004c2a80 calls: 1
+[10:46:09]   load-enter arg0=1 gamemode=None ring=None sel=16777216 charCount=None
+[10:46:09] gamemode values seen: [-1, 0]
+[10:46:09] ring values seen: [-1, 1]
+[10:46:09] FINAL gamemode=0 ring=1 sel=16777216 charCount=0
