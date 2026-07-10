@@ -1,0 +1,38 @@
+{
+  "id": "logh7-ability-schema",
+  "generatedAt": "2026-07-10T16:14:35.434Z",
+  "provenance": "character-roster.json _stat_keys / _stat_key_meaning_ja",
+  "order": [
+    "tochi",
+    "seiji",
+    "unei",
+    "joho",
+    "shiki",
+    "kido",
+    "kogeki",
+    "bogyo"
+  ],
+  "ja": {
+    "tochi": "統率",
+    "seiji": "政治",
+    "unei": "運用",
+    "joho": "情報",
+    "shiki": "指揮",
+    "kido": "機動",
+    "kogeki": "攻撃",
+    "bogyo": "防御"
+  },
+  "ko": {
+    "tochi": "통솔",
+    "seiji": "정치",
+    "unei": "운용",
+    "joho": "정보",
+    "shiki": "지휘",
+    "kido": "기동",
+    "kogeki": "공격",
+    "bogyo": "방어"
+  },
+  "wireField": "character ability8[0..7] (u8 each)",
+  "confidence": "order-inferred",
+  "note": "ability8[i] ↔ 위 순서 매핑은 roster 문서 순서 기준. [CW]§2.1 캡처 대조로 최종 확정 필요(GAP)."
+}

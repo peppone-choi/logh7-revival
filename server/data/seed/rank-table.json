@@ -1,0 +1,156 @@
+{
+  "id": "logh7-rank-table",
+  "generatedAt": "2026-07-10T16:14:35.434Z",
+  "provenance": "constmsg group 5 (baseId 477, count 21); 少尉=0x0d 앵커 = logh7-character-codec.mjs",
+  "wireField": "character rank (u8, constmsg g5 subid)",
+  "note": "8-12/14-17 subid는 samples 미포함 → 캐논 군사 계급 사다리로 보간(confidence=inferred-canon-ladder).",
+  "ranks": [
+    {
+      "code": 0,
+      "ja": "皇帝",
+      "ko": "황제",
+      "tier": "sovereign",
+      "confidence": "confirmed"
+    },
+    {
+      "code": 1,
+      "ja": "政治家",
+      "ko": "정치가",
+      "tier": "civil",
+      "confidence": "confirmed"
+    },
+    {
+      "code": 2,
+      "ja": "元帥",
+      "ko": "원수",
+      "tier": "officer",
+      "confidence": "confirmed"
+    },
+    {
+      "code": 3,
+      "ja": "上級大将",
+      "ko": "상급대장",
+      "tier": "officer",
+      "confidence": "confirmed"
+    },
+    {
+      "code": 4,
+      "ja": "大将",
+      "ko": "대장",
+      "tier": "officer",
+      "confidence": "confirmed"
+    },
+    {
+      "code": 5,
+      "ja": "中将",
+      "ko": "중장",
+      "tier": "officer",
+      "confidence": "confirmed"
+    },
+    {
+      "code": 6,
+      "ja": "少将",
+      "ko": "소장",
+      "tier": "officer",
+      "confidence": "confirmed"
+    },
+    {
+      "code": 7,
+      "ja": "准将",
+      "ko": "준장",
+      "tier": "officer",
+      "confidence": "confirmed"
+    },
+    {
+      "code": 8,
+      "ja": "大佐",
+      "ko": "대령",
+      "tier": "officer",
+      "confidence": "inferred-canon-ladder"
+    },
+    {
+      "code": 9,
+      "ja": "中佐",
+      "ko": "중령",
+      "tier": "officer",
+      "confidence": "inferred-canon-ladder"
+    },
+    {
+      "code": 10,
+      "ja": "少佐",
+      "ko": "소령",
+      "tier": "officer",
+      "confidence": "inferred-canon-ladder"
+    },
+    {
+      "code": 11,
+      "ja": "大尉",
+      "ko": "대위",
+      "tier": "officer",
+      "confidence": "inferred-canon-ladder"
+    },
+    {
+      "code": 12,
+      "ja": "中尉",
+      "ko": "중위",
+      "tier": "officer",
+      "confidence": "inferred-canon-ladder"
+    },
+    {
+      "code": 13,
+      "ja": "少尉",
+      "ko": "소위",
+      "tier": "officer",
+      "confidence": "confirmed"
+    },
+    {
+      "code": 14,
+      "ja": "准尉",
+      "ko": "준위",
+      "tier": "officer",
+      "confidence": "inferred-canon-ladder"
+    },
+    {
+      "code": 15,
+      "ja": "曹長",
+      "ko": "상사",
+      "tier": "nco",
+      "confidence": "inferred-canon-ladder"
+    },
+    {
+      "code": 16,
+      "ja": "軍曹",
+      "ko": "중사",
+      "tier": "nco",
+      "confidence": "inferred-canon-ladder"
+    },
+    {
+      "code": 17,
+      "ja": "伍長",
+      "ko": "하사",
+      "tier": "nco",
+      "confidence": "inferred-canon-ladder"
+    },
+    {
+      "code": 18,
+      "ja": "上等兵",
+      "ko": "상병",
+      "tier": "enlisted",
+      "confidence": "confirmed"
+    },
+    {
+      "code": 19,
+      "ja": "一等兵",
+      "ko": "일등병",
+      "tier": "enlisted",
+      "confidence": "confirmed"
+    },
+    {
+      "code": 20,
+      "ja": "二等兵",
+      "ko": "이등병",
+      "tier": "enlisted",
+      "confidence": "confirmed"
+    }
+  ]
+}

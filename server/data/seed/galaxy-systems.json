@@ -1,0 +1,2419 @@
+{
+  "id": "logh7-galaxy-systems-seed",
+  "generatedAt": "2026-07-10T16:14:35.434Z",
+  "provenance": "server/content/galaxy.json (좌표 정본: null_galaxy.mdx + 매뉴얼 성도 교차검증)",
+  "grid": {
+    "width": 100,
+    "height": 50,
+    "cellFormula": "cell = canonRow*100 + canonCol (0-indexed, 0x0315 5000셀 배열)"
+  },
+  "counts": {
+    "total": 85,
+    "withCell": 85,
+    "empire": 40,
+    "alliance": 44,
+    "neutral": 1,
+    "corridors": 6
+  },
+  "systems": [
+    {
+      "system": "ルンビーニ",
+      "faction": "alliance",
+      "isCorridor": false,
+      "canonCol": 5,
+      "canonRow": 20,
+      "cell": 2005,
+      "canonGameCol": 6,
+      "canonGameRow": 21,
+      "spectralClass": "M",
+      "planets": [
+        {
+          "name": "バクタプール",
+          "orbit": 1
+        },
+        {
+          "name": "カライヤ",
+          "orbit": 2
+        },
+        {
+          "name": "バドガオン",
+          "orbit": 3
+        }
+      ],
+      "fortresses": []
+    },
+    {
+      "system": "シロン",
+      "faction": "alliance",
+      "isCorridor": false,
+      "canonCol": 6,
+      "canonRow": 14,
+      "cell": 1406,
+      "canonGameCol": 7,
+      "canonGameRow": 15,
+      "spectralClass": "G",
+      "planets": [
+        {
+          "name": "ネプティス",
+          "orbit": 1
+        },
+        {
+          "name": "ジャライン",
+          "orbit": 2
+        },
+        {
+          "name": "アヌビス",
+          "orbit": 3
+        },
+        {
+          "name": "オシリス",
+          "orbit": 4
+        }
+      ],
+      "fortresses": []
+    },
+    {
+      "system": "エリューセラ",
+      "faction": "alliance",
+      "isCorridor": false,
+      "canonCol": 7,
+      "canonRow": 34,
+      "cell": 3407,
+      "canonGameCol": 8,
+      "canonGameRow": 35,
+      "spectralClass": "G",
+      "planets": [
+        {
+          "name": "コルテラッツォ",
+          "orbit": 1
+        },
+        {
+          "name": "ポンテ・クレパルド",
+          "orbit": 2
+        },
+        {
+          "name": "クルッキド",
+          "orbit": 3
+        },
+        {
+          "name": "アンドロス",
+          "orbit": 4
+        }
+      ],
+      "fortresses": []
+    },
+    {
+      "system": "タナトス",
+      "faction": "alliance",
+      "isCorridor": false,
+      "canonCol": 9,
+      "canonRow": 27,
+      "cell": 2709,
+      "canonGameCol": 10,
+      "canonGameRow": 28,
+      "spectralClass": "G",
+      "planets": [
+        {
+          "name": "エコニア",
+          "orbit": 1
+        },
+        {
+          "name": "プロスキナス",
+          "orbit": 2
+        },
+        {
+          "name": "マスジット",
+          "orbit": 3
+        },
+        {
+          "name": "ケール",
+          "orbit": 4
+        }
+      ],
+      "fortresses": []
+    },
+    {
+      "system": "リオ・ヴェルデ",
+      "faction": "alliance",
+      "isCorridor": false,
+      "canonCol": 11,
+      "canonRow": 33,
+      "cell": 3311,
+      "canonGameCol": 12,
+      "canonGameRow": 34,
+      "spectralClass": "M",
+      "planets": [
+        {
+          "name": "メサ・デル・アグア",
+          "orbit": 1
+        },
+        {
+          "name": "サン・カルロス",
+          "orbit": 2
+        },
+        {
+          "name": "リアノ・ブランコ",
+          "orbit": 3
+        },
+        {
+          "name": "イスラ・ブランカ",
+          "orbit": 4
+        }
+      ],
+      "fortresses": []
+    },
+    {
+      "system": "ロフォーテン",
+      "faction": "alliance",
+      "isCorridor": false,
+      "canonCol": 13,
+      "canonRow": 11,
+      "cell": 1113,
+      "canonGameCol": 14,
+      "canonGameRow": 12,
+      "spectralClass": "G",
+      "planets": [
+        {
+          "name": "アルスタッド",
+          "orbit": 1
+        },
+        {
+          "name": "バルスタッド",
+          "orbit": 2
+        },
+        {
+          "name": "スヴォルヴェア",
+          "orbit": 3
+        }
+      ],
+      "fortresses": [
+        "ルドミラ"
+      ]
+    },
+    {
+      "system": "バーラト",
+      "faction": "alliance",
+      "isCorridor": false,
+      "canonCol": 14,
+      "canonRow": 20,
+      "cell": 2014,
+      "canonGameCol": 15,
+      "canonGameRow": 21,
+      "spectralClass": "G",
+      "planets": [
+        {
+          "name": "テルヌーゼン",
+          "orbit": 1
+        },
+        {
+          "name": "カスバ・ナグム",
+          "orbit": 2
+        },
+        {
+          "name": "ハイネセン",
+          "orbit": 3
+        },
+        {
+          "name": "シリューナガル",
+          "orbit": 4
+        }
+      ],
+      "fortresses": []
+    },
+    {
+      "system": "ファラーファラ",
+      "faction": "alliance",
+      "isCorridor": false,
+      "canonCol": 18,
+      "canonRow": 7,
+      "cell": 718,
+      "canonGameCol": 19,
+      "canonGameRow": 8,
+      "spectralClass": "F",
+      "planets": [
+        {
+          "name": "アラム・バダー",
+          "orbit": 1
+        },
+        {
+          "name": "ラムル",
+          "orbit": 2
+        },
+        {
+          "name": "ミセヌム",
+          "orbit": 3
+        },
+        {
+          "name": "アスワン",
+          "orbit": 4
+        }
+      ],
+      "fortresses": []
+    },
+    {
+      "system": "ケリム",
+      "faction": "alliance",
+      "isCorridor": false,
+      "canonCol": 18,
+      "canonRow": 14,
+      "cell": 1418,
+      "canonGameCol": 19,
+      "canonGameRow": 15,
+      "spectralClass": "G",
+      "planets": [
+        {
+          "name": "カッシナ",
+          "orbit": 1
+        },
+        {
+          "name": "バフラ",
+          "orbit": 2
+        },
+        {
+          "name": "アユディン",
+          "orbit": 3
+        },
+        {
+          "name": "パラス",
+          "orbit": 4
+        }
+      ],
+      "fortresses": []
+    },
+    {
+      "system": "ポリスーン",
+      "faction": "alliance",
+      "isCorridor": false,
+      "canonCol": 18,
+      "canonRow": 46,
+      "cell": 4618,
+      "canonGameCol": 19,
+      "canonGameRow": 47,
+      "spectralClass": "M",
+      "planets": [
+        {
+          "name": "エルデン",
+          "orbit": 1
+        },
+        {
+          "name": "ベレケト",
+          "orbit": 2
+        },
+        {
+          "name": "キルニス",
+          "orbit": 3
+        }
+      ],
+      "fortresses": [
+        "ダヤン・ハーン"
+      ]
+    },
+    {
+      "system": "ライガール",
+      "faction": "alliance",
+      "isCorridor": false,
+      "canonCol": 21,
+      "canonRow": 35,
+      "cell": 3521,
+      "canonGameCol": 22,
+      "canonGameRow": 36,
+      "spectralClass": "M",
+      "planets": [
+        {
+          "name": "シンガラ",
+          "orbit": 1
+        },
+        {
+          "name": "ミルパラ",
+          "orbit": 2
+        },
+        {
+          "name": "アユアラ",
+          "orbit": 3
+        }
+      ],
+      "fortresses": []
+    },
+    {
+      "system": "バーミリオン",
+      "faction": "alliance",
+      "isCorridor": false,
+      "canonCol": 22,
+      "canonRow": 28,
+      "cell": 2822,
+      "canonGameCol": 23,
+      "canonGameRow": 29,
+      "spectralClass": "M",
+      "planets": [
+        {
+          "name": "エイクロン",
+          "orbit": 1
+        },
+        {
+          "name": "ロートン",
+          "orbit": 2
+        },
+        {
+          "name": "カスケード",
+          "orbit": 3
+        }
+      ],
+      "fortresses": []
+    },
+    {
+      "system": "リューカス",
+      "faction": "alliance",
+      "isCorridor": false,
+      "canonCol": 24,
+      "canonRow": 24,
+      "cell": 2424,
+      "canonGameCol": 25,
+      "canonGameRow": 25,
+      "spectralClass": "K",
+      "planets": [
+        {
+          "name": "ザカリアス",
+          "orbit": 1
+        },
+        {
+          "name": "インコバネ",
+          "orbit": 2
+        },
+        {
+          "name": "ヴァルミー",
+          "orbit": 3
+        }
+      ],
+      "fortresses": []
+    },
+    {
+      "system": "マローヴィア",
+      "faction": "alliance",
+      "isCorridor": false,
+      "canonCol": 24,
+      "canonRow": 2,
+      "cell": 224,
+      "canonGameCol": 25,
+      "canonGameRow": 3,
+      "spectralClass": "K",
+      "planets": [],
+      "fortresses": []
+    },
+    {
+      "system": "ハダト",
+      "faction": "alliance",
+      "isCorridor": false,
+      "canonCol": 25,
+      "canonRow": 6,
+      "cell": 625,
+      "canonGameCol": 26,
+      "canonGameRow": 7,
+      "spectralClass": "M",
+      "planets": [
+        {
+          "name": "シャンプール",
+          "orbit": 1
+        },
+        {
+          "name": "ベラスィ",
+          "orbit": 2
+        },
+        {
+          "name": "アンジャル",
+          "orbit": 3
+        }
+      ],
+      "fortresses": []
+    },
+    {
+      "system": "ジャムシード",
+      "faction": "alliance",
+      "isCorridor": false,
+      "canonCol": 25,
+      "canonRow": 16,
+      "cell": 1625,
+      "canonGameCol": 26,
+      "canonGameRow": 17,
+      "spectralClass": "G",
+      "planets": [
+        {
+          "name": "タフテ・ジャムシード",
+          "orbit": 1
+        },
+        {
+          "name": "カッファー",
+          "orbit": 2
+        },
+        {
+          "name": "ムハバット",
+          "orbit": 3
+        },
+        {
+          "name": "アパダナ",
+          "orbit": 4
+        }
+      ],
+      "fortresses": []
+    },
+    {
+      "system": "トリプラ",
+      "faction": "alliance",
+      "isCorridor": false,
+      "canonCol": 26,
+      "canonRow": 39,
+      "cell": 3926,
+      "canonGameCol": 27,
+      "canonGameRow": 40,
+      "spectralClass": "M",
+      "planets": [
+        {
+          "name": "パルメレンド",
+          "orbit": 1
+        },
+        {
+          "name": "アガタラ",
+          "orbit": 2
+        },
+        {
+          "name": "カリャンプール",
+          "orbit": 3
+        },
+        {
+          "name": "イスファハン",
+          "orbit": 4
+        }
+      ],
+      "fortresses": []
+    },
+    {
+      "system": "タッシリ",
+      "faction": "alliance",
+      "isCorridor": false,
+      "canonCol": 27,
+      "canonRow": 30,
+      "cell": 3027,
+      "canonGameCol": 28,
+      "canonGameRow": 31,
+      "spectralClass": "M",
+      "planets": [
+        {
+          "name": "タッシリ・ナジェール",
+          "orbit": 1
+        },
+        {
+          "name": "アドラル・ソアフ",
+          "orbit": 2
+        },
+        {
+          "name": "トゥアレグ",
+          "orbit": 3
+        }
+      ],
+      "fortresses": []
+    },
+    {
+      "system": "シュパーラ",
+      "faction": "alliance",
+      "isCorridor": false,
+      "canonCol": 27,
+      "canonRow": 46,
+      "cell": 4627,
+      "canonGameCol": 28,
+      "canonGameRow": 47,
+      "spectralClass": "K",
+      "planets": [
+        {
+          "name": "アルンキパ",
+          "orbit": 1
+        },
+        {
+          "name": "ヴィスカ・グランデ",
+          "orbit": 2
+        },
+        {
+          "name": "シウダ・ロドリゴ",
+          "orbit": 3
+        },
+        {
+          "name": "ヴィシュコフ",
+          "orbit": 4
+        }
+      ],
+      "fortresses": []
+    },
+    {
+      "system": "ドーリア",
+      "faction": "alliance",
+      "isCorridor": false,
+      "canonCol": 30,
+      "canonRow": 12,
+      "cell": 1230,
+      "canonGameCol": 31,
+      "canonGameRow": 13,
+      "spectralClass": "K",
+      "planets": [
+        {
+          "name": "モンテカプラロ",
+          "orbit": 1
+        },
+        {
+          "name": "カスタノーラ",
+          "orbit": 2
+        },
+        {
+          "name": "ピエヴェッタ",
+          "orbit": 3
+        },
+        {
+          "name": "ボルゲーゼ",
+          "orbit": 4
+        }
+      ],
+      "fortresses": []
+    },
+    {
+      "system": "シヴァ",
+      "faction": "alliance",
+      "isCorridor": false,
+      "canonCol": 31,
+      "canonRow": 4,
+      "cell": 431,
+      "canonGameCol": 32,
+      "canonGameRow": 5,
+      "spectralClass": "A",
+      "planets": [
+        {
+          "name": "パールヴァティ",
+          "orbit": 1
+        },
+        {
+          "name": "ガンガー",
+          "orbit": 2
+        },
+        {
+          "name": "ナンディ",
+          "orbit": 3
+        },
+        {
+          "name": "アナンタ",
+          "orbit": 4
+        }
+      ],
+      "fortresses": []
+    },
+    {
+      "system": "エル・ファシル",
+      "faction": "alliance",
+      "isCorridor": false,
+      "canonCol": 32,
+      "canonRow": 17,
+      "cell": 1732,
+      "canonGameCol": 33,
+      "canonGameRow": 18,
+      "spectralClass": "G",
+      "planets": [
+        {
+          "name": "カルタヘナ",
+          "orbit": 1
+        },
+        {
+          "name": "ラス・カシタス",
+          "orbit": 2
+        },
+        {
+          "name": "サンタ・アナ",
+          "orbit": 3
+        },
+        {
+          "name": "サルバドル",
+          "orbit": 4
+        }
+      ],
+      "fortresses": []
+    },
+    {
+      "system": "ガンダルヴァ",
+      "faction": "alliance",
+      "isCorridor": false,
+      "canonCol": 33,
+      "canonRow": 34,
+      "cell": 3433,
+      "canonGameCol": 34,
+      "canonGameRow": 35,
+      "spectralClass": "K",
+      "planets": [
+        {
+          "name": "ウルヴァシー",
+          "orbit": 1
+        },
+        {
+          "name": "カルティケーヤ",
+          "orbit": 2
+        },
+        {
+          "name": "アガスティア",
+          "orbit": 3
+        },
+        {
+          "name": "ヴァルナ",
+          "orbit": 4
+        }
+      ],
+      "fortresses": []
+    },
+    {
+      "system": "ランテマリオ",
+      "faction": "alliance",
+      "isCorridor": false,
+      "canonCol": 34,
+      "canonRow": 25,
+      "cell": 2534,
+      "canonGameCol": 35,
+      "canonGameRow": 26,
+      "spectralClass": "M",
+      "planets": [
+        {
+          "name": "ルエヴィト",
+          "orbit": 1
+        },
+        {
+          "name": "スヴェン・ヴィト",
+          "orbit": 2
+        },
+        {
+          "name": "ヤロヴィト",
+          "orbit": 3
+        }
+      ],
+      "fortresses": []
+    },
+    {
+      "system": "メルカルト",
+      "faction": "alliance",
+      "isCorridor": false,
+      "canonCol": 34,
+      "canonRow": 45,
+      "cell": 4534,
+      "canonGameCol": 35,
+      "canonGameRow": 46,
+      "spectralClass": "F",
+      "planets": [
+        {
+          "name": "アシュール",
+          "orbit": 1
+        },
+        {
+          "name": "ネルガル",
+          "orbit": 2
+        },
+        {
+          "name": "バール・ザフォン",
+          "orbit": 3
+        }
+      ],
+      "fortresses": []
+    },
+    {
+      "system": "エルゴン",
+      "faction": "alliance",
+      "isCorridor": false,
+      "canonCol": 35,
+      "canonRow": 8,
+      "cell": 835,
+      "canonGameCol": 36,
+      "canonGameRow": 9,
+      "spectralClass": "K",
+      "planets": [
+        {
+          "name": "カモロク",
+          "orbit": 1
+        },
+        {
+          "name": "ブタンディガ",
+          "orbit": 2
+        },
+        {
+          "name": "ムバレ",
+          "orbit": 3
+        },
+        {
+          "name": "カンパラ",
+          "orbit": 4
+        }
+      ],
+      "fortresses": []
+    },
+    {
+      "system": "マル・アデッタ",
+      "faction": "alliance",
+      "isCorridor": false,
+      "canonCol": 38,
+      "canonRow": 29,
+      "cell": 2938,
+      "canonGameCol": 39,
+      "canonGameRow": 30,
+      "spectralClass": "K",
+      "planets": [
+        {
+          "name": "バラセット",
+          "orbit": 1
+        },
+        {
+          "name": "アヴェラノス",
+          "orbit": 2
+        },
+        {
+          "name": "ファルネーゼ",
+          "orbit": 3
+        },
+        {
+          "name": "マントヴァ",
+          "orbit": 4
+        }
+      ],
+      "fortresses": []
+    },
+    {
+      "system": "バラトループ",
+      "faction": "alliance",
+      "isCorridor": false,
+      "canonCol": 39,
+      "canonRow": 41,
+      "cell": 4139,
+      "canonGameCol": 40,
+      "canonGameRow": 42,
+      "spectralClass": "M",
+      "planets": [
+        {
+          "name": "バラトループ1",
+          "orbit": 1
+        },
+        {
+          "name": "バラトループ2",
+          "orbit": 2
+        },
+        {
+          "name": "バラトループ3",
+          "orbit": 3
+        }
+      ],
+      "fortresses": []
+    },
+    {
+      "system": "シャンダルーア",
+      "faction": "alliance",
+      "isCorridor": false,
+      "canonCol": 39,
+      "canonRow": 33,
+      "cell": 3339,
+      "canonGameCol": 40,
+      "canonGameRow": 34,
+      "spectralClass": "O",
+      "planets": [
+        {
+          "name": "シャンダルーア1",
+          "orbit": 1
+        },
+        {
+          "name": "シャンダルーア2",
+          "orbit": 2
+        },
+        {
+          "name": "シャンダルーア3",
+          "orbit": 3
+        }
+      ],
+      "fortresses": []
+    },
+    {
+      "system": "ダゴン",
+      "faction": "alliance",
+      "isCorridor": false,
+      "canonCol": 40,
+      "canonRow": 6,
+      "cell": 640,
+      "canonGameCol": 41,
+      "canonGameRow": 7,
+      "spectralClass": "K",
+      "planets": [
+        {
+          "name": "ダゴン1",
+          "orbit": 1
+        },
+        {
+          "name": "ダゴン2",
+          "orbit": 2
+        },
+        {
+          "name": "ダゴン3",
+          "orbit": 3
+        },
+        {
+          "name": "ダゴン4",
+          "orbit": 4
+        }
+      ],
+      "fortresses": []
+    },
+    {
+      "system": "ティアマト",
+      "faction": "alliance",
+      "isCorridor": false,
+      "canonCol": 40,
+      "canonRow": 15,
+      "cell": 1540,
+      "canonGameCol": 41,
+      "canonGameRow": 16,
+      "spectralClass": "M",
+      "planets": [
+        {
+          "name": "ティアマト1",
+          "orbit": 1
+        },
+        {
+          "name": "ティアマト2",
+          "orbit": 2
+        },
+        {
+          "name": "ティアマト3",
+          "orbit": 3
+        },
+        {
+          "name": "ティアマト4",
+          "orbit": 4
+        }
+      ],
+      "fortresses": []
+    },
+    {
+      "system": "ドラゴニア",
+      "faction": "alliance",
+      "isCorridor": false,
+      "canonCol": 41,
+      "canonRow": 19,
+      "cell": 1941,
+      "canonGameCol": 42,
+      "canonGameRow": 20,
+      "spectralClass": "B",
+      "planets": [
+        {
+          "name": "ドラゴニア1",
+          "orbit": 1
+        },
+        {
+          "name": "ドラゴニア2",
+          "orbit": 2
+        },
+        {
+          "name": "ドラゴニア3",
+          "orbit": 3
+        }
+      ],
+      "fortresses": []
+    },
+    {
+      "system": "フォルセティ",
+      "faction": "alliance",
+      "isCorridor": false,
+      "canonCol": 41,
+      "canonRow": 25,
+      "cell": 2541,
+      "canonGameCol": 42,
+      "canonGameRow": 26,
+      "spectralClass": "A",
+      "planets": [],
+      "fortresses": []
+    },
+    {
+      "system": "アスターテ",
+      "faction": "alliance",
+      "isCorridor": false,
+      "canonCol": 43,
+      "canonRow": 11,
+      "cell": 1143,
+      "canonGameCol": 44,
+      "canonGameRow": 12,
+      "spectralClass": "F",
+      "planets": [
+        {
+          "name": "アスターテ1",
+          "orbit": 1
+        },
+        {
+          "name": "アスターテ2",
+          "orbit": 2
+        },
+        {
+          "name": "アスターテ3",
+          "orbit": 3
+        },
+        {
+          "name": "アスターテ4",
+          "orbit": 4
+        }
+      ],
+      "fortresses": []
+    },
+    {
+      "system": "ファイアザード",
+      "faction": "alliance",
+      "isCorridor": false,
+      "canonCol": 43,
+      "canonRow": 29,
+      "cell": 2943,
+      "canonGameCol": 44,
+      "canonGameRow": 30,
+      "spectralClass": "F",
+      "planets": [
+        {
+          "name": "ファイアザード1",
+          "orbit": 1
+        },
+        {
+          "name": "ファイアザード2",
+          "orbit": 2
+        },
+        {
+          "name": "ファイアザード3",
+          "orbit": 3
+        }
+      ],
+      "fortresses": []
+    },
+    {
+      "system": "ポレヴィト",
+      "faction": "alliance",
+      "isCorridor": false,
+      "canonCol": 44,
+      "canonRow": 38,
+      "cell": 3844,
+      "canonGameCol": 45,
+      "canonGameRow": 39,
+      "spectralClass": "A",
+      "planets": [
+        {
+          "name": "ルジアーナ",
+          "orbit": 1
+        },
+        {
+          "name": "チェルノボーグ",
+          "orbit": 2
+        },
+        {
+          "name": "スヴァローグ",
+          "orbit": 3
+        },
+        {
+          "name": "ポレヴィーク",
+          "orbit": 4
+        }
+      ],
+      "fortresses": []
+    },
+    {
+      "system": "アルレスハイム",
+      "faction": "alliance",
+      "isCorridor": false,
+      "canonCol": 44,
+      "canonRow": 19,
+      "cell": 1944,
+      "canonGameCol": 45,
+      "canonGameRow": 20,
+      "spectralClass": "F",
+      "planets": [
+        {
+          "name": "アルレスハイム1",
+          "orbit": 1
+        },
+        {
+          "name": "アルレスハイム2",
+          "orbit": 2
+        },
+        {
+          "name": "アルレスハイム3",
+          "orbit": 3
+        },
+        {
+          "name": "アルレスハイム4",
+          "orbit": 4
+        }
+      ],
+      "fortresses": []
+    },
+    {
+      "system": "パランティア",
+      "faction": "alliance",
+      "isCorridor": false,
+      "canonCol": 44,
+      "canonRow": 25,
+      "cell": 2544,
+      "canonGameCol": 45,
+      "canonGameRow": 26,
+      "spectralClass": "A",
+      "planets": [
+        {
+          "name": "パランティア1",
+          "orbit": 1
+        },
+        {
+          "name": "パランティア2",
+          "orbit": 2
+        },
+        {
+          "name": "パランティア3",
+          "orbit": 3
+        },
+        {
+          "name": "パランティア4",
+          "orbit": 4
+        }
+      ],
+      "fortresses": []
+    },
+    {
+      "system": "アルトミュール",
+      "faction": "alliance",
+      "isCorridor": false,
+      "canonCol": 46,
+      "canonRow": 14,
+      "cell": 1446,
+      "canonGameCol": 47,
+      "canonGameRow": 15,
+      "spectralClass": "A",
+      "planets": [
+        {
+          "name": "カプチェランカ",
+          "orbit": 1
+        },
+        {
+          "name": "ヴァウブジフ",
+          "orbit": 2
+        },
+        {
+          "name": "エディルネ",
+          "orbit": 3
+        },
+        {
+          "name": "レグニッツァ",
+          "orbit": 4
+        }
+      ],
+      "fortresses": []
+    },
+    {
+      "system": "ヴァンフリート",
+      "faction": "alliance",
+      "isCorridor": true,
+      "canonCol": 46,
+      "canonRow": 12,
+      "cell": 1246,
+      "canonGameCol": 47,
+      "canonGameRow": 13,
+      "spectralClass": "B",
+      "planets": [
+        {
+          "name": "ヴァンフリート1",
+          "orbit": 1
+        },
+        {
+          "name": "ヴァンフリート2",
+          "orbit": 2
+        },
+        {
+          "name": "ヴァンフリート3",
+          "orbit": 3
+        },
+        {
+          "name": "ヴァンフリート4",
+          "orbit": 4
+        }
+      ],
+      "fortresses": []
+    },
+    {
+      "system": "フェザーン",
+      "faction": "neutral",
+      "isCorridor": true,
+      "canonCol": 51,
+      "canonRow": 37,
+      "cell": 3751,
+      "canonGameCol": 52,
+      "canonGameRow": 38,
+      "spectralClass": "G",
+      "planets": [
+        {
+          "name": "ジラー",
+          "orbit": 1
+        },
+        {
+          "name": "リウドルフィンク",
+          "orbit": 2
+        },
+        {
+          "name": "ザリエル",
+          "orbit": 3
+        },
+        {
+          "name": "フェザーン",
+          "orbit": 4
+        }
+      ],
+      "fortresses": []
+    },
+    {
+      "system": "イゼルローン",
+      "faction": "empire",
+      "isCorridor": true,
+      "canonCol": 53,
+      "canonRow": 12,
+      "cell": 1253,
+      "canonGameCol": 54,
+      "canonGameRow": 13,
+      "spectralClass": "M",
+      "planets": [],
+      "fortresses": [
+        "イゼルローン"
+      ]
+    },
+    {
+      "system": "アイゼンヘルツ",
+      "faction": "empire",
+      "isCorridor": true,
+      "canonCol": 57,
+      "canonRow": 38,
+      "cell": 3857,
+      "canonGameCol": 58,
+      "canonGameRow": 39,
+      "spectralClass": "K",
+      "planets": [
+        {
+          "name": "ヒンターヴィルド",
+          "orbit": 1
+        },
+        {
+          "name": "ラドメール",
+          "orbit": 2
+        },
+        {
+          "name": "ゴータ",
+          "orbit": 3
+        }
+      ],
+      "fortresses": [
+        "ガイエスブルク"
+      ]
+    },
+    {
+      "system": "アムリッツァ",
+      "faction": "empire",
+      "isCorridor": true,
+      "canonCol": 61,
+      "canonRow": 12,
+      "cell": 1261,
+      "canonGameCol": 62,
+      "canonGameRow": 13,
+      "spectralClass": "M",
+      "planets": [
+        {
+          "name": "クラインゲルト",
+          "orbit": 1
+        },
+        {
+          "name": "モールゲン",
+          "orbit": 2
+        },
+        {
+          "name": "ダンク",
+          "orbit": 3
+        },
+        {
+          "name": "ハーフェン",
+          "orbit": 4
+        }
+      ],
+      "fortresses": []
+    },
+    {
+      "system": "フォルゲン",
+      "faction": "empire",
+      "isCorridor": true,
+      "canonCol": 61,
+      "canonRow": 47,
+      "cell": 4761,
+      "canonGameCol": 62,
+      "canonGameRow": 48,
+      "spectralClass": "M",
+      "planets": [
+        {
+          "name": "シュヴァンガウ",
+          "orbit": 1
+        },
+        {
+          "name": "フュッセン",
+          "orbit": 2
+        },
+        {
+          "name": "ボーデルスベルク",
+          "orbit": 3
+        }
+      ],
+      "fortresses": []
+    },
+    {
+      "system": "ヨーツンヘイム",
+      "faction": "empire",
+      "isCorridor": false,
+      "canonCol": 63,
+      "canonRow": 40,
+      "cell": 4063,
+      "canonGameCol": 64,
+      "canonGameRow": 41,
+      "spectralClass": "F",
+      "planets": [
+        {
+          "name": "ウトガルド",
+          "orbit": 1
+        },
+        {
+          "name": "ヨーツンヘイム",
+          "orbit": 2
+        },
+        {
+          "name": "エーリヴァーガル",
+          "orbit": 3
+        }
+      ],
+      "fortresses": []
+    },
+    {
+      "system": "ヴァンステイド",
+      "faction": "empire",
+      "isCorridor": false,
+      "canonCol": 63,
+      "canonRow": 18,
+      "cell": 1863,
+      "canonGameCol": 64,
+      "canonGameRow": 19,
+      "spectralClass": "M",
+      "planets": [
+        {
+          "name": "ラヴンストラップ",
+          "orbit": 1
+        },
+        {
+          "name": "レグステッド",
+          "orbit": 2
+        },
+        {
+          "name": "ファルドガルデ",
+          "orbit": 3
+        }
+      ],
+      "fortresses": []
+    },
+    {
+      "system": "ビルロスト",
+      "faction": "empire",
+      "isCorridor": false,
+      "canonCol": 64,
+      "canonRow": 5,
+      "cell": 564,
+      "canonGameCol": 65,
+      "canonGameRow": 6,
+      "spectralClass": "M",
+      "planets": [
+        {
+          "name": "ヘイムダル",
+          "orbit": 1
+        },
+        {
+          "name": "ヒミンビョルグ",
+          "orbit": 2
+        },
+        {
+          "name": "ブルトガング",
+          "orbit": 3
+        },
+        {
+          "name": "ギャラルホルン",
+          "orbit": 4
+        }
+      ],
+      "fortresses": []
+    },
+    {
+      "system": "アルメントフベール",
+      "faction": "empire",
+      "isCorridor": false,
+      "canonCol": 64,
+      "canonRow": 33,
+      "cell": 3364,
+      "canonGameCol": 65,
+      "canonGameRow": 34,
+      "spectralClass": "M",
+      "planets": [
+        {
+          "name": "ビッケンバッハ",
+          "orbit": 1
+        },
+        {
+          "name": "ゲルンスハイム",
+          "orbit": 2
+        },
+        {
+          "name": "アルスバッハ",
+          "orbit": 3
+        },
+        {
+          "name": "クレーベルク",
+          "orbit": 4
+        }
+      ],
+      "fortresses": []
+    },
+    {
+      "system": "トラーバッハ",
+      "faction": "empire",
+      "isCorridor": false,
+      "canonCol": 64,
+      "canonRow": 26,
+      "cell": 2664,
+      "canonGameCol": 65,
+      "canonGameRow": 27,
+      "spectralClass": "G",
+      "planets": [
+        {
+          "name": "ヴォルフェルスドルフ",
+          "orbit": 1
+        },
+        {
+          "name": "ファルクヴィーラー",
+          "orbit": 2
+        },
+        {
+          "name": "シュテルネンベルク",
+          "orbit": 3
+        },
+        {
+          "name": "トラーベン",
+          "orbit": 4
+        }
+      ],
+      "fortresses": []
+    },
+    {
+      "system": "ブラウンシュヴァイク",
+      "faction": "empire",
+      "isCorridor": false,
+      "canonCol": 67,
+      "canonRow": 44,
+      "cell": 4467,
+      "canonGameCol": 68,
+      "canonGameRow": 45,
+      "spectralClass": "G",
+      "planets": [
+        {
+          "name": "ヴェスターラント",
+          "orbit": 1
+        },
+        {
+          "name": "ヴェーデル",
+          "orbit": 2
+        },
+        {
+          "name": "ショーペンシュタット",
+          "orbit": 3
+        },
+        {
+          "name": "フォルケンローデ",
+          "orbit": 4
+        }
+      ],
+      "fortresses": []
+    },
+    {
+      "system": "ボルソルン",
+      "faction": "empire",
+      "isCorridor": false,
+      "canonCol": 68,
+      "canonRow": 7,
+      "cell": 768,
+      "canonGameCol": 69,
+      "canonGameRow": 8,
+      "spectralClass": "K",
+      "planets": [
+        {
+          "name": "ベストラ",
+          "orbit": 1
+        },
+        {
+          "name": "ボルソルン",
+          "orbit": 2
+        },
+        {
+          "name": "ヴァイセンバッハ",
+          "orbit": 3
+        },
+        {
+          "name": "ボル",
+          "orbit": 4
+        }
+      ],
+      "fortresses": []
+    },
+    {
+      "system": "ドヴェルグ",
+      "faction": "empire",
+      "isCorridor": false,
+      "canonCol": 68,
+      "canonRow": 12,
+      "cell": 1268,
+      "canonGameCol": 69,
+      "canonGameRow": 13,
+      "spectralClass": "K",
+      "planets": [
+        {
+          "name": "グレイプニル",
+          "orbit": 1
+        },
+        {
+          "name": "イーヴァルディ",
+          "orbit": 2
+        },
+        {
+          "name": "レージング",
+          "orbit": 3
+        },
+        {
+          "name": "カパール",
+          "orbit": 4
+        }
+      ],
+      "fortresses": []
+    },
+    {
+      "system": "アルタイル",
+      "faction": "empire",
+      "isCorridor": false,
+      "canonCol": 70,
+      "canonRow": 21,
+      "cell": 2170,
+      "canonGameCol": 71,
+      "canonGameRow": 22,
+      "spectralClass": "M",
+      "planets": [
+        {
+          "name": "カタラウヌム",
+          "orbit": 1
+        },
+        {
+          "name": "アンティノウス",
+          "orbit": 2
+        },
+        {
+          "name": "テルモピュレー",
+          "orbit": 3
+        },
+        {
+          "name": "アルタイル",
+          "orbit": 4
+        }
+      ],
+      "fortresses": []
+    },
+    {
+      "system": "フレイア",
+      "faction": "empire",
+      "isCorridor": false,
+      "canonCol": 70,
+      "canonRow": 34,
+      "cell": 3470,
+      "canonGameCol": 71,
+      "canonGameRow": 35,
+      "spectralClass": "B",
+      "planets": [
+        {
+          "name": "フォールクヴァング",
+          "orbit": 1
+        },
+        {
+          "name": "フェンサリル",
+          "orbit": 2
+        },
+        {
+          "name": "ブリシンガメン",
+          "orbit": 3
+        }
+      ],
+      "fortresses": [
+        "レンテンベルグ"
+      ]
+    },
+    {
+      "system": "ヤヴァンハール",
+      "faction": "empire",
+      "isCorridor": false,
+      "canonCol": 71,
+      "canonRow": 15,
+      "cell": 1571,
+      "canonGameCol": 72,
+      "canonGameRow": 16,
+      "spectralClass": "K",
+      "planets": [
+        {
+          "name": "ハールバルド",
+          "orbit": 1
+        },
+        {
+          "name": "リューゲン",
+          "orbit": 2
+        },
+        {
+          "name": "ヴィスマール",
+          "orbit": 3
+        },
+        {
+          "name": "シュヴェリーン",
+          "orbit": 4
+        }
+      ],
+      "fortresses": []
+    },
+    {
+      "system": "キフォイザー",
+      "faction": "empire",
+      "isCorridor": false,
+      "canonCol": 73,
+      "canonRow": 45,
+      "cell": 4573,
+      "canonGameCol": 74,
+      "canonGameRow": 46,
+      "spectralClass": "A",
+      "planets": [
+        {
+          "name": "ロールバッハ",
+          "orbit": 1
+        },
+        {
+          "name": "ヴァーゲンバッハ",
+          "orbit": 2
+        },
+        {
+          "name": "パルテンキルヒェン",
+          "orbit": 3
+        }
+      ],
+      "fortresses": [
+        "ガルミッシュ"
+      ]
+    },
+    {
+      "system": "アルヴィース",
+      "faction": "empire",
+      "isCorridor": false,
+      "canonCol": 76,
+      "canonRow": 28,
+      "cell": 2876,
+      "canonGameCol": 77,
+      "canonGameRow": 29,
+      "spectralClass": "F",
+      "planets": [
+        {
+          "name": "ビルスキルニル",
+          "orbit": 1
+        },
+        {
+          "name": "スルード",
+          "orbit": 2
+        },
+        {
+          "name": "ウンターグリューン",
+          "orbit": 3
+        },
+        {
+          "name": "ヴァンガル",
+          "orbit": 4
+        }
+      ],
+      "fortresses": []
+    },
+    {
+      "system": "太陽系",
+      "faction": "empire",
+      "isCorridor": false,
+      "canonCol": 76,
+      "canonRow": 3,
+      "cell": 376,
+      "canonGameCol": 77,
+      "canonGameRow": 4,
+      "spectralClass": "G",
+      "planets": [
+        {
+          "name": "○水星",
+          "orbit": 1
+        },
+        {
+          "name": "○金星",
+          "orbit": 2
+        },
+        {
+          "name": "○地球",
+          "orbit": 3
+        },
+        {
+          "name": "○火星",
+          "orbit": 4
+        }
+      ],
+      "fortresses": []
+    },
+    {
+      "system": "バルドル",
+      "faction": "empire",
+      "isCorridor": false,
+      "canonCol": 77,
+      "canonRow": 47,
+      "cell": 4777,
+      "canonGameCol": 78,
+      "canonGameRow": 48,
+      "spectralClass": "K",
+      "planets": [
+        {
+          "name": "ブレイザブリク",
+          "orbit": 1
+        },
+        {
+          "name": "フリングホルニ",
+          "orbit": 2
+        },
+        {
+          "name": "グリトニル",
+          "orbit": 3
+        },
+        {
+          "name": "ホズ",
+          "orbit": 4
+        }
+      ],
+      "fortresses": []
+    },
+    {
+      "system": "リンダーホーフ",
+      "faction": "empire",
+      "isCorridor": false,
+      "canonCol": 78,
+      "canonRow": 11,
+      "cell": 1178,
+      "canonGameCol": 79,
+      "canonGameRow": 12,
+      "spectralClass": "G",
+      "planets": [
+        {
+          "name": "ノイシュヴァンシュタイン",
+          "orbit": 1
+        },
+        {
+          "name": "キームゼー",
+          "orbit": 2
+        },
+        {
+          "name": "ホーエンシュヴァンガウ",
+          "orbit": 3
+        },
+        {
+          "name": "オーバーアマガウ",
+          "orbit": 4
+        }
+      ],
+      "fortresses": []
+    },
+    {
+      "system": "シリウス",
+      "faction": "empire",
+      "isCorridor": false,
+      "canonCol": 80,
+      "canonRow": 1,
+      "cell": 180,
+      "canonGameCol": 81,
+      "canonGameRow": 2,
+      "spectralClass": "K",
+      "planets": [
+        {
+          "name": "ポ・トロ",
+          "orbit": 1
+        },
+        {
+          "name": "エンメ・ヤ",
+          "orbit": 2
+        },
+        {
+          "name": "ノンモ",
+          "orbit": 3
+        },
+        {
+          "name": "ロンドリーナ",
+          "orbit": 4
+        }
+      ],
+      "fortresses": []
+    },
+    {
+      "system": "ヴェガ",
+      "faction": "empire",
+      "isCorridor": false,
+      "canonCol": 80,
+      "canonRow": 4,
+      "cell": 480,
+      "canonGameCol": 81,
+      "canonGameRow": 5,
+      "spectralClass": "M",
+      "planets": [
+        {
+          "name": "オルフェウス",
+          "orbit": 1
+        },
+        {
+          "name": "エウリュディケ",
+          "orbit": 2
+        },
+        {
+          "name": "アクリシオス",
+          "orbit": 3
+        },
+        {
+          "name": "ベルセボネー",
+          "orbit": 4
+        }
+      ],
+      "fortresses": []
+    },
+    {
+      "system": "アルテナ",
+      "faction": "empire",
+      "isCorridor": false,
+      "canonCol": 81,
+      "canonRow": 33,
+      "cell": 3381,
+      "canonGameCol": 82,
+      "canonGameRow": 34,
+      "spectralClass": "O",
+      "planets": [
+        {
+          "name": "ヴェセルデ",
+          "orbit": 1
+        },
+        {
+          "name": "ナッハロート",
+          "orbit": 2
+        },
+        {
+          "name": "ノイエンラーデ",
+          "orbit": 3
+        },
+        {
+          "name": "ヘートフェルト",
+          "orbit": 4
+        }
+      ],
+      "fortresses": []
+    },
+    {
+      "system": "リッテンハイム",
+      "faction": "empire",
+      "isCorridor": false,
+      "canonCol": 82,
+      "canonRow": 44,
+      "cell": 4482,
+      "canonGameCol": 83,
+      "canonGameRow": 45,
+      "spectralClass": "G",
+      "planets": [
+        {
+          "name": "インゲンハイム",
+          "orbit": 1
+        },
+        {
+          "name": "デュンツェンハイム",
+          "orbit": 2
+        },
+        {
+          "name": "アルテンハイム",
+          "orbit": 3
+        },
+        {
+          "name": "ローゲンドルフ",
+          "orbit": 4
+        }
+      ],
+      "fortresses": []
+    },
+    {
+      "system": "ヴェルラ",
+      "faction": "empire",
+      "isCorridor": false,
+      "canonCol": 83,
+      "canonRow": 23,
+      "cell": 2383,
+      "canonGameCol": 84,
+      "canonGameRow": 24,
+      "spectralClass": "B",
+      "planets": [
+        {
+          "name": "マルクト",
+          "orbit": 1
+        },
+        {
+          "name": "ヤコビ",
+          "orbit": 2
+        },
+        {
+          "name": "シュテファニ",
+          "orbit": 3
+        }
+      ],
+      "fortresses": []
+    },
+    {
+      "system": "ヴィレンシュタイン",
+      "faction": "empire",
+      "isCorridor": false,
+      "canonCol": 85,
+      "canonRow": 9,
+      "cell": 985,
+      "canonGameCol": 86,
+      "canonGameRow": 10,
+      "spectralClass": "G",
+      "planets": [
+        {
+          "name": "ウイツィッヒハウゼン",
+          "orbit": 1
+        },
+        {
+          "name": "ヴァイセンホルン",
+          "orbit": 2
+        },
+        {
+          "name": "グラフェルツホーフェン",
+          "orbit": 3
+        },
+        {
+          "name": "オーベンハウゼン",
+          "orbit": 4
+        }
+      ],
+      "fortresses": []
+    },
+    {
+      "system": "ハインスベルク",
+      "faction": "empire",
+      "isCorridor": false,
+      "canonCol": 88,
+      "canonRow": 15,
+      "cell": 1588,
+      "canonGameCol": 89,
+      "canonGameRow": 16,
+      "spectralClass": "M",
+      "planets": [
+        {
+          "name": "ランデラート",
+          "orbit": 1
+        },
+        {
+          "name": "ダッセル",
+          "orbit": 2
+        },
+        {
+          "name": "ミュレンアルク",
+          "orbit": 3
+        }
+      ],
+      "fortresses": []
+    },
+    {
+      "system": "ヴァルデマール",
+      "faction": "empire",
+      "isCorridor": false,
+      "canonCol": 88,
+      "canonRow": 38,
+      "cell": 3888,
+      "canonGameCol": 89,
+      "canonGameRow": 39,
+      "spectralClass": "K",
+      "planets": [
+        {
+          "name": "ウーファー",
+          "orbit": 1
+        },
+        {
+          "name": "パウル",
+          "orbit": 2
+        },
+        {
+          "name": "リンケ",
+          "orbit": 3
+        }
+      ],
+      "fortresses": []
+    },
+    {
+      "system": "ヴァルハラ",
+      "faction": "empire",
+      "isCorridor": false,
+      "canonCol": 88,
+      "canonRow": 25,
+      "cell": 2588,
+      "canonGameCol": 89,
+      "canonGameRow": 26,
+      "spectralClass": "G",
+      "planets": [
+        {
+          "name": "ゾースト",
+          "orbit": 1
+        },
+        {
+          "name": "オーディン",
+          "orbit": 2
+        },
+        {
+          "name": "トゥール",
+          "orbit": 3
+        },
+        {
+          "name": "ヴァルグリンド",
+          "orbit": 4
+        }
+      ],
+      "fortresses": []
+    },
+    {
+      "system": "シャンタウ",
+      "faction": "empire",
+      "isCorridor": false,
+      "canonCol": 88,
+      "canonRow": 32,
+      "cell": 3288,
+      "canonGameCol": 89,
+      "canonGameRow": 33,
+      "spectralClass": "B",
+      "planets": [
+        {
+          "name": "クネスドルフ",
+          "orbit": 1
+        },
+        {
+          "name": "ハーケンドルフ",
+          "orbit": 2
+        },
+        {
+          "name": "ノイエンキルヒェン",
+          "orbit": 3
+        },
+        {
+          "name": "ゼードルフ",
+          "orbit": 4
+        }
+      ],
+      "fortresses": []
+    },
+    {
+      "system": "ニヴルヘイム",
+      "faction": "empire",
+      "isCorridor": false,
+      "canonCol": 89,
+      "canonRow": 18,
+      "cell": 1889,
+      "canonGameCol": 90,
+      "canonGameRow": 19,
+      "spectralClass": "A",
+      "planets": [
+        {
+          "name": "エリューズニル",
+          "orbit": 1
+        },
+        {
+          "name": "ギョッル",
+          "orbit": 2
+        },
+        {
+          "name": "フヴェルゲルミル",
+          "orbit": 3
+        }
+      ],
+      "fortresses": []
+    },
+    {
+      "system": "ランメルスベルク",
+      "faction": "empire",
+      "isCorridor": false,
+      "canonCol": 89,
+      "canonRow": 43,
+      "cell": 4389,
+      "canonGameCol": 90,
+      "canonGameRow": 44,
+      "spectralClass": "K",
+      "planets": [
+        {
+          "name": "ハルスブリュッケ",
+          "orbit": 1
+        },
+        {
+          "name": "ハルテンシュタイン",
+          "orbit": 2
+        },
+        {
+          "name": "ヒンメルスフュルスト",
+          "orbit": 3
+        },
+        {
+          "name": "シュレマ",
+          "orbit": 4
+        }
+      ],
+      "fortresses": []
+    },
+    {
+      "system": "カストロプ",
+      "faction": "empire",
+      "isCorridor": false,
+      "canonCol": 92,
+      "canonRow": 8,
+      "cell": 892,
+      "canonGameCol": 93,
+      "canonGameRow": 9,
+      "spectralClass": "G",
+      "planets": [
+        {
+          "name": "カストロプ",
+          "orbit": 1
+        },
+        {
+          "name": "ニーダー・ヴィンディンゲ",
+          "orbit": 2
+        },
+        {
+          "name": "ヴォルディングボルグ",
+          "orbit": 3
+        },
+        {
+          "name": "マリーンドルフ",
+          "orbit": 4
+        }
+      ],
+      "fortresses": []
+    },
+    {
+      "system": "アスガルド",
+      "faction": "empire",
+      "isCorridor": false,
+      "canonCol": 93,
+      "canonRow": 30,
+      "cell": 3093,
+      "canonGameCol": 94,
+      "canonGameRow": 31,
+      "spectralClass": "A",
+      "planets": [
+        {
+          "name": "ミーミル",
+          "orbit": 1
+        },
+        {
+          "name": "ギンヌンガガプ",
+          "orbit": 2
+        },
+        {
+          "name": "トイトブルク",
+          "orbit": 3
+        },
+        {
+          "name": "イーダリル",
+          "orbit": 4
+        }
+      ],
+      "fortresses": []
+    },
+    {
+      "system": "ヴァナヘイム",
+      "faction": "empire",
+      "isCorridor": false,
+      "canonCol": 94,
+      "canonRow": 15,
+      "cell": 1594,
+      "canonGameCol": 95,
+      "canonGameRow": 16,
+      "spectralClass": "F",
+      "planets": [
+        {
+          "name": "エインヘリヤル",
+          "orbit": 1
+        },
+        {
+          "name": "ノーアトゥーン",
+          "orbit": 2
+        },
+        {
+          "name": "ニョルド",
+          "orbit": 3
+        },
+        {
+          "name": "フレイ",
+          "orbit": 4
+        }
+      ],
+      "fortresses": []
+    },
+    {
+      "system": "ヴィッテルスバッハ",
+      "faction": "empire",
+      "isCorridor": false,
+      "canonCol": 94,
+      "canonRow": 38,
+      "cell": 3894,
+      "canonGameCol": 95,
+      "canonGameRow": 39,
+      "spectralClass": "G",
+      "planets": [
+        {
+          "name": "レジデンツ",
+          "orbit": 1
+        },
+        {
+          "name": "ニュンフェンブルク",
+          "orbit": 2
+        },
+        {
+          "name": "ヴィクトアーリエン",
+          "orbit": 3
+        }
+      ],
+      "fortresses": []
+    },
+    {
+      "system": "ルイトポルディング",
+      "faction": "empire",
+      "isCorridor": false,
+      "canonCol": 96,
+      "canonRow": 24,
+      "cell": 2496,
+      "canonGameCol": 97,
+      "canonGameRow": 25,
+      "spectralClass": "M",
+      "planets": [
+        {
+          "name": "ルイトポルト",
+          "orbit": 1
+        },
+        {
+          "name": "ベルトホルト",
+          "orbit": 2
+        },
+        {
+          "name": "アルヌルフ",
+          "orbit": 3
+        }
+      ],
+      "fortresses": []
+    },
+    {
+      "system": "ヴィンスティンゲン",
+      "faction": "empire",
+      "isCorridor": false,
+      "canonCol": 98,
+      "canonRow": 35,
+      "cell": 3598,
+      "canonGameCol": 99,
+      "canonGameRow": 36,
+      "spectralClass": "G",
+      "planets": [
+        {
+          "name": "フォルマール",
+          "orbit": 1
+        },
+        {
+          "name": "ヴィート",
+          "orbit": 2
+        },
+        {
+          "name": "イーゼンブルク",
+          "orbit": 3
+        }
+      ],
+      "fortresses": []
+    },
+    {
+      "system": "ウォームスガウ",
+      "faction": "empire",
+      "isCorridor": false,
+      "canonCol": 99,
+      "canonRow": 30,
+      "cell": 3099,
+      "canonGameCol": 100,
+      "canonGameRow": 31,
+      "spectralClass": "K",
+      "planets": [
+        {
+          "name": "ヴェルナー",
+          "orbit": 1
+        },
+        {
+          "name": "コンラート",
+          "orbit": 2
+        },
+        {
+          "name": "ブルーノ",
+          "orbit": 3
+        },
+        {
+          "name": "リウドルフ",
+          "orbit": 4
+        }
+      ],
+      "fortresses": []
+    },
+    {
+      "system": "アンウレガルラ",
+      "faction": "alliance",
+      "isCorridor": false,
+      "canonCol": 30,
+      "canonRow": 7,
+      "cell": 730,
+      "canonGameCol": 31,
+      "canonGameRow": 8,
+      "spectralClass": "G",
+      "planets": [
+        {
+          "name": "エリドゥ",
+          "orbit": 1
+        },
+        {
+          "name": "ウルク",
+          "orbit": 2
+        },
+        {
+          "name": "ニップル",
+          "orbit": 3
+        },
+        {
+          "name": "ラガシュ",
+          "orbit": 4
+        }
+      ],
+      "fortresses": []
+    },
+    {
+      "system": "ケープホーン",
+      "faction": "alliance",
+      "isCorridor": false,
+      "canonCol": 16,
+      "canonRow": 42,
+      "cell": 4216,
+      "canonGameCol": 17,
+      "canonGameRow": 43,
+      "spectralClass": "F",
+      "planets": [
+        {
+          "name": "フエゴ",
+          "orbit": 1
+        },
+        {
+          "name": "ナバリノ",
+          "orbit": 2
+        },
+        {
+          "name": "ドレーク",
+          "orbit": 3
+        },
+        {
+          "name": "マゼラン",
+          "orbit": 4
+        }
+      ],
+      "fortresses": []
+    },
+    {
+      "system": "コブラヴェルデ",
+      "faction": "alliance",
+      "isCorridor": false,
+      "canonCol": 22,
+      "canonRow": 38,
+      "cell": 3822,
+      "canonGameCol": 23,
+      "canonGameRow": 39,
+      "spectralClass": "K",
+      "planets": [
+        {
+          "name": "サンティアゴ",
+          "orbit": 1
+        },
+        {
+          "name": "ボア・ヴィスタ",
+          "orbit": 2
+        },
+        {
+          "name": "サン・ヴィセンテ",
+          "orbit": 3
+        },
+        {
+          "name": "サント・アンタオン",
+          "orbit": 4
+        }
+      ],
+      "fortresses": []
+    },
+    {
+      "system": "ニーベルング",
+      "faction": "empire",
+      "isCorridor": false,
+      "canonCol": 76,
+      "canonRow": 18,
+      "cell": 1876,
+      "canonGameCol": 77,
+      "canonGameRow": 19,
+      "spectralClass": "M",
+      "planets": [
+        {
+          "name": "ラインゴルト",
+          "orbit": 1
+        },
+        {
+          "name": "アルベリヒ",
+          "orbit": 2
+        },
+        {
+          "name": "ミーメ",
+          "orbit": 3
+        },
+        {
+          "name": "ジークフリート",
+          "orbit": 4
+        }
+      ],
+      "fortresses": []
+    },
+    {
+      "system": "モンサルヴァール",
+      "faction": "alliance",
+      "isCorridor": false,
+      "canonCol": 36,
+      "canonRow": 36,
+      "cell": 3636,
+      "canonGameCol": 37,
+      "canonGameRow": 37,
+      "spectralClass": "A",
+      "planets": [
+        {
+          "name": "エルサム",
+          "orbit": 1
+        },
+        {
+          "name": "ヤラ",
+          "orbit": 2
+        },
+        {
+          "name": "グラアル",
+          "orbit": 3
+        }
+      ],
+      "fortresses": []
+    }
+  ]
+}

@@ -1,0 +1,396 @@
+{
+  "id": "logh7-initial-deployment-seed",
+  "generatedAt": "2026-07-10T16:14:35.434Z",
+  "provenance": "server/content/initial-deployment.json (EXE 추출 시나리오 시작 배치) + cell은 galaxy-systems 해석",
+  "imperial": {
+    "fleet": [
+      {
+        "unit": 1,
+        "system": "ヴァルハラ",
+        "planet": "オーディン",
+        "cell": 2588
+      },
+      {
+        "unit": 2,
+        "system": "ヴァルハラ",
+        "planet": "オーディン",
+        "cell": 2588
+      },
+      {
+        "unit": 3,
+        "system": "アルテナ",
+        "planet": "ノイエンラーデ",
+        "cell": 3381
+      },
+      {
+        "unit": 4,
+        "system": "アムリッツァ",
+        "planet": "ハーフェン",
+        "cell": 1261
+      },
+      {
+        "unit": 5,
+        "system": "アムリッツァ",
+        "planet": "ハーフェン",
+        "cell": 1261
+      },
+      {
+        "unit": 6,
+        "system": "フレイア",
+        "planet": "レンテンベルク",
+        "planet_raw": "レンテンベルグ",
+        "planet_type": "fortress",
+        "cell": 3470
+      },
+      {
+        "unit": 7,
+        "system": "フレイア",
+        "planet": "レンテンベルク",
+        "planet_raw": "レンテンベルグ",
+        "planet_type": "fortress",
+        "cell": 3470
+      },
+      {
+        "unit": 8,
+        "system": "キフォイザー",
+        "planet": "ガルミッシュ",
+        "planet_type": "fortress",
+        "cell": 4573
+      },
+      {
+        "unit": 9,
+        "system": "キフォイザー",
+        "planet": "ガルミッシュ",
+        "planet_type": "fortress",
+        "cell": 4573
+      },
+      {
+        "unit": 10,
+        "system": "アイゼンヘルツ",
+        "planet": "ガイエスブルク",
+        "planet_raw": "ガイエスブルグ",
+        "planet_type": "fortress",
+        "cell": 3857
+      },
+      {
+        "unit": 11,
+        "system": "アイゼンヘルツ",
+        "planet": "ガイエスブルク",
+        "planet_raw": "ガイエスブルグ",
+        "planet_type": "fortress",
+        "cell": 3857
+      },
+      {
+        "unit": 12,
+        "system": "イゼルローン",
+        "planet": "イゼルローン",
+        "planet_type": "fortress",
+        "cell": 1253
+      }
+    ],
+    "patrol": [
+      {
+        "from": 1,
+        "to": 3,
+        "system": "ヴァルハラ",
+        "planet": "オーディン"
+      },
+      {
+        "from": 4,
+        "to": 5,
+        "system": "アルテナ",
+        "planet": "ナッハロート"
+      },
+      {
+        "from": 6,
+        "to": 6,
+        "system": "ニヴルヘイム",
+        "planet": "エリューズニル",
+        "system_raw": "ニブルヘイム"
+      },
+      {
+        "from": 7,
+        "to": 7,
+        "system": "ヴェルラ",
+        "planet": "シュテファニ"
+      },
+      {
+        "from": 8,
+        "to": 8,
+        "system": "シャンタウ",
+        "planet": "クネスドルフ"
+      },
+      {
+        "from": 9,
+        "to": 9,
+        "system": "アスガルド",
+        "planet": "トイトブルク"
+      },
+      {
+        "from": 10,
+        "to": 10,
+        "system": "ルイトポルディング",
+        "planet": "ルイトポルト",
+        "system_raw": "ルイトボルディング"
+      },
+      {
+        "from": 11,
+        "to": 13,
+        "system": "ヴィレンシュタイン",
+        "planet": "ヴァイセンホルン",
+        "system_raw": "ヴィレンンシュタイン"
+      },
+      {
+        "from": 14,
+        "to": 16,
+        "system": "リンダーホーフ",
+        "planet": "ホーエンシュヴァンガウ"
+      },
+      {
+        "from": 17,
+        "to": 19,
+        "system": "ヴァナヘイム",
+        "planet": "フレイ"
+      },
+      {
+        "from": 20,
+        "to": 22,
+        "system": "ヴィッテルスバッハ",
+        "planet": "ニュンフェンブルク",
+        "system_raw": "ヴィテルスバッハ"
+      },
+      {
+        "from": 23,
+        "to": 25,
+        "system": "ウォームスガウ",
+        "planet": "コンラート"
+      },
+      {
+        "from": 26,
+        "to": 28,
+        "system": "バルドル",
+        "planet": "フリングホルニ",
+        "system_raw": "バルドレ"
+      },
+      {
+        "from": 29,
+        "to": 31,
+        "system": "アムリッツァ",
+        "planet": "ハーフェン"
+      },
+      {
+        "from": 32,
+        "to": 34,
+        "system": "ビルロスト",
+        "planet": "ヘイムダル"
+      },
+      {
+        "from": 35,
+        "to": 37,
+        "system": "ヴァンステイド",
+        "planet": "ファルドガルデ"
+      },
+      {
+        "from": 38,
+        "to": 40,
+        "system": "ドヴェルグ",
+        "planet": "グレイプニル"
+      },
+      {
+        "from": 41,
+        "to": 43,
+        "system": "フレイア",
+        "planet": "レンテンベルク",
+        "planet_type": "fortress"
+      },
+      {
+        "from": 44,
+        "to": 46,
+        "system": "アイゼンヘルツ",
+        "planet": "ガイエスブルク",
+        "planet_type": "fortress"
+      },
+      {
+        "from": 47,
+        "to": 47,
+        "system": "フォルゲン",
+        "planet": "シュヴァンガウ"
+      },
+      {
+        "from": 49,
+        "to": 49,
+        "system": "キフォイザー",
+        "planet": "ガルミッシュ",
+        "planet_type": "fortress"
+      },
+      {
+        "from": 50,
+        "to": 52,
+        "system": "イゼルローン",
+        "planet": "イゼルローン",
+        "planet_type": "fortress"
+      },
+      {
+        "from": 53,
+        "to": 60,
+        "system": null,
+        "planet": null,
+        "note": "blank in manual"
+      }
+    ]
+  },
+  "alliance": {
+    "fleet": [
+      {
+        "unit": 1,
+        "system": "バーラト",
+        "planet": "ハイネセン",
+        "cell": 2014
+      },
+      {
+        "unit": 2,
+        "system": "バーラト",
+        "planet": "ハイネセン",
+        "cell": 2014
+      },
+      {
+        "unit": 3,
+        "system": "ポレヴィト",
+        "planet": "ルジアーナ",
+        "cell": 3844
+      },
+      {
+        "unit": 4,
+        "system": "ドーリア",
+        "planet": "ボルゲーゼ",
+        "cell": 1230
+      },
+      {
+        "unit": 5,
+        "system": "エル・ファシル",
+        "planet": "サンタ・アナ",
+        "cell": 1732
+      },
+      {
+        "unit": 6,
+        "system": "ドーリア",
+        "planet": "ボルゲーゼ",
+        "cell": 1230
+      },
+      {
+        "unit": 7,
+        "system": "ポレヴィト",
+        "planet": "ルジアーナ",
+        "cell": 3844
+      },
+      {
+        "unit": 8,
+        "system": "シュパーラ",
+        "planet": "シウダ・ロドリゴ",
+        "cell": 4627
+      },
+      {
+        "unit": 9,
+        "system": "エル・ファシル",
+        "planet": "サンタ・アナ",
+        "cell": 1732
+      },
+      {
+        "unit": 10,
+        "system": "ケリム",
+        "planet": "カッシナ",
+        "cell": 1418
+      },
+      {
+        "unit": 11,
+        "system": "シュパーラ",
+        "planet": "シウダ・ロドリゴ",
+        "cell": 4627
+      },
+      {
+        "unit": 12,
+        "system": "ケリム",
+        "planet": "カッシナ",
+        "cell": 1418
+      }
+    ],
+    "patrol": [
+      {
+        "from": 1,
+        "to": 5,
+        "system": "バーラト",
+        "planet": "ハイネセン"
+      },
+      {
+        "from": 6,
+        "to": 10,
+        "system": "リューカス",
+        "planet": "ヴァルミー"
+      },
+      {
+        "from": 11,
+        "to": 15,
+        "system": "ドーリア",
+        "planet": "ボルゲーゼ",
+        "planet_raw": "ボルゲーゼ"
+      },
+      {
+        "from": 16,
+        "to": 20,
+        "system": "ジャムシード",
+        "planet": "カッファー"
+      },
+      {
+        "from": 21,
+        "to": 25,
+        "system": "ケリム",
+        "planet": "カッシナ"
+      },
+      {
+        "from": 26,
+        "to": 30,
+        "system": "ロフォーテン",
+        "planet": "ルドミラ",
+        "planet_type": "fortress"
+      },
+      {
+        "from": 31,
+        "to": 35,
+        "system": "エル・ファシル",
+        "planet": "サンタ・アナ"
+      },
+      {
+        "from": 36,
+        "to": 40,
+        "system": "ポレヴィト",
+        "planet": "ルジアーナ"
+      },
+      {
+        "from": 41,
+        "to": 45,
+        "system": "メルカルト",
+        "planet": "ネルガル"
+      },
+      {
+        "from": 46,
+        "to": 49,
+        "system": "リオ・ヴェルデ",
+        "planet": "サン・カルロス"
+      },
+      {
+        "from": 50,
+        "to": 55,
+        "system": "シュパーラ",
+        "planet": "シウダ・ロドリゴ",
+        "system_raw": "シュバーラ"
+      },
+      {
+        "from": 56,
+        "to": 60,
+        "system": "ファラーファラ",
+        "planet": "ミセヌム"
+      }
+    ]
+  },
+  "note": "fleet[].cell=null 은 요새/추가행성 등 galaxy.json 미등재 지점(system→cell 해석 실패)."
+}

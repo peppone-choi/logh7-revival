@@ -1,0 +1,895 @@
+{
+  "id": "logh7-ships-seed",
+  "generatedAt": "2026-07-10T16:14:35.434Z",
+  "provenance": "server/content/ship-stats.json (매뉴얼 함선표 OCR 파생, pools=wire 유닛 스탯)",
+  "counts": {
+    "total": 63,
+    "empire": 52,
+    "alliance": 11
+  },
+  "note": "0x0325 유닛 포맷 정합은 wire-engineer/re-ui-entities 확정 대기. pools 필드는 와이어 스탯 후보.",
+  "ships": [
+    {
+      "key": "SS75",
+      "name": "標準戦艦 (SS75型標準戦艦)",
+      "side": "empire",
+      "shipClass": "battleship",
+      "pools": {
+        "maxArmor": 56,
+        "maxZanki": 100,
+        "maxShield": 20000,
+        "beamPower": 100,
+        "defense": 70,
+        "morale": 100
+      }
+    },
+    {
+      "key": "PK86",
+      "name": "高速戦艦 (PK86型標準高速戦艦)",
+      "side": "empire",
+      "shipClass": "fast_battleship",
+      "pools": {
+        "maxArmor": 48,
+        "maxZanki": 410,
+        "maxShield": null,
+        "beamPower": 100,
+        "defense": 70,
+        "morale": 100
+      }
+    },
+    {
+      "key": "SK80",
+      "name": "巡航艦 (SK80型標準巡航艦)",
+      "side": "empire",
+      "shipClass": "cruiser",
+      "pools": {
+        "maxArmor": 52,
+        "maxZanki": 260,
+        "maxShield": 22,
+        "beamPower": 60,
+        "defense": 50,
+        "morale": 100
+      }
+    },
+    {
+      "key": "Z82",
+      "name": "駆逐艦 (Z82型標準駆逐艦)",
+      "side": "empire",
+      "shipClass": "destroyer",
+      "pools": {
+        "maxArmor": 19,
+        "maxZanki": 40,
+        "maxShield": 20,
+        "beamPower": 104,
+        "defense": 30,
+        "morale": 100
+      }
+    },
+    {
+      "key": "FR88",
+      "name": "戦闘艇母艦 (FR88型戦闘艇母艦)",
+      "side": "empire",
+      "shipClass": "carrier",
+      "pools": {
+        "maxArmor": 88,
+        "maxZanki": 128,
+        "maxShield": null,
+        "beamPower": 110,
+        "defense": null,
+        "morale": 100
+      }
+    },
+    {
+      "key": "TR88",
+      "name": "雷撃艇母艦 (TR88型雷撃艇母艦)",
+      "side": "empire",
+      "shipClass": "torpedo_carrier",
+      "pools": {
+        "maxArmor": 88,
+        "maxZanki": 128,
+        "maxShield": null,
+        "beamPower": 110,
+        "defense": null,
+        "morale": 100
+      }
+    },
+    {
+      "key": "A76",
+      "name": "工作艦 (A76型標準工作艦)",
+      "side": "empire",
+      "shipClass": "repair",
+      "pools": {
+        "maxArmor": 52,
+        "maxZanki": 1,
+        "maxShield": null,
+        "beamPower": null,
+        "defense": null,
+        "morale": 100
+      }
+    },
+    {
+      "key": "A74",
+      "name": "輸送艦 (A74型標準輸送艦)",
+      "side": "empire",
+      "shipClass": "transport",
+      "pools": {
+        "maxArmor": 94,
+        "maxZanki": 1,
+        "maxShield": null,
+        "beamPower": 32,
+        "defense": null,
+        "morale": 100
+      }
+    },
+    {
+      "key": "A72",
+      "name": "兵員輸送艦 (A72型標準兵員輸送艦)",
+      "side": "empire",
+      "shipClass": "trooper",
+      "pools": {
+        "maxArmor": 30,
+        "maxZanki": 1,
+        "maxShield": null,
+        "beamPower": 40,
+        "defense": null,
+        "morale": 100
+      }
+    },
+    {
+      "key": "A78",
+      "name": "揚陸艦 (A78型標準揚陸艦)",
+      "side": "empire",
+      "shipClass": "lander",
+      "pools": {
+        "maxArmor": 30,
+        "maxZanki": 1,
+        "maxShield": null,
+        "beamPower": 40,
+        "defense": null,
+        "morale": 100
+      }
+    },
+    {
+      "key": "民間船 / 商船",
+      "name": "民間船 / 商船",
+      "side": "empire",
+      "shipClass": "civilian",
+      "pools": {
+        "maxArmor": 40,
+        "maxZanki": 100,
+        "maxShield": 16,
+        "beamPower": 10,
+        "defense": 20,
+        "morale": 100
+      }
+    },
+    {
+      "key": "標準戦艦",
+      "name": "標準戦艦 (787年型標準戦艦)",
+      "side": "alliance",
+      "shipClass": "battleship",
+      "pools": {
+        "maxArmor": 58,
+        "maxZanki": 100,
+        "maxShield": 20,
+        "beamPower": 90,
+        "defense": 70,
+        "morale": 100
+      }
+    },
+    {
+      "key": "巡航艦",
+      "name": "巡航艦 (795年型標準巡航艦)",
+      "side": "alliance",
+      "shipClass": "cruiser",
+      "pools": {
+        "maxArmor": 34,
+        "maxZanki": 260,
+        "maxShield": 22,
+        "beamPower": 50,
+        "defense": 60,
+        "morale": 100
+      }
+    },
+    {
+      "key": "打撃巡航艦",
+      "name": "打撃巡航艦 (794年型打撃巡航艦)",
+      "side": "alliance",
+      "shipClass": "strike_cruiser",
+      "pools": {
+        "maxArmor": 32,
+        "maxZanki": 260,
+        "maxShield": 22,
+        "beamPower": 150,
+        "defense": 50,
+        "morale": 100
+      }
+    },
+    {
+      "key": "偵察巡航艦",
+      "name": "偵察巡航艦 (レダ級偵察巡航艦, 795年〜建造)",
+      "side": "alliance",
+      "shipClass": "cruiser",
+      "pools": {
+        "maxArmor": 46,
+        "maxZanki": 300,
+        "maxShield": 25,
+        "beamPower": 60,
+        "defense": 70,
+        "morale": 100
+      }
+    },
+    {
+      "key": "駆逐艦",
+      "name": "駆逐艦 (796年型標準駆逐艦)",
+      "side": "alliance",
+      "shipClass": "destroyer",
+      "pools": {
+        "maxArmor": 20,
+        "maxZanki": 40,
+        "maxShield": 19,
+        "beamPower": 50,
+        "defense": 40,
+        "morale": 100
+      }
+    },
+    {
+      "key": "戦闘艇母艦",
+      "name": "戦闘艇母艦 (796年型標準戦闘艇母艦)",
+      "side": "alliance",
+      "shipClass": "destroyer",
+      "pools": {
+        "maxArmor": 80,
+        "maxZanki": 40,
+        "maxShield": null,
+        "beamPower": 70,
+        "defense": null,
+        "morale": 100
+      }
+    },
+    {
+      "key": "工作艦",
+      "name": "工作艦 (793年型標準工作艦)",
+      "side": "alliance",
+      "shipClass": "repair",
+      "pools": {
+        "maxArmor": 46,
+        "maxZanki": 1,
+        "maxShield": null,
+        "beamPower": null,
+        "defense": null,
+        "morale": 100
+      }
+    },
+    {
+      "key": "輸送艦",
+      "name": "輸送艦 (792年型標準輸送艦)",
+      "side": "alliance",
+      "shipClass": "transport",
+      "pools": {
+        "maxArmor": 118,
+        "maxZanki": 1,
+        "maxShield": null,
+        "beamPower": null,
+        "defense": null,
+        "morale": 100
+      }
+    },
+    {
+      "key": "兵員輸送艦",
+      "name": "兵員輸送艦 (788年型標準兵員輸送艦)",
+      "side": "alliance",
+      "shipClass": "trooper",
+      "pools": {
+        "maxArmor": 10,
+        "maxZanki": 1,
+        "maxShield": null,
+        "beamPower": 40,
+        "defense": null,
+        "morale": 100
+      }
+    },
+    {
+      "key": "揚陸艦",
+      "name": "揚陸艦 (795年型標準揚陸艦 / 786年型系)",
+      "side": "alliance",
+      "shipClass": "cruiser",
+      "pools": {
+        "maxArmor": 36,
+        "maxZanki": 1,
+        "maxShield": null,
+        "beamPower": 40,
+        "defense": null,
+        "morale": 100
+      }
+    },
+    {
+      "key": "民間船 / 商船/a",
+      "name": "民間船 / 商船 (Civilian ship / Merchant ship)",
+      "side": "alliance",
+      "shipClass": "civilian",
+      "pools": {
+        "maxArmor": 44,
+        "maxZanki": 100,
+        "maxShield": 16,
+        "beamPower": 20,
+        "defense": 40,
+        "morale": 100
+      }
+    },
+    {
+      "key": "SS75a",
+      "name": "戦艦Ⅲ (SS75a型戦艦)",
+      "side": "empire",
+      "shipClass": "battleship",
+      "pools": {
+        "maxArmor": 56,
+        "maxZanki": 100,
+        "maxShield": 20000,
+        "beamPower": 100,
+        "defense": 70,
+        "morale": 100
+      }
+    },
+    {
+      "key": "SS75b",
+      "name": "戦艦Ⅳ (SS75b型戦艦)",
+      "side": "empire",
+      "shipClass": "battleship",
+      "pools": {
+        "maxArmor": 56,
+        "maxZanki": 100,
+        "maxShield": 20000,
+        "beamPower": 100,
+        "defense": 70,
+        "morale": 100
+      }
+    },
+    {
+      "key": "SS75c",
+      "name": "戦艦Ⅴ (SS75c型戦艦)",
+      "side": "empire",
+      "shipClass": "battleship",
+      "pools": {
+        "maxArmor": 56,
+        "maxZanki": 100,
+        "maxShield": 20000,
+        "beamPower": 100,
+        "defense": 70,
+        "morale": 100
+      }
+    },
+    {
+      "key": "SS75d",
+      "name": "戦艦Ⅵ (SS75d型戦艦)",
+      "side": "empire",
+      "shipClass": "battleship",
+      "pools": {
+        "maxArmor": 56,
+        "maxZanki": 100,
+        "maxShield": 20000,
+        "beamPower": 100,
+        "defense": 70,
+        "morale": 100
+      }
+    },
+    {
+      "key": "SS75e",
+      "name": "戦艦Ⅶ (SS75e型戦艦)",
+      "side": "empire",
+      "shipClass": "battleship",
+      "pools": {
+        "maxArmor": 56,
+        "maxZanki": 100,
+        "maxShield": 20000,
+        "beamPower": 100,
+        "defense": 70,
+        "morale": 100
+      }
+    },
+    {
+      "key": "SS75f",
+      "name": "戦艦Ⅷ (SS75f型 / SS75g型戦艦)",
+      "side": "empire",
+      "shipClass": "battleship",
+      "pools": {
+        "maxArmor": 56,
+        "maxZanki": 100,
+        "maxShield": 20000,
+        "beamPower": 100,
+        "defense": 70,
+        "morale": 100
+      }
+    },
+    {
+      "key": "PK86a",
+      "name": "高速戦艦Ⅲ (PK86a型 / PK86b型高速戦艦)",
+      "side": "empire",
+      "shipClass": "fast_battleship",
+      "pools": {
+        "maxArmor": 48,
+        "maxZanki": 410,
+        "maxShield": null,
+        "beamPower": 100,
+        "defense": 70,
+        "morale": 100
+      }
+    },
+    {
+      "key": "PK86c",
+      "name": "高速戦艦Ⅳ／Ⅴ (PK86c型 / PK86d型高速戦艦)",
+      "side": "empire",
+      "shipClass": "fast_battleship",
+      "pools": {
+        "maxArmor": 48,
+        "maxZanki": 410,
+        "maxShield": null,
+        "beamPower": 100,
+        "defense": 70,
+        "morale": 100
+      }
+    },
+    {
+      "key": "PK86e",
+      "name": "高速戦艦Ⅵ (PK86e型標準高速戦艦)",
+      "side": "empire",
+      "shipClass": "fast_battleship",
+      "pools": {
+        "maxArmor": 48,
+        "maxZanki": 410,
+        "maxShield": null,
+        "beamPower": 100,
+        "defense": 70,
+        "morale": 100
+      }
+    },
+    {
+      "key": "PK86f",
+      "name": "高速戦艦Ⅶ (PK86f型高速戦艦)",
+      "side": "empire",
+      "shipClass": "fast_battleship",
+      "pools": {
+        "maxArmor": 48,
+        "maxZanki": 410,
+        "maxShield": null,
+        "beamPower": 100,
+        "defense": 70,
+        "morale": 100
+      }
+    },
+    {
+      "key": "PK86g",
+      "name": "高速戦艦Ⅷ (PK86g型高速戦艦)",
+      "side": "empire",
+      "shipClass": "fast_battleship",
+      "pools": {
+        "maxArmor": 48,
+        "maxZanki": 410,
+        "maxShield": null,
+        "beamPower": 100,
+        "defense": 70,
+        "morale": 100
+      }
+    },
+    {
+      "key": "SK80a",
+      "name": "巡航艦Ⅲ (SK80a型巡航艦)",
+      "side": "empire",
+      "shipClass": "cruiser",
+      "pools": {
+        "maxArmor": 52,
+        "maxZanki": 260,
+        "maxShield": 22,
+        "beamPower": 60,
+        "defense": 50,
+        "morale": 100
+      }
+    },
+    {
+      "key": "SK80b",
+      "name": "巡航艦Ⅳ (SK80b型巡航艦)",
+      "side": "empire",
+      "shipClass": "cruiser",
+      "pools": {
+        "maxArmor": 52,
+        "maxZanki": 260,
+        "maxShield": 22,
+        "beamPower": 60,
+        "defense": 50,
+        "morale": 100
+      }
+    },
+    {
+      "key": "SK80c",
+      "name": "巡航艦Ⅴ (SK80c型 / SK80d型巡航艦)",
+      "side": "empire",
+      "shipClass": "cruiser",
+      "pools": {
+        "maxArmor": 52,
+        "maxZanki": 260,
+        "maxShield": 22,
+        "beamPower": 60,
+        "defense": 50,
+        "morale": 100
+      }
+    },
+    {
+      "key": "SK80e",
+      "name": "巡航艦Ⅵ (SK80e型巡航艦)",
+      "side": "empire",
+      "shipClass": "cruiser",
+      "pools": {
+        "maxArmor": 52,
+        "maxZanki": 260,
+        "maxShield": 22,
+        "beamPower": 60,
+        "defense": 50,
+        "morale": 100
+      }
+    },
+    {
+      "key": "SK80f",
+      "name": "巡航艦Ⅶ (SK80f型巡航艦)",
+      "side": "empire",
+      "shipClass": "cruiser",
+      "pools": {
+        "maxArmor": 52,
+        "maxZanki": 260,
+        "maxShield": 22,
+        "beamPower": 60,
+        "defense": 50,
+        "morale": 100
+      }
+    },
+    {
+      "key": "SK80g",
+      "name": "巡航艦Ⅷ (SK80g型巡航艦)",
+      "side": "empire",
+      "shipClass": "cruiser",
+      "pools": {
+        "maxArmor": 52,
+        "maxZanki": 260,
+        "maxShield": 22,
+        "beamPower": 60,
+        "defense": 50,
+        "morale": 100
+      }
+    },
+    {
+      "key": "K86",
+      "name": "高速艇 (K86型高速艇)",
+      "side": "empire",
+      "shipClass": "corvette",
+      "pools": {
+        "maxArmor": 19,
+        "maxZanki": 40,
+        "maxShield": 20,
+        "beamPower": 40,
+        "defense": 30,
+        "morale": 100
+      }
+    },
+    {
+      "key": "Z82a",
+      "name": "駆逐艦Ⅱ (Z82a型駆逐艦)",
+      "side": "empire",
+      "shipClass": "destroyer",
+      "pools": {
+        "maxArmor": 19,
+        "maxZanki": 40,
+        "maxShield": 20,
+        "beamPower": 104,
+        "defense": 30,
+        "morale": 100
+      }
+    },
+    {
+      "key": "Z82b",
+      "name": "駆逐艦Ⅲ (Z82b型駆逐艦)",
+      "side": "empire",
+      "shipClass": "destroyer",
+      "pools": {
+        "maxArmor": 19,
+        "maxZanki": 40,
+        "maxShield": 20,
+        "beamPower": 104,
+        "defense": 30,
+        "morale": 100
+      }
+    },
+    {
+      "key": "Z82c",
+      "name": "駆逐艦Ⅳ (Z82c型駆逐艦)",
+      "side": "empire",
+      "shipClass": "destroyer",
+      "pools": {
+        "maxArmor": 19,
+        "maxZanki": 40,
+        "maxShield": 20,
+        "beamPower": 104,
+        "defense": 30,
+        "morale": 100
+      }
+    },
+    {
+      "key": "Z82d",
+      "name": "駆逐艦Ⅴ (Z82d型駆逐艦)",
+      "side": "empire",
+      "shipClass": "destroyer",
+      "pools": {
+        "maxArmor": 19,
+        "maxZanki": 40,
+        "maxShield": 20,
+        "beamPower": 104,
+        "defense": 30,
+        "morale": 100
+      }
+    },
+    {
+      "key": "Z82e",
+      "name": "駆逐艦Ⅵ (Z82e型駆逐艦)",
+      "side": "empire",
+      "shipClass": "destroyer",
+      "pools": {
+        "maxArmor": 19,
+        "maxZanki": 40,
+        "maxShield": 20,
+        "beamPower": 104,
+        "defense": 30,
+        "morale": 100
+      }
+    },
+    {
+      "key": "Z82f",
+      "name": "駆逐艦Ⅶ (Z82f型駆逐艦)",
+      "side": "empire",
+      "shipClass": "destroyer",
+      "pools": {
+        "maxArmor": 19,
+        "maxZanki": 40,
+        "maxShield": 20,
+        "beamPower": 104,
+        "defense": 30,
+        "morale": 100
+      }
+    },
+    {
+      "key": "Z82g",
+      "name": "駆逐艦Ⅷ (Z82g型駆逐艦)",
+      "side": "empire",
+      "shipClass": "destroyer",
+      "pools": {
+        "maxArmor": 19,
+        "maxZanki": 40,
+        "maxShield": 20,
+        "beamPower": 104,
+        "defense": 30,
+        "morale": 100
+      }
+    },
+    {
+      "key": "FR88b",
+      "name": "戦闘艇母艦Ⅲ (FR88b型戦闘艇母艦)",
+      "side": "empire",
+      "shipClass": "carrier",
+      "pools": {
+        "maxArmor": 88,
+        "maxZanki": 128,
+        "maxShield": null,
+        "beamPower": 110,
+        "defense": null,
+        "morale": 100
+      }
+    },
+    {
+      "key": "FR88b/e",
+      "name": "戦闘艇母艦Ⅳ (FR88b型戦闘艇母艦・戦時急造型)",
+      "side": "empire",
+      "shipClass": "carrier",
+      "pools": {
+        "maxArmor": 88,
+        "maxZanki": 128,
+        "maxShield": null,
+        "beamPower": 110,
+        "defense": null,
+        "morale": 100
+      }
+    },
+    {
+      "key": "TR88b",
+      "name": "雷撃艇母艦Ⅲ (TR88b型雷撃艇母艦)",
+      "side": "empire",
+      "shipClass": "torpedo_carrier",
+      "pools": {
+        "maxArmor": 88,
+        "maxZanki": 128,
+        "maxShield": null,
+        "beamPower": 110,
+        "defense": null,
+        "morale": 100
+      }
+    },
+    {
+      "key": "TR88c",
+      "name": "雷撃艇母艦Ⅳ (TR88c型雷撃艇母艦)",
+      "side": "empire",
+      "shipClass": "torpedo_carrier",
+      "pools": {
+        "maxArmor": 88,
+        "maxZanki": 128,
+        "maxShield": null,
+        "beamPower": 110,
+        "defense": null,
+        "morale": 100
+      }
+    },
+    {
+      "key": "A76a",
+      "name": "工作艦Ⅱ (A76a型工作艦)",
+      "side": "empire",
+      "shipClass": "repair",
+      "pools": {
+        "maxArmor": 52,
+        "maxZanki": 1,
+        "maxShield": null,
+        "beamPower": null,
+        "defense": null,
+        "morale": 100
+      }
+    },
+    {
+      "key": "A76b",
+      "name": "工作艦Ⅲ (A76b型工作艦)",
+      "side": "empire",
+      "shipClass": "repair",
+      "pools": {
+        "maxArmor": 52,
+        "maxZanki": 1,
+        "maxShield": null,
+        "beamPower": null,
+        "defense": null,
+        "morale": 100
+      }
+    },
+    {
+      "key": "A76b/e",
+      "name": "工作艦Ⅳ (A76b型工作艦・戦時急造型)",
+      "side": "empire",
+      "shipClass": "repair",
+      "pools": {
+        "maxArmor": 52,
+        "maxZanki": 1,
+        "maxShield": null,
+        "beamPower": null,
+        "defense": null,
+        "morale": 100
+      }
+    },
+    {
+      "key": "A74a",
+      "name": "輸送艦Ⅱ (A74a型輸送艦)",
+      "side": "empire",
+      "shipClass": "transport",
+      "pools": {
+        "maxArmor": 94,
+        "maxZanki": 1,
+        "maxShield": null,
+        "beamPower": 32,
+        "defense": null,
+        "morale": 100
+      }
+    },
+    {
+      "key": "A74b",
+      "name": "輸送艦Ⅲ (A74b型輸送艦)",
+      "side": "empire",
+      "shipClass": "transport",
+      "pools": {
+        "maxArmor": 94,
+        "maxZanki": 1,
+        "maxShield": null,
+        "beamPower": 32,
+        "defense": null,
+        "morale": 100
+      }
+    },
+    {
+      "key": "A74c",
+      "name": "輸送艦Ⅳ (A74c型輸送艦)",
+      "side": "empire",
+      "shipClass": "transport",
+      "pools": {
+        "maxArmor": 94,
+        "maxZanki": 1,
+        "maxShield": null,
+        "beamPower": 32,
+        "defense": null,
+        "morale": 100
+      }
+    },
+    {
+      "key": "A72a",
+      "name": "兵員輸送艦Ⅱ (A72a型兵員輸送艦)",
+      "side": "empire",
+      "shipClass": "trooper",
+      "pools": {
+        "maxArmor": 30,
+        "maxZanki": 1,
+        "maxShield": null,
+        "beamPower": 40,
+        "defense": null,
+        "morale": 100
+      }
+    },
+    {
+      "key": "A72b",
+      "name": "兵員輸送艦Ⅲ (A72b型兵員輸送艦)",
+      "side": "empire",
+      "shipClass": "trooper",
+      "pools": {
+        "maxArmor": 30,
+        "maxZanki": 1,
+        "maxShield": null,
+        "beamPower": 40,
+        "defense": null,
+        "morale": 100
+      }
+    },
+    {
+      "key": "A72c",
+      "name": "兵員輸送艦Ⅳ (A72c型兵員輸送艦)",
+      "side": "empire",
+      "shipClass": "trooper",
+      "pools": {
+        "maxArmor": 30,
+        "maxZanki": 1,
+        "maxShield": null,
+        "beamPower": 40,
+        "defense": null,
+        "morale": 100
+      }
+    },
+    {
+      "key": "A78a",
+      "name": "揚陸艦Ⅱ (A78a型標準揚陸艦)",
+      "side": "empire",
+      "shipClass": "lander",
+      "pools": {
+        "maxArmor": 30,
+        "maxZanki": 1,
+        "maxShield": null,
+        "beamPower": 40,
+        "defense": null,
+        "morale": 100
+      }
+    },
+    {
+      "key": "A78b",
+      "name": "揚陸艦Ⅲ (A78b型標準揚陸艦)",
+      "side": "empire",
+      "shipClass": "lander",
+      "pools": {
+        "maxArmor": 30,
+        "maxZanki": 1,
+        "maxShield": null,
+        "beamPower": 40,
+        "defense": null,
+        "morale": 100
+      }
+    },
+    {
+      "key": "A78c",
+      "name": "揚陸艦Ⅳ (A78c型標準揚陸艦)",
+      "side": "empire",
+      "shipClass": "lander",
+      "pools": {
+        "maxArmor": 30,
+        "maxZanki": 1,
+        "maxShield": null,
+        "beamPower": 40,
+        "defense": null,
+        "morale": 100
+      }
+    }
+  ]
+}

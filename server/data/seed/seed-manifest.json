@@ -1,0 +1,41 @@
+{
+  "id": "logh7-db-seed-manifest",
+  "generatedAt": "2026-07-10T16:14:35.434Z",
+  "builder": "server/tools/build-db-seed.mjs",
+  "catalogs": [
+    {
+      "file": "rank-table.json",
+      "bytes": 3282
+    },
+    {
+      "file": "ability-schema.json",
+      "bytes": 886
+    },
+    {
+      "file": "factions.json",
+      "bytes": 1741
+    },
+    {
+      "file": "characters.json",
+      "bytes": 104425
+    },
+    {
+      "file": "galaxy-systems.json",
+      "bytes": 50558
+    },
+    {
+      "file": "ships.json",
+      "bytes": 20472
+    },
+    {
+      "file": "fortresses.json",
+      "bytes": 3379
+    },
+    {
+      "file": "initial-deployment.json",
+      "bytes": 9255
+    }
+  ],
+  "serverSchemaToday": "accounts, characters, world_fleet, domain_events (Database.mjs) — 갤럭시/함선/요새 미시드",
+  "note": "이 시드셋은 서버 영속층이 아직 소비하지 않는 정본 카탈로그. server-dev 시드 로더 배선 대기."
+}
