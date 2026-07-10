@@ -1,0 +1,60 @@
+[11:06:53] launch E:\logh7-revival\artifacts\logh7-install\____________s___\____\exe\g7mtclient.exe
+[11:06:53] client pid(spawn)=23048
+[11:06:54] window hwnd=0xb106a pid=23048
+[11:06:57] probe script = _frida_wire0323.js
+[11:06:58] hooks loaded, ready=[{'ev': 'ready', 'base': '0x400000', 'fDisp': '0x4ba2b0', 'fLoad': '0x4c2a80', 'fBuild': '0x4c2c80'}]
+[11:06:58] SNAP attach: gamemode=-1 ring=-1 sel=-1 charCount=-1
+  shot E:\logh7-revival\.omo\live-qa\m3-parser-map-20260710-1102\shots\01-login.png (650, 533)
+[11:06:58] login screen 644x484 -> do_login
+login geometry client=644x484 origin=(3,46)
+  shot E:\logh7-revival\.omo\live-qa\m3-parser-map-20260710-1102\shots\01-login-before.png (650, 533)
+  click ID client=(374,290) screen=(377,336)
+  click PW client=(376,318) screen=(379,364)
+  click LOGIN client=(352,347) screen=(355,393)
+  shot E:\logh7-revival\.omo\live-qa\m3-parser-map-20260710-1102\shots\02-after-login.png (1024, 768)
+[11:07:05] lobby-size reached at t+0s 1028x772 (splash may still show)
+[11:07:05] wait 9s for BOTHTEC splash to clear -> lobby menu
+[11:07:14] SNAP lobby: gamemode=-1 ring=-1 sel=-1 charCount=-1
+  shot E:\logh7-revival\.omo\live-qa\m3-parser-map-20260710-1102\shots\02-lobby.png (1028, 772)
+[11:07:14] click GAME_START client=(125, 191)
+[11:07:18] SNAP after-game-start: gamemode=-1 ring=-1 sel=-1 charCount=-1
+  shot E:\logh7-revival\.omo\live-qa\m3-parser-map-20260710-1102\shots\03-game-start.png (1028, 772)
+[11:07:18] click CHAR_CARD client=(657, 306)
+[11:07:20] SNAP after-char-card: gamemode=-1 ring=-1 sel=-1 charCount=-1
+  shot E:\logh7-revival\.omo\live-qa\m3-parser-map-20260710-1102\shots\04-char-card.png (1028, 772)
+[11:07:23] SNAP after-char-dbl: gamemode=0 ring=1 sel=16777216 charCount=1
+  shot E:\logh7-revival\.omo\live-qa\m3-parser-map-20260710-1102\shots\05-char-dbl.png (1028, 772)
+[11:07:23] === monitor world-load (45s) ===
+[11:07:23] SNAP mon+0s: gamemode=0 ring=1 sel=16777216 charCount=1
+[11:07:25] SNAP mon+2s: gamemode=0 ring=1 sel=16777216 charCount=1
+[11:07:28] SNAP mon+5s: gamemode=0 ring=1 sel=16777216 charCount=1
+[11:07:30] SNAP mon+7s: gamemode=0 ring=1 sel=16777216 charCount=1
+  shot E:\logh7-revival\.omo\live-qa\m3-parser-map-20260710-1102\shots\06-mon-7s.png (1028, 772)
+[11:07:33] SNAP mon+10s: gamemode=0 ring=1 sel=16777216 charCount=1
+[11:07:35] SNAP mon+12s: gamemode=0 ring=1 sel=16777216 charCount=1
+[11:07:38] SNAP mon+15s: gamemode=0 ring=1 sel=16777216 charCount=1
+  shot E:\logh7-revival\.omo\live-qa\m3-parser-map-20260710-1102\shots\07-mon-15s.png (1028, 772)
+[11:07:41] SNAP mon+17s: gamemode=0 ring=1 sel=16777216 charCount=1
+[11:07:43] SNAP mon+20s: gamemode=0 ring=1 sel=16777216 charCount=1
+[11:07:46] SNAP mon+22s: gamemode=0 ring=1 sel=16777216 charCount=1
+  shot E:\logh7-revival\.omo\live-qa\m3-parser-map-20260710-1102\shots\08-mon-22s.png (1028, 772)
+[11:07:48] SNAP mon+25s: gamemode=0 ring=1 sel=16777216 charCount=1
+[11:07:51] SNAP mon+27s: gamemode=0 ring=1 sel=16777216 charCount=1
+[11:07:53] SNAP mon+30s: gamemode=0 ring=1 sel=16777216 charCount=1
+  shot E:\logh7-revival\.omo\live-qa\m3-parser-map-20260710-1102\shots\09-mon-30s.png (1028, 772)
+[11:07:56] SNAP mon+32s: gamemode=0 ring=1 sel=16777216 charCount=1
+[11:07:58] SNAP mon+35s: gamemode=0 ring=1 sel=16777216 charCount=1
+[11:08:01] SNAP mon+37s: gamemode=0 ring=1 sel=16777216 charCount=1
+  shot E:\logh7-revival\.omo\live-qa\m3-parser-map-20260710-1102\shots\10-mon-37s.png (1028, 772)
+[11:08:03] SNAP mon+40s: gamemode=0 ring=1 sel=16777216 charCount=1
+[11:08:06] SNAP mon+42s: gamemode=0 ring=1 sel=16777216 charCount=1
+[11:08:08] SNAP final: gamemode=0 ring=1 sel=16777216 charCount=1
+  shot E:\logh7-revival\.omo\live-qa\m3-parser-map-20260710-1102\shots\99-final.png (1028, 772)
+[11:08:08] alive=True
+[11:08:08] dispatch total = 2
+[11:08:08] === SUMMARY ===
+[11:08:08] FUN_004c2a80 calls: 1
+[11:08:08]   load-enter arg0=1 gamemode=None ring=None sel=16777216 charCount=None
+[11:08:08] gamemode values seen: [-1, 0]
+[11:08:08] ring values seen: [-1, 1]
+[11:08:08] FINAL gamemode=0 ring=1 sel=16777216 charCount=1

@@ -1,6 +1,31 @@
 # LOGH VII 루프 상태
 
-## ⛔ M3 회귀: spot_owner 제거(-4 시프트)가 0x0323 dispatch를 죽임 → 되돌림 (2026-07-10)
+## ✅✅✅✅✅ M3 정본 0x0323 WIRE 레이아웃 확정(sentinel A/B): packed BIG-ENDIAN (2026-07-10)
+
+**sentinel A/B 실측(`.omo/live-qa/m3-parser-map-20260710-1102/PARSER-MAP.txt`)이 두 결함을 바이트 단위 확정.** 각 필드에 유니크 마커(0x51..0x5a) 심고 클라 struct 랜딩을 Frida로 실측(env-gate LOGH_M5_SENTINEL, 캡처 후 원복·27테스트 통과).
+
+- **결함 (A) 엔디안**: 0x0323 멀티바이트 필드는 **wire 상 BIG-ENDIAN**(network-order). 서버는 `writeUInt32LE/16LE` → 전 필드 바이트 역전. (msg32 code가 u16 BE인 것과 일관 — 이 레코드 전체가 network-order.)
+- **결함 (B) +4 packing drift**: 서버가 **struct(정렬) 레이아웃**을 wire로 방출. 클라가 struct 정렬용으로 삽입하는 **2바이트 pad ×2(struct 0x0e, 0x16)는 wire에 있으면 안 됨.** 이 4B가 return_base 이후 전 필드 +4 밀어 flagship(wire 0x24)이 name_len 자리로, spot_owner가 링크슬롯(struct 0x24)으로 감. **M4 회귀("flagship만 -4는 struct[0x24] 맞지만 name 깨짐")의 근본원인.**
+- **정본 0x0323 WIRE 레이아웃 (전부 BIG-ENDIAN, PACKED)**:
+  | wire off | 폭 | 필드 | →struct |
+  |---|---|---|---|
+  | 0x00 | u32 BE | id | 0x00 |
+  | 0x04 | u8×4 | power/camp/state/field07 | 0x04 |
+  | 0x08 | u32 BE | begin_session_age | 0x08 |
+  | 0x0c/0x0d | u8×2 | birthday month/day | 0x0c/0x0d |
+  | **0x0e** | u32 BE | fame | 0x10 (struct 0x0e-0f = 클라삽입 pad) |
+  | **0x12** | u16 BE | max_of_special | 0x14 (struct 0x16-17 = 클라삽입 pad) |
+  | **0x14** | u32 BE | return_base | 0x18 |
+  | **0x18** | u32 BE | spot | 0x1c |
+  | **0x1c** | u32 BE | spot_owner | 0x20 |
+  | **0x20** | u32 BE | **flagship (grid-unit id) LINK 앵커** | 0x24 |
+  | **0x24** | u8 | flagship_name_len | 0x28 |
+  | **0x26** | u16[13] BE | flagship_name | 0x2a |
+- **부수(중요)**: 클라 accept 경로가 **필드 값 범위 검증** — 극단값(0x24242424 등)이면 0x0323 프레임 통째 폐기(dispatch 0). in-range 값 필수.
+- **주의**: `logh7-info-records-wire.md`의 0x0323 표는 **struct(확장 후) 레이아웃**(FUN_00419300 덤퍼가 확장 struct walk)이라 wire와 offset 다름. **wire 정본은 위 표.**
+- **server-dev 수정**: buildInformationCharacterInner를 (1) 멀티바이트 전부 **BE**, (2) **packed**(0x0e·0x16 pad 제거): fame@0x0e, max_special@0x12, return_base@0x14, spot@0x18, spot_owner@0x1c, **flagship@0x20**, name_len@0x24, name@0x26. flagship=0x0325 unit id(≠0, in-range). 0x24 이후(strategy/parentage@struct0x80/ability@struct0x188/cards)도 packed-BE 재산정 — 본 실측은 flagship+name까지 확정, 이후는 re-analyst 디스어셈블 또는 추가 sentinel. 단 이후 필드 대부분 0이라 최소 월드로드엔 flagship+name 정합이 핵심.
+
+## ⛔ (원인규명됨) M3 회귀: spot_owner 제거만으론 부족 — packed-BE 전체 재작성 필요 (2026-07-10)
 
 - **회귀 확정**(`.omo/live-qa/m3-final-render-20260710-1040/` + 재현 `-b-1044`): spot_owner 제거 + flagship 이후 -4 시프트(커밋 d0d3c1c5) 상태에서 실클라가 **0x0323을 아예 dispatch 안 함**(FUN_004ba2b0 case 0x323 호출 0회, M4는 2회). char table 빈 채(ccnt=0) 월드로드 → NOW LOADING. **커밋 f1f7af3a로 되돌림**(flagship@0x24 = dispatch 작동 상태 복원, 211/211).
 - **원인(추정)**: 클라 world-ready 배치는 msg32 inner를 **코드별 고정크기로 순차 소비**(선두 u32=0, length 아님). 0x0323 레코드의 -4 재배치가 배치 이터레이터를 desync시켜 0x0323 코드에 못 닿게 함. flagship 슬롯 A/B(-4)는 맞았으나 **name 등 후속 필드의 실제 와이어 레이아웃이 균일 -4가 아님** → 전체 파싱 붕괴.

@@ -1,0 +1,73 @@
+0x0323 정본 wire 레이아웃 확정 — sentinel A/B 실측 (live-qa M5)
+세션: m3-parser-map-20260710-1102 (클라 inei00, char id=1 Reinhard/Lohengramm)
+프로브: tools/live/_frida_wire0323.js (disp0323 arg1 + FUN_004c2a80 char struct 덤프)
+방법: buildInformationCharacterInner 에 env-gate(LOGH_M5_SENTINEL) 로 body 각 필드에 유니크 마커
+      주입 → 클라 struct 의 어느 offset 으로 가는지 실측. 캡처 후 즉시 원복(git diff 0, 27 tests pass).
+
+[run A — 극단 sentinel(0x24242424 등)] → 클라가 0x0323 프레임 DROP (disp0323 0회, ccnt=0).
+  = 클라 accept 경로가 body 필드 값 범위를 검증하고 out-of-range 면 레코드 전체 폐기.
+[run B — 소형 in-range sentinel(0x51..0x5a)] → 정상 dispatch (disp0323 2회, ccnt=1). 아래 매핑 확정.
+
+[서버 송신 body(현행 struct-layout, LITTLE-ENDIAN)]  마커:
+  0x08=51(u32) 0x0c=52(u8) 0x0d=53(u8) 0x0e=54(u16) 0x10=55(u32) 0x14=56(u16) 0x16=57(u16)
+  0x18=58(u32) 0x1c=59(u32) 0x20=5a(u32)   [0x24 flagship=gridUnitId=1 은 미변조]
+
+[클라 char struct 첫 0x30 (FUN_004c2a80 load-enter, stride 0x2d4)]
+  0x00: 00 00 00 01   BE u32 = id=1
+  0x04: 02 00 00 00   power(u8)=2
+  0x08: 00 00 00 51   BE u32 = begin_session_age=0x51   ← 서버 body 0x08
+  0x0c: 52 53 00 00   bmonth=0x52 bday=0x53 (u8×2) + pad
+  0x10: 00 55 00 54   = native LE 저장된 BE u32 0x54005500  (서버 body 0x0e..0x11 을 BE로 읽음)
+  0x14: 00 00 00 00
+  0x18: 00 57 00 56   = BE u32 0x56005700  (서버 body 0x14..0x17 을 BE로 읽음)
+  0x1c: 00 00 00 58   BE u32 = return_base=0x58   ← 서버 body 0x18
+  0x20: 00 00 00 59   BE u32 = spot=0x59          ← 서버 body 0x1c
+  0x24: 00 00 00 5a   BE u32 = 0x5a  ← 서버 body 0x20(spot_owner). ★flagship 링크슬롯인데 spot_owner 안착
+  0x28: 01 00 00 00   flagship_name_len(u8)=1  ← 서버 body 0x24(flagship low byte). flagship 이 name_len 로 오소비
+
+[sentinel 랜딩표: 서버 body off → struct off (마커 바이트 위치)]
+  0x08→0x0b  0x0c→0x0c  0x0d→0x0d  0x0e→0x13  0x10→0x11  0x14→0x1b  0x16→0x19
+  0x18→0x1f  0x1c→0x23  0x20→0x27
+  = 이 산포는 "클라가 packed BIG-ENDIAN wire 를 읽어 aligned struct 로 확장"과 바이트 단위로 완전 일치.
+
+════════════════════════════════════════════════════════════════════════
+정본 0x0323 WIRE 레이아웃 (클라 case 0x323 파서가 실제로 읽는 것) — 전부 BIG-ENDIAN, PACKED
+════════════════════════════════════════════════════════════════════════
+ wire off | width | field                         | → struct off (RE doc)
+  0x00    | u32 BE| id                            | 0x00
+  0x04    | u8    | power                         | 0x04
+  0x05    | u8    | camp                          | 0x05
+  0x06    | u8    | state                         | 0x06
+  0x07    | u8    | field07                       | 0x07
+  0x08    | u32 BE| begin_session_age             | 0x08
+  0x0c    | u8    | birthday_month                | 0x0c
+  0x0d    | u8    | birthday_day                  | 0x0d
+  0x0e    | u32 BE| fame                          | 0x10  (struct 0x0e-0x0f = 클라삽입 align pad)
+  0x12    | u16 BE| max_of_special                | 0x14  (struct 0x16-0x17 = 클라삽입 align pad)
+  0x14    | u32 BE| return_base                   | 0x18
+  0x18    | u32 BE| spot                          | 0x1c
+  0x1c    | u32 BE| spot_owner                    | 0x20
+  0x20    | u32 BE| flagship (grid-unit id) LINK  | 0x24   ★
+  0x24    | u8    | flagship_name_len             | 0x28
+  0x26    | u16[13] BE| flagship_name             | 0x2a
+
+두 결함(독립):
+ (A) ENDIANNESS: 0x0323 body 멀티바이트 필드는 WIRE 상 BIG-ENDIAN. 서버는 writeUInt32LE/16LE 로
+     little-endian 송신 → 전 필드 바이트 역전. (id·begin_session_age·return_base·spot·spot_owner
+     모두 struct 에 BE로 안착 = 서버 LE 를 클라가 BE로 읽음.)
+ (B) +4 PACKING DRIFT: 서버가 struct(정렬) 레이아웃을 그대로 wire 로 방출 — 클라가 struct 정렬용으로
+     삽입하는 2바이트 pad ×2 (0x0e, 0x16)를 wire 에 넣지 말아야 한다. 이 4바이트 때문에 return_base
+     이후 전 필드가 +4 밀려 flagship(서버 body 0x24)이 struct 0x28(name_len)로, spot_owner 가 링크
+     슬롯 struct 0x24 로 감 → 링크 실패 + 이름 깨짐.
+
+server-dev 수정 지침 (buildInformationCharacterInner):
+ · 멀티바이트 전부 BE 로 재인코딩.
+ · packed 레이아웃: id@0x00, power/camp/state/field07@0x04-07, begin_session_age@0x08,
+   bmonth@0x0c, bday@0x0d, fame@0x0e, max_of_special@0x12, return_base@0x14, spot@0x18,
+   spot_owner@0x1c, flagship@0x20, flagship_name_len@0x24, flagship_name@0x26.
+ · 0x0e/0x16 pad 제거. flagship 이 wire 0x20 에 오면 struct 0x24 링크슬롯 안착.
+ · 0x24 이후(strategy@struct0x44, parentage@struct0x80, ability@struct0x188 …)도 동일 packed-BE 로
+   재산정 필요 — 본 실측은 flagship+name 까지 확정. 이후 구간은 추가 sentinel 또는 case 0x323 파서
+   디스어셈블(re-analyst)로 packed offset 확정 권장.
+
+증거: frida-events.jsonl(run B), frida-events-A-extreme.jsonl(run A drop), server-b.log, shots/
