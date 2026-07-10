@@ -210,49 +210,50 @@ export function buildSsGameLoginOkInner({ status = 1 } = {}) {
  *   0x188 ability_8(u16×8) / 0x1a8 influence / 0x1a9 stamina.
  * flagship_name/parentage(0x80 경로)·기타 표시필드는 최소 렌더엔 불필요 → 값 0(날조 금지). 총 0x2d4(724B).
  */
+const CHARACTER_NAME_MAX_UNITS = NAME_MAX; // parser cap `< 0xe` per name (lastname/firstname)
+
+function writeWireU32(buffer, value, offset, wireEndian) {
+  if (wireEndian === 'be') buffer.writeUInt32BE(value >>> 0, offset);
+  else buffer.writeUInt32LE(value >>> 0, offset);
+}
+
 export function buildInformationCharacterInner({
-  characterId = 1,
-  gridUnitId = 1,
-  power = 1,
-  camp = 0,
-  state = 0,
-  spot = 1,
-  spotOwner = 0,
-  fame = null,
-  pcp = null,
-  mcp = null,
-  money = null,
-  online = false,
-  influence = null,
-  stamina = null,
-  abilities = null,
-  officerCount = 0,
-  seatEntries = null,
-  // 표시(parentage) 필드 — 최소 렌더엔 불필요. 호출부 호환 위해 받되 방출 안 함(날조 금지).
-  lastname = null, firstname = null, face = null, rank = null, flagshipName = null,
+  characterId = 1, gridUnitId = 0, power = null, spot = null, spotOwner = null, abilities = null, online = false,
+  camp = null, state = null, fame = null, pcp = null, mcp = null, money = null, influence = null, stamina = null,
+  officerCount = null,
+  lastname = null, firstname = null, displayName = null, rank = null, title = null, face = null,
+  seatEntries = null, spotResolverBase = null, together = null,
+  // 정본 wireEndian = 'be' (옛 proven 렌더코드가 wireEndian:'be' 로 호출). 앵커/링크/seat = BE, 스탯 = LE.
+  wireEndian = 'be',
 } = {}) {
+  // 옛 proven 빌더(5bd249c buildInformationCharacterRecordInner) 바이트 충실 포팅 — 전 필드 복원.
+  // framing: buildMsg32Inner([u32 0][u16BE code][body]) == 옛 buildLobbyResponseInner 와 byte-identical.
   const body = Buffer.alloc(CODE_INFO_CHARACTER_BYTES);
-  // 앵커/링크 필드 = struct-aligned BIG-ENDIAN (옛 proven 렌더 경로 정본).
-  body.writeUInt32BE(characterId >>> 0, 0x00); // id ★self-match 앵커 (0x0204 self-id 와 동일 BE)
-  body.writeUInt8(power & 0xff, 0x04);         // power
-  body.writeUInt8(camp & 0xff, 0x05);          // camp
-  body.writeUInt8(state & 0xff, 0x06);         // state
-  if (Number.isInteger(fame)) body.writeUInt32LE(fame >>> 0, 0x10); // 표시 스탯 고정 LE
-  body.writeUInt32BE(spot >>> 0, 0x1c);        // spot BE
-  body.writeUInt32BE(spotOwner >>> 0, 0x20);   // spot_owner BE
-  body.writeUInt32BE(gridUnitId >>> 0, 0x24);  // flagship (grid-unit id) BE ★링크 앵커
-  if (Number.isInteger(pcp)) body.writeUInt32LE(pcp >>> 0, 0x50);
-  if (Number.isInteger(mcp)) body.writeUInt32LE(mcp >>> 0, 0x54);
-  if (online) body.writeUInt8(1, 0x64);
-  if (Number.isInteger(money)) body.writeUInt32LE(money >>> 0, 0x68);
+  const payload = body; // 옛 코드의 payload(=inner.subarray(6)) 역할
+  const writeRecordU16 = (value, offset) => payload.writeUInt16LE((value ?? 0) & 0xffff, offset);
+  const writeRecordU32 = (value, offset) => payload.writeUInt32LE((value ?? 0) >>> 0, offset);
+  // proven anchors (G164 world load): id@0x00, flagship/grid-unit id@0x24 (BE)
+  writeWireU32(payload, characterId, 0x00, wireEndian); // id ★self-match 앵커 (0x0204 self-id 와 동일 BE)
+  writeWireU32(payload, gridUnitId, 0x24, wireEndian);  // flagship (grid-unit id) ★char↔unit 링크 앵커
+  if (Number.isInteger(power)) payload.writeUInt8(power & 0xff, 0x04); // 陣営/faction id
+  if (Number.isInteger(camp)) payload.writeUInt8(camp & 0xff, 0x05);
+  if (Number.isInteger(state)) payload.writeUInt8(state & 0xff, 0x06);
+  if (Number.isInteger(fame)) writeRecordU32(fame, 0x10); // 표시 스탯 고정 LE
+  if (Number.isInteger(spot)) writeWireU32(payload, spot, 0x1c, wireEndian); // current system id
+  if (Number.isInteger(spotOwner)) writeWireU32(payload, spotOwner, 0x20, wireEndian);
+  if (Number.isInteger(pcp)) writeRecordU32(pcp, 0x50);
+  if (Number.isInteger(mcp)) writeRecordU32(mcp, 0x54);
+  if (online) payload.writeUInt8(1, 0x64);
+  if (Number.isInteger(money)) writeRecordU32(money, 0x68);
+  // ability_8 @0x188: 8 entries of {point u16, experience u16}, canonical order. point(스탯값)만 채움.
   if (Array.isArray(abilities)) {
     for (let i = 0; i < 8 && i < abilities.length; i += 1) {
-      body.writeUInt16LE((abilities[i] ?? 0) & 0xffff, 0x188 + i * 4);
+      writeRecordU16(abilities[i] ?? 0, 0x188 + i * 4);
     }
   }
-  if (Number.isInteger(influence)) body.writeUInt8(influence & 0xff, 0x1a8);
-  if (Number.isInteger(stamina)) body.writeUInt8(stamina & 0xff, 0x1a9);
-  // seat/card 배열 (BE): count u8 @0x24c, entries @0x254 stride 8 {character u32 BE @+0, role u32 BE @+4}, max 16.
+  if (Number.isInteger(influence)) payload.writeUInt8(influence & 0xff, 0x1a8);
+  if (Number.isInteger(stamina)) payload.writeUInt8(stamina & 0xff, 0x1a9); // 体力/stamina
+  // seat/card 배열: count u8 @0x24c, entries @0x254 stride 8 {character u32 @+0, role u32 @+4}, max 16.
   // FUN_004c2c80 이 record+0x24c 를 PLAYER_INFO+0x270 으로 복사 → C002 유닛리스트 행수. count 0 이면 렌더 안 됨.
   const resolvedSeatEntries = Array.isArray(seatEntries)
     ? seatEntries
@@ -260,32 +261,64 @@ export function buildInformationCharacterInner({
       ? Array.from({ length: Math.min(officerCount, 0x10) }, () => ({ character: characterId, role: 0 }))
       : []);
   const seatCount = Math.min(resolvedSeatEntries.length, 0x10);
-  body.writeUInt8(seatCount, 0x24c);
+  payload.writeUInt8(seatCount, 0x24c);
   for (let i = 0; i < seatCount; i += 1) {
     const entry = resolvedSeatEntries[i] ?? {};
-    const character = Number(entry.character ?? entry.characterId ?? entry.id ?? 0);
+    const character = Number(entry.character ?? entry.characterId ?? entry.cardId ?? entry.id ?? 0);
     const role = Number(entry.role ?? entry.seatRole ?? 0);
-    body.writeUInt32BE(Number.isInteger(character) ? character >>> 0 : 0, 0x254 + i * 8);
-    body.writeUInt32BE(Number.isInteger(role) ? role >>> 0 : 0, 0x258 + i * 8);
+    writeWireU32(payload, Number.isInteger(character) ? character : 0, 0x254 + i * 8, wireEndian);
+    writeWireU32(payload, Number.isInteger(role) ? role : 0, 0x258 + i * 8, wireEndian);
   }
+  // parentage[0] sub-record @0x80 (stride 0x84): names + rank + face at documented rel. offsets.
+  // 텍스트 필드는 항상 UCS-2/UTF-16LE (수치 앵커가 BE 여도 문자열은 LE). 옛 렌더 경로가
+  // lastname/firstname=''·face/rank=0 을 넘겨 이 블록을 방출했다 → 전 필드 복원의 핵심.
+  const P0 = 0x80;
+  const writePstr16 = (str, lenOff, charsOff) => {
+    const codes = [...String(str)].slice(0, CHARACTER_NAME_MAX_UNITS);
+    payload.writeUInt8(codes.length, lenOff);
+    for (let i = 0; i < codes.length; i += 1) {
+      payload.writeUInt16LE(codes[i].charCodeAt(0), charsOff + i * 2);
+    }
+  };
+  const resolvedDisplayName = displayName ?? (
+    lastname != null && firstname != null ? `${lastname} ${firstname}` : lastname ?? firstname
+  );
+  const hasParentage =
+    lastname != null ||
+    firstname != null ||
+    resolvedDisplayName != null ||
+    Number.isInteger(rank) ||
+    title != null ||
+    Number.isInteger(face);
+  if (hasParentage) {
+    payload.writeUInt8(1, 0x7d); // parentage_len: client skips the sub-record when this stays zero.
+    payload.writeUInt8(1, P0 + 0x00); // truth flag for parentage[0].
+  }
+  if (lastname != null) writePstr16(lastname, P0 + 0x01, P0 + 0x02); // lastname @0x81/0x82
+  if (firstname != null) writePstr16(firstname, P0 + 0x1c, P0 + 0x1e); // firstname @0x9c/0x9e
+  if (resolvedDisplayName != null) writePstr16(resolvedDisplayName, P0 + 0x38, P0 + 0x3a); // display_name @0xb8/0xba
+  if (Number.isInteger(rank)) writeRecordU16(rank, P0 + 0x56); // rank @0xd6
+  if (title != null && String(title).length > 0) writePstr16(String(title), P0 + 0x58, P0 + 0x5a); // titlename @0xd8/0xda
+  if (Number.isInteger(face)) writeRecordU32(face, P0 + 0x74); // face @0xf4
+  if (Number.isInteger(spotResolverBase)) writeRecordU32(spotResolverBase, P0 + 0x80); // source +0x100 -> PLAYER_INFO +0x120
+  if (Number.isInteger(together)) payload.writeUInt8(together & 0xff, 0x2d0); // together= (PLAYER_INFO+0x2f4)
   return buildMsg32Inner(CODE_INFO_CHARACTER, body);
 }
 
 // ─── 0x0325 ResponseInformationUnit (최소 count+id) ───────────────────────────
 
-export function buildInformationUnitInner({ unitId = 1, unitCount = 1, cell = 0, commander = 0 } = {}) {
+// 옛 proven 빌더(5bd249c buildInformationUnitRecordInner, fleets 미지정 minimal form) 바이트 충실 포팅.
+// 정본 minimal = count + unit[0].id 만 (commander/cell 미방출 — 옛 G164 world-load 경로가 그랬다).
+// cell/commander 파라미터는 호출부 호환 위해 받되 방출 안 함(옛 것과 byte-identical 유지).
+export function buildInformationUnitInner({ unitId = 1, unitCount = 1, cell = 0, commander = 0, wireEndian = 'be' } = {}) {
   const body = Buffer.alloc(CODE_INFO_UNIT_BYTES);
   const count = Math.max(0, Math.min(unitCount, 600));
-  // 정본 = BIG-ENDIAN. header [u16 count][u16 pad] @0x00, unit[0] @ payload+4 (stride 0x58).
+  // header [u16 count][u16 pad] @0x00, unit[0].id @ payload+HEADER(4) (stride 0x58).
   // count BE (1이 클라에서 1로 읽히게 — LE 는 256 팬텀). unit[0].id(+0x00)는 0x0323 flagship(+0x24)의
   // 링크 대상 — "동일 바이트값" 되려면 둘 다 BE.
-  body.writeUInt16BE(count, 0);
-  if (count > 0) {
-    const base = CODE_INFO_UNIT_HEADER;
-    body.writeUInt32BE(unitId >>> 0, base + 0x00);       // unit[0].id ★flagship 링크 대상
-    if (Number.isInteger(commander)) body.writeUInt32BE(commander >>> 0, base + 0x08);
-    if (Number.isInteger(cell)) body.writeUInt32BE(cell >>> 0, base + 0x0c);
-  }
+  if (wireEndian === 'be') body.writeUInt16BE(count, 0);
+  else body.writeUInt16LE(count, 0);
+  writeWireU32(body, unitId, CODE_INFO_UNIT_HEADER + 0x00, wireEndian); // unit[0].id ★flagship 링크 대상
   return buildMsg32Inner(CODE_INFO_UNIT, body);
 }
 

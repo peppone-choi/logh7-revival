@@ -43,6 +43,7 @@ import {
   readMsg32Code,
   msg32Body,
 } from '../src/server/logh7-world-records.mjs';
+import { buildInformationCharacterRecordInner } from './fixtures/logh7-old-character-record.mjs';
 
 test('0x0323 character record is message32 with 724B body and id/flagship anchors (aligned BE)', () => {
   // 정본 wire = struct-aligned BIG-ENDIAN (옛 렌더코드 5bd249c wireEndian:be + 라이브 실측). id@0x00 BE, flagship@0x24 BE.
@@ -525,6 +526,70 @@ test('isAdmissionRequestCode covers every static-info req (incl. 신규 0x0308/0
   assert.equal(isAdmissionRequestCode(0x030d), false);
   assert.equal(isAdmissionRequestCode(0x2009), false);
   assert.equal(isAdmissionRequestCode(0x7abc), false);
+});
+
+// ─── 옛 proven 빌더(5bd249c) 바이트 충실 포팅 대조 ─────────────────────────────
+//
+// 근거: 초기화 전 실제로 전략맵이 렌더됐던 옛 렌더 경로(5bd249c
+//   buildInformationCharacterRecordInner, tests/fixtures/logh7-old-character-record.mjs 로 verbatim 복원).
+//   현재 buildInformationCharacterInner 는 이 옛 빌더와 같은 입력에 대해 byte-identical 이어야 한다 —
+//   전 필드(fame/pcp/mcp/money/ability/influence/stamina/seat/parentage@0x80/together@0x2d0) 복원 잠금.
+//   내 sparse 재구현이 뺐던 parentage@0x80 블록과 together@0x2d0 를 되살렸는지 이 테스트가 증명한다.
+
+test('0x0323 new builder == old proven 5bd249c builder, byte-identical (all fields, both endians)', () => {
+  const inputs = [
+    // anchor-only (렌더 게이트 최소): 옛 default 그대로
+    { characterId: 7, gridUnitId: 42 },
+    // world-enter 렌더 경로 실입력: 빈 이름/0 face/0 rank → parentage@0x80 블록 방출됨
+    {
+      characterId: 42, gridUnitId: 7, power: 2, spot: 1, online: true,
+      lastname: '', firstname: '', face: 0, rank: 0, officerCount: 1,
+    },
+    // 전 필드 부하: 앵커/스탯/ability/seat/parentage(이름·작위·face)/together 전부
+    {
+      characterId: 0x11223344, gridUnitId: 0x0aabbccd, power: 0x2a, camp: 2, state: 5,
+      fame: 0x0badf00d, spot: 0x0000dead, spotOwner: 0x0000beef,
+      pcp: 0x1111, mcp: 0x2222, money: 0x33445566, online: true,
+      influence: 0x77, stamina: 0x66, abilities: [90, 85, 80, 75, 70, 65, 60, 55],
+      officerCount: 3, rank: 0x20, face: 3, together: 0x09,
+      lastname: 'Reinhard', firstname: 'Lohengramm', title: 'Kaiser',
+      spotResolverBase: 0x0c0ffee0,
+    },
+    // seatEntries 명시 경로 (officerCount 대신 배열)
+    {
+      characterId: 5, gridUnitId: 11,
+      seatEntries: [{ character: 5, role: 1 }, { character: 6, role: 2 }, { character: 7, role: 0 }],
+    },
+  ];
+  for (const args of inputs) {
+    for (const wireEndian of ['be', 'le']) {
+      const nu = msg32Body(buildInformationCharacterInner({ ...args, wireEndian }));
+      const old = buildInformationCharacterRecordInner({ ...args, wireEndian }).subarray(6);
+      assert.equal(nu.length, 0x2d4);
+      assert.equal(old.length, 0x2d4);
+      assert.deepEqual(
+        nu,
+        old,
+        `byte-identical mismatch (wireEndian=${wireEndian}, args=${JSON.stringify(args)})`,
+      );
+    }
+  }
+});
+
+test('0x0323 parentage@0x80 block restored (not sparse): render-path input emits truth flag + names', () => {
+  // sparse 재구현이 뺐던 parentage 블록 복원 검증. 옛 렌더 경로 입력(빈 이름·0 face/rank)이
+  // 0x7d/0x80 truth flag 와 display_name(" ")을 방출해야 한다.
+  const b = msg32Body(buildInformationCharacterInner({
+    characterId: 42, gridUnitId: 7, power: 2, spot: 1, online: true,
+    lastname: 'Reinhard', firstname: 'Lohengramm', face: 3, rank: 0x20,
+  }));
+  assert.equal(b.readUInt8(0x7d), 1, 'parentage_len flag @0x7d (client skips sub-record if 0)');
+  assert.equal(b.readUInt8(0x80), 1, 'parentage[0] truth flag @0x80');
+  assert.equal(b.readUInt8(0x81), 8, 'lastname len @0x81 = "Reinhard".length');
+  assert.equal(b.readUInt16LE(0x82), 'R'.charCodeAt(0), 'lastname[0] UCS-2 LE @0x82');
+  assert.equal(b.readUInt8(0x9c), 10, 'firstname len @0x9c = "Lohengramm".length');
+  assert.equal(b.readUInt16LE(0xd6), 0x20, 'rank u16 LE @0xd6');
+  assert.equal(b.readUInt32LE(0xf4), 3, 'face u32 LE @0xf4');
 });
 
 // ─── 0x0323 flagship -4 위치 실험(env-gate LOGH_FLAGSHIP_M4) 제거 ──────────────────
