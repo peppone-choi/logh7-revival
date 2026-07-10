@@ -13,6 +13,7 @@
 
 ## 소스 오브 트루스
 
+- **정통 클라이언트 EXE (단일 정본, 2026-07-10 확정):** `artifacts/logh7-install/…/exe/g7mtclient.exe` — **sha256 `9c97de2ae426f011680992d6c8d88b25488b5f51555ce5784aeef677f334bb51`**. 라이브 QA가 실제 구동하는 그 EXE. **모든 RE·라이브QA·exe-patch는 이 EXE 하나만 대상으로 한다.** 다른 사본(`g7mtclient-sjis.exe` 등)은 `artifacts/_exe-archive-nonCanonical/`로 격리 — RE/QA에 쓰지 말 것(과거 여러 사본 혼용이 엉뚱한 EXE 분석·패치 오프셋 오류를 유발). RE 시 이 EXE의 실바이트로 오프셋 검증 필수(Ghidra 디컴파일은 -sjis 기반이라 36바이트 패치 영역이 다를 수 있음).
 - `artifacts/logh7-cd/Logh7.bin|.cue` — https://archive.org/details/logh-7 CD 이미지 (md5 검증 완료: `bf87c6a8...`/`8784...`, gitignored — 없으면 재다운로드)
 - `docs/reference/*.pdf` — 공식 매뉴얼 5종 (게임 규칙의 근거)
 - `docs/logh7-requirements-current.md`, `docs/logh7-architecture-operations-current.md` — 이전 사이클 지식 베이스 (역사적 참고 — 코드 경로 언급은 리셋 전 기준이므로 신뢰하지 말 것)
