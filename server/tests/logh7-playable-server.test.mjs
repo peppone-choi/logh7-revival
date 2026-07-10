@@ -303,18 +303,18 @@ test('playable server boots twice and serves login+world+move sequence', async (
         assert.ok(k > iBeg && k < iEnd, `boot ${boot} refresh frame @${k} between begin/end`);
       }
     }
-    // ★정합(TCP 레벨, packed BE): 0x0323 flagship(body+0x20 BE) == 0x0325 unit[0].id(body+0x04 BE), count≥1.
+    // ★정합(TCP 레벨, aligned LE): 0x0323 flagship(body+0x24 LE) == 0x0325 unit[0].id(body+0x04 LE), count≥1.
     const decodeInnerBody = (fr) => {
       const dec = decryptBuffer(fr.body.subarray(4), expandChildCodecKey(DECIPHER_KEY, tables));
       return parse0030Body(dec).inner.subarray(6); // message32 body (skip [u32 0][u16 code])
     };
     const unitBody = decodeInnerBody(pushFrames.find((fr) => decodeInnerCode(fr) === 0x0325));
     const charBody = decodeInnerBody(pushFrames.find((fr) => decodeInnerCode(fr) === 0x0323));
-    assert.ok(unitBody.readUInt16BE(0x00) >= 1, `boot ${boot} 0x0325 count ≥ 1`);
+    assert.ok(unitBody.readUInt16LE(0x00) >= 1, `boot ${boot} 0x0325 count ≥ 1`);
     assert.equal(
-      charBody.readUInt32BE(0x20),
-      unitBody.readUInt32BE(0x04),
-      `boot ${boot} char flagship(+0x20 BE) must equal unit[0].id(+0x04 BE)`,
+      charBody.readUInt32LE(0x24),
+      unitBody.readUInt32LE(0x04),
+      `boot ${boot} char flagship(+0x24 LE) must equal unit[0].id(+0x04 LE)`,
     );
 
     // move 0x0b01 (push 완전 소진 후이므로 소켓은 move 응답만 남는다)

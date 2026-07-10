@@ -189,37 +189,39 @@ export function buildSsGameLoginOkInner({ status = 1 } = {}) {
 
 // ─── 0x0323 ResponseInformationCharacter (724B) ───────────────────────────────
 
-/** pstr16: [u8 len][u16BE ×len] UTF-16 BIG-ENDIAN (정본 0x0323 flagship_name 계열) */
-function writePstr16Be(payload, str, lenOff, charsOff) {
+/** pstr16: [u8 len][u16LE ×len] UTF-16 LITTLE-ENDIAN (정본 0x0323 flagship_name 계열) */
+function writePstr16Le(payload, str, lenOff, charsOff) {
   const codes = [...String(str ?? '')].slice(0, NAME_MAX);
   payload.writeUInt8(codes.length, lenOff);
   for (let i = 0; i < codes.length; i += 1) {
-    payload.writeUInt16BE(codes[i].charCodeAt(0) & 0xffff, charsOff + i * 2);
+    payload.writeUInt16LE(codes[i].charCodeAt(0) & 0xffff, charsOff + i * 2);
   }
 }
 
 /**
- * 0x0323 ResponseInformationCharacter (724B) — 정본 wire = PACKED BIG-ENDIAN.
+ * 0x0323 ResponseInformationCharacter (724B) — 정본 wire = struct-aligned LITTLE-ENDIAN.
  *
- * 근본원인(Frida sentinel A/B 확정, 재조사 불필요): 클라 case 0x0323 파서는 body 를
- * packed BIG-ENDIAN 으로 읽는다. 이전 struct-정렬 + little-endian 방출은 두 결함이 있었다:
- *   (A) 멀티바이트 전 필드가 BE 여야 하는데 LE 로 나가 바이트가 뒤집혔다.
- *   (B) 서버가 struct 정렬용 pad 2B×2(0x0e·0x16)를 wire 에 포함시켰다 — wire 는 packed 라
- *       pad 가 없다. 그래서 return_base 이후 모든 필드가 +4 drift 해 flagship 이 0x24 로 밀렸고
- *       링크(flagship==0x0325 unit[0].id)가 실패해 전략맵이 NOW LOADING 에서 정지했다.
+ * 근본원인(Frida wire 실측 + re-analyst decompile 2독립 증거, 재조사 불필요, docs/logh7-objtable-gate-re.md §3):
+ * 클라 case 0x0323 파서는 body 를 정렬 pad 가 있는 LITTLE-ENDIAN 으로 읽는다. 커밋 64e5fd21 의
+ * packed-BE 방출은 두 결함이 있었다:
+ *   (A) 멀티바이트 전 필드가 LE 여야 하는데 BE 로 나가 record[0](char id)이 0x0204 self-id(LE)와
+ *       바이트오더 불일치 → self-match(FUN_004c2a80: record[0]==clientBase+0x3584a0) 영구 실패
+ *       → 자기 캐릭을 objTable slot0 에 쓰는 mode-0 미호출 → 전략맵이 NOW LOADING 에서 정지.
+ *   (B) 정렬 pad 2B×2(0x0e·0x16)를 제거(packed)해 flagship 앵커가 0x24→0x20 으로 밀려
+ *       클라 실제 읽기(0x24)와 어긋났다.
  *
- * 정본 PACKED BE 레이아웃(pad 없음, 멀티바이트 전부 writeUInt*BE):
- *   0x00 u32 id / 0x04 u8 power / 0x05 u8 camp / 0x06 u8 state / 0x07 u8 field07(0)
- *   0x08 u32 begin_session_age / 0x0c u8 bday_month / 0x0d u8 bday_day
- *   0x0e u32 fame / 0x12 u16 max_of_special / 0x14 u32 return_base
- *   0x18 u32 spot / 0x1c u32 spot_owner
- *   0x20 u32 flagship(=gridUnitId=0x0325 unit[0].id) ★char↔unit 링크 앵커
- *   0x24 u8 flagship_name_len / 0x26 u16[13] flagship_name(UTF-16 BE)
- * 0x40 이후(strategy/parentage/ability/cards)는 전부 미승격 0 (packed BE 실오프셋 미확정 →
- * 날조 금지, 값 0). 총 크기 0x2d4(724B) 유지 — packed 로 앞이 4B 줄어 끝이 자연 0 패딩.
+ * 정본 aligned-LE 레이아웃(pad 있음, 멀티바이트 전부 writeUInt*LE):
+ *   0x00 u32 id ★self-match 앵커 / 0x04 u8 power / 0x05 u8 camp / 0x06 u8 state / 0x07 u8 field07(0)
+ *   0x08 u32 begin_session_age / 0x0c u8 bday_month / 0x0d u8 bday_day / 0x0e–0x0f PAD 2B
+ *   0x10 u32 fame / 0x14 u16 max_of_special / 0x16–0x17 PAD 2B / 0x18 u32 return_base
+ *   0x1c u32 spot / 0x20 u32 spot_owner
+ *   0x24 u32 flagship(=gridUnitId=0x0325 unit[0].id) ★char↔unit 링크 앵커
+ *   0x28 u8 flagship_name_len / 0x2a u16[13] flagship_name(UTF-16 LE)
+ * 0x40 이후(strategy/parentage/ability/cards)는 전부 미승격 0 (실오프셋 미확정 → 날조 금지, 값 0).
+ * 총 크기 0x2d4(724B) 유지.
  *
  * 참고: lastname/firstname/face/rank/abilities/online/officerCount 등 구 표시필드 인자는
- * 호출부 호환을 위해 받되(무시), 정본 BE 오프셋이 확정되기 전엔 방출하지 않는다.
+ * 호출부 호환을 위해 받되(무시), 정본 LE 오프셋이 확정되기 전엔 방출하지 않는다.
  */
 export function buildInformationCharacterInner({
   characterId = 1,
@@ -238,26 +240,28 @@ export function buildInformationCharacterInner({
   flagshipName = null,
 } = {}) {
   const body = Buffer.alloc(CODE_INFO_CHARACTER_BYTES);
-  // 정본 wire: PACKED BIG-ENDIAN (pad 없음). 멀티바이트 전부 writeUInt*BE.
-  body.writeUInt32BE(characterId >>> 0, 0x00); // id
+  // 정본 wire: struct-aligned LITTLE-ENDIAN (pad 있음). 멀티바이트 전부 writeUInt*LE.
+  body.writeUInt32LE(characterId >>> 0, 0x00); // id ★self-match 앵커 (0x0204 self-id 와 동일 LE)
   body.writeUInt8(power & 0xff, 0x04);         // power
   body.writeUInt8(camp & 0xff, 0x05);          // camp
   body.writeUInt8(state & 0xff, 0x06);         // state
   // 0x07 field07 = 0
-  body.writeUInt32BE(beginSessionAge >>> 0, 0x08); // begin_session_age
+  body.writeUInt32LE(beginSessionAge >>> 0, 0x08); // begin_session_age
   body.writeUInt8(birthdayMonth & 0xff, 0x0c);     // birthday_month
   body.writeUInt8(birthdayDay & 0xff, 0x0d);       // birthday_day
-  body.writeUInt32BE(fame >>> 0, 0x0e);            // fame (packed — 0x0e pad 없음)
-  body.writeUInt16BE(maxOfSpecial & 0xffff, 0x12); // max_of_special (u16, packed)
-  body.writeUInt32BE(returnBase >>> 0, 0x14);      // return_base (packed — 0x16 pad 없음)
-  body.writeUInt32BE(spot >>> 0, 0x18);            // spot
-  body.writeUInt32BE(spotOwner >>> 0, 0x1c);       // spot_owner
-  body.writeUInt32BE(gridUnitId >>> 0, 0x20);      // flagship (grid-unit id) ★링크 앵커
-  // 0x24 flagship_name_len / 0x26 flagship_name (UTF-16 BE ×13) — 표시용, 없으면 0
+  // 0x0e–0x0f: 정렬 pad 2B (0 유지)
+  body.writeUInt32LE(fame >>> 0, 0x10);            // fame
+  body.writeUInt16LE(maxOfSpecial & 0xffff, 0x14); // max_of_special (u16)
+  // 0x16–0x17: 정렬 pad 2B (0 유지)
+  body.writeUInt32LE(returnBase >>> 0, 0x18);      // return_base
+  body.writeUInt32LE(spot >>> 0, 0x1c);            // spot
+  body.writeUInt32LE(spotOwner >>> 0, 0x20);       // spot_owner
+  body.writeUInt32LE(gridUnitId >>> 0, 0x24);      // flagship (grid-unit id) ★링크 앵커
+  // 0x28 flagship_name_len / 0x2a flagship_name (UTF-16 LE ×13) — 표시용, 없으면 0
   if (flagshipName != null && String(flagshipName).length > 0) {
-    writePstr16Be(body, flagshipName, 0x24, 0x26);
+    writePstr16Le(body, flagshipName, 0x28, 0x2a);
   }
-  // 0x40 이후: 미승격 0 (정본 packed BE 오프셋 미확정 → 방출 안 함).
+  // 0x40 이후: 미승격 0 (정본 LE 오프셋 미확정 → 방출 안 함).
   return buildMsg32Inner(CODE_INFO_CHARACTER, body);
 }
 
@@ -266,15 +270,14 @@ export function buildInformationCharacterInner({
 export function buildInformationUnitInner({ unitId = 1, unitCount = 1, cell = 0, commander = 0 } = {}) {
   const body = Buffer.alloc(CODE_INFO_UNIT_BYTES);
   const count = Math.max(0, Math.min(unitCount, 600));
-  // 0x0325 도 0x0323 과 같은 info-record 파서 계열 → PACKED BIG-ENDIAN.
-  // count 를 BE 로 쓰지 않으면 클라가 count 를 뒤집어 읽어 팬텀 유닛을 순회한다(내부 정합).
-  // unit[0].id(+0x04)는 0x0323 flagship(+0x20)의 링크 대상 — "동일 바이트값" 되려면 둘 다 BE.
-  body.writeUInt16BE(count, 0);
+  // 0x0325 도 0x0323 과 같은 info-record 파서 계열 → struct-aligned LITTLE-ENDIAN.
+  // unit[0].id(+0x04)는 0x0323 flagship(+0x24)의 링크 대상 — "동일 바이트값" 되려면 둘 다 LE.
+  body.writeUInt16LE(count, 0);
   if (count > 0) {
     const base = CODE_INFO_UNIT_HEADER;
-    body.writeUInt32BE(unitId >>> 0, base + 0x00);       // unit[0].id ★flagship 링크 대상
-    if (Number.isInteger(commander)) body.writeUInt32BE(commander >>> 0, base + 0x08);
-    if (Number.isInteger(cell)) body.writeUInt32BE(cell >>> 0, base + 0x0c);
+    body.writeUInt32LE(unitId >>> 0, base + 0x00);       // unit[0].id ★flagship 링크 대상
+    if (Number.isInteger(commander)) body.writeUInt32LE(commander >>> 0, base + 0x08);
+    if (Number.isInteger(cell)) body.writeUInt32LE(cell >>> 0, base + 0x0c);
   }
   return buildMsg32Inner(CODE_INFO_UNIT, body);
 }
