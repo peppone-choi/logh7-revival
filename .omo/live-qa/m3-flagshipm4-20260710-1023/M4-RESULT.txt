@@ -1,0 +1,30 @@
+LOGH_FLAGSHIP_M4=1 결정적 실험 결과 — flagship -4 이동으로 클라 struct[0x24] 안착 여부
+세션: m3-flagshipm4-20260710-1023 (서버 PID 36316, 클라 inei00, char id=1 Reinhard/Lohengramm)
+서버 기동: LOGH_FLAGSHIP_M4=1 node tools/live/_m2_launch.mjs (env 정상 주입, 서버가 body[0x20]에 flagship, body[0x24]=0)
+프로브: tools/live/_frida_wire0323.js (10:05 M3 베이스라인과 동일 프로브 → apples-to-apples A/B)
+
+[핵심 A/B — 클라 char struct off24/off28 (disp0323 arg1, struct @ 0x54e4b10)]
+  M3 off(10:05 베이스라인):  struct[0x24]=0 (off24be=0)   struct[0x28]=1 (flagship이 +4 밀려 여기 안착) → 링크 슬롯 비어 링크 실패
+  M4 on(이번):              struct[0x24]=1 (off24be=1)   struct[0x28]=name  → flagship(unitId=1)이 링크 슬롯에 안착
+  => struct[0x24] 0→1 플립. 서버 flagship을 물리 -4(body 0x24→0x20) 이동시키니 클라 struct[0x24]에 정확히 안착.
+  => +4 어긋남 가설 [확정]. FUN_004c2a80이 flagship으로 읽는 슬롯(struct+0x24)에 unitId가 들어옴.
+
+[그러나 — 월드 렌더 실패]
+  NOW LOADING 미해제. 45s 모니터 전 구간 gamemode=0/ring=1 고정, 20개 스냅 전부 정지.
+  스크린샷 shots/06~10-mon-*.png, 99-final.png 전부 NOW LOADING(플래그십 일러스트) 화면. 전략맵/HUD 미렌더. 크래시 없음(alive=True).
+  FUN_004c2c80(objTable build): M4 2회(param2=1,1) / M3 3회(param2=1,1,0). M4가 오히려 적고 param2=0 미도달.
+
+[판정]
+  +4 flagship 드리프트: 확정. 그러나 flagship 슬롯만 -4 이동한 것으로는 월드 렌더 불가(필요조건이지 충분조건 아님).
+  근거: struct[0x24]는 고쳐졌으나 struct[0x28] 이후(name 등) 잔여 필드는 여전히 +4 밀림.
+  M4 struct 덤프의 name 바이트가 "796rd Lohengra…"로 깨짐 — 드리프트가 flagship 한 슬롯이 아니라
+  body 0x04~0x1c 구간의 필드폭 불일치에서 열려 전체 후속 필드를 오염시킴. flagship만 재배치하면
+  로더가 여전히 malformed char로 판단, objTable 완성/월드 빌드 실패 → NOW LOADING 지속.
+
+[정식 수정 방향 (re-analyst/wire-engineer)]
+  개별 필드 재배치(env-gate M4) 아님. 근본 = 0x0323 body 인코딩의 0x04~0x1c 구간 필드폭 정렬.
+  클라 파서가 이 구간에서 서버보다 4B 더 소비 → 이후 모든 필드 +4. 서버 인코더가 이 구간에
+  4바이트 필드 하나를 추가(또는 폭 확대)해 클라 파서와 스텝을 맞추면 flagship·name·그 뒤 필드가
+  일괄 정렬될 것. re-analyst: FUN_004c2a80 및 0x0323 파서(디스패치 0x4ba2b0 경유)에서 body 0x04~0x1c
+  각 필드의 실제 read 폭을 확정. 서버측: server/src/server/logh7-world-records.mjs 의
+  buildInformationCharacterInner / msg32Body 인코딩을 그 폭에 맞춰 수정.

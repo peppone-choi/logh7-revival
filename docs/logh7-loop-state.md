@@ -1,6 +1,20 @@
 # LOGH VII 루프 상태
 
-## ✅✅✅ M3 정본 파서 테이블 확정(raw asm): 0x0323 = 고정 LITTLE-ENDIAN, flagship@wire+0x24 (2026-07-10)
+## ✅✅✅✅ M3 +4 드리프트 A/B 확정: body 0x04~0x1c 여분 4B 필드가 전 후속필드 오염 (2026-07-10)
+
+**A/B 실험(`.omo/live-qa/m3-flagshipm4-20260710-1023/`)이 +4를 결정 확정.** LOGH_FLAGSHIP_M4 env-gate로 flagship 물리위치를 body[0x24]↔[0x20] 토글:
+| flagship 서버 위치 | 클라 struct[0x24] (FUN_004c2a80 링크슬롯) |
+|---|---|
+| body[0x24] (off) | **0** — 링크 실패 (flagship이 +4 밀려 struct[0x28]) |
+| body[0x20] (-4, on) | **1 = unitId** — 링크슬롯 정확 안착 |
+→ **+4 드리프트 확정.** 서버 flagship -4 이동 시 클라 struct[0x24] 0→1 플립.
+
+- **그러나 전략맵 미렌더(필요조건≠충분조건)**: flagship만 -4 옮기면 struct[0x24]는 고쳐지나 **struct[0x28] 이후 필드(이름 등) 여전히 +4 밀림**. M4 struct 덤프 이름이 `796rd Lohengra`로 깨짐 = 드리프트가 flagship 한 슬롯이 아니라 **body 0x04~0x1c 필드폭 불일치에서 열려 후속 전 필드 오염**. 로더는 malformed char로 objTable 완성/월드빌드 실패 → NOW LOADING 지속. (FUN_004c2c80은 호출되나 불충분.)
+- **정식 수정(확정, 정밀)**: env-gate 개별이동이 아니라 **0x0323 body 0x04~0x1c 구간에서 서버가 쓰는 여분 4B 제거/축소** → flagship·이름·후속 필드가 일괄 -4 정렬. **유력: spot_owner@0x20(값 0, 클라 와이어에 없는 여분 u32)** 또는 0x04~0x1c의 u32→u16 오기 필드. 제거하면 flagship이 자연히 wire[0x20]로, 이름이 wire[0x24]로 모두 정렬.
+- **다음 축**: (1) re-analyst가 클라 디스패처 case 0x323의 **wire-read 폭을 0x04~0x1c까지 바이트별로** 추출해 서버 대비 4B 여분 필드 특정(라이브 M4가 flagship=wire[0x20] 증명 → 실제 wire엔 0x20 spot_owner 없음이 유력). (2) server-dev가 그 필드 제거 후 flagship·후속 -4 일괄 정렬. (3) live-qa Frida A/B로 struct[0x24..0x28+] 전체 정렬·NOW LOADING 해제 검증.
+- **환경 주의**: Frida 파이썬은 `C:\Users\user\AppData\Local\Programs\Python\Python311\python.exe`에만 설치. 라이브런은 이 전체경로 사용.
+
+## (참조공간 혼동 정정) M3 정본 파서 테이블(raw asm): 0x0323 LE, flagship — wire vs 파싱struct 구분 필요 (2026-07-10)
 
 **실제 파서 = dispatcher case 0x323(`FUN_004ba2b0` @ 0x4ba574), raw asm이 전부 고정 LE native MOV 증명.** BE 가정 뒤집힘. `FUN_00419300`은 덤퍼(파서 아님, 0x4192d0 토글).
 
