@@ -175,7 +175,7 @@ test('handleWorldInner routes 0x0314 → single 0x0315 static-only (fixed 5004B 
   assert.equal(msg32Body(result.responses[0].inner).length, 0x138c);
 });
 
-test('handleWorldInner routes admission 0x0312 → 0x0313 (grid-type object table, count=0)', () => {
+test('handleWorldInner routes admission 0x0312 → 0x0313 (정본 갤럭시 팔레트, 성계 klass=3)', () => {
   const world = createWorldSession();
   world.seedPlayer({ connectionId: 1, characterId: 5, unitId: 8, inWorld: true });
   const req = Buffer.alloc(2);
@@ -183,12 +183,23 @@ test('handleWorldInner routes admission 0x0312 → 0x0313 (grid-type object tabl
   const result = world.handleWorldInner({ connectionId: 1, accountId: 'a', inner: req });
   assert.ok(result, '0x0312 must be routed');
   assert.equal(readMsg32Code(result.responses[0].inner), 0x0313);
-  // 문서(L178): 고정 5004B; payload[0]=count. 실 섹터그리드 타입(플라스마 폭풍/공간/항행불능) = count 3.
+  // 고정 5004B; payload[0]=count=max(value)+1. 정본 갤럭시 팔레트(터레인 0..2 + 성계 3..87).
   const body = msg32Body(result.responses[0].inner);
   assert.equal(body.length, 0x138c);
-  assert.equal(body.readUInt8(0), 3, 'real sector grid-type palette (0..2 terrain labels)');
-  // klass(byte @ 1+value*3 +1) 은 0(비클릭) — 팬텀 클릭 마커(klass 3) 금지.
-  assert.equal(body.readUInt8(1 + 0 * 3 + 1), 0, 'grid-type value 0 is non-clickable (klass 0)');
+  const count = body.readUInt8(0);
+  assert.ok(count > 3 && count < 0x65, `성계 포함 count(${count})>3 이고 <101`);
+  // 배경 value 0 = 항법불가(klass 0) — 팬텀 클릭 마커 금지.
+  assert.equal(body.readUInt8(1 + 0 * 3 + 1), 0, 'value 0 배경 = klass 0 비클릭');
+  // 空間 value 1 = 항법가능(klass 1).
+  assert.equal(body.readUInt8(1 + 1 * 3 + 1), 1, 'value 1 空間 = klass 1 항법가능');
+  // 첫 성계 value 3 = 클릭 마커(klass 3).
+  assert.equal(body.readUInt8(1 + 3 * 3 + 1), 3, 'value 3 성계 = klass 3 마커');
+  // klass=3 마커가 다수 존재해야(성계 배치 증명).
+  let markers = 0;
+  for (let v = 3; v < count; v += 1) {
+    if (body.readUInt8(1 + v * 3 + 1) === 3) markers += 1;
+  }
+  assert.ok(markers >= 80, `성계 마커 다수 배치 (실제 ${markers})`);
 });
 
 test('handleWorldInner admission works with message32-framed request too', () => {
@@ -600,7 +611,7 @@ function decodeStaticGrid(body) {
   return { w, h, cells };
 }
 
-test('handleWorldInner 0x0314 is static-only with player-fleet cell in 0x0315 (no push)', () => {
+test('handleWorldInner 0x0314 는 정본 갤럭시 셀(성계 마커 + 항법공간)을 0x0315 로 싣는다 (no push)', () => {
   // 월드-init 핸드셰이크 복원: 0x0314 는 static-info(0x0315)만 돌려준다. world-ready push/0x0f03 을
   // 여기 실으면 클라가 0x0f00→0x0f02 를 건너뛰고 NOW LOADING 에 정지한다. 스폰은 0x0f02 로 이동.
   const world = createWorldSession();
@@ -612,27 +623,30 @@ test('handleWorldInner 0x0314 is static-only with player-fleet cell in 0x0315 (n
   assert.equal(result.kind, 'admission');
   const codes = result.responses.map((r) => readMsg32Code(r.inner));
   assert.deepEqual(codes, [0x0315], '0x0314 = single static-info 0x0315 (no world-ready push, no 0x0f03)');
-  // ★그리드 cell 비어있지 않음: 플레이어 함대 cell(2588 → col 88,row 25)이 SPACE(1)로 배치.
   const gridBody = msg32Body(result.responses[0].inner);
   assert.equal(gridBody.length, 0x138c);
   const grid = decodeStaticGrid(gridBody);
   assert.equal(grid.cells.length, 5000, 'ΣrunLen == 100*50 (full coverage, no crash)');
-  assert.equal(grid.cells[2588], 1, 'player fleet cell placed = SPACE(1), not empty board');
-  assert.equal(grid.cells.filter((v) => v !== 0).length, 1, 'exactly one placed cell');
+  // 85개 성계 마커 셀(value≥3) + 다수 항법공간(value 1). 플레이어 스폰 cell 2588=ヴァルハラ 성계.
+  const markers = grid.cells.filter((v) => v >= 3).length;
+  assert.equal(markers, 85, '85개 성계 마커 셀 배치');
+  assert.ok(grid.cells.filter((v) => v === 1).length > 3000, '항법공간 셀 다수');
+  assert.notEqual(grid.cells[2588], 0, '플레이어 스폰 cell 항법가능(배경 0 아님)');
   assert.deepEqual(result.responses[0].targets, [1]);
   assert.equal(result.responses[0].isMsg32, true);
 });
 
-test('handleWorldInner 0x0314 without in-world player falls back to bare empty 0x0315 (no crash)', () => {
+test('handleWorldInner 0x0314 는 플레이어 없어도 갤럭시 마커를 싣는다 (성계는 플레이어 무관)', () => {
   const world = createWorldSession();
   const req = Buffer.alloc(2);
   req.writeUInt16BE(CODE_REQ_STATIC_GRID, 0);
   const result = world.handleWorldInner({ connectionId: 9, accountId: 'z', inner: req });
   assert.ok(result, '0x0314 still routed even without player');
   const codes = result.responses.map((r) => readMsg32Code(r.inner));
-  assert.deepEqual(codes, [0x0315], 'no player → bare reactive 0x0315 only');
+  assert.deepEqual(codes, [0x0315], 'no player → reactive 0x0315 only');
   const grid = decodeStaticGrid(msg32Body(result.responses[0].inner));
-  assert.equal(grid.cells.filter((v) => v !== 0).length, 0, 'empty board fallback');
+  assert.equal(grid.cells.length, 5000, 'Σrun 5000 불변식');
+  assert.equal(grid.cells.filter((v) => v >= 3).length, 85, '플레이어 없어도 85 성계 마커');
 });
 
 // ─── 정적정보 워크 전 요청 응답 커버리지 + wire 크기 정합 (NOW LOADING 게이트) ────

@@ -968,6 +968,11 @@ export function buildGridInitializeSpawnInners({
   rank = 0,
   abilities = null,
   officerCount = 0,
+  // 정본 갤럭시 배치(logh7-galaxy-placement). 주어지면 SPACE-only 폴백 대신 실 성계 팔레트/셀을
+  // 방출한다 — 스테이징→라이브 run-once 복사(FUN_004c5350) 전에 이 경로가 팔레트/셀을 재기록하므로
+  // 여기에 galaxy 데이터를 실어야 마커가 스테이징에 남는다(SPACE-only 면 galaxy 팔레트를 덮어씀).
+  paletteObjects = null,
+  staticCells = null,
 } = {}) {
   if (!Number.isInteger(characterId) || characterId <= 0) {
     throw new Error('buildGridInitializeSpawnInners: characterId required (no default id=1 / emperor trap)');
@@ -995,20 +1000,24 @@ export function buildGridInitializeSpawnInners({
     // seat count@0x24c 최소 1 (commander 자신 1행) — 0 이면 C002 유닛리스트 미렌더.
     officerCount: Math.max(1, officerCount),
   }));
-  // 4) grid extras: 0x0313 grid-type(SPACE 팔레트) → 0x0315 cell grid(플레이어 함대 cell = SPACE).
+  // 4) grid extras: 0x0313 grid-type(팔레트) → 0x0315 cell grid.
   //    grid-type 이 셀그리드보다 먼저여야 클라가 셀 value 를 palette index 로 해석한다.
-  //    옛 fleet-only 폴백: SPACE(=1, 항행 가능·마커 없음) 값 하나로 grid-type/cell 을 구성한다
-  //    (함대를 klass-3 마커로 박으면 가짜 성계 dot 로 오인 렌더 — 함대 렌더는 0x0325 가 담당).
+  //    galaxy 데이터가 있으면 실 성계 팔레트/셀(플레이어 함대 cell = SPACE 로 덮어 항행표식),
+  //    없으면 옛 fleet-only 폴백(SPACE=1 값 하나). 함대 렌더/선택은 0x0325 가 담당.
   const TERRAIN_SPACE = 1; // 空間(항행 가능 빈 공간). byte1(klass)=1 → 비-마커.
   const col = unitCell % STRATEGIC_GRID_W;
   const row = Math.floor(unitCell / STRATEGIC_GRID_W);
   inners.push(buildStaticInformationGridTypeInner({
-    objects: [{ value: TERRAIN_SPACE, contentId: TERRAIN_SPACE, klass: TERRAIN_SPACE, variant: 0 }],
+    objects: Array.isArray(paletteObjects) && paletteObjects.length
+      ? paletteObjects
+      : [{ value: TERRAIN_SPACE, contentId: TERRAIN_SPACE, klass: TERRAIN_SPACE, variant: 0 }],
   }));
   inners.push(buildStaticInformationGridInner({
     width: STRATEGIC_GRID_W,
     height: STRATEGIC_GRID_H,
-    cells: [{ col, row, value: TERRAIN_SPACE }],
+    cells: Array.isArray(staticCells) && staticCells.length
+      ? staticCells
+      : [{ col, row, value: TERRAIN_SPACE }],
   }));
   // 5) 0x0f03 GridInitialize_OK — 반드시 맨 마지막. 이게 gridInitialized 를 flip 해 렌더를 트리거한다.
   inners.push(buildGridInitOkInner({ status: 1 }));

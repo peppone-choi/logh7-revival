@@ -7,6 +7,8 @@ import {
 } from '../domain/entities.mjs';
 import { openDatabase, DEFAULT_DB_PATH } from '../infrastructure/persistence/Database.mjs';
 import { createUnitOfWork } from '../infrastructure/persistence/UnitOfWork.mjs';
+import { loadWorldSeed, DEFAULT_SEED_DIR } from '../infrastructure/persistence/WorldSeedLoader.mjs';
+import { createWorldCatalog } from '../infrastructure/persistence/WorldCatalog.mjs';
 import { createCommandBus, createQueryBus } from './bus.mjs';
 import { registerGameHandlers } from './handlers.mjs';
 
@@ -14,8 +16,17 @@ import { registerGameHandlers } from './handlers.mjs';
  * 게임 서버 애플리케이션 컨텍스트.
  * Presentation 은 이 객체에 커맨드/쿼리만 위임한다.
  */
-export function createGameApplication({ dbPath = DEFAULT_DB_PATH } = {}) {
+export function createGameApplication({
+  dbPath = DEFAULT_DB_PATH,
+  seedDir = DEFAULT_SEED_DIR,
+  seed = true,
+} = {}) {
   const connection = openDatabase({ dbPath });
+  const worldCatalog = createWorldCatalog(connection);
+  // 부팅 시 정적 세계 적재 (멱등 — 재부팅해도 중복 없음). seed:false 로 비활성.
+  if (seed) {
+    loadWorldSeed({ connection, seedDir });
+  }
   const commandBus = createCommandBus();
   const queryBus = createQueryBus();
   registerGameHandlers({ commandBus, queryBus });
@@ -30,11 +41,11 @@ export function createGameApplication({ dbPath = DEFAULT_DB_PATH } = {}) {
   }
 
   async function dispatchCommand(command) {
-    return withUnitOfWork((uow, db) => commandBus.execute(command, { uow, db }));
+    return withUnitOfWork((uow, db) => commandBus.execute(command, { uow, db, worldCatalog }));
   }
 
   async function dispatchQuery(query) {
-    return withUnitOfWork((uow, db) => queryBus.execute(query, { uow, db }));
+    return withUnitOfWork((uow, db) => queryBus.execute(query, { uow, db, worldCatalog }));
   }
 
   /**
@@ -132,6 +143,7 @@ export function createGameApplication({ dbPath = DEFAULT_DB_PATH } = {}) {
 
   return {
     connection,
+    worldCatalog,
     dbPath: connection.path,
     commandBus,
     queryBus,

@@ -54,6 +54,119 @@ CREATE TABLE IF NOT EXISTS domain_events (
   payload_json TEXT NOT NULL,
   created_at INTEGER NOT NULL
 );
+
+-- ── 정적 세계 참조 카탈로그 (읽기 전용 시드; 플레이어 상태와 분리) ──────────
+-- 시드 소스: server/data/seed/*.json (extract-miner 정본). WorldSeedLoader 가 멱등 적재.
+CREATE TABLE IF NOT EXISTS galaxy_systems (
+  system_name TEXT PRIMARY KEY,
+  faction TEXT,
+  is_corridor INTEGER NOT NULL DEFAULT 0,
+  canon_col INTEGER,
+  canon_row INTEGER,
+  cell INTEGER,
+  canon_game_col INTEGER,
+  canon_game_row INTEGER,
+  spectral_class TEXT,
+  planets_json TEXT,
+  fortresses_json TEXT
+);
+CREATE INDEX IF NOT EXISTS idx_galaxy_cell ON galaxy_systems(cell);
+
+CREATE TABLE IF NOT EXISTS ships (
+  ship_key TEXT PRIMARY KEY,
+  name TEXT,
+  side TEXT,
+  ship_class TEXT,
+  pools_json TEXT
+);
+
+CREATE TABLE IF NOT EXISTS fortresses (
+  id TEXT PRIMARY KEY,
+  name_ja TEXT,
+  name_ko TEXT,
+  name_en TEXT,
+  system TEXT,
+  faction TEXT,
+  cannon_name TEXT,
+  cannon_power INTEGER,
+  armor INTEGER,
+  antiaircraft INTEGER,
+  stamina INTEGER,
+  defense_outfit INTEGER,
+  garrison_capacity INTEGER,
+  data_json TEXT
+);
+
+CREATE TABLE IF NOT EXISTS factions (
+  id TEXT PRIMARY KEY,
+  power_id INTEGER,
+  name_ja TEXT,
+  name_ko TEXT,
+  name_en TEXT,
+  color_rgb_json TEXT,
+  dynasty TEXT,
+  flags_json TEXT,
+  note TEXT
+);
+
+CREATE TABLE IF NOT EXISTS rank_table (
+  code INTEGER PRIMARY KEY,
+  ja TEXT,
+  ko TEXT,
+  tier TEXT,
+  confidence TEXT
+);
+
+CREATE TABLE IF NOT EXISTS abilities (
+  order_index INTEGER PRIMARY KEY,
+  ability_key TEXT NOT NULL,
+  ja TEXT,
+  ko TEXT
+);
+
+-- 시나리오 시작 배치 (제국12 + 동맹12). cell 은 galaxy_systems 와 공유 소스.
+CREATE TABLE IF NOT EXISTS initial_deployment (
+  faction TEXT NOT NULL,
+  unit INTEGER NOT NULL,
+  system TEXT,
+  planet TEXT,
+  cell INTEGER,
+  PRIMARY KEY (faction, unit)
+);
+
+-- NPC 정의(캐논 99 + 외부 작성 무명 슬롯). id 로 캐논/외부 범위 분리(캐논=slug, 외부=npc-*).
+-- source 로 출처 구분: 'canon'(server/data/seed/characters.json) | 'external'(npc-characters.json).
+CREATE TABLE IF NOT EXISTS canon_characters (
+  id TEXT PRIMARY KEY,
+  source TEXT NOT NULL DEFAULT 'canon',
+  faction TEXT,
+  power_id INTEGER,
+  kind TEXT,
+  sex INTEGER,
+  name_ja TEXT,
+  name_romaji TEXT,
+  name_kr TEXT,
+  lastname TEXT,
+  firstname TEXT,
+  rank_code INTEGER,
+  post TEXT,
+  face INTEGER,
+  ability8_json TEXT,
+  unit INTEGER,
+  flagship TEXT,
+  data_json TEXT
+);
+CREATE INDEX IF NOT EXISTS idx_canon_characters_source ON canon_characters(source);
+
+-- 시드 provenance/멱등 추적 (정본 출처·생성시각·행수 보존)
+CREATE TABLE IF NOT EXISTS seed_provenance (
+  catalog TEXT PRIMARY KEY,
+  source_file TEXT,
+  provenance TEXT,
+  generated_at TEXT,
+  row_count INTEGER,
+  loaded_at INTEGER
+);
 `;
 
 /**
@@ -66,9 +179,15 @@ export function openDatabase({ dbPath = DEFAULT_DB_PATH } = {}) {
   db.exec('PRAGMA journal_mode = WAL;');
   db.exec('PRAGMA foreign_keys = ON;');
   db.exec(MIGRATIONS);
+  // 기존 DB 보정: canon_characters.source 컬럼이 없으면 추가 (구 스키마 → NPC 수용).
+  const canonCols = db.prepare("PRAGMA table_info('canon_characters')").all();
+  if (canonCols.length > 0 && !canonCols.some((c) => c.name === 'source')) {
+    db.exec("ALTER TABLE canon_characters ADD COLUMN source TEXT NOT NULL DEFAULT 'canon'");
+    db.exec('CREATE INDEX IF NOT EXISTS idx_canon_characters_source ON canon_characters(source)');
+  }
   const row = db.prepare('SELECT COUNT(*) AS c FROM schema_version').get();
   if (!row || row.c === 0) {
-    db.prepare('INSERT INTO schema_version(version) VALUES (?)').run(1);
+    db.prepare('INSERT INTO schema_version(version) VALUES (?)').run(2);
   }
   return {
     db,

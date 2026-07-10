@@ -133,6 +133,15 @@ export function registerGameHandlers({ commandBus, queryBus }) {
     return { character: c ? { ...c } : null };
   });
 
+  // ── 정적 세계 카탈로그 쿼리 (시드된 참조 테이블) ─────────────────────────
+  queryBus.register('GetGalaxySystems', (_q, { worldCatalog }) => {
+    return { systems: worldCatalog.getGalaxySystems() };
+  });
+
+  queryBus.register('GetInitialDeployment', (_q, { worldCatalog }) => {
+    return { deployment: worldCatalog.getInitialDeployment() };
+  });
+
   queryBus.register('GetFleetAtCell', (q, { uow, db }) => {
     // 읽기 모델: world_fleet 테이블
     const rows = db.prepare(

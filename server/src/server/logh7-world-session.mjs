@@ -19,10 +19,16 @@ import {
   buildAdmissionResponseInner,
   buildGridInitializeSpawnInners,
   buildStaticInformationGridInner,
+  buildStaticInformationGridTypeInner,
   readMsg32Code,
   CODE_REQ_STATIC_GRID,
+  CODE_REQ_STATIC_GRID_TYPE,
   CODE_REQ_GRID_INIT,
 } from './logh7-world-records.mjs';
+import {
+  getStrategicGridCells,
+  getStrategicPaletteObjects,
+} from './logh7-galaxy-placement.mjs';
 
 /**
  * @typedef {{
@@ -366,11 +372,26 @@ export function createWorldSession({
     //   klass=0 비-마커 terrain — 클라가 앞선 0x0312→0x0313(DEFAULT_SECTOR_GRID_TYPES)에서 이미 받은
     //   팔레트 index 라 별도 팔레트 방출 없이 해석된다(팬텀 성계 dot 없음). 함대 렌더/선택은 0x0325 가
     //   담당하고 cell 은 항행가능 표식일 뿐. 플레이어 없으면 빈 보드 폴백(크래시 방지).
+    // 0x0312(RequestStaticInformationGridType) → 0x0313: 정본 갤럭시 팔레트(터레인3 + 성계85 klass=3).
+    //   기존 DEFAULT_SECTOR_GRID_TYPES(터레인 3종, 마커 0) 대신 실 성계 오브젝트 테이블을 싣는다.
+    //   run-once 스테이징 복사(FUN_004c5350) 전에 이 팔레트가 resident 여야 셀값→마커 해석이 성립.
+    if (code === CODE_REQ_STATIC_GRID_TYPE) {
+      const typeResp = buildStaticInformationGridTypeInner({ objects: getStrategicPaletteObjects() });
+      return {
+        kind: 'admission',
+        reqCode: code,
+        respCode: readMsg32Code(typeResp),
+        responses: [{ targets: [connectionId], inner: typeResp, isMsg32: true }],
+      };
+    }
+
     if (code === CODE_REQ_STATIC_GRID) {
       const player = players.get(connectionId);
-      const cells = (player && player.unitId > 0 && player.characterId > 0)
-        ? [{ cell: player.cell, value: 1 }] // TERRAIN SPACE=1 (klass=0 비-마커)
+      // 정본 갤럭시 셀(항법공간 + 성계 마커) + 플레이어 함대 cell(SPACE=1, 항행표식).
+      const extra = (player && player.unitId > 0 && player.characterId > 0)
+        ? [{ cell: player.cell, value: 1 }] // TERRAIN SPACE=1 (klass=1 비-마커)
         : [];
+      const cells = getStrategicGridCells(extra);
       const gridResp = buildStaticInformationGridInner({ cells });
       return {
         kind: 'admission',
@@ -403,6 +424,9 @@ export function createWorldSession({
           face: Number.isInteger(player.face) ? player.face : 0,
           rank: Number.isInteger(player.rank) ? player.rank : 0,
           officerCount: Number.isInteger(player.officerCount) ? player.officerCount : 0,
+          // 정본 갤럭시 팔레트/셀 — 스폰 경로가 SPACE-only 로 스테이징을 덮어 마커를 지우지 않게 한다.
+          paletteObjects: getStrategicPaletteObjects(),
+          staticCells: getStrategicGridCells([{ cell: player.cell, value: 1 }]),
         });
         logEvent('grid-init-spawn', connectionId, { codes: listWorldEntryCodes(spawnInners) });
         return {
