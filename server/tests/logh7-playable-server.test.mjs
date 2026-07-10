@@ -279,21 +279,41 @@ test('playable server boots twice and serves login+world+move sequence', async (
       }
     };
 
-    // 0x0314 RequestStaticInformationGrid → world-ready push 버스트(2cc17beb 복원):
-    //   0x0315(플레이어 함대 cell) → 0x0b09(begin) → 0x0325 → 0x0323 → 0x0b0a(end) → 0x0f03(맨 마지막).
-    //   직전 0x0f01 world-init reset 이 char count 를 0 으로 지웠으므로 여기서 0x0323 을 재전송해
-    //   count 를 1 로 복구하고, 0x0f03 이 gridInitialized 를 flip 해 렌더를 트리거한다. 0x0325(~58KB)
-    //   대용량 버스트라 여러 TCP 청크로 쪼개지므로 단일 파서로 0x0f03(버스트 종료)까지 수집한다.
-    //   (e5d825e8 이 이 push 를 0x0f02 로 옮겨 0x0314 가 bare 0x0315 만 돌려주자 클라가 0x0f02 를
-    //    안 보내고 정지했다 — 회귀. push 를 0x0314 로 되돌린다.)
+    const decodeInnerBody = (fr) => {
+      const dec = decryptBuffer(fr.body.subarray(4), expandChildCodecKey(DECIPHER_KEY, tables));
+      return parse0030Body(dec).inner.subarray(6); // message32 body (skip [u32 0][u16 code])
+    };
+
+    // 0x0314 RequestStaticInformationGrid → static-info(0x0315)만. world-ready push/0x0f03 없음.
+    //   ★월드-init 핸드셰이크 복원: 0x0314 에 0x0f03 을 실으면 클라가 0x0f00→0x0f02 를 건너뛰고
+    //   NOW LOADING 에 정지한다. 스폰은 클라가 스스로 밟는 0x0f02 로 이동(아래).
+    //   reactive 0x0315 는 플레이어 함대 cell 한 칸을 SPACE 로 채운다(빈 보드 아님).
     const gridReq = Buffer.alloc(2);
     gridReq.writeUInt16BE(0x0314, 0);
     socket.write(build0030Transport({ phase1Key, id: reactiveId, inner: gridReq, tables }));
     reactiveId += 1;
+    const [gridFrame] = await readFrames(socket, 1, 4000);
+    assert.equal(decodeInnerCode(gridFrame), 0x0315, `boot ${boot} 0x0314 → single static-info 0x0315`);
+    const staticGridBody = decodeInnerBody(gridFrame);
+    assert.equal(staticGridBody.length, 0x138c, `boot ${boot} 0x0315 fixed 5004B`);
+    let staticPlaced = 0;
+    for (let off = 4, rEnd = 4 + staticGridBody.readUInt16LE(2); off + 1 < rEnd; off += 2) {
+      if (staticGridBody.readUInt8(off + 1) !== 0) staticPlaced += staticGridBody.readUInt8(off);
+    }
+    assert.ok(staticPlaced >= 1, `boot ${boot} 0x0314 0x0315 must place ≥1 player fleet cell (not empty board)`);
+
+    // 0x0f02 RequestGridInitialize → 스폰 버스트(G164): [0x0204 + 0x0325 + 0x0323] → grid extras
+    //   (0x0313 + 0x0315) → 0x0f03(맨 마지막). 직전 0x0f01 world-init reset 이 char count 를 0 으로
+    //   지웠으므로 0x0323 을 재전송해 count 를 1 로 복구하고, 0x0f03 이 gridInitialized 를 flip 해 렌더를
+    //   트리거한다. 0x0325(~58KB) 대용량 버스트라 단일 파서로 0x0f03(버스트 종료)까지 수집한다.
+    const gridInitReq = Buffer.alloc(2);
+    gridInitReq.writeUInt16BE(0x0f02, 0);
+    socket.write(build0030Transport({ phase1Key, id: reactiveId, inner: gridInitReq, tables }));
+    reactiveId += 1;
     const pushFrames = await collectUntilCode(0x0f03, 10000);
     const pushCodes = pushFrames.map(decodeInnerCode);
-    // 순서: 0x0315(선두) → … → 0x0325 → 0x0323 → … → 0x0f03(맨 마지막, 각 1회).
-    assert.equal(pushCodes[0], 0x0315, `boot ${boot} 0x0314 push must start with reactive 0x0315`);
+    // 순서: 0x0204(선두) → 0x0325 → 0x0323 → … → 0x0f03(맨 마지막, 각 1회).
+    assert.equal(pushCodes[0], 0x0204, `boot ${boot} 0x0f02 spawn burst must start with 0x0204`);
     assert.equal(pushCodes[pushCodes.length - 1], 0x0f03, `boot ${boot} 0x0f03 must be LAST`);
     assert.equal(pushCodes.filter((c) => c === 0x0f03).length, 1, `boot ${boot} 0x0f03 exactly once`);
     assert.equal(pushCodes.filter((c) => c === 0x0325).length, 1, `boot ${boot} 0x0325 exactly once`);
@@ -303,18 +323,6 @@ test('playable server boots twice and serves login+world+move sequence', async (
       pushCodes.indexOf(0x0325) < pushCodes.indexOf(0x0323),
       `boot ${boot} 0x0325 must precede 0x0323`,
     );
-    const decodeInnerBody = (fr) => {
-      const dec = decryptBuffer(fr.body.subarray(4), expandChildCodecKey(DECIPHER_KEY, tables));
-      return parse0030Body(dec).inner.subarray(6); // message32 body (skip [u32 0][u16 code])
-    };
-    // ★그리드 cell 비어있지 않음(TCP 레벨): 0x0315 고정 5004B, RLE 에 non-zero cell(플레이어 함대) 존재.
-    const gridBody = decodeInnerBody(pushFrames.find((fr) => decodeInnerCode(fr) === 0x0315));
-    assert.equal(gridBody.length, 0x138c, `boot ${boot} 0x0315 fixed 5004B`);
-    let placedCells = 0;
-    for (let off = 4, rEnd = 4 + gridBody.readUInt16LE(2); off + 1 < rEnd; off += 2) {
-      if (gridBody.readUInt8(off + 1) !== 0) placedCells += gridBody.readUInt8(off);
-    }
-    assert.ok(placedCells >= 1, `boot ${boot} 0x0315 must place ≥1 player fleet cell (not empty board)`);
     // ★정합(TCP 레벨, aligned BE): 0x0323 flagship(body+0x24 BE) == 0x0325 unit[0].id(body+0x04 BE), count≥1.
     const unitBody = decodeInnerBody(pushFrames.find((fr) => decodeInnerCode(fr) === 0x0325));
     const charBody = decodeInnerBody(pushFrames.find((fr) => decodeInnerCode(fr) === 0x0323));
@@ -324,14 +332,6 @@ test('playable server boots twice and serves login+world+move sequence', async (
       unitBody.readUInt32BE(0x04),
       `boot ${boot} char flagship(+0x24 BE) must equal unit[0].id(+0x04 BE)`,
     );
-
-    // 0x0f02 RequestGridInitialize → plain 0x0f03 (스폰 push 는 0x0314 로 복원 — 이동 되돌림).
-    const gridInitReq = Buffer.alloc(2);
-    gridInitReq.writeUInt16BE(0x0f02, 0);
-    socket.write(build0030Transport({ phase1Key, id: reactiveId, inner: gridInitReq, tables }));
-    reactiveId += 1;
-    const [gridInitFrame] = await readFrames(socket, 1, 4000);
-    assert.equal(decodeInnerCode(gridInitFrame), 0x0f03, `boot ${boot} 0x0f02 → plain 0x0f03`);
 
     // move 0x0b01 (push 완전 소진 후이므로 소켓은 move 응답만 남는다)
     const player = server.worldSession.getPlayer(1);

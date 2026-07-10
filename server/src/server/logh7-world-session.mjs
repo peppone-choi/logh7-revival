@@ -17,10 +17,11 @@ import {
   CODE_SS_GAME_LOGIN_REQ,
   listWorldEntryCodes,
   buildAdmissionResponseInner,
-  buildWorldReadyPushInners,
+  buildGridInitializeSpawnInners,
   buildStaticInformationGridInner,
   readMsg32Code,
   CODE_REQ_STATIC_GRID,
+  CODE_REQ_GRID_INIT,
 } from './logh7-world-records.mjs';
 
 /**
@@ -46,6 +47,10 @@ export function createWorldSession({
 } = {}) {
   /** @type {Map<number, WorldPlayer>} */
   const players = new Map();
+  // 0x0f02(RequestGridInitialize)에 스폰 버스트를 첫 요청에만 주입하기 위한 게이트.
+  // 두 번째 이후 0x0f02 는 plain 0x0f03 ack 만 돌려준다(중복 스폰 방지).
+  /** @type {Set<number>} */
+  const gridInitSpawned = new Set();
   /** @type {Array<{seq:number, type:string, from:number, payload:object}>} */
   const eventLog = [];
   let seq = 0;
@@ -350,31 +355,47 @@ export function createWorldSession({
       };
     }
 
-    // 0x0314(RequestStaticInformationGrid) 처리: reactive 0x0315(플레이어 함대 cell 배치) + world-ready push.
+    // 0x0314(RequestStaticInformationGrid) 처리: static-info(0x0315 그리드)만 돌려준다.
     //
-    // 근거: 2cc17beb proven 상태 복원 — 클라가 0x0f02 도달·mode-0 발화·objTable slot0 채움까지 진행한 최선.
-    //   e5d825e8 이 이 push 를 0x0f02(G164)로 **이동**한 게 회귀였다(0x0314 가 bare 0x0315 만 돌려주면
-    //   0x0f03 이 안 실려 클라가 0x0f02 를 아예 안 보내고 정지). push 를 0x0314 로 되돌려 진행을 복원한다.
-    // 클라 0x0314 직후(=0x0315 송신 직후) 계약 순서(render-contract L102)로 push:
-    //   0x0b09(begin) → 0x0325(유닛) + 0x0323(캐릭터 refresh) → 0x0b0a(end) → 0x0f03.
-    // 계약 핵심: 0x0325/0x0323 refresh 는 begin/end **사이**, 0x0f03 은 그 뒤(조기 push 크래시).
+    // ★핵심(월드-init 핸드셰이크 복원): 0x0314 에 world-ready push/0x0f03 을 조기 전송하지 않는다.
+    //   0x0f03 을 여기서 실으면 클라가 0x0f00→0x0f01→0x0f02→0x0f03 월드-init 핸드셰이크를 건너뛰고
+    //   NOW LOADING 에 정지한다(라이브: 클라 수신 0x0304/0x0306/0x0314 후 무요청 정지). 0x0314 는
+    //   static-info walk 의 reactive 응답일 뿐 — 스폰은 클라가 스스로 밟는 0x0f02 에 주입한다.
     //
-    // ★그리드 셀 배치(2cc17beb 대비 추가): reactive 0x0315 를 빈 보드가 아니라 플레이어 함대 cell 로 채운다.
-    //   value=1 空間(SPACE)은 klass=0 비-마커 terrain — 클라가 앞선 0x0312→0x0313(DEFAULT_SECTOR_GRID_TYPES)
-    //   에서 이미 받은 팔레트 index 라 별도 팔레트 방출 없이 해석된다(팬텀 성계 dot 없음). 함대 자체
-    //   렌더/선택은 0x0325 unit 레코드가 담당하고, cell 은 항행가능 표식일 뿐이다. col=cell%100, row=cell//100.
+    // reactive 0x0315 는 빈 보드가 아니라 플레이어 함대 cell 을 SPACE(1)로 채운다. value=1 空間은
+    //   klass=0 비-마커 terrain — 클라가 앞선 0x0312→0x0313(DEFAULT_SECTOR_GRID_TYPES)에서 이미 받은
+    //   팔레트 index 라 별도 팔레트 방출 없이 해석된다(팬텀 성계 dot 없음). 함대 렌더/선택은 0x0325 가
+    //   담당하고 cell 은 항행가능 표식일 뿐. 플레이어 없으면 빈 보드 폴백(크래시 방지).
     if (code === CODE_REQ_STATIC_GRID) {
       const player = players.get(connectionId);
-      // 실 유닛을 보유한 in-world 플레이어에게만 push(합성 유닛 금지). 없으면 bare empty 0x0315 폴백.
-      if (player && player.unitId > 0 && player.characterId > 0) {
-        // TERRAIN_VALUE.SPACE=1 (DEFAULT_SECTOR_GRID_TYPES value=1 空間, klass=0 비-마커).
-        const gridResp = buildStaticInformationGridInner({ cells: [{ cell: player.cell, value: 1 }] });
-        const responses = [{ targets: [connectionId], inner: gridResp, isMsg32: true }];
-        const readyInners = buildWorldReadyPushInners({
+      const cells = (player && player.unitId > 0 && player.characterId > 0)
+        ? [{ cell: player.cell, value: 1 }] // TERRAIN SPACE=1 (klass=0 비-마커)
+        : [];
+      const gridResp = buildStaticInformationGridInner({ cells });
+      return {
+        kind: 'admission',
+        reqCode: code,
+        respCode: readMsg32Code(gridResp),
+        responses: [{ targets: [connectionId], inner: gridResp, isMsg32: true }],
+      };
+    }
+
+    // 0x0f02(RequestGridInitialize) 처리: 첫 요청에 플레이어 스폰 버스트를 주입한다(G164 정본).
+    //
+    // 근거: 5bd249c logh7-login-session.mjs 2095~ G164 스폰 순서. 직전 0x0f01(WorldInitialize_OK)
+    //   world-init reset 이 char count(client+0x36a5dc)를 0 으로 지우므로, 0x0f02 에서 0x0323 을
+    //   재전송해 count 를 1 로 복구하고 0x0f03(GridInitialize_OK)로 gridInitialized 를 flip 해 렌더를
+    //   트리거한다. 순서: [0x0204 + 0x0325 + 0x0323] → grid extras(0x0313 + 0x0315 플레이어 cell)
+    //   → 0x0f03(맨 마지막). 첫 0x0f02 에만(gridInitSpawned 게이트) — 이후엔 plain 0x0f03 ack.
+    // 플레이어 없거나 실 유닛/캐릭터 미보유면 합성 스폰 금지 → plain 0x0f03 폴백.
+    if (code === CODE_REQ_GRID_INIT) {
+      const player = players.get(connectionId);
+      if (player && player.unitId > 0 && player.characterId > 0 && !gridInitSpawned.has(connectionId)) {
+        gridInitSpawned.add(connectionId);
+        const spawnInners = buildGridInitializeSpawnInners({
+          characterId: player.characterId,
           unitId: player.unitId,
           unitCell: player.cell,
-          commander: player.characterId,
-          // 0x0323 refresh(begin/end 사이): world-enter 와 동일하게 플레이어 실 시드 필드 전달.
           power: player.power ?? 0,
           spot: 1,
           lastname: player.lastname ?? '',
@@ -382,20 +403,20 @@ export function createWorldSession({
           face: Number.isInteger(player.face) ? player.face : 0,
           rank: Number.isInteger(player.rank) ? player.rank : 0,
           officerCount: Number.isInteger(player.officerCount) ? player.officerCount : 0,
-          includeEarlyGridType: stratGridEarly,
         });
-        for (const inner of readyInners) {
-          responses.push({ targets: [connectionId], inner, isMsg32: true });
-        }
-        logEvent('world-ready-push', connectionId, { codes: listWorldEntryCodes(readyInners) });
-        return { kind: 'admission-world-ready', reqCode: code, responses };
+        logEvent('grid-init-spawn', connectionId, { codes: listWorldEntryCodes(spawnInners) });
+        return {
+          kind: 'grid-init-spawn',
+          reqCode: code,
+          responses: spawnInners.map((inner) => ({ targets: [connectionId], inner, isMsg32: true })),
+        };
       }
-      const gridResp = buildAdmissionResponseInner(code); // 0x0315 (empty static grid) 폴백
+      const ackInner = buildAdmissionResponseInner(code); // plain 0x0f03 (status=1) ack
       return {
         kind: 'admission',
         reqCode: code,
-        respCode: readMsg32Code(gridResp),
-        responses: [{ targets: [connectionId], inner: gridResp, isMsg32: true }],
+        respCode: readMsg32Code(ackInner),
+        responses: [{ targets: [connectionId], inner: ackInner, isMsg32: true }],
       };
     }
 

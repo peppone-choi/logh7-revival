@@ -161,7 +161,7 @@ test('handleWorldInner routes admission 0x0306 → 0x0307', () => {
   assert.equal(readMsg32Code(result.responses[0].inner), 0x0307);
 });
 
-test('handleWorldInner routes 0x0314 → 0x0315 first (fixed 5004B framing)', () => {
+test('handleWorldInner routes 0x0314 → single 0x0315 static-only (fixed 5004B framing)', () => {
   const world = createWorldSession();
   world.seedPlayer({ connectionId: 1, characterId: 5, unitId: 8, inWorld: true });
   const req = Buffer.alloc(2);
@@ -169,7 +169,8 @@ test('handleWorldInner routes 0x0314 → 0x0315 first (fixed 5004B framing)', ()
   const result = world.handleWorldInner({ connectionId: 1, accountId: 'a', inner: req });
   assert.ok(result, '0x0314 must be routed');
   // 문서(logh7-render-interaction-contract L179): 고정 5004B [u8 w][u8 h][u16LE rle]...
-  // reactive 0x0315 가 항상 첫 응답(뒤에 world-ready push 가 이어짐 — 아래 복원 테스트에서 전체 검증).
+  // ★static-only: world-ready push/0x0f03 을 싣지 않는다(월드-init 핸드셰이크 복원 — 스폰은 0x0f02).
+  assert.equal(result.responses.length, 1, '0x0314 emits only static-info 0x0315 (no push)');
   assert.equal(readMsg32Code(result.responses[0].inner), 0x0315);
   assert.equal(msg32Body(result.responses[0].inner).length, 0x138c);
 });
@@ -254,20 +255,50 @@ test('isAdmissionRequestCode(0x0f00) is true (world-init handshake routes to wor
   assert.equal(isAdmissionRequestCode(0x0f00), true);
 });
 
-// ─── 0x0f02 RequestGridInitialize → plain 0x0f03 (스폰 push 는 0x0314 로 복원) ─────
-// 회귀 복원(2cc17beb): world-ready 스폰 push 는 0x0f02 가 아니라 0x0314 에서 방출한다.
-// e5d825e8 이 push 를 0x0f02 로 이동하자 클라가 0x0314 에서 0x0f03 을 못 받아 0x0f02 를 아예
-// 보내지 않고 정지했다(회귀). 이동을 되돌려 0x0f02 는 순수 ack(plain 0x0f03)만 돌려준다.
+// ─── 0x0f02 RequestGridInitialize → 스폰 버스트(G164), 0x0f03 맨 마지막 ────────────
+// 월드-init 핸드셰이크 복원: 스폰(플레이어 유닛/캐릭터)은 0x0314 가 아니라 클라가 스스로 밟는
+// 0x0f02 에 주입한다. 순서 [0x0204 + 0x0325 + 0x0323] → grid extras(0x0313 + 0x0315) → 0x0f03(맨
+// 마지막). 첫 0x0f02 에만(gridInitSpawned 게이트) — 두 번째부터는 plain 0x0f03 ack.
 
-test('handleWorldInner 0x0f02 returns plain 0x0f03 (spawn push restored to 0x0314)', () => {
+test('handleWorldInner first 0x0f02 injects spawn burst with 0x0f03 LAST (G164)', () => {
   const world = createWorldSession();
   world.seedPlayer({ connectionId: 1, characterId: 5, unitId: 8, cell: 2588, inWorld: true });
   const req = Buffer.alloc(2);
   req.writeUInt16BE(0x0f02, 0);
   const result = world.handleWorldInner({ connectionId: 1, accountId: 'a', inner: req });
   assert.ok(result, '0x0f02 must be routed (not null — else it leaks to lobby, NOW LOADING stall)');
+  assert.equal(result.kind, 'grid-init-spawn');
+  const codes = result.responses.map((r) => readMsg32Code(r.inner));
+  assert.deepEqual(codes, [
+    CODE_SS_CHARACTER_ID, // 0x0204
+    CODE_INFO_UNIT,       // 0x0325
+    CODE_INFO_CHARACTER,  // 0x0323
+    0x0313,               // grid-type 팔레트
+    0x0315,               // cell grid (플레이어 함대 cell)
+    CODE_GRID_INIT_OK,    // 0x0f03 (맨 마지막)
+  ], 'spawn burst: 0x0204+0x0325+0x0323 → grid extras → 0x0f03 LAST');
+  assert.equal(codes[codes.length - 1], CODE_GRID_INIT_OK, '0x0f03 must be LAST');
+  assert.equal(codes.filter((c) => c === CODE_GRID_INIT_OK).length, 1, '0x0f03 exactly once');
+  assert.equal(msg32Body(result.responses[codes.length - 1].inner).readUInt8(0), 1, '0x0f03 status=1');
+  // flagship↔unit 정합: 0x0323 flagship(+0x24 BE) == 0x0325 unit[0].id(+0x04 BE).
+  const unitRec = result.responses.find((r) => readMsg32Code(r.inner) === CODE_INFO_UNIT).inner;
+  const charRec = result.responses.find((r) => readMsg32Code(r.inner) === CODE_INFO_CHARACTER).inner;
+  assert.equal(msg32Body(charRec).readUInt32BE(0x24), msg32Body(unitRec).readUInt32BE(0x04));
+  for (const r of result.responses) {
+    assert.deepEqual(r.targets, [1]);
+    assert.equal(r.isMsg32, true);
+  }
+});
+
+test('handleWorldInner second 0x0f02 returns plain 0x0f03 ack (spawn gated to first)', () => {
+  const world = createWorldSession();
+  world.seedPlayer({ connectionId: 1, characterId: 5, unitId: 8, cell: 2588, inWorld: true });
+  const req = Buffer.alloc(2);
+  req.writeUInt16BE(0x0f02, 0);
+  world.handleWorldInner({ connectionId: 1, accountId: 'a', inner: req }); // 첫 요청: 스폰 버스트
+  const result = world.handleWorldInner({ connectionId: 1, accountId: 'a', inner: req }); // 재요청: ack
   assert.equal(result.kind, 'admission');
-  assert.equal(result.responses.length, 1, '0x0f02 emits only the ack (no spawn burst)');
+  assert.equal(result.responses.length, 1, 'gate: 두 번째 0x0f02 는 ack 만');
   assert.equal(readMsg32Code(result.responses[0].inner), 0x0f03);
   assert.equal(msg32Body(result.responses[0].inner).readUInt8(0), 1, '0x0f03 status=1');
 });
@@ -282,7 +313,7 @@ test('handleWorldInner 0x0f02 without in-world player also returns plain 0x0f03'
   assert.equal(readMsg32Code(result.responses[0].inner), 0x0f03);
 });
 
-test('handleWorldInner routes 0x0f02 when message32-framed too', () => {
+test('handleWorldInner routes 0x0f02 when message32-framed too (spawn burst)', () => {
   const world = createWorldSession();
   world.seedPlayer({ connectionId: 1, characterId: 5, unitId: 8, cell: 2588, inWorld: true });
   const req = Buffer.alloc(6);
@@ -290,7 +321,9 @@ test('handleWorldInner routes 0x0f02 when message32-framed too', () => {
   req.writeUInt16BE(0x0f02, 4);
   const result = world.handleWorldInner({ connectionId: 1, accountId: 'a', inner: req });
   assert.ok(result);
-  assert.equal(readMsg32Code(result.responses[0].inner), 0x0f03, '0x0f02 → plain 0x0f03');
+  const codes = result.responses.map((r) => readMsg32Code(r.inner));
+  assert.equal(codes[0], CODE_SS_CHARACTER_ID, '0x0f02 burst starts with 0x0204');
+  assert.equal(codes[codes.length - 1], 0x0f03, '0x0f03 last');
 });
 
 test('isAdmissionRequestCode(0x0f02) is true so playable-server routes it to world (not lobby)', () => {
@@ -567,26 +600,18 @@ function decodeStaticGrid(body) {
   return { w, h, cells };
 }
 
-test('handleWorldInner 0x0314 restores world-ready push (2cc17beb) with player-fleet cell in 0x0315', () => {
-  // 회귀 복원: e5d825e8 이 push 를 0x0f02 로 옮겨 0x0314 가 bare 0x0315 만 돌려주자 클라가 0x0f02 를
-  // 안 보내고 정지했다. push 를 0x0314 로 되돌려 진행을 복원 + reactive 0x0315 에 플레이어 함대 cell 배치.
+test('handleWorldInner 0x0314 is static-only with player-fleet cell in 0x0315 (no push)', () => {
+  // 월드-init 핸드셰이크 복원: 0x0314 는 static-info(0x0315)만 돌려준다. world-ready push/0x0f03 을
+  // 여기 실으면 클라가 0x0f00→0x0f02 를 건너뛰고 NOW LOADING 에 정지한다. 스폰은 0x0f02 로 이동.
   const world = createWorldSession();
   world.seedPlayer({ connectionId: 1, characterId: 5, unitId: 8, cell: 2588, inWorld: true });
   const req = Buffer.alloc(2);
   req.writeUInt16BE(CODE_REQ_STATIC_GRID, 0); // 0x0314
   const result = world.handleWorldInner({ connectionId: 1, accountId: 'a', inner: req });
   assert.ok(result, '0x0314 must be routed');
-  assert.equal(result.kind, 'admission-world-ready');
+  assert.equal(result.kind, 'admission');
   const codes = result.responses.map((r) => readMsg32Code(r.inner));
-  // reactive 0x0315(플레이어 cell) → begin → 0x0325 유닛 → 0x0323 캐릭터 → end → 0x0f03.
-  assert.deepEqual(codes, [
-    0x0315,
-    CODE_NOTIFY_ENTER_GRID_BEGIN,
-    CODE_INFO_UNIT,
-    CODE_INFO_CHARACTER,
-    CODE_NOTIFY_ENTER_GRID_END,
-    CODE_GRID_INIT_OK,
-  ], 'world-ready push restored at 0x0314 (0x0f03 present so client advances to 0x0f02)');
+  assert.deepEqual(codes, [0x0315], '0x0314 = single static-info 0x0315 (no world-ready push, no 0x0f03)');
   // ★그리드 cell 비어있지 않음: 플레이어 함대 cell(2588 → col 88,row 25)이 SPACE(1)로 배치.
   const gridBody = msg32Body(result.responses[0].inner);
   assert.equal(gridBody.length, 0x138c);
@@ -594,10 +619,8 @@ test('handleWorldInner 0x0314 restores world-ready push (2cc17beb) with player-f
   assert.equal(grid.cells.length, 5000, 'ΣrunLen == 100*50 (full coverage, no crash)');
   assert.equal(grid.cells[2588], 1, 'player fleet cell placed = SPACE(1), not empty board');
   assert.equal(grid.cells.filter((v) => v !== 0).length, 1, 'exactly one placed cell');
-  for (const r of result.responses) {
-    assert.deepEqual(r.targets, [1]);
-    assert.equal(r.isMsg32, true);
-  }
+  assert.deepEqual(result.responses[0].targets, [1]);
+  assert.equal(result.responses[0].isMsg32, true);
 });
 
 test('handleWorldInner 0x0314 without in-world player falls back to bare empty 0x0315 (no crash)', () => {
