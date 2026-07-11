@@ -1178,10 +1178,17 @@ export function buildGridInitializeSpawnInners({
   const inners = [];
   // 1) 0x0204 선택 캐릭터 id (self-match 앵커: 0x0323 record[0](+0x00 BE)와 바이트 동일)
   inners.push(buildSsCharacterIdInner({ characterId }));
-  // 2) 0x0325 유닛 테이블 (unit gate 충족: count≥1, unit[0].id = flagship 링크).
+  // 2) 0x0b09 NotifyEnterGridBegin (value=0) — grid-enter 괄호 開始.
+  //    ★근거(docs/reference/legacy-evidence/logh7-0325-loader-gate.md): 클라 렌더 레지스트리 벌크
+  //    적재(FUN_004c2a80)는 오직 0x0b0a 수신 시에만 실행된다. 0x0325/0x0323 은 스테이징/캐릭터
+  //    테이블만 채우므로, begin/end 괄호가 없으면 레지스트리로 옮겨지지 않아 activeCount=0 →
+  //    마커클릭 null-deref. begin(value=0)이 char count(client+0x36a5dc)를 리셋 → 뒤이은 0x0323 이
+  //    count 를 1 로 재충전 → 0x0b0a 가 적재를 트리거한다. 반드시 0x0325/0x0323 **앞**(0x0323 前).
+  inners.push(buildNotifyEnterGridBeginInner({ value: 0 }));
+  // 3) 0x0325 유닛 테이블 (unit gate 충족: count≥1, unit[0].id = flagship 링크).
   //    fleets 지정 시 full 레코드 N개(레지스트리 충전 → 마커 클릭 null-deref 해소).
   inners.push(buildInformationUnitInner({ unitId, unitCount: 1, cell: unitCell, commander: characterId, fleets }));
-  // 3) 0x0323 캐릭터 레코드 (char count 복구: 0x0f01 reset 후 1 로 되돌림. flagship(+0x24)=unitId 링크)
+  // 4) 0x0323 캐릭터 레코드 (char count 복구: 0x0b09 reset 후 1 로 되돌림. flagship(+0x24)=unitId 링크)
   inners.push(buildInformationCharacterInner({
     characterId,
     gridUnitId: unitId,
@@ -1196,7 +1203,11 @@ export function buildGridInitializeSpawnInners({
     // seat count@0x24c 최소 1 (commander 자신 1행) — 0 이면 C002 유닛리스트 미렌더.
     officerCount: Math.max(1, officerCount),
   }));
-  // 4) grid extras: 0x0313 grid-type(팔레트) → 0x0315 cell grid.
+  // 5) 0x0b0a NotifyEnterGridEnd (value=0) — grid-enter 괄호 終了 = 적재 트리거.
+  //    이 프레임이 FUN_004c2a80 을 호출해 캐릭터 테이블(0x0323)을 순회하며 self 캐릭터를
+  //    렌더 레지스트리로 스폰(0x0325 스테이징 flagship 링크 소비). 반드시 0x0325/0x0323 **뒤**.
+  inners.push(buildNotifyEnterGridEndInner({ value: 0 }));
+  // 6) grid extras: 0x0313 grid-type(팔레트) → 0x0315 cell grid.
   //    grid-type 이 셀그리드보다 먼저여야 클라가 셀 value 를 palette index 로 해석한다.
   //    galaxy 데이터가 있으면 실 성계 팔레트/셀(플레이어 함대 cell = SPACE 로 덮어 항행표식),
   //    없으면 옛 fleet-only 폴백(SPACE=1 값 하나). 함대 렌더/선택은 0x0325 가 담당.
@@ -1215,7 +1226,7 @@ export function buildGridInitializeSpawnInners({
       ? staticCells
       : [{ col, row, value: TERRAIN_SPACE }],
   }));
-  // 5) 0x0f03 GridInitialize_OK — 반드시 맨 마지막. 이게 gridInitialized 를 flip 해 렌더를 트리거한다.
+  // 7) 0x0f03 GridInitialize_OK — 반드시 맨 마지막. 이게 gridInitialized 를 flip 해 렌더를 트리거한다.
   inners.push(buildGridInitOkInner({ status: 1 }));
   return inners;
 }

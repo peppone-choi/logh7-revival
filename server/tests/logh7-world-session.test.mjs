@@ -266,12 +266,18 @@ test('isAdmissionRequestCode(0x0f00) is true (world-init handshake routes to wor
   assert.equal(isAdmissionRequestCode(0x0f00), true);
 });
 
-// ─── 0x0f02 RequestGridInitialize → 스폰 버스트(G164), 0x0f03 맨 마지막 ────────────
+// ─── 0x0f02 RequestGridInitialize → 스폰 버스트(G164) + grid-enter 괄호, 0x0f03 맨 마지막 ──
 // 월드-init 핸드셰이크 복원: 스폰(플레이어 유닛/캐릭터)은 0x0314 가 아니라 클라가 스스로 밟는
-// 0x0f02 에 주입한다. 순서 [0x0204 + 0x0325 + 0x0323] → grid extras(0x0313 + 0x0315) → 0x0f03(맨
-// 마지막). 첫 0x0f02 에만(gridInitSpawned 게이트) — 두 번째부터는 plain 0x0f03 ack.
+// 0x0f02 에 주입한다. 순서 [0x0204 → 0x0b09(begin) → 0x0325 + 0x0323 → 0x0b0a(end)] →
+// grid extras(0x0313 + 0x0315) → 0x0f03(맨 마지막). 첫 0x0f02 에만(gridInitSpawned 게이트).
+//
+// ★grid-enter 괄호 배선(logh7-0325-loader-gate.md): 클라 유닛 레지스트리 벌크 적재(FUN_004c2a80)는
+//   오직 0x0b0a(NotifyEnterGridEnd) 수신 시에만 실행된다. 0x0325/0x0323 은 스테이징/캐릭터 테이블만
+//   채우고, 0x0b0a 가 없으면 렌더 레지스트리로 옮겨지지 않아 activeCount=0 → 마커클릭 null-deref.
+//   불변식: 0x0325·0x0323 은 반드시 0x0b09(begin)와 0x0b0a(end) 사이. 0x0b09 는 0x0323 앞
+//   (begin 이 char count 리셋 → 0x0323 이 재충전 → 0x0b0a 가 적재 트리거).
 
-test('handleWorldInner first 0x0f02 injects spawn burst with 0x0f03 LAST (G164)', () => {
+test('handleWorldInner first 0x0f02 injects spawn burst with grid-enter brackets, 0x0f03 LAST (G164)', () => {
   const world = createWorldSession();
   world.seedPlayer({ connectionId: 1, characterId: 5, unitId: 8, cell: 2588, inWorld: true });
   const req = Buffer.alloc(2);
@@ -281,16 +287,31 @@ test('handleWorldInner first 0x0f02 injects spawn burst with 0x0f03 LAST (G164)'
   assert.equal(result.kind, 'grid-init-spawn');
   const codes = result.responses.map((r) => readMsg32Code(r.inner));
   assert.deepEqual(codes, [
-    CODE_SS_CHARACTER_ID, // 0x0204
-    CODE_INFO_UNIT,       // 0x0325
-    CODE_INFO_CHARACTER,  // 0x0323
-    0x0313,               // grid-type 팔레트
-    0x0315,               // cell grid (플레이어 함대 cell)
-    CODE_GRID_INIT_OK,    // 0x0f03 (맨 마지막)
-  ], 'spawn burst: 0x0204+0x0325+0x0323 → grid extras → 0x0f03 LAST');
+    CODE_SS_CHARACTER_ID,        // 0x0204
+    CODE_NOTIFY_ENTER_GRID_BEGIN, // 0x0b09 (begin, char count 리셋)
+    CODE_INFO_UNIT,              // 0x0325
+    CODE_INFO_CHARACTER,         // 0x0323 (char 재충전)
+    CODE_NOTIFY_ENTER_GRID_END,  // 0x0b0a (적재 트리거 FUN_004c2a80)
+    0x0313,                      // grid-type 팔레트
+    0x0315,                      // cell grid (플레이어 함대 cell)
+    CODE_GRID_INIT_OK,           // 0x0f03 (맨 마지막)
+  ], 'spawn burst: 0x0204 → 0x0b09 → 0x0325+0x0323 → 0x0b0a → grid extras → 0x0f03 LAST');
   assert.equal(codes[codes.length - 1], CODE_GRID_INIT_OK, '0x0f03 must be LAST');
   assert.equal(codes.filter((c) => c === CODE_GRID_INIT_OK).length, 1, '0x0f03 exactly once');
   assert.equal(msg32Body(result.responses[codes.length - 1].inner).readUInt8(0), 1, '0x0f03 status=1');
+  // grid-enter 괄호 불변식: begin < unit < char < end (0x0325/0x0323 이 begin/end 사이).
+  const iBegin = codes.indexOf(CODE_NOTIFY_ENTER_GRID_BEGIN);
+  const iUnit = codes.indexOf(CODE_INFO_UNIT);
+  const iChar = codes.indexOf(CODE_INFO_CHARACTER);
+  const iEnd = codes.indexOf(CODE_NOTIFY_ENTER_GRID_END);
+  assert.ok(iBegin < iUnit, `0x0b09 begin(@${iBegin}) must precede 0x0325 unit(@${iUnit})`);
+  assert.ok(iUnit < iChar, `0x0325 unit(@${iUnit}) must precede 0x0323 char(@${iChar})`);
+  assert.ok(iChar < iEnd, `0x0323 char(@${iChar}) must precede 0x0b0a end(@${iEnd})`);
+  // begin/end body value=0 (value=1 은 char count 리셋만이 아니라 잘못된 상태 — 검증된 안전 경로는 0).
+  const beginRec = result.responses.find((r) => readMsg32Code(r.inner) === CODE_NOTIFY_ENTER_GRID_BEGIN).inner;
+  const endRec = result.responses.find((r) => readMsg32Code(r.inner) === CODE_NOTIFY_ENTER_GRID_END).inner;
+  assert.equal(msg32Body(beginRec).readUInt8(0), 0, '0x0b09 body value=0');
+  assert.equal(msg32Body(endRec).readUInt8(0), 0, '0x0b0a body value=0');
   // flagship↔unit 정합: 0x0323 flagship(+0x24 BE) == 0x0325 unit[0].id(+0x04 BE).
   const unitRec = result.responses.find((r) => readMsg32Code(r.inner) === CODE_INFO_UNIT).inner;
   const charRec = result.responses.find((r) => readMsg32Code(r.inner) === CODE_INFO_CHARACTER).inner;
