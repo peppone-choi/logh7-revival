@@ -121,6 +121,30 @@ function splitName(nameJa) {
   // 단일 토큰 → 성으로 취급(HUD 표시명). 와이어는 lastname 비어있지 않으면 OK.
   return { firstname: '', lastname: nameJa || '', split: 'single-token-as-family' };
 }
+
+// ─── 얼굴 placeholder 배정 (정체성 아님, 익명 인덱스 풀) ─────────────────────
+// 근거: docs/reference/legacy-evidence/logh7-face-id-encoding.md
+//   face(u32)를 10진 자릿수 필드로 분해 → 아틀라스 {O|G}{E|A}{M|F} 선택 + local index.
+//   클라 Path2(FUN_00592c30→FUN_005924c0)가 그 tcf 아틀라스의 local-index-th 초상을 그린다.
+//   아틀라스 SELECTION(진영·성별·계급군)은 완전 해석됨. O-group(Original)=캐논/NPC용.
+//   loader 상한(param_3): oem<=199 oam<=95 o<=99 → 이 범위 내 index는 크래시 없이 렌더(폴백 가능).
+// ⚠️ 정체성 미확정: 아래 값은 "카테고리 유효(크래시 없이 렌더)" placeholder일 뿐이며
+//    "이 얼굴 = 이 인물"이 절대 아니다. AI분류·초상복원 기반 정체성 매핑은 폐기됨. 외부 재배정 가능.
+//    앵커: 라이브에서 황제(oem index 0, face=0) 카드가 렌더됨 → oem 저인덱스 유효 확인.
+const FACE_ATLAS = {
+  'empire:0':   { atlas: 'oem', base: 0,      cap: 199 }, // 제국·남 士官(Original)
+  'alliance:0': { atlas: 'oam', base: 100000, cap: 95 },  // 동맹·남 士官(Original)
+  'empire:1':   { atlas: 'o',   base: 10000,  cap: 99 },  // 여/기타
+  'alliance:1': { atlas: 'o',   base: 10000,  cap: 99 },
+};
+const faceCursor = {};
+function assignPlaceholderFace(faction, sex) {
+  const spec = FACE_ATLAS[`${faction}:${sex}`] ?? FACE_ATLAS['empire:0'];
+  const cur = faceCursor[spec.atlas] ?? 0;
+  const localIndex = cur % (spec.cap + 1); // cap 초과 시 wrap → 항상 유효 범위(크래시 방지)
+  faceCursor[spec.atlas] = cur + 1;
+  return { face: spec.base + localIndex, atlas: spec.atlas, localIndex, base: spec.base };
+}
 const chars = roster.characters.map((c) => {
   const { firstname, lastname, split } = splitName(c.name_ja);
   const ability8 = c.stats && c.stats_known
@@ -144,8 +168,17 @@ const chars = roster.characters.map((c) => {
     lastname, firstname, nameSplit: split,
     rankJa: c.rank, rankCode,
     post: c.post,
-    face: c.face_number ?? null,
-    faceConfidence: c.face_number != null ? 'roster' : 'gap',
+    // 얼굴: 익명 인덱스 풀에서 카테고리 유효 placeholder 배정(정체성 아님). 아래 플래그로 미확정 명시.
+    ...(() => {
+      const fa = assignPlaceholderFace(c.faction, 0);
+      return {
+        face: fa.face,
+        faceSource: 'placeholder',
+        faceIdentityConfirmed: false,
+        faceCategory: fa.atlas,
+        faceLocalIndex: fa.localIndex,
+      };
+    })(),
     ability8,
     abilityKeys: ABILITY8,
     statsKnown: !!(c.stats && c.stats_known),
@@ -164,14 +197,18 @@ emitted.push(write('characters.json', {
   counts: {
     total: chars.length,
     withStats: chars.filter((c) => c.statsKnown).length,
-    withFace: chars.filter((c) => c.face != null).length,
+    withValidFace: chars.filter((c) => Number.isInteger(c.face)).length, // 전원 유효 placeholder
+    faceIdentityConfirmed: chars.filter((c) => c.faceIdentityConfirmed).length, // 0 — 정체성 매핑 폐기
     withRankCode: chars.filter((c) => c.rankCode != null).length,
     empire: chars.filter((c) => c.faction === 'empire').length,
     alliance: chars.filter((c) => c.faction === 'alliance').length,
   },
+  faceNote: '얼굴은 익명 인덱스 풀. face 값은 카테고리(진영·성별) 유효 placeholder로 크래시 없이 '
+    + '초상을 렌더하기 위한 것이며 정체성 주장이 아니다(faceIdentityConfirmed=false 전원). '
+    + '인코딩·유효 풀: server/content/generated/logh7-face-valid-pool.json, docs/logh7-db-seed-catalog.md.',
   gaps: [
     'sex 필드 없음(전원 男 가정)',
-    'face 없는 인물 87/99',
+    'face 정체성 미확정 — 전원 placeholder(카테고리 유효값). 외부에서 인물별 재배정 가능',
     'name 분할은 heuristic(nameSplit 라벨 참조)',
     'blood/title/bonusPoint/specialAbilityNum/birth 미보유 → 서버 기본값',
   ],
