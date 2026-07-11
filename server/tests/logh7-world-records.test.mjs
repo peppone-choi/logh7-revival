@@ -135,23 +135,38 @@ test('world entry batch = unsolicited table-fill only (request-response codes re
   const emits = buildWorldEntryInners({ characterId: 3, gridUnitId: 9 });
   const codes = listWorldEntryCodes(emits);
   // 유지: unsolicited 테이블 채움 (클라가 워크에서 요청 안 함, ring 상관 대상 아님)
-  //   0x0206 SSGameLoginOK(0x0205 응답, 선두), 0x0204 캐릭터 id, 0x0323 캐릭 레코드,
-  //   0x0325 유닛 테이블
+  //   0x0206 SSGameLoginOK(0x0205 응답, 선두), 0x0204 캐릭터 id,
+  //   0x0325 유닛 테이블 → 0x0323 캐릭 레코드
+  // ★순서: 0x0325(유닛)가 0x0323(캐릭터)보다 먼저다(라이브 크래시 회귀 수정, qa-marker2 확정).
+  //   클라는 0x0323 flagship(+0x24)→유닛 링크로 unit[0].id(+0x04)를 찾아 그 유닛의 +0x14 를 deref 한다.
+  //   유닛(0x0325)이 캐릭터(0x0323)보다 먼저 도착해 오브젝트 테이블에 resident 여야 null(+0x14) deref
+  //   (STATUS_ACCESS_VIOLATION, memAddr=0x14)를 피한다. char→unit 순서면 결정적 하드크래시.
   assert.deepEqual(codes, [
     CODE_SS_GAME_LOGIN_OK,
     CODE_SS_CHARACTER_ID,
-    CODE_INFO_CHARACTER,
     CODE_INFO_UNIT,
+    CODE_INFO_CHARACTER,
   ]);
   // 제거: 요청-응답 4코드는 배치에 있으면 안 된다 (pre-push = ring 미배수 → 영구 정지)
   for (const removed of [0x0301, 0x0f01, 0x0f03, 0x0315]) {
     assert.ok(!codes.includes(removed), `0x${removed.toString(16)} must NOT be pre-pushed`);
   }
+  // 순서 불변식 명시: 0x0325(유닛)가 0x0323(캐릭터)보다 반드시 앞선다.
+  const iUnit = codes.indexOf(CODE_INFO_UNIT);
+  const iChar = codes.indexOf(CODE_INFO_CHARACTER);
+  assert.ok(iUnit < iChar, `0x0325 unit(@${iUnit}) must precede 0x0323 char(@${iChar}) — null-deref 회귀`);
   // 유지 코드 크기 확정 (크래시 방지 앵커)
   const charRec = emits.find((i) => listWorldEntryCodes([i])[0] === CODE_INFO_CHARACTER);
   const unitRec = emits.find((i) => listWorldEntryCodes([i])[0] === CODE_INFO_UNIT);
   assert.equal(msg32Body(charRec).length, 0x2d4);
   assert.equal(msg32Body(unitRec).length, 0xce44);
+  // self-match 무결(순서 바꿔도 링크 유지): 0x0323 flagship(+0x24 BE) == 0x0325 unit[0].id(+0x04 BE).
+  //   count LE 정정은 id 를 안 건드리므로 두 앵커가 동일 gridUnitId(=9) 여야 클라가 flagship→유닛 링크를 찾는다.
+  const flagship = msg32Body(charRec).readUInt32BE(0x24);
+  const unitId0 = msg32Body(unitRec).readUInt32BE(0x04);
+  assert.equal(flagship, 9, '0x0323 flagship(+0x24 BE) == gridUnitId');
+  assert.equal(unitId0, 9, '0x0325 unit[0].id(+0x04 BE) == gridUnitId');
+  assert.equal(flagship, unitId0, 'flagship(+0x24) == unit[0].id(+0x04) — char→unit self-match 유지');
 });
 
 test('reactive: request-response codes answered by admission handler, not world-enter batch', () => {

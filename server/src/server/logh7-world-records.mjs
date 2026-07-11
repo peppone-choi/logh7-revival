@@ -951,8 +951,13 @@ export function isAdmissionRequestCode(code) {
  * 순서 (RE: 0x0206 이 월드 파이프라인 활성 0x35837e → 레코드가 흐른다):
  *   0x0206 SSGameLoginOK (선두, 0x0205 응답)
  *   0x0204 선택 캐릭터 id
+ *   0x0325 유닛 테이블 (고정 52804B, 최소 count+id) — ★캐릭터보다 먼저 (아래 순서 주의)
  *   0x0323 캐릭터 레코드 (724B — 오브젝트 테이블 채움, 렌더러 크래시 방지 필수)
- *   0x0325 유닛 테이블 (고정 52804B, 최소 count+id)
+ *
+ * ★유닛→캐릭터 순서 (라이브 크래시 회귀 수정, qa-marker2 확정): 클라는 0x0323 flagship(+0x24)
+ *   →유닛 링크로 0x0325 unit[0].id(+0x04)를 찾아 그 유닛의 +0x14 를 deref 한다. 유닛이 캐릭터보다
+ *   먼저 도착해 오브젝트 테이블에 resident 여야 null(+0x14) deref(0xc0000005, memAddr=0x14)를
+ *   피한다. 캐릭터를 먼저 보내면 flagship→유닛 링크가 null 이라 결정적 하드크래시.
  *
  * 이 4코드는 클라가 워크에서 요청하지 않는 unsolicited 테이블 채움이라 push(ring 상관 대상 아님).
  *
@@ -1003,6 +1008,17 @@ export function buildWorldEntryInners({
     // 0x0206 을 선두로: 월드 파이프라인 활성(0x35837e) 후 레코드가 흐른다 (RE 순서).
     buildSsGameLoginOkInner({ status: 1 }),
     buildSsCharacterIdInner({ characterId }),
+    // ★0x0325(유닛)를 0x0323(캐릭터)보다 먼저 방출(라이브 크래시 회귀 수정, qa-marker2 확정).
+    //   클라는 0x0323 flagship(+0x24)→유닛 링크로 unit[0].id(+0x04)를 찾아 그 유닛의 +0x14 를 deref 한다.
+    //   유닛(0x0325)이 캐릭터(0x0323)보다 먼저 도착해 오브젝트 테이블에 resident 여야 null(+0x14) deref
+    //   (STATUS_ACCESS_VIOLATION 0xc0000005, memAddr=0x14)를 피한다. char→unit 순서면 결정적 하드크래시.
+    buildInformationUnitInner({
+      unitId: gridUnitId,
+      unitCount: 1,
+      cell: unitCell,
+      commander: characterId,
+      fleets, // 지정 시 full 레코드(레지스트리 충전), 미지정 시 minimal
+    }),
     buildInformationCharacterInner({
       characterId,
       gridUnitId,
@@ -1016,13 +1032,6 @@ export function buildWorldEntryInners({
       abilities: Array.isArray(abilities) && abilities.length ? abilities : null,
       // seat count@0x24c 최소 1 (commander 자신 1행) — 0 이면 C002 유닛리스트 미렌더.
       officerCount: Math.max(1, officerCount),
-    }),
-    buildInformationUnitInner({
-      unitId: gridUnitId,
-      unitCount: 1,
-      cell: unitCell,
-      commander: characterId,
-      fleets, // 지정 시 full 레코드(레지스트리 충전), 미지정 시 minimal
     }),
   ];
   return emits;
