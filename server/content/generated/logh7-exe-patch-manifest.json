@@ -1,17 +1,22 @@
 {
   "id": "logh7-exe-patch-manifest",
   "schemaVersion": 1,
-  "status": "gate-only",
-  "purpose": "Required reversible EXE patch gate before any direct LOGH VII client change is promoted.",
+  "status": "applied",
+  "purpose": "Authoritative record of the reversible .text patches present in the canonical LOGH VII client. Rebuilt 2026-07-11 from a byte-diff of the pristine install-tree EXE (source) against the canonical EXE (target). Serves as the reversible-patch gate before any further direct client change is promoted.",
   "targetExe": {
-    "name": "G7MTClient.exe",
-    "sha256": "2848be76a7662e25159353463bdfd8ff2f270ac5845ef4cea62983443c155345",
-    "imageBase": null,
+    "name": "g7mtclient.exe",
+    "sha256": "9c97de2ae426f011680992d6c8d88b25488b5f51555ce5784aeef677f334bb51",
+    "imageBase": "0x400000",
+    "size": 3956736,
     "pathHints": [
-      "artifacts/logh7-install/**/exe/g7mtclient.exe",
-      ".omo/re-galaxy/g7mtclient.exe"
+      "artifacts/logh7-install/**/exe/g7mtclient.exe"
     ],
-    "note": "2026-07-09 install tree EXE already contains ASCII 127.0.0.1 @ offset 3599932 and 47900 @ 3599924 (loopback applied)."
+    "note": "Canonical EXE is ALREADY patched: it equals the pristine install-tree build (sha256 2848be76a7662e25159353463bdfd8ff2f270ac5845ef4cea62983443c155345, kept as g7mtclient.exe.bak-pre-font) plus the 6 patches below (39 bytes, all in .text). Loopback connection default 127.0.0.1 @ offset 3599932 and port 47900 @ offset 3599924 are RESIDENT in the pristine build (identical in both) — they are the compiled-in defaults, NOT a tool-applied patch, so they are not tracked as reversible patches here. Original live server IP 202.8.80.179 does not appear anywhere in the binary."
+  },
+  "sourceExe": {
+    "name": "g7mtclient.exe.bak-pre-font",
+    "sha256": "2848be76a7662e25159353463bdfd8ff2f270ac5845ef4cea62983443c155345",
+    "note": "Pristine install-tree EXE prior to any of our patches. originalBytes/rollbackBytes below are measured from this file; patchedBytes are measured from the canonical target."
   },
   "policy": {
     "sameLengthOnly": true,
@@ -21,26 +26,70 @@
   },
   "patches": [
     {
-      "id": "login-server-ip-loopback-already-applied",
+      "id": "sjis-charset-A",
       "sourceExeSha256": "2848be76a7662e25159353463bdfd8ff2f270ac5845ef4cea62983443c155345",
       "addressKind": "offset",
-      "offset": 3599932,
-      "originalBytes": "3132372e302e302e31000000",
-      "patchedBytes": "3132372e302e302e31000000",
-      "rollbackBytes": "3132372e302e302e31000000",
-      "reason": "Document current install EXE loopback state (no-op patch; original 202.8.80.179 already replaced)."
-    }
-  ],
-  "schemaExample": {
-    "patch": {
-      "id": "example-reconfirmed-patch",
-      "sourceExeSha256": "bd19263c10decc3d58373165a82d42a9267868400d407da87d5f4f4109ab6e16",
+      "offset": 716267,
+      "virtualAddressHex": "0x004aedeb",
+      "originalBytes": "6a01",
+      "patchedBytes": "6a80",
+      "rollbackBytes": "6a01",
+      "reason": "CreateFontA charset push 1 (DEFAULT_CHARSET) -> 0x80 (SHIFTJIS_CHARSET) so the client renders SJIS text. Applied byte: 0xaedec 01->80."
+    },
+    {
+      "id": "sjis-charset-B",
+      "sourceExeSha256": "2848be76a7662e25159353463bdfd8ff2f270ac5845ef4cea62983443c155345",
       "addressKind": "offset",
-      "offset": 0,
+      "offset": 723863,
+      "virtualAddressHex": "0x004b0b97",
+      "originalBytes": "6a01",
+      "patchedBytes": "6a80",
+      "rollbackBytes": "6a01",
+      "reason": "Second CreateFontA charset push 1 -> 0x80 (SHIFTJIS_CHARSET). Applied byte: 0xb0b98 01->80."
+    },
+    {
+      "id": "fsm-scene-active-gate-bypass",
+      "sourceExeSha256": "2848be76a7662e25159353463bdfd8ff2f270ac5845ef4cea62983443c155345",
+      "addressKind": "offset",
+      "offset": 1155996,
+      "virtualAddressHex": "0x0051a39c",
+      "originalBytes": "0f84d8160000",
+      "patchedBytes": "909090909090",
+      "rollbackBytes": "0f84d8160000",
+      "reason": "NOP the lobby FSM (FUN_0051a370) scene-active early-exit `je 0x51ba7a` so the FSM keeps ticking past state6 and conn2's recv pump stays alive to read the lobby RPC replies (0x2001/0x2004/0x2006/0x200a)."
+    },
+    {
+      "id": "session-picker-flag-item1",
+      "sourceExeSha256": "2848be76a7662e25159353463bdfd8ff2f270ac5845ef4cea62983443c155345",
+      "addressKind": "offset",
+      "offset": 1157950,
+      "virtualAddressHex": "0x0051ab3e",
       "originalBytes": "00",
-      "patchedBytes": "90",
+      "patchedBytes": "01",
       "rollbackBytes": "00",
-      "reason": "replace with RE-confirmed patch data"
+      "reason": "imm8 of `mov byte ptr [esp+0x15], 0` -> 1 inside the lobby/session-picker init (adjacent to session-change-opens-picker). Tracked as the 'item1' patch (backup g7mtclient.exe.pre-item1.bak)."
+    },
+    {
+      "id": "session-change-opens-picker",
+      "sourceExeSha256": "2848be76a7662e25159353463bdfd8ff2f270ac5845ef4cea62983443c155345",
+      "addressKind": "offset",
+      "offset": 1158637,
+      "virtualAddressHex": "0x0051aded",
+      "originalBytes": "683c677800c7450416000000e8a275070083c404e9570c0000",
+      "patchedBytes": "e981ffffff9090909090909090909090909090909090909090",
+      "rollbackBytes": "683c677800c7450416000000e8a275070083c404e9570c0000",
+      "reason": "FUN_0051a370 case 0x1c no-op -> `jmp 0x0051ad73` (case 0x19 picker init) + NOP tail, so a session change opens the session picker. Live-verified 2026-07-01."
+    },
+    {
+      "id": "router-null-result-no-teardown",
+      "sourceExeSha256": "2848be76a7662e25159353463bdfd8ff2f270ac5845ef4cea62983443c155345",
+      "addressKind": "offset",
+      "offset": 2175319,
+      "virtualAddressHex": "0x00613157",
+      "originalBytes": "e8d4190000",
+      "patchedBytes": "9090909090",
+      "rollbackBytes": "e8d4190000",
+      "reason": "NOP the transport router (0x6130a0) teardown `call 0x614b30` at 0x613150 so conn2 is NOT torn down on a null/unhandled frame; its recv pump keeps polling. conn1 closes via 0x4ac726, so conn1-safe."
     }
-  }
+  ]
 }
