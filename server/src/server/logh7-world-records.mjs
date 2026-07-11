@@ -334,29 +334,34 @@ export function buildInformationCharacterInner({
 //   - full (fleets 지정): 각 유닛의 0x58B 레코드를 UNIT_ELEM 레이아웃으로 채움. 빈 레지스트리
 //     (@0x7db3c8 activeCount=0) → 마커 클릭 null-deref 크래시 해소. fleets[0].id 는 반드시
 //     gridUnitId(=0x0323 flagship+0x24)여야 char↔unit 링크가 유지된다.
-// 프레이밍: count @0 는 u16 LITTLE-ENDIAN, unit[0] @ payload+4, 레코드 값(id 등)은 BE — full 도 동일.
-//   count LE 근거(RE 확정, docs/reference/legacy-evidence/logh7-0325-unit-loader-wire.md): 클라
-//   FUN_004ba2b0 case 0x325 가 payload offset 0 의 count 를 u16 LE 로 읽는다. BE 로 쓰면 count=1 →
-//   바이트 `00 01` → 클라 LE read=256 → 단일유닛 스폰 게이트(count==1) 미성립 → 레지스트리
-//   @0x7db3c8 activeCount=0 → 마커클릭 null-deref. count 만 LE, record[0].id 는 BE 유지(아래).
+// 프레이밍: count @0 는 u16 BIG-ENDIAN, unit[0] @ payload+4, 레코드 값(id 등)도 BE — 레코드 전체 일관 BE.
+//   count BE 근거(라이브+정적 실측 확정, docs/reference/legacy-evidence/logh7-0325-handler-stage.md): 실제
+//   0x0325 핸들러는 FUN_00419ca0. 그 게이트가 count 를 `call [eax+0x20]` 스트림 read 로 읽는데 이 read 가
+//   ntohs(네트워크 바이트순서, 바이트스왑)한다. 서버가 BE `00 19`(count=25) 를 보내면 [eax+0x20] 스왑 →
+//   edi `19 00` → mov ax,[edi] LE 읽기 = 0x0019 = 25 ≤ 600(레지스트리 슬롯수) → 유닛 스테이징 통과.
+//   83a52a5e 의 LE 정정은 틀린 함수(FUN_004ba2b0 case 0x325) 근거였고 실행 경로가 아님이 밝혀졌다.
+//   count/id 동일 BE. record[0].id 는 0x0323 flagship self-match 불변식(아래).
 export function buildInformationUnitInner({
   unitId = 1, unitCount = 1, cell = 0, commander = 0, wireEndian = 'be', fleets = null,
 } = {}) {
-  const body = Buffer.alloc(CODE_INFO_UNIT_BYTES);
-  const writeU16 = (v, off) => (wireEndian === 'be' ? body.writeUInt16BE(v & 0xffff, off) : body.writeUInt16LE(v & 0xffff, off));
   const list = Array.isArray(fleets) && fleets.length ? fleets : null;
+  const count = list ? Math.min(list.length, CODE_INFO_UNIT_MAX) : Math.max(0, Math.min(unitCount, CODE_INFO_UNIT_MAX));
+  const body = Buffer.alloc(CODE_INFO_UNIT_BYTES);
+
+  const writeU16 = (v, off) => (wireEndian === 'be' ? body.writeUInt16BE(v & 0xffff, off) : body.writeUInt16LE(v & 0xffff, off));
+
   if (!list) {
-    // minimal: header [u16 count LE][u16 pad] @0x00, unit[0].id @ payload+HEADER(4) (stride 0x58).
-    // count 는 u16 LITTLE-ENDIAN (클라 case 0x325 가 LE 로 읽음 — BE 로 쓰면 count=1→256 팬텀).
+    // minimal: header [u16 count BE][u16 pad] @0x00, unit[0].id @ payload+HEADER(4) (stride 0x58).
+    // count 는 u16 BIG-ENDIAN (실 핸들러 FUN_00419ca0 의 [eax+0x20] 스왑 스트림리더가 ntohs 로 읽음).
     // unit[0].id(+0x00)는 0x0323 flagship(+0x24)의 self-match 링크 대상이라 BE 유지(FUN_004c2a80 원바이트 비교).
-    const count = Math.max(0, Math.min(unitCount, CODE_INFO_UNIT_MAX));
-    body.writeUInt16LE(count & 0xffff, 0); // count LE (record.id 와 반대 엔디안 — 의도된 것)
-    writeWireU32(body, unitId, CODE_INFO_UNIT_HEADER + UNIT_ELEM.ID, wireEndian); // unit[0].id ★flagship 링크 대상(BE)
+    body.writeUInt16BE(count & 0xffff, 0); // count BE (record.id 와 동일 엔디안 — 레코드 일관 BE)
+    if (count > 0) {
+      writeWireU32(body, unitId, CODE_INFO_UNIT_HEADER + UNIT_ELEM.ID, wireEndian); // unit[0].id ★flagship 링크 대상(BE)
+    }
     return buildMsg32Inner(CODE_INFO_UNIT, body);
   }
   // full: count + N개 0x58B 레코드. 고정 52804B 버퍼를 넘기지 않게 캡.
-  const count = Math.min(list.length, CODE_INFO_UNIT_MAX);
-  body.writeUInt16LE(count & 0xffff, 0); // count LE (minimal 과 동일 — 클라 case 0x325 LE 리드)
+  body.writeUInt16BE(count & 0xffff, 0); // count BE (minimal 과 동일 — 실 핸들러 FUN_00419ca0 스왑 리더)
   for (let i = 0; i < count; i += 1) {
     const base = CODE_INFO_UNIT_HEADER + i * CODE_INFO_UNIT_STRIDE;
     if (base + CODE_INFO_UNIT_STRIDE > body.length) break;

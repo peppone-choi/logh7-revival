@@ -323,10 +323,10 @@ test('playable server boots twice and serves login+world+move sequence', async (
       pushCodes.indexOf(0x0325) < pushCodes.indexOf(0x0323),
       `boot ${boot} 0x0325 must precede 0x0323`,
     );
-    // ★정합(TCP 레벨): 0x0323 flagship(body+0x24 BE) == 0x0325 unit[0].id(body+0x04 BE). count 는 LE.
+    // ★정합(TCP 레벨): 0x0323 flagship(body+0x24 BE) == 0x0325 unit[0].id(body+0x04 BE). count 도 BE.
     const unitBody = decodeInnerBody(pushFrames.find((fr) => decodeInnerCode(fr) === 0x0325));
     const charBody = decodeInnerBody(pushFrames.find((fr) => decodeInnerCode(fr) === 0x0323));
-    assert.ok(unitBody.readUInt16LE(0x00) >= 1, `boot ${boot} 0x0325 count ≥ 1 (LE)`);
+    assert.ok(unitBody.readUInt16BE(0x00) >= 1, `boot ${boot} 0x0325 count ≥ 1 (BE)`);
     assert.equal(
       charBody.readUInt32BE(0x24),
       unitBody.readUInt32BE(0x04),

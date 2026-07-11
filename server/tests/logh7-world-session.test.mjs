@@ -695,7 +695,7 @@ test('buildWorldReadyPushInners pushes 0x0325×1 + 0x0323×1 inside 0x0b09/0x0b0
   const charRec = inners.find((i) => readMsg32Code(i) === CODE_INFO_CHARACTER);
   const unitBody = msg32Body(unitRec);
   const charBody = msg32Body(charRec);
-  assert.ok(unitBody.readUInt16LE(0x00) >= 1, '0x0325 count ≥ 1 (unit array non-empty, LE)');
+  assert.ok(unitBody.readUInt16BE(0x00) >= 1, '0x0325 count ≥ 1 (unit array non-empty, BE)');
   assert.equal(unitBody.readUInt32BE(0x04), 8, 'unit[0].id(+0x04 BE) = real fleet id');
   assert.equal(
     charBody.readUInt32BE(0x24),

@@ -55,25 +55,26 @@ test('0x0323 character record is message32 with 724B body and id/flagship anchor
   assert.equal(body.readUInt32BE(0x24), 42);
 });
 
-test('0x0325 unit record is fixed 52804B: count LE, unit id BE', () => {
-  // count @0 는 u16 LE (클라 FUN_004ba2b0 case 0x325 가 LE 리드), record[0].id 는 BE
-  // (flagship(0x0323 +0x24) self-match 앵커). 두 필드가 반대 엔디안인 것이 정본이다.
+test('0x0325 unit record is fixed 52804B: count BE, unit id BE', () => {
+  // count @0 는 u16 BE (실 핸들러 FUN_00419ca0 의 [eax+0x20] ntohs 스왑 스트림리더가 읽음), record[0].id 도 BE
+  // (flagship(0x0323 +0x24) self-match 앵커). 레코드 전체 일관 BE 가 정본이다.
   const inner = buildInformationUnitInner({ unitId: 5, unitCount: 1, cell: 2588 });
   assert.equal(readMsg32Code(inner), CODE_INFO_UNIT);
   const body = msg32Body(inner);
   assert.equal(body.length, CODE_INFO_UNIT_BYTES);
-  assert.equal(body.readUInt16LE(0), 1, 'count LE == 1');
+  assert.equal(body.readUInt16BE(0), 1, 'count BE == 1');
   assert.equal(body.readUInt32BE(4), 5, 'unit[0].id BE');
 });
 
-test('0x0325 count field is LITTLE-ENDIAN: count=1 → bytes [01 00], id stays BE', () => {
-  // RE 확정(docs/reference/legacy-evidence/logh7-0325-unit-loader-wire.md): 클라가 count 를 u16 LE 로
-  // 읽는다. BE(`00 01`)면 클라 LE read=256 → 단일유닛 스폰 게이트 미성립 → 마커클릭 null-deref.
+test('0x0325 count field is BIG-ENDIAN: count=1 → bytes [00 01], id stays BE', () => {
+  // 라이브+정적 실측 확정(docs/reference/legacy-evidence/logh7-0325-handler-stage.md): 실 핸들러
+  // FUN_00419ca0 게이트가 count 를 [eax+0x20] 스왑(ntohs) 리더로 읽는다. BE `00 19`(25) → edi `19 00`
+  // → ax=0x0019=25 ≤ 600 → 스테이징 통과. LE 였다면 게이트 탈락 → 마커클릭 null-deref.
   const inner = buildInformationUnitInner({ unitId: 9, unitCount: 1, cell: 2588 });
   const body = msg32Body(inner);
-  assert.equal(body.readUInt8(0), 0x01, 'count byte0 = 0x01 (LE low byte)');
-  assert.equal(body.readUInt8(1), 0x00, 'count byte1 = 0x00 (LE high byte)');
-  assert.equal(body.readUInt16LE(0), 1, 'client-visible count == 1');
+  assert.equal(body.readUInt8(0), 0x00, 'count byte0 = 0x00 (BE high byte)');
+  assert.equal(body.readUInt8(1), 0x01, 'count byte1 = 0x01 (BE low byte)');
+  assert.equal(body.readUInt16BE(0), 1, 'client-visible count == 1 (after ntohs swap)');
   assert.equal(body.readUInt32BE(4), 9, 'unit[0].id stays BE (flagship self-match anchor)');
 });
 
@@ -161,7 +162,7 @@ test('world entry batch = unsolicited table-fill only (request-response codes re
   assert.equal(msg32Body(charRec).length, 0x2d4);
   assert.equal(msg32Body(unitRec).length, 0xce44);
   // self-match 무결(순서 바꿔도 링크 유지): 0x0323 flagship(+0x24 BE) == 0x0325 unit[0].id(+0x04 BE).
-  //   count LE 정정은 id 를 안 건드리므로 두 앵커가 동일 gridUnitId(=9) 여야 클라가 flagship→유닛 링크를 찾는다.
+  //   count BE 복원은 id 를 안 건드리므로 두 앵커가 동일 gridUnitId(=9) 여야 클라가 flagship→유닛 링크를 찾는다.
   const flagship = msg32Body(charRec).readUInt32BE(0x24);
   const unitId0 = msg32Body(unitRec).readUInt32BE(0x04);
   assert.equal(flagship, 9, '0x0323 flagship(+0x24 BE) == gridUnitId');
