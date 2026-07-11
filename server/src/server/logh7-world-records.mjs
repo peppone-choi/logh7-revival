@@ -334,7 +334,11 @@ export function buildInformationCharacterInner({
 //   - full (fleets 지정): 각 유닛의 0x58B 레코드를 UNIT_ELEM 레이아웃으로 채움. 빈 레지스트리
 //     (@0x7db3c8 activeCount=0) → 마커 클릭 null-deref 크래시 해소. fleets[0].id 는 반드시
 //     gridUnitId(=0x0323 flagship+0x24)여야 char↔unit 링크가 유지된다.
-// 프레이밍(count BE @0, unit[0] @ payload+4, 값 BE)은 라이브 검증된 현 관례 그대로 — full 도 동일.
+// 프레이밍: count @0 는 u16 LITTLE-ENDIAN, unit[0] @ payload+4, 레코드 값(id 등)은 BE — full 도 동일.
+//   count LE 근거(RE 확정, docs/reference/legacy-evidence/logh7-0325-unit-loader-wire.md): 클라
+//   FUN_004ba2b0 case 0x325 가 payload offset 0 의 count 를 u16 LE 로 읽는다. BE 로 쓰면 count=1 →
+//   바이트 `00 01` → 클라 LE read=256 → 단일유닛 스폰 게이트(count==1) 미성립 → 레지스트리
+//   @0x7db3c8 activeCount=0 → 마커클릭 null-deref. count 만 LE, record[0].id 는 BE 유지(아래).
 export function buildInformationUnitInner({
   unitId = 1, unitCount = 1, cell = 0, commander = 0, wireEndian = 'be', fleets = null,
 } = {}) {
@@ -342,17 +346,17 @@ export function buildInformationUnitInner({
   const writeU16 = (v, off) => (wireEndian === 'be' ? body.writeUInt16BE(v & 0xffff, off) : body.writeUInt16LE(v & 0xffff, off));
   const list = Array.isArray(fleets) && fleets.length ? fleets : null;
   if (!list) {
-    // minimal: header [u16 count][u16 pad] @0x00, unit[0].id @ payload+HEADER(4) (stride 0x58).
-    // count BE (1이 클라에서 1로 읽히게 — LE 는 256 팬텀). unit[0].id(+0x00)는 0x0323 flagship(+0x24)의
-    // 링크 대상 — "동일 바이트값" 되려면 둘 다 BE.
+    // minimal: header [u16 count LE][u16 pad] @0x00, unit[0].id @ payload+HEADER(4) (stride 0x58).
+    // count 는 u16 LITTLE-ENDIAN (클라 case 0x325 가 LE 로 읽음 — BE 로 쓰면 count=1→256 팬텀).
+    // unit[0].id(+0x00)는 0x0323 flagship(+0x24)의 self-match 링크 대상이라 BE 유지(FUN_004c2a80 원바이트 비교).
     const count = Math.max(0, Math.min(unitCount, CODE_INFO_UNIT_MAX));
-    writeU16(count, 0);
-    writeWireU32(body, unitId, CODE_INFO_UNIT_HEADER + UNIT_ELEM.ID, wireEndian); // unit[0].id ★flagship 링크 대상
+    body.writeUInt16LE(count & 0xffff, 0); // count LE (record.id 와 반대 엔디안 — 의도된 것)
+    writeWireU32(body, unitId, CODE_INFO_UNIT_HEADER + UNIT_ELEM.ID, wireEndian); // unit[0].id ★flagship 링크 대상(BE)
     return buildMsg32Inner(CODE_INFO_UNIT, body);
   }
   // full: count + N개 0x58B 레코드. 고정 52804B 버퍼를 넘기지 않게 캡.
   const count = Math.min(list.length, CODE_INFO_UNIT_MAX);
-  writeU16(count, 0);
+  body.writeUInt16LE(count & 0xffff, 0); // count LE (minimal 과 동일 — 클라 case 0x325 LE 리드)
   for (let i = 0; i < count; i += 1) {
     const base = CODE_INFO_UNIT_HEADER + i * CODE_INFO_UNIT_STRIDE;
     if (base + CODE_INFO_UNIT_STRIDE > body.length) break;
@@ -548,6 +552,112 @@ export function buildMessengerStatus0f07() {
   return buildMsg32Inner(CODE_RESP_MESSENGER_STATUS, Buffer.alloc(CODE_RESP_MESSENGER_STATUS_BYTES));
 }
 
+// ─── 0x032a / 0x032b ResponseInformationOutfit (旗艦情報/편성 팝업) ─────────────
+//
+// 근거: docs/reference/legacy-evidence/logh7-032a-flagship-wire.md (정본 EXE RE, 2026-07-11)
+//   0x032a(req) → 0x032b(resp). 응답 대기형(fire-and-forget 아님) — 응답 없으면 클라 재시도.
+//   바디 정확히 2804B(0xaf4) 고정. count≥1 필수(0 이면 클라가 표시 함수 미호출 → 빈 창).
+//   레이아웃: [u8 count @0x00][pad 3B][element[i] @0x04 + i*0x1c, 각 28B, ≤100].
+//   엔디안: 형제 0x0323/0x0325 와 동일 packed BE(0x03xx 일괄 BE 규약).
+export const CODE_REQ_OUTFIT_INFO = 0x032a; // C→S RequestInformationOutfit
+export const CODE_RESP_OUTFIT_INFO = 0x032b; // S→C ResponseInformationOutfit
+export const CODE_RESP_OUTFIT_INFO_BYTES = 0xaf4; // 2804 고정 수신 크기
+export const OUTFIT_HEADER = 4; // [u8 count][pad 3B]; element[0] = payload+4
+export const OUTFIT_STRIDE = 0x1c; // 28B element
+export const OUTFIT_MAX = 100; // 사이저 상한
+
+// element(28B) 필드 오프셋 — 요소 base 상대 (RE 표 §2, FUN_0041c330 덤프).
+export const OUTFIT_ELEM = Object.freeze({
+  ID: 0x00, // u32 outfit/fleet id
+  KIND: 0x04, // u8 種別
+  POWER: 0x05, // u8 陣営
+  CAMP: 0x06, // u8 camp
+  INDEX: 0x07, // u8 index
+  ACHIEVEMENT: 0x08, // u16 戦功
+  STRATEGY_ID: 0x0c, // u32
+  PRACTICE_WARP: 0x10, // u8 연성치(함대 훈련) 10종 @0x10..0x19
+  PRACTICE_SPEED: 0x11,
+  PRACTICE_COMMAND: 0x12,
+  PRACTICE_OFFENCE: 0x13,
+  PRACTICE_DEFENCE: 0x14,
+  PRACTICE_ANTIAIRCRAFT: 0x15,
+  PRACTICE_SEARCH: 0x16,
+  PRACTICE_DECEPTION: 0x17,
+  PRACTICE_LANDBATTLE: 0x18,
+  PRACTICE_AIRBATTLE: 0x19,
+});
+
+/**
+ * ability8 → 연성치 10종 매핑 (정확 漢字 identity 만, 날조 금지).
+ *
+ * 시드 ability8 키: [tochi統治, seiji政治, unei運営, joho情報, shiki指揮, kido機動, kogeki攻撃, bogyo防御].
+ * 연성치는 함대 훈련값으로 캐릭터 능력치와 개념이 다르나, 漢字가 정확히 일치하는 3종만 근거로 채운다:
+ *   command(指揮) ← ability8[4] shiki指揮 / offence(攻撃) ← ability8[6] kogeki攻撃 / defence(防御) ← ability8[7] bogyo防御.
+ * 나머지 warp/speed/antiaircraft/search/deception/landbattle/airbattle 는 대응 능력치 없음 → 0.
+ *   (機動≠速度, 情報≠索敵 — 근사 매핑도 근거 부족이라 0 유지.)
+ */
+export function outfitPracticeFromAbility8(ability8) {
+  const a = Array.isArray(ability8) ? ability8 : [];
+  const at = (i) => (Number.isFinite(Number(a[i])) ? Number(a[i]) & 0xff : 0);
+  return {
+    warp: 0,
+    speed: 0,
+    command: at(4), // 指揮
+    offence: at(6), // 攻撃
+    defence: at(7), // 防御
+    antiaircraft: 0,
+    search: 0,
+    deception: 0,
+    landbattle: 0,
+    airbattle: 0,
+  };
+}
+
+/**
+ * 0x032b ResponseInformationOutfit (2804B 고정). 순수 빌더.
+ *
+ * outfits: [{ id, kind, power, camp, index, achievement, strategyId, practice:{warp,speed,command,...} }]
+ * count = min(outfits.length, 100). 자기소속 팝업이면 outfits=[플레이어 편성 1개] → count=1.
+ * 엔디안 BE(형제 0x0323/0x0325 규약). 라이브에서 숫자 뒤집히면 LE 폴백(RE §3).
+ * 근거 있는 필드만 채우고(호출측 책임) 미지정은 0 — 여기서 값 합성하지 않는다.
+ */
+export function buildOutfitInfo032b({ outfits = [], wireEndian = 'be' } = {}) {
+  const body = Buffer.alloc(CODE_RESP_OUTFIT_INFO_BYTES);
+  const list = Array.isArray(outfits) ? outfits : [];
+  const count = Math.min(list.length, OUTFIT_MAX);
+  body.writeUInt8(count & 0xff, 0); // count @0x00 (pad @0x01..0x03)
+  const writeU32 = (v, off) => (wireEndian === 'be'
+    ? body.writeUInt32BE((v ?? 0) >>> 0, off)
+    : body.writeUInt32LE((v ?? 0) >>> 0, off));
+  const writeU16 = (v, off) => (wireEndian === 'be'
+    ? body.writeUInt16BE((v ?? 0) & 0xffff, off)
+    : body.writeUInt16LE((v ?? 0) & 0xffff, off));
+  for (let i = 0; i < count; i += 1) {
+    const base = OUTFIT_HEADER + i * OUTFIT_STRIDE;
+    if (base + OUTFIT_STRIDE > body.length) break;
+    const o = list[i] ?? {};
+    const p = o.practice ?? {};
+    writeU32(o.id, base + OUTFIT_ELEM.ID);
+    body.writeUInt8((o.kind ?? 0) & 0xff, base + OUTFIT_ELEM.KIND);
+    body.writeUInt8((o.power ?? 0) & 0xff, base + OUTFIT_ELEM.POWER);
+    body.writeUInt8((o.camp ?? 0) & 0xff, base + OUTFIT_ELEM.CAMP);
+    body.writeUInt8((o.index ?? 0) & 0xff, base + OUTFIT_ELEM.INDEX);
+    writeU16(o.achievement, base + OUTFIT_ELEM.ACHIEVEMENT);
+    writeU32(o.strategyId, base + OUTFIT_ELEM.STRATEGY_ID);
+    body.writeUInt8((p.warp ?? 0) & 0xff, base + OUTFIT_ELEM.PRACTICE_WARP);
+    body.writeUInt8((p.speed ?? 0) & 0xff, base + OUTFIT_ELEM.PRACTICE_SPEED);
+    body.writeUInt8((p.command ?? 0) & 0xff, base + OUTFIT_ELEM.PRACTICE_COMMAND);
+    body.writeUInt8((p.offence ?? 0) & 0xff, base + OUTFIT_ELEM.PRACTICE_OFFENCE);
+    body.writeUInt8((p.defence ?? 0) & 0xff, base + OUTFIT_ELEM.PRACTICE_DEFENCE);
+    body.writeUInt8((p.antiaircraft ?? 0) & 0xff, base + OUTFIT_ELEM.PRACTICE_ANTIAIRCRAFT);
+    body.writeUInt8((p.search ?? 0) & 0xff, base + OUTFIT_ELEM.PRACTICE_SEARCH);
+    body.writeUInt8((p.deception ?? 0) & 0xff, base + OUTFIT_ELEM.PRACTICE_DECEPTION);
+    body.writeUInt8((p.landbattle ?? 0) & 0xff, base + OUTFIT_ELEM.PRACTICE_LANDBATTLE);
+    body.writeUInt8((p.airbattle ?? 0) & 0xff, base + OUTFIT_ELEM.PRACTICE_AIRBATTLE);
+  }
+  return buildMsg32Inner(CODE_RESP_OUTFIT_INFO, body);
+}
+
 // ─── 0x0b09 / 0x0b0a NotifyEnterGrid Begin/End (그리드진입 = 렌더 트리거) ───────
 //
 // 근거 (5bd249c logh7-login-protocol.mjs:1197-1209, opcode-reference-2026-06-28.md L211-212):
@@ -684,6 +794,7 @@ export const STATIC_INFO_BODY_SIZES = Object.freeze({
   0x0315: 0x138c, // 5004 (전용 빌더 buildStaticInformationGridInner 로 헤더 채움)
   0x0f07: 0x74cc, // 29900 ResponseInformationMessengerStatus (zero-fill, 클라 미파싱)
   0x031d: 0x520c, // 21004 static-base
+  0x032b: 0x0af4, // 2804 ResponseInformationOutfit (전용 빌더 buildOutfitInfo032b, count≥1)
 });
 
 /**
@@ -807,6 +918,10 @@ const ADMISSION_DEDICATED_BUILDERS = Object.freeze({
   [CODE_REQ_WORLD_INIT]: () => buildWorldInitOkInner({ status: 1 }), // 0x0f00 → 0x0f01
   [CODE_REQ_GRID_INIT]: () => buildGridInitOkInner({ status: 1 }), // 0x0f02 → 0x0f03 (plain OK)
   [CODE_REQ_MESSENGER_STATUS]: () => buildMessengerStatus0f07(), // 0x0f06 → 0x0f07 (idle queue unblock)
+  // 0x032a → 0x032b: 라우팅 인식용 등록(isAdmissionRequestCode). 실제 응답은 handleWorldInner 가
+  //   플레이어 편성으로 가로채 생성한다(0x0f02/0x0314 와 동일 패턴). 여기 fallback 은 플레이어
+  //   컨텍스트 없이 호출될 때 창만 뜨는 안전망(count=1, 값 0) — 정상 경로에선 미사용.
+  [CODE_REQ_OUTFIT_INFO]: () => buildOutfitInfo032b({ outfits: [{}] }), // 0x032a → 0x032b
 });
 
 /**

@@ -381,6 +381,76 @@ test('isAdmissionRequestCode(0x0f02) is true so playable-server routes it to wor
   assert.equal(isAdmissionRequestCode(0x0f02), true);
 });
 
+// ─── 0x032a RequestInformationOutfit → 0x032b (旗艦情報/편성 팝업) ─────────────
+// 근거: docs/reference/legacy-evidence/logh7-032a-flagship-wire.md (정본 EXE RE)
+// 0x032a 수신 → 0x032b 응답(2804B 고정, count≥1). count=0 이면 클라가 표시 함수를
+// 안 불러 창이 빈다. 자기 편성이므로 count=1 + element[0]=플레이어 기함/편성.
+// element(28B) 오프셋(요소 base 상대): id u32@0x00, camp u8@0x06,
+//   practice_command@0x12, practice_offence@0x13, practice_defence@0x14 (형제 0x03xx 와 동일 BE).
+// 연성치 매핑(정확 漢字만): command←ability8[4](指揮), offence←ability8[6](攻撃), defence←ability8[7](防御).
+
+test('handleWorldInner routes 0x032a RequestInformationOutfit → 0x032b', () => {
+  const world = createWorldSession();
+  world.seedPlayer({ connectionId: 1, characterId: 5, unitId: 8, power: 2, inWorld: true });
+  const req = Buffer.alloc(2);
+  req.writeUInt16BE(0x032a, 0);
+  const result = world.handleWorldInner({ connectionId: 1, accountId: 'a', inner: req });
+  assert.ok(result, '0x032a must be routed (not null — else popup never opens & client retries)');
+  assert.equal(result.kind, 'admission');
+  assert.equal(result.responses.length, 1);
+  assert.equal(readMsg32Code(result.responses[0].inner), 0x032b);
+  assert.deepEqual(result.responses[0].targets, [1]);
+  assert.equal(result.responses[0].isMsg32, true);
+});
+
+test('0x032b response body is exactly 2804 bytes (0xaf4) with count=1', () => {
+  const world = createWorldSession();
+  world.seedPlayer({ connectionId: 1, characterId: 5, unitId: 8, power: 2, inWorld: true });
+  const req = Buffer.alloc(2);
+  req.writeUInt16BE(0x032a, 0);
+  const result = world.handleWorldInner({ connectionId: 1, accountId: 'a', inner: req });
+  const body = msg32Body(result.responses[0].inner);
+  assert.equal(body.length, 0xaf4, 'body length exactly 2804 (0xaf4)');
+  assert.equal(body.length, 2804, 'body length exactly 2804 (decimal)');
+  assert.equal(body.readUInt8(0), 1, 'count field @0x00 must be 1 (0 → empty popup)');
+});
+
+test('0x032b element[0] carries player fleet id + faction + mapped practice (BE) from seed', () => {
+  // 자기 편성 팝업: id=플레이어 unit[0].id(=gridUnitId), camp=faction,
+  // 연성치는 정확 漢字 매핑(指揮/攻撃/防御)만 채우고 나머지는 근거없어 0.
+  const characterStore = {
+    getCharacters: (acct) =>
+      acct === 'inei00'
+        ? [{
+            id: 7,
+            power: 2,
+            ability8: [90, 85, 80, 75, 70, 65, 60, 55],
+          }]
+        : [],
+  };
+  const world = createWorldSession({ characterStore });
+  world.seedPlayer({ connectionId: 1, accountId: 'inei00', characterId: 7, unitId: 8, power: 2, inWorld: true });
+  const req = Buffer.alloc(2);
+  req.writeUInt16BE(0x032a, 0);
+  const result = world.handleWorldInner({ connectionId: 1, accountId: 'inei00', inner: req });
+  const body = msg32Body(result.responses[0].inner);
+  const base = 4; // OUTFIT_HEADER: element[0] = body+4
+  assert.equal(body.readUInt32BE(base + 0x00), 8, 'element id (BE) == player unit[0].id');
+  assert.equal(body.readUInt8(base + 0x06), 2, 'camp == player faction');
+  // 정확 漢字 매핑: command(指揮)=ability8[4]=70, offence(攻撃)=ability8[6]=60, defence(防御)=ability8[7]=55
+  assert.equal(body.readUInt8(base + 0x12), 70, 'practice_command <- ability8[4] (指揮)');
+  assert.equal(body.readUInt8(base + 0x13), 60, 'practice_offence <- ability8[6] (攻撃)');
+  assert.equal(body.readUInt8(base + 0x14), 55, 'practice_defence <- ability8[7] (防御)');
+  // 대응 능력치 없는 연성치는 0 (날조 금지)
+  assert.equal(body.readUInt8(base + 0x10), 0, 'practice_warp = 0 (no basis)');
+  assert.equal(body.readUInt8(base + 0x11), 0, 'practice_speed = 0 (機動≠速度)');
+  assert.equal(body.readUInt8(base + 0x16), 0, 'practice_search = 0 (情報≠索敵)');
+});
+
+test('isAdmissionRequestCode(0x032a) is true so playable-server routes it to world (not lobby)', () => {
+  assert.equal(isAdmissionRequestCode(0x032a), true);
+});
+
 test('handleWorldInner still returns null for a genuinely unknown code', () => {
   const world = createWorldSession();
   world.seedPlayer({ connectionId: 1, characterId: 5, unitId: 8, inWorld: true });
@@ -604,7 +674,7 @@ test('buildWorldReadyPushInners pushes 0x0325×1 + 0x0323×1 inside 0x0b09/0x0b0
   const charRec = inners.find((i) => readMsg32Code(i) === CODE_INFO_CHARACTER);
   const unitBody = msg32Body(unitRec);
   const charBody = msg32Body(charRec);
-  assert.ok(unitBody.readUInt16BE(0x00) >= 1, '0x0325 count ≥ 1 (unit array non-empty)');
+  assert.ok(unitBody.readUInt16LE(0x00) >= 1, '0x0325 count ≥ 1 (unit array non-empty, LE)');
   assert.equal(unitBody.readUInt32BE(0x04), 8, 'unit[0].id(+0x04 BE) = real fleet id');
   assert.equal(
     charBody.readUInt32BE(0x24),

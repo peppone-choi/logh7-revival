@@ -55,14 +55,26 @@ test('0x0323 character record is message32 with 724B body and id/flagship anchor
   assert.equal(body.readUInt32BE(0x24), 42);
 });
 
-test('0x0325 unit record is fixed 52804B with count and unit id (aligned BE)', () => {
-  // 0x0325 도 info-record 계열 → aligned BE (count·id). flagship(0x0323 +0x24)과 동일 BE 로 링크.
+test('0x0325 unit record is fixed 52804B: count LE, unit id BE', () => {
+  // count @0 는 u16 LE (클라 FUN_004ba2b0 case 0x325 가 LE 리드), record[0].id 는 BE
+  // (flagship(0x0323 +0x24) self-match 앵커). 두 필드가 반대 엔디안인 것이 정본이다.
   const inner = buildInformationUnitInner({ unitId: 5, unitCount: 1, cell: 2588 });
   assert.equal(readMsg32Code(inner), CODE_INFO_UNIT);
   const body = msg32Body(inner);
   assert.equal(body.length, CODE_INFO_UNIT_BYTES);
-  assert.equal(body.readUInt16BE(0), 1);
-  assert.equal(body.readUInt32BE(4), 5);
+  assert.equal(body.readUInt16LE(0), 1, 'count LE == 1');
+  assert.equal(body.readUInt32BE(4), 5, 'unit[0].id BE');
+});
+
+test('0x0325 count field is LITTLE-ENDIAN: count=1 → bytes [01 00], id stays BE', () => {
+  // RE 확정(docs/reference/legacy-evidence/logh7-0325-unit-loader-wire.md): 클라가 count 를 u16 LE 로
+  // 읽는다. BE(`00 01`)면 클라 LE read=256 → 단일유닛 스폰 게이트 미성립 → 마커클릭 null-deref.
+  const inner = buildInformationUnitInner({ unitId: 9, unitCount: 1, cell: 2588 });
+  const body = msg32Body(inner);
+  assert.equal(body.readUInt8(0), 0x01, 'count byte0 = 0x01 (LE low byte)');
+  assert.equal(body.readUInt8(1), 0x00, 'count byte1 = 0x00 (LE high byte)');
+  assert.equal(body.readUInt16LE(0), 1, 'client-visible count == 1');
+  assert.equal(body.readUInt32BE(4), 9, 'unit[0].id stays BE (flagship self-match anchor)');
 });
 
 // ─── self-id ↔ record[0] 바이트오더 불변식 (self-match 정합 잠금) ────────────────

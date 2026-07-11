@@ -58,13 +58,13 @@ test('buildDeploymentFleetList: 플레이어 unit[0] 앵커 + NPC, id 충돌 제
   assert.equal(ids.size, list.length, '플레이어 포함 id 유니크');
 });
 
-test('0x0325 full form: 고정 52804B, count BE == fleets 수, unit[0].id == 앵커', () => {
+test('0x0325 full form: 고정 52804B, count LE == fleets 수, unit[0].id == 앵커', () => {
   const fleets = buildDeploymentFleetList({ unitId: 5, cell: 100, characterId: 9, faction: FACTION_ALLIANCE });
   const inner = buildInformationUnitInner({ unitId: 5, fleets });
   assert.equal(readMsg32Code(inner), CODE_INFO_UNIT);
   const body = msg32Body(inner);
   assert.equal(body.length, CODE_INFO_UNIT_BYTES, '고정 52804B 유지');
-  assert.equal(body.readUInt16BE(0), fleets.length, 'count BE == fleets 수');
+  assert.equal(body.readUInt16LE(0), fleets.length, 'count LE == fleets 수 (클라 case 0x325 LE 리드)');
   // unit[0] = 플레이어 (앵커: flagship 링크)
   assert.equal(body.readUInt32BE(unitBase(0) + UNIT_ELEM.ID), 5, 'unit[0].id BE @ +0x04 == unitId');
   assert.equal(body.readUInt32BE(unitBase(0) + UNIT_ELEM.CELL), 100, 'unit[0].cell');
@@ -83,7 +83,7 @@ test('0x0325 minimal form 회귀: fleets 미지정 시 count+id 만 (byte-identi
   const inner = buildInformationUnitInner({ unitId: 5, unitCount: 1, cell: 2588 });
   const body = msg32Body(inner);
   assert.equal(body.length, CODE_INFO_UNIT_BYTES);
-  assert.equal(body.readUInt16BE(0), 1, 'count=1');
+  assert.equal(body.readUInt16LE(0), 1, 'count=1 (LE)');
   assert.equal(body.readUInt32BE(4), 5, 'unit[0].id=5');
   // 여분 필드 0 (minimal 은 cell/faction 미방출)
   assert.equal(body.readUInt32BE(unitBase(0) + UNIT_ELEM.CELL), 0, 'minimal: cell 미방출');
@@ -95,7 +95,7 @@ test('world-enter fleets: 0x0325 unit[0].id == gridUnitId (flagship 링크 유�
   const emits = buildWorldEntryInners({ characterId: 42, gridUnitId: 7, power: 2, spot: 1, fleets });
   const unitRec = emits.find((i) => readMsg32Code(i) === CODE_INFO_UNIT);
   const ub = msg32Body(unitRec);
-  assert.equal(ub.readUInt16BE(0), fleets.length, 'count > 1 (레지스트리 충전)');
+  assert.equal(ub.readUInt16LE(0), fleets.length, 'count > 1 (레지스트리 충전, LE)');
   assert.equal(ub.readUInt32BE(4), 7, 'unit[0].id BE == gridUnitId (링크 앵커)');
 });
 
@@ -105,6 +105,6 @@ test('grid-init spawn fleets: 0x0325 가 N개 실 레코드로 레지스트리 �
   const unitRec = inners.find((i) => readMsg32Code(i) === CODE_INFO_UNIT);
   assert.ok(unitRec, '0x0325 present in grid-init spawn');
   const ub = msg32Body(unitRec);
-  assert.equal(ub.readUInt16BE(0), fleets.length, 'spawn count == fleets 수');
+  assert.equal(ub.readUInt16LE(0), fleets.length, 'spawn count == fleets 수 (LE)');
   assert.equal(ub.readUInt32BE(4), 3, 'unit[0].id == unitId');
 });

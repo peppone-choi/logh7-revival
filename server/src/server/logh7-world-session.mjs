@@ -24,6 +24,9 @@ import {
   CODE_REQ_STATIC_GRID,
   CODE_REQ_STATIC_GRID_TYPE,
   CODE_REQ_GRID_INIT,
+  CODE_REQ_OUTFIT_INFO,
+  buildOutfitInfo032b,
+  outfitPracticeFromAbility8,
 } from './logh7-world-records.mjs';
 import {
   getStrategicGridCells,
@@ -460,6 +463,48 @@ export function createWorldSession({
         reqCode: code,
         respCode: readMsg32Code(ackInner),
         responses: [{ targets: [connectionId], inner: ackInner, isMsg32: true }],
+      };
+    }
+
+    // 0x032a(RequestInformationOutfit) → 0x032b: 旗艦情報/편성 팝업. 플레이어 자기 편성으로 응답.
+    //
+    // 근거: docs/reference/legacy-evidence/logh7-032a-flagship-wire.md. 요청 5바이트 필드는
+    //   미확정(RE unknown) → 파싱하지 않고 플레이어 자기 outfit 으로 응답(RE §5). count≥1 필수.
+    // element[0] 값 소스(근거 있는 것만, 날조 금지):
+    //   id      = player.unitId (0x0325 unit[0].id = gridUnitId = flagship 링크 대상)
+    //   camp    = seed/player faction (진영)
+    //   연성치   = outfitPracticeFromAbility8: 指揮/攻撃/防御 3종만 시드 ability8 매핑, 나머지 0
+    //   kind/power/index/achievement/strategy_id = 근거 없어 0.
+    // 플레이어 미보유/미진입이면 합성 금지 → null(fail-closed). 라우팅 인식은
+    //   ADMISSION_DEDICATED_BUILDERS[0x032a] 로 유지되나 실제 응답은 여기서 생성한다.
+    if (code === CODE_REQ_OUTFIT_INFO) {
+      const player = players.get(connectionId);
+      if (!player || !player.inWorld || !(player.characterId > 0)) {
+        return null;
+      }
+      // 시드 ability8 조회(enterWorld 와 동일 경로). 없으면 연성치 0.
+      let seed = null;
+      if (characterStore && typeof characterStore.getCharacters === 'function' && player.accountId) {
+        try {
+          const chars = characterStore.getCharacters(player.accountId) ?? [];
+          seed = chars.find((c) => Number(c?.id) === Number(player.characterId)) ?? chars[0] ?? null;
+        } catch {
+          seed = null;
+        }
+      }
+      const ability8 = Array.isArray(seed?.ability8) ? seed.ability8 : null;
+      const outfitResp = buildOutfitInfo032b({
+        outfits: [{
+          id: player.unitId, // 자기 함대 id (0x0325 unit[0].id 와 동일)
+          camp: seed?.power ?? player.power ?? 0, // 진영/faction
+          practice: outfitPracticeFromAbility8(ability8),
+        }],
+      });
+      return {
+        kind: 'admission',
+        reqCode: code,
+        respCode: readMsg32Code(outfitResp),
+        responses: [{ targets: [connectionId], inner: outfitResp, isMsg32: true }],
       };
     }
 
