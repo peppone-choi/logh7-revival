@@ -337,6 +337,46 @@ test('handleWorldInner routes 0x0f02 when message32-framed too (spawn burst)', (
   assert.equal(codes[codes.length - 1], 0x0f03, '0x0f03 last');
 });
 
+// ─── 0x0f06 RequestInformationMessengerStatus → 0x0f07 (idle 파이프라인 해제) ──
+// 근거: docs/reference/legacy-evidence/logh7-0f06-wire.md (정본 EXE RE)
+// 클라 0x0f06 을 보낼 때 응답 0x0f07 을 미결 큐에 등록. 응답 없으면 큐 정지
+// (이후 모든 요청 송신 차단 → idle 크래시). 0x0f07 바디는 29900B zero-fill.
+// 클라가 파싱하지 않음(핸들러 빈 스텁) → 내용 정확도 불필요, 도착만 필요.
+
+test('handleWorldInner routes 0x0f06 RequestInformationMessengerStatus → 0x0f07', () => {
+  const world = createWorldSession();
+  world.seedPlayer({ connectionId: 1, characterId: 5, unitId: 8, inWorld: true });
+  const req = Buffer.alloc(2);
+  req.writeUInt16BE(0x0f06, 0);
+  const result = world.handleWorldInner({ connectionId: 1, accountId: 'a', inner: req });
+  assert.ok(result, '0x0f06 must be routed (not null — else idle queue stalls)');
+  assert.equal(result.kind, 'admission');
+  assert.equal(result.responses.length, 1);
+  assert.equal(readMsg32Code(result.responses[0].inner), 0x0f07);
+  assert.deepEqual(result.responses[0].targets, [1]);
+  assert.equal(result.responses[0].isMsg32, true);
+});
+
+test('0x0f07 response body is exactly 29900 bytes (0x74cc) of zeros', () => {
+  const world = createWorldSession();
+  world.seedPlayer({ connectionId: 1, characterId: 5, unitId: 8, inWorld: true });
+  const req = Buffer.alloc(2);
+  req.writeUInt16BE(0x0f06, 0);
+  const result = world.handleWorldInner({ connectionId: 1, accountId: 'a', inner: req });
+  const body = msg32Body(result.responses[0].inner);
+  assert.equal(body.length, 0x74cc, 'body length exactly 29900');
+  assert.equal(body.length, 29900, 'body length exactly 29900 (decimal)');
+  // 검증: 모든 바이트가 0
+  for (let i = 0; i < body.length; i += 1) {
+    assert.equal(body.readUInt8(i), 0, `byte[${i}] must be 0`);
+  }
+});
+
+test('isAdmissionRequestCode(0x0f06) is true (idle queue depends on routing)', () => {
+  // 미배선 시 lobby 로 새어 queue depth 무한 증가 → 로그 flooding + 클라 송신 정지
+  assert.equal(isAdmissionRequestCode(0x0f06), true);
+});
+
 test('isAdmissionRequestCode(0x0f02) is true so playable-server routes it to world (not lobby)', () => {
   assert.equal(isAdmissionRequestCode(0x0f02), true);
 });

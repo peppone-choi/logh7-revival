@@ -81,6 +81,9 @@ export const CODE_REQ_WORLD_INIT = 0x0f00; // C→S RequestWorldInitialize → 0
 export const CODE_WORLD_INIT_OK = 0x0f01; // ResponseWorldInitialize_OK → client+0x35f356
 export const CODE_REQ_GRID_INIT = 0x0f02; // C→S RequestGridInitialize → 0x0f03 (라이브 정정: push 아님)
 export const CODE_GRID_INIT_OK = 0x0f03; // ResponseGridInitialize_OK → client+0x35f357
+export const CODE_REQ_MESSENGER_STATUS = 0x0f06; // C→S RequestInformationMessengerStatus → 0x0f07
+export const CODE_RESP_MESSENGER_STATUS = 0x0f07; // S→C ResponseInformationMessengerStatus — 29900B zero-fill
+export const CODE_RESP_MESSENGER_STATUS_BYTES = 0x74cc; // 29900 fixed receive size
 export const CODE_STATIC_GRID = 0x0315; // ResponseStaticInformationGrid RLE, fixed 0x138c
 export const CODE_STATIC_GRID_BYTES = 0x138c; // 5004
 export const CODE_GRID_SELECTOR = 0x0317; // ResponseInformationGrid single dword
@@ -534,6 +537,17 @@ export function buildGridInitOkInner({ status = 1 } = {}) {
   return buildWorldOkStatusInner(CODE_GRID_INIT_OK, { status });
 }
 
+// ─── 0x0f07 ResponseInformationMessengerStatus (idle 파이프라인 해제) ─────────────
+//
+// 근거: docs/reference/legacy-evidence/logh7-0f06-wire.md (정본 EXE RE, 2026-07-11)
+//   0x0f06 요청 → 0x0f07 응답 29900B(0x74cc). 클라 미결 큐가 응답을 대기하며, 응답 없으면
+//   큐 정지 → 후속 요청 전부 미송신 → idle 크래시. 바디는 클라가 파싱하지 않음(핸들러 빈 스텁,
+//   FUN_005266e0). 따라서 zero-fill이 정본.
+export function buildMessengerStatus0f07() {
+  // 필드 의미 unknown — 클라 파서가 빈 스텁이라 zero-fill이 정본(logh7-0f06-wire.md)
+  return buildMsg32Inner(CODE_RESP_MESSENGER_STATUS, Buffer.alloc(CODE_RESP_MESSENGER_STATUS_BYTES));
+}
+
 // ─── 0x0b09 / 0x0b0a NotifyEnterGrid Begin/End (그리드진입 = 렌더 트리거) ───────
 //
 // 근거 (5bd249c logh7-login-protocol.mjs:1197-1209, opcode-reference-2026-06-28.md L211-212):
@@ -668,6 +682,7 @@ export const STATIC_INFO_BODY_SIZES = Object.freeze({
   0x0311: 0x01b0, // 432
   0x0313: 0x138c, // 5004 (전용 빌더 buildStaticInformationGridTypeInner 로 헤더 채움)
   0x0315: 0x138c, // 5004 (전용 빌더 buildStaticInformationGridInner 로 헤더 채움)
+  0x0f07: 0x74cc, // 29900 ResponseInformationMessengerStatus (zero-fill, 클라 미파싱)
   0x031d: 0x520c, // 21004 static-base
 });
 
@@ -791,6 +806,7 @@ const ADMISSION_DEDICATED_BUILDERS = Object.freeze({
   [CODE_REQ_RESPONSE_TIME]: () => buildResponseTimeInner(), // 0x0300 → 0x0301
   [CODE_REQ_WORLD_INIT]: () => buildWorldInitOkInner({ status: 1 }), // 0x0f00 → 0x0f01
   [CODE_REQ_GRID_INIT]: () => buildGridInitOkInner({ status: 1 }), // 0x0f02 → 0x0f03 (plain OK)
+  [CODE_REQ_MESSENGER_STATUS]: () => buildMessengerStatus0f07(), // 0x0f06 → 0x0f07 (idle queue unblock)
 });
 
 /**
