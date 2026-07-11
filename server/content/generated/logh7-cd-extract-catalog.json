@@ -1,0 +1,439 @@
+{
+  "schemaVersion": 1,
+  "provenance": {
+    "extractor": "tools/extract/logh7-cd-extract.mjs",
+    "driver": "tools/extract/logh7-cd-reextract-run.mjs",
+    "source": {
+      "bin": {
+        "file": "artifacts/logh7-cd/Logh7.bin",
+        "bytes": 229070688,
+        "md5": "bf87c6a8cb068f05625737377a07b09d",
+        "sha256": "0b463820a980889d396b459c74720d48f9486b5133cea01172f4693de480acb1"
+      },
+      "cue": {
+        "file": "artifacts/logh7-cd/Logh7.cue",
+        "sha256": "7e3d277a1d2874b00d4fec201c41401d9239496e654b1147c59be39fa7a6c789",
+        "track": {
+          "binFile": "Logh7.bin",
+          "trackNumber": 1,
+          "mode": "MODE2/2352",
+          "sectorSize": 2352,
+          "indexLba": 0
+        }
+      }
+    },
+    "derivedIso": {
+      "logicalBytes": 199462912,
+      "sectors": 97394,
+      "sha256": "375838ce1c0798e166d9d127cd598705560de4efcff1ff0ad7d0b19fab01cc22"
+    },
+    "legacyIso": {
+      "bytes": 199462912,
+      "sha256": "375838ce1c0798e166d9d127cd598705560de4efcff1ff0ad7d0b19fab01cc22",
+      "identicalToFreshConversion": true
+    },
+    "extractedAt": "2026-07-11T03:39:22.659Z",
+    "outputDir": "artifacts/logh7-cd/iso-root-v2",
+    "canonicalTree": "joliet"
+  },
+  "volume": {
+    "descriptors": [
+      {
+        "lba": 16,
+        "type": 1
+      },
+      {
+        "lba": 17,
+        "type": 2
+      },
+      {
+        "lba": 18,
+        "type": 255
+      }
+    ],
+    "primaryFileCount": 25,
+    "jolietFileCount": 25
+  },
+  "files": [
+    {
+      "path": "DSETUP.dll",
+      "size": 60416,
+      "extentLba": 75236,
+      "extentByteStart": 154083328,
+      "occupiedSectors": 30,
+      "sha256": "edc9c0bdd3e1e445c9bd57fe8141f93c0be53d61d1f8c6355e6d53565028001d",
+      "md5": "91865aec9c49bee70ed3ab5ec4365127"
+    },
+    {
+      "path": "DirectX9/BDA.cab",
+      "size": 695962,
+      "extentLba": 79584,
+      "extentByteStart": 162988032,
+      "occupiedSectors": 340,
+      "sha256": "47acfa0dd8b6697fe711f3c8ea17396fc9dfffa0ef996877fc3ddd75d4d20f5d",
+      "md5": "8900f15a6bb4e88a40e61dff0383904c"
+    },
+    {
+      "path": "DirectX9/BDANT.cab",
+      "size": 1149019,
+      "extentLba": 79924,
+      "extentByteStart": 163684352,
+      "occupiedSectors": 562,
+      "sha256": "d83c0089cdfe14c1b008b27257c1950ac86b7df56c03803b84a3422928701eab",
+      "md5": "08938174a6e3174795d6f173da953e7c"
+    },
+    {
+      "path": "DirectX9/BDAXP.cab",
+      "size": 968156,
+      "extentLba": 80486,
+      "extentByteStart": 164835328,
+      "occupiedSectors": 473,
+      "sha256": "a027e84d33b1bcc5d534de2d088d2bbc7d2186347e5f38742b1964133b07b871",
+      "md5": "3d48496dd6669692bc69de5f1694b817"
+    },
+    {
+      "path": "DirectX9/DSETUP.dll",
+      "size": 60416,
+      "extentLba": 88500,
+      "extentByteStart": 181248000,
+      "occupiedSectors": 30,
+      "sha256": "edc9c0bdd3e1e445c9bd57fe8141f93c0be53d61d1f8c6355e6d53565028001d",
+      "md5": "91865aec9c49bee70ed3ab5ec4365127"
+    },
+    {
+      "path": "DirectX9/DirectX.cab",
+      "size": 15443578,
+      "extentLba": 80959,
+      "extentByteStart": 165804032,
+      "occupiedSectors": 7541,
+      "sha256": "e8497df7ed6b47e7ae6a4a78eb10fd3c279224b50bfc9084ab67996ecbeb9517",
+      "md5": "8395203fb63b22a35764e90868da5fd5"
+    },
+    {
+      "path": "DirectX9/ManagedDX.CAB",
+      "size": 1104358,
+      "extentLba": 96151,
+      "extentByteStart": 196917248,
+      "occupiedSectors": 540,
+      "sha256": "a05cde5ab21d65c6040b3183f8ac493548cf1456ce792fc44377fb97b305b86f",
+      "md5": "4f35b8a97ecb14ee8bda8e8b7aa626fd"
+    },
+    {
+      "path": "DirectX9/dsetup32.dll",
+      "size": 1978368,
+      "extentLba": 88530,
+      "extentByteStart": 181309440,
+      "occupiedSectors": 966,
+      "sha256": "8957cca723307720687283fa50df6b06883a90bac350be8d599544320b405c65",
+      "md5": "54a2e8e8b8672ab0921017b704d0eec7"
+    },
+    {
+      "path": "DirectX9/dxnt.cab",
+      "size": 13160291,
+      "extentLba": 89496,
+      "extentByteStart": 183287808,
+      "occupiedSectors": 6426,
+      "sha256": "7f5236c8ed91e5b7c08045e309e3679b01bec42921fcecccb99be83ca7010f77",
+      "md5": "1451b2aa63243bc6639694b6d472c41e"
+    },
+    {
+      "path": "DirectX9/dxsetup.exe",
+      "size": 467456,
+      "extentLba": 95922,
+      "extentByteStart": 196448256,
+      "occupiedSectors": 229,
+      "sha256": "67c521b646c74f01ccae7e730cde027326908ddc7d26ace045451a68a6567d31",
+      "md5": "50ca7683aca3e726583aa99f1621decc"
+    },
+    {
+      "path": "DirectX9/mdxredist.msi",
+      "size": 1127936,
+      "extentLba": 96691,
+      "extentByteStart": 198023168,
+      "occupiedSectors": 551,
+      "sha256": "896805fa53c890615d12c6476af8baf4ee95088a6c3f63b61adf6fbd8cbb50be",
+      "md5": "ff9252312b1a32ee095060878d9e67e8"
+    },
+    {
+      "path": "G7Start.exe",
+      "size": 434176,
+      "extentLba": 76437,
+      "extentByteStart": 156542976,
+      "occupiedSectors": 212,
+      "sha256": "1023c4a045f184bf76ca84ab603e0c03db989799f02b701bf8dd89b21ea78f93",
+      "md5": "bb93a40977a3d2f5a9fd8ac78f580486"
+    },
+    {
+      "path": "G7Start.ico",
+      "size": 2238,
+      "extentLba": 76649,
+      "extentByteStart": 156977152,
+      "occupiedSectors": 2,
+      "sha256": "f05a4999a0899a1c5f66e6f00241fc20e78e3f6b6c29e0087549f65f365a412a",
+      "md5": "4a537524dce287df460abde2add8f25e"
+    },
+    {
+      "path": "autorun.inf",
+      "size": 53,
+      "extentLba": 46,
+      "extentByteStart": 94208,
+      "occupiedSectors": 1,
+      "sha256": "5db097e7adc4979e416c42a36794e84ef4d7cf875f18246da13cce56d88969ed",
+      "md5": "a243e77d729618c52d58e32d559d5001"
+    },
+    {
+      "path": "data1.cab",
+      "size": 264958,
+      "extentLba": 47,
+      "extentByteStart": 96256,
+      "occupiedSectors": 130,
+      "sha256": "331f8114e22270b2f4f87e42de6c5225872e362af4514d0e7af4df33039839e3",
+      "md5": "b97292e412234b8b68764d5b695b6ed4"
+    },
+    {
+      "path": "data1.hdr",
+      "size": 218843,
+      "extentLba": 177,
+      "extentByteStart": 362496,
+      "occupiedSectors": 107,
+      "sha256": "a0be81cb1db8ae3240837580168fc01862bf979a10d50ee5de333d7d261a4576",
+      "md5": "9f76488931ddb1b76c9b04414147974d"
+    },
+    {
+      "path": "data2.cab",
+      "size": 153500003,
+      "extentLba": 284,
+      "extentByteStart": 581632,
+      "occupiedSectors": 74952,
+      "sha256": "457b1f8ad0f51ffae9fa2f84e051e14097d8ccf38a7de610e0bed5871f71ad61",
+      "md5": "5927942dc5f0afad813020597d2e840d"
+    },
+    {
+      "path": "dsetup32.dll",
+      "size": 1978368,
+      "extentLba": 75266,
+      "extentByteStart": 154144768,
+      "occupiedSectors": 966,
+      "sha256": "8957cca723307720687283fa50df6b06883a90bac350be8d599544320b405c65",
+      "md5": "54a2e8e8b8672ab0921017b704d0eec7"
+    },
+    {
+      "path": "engine32.cab",
+      "size": 418296,
+      "extentLba": 76232,
+      "extentByteStart": 156123136,
+      "occupiedSectors": 205,
+      "sha256": "bd3581f52a75fc9f0f044d239e152a2d542efa552131662ab32edc753224f0ad",
+      "md5": "b31f0800ecb5f3cdce497d16b5f4c08b"
+    },
+    {
+      "path": "layout.bin",
+      "size": 456,
+      "extentLba": 76651,
+      "extentByteStart": 156981248,
+      "occupiedSectors": 1,
+      "sha256": "12bea007d575af20f09d2742e97d6c5ab4b49da62e31bd9dd237c9bfe89211b1",
+      "md5": "8394d0833e909ce66ffae71f51ef659b"
+    },
+    {
+      "path": "setup.boot",
+      "size": 342212,
+      "extentLba": 76791,
+      "extentByteStart": 157267968,
+      "occupiedSectors": 168,
+      "sha256": "b0cd28a617b5ed0a0c57f568156b0d6842ee418e45ae30a61bfac7d11795e763",
+      "md5": "34e9f9d30331239daf92c578c1cf69ed"
+    },
+    {
+      "path": "setup.exe",
+      "size": 107512,
+      "extentLba": 76652,
+      "extentByteStart": 156983296,
+      "occupiedSectors": 53,
+      "sha256": "e25cadc80ea5163e0f1c6fd703479469d9f23b47ade244fac5f22bcdb01b39bd",
+      "md5": "5b2065fa6f2ec63fe28be26fdb7b0480"
+    },
+    {
+      "path": "setup.ini",
+      "size": 398,
+      "extentLba": 76705,
+      "extentByteStart": 157091840,
+      "occupiedSectors": 1,
+      "sha256": "dd850923c6cf045535bf0b722d727b206861c0bea0017cbd9d2a9627889837be",
+      "md5": "d41c582ad15ed69484cddd351c214799"
+    },
+    {
+      "path": "setup.inx",
+      "size": 172535,
+      "extentLba": 76706,
+      "extentByteStart": 157093888,
+      "occupiedSectors": 85,
+      "sha256": "368daba80a29b970971f7c58ce0ca00d96ff9820e511f41055abb5097558b674",
+      "md5": "d094448d071367916a0d396a3f80377c"
+    },
+    {
+      "path": "銀英伝７マニュアル.pdf",
+      "size": 5374309,
+      "extentLba": 76959,
+      "extentByteStart": 157612032,
+      "occupiedSectors": 2625,
+      "sha256": "1c4cf3db13a172361277264c06ada6e2499be0969494c6557eb84bc4cc005399",
+      "md5": "a9a14a773b1ae7f144c4b6fca02f38ad"
+    }
+  ],
+  "primaryTreeFiles": [
+    {
+      "path": "\u000bb\tp\u0013`~1.PDF",
+      "size": 5374309,
+      "extentLba": 76959
+    },
+    {
+      "path": "AUTORUN.INF",
+      "size": 53,
+      "extentLba": 46
+    },
+    {
+      "path": "DATA1.CAB",
+      "size": 264958,
+      "extentLba": 47
+    },
+    {
+      "path": "DATA1.HDR",
+      "size": 218843,
+      "extentLba": 177
+    },
+    {
+      "path": "DATA2.CAB",
+      "size": 153500003,
+      "extentLba": 284
+    },
+    {
+      "path": "DIRECTX9/BDA.CAB",
+      "size": 695962,
+      "extentLba": 79584
+    },
+    {
+      "path": "DIRECTX9/BDANT.CAB",
+      "size": 1149019,
+      "extentLba": 79924
+    },
+    {
+      "path": "DIRECTX9/BDAXP.CAB",
+      "size": 968156,
+      "extentLba": 80486
+    },
+    {
+      "path": "DIRECTX9/DIRECTX.CAB",
+      "size": 15443578,
+      "extentLba": 80959
+    },
+    {
+      "path": "DIRECTX9/DSETUP.DLL",
+      "size": 60416,
+      "extentLba": 88500
+    },
+    {
+      "path": "DIRECTX9/DSETUP32.DLL",
+      "size": 1978368,
+      "extentLba": 88530
+    },
+    {
+      "path": "DIRECTX9/DXNT.CAB",
+      "size": 13160291,
+      "extentLba": 89496
+    },
+    {
+      "path": "DIRECTX9/DXSETUP.EXE",
+      "size": 467456,
+      "extentLba": 95922
+    },
+    {
+      "path": "DIRECTX9/MANAGE~1.CAB",
+      "size": 1104358,
+      "extentLba": 96151
+    },
+    {
+      "path": "DIRECTX9/MDXRED~1.MSI",
+      "size": 1127936,
+      "extentLba": 96691
+    },
+    {
+      "path": "DSETUP.DLL",
+      "size": 60416,
+      "extentLba": 75236
+    },
+    {
+      "path": "DSETUP32.DLL",
+      "size": 1978368,
+      "extentLba": 75266
+    },
+    {
+      "path": "ENGINE32.CAB",
+      "size": 418296,
+      "extentLba": 76232
+    },
+    {
+      "path": "G7START.EXE",
+      "size": 434176,
+      "extentLba": 76437
+    },
+    {
+      "path": "G7START.ICO",
+      "size": 2238,
+      "extentLba": 76649
+    },
+    {
+      "path": "LAYOUT.BIN",
+      "size": 456,
+      "extentLba": 76651
+    },
+    {
+      "path": "SETUP.EXE",
+      "size": 107512,
+      "extentLba": 76652
+    },
+    {
+      "path": "SETUP.INI",
+      "size": 398,
+      "extentLba": 76705
+    },
+    {
+      "path": "SETUP.INX",
+      "size": 172535,
+      "extentLba": 76706
+    },
+    {
+      "path": "SETUP~1.BOO",
+      "size": 342212,
+      "extentLba": 76791
+    }
+  ],
+  "coverage": {
+    "totalBytes": 199462912,
+    "totalSectors": 97394,
+    "classifiedBytes": 199112704,
+    "uniqueCoveredBytes": 199112704,
+    "coveredSectors": 97223,
+    "gapBytes": 350208,
+    "gapSectors": 171,
+    "overlapBytes": 0,
+    "complete": false,
+    "gaps": [
+      {
+        "startLba": 27,
+        "endLba": 46,
+        "sectors": 19,
+        "bytes": 38912,
+        "nonZero": false
+      },
+      {
+        "startLba": 97242,
+        "endLba": 97394,
+        "sectors": 152,
+        "bytes": 311296,
+        "nonZero": false
+      }
+    ],
+    "overlaps": []
+  }
+}
