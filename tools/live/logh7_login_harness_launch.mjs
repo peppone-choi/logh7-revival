@@ -31,7 +31,7 @@ function parseCli(argv) {
 async function main() {
   const values = parseCli(process.argv.slice(2));
   const port = values.port ? Number(values.port) : 47900;
-  const host = values.host ?? '0.0.0.0';
+  const host = values.host ?? '127.0.0.1';
   const tracePath = values.trace ? resolve(REPO_ROOT, values.trace) : null;
 
   if (!Number.isInteger(port) || port <= 0 || port > 0xffff) {

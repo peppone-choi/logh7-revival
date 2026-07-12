@@ -5,6 +5,10 @@ import { createPlayableServer } from '../../server/src/server/logh7-playable-ser
 const evdir = process.argv[2];
 if (!evdir) { console.error('usage: node _m2_launch.mjs <evidence-dir>'); process.exit(1); }
 
+// canonical live client는 0x0323/0x0325의 packed 링크 필드를 사용한다. 안정 레이아웃 비교가
+// 필요할 때만 LOGH_LIVE_CLIENT_LAYOUT=0으로 명시적으로 끈다.
+if (process.env.LOGH_LIVE_CLIENT_LAYOUT === undefined) process.env.LOGH_LIVE_CLIENT_LAYOUT = '1';
+
 const srv = createPlayableServer({
   port: 47900,
   host: '127.0.0.1',

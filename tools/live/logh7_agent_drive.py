@@ -105,7 +105,7 @@ class INPUT(ctypes.Structure):
     _fields_ = [("type", wintypes.DWORD), ("union", INPUT_UNION)]
 
 
-def find_client_hwnd() -> int:
+def find_client_hwnd(expected_pid: int | None = None) -> int:
     """G7MTClient 메인 창 탐색 (Toolhelp 프로세스명 + EnumWindows)."""
     TH32CS_SNAPPROCESS = 0x00000002
 
@@ -131,7 +131,7 @@ def find_client_hwnd() -> int:
             pe.dwSize = ctypes.sizeof(PROCESSENTRY32W)
             if kernel32.Process32FirstW(snap, ctypes.byref(pe)):
                 while True:
-                    if "g7mtclient" in pe.szExeFile.lower():
+                    if "g7mtclient" in pe.szExeFile.lower() and (expected_pid is None or pe.th32ProcessID == expected_pid):
                         pids.add(pe.th32ProcessID)
                     if not kernel32.Process32NextW(snap, ctypes.byref(pe)):
                         break
