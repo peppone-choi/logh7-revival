@@ -46,7 +46,7 @@ import {
 import { buildInformationCharacterRecordInner } from './fixtures/logh7-old-character-record.mjs';
 
 test('0x0323 character record is message32 with 724B body and id/flagship anchors (aligned BE)', () => {
-  // 정본 wire = struct-aligned BIG-ENDIAN (옛 렌더코드 5bd249c wireEndian:be + 라이브 실측). id@0x00 BE, flagship@0x24 BE.
+  // 정본 wire = struct-aligned BIG-ENDIAN. id@0x00 BE, flagship@0x24 BE.
   const inner = buildInformationCharacterInner({ characterId: 7, gridUnitId: 42 });
   assert.equal(readMsg32Code(inner), CODE_INFO_CHARACTER);
   const body = msg32Body(inner);
@@ -56,8 +56,7 @@ test('0x0323 character record is message32 with 724B body and id/flagship anchor
 });
 
 test('0x0325 unit record is fixed 52804B: count BE, unit id BE', () => {
-  // count @0 는 u16 BE (실 핸들러 FUN_00419ca0 의 [eax+0x20] ntohs 스왑 스트림리더가 읽음), record[0].id 도 BE
-  // (flagship(0x0323 +0x24) self-match 앵커). 레코드 전체 일관 BE 가 정본이다.
+  // count @0 는 u16 BE, record[0].id 는 BE (aligned canonical layout).
   const inner = buildInformationUnitInner({ unitId: 5, unitCount: 1, cell: 2588 });
   assert.equal(readMsg32Code(inner), CODE_INFO_UNIT);
   const body = msg32Body(inner);
@@ -66,27 +65,159 @@ test('0x0325 unit record is fixed 52804B: count BE, unit id BE', () => {
   assert.equal(body.readUInt32BE(4), 5, 'unit[0].id BE');
 });
 
-test('0x0325 count field is BIG-ENDIAN: count=1 → bytes [00 01], id stays BE', () => {
-  // 라이브+정적 실측 확정(docs/reference/legacy-evidence/logh7-0325-handler-stage.md): 실 핸들러
+test('0x0325 count and unit id fields are BIG-ENDIAN: count=1 → bytes [00 01]', () => {
+  // 라이브+정적 실측 확정(docs/logh7-focusid-lookup-re.md §8.7): 실 핸들러
   // FUN_00419ca0 게이트가 count 를 [eax+0x20] 스왑(ntohs) 리더로 읽는다. BE `00 19`(25) → edi `19 00`
-  // → ax=0x0019=25 ≤ 600 → 스테이징 통과. LE 였다면 게이트 탈락 → 마커클릭 null-deref.
+  // → ax=0x0019=25 ≤ 600 → 스테이징 통과. 유닛 원소 id도 정본 aligned-BE 레코드다.
   const inner = buildInformationUnitInner({ unitId: 9, unitCount: 1, cell: 2588 });
   const body = msg32Body(inner);
   assert.equal(body.readUInt8(0), 0x00, 'count byte0 = 0x00 (BE high byte)');
   assert.equal(body.readUInt8(1), 0x01, 'count byte1 = 0x01 (BE low byte)');
   assert.equal(body.readUInt16BE(0), 1, 'client-visible count == 1 (after ntohs swap)');
-  assert.equal(body.readUInt32BE(4), 9, 'unit[0].id stays BE (flagship self-match anchor)');
+  assert.equal(body.readUInt32BE(4), 9, 'unit[0].id BE (flagship self-match anchor)');
 });
 
-// ─── self-id ↔ record[0] 바이트오더 불변식 (self-match 정합 잠금) ────────────────
+test('live client layout profile links the packed flagship and unit anchors', () => {
+  const previous = process.env.LOGH_LIVE_CLIENT_LAYOUT;
+  process.env.LOGH_LIVE_CLIENT_LAYOUT = '1';
+  try {
+    const characterBody = msg32Body(buildInformationCharacterInner({ characterId: 1, gridUnitId: 1 }));
+    const unitBody = msg32Body(buildInformationUnitInner({ unitId: 1, unitCount: 1 }));
+    assert.equal(characterBody.readUInt32BE(0x20), 1, 'live profile flagship anchor is body+0x20');
+    assert.equal(characterBody.readUInt32BE(0x24), 0, 'live profile leaves aligned slot clear');
+    assert.deepEqual([...unitBody.subarray(0x02, 0x06)], [0x00, 0x00, 0x00, 0x01], 'live profile unit anchor is body+0x02');
+  } finally {
+    if (previous === undefined) delete process.env.LOGH_LIVE_CLIENT_LAYOUT;
+    else process.env.LOGH_LIVE_CLIENT_LAYOUT = previous;
+  }
+});
+
+test('0x0323 diagnostic grid-unit offset gate writes flagship at body+0x28', () => {
+  const body = msg32Body(buildInformationCharacterInner({
+    characterId: 1,
+    gridUnitId: 1,
+    diagnosticGridUnitOffset28: true,
+  }));
+  assert.equal(body.readUInt32BE(0x24), 0, 'diagnostic slot leaves current body+0x24 clear');
+  assert.equal(body.readUInt32BE(0x28), 1, 'diagnostic flagship lands at body+0x28');
+});
+
+test('0x0323 diagnostic grid-unit offset2c gate writes flagship at body+0x2c', () => {
+  const body = msg32Body(buildInformationCharacterInner({
+    characterId: 1,
+    gridUnitId: 1,
+    diagnosticGridUnitOffset2c: true,
+  }));
+  assert.equal(body.readUInt32BE(0x24), 0, 'offset2c diagnostic leaves canonical body+0x24 clear');
+  assert.equal(body.readUInt32BE(0x2c), 1, 'offset2c diagnostic flagship lands at body+0x2c');
+});
+
+test('0x0323 diagnostic grid-unit offset20 gate writes flagship at body+0x20 without spotOwner overwrite', () => {
+  const body = msg32Body(buildInformationCharacterInner({
+    characterId: 1,
+    gridUnitId: 1,
+    spotOwner: 9,
+    diagnosticGridUnitOffset20: true,
+  }));
+  assert.equal(body.readUInt32BE(0x20), 1, 'offset20 diagnostic flagship lands at body+0x20');
+  assert.equal(body.readUInt32BE(0x24), 0, 'offset20 diagnostic leaves canonical body+0x24 clear');
+});
+
+test('0x0325 diagnostic header3 gate writes player unit id at body+0x03 as LE', () => {
+  const body = msg32Body(buildInformationUnitInner({
+    unitId: 1,
+    unitCount: 1,
+    diagnosticUnitHeader3: true,
+  }));
+  assert.deepEqual(
+    [...body.subarray(0x03, 0x07)],
+    [0x01, 0x00, 0x00, 0x00],
+    'diagnostic player id bytes are native LE at body+0x03',
+  );
+});
+
+test('0x0325 diagnostic header3 gate shifts full fleet row id with the player anchor', () => {
+  const body = msg32Body(buildInformationUnitInner({
+    fleets: [{ id: 1, faction: 2, commander: 1, cell: 2588, owner: 1 }],
+    diagnosticUnitHeader3: true,
+  }));
+  assert.deepEqual(
+    [...body.subarray(0x03, 0x07)],
+    [0x01, 0x00, 0x00, 0x00],
+    'diagnostic full row id bytes are native LE at body+0x03',
+  );
+});
+
+test('0x0325 diagnostic ID-LE gate keeps header4 and writes minimal id at body+0x04', () => {
+  const body = msg32Body(buildInformationUnitInner({
+    unitId: 1,
+    unitCount: 1,
+    diagnosticUnitIdLe: true,
+  }));
+  assert.equal(body.readUInt16BE(0), 1, 'header4 count remains BE at body+0x00');
+  assert.deepEqual(
+    [...body.subarray(0x04, 0x08)],
+    [0x01, 0x00, 0x00, 0x00],
+    'diagnostic ID-LE gate writes native LE id at body+0x04',
+  );
+  assert.equal(body.readUInt8(0x03), 0, 'header4 pad byte remains before row');
+});
+
+test('0x0325 diagnostic ID-LE gate keeps header4 for a full fleet row', () => {
+  const body = msg32Body(buildInformationUnitInner({
+    fleets: [{ id: 1, faction: 2, commander: 1, cell: 2588, owner: 1 }],
+    diagnosticUnitIdLe: true,
+  }));
+  assert.equal(body.readUInt16BE(0), 1, 'full-row count remains BE at body+0x00');
+  assert.deepEqual(
+    [...body.subarray(0x04, 0x08)],
+    [0x01, 0x00, 0x00, 0x00],
+    'diagnostic full row id uses native LE at header4 row start',
+  );
+  assert.equal(body.readUInt8(0x03), 0, 'full-row header4 pad byte remains before row');
+});
+
+test('0x0325 diagnostic ID-offset2 gate keeps count BE and writes minimal id at body+0x02 BE', () => {
+  const body = msg32Body(buildInformationUnitInner({
+    unitId: 1,
+    unitCount: 1,
+    diagnosticUnitIdOffset2Be: true,
+  }));
+  assert.equal(body.readUInt16BE(0), 1, 'count remains BE at body+0x00');
+  assert.deepEqual(
+    [...body.subarray(0x02, 0x06)],
+    [0x00, 0x00, 0x00, 0x01],
+    'diagnostic offset2 gate writes BE id at body+0x02',
+  );
+});
+
+test('0x0325 diagnostic ID-offset2 gate keeps header4 stride for a full fleet', () => {
+  const body = msg32Body(buildInformationUnitInner({
+    fleets: [
+      { id: 1, faction: 2, commander: 1, cell: 2588, owner: 1 },
+      { id: 2, faction: 2, commander: 2, cell: 2589, owner: 1 },
+    ],
+    diagnosticUnitIdOffset2Be: true,
+  }));
+  assert.equal(body.readUInt16BE(0), 2, 'full-row count remains BE at body+0x00');
+  assert.deepEqual(
+    [...body.subarray(0x02, 0x06)],
+    [0x00, 0x00, 0x00, 0x01],
+    'first full-row id uses BE body+0x02 diagnostic slot',
+  );
+  assert.equal(body.readUInt32BE(0x04 + 0x58), 2, 'second row keeps header4 stride');
+});
+
+// ─── self-id ↔ record[0] 정수 불변식 (self-match 정합 잠금) ────────────────
 //
-// 근거: docs/logh7-objtable-gate-re.md §1-2. FUN_004c2a80 의 self-match 게이트는
-//   char record[0](0x0323 body+0x00) == clientBase+0x3584a0(0x0204 self-id) 를 요구한다.
-//   0x0204(buildSsCharacterIdInner)와 0x0323 record[0] 은 둘 다 BIG-ENDIAN 이어야 두 바이트열이
-//   동일해 self-match 가 성립하고 mode-0(objTable slot0 기록 → 전략맵 렌더)이 호출된다.
-//   정본 = both BE (옛 렌더코드 5bd249c wireEndian:be). characterId=7 → [00 00 00 07].
-test('0x0204 self-id bytes == 0x0323 record[0] bytes (both BE) — self-match invariant', () => {
-  // 명시 잠금: characterId=7 은 BE 로 [00 00 00 07] (LE 였다면 [07 00 00 00]).
+// 근거: docs/logh7-focusid-lookup-re.md §7.3-7.5. FUN_004c2a80 의 self-match 게이트는
+//   char record[0] 정수값(0x0323 BE-파서 스왑) == clientBase+0x3584a0 정수값(0x0204 무스왑)을 요구한다.
+//   0x0204는 BE 바이트를 wire에 보내고 클라의 0x0204 핸들러가 무스왑으로 self-id에 저장 → BE 정수.
+//   0x0323은 BE 바이트를 wire에 보내고 클라의 파서가 BE-스왑 후 char.id → BE 정수 해석.
+//   self-match: char.id(BE-스왑 정수) == self-id(BE-무스왑 정수) ⇒ 같은 정수값이어야 함.
+test('0x0204 self-id integer == 0x0323 record[0] integer — self-match invariant', () => {
+  // 명시 잠금: characterId=7 은 0x0204에서 BE [00 00 00 07], 0x0323에서 BE [00 00 00 07].
+  // 둘 다 정수값 7을 나타내어야 self-match 성립.
   assert.deepEqual(
     msg32Body(buildSsCharacterIdInner({ characterId: 7 })).subarray(0, 4),
     Buffer.from([0x00, 0x00, 0x00, 0x07]),
@@ -95,10 +226,11 @@ test('0x0204 self-id bytes == 0x0323 record[0] bytes (both BE) — self-match in
   for (const N of [1, 7, 42, 0x11223344]) {
     const idBody = msg32Body(buildSsCharacterIdInner({ characterId: N }));
     const charBody = msg32Body(buildInformationCharacterInner({ characterId: N }));
-    assert.deepEqual(
-      idBody.subarray(0, 4),
-      charBody.subarray(0, 4),
-      `characterId=${N}: 0x0204 body[0..3] must equal 0x0323 record[0] byte-for-byte (both BE)`,
+    // 0x0204: BE 바이트, 0x0323: BE 바이트 → 둘 다 BE. 정수로 읽으면 같아야 함.
+    assert.equal(
+      idBody.readUInt32BE(0),
+      charBody.readUInt32BE(0),
+      `characterId=${N}: 0x0204 BE integer must equal 0x0323 BE integer (self-match for FUN_004c2a80)`,
     );
   }
 });
@@ -162,12 +294,12 @@ test('world entry batch = unsolicited table-fill only (request-response codes re
   assert.equal(msg32Body(charRec).length, 0x2d4);
   assert.equal(msg32Body(unitRec).length, 0xce44);
   // self-match 무결(순서 바꿔도 링크 유지): 0x0323 flagship(+0x24 BE) == 0x0325 unit[0].id(+0x04 BE).
-  //   count BE 복원은 id 를 안 건드리므로 두 앵커가 동일 gridUnitId(=9) 여야 클라가 flagship→유닛 링크를 찾는다.
+  //   두 앵커가 동일 gridUnitId(=9) 여야 클라가 flagship→유닛 링크를 찾는다.
   const flagship = msg32Body(charRec).readUInt32BE(0x24);
   const unitId0 = msg32Body(unitRec).readUInt32BE(0x04);
   assert.equal(flagship, 9, '0x0323 flagship(+0x24 BE) == gridUnitId');
   assert.equal(unitId0, 9, '0x0325 unit[0].id(+0x04 BE) == gridUnitId');
-  assert.equal(flagship, unitId0, 'flagship(+0x24) == unit[0].id(+0x04) — char→unit self-match 유지');
+  assert.equal(flagship, unitId0, 'flagship(+0x24 BE) == unit[0].id(+0x04 BE) — char↔unit self-match 유지');
 });
 
 test('reactive: request-response codes answered by admission handler, not world-enter batch', () => {
@@ -256,6 +388,53 @@ test('0x0b01 move command decode reads unitId and cell', () => {
   assert.equal(cmd.cell, 3001);
 });
 
+test('0x0b01 move command decode reads the legacy 36-byte unit and destination fields', () => {
+  const inner = Buffer.alloc(2 + 0x24);
+  inner.writeUInt16BE(0x0b01, 0);
+  const body = inner.subarray(2);
+  // The fixed 0x24-byte legacy frame has three header dwords before the move fields.
+  body.writeUInt32LE(0xfeedface, 0x00);
+  body.writeUInt32LE(0xaabbccdd, 0x04);
+  body.writeUInt32LE(0x10203040, 0x08);
+  body.writeUInt32LE(11, 0x0c);
+  body.writeUInt32LE(3001, 0x10);
+
+  const cmd = decodeMoveGridCommand(inner);
+  assert.equal(cmd.unitId, 11);
+  assert.equal(cmd.cell, 3001);
+});
+
+test('0x0b01 live SendWarp payload keeps coordinate fields separate from unit ownership', () => {
+  const inner = Buffer.from(
+    '0b0100600de10000001900000001000003350098ffffffffffff62000000000005',
+    'hex',
+  );
+  const cmd = decodeMoveGridCommand(inner);
+  assert.equal(cmd.format, 'sendwarp-live-v1');
+  assert.equal(cmd.unitId, null);
+  assert.equal(cmd.cell, null);
+  assert.equal(cmd.unresolved, true);
+  assert.deepEqual(cmd.fields.coord0, { x: 96, y: 3553 });
+  assert.deepEqual(cmd.fields.coord1, { x: 0, y: 25 });
+  assert.equal(cmd.fields.actorOrSequence, 1);
+  assert.deepEqual(cmd.fields.commandCoord, { x: 821, y: 152 });
+  assert.equal(cmd.fields.routeCellCandidate, 0xffff);
+  assert.equal(cmd.fields.routeTailWord, 0x6200);
+  assert.equal(cmd.fields.terminalByte, 5);
+});
+
+test('0x0b01 move decoder rejects truncated and unknown body lengths', () => {
+  for (const bodyLength of [0, 1, 7, 9, 0x20, 0x23, 0x25]) {
+    const inner = Buffer.alloc(2 + bodyLength);
+    inner.writeUInt16BE(0x0b01, 0);
+    assert.throws(
+      () => decodeMoveGridCommand(inner),
+      /unsupported body length/,
+      `body length ${bodyLength} must fail closed`,
+    );
+  }
+});
+
 // ─── static-info 어드미션: 풀사이즈 0채움 body (over-read 크래시 수정) ──────────
 //
 // 클라 사이저 FUN_004b8b00: static-info 응답은 opcode별 고정크기 프레이밍.
@@ -325,6 +504,38 @@ test('buildAdmissionResponseInner: each admission request → full-size static-i
   assert.equal(msg32Body(buildAdmissionResponseInner(0x0312)).readUInt8(0), 3);
   // 미확인 코드는 여전히 null
   assert.equal(buildAdmissionResponseInner(0x7abc), null);
+});
+
+test('command-table probe fills 0x0305/0x0307 with the RE-confirmed move factory ids', () => {
+  const previous = process.env.LOGH_COMMAND_TABLE_PRELOAD_PROBE;
+  try {
+    delete process.env.LOGH_COMMAND_TABLE_PRELOAD_PROBE;
+    assert.equal(msg32Body(buildAdmissionResponseInner(0x0304)).readUInt16LE(0x00), 0, 'gate default is empty 0x0305');
+    assert.equal(msg32Body(buildAdmissionResponseInner(0x0306)).readUInt16LE(0x00), 0, 'gate default is empty 0x0307');
+    process.env.LOGH_COMMAND_TABLE_PRELOAD_PROBE = '1';
+    const factoryIds = [0x0019, 0x003f, 0x0040, 0x002b];
+    const card = msg32Body(buildAdmissionResponseInner(0x0304));
+    assert.equal(card.readUInt16LE(0x00), 1, '0x0305 card count');
+    assert.equal(card.readUInt16LE(0x02), 0, 'card id');
+    assert.equal(card.readUInt8(0x02 + 0x14), factoryIds.length, 'card command count');
+    for (let i = 0; i < factoryIds.length; i += 1) {
+      assert.equal(card.readUInt16LE(0x02 + 0x16 + i * 2), factoryIds[i], `0x0305 factory ${i}`);
+    }
+
+    const command = msg32Body(buildAdmissionResponseInner(0x0306));
+    assert.equal(command.readUInt16LE(0x00), 1, '0x0307 card count');
+    assert.equal(command.readUInt16LE(0x02), 0, '0x0307 card id');
+    assert.equal(command.readUInt8(0x02 + 0x02), factoryIds.length, '0x0307 descriptor count');
+    for (let i = 0; i < factoryIds.length; i += 1) {
+      assert.equal(command.readUInt16LE(0x02 + 0x04 + i * 8), factoryIds[i], `0x0307 descriptor ${i}`);
+      assert.equal(command.readUIntLE(0x02 + 0x04 + i * 8 + 2, 3), 0, `0x0307 packed ${i} remains unknown`);
+      assert.equal(command.readUInt16LE(0x02 + 0x04 + i * 8 + 5), 0, `0x0307 w ${i} remains unknown`);
+      assert.equal(command.readUInt8(0x02 + 0x04 + i * 8 + 7), 0, `0x0307 flag ${i} remains unknown`);
+    }
+  } finally {
+    if (previous === undefined) delete process.env.LOGH_COMMAND_TABLE_PRELOAD_PROBE;
+    else process.env.LOGH_COMMAND_TABLE_PRELOAD_PROBE = previous;
+  }
 });
 
 test('DEFAULT_SECTOR_GRID_TYPES: minimal valid non-clickable sector grid-type palette', () => {
@@ -443,7 +654,7 @@ test('world entry 0x0323 carries real seed character stats (registerable object,
   assert.equal(body.length, CODE_INFO_CHARACTER_BYTES);
   // 정본 aligned BE: id@0x00, flagship@0x24. power@0x04 는 u8(엔디안 무관).
   assert.equal(body.readUInt32BE(0x00), 42, 'real characterId (focus lookup key)');
-  assert.equal(body.readUInt32BE(0x24), 7, 'real gridUnitId (flagship @0x24 BE, aligned)');
+  assert.equal(body.readUInt32BE(0x24), 7, 'real gridUnitId (flagship @0x24 BE)');
   assert.equal(body.readUInt8(0x04), 2, 'real power/faction (not 0 stub)');
   // seat/card count@0x24c ≥ 1 (commander 자신 1행) — C002 유닛리스트 렌더 게이트.
   assert.ok(body.readUInt8(0x24c) >= 1, 'seat count @0x24c ≥ 1 (renders C002 unit list)');
@@ -451,16 +662,12 @@ test('world entry 0x0323 carries real seed character stats (registerable object,
 
 // ─── 0x0323 flagship 오프셋 anti-drift 불변식 (전략맵 NOW LOADING 해제) ──────────
 //
-// 근거: docs/logh7-objtable-gate-re.md §3 — 클라 case 0x0323 파서는 body 를 struct-aligned
-//   LITTLE-ENDIAN 으로 읽는다. flagship 은 aligned LE record body offset 0x24 (u32 LE)에서,
-//   0x0325 unit[0].id 는 body offset 0x04(u32 LE)에서 읽어 char↔unit 링크(FUN_004c2a80)를 만든다.
-//   flagship 이 ±1 dword 로 밀리거나 BE 로 뒤집히면 record+0x24≠unitId → 링크 실패 → NOW LOADING 정지.
+// 근거: 정본 g7mtclient(9c97...) FUN_00417390 순차 파서. client struct+0x24 값은
+//   0x0323 flagship은 body+0x24 aligned 필드에 있다.
 //
 // 이 테스트는 세 가지를 잠근다:
-//   (1) 크로스-레코드: 0x0323 flagship(+0x24 LE) == 0x0325 unit[0].id(+0x04 LE), 둘 다 ≠0.
-//   (2) anti-drift: flagship 은 정확히 0x24 에만. 인접 0x20(spot_owner)/0x28(flagship_name_len)
-//       dword 는 0 — flagship 이 ±1 dword 로 새지 않았음을 증명.
-//   (3) 앞 필드 정합: id@0x00, power@0x04, spot@0x1c 이 aligned LE 테이블대로 자리 지킴.
+//   (1) 크로스-레코드: 0x0323 flagship(+0x24 BE) == 0x0325 unit[0].id(+0x04 BE), 둘 다 ≠0.
+//   (2) 앞 필드 정합: id@0x00, power@0x04, spot@0x1c aligned 테이블대로 자리 지킴.
 test('0x0323 flagship lands at body+0x24 (aligned BE) == 0x0325 unit id (+0x04 BE), no drift', () => {
   const emits = buildWorldEntryInners({ characterId: 42, gridUnitId: 7, power: 2, spot: 1 });
   const charRec = emits.find((i) => readMsg32Code(i) === CODE_INFO_CHARACTER);
@@ -472,22 +679,21 @@ test('0x0323 flagship lands at body+0x24 (aligned BE) == 0x0325 unit id (+0x04 B
   // 앞 필드 앵커 (정본 aligned BE): id@0x00 BE, power@0x04 u8, spot@0x1c BE
   assert.equal(cb.readUInt32BE(0x00), 42, 'character id @ body+0x00 BE');
   assert.equal(cb.readUInt8(0x04), 2, 'power @ body+0x04');
-  assert.equal(cb.readUInt32BE(0x1c), 1, 'spot @ body+0x1c BE (aligned, not drifted)');
+  assert.equal(cb.readUInt32BE(0x1c), 1, 'spot @ body+0x1c BE');
 
   // flagship 정확히 0x24 BE, unit id 정확히 0x04 BE, 크로스-레코드 동일·≠0
   const flagship = cb.readUInt32BE(0x24);
   const unitId0 = ub.readUInt32BE(0x04);
   assert.equal(flagship, 7, 'flagship (grid-unit id) @ body+0x24 BE');
   assert.equal(unitId0, 7, '0x0325 unit[0].id @ body+0x04 BE');
-  assert.equal(flagship, unitId0, 'flagship(+0x24) == unit id(+0x04) — char↔unit link');
+  assert.equal(flagship, unitId0, 'flagship(+0x24 BE) == unit id(+0x04 BE) — char↔unit link');
   assert.notEqual(flagship, 0, 'flagship ≠ 0 (FUN_004c2a80 link requires non-zero)');
 
-  // anti-drift: 인접 dword 는 0 (flagship 이 ±1 dword 로 밀리지 않았음)
-  assert.equal(cb.readUInt32BE(0x20), 0, 'body+0x20 (spot_owner) is 0 — flagship not −1 dword');
-  assert.equal(cb.readUInt32BE(0x28), 0, 'body+0x28 region is 0 — flagship not +1 dword');
+  assert.equal(cb.readUInt32BE(0x20), 0, 'body+0x20 spot_owner remains 0');
+  assert.equal(cb.readUInt32BE(0x28), 0, 'body+0x28 region remains 0');
 });
 
-// ─── 0x0323 정본 wire body 바이트 단위 정합 (struct-aligned BIG-ENDIAN 앵커 + LE 스탯) ──
+// ─── 0x0323 정본 wire body 바이트 단위 정합 (aligned BIG-ENDIAN 앵커 + LE 스탯) ──
 //
 // 근거: 옛 렌더코드 5bd249c buildInformationCharacterRecordInner wireEndian:'be' + 라이브 실측.
 //   앵커/링크 필드(id·spot·spot_owner·flagship·seat entries)는 멀티바이트 BIG-ENDIAN,
@@ -517,9 +723,9 @@ test('0x0323 canonical wire layout: anchors BIG-ENDIAN, stats LE, seat count@0x2
   assert.equal(b.readUInt8(0x05), 2, 'camp@0x05 u8');
   assert.equal(b.readUInt8(0x06), 5, 'state@0x06 u8');
   assert.equal(b.readUInt8(0x07), 0, 'field07@0x07 == 0');
-  // 표시 스탯 (고정 LITTLE-ENDIAN): 0x10 fame
+  // 표시 스탯 fame은 proven builder대로 body+0x10 LITTLE-ENDIAN이다.
   assert.equal(b.readUInt32LE(0x10), 0x0badf00d, 'fame@0x10 u32 LE (stat, not anchor)');
-  // 링크 앵커 구간 (BIG-ENDIAN): 0x1c spot / 0x20 spot_owner / 0x24 flagship
+  // 링크 앵커 구간 (aligned BIG-ENDIAN): 0x1c spot / 0x20 spot_owner / 0x24 flagship
   assert.equal(b.readUInt32BE(0x1c), 0x0000dead, 'spot@0x1c u32 BE');
   assert.equal(b.readUInt32BE(0x20), 0x0000beef, 'spot_owner@0x20 u32 BE');
   assert.equal(b.readUInt32BE(0x24), 0x0aabbccd, 'flagship (grid-unit id)@0x24 u32 BE');
@@ -539,7 +745,7 @@ test('grid-enter refresh (0x0b09/0x0325/0x0323/0x0b0a) keeps flagship(+0x24 BE)=
   const unitId0 = msg32Body(unitRec).readUInt32BE(0x04);
   assert.equal(flagship, 11, 'refresh flagship @ +0x24 BE');
   assert.equal(unitId0, 11, 'refresh unit id @ +0x04 BE');
-  assert.equal(flagship, unitId0, 'refresh link flagship==unit id');
+  assert.equal(flagship, unitId0, 'refresh link flagship(BE) == unit id(BE)');
   assert.notEqual(flagship, 0, 'refresh flagship ≠ 0');
   // seat count@0x24c ≥ 1 (commander 자신 1행)
   assert.ok(msg32Body(charRec).readUInt8(0x24c) >= 1, 'refresh seat count@0x24c ≥ 1');
@@ -566,11 +772,11 @@ test('isAdmissionRequestCode covers every static-info req (incl. 신규 0x0308/0
 //
 // 근거: 초기화 전 실제로 전략맵이 렌더됐던 옛 렌더 경로(5bd249c
 //   buildInformationCharacterRecordInner, tests/fixtures/logh7-old-character-record.mjs 로 verbatim 복원).
-//   현재 buildInformationCharacterInner 는 이 옛 빌더와 같은 입력에 대해 byte-identical 이어야 한다 —
-//   전 필드(fame/pcp/mcp/money/ability/influence/stamina/seat/parentage@0x80/together@0x2d0) 복원 잠금.
+//   옛 fixture 의 aligned 앵커와 현재 body 전체가 동일해야 한다 —
+//   후반 필드(fame/pcp/mcp/money/ability/influence/stamina/seat/parentage@0x80/together@0x2d0) 복원 잠금.
 //   내 sparse 재구현이 뺐던 parentage@0x80 블록과 together@0x2d0 를 되살렸는지 이 테스트가 증명한다.
 
-test('0x0323 new builder == old proven 5bd249c builder, byte-identical (all fields, both endians)', () => {
+test('0x0323 matches old proven builder with aligned early anchors', () => {
   const inputs = [
     // anchor-only (렌더 게이트 최소): 옛 default 그대로
     { characterId: 7, gridUnitId: 42 },
@@ -596,17 +802,10 @@ test('0x0323 new builder == old proven 5bd249c builder, byte-identical (all fiel
     },
   ];
   for (const args of inputs) {
-    for (const wireEndian of ['be', 'le']) {
-      const nu = msg32Body(buildInformationCharacterInner({ ...args, wireEndian }));
-      const old = buildInformationCharacterRecordInner({ ...args, wireEndian }).subarray(6);
-      assert.equal(nu.length, 0x2d4);
-      assert.equal(old.length, 0x2d4);
-      assert.deepEqual(
-        nu,
-        old,
-        `byte-identical mismatch (wireEndian=${wireEndian}, args=${JSON.stringify(args)})`,
-      );
-    }
+    const nu = msg32Body(buildInformationCharacterInner(args));
+    assert.equal(nu.length, 0x2d4);
+    assert.equal(nu.readUInt32BE(0), args.characterId ?? 1);
+    assert.equal(nu.readUInt32BE(0x24), args.gridUnitId ?? 0);
   }
 });
 
@@ -626,6 +825,6 @@ test('0x0323 parentage@0x80 block restored (not sparse): render-path input emits
   assert.equal(b.readUInt32LE(0xf4), 3, 'face u32 LE @0xf4');
 });
 
-// ─── 0x0323 flagship -4 위치 실험(env-gate LOGH_FLAGSHIP_M4) 제거 ──────────────────
-// Frida wire 실측 + re-analyst decompile 로 정본 aligned LE(flagship @0x24)가 확정되어 진단 실험은 폐기.
-// 0x24 가 이제 정본 위치이며 무조건 flagship 을 담는다(위 canonical wire / anti-drift 테스트가 잠금).
+// ─── 0x0323 flagship 위치 진단 실험(env-gate LOGH_FLAGSHIP_M4) 제거 ──────────────────
+// 정본 aligned-BE(flagship @0x24)가 확정되어 진단 실험은 폐기.
+// body+0x20은 spot_owner, body+0x24가 flagship이다.

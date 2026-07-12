@@ -58,16 +58,32 @@ test('buildDeploymentFleetList: 플레이어 unit[0] 앵커 + NPC, id 충돌 제
   assert.equal(ids.size, list.length, '플레이어 포함 id 유니크');
 });
 
-test('0x0325 full form: 고정 52804B, count BE == fleets 수, unit[0].id == 앵커', () => {
+test('buildDeploymentFleetList: 기본 commander는 characterId를 유지한다', () => {
+  const list = buildDeploymentFleetList({ unitId: 7, cell: 2588, characterId: 42, faction: FACTION_EMPIRE });
+  assert.equal(list[0].commander, 42, '기본 경로는 commander에 characterId를 사용');
+});
+
+test('buildDeploymentFleetList: focusCell 게이트는 commander에 플레이어 cell을 사용한다', () => {
+  const list = buildDeploymentFleetList({
+    unitId: 7,
+    cell: 2014,
+    characterId: 42,
+    faction: FACTION_ALLIANCE,
+    focusCell: true,
+  });
+  assert.equal(list[0].commander, 2014, 'focusCell 경로는 commander에 함대 cell을 주입');
+});
+
+test('0x0325 full form: 고정 52804B, count BE == fleets 수, unit[0].id BE', () => {
   const fleets = buildDeploymentFleetList({ unitId: 5, cell: 100, characterId: 9, faction: FACTION_ALLIANCE });
   const inner = buildInformationUnitInner({ unitId: 5, fleets });
   assert.equal(readMsg32Code(inner), CODE_INFO_UNIT);
   const body = msg32Body(inner);
   assert.equal(body.length, CODE_INFO_UNIT_BYTES, '고정 52804B 유지');
-  assert.equal(body.readUInt16BE(0), fleets.length, 'count BE == fleets 수 (실 핸들러 FUN_00419ca0 스왑 리더)');
+  assert.equal(body.readUInt16BE(0), fleets.length, 'count BE == fleets 수');
   // unit[0] = 플레이어 (앵커: flagship 링크)
   assert.equal(body.readUInt32BE(unitBase(0) + UNIT_ELEM.ID), 5, 'unit[0].id BE @ +0x04 == unitId');
-  assert.equal(body.readUInt32BE(unitBase(0) + UNIT_ELEM.CELL), 100, 'unit[0].cell');
+  assert.equal(body.readUInt32BE(unitBase(0) + UNIT_ELEM.CELL), 100, 'unit[0].cell BE');
   // unit[1] = 첫 NPC: id/cell/faction 이 레코드 오프셋에 정확히 실림 (active 조건)
   const npc0 = fleets[1];
   assert.equal(body.readUInt32BE(unitBase(1) + UNIT_ELEM.ID), npc0.id, 'unit[1].id BE');
@@ -76,7 +92,7 @@ test('0x0325 full form: 고정 52804B, count BE == fleets 수, unit[0].id == 앵
   // 마지막 NPC 도 버퍼 안에 있음(24+1=25 records < 600 cap, 52804/0x58≈599)
   const last = fleets.length - 1;
   assert.ok(unitBase(last) + CODE_INFO_UNIT_STRIDE <= body.length, '전 레코드 버퍼 내');
-  assert.equal(body.readUInt32BE(unitBase(last) + UNIT_ELEM.ID), fleets[last].id, '마지막 unit.id 방출');
+  assert.equal(body.readUInt32BE(unitBase(last) + UNIT_ELEM.ID), fleets[last].id, '마지막 unit.id BE');
 });
 
 test('0x0325 minimal form 회귀: fleets 미지정 시 count+id 만 (byte-identical)', () => {

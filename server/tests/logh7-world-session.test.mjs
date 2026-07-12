@@ -23,6 +23,8 @@ import {
   isAdmissionRequestCode,
   readMsg32Code,
   msg32Body,
+  CODE_INFO_UNIT_HEADER,
+  UNIT_ELEM,
 } from '../src/server/logh7-world-records.mjs';
 import {
   runLoginSuccessPath,
@@ -39,6 +41,28 @@ test('enterWorld emits character/unit records and marks inWorld', () => {
   assert.ok(codes.includes(CODE_INFO_CHARACTER));
   assert.ok(emits.length >= 4);
   assert.equal(world.getPlayer(1).inWorld, true);
+});
+
+test('enterWorld focus-cell gate projects player cell into the 0x0325 commander slot', () => {
+  const previous = process.env.LOGH_PLAYER_FOCUS_CELL;
+  process.env.LOGH_PLAYER_FOCUS_CELL = '1';
+  try {
+    const world = createWorldSession();
+    world.seedPlayer({ connectionId: 1, characterId: 42, unitId: 7, cell: 2014, inWorld: false });
+    const { emits } = world.enterWorld({ connectionId: 1 });
+    const unitRec = emits.find((inner) => readMsg32Code(inner) === CODE_INFO_UNIT);
+    assert.ok(unitRec, '0x0325 present');
+    const body = msg32Body(unitRec);
+    const playerUnitBase = CODE_INFO_UNIT_HEADER;
+    assert.equal(
+      body.readUInt32BE(playerUnitBase + UNIT_ELEM.COMMANDER),
+      2014,
+      'call site gate carries fleet cell through commander',
+    );
+  } finally {
+    if (previous === undefined) delete process.env.LOGH_PLAYER_FOCUS_CELL;
+    else process.env.LOGH_PLAYER_FOCUS_CELL = previous;
+  }
 });
 
 test('enterWorld encodes real seed character from characterStore into 0x0323 (crash fix)', () => {
@@ -67,6 +91,39 @@ test('enterWorld encodes real seed character from characterStore into 0x0323 (cr
   // 정본 aligned BE: id@0x00 BE, power@0x04 u8.
   assert.equal(body.readUInt32BE(0x00), 7, 'real characterId from store');
   assert.equal(body.readUInt8(0x04), 2, 'real power/faction from store (not 0 stub)');
+});
+
+test('0x0f02 grid refresh preserves selected character fields from the seed', () => {
+  const characterStore = {
+    getCharacters: (acct) => acct === 'inei00'
+      ? [{
+          id: 7,
+          power: 2,
+          lastname: 'Reinhard',
+          firstname: 'Lohengramm',
+          face: 3,
+          rank: 0x20,
+          ability8: [90, 85, 80, 75, 70, 65, 60, 55],
+        }]
+      : [],
+  };
+  const world = createWorldSession({ characterStore });
+  world.seedPlayer({ connectionId: 1, accountId: 'inei00', characterId: 7, unitId: 8, inWorld: false });
+  world.enterWorld({ connectionId: 1, accountId: 'inei00' });
+
+  const req = Buffer.alloc(2);
+  req.writeUInt16BE(0x0f02, 0);
+  const result = world.handleWorldInner({ connectionId: 1, accountId: 'inei00', inner: req });
+  const refresh = result.responses.find((entry) => readMsg32Code(entry.inner) === CODE_INFO_CHARACTER);
+  assert.ok(refresh, 'grid-init must refresh the character record');
+  const body = msg32Body(refresh.inner);
+  assert.equal(body.readUInt32BE(0x00), 7, 'refresh keeps character id');
+  assert.equal(body.readUInt8(0x04), 2, 'refresh keeps faction');
+  assert.equal(body.readUInt8(0x7d), 1, 'refresh keeps parentage block');
+  assert.equal(body.readUInt8(0x81), 'Reinhard'.length, 'refresh keeps lastname');
+  assert.equal(body.readUInt8(0x9c), 'Lohengramm'.length, 'refresh keeps firstname');
+  assert.equal(body.readUInt16LE(0x188), 90, 'refresh keeps ability8[0]');
+  assert.equal(body.readUInt16LE(0x1a4), 55, 'refresh keeps ability8[7]');
 });
 
 test('0x2009 create-pending (no character) returns 0x200a without inventing char', () => {
@@ -503,6 +560,7 @@ test('reconnect: enterWorld on a new connectionId rebinds session player by acco
   assert.equal(result.kind, 'world-enter');
   assert.equal(result.player.connectionId, 3);
   assert.equal(result.player.characterId, 7);
+  assert.equal(result.player.unitId, 3);
   assert.equal(result.player.inWorld, true);
   // 플레이어 맵도 conn3 으로 이동, conn2 는 비워짐
   assert.equal(world.getPlayer(3)?.characterId, 7);
@@ -553,15 +611,15 @@ test('reconnect guard: create-pending account cannot enter world on rebind', () 
 
 test('authoritative move updates cell and notifies both sessions', () => {
   const world = createWorldSession();
-  world.seedPlayer({ connectionId: 1, characterId: 1, unitId: 1, cell: 2588, inWorld: true });
-  world.seedPlayer({ connectionId: 2, characterId: 2, unitId: 2, cell: 100, inWorld: true });
+  world.seedPlayer({ connectionId: 1, accountId: 'owner', characterId: 1, unitId: 1, cell: 2588, inWorld: true });
+  world.seedPlayer({ connectionId: 2, accountId: 'observer', characterId: 2, unitId: 2, cell: 100, inWorld: true });
 
   const moveInner = Buffer.alloc(10);
   moveInner.writeUInt16BE(0x0b01, 0);
   moveInner.writeUInt32LE(1, 2);
   moveInner.writeUInt32LE(2597, 6);
 
-  const result = world.handleMoveCommand({ connectionId: 1, inner: moveInner });
+  const result = world.handleMoveCommand({ connectionId: 1, accountId: 'owner', inner: moveInner });
   assert.equal(result.cell, 2597);
   assert.equal(world.getPlayer(1).cell, 2597);
   assert.equal(world.getPlayer(2).cell, 100); // observer unchanged
@@ -570,6 +628,155 @@ test('authoritative move updates cell and notifies both sessions', () => {
   assert.equal(readMsg32Code(result.notify), CODE_NOTIFY_MOVED_GRID);
   assert.equal(msg32Body(result.notify).readUInt32LE(0x14), 1);
   assert.equal(msg32Body(result.notify).readUInt32LE(0x18), 2597);
+});
+
+test('live SendWarp move prefers a valid route candidate over the QA fallback', () => {
+  const previous = process.env.LOGH_DEV_GRID_MOVE_FALLBACK_CELL;
+  process.env.LOGH_DEV_GRID_MOVE_FALLBACK_CELL = '2115';
+  try {
+    const world = createWorldSession();
+    world.seedPlayer({ connectionId: 1, accountId: 'owner', characterId: 1, unitId: 1, cell: 2588, inWorld: true });
+    const moveInner = Buffer.from(
+      '0b01033500880335008800000001000003350098ffffffff09b977000000000005',
+      'hex',
+    );
+    const result = world.handleMoveCommand({ connectionId: 1, accountId: 'owner', inner: moveInner });
+    assert.equal(result.unitId, 1);
+    assert.equal(result.cell, 2489);
+    assert.equal(result.cellSource, 'route-candidate-qa-gated');
+    assert.equal(result.configuredFallback, 2115);
+    assert.equal(world.getPlayer(1).cell, 2489);
+  } finally {
+    if (previous === undefined) delete process.env.LOGH_DEV_GRID_MOVE_FALLBACK_CELL;
+    else process.env.LOGH_DEV_GRID_MOVE_FALLBACK_CELL = previous;
+  }
+});
+
+test('live SendWarp move accepts a valid route candidate without the QA fallback gate', () => {
+  const previous = process.env.LOGH_DEV_GRID_MOVE_FALLBACK_CELL;
+  delete process.env.LOGH_DEV_GRID_MOVE_FALLBACK_CELL;
+  try {
+    const world = createWorldSession();
+    world.seedPlayer({ connectionId: 1, accountId: 'owner', characterId: 1, unitId: 1, cell: 2588, inWorld: true });
+    const moveInner = Buffer.from(
+      '0b01033500880335008800000001000003350098ffffffff09b977000000000005',
+      'hex',
+    );
+    const result = world.handleMoveCommand({ connectionId: 1, accountId: 'owner', inner: moveInner });
+    assert.equal(result.unitId, 1);
+    assert.equal(result.cell, 2489);
+    assert.equal(result.cellSource, 'route-candidate-qa-gated');
+    assert.equal(result.routeCellCandidate, 2489);
+    assert.equal(result.configuredFallback, null);
+    assert.equal(result.unresolved, true);
+    assert.equal(world.getPlayer(1).cell, 2489);
+  } finally {
+    if (previous === undefined) delete process.env.LOGH_DEV_GRID_MOVE_FALLBACK_CELL;
+    else process.env.LOGH_DEV_GRID_MOVE_FALLBACK_CELL = previous;
+  }
+});
+
+test('live SendWarp move uses an explicit QA fallback only when the route candidate is unresolved', () => {
+  const previous = process.env.LOGH_DEV_GRID_MOVE_FALLBACK_CELL;
+  process.env.LOGH_DEV_GRID_MOVE_FALLBACK_CELL = '2115';
+  try {
+    const world = createWorldSession();
+    world.seedPlayer({ connectionId: 1, accountId: 'owner', characterId: 1, unitId: 1, cell: 2588, inWorld: true });
+    const moveInner = Buffer.from(
+      '0b0100600de10000001900000001000003350098ffffffffffff62000000000005',
+      'hex',
+    );
+    const result = world.handleMoveCommand({ connectionId: 1, accountId: 'owner', inner: moveInner });
+    assert.equal(result.unitId, 1);
+    assert.equal(result.cell, 2115);
+    assert.equal(result.cellSource, 'configured-fallback-qa-gated');
+    assert.equal(result.routeCellCandidate, null);
+    assert.equal(result.configuredFallback, 2115);
+    assert.equal(result.unresolved, true);
+    assert.equal(world.getPlayer(1).cell, 2115);
+  } finally {
+    if (previous === undefined) delete process.env.LOGH_DEV_GRID_MOVE_FALLBACK_CELL;
+    else process.env.LOGH_DEV_GRID_MOVE_FALLBACK_CELL = previous;
+  }
+});
+
+test('live SendWarp move rejects an unresolved route when no QA fallback is configured', () => {
+  const previous = process.env.LOGH_DEV_GRID_MOVE_FALLBACK_CELL;
+  delete process.env.LOGH_DEV_GRID_MOVE_FALLBACK_CELL;
+  try {
+    const world = createWorldSession();
+    world.seedPlayer({ connectionId: 1, accountId: 'owner', characterId: 1, unitId: 1, cell: 2588, inWorld: true });
+    const moveInner = Buffer.from(
+      '0b0100600de10000001900000001000003350098ffffffffffff62000000000005',
+      'hex',
+    );
+    assert.throws(
+      () => world.handleMoveCommand({ connectionId: 1, accountId: 'owner', inner: moveInner }),
+      /unresolved grid target/,
+    );
+  } finally {
+    if (previous === undefined) delete process.env.LOGH_DEV_GRID_MOVE_FALLBACK_CELL;
+    else process.env.LOGH_DEV_GRID_MOVE_FALLBACK_CELL = previous;
+  }
+});
+
+test('live SendWarp move keeps an empty QA fallback value fail-closed', () => {
+  const previous = process.env.LOGH_DEV_GRID_MOVE_FALLBACK_CELL;
+  process.env.LOGH_DEV_GRID_MOVE_FALLBACK_CELL = '';
+  try {
+    const world = createWorldSession();
+    world.seedPlayer({ connectionId: 1, accountId: 'owner', characterId: 1, unitId: 1, cell: 2588, inWorld: true });
+    const moveInner = Buffer.from(
+      '0b0100600de10000001900000001000003350098ffffffffffff62000000000005',
+      'hex',
+    );
+    assert.throws(
+      () => world.handleMoveCommand({ connectionId: 1, accountId: 'owner', inner: moveInner }),
+      /unresolved grid target/,
+    );
+  } finally {
+    if (previous === undefined) delete process.env.LOGH_DEV_GRID_MOVE_FALLBACK_CELL;
+    else process.env.LOGH_DEV_GRID_MOVE_FALLBACK_CELL = previous;
+  }
+});
+
+test('move rejects compact cells outside the 100x50 strategic grid', () => {
+  const world = createWorldSession();
+  world.seedPlayer({ connectionId: 1, accountId: 'owner', characterId: 1, unitId: 1, cell: 2588, inWorld: true });
+  const moveInner = Buffer.alloc(10);
+  moveInner.writeUInt16BE(0x0b01, 0);
+  moveInner.writeUInt32LE(1, 2);
+  moveInner.writeUInt32LE(5000, 6);
+  assert.throws(
+    () => world.handleMoveCommand({ connectionId: 1, accountId: 'owner', inner: moveInner }),
+    /invalid grid cell/,
+  );
+});
+
+test('move rejects a world request bound to another account', () => {
+  const world = createWorldSession();
+  world.seedPlayer({ connectionId: 1, accountId: 'owner', characterId: 1, unitId: 1, cell: 2588, inWorld: true });
+  const moveInner = Buffer.alloc(10);
+  moveInner.writeUInt16BE(0x0b01, 0);
+  moveInner.writeUInt32LE(1, 2);
+  moveInner.writeUInt32LE(2597, 6);
+  assert.throws(
+    () => world.handleWorldInner({ connectionId: 1, accountId: 'intruder', inner: moveInner }),
+    /account not owned/,
+  );
+});
+
+test('move rejects an online request without an authenticated account principal', () => {
+  const world = createWorldSession();
+  world.seedPlayer({ connectionId: 1, accountId: 'owner', characterId: 1, unitId: 1, cell: 2588, inWorld: true });
+  const moveInner = Buffer.alloc(10);
+  moveInner.writeUInt16BE(0x0b01, 0);
+  moveInner.writeUInt32LE(1, 2);
+  moveInner.writeUInt32LE(2597, 6);
+  assert.throws(
+    () => world.handleMoveCommand({ connectionId: 1, inner: moveInner }),
+    /account required/,
+  );
 });
 
 test('move rejects when not in world', () => {
@@ -663,7 +870,7 @@ test('full login→roster→world→move pipeline (shipped codecs) dual-session'
 // 순서 엄수: 0x0f03(월드초기화)는 반드시 0x0b0a 이후 (render-contract: 조기 push 크래시).
 
 test('buildWorldReadyPushInners pushes 0x0325×1 + 0x0323×1 inside 0x0b09/0x0b0a with flagship↔unit alignment', () => {
-  // M3 수정 확정(docs/logh7-loop-state.md "0x0323 flagship(+0x24)=0x0325 unit id(+0x04) 정합"):
+  // 정본 aligned-BE 경로: 0x0323 flagship(+0x24)=0x0325 unit id(+0x04).
   // 클라 FUN_004c2a80 는 선택 char 의 flagship(+0x24)을 unit id(+0x04)와 링크해 플레이어 오브젝트를
   // 빌드한다. 링크가 성립하면 오브젝트 테이블(clientBase+0xc)이 채워져 NOW LOADING 이 해제된다.
   // 이전 P7 ×2 재전송은 정합이 아니라 타이밍 추측이었고 중복 스텁을 만든다 — 각 레코드 정확히 1회로

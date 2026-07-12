@@ -23,6 +23,7 @@ import {
   readMsg32Code,
   CODE_REQ_STATIC_GRID,
   CODE_REQ_STATIC_GRID_TYPE,
+  CODE_REQ_STATIC_BASE,
   CODE_REQ_GRID_INIT,
   CODE_REQ_OUTFIT_INFO,
   buildOutfitInfo032b,
@@ -33,6 +34,10 @@ import {
   getStrategicPaletteObjects,
 } from './logh7-galaxy-placement.mjs';
 import { buildDeploymentFleetList } from './logh7-deployment-units.mjs';
+import {
+  buildStaticInformationBaseFromGalaxy,
+  readStaticBaseRequest,
+} from './logh7-static-base.mjs';
 
 /**
  * @typedef {{
@@ -105,6 +110,7 @@ export function createWorldSession({
         power: 0,
         face: 0,
         rank: 0,
+        ability8: null,
       };
       players.set(connectionId, pending);
       logEvent('session-login-create-pending', connectionId, { sessionId });
@@ -116,7 +122,9 @@ export function createWorldSession({
       };
     }
 
-    const unitId = character?.flagship ?? character?.unitId ?? nextUnitId;
+    // 영속 캐릭터가 보유한 flagship/unit id를 우선한다. 없을 때만 새 세션 id를 할당한다.
+    const storedUnitId = Number(character?.flagship ?? character?.unitId);
+    const unitId = Number.isInteger(storedUnitId) && storedUnitId > 0 ? storedUnitId : nextUnitId;
     if (unitId >= nextUnitId) nextUnitId = unitId + 1;
 
     const player = {
@@ -133,6 +141,7 @@ export function createWorldSession({
       power: character?.power ?? 0,
       face: character?.face ?? 0,
       rank: character?.rank ?? 0,
+      ability8: Array.isArray(character?.ability8) ? character.ability8.slice(0, 8) : null,
     };
     players.set(connectionId, player);
     logEvent('session-login', connectionId, { characterId, unitId, sessionId });
@@ -219,6 +228,14 @@ export function createWorldSession({
       }
     }
     const seedAbilities = Array.isArray(seed?.ability8) ? seed.ability8 : null;
+    if (seed) {
+      p.power = Number.isInteger(seed.power) ? seed.power : p.power;
+      p.lastname = seed.lastname ?? p.lastname;
+      p.firstname = seed.firstname ?? p.firstname;
+      p.face = Number.isInteger(seed.face) ? seed.face : p.face;
+      p.rank = Number.isInteger(seed.rank) ? seed.rank : p.rank;
+      p.ability8 = seedAbilities ? seedAbilities.slice(0, 8) : p.ability8;
+    }
 
     // 0x0325 유닛 레지스트리 충전: 플레이어 unit[0] + NPC 초기 배치 함대(제국12+동맹12).
     // 빈 레지스트리(@0x7db3c8 activeCount=0) → 마커 클릭 null-deref 크래시 해소.
@@ -227,6 +244,7 @@ export function createWorldSession({
       cell: p.cell,
       characterId: p.characterId,
       faction: seed?.power ?? p.power ?? 0,
+      focusCell: process.env.LOGH_PLAYER_FOCUS_CELL === '1',
     });
 
     const emits = buildWorldEntryInners({
@@ -240,7 +258,7 @@ export function createWorldSession({
       firstname: seed?.firstname ?? p.firstname ?? '',
       face: Number.isInteger(seed?.face) ? seed.face : (Number.isInteger(p.face) ? p.face : 0),
       rank: Number.isInteger(seed?.rank) ? seed.rank : (Number.isInteger(p.rank) ? p.rank : 0),
-      abilities: seedAbilities,
+      abilities: seedAbilities ?? p.ability8,
       officerCount: Number.isInteger(p.officerCount) ? p.officerCount : 0,
     });
     logEvent('world-enter', connectionId, {
@@ -254,14 +272,38 @@ export function createWorldSession({
   /**
    * 권위 이동: 0x0b01 → 상태 갱신 + 0x0b07 브로드캐스트 대상 목록.
    */
-  function handleMoveCommand({ connectionId, inner }) {
+  function handleMoveCommand({ connectionId, accountId = null, inner }) {
     const cmd = decodeMoveGridCommand(inner);
     const player = players.get(connectionId);
     if (!player || !player.inWorld) {
       throw new Error('move rejected: not in world');
     }
+    if (accountId == null || String(accountId).trim() === '' || !player.accountId) {
+      throw new Error('move rejected: account required');
+    }
+    if (player.accountId !== String(accountId)) {
+      throw new Error('move rejected: account not owned');
+    }
+    const routeCellCandidate = Number(cmd.fields?.routeCellCandidate);
+    const fallbackRaw = process.env.LOGH_DEV_GRID_MOVE_FALLBACK_CELL;
+    const configuredFallback = typeof fallbackRaw === 'string' && fallbackRaw.trim() !== ''
+      ? Number(fallbackRaw)
+      : Number.NaN;
+    const fallbackCell = Number.isInteger(configuredFallback) && configuredFallback >= 0 && configuredFallback < 5000
+      ? configuredFallback
+      : null;
+    const hasRouteCell = Number.isInteger(routeCellCandidate) && routeCellCandidate >= 0 && routeCellCandidate < 5000;
+    if (cmd.unresolved && !hasRouteCell && fallbackCell === null) {
+      throw new Error('move rejected: unresolved grid target');
+    }
     const unitId = cmd.unitId || player.unitId;
-    const cell = cmd.cell >>> 0;
+    const cell = cmd.unresolved ? (hasRouteCell ? routeCellCandidate : fallbackCell) : cmd.cell >>> 0;
+    const cellSource = cmd.unresolved
+      ? (hasRouteCell ? 'route-candidate-qa-gated' : 'configured-fallback-qa-gated')
+      : 'decoded-cell';
+    if (!Number.isInteger(cell) || cell < 0 || cell >= 5000) {
+      throw new Error('move rejected: invalid grid cell');
+    }
     // 소유 unit 만 이동 (다른 unitId 요청 시 거부)
     if (unitId !== player.unitId) {
       throw new Error(`move rejected: unit ${unitId} not owned by connection ${connectionId}`);
@@ -276,6 +318,10 @@ export function createWorldSession({
     return {
       unitId,
       cell,
+      cellSource,
+      routeCellCandidate: hasRouteCell ? routeCellCandidate : null,
+      configuredFallback: fallbackCell,
+      unresolved: !!cmd.unresolved,
       notify,
       recipients,
       playersSnapshot: [...players.values()].map((p) => ({ ...p })),
@@ -298,7 +344,7 @@ export function createWorldSession({
       castType: cmd.castType,
     });
     const recipients = [...players.values()].filter((p) => p.inWorld).map((p) => p.connectionId);
-    logEvent('chat', connectionId, { text: cmd.text, recipients });
+    logEvent('chat', connectionId, { textLength: cmd.text.length, recipients });
     return { text: cmd.text, notify, recipients };
   }
 
@@ -345,11 +391,15 @@ export function createWorldSession({
     }
 
     if (code === CODE_CMD_MOVE_GRID) {
-      const result = handleMoveCommand({ connectionId, inner: rawForDecode });
+      const result = handleMoveCommand({ connectionId, accountId, inner: rawForDecode });
       return {
         kind: 'move',
         cell: result.cell,
         unitId: result.unitId,
+        cellSource: result.cellSource,
+        routeCellCandidate: result.routeCellCandidate,
+        configuredFallback: result.configuredFallback,
+        unresolved: result.unresolved,
         responses: [
           {
             targets: result.recipients,
@@ -415,6 +465,20 @@ export function createWorldSession({
       };
     }
 
+    // 0x031c(RequestStaticInformationBase) → 0x031d: galaxy.json 시스템 정적 마스터.
+    // 요청의 선택 id/cell은 첫 레코드로 우선하고, 나머지 시스템도 같은 순서로 붙인다. 0x031d
+    // body는 고정 0x520c이므로 85개 시스템 전체가 항상 같은 프레임 안에 들어간다.
+    if (code === CODE_REQ_STATIC_BASE) {
+      const request = readStaticBaseRequest(rawForDecode);
+      const staticBaseResp = buildStaticInformationBaseFromGalaxy(request);
+      return {
+        kind: 'admission',
+        reqCode: code,
+        respCode: readMsg32Code(staticBaseResp),
+        responses: [{ targets: [connectionId], inner: staticBaseResp, isMsg32: true }],
+      };
+    }
+
     // 0x0f02(RequestGridInitialize) 처리: 첫 요청에 플레이어 스폰 버스트를 주입한다(G164 정본).
     //
     // 근거: 5bd249c logh7-login-session.mjs 2095~ G164 스폰 순서. 직전 0x0f01(WorldInitialize_OK)
@@ -437,6 +501,7 @@ export function createWorldSession({
           firstname: player.firstname ?? '',
           face: Number.isInteger(player.face) ? player.face : 0,
           rank: Number.isInteger(player.rank) ? player.rank : 0,
+          abilities: Array.isArray(player.ability8) ? player.ability8 : null,
           officerCount: Number.isInteger(player.officerCount) ? player.officerCount : 0,
           // 정본 갤럭시 팔레트/셀 — 스폰 경로가 SPACE-only 로 스테이징을 덮어 마커를 지우지 않게 한다.
           paletteObjects: getStrategicPaletteObjects(),
@@ -448,6 +513,7 @@ export function createWorldSession({
             cell: player.cell,
             characterId: player.characterId,
             faction: player.power ?? 0,
+            focusCell: process.env.LOGH_PLAYER_FOCUS_CELL === '1',
           }),
         });
         logEvent('grid-init-spawn', connectionId, { codes: listWorldEntryCodes(spawnInners) });
@@ -561,6 +627,7 @@ export function createWorldSession({
       power: player.power ?? 0,
       face: player.face ?? 0,
       rank: player.rank ?? 0,
+      ability8: Array.isArray(player.ability8) ? player.ability8.slice(0, 8) : null,
     };
     players.set(p.connectionId, p);
     return { ...p };

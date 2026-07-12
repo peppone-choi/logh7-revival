@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { once } from 'node:events';
-import { mkdtemp, rm } from 'node:fs/promises';
+import { mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import net from 'node:net';
@@ -83,6 +83,7 @@ test('playable server: handshake + GIN7 login returns keysetup+redirect', async 
   const server = createPlayableServer({
     port: 0,
     host: '127.0.0.1',
+    tracePath: join(dir, 'trace.jsonl'),
     characterStore: store,
     tables,
     transportKey: TRANSPORT_KEY,
@@ -111,13 +112,198 @@ test('playable server: handshake + GIN7 login returns keysetup+redirect', async 
     const ksParsed = parse0030Body(ksBody);
     assert.equal(readInnerCode(ksParsed.inner), 0x0031);
     socket.end();
+    await once(socket, 'close');
+    const traceLines = (await readFile(join(dir, 'trace.jsonl'), 'utf8'))
+      .trim().split('\n').map((line) => JSON.parse(line));
+    const loginSent = traceLines.find((line) => line.event === 'login-response-sent');
+    assert.equal(loginSent.gin7KeyHex, undefined);
+    assert.equal(loginSent.gin7KeyRedacted, true);
   } finally {
     await server.close();
     await rm(dir, { recursive: true, force: true });
   }
 });
 
-test('playable server boots twice and serves login+world+move sequence', async () => {
+test('playable server rejects a fresh connection that sends 0x2000 without authenticated handoff', async () => {
+  const dir = await mkdtemp(join(tmpdir(), 'logh7-ps-auth-'));
+  const tracePath = join(dir, 'trace.jsonl');
+  const server = createPlayableServer({
+    port: 0,
+    host: '127.0.0.1',
+    tracePath,
+    tables: loadChildCodecTables(),
+    transportKey: TRANSPORT_KEY,
+    decipherKey: DECIPHER_KEY,
+  });
+  let socket = null;
+  try {
+    await server.listen();
+    socket = net.connect(server.address());
+    await once(socket, 'connect');
+    const phase1Key = Buffer.from('00112233445566778899aabbccddeeff', 'hex');
+    socket.write(buildPhase1Frame({ phase1Key, sequence: 1, tables: loadChildCodecTables() }));
+    await readFrames(socket, 1);
+    const lobbyLogin = Buffer.from(
+      '200047494e3700040000070069006e00650069003000300000',
+      'hex',
+    );
+    socket.write(build0030Transport({
+      phase1Key,
+      id: 1,
+      inner: lobbyLogin,
+      tables: loadChildCodecTables(),
+    }));
+    await once(socket, 'close');
+    const lines = (await readFile(tracePath, 'utf8'))
+      .trim().split('\n').map((line) => JSON.parse(line));
+    assert.equal(lines.some((line) => line.event === 'auth-required' && line.innerCodeHex === '0x2000'), true);
+    assert.equal(lines.some((line) => line.event === 'lobby-login-ok-sent'), false);
+  } finally {
+    socket?.destroy();
+    await server.close().catch(() => {});
+    await rm(dir, { recursive: true, force: true });
+  }
+});
+
+test('playable server refuses a public bind without an explicit accounts file', async () => {
+  const dir = await mkdtemp(join(tmpdir(), 'logh7-ps-public-'));
+  try {
+    assert.throws(
+      () => createPlayableServer({
+        port: 0,
+        host: '0.0.0.0',
+        accountsPath: join(dir, 'missing-accounts.json'),
+      }),
+      /accounts file required/,
+    );
+  } finally {
+    await rm(dir, { recursive: true, force: true });
+  }
+});
+
+test('playable server refuses known development credentials on a public bind', async () => {
+  const dir = await mkdtemp(join(tmpdir(), 'logh7-ps-public-dev-'));
+  const accountsPath = join(dir, 'accounts.json');
+  await writeFile(accountsPath, JSON.stringify({ accounts: [{ accountId: 'inei00', password: 'dummy' }] }), 'utf8');
+  try {
+    assert.throws(
+      () => createPlayableServer({ port: 0, host: '0.0.0.0', accountsPath }),
+      /known development credentials/,
+    );
+  } finally {
+    await rm(dir, { recursive: true, force: true });
+  }
+});
+
+test('playable server disables stock handoff on a public bind without an explicit opt-in', async () => {
+  const dir = await mkdtemp(join(tmpdir(), 'logh7-ps-public-handoff-'));
+  const accountsPath = join(dir, 'accounts.json');
+  const tracePath = join(dir, 'trace.jsonl');
+  await writeFile(accountsPath, JSON.stringify({ accounts: [{ accountId: 'inei00', password: 'strong-password' }] }), 'utf8');
+  const server = createPlayableServer({
+    port: 0,
+    host: '0.0.0.0',
+    accountsPath,
+    tracePath,
+    tables: loadChildCodecTables(),
+    transportKey: TRANSPORT_KEY,
+    decipherKey: DECIPHER_KEY,
+  });
+  let socket = null;
+  try {
+    await server.listen();
+    socket = net.connect({ host: '127.0.0.1', port: server.address().port });
+    await once(socket, 'connect');
+    const phase1Key = Buffer.from('00112233445566778899aabbccddeeff', 'hex');
+    socket.write(buildPhase1Frame({ phase1Key, sequence: 1, tables: loadChildCodecTables() }));
+    await readFrames(socket, 1);
+    socket.write(build0030Transport({
+      phase1Key,
+      id: 1,
+      inner: Buffer.from('020047494e370057', 'hex'),
+      tables: loadChildCodecTables(),
+    }));
+    await once(socket, 'close');
+    const traceLines = (await readFile(tracePath, 'utf8')).trim().split('\n').map((line) => JSON.parse(line));
+    assert.equal(traceLines.some((line) => line.event === 'auth-required' && line.innerCodeHex === '0x0200'), true);
+    assert.equal(traceLines.some((line) => line.event === 'ss-login-ok-sent'), false);
+  } finally {
+    socket?.destroy();
+    await server.close().catch(() => {});
+    await rm(dir, { recursive: true, force: true });
+  }
+});
+
+test('playable server preserves the authenticated account across the stock three-connection handoff', async () => {
+  const dir = await mkdtemp(join(tmpdir(), 'logh7-ps-handoff-'));
+  const tables = loadChildCodecTables();
+  const store = createCharacterStore(join(dir, 'chars.json'));
+  store.addCharacter('inei00', { power: 1, lastname: 'Test', firstname: 'Pilot', face: 1, rank: 0x0d });
+  const server = createPlayableServer({
+    port: 0,
+    host: '127.0.0.1',
+    tracePath: join(dir, 'trace.jsonl'),
+    characterStore: store,
+    tables,
+    transportKey: TRANSPORT_KEY,
+    decipherKey: DECIPHER_KEY,
+  });
+  const sockets = [];
+  const connectAndPhase = async (phase1Key, sequence) => {
+    const socket = net.connect(server.address());
+    sockets.push(socket);
+    await once(socket, 'connect');
+    socket.write(buildPhase1Frame({ phase1Key, sequence, tables }));
+    await readFrames(socket, 1);
+    return socket;
+  };
+  try {
+    await server.listen();
+    const phase1Key = Buffer.from('00112233445566778899aabbccddeeff', 'hex');
+    const first = await connectAndPhase(phase1Key, 1);
+    first.write(build0030Transport({ phase1Key, id: 1, inner: CREDENTIAL_INNER, tables }));
+    await readFrames(first, 2);
+    first.end();
+    await once(first, 'close');
+
+    const lobbyLogin = Buffer.from(
+      '200047494e3700040000070069006e00650069003000300000',
+      'hex',
+    );
+    const second = await connectAndPhase(phase1Key, 2);
+    second.write(build0030Transport({ phase1Key, id: 2, inner: lobbyLogin, tables }));
+    const [lobbyFrame] = await readFrames(second, 1);
+    const lobbyBody = decryptBuffer(lobbyFrame.body.subarray(4), expandChildCodecKey(DECIPHER_KEY, tables));
+    assert.equal(parse0030Body(lobbyBody).inner.readUInt16BE(4), 0x2001);
+    const sessionReq = Buffer.alloc(10);
+    sessionReq.writeUInt16BE(0x2009, 0);
+    sessionReq.writeUInt32LE(1, 2);
+    sessionReq.writeUInt32LE(1, 6);
+    second.write(build0030Transport({ phase1Key, id: 3, inner: sessionReq, tables }));
+    await readFrames(second, 1);
+    second.end();
+    await once(second, 'close');
+
+    const third = await connectAndPhase(phase1Key, 3);
+    third.write(build0030Transport({ phase1Key, id: 3, inner: Buffer.from('020047494e370057', 'hex'), tables }));
+    const [ssOk] = await readFrames(third, 1);
+    const ssBody = decryptBuffer(ssOk.body.subarray(4), expandChildCodecKey(DECIPHER_KEY, tables));
+    assert.equal(parse0030Body(ssBody).inner.readUInt16BE(4), 0x0201);
+    const worldReq = Buffer.alloc(2);
+    worldReq.writeUInt16BE(0x0205, 0);
+    third.write(build0030Transport({ phase1Key, id: 4, inner: worldReq, tables }));
+    const worldFrames = await readFrames(third, 4, 4000);
+    assert.equal(worldFrames.length, 4);
+    third.end();
+    await once(third, 'close');
+  } finally {
+    for (const socket of sockets) socket.destroy();
+    await server.close().catch(() => {});
+    await rm(dir, { recursive: true, force: true });
+  }
+});
+
+test('playable server boots twice and serves login+world+move sequence', async (t) => {
   const dir = await mkdtemp(join(tmpdir(), 'logh7-ps2-'));
   const tables = loadChildCodecTables();
   const results = [];
@@ -134,6 +320,7 @@ test('playable server boots twice and serves login+world+move sequence', async (
     const server = createPlayableServer({
       port: 0,
       host: '127.0.0.1',
+      tracePath: join(dir, `trace-${boot}.jsonl`),
       characterStore: store,
       tables,
       transportKey: TRANSPORT_KEY,
@@ -142,6 +329,9 @@ test('playable server boots twice and serves login+world+move sequence', async (
     await server.listen();
     const { port } = server.address();
     const socket = net.connect({ host: '127.0.0.1', port });
+    // ★어서션 실패 시에도 서버/소켓을 반드시 닫는다 — 미정리 시 리스너 핸들이 남아
+    //   node --test 자식 프로세스가 영원히 종료하지 않는다(스위트 행/좀비 러너의 원인).
+    t.after(() => { socket.destroy(); return server.close().catch(() => {}); });
     await once(socket, 'connect');
     const phase1Key = Buffer.from('11223344556677889900aabbccddeeff', 'hex');
     socket.write(buildPhase1Frame({ phase1Key, sequence: boot, tables }));
@@ -323,7 +513,8 @@ test('playable server boots twice and serves login+world+move sequence', async (
       pushCodes.indexOf(0x0325) < pushCodes.indexOf(0x0323),
       `boot ${boot} 0x0325 must precede 0x0323`,
     );
-    // ★정합(TCP 레벨): 0x0323 flagship(body+0x24 BE) == 0x0325 unit[0].id(body+0x04 BE). count 도 BE.
+    // ★정합(TCP 레벨): 0x0323 flagship(body+0x24 BE) == 0x0325 unit[0].id(body+0x04 BE).
+    //   count와 유닛 원소 id 필드는 모두 정본 aligned-BE — docs/logh7-focusid-lookup-re.md §8.7.
     const unitBody = decodeInnerBody(pushFrames.find((fr) => decodeInnerCode(fr) === 0x0325));
     const charBody = decodeInnerBody(pushFrames.find((fr) => decodeInnerCode(fr) === 0x0323));
     assert.ok(unitBody.readUInt16BE(0x00) >= 1, `boot ${boot} 0x0325 count ≥ 1 (BE)`);
@@ -346,13 +537,68 @@ test('playable server boots twice and serves login+world+move sequence', async (
     const moveParsed = parse0030Body(moveBody);
     assert.equal(moveParsed.inner.readUInt16BE(4), 0x0b07);
     assert.equal(server.worldSession.getPlayer(1).cell, 2700 + boot);
+    const compactMoveCell = server.worldSession.getPlayer(1).cell;
+
+    const previousFallback = process.env.LOGH_DEV_GRID_MOVE_FALLBACK_CELL;
+    process.env.LOGH_DEV_GRID_MOVE_FALLBACK_CELL = '2115';
+    try {
+      const liveMoveInner = Buffer.from(
+        '0b0100600de10000001900000001000003350098ffffffffffff62000000000005',
+        'hex',
+      );
+      socket.write(build0030Transport({ phase1Key, id: 7, inner: liveMoveInner, tables }));
+      const [liveMoveFrame] = await collectUntilCode(0x0b07, 6000);
+      const liveMoveBody = decryptBuffer(
+        liveMoveFrame.body.subarray(4),
+        expandChildCodecKey(DECIPHER_KEY, tables),
+      );
+      assert.equal(parse0030Body(liveMoveBody).inner.readUInt16BE(4), 0x0b07);
+      assert.equal(server.worldSession.getPlayer(1).cell, 2115);
+      const traceLines = (await readFile(join(dir, `trace-${boot}.jsonl`), 'utf8'))
+        .trim().split('\n').map((line) => JSON.parse(line));
+      const moveTrace = traceLines.filter((line) => line.event === 'world-response-sent' && line.kind === 'move').at(-1);
+      assert.equal(moveTrace.cell, 2115);
+      assert.equal(moveTrace.cellSource, 'configured-fallback-qa-gated');
+      assert.equal(moveTrace.unresolved, true);
+    } finally {
+      if (previousFallback === undefined) delete process.env.LOGH_DEV_GRID_MOVE_FALLBACK_CELL;
+      else process.env.LOGH_DEV_GRID_MOVE_FALLBACK_CELL = previousFallback;
+    }
+
+    const previousRouteFallback = process.env.LOGH_DEV_GRID_MOVE_FALLBACK_CELL;
+    delete process.env.LOGH_DEV_GRID_MOVE_FALLBACK_CELL;
+    try {
+      const routeMoveInner = Buffer.from(
+        '0b0100000b47054f477000000001000012c13020000000000b4700000000000005',
+        'hex',
+      );
+      socket.write(build0030Transport({ phase1Key, id: 8, inner: routeMoveInner, tables }));
+      const [routeMoveFrame] = await collectUntilCode(0x0b07, 6000);
+      const routeMoveBody = decryptBuffer(
+        routeMoveFrame.body.subarray(4),
+        expandChildCodecKey(DECIPHER_KEY, tables),
+      );
+      assert.equal(parse0030Body(routeMoveBody).inner.readUInt16BE(4), 0x0b07);
+      assert.equal(server.worldSession.getPlayer(1).cell, 2887);
+      const traceLines = (await readFile(join(dir, `trace-${boot}.jsonl`), 'utf8'))
+        .trim().split('\n').map((line) => JSON.parse(line));
+      const routeMoveTrace = traceLines.filter((line) => line.event === 'world-response-sent' && line.kind === 'move').at(-1);
+      assert.equal(routeMoveTrace.cell, 2887);
+      assert.equal(routeMoveTrace.cellSource, 'route-candidate-qa-gated');
+      assert.equal(routeMoveTrace.configuredFallback, null);
+      assert.equal(routeMoveTrace.unresolved, true);
+    } finally {
+      if (previousRouteFallback === undefined) delete process.env.LOGH_DEV_GRID_MOVE_FALLBACK_CELL;
+      else process.env.LOGH_DEV_GRID_MOVE_FALLBACK_CELL = previousRouteFallback;
+    }
 
     results.push({
       boot,
       port,
       loginReplies: loginReplies.length,
       worldCodes: decodedCodes.map((c) => `0x${c.toString(16)}`),
-      moveCell: server.worldSession.getPlayer(1).cell,
+      moveCell: compactMoveCell,
+      liveMoveCell: server.worldSession.getPlayer(1).cell,
     });
     socket.end();
     await server.close();
@@ -361,5 +607,7 @@ test('playable server boots twice and serves login+world+move sequence', async (
   assert.equal(results.length, 2);
   assert.equal(results[0].moveCell, 2701);
   assert.equal(results[1].moveCell, 2702);
+  assert.equal(results[0].liveMoveCell, 2887);
+  assert.equal(results[1].liveMoveCell, 2887);
   await rm(dir, { recursive: true, force: true });
 });

@@ -10,6 +10,8 @@
 // 미확정 필드는 0으로 두고, 확정 anchor 만 채운다 (날조 금지).
 
 /** message32: [u32 LE 0][u16 BE code][body] — 현재 코드베이스 관례(LE prefix) */
+import { buildNotifyInformationCharacterInner } from './codec/personnel-action-list.mjs';
+
 export function buildMsg32Inner(code, body = Buffer.alloc(0)) {
   const bodyBuf = Buffer.isBuffer(body) ? body : Buffer.from(body);
   const out = Buffer.alloc(6 + bodyBuf.length);
@@ -41,6 +43,7 @@ export const CODE_SS_GAME_LOGIN_OK = 0x0206; // S→C SSGameLoginOK
 export const CODE_SS_GAME_LOGIN_REQ = 0x0205; // C→S SSGameLoginRequest
 export const CODE_INFO_CHARACTER = 0x0323; // S→C ResponseInformationCharacter
 export const CODE_INFO_CHARACTER_BYTES = 0x02d4; // 724
+export const CODE_NOTIFY_INFORMATION_CHARACTER = 0x0356;
 export const CODE_INFO_UNIT = 0x0325; // S→C ResponseInformationUnit
 export const CODE_INFO_UNIT_BYTES = 0xce44; // 52804 fixed receive size
 export const CODE_INFO_UNIT_HEADER = 4; // [u16 count][u16 pad]
@@ -196,8 +199,9 @@ export function buildCharacterRosterTransaction({ characters = [] } = {}) {
 
 export function buildSsCharacterIdInner({ characterId = 1 } = {}) {
   const body = Buffer.alloc(4);
-  // 정본 = BIG-ENDIAN. 0x0323 record[0](BE)와 바이트 동일해야 self-match(FUN_004c2a80:
-  // record[0]==clientBase+0x3584a0)가 성립한다. characterId=7 → [00 00 00 07].
+  // 0x0204 핸들러(0x4ba3e7)는 wire body dword0을 무스왑으로 복사 → self-id 전역(clientBase+0x3584a0).
+  // 조인 self-판정: char.id(0x0323 BE-파서 스왑) == self-id 전역. 일치하려면 BE.
+  // 근거: 라이브 반증: 0x0204 핸들러가 SWAP → native 1을 얻으려면 BE wire. (단 2차 BE에서도 slot0 미등록이었으므로 self-id는 근본원인 아님 — 조인 매치가 진짜 블로커)
   body.writeUInt32BE(characterId >>> 0, 0);
   return buildMsg32Inner(CODE_SS_CHARACTER_ID, body);
 }
@@ -214,21 +218,20 @@ export function buildSsGameLoginOkInner({ status = 1 } = {}) {
 /**
  * 0x0323 ResponseInformationCharacter (724B) — 정본 wire = struct-aligned BIG-ENDIAN.
  *
- * 근거(초기화 전 실제로 전략맵이 떴던 옛 렌더 경로 5bd249c buildInformationCharacterRecordInner
- * `wireEndian:'be'` + 라이브 실측 2독립 증거 수렴 — 재조사·재논쟁 금지):
- * 앵커/링크 필드(id·spot·spot_owner·flagship·seat entries)는 멀티바이트 BIG-ENDIAN 이어야
- * 클라가 옳게 읽는다(count 1→256 팬텀 없음, id 1→16777216 없음). 표시용 스탯(fame/pcp/mcp/ability)은
- * 옛 코드처럼 고정 LE(대부분 0이라 값 무관).
+ * 근거: 93fcf150 안정 경로와 5bd249c proven builder의 라이브 렌더 조합.
+ * 앵커/링크 필드(id·spot·spot_owner·flagship·seat entries)는 정렬된 BIG-ENDIAN
+ * 오프셋을 유지하고, 표시 스탯은 proven builder와 같이 고정 LITTLE-ENDIAN이다.
  *
- * 렌더 게이트 필드(BE):
- *   0x00 u32 id ★self-match 앵커 (0x0204 self-id 와 바이트 동일) / 0x04 u8 power / 0x05 u8 camp / 0x06 u8 state
+ * 정본 앵커:
+ *   0x00 u32 id ★self-match 앵커 (0x0204 self-id와 바이트 동일)
+ *   0x04 u8×4 (@0x04..0x07 power/camp/state)
  *   0x1c u32 spot / 0x20 u32 spot_owner
- *   0x24 u32 flagship(=gridUnitId=0x0325 unit[0].id) ★char↔unit 링크 앵커
- *   0x24c u8 seat/card count (officerCount, 최소 1) / 0x254 stride 8 = {character u32 @+0, role u32 @+4}, max 16
+ *   0x24 u32 flagship=gridUnitId ★char↔unit 링크 앵커
+ *   body+0x20/0x28/0x2c 진입점은 별도 진단 게이트이며 정본이 아니다.
+ *   wire 0x24c u8 seat/card count (officerCount, 최소 1) / 0x254 stride 8 = {character u32 @+0, role u32 @+4}, max 16
  *     ← FUN_004c2c80→PLAYER_INFO+0x270 유닛리스트 행수(C002 패널). 없으면 렌더 안 됨.
- * 표시 스탯(고정 LE, 옵션): 0x10 fame / 0x50 pcp / 0x54 mcp / 0x64 online / 0x68 money /
- *   0x188 ability_8(u16×8) / 0x1a8 influence / 0x1a9 stamina.
- * flagship_name/parentage(0x80 경로)·기타 표시필드는 최소 렌더엔 불필요 → 값 0(날조 금지). 총 0x2d4(724B).
+ * 표시 스탯(고정 LE, 옵션): 0x50 pcp / 0x54 mcp / 0x64 online / 0x68 money /
+ *   0x188 ability_8(u16×8) / 0x1a8 influence / 0x1a9 stamina. 총 0x2d4(724B).
  */
 const CHARACTER_NAME_MAX_UNITS = NAME_MAX; // parser cap `< 0xe` per name (lastname/firstname)
 
@@ -243,24 +246,43 @@ export function buildInformationCharacterInner({
   officerCount = null,
   lastname = null, firstname = null, displayName = null, rank = null, title = null, face = null,
   seatEntries = null, spotResolverBase = null, together = null,
-  // 정본 wireEndian = 'be' (옛 proven 렌더코드가 wireEndian:'be' 로 호출). 앵커/링크/seat = BE, 스탯 = LE.
   wireEndian = 'be',
+  // 최신 charstage A/B 진단용: 기본 aligned 위치(0x24)는 유지하고, opt-in 시 후보 오프셋을 쓴다.
+  diagnosticGridUnitOffset28 = undefined,
+  // 추가 charstage 후보: opt-in 시 gridUnitId를 body+0x2c에 쓴다. 기본값은 body+0x24다.
+  diagnosticGridUnitOffset2c = undefined,
+  // 정적 parser map 후보: opt-in 시 gridUnitId를 wire body+0x20에 쓴다. 기본값은 body+0x24다.
+  diagnosticGridUnitOffset20 = undefined,
 } = {}) {
-  // 옛 proven 빌더(5bd249c buildInformationCharacterRecordInner) 바이트 충실 포팅 — 전 필드 복원.
+  // 옛 proven 빌더(5bd249c buildInformationCharacterRecordInner)의 후반 필드는 보존하고 초기 앵커는 정본 파서에 맞춘다.
   // framing: buildMsg32Inner([u32 0][u16BE code][body]) == 옛 buildLobbyResponseInner 와 byte-identical.
   const body = Buffer.alloc(CODE_INFO_CHARACTER_BYTES);
   const payload = body; // 옛 코드의 payload(=inner.subarray(6)) 역할
   const writeRecordU16 = (value, offset) => payload.writeUInt16LE((value ?? 0) & 0xffff, offset);
   const writeRecordU32 = (value, offset) => payload.writeUInt32LE((value ?? 0) >>> 0, offset);
-  // proven anchors (G164 world load): id@0x00, flagship/grid-unit id@0x24 (BE)
+  const useLiveClientLayout = process.env.LOGH_LIVE_CLIENT_LAYOUT === '1';
+  const useDiagnosticGridUnitOffset28 = diagnosticGridUnitOffset28 === true
+    || (diagnosticGridUnitOffset28 === undefined && process.env.LOGH_DIAG_0323_GRIDUNIT_OFFSET28 === '1');
+  const useDiagnosticGridUnitOffset2c = diagnosticGridUnitOffset2c === true
+    || (diagnosticGridUnitOffset2c === undefined && process.env.LOGH_DIAG_0323_GRIDUNIT_OFFSET2C === '1');
+  const useDiagnosticGridUnitOffset20 = diagnosticGridUnitOffset20 === true
+    || (diagnosticGridUnitOffset20 === undefined
+      && (process.env.LOGH_DIAG_0323_GRIDUNIT_OFFSET20 === '1' || useLiveClientLayout));
+  const gridUnitWireOffset = useDiagnosticGridUnitOffset20
+    ? 0x20
+    : (useDiagnosticGridUnitOffset2c ? 0x2c : (useDiagnosticGridUnitOffset28 ? 0x28 : 0x24));
+  // proven anchors (G164 world load): id@0x00, flagship/grid-unit id@0x24 (BE).
+  // 진단 게이트(LOGH_DIAG_0323_GRIDUNIT_OFFSET28=1)에서만 body+0x28로 이동한다.
   writeWireU32(payload, characterId, 0x00, wireEndian); // id ★self-match 앵커 (0x0204 self-id 와 동일 BE)
-  writeWireU32(payload, gridUnitId, 0x24, wireEndian);  // flagship (grid-unit id) ★char↔unit 링크 앵커
-  if (Number.isInteger(power)) payload.writeUInt8(power & 0xff, 0x04); // 陣営/faction id
+  if (Number.isInteger(power)) payload.writeUInt8(power & 0xff, 0x04);
   if (Number.isInteger(camp)) payload.writeUInt8(camp & 0xff, 0x05);
   if (Number.isInteger(state)) payload.writeUInt8(state & 0xff, 0x06);
-  if (Number.isInteger(fame)) writeRecordU32(fame, 0x10); // 표시 스탯 고정 LE
-  if (Number.isInteger(spot)) writeWireU32(payload, spot, 0x1c, wireEndian); // current system id
-  if (Number.isInteger(spotOwner)) writeWireU32(payload, spotOwner, 0x20, wireEndian);
+  writeWireU32(payload, gridUnitId, gridUnitWireOffset, wireEndian);
+  if (Number.isInteger(fame)) writeRecordU32(fame, 0x10);
+  if (Number.isInteger(spot)) writeWireU32(payload, spot, 0x1c, wireEndian);
+  if (Number.isInteger(spotOwner) && !useDiagnosticGridUnitOffset20) {
+    writeWireU32(payload, spotOwner, 0x20, wireEndian);
+  }
   if (Number.isInteger(pcp)) writeRecordU32(pcp, 0x50);
   if (Number.isInteger(mcp)) writeRecordU32(mcp, 0x54);
   if (online) payload.writeUInt8(1, 0x64);
@@ -334,39 +356,63 @@ export function buildInformationCharacterInner({
 //   - full (fleets 지정): 각 유닛의 0x58B 레코드를 UNIT_ELEM 레이아웃으로 채움. 빈 레지스트리
 //     (@0x7db3c8 activeCount=0) → 마커 클릭 null-deref 크래시 해소. fleets[0].id 는 반드시
 //     gridUnitId(=0x0323 flagship+0x24)여야 char↔unit 링크가 유지된다.
-// 프레이밍: count @0 는 u16 BIG-ENDIAN, unit[0] @ payload+4, 레코드 값(id 등)도 BE — 레코드 전체 일관 BE.
-//   count BE 근거(라이브+정적 실측 확정, docs/reference/legacy-evidence/logh7-0325-handler-stage.md): 실제
+// 프레이밍: count @0 는 u16 BIG-ENDIAN (별도 스왑 리더), unit[0] @ payload+4, 레코드 필드값은 aligned BE.
+//   count BE 근거(라이브+정적 실측 확정, docs/logh7-focusid-lookup-re.md §6.3-6.4): 실제
 //   0x0325 핸들러는 FUN_00419ca0. 그 게이트가 count 를 `call [eax+0x20]` 스트림 read 로 읽는데 이 read 가
 //   ntohs(네트워크 바이트순서, 바이트스왑)한다. 서버가 BE `00 19`(count=25) 를 보내면 [eax+0x20] 스왑 →
 //   edi `19 00` → mov ax,[edi] LE 읽기 = 0x0019 = 25 ≤ 600(레지스트리 슬롯수) → 유닛 스테이징 통과.
-//   83a52a5e 의 LE 정정은 틀린 함수(FUN_004ba2b0 case 0x325) 근거였고 실행 경로가 아님이 밝혀졌다.
-//   count/id 동일 BE. record[0].id 는 0x0323 flagship self-match 불변식(아래).
+//   ★ 유닛 원소 필드는 전부 BE (§6.3 라이브 실측상 BE 상태에서 ucnt=25 로드 성립; LE/header 변형은 진단 게이트).
 export function buildInformationUnitInner({
   unitId = 1, unitCount = 1, cell = 0, commander = 0, wireEndian = 'be', fleets = null,
+  // 최신 charstage A/B 진단용: 기본 record 시작(0x04)은 유지하고, opt-in 시 body+0x03부터
+  // native LE unit id를 쓴다. 기본값은 기존 안정 경로(header4/BE)다.
+  diagnosticUnitHeader3 = undefined,
+  // 정적 변환 버퍼 결과 재현용: header4는 유지하고 ID 필드만 native LE로 쓴다. 기본 off.
+  diagnosticUnitIdLe = undefined,
+  // 정적 변환 버퍼 후보 재현용: count 뒤 body+0x02에 첫 unit id를 BE로 쓴다. 기본 off.
+  diagnosticUnitIdOffset2Be = undefined,
 } = {}) {
   const list = Array.isArray(fleets) && fleets.length ? fleets : null;
   const count = list ? Math.min(list.length, CODE_INFO_UNIT_MAX) : Math.max(0, Math.min(unitCount, CODE_INFO_UNIT_MAX));
   const body = Buffer.alloc(CODE_INFO_UNIT_BYTES);
+  const useDiagnosticUnitHeader3 = diagnosticUnitHeader3 === true
+    || (diagnosticUnitHeader3 === undefined && process.env.LOGH_DIAG_0325_HEADER3_LE === '1');
+  const useDiagnosticUnitIdLe = diagnosticUnitIdLe === true
+    || (diagnosticUnitIdLe === undefined && process.env.LOGH_DIAG_0325_ID_LE === '1');
+  const useDiagnosticUnitIdOffset2Be = diagnosticUnitIdOffset2Be === true
+    || (diagnosticUnitIdOffset2Be === undefined
+      && (process.env.LOGH_DIAG_0325_ID_OFFSET2_BE === '1' || process.env.LOGH_LIVE_CLIENT_LAYOUT === '1'));
+  const unitHeader = useDiagnosticUnitIdOffset2Be
+    ? CODE_INFO_UNIT_HEADER
+    : (useDiagnosticUnitHeader3 ? CODE_INFO_UNIT_HEADER - 1 : CODE_INFO_UNIT_HEADER);
+  const unitIdWireEndian = useDiagnosticUnitIdOffset2Be
+    ? 'be'
+    : ((useDiagnosticUnitHeader3 || useDiagnosticUnitIdLe) ? 'le' : wireEndian);
+  const unitIdWireOffset = (rowIndex, rowBase) => (
+    useDiagnosticUnitIdOffset2Be && rowIndex === 0 ? 0x02 : rowBase + UNIT_ELEM.ID
+  );
 
   const writeU16 = (v, off) => (wireEndian === 'be' ? body.writeUInt16BE(v & 0xffff, off) : body.writeUInt16LE(v & 0xffff, off));
 
   if (!list) {
     // minimal: header [u16 count BE][u16 pad] @0x00, unit[0].id @ payload+HEADER(4) (stride 0x58).
     // count 는 u16 BIG-ENDIAN (실 핸들러 FUN_00419ca0 의 [eax+0x20] 스왑 스트림리더가 ntohs 로 읽음).
-    // unit[0].id(+0x00)는 0x0323 flagship(+0x24)의 self-match 링크 대상이라 BE 유지(FUN_004c2a80 원바이트 비교).
-    body.writeUInt16BE(count & 0xffff, 0); // count BE (record.id 와 동일 엔디안 — 레코드 일관 BE)
+    // unit[0].id(+0x00)는 aligned-BE 레코드 필드다.
+    body.writeUInt16BE(count & 0xffff, 0);
     if (count > 0) {
-      writeWireU32(body, unitId, CODE_INFO_UNIT_HEADER + UNIT_ELEM.ID, wireEndian); // unit[0].id ★flagship 링크 대상(BE)
+      writeWireU32(body, unitId, unitIdWireOffset(0, unitHeader), unitIdWireEndian);
     }
     return buildMsg32Inner(CODE_INFO_UNIT, body);
   }
   // full: count + N개 0x58B 레코드. 고정 52804B 버퍼를 넘기지 않게 캡.
-  body.writeUInt16BE(count & 0xffff, 0); // count BE (minimal 과 동일 — 실 핸들러 FUN_00419ca0 스왑 리더)
+  // ★주의: aligned-BE 레코드 필드 전체를 기본 wireEndian으로 쓴다.
+  //        0x0325 전체 LE 전환은 진단 게이트에서만 허용한다(카운트 헤더 붕괴 방지). §7.1
+  body.writeUInt16BE(count & 0xffff, 0);
   for (let i = 0; i < count; i += 1) {
-    const base = CODE_INFO_UNIT_HEADER + i * CODE_INFO_UNIT_STRIDE;
+    const base = unitHeader + i * CODE_INFO_UNIT_STRIDE;
     if (base + CODE_INFO_UNIT_STRIDE > body.length) break;
     const f = list[i] ?? {};
-    writeWireU32(body, f.id ?? 0, base + UNIT_ELEM.ID, wireEndian); // 앵커(P0)
+    writeWireU32(body, f.id ?? 0, unitIdWireOffset(i, base), unitIdWireEndian);
     writeU16(f.faction ?? 0, base + UNIT_ELEM.FACTION);
     writeWireU32(body, f.commander ?? 0, base + UNIT_ELEM.COMMANDER, wireEndian);
     writeWireU32(body, f.cell ?? 0, base + UNIT_ELEM.CELL, wireEndian);
@@ -462,7 +508,13 @@ export function buildNotifyMovedGridInner({ units = [], header = {} } = {}) {
   return buildMsg32Inner(CODE_NOTIFY_MOVED_GRID, body);
 }
 
-/** 0x0b01 C→S: body 최소 [u32 unitId][u32 cell] (RE: 0x24 body; 앞 필드만 소비) */
+/**
+ * 0x0b01 C→S: compact body [u32 unitId][u32 cell] 또는 고정 0x24-byte legacy body.
+ *
+ * Legacy 0x0b01 is structurally distinguishable by its fixed body size: the first three
+ * dwords are header fields and unitId/destination live at body+0x0c/+0x10. Shorter
+ * diagnostic/compact inputs retain the current leading-dword interpretation.
+ */
 export function decodeMoveGridCommand(inner) {
   const buf = Buffer.isBuffer(inner) ? inner : Buffer.from(inner);
   if (buf.length < 2) throw new RangeError('0x0b01 too short');
@@ -471,7 +523,53 @@ export function decodeMoveGridCommand(inner) {
     throw new RangeError(`0x0b01 expected, got 0x${code.toString(16)}`);
   }
   const body = buf.subarray(2);
-  // 유연 파싱: unitId@0, cell@4 또는 unitCount@12 이후 entry (tactical-style) 무시하고 LE 첫 두 dword
+  if (body.length === 0x24) {
+    return {
+      code,
+      unitId: body.readUInt32LE(0x0c),
+      cell: body.readUInt32LE(0x10),
+    };
+  }
+  if (body.length === 0x1f) {
+    const nonzeroWordsBe = [];
+    for (let offset = 0; offset + 1 < body.length; offset += 2) {
+      const value = body.readUInt16BE(offset);
+      if (value !== 0) {
+        nonzeroWordsBe.push({
+          offset,
+          value,
+          valueHex: `0x${value.toString(16).padStart(4, '0')}`,
+        });
+      }
+    }
+    const routeCellCandidate = body.readUInt16BE(0x16);
+    const routeTailWord = body.readUInt16BE(0x18);
+    return {
+      code,
+      unitId: null,
+      cell: null,
+      format: 'sendwarp-live-v1',
+      unresolved: true,
+      bodyLength: body.length,
+      fields: {
+        coord0: { x: body.readUInt16BE(0x00), y: body.readUInt16BE(0x02) },
+        coord1: { x: body.readUInt16BE(0x04), y: body.readUInt16BE(0x06) },
+        actorOrSequence: body.readUInt32BE(0x08),
+        commandCoord: { x: body.readUInt16BE(0x0e), y: body.readUInt16BE(0x10) },
+        routeCellCandidate,
+        routeCellCandidateHex: `0x${routeCellCandidate.toString(16).padStart(4, '0')}`,
+        routeTailWord,
+        routeTailWordHex: `0x${routeTailWord.toString(16).padStart(4, '0')}`,
+        terminalByte: body.readUInt8(0x1e),
+        nonzeroWordsBe,
+        rawHex: body.toString('hex'),
+      },
+    };
+  }
+  if (body.length !== 8) {
+    throw new RangeError(`0x0b01 unsupported body length: ${body.length}`);
+  }
+  // compact compatibility: unitId@0, cell@4
   const unitId = body.length >= 4 ? body.readUInt32LE(0) : 0;
   const cell = body.length >= 8 ? body.readUInt32LE(4) : 0;
   return { code, unitId, cell };
@@ -563,7 +661,7 @@ export function buildMessengerStatus0f07() {
 //   0x032a(req) → 0x032b(resp). 응답 대기형(fire-and-forget 아님) — 응답 없으면 클라 재시도.
 //   바디 정확히 2804B(0xaf4) 고정. count≥1 필수(0 이면 클라가 표시 함수 미호출 → 빈 창).
 //   레이아웃: [u8 count @0x00][pad 3B][element[i] @0x04 + i*0x1c, 각 28B, ≤100].
-//   엔디안: 형제 0x0323/0x0325 와 동일 packed BE(0x03xx 일괄 BE 규약).
+//   엔디안: 형제 0x0323/0x0325 와 동일 aligned BE(0x03xx 앵커 규약).
 export const CODE_REQ_OUTFIT_INFO = 0x032a; // C→S RequestInformationOutfit
 export const CODE_RESP_OUTFIT_INFO = 0x032b; // S→C ResponseInformationOutfit
 export const CODE_RESP_OUTFIT_INFO_BYTES = 0xaf4; // 2804 고정 수신 크기
@@ -859,6 +957,95 @@ export function buildStaticInformationGridTypeInner({ objects = [] } = {}) {
  * zero=빈 테이블, 콘텐츠 미승격(데이터 날조 아님). Buffer.alloc 이라 0 초기화 보장
  * (allocUnsafe 금지 — garbage 위험). 표에 없는 순수 ack 코드는 기존대로 빈 body 유지.
  */
+/**
+ * 명령 테이블 프리로드는 기본 경로가 아닌 명시적 진단 게이트다.
+ *
+ * 근거:
+ *   - 0x0305: count u16 LE, card stride 0x46, command_count @record+0x14,
+ *     factory ids u16 LE @record+0x16 (FUN_004f5cb0).
+ *   - 0x0307: count u16 LE, card stride 0xc4, descriptor id u16 LE @record+0x04,
+ *     descriptor stride 8 (FUN_004ba2b0/FUN_005312b0).
+ *   - 0x19/0x3f/0x40: selected-factory branch가 정적으로 확인된 명령 ID.
+ *   - 0x2b: SelectGrid(0x0b01→0x0b07) factory anchor가 정적으로 확인된 호환 슬롯.
+ * packed/w/flag의 의미는 미확정이므로 0으로 둔다.
+ */
+export const COMMAND_TABLE_PRELOAD_ENV = 'LOGH_COMMAND_TABLE_PRELOAD_PROBE';
+export const COMMAND_TABLE_PRELOAD_FACTORY_IDS = Object.freeze([0x0019, 0x003f, 0x0040, 0x002b]);
+export const STATIC_INFORMATION_CARD_STRIDE = 0x46;
+export const STATIC_INFORMATION_CARD_MAX = 300;
+export const STATIC_INFORMATION_CARD_COMMAND_STRIDE = 0xc4;
+export const STATIC_INFORMATION_CARD_COMMAND_RECORD_MAX = 300;
+export const STATIC_INFORMATION_CARD_COMMAND_ENTRY_STRIDE = 8;
+export const STATIC_INFORMATION_CARD_COMMAND_MAX = 24;
+
+export function isCommandTablePreloadEnabled() {
+  return process.env[COMMAND_TABLE_PRELOAD_ENV] === '1';
+}
+
+function clampU16(value) {
+  const n = Number(value);
+  return Number.isFinite(n) ? Math.max(0, Math.min(0xffff, Math.trunc(n))) : 0;
+}
+
+/** 0x0305 ResponseStaticInformationCard — RE 확정 필드만 채운다. */
+export function buildStaticInformationCardInner({ cards = [] } = {}) {
+  const body = Buffer.alloc(STATIC_INFO_BODY_SIZES[0x0305]);
+  const list = Array.isArray(cards) ? cards.slice(0, STATIC_INFORMATION_CARD_MAX) : [];
+  body.writeUInt16LE(list.length, 0x00);
+  for (let i = 0; i < list.length; i += 1) {
+    const card = list[i] ?? {};
+    const base = 2 + i * STATIC_INFORMATION_CARD_STRIDE;
+    if (base + STATIC_INFORMATION_CARD_STRIDE > body.length) break;
+    body.writeUInt16LE(clampU16(card.id ?? card.cardId), base + 0x00);
+    const commands = Array.isArray(card.commands)
+      ? card.commands.slice(0, STATIC_INFORMATION_CARD_COMMAND_MAX)
+      : [];
+    body.writeUInt8(commands.length, base + 0x14);
+    for (let j = 0; j < commands.length; j += 1) {
+      body.writeUInt16LE(clampU16(commands[j]), base + 0x16 + j * 2);
+    }
+  }
+  return buildMsg32Inner(0x0305, body);
+}
+
+/** 0x0307 ResponseStaticInformationCardCommand — descriptor ID만 RE-confirmed. */
+export function buildStaticInformationCardCommandInner({ cards = [] } = {}) {
+  const body = Buffer.alloc(STATIC_INFO_BODY_SIZES[0x0307]);
+  const list = Array.isArray(cards) ? cards.slice(0, STATIC_INFORMATION_CARD_COMMAND_RECORD_MAX) : [];
+  body.writeUInt16LE(list.length, 0x00);
+  for (let i = 0; i < list.length; i += 1) {
+    const card = list[i] ?? {};
+    const base = 2 + i * STATIC_INFORMATION_CARD_COMMAND_STRIDE;
+    if (base + STATIC_INFORMATION_CARD_COMMAND_STRIDE > body.length) break;
+    body.writeUInt16LE(clampU16(card.id ?? card.cardId), base + 0x00);
+    const commands = Array.isArray(card.commands)
+      ? card.commands.slice(0, STATIC_INFORMATION_CARD_COMMAND_MAX)
+      : [];
+    body.writeUInt8(commands.length, base + 0x02);
+    for (let j = 0; j < commands.length; j += 1) {
+      const off = base + 0x04 + j * STATIC_INFORMATION_CARD_COMMAND_ENTRY_STRIDE;
+      body.writeUInt16LE(clampU16(commands[j]?.id ?? commands[j]), off + 0x00);
+      // packed u24, w u16, flag u8의 의미는 미확정 — Buffer.alloc의 0을 유지한다.
+    }
+  }
+  return buildMsg32Inner(0x0307, body);
+}
+
+export function buildCommandTablePreloadCardInner() {
+  return buildStaticInformationCardInner({
+    cards: [{ id: 0, commands: COMMAND_TABLE_PRELOAD_FACTORY_IDS }],
+  });
+}
+
+export function buildCommandTablePreloadCommandInner() {
+  return buildStaticInformationCardCommandInner({
+    cards: [{
+      id: 0,
+      commands: COMMAND_TABLE_PRELOAD_FACTORY_IDS.map((id) => ({ id })),
+    }],
+  });
+}
+
 export function buildEmptyWalkerInner(code) {
   const size = STATIC_INFO_BODY_SIZES[code & 0xffff] ?? 0;
   return buildMsg32Inner(code & 0xffff, Buffer.alloc(size));
@@ -935,6 +1122,12 @@ const ADMISSION_DEDICATED_BUILDERS = Object.freeze({
  */
 export function buildAdmissionResponseInner(reqCode) {
   const code = reqCode & 0xffff;
+  // 명령 테이블 프리로드는 LOGH_COMMAND_TABLE_PRELOAD_PROBE=1에서만 활성화한다.
+  // 기본값은 기존 zero-fill walker를 유지해 월드 진입 회귀를 막는다.
+  if (isCommandTablePreloadEnabled()) {
+    if (code === CODE_REQ_SESSION_WALKER) return buildCommandTablePreloadCardInner();
+    if (code === CODE_REQ_DUTY_WALKER) return buildCommandTablePreloadCommandInner();
+  }
   const dedicated = ADMISSION_DEDICATED_BUILDERS[code];
   if (dedicated) return dedicated();
   const respCode = ADMISSION_WALKER_REQ_RESP[code];
@@ -975,7 +1168,8 @@ export function isAdmissionRequestCode(code) {
  * (0x0300→0x0301, 0x0f00→0x0f01, 0x0f02→0x0f03, 0x0314→0x0315)에 대해
  * buildAdmissionResponseInner/ADMISSION_DEDICATED_BUILDERS 가 reactive 로 응답한다.
  *
- * 0x031d/0x031f base 바디는 오프셋 미확정 → 생략 (fail-closed).
+ * 0x031d base는 logh7-static-base 경로로 reactive 제공하지만, 전체 필드 계보는 provisional이다.
+ * 0x031f/0x0321은 오프셋 미확정이라 생략한다(fail-closed).
  */
 /**
  * ★황제(emperor) 재발 금지:
@@ -1124,8 +1318,8 @@ export function buildWorldReadyPushInners({
   }
   // 계약 순서(render-contract L102) + M3 정합 수정:
   //   0x0b09(begin) → 0x0325(유닛) + 0x0323(캐릭터) → 0x0b0a(end) → 0x0f03. 각 정확히 1회.
-  // ★정합이 NOW LOADING 을 해제한다(docs/logh7-loop-state.md "0x0323 flagship(+0x24)=0x0325
-  //   unit id(+0x04) 정합"): 클라 FUN_004c2a80 은 begin/end 사이에서 char.flagship(+0x24)을
+  // ★정합이 NOW LOADING 을 해제한다: 0x0323 flagship(+0x24)=0x0325 unit id(+0x04).
+  //   클라 FUN_004c2a80 은 begin/end 사이에서 char.flagship(+0x24)을
   //   unit id(+0x04)와 링크해 플레이어 오브젝트(clientBase+0xc)를 빌드한다. makeChar 의
   //   gridUnitId 와 makeUnit 의 unitId 는 동일 `unitId` 라서 flagship==unit[0].id 가 성립한다.
   //   이전 P7 ×2 재전송은 정합이 아니라 타이밍 추측이었다 — 링크가 성립하면 1회로 충분하며,
@@ -1173,6 +1367,7 @@ export function buildGridInitializeSpawnInners({
   staticCells = null,
   // 0x0325 유닛 레지스트리 충전용 전체 함대 목록(플레이어 unit[0] + NPC). 미지정 시 minimal(플레이어 1).
   fleets = null,
+  includeActionList = undefined,
 } = {}) {
   if (!Number.isInteger(characterId) || characterId <= 0) {
     throw new Error('buildGridInitializeSpawnInners: characterId required (no default id=1 / emperor trap)');
@@ -1180,6 +1375,12 @@ export function buildGridInitializeSpawnInners({
   if (!Number.isInteger(unitId) || unitId <= 0) {
     throw new Error('buildGridInitializeSpawnInners: unitId required (no synthetic id)');
   }
+  const category = Number(process.env.LOGH_ACTION_LIST_CATEGORY);
+  const hasCategory = process.env.LOGH_ACTION_LIST_CATEGORY !== undefined
+    && Number.isInteger(category) && category >= 0 && category <= 0xffff;
+  const actionSeatCharacter = hasCategory
+    ? (category === 0 ? 0x10000 : category)
+    : characterId;
   const inners = [];
   // 1) 0x0204 선택 캐릭터 id (self-match 앵커: 0x0323 record[0](+0x00 BE)와 바이트 동일)
   inners.push(buildSsCharacterIdInner({ characterId }));
@@ -1212,6 +1413,10 @@ export function buildGridInitializeSpawnInners({
   //    이 프레임이 FUN_004c2a80 을 호출해 캐릭터 테이블(0x0323)을 순회하며 self 캐릭터를
   //    렌더 레지스트리로 스폰(0x0325 스테이징 flagship 링크 소비). 반드시 0x0325/0x0323 **뒤**.
   inners.push(buildNotifyEnterGridEndInner({ value: 0 }));
+  const postloadActionListEnabled = includeActionList === true
+    || (includeActionList === undefined && (
+      process.env.LOGH_POSTLOAD_ACTION_LIST === '1'
+    ));
   // 6) grid extras: 0x0313 grid-type(팔레트) → 0x0315 cell grid.
   //    grid-type 이 셀그리드보다 먼저여야 클라가 셀 value 를 palette index 로 해석한다.
   //    galaxy 데이터가 있으면 실 성계 팔레트/셀(플레이어 함대 cell = SPACE 로 덮어 항행표식),
@@ -1231,8 +1436,26 @@ export function buildGridInitializeSpawnInners({
       ? staticCells
       : [{ col, row, value: TERRAIN_SPACE }],
   }));
-  // 7) 0x0f03 GridInitialize_OK — 반드시 맨 마지막. 이게 gridInitialized 를 flip 해 렌더를 트리거한다.
+  // 7) 0x0f03 GridInitialize_OK — core grid-init 응답의 마지막. 이게 gridInitialized 를 flip 해 렌더를 트리거한다.
   inners.push(buildGridInitOkInner({ status: 1 }));
+  if (postloadActionListEnabled) {
+    // 0x0356은 명시적 post-load 진단 게이트다. 0x0f03 이후에 보내도 core 초기화 순서는 유지된다.
+    inners.push(buildNotifyInformationCharacterInner({
+      characterId,
+      gridUnitId: unitId,
+      power,
+      spot,
+      spotOwner: unitId,
+      online: true,
+      lastname,
+      firstname,
+      face,
+      rank,
+      abilities: Array.isArray(abilities) && abilities.length ? abilities : null,
+      spotResolverBase: spot,
+      seatEntries: [{ character: actionSeatCharacter, role: 0 }],
+    }));
+  }
   return inners;
 }
 
@@ -1266,8 +1489,10 @@ export function listRequiredServerEmitCodes() {
       notifyMovedGrid: CODE_NOTIFY_MOVED_GRID,
       gridChat: CODE_CMD_GRID_CHAT,
     },
+    provisional: [
+      '0x031d ResponseStaticInformationBase (runtime served; field provenance partial)',
+    ],
     omittedUnproven: [
-      '0x031d ResponseStaticInformationBase (layout partial)',
       '0x031f ResponseInformationSystem (provisional offsets)',
       '0x0321 ResponseInformationInstitution',
     ],

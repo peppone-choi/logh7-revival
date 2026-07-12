@@ -178,7 +178,9 @@ test('login harness replies to a decoded GIN7 credential with the keysetup+redir
     assert.equal(decoded.innerCodeHex, '0x7000');
     const sent = traceLines.find((line) => line.event === 'login-response-sent');
     assert.ok(sent, 'login-response-sent trace expected');
-    assert.equal(sent.gin7KeyHex, gin7Key.toString('hex'));
+    assert.equal(sent.gin7KeyHex, undefined, 'credential key must not be logged by default');
+    assert.equal(sent.gin7KeyBytes, gin7Key.length);
+    assert.equal(sent.gin7KeyRedacted, true);
   } finally {
     socket?.destroy();
     await harness.close().catch(() => {});

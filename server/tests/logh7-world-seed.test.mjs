@@ -118,6 +118,33 @@ test('world seed: GameApplication boots with static world and exposes catalog', 
     const dep = await app.dispatchQuery({ type: 'GetInitialDeployment' });
     assert.equal(dep.deployment.length, 24);
 
+    const ships = await app.dispatchQuery({ type: 'GetShips' });
+    assert.equal(ships.ships.length, 63);
+    assert.deepEqual(Object.keys(ships.ships[0]).sort(), ['name', 'pools', 'shipClass', 'ship_key', 'side']);
+    assert.equal(typeof ships.ships[0].pools, 'object');
+
+    const fortresses = await app.dispatchQuery({ type: 'GetFortresses' });
+    assert.equal(fortresses.fortresses.length, 6);
+    assert.equal(typeof fortresses.fortresses[0], 'object');
+
+    const factions = await app.dispatchQuery({ type: 'GetFactions' });
+    assert.equal(factions.factions.length, 3);
+    assert.deepEqual(Object.keys(factions.factions[0]).sort(), [
+      'colorRgb', 'dynasty', 'flags', 'id', 'name_en', 'name_ja', 'name_ko', 'note', 'powerId',
+    ]);
+
+    const ranks = await app.dispatchQuery({ type: 'GetRanks' });
+    assert.equal(ranks.ranks.length, 21);
+    assert.deepEqual(Object.keys(ranks.ranks[0]).sort(), ['code', 'confidence', 'ja', 'ko', 'tier']);
+
+    const abilities = await app.dispatchQuery({ type: 'GetAbilities' });
+    assert.equal(abilities.abilities.length, 8);
+    assert.deepEqual(Object.keys(abilities.abilities[0]).sort(), ['ja', 'key', 'ko', 'order']);
+
+    const canonCharacters = await app.dispatchQuery({ type: 'GetCanonCharacters' });
+    assert.equal(canonCharacters.characters.length, 99);
+    assert.equal(typeof canonCharacters.characters[0], 'object');
+
     // reopen — seed loader must not duplicate on second boot
     app.close();
     const app2 = createGameApplication({ dbPath });

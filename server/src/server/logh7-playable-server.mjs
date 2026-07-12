@@ -69,6 +69,17 @@ function codeHex(code) {
   return `0x${code.toString(16).padStart(4, '0')}`;
 }
 
+function isLoopbackHost(host) {
+  return host === '127.0.0.1' || host === '::1' || host === 'localhost';
+}
+
+function hasKnownDevCredential(accounts) {
+  return accounts.some((entry) => (
+    (entry.accountId === 'inei00' || entry.accountId === 'dummy')
+    && entry.password === 'dummy'
+  ));
+}
+
 // 응답 inner 의 실제 방출 코드 추출 (message32 [u32 0][u16BE code] 또는 raw [u16BE code]).
 // admission trace 가 codes=null 로 남던 문제 해소 — 다음 라이브 캡처에서 무슨 코드를 실제로
 // 보냈는지(0x0315 등) 판독 가능하게 한다.
@@ -134,7 +145,13 @@ export function createPlayableServer({
   if (tracePath) mkdirSync(dirname(tracePath), { recursive: true });
 
   // 실 서버 data/ 경로 (유저 환경과 동일). accounts 시드 보장.
-  loadAccountRegistry(accountsPath);
+  const loopbackHost = isLoopbackHost(host);
+  const accountRegistry = loadAccountRegistry(accountsPath, {
+    seedIfMissing: loopbackHost || process.env.LOGH_ALLOW_DEV_ACCOUNTS === '1',
+  });
+  if (!loopbackHost && process.env.LOGH_ALLOW_DEV_ACCOUNTS !== '1' && hasKnownDevCredential(accountRegistry.accounts)) {
+    throw new Error('refusing public bind with known development credentials; set LOGH_ALLOW_DEV_ACCOUNTS=1 only for an isolated QA run');
+  }
   const resolvedCharacterStore = characterStore
     ?? createCharacterStore(characterStorePath ?? DEFAULT_CHARACTERS_PATH);
   const resolvedWorld = worldSession ?? createWorldSession({
@@ -151,13 +168,68 @@ export function createPlayableServer({
   /** @type {Map<number, import('node:net').Socket>} */
   const socketsByConn = new Map();
   const sockets = new Set();
-  // 세션 서버 재접속(conn N+1) 시 직전 로비 계정 바인딩용 (0x0200 바디 계정 파싱 전 임시)
-  let lastLobbyAccount = null;
+  const reconnectHandoffs = new Map();
+  let nextHandoffId = 1;
+  const RECONNECT_HANDOFF_TTL_MS = 60_000;
+  // 원본 클라이언트는 새 TCP 연결에 티켓을 반사하지 않으므로, 호스트 공개 시
+  // 계정 바인딩을 증명할 수 없다. 루프백 호환을 벗어날 때는 명시적 옵트인만 허용한다.
+  const allowInsecureHandoff = loopbackHost || process.env.LOGH_ALLOW_INSECURE_HANDOFF === '1';
+
+  const issueReconnectHandoff = (account, socket, stage = 'lobby') => {
+    if (!allowInsecureHandoff) return;
+    const id = nextHandoffId;
+    nextHandoffId += 1;
+    reconnectHandoffs.set(id, {
+      id,
+      account: String(account),
+      remoteAddress: socket.remoteAddress ?? null,
+      stage,
+      expiresAt: Date.now() + RECONNECT_HANDOFF_TTL_MS,
+    });
+  };
+
+  const consumeReconnectHandoff = (socket, account = null, stage = 'lobby') => {
+    if (!allowInsecureHandoff) return null;
+    const now = Date.now();
+    for (const [id, handoff] of reconnectHandoffs) {
+      if (handoff.expiresAt < now) reconnectHandoffs.delete(id);
+    }
+    const matches = [...reconnectHandoffs.values()]
+      .filter((handoff) => handoff.stage === stage)
+      .filter((handoff) => handoff.remoteAddress === (socket.remoteAddress ?? null))
+      .filter((handoff) => account == null || handoff.account === String(account));
+    // 월드 0x0200에는 계정 필드가 없으므로 동일 원격지의 동시 세션은
+    // 추측으로 선택하지 않고 거부한다.
+    if (matches.length !== 1) return null;
+    const handoff = matches[0];
+    reconnectHandoffs.delete(handoff.id);
+    return handoff.account;
+  };
 
   const writeTrace = (record) => {
     const line = JSON.stringify({ ts: new Date().toISOString(), ...record });
     if (tracePath) appendFileSync(tracePath, `${line}\n`);
     logger?.debug?.(record);
+  };
+
+  const traceInner = (inner) => {
+    const raw = Buffer.from(inner);
+    if (process.env.LOGH_TRACE_RAW_INNER === '1') {
+      const preview = raw.subarray(0, 64);
+      return {
+        innerHex: preview.toString('hex'),
+        innerHexTruncated: raw.length > preview.length,
+      };
+    }
+    return { innerHexRedacted: true };
+  };
+
+  const traceGin7Key = (gin7KeyHex) => {
+    if (process.env.LOGH_TRACE_SECRETS === '1') return { gin7KeyHex };
+    return {
+      gin7KeyBytes: Math.floor(String(gin7KeyHex ?? '').length / 2),
+      gin7KeyRedacted: true,
+    };
   };
 
   function sendInner(socket, connectionId, id, inner) {
@@ -192,6 +264,8 @@ export function createPlayableServer({
     const parser = createFrameStreamParser();
     let phase1Key = null;
     let lobbyAccount = null;
+    let authenticatedAccount = null;
+    let authRejected = false;
     // S→C 단조 증가 id (해독 시퀀스 게이트 0x645eda: id > cipher+0x20)
     // ★요청 id 재사용 금지 — 0x2001 replyId=3 후 0x2004 에 또 id=3 쓰면 클라가 폐기/FIN.
     let nextReplyId = 1;
@@ -220,6 +294,7 @@ export function createPlayableServer({
       }
 
       for (const frame of frames) {
+        if (authRejected) break;
         writeTrace({
           event: 'frame-received',
           connectionId,
@@ -264,6 +339,7 @@ export function createPlayableServer({
               id: parsed0030.id,
               innerCodeHex: codeHex(innerCode),
               innerLen: parsed0030.innerLen,
+              ...(innerCode === CODE_CMD_MOVE_GRID ? traceInner(parsed0030.inner) : {}),
             });
 
             if (innerCode === LOGIN_INNER_CODE) {
@@ -276,6 +352,7 @@ export function createPlayableServer({
                 reason: auth.reason ?? null,
               });
               if (!auth.ok) {
+                authRejected = true;
                 // fail-closed: 성공 쌍 없이 0x7002 LGLoginNG 만 전송
                 try {
                   const { ngFrame } = buildLoginNgResponseFrame({
@@ -299,7 +376,11 @@ export function createPlayableServer({
                     message: ngError.message,
                   });
                 }
+                socket.end();
               } else {
+                authenticatedAccount = String(auth.account);
+                lobbyAccount = authenticatedAccount;
+                issueReconnectHandoff(authenticatedAccount, socket);
                 const { keysetupFrame, redirectFrame, gin7KeyHex } = buildLoginResponseFrames({
                   tables,
                   decipherKey: resolvedDecipherKey.bytes,
@@ -311,14 +392,14 @@ export function createPlayableServer({
                   connectionId,
                   keysetupCodeHex: codeHex(0x0031),
                   redirectCodeHex: codeHex(0x7001),
-                  gin7KeyHex,
+                  ...traceGin7Key(gin7KeyHex),
                 });
               }
             } else if (innerCode === CODE_LOBBY_SESSION_INIT) {
               writeTrace({ event: 'lobby-session-init', connectionId, id: parsed0030.id });
               // G177: LOGH_LOBBY_EARLY_OK=1 일 때만 0x0020 시점에 0x2001 선전송.
               // 기본 OFF — 이중 0x2001 + 잘못된 타이밍이 실클라 다이얼로그/종료를 유발한 전례.
-              if (process.env.LOGH_LOBBY_EARLY_OK === '1') {
+              if (process.env.LOGH_LOBBY_EARLY_OK === '1' && authenticatedAccount) {
                 const earlyId = takeReplyId(parsed0030.id >>> 0);
                 const earlyFrame = buildLobbyLoginOkFrame({
                   id: earlyId,
@@ -336,6 +417,12 @@ export function createPlayableServer({
                   okFormat: 'message32',
                   subheaderLen: LOBBY_SUBHEADER_LEN,
                 });
+              } else if (process.env.LOGH_LOBBY_EARLY_OK === '1') {
+                writeTrace({
+                  event: 'lobby-early-ok-suppressed',
+                  connectionId,
+                  reason: 'auth-required',
+                });
               }
             } else if (innerCode === CODE_SS_LOGIN_REQ) {
               // 0x0200 GameLogin: 씬 전환 FSM 게이트다 (RE 확정).
@@ -345,7 +432,17 @@ export function createPlayableServer({
               // 월드레코드는 0x0205(handleWorldInner CODE_SS_GAME_LOGIN_REQ)에서 흐른다.
               // 0x0200 에 인라인 푸시하면 0x0205 응답과 이중 송신되고, 0x0206-before-0x0204
               // 순서를 클라 recv 필터에서 보장할 수 없다(0x0204 드롭 + 0x0205 재트리거 루프).
-              if (!lobbyAccount && lastLobbyAccount) lobbyAccount = lastLobbyAccount;
+              if (!authenticatedAccount) {
+                const handedAccount = consumeReconnectHandoff(socket, null, 'world');
+                if (!handedAccount) {
+                  writeTrace({ event: 'auth-required', connectionId, innerCodeHex: codeHex(innerCode) });
+                  authRejected = true;
+                  socket.end();
+                  break;
+                }
+                authenticatedAccount = handedAccount;
+              }
+              lobbyAccount = authenticatedAccount;
               const okId = takeReplyId(parsed0030.id >>> 0);
               const okInner = buildSsLoginOkInner({ status: 1 });
               sendInner(socket, connectionId, okId, okInner);
@@ -362,7 +459,13 @@ export function createPlayableServer({
             } else if (innerCode === CODE_TX_SIMPLE_DATA_BEGIN) {
               // 라이브 생성 경로: 클라가 0x1001 직후 C→S 0x1200(31B) 송신.
               // S→C 트랜잭션으로 응답 (Begin 포함 전체).
-              if (!lobbyAccount && lastLobbyAccount) lobbyAccount = lastLobbyAccount;
+              if (!authenticatedAccount) {
+                writeTrace({ event: 'auth-required', connectionId, innerCodeHex: codeHex(innerCode) });
+                authRejected = true;
+                socket.end();
+                break;
+              }
+              lobbyAccount = authenticatedAccount;
               const rosterChars = lobbyAccount
                 ? resolvedCharacterStore.getCharacters(lobbyAccount)
                 : [];
@@ -383,12 +486,32 @@ export function createPlayableServer({
                 after: 'c2s-0x1200',
                 frames: rosterFrames.length,
                 characterCount: rosterChars.length,
-                requestInnerHex: Buffer.from(parsed0030.inner).subarray(0, 64).toString('hex'),
+                ...traceInner(parsed0030.inner),
               });
             } else if (innerCode === CODE_LOBBY_LOGIN_REQUEST) {
               const { account } = decodeLobbyLoginRequest(parsed0030.inner);
-              lobbyAccount = account;
-              lastLobbyAccount = account;
+              if (!authenticatedAccount) {
+                const handedAccount = consumeReconnectHandoff(socket, account, 'lobby');
+                if (!handedAccount) {
+                  writeTrace({ event: 'auth-required', connectionId, innerCodeHex: codeHex(innerCode), account });
+                  authRejected = true;
+                  socket.end();
+                  break;
+                }
+                authenticatedAccount = handedAccount;
+              }
+              if (authenticatedAccount !== account) {
+                writeTrace({
+                  event: 'account-mismatch',
+                  connectionId,
+                  authenticatedAccount,
+                  requestedAccount: account,
+                });
+                authRejected = true;
+                socket.end();
+                break;
+              }
+              lobbyAccount = authenticatedAccount;
               // ★캐릭터 자동 생성 금지. 빈 로스터면 빈 목록 그대로 응답.
               // 생성은 클라 0x1008(CommandGenerateCharacterCharge) 등 정식 경로만.
               const chars = resolvedCharacterStore.getCharacters(account);
@@ -448,6 +571,13 @@ export function createPlayableServer({
               // 이걸 로비 라우터로 흘리면 handleLobbyInner 가 null 반환 → 응답 없음 → NOW LOADING 정지.
               || isAdmissionRequestCode(innerCode)
             ) {
+              if (!authenticatedAccount) {
+                writeTrace({ event: 'auth-required', connectionId, innerCodeHex: codeHex(innerCode) });
+                authRejected = true;
+                socket.end();
+                break;
+              }
+              lobbyAccount = authenticatedAccount;
               // 월드 권위 경로
               let character = null;
               if (lobbyAccount) {
@@ -467,6 +597,7 @@ export function createPlayableServer({
                   inner: parsed0030.inner,
                   character,
                 });
+                issueReconnectHandoff(authenticatedAccount, socket, 'world');
                 result.responses.push({
                   targets: [connectionId],
                   inner: login.responseInner,
@@ -480,7 +611,7 @@ export function createPlayableServer({
                   sessionId: login.player?.sessionId ?? 0,
                   responseIsMsg32: login.responseIsMsg32 !== false,
                   responseHex: Buffer.from(login.responseInner).toString('hex'),
-                  innerHex: Buffer.from(parsed0030.inner).toString('hex'),
+                  ...traceInner(parsed0030.inner),
                 });
                 // 0x2009 는 0x200a 리다이렉트만 보낸다. 월드 진입(0x0206+레코드)은
                 // 클라가 이어 보내는 0x0200 GameLogin 응답에서 0x0201 직후에 처리한다.
@@ -523,10 +654,21 @@ export function createPlayableServer({
                 reqCode: result.reqCode != null ? codeHex(result.reqCode) : null,
                 responseCount: result.responses.length,
                 cell: result.cell ?? null,
-                text: result.text ?? null,
+                cellSource: result.cellSource ?? null,
+                routeCellCandidate: result.routeCellCandidate ?? null,
+                configuredFallback: result.configuredFallback ?? null,
+                unresolved: result.unresolved ?? null,
+                textLength: typeof result.text === 'string' ? result.text.length : null,
               });
             } else {
               // 로비 캐릭터 라우터 (0x1000/0x2003/0x2005/0x1008 등)
+              if (!authenticatedAccount) {
+                writeTrace({ event: 'auth-required', connectionId, innerCodeHex: codeHex(innerCode) });
+                authRejected = true;
+                socket.end();
+                break;
+              }
+              lobbyAccount = authenticatedAccount;
               try {
                 const responseInner = handleLobbyInner(
                   parsed0030.inner,
@@ -553,7 +695,7 @@ export function createPlayableServer({
                   connectionId,
                   innerCodeHex: codeHex(innerCode),
                   message: lobbyError.message,
-                  innerHex: Buffer.from(parsed0030.inner).subarray(0, 64).toString('hex'),
+                  ...traceInner(parsed0030.inner),
                 });
                 // 로비 미지 코드면 월드 라우터 재시도
                 const worldResult = resolvedWorld.handleWorldInner({
@@ -577,7 +719,7 @@ export function createPlayableServer({
                     connectionId,
                     innerCodeHex: codeHex(innerCode),
                     message: lobbyError.message,
-                    innerHex: Buffer.from(parsed0030.inner).subarray(0, 64).toString('hex'),
+                    ...traceInner(parsed0030.inner),
                   });
                 }
               }

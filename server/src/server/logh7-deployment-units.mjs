@@ -69,20 +69,26 @@ export function getDeploymentFleetUnits() {
  * 0x0325 유닛 레코드용 전체 fleets 목록 조립: 플레이어 유닛[0] + NPC 배치 함대.
  *
  * ★플레이어는 반드시 unit[0] (id=gridUnitId). 클라 char↔unit 링크(FUN_004c2a80)가
- *   0x0323 flagship(+0x24) == 0x0325 unit[0].id(+0x04) 를 요구하므로 앵커 순서 고정.
+ *   0x0323 flagship(wire@0x20→struct@0x24) == 0x0325 unit[0].id(wire@0x04→struct@0x00) 를 요구하므로 앵커 순서 고정.
  * NPC id 가 플레이어 id 와 겹치면 NPC 를 제외(플레이어 우선).
  *
- * @param {{ unitId:number, cell?:number, characterId?:number, faction?:number }} player
+ * @param {{ unitId:number, cell?:number, characterId?:number, faction?:number, focusCell?:boolean }} player
  * @returns {Array<{id:number, cell:number, faction:number, owner:number, commander:number}>}
  */
 export function buildDeploymentFleetList(player = {}) {
   const unitId = Number(player.unitId) >>> 0;
+  const playerCell = Number.isInteger(player.cell) ? player.cell >>> 0 : 0;
+  // 기본 commander=characterId는 유지하고, 검증된 선택 게이트에서만 own-cell을 주입한다.
+  const focusCell = player.focusCell === true
+    || (player.focusCell === undefined && process.env.LOGH_PLAYER_FOCUS_CELL === '1');
   const playerUnit = {
     id: unitId,
-    cell: Number.isInteger(player.cell) ? player.cell >>> 0 : 0,
+    cell: playerCell,
     faction: Number.isInteger(player.faction) ? player.faction : 0,
     owner: Number.isInteger(player.characterId) ? player.characterId >>> 0 : 0,
-    commander: Number.isInteger(player.characterId) ? player.characterId >>> 0 : 0,
+    commander: focusCell
+      ? playerCell
+      : (Number.isInteger(player.characterId) ? player.characterId >>> 0 : 0),
   };
   const npc = getDeploymentFleetUnits().filter((u) => u.id !== unitId);
   return [playerUnit, ...npc];

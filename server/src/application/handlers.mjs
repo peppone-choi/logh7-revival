@@ -106,12 +106,22 @@ export function registerGameHandlers({ commandBus, queryBus }) {
   commandBus.register('MoveGrid', (cmd, { uow }) => {
     const character = uow.findCharacterById(cmd.characterId);
     if (!character) throw new Error('character not found');
+    if (cmd.accountId == null || String(cmd.accountId).trim() === '') {
+      throw new Error('account required');
+    }
+    if (character.accountId !== String(cmd.accountId)) {
+      throw new Error('character not owned');
+    }
     if (!character.online) throw new Error('not in world');
     const unitId = ensureUnitId(character);
     if (cmd.unitId != null && cmd.unitId !== unitId) {
       throw new Error('unit not owned');
     }
-    setCharacterCell(character, cmd.cell >>> 0);
+    const cell = Number(cmd.cell);
+    if (!Number.isInteger(cell) || cell < 0 || cell >= 5000) {
+      throw new Error('invalid grid cell');
+    }
+    setCharacterCell(character, cell);
     uow.registerEvent('GridMoved', {
       characterId: character.id,
       unitId,
@@ -140,6 +150,30 @@ export function registerGameHandlers({ commandBus, queryBus }) {
 
   queryBus.register('GetInitialDeployment', (_q, { worldCatalog }) => {
     return { deployment: worldCatalog.getInitialDeployment() };
+  });
+
+  queryBus.register('GetShips', (_q, { worldCatalog }) => {
+    return { ships: worldCatalog.getShips() };
+  });
+
+  queryBus.register('GetFortresses', (_q, { worldCatalog }) => {
+    return { fortresses: worldCatalog.getFortresses() };
+  });
+
+  queryBus.register('GetFactions', (_q, { worldCatalog }) => {
+    return { factions: worldCatalog.getFactions() };
+  });
+
+  queryBus.register('GetRanks', (_q, { worldCatalog }) => {
+    return { ranks: worldCatalog.getRanks() };
+  });
+
+  queryBus.register('GetAbilities', (_q, { worldCatalog }) => {
+    return { abilities: worldCatalog.getAbilities() };
+  });
+
+  queryBus.register('GetCanonCharacters', (_q, { worldCatalog }) => {
+    return { characters: worldCatalog.getCanonCharacters() };
   });
 
   queryBus.register('GetFleetAtCell', (q, { uow, db }) => {

@@ -59,11 +59,41 @@ test('CQRS+ORM: create account/character, enter world, move grid with flush', as
 
     const moved = await app.dispatchCommand({
       type: 'MoveGrid',
+      accountId: 'inei00',
       characterId: created.character.id,
       unitId: entered.unitId,
       cell: 2597,
     });
     assert.equal(moved.cell, 2597);
+    await assert.rejects(
+      app.dispatchCommand({
+        type: 'MoveGrid',
+        accountId: 'intruder',
+        characterId: created.character.id,
+        unitId: entered.unitId,
+        cell: 2598,
+      }),
+      /character not owned/,
+    );
+    await assert.rejects(
+      app.dispatchCommand({
+        type: 'MoveGrid',
+        characterId: created.character.id,
+        unitId: entered.unitId,
+        cell: 2598,
+      }),
+      /account required/,
+    );
+    await assert.rejects(
+      app.dispatchCommand({
+        type: 'MoveGrid',
+        accountId: 'inei00',
+        characterId: created.character.id,
+        unitId: entered.unitId,
+        cell: 5000,
+      }),
+      /invalid grid cell/,
+    );
 
     // 재오픈 후 영속 확인 (Hibernate급 flush 검증)
     app.close();

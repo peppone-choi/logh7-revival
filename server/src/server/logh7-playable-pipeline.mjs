@@ -380,7 +380,7 @@ export function runLoginWorldMpSequence({
   moveInner.writeUInt16BE(CODE_CMD_MOVE_GRID, 0);
   moveInner.writeUInt32LE(entered.player.unitId, 2);
   moveInner.writeUInt32LE(moveCell, 6);
-  const move = world.handleMoveCommand({ connectionId: 1, inner: moveInner });
+  const move = world.handleMoveCommand({ connectionId: 1, accountId, inner: moveInner });
   if (move.cell !== moveCell) throw new Error('move cell not applied');
   if (readMsg32Code(move.notify) !== CODE_NOTIFY_MOVED_GRID) throw new Error('notify code');
   if (msg32Body(move.notify).length !== 0x244) throw new Error('0x0b07 size');

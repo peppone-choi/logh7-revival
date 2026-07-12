@@ -147,7 +147,9 @@ test('0x0036 and 0x0030 are traced without forced 0x0030 decode', async () => {
     const traceLines = (await readFile(tracePath, 'utf8')).trim().split('\n').map((line) => JSON.parse(line));
     const received = traceLines.filter((line) => line.event === 'frame-received');
     assert.deepEqual(received.map((line) => line.codeHex), ['0x0036', '0x0030']);
-    assert.equal(received[1].rawFrameHex.endsWith('aabbccddeeff'), true);
+    assert.equal(received[1].rawFrameHex, undefined);
+    assert.equal(received[1].rawFrameRedacted, true);
+    assert.equal(received[1].rawFrameBytes, 10);
     assert.equal(traceLines.some((line) => line.event === '0030-decoded'), false);
     assert.equal(traceLines.some((line) => line.event === '0030-decode-skipped'), true);
   } finally {

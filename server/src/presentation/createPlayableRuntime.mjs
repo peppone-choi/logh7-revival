@@ -21,7 +21,10 @@ export function createPlayableRuntime({
   const app = createGameApplication({ dbPath });
 
   // JSON 계정 파일과 SQLite accounts 동기 시드
-  const { accounts } = loadAccountRegistry(accountsPath);
+  const loopbackHost = host === '127.0.0.1' || host === '::1' || host === 'localhost';
+  const { accounts } = loadAccountRegistry(accountsPath, {
+    seedIfMissing: loopbackHost || process.env.LOGH_ALLOW_DEV_ACCOUNTS === '1',
+  });
   for (const a of accounts) {
     app.ensureAccount({ accountId: a.accountId, password: a.password });
   }

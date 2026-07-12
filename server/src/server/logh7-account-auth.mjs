@@ -19,11 +19,15 @@ export const DEFAULT_CHARACTERS_PATH = join(HERE, '..', '..', 'data', 'logh7-cha
 /**
  * 계정 파일 로드. 없으면 기본 개발 계정(inei00/dummy) 시드.
  * @param {string} [accountsPath]
+ * @param {{seedIfMissing?: boolean}} [options]
  * @returns {{ accounts: Array<{accountId:string,password:string}>, path: string }}
  */
-export function loadAccountRegistry(accountsPath = DEFAULT_ACCOUNTS_PATH) {
+export function loadAccountRegistry(accountsPath = DEFAULT_ACCOUNTS_PATH, { seedIfMissing = true } = {}) {
   const path = accountsPath;
   if (!existsSync(path)) {
+    if (!seedIfMissing) {
+      throw new Error(`accounts file required: ${path}`);
+    }
     mkdirSync(dirname(path), { recursive: true });
     const seed = {
       accounts: [{ accountId: 'inei00', password: 'dummy' }],

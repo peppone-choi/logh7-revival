@@ -141,6 +141,8 @@ export function createLoginHarnessServer({
   const resolvedTransportKey = resolveKey(transportKey, 'LOGH_TRANSPORT_KEY_HEX', LEGACY_TRANSPORT_KEY_HEX);
   const resolvedDecipherKey = resolveKey(decipherKey, 'LOGH_DECIPHER_KEY_HEX', LEGACY_DECIPHER_KEY_HEX);
   const phase3Mode = resolvedTransportKey.source === 'legacy-default' || resolvedDecipherKey.source === 'legacy-default' ? 'replayed' : 'observed';
+  const loopbackHost = host === '127.0.0.1' || host === '::1' || host === 'localhost';
+  const allowUnauthenticatedLobby = loopbackHost || process.env.LOGH_ALLOW_INSECURE_HARNESS === '1';
   let nextConnectionId = 1;
   let listening = false;
   const sockets = new Set();
@@ -151,12 +153,36 @@ export function createLoginHarnessServer({
     logger?.debug?.(record);
   };
 
+  const traceGin7Key = (gin7KeyHex) => {
+    if (process.env.LOGH_TRACE_SECRETS === '1') return { gin7KeyHex };
+    return {
+      gin7KeyBytes: Math.floor(String(gin7KeyHex ?? '').length / 2),
+      gin7KeyRedacted: true,
+    };
+  };
+
+  const traceFrame = (frame) => {
+    const raw = Buffer.from(frame.raw);
+    if (process.env.LOGH_TRACE_RAW_FRAMES === '1') {
+      const preview = raw.subarray(0, 128);
+      return {
+        rawFrameHex: preview.toString('hex'),
+        rawFrameHexTruncated: raw.length > preview.length,
+      };
+    }
+    return {
+      rawFrameBytes: raw.length,
+      rawFrameRedacted: true,
+    };
+  };
+
   const server = createServer((socket) => {
     const connectionId = nextConnectionId;
     nextConnectionId += 1;
     sockets.add(socket);
     const parser = createFrameStreamParser();
     let phase1Key = null;
+    let authRejected = false;
     let lobbyAccount = null; // conn2 0x2000 에서 바인딩되는 로비 계정(캐릭터 store 키)
     writeTrace({
       event: 'connection-opened',
@@ -176,13 +202,14 @@ export function createLoginHarnessServer({
       }
 
       for (const frame of frames) {
+        if (authRejected) break;
         writeTrace({
           event: 'frame-received',
           connectionId,
           codeHex: codeHex(frame.code),
           length: frame.length,
           bodyBytes: frame.body.length,
-          rawFrameHex: frame.raw.toString('hex'),
+          ...traceFrame(frame),
         });
 
         if (frame.code === PHASE1_CODE) {
@@ -261,7 +288,7 @@ export function createLoginHarnessServer({
                 redirectCodeHex: codeHex(0x7001),
                 keysetupFrameBytes: keysetupFrame.length,
                 redirectFrameBytes: redirectFrame.length,
-                gin7KeyHex,
+                ...traceGin7Key(gin7KeyHex),
               });
             } else if (innerCode === CODE_LOBBY_SESSION_INIT) {
               // 0x0020 LobbySessionInit — 서버 무응답이 정상(라이브 근거: selector=1). 트레이스만.
@@ -269,6 +296,12 @@ export function createLoginHarnessServer({
             } else if (innerCode === CODE_LOBBY_LOGIN_REQUEST) {
               // 0x2000 LobbyLoginRequest(GIN7 v4, LE) → 0x2001 LobbyLoginOK.
               // account 를 커넥션에 바인딩(이후 0x1000 캐릭터 로스터의 store 키).
+              if (!allowUnauthenticatedLobby) {
+                writeTrace({ event: 'auth-required', connectionId, innerCodeHex: codeHex(innerCode) });
+                authRejected = true;
+                socket.end();
+                break;
+              }
               const { account } = decodeLobbyLoginRequest(parsed0030.inner);
               lobbyAccount = account;
               const okFrame = buildLobbyLoginOkFrame({
