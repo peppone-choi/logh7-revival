@@ -1,0 +1,140 @@
+{
+  "id": "logh7-server-data-crosslink-audit",
+  "generatedAt": "2026-07-12",
+  "purpose": "Cross-link extracted catalogs, server seed data, runtime consumers, and client-facing wire builders. This is an inventory and provenance report; it does not promote suspect extraction data to canonical.",
+  "scope": {
+    "serverDataRoots": [
+      "server/content",
+      "server/data/seed",
+      "server/src"
+    ],
+    "clientSurface": "G7MTClient-compatible wire builders under server/src/server"
+  },
+  "linkSemantics": {
+    "canonical": "Used by WorldSeedLoader/WorldCatalog or an authoritative wire response builder.",
+    "derived": "Generated from another catalog and retained for presentation, diagnostics, or geometry.",
+    "extractionOnly": "Extracted evidence with no runtime consumer found in the current server.",
+    "unresolved": "A link is suggested by naming or format, but no byte-level/runtime join is established."
+  },
+  "datasets": [
+    {
+      "id": "galaxy-systems",
+      "paths": ["server/data/seed/galaxy-systems.json", "server/content/galaxy.json"],
+      "recordCounts": {"systems": 85, "planets": 300},
+      "provenance": "CD/MsgDat/manual/reconstruction ledger; canonCol/canonRow are the strategic cell source.",
+      "runtimeConsumers": [
+        "server/src/infrastructure/persistence/WorldSeedLoader.mjs",
+        "server/src/infrastructure/persistence/WorldCatalog.mjs",
+        "server/src/server/logh7-galaxy-placement.mjs",
+        "server/src/server/logh7-map-position-ledger.mjs",
+        "server/src/server/logh7-world-session.mjs (0x0312/0x0314)"
+      ],
+      "wireLinks": ["0x0313 static palette", "0x0315 static grid", "0x031d static object information"],
+      "reverseLinks": ["system -> planets[].orbit", "system -> fortresses[]", "system -> factionId", "system -> canonCol/canonRow"],
+      "unconsumedOrSuspect": ["planet records have no independent strategic cell", "P3 special-body cells remain unverified"]
+    },
+    {
+      "id": "fortresses",
+      "paths": ["server/data/seed/fortresses.json", "server/content/fortresses.json"],
+      "recordCounts": {"fortresses": 6},
+      "provenance": "Named fortress catalog cross-linked to galaxy systems.",
+      "runtimeConsumers": ["WorldSeedLoader", "WorldCatalog", "logh7-map-position-ledger"],
+      "wireLinks": ["0x031d object kind=2", "0x031f dynamic owner/economy", "0x0321 facilities"],
+      "reverseLinks": ["fortress -> galaxy system -> strategic cell"],
+      "unconsumedOrSuspect": ["No independent fortress geometry/cell is present in MDX evidence"]
+    },
+    {
+      "id": "planet-economy-overlay",
+      "paths": ["server/content/planet-economy.json"],
+      "recordCounts": {"systems": 85},
+      "provenance": "P3 procedural overlay; not original static CD data.",
+      "runtimeConsumers": [],
+      "wireLinks": [],
+      "reverseLinks": ["system -> generated planet economy entries"],
+      "unconsumedOrSuspect": ["Must not be treated as canonical runtime economy without live/wire confirmation"]
+    },
+    {
+      "id": "ships",
+      "paths": ["server/data/seed/ships.json", "server/content/ship-stats.json", "server/content/ship-stats-raw.json"],
+      "recordCounts": {"seedShips": 63, "rawShips": 63, "derivedShips": 63},
+      "provenance": "Wire-oriented ship catalog plus derived stat presentation.",
+      "runtimeConsumers": ["WorldSeedLoader", "WorldCatalog", "handlers.mjs (GetShips)", "logh7-deployment-units.mjs", "logh7-world-records.mjs"],
+      "wireLinks": ["0x0325 unit table", "0x033b tactical unit/ship", "0x0341 fill ship"],
+      "reverseLinks": ["ship -> deployment unit -> faction/character"],
+      "unconsumedOrSuspect": ["server/content/extracted/model-ship.json (273 visual records) is not a 1:1 gameplay stat source"]
+    },
+    {
+      "id": "characters",
+      "paths": ["server/data/seed/characters.json", "server/content/character-roster.json", "server/content/character-portraits-complete.json"],
+      "recordCounts": {"characters": 99, "portraitRecords": 99, "extractedNames": 133},
+      "provenance": "Roster/stat seed with portrait and extracted-name cross-links.",
+      "runtimeConsumers": ["WorldSeedLoader", "WorldCatalog", "handlers.mjs (GetCanonCharacters)", "logh7-world-records.mjs (0x0323)"],
+      "wireLinks": ["0x0323 character/unit table", "0x0322 character information"],
+      "reverseLinks": ["character -> faction", "character -> portrait", "character -> deployment unit"],
+      "unconsumedOrSuspect": ["all-names.characters count 133 exceeds canonical roster 99; remaining names need identity joins"]
+    },
+    {
+      "id": "factions-ranks-abilities",
+      "paths": ["server/data/seed/factions.json", "server/data/seed/rank-table.json", "server/data/seed/ability-schema.json"],
+      "recordCounts": {"factions": 3, "ranks": 21, "abilities": 8},
+      "provenance": "Seed schemas with explicit wire-field metadata.",
+      "runtimeConsumers": ["WorldSeedLoader", "WorldCatalog", "handlers.mjs (GetFactions/GetRanks/GetAbilities)", "logh7-world-records.mjs"],
+      "wireLinks": ["0x031f owner/faction", "0x0323 fame/rank/ability fields"],
+      "reverseLinks": ["faction -> characters", "rank/ability -> character stats"],
+      "unconsumedOrSuspect": []
+    },
+    {
+      "id": "deployment",
+      "paths": ["server/data/seed/initial-deployment.json", "server/content/initial-deployment.json"],
+      "recordCounts": {"factionDeployments": 2, "seedUnits": 25},
+      "provenance": "Initial deployment reconstruction; live-compatible full fleet table retained.",
+      "runtimeConsumers": ["WorldSeedLoader", "logh7-deployment-units.mjs", "logh7-world-records.mjs", "logh7-world-session.mjs"],
+      "wireLinks": ["0x0325 unit table", "0x0323 unit details", "0x033b tactical unit/ship"],
+      "reverseLinks": ["unit -> ship", "unit -> character", "unit -> strategic cell"],
+      "unconsumedOrSuspect": ["NPC deployment identity is reconstructed and requires live/wire confirmation"]
+    },
+    {
+      "id": "mdx-visual-models",
+      "paths": ["server/content/extracted/model-planets.json", "server/content/extracted/model-galaxy-nodes.json", "server/content/extracted/model-galaxy-stars.json", "server/content/generated/logh7-mdx-catalog.json"],
+      "recordCounts": {"planetVisualModels": 107, "galaxyNodes": 85, "stars": 79, "specialBodies": 6},
+      "provenance": "LOGH7 MDX/MDS scenegraph geometry and asset references.",
+      "runtimeConsumers": [],
+      "wireLinks": [],
+      "reverseLinks": ["model file -> node names/assets"],
+      "unconsumedOrSuspect": ["MDX coordinates are visual-space data, not strategic gameplay cells", "star_NN naming has no canonical system-name join", "special-body cells are unverified"]
+    },
+    {
+      "id": "map-grids",
+      "paths": ["server/content/galaxy-passable-cells.json", "server/content/galaxy-adjacency.json", "server/content/galaxy-raster-star-centers.json"],
+      "recordCounts": {"rasterStarCenters": 80},
+      "provenance": "Derived strategic raster and adjacency data.",
+      "runtimeConsumers": ["logh7-galaxy-placement.mjs", "logh7-world-session.mjs"],
+      "wireLinks": ["0x0313 palette", "0x0315 grid"],
+      "reverseLinks": ["cell -> terrain/palette index", "system -> cell"],
+      "unconsumedOrSuspect": ["rasterStarCenters is diagnostic and has one extra/alternate center relative to the 85-system catalog"]
+    },
+    {
+      "id": "client-msgdat-and-extraction",
+      "paths": ["server/content/client/msgdat.json", "server/content/extracted/msgdat-full.json", "server/content/extracted/constmsg-label-catalog.json", "server/content/extracted/all-names.json"],
+      "recordCounts": {"allNamesPlanets": 281, "allNamesFortresses": 6, "allNamesFactions": 3, "allNamesShips": 74, "constmsgGroups": 120},
+      "provenance": "CD/client string and protocol-label extraction.",
+      "runtimeConsumers": ["logh7-galaxy-placement.mjs (constmsg labels)", "wire builders via protocol constants"],
+      "wireLinks": ["0x0313 labels", "0x031d/0x031f object details"],
+      "reverseLinks": ["label/content id -> visual/map object"],
+      "unconsumedOrSuspect": ["all-names ships 74 exceeds gameplay seed 63; identity mapping is incomplete"]
+    }
+  ],
+  "surfaceSummary": {
+    "authoritativeStrategicPositionSource": "server/content/galaxy.json canonCol/canonRow",
+    "authoritativePlanetPosition": "system cell plus orbit; no independent cell",
+    "authoritativeFortressPosition": "inherits containing system cell",
+    "tacticalPositionSource": "wire 0x042f participant poses (shipId, heading, x, z, y)",
+    "tacticalCelestialPlacement": "not supplied by MDX; 0x033b/0x0345/0x0347 are separate tactical object records",
+    "runtimeCatalogQueries": ["GetShips", "GetFortresses", "GetFactions", "GetRanks", "GetAbilities", "GetCanonCharacters"]
+  },
+  "auditLimitations": [
+    "This report inventories current source links; it does not claim unknown binary fields are decoded.",
+    "Extraction-only datasets require explicit provenance promotion before runtime use.",
+    "Reverse links that are only naming-based are listed as unresolved rather than canonical."
+  ]
+}
