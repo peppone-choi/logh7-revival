@@ -65,7 +65,8 @@ test('foreground attaches, detaches, and continues only after activation succeed
   const setForegroundIndex = foreground.indexOf('activated = bool(user32.SetForegroundWindow(hwnd))');
   const finallyIndex = foreground.indexOf('finally:');
   const detachIndex = foreground.search(/AttachThreadInput\([^\n]+, False\)/);
-  const failureGuardIndex = foreground.indexOf('if not activated:');
+  // 활성화가 끝내 실패하면 timeout 재시도 루프가 deadline 에서 예외를 던진다(fail-closed).
+  const failClosedIndex = foreground.search(/raise ForegroundActivationError\(hwnd\)/);
   const settleIndex = foreground.indexOf('time.sleep(0.25)');
 
   assert.ok(getForegroundIndex >= 0);
@@ -76,8 +77,9 @@ test('foreground attaches, detaches, and continues only after activation succeed
   assert.ok(setForegroundIndex > tryIndex);
   assert.ok(finallyIndex > setForegroundIndex);
   assert.ok(detachIndex > finallyIndex);
-  assert.ok(failureGuardIndex > detachIndex);
-  assert.ok(settleIndex > failureGuardIndex);
+  // attach/detach 규율이 끝난 뒤에만 정착 대기(settle)와 fail-closed 예외가 온다.
+  assert.ok(settleIndex > detachIndex);
+  assert.ok(failClosedIndex > detachIndex);
 });
 
 test('foreground fails closed when Windows rejects activation', async () => {
@@ -85,8 +87,9 @@ test('foreground fails closed when Windows rejects activation', async () => {
   const foreground = sliceBetween(source, 'def foreground(', 'def abs_coords(');
 
   assert.match(source, /class ForegroundActivationError\(RuntimeError\):/);
+  // 활성화가 성공하지 못한 채 deadline 을 넘기면 조용히 진행하지 않고 예외를 던진다.
   assert.match(
     foreground,
-    /if not activated:\s+raise ForegroundActivationError\(hwnd\)/,
+    /if time\.monotonic\(\) >= deadline:\s+raise ForegroundActivationError\(hwnd\)/,
   );
 });
