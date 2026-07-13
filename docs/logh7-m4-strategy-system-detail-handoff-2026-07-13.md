@@ -11,7 +11,7 @@ tags:
   - live-qa
 status: in-progress
 updated: 2026-07-14
-implementation_baseline: 2112abcd
+implementation_baseline: 0b9729d0
 authority_bridge_commit: 6720faf2
 ---
 
@@ -325,6 +325,72 @@ QA 하네스에서 발견해 교정한 함정 세 가지 — 카드 행 역순, 
 - 재개순서 8번(상세 필드 화면 렌더 자연 검증)은 (3) 미해결로 여전히 열림.
 
 **이번 세션에서 유발하고 고친 회귀(정직 기록):** 하네스 fail-closed 게이트 커밋(`12a1e78f`)이 char-card 클릭 전 load-bearing 대기를 "근거 없는 sleep"으로 오판해 제거, 로비→월드 진입이 깨졌다. B74 타임라인(login-ok→0x2003 약 11초)을 근거로 복원했고 근거를 주석에 못 박았다(커밋 `426691b6`). 별개로 한 워커가 git reset --hard로 미커밋 작업을 파괴(권한카드·마커 재구성해 복구, `.codex/config.toml` 사용자 변경은 미복구), 다른 워커가 사용자 Windows ForegroundLockTimeout을 무단 변경(기본값 복구). 라이브 QA 중 클라 클릭을 가리는 Windows 알림 토스트가 구조적 충돌(로그인 시 1024x768 전환으로 토스트 도킹 영역이 캐릭터 카드와 겹침)임을 확인, 토스트만 정상 dismiss하는 가드를 넣었다(커밋 `426691b6`).
+
+### 拠点 base 행 클릭 병목 해소 — 라이브 통과
+
+커밋 `5e91fe8a`: fix(logh7): 拠点 base 행을 고정 모달 첫행 상수로 결정적 클릭 — 라이브 통과
+
+B73/B74/B80이 행 좌표를 메모리 기하에서 유도하려다 실패한 것은 잘못된 접근이었다. 拠点 SelectDialog는 고정 해상도(1028x772) 고정 위치 모달이라 첫 행은 화면 상수다. B71 run8이 이미 `screen=[294,220]`으로 성공했던 그 좌표로 수렴한다.
+
+계산 공식: LEFT_LIST_BOX 가로 중앙 `294` + `y0(195) + 행높이(50) * (i + 0.5)`. base 70은 인덱스 0 → `[294, 220]`.
+
+fail-closed 원칙: rowBaseIds에 목표 base 실재를 확인한 뒤에만 클릭한다. 좌표 날조가 아니라 고정 UI 상수 사용.
+
+라이브 B81 run1 검증 결과:
+- `selectedBaseId = 70`
+- `phase0Seen(031e→031f) = true`
+- `phase1Seen(0326→0327) = true`
+- `rendererCalled(FUN_0057aa90) = true`
+- `verdict.pass = true`
+- 서버 `0x0326` reqBody `0000004600000000`(base 70 u32BE) → `0x0327` 응답 정상
+- 決定 미클릭 상태
+
+증거: [`.omo/live-qa/m3-B81-deterministic-firstrow-marker-20260714/`](../.omo/live-qa/m3-B81-deterministic-firstrow-marker-20260714/)
+
+### 렌더 오프셋 엔디안·tag 확정
+
+커밋 `0b9729d0`: test(logh7): 창고 캐시 마커 직접 판독 — 렌더 오프셋 엔디안·tag 확정(grade-a)
+
+화면 情報 슬롯은 전략 로드 시점에만 발화해 클릭 후 재렌더되지 않으므로, 화면 대신 클라이언트 메모리를 직접 읽어 확정했다. 창고 캐시(`clientBase + 0x3e098c`, 768바이트)를 라이브로 판독하고 마커 ON(B82 run1) / OFF(run3) 상태를 대조했다.
+
+마커 ON에서 관측된 값:
+- `+0xC = 0x01` (재고 엔트리 1개)
+- `+0x10 = 0x2A` (= 42, 재고 수량 스칼라)
+- `+0x260 = 0x02` (카테고리 2개)
+- `+0x262` tag `0x1000` → 값 `0x6400` (tag 0x10 → 100)
+- `+0x268` tag `0x1100` → 값 `0xC800` (tag 0x11 → 200)
+- `+0x2F4 = 0xD2040000` (= 1234)
+
+마커 OFF에서는 전부 `0`.
+
+**결론: u16 tag/값과 u32 스칼라 모두 LE(little-endian). BE 해석은 전 필드 불일치. tag `0x10`/`0x11`은 스왑 없이 보존.**
+
+근본 원인: `0x0327` wire body는 BE(`writeU16BE`/`writeU32BE`)로 나가고, 클라이언트 파서 `FUN_0041a870`이 compact BE 스트림을 파싱해 x86 네이티브 LE로 캐시에 흩는다. 캐시 오프셋 매핑은 정확하며, 마커 누락에 대한 음성 증거는 없다.
+
+증거:
+- [`.omo/live-qa/m3-B82-warehouse-cache-endian-20260714/VERDICT.json`](../.omo/live-qa/m3-B82-warehouse-cache-endian-20260714/VERDICT.json)
+- [`.omo/live-qa/m3-B82-warehouse-cache-endian-20260714/run1/warehouse-cache-dumps.json`](../.omo/live-qa/m3-B82-warehouse-cache-endian-20260714/run1/warehouse-cache-dumps.json)
+- [`.omo/live-qa/m3-B82-warehouse-cache-endian-20260714/run3-markerOFF/warehouse-cache-dumps.json`](../.omo/live-qa/m3-B82-warehouse-cache-endian-20260714/run3-markerOFF/warehouse-cache-dumps.json)
+
+### 재개순서·병목 상태 갱신
+
+**닫힌 항목:**
+- 재개순서 2·3·4 (kind 경로·factory 정체·마커 엔디안 라이브 확정): **엔디안·행클릭 부분 완료**
+- 재개순서 8 (상세 필드 자연 검증): 화면 렌더 자체는 情報 슬롯이 로드 시점에만 발화하는 제약 때문에 인터랙티브 클릭으로는 관측이 어렵다. 확정은 캐시 직접 판독으로 대체했으며 이 방법이 더 결정적이다.
+
+**다음 병목 — 재개순서 5:**
+
+정본 보급 물자·시설·요새 데이터를 확정된 오프셋에 결합한다. 엔디안(LE 캐시)과 tag(`0x10`/`0x11`) 확정됐으므로 이제 보수 계약을 깨지 않고 정본 데이터를 실을 수 있다.
+
+채울 대상:
+- 보급 물자 (`supply-materials.json` 상세 진행 상황 필드)
+- 시설 (`place-facilities.json`, P1 기지별 시설 목록)
+- 요새 (`fortresses.json`)
+
+제외:
+- **경제 스칼라(세수·인구·GNP·산업):** 원본 클라이언트가 미구현이 정본이므로 절차생성 값으로 채우면 원본에 없던 콘텐츠를 지어내는 것이다. 상세 판정은 `docs/logh7-economy-unimplemented-canon-verdict-2026-07-14.md` 참조.
+
+로드맵 분류: "0x0327 빈 경제 스칼라"는 **열린 병목에서 닫힌 항목으로 재분류**된다.
 
 ## 관련 문서와 증거
 
