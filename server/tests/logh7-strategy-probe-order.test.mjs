@@ -271,7 +271,10 @@ test('전략 selection payload의 카드 종류는 +0x274 stride 8 배열만 bou
   const obsoleteTailField = ['payloadWord', '26', 'c'].join('');
   const obsoleteTailOffset = ['0x', '26', 'c'].join('');
   const obsoleteSingleKindField = ['payloadWord', '274'].join('');
-  for (const source of [frida, probe]) {
+  // 이 가드는 selection payload의 over-read 부활을 막는 것이므로 selectionState 슬라이스에만
+  // 적용한다. 창고 캐시 덤프(warehouseCacheDump)는 카테고리 값 오프셋 +0x26C를 정당하게
+  // 쓰는 별개 구조라 전체 파일 검사와 충돌한다(라이브 grade-a 확정).
+  for (const source of [selection, probe]) {
     assert.equal(source.includes(obsoleteTailField), false);
     assert.equal(source.includes(obsoleteTailOffset), false);
     assert.equal(source.includes(obsoleteSingleKindField), false);
