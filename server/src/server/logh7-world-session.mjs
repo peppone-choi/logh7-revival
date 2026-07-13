@@ -37,6 +37,7 @@ import {
   getStrategicPaletteObjects,
 } from './logh7-galaxy-placement.mjs';
 import { buildDeploymentFleetList } from './logh7-deployment-units.mjs';
+import { buildTacticalEntrySequenceInners } from './codec/tactical-entry-sequence.mjs';
 import {
   buildStaticInformationBaseFromGalaxy,
   findStaticBase,
@@ -71,6 +72,9 @@ export function createWorldSession({
   // LOGH_STRAT_GRID_EARLY=1: world-ready push 에서 0x0313 grid-type 를 조기 방출(reactive 0x0312
   // 응답과 합쳐 ×2). 스펙 §미방출 3(early-grid) 근거. 기본은 env 로 결정(프로덕션 opt-in).
   stratGridEarly = process.env.LOGH_STRAT_GRID_EARLY === '1',
+  // LOGH_TACTICAL_ENTRY=1: 월드진입 응답 말미에 전술 진입 시퀀스([0x0325,0x0323,0x033b,0x0f1f])를
+  // deferred 로 덧붙인다. 기본 off — off 면 전술 inner 0건(기존 동작 완전 불변). 전술 arm 트랙 게이트.
+  tacticalEntry = process.env.LOGH_TACTICAL_ENTRY === '1',
 } = {}) {
   /** @type {Map<number, WorldPlayer>} */
   const players = new Map();
@@ -279,6 +283,16 @@ export function createWorldSession({
       abilities: seedAbilities ?? p.ability8,
       officerCount: Number.isInteger(p.officerCount) ? p.officerCount : 0,
     });
+    // 전술 진입 시퀀스(off-default 게이트). 게이트 미설정이면 아무것도 덧붙이지 않아
+    // 기존 world-enter 응답이 완전 불변이다. 게이트 on 이면 참가 로스터(player unit[0] + NPC 함대)로
+    // [0x0325,0x0323,0x033b,0x0f1f(arm)]를 말미에 방출한다. 위치는 미확정 0(battle 엔진 이전 단계).
+    if (tacticalEntry) {
+      const tacticalUnits = fleets.map((f) => ({
+        ...f,
+        character: f.id === p.unitId ? p.characterId : 0,
+      }));
+      emits.push(...buildTacticalEntrySequenceInners({ units: tacticalUnits }));
+    }
     logEvent('world-enter', connectionId, {
       characterId: p.characterId,
       unitId: p.unitId,

@@ -6,6 +6,11 @@ export const RESPONSE_TACTICS_BASE_CODE = 0x0345;
 export const RESPONSE_INFORMATION_OBSTACLE_CODE = 0x0347;
 export const RESPONSE_POSITION_UNIT_CODE = 0x0349;
 export const RESPONSE_POSITION_BASE_CODE = 0x034b;
+export const RESPONSE_NOTIFY_TACTICS_CODE = 0x0f1f;
+
+// 0x0f1f NotifyTactics arm — 클라 FUN_004c1b20이 payload byte0==1이면 전술 arm(state 2), 아니면 0.
+// body 8B(2 dword). arg0가 payload byte0(LE)을 결정한다. arg1은 예약(LOW side/phase).
+export const NOTIFY_TACTICS_BODY_BYTES = 8;
 
 export const UNIT_SHIP_DISPATCH_BYTES = 0x79e4;
 export const BASE_DISPATCH_BYTES = 0x0204;
@@ -135,6 +140,18 @@ export function buildTacticsInformationUnitShipInner({ ships = [] } = {}) {
   }
 
   return buildMsg32Inner(RESPONSE_TACTICS_UNIT_SHIP_CODE, body);
+}
+
+/**
+ * 0x0f1f NotifyTactics — 전술 진입 arm(§9, 8B). Byte0(arg0의 LE 최하위)이 클라
+ * FUN_004c1b20의 전술 setup 분기를 고른다(==1 → state 2, else 0). arg1은 예약.
+ * 삭제된 5bd249c buildNotifyTacticsInner의 순수 재복원(framing만 현행 buildMsg32Inner로).
+ */
+export function buildNotifyTacticsInner({ arg0 = 0, arg1 = 0 } = {}) {
+  const body = Buffer.alloc(NOTIFY_TACTICS_BODY_BYTES);
+  body.writeUInt32LE(u32(arg0), 0);
+  body.writeUInt32LE(u32(arg1), 4);
+  return buildMsg32Inner(RESPONSE_NOTIFY_TACTICS_CODE, body);
 }
 
 /** 0x0345: 요새/기지 전술 상태. */
