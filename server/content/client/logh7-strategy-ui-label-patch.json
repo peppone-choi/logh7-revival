@@ -1,0 +1,109 @@
+{
+  "id": "logh7-strategy-ui-label-patch",
+  "schemaVersion": 1,
+  "status": "ready",
+  "purpose": "전략 UI의 HUD 탭과 확인창 라벨이 잘못된 ConstMsg 그룹을 참조하는 EXE 상수 오류를 되돌릴 수 있게 교정한다.",
+  "targetExe": {
+    "name": "g7mtclient.exe",
+    "sha256": "9c97de2ae426f011680992d6c8d88b25488b5f51555ce5784aeef677f334bb51",
+    "imageBase": 4194304
+  },
+  "expectedPatchedSha256": "d1ef22b75e97462bc1b098848db2732fb4388e4445ab4924203671d88a3e1146",
+  "policy": {
+    "sameLengthOnly": true,
+    "requireOriginalBytes": true,
+    "requireRollbackBytes": true
+  },
+  "patches": [
+    {
+      "id": "strategy-hud-right-tab-label-group",
+      "childIndex": 8,
+      "constMsgSubId": 2,
+      "sourceExeSha256": "9c97de2ae426f011680992d6c8d88b25488b5f51555ce5784aeef677f334bb51",
+      "addressKind": "offset",
+      "offset": 1035701,
+      "originalBytes": "6a65b900742102e84f520200",
+      "patchedBytes": "6a60b900742102e84f520200",
+      "rollbackBytes": "6a65b900742102e84f520200",
+      "reason": "전략 HUD 오른쪽 탭(child 8)이 ConstMsg group 0x65/sub 2의 사운드 설정을 잘못 표시하므로 같은 subId를 유지한 채 group 0x60의 同スポットキャラクター로 교정한다."
+    },
+    {
+      "id": "strategy-hud-left-tab-label-group",
+      "childIndex": 9,
+      "constMsgSubId": 3,
+      "sourceExeSha256": "9c97de2ae426f011680992d6c8d88b25488b5f51555ce5784aeef677f334bb51",
+      "addressKind": "offset",
+      "offset": 1035903,
+      "originalBytes": "6a65b900742102e885510200",
+      "patchedBytes": "6a60b900742102e885510200",
+      "rollbackBytes": "6a65b900742102e885510200",
+      "reason": "전략 HUD 왼쪽 탭(child 9)이 ConstMsg group 0x65/sub 3의 게임 중단 문구를 잘못 표시하므로 같은 subId를 유지한 채 group 0x60의 職務権限カード로 교정한다."
+    },
+    {
+      "id": "common-dialog-confirm-label-group",
+      "constMsgSubId": 0,
+      "sourceExeSha256": "9c97de2ae426f011680992d6c8d88b25488b5f51555ce5784aeef677f334bb51",
+      "addressKind": "offset",
+      "offset": 1504004,
+      "originalBytes": "6a67b900742102e8002dfbff",
+      "patchedBytes": "6a62b900742102e8002dfbff",
+      "rollbackBytes": "6a67b900742102e8002dfbff",
+      "reason": "공통 확인창 생성자 FUN_0056ebf0의 child 6 라벨이 ConstMsg group 0x67/sub 0의 로그인 실패 문구를 잘못 표시하므로 group 0x62/sub 0의 決定으로 교정한다."
+    },
+    {
+      "id": "common-dialog-cancel-label-group",
+      "constMsgSubId": 1,
+      "sourceExeSha256": "9c97de2ae426f011680992d6c8d88b25488b5f51555ce5784aeef677f334bb51",
+      "addressKind": "offset",
+      "offset": 1504154,
+      "originalBytes": "6a67b90074210289442430e8662cfbff",
+      "patchedBytes": "6a62b90074210289442430e8662cfbff",
+      "rollbackBytes": "6a67b90074210289442430e8662cfbff",
+      "reason": "공통 확인창 생성자 FUN_0056ebf0의 child 7 라벨이 ConstMsg group 0x67/sub 1의 버전 오류 문구를 잘못 표시하므로 group 0x62/sub 1의 取消し로 교정한다."
+    },
+    {
+      "id": "strategy-command-ui-confirm-label-group",
+      "constMsgSubId": 0,
+      "sourceExeSha256": "9c97de2ae426f011680992d6c8d88b25488b5f51555ce5784aeef677f334bb51",
+      "addressKind": "offset",
+      "offset": 1541822,
+      "originalBytes": "6a67b900742102e84699faff",
+      "patchedBytes": "6a62b900742102e84699faff",
+      "rollbackBytes": "6a67b900742102e84699faff",
+      "reason": "전략 커맨드 UI FUN_005780f0의 결정 필드가 ConstMsg group 0x67/sub 0의 로그인 실패 문구를 잘못 표시하므로 group 0x62/sub 0의 決定으로 교정한다."
+    },
+    {
+      "id": "strategy-command-ui-cancel-label-group",
+      "constMsgSubId": 1,
+      "sourceExeSha256": "9c97de2ae426f011680992d6c8d88b25488b5f51555ce5784aeef677f334bb51",
+      "addressKind": "offset",
+      "offset": 1541980,
+      "originalBytes": "6a67b900742102e8a898faff",
+      "patchedBytes": "6a62b900742102e8a898faff",
+      "rollbackBytes": "6a67b900742102e8a898faff",
+      "reason": "전략 커맨드 UI FUN_005780f0의 취소 필드가 ConstMsg group 0x67/sub 1의 버전 오류 문구를 잘못 표시하므로 group 0x62/sub 1의 取消し로 교정한다."
+    },
+    {
+      "id": "strategy-command-ui-remaining-count-label-group",
+      "constMsgSubId": 2,
+      "sourceExeSha256": "9c97de2ae426f011680992d6c8d88b25488b5f51555ce5784aeef677f334bb51",
+      "addressKind": "offset",
+      "offset": 1542139,
+      "originalBytes": "6a67b900742102e80998faff",
+      "patchedBytes": "6a62b900742102e80998faff",
+      "rollbackBytes": "6a67b900742102e80998faff",
+      "reason": "전략 커맨드 UI FUN_005780f0의 남은 매수 필드가 ConstMsg group 0x67/sub 2의 서버 혼잡 문구를 잘못 표시하므로 group 0x62/sub 2의 残り枚数로 교정한다."
+    },
+    {
+      "id": "strategy-command-ui-minimum-rank-label-group",
+      "constMsgSubId": 3,
+      "sourceExeSha256": "9c97de2ae426f011680992d6c8d88b25488b5f51555ce5784aeef677f334bb51",
+      "addressKind": "offset",
+      "offset": 1542691,
+      "originalBytes": "6a67b900742102e8e195faff",
+      "patchedBytes": "6a62b900742102e8e195faff",
+      "rollbackBytes": "6a67b900742102e8e195faff",
+      "reason": "전략 커맨드 UI FUN_005780f0의 최소 조건 계급 필드가 ConstMsg group 0x67/sub 3의 중복 로그인 문구를 잘못 표시하므로 group 0x62/sub 3의 最低条件階級으로 교정한다."
+    }
+  ]
+}
