@@ -320,7 +320,7 @@ export function runLoginWorldMpSequence({
   // ★월드-init 핸드셰이크 복원: 0x0314 는 static-info(0x0315)만 돌려주고 world-ready push/0x0f03 을
   //   싣지 않는다. 그래야 클라가 0x0f00→0x0f01→0x0f02 를 스스로 밟는다. 스폰(플레이어 유닛/캐릭터)은
   //   클라의 첫 0x0f02(RequestGridInitialize)에 [0x0204+0x0325+0x0323+grid extras]로 주입하고
-  //   0x0f03(GridInitialize_OK) ack 을 맨 마지막에 둔다(G164 정본). 나머지 어드미션 코드는 단일 응답.
+  //   core 마지막 0x0f03(GridInitialize_OK) 직후 필수 0x0356 post-load delta를 둔다. 나머지는 단일 응답.
   const reactiveWorldCodes = [];
   for (const [reqCode, respCode] of [
     [0x0314, 0x0315],
@@ -341,13 +341,23 @@ export function runLoginWorldMpSequence({
         throw new Error(`reactive 0x0314 must be static-only 0x0315, got [${codesOut.map((c) => c.toString(16)).join(',')}]`);
       }
     } else if (reqCode === 0x0f02) {
-      // 스폰 버스트: 0x0204 로 시작, 0x0325/0x0323 포함, 0x0f03 이 맨 마지막(각 1회).
+      // 스폰 버스트: 0x0204로 시작하고, core 마지막 0x0f03 직후 필수 post-load 0x0356만 1회 이어진다.
       if (codesOut[0] !== 0x0204) {
         throw new Error(`reactive 0x0f02 first code 0x${codesOut[0].toString(16)}, want 0x0204`);
       }
-      const last = codesOut[codesOut.length - 1];
-      if (last !== 0x0f03) {
-        throw new Error(`reactive 0x0f02 last code 0x${last.toString(16)}, want 0x0f03 (must be LAST)`);
+      const gridInitIndex = codesOut.indexOf(0x0f03);
+      const actionIndex = codesOut.indexOf(0x0356);
+      const gridInitCount = codesOut.filter((code) => code === 0x0f03).length;
+      const actionCount = codesOut.filter((code) => code === 0x0356).length;
+      if (
+        gridInitCount !== 1
+        || actionCount !== 1
+        || actionIndex !== gridInitIndex + 1
+        || actionIndex !== codesOut.length - 1
+      ) {
+        throw new Error(
+          `reactive 0x0f02 tail must be exactly 0x0f03,0x0356 once each; got [${codesOut.map((code) => code.toString(16)).join(',')}]`,
+        );
       }
       for (const need of [0x0325, 0x0323]) {
         if (!codesOut.includes(need)) {

@@ -487,7 +487,7 @@ export function createWorldSession({
     //   world-init reset 이 char count(client+0x36a5dc)를 0 으로 지우므로, 0x0f02 에서 0x0323 을
     //   재전송해 count 를 1 로 복구하고 0x0f03(GridInitialize_OK)로 gridInitialized 를 flip 해 렌더를
     //   트리거한다. 순서: [0x0204 + 0x0325 + 0x0323] → grid extras(0x0313 + 0x0315 플레이어 cell)
-    //   → 0x0f03(맨 마지막). 첫 0x0f02 에만(gridInitSpawned 게이트) — 이후엔 plain 0x0f03 ack.
+    //   → 0x0f03(core 마지막) → 0x0356(post-load delta). 첫 0x0f02에만 — 이후엔 plain 0x0f03 ack.
     // 플레이어 없거나 실 유닛/캐릭터 미보유면 합성 스폰 금지 → plain 0x0f03 폴백.
     if (code === CODE_REQ_GRID_INIT) {
       const player = players.get(connectionId);

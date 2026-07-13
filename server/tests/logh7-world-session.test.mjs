@@ -17,6 +17,7 @@ import {
   CODE_INFO_UNIT,
   CODE_NOTIFY_ENTER_GRID_BEGIN,
   CODE_NOTIFY_ENTER_GRID_END,
+  CODE_NOTIFY_INFORMATION_CHARACTER,
   CODE_GRID_INIT_OK,
   CODE_REQ_STATIC_GRID,
   buildWorldReadyPushInners,
@@ -239,29 +240,67 @@ test('0x0205 SSGameLoginRequest batch emits 0x0206 before 0x0204', () => {
 // 8종 월드레코드 수신 후 클라가 0x0304(2B, 페이로드 없음)를 보낸다. 이전엔
 // handleWorldInner 가 라우팅 안 해 "알 수 없는 코드 0x0304" → NOW LOADING 영구 정지.
 
-test('handleWorldInner routes admission 0x0304 → empty 0x0305 walker', () => {
-  const world = createWorldSession();
-  world.seedPlayer({ connectionId: 1, characterId: 5, unitId: 8, inWorld: true });
-  const req = Buffer.alloc(2);
-  req.writeUInt16BE(0x0304, 0);
-  const result = world.handleWorldInner({ connectionId: 1, accountId: 'a', inner: req });
-  assert.ok(result, '0x0304 must be routed (not null)');
-  assert.equal(result.kind, 'admission');
-  assert.equal(result.responses.length, 1);
-  assert.equal(readMsg32Code(result.responses[0].inner), 0x0305);
-  assert.deepEqual(result.responses[0].targets, [1]);
-  assert.equal(result.responses[0].isMsg32, true);
+test('handleWorldInner routes admission 0x0304 → populated playable-baseline 0x0305', () => {
+  const previous = process.env.LOGH_COMMAND_TABLE_PRELOAD_PROBE;
+  delete process.env.LOGH_COMMAND_TABLE_PRELOAD_PROBE;
+  try {
+    const world = createWorldSession();
+    world.seedPlayer({ connectionId: 1, characterId: 5, unitId: 8, inWorld: true });
+    const req = Buffer.alloc(2);
+    req.writeUInt16BE(0x0304, 0);
+    const result = world.handleWorldInner({ connectionId: 1, accountId: 'a', inner: req });
+    assert.ok(result, '0x0304 must be routed (not null)');
+    assert.equal(result.kind, 'admission');
+    assert.equal(result.responses.length, 1);
+    assert.equal(readMsg32Code(result.responses[0].inner), 0x0305);
+    const body = msg32Body(result.responses[0].inner);
+    assert.equal(body.readUInt16BE(0x00), 2, '0x0305 card count');
+    assert.deepEqual(
+      [body.readUInt16BE(0x02), body.readUInt16BE(0x19)],
+      [0, 1],
+      '0x0305 card ids',
+    );
+    assert.deepEqual(
+      [body.readUInt16BE(0x15), body.readUInt16BE(0x17)],
+      [0x002b, 0x0041],
+      '0x0305 factories',
+    );
+    assert.deepEqual(result.responses[0].targets, [1]);
+    assert.equal(result.responses[0].isMsg32, true);
+  } finally {
+    if (previous === undefined) delete process.env.LOGH_COMMAND_TABLE_PRELOAD_PROBE;
+    else process.env.LOGH_COMMAND_TABLE_PRELOAD_PROBE = previous;
+  }
 });
 
-test('handleWorldInner routes admission 0x0306 → 0x0307', () => {
-  const world = createWorldSession();
-  world.seedPlayer({ connectionId: 1, characterId: 5, unitId: 8, inWorld: true });
-  const req = Buffer.alloc(2);
-  req.writeUInt16BE(0x0306, 0);
-  const result = world.handleWorldInner({ connectionId: 1, accountId: 'a', inner: req });
-  assert.ok(result, '0x0306 must be routed');
-  assert.equal(result.kind, 'admission');
-  assert.equal(readMsg32Code(result.responses[0].inner), 0x0307);
+test('handleWorldInner routes admission 0x0306 → populated playable-baseline 0x0307', () => {
+  const previous = process.env.LOGH_COMMAND_TABLE_PRELOAD_PROBE;
+  delete process.env.LOGH_COMMAND_TABLE_PRELOAD_PROBE;
+  try {
+    const world = createWorldSession();
+    world.seedPlayer({ connectionId: 1, characterId: 5, unitId: 8, inWorld: true });
+    const req = Buffer.alloc(2);
+    req.writeUInt16BE(0x0306, 0);
+    const result = world.handleWorldInner({ connectionId: 1, accountId: 'a', inner: req });
+    assert.ok(result, '0x0306 must be routed');
+    assert.equal(result.kind, 'admission');
+    assert.equal(readMsg32Code(result.responses[0].inner), 0x0307);
+    const body = msg32Body(result.responses[0].inner);
+    assert.equal(body.readUInt16BE(0x00), 2, '0x0307 record count');
+    assert.deepEqual(
+      [body.readUInt16BE(0x02), body.readUInt16BE(0x15)],
+      [0, 1],
+      '0x0307 card ids',
+    );
+    assert.deepEqual(
+      [body.readUInt16BE(0x05), body.readUInt16BE(0x0d)],
+      [0x002b, 0x0041],
+      '0x0307 descriptors',
+    );
+  } finally {
+    if (previous === undefined) delete process.env.LOGH_COMMAND_TABLE_PRELOAD_PROBE;
+    else process.env.LOGH_COMMAND_TABLE_PRELOAD_PROBE = previous;
+  }
 });
 
 test('handleWorldInner routes 0x0314 → single 0x0315 static-only (fixed 5004B framing)', () => {
@@ -369,10 +408,10 @@ test('isAdmissionRequestCode(0x0f00) is true (world-init handshake routes to wor
   assert.equal(isAdmissionRequestCode(0x0f00), true);
 });
 
-// ─── 0x0f02 RequestGridInitialize → 스폰 버스트(G164) + grid-enter 괄호, 0x0f03 맨 마지막 ──
+// ─── 0x0f02 RequestGridInitialize → 스폰 버스트 + core 0x0f03 → 필수 0x0356 delta ──
 // 월드-init 핸드셰이크 복원: 스폰(플레이어 유닛/캐릭터)은 0x0314 가 아니라 클라가 스스로 밟는
 // 0x0f02 에 주입한다. 순서 [0x0204 → 0x0b09(begin) → 0x0325 + 0x0323 → 0x0b0a(end)] →
-// grid extras(0x0313 + 0x0315) → 0x0f03(맨 마지막). 첫 0x0f02 에만(gridInitSpawned 게이트).
+// grid extras(0x0313 + 0x0315) → 0x0f03(core 마지막) → 0x0356(post-load delta). 첫 0x0f02에만.
 //
 // ★grid-enter 괄호 배선(logh7-0325-loader-gate.md): 클라 유닛 레지스트리 벌크 적재(FUN_004c2a80)는
 //   오직 0x0b0a(NotifyEnterGridEnd) 수신 시에만 실행된다. 0x0325/0x0323 은 스테이징/캐릭터 테이블만
@@ -380,7 +419,7 @@ test('isAdmissionRequestCode(0x0f00) is true (world-init handshake routes to wor
 //   불변식: 0x0325·0x0323 은 반드시 0x0b09(begin)와 0x0b0a(end) 사이. 0x0b09 는 0x0323 앞
 //   (begin 이 char count 리셋 → 0x0323 이 재충전 → 0x0b0a 가 적재 트리거).
 
-test('handleWorldInner first 0x0f02 injects spawn burst with grid-enter brackets, 0x0f03 LAST (G164)', () => {
+test('handleWorldInner first 0x0f02 injects spawn burst, then 0x0f03 + exactly one 0x0356', () => {
   const world = createWorldSession();
   world.seedPlayer({ connectionId: 1, characterId: 5, unitId: 8, cell: 2588, inWorld: true });
   const req = Buffer.alloc(2);
@@ -397,11 +436,16 @@ test('handleWorldInner first 0x0f02 injects spawn burst with grid-enter brackets
     CODE_NOTIFY_ENTER_GRID_END,  // 0x0b0a (적재 트리거 FUN_004c2a80)
     0x0313,                      // grid-type 팔레트
     0x0315,                      // cell grid (플레이어 함대 cell)
-    CODE_GRID_INIT_OK,           // 0x0f03 (맨 마지막)
-  ], 'spawn burst: 0x0204 → 0x0b09 → 0x0325+0x0323 → 0x0b0a → grid extras → 0x0f03 LAST');
-  assert.equal(codes[codes.length - 1], CODE_GRID_INIT_OK, '0x0f03 must be LAST');
+    CODE_GRID_INIT_OK,           // 0x0f03 (core grid-init 마지막)
+    CODE_NOTIFY_INFORMATION_CHARACTER, // 0x0356 (필수 post-load delta)
+  ], 'spawn burst: core 0x0f03 직후 필수 post-load 0x0356만 이어진다');
+  const iGridInit = codes.indexOf(CODE_GRID_INIT_OK);
+  const iAction = codes.indexOf(CODE_NOTIFY_INFORMATION_CHARACTER);
+  assert.equal(iAction, iGridInit + 1, '0x0356 immediately follows 0x0f03');
+  assert.equal(iAction, codes.length - 1, '0x0356 is the only allowed tail after 0x0f03');
   assert.equal(codes.filter((c) => c === CODE_GRID_INIT_OK).length, 1, '0x0f03 exactly once');
-  assert.equal(msg32Body(result.responses[codes.length - 1].inner).readUInt8(0), 1, '0x0f03 status=1');
+  assert.equal(codes.filter((c) => c === CODE_NOTIFY_INFORMATION_CHARACTER).length, 1, '0x0356 exactly once');
+  assert.equal(msg32Body(result.responses[iGridInit].inner).readUInt8(0), 1, '0x0f03 status=1');
   // grid-enter 괄호 불변식: begin < unit < char < end (0x0325/0x0323 이 begin/end 사이).
   const iBegin = codes.indexOf(CODE_NOTIFY_ENTER_GRID_BEGIN);
   const iUnit = codes.indexOf(CODE_INFO_UNIT);
@@ -465,7 +509,12 @@ test('handleWorldInner routes 0x0f02 when message32-framed too (spawn burst)', (
   assert.ok(result);
   const codes = result.responses.map((r) => readMsg32Code(r.inner));
   assert.equal(codes[0], CODE_SS_CHARACTER_ID, '0x0f02 burst starts with 0x0204');
-  assert.equal(codes[codes.length - 1], 0x0f03, '0x0f03 last');
+  const iGridInit = codes.indexOf(CODE_GRID_INIT_OK);
+  const iAction = codes.indexOf(CODE_NOTIFY_INFORMATION_CHARACTER);
+  assert.equal(iAction, iGridInit + 1, 'message32: 0x0356 immediately follows core 0x0f03');
+  assert.equal(iAction, codes.length - 1, 'message32: no tail other than 0x0356');
+  assert.equal(codes.filter((code) => code === CODE_GRID_INIT_OK).length, 1, 'message32: 0x0f03 exactly once');
+  assert.equal(codes.filter((code) => code === CODE_NOTIFY_INFORMATION_CHARACTER).length, 1, 'message32: 0x0356 exactly once');
 });
 
 // ─── 0x0f06 RequestInformationMessengerStatus → 0x0f07 (idle 파이프라인 해제) ──
@@ -1085,7 +1134,7 @@ test('static-info walk: every walk request routes to its exact paired response w
 });
 
 test('static-info walk: pure reactive codes emit exactly one paired frame (no early-send desync)', () => {
-  // 0x0f02 만 의도적 스폰 버스트(G164, 다중 프레임 — 0x0f03 맨 마지막). 나머지는 요청당 정확히
+  // 0x0f02만 의도적 스폰 버스트(다중 프레임 — core 0x0f03 뒤 필수 0x0356). 나머지는 요청당 정확히
   // 1 프레임(짝 응답)이어야 한다. 조기전송(예: 0x0314 에 0x0f03 동봉)은 워크 큐 헤드가 기대하는
   // 코드와 불일치해 매칭 실패 → 큐 안 비워짐 → 다음 스텝 정지(desync). 요청-응답 페어링 강제.
   for (const [req, resp] of STATIC_INFO_WALK) {

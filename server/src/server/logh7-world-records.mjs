@@ -920,7 +920,7 @@ export function buildStaticInformationGridTypeInner({ objects = [] } = {}) {
  * (allocUnsafe 금지 — garbage 위험). 표에 없는 순수 ack 코드는 기존대로 빈 body 유지.
  */
 /**
- * 명령 테이블 프리로드는 기본 경로가 아닌 명시적 진단 게이트다.
+ * 0x0305/0x0307 명령 테이블은 라이브 호환 플레이 가능 기준선 시드다.
  *
  * 근거:
  *   - 0x0305: wire 외곽 count는 u16 BE이고 레코드는 compact cursor로 이어진다.
@@ -929,22 +929,19 @@ export function buildStaticInformationGridTypeInner({ objects = [] } = {}) {
  *   - 0x0307: wire 외곽 count와 compact record/descriptor의 u16은 모두 BE다.
  *     wire descriptor stride는 8이며, 클라이언트 native destination만 card stride 0xc4다
  *     (FUN_004ba2b0/FUN_005312b0).
- *   - 현재 probe에서 확인한 factory id는 0x2b/0x41이다. category/card id 0/1을 함께 보내야
+ *   - 0x2b는 P0 SelectGrid + P1 라이브 근거가 있는 factory다. 0x41, category 0, card 숫자 매핑은
+ *     P3 호환성 값이며 정본 권한 의미로 승격하지 않는다. category/card id 0/1을 함께 보내야
  *     FUN_004c4a10의 one-shot staging→runtime 변환에서 category 1이 빈 채로 고정되지 않는다.
- * packed/w/flag의 의미는 미확정이므로 0으로 둔다.
+ * 이 시드는 B48/B55에서 확인한 live-compatible playable baseline일 뿐이며, 정본 전체 권한표가
+ * 완성됐다는 뜻이 아니다. packed/w/flag의 의미도 미확정이므로 0으로 둔다.
  */
-export const COMMAND_TABLE_PRELOAD_ENV = 'LOGH_COMMAND_TABLE_PRELOAD_PROBE';
-export const COMMAND_TABLE_PRELOAD_FACTORY_IDS = Object.freeze([0x002b, 0x0041]);
+export const PLAYABLE_BASELINE_COMMAND_FACTORY_IDS = Object.freeze([0x002b, 0x0041]);
 export const STATIC_INFORMATION_CARD_STRIDE = 0x46; // 0x0305 native destination stride (wire는 compact)
 export const STATIC_INFORMATION_CARD_MAX = 300;
 export const STATIC_INFORMATION_CARD_COMMAND_STRIDE = 0xc4; // 0x0307 native destination stride (wire는 compact)
 export const STATIC_INFORMATION_CARD_COMMAND_RECORD_MAX = 300;
 export const STATIC_INFORMATION_CARD_COMMAND_ENTRY_STRIDE = 8;
 export const STATIC_INFORMATION_CARD_COMMAND_MAX = 24;
-
-export function isCommandTablePreloadEnabled() {
-  return process.env[COMMAND_TABLE_PRELOAD_ENV] === '1';
-}
 
 function clampU16(value) {
   const n = Number(value);
@@ -1005,27 +1002,27 @@ export function buildStaticInformationCardCommandInner({ cards = [] } = {}) {
   return buildMsg32Inner(0x0307, body);
 }
 
-export function buildCommandTablePreloadCardInner() {
+export function buildPlayableBaselineCommandCardInner() {
   return buildStaticInformationCardInner({
     // FUN_004c4a10의 one-shot staging 변환 전에 category 0/1을 모두 채운다.
     cards: [
-      { id: 0, commands: COMMAND_TABLE_PRELOAD_FACTORY_IDS },
-      { id: 1, commands: COMMAND_TABLE_PRELOAD_FACTORY_IDS },
+      { id: 0, commands: PLAYABLE_BASELINE_COMMAND_FACTORY_IDS },
+      { id: 1, commands: PLAYABLE_BASELINE_COMMAND_FACTORY_IDS },
     ],
   });
 }
 
-export function buildCommandTablePreloadCommandInner() {
+export function buildPlayableBaselineCommandDescriptorInner() {
   return buildStaticInformationCardCommandInner({
     // category 1도 함께 보내야 초기 native command table이 빈 채로 고정되지 않는다.
     cards: [
       {
         id: 0,
-        commands: COMMAND_TABLE_PRELOAD_FACTORY_IDS.map((id) => ({ id })),
+        commands: PLAYABLE_BASELINE_COMMAND_FACTORY_IDS.map((id) => ({ id })),
       },
       {
         id: 1,
-        commands: COMMAND_TABLE_PRELOAD_FACTORY_IDS.map((id) => ({ id })),
+        commands: PLAYABLE_BASELINE_COMMAND_FACTORY_IDS.map((id) => ({ id })),
       },
     ],
   });
@@ -1039,9 +1036,9 @@ export function buildEmptyWalkerInner(code) {
 /**
  * static-info 어드미션 walker 요청 code → 응답 code 매핑 (req 짝수 → resp = req+1 홀수).
  *
- * 전부 buildEmptyWalkerInner 로 처리 — 응답 code 의 STATIC_INFO_BODY_SIZES 고정크기
- * 0채움 body(빈 테이블). 클라 고정크기 프레이밍이 recv 버퍼를 over-read 하지 않도록
- * 반드시 풀사이즈로 응답한다. 0x0308/0x030c 미배선 시 lobby 라우터로 새어 NOW LOADING 정지.
+ * 0x0304/0x0306은 라이브 호환 플레이 가능 기준선 명령 테이블로 직접 응답한다. 나머지는
+ * buildEmptyWalkerInner로 처리해 응답 code의 고정크기 0채움 body를 보낸다. 클라 프레이밍이
+ * recv 버퍼를 over-read 하지 않도록 반드시 풀사이즈여야 한다.
  *
  * 전용 빌더가 필요한 0x0312→0x0313 / 0x0314→0x0315 (헤더 채움)는 이 표에 넣지 않고
  * buildAdmissionResponseInner 에서 별도 분기한다.
@@ -1103,16 +1100,12 @@ const ADMISSION_DEDICATED_BUILDERS = Object.freeze({
 
 /**
  * 어드미션 요청 code → 응답 message32. handleWorldInner 가 사용.
- * 전용 빌더(0x0313/0x0315)만 실제 바디, 나머지는 빈 walker(풀사이즈 0채움). 미배선은 null.
+ * 명령 기준선(0x0305/0x0307)과 전용 빌더(0x0313/0x0315)는 실제 바디, 나머지는 빈 walker다.
  */
 export function buildAdmissionResponseInner(reqCode) {
   const code = reqCode & 0xffff;
-  // 명령 테이블 프리로드는 LOGH_COMMAND_TABLE_PRELOAD_PROBE=1에서만 활성화한다.
-  // 기본값은 기존 zero-fill walker를 유지해 월드 진입 회귀를 막는다.
-  if (isCommandTablePreloadEnabled()) {
-    if (code === CODE_REQ_SESSION_WALKER) return buildCommandTablePreloadCardInner();
-    if (code === CODE_REQ_DUTY_WALKER) return buildCommandTablePreloadCommandInner();
-  }
+  if (code === CODE_REQ_SESSION_WALKER) return buildPlayableBaselineCommandCardInner();
+  if (code === CODE_REQ_DUTY_WALKER) return buildPlayableBaselineCommandDescriptorInner();
   const dedicated = ADMISSION_DEDICATED_BUILDERS[code];
   if (dedicated) return dedicated();
   const respCode = ADMISSION_WALKER_REQ_RESP[code];
@@ -1322,13 +1315,13 @@ export function buildWorldReadyPushInners({
 // 근거: 5bd249c server/src/server/logh7-login-session.mjs line 2095~ G164 스폰 로직(정본).
 //
 // 옛 라이브 확정 타이밍: 플레이어 스폰(0x0204 + 0x0325 + 0x0323)을 0x0f02(RequestGridInitialize)
-// 핸들러에서 방출하고, 0x0f03(GridInitialize_OK) ack 을 맨 마지막에 둔다.
+// 핸들러에서 방출하고, 0x0f03(GridInitialize_OK)을 core 마지막에 둔 뒤 0x0356 post-load delta를 잇는다.
 //   - 이유: 직전 0x0f01(ResponseWorldInitialize_OK) world-init reset 이 char count(client+0x36a5dc)를
 //     0 으로 지운다. 그래서 0x0323 을 0x0f02 에서 (재)전송해야 count 가 1 로 복구돼 HUD 렌더 전까지
 //     살아남는다. 0x0f03 이 gridInitialized 를 flip → FUN_004c2a80 이 PLAYER_INFO 를 count=1
 //     (0x0325 가 unit gate 충족)로 재빌드 → FUN_004c7290 non-null → [0x80] 크래시 스킵 → 렌더.
 //   - 순서: (0x0204, 0x0325, 0x0323) 먼저 → grid extras(0x0313 grid-type + 0x0315 cell, 플레이어
-//     함대 cell 포함) → 0x0f03 맨 마지막.
+//     함대 cell 포함) → 0x0f03(core 마지막) → 0x0356(post-load delta).
 //
 // grid extras(옛 fleet-only 폴백): 함대를 klass-3 마커로 박지 않는다(오브젝트테이블에 함대 클래스가
 // 없어 klass-3 은 가짜 성계 dot 로 오인 렌더됨). 대신 grid-type 에 SPACE(항행 가능) 객체 하나를 두고,
@@ -1352,7 +1345,6 @@ export function buildGridInitializeSpawnInners({
   staticCells = null,
   // 0x0325 유닛 레지스트리 충전용 전체 함대 목록(플레이어 unit[0] + NPC). 미지정 시 minimal(플레이어 1).
   fleets = null,
-  includeActionList = undefined,
 } = {}) {
   if (!Number.isInteger(characterId) || characterId <= 0) {
     throw new Error('buildGridInitializeSpawnInners: characterId required (no default id=1 / emperor trap)');
@@ -1398,10 +1390,6 @@ export function buildGridInitializeSpawnInners({
   //    이 프레임이 FUN_004c2a80 을 호출해 캐릭터 테이블(0x0323)을 순회하며 self 캐릭터를
   //    렌더 레지스트리로 스폰(0x0325 스테이징 flagship 링크 소비). 반드시 0x0325/0x0323 **뒤**.
   inners.push(buildNotifyEnterGridEndInner({ value: 0 }));
-  const postloadActionListEnabled = includeActionList === true
-    || (includeActionList === undefined && (
-      process.env.LOGH_POSTLOAD_ACTION_LIST === '1'
-    ));
   // 6) grid extras: 0x0313 grid-type(팔레트) → 0x0315 cell grid.
   //    grid-type 이 셀그리드보다 먼저여야 클라가 셀 value 를 palette index 로 해석한다.
   //    galaxy 데이터가 있으면 실 성계 팔레트/셀(플레이어 함대 cell = SPACE 로 덮어 항행표식),
@@ -1423,24 +1411,25 @@ export function buildGridInitializeSpawnInners({
   }));
   // 7) 0x0f03 GridInitialize_OK — core grid-init 응답의 마지막. 이게 gridInitialized 를 flip 해 렌더를 트리거한다.
   inners.push(buildGridInitOkInner({ status: 1 }));
-  if (postloadActionListEnabled) {
-    // 0x0356은 명시적 post-load 진단 게이트다. 0x0f03 이후에 보내도 core 초기화 순서는 유지된다.
-    inners.push(buildNotifyInformationCharacterInner({
-      characterId,
-      gridUnitId: unitId,
-      power,
-      spot,
-      spotOwner: unitId,
-      online: true,
-      lastname,
-      firstname,
-      face,
-      rank,
-      abilities: Array.isArray(abilities) && abilities.length ? abilities : null,
-      spotResolverBase: spot,
-      seatEntries: [{ character: actionSeatCharacter, role: 0 }],
-    }));
-  }
+  // 8) 0x0356은 정상 플레이어 HUD의 필수 action-list다. B56에서 이 프레임만 빼자 링크는 정상인데도
+  //    hudModeF4=1, listCount188=0, payloadCount270=0으로 30초 readiness가 실패했다.
+  //    core 초기화 순서를 보존하도록 0x0f03 직후 정확히 한 번 보내며, category 진단이 없으면
+  //    기본 seat character는 실제 characterId를 유지한다.
+  inners.push(buildNotifyInformationCharacterInner({
+    characterId,
+    gridUnitId: unitId,
+    power,
+    spot,
+    spotOwner: unitId,
+    online: true,
+    lastname,
+    firstname,
+    face,
+    rank,
+    abilities: Array.isArray(abilities) && abilities.length ? abilities : null,
+    spotResolverBase: spot,
+    seatEntries: [{ character: actionSeatCharacter, role: 0 }],
+  }));
   return inners;
 }
 

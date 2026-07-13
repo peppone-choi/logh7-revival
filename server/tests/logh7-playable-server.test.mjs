@@ -450,7 +450,7 @@ test('playable server boots twice and serves login+world+move sequence', async (
     // ★단일 파서로 프레임을 code 목표까지 순차 수집(부분 프레임 손실 없이 소켓 스트림 소진).
     //   readFrames 는 반환 시 내부 파서(부분 프레임 잔여)를 버리므로, 대용량 버스트를 쪼갠
     //   readFrames(1) 뒤 새 파서로 이어 읽으면 프레이밍이 어긋난다. 여기선 하나의 파서로
-    //   목표 코드(예: 0x0f03=push 종료)까지 읽어 그 문제를 피한다.
+    //   목표 코드(예: 0x0356=post-load delta 종료)까지 읽어 그 문제를 피한다.
     const collectUntilCode = async (wantCode, timeoutMs = 10000) => {
       const parser = createFrameStreamParser();
       const deadline = Date.now() + timeoutMs;
@@ -492,20 +492,26 @@ test('playable server boots twice and serves login+world+move sequence', async (
     }
     assert.ok(staticPlaced >= 1, `boot ${boot} 0x0314 0x0315 must place ≥1 player fleet cell (not empty board)`);
 
-    // 0x0f02 RequestGridInitialize → 스폰 버스트(G164): [0x0204 + 0x0325 + 0x0323] → grid extras
-    //   (0x0313 + 0x0315) → 0x0f03(맨 마지막). 직전 0x0f01 world-init reset 이 char count 를 0 으로
+    // 0x0f02 RequestGridInitialize → 스폰 버스트: [0x0204 + 0x0325 + 0x0323] → grid extras
+    //   (0x0313 + 0x0315) → core 마지막 0x0f03 → post-load 0x0356. 직전 0x0f01 reset이 char count를 0으로
     //   지웠으므로 0x0323 을 재전송해 count 를 1 로 복구하고, 0x0f03 이 gridInitialized 를 flip 해 렌더를
-    //   트리거한다. 0x0325(~58KB) 대용량 버스트라 단일 파서로 0x0f03(버스트 종료)까지 수집한다.
+    //   트리거한다. 0x0325(~58KB) 대용량 버스트라 단일 파서로 0x0356까지 완전히 수집한다.
     const gridInitReq = Buffer.alloc(2);
     gridInitReq.writeUInt16BE(0x0f02, 0);
     socket.write(build0030Transport({ phase1Key, id: reactiveId, inner: gridInitReq, tables }));
     reactiveId += 1;
-    const pushFrames = await collectUntilCode(0x0f03, 10000);
+    const pushFrames = await collectUntilCode(0x0356, 10000);
     const pushCodes = pushFrames.map(decodeInnerCode);
-    // 순서: 0x0204(선두) → 0x0325 → 0x0323 → … → 0x0f03(맨 마지막, 각 1회).
+    // 순서: 0x0204(선두) → 0x0325 → 0x0323 → … → 0x0f03 → 0x0356(마지막, 각 1회).
     assert.equal(pushCodes[0], 0x0204, `boot ${boot} 0x0f02 spawn burst must start with 0x0204`);
-    assert.equal(pushCodes[pushCodes.length - 1], 0x0f03, `boot ${boot} 0x0f03 must be LAST`);
     assert.equal(pushCodes.filter((c) => c === 0x0f03).length, 1, `boot ${boot} 0x0f03 exactly once`);
+    assert.equal(pushCodes.filter((c) => c === 0x0356).length, 1, `boot ${boot} 0x0356 exactly once`);
+    assert.equal(
+      pushCodes.indexOf(0x0356),
+      pushCodes.indexOf(0x0f03) + 1,
+      `boot ${boot} 0x0356 must immediately follow 0x0f03`,
+    );
+    assert.equal(pushCodes.at(-1), 0x0356, `boot ${boot} 0x0356 must be LAST (no other tail)`);
     assert.equal(pushCodes.filter((c) => c === 0x0325).length, 1, `boot ${boot} 0x0325 exactly once`);
     assert.equal(pushCodes.filter((c) => c === 0x0323).length, 1, `boot ${boot} 0x0323 exactly once`);
     // 0x0325 unit gate 가 0x0323(count 복구)보다 먼저.

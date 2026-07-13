@@ -564,8 +564,8 @@ test('buildEmptyWalkerInner keeps empty body for pure-ack codes not in size tabl
 
 test('buildAdmissionResponseInner: each admission request → full-size static-info response', () => {
   const cases = [
-    { req: 0x0304, resp: 0x0305, size: 0x520a, allZero: true },
-    { req: 0x0306, resp: 0x0307, size: 0xe5b2, allZero: true },
+    { req: 0x0304, resp: 0x0305, size: 0x520a, allZero: false },
+    { req: 0x0306, resp: 0x0307, size: 0xe5b2, allZero: false },
     { req: 0x0308, resp: 0x0309, size: 0x055c, allZero: true }, // 신규(정지 원인)
     { req: 0x030a, resp: 0x030b, size: 0x6d64, allZero: true },
     { req: 0x030c, resp: 0x030d, size: 0x0184, allZero: true }, // 신규
@@ -583,9 +583,11 @@ test('buildAdmissionResponseInner: each admission request → full-size static-i
     const body = msg32Body(inner);
     assert.equal(body.length, size, `0x${resp.toString(16)} body size`);
     assert.equal(inner.length, 6 + size, `0x${resp.toString(16)} inner total = 6 + N`);
-    if (allZero) {
-      assert.ok(body.every((b) => b === 0), `0x${resp.toString(16)} zero-filled empty table`);
-    }
+    assert.equal(
+      body.every((b) => b === 0),
+      allZero,
+      `0x${resp.toString(16)} all-zero=${allZero}`,
+    );
   }
   // 0x0313 grid-type: payload[0]=count=3 (실 섹터그리드 타입 팔레트 — 플라스마 폭풍/공간/항행불능).
   assert.equal(msg32Body(buildAdmissionResponseInner(0x0312)).readUInt8(0), 3);
@@ -593,48 +595,59 @@ test('buildAdmissionResponseInner: each admission request → full-size static-i
   assert.equal(buildAdmissionResponseInner(0x7abc), null);
 });
 
-test('command-table preload emits compact BE 0x0305 records with a fixed zero tail', () => {
+test('playable command baseline은 env unset/0/1에서 동일한 compact BE 0x0305/0x0307을 보낸다', () => {
   const previous = process.env.LOGH_COMMAND_TABLE_PRELOAD_PROBE;
+  const cardFrames = [];
+  const commandFrames = [];
   try {
-    delete process.env.LOGH_COMMAND_TABLE_PRELOAD_PROBE;
-    assert.equal(msg32Body(buildAdmissionResponseInner(0x0304)).readUInt16BE(0x00), 0, 'gate default is empty 0x0305');
-    assert.equal(msg32Body(buildAdmissionResponseInner(0x0306)).readUInt16BE(0x00), 0, 'gate default is empty 0x0307');
-    process.env.LOGH_COMMAND_TABLE_PRELOAD_PROBE = '1';
-    const factoryIds = [0x002b, 0x0041];
-    const categories = [0, 1];
-    const card = msg32Body(buildAdmissionResponseInner(0x0304));
-    assert.equal(card.readUInt16BE(0x00), 2, '0x0305 outer count is BE');
-    assert.equal(card.length, 0x520a, '0x0305 fixed body size');
-    assert.equal(card.readUInt16BE(0x02), categories[0], '0x0305 compact card id 0');
-    assert.equal(card.readUInt8(0x14), factoryIds.length, '0x0305 compact command count 0');
-    assert.equal(card.readUInt16BE(0x15), factoryIds[0], '0x0305 compact factory 0/0');
-    assert.equal(card.readUInt16BE(0x17), factoryIds[1], '0x0305 compact factory 0/1');
-    assert.equal(card.readUInt16BE(0x19), categories[1], '0x0305 compact card id 1');
-    assert.equal(card.readUInt8(0x2b), factoryIds.length, '0x0305 compact command count 1');
-    assert.equal(card.readUInt16BE(0x2c), factoryIds[0], '0x0305 compact factory 1/0');
-    assert.equal(card.readUInt16BE(0x2e), factoryIds[1], '0x0305 compact factory 1/1');
-    assert.ok(card.subarray(0x30).every((value) => value === 0), '0x0305 compact tail is zero-filled');
+    for (const value of [undefined, '0', '1']) {
+      if (value === undefined) delete process.env.LOGH_COMMAND_TABLE_PRELOAD_PROBE;
+      else process.env.LOGH_COMMAND_TABLE_PRELOAD_PROBE = value;
+      const label = `LOGH_COMMAND_TABLE_PRELOAD_PROBE=${value ?? 'unset'}`;
+      const factoryIds = [0x002b, 0x0041];
+      const categories = [0, 1];
+      const cardInner = buildAdmissionResponseInner(0x0304);
+      const card = msg32Body(cardInner);
+      assert.equal(card.readUInt16BE(0x00), 2, `${label}: 0x0305 outer count is BE`);
+      assert.equal(card.length, 0x520a, `${label}: 0x0305 fixed body size`);
+      assert.equal(card.readUInt16BE(0x02), categories[0], `${label}: 0x0305 card id 0`);
+      assert.equal(card.readUInt8(0x14), factoryIds.length, `${label}: 0x0305 command count 0`);
+      assert.equal(card.readUInt16BE(0x15), factoryIds[0], `${label}: 0x0305 factory 0/0`);
+      assert.equal(card.readUInt16BE(0x17), factoryIds[1], `${label}: 0x0305 factory 0/1`);
+      assert.equal(card.readUInt16BE(0x19), categories[1], `${label}: 0x0305 card id 1`);
+      assert.equal(card.readUInt8(0x2b), factoryIds.length, `${label}: 0x0305 command count 1`);
+      assert.equal(card.readUInt16BE(0x2c), factoryIds[0], `${label}: 0x0305 factory 1/0`);
+      assert.equal(card.readUInt16BE(0x2e), factoryIds[1], `${label}: 0x0305 factory 1/1`);
+      assert.ok(card.subarray(0x30).every((byte) => byte === 0), `${label}: 0x0305 zero tail`);
+      cardFrames.push(cardInner);
 
-    const command = msg32Body(buildAdmissionResponseInner(0x0306));
-    assert.equal(command.readUInt16BE(0x00), 2, '0x0307 outer count is BE');
-    assert.equal(command.length, 0xe5b2, '0x0307 fixed body size');
-    assert.equal(command.readUInt16BE(0x02), categories[0], '0x0307 compact card id 0');
-    assert.equal(command.readUInt8(0x04), factoryIds.length, '0x0307 compact descriptor count 0');
-    for (const [index, off] of [0x05, 0x0d].entries()) {
-      assert.equal(command.readUInt16BE(off), factoryIds[index], `0x0307 compact descriptor 0/${index}`);
-      assert.equal(command.readUIntBE(off + 2, 3), 0, `0x0307 packed 0/${index} remains unknown`);
-      assert.equal(command.readUInt16BE(off + 5), 0, `0x0307 w 0/${index} remains unknown`);
-      assert.equal(command.readUInt8(off + 7), 0, `0x0307 flag 0/${index} remains unknown`);
+      const commandInner = buildAdmissionResponseInner(0x0306);
+      const command = msg32Body(commandInner);
+      assert.equal(command.readUInt16BE(0x00), 2, `${label}: 0x0307 outer count is BE`);
+      assert.equal(command.length, 0xe5b2, `${label}: 0x0307 fixed body size`);
+      assert.equal(command.readUInt16BE(0x02), categories[0], `${label}: 0x0307 card id 0`);
+      assert.equal(command.readUInt8(0x04), factoryIds.length, `${label}: 0x0307 descriptor count 0`);
+      for (const [index, off] of [0x05, 0x0d].entries()) {
+        assert.equal(command.readUInt16BE(off), factoryIds[index], `${label}: 0x0307 descriptor 0/${index}`);
+        assert.equal(command.readUIntBE(off + 2, 3), 0, `${label}: 0x0307 packed 0/${index}`);
+        assert.equal(command.readUInt16BE(off + 5), 0, `${label}: 0x0307 w 0/${index}`);
+        assert.equal(command.readUInt8(off + 7), 0, `${label}: 0x0307 flag 0/${index}`);
+      }
+      assert.equal(command.readUInt16BE(0x15), categories[1], `${label}: 0x0307 card id 1`);
+      assert.equal(command.readUInt8(0x17), factoryIds.length, `${label}: 0x0307 descriptor count 1`);
+      for (const [index, off] of [0x18, 0x20].entries()) {
+        assert.equal(command.readUInt16BE(off), factoryIds[index], `${label}: 0x0307 descriptor 1/${index}`);
+        assert.equal(command.readUIntBE(off + 2, 3), 0, `${label}: 0x0307 packed 1/${index}`);
+        assert.equal(command.readUInt16BE(off + 5), 0, `${label}: 0x0307 w 1/${index}`);
+        assert.equal(command.readUInt8(off + 7), 0, `${label}: 0x0307 flag 1/${index}`);
+      }
+      assert.ok(command.subarray(0x28).every((byte) => byte === 0), `${label}: 0x0307 zero tail`);
+      commandFrames.push(commandInner);
     }
-    assert.equal(command.readUInt16BE(0x15), categories[1], '0x0307 compact card id 1');
-    assert.equal(command.readUInt8(0x17), factoryIds.length, '0x0307 compact descriptor count 1');
-    for (const [index, off] of [0x18, 0x20].entries()) {
-      assert.equal(command.readUInt16BE(off), factoryIds[index], `0x0307 compact descriptor 1/${index}`);
-      assert.equal(command.readUIntBE(off + 2, 3), 0, `0x0307 packed 1/${index} remains unknown`);
-      assert.equal(command.readUInt16BE(off + 5), 0, `0x0307 w 1/${index} remains unknown`);
-      assert.equal(command.readUInt8(off + 7), 0, `0x0307 flag 1/${index} remains unknown`);
-    }
-    assert.ok(command.subarray(0x28).every((value) => value === 0), '0x0307 compact tail is zero-filled');
+    assert.deepEqual(cardFrames[1], cardFrames[0], '0x0305 env=0 bytes equal unset');
+    assert.deepEqual(cardFrames[2], cardFrames[0], '0x0305 env=1 bytes equal unset');
+    assert.deepEqual(commandFrames[1], commandFrames[0], '0x0307 env=0 bytes equal unset');
+    assert.deepEqual(commandFrames[2], commandFrames[0], '0x0307 env=1 bytes equal unset');
   } finally {
     if (previous === undefined) delete process.env.LOGH_COMMAND_TABLE_PRELOAD_PROBE;
     else process.env.LOGH_COMMAND_TABLE_PRELOAD_PROBE = previous;
