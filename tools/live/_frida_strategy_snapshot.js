@@ -2895,6 +2895,15 @@ function spotTryOrigin(target) {
 
 // 원점 후보를 여러 파생 경로로 만들고 각각을 프로세스 안에서 검증해 plausible 플래그를 붙인다.
 // 드라이버는 plausible 한 첫 후보만 쓰고, 하나도 없으면 fail-closed 한다(좌표 추측 금지).
+//
+// 정적 RE 확정(2026-07-14): 이 후보들은 구조적으로 실패한다 — READ_ABSOLUTE_ORIGIN
+// (FUN_00507090)은 위치 위젯 전용(this+0xC=local x, this+0x10=local y, this+0x8=부모 핸들)인데,
+// list/parent 는 위치 위젯이 아닌 논리 모델이다(list+0xC=컬럼수, list+0x10=선택수). 따라서
+// listStatic/listDeref 는 vtable 부재로 null, parent* 는 비좌표 필드를 x/y 로 읽어 쓰레기,
+// column0(=그리드 모델 포인터)도 셀 위젯이 아니라 null 이 정상이다. 진짜 원점은 정적 필드가
+// 아니라 엔진이 draw time 에 계산하므로, 이 경로로는 확정 불가. 확정은 라이브 FUN_005015f0
+// 경계 훅(경로 A) 또는 인덱스 선택 FUN_00576d40(경로 B)로 한다. 관측 유지 목적상 후보는
+// 그대로 두되(전부 plausible:false 로 보고), 좌표원으로 신뢰하지 않는다.
 function spotOriginCandidates(list, parent, columns) {
   const out = [];
   const push = (name, source, origin) => {
@@ -2981,26 +2990,51 @@ function spotDialogListState() {
   const parentHead = { raw: readHex(parent, 0x40), dwords: spotDwordView(parent, 0x10) };
   const parentRect = rectState(parent);
 
-  // 행 기하. 행 rect 는 메모리에 {x,y,w,h} 로 저장되지 않고(0x502/0x503 그리드 렌더가
-  // draw 시점에 계산) 확정 소스가 아직 없다. 따라서 rowHeight 를 추측해 채우지 않는다 —
-  // null 이면 드라이버가 fail-closed 한다. 후보 스칼라만 노출해 다음 런에서 확정한다.
+  // 행 기하. 행 rect 는 메모리에 {x,y,w,h} 로 저장되지 않는다 — 정적 RE 확정(2026-07-14,
+  // docs/logh7-spot-select-dialog-row-re-2026-07-14.md). 리스트 위젯(parent+0x244)과
+  // 그리드(list+0x20)는 논리 모델(행 연결리스트 + 셀 상태 플래그)만 들고, 화면 좌표는
+  // 입력/렌더 엔진 FUN_005015f0(0x005015f0) 계열이 draw/hit-test 시점에 전역 입력·레이아웃
+  // 상태(0x022142a8/0x022143e4 등)로부터 계산한다. 따라서 stored origin/rowHeight 는 없다 —
+  // rowHeight/rowTop 는 null 로 두고 드라이버가 fail-closed 한다. 확정 경로는 라이브에서
+  // FUN_005015f0 경계 훅으로 out-struct 좌표 캡처(경로 A) 또는 FUN_00576d40(index) 인덱스
+  // 선택(경로 B). 이전 cellRect/rowWidth(232/374)는 그리드 모델 포인터를 셀 위젯으로 오인해
+  // +0x20/+0x24/+0x2c/+0x30 을 rect 로 읽은 값이라 신뢰 불가 → 좌표원으로 쓰지 않는다.
   const cell0 = columns.length > 0 ? columns[0] : null;
-  const cellRect = cell0 && cell0.rectAt20 ? cell0.rectAt20 : null;
   const rowGeometry = {
     rowHeight: null,
     rowTop: null,
-    rowWidth: cellRect ? cellRect.width : null,
-    candidates: {
-      listHead04: readS32(list.add(0x4)),
-      listHead08: readS32(list.add(0x8)),
-      cellRect,
-      itemCount,
-    },
+    rowWidth: null,
+    // ctor FUN_004fa350 리터럴 상수(정본 EXE 바이트 확인: mov [esi+4],0x1388 / mov [esi+8],0x19).
+    // 좌표·행높이 아님. "25=행높이" 가설 grade a 로 기각.
+    ctorConst04_notGeometry: readS32(list.add(0x4)),
+    ctorConst08_notGeometry: readS32(list.add(0x8)),
+    // 신뢰 불가 관측(그리드 모델 포인터를 rect 로 오독한 잔재). 좌표 계산에 쓰지 말 것.
+    unreliableCellRectObservation: cell0 && cell0.rectAt20 ? cell0.rectAt20 : null,
+    itemCount,
+  };
+
+  // 그리드 셀 모델(list+0x20) 관측. 컬럼 c 블록 base = grid + 0x7c24 + c*0x3f50.
+  // 픽셀 rect 는 없으나, 셀이 실제로 그려지는지(플래그) 및 draw 좌표 후보영역(grid+0x20 5-dword)을
+  // 다음 라이브 런에서 확정하기 위한 관측 데이터. grade c(값 미상, 구조만 확정).
+  const grid = readPtr(list.add(0x20));
+  const gridObservation = grid.isNull() ? { ptr: null } : {
+    ptr: ptrHex(grid),
+    col0BlockBase: ptrHex(grid.add(0x7c24)),
+    col0RowCount9330: readS32(grid.add(0x7c24 + 0x9330)),
+    col0Flag0At90d0: readU8(grid.add(0x7c24 + 0x90d0)),
+    coordRegion20: spotDwordView(grid.add(0x20), 5),
+  };
+
+  // 렌더 가드 관측(Q4). itemCount 가 있어도 이 가드들이 미충족이면 셀이 안 그려질 수 있다.
+  const renderGuards = {
+    listId00: readS32(list),
+    childGate18: readS32(list.add(0x18)),
+    drawnFlag8f8: readU8(list.add(0x8f8)),
   };
 
   return {
     ...meta, listOrigin, parentOrigin, originCandidates,
-    widgetHead, parentHead, parentRect, rowGeometry, columns, rows,
+    widgetHead, parentHead, parentRect, rowGeometry, gridObservation, renderGuards, columns, rows,
   };
 }
 
