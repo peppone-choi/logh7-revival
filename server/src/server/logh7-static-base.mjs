@@ -22,6 +22,9 @@ export const STATIC_BASE_STREAM_COUNT_BYTES = 2;
 export const STATIC_BASE_MAX = 350;
 export const STATIC_BASE_NAME_MAX_UNITS = 13;
 export const STATIC_BASE_DEST_STRIDE = 0x3c;
+const STATIC_BASE_SELECTOR_REQUEST_CODES = new Set([0x031c, 0x031e, 0x0320]);
+const DETAIL_BASE_SELECTOR_REQUEST_CODES = new Set([0x031e, 0x0320]);
+const DETAIL_BASE_SELECTOR_MAX = 4;
 
 export const STATIC_BASE_DEST_OFFSETS = Object.freeze({
   ID: 0x00,
@@ -112,31 +115,83 @@ function catalogMatch(value) {
   return catalog.find((record) => record.id === n || record.grid === n) ?? null;
 }
 
+/** system id를 우선하고, 없으면 전략맵 cell로 같은 정적 base 레코드를 찾는다. */
+export function findStaticBase({ systemId = null, cell = null } = {}) {
+  const catalog = getStaticBaseCatalog();
+  if (Number.isInteger(systemId) && systemId > 0) {
+    const byId = catalog.find((record) => record.id === systemId);
+    if (byId) return byId;
+  }
+  if (Number.isInteger(cell) && cell >= 0) {
+    return catalog.find((record) => record.grid === cell) ?? null;
+  }
+  return null;
+}
+
+/** 플레이어 위치를 상세 레코드의 base id로 조인하는 명시적 cell lookup. */
+export function findStaticBaseByCell(cell) {
+  return findStaticBase({ cell });
+}
+
 /**
  * 0x031c 요청에서 첫 번째 id/cell 후보를 읽는다.
  * 라이브 요청은 길이 접두가 있는 [u16 count][u32 id…] 형태였고, 일부 진단 도구는
- * body에 u32만 넣었다. 두 형태를 모두 읽되 catalog에 실제로 매칭되는 endian을 우선한다.
+ * body에 u32만 넣었다. 두 형태 모두 검증된 little-endian selector ID로만 읽는다.
  */
 export function readStaticBaseRequest(innerOrBody) {
   const buf = Buffer.isBuffer(innerOrBody) ? innerOrBody : Buffer.from(innerOrBody ?? []);
   let body = buf;
-  if (buf.length >= 6 && buf.readUInt32LE(0) === 0) {
+  let hasEnvelope = false;
+  let requestCode = null;
+  if (buf.length >= 6
+    && buf.readUInt32LE(0) === 0
+    && STATIC_BASE_SELECTOR_REQUEST_CODES.has(buf.readUInt16BE(4))) {
+    requestCode = buf.readUInt16BE(4);
     body = buf.subarray(6);
-  } else if (buf.length >= 2 && buf.readUInt16BE(0) === 0x031c) {
+    hasEnvelope = true;
+  } else if (buf.length >= 2 && STATIC_BASE_SELECTOR_REQUEST_CODES.has(buf.readUInt16BE(0))) {
+    requestCode = buf.readUInt16BE(0);
     body = buf.subarray(2);
+    hasEnvelope = true;
   }
   const candidates = [];
-  if (body.length >= 6) {
-    candidates.push(body.readUInt32LE(2), body.readUInt32BE(2));
-  }
-  if (body.length >= 4) {
-    candidates.push(body.readUInt32LE(0), body.readUInt32BE(0));
+  let selectorStatus = 'unmatched';
+  if (body.length === 0) {
+    selectorStatus = 'absent';
+  } else if (!hasEnvelope && body.length === 4) {
+    // 일부 진단 도구가 전달하는 명확한 body-only u32 shape만 별도로 허용한다.
+    candidates.push(body.readUInt32LE(0));
+  } else if (body.length >= 2) {
+    const count = body.readUInt16BE(0);
+    const expectedLength = 2 + count * 4;
+    const exceedsRequestCap = DETAIL_BASE_SELECTOR_REQUEST_CODES.has(requestCode)
+      && count > DETAIL_BASE_SELECTOR_MAX;
+    if (count === 0 && body.length === expectedLength) {
+      selectorStatus = 'absent';
+    } else if (count > 0 && body.length === expectedLength && !exceedsRequestCap) {
+      // count-prefixed shape는 첫 selector만 읽고 offset 0을 독립 u32로 재해석하지 않는다.
+      candidates.push(body.readUInt32LE(2));
+    }
   }
   for (const candidate of candidates) {
     const match = catalogMatch(candidate);
-    if (match) return { requestValue: candidate, systemId: match.id, cell: match.grid };
+    if (match) {
+      return {
+        selectorStatus: 'matched',
+        requestValue: candidate,
+        systemId: match.id,
+        cell: match.grid,
+      };
+    }
   }
-  return { requestValue: null, systemId: null, cell: null };
+  // 나머지 짧거나 길이가 맞지 않거나 catalog에 없는 body는 명시적 오류로 보존한다.
+  // 세션 계층은 unmatched를 플레이어 cell로 대체하지 않는다.
+  return {
+    selectorStatus,
+    requestValue: candidates[0] ?? null,
+    systemId: null,
+    cell: null,
+  };
 }
 
 function orderCatalog({ systemId = null, cell = null } = {}) {

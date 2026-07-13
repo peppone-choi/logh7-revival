@@ -77,8 +77,8 @@ export function getDeploymentFleetUnits() {
  *   자연 SendWarp가 성공했고, B54에서 +0x08=characterId(1)이면 currentRaw11178=1/sendWarp=0이었다.
  *   따라서 player에는 current cell을 투영하고 캐릭터 ID는 owner와 0x0323에만 둔다. NPC는 근거가 없어 0 유지.
  *
- * @param {{ unitId:number, cell?:number, characterId?:number, faction?:number }} player
- * @returns {Array<{id:number, cell:number, faction:number, owner:number, commander:number}>}
+ * @param {{ unitId:number, cell?:number, characterId?:number, faction?:number, spotResolverBase?:number }} player
+ * @returns {Array<{id:number, cell:number, faction:number, owner:number, commander:number, spotResolverBase?:number}>}
  */
 export function buildDeploymentFleetList(player = {}) {
   const unitId = Number(player.unitId) >>> 0;
@@ -89,6 +89,7 @@ export function buildDeploymentFleetList(player = {}) {
     faction: Number.isInteger(player.faction) ? player.faction : 0,
     owner: Number.isInteger(player.characterId) ? player.characterId >>> 0 : 0,
     commander: playerCell,
+    spotResolverBase: Number.isInteger(player.spotResolverBase) ? player.spotResolverBase >>> 0 : 0,
   };
   const npc = getDeploymentFleetUnits().filter((u) => u.id !== unitId);
   return [playerUnit, ...npc];

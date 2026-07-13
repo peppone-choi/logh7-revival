@@ -40,6 +40,7 @@ import {
   decodeGridChatCommand,
   decodeLobbySessionLoginReq,
   listWorldEntryCodes,
+  listRequiredServerEmitCodes,
   readMsg32Code,
   msg32Body,
 } from '../src/server/logh7-world-records.mjs';
@@ -539,6 +540,8 @@ test('STATIC_INFO_BODY_SIZES matches client sizer FUN_004b8b00 (RE 확정)', () 
   assert.equal(STATIC_INFO_BODY_SIZES[0x0313], 0x138c);
   assert.equal(STATIC_INFO_BODY_SIZES[0x0315], 0x138c);
   assert.equal(STATIC_INFO_BODY_SIZES[0x031d], 0x520c);
+  assert.equal(STATIC_INFO_BODY_SIZES[0x031f], 0x0604);
+  assert.equal(STATIC_INFO_BODY_SIZES[0x0321], 0x8de4);
 });
 
 test('buildEmptyWalkerInner emits full-size zero-filled body for static-info opcodes', () => {
@@ -572,6 +575,8 @@ test('buildAdmissionResponseInner: each admission request → full-size static-i
     { req: 0x030e, resp: 0x030f, size: 0x0034, allZero: true },
     { req: 0x0310, resp: 0x0311, size: 0x01b0, allZero: true },
     { req: 0x031c, resp: 0x031d, size: 0x520c, allZero: true },
+    { req: 0x031e, resp: 0x031f, size: 0x0604, allZero: true },
+    { req: 0x0320, resp: 0x0321, size: 0x8de4, allZero: true },
     // 전용 빌더: 고정 크기 동일, body 는 헤더 포함이라 all-zero 아님
     { req: 0x0312, resp: 0x0313, size: 0x138c, allZero: false },
     { req: 0x0314, resp: 0x0315, size: 0x138c, allZero: false },
@@ -650,6 +655,13 @@ test('playable command baseline은 env unset/0/1에서 동일한 compact BE 0x03
     if (previous === undefined) delete process.env.LOGH_COMMAND_TABLE_PRELOAD_PROBE;
     else process.env.LOGH_COMMAND_TABLE_PRELOAD_PROBE = previous;
   }
+});
+
+test('server emit inventory no longer reports the restored id-only 0x031f/0x0321 path as omitted', () => {
+  const inventory = listRequiredServerEmitCodes();
+  assert.deepEqual(inventory.omittedUnproven, []);
+  assert.ok(inventory.provisional.some((entry) => entry.includes('0x031f') && entry.includes('id-only')));
+  assert.ok(inventory.provisional.some((entry) => entry.includes('0x0321') && entry.includes('id-only')));
 });
 
 test('DEFAULT_SECTOR_GRID_TYPES: minimal valid non-clickable sector grid-type palette', () => {
@@ -868,6 +880,7 @@ test('grid-enter refresh keeps flagship(+0x24 BE)==FUN_00419ca0-decoded unit id'
 test('isAdmissionRequestCode covers every static-info req (incl. 신규 0x0308/0x030c), rejects non-admission', () => {
   const reqCodes = [
     0x0304, 0x0306, 0x0308, 0x030a, 0x030c, 0x030e, 0x0310, 0x0312, 0x0314, 0x031c,
+    0x031e, 0x0320,
   ];
   for (const req of reqCodes) {
     assert.equal(isAdmissionRequestCode(req), true, `0x${req.toString(16)} must be admission req`);

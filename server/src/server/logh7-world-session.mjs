@@ -24,6 +24,8 @@ import {
   CODE_REQ_STATIC_GRID,
   CODE_REQ_STATIC_GRID_TYPE,
   CODE_REQ_STATIC_BASE,
+  CODE_REQ_INFORMATION_BASE,
+  CODE_REQ_INFORMATION_INSTITUTION,
   CODE_REQ_GRID_INIT,
   CODE_REQ_OUTFIT_INFO,
   buildOutfitInfo032b,
@@ -36,8 +38,11 @@ import {
 import { buildDeploymentFleetList } from './logh7-deployment-units.mjs';
 import {
   buildStaticInformationBaseFromGalaxy,
+  findStaticBase,
   readStaticBaseRequest,
 } from './logh7-static-base.mjs';
+import { buildResponseInformationBaseInner } from './codec/base-record.mjs';
+import { buildResponseInformationInstitutionInner } from './codec/institution-record.mjs';
 
 /**
  * @typedef {{
@@ -237,6 +242,7 @@ export function createWorldSession({
       p.ability8 = seedAbilities ? seedAbilities.slice(0, 8) : p.ability8;
     }
 
+    const selectedBase = findStaticBase({ cell: p.cell });
     // 0x0325 유닛 레지스트리 충전: 플레이어 unit[0] + NPC 초기 배치 함대(제국12+동맹12).
     // 빈 레지스트리(@0x7db3c8 activeCount=0) → 마커 클릭 null-deref 크래시 해소.
     const fleets = buildDeploymentFleetList({
@@ -244,6 +250,7 @@ export function createWorldSession({
       cell: p.cell,
       characterId: p.characterId,
       faction: seed?.power ?? p.power ?? 0,
+      spotResolverBase: selectedBase?.id ?? 0,
     });
 
     const emits = buildWorldEntryInners({
@@ -251,7 +258,7 @@ export function createWorldSession({
       gridUnitId: p.unitId,
       unitCell: p.cell,
       power: seed?.power ?? p.power ?? 0,
-      spot: 1,
+      spot: selectedBase?.id ?? 0,
       fleets,
       lastname: seed?.lastname ?? p.lastname ?? '',
       firstname: seed?.firstname ?? p.firstname ?? '',
@@ -481,24 +488,49 @@ export function createWorldSession({
       };
     }
 
+    // 0x031e/0x0320은 0x031d와 같은 base id로 조인한다. 요청 selector가 있으면 우선하고,
+    // 없으면 현재 플레이어 cell을 사용한다. 매칭되지 않는 cell에 id=1을 합성하지 않는다.
+    if (code === CODE_REQ_INFORMATION_BASE || code === CODE_REQ_INFORMATION_INSTITUTION) {
+      const request = readStaticBaseRequest(rawForDecode);
+      const player = players.get(connectionId);
+      const fallbackCell = request.selectorStatus === 'absent' ? player?.cell ?? null : null;
+      const selected = findStaticBase({
+        systemId: request.systemId,
+        cell: request.cell ?? fallbackCell,
+      });
+      const response = code === CODE_REQ_INFORMATION_BASE
+        ? buildResponseInformationBaseInner({ bases: selected ? [{ id: selected.id }] : [] })
+        : buildResponseInformationInstitutionInner({
+          institutions: selected ? [{ id: selected.id, institutions: [] }] : [],
+        });
+      return {
+        kind: 'admission',
+        reqCode: code,
+        respCode: readMsg32Code(response),
+        responses: [{ targets: [connectionId], inner: response, isMsg32: true }],
+      };
+    }
+
     // 0x0f02(RequestGridInitialize) 처리: 첫 요청에 플레이어 스폰 버스트를 주입한다(G164 정본).
     //
     // 근거: 5bd249c logh7-login-session.mjs 2095~ G164 스폰 순서. 직전 0x0f01(WorldInitialize_OK)
     //   world-init reset 이 char count(client+0x36a5dc)를 0 으로 지우므로, 0x0f02 에서 0x0323 을
     //   재전송해 count 를 1 로 복구하고 0x0f03(GridInitialize_OK)로 gridInitialized 를 flip 해 렌더를
     //   트리거한다. 순서: [0x0204 + 0x0325 + 0x0323] → grid extras(0x0313 + 0x0315 플레이어 cell)
-    //   → 0x0f03(core 마지막) → 0x0356(post-load delta). 첫 0x0f02에만 — 이후엔 plain 0x0f03 ack.
+    //   → 상세 source(0x031f + 0x0321) → 0x0f03(core 마지막) → 0x0356(post-load delta).
+    // 첫 0x0f02에만 — 이후엔 plain 0x0f03 ack.
     // 플레이어 없거나 실 유닛/캐릭터 미보유면 합성 스폰 금지 → plain 0x0f03 폴백.
     if (code === CODE_REQ_GRID_INIT) {
       const player = players.get(connectionId);
       if (player && player.unitId > 0 && player.characterId > 0 && !gridInitSpawned.has(connectionId)) {
         gridInitSpawned.add(connectionId);
+        const selectedBase = findStaticBase({ cell: player.cell });
         const spawnInners = buildGridInitializeSpawnInners({
           characterId: player.characterId,
           unitId: player.unitId,
           unitCell: player.cell,
           power: player.power ?? 0,
-          spot: 1,
+          spot: selectedBase?.id ?? 0,
           lastname: player.lastname ?? '',
           firstname: player.firstname ?? '',
           face: Number.isInteger(player.face) ? player.face : 0,
@@ -515,7 +547,9 @@ export function createWorldSession({
             cell: player.cell,
             characterId: player.characterId,
             faction: player.power ?? 0,
+            spotResolverBase: selectedBase?.id ?? 0,
           }),
+          baseId: selectedBase?.id ?? null,
         });
         logEvent('grid-init-spawn', connectionId, { codes: listWorldEntryCodes(spawnInners) });
         return {

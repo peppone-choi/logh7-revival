@@ -92,6 +92,25 @@ test('buildDeploymentFleetList: 플레이어 unit[0] 앵커 + NPC, id 충돌 제
   assert.equal(ids.size, list.length, '플레이어 포함 id 유니크');
 });
 
+test('buildDeploymentFleetList: selected base id는 player spot resolver에만 투영한다', () => {
+  const fleets = buildDeploymentFleetList({
+    unitId: 7,
+    cell: 2588,
+    characterId: 42,
+    faction: FACTION_EMPIRE,
+    spotResolverBase: 70,
+  });
+  assert.equal(fleets[0].spotResolverBase, 70, 'player unit[0] uses the selected base id');
+  assert.ok(fleets.slice(1).every((fleet) => (fleet.spotResolverBase ?? 0) === 0),
+    'NPC spot resolver remains unproven/zero');
+
+  const body = msg32Body(buildInformationUnitInner({ unitId: 7, fleets }));
+  const decoded = decodeInformationUnitsLikeFun419ca0(body);
+  assert.equal(decoded.rows[0].spotResolverBase, 70, 'wire unit[0]+0x40 carries the selected base id');
+  assert.ok(decoded.rows.slice(1).every((row) => row.spotResolverBase === 0),
+    'wire NPC unit+0x40 remains zero');
+});
+
 test('buildDeploymentFleetList: env와 무관하게 player native +0x08은 cell이고 NPC commander는 0이다', () => {
   const previous = process.env.LOGH_PLAYER_FOCUS_CELL;
   const bodies = [];

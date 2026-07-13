@@ -20,6 +20,7 @@ import {
   CODE_NOTIFY_INFORMATION_CHARACTER,
   CODE_GRID_INIT_OK,
   CODE_REQ_STATIC_GRID,
+  buildGridInitializeSpawnInners,
   buildWorldReadyPushInners,
   isAdmissionRequestCode,
   readMsg32Code,
@@ -83,21 +84,35 @@ test('world-enter와 grid-init은 focus env 없이도 decoded commander/cell=258
 
       const { emits } = world.enterWorld({ connectionId: 1 });
       const enterUnit = emits.find((inner) => readMsg32Code(inner) === CODE_INFO_UNIT);
+      const enterChar = emits.find((inner) => readMsg32Code(inner) === CODE_INFO_CHARACTER);
       assert.ok(enterUnit, `${label}: world-enter 0x0325 present`);
+      assert.ok(enterChar, `${label}: world-enter 0x0323 present`);
       const enterBody = msg32Body(enterUnit);
       const enterDecoded = decodeInformationUnitsLikeFun419ca0(enterBody);
       assert.equal(enterDecoded.rows[0].commander, 2588, `${label}: world-enter native +0x08`);
       assert.equal(enterDecoded.rows[0].cell, 2588, `${label}: world-enter native +0x0c`);
+      assert.equal(enterDecoded.rows[0].spotResolverBase, 70,
+        `${label}: world-enter native +0x40 joins selected base id`);
+      assert.ok(enterDecoded.rows.slice(1).every((row) => row.spotResolverBase === 0),
+        `${label}: world-enter NPC spot resolvers remain zero`);
+      assert.equal(msg32Body(enterChar).readUInt32BE(0x1c), 70, `${label}: world-enter selected base id`);
 
       const req = Buffer.alloc(2);
       req.writeUInt16BE(0x0f02, 0);
       const grid = world.handleWorldInner({ connectionId: 1, accountId: 'a', inner: req });
       const gridUnit = grid.responses.find((entry) => readMsg32Code(entry.inner) === CODE_INFO_UNIT)?.inner;
+      const gridChar = grid.responses.find((entry) => readMsg32Code(entry.inner) === CODE_INFO_CHARACTER)?.inner;
       assert.ok(gridUnit, `${label}: grid-init 0x0325 present`);
+      assert.ok(gridChar, `${label}: grid-init 0x0323 present`);
       const gridBody = msg32Body(gridUnit);
       const gridDecoded = decodeInformationUnitsLikeFun419ca0(gridBody);
       assert.equal(gridDecoded.rows[0].commander, 2588, `${label}: grid-init native +0x08`);
       assert.equal(gridDecoded.rows[0].cell, 2588, `${label}: grid-init native +0x0c`);
+      assert.equal(gridDecoded.rows[0].spotResolverBase, 70,
+        `${label}: grid-init native +0x40 joins selected base id`);
+      assert.ok(gridDecoded.rows.slice(1).every((row) => row.spotResolverBase === 0),
+        `${label}: grid-init NPC spot resolvers remain zero`);
+      assert.equal(msg32Body(gridChar).readUInt32BE(0x1c), 70, `${label}: grid-init selected base id`);
       assert.deepEqual(gridBody, enterBody, `${label}: both production callsites emit identical 0x0325 bytes`);
       enterBodies.push(enterBody);
       gridBodies.push(gridBody);
@@ -110,6 +125,34 @@ test('world-enter와 grid-init은 focus env 없이도 decoded commander/cell=258
     if (previous === undefined) delete process.env.LOGH_PLAYER_FOCUS_CELL;
     else process.env.LOGH_PLAYER_FOCUS_CELL = previous;
   }
+});
+
+test('unknown player cell keeps the 0x0323 selected base id zero instead of fabricating id 1', () => {
+  const world = createWorldSession();
+  world.seedPlayer({ connectionId: 1, characterId: 42, unitId: 7, cell: 4999, inWorld: false });
+  const { emits } = world.enterWorld({ connectionId: 1 });
+  const enterChar = emits.find((inner) => readMsg32Code(inner) === CODE_INFO_CHARACTER);
+  const enterUnit = emits.find((inner) => readMsg32Code(inner) === CODE_INFO_UNIT);
+  assert.equal(msg32Body(enterChar).readUInt32BE(0x1c), 0, 'world-enter unknown base stays zero');
+  assert.equal(decodeInformationUnitsLikeFun419ca0(msg32Body(enterUnit)).rows[0].spotResolverBase, 0,
+    'world-enter unknown base keeps unit[0]+0x40 zero');
+
+  const request = Buffer.alloc(2);
+  request.writeUInt16BE(0x0f02, 0);
+  const grid = world.handleWorldInner({ connectionId: 1, accountId: 'a', inner: request });
+  const gridChar = grid.responses.find((entry) => readMsg32Code(entry.inner) === CODE_INFO_CHARACTER)?.inner;
+  const gridUnit = grid.responses.find((entry) => readMsg32Code(entry.inner) === CODE_INFO_UNIT)?.inner;
+  assert.equal(msg32Body(gridChar).readUInt32BE(0x1c), 0, 'grid-init unknown base stays zero');
+  assert.equal(decodeInformationUnitsLikeFun419ca0(msg32Body(gridUnit)).rows[0].spotResolverBase, 0,
+    'grid-init unknown base keeps unit[0]+0x40 zero');
+  assert.ok(!grid.responses.some((entry) => [0x031f, 0x0321].includes(readMsg32Code(entry.inner))),
+    'unknown base does not preload fabricated detail records');
+});
+
+test('grid-init builder without a resolved base never defaults selected base id to 1', () => {
+  const inners = buildGridInitializeSpawnInners({ characterId: 42, unitId: 7 });
+  const character = inners.find((inner) => readMsg32Code(inner) === CODE_INFO_CHARACTER);
+  assert.equal(msg32Body(character).readUInt32BE(0x1c), 0);
 });
 
 test('enterWorld encodes real seed character from characterStore into 0x0323 (crash fix)', () => {
@@ -423,7 +466,8 @@ test('isAdmissionRequestCode(0x0f00) is true (world-init handshake routes to wor
 // ─── 0x0f02 RequestGridInitialize → 스폰 버스트 + core 0x0f03 → 필수 0x0356 delta ──
 // 월드-init 핸드셰이크 복원: 스폰(플레이어 유닛/캐릭터)은 0x0314 가 아니라 클라가 스스로 밟는
 // 0x0f02 에 주입한다. 순서 [0x0204 → 0x0b09(begin) → 0x0325 + 0x0323 → 0x0b0a(end)] →
-// grid extras(0x0313 + 0x0315) → 0x0f03(core 마지막) → 0x0356(post-load delta). 첫 0x0f02에만.
+// grid extras(0x0313 + 0x0315) → 상세 source(0x031f + 0x0321) → 0x0f03(core 마지막)
+// → 0x0356(post-load delta). 첫 0x0f02에만.
 //
 // ★grid-enter 괄호 배선(logh7-0325-loader-gate.md): 클라 유닛 레지스트리 벌크 적재(FUN_004c2a80)는
 //   오직 0x0b0a(NotifyEnterGridEnd) 수신 시에만 실행된다. 0x0325/0x0323 은 스테이징/캐릭터 테이블만
@@ -448,6 +492,8 @@ test('handleWorldInner first 0x0f02 injects spawn burst, then 0x0f03 + exactly o
     CODE_NOTIFY_ENTER_GRID_END,  // 0x0b0a (적재 트리거 FUN_004c2a80)
     0x0313,                      // grid-type 팔레트
     0x0315,                      // cell grid (플레이어 함대 cell)
+    0x031f,                      // 선택 성계의 동적 base detail source cache
+    0x0321,                      // 같은 성계의 시설 source cache
     CODE_GRID_INIT_OK,           // 0x0f03 (core grid-init 마지막)
     CODE_NOTIFY_INFORMATION_CHARACTER, // 0x0356 (필수 post-load delta)
   ], 'spawn burst: core 0x0f03 직후 필수 post-load 0x0356만 이어진다');
@@ -458,6 +504,15 @@ test('handleWorldInner first 0x0f02 injects spawn burst, then 0x0f03 + exactly o
   assert.equal(codes.filter((c) => c === CODE_GRID_INIT_OK).length, 1, '0x0f03 exactly once');
   assert.equal(codes.filter((c) => c === CODE_NOTIFY_INFORMATION_CHARACTER).length, 1, '0x0356 exactly once');
   assert.equal(msg32Body(result.responses[iGridInit].inner).readUInt8(0), 1, '0x0f03 status=1');
+  const baseBody = msg32Body(result.responses[codes.indexOf(0x031f)].inner);
+  const institutionBody = msg32Body(result.responses[codes.indexOf(0x0321)].inner);
+  assert.equal(baseBody.length, 0x604, '0x031f fixed body size');
+  assert.equal(institutionBody.length, 0x8de4, '0x0321 fixed body size');
+  assert.equal(baseBody.readUInt8(0), 1, '0x031f contains one selected base');
+  assert.equal(baseBody.readUInt32BE(1), 70, '0x031f compact stream joins Valhalla id=70');
+  assert.equal(institutionBody.readUInt8(0), 1, '0x0321 contains one selected base');
+  assert.equal(institutionBody.readUInt32BE(1), 70, '0x0321 compact stream joins Valhalla id=70');
+  assert.equal(institutionBody.readUInt8(5), 0, 'facility count remains zero until values are proven');
   // grid-enter 괄호 불변식: begin < unit < char < end (0x0325/0x0323 이 begin/end 사이).
   const iBegin = codes.indexOf(CODE_NOTIFY_ENTER_GRID_BEGIN);
   const iUnit = codes.indexOf(CODE_INFO_UNIT);
@@ -527,6 +582,127 @@ test('handleWorldInner routes 0x0f02 when message32-framed too (spawn burst)', (
   assert.equal(iAction, codes.length - 1, 'message32: no tail other than 0x0356');
   assert.equal(codes.filter((code) => code === CODE_GRID_INIT_OK).length, 1, 'message32: 0x0f03 exactly once');
   assert.equal(codes.filter((code) => code === CODE_NOTIFY_INFORMATION_CHARACTER).length, 1, 'message32: 0x0356 exactly once');
+});
+
+test('0x031e returns a populated fixed 0x031f joined by the current player cell', () => {
+  const world = createWorldSession();
+  world.seedPlayer({ connectionId: 1, characterId: 5, unitId: 8, cell: 2588, inWorld: true });
+  const request = Buffer.alloc(2);
+  request.writeUInt16BE(0x031e, 0);
+
+  const result = world.handleWorldInner({ connectionId: 1, accountId: 'a', inner: request });
+  assert.ok(result, '0x031e must route to the world session');
+  assert.equal(result.responses.length, 1, 'reactive request emits one paired frame');
+  assert.equal(readMsg32Code(result.responses[0].inner), 0x031f);
+  const body = msg32Body(result.responses[0].inner);
+  assert.equal(body.length, 0x604);
+  assert.equal(body.readUInt8(0), 1);
+  assert.equal(body.readUInt32BE(1), 70, 'player cell 2588 joins static base id 70');
+  assert.ok(body.subarray(5).every((byte) => byte === 0), 'unproven base fields stay zero');
+});
+
+test('0x0320 returns a fixed 0x0321 for the same base with no fabricated facilities', () => {
+  const world = createWorldSession();
+  world.seedPlayer({ connectionId: 1, characterId: 5, unitId: 8, cell: 2588, inWorld: true });
+  const request = Buffer.alloc(2);
+  request.writeUInt16BE(0x0320, 0);
+
+  const result = world.handleWorldInner({ connectionId: 1, accountId: 'a', inner: request });
+  assert.ok(result, '0x0320 must route to the world session');
+  assert.equal(result.responses.length, 1, 'reactive request emits one paired frame');
+  assert.equal(readMsg32Code(result.responses[0].inner), 0x0321);
+  const body = msg32Body(result.responses[0].inner);
+  assert.equal(body.length, 0x8de4);
+  assert.equal(body.readUInt8(0), 1);
+  assert.equal(body.readUInt32BE(1), 70, 'player cell 2588 joins static base id 70');
+  assert.equal(body.readUInt8(5), 0, 'institution count is zero without proven records');
+  assert.ok(body.subarray(5).every((byte) => byte === 0), 'unproven institution fields stay zero');
+});
+
+test('0x031e/0x0320 request selector overrides the player cell with the same joined base id', () => {
+  const world = createWorldSession();
+  world.seedPlayer({ connectionId: 1, characterId: 5, unitId: 8, cell: 2588, inWorld: true });
+  for (const requestCode of [0x031e, 0x0320]) {
+    const request = Buffer.alloc(8);
+    request.writeUInt16BE(requestCode, 0);
+    request.writeUInt16BE(1, 2);
+    request.writeUInt32LE(2, 4); // シロン, cell 1406
+    const result = world.handleWorldInner({ connectionId: 1, accountId: 'a', inner: request });
+    const body = msg32Body(result.responses[0].inner);
+    assert.equal(body.readUInt8(0), 1);
+    assert.equal(body.readUInt32BE(1), 2, `0x${requestCode.toString(16)} selector wins over cell 2588`);
+  }
+});
+
+test('unknown explicit 0x031e/0x0320 selector returns an empty detail response instead of the player cell', () => {
+  const world = createWorldSession();
+  world.seedPlayer({ connectionId: 1, characterId: 5, unitId: 8, cell: 2588, inWorld: true });
+  for (const requestCode of [0x031e, 0x0320]) {
+    const request = Buffer.alloc(8);
+    request.writeUInt16BE(requestCode, 0);
+    request.writeUInt16BE(1, 2);
+    request.writeUInt32LE(0x7fffffff, 4);
+    const result = world.handleWorldInner({ connectionId: 1, accountId: 'a', inner: request });
+    const body = msg32Body(result.responses[0].inner);
+    assert.equal(body.readUInt8(0), 0,
+      `0x${requestCode.toString(16)} unknown explicit selector must fail closed`);
+  }
+});
+
+test('count-zero selector with trailing bytes cannot alias ID 70 or fall back to player cell', () => {
+  const world = createWorldSession();
+  world.seedPlayer({ connectionId: 1, characterId: 5, unitId: 8, cell: 2588, inWorld: true });
+  for (const requestCode of [0x031e, 0x0320]) {
+    const request = Buffer.alloc(8);
+    request.writeUInt16BE(requestCode, 0);
+    request.writeUInt16BE(0, 2);
+    request.writeUInt32LE(0x4600, 4);
+    const result = world.handleWorldInner({ connectionId: 1, accountId: 'a', inner: request });
+    const body = msg32Body(result.responses[0].inner);
+    assert.equal(body.readUInt8(0), 0,
+      `0x${requestCode.toString(16)} malformed count shape must stay empty`);
+  }
+});
+
+test('detail selector count above four returns empty instead of using its first id or player cell', () => {
+  const world = createWorldSession();
+  world.seedPlayer({ connectionId: 1, characterId: 5, unitId: 8, cell: 2588, inWorld: true });
+  for (const requestCode of [0x031e, 0x0320]) {
+    const request = Buffer.alloc(24);
+    request.writeUInt16BE(requestCode, 0);
+    request.writeUInt16BE(5, 2);
+    for (let i = 0; i < 5; i += 1) request.writeUInt32LE(i + 2, 4 + i * 4);
+    const result = world.handleWorldInner({ connectionId: 1, accountId: 'a', inner: request });
+    const body = msg32Body(result.responses[0].inner);
+    assert.equal(body.readUInt8(0), 0,
+      `0x${requestCode.toString(16)} count=5 must fail closed`);
+  }
+});
+
+test('big-endian selector alias cannot resolve a base or fall back to player cell', () => {
+  const world = createWorldSession();
+  world.seedPlayer({ connectionId: 1, characterId: 5, unitId: 8, cell: 2588, inWorld: true });
+  for (const requestCode of [0x031e, 0x0320]) {
+    const request = Buffer.alloc(8);
+    request.writeUInt16BE(requestCode, 0);
+    request.writeUInt16BE(1, 2);
+    request.writeUInt32BE(2, 4);
+    const result = world.handleWorldInner({ connectionId: 1, accountId: 'a', inner: request });
+    assert.equal(msg32Body(result.responses[0].inner).readUInt8(0), 0,
+      `0x${requestCode.toString(16)} BE alias must fail closed`);
+  }
+});
+
+test('unknown player cell never falls back to fabricated base id 1', () => {
+  const world = createWorldSession();
+  world.seedPlayer({ connectionId: 1, characterId: 5, unitId: 8, cell: 4999, inWorld: true });
+  for (const requestCode of [0x031e, 0x0320]) {
+    const request = Buffer.alloc(2);
+    request.writeUInt16BE(requestCode, 0);
+    const result = world.handleWorldInner({ connectionId: 1, accountId: 'a', inner: request });
+    const body = msg32Body(result.responses[0].inner);
+    assert.equal(body.readUInt8(0), 0, `0x${requestCode.toString(16)} unknown cell stays empty`);
+  }
 });
 
 // ─── 0x0f06 RequestInformationMessengerStatus → 0x0f07 (idle 파이프라인 해제) ──
