@@ -184,3 +184,27 @@
 
 - `.omo/live-qa/m3-strategy-command-origin-B60-minimal-authority-0x2b-only-20260713`
 - `.omo/live-qa/m3-strategy-command-origin-B61-category1-only-0x2b-20260713`
+
+## 2026-07-13 B62 기본 UI overlay 실행 경로 복원
+
+### 근본원인
+
+- `116727ff`는 UI 패치 manifest와 테스트만 추가했으며, strategy probe와 UI explorer는 기본 실행 및 명시적 canonical 실행에서 계속 원본 EXE를 선택했다. 따라서 패치 소비 횟수가 `0`이었고, 실제 기본 실행 화면의 버튼 문구는 바뀌지 않았다.
+- 리셋 전 `5bd249c`에는 playable overlay를 기본 실행 대상으로 고르는 경로가 있었다. 리셋 뒤 이 선택 단계가 빠진 것이 회귀 원인이었다.
+
+### 구현
+
+- `tools/live/prepare_strategy_ui_client.mjs`가 canonical SHA-256 `9c97de2ae426f011680992d6c8d88b25488b5f51555ce5784aeef677f334bb51`인 원본을 읽고 8개의 guarded patch를 적용한다. 결과는 sibling `exe-strategy-ui/G7MTClient.exe`에 생성하거나 검증 후 재사용하며, 기대 SHA-256은 `d1ef22b75e97462bc1b098848db2732fb4388e4445ab4924203671d88a3e1146`이다.
+- overlay 실행 디렉터리에 `String`, `window2`, `window3`을 복사한다. 원본 또는 결과 해시가 기대값과 다르거나 source/output이 동일 파일·hardlink alias이면 패치 전에 실행을 거부하는 fail-closed 규칙을 적용했다.
+- strategy probe와 UI explorer의 기본 실행을 이 준비 경로에 연결했다. 사용자가 EXE를 명시하면 그 경로를 존중하며, 기본 overlay 선택 여부·해시 신뢰 여부·패치 생성 또는 재사용 결과를 receipt에 기록한다.
+
+### 라이브·시각 검증
+
+- `LOGH_CLIENT_EXE`와 ALLOW 계열 환경변수를 모두 설정하지 않은 B62에서 `selectionMode=default-overlay`, `trusted=true`가 기록됐고 로그인, 전략 탭 진입, readiness가 모두 성공했다.
+- 오른쪽 아래 탭은 `職務権限カード`와 `同スポットキャラクター`, 공통 확인창은 `決定`과 `取消し`로 표시됐다. 독립 visual QA 판정은 PASS였다.
+- 같은 실행에서 factory `43`, SelectGrid, `sendWarp/gridMove=[2388,0,1]`, `0x0b01→0x0b07 cell=2388`이 이어졌으며 모든 force 플래그는 `false`였다.
+- Node 집중 테스트 `29/29`, Python 테스트 `14/14`, 서버 전체 테스트 `321/321`이 통과했다. 원본 EXE 해시는 바뀌지 않았고 종료 뒤 클라이언트 프로세스와 TCP 47900 listener는 각각 `0`이었다.
+
+증거:
+
+- `.omo/live-qa/m3-strategy-command-origin-B62-default-ui-overlay-20260713`
