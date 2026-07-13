@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+# noqa: SIZE_OK — 실클라이언트 세션과 화면 전환을 순서대로 관측하는 단일 QA 상태기계다.
+
 import ctypes
 import hashlib
 import json
@@ -26,6 +28,8 @@ PROBE_JS = Path(__file__).resolve().parent / '_frida_strategy_snapshot.js'
 LOBBY_REF = (1024, 768)
 GAME_START = (125, 191)
 CHAR_CARD = (655, 305)
+STRATEGY_REF = (1028, 772)
+STRATEGY_AUTHORITY_TAB = (735, 580)
 EXPECTED_CLIENT_SHA256 = '9c97de2ae426f011680992d6c8d88b25488b5f51555ce5784aeef677f334bb51'
 
 STORE = {
@@ -46,6 +50,10 @@ def scale(ref, point, width, height):
 def main():
     if len(sys.argv) < 2:
         raise SystemExit('usage: py -3 _strategy_table_probe.py <evidence-dir>')
+    force_hud_mode2 = os.environ.get('LOGH_FORCE_HUD_MODE2') == '1'
+    click_strategy_authority_tab = os.environ.get('LOGH_CLICK_STRATEGY_AUTHORITY_TAB') == '1'
+    if force_hud_mode2 and click_strategy_authority_tab:
+        raise SystemExit('LOGH_FORCE_HUD_MODE2 and LOGH_CLICK_STRATEGY_AUTHORITY_TAB are mutually exclusive')
     evdir = Path(sys.argv[1]).resolve()
     allowed_evidence_roots = [(ROOT / '.omo' / 'live-qa').resolve(), (ROOT / 'tools' / 'live' / '_ev').resolve()]
     if not any(evdir == root or root in evdir.parents for root in allowed_evidence_roots):
@@ -68,6 +76,7 @@ def main():
     script = None
     hwnd = None
     before_send_force_arm = None
+    authority_tab_base_snapshot = None
     try:
         with server_log.open('w', encoding='utf-8') as log:
             server = subprocess.Popen(['node', str(M2_LAUNCH), str(evdir)], cwd=str(ROOT), stdout=log, stderr=subprocess.STDOUT)
@@ -111,15 +120,32 @@ def main():
                 pass
             if width < 900:
                 do_login(hwnd, 'inei00', 'dummy', shots)
-            lobby_deadline = time.time() + 20
-            while time.time() < lobby_deadline and client.poll() is None:
+            login_gate_started = time.monotonic()
+            lobby_deadline = login_gate_started + 20
+            lobby_login_ok = False
+            while time.monotonic() < lobby_deadline and client.poll() is None:
                 try:
                     lobby_log = server_log.read_text(encoding='utf-8', errors='ignore')
                 except OSError:
                     lobby_log = ''
                 if 'lobby-login-ok-sent' in lobby_log:
+                    lobby_login_ok = True
                     break
                 time.sleep(0.5)
+            login_gate_result = {
+                'success': lobby_login_ok,
+                'elapsed': time.monotonic() - login_gate_started,
+                'clientExitCode': client.poll(),
+                'serverLogMarkers': {
+                    'lobby-login-ok-sent': lobby_login_ok,
+                },
+            }
+            (evdir / 'login-gate.json').write_text(
+                json.dumps(login_gate_result, ensure_ascii=False, indent=2),
+                encoding='utf-8',
+            )
+            if not lobby_login_ok:
+                raise RuntimeError('lobby login success marker was not observed')
             time.sleep(9)
             if client.poll() is None:
                 ox, oy, width, height = client_geometry(hwnd)
@@ -185,6 +211,50 @@ def main():
                 )
             if os.environ.get('LOGH_FORCE_SELECTGRID_BEFORE_SEND') == '1' and client.poll() is None:
                 before_send_force_arm = script.exports_sync.selectgridbeforesend()
+            if click_strategy_authority_tab and client.poll() is None:
+                authority_tab_base_started = time.monotonic()
+                authority_tab_base_deadline = authority_tab_base_started + 30
+                authority_tab_base_ready = False
+                while time.monotonic() < authority_tab_base_deadline and client.poll() is None:
+                    try:
+                        authority_tab_base_snapshot = script.exports_sync.snapshot()
+                    except (OSError, RuntimeError, TypeError, ValueError, frida.InvalidOperationError):
+                        break
+                    selection = authority_tab_base_snapshot.get('selection') or {}
+                    linkage = authority_tab_base_snapshot.get('linkage') or {}
+                    authority_tab_base_ready = (
+                        selection.get('hudModeF4') == 1
+                        and (selection.get('listCount188') or 0) >= 1
+                        and (selection.get('payloadCount270') or 0) >= 1
+                        and linkage.get('gridActive126710') == 1
+                        and linkage.get('fieldMode126711') == 2
+                        and (linkage.get('unit0Id') or 0) > 0
+                        and (linkage.get('char0Flagship') or 0) > 0
+                    )
+                    if authority_tab_base_ready:
+                        break
+                    time.sleep(0.25)
+                base_selection = (authority_tab_base_snapshot or {}).get('selection') or {}
+                base_linkage = (authority_tab_base_snapshot or {}).get('linkage') or {}
+                authority_tab_base_result = {
+                    'ready': authority_tab_base_ready,
+                    'elapsed': time.monotonic() - authority_tab_base_started,
+                    'lastSnapshot': {
+                        'hudModeF4': base_selection.get('hudModeF4'),
+                        'listCount188': base_selection.get('listCount188'),
+                        'payloadCount270': base_selection.get('payloadCount270'),
+                        'gridActive126710': base_linkage.get('gridActive126710'),
+                        'fieldMode126711': base_linkage.get('fieldMode126711'),
+                        'unit0Id': base_linkage.get('unit0Id'),
+                        'char0Flagship': base_linkage.get('char0Flagship'),
+                    },
+                }
+                (evdir / 'strategy-authority-tab-ready.json').write_text(
+                    json.dumps(authority_tab_base_result, ensure_ascii=False, indent=2),
+                    encoding='utf-8',
+                )
+                if not authority_tab_base_ready:
+                    raise RuntimeError('strategy authority tab base HUD did not become ready')
             if os.environ.get('LOGH_FORCE_COMMAND_TABLE') == '1' and client.poll() is None:
                 (evdir / 'command-table-force.json').write_text(
                     json.dumps(script.exports_sync.commandtable(), ensure_ascii=False, indent=2),
@@ -228,6 +298,50 @@ def main():
                         time.sleep(0.25)
                 time.sleep(1)
                 force_result.write_text(json.dumps({'armed': armed, 'retryArmed': retry_armed, 'result': result}, ensure_ascii=False, indent=2), encoding='utf-8')
+            if click_strategy_authority_tab and client.poll() is None and authority_tab_base_snapshot is not None:
+                before_snapshot = script.exports_sync.snapshot()
+                before_selection = before_snapshot.get('selection') or {}
+                before_command = before_snapshot.get('command') or {}
+                before_hud_mode = before_selection.get('hudModeF4')
+                screenshot(hwnd, shots / 'strategy-authority-tab-before.png')
+                ox, oy, width, height = client_geometry(hwnd)
+                x, y = scale(STRATEGY_REF, STRATEGY_AUTHORITY_TAB, width, height)
+                foreground(hwnd)
+                mouse_click(ox + x, oy + y)
+                time.sleep(1)
+                after_snapshot = script.exports_sync.snapshot()
+                after_selection = after_snapshot.get('selection') or {}
+                after_command = after_snapshot.get('command') or {}
+                after_hud_mode = after_selection.get('hudModeF4')
+                screenshot(hwnd, shots / 'strategy-authority-tab-after.png')
+                authority_tab_result = {
+                    'point': {
+                        'reference': STRATEGY_AUTHORITY_TAB,
+                        'screen': (ox + x, oy + y),
+                    },
+                    'beforeHudModeF4': before_hud_mode,
+                    'afterHudModeF4': after_hud_mode,
+                    'beforeSnapshot': {
+                        'selectionOrigin': before_selection.get('origin'),
+                        'selectionRowCount': len(before_selection.get('rows') or []),
+                        'commandOrigin': before_command.get('origin'),
+                        'commandRowCount': len(before_command.get('rows') or []),
+                    },
+                    'afterSnapshot': {
+                        'selectionOrigin': after_selection.get('origin'),
+                        'selectionRowCount': len(after_selection.get('rows') or []),
+                        'commandOrigin': after_command.get('origin'),
+                        'commandRowCount': len(after_command.get('rows') or []),
+                    },
+                    'timestamp': time.time(),
+                    'success': before_hud_mode != 2 and after_hud_mode == 2,
+                }
+                (evdir / 'strategy-authority-tab-click.json').write_text(
+                    json.dumps(authority_tab_result, ensure_ascii=False, indent=2),
+                    encoding='utf-8',
+                )
+                if not authority_tab_result['success']:
+                    raise RuntimeError('strategy authority tab click did not enter HUD mode 2')
             if os.environ.get('LOGH_WAIT_STRATEGY_READY') == '1':
                 ready_started = time.monotonic()
                 ready_deadline = ready_started + 30
@@ -238,15 +352,11 @@ def main():
                         ready_snapshot = script.exports_sync.snapshot()
                     except (OSError, RuntimeError, TypeError, ValueError, frida.InvalidOperationError):
                         break
-                    command = ready_snapshot.get('command') or {}
                     selection = ready_snapshot.get('selection') or {}
                     linkage = ready_snapshot.get('linkage') or {}
-                    command_origin = command.get('origin') or {}
                     selection_origin = selection.get('origin') or {}
                     ready = (
-                        ((command_origin.get('x') or 0) > 0)
-                        and ((selection_origin.get('x') or 0) > 0)
-                        and len(command.get('rows') or []) > 0
+                        ((selection_origin.get('x') or 0) > 0)
                         and len(selection.get('rows') or []) > 0
                         and ((linkage.get('unit0Id') or 0) > 0)
                         and ((linkage.get('char0Flagship') or 0) > 0)
@@ -289,13 +399,9 @@ def main():
                             origin['y'] + row['rectY24'] + row['rectH30'] // 2,
                         )
                     selection_origin = initial['selection'].get('origin')
-                    command_origin = initial['command'].get('origin')
                     dynamic = []
-                    if selection_origin and initial['selection']['rows']:
+                    if selection_origin and (selection_origin.get('x') or 0) > 0 and initial['selection']['rows']:
                         dynamic.append(('selection-row-dynamic', center(selection_origin, initial['selection']['rows'][0]['primary'])))
-                    if command_origin:
-                        for row in initial['command']['rows'][:10]:
-                            dynamic.append((f"command-row-{row['index']}-dynamic", center(command_origin, row)))
                     destination_point = (512, 268)
                     raw_destination = os.environ.get('LOGH_STRATEGY_DESTINATION_POINT')
                     if raw_destination:
@@ -308,7 +414,8 @@ def main():
                     dynamic.append(('destination-dynamic', destination_point))
                     if dynamic:
                         sweep_points = dynamic
-                for label, point in sweep_points:
+                command_points_inserted = False
+                for current_index, (label, point) in enumerate(sweep_points):
                     ox, oy, width, height = client_geometry(hwnd)
                     x, y = scale((1028, 772), point, width, height)
                     foreground(hwnd)
@@ -316,12 +423,37 @@ def main():
                     time.sleep(1)
                     if client.poll() is not None:
                         break
-                    if label == 'destination-dynamic' and os.environ.get('LOGH_FORCE_SELECTGRID_CONFIRM_AFTER_TARGET') == '1':
-                        (evdir / 'selectgrid-confirm-after-target.json').write_text(
-                            json.dumps(script.exports_sync.selectgridconfirmnow(), ensure_ascii=False, indent=2),
-                            encoding='utf-8',
-                        )
-                        time.sleep(1)
+                    if label == 'selection-row-dynamic':
+                        state = script.exports_sync.snapshot()
+                        if not command_points_inserted:
+                            refreshed_command_origin = state['command'].get('origin')
+                            command_points = []
+                            if refreshed_command_origin and (refreshed_command_origin.get('x') or 0) > 0:
+                                for row in (state['command'].get('rows') or [])[:10]:
+                                    command_points.append((f"command-row-{row['index']}-dynamic", center(refreshed_command_origin, row)))
+                            destination_index = next(
+                                index
+                                for index, (candidate_label, _candidate_point) in enumerate(sweep_points)
+                                if candidate_label == 'destination-dynamic'
+                            )
+                            sweep_points[destination_index:destination_index] = command_points
+                            command_points_inserted = True
+                    if label.startswith('command-row-'):
+                        if label.endswith('-dynamic'):
+                            state = script.exports_sync.snapshot()
+                            if state['selectGrid'].get('mode') != 0:
+                                sweep_points[current_index + 1:] = [
+                                    item
+                                    for item in sweep_points[current_index + 1:]
+                                    if item[0] == 'destination-dynamic' or not item[0].startswith('command-row-')
+                                ]
+                    if label == 'destination-dynamic':
+                        if os.environ.get('LOGH_FORCE_SELECTGRID_CONFIRM_AFTER_TARGET') == '1':
+                            (evdir / 'selectgrid-confirm-after-target.json').write_text(
+                                json.dumps(script.exports_sync.selectgridconfirmnow(), ensure_ascii=False, indent=2),
+                                encoding='utf-8',
+                            )
+                            time.sleep(1)
                         if os.environ.get('LOGH_CLICK_CONFIRM_AFTER_TARGET') == '1':
                             try:
                                 screenshot(hwnd, shots / 'confirm-before.png')

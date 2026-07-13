@@ -98,6 +98,40 @@ function rowState(value) {
   };
 }
 
+const CONST_MSG_LOOKUP = abs('0x00522010');
+const CONST_MSG_LOOKUP_RING_LIMIT = 128;
+const constMsgLookupState = { totalMatchedCalls: 0, ring: [] };
+
+// constmsg 실조회만 수집하며 클라이언트 메모리는 변경하지 않는다.
+Interceptor.attach(CONST_MSG_LOOKUP, {
+  onEnter(args) {
+    const group = safe(() => args[0].toInt32());
+    const subId = safe(() => args[1].toInt32());
+    this.constMsgLookupEntry = null;
+    if (group !== 0x62 && group !== 0x67) return;
+    const entry = {
+      group,
+      subId,
+      callerVa: safe(() => ptr(this.returnAddress).sub(moduleBase).add(IMAGE_BASE).toString()),
+      timestamp: Date.now(),
+      returnPtr: null,
+      returnRawHex: null,
+    };
+    constMsgLookupState.totalMatchedCalls += 1;
+    constMsgLookupState.ring.push(entry);
+    if (constMsgLookupState.ring.length > CONST_MSG_LOOKUP_RING_LIMIT) {
+      constMsgLookupState.ring.shift();
+    }
+    this.constMsgLookupEntry = entry;
+  },
+  onLeave(retval) {
+    const entry = this.constMsgLookupEntry;
+    if (entry === null) return;
+    entry.returnPtr = ptrHex(retval);
+    entry.returnRawHex = readHex(retval, 64);
+  },
+});
+
 const selectionHitState = { calls: 0, accepted: 0, rejected: 0, last: null };
 const commandHitState = { calls: 0, accepted: 0, rejected: 0, last: null };
 const nativeCallState = {
@@ -647,9 +681,13 @@ function armCommandTableForce() {
   try {
     if (!base || base.isNull()) throw new Error('client base is null');
     const table = base.add(0x3416d8);
-    table.add(0x1e).writeU8(2);
-    table.add(0x20).writeU16(0x002b);
-    table.add(0x22).writeU16(0x0041);
+    // QA 전용 강제 주입: 런타임 명령표의 자연 선택 범주 0·1만 최소 채운다.
+    for (const category of [0, 1]) {
+      const record = table.add(category * 0x46);
+      record.add(0x1e).writeU8(2);
+      record.add(0x20).writeU16(0x002b);
+      record.add(0x22).writeU16(0x0041);
+    }
     commandTableForceEnabled = true;
     commandTableForceResult = { ok: true, before, after: commandTableState(), t: Date.now() };
   } catch (error) {
@@ -844,6 +882,8 @@ function runtimeTables(base) {
       stagingCardId02: readU16(staging305.add(0x02)),
       stagingCommandCount16: readU8(staging305.add(0x16)),
       stagingFirstFactory18: readU16(staging305.add(0x18)),
+      stagingCategory1CommandCount5c: readU8(staging305.add(0x5c)),
+      stagingCategory1FirstFactory5e: readU16(staging305.add(0x5e)),
       stagingRaw08: readHex(staging305, 0x46),
     },
     table307: {
@@ -854,11 +894,21 @@ function runtimeTables(base) {
       secondRecordCount04: readU8(table307.add(0x04)),
       commandCount02: readU8(table307.add(0x02)),
       firstDescriptor04: readU16(table307.add(0x04)),
+      firstRecordCommandCount04: readU8(table307.add(0x04)),
+      firstRecordFirstDescriptor06: readU16(table307.add(0x06)),
+      secondRecordIdC6: readU16(table307.add(0xc6)),
+      secondRecordCommandCountC8: readU8(table307.add(0xc8)),
+      secondRecordFirstDescriptorCa: readU16(table307.add(0xca)),
       raw00: readHex(table307, 0x20),
       stagingAddress: ptrHex(staging307),
       stagingCount00: readU16(staging307),
       stagingFirstRecordId02: readU16(staging307.add(0x02)),
       stagingSecondRecordCount04: readU8(staging307.add(0x04)),
+      stagingFirstRecordCommandCount04: readU8(staging307.add(0x04)),
+      stagingFirstRecordFirstDescriptor06: readU16(staging307.add(0x06)),
+      stagingSecondRecordIdC6: readU16(staging307.add(0xc6)),
+      stagingSecondRecordCommandCountC8: readU8(staging307.add(0xc8)),
+      stagingSecondRecordFirstDescriptorCa: readU16(staging307.add(0xca)),
       stagingRaw00: readHex(staging307, 0x20),
     },
   };
@@ -915,6 +965,7 @@ function snapshot() {
     linkage: linkageState(base),
     selectionHit: selectionHitState,
     commandHit: commandHitState,
+    constMsgLookups: constMsgLookupState,
     nativeCalls: nativeCallState,
     nestedGates: nestedGateState,
     inputState: { ...rowState(INPUT_STATE), raw: readHex(INPUT_STATE, 0x180) },
