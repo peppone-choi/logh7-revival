@@ -1,0 +1,48 @@
+{
+  "id": "logh7-hangul-charset-patch",
+  "schemaVersion": 1,
+  "status": "available",
+  "purpose": "정본 클라이언트의 GDI 폰트 charset을 SHIFT_JIS(0x80)에서 HANGUL(0x81)로 바꾸는 되돌릴 수 있는 2바이트 패치. 캐릭터 이름 등 UTF-16LE 무손실 텍스트가 ACP 949(CP949) 구동 시 한글 글꼴로 렌더되게 한다. 원본은 절대 덮어쓰지 않고 별도 출력본을 생성한다.",
+  "targetExe": {
+    "name": "g7mtclient.exe",
+    "sha256": "9c97de2ae426f011680992d6c8d88b25488b5f51555ce5784aeef677f334bb51",
+    "imageBase": 4194304,
+    "size": 3956736,
+    "pathHints": [
+      "artifacts/logh7-install/**/exe/g7mtclient.exe"
+    ],
+    "note": "정본 EXE는 이미 SHIFTJIS_CHARSET(0x80) 상태(sjis-charset-A/B, logh7-exe-patch-manifest.json). 이 패치는 그 위에서 0x80→0x81만 바꾼다."
+  },
+  "expectedPatchedSha256": "18b5f53d713733b0715aa8f39ea417e5b724e621fdb75ce9e0b9c11d6c8e97e1",
+  "policy": {
+    "sameLengthOnly": true,
+    "requireOriginalBytes": true,
+    "requireRollbackBytes": true,
+    "supportsDryRun": true,
+    "neverOverwriteOriginal": true
+  },
+  "patches": [
+    {
+      "id": "hangul-charset-A",
+      "sourceExeSha256": "9c97de2ae426f011680992d6c8d88b25488b5f51555ce5784aeef677f334bb51",
+      "addressKind": "offset",
+      "offset": 716267,
+      "virtualAddressHex": "0x004aedeb",
+      "originalBytes": "6a80",
+      "patchedBytes": "6a81",
+      "rollbackBytes": "6a80",
+      "reason": "CreateFontA charset push 0x80(SHIFTJIS_CHARSET) -> 0x81(HANGUL_CHARSET). charset 바이트는 6a opcode 뒤 0x4aedec. 한글 글꼴 폴백 활성화."
+    },
+    {
+      "id": "hangul-charset-B",
+      "sourceExeSha256": "9c97de2ae426f011680992d6c8d88b25488b5f51555ce5784aeef677f334bb51",
+      "addressKind": "offset",
+      "offset": 723863,
+      "virtualAddressHex": "0x004b0b97",
+      "originalBytes": "6a80",
+      "patchedBytes": "6a81",
+      "rollbackBytes": "6a80",
+      "reason": "두 번째 CreateFontA charset push 0x80 -> 0x81(HANGUL_CHARSET). charset 바이트는 0x4b0b98. 두 폰트 생성 경로 모두 한글화."
+    }
+  ]
+}
