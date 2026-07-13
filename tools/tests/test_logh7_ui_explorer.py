@@ -70,6 +70,46 @@ class UiExplorerTests(unittest.TestCase):
             self.assertEqual(payload["started"]["clientPid"], 42796)
             saved = _load_session(args.session)
             self.assertEqual(saved["hwnd"], 81234)
+            self.assertEqual(saved["clientSelection"]["mode"], "explicit")
+            self.assertEqual(saved["clientSelection"]["path"], str(exe.resolve()))
+
+    def test_start_uses_default_strategy_ui_overlay_when_exe_is_omitted(self) -> None:
+        with TemporaryDirectory() as raw_dir:
+            root = Path(raw_dir)
+            overlay = root / "exe-strategy-ui" / "G7MTClient.exe"
+            overlay.parent.mkdir(parents=True)
+            overlay.write_bytes(b"patched")
+            args = argparse.Namespace(
+                session=root / "session",
+                exe=None,
+                label="initial",
+                settle=0.0,
+                window_timeout=1.0,
+                title_substring=None,
+            )
+            receipt = {
+                "path": str(overlay),
+                "sha256": "d1ef22",
+                "mode": "reused",
+                "manifestId": "logh7-strategy-ui-label-patch",
+            }
+            fake_process = MagicMock(pid=42796)
+            with patch("tools.logh7_ui_explorer._require_windows"), patch(
+                "tools.logh7_ui_explorer._prepare_default_client", return_value=(overlay, receipt)
+            ) as prepare, patch(
+                "tools.logh7_ui_explorer.subprocess.Popen", return_value=fake_process
+            ) as popen, patch(
+                "tools.logh7_ui_explorer._wait_for_window", return_value=81234
+            ), patch(
+                "tools.logh7_ui_explorer._observe", return_value={"label": "initial"}
+            ), patch("sys.stdout", new=io.StringIO()):
+                self.assertEqual(cmd_start(args), 0)
+
+            prepare.assert_called_once_with()
+            self.assertEqual(popen.call_args.args[0], [str(overlay.resolve())])
+            saved = _load_session(args.session)
+            self.assertEqual(saved["exe"], str(overlay.resolve()))
+            self.assertEqual(saved["clientSelection"], receipt)
 
     def test_shot_uses_saved_session(self) -> None:
         with TemporaryDirectory() as raw_dir:
@@ -195,6 +235,19 @@ class UiExplorerTests(unittest.TestCase):
         ):
             self.assertEqual(main(), 0)
         self.assertEqual(seen[0].exe, Path("client.exe"))
+
+    def test_main_allows_start_without_explicit_exe(self) -> None:
+        seen: list[argparse.Namespace] = []
+
+        def fake_start(args: argparse.Namespace) -> int:
+            seen.append(args)
+            return 0
+
+        with patch("tools.logh7_ui_explorer.cmd_start", side_effect=fake_start), patch(
+            "sys.argv", ["logh7_ui_explorer", "start"]
+        ):
+            self.assertEqual(main(), 0)
+        self.assertIsNone(seen[0].exe)
 
 
 if __name__ == "__main__":

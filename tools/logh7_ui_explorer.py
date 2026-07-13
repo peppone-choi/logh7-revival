@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import ctypes
+import hashlib
 import json
 import os
 import subprocess
@@ -57,6 +58,7 @@ class _INPUT(ctypes.Structure):
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_SESSION = ROOT / ".omo/ui-explorer/session"
+PREPARE_STRATEGY_UI_CLIENT = ROOT / "tools/live/prepare_strategy_ui_client.mjs"
 DESCRIPTION = "Minimal LOGH VII live UI driver restored from 5bd249c."
 
 DETACHED_PROCESS = 0x00000008
@@ -413,17 +415,42 @@ def _sanitize_label(label: str) -> str:
     return cleaned.strip("-") or "shot"
 
 
+def _prepare_default_client() -> tuple[Path, dict[str, Any]]:
+    completed = subprocess.run(
+        ["node", str(PREPARE_STRATEGY_UI_CLIENT)],
+        cwd=str(ROOT),
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True,
+        check=True,
+    )
+    receipt: dict[str, Any] = json.loads(completed.stdout)
+    exe = Path(receipt["path"]).resolve()
+    receipt["path"] = str(exe)
+    receipt["selectionMode"] = "default-overlay"
+    return exe, receipt
+
+
 def cmd_start(args: argparse.Namespace) -> int:
     _require_windows()
     session: Path = args.session.resolve()
     session.mkdir(parents=True, exist_ok=True)
-    exe = args.exe.resolve()
-    if not exe.exists():
-        raise SystemExit(f"client exe not found: {exe}")
     if _session_path(session).exists():
         existing = _load_session(session)
         if _process_alive(int(existing.get("clientPid") or 0)):
             raise SystemExit(f"session already active at {session}")
+    if args.exe is None:
+        exe, client_selection = _prepare_default_client()
+    else:
+        exe = args.exe.resolve()
+        client_selection = {
+            "path": str(exe),
+            "sha256": hashlib.sha256(exe.read_bytes()).hexdigest() if exe.is_file() else None,
+            "mode": "explicit",
+            "manifestId": None,
+        }
+    if not exe.exists():
+        raise SystemExit(f"client exe not found: {exe}")
     creationflags = DETACHED_PROCESS | CREATE_NEW_PROCESS_GROUP | CREATE_BREAKAWAY_FROM_JOB
     process = subprocess.Popen(
         [str(exe)],
@@ -442,6 +469,7 @@ def cmd_start(args: argparse.Namespace) -> int:
         state = {
             "session": str(session),
             "exe": str(exe),
+            "clientSelection": client_selection,
             "clientPid": process.pid,
             "hwnd": hwnd,
             "startedAt": datetime.now(UTC).astimezone().isoformat(),
@@ -583,7 +611,7 @@ def build_parser() -> argparse.ArgumentParser:
     sub = parser.add_subparsers(dest="command", required=True)
 
     p_start = sub.add_parser("start")
-    p_start.add_argument("--exe", type=Path, required=True)
+    p_start.add_argument("--exe", type=Path)
     p_start.add_argument("--label", default="initial")
     p_start.add_argument("--settle", type=float, default=5.0)
     p_start.add_argument("--window-timeout", type=float, default=30.0)

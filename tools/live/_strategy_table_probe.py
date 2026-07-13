@@ -19,10 +19,9 @@ from logh7_agent_drive import client_geometry, do_login, find_client_hwnd, foreg
 
 user32 = ctypes.windll.user32
 ROOT = Path(__file__).resolve().parents[2]
-CLIENT_EXE = Path(os.environ.get(
-    'LOGH_CLIENT_EXE',
-    r'E:\logh7-revival\artifacts\logh7-install\____________s___\____\exe\g7mtclient.exe',
-))
+CANONICAL_CLIENT_EXE = ROOT / 'artifacts' / 'logh7-install' / '____________s___' / '____' / 'exe' / 'g7mtclient.exe'
+PREPARE_STRATEGY_UI_CLIENT = ROOT / 'tools' / 'live' / 'prepare_strategy_ui_client.mjs'
+STRATEGY_UI_PATCH_MANIFEST = ROOT / 'server' / 'content' / 'client' / 'logh7-strategy-ui-label-patch.json'
 M2_LAUNCH = ROOT / 'tools' / 'live' / '_m2_launch.mjs'
 PROBE_JS = Path(__file__).resolve().parent / '_frida_strategy_snapshot.js'
 LOBBY_REF = (1024, 768)
@@ -30,7 +29,7 @@ GAME_START = (125, 191)
 CHAR_CARD = (655, 305)
 STRATEGY_REF = (1028, 772)
 STRATEGY_AUTHORITY_TAB = (735, 580)
-EXPECTED_CLIENT_SHA256 = '9c97de2ae426f011680992d6c8d88b25488b5f51555ce5784aeef677f334bb51'
+EXPECTED_CANONICAL_CLIENT_SHA256 = '9c97de2ae426f011680992d6c8d88b25488b5f51555ce5784aeef677f334bb51'
 
 STORE = {
     'accounts': {'inei00': [{
@@ -58,13 +57,47 @@ def main():
     allowed_evidence_roots = [(ROOT / '.omo' / 'live-qa').resolve(), (ROOT / 'tools' / 'live' / '_ev').resolve()]
     if not any(evdir == root or root in evdir.parents for root in allowed_evidence_roots):
         raise SystemExit('evidence directory must be under .omo/live-qa or tools/live/_ev')
-    if CLIENT_EXE.name.lower() != 'g7mtclient.exe' or not CLIENT_EXE.is_file():
-        raise SystemExit('LOGH_CLIENT_EXE must point to an existing g7mtclient.exe')
-    if os.environ.get('LOGH_ALLOW_NONCANONICAL_CLIENT') != '1':
-        digest = hashlib.sha256(CLIENT_EXE.read_bytes()).hexdigest()
-        if digest != EXPECTED_CLIENT_SHA256:
-            raise SystemExit(f'client SHA-256 mismatch: {digest}')
     evdir.mkdir(parents=True, exist_ok=True)
+    ui_manifest = json.loads(STRATEGY_UI_PATCH_MANIFEST.read_text(encoding='utf-8'))
+    expected_patched_sha256 = ui_manifest['expectedPatchedSha256'].lower()
+    requested_client = os.environ.get('LOGH_CLIENT_EXE')
+    if requested_client:
+        client_exe = Path(requested_client).resolve()
+        client_selection = {
+            'path': str(client_exe),
+            'mode': 'explicit',
+            'manifestId': None,
+        }
+    else:
+        prepared = subprocess.run(
+            ['node', str(PREPARE_STRATEGY_UI_CLIENT)],
+            cwd=str(ROOT),
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+            check=True,
+        )
+        client_selection = json.loads(prepared.stdout)
+        client_selection['selectionMode'] = 'default-overlay'
+        client_exe = Path(client_selection['path']).resolve()
+    if client_exe.name.lower() != 'g7mtclient.exe' or not client_exe.is_file():
+        raise SystemExit('LOGH_CLIENT_EXE must point to an existing g7mtclient.exe')
+    digest = hashlib.sha256(client_exe.read_bytes()).hexdigest()
+    trusted_hashes = {EXPECTED_CANONICAL_CLIENT_SHA256, expected_patched_sha256}
+    allow_noncanonical = os.environ.get('LOGH_ALLOW_NONCANONICAL_CLIENT') == '1'
+    if digest not in trusted_hashes and not allow_noncanonical:
+        raise SystemExit(f'client SHA-256 mismatch: {digest}')
+    client_selection.update({
+        'path': str(client_exe),
+        'sha256': digest,
+        'trusted': digest in trusted_hashes,
+        'allowNoncanonical': allow_noncanonical,
+        'canonicalPath': str(CANONICAL_CLIENT_EXE.resolve()),
+    })
+    (evdir / 'client-selection.json').write_text(
+        json.dumps(client_selection, ensure_ascii=False, indent=2),
+        encoding='utf-8',
+    )
     shots = evdir / 'shots'
     shots.mkdir(parents=True, exist_ok=True)
     (evdir / 'store.json').write_text(json.dumps(STORE, ensure_ascii=False, indent=2), encoding='utf-8')
@@ -91,7 +124,7 @@ def main():
             else:
                 raise RuntimeError('server did not become ready')
 
-            client = subprocess.Popen([str(CLIENT_EXE)], cwd=str(CLIENT_EXE.parent))
+            client = subprocess.Popen([str(client_exe)], cwd=str(client_exe.parent))
             deadline = time.time() + 30
             while time.time() < deadline:
                 try:
