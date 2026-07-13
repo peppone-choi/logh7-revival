@@ -18,7 +18,17 @@ import frida
 
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
-from logh7_agent_drive import client_geometry, do_login, find_client_hwnd, foreground, mouse_click, screenshot
+from logh7_agent_drive import (
+    DISMISSED_TOASTS,
+    ClickOccludedError,
+    click_guarded,
+    client_geometry,
+    do_login,
+    find_client_hwnd,
+    foreground,
+    mouse_click,
+    screenshot,
+)
 from _spot_dialog_geometry import SpotRowUnresolved, resolve_base_row_click
 from _strategy_ready_gate import StrategyNotReady, wait_strategy_ready
 # 검증된 상수·STORE·경로는 기존 드라이버에서 재사용한다(main() 은 __main__ 아래라 임포트해도 실행 안 됨).
@@ -169,27 +179,65 @@ def main():
                 raise RuntimeError('lobby login success marker not observed')
 
             # 2) 월드 진입 (ゲームスタート → キャラカード)
+            #
+            # 이 sleep(9) 는 근거 있는 대기다. 지우지 말 것.
+            # 로비 로그인 OK(0x2001) 가 나간 직후 클라는 아직 로비 UI를 구성하는 중이라
+            # ゲームスタート 버튼이 히트박스를 갖지 않는다. 통과 런의 서버 로그에서도
+            # 로그인 OK 부터 첫 0x2003 요청까지 11초가 걸렸다:
+            #   .omo/live-qa/m3-B74-rect-deterministic-20260713/server-stdout.txt
+            #   14:17:40.733 lobby-login-ok-sent → 14:17:52.029 0x2003 (=ゲームスタート 클릭 반응)
+            # 즉 클릭이 먹히기 시작하는 시점이 대략 +9~11초다. 이 대기를 "근거 없는 sleep"
+            # 으로 보고 제거하면 클릭이 아직 살아있지 않은 UI에 나간다.
+            # 관측 가능한 로비-준비 신호(0x2003 이전에 클라가 내는 신호)를 찾기 전까지는
+            # 이 대기가 정본이다. 대신 클릭 자체는 아래 click_guarded 로 검증한다.
             time.sleep(9)
-            if client.poll() is None:
-                ox, oy, width, height = client_geometry(hwnd)
-                x, y = scale(LOBBY_REF, GAME_START, width, height)
-                foreground(hwnd)
-                mouse_click(ox + x, oy + y)
-                time.sleep(3)
-                ox, oy, width, height = client_geometry(hwnd)
-                x, y = scale(LOBBY_REF, CHAR_CARD, width, height)
-                mouse_click(ox + x, oy + y)
-                time.sleep(1)
-                mouse_click(ox + x, oy + y)
-            world_started = time.monotonic()
+
+            # 클릭 시퀀스는 2회까지 재시도한다. 구 드라이버(_strategy_table_probe.py:504)
+            # 에도 있던 재시도이며, 첫 클릭이 UI 구성 타이밍에 걸려 한 번 빗나가도 런
+            # 전체가 죽지 않게 한다. 재시도해도 안 되면 fail-closed(예외).
+            world_entry_attempts = []
             world_ok = False
-            while time.monotonic() < world_started + 8 and client.poll() is None:
-                if 'ss-login-ok-sent' in server_log.read_text(encoding='utf-8', errors='ignore'):
-                    world_ok = True
+            for attempt in range(1, 3):
+                if client.poll() is not None:
                     break
-                time.sleep(0.25)
+                record = {'attempt': attempt, 'clicks': []}
+                try:
+                    ox, oy, width, height = client_geometry(hwnd)
+                    x, y = scale(LOBBY_REF, GAME_START, width, height)
+                    record['clicks'].append(click_guarded(hwnd, ox + x, oy + y, label='game-start'))
+                    time.sleep(3)
+                    screenshot(hwnd, shots / f'02b-char-card-before-{attempt}.png')
+                    ox, oy, width, height = client_geometry(hwnd)
+                    x, y = scale(LOBBY_REF, CHAR_CARD, width, height)
+                    # キャラカード는 1클릭=선택 / 2클릭=확정이라 두 번 누른다. B74 통과 런에서도
+                    # 두 번째 클릭 직후에야 0x2009(SSGameLogin 요청)가 나갔다.
+                    record['clicks'].append(click_guarded(hwnd, ox + x, oy + y, label='char-card-1'))
+                    time.sleep(1)
+                    record['clicks'].append(click_guarded(hwnd, ox + x, oy + y, label='char-card-2'))
+                    screenshot(hwnd, shots / f'02c-char-card-after-{attempt}.png')
+                except ClickOccludedError as occluded:
+                    # 클릭점을 남의 창(알림 토스트 등)이 계속 덮고 있었다 — B75 를 죽인 그 실패다.
+                    # 증거로 가린 창의 정체를 남기고 다음 attempt 에서 다시 노린다.
+                    record['occluded'] = {
+                        'label': occluded.label,
+                        'point': list(occluded.point),
+                        'offender': occluded.offender,
+                    }
+                    world_entry_attempts.append(record)
+                    continue
+                deadline = time.monotonic() + 12
+                while time.monotonic() < deadline and client.poll() is None:
+                    if 'ss-login-ok-sent' in server_log.read_text(encoding='utf-8', errors='ignore'):
+                        world_ok = True
+                        break
+                    time.sleep(0.25)
+                record['worldOk'] = world_ok
+                world_entry_attempts.append(record)
+                if world_ok:
+                    break
             (evdir / 'world-entry-gate.json').write_text(json.dumps({
                 'success': world_ok, 'clientExitCode': client.poll(),
+                'attempts': world_entry_attempts,
             }, ensure_ascii=False, indent=2), encoding='utf-8')
             if not world_ok:
                 raise RuntimeError('world entry success marker not observed')
@@ -335,7 +383,15 @@ def main():
             cmd_rows = cmd.get('rows') or []
             cmd_origin = cmd.get('origin')
             row_count = cmd.get('rowCountD4') or 0
-            target_idx = int(os.environ.get('LOGH_B71_CMD_ROW', '0'))  # 역순 가정상 0x2d=최상단 행(0)
+            # 명령 버튼 행 선택. '역순 가정상 0x2d=행0' 은 실측으로 반증됐다(B79, 2026-07-14).
+            # 실제 화면: 두 버튼이 가로로 나란히 있고 왼쪽=ワープ航行(0x2b), 오른쪽=寄港(0x2d).
+            # 트레이서 rect 도 일치한다 — 행0 rectX20=12(왼쪽), 행1 rectX20=113(오른쪽).
+            # 행0 을 눌렀더니 게임이 ワープ航行 그리드 선택 모드로 들어갔다(증거 스크린샷:
+            #   .omo/live-qa/m3-B79-toast-dismiss-worldentry-20260714/shots/
+            #     05-factory-0x2d-before.png (버튼 라벨), 06b-base-row-before.png ("Please choose
+            #     the grid." + "* ワープ航行コマンド選択を行います。")).
+            # 따라서 寄港 = 행1. 행에 factory 코드 필드가 없어 위치로 고를 수밖에 없다.
+            target_idx = int(os.environ.get('LOGH_B71_CMD_ROW', '1'))
             if not (0 <= target_idx < len(cmd_rows)):
                 target_idx = 0 if cmd_rows else None
             target_primary = cmd_rows[target_idx] if (target_idx is not None and target_idx < len(cmd_rows)) else None
@@ -475,6 +531,13 @@ def main():
             }, ensure_ascii=False))
             return 0
     finally:
+        # 닫은 알림 토스트 목록은 성공/실패와 무관하게 항상 남긴다 — 조용한 dismissal 금지.
+        try:
+            (evdir / 'toast-dismissals.json').write_text(json.dumps({
+                'count': len(DISMISSED_TOASTS), 'dismissed': DISMISSED_TOASTS,
+            }, ensure_ascii=False, indent=2), encoding='utf-8')
+        except OSError:
+            pass
         if script is not None:
             try:
                 script.unload()
@@ -500,4 +563,22 @@ def main():
 
 
 if __name__ == '__main__':
-    raise SystemExit(main())
+    # 예외를 삼키지 않되, 반드시 evdir 에 full traceback 을 남긴다.
+    # B76 run3 는 드라이버 stdout 이 비어 있어 왜 죽었는지 아무도 몰랐다 — 파이썬
+    # 트레이스백이 stderr 로만 나가서 캡처되지 않았기 때문이다. 여기서 파일로 못 박는다.
+    try:
+        raise SystemExit(main())
+    except SystemExit:
+        raise
+    except BaseException:
+        import traceback
+        tb = traceback.format_exc()
+        try:
+            crash_dir = Path(sys.argv[1]).resolve() if len(sys.argv) > 1 else HERE
+            crash_dir.mkdir(parents=True, exist_ok=True)
+            (crash_dir / 'driver-traceback.txt').write_text(tb, encoding='utf-8')
+        except OSError:
+            pass
+        print(json.dumps({'event': 'b71-probe-crashed', 'traceback': tb}, ensure_ascii=False))
+        sys.stderr.write(tb)
+        raise SystemExit(1)
