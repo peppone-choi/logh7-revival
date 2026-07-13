@@ -30,8 +30,50 @@ CHAR_CARD = (655, 305)
 STRATEGY_REF = (1028, 772)
 STRATEGY_AUTHORITY_TAB = (735, 580)
 STRATEGY_SYSTEM_MARKER = (515, 390)
-STRATEGY_SYSTEM_ROW_MODE1 = (158, 456)
+STRATEGY_C002_UNIT_ROW_MODE1 = (158, 456)
 EXPECTED_CANONICAL_CLIENT_SHA256 = '9c97de2ae426f011680992d6c8d88b25488b5f51555ce5784aeef677f334bb51'
+SELECTION_ADMISSION_METRIC_KEYS = (
+    'selectionAdmissionWriterCalls',
+    'selectionAdmissionLatchCalls',
+    'selectionAdmissionEvent2EnqueueCalls',
+    'selectionAdmissionEvent2DequeueCalls',
+    'selectionAdmissionCalls',
+    'selectionAdmissionAccepted',
+    'selectionAdmissionModeApplyCalls',
+    'selectionAdmissionLayoutOpenCalls',
+    'selectionAdmissionHudModeSetCalls',
+    'selectionAdmissionHudFrameTransitionCalls',
+)
+SYSTEM_OUTPUT_STAGE_KEYS = (
+    'commandCard0305',
+    'factory41Granted',
+    'factory41Selected',
+    'factory41Handler',
+    'selectDialogCtor',
+    'selectDialogTick',
+    'genericListRow70',
+    'selector',
+    'refresh031f',
+    'refresh0327',
+    'panelDispatch',
+    'renderSink',
+)
+SYSTEM_OUTPUT_RESPONSE_STAGE_KEYS = ('response031f', 'response0327')
+SYSTEM_OUTPUT_ID_STAGE_KEYS = {
+    'genericListRow70',
+    'selector',
+    'refresh031f',
+    'refresh0327',
+    'response031f',
+    'response0327',
+    'panelDispatch',
+    'renderSink',
+}
+SYSTEM_OUTPUT_FACTORY_STAGE_KEYS = {
+    'factory41Granted',
+    'factory41Selected',
+    'factory41Handler',
+}
 
 STORE = {
     'accounts': {'inei00': [{
@@ -46,6 +88,257 @@ STORE = {
 
 def scale(ref, point, width, height):
     return int(point[0] * width / ref[0]), int(point[1] * height / ref[1])
+
+
+def selection_admission_metrics(system_detail):
+    admission = system_detail.get('selectionAdmission') or {}
+    counts = admission.get('counts') or {}
+    selection_list = admission.get('selectionList') or {}
+    return {
+        'selectionAdmissionWriterCalls': counts.get('writer') or 0,
+        'selectionAdmissionLatchCalls': counts.get('latch') or 0,
+        'selectionAdmissionEvent2EnqueueCalls': counts.get('event2Enqueue') or 0,
+        'selectionAdmissionEvent2DequeueCalls': counts.get('event2Dequeue') or 0,
+        'selectionAdmissionCalls': counts.get('admission') or 0,
+        'selectionAdmissionAccepted': counts.get('admissionAccepted') or 0,
+        'selectionAdmissionModeApplyCalls': counts.get('modeApply') or 0,
+        'selectionAdmissionLayoutOpenCalls': counts.get('layoutOpen') or 0,
+        'selectionAdmissionHudModeSetCalls': counts.get('hudModeSet') or 0,
+        'selectionAdmissionHudFrameTransitionCalls': counts.get('hudFrameTransition') or 0,
+        'selectionAdmissionLast': admission.get('last'),
+        'selectionAdmissionListBase': selection_list.get('base'),
+        'selectionAdmissionListCount188': selection_list.get('listCount188'),
+        'selectionAdmissionListSelected189': selection_list.get('listSelected189'),
+    }
+
+
+def selection_admission_delta(current, baseline):
+    return {
+        key: (current.get(key) or 0) - (baseline.get(key) or 0)
+        for key in SELECTION_ADMISSION_METRIC_KEYS
+    }
+
+
+def selection_admission_phase(before_snapshot, after_snapshot):
+    before_detail = before_snapshot.get('systemDetail') or {}
+    after_detail = after_snapshot.get('systemDetail') or {}
+    before_admission = before_detail.get('selectionAdmission') or {}
+    after_admission = after_detail.get('selectionAdmission') or {}
+    before_metrics = selection_admission_metrics(before_detail)
+    after_metrics = selection_admission_metrics(after_detail)
+    before_sequence = before_admission.get('sequence') or 0
+    timeline = [
+        entry
+        for entry in after_admission.get('ring') or []
+        if (entry.get('sequence') or 0) > before_sequence
+    ]
+    return {
+        'before': before_metrics,
+        'after': after_metrics,
+        'delta': selection_admission_delta(after_metrics, before_metrics),
+        'timeline': timeline,
+        'selectionList': {
+            'before': before_admission.get('selectionList'),
+            'after': after_admission.get('selectionList'),
+        },
+    }
+
+
+def system_output_trace_metrics(system_detail):
+    trace = system_detail.get('systemOutputTrace') or {}
+    counts = trace.get('counts') or {}
+    last = trace.get('last') or {}
+    correlation = trace.get('correlation') or {}
+    command_card = trace.get('commandCard0305') or {}
+    runtime = command_card.get('runtime') or {}
+    panel_dispatch = last.get('panelDispatch') or {}
+    render_sink = last.get('renderSink') or {}
+    return {
+        'sequence': trace.get('sequence') or 0,
+        'stageCounts': {key: counts.get(key) or 0 for key in SYSTEM_OUTPUT_STAGE_KEYS},
+        'commandCard0305Calls': counts.get('commandCard0305') or 0,
+        'factory41GrantedCalls': counts.get('factory41Granted') or 0,
+        'factory41SelectedCalls': counts.get('factory41Selected') or 0,
+        'factory41HandlerCalls': counts.get('factory41Handler') or 0,
+        'panelDispatchCalls': counts.get('panelDispatch') or 0,
+        'renderSinkCalls': counts.get('renderSink') or 0,
+        'response031fCalls': counts.get('response031f') or 0,
+        'response0327Calls': counts.get('response0327') or 0,
+        'panelDispatchId70': panel_dispatch.get('baseId') == 70,
+        'renderSinkId70': render_sink.get('baseId') == 70,
+        'factory41Granted': runtime.get('factory41Granted') is True,
+        'runtimeFactoryIds': runtime.get('factoryIds') or [],
+        'orderedId70Complete': correlation.get('orderedId70Complete') is True,
+        'firstMissingStage': correlation.get('firstMissingStage'),
+        'missingStages': correlation.get('missingStages') or [],
+        'missingRequiredResponse0327': trace.get('missingRequiredResponse0327') is True,
+        'panelStateMachineWaitsFor0327Ack': trace.get('panelStateMachineWaitsFor0327Ack') is True,
+    }
+
+
+def system_output_trace_delta(current, baseline):
+    current_stages = current.get('stageCounts') or {}
+    baseline_stages = baseline.get('stageCounts') or {}
+    return {
+        'stageCounts': {
+            key: (current_stages.get(key) or 0) - (baseline_stages.get(key) or 0)
+            for key in SYSTEM_OUTPUT_STAGE_KEYS
+        },
+        'panelDispatchDelta': (
+            (current.get('panelDispatchCalls') or 0)
+            - (baseline.get('panelDispatchCalls') or 0)
+        ),
+        'renderSinkDelta': (
+            (current.get('renderSinkCalls') or 0)
+            - (baseline.get('renderSinkCalls') or 0)
+        ),
+        'panelDispatchId70': current.get('panelDispatchId70') is True,
+        'renderSinkId70': current.get('renderSinkId70') is True,
+        'factory41Granted': current.get('factory41Granted') is True,
+        'orderedId70Complete': current.get('orderedId70Complete') is True,
+        'firstMissingStage': current.get('firstMissingStage'),
+        'missingStages': current.get('missingStages') or [],
+        'missingRequiredResponse0327': current.get('missingRequiredResponse0327') is True,
+        'panelStateMachineWaitsFor0327Ack': (
+            current.get('panelStateMachineWaitsFor0327Ack') is True
+        ),
+    }
+
+
+def _system_output_trace_entry_matches(stage, entry):
+    if stage in SYSTEM_OUTPUT_ID_STAGE_KEYS:
+        return entry.get('baseId') == 70
+    if stage in SYSTEM_OUTPUT_FACTORY_STAGE_KEYS:
+        return entry.get('factoryId') == 0x41
+    return True
+
+
+def system_output_trace_phase(before_snapshot, after_snapshot):
+    before_detail = before_snapshot.get('systemDetail') or {}
+    after_detail = after_snapshot.get('systemDetail') or {}
+    before_trace = before_detail.get('systemOutputTrace') or {}
+    after_trace = after_detail.get('systemOutputTrace') or {}
+    before_metrics = system_output_trace_metrics(before_detail)
+    after_metrics = system_output_trace_metrics(after_detail)
+    before_sequence = before_trace.get('sequence') or 0
+    phase_timeline = [
+        entry
+        for entry in after_trace.get('timeline') or []
+        if (entry.get('sequence') or 0) > before_sequence
+    ]
+    phase_ordered = []
+    phase_ordered_by_stage = {}
+    previous_sequence = before_sequence
+    phase_first_unobserved_stage = None
+    for stage in SYSTEM_OUTPUT_STAGE_KEYS:
+        match = next((
+            entry for entry in phase_timeline
+            if (entry.get('sequence') or 0) > previous_sequence
+            and entry.get('stage') == stage
+            and _system_output_trace_entry_matches(stage, entry)
+        ), None)
+        if match is None:
+            phase_first_unobserved_stage = stage
+            break
+        phase_ordered.append(match)
+        phase_ordered_by_stage[stage] = match
+        previous_sequence = match.get('sequence') or previous_sequence
+    phase_response_dispatch_timeline = []
+    for request_stage, response_stage in (
+        ('refresh031f', 'response031f'),
+        ('refresh0327', 'response0327'),
+    ):
+        request_entry = phase_ordered_by_stage.get(request_stage)
+        response_entry = next((
+            entry for entry in phase_timeline
+            if request_entry is not None
+            and (entry.get('sequence') or 0) > (request_entry.get('sequence') or 0)
+            and entry.get('stage') == response_stage
+            and _system_output_trace_entry_matches(response_stage, entry)
+        ), None)
+        if response_entry is not None:
+            phase_response_dispatch_timeline.append(response_entry)
+        elif phase_first_unobserved_stage is None:
+            phase_first_unobserved_stage = response_stage
+    phase_observed_stages = []
+    for entry in phase_timeline:
+        stage = entry.get('stage')
+        if stage is not None and stage not in phase_observed_stages:
+            phase_observed_stages.append(stage)
+    phase_observed_stage_set = set(phase_observed_stages)
+    phase_unobserved_stages = [
+        stage for stage in SYSTEM_OUTPUT_STAGE_KEYS if stage not in phase_observed_stage_set
+    ]
+    for response_stage in SYSTEM_OUTPUT_RESPONSE_STAGE_KEYS:
+        if not any(
+            entry.get('stage') == response_stage
+            for entry in phase_response_dispatch_timeline
+        ):
+            phase_unobserved_stages.append(response_stage)
+    phase_panel_dispatch_id70 = any(
+        entry.get('stage') == 'panelDispatch' and entry.get('baseId') == 70
+        for entry in phase_timeline
+    )
+    phase_render_sink_id70 = any(
+        entry.get('stage') == 'renderSink' and entry.get('baseId') == 70
+        for entry in phase_timeline
+    )
+    phase_factory41_granted = any(
+        entry.get('stage') == 'factory41Granted' and entry.get('factoryId') == 0x41
+        for entry in phase_timeline
+    )
+    phase_response0327_observed = any(
+        entry.get('stage') == 'response0327'
+        for entry in phase_response_dispatch_timeline
+    )
+    delta = system_output_trace_delta(after_metrics, before_metrics)
+    delta.update({
+        'phasePanelDispatchId70': phase_panel_dispatch_id70,
+        'phaseRenderSinkId70': phase_render_sink_id70,
+        'phaseFactory41Granted': phase_factory41_granted,
+        'phaseSequenceComplete': phase_first_unobserved_stage is None,
+        'phaseFirstUnobservedStage': phase_first_unobserved_stage,
+        'phaseUnobservedStages': phase_unobserved_stages,
+        'phaseMissingRequiredResponse0327': not phase_response0327_observed,
+    })
+    return {
+        'before': before_metrics,
+        'after': after_metrics,
+        'delta': delta,
+        'runCorrelation': {
+            'before': {
+                'orderedId70Complete': before_metrics.get('orderedId70Complete') is True,
+                'firstMissingStage': before_metrics.get('firstMissingStage'),
+                'missingStages': before_metrics.get('missingStages') or [],
+                'missingRequiredResponse0327': (
+                    before_metrics.get('missingRequiredResponse0327') is True
+                ),
+            },
+            'after': {
+                'orderedId70Complete': after_metrics.get('orderedId70Complete') is True,
+                'firstMissingStage': after_metrics.get('firstMissingStage'),
+                'missingStages': after_metrics.get('missingStages') or [],
+                'missingRequiredResponse0327': (
+                    after_metrics.get('missingRequiredResponse0327') is True
+                ),
+            },
+        },
+        'orderedId70Complete': after_metrics.get('orderedId70Complete') is True,
+        'firstMissingStage': after_metrics.get('firstMissingStage'),
+        'missingStages': after_metrics.get('missingStages') or [],
+        'missingRequiredResponse0327': after_metrics.get('missingRequiredResponse0327') is True,
+        'phaseObservedStages': phase_observed_stages,
+        'phaseTimeline': phase_timeline,
+        'phaseOrderedTimeline': phase_ordered,
+        'phaseResponseDispatchTimeline': phase_response_dispatch_timeline,
+        'phasePanelDispatchId70': phase_panel_dispatch_id70,
+        'phaseRenderSinkId70': phase_render_sink_id70,
+        'phaseFactory41Granted': phase_factory41_granted,
+        'phaseSequenceComplete': phase_first_unobserved_stage is None,
+        'phaseFirstUnobservedStage': phase_first_unobserved_stage,
+        'phaseUnobservedStages': phase_unobserved_stages,
+        'phaseMissingRequiredResponse0327': not phase_response0327_observed,
+    }
 
 
 def main():
@@ -333,6 +626,7 @@ def main():
                         'hudModeF4': base_selection.get('hudModeF4'),
                         'listCount188': base_selection.get('listCount188'),
                         'payloadCount270': base_selection.get('payloadCount270'),
+                        'cardKinds': base_selection.get('cardKinds') or [],
                         'gridActive126710': base_linkage.get('gridActive126710'),
                         'fieldMode126711': base_linkage.get('fieldMode126711'),
                         'unit0Id': base_linkage.get('unit0Id'),
@@ -403,6 +697,7 @@ def main():
                 after_selection = after_snapshot.get('selection') or {}
                 after_command = after_snapshot.get('command') or {}
                 after_hud_mode = after_selection.get('hudModeF4')
+                authority_admission = selection_admission_phase(before_snapshot, after_snapshot)
                 screenshot(hwnd, shots / 'strategy-authority-tab-after.png')
                 authority_tab_result = {
                     'point': {
@@ -414,15 +709,22 @@ def main():
                     'beforeSnapshot': {
                         'selectionOrigin': before_selection.get('origin'),
                         'selectionRowCount': len(before_selection.get('rows') or []),
+                        'selectionListBase': before_selection.get('listBase'),
+                        'listCount188': before_selection.get('listCount188'),
+                        'listSelected189': before_selection.get('listSelected189'),
                         'commandOrigin': before_command.get('origin'),
                         'commandRowCount': len(before_command.get('rows') or []),
                     },
                     'afterSnapshot': {
                         'selectionOrigin': after_selection.get('origin'),
                         'selectionRowCount': len(after_selection.get('rows') or []),
+                        'selectionListBase': after_selection.get('listBase'),
+                        'listCount188': after_selection.get('listCount188'),
+                        'listSelected189': after_selection.get('listSelected189'),
                         'commandOrigin': after_command.get('origin'),
                         'commandRowCount': len(after_command.get('rows') or []),
                     },
+                    'selectionAdmission': authority_admission,
                     'timestamp': time.time(),
                     'success': before_hud_mode != 2 and after_hud_mode == 2,
                 }
@@ -548,6 +850,7 @@ def main():
                     'selectionHitCalls': before_selection_hit.get('calls') or 0,
                     'selectionHitAccepted': before_selection_hit.get('accepted') or 0,
                     'selectionHitRejected': before_selection_hit.get('rejected') or 0,
+                    **selection_admission_metrics(before_detail),
                 }
 
                 mouse_click(ox + x, oy + y)
@@ -578,6 +881,7 @@ def main():
                     'selectionHitCalls': single_selection_hit.get('calls') or 0,
                     'selectionHitAccepted': single_selection_hit.get('accepted') or 0,
                     'selectionHitRejected': single_selection_hit.get('rejected') or 0,
+                    **selection_admission_metrics(single_detail),
                 }
                 single_delta = {
                     'baseLookupTotalCalls': single_metrics['baseLookupTotalCalls'] - before_metrics['baseLookupTotalCalls'],
@@ -591,6 +895,7 @@ def main():
                     'selectionHitCalls': single_metrics['selectionHitCalls'] - before_metrics['selectionHitCalls'],
                     'selectionHitAccepted': single_metrics['selectionHitAccepted'] - before_metrics['selectionHitAccepted'],
                     'selectionHitRejected': single_metrics['selectionHitRejected'] - before_metrics['selectionHitRejected'],
+                    **selection_admission_delta(single_metrics, before_metrics),
                 }
                 single_panel_delta = single_delta['panelTotalCalls']
 
@@ -638,7 +943,7 @@ def main():
                 if single_panel_delta <= 0 and row_geometry_valid:
                     row_click_attempted = True
                     if row_mode1_zero_origin:
-                        row_reference_point = STRATEGY_SYSTEM_ROW_MODE1
+                        row_reference_point = STRATEGY_C002_UNIT_ROW_MODE1
                         row_point_source = 'hud-mode1-fixed'
                     else:
                         row_reference_point = (
@@ -652,7 +957,7 @@ def main():
                     foreground(hwnd)
                     row_before_captured_at = time.time()
                     row_before_snapshot = script.exports_sync.snapshot()
-                    screenshot(hwnd, shots / 'strategy-system-row-before.png')
+                    screenshot(hwnd, shots / 'strategy-c002-unit-row-before.png')
                     row_before_detail = row_before_snapshot.get('systemDetail') or {}
                     row_before_lookups = row_before_detail.get('lookups') or {}
                     row_before_base_lookup = row_before_lookups.get('base031f') or {}
@@ -675,13 +980,14 @@ def main():
                         'selectionHitCalls': row_before_selection_hit.get('calls') or 0,
                         'selectionHitAccepted': row_before_selection_hit.get('accepted') or 0,
                         'selectionHitRejected': row_before_selection_hit.get('rejected') or 0,
+                        **selection_admission_metrics(row_before_detail),
                     }
                     mouse_click(row_ox + row_x, row_oy + row_y)
                     row_clicked_at = time.time()
                     time.sleep(0.5)
                     row_captured_at = time.time()
                     row_snapshot = script.exports_sync.snapshot()
-                    screenshot(hwnd, shots / 'strategy-system-row-after.png')
+                    screenshot(hwnd, shots / 'strategy-c002-unit-row-after.png')
                     row_detail = row_snapshot.get('systemDetail') or {}
                     row_lookups = row_detail.get('lookups') or {}
                     row_base_lookup = row_lookups.get('base031f') or {}
@@ -704,6 +1010,7 @@ def main():
                         'selectionHitCalls': row_selection_hit.get('calls') or 0,
                         'selectionHitAccepted': row_selection_hit.get('accepted') or 0,
                         'selectionHitRejected': row_selection_hit.get('rejected') or 0,
+                        **selection_admission_metrics(row_detail),
                     }
                     row_delta = {
                         'baseLookupTotalCalls': row_metrics['baseLookupTotalCalls'] - row_before_metrics['baseLookupTotalCalls'],
@@ -717,6 +1024,7 @@ def main():
                         'selectionHitCalls': row_metrics['selectionHitCalls'] - row_before_metrics['selectionHitCalls'],
                         'selectionHitAccepted': row_metrics['selectionHitAccepted'] - row_before_metrics['selectionHitAccepted'],
                         'selectionHitRejected': row_metrics['selectionHitRejected'] - row_before_metrics['selectionHitRejected'],
+                        **selection_admission_delta(row_metrics, row_before_metrics),
                     }
                     row_panel_activated = row_delta['panelTotalCalls'] > 0
                     row_selection_activated = row_delta['selectionIndexChangedCalls'] > 0
@@ -758,6 +1066,7 @@ def main():
                         'selectionHitCalls': double_before_selection_hit.get('calls') or 0,
                         'selectionHitAccepted': double_before_selection_hit.get('accepted') or 0,
                         'selectionHitRejected': double_before_selection_hit.get('rejected') or 0,
+                        **selection_admission_metrics(double_before_detail),
                     }
                     mouse_click(ox + x, oy + y)
                     time.sleep(0.15)
@@ -789,6 +1098,7 @@ def main():
                         'selectionHitCalls': double_selection_hit.get('calls') or 0,
                         'selectionHitAccepted': double_selection_hit.get('accepted') or 0,
                         'selectionHitRejected': double_selection_hit.get('rejected') or 0,
+                        **selection_admission_metrics(double_detail),
                     }
                     double_delta = {
                         'baseLookupTotalCalls': double_metrics['baseLookupTotalCalls'] - double_before_metrics['baseLookupTotalCalls'],
@@ -802,6 +1112,7 @@ def main():
                         'selectionHitCalls': double_metrics['selectionHitCalls'] - double_before_metrics['selectionHitCalls'],
                         'selectionHitAccepted': double_metrics['selectionHitAccepted'] - double_before_metrics['selectionHitAccepted'],
                         'selectionHitRejected': double_metrics['selectionHitRejected'] - double_before_metrics['selectionHitRejected'],
+                        **selection_admission_delta(double_metrics, double_before_metrics),
                     }
 
                 final_metrics = double_metrics or row_metrics or single_metrics
@@ -818,6 +1129,7 @@ def main():
                     'selectionHitCalls': final_metrics['selectionHitCalls'] - before_metrics['selectionHitCalls'],
                     'selectionHitAccepted': final_metrics['selectionHitAccepted'] - before_metrics['selectionHitAccepted'],
                     'selectionHitRejected': final_metrics['selectionHitRejected'] - before_metrics['selectionHitRejected'],
+                    **selection_admission_delta(final_metrics, before_metrics),
                 }
                 final_panel_delta = final_delta['panelTotalCalls']
                 marker_result = {
@@ -872,6 +1184,35 @@ def main():
                         'rowFromRowBefore': row_delta,
                         'doubleFromDoubleBefore': double_delta,
                         'finalFromBefore': final_delta,
+                    },
+                    'systemOutputTrace': {
+                        'singleFromBefore': system_output_trace_phase(
+                            before_snapshot, single_snapshot,
+                        ),
+                        'rowFromRowBefore': (
+                            system_output_trace_phase(row_before_snapshot, row_snapshot)
+                            if row_before_snapshot is not None and row_snapshot is not None
+                            else None
+                        ),
+                        'doubleFromDoubleBefore': (
+                            system_output_trace_phase(double_before_snapshot, double_snapshot)
+                            if double_before_snapshot is not None and double_snapshot is not None
+                            else None
+                        ),
+                        'finalFromBefore': system_output_trace_phase(before_snapshot, final_snapshot),
+                    },
+                    'selectionAdmissionLast': {
+                        'markerBefore': before_metrics['selectionAdmissionLast'],
+                        'single': single_metrics['selectionAdmissionLast'],
+                        'rowBefore': (
+                            row_before_metrics['selectionAdmissionLast'] if row_before_metrics else None
+                        ),
+                        'row': row_metrics['selectionAdmissionLast'] if row_metrics else None,
+                        'doubleBefore': (
+                            double_before_metrics['selectionAdmissionLast'] if double_before_metrics else None
+                        ),
+                        'double': double_metrics['selectionAdmissionLast'] if double_metrics else None,
+                        'final': final_metrics['selectionAdmissionLast'],
                     },
                     'snapshots': {
                         'before': before_snapshot,

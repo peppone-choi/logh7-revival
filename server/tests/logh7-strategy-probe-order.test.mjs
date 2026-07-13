@@ -1,9 +1,14 @@
 import assert from 'node:assert/strict';
+import { execFile } from 'node:child_process';
 import { readFile } from 'node:fs/promises';
 import { test } from 'node:test';
+import { fileURLToPath } from 'node:url';
+import { promisify } from 'node:util';
 
 const PROBE_URL = new URL('../../tools/live/_strategy_table_probe.py', import.meta.url);
 const FRIDA_URL = new URL('../../tools/live/_frida_strategy_snapshot.js', import.meta.url);
+const LIVE_DIR = fileURLToPath(new URL('../../tools/live/', import.meta.url));
+const execFileAsync = promisify(execFile);
 
 function sliceBetween(source, startMarker, endMarker) {
   const start = source.indexOf(startMarker);
@@ -251,6 +256,29 @@ test('자연 전략 권한 탭은 기본 HUD 준비를 확인한 뒤 강제 단�
   assert.match(readiness, /raise RuntimeError\('strategy authority tab base HUD did not become ready'\)/);
 });
 
+test('전략 selection payload의 카드 종류는 +0x274 stride 8 배열만 bounded하게 읽는다', async () => {
+  // Given: character payload와 권한 탭 준비 증거를 읽는 Frida/Python 프로브
+  const frida = await readFile(FRIDA_URL, 'utf8');
+  const probe = await readFile(PROBE_URL, 'utf8');
+  const selection = sliceBetween(frida, 'function selectionState() {', 'function runtimeTables(base) {');
+
+  // When/Then: special-ability tail을 card kind로 승격하지 않는다.
+  assert.match(frida, /const SELECTION_CARD_KIND_CAP = 8;/);
+  assert.match(selection, /const payloadCount = payload\.isNull\(\) \? 0 : readU8\(payload\.add\(0x270\)\);/);
+  assert.match(selection, /Math\.min\(payloadCount, SELECTION_CARD_KIND_CAP\)/);
+  assert.match(selection, /readU16\(payload\.add\(0x274 \+ index \* 8\)\)/);
+  assert.match(selection, /cardKinds,/);
+  const obsoleteTailField = ['payloadWord', '26', 'c'].join('');
+  const obsoleteTailOffset = ['0x', '26', 'c'].join('');
+  const obsoleteSingleKindField = ['payloadWord', '274'].join('');
+  for (const source of [frida, probe]) {
+    assert.equal(source.includes(obsoleteTailField), false);
+    assert.equal(source.includes(obsoleteTailOffset), false);
+    assert.equal(source.includes(obsoleteSingleKindField), false);
+  }
+  assert.match(probe, /'cardKinds': base_selection\.get\('cardKinds'\) or \[\]/);
+});
+
 test('자연 전략 권한 탭 클릭은 고정 좌표와 전환 증거를 남긴다', async () => {
   // 준비: 전략 HUD 좌표계와 클릭 단계가 포함된 프로브를 읽는다.
   const source = await readFile(PROBE_URL, 'utf8');
@@ -274,6 +302,11 @@ test('자연 전략 권한 탭 클릭은 고정 좌표와 전환 증거를 남�
   assert.match(click, /'afterHudModeF4'/);
   assert.match(click, /'beforeSnapshot'/);
   assert.match(click, /'afterSnapshot'/);
+  assert.match(click, /authority_admission = selection_admission_phase\(before_snapshot, after_snapshot\)/);
+  assert.match(click, /'selectionAdmission': authority_admission/);
+  assert.match(click, /'selectionListBase'/);
+  assert.match(click, /'listCount188'/);
+  assert.match(click, /'listSelected189'/);
   assert.match(click, /'timestamp'/);
   assert.match(click, /'success'/);
   assert.ok(click.match(/script\.exports_sync\.snapshot\(\)/g)?.length >= 2);
@@ -320,7 +353,6 @@ test('성계 상세 프로토콜 계측은 네 응답의 OnRecv와 dispatcher를
     'const SYSTEM_DETAIL_PROTOCOL_CODES = new Set([',
     'const selectionHitState =',
   );
-
   for (const code of ['0x031d', '0x031f', '0x0321', '0x0f03']) {
     assert.match(passive, new RegExp(code));
   }
@@ -331,7 +363,8 @@ test('성계 상세 프로토콜 계측은 네 응답의 OnRecv와 dispatcher를
   assert.match(passive, /systemDetailProtocolState\.dispatch/);
   assert.match(passive, /callerVa/);
   assert.match(passive, /timestamp: Date\.now\(\)/);
-  assert.match(passive, /systemDetailAttachedAddresses\.has\(va\)/);
+  assert.match(passive, /const systemDetailHookCallbacks = new Map\(\);/);
+  assert.match(passive, /existingCallbacks\.push\(callbacks\)/);
 });
 
 test('성계 상세 스냅샷은 정적·031f·0321 캐시를 안전한 상한으로 읽고 base id 조인을 계산한다', async () => {
@@ -426,7 +459,7 @@ test('성계 상세 계측 블록은 읽기 전용이며 함수 호출이나 강
   assert.doesNotMatch(passive, /force/i);
 });
 
-test('성계 상세 선택 인덱스 계측은 음수 선택을 버리고 정보 패널 후보만 bounded ring에 남긴다', async () => {
+test('성계 상세 선택 인덱스 계측은 embedded list 기준으로 정보 패널 후보만 bounded ring에 남긴다', async () => {
   // Given: 성계 상세 전용 수동 계측 구간
   const source = await readFile(FRIDA_URL, 'utf8');
   const passive = sliceBetween(
@@ -452,6 +485,10 @@ test('성계 상세 선택 인덱스 계측은 음수 선택을 버리고 정보
   assert.match(hook, /index === -1/);
   assert.match(hook, /index < 0/);
   assert.match(hook, /systemDetailSelectionIndexState\.validCalls \+= 1/);
+  assert.match(hook, /const list = safe\(\(\) => ptr\(this\.context\.ecx\), ptr\('0x0'\)\);/);
+  assert.match(hook, /const parent = list\.isNull\(\) \? ptr\('0x0'\) : list\.sub\(0x244\);/);
+  assert.match(hook, /const panelKind = parent\.isNull\(\) \? null : readS32\(parent\.add\(0x234\)\);/);
+  assert.match(hook, /const itemCount = list\.isNull\(\) \? null : readS32\(list\.add\(0x8e4\)\);/);
   assert.match(hook, /const inRange = Number\.isInteger\(itemCount\) && index < itemCount;/);
   assert.match(hook, /if \(inRange\) \{/);
   assert.match(hook, /systemDetailSelectionIndexState\.inRangeCalls \+= 1/);
@@ -460,12 +497,16 @@ test('성계 상세 선택 인덱스 계측은 음수 선택을 버리고 정보
   for (const offset of ['0x8e4', '0x8e8', '0x234', '0x238', '0xb2c']) {
     assert.match(hook, new RegExp(offset));
   }
-  assert.match(hook, /controller: ptrHex\(controller\)/);
+  assert.match(hook, /list: ptrHex\(list\)/);
+  assert.match(hook, /parent: ptrHex\(parent\)/);
+  assert.match(hook, /selectedBefore: list\.isNull\(\) \? null : readS32\(list\.add\(0x8e8\)\)/);
+  assert.match(hook, /panelState: parent\.isNull\(\) \? null : readS32\(parent\.add\(0x238\)\)/);
+  assert.match(hook, /infoSelectedIndex: parent\.isNull\(\) \? null : readS32\(parent\.add\(0xb2c\)\)/);
   assert.match(hook, /callerVa: systemDetailCallerVa\(this\.returnAddress\)/);
   assert.match(hook, /timestamp: Date\.now\(\)/);
   assert.match(hook, /entry\.retval =/);
-  assert.match(hook, /entry\.selectedAfter =/);
-  assert.match(hook, /entry\.infoSelectedIndexAfter =/);
+  assert.match(hook, /entry\.selectedAfter = readS32\(list\.add\(0x8e8\)\)/);
+  assert.match(hook, /entry\.infoSelectedIndexAfter = readS32\(parent\.add\(0xb2c\)\)/);
   assert.match(hook, /entry\.selectionChanged =/);
   assert.match(hook, /entry\.selectedAfter === entry\.index/);
   assert.match(hook, /entry\.selectedAfter !== entry\.selectedBefore/);
@@ -473,10 +514,137 @@ test('성계 상세 선택 인덱스 계측은 음수 선택을 버리고 정보
   assert.match(hook, /systemDetailSelectionIndexState\.infoPanelSelectionChangedCalls \+= 1/);
   assert.match(hook, /pushSystemDetailRing\(systemDetailSelectionIndexState\.ring, entry\)/);
   assert.match(passive, /selectionIndex: systemDetailSelectionIndexState/);
+  assert.doesNotMatch(hook, /controller\.add\(0x(?:234|238|8e4|8e8|b2c)\)/);
   assert.doesNotMatch(hook, /\.write(?:U8|U16|U32|Pointer|ByteArray)?\s*\(/);
   assert.doesNotMatch(hook, /new NativeFunction\s*\(/);
   assert.doesNotMatch(hook, /retval\.replace\s*\(/);
   assert.doesNotMatch(hook, /force/i);
+});
+
+test('C002 직무카드·유닛 admission 계측은 hot path를 오염시키지 않고 상태 전환만 보존한다', async () => {
+  // Given: B68b 이후 C002 직무카드·유닛 admission 병목을 추적할 Frida 계측
+  const source = await readFile(FRIDA_URL, 'utf8');
+  const passive = sliceBetween(
+    source,
+    'const SELECTION_ADMISSION_RING_LIMIT = 128;',
+    'function systemDetailJoinFor',
+  );
+
+  const registry = sliceBetween(
+    source,
+    'const systemDetailHookCallbacks = new Map();',
+    "attachSystemDetailHook('0x004ae0d0'",
+  );
+  const latch = sliceBetween(
+    passive,
+    "attachSystemDetailHook('0x00507f20'",
+    "attachSystemDetailHook('0x00501e30'",
+  );
+  const admission = sliceBetween(
+    passive,
+    "attachSystemDetailHook('0x005015f0'",
+    "attachSystemDetailHook('0x004f6680'",
+  );
+
+  // When/Then: 검증된 ABI와 cached slot 포인터를 쓰며 상태 전환만 timeline에 남긴다.
+  assert.match(passive, /const selectionAdmissionState = \{/);
+  assert.match(passive, /counts: \{/);
+  assert.match(passive, /last: \{/);
+  assert.match(passive, /ring: \[\]/);
+  assert.match(passive, /selectionAdmissionState\.ring\.length > SELECTION_ADMISSION_RING_LIMIT/);
+  assert.match(passive, /selectionAdmissionState\.ring\.shift\(\)/);
+  assert.match(passive, /sequence: 0/);
+  assert.match(passive, /const selectionAdmissionRoleCache = \{/);
+  assert.match(passive, /function refreshSelectionAdmissionRoleCache\(\)/);
+  assert.match(passive, /function selectionAdmissionCachedIdentity\(controller, target\)/);
+  assert.match(passive, /selectionRoot: ptrHex\(selectionRoot\)/);
+  assert.match(passive, /controllerMatchesSelectionRoot: selectionAdmissionPointersEqual\(controller, selectionRoot\)/);
+  assert.match(passive, /targetMatchesSelectionRoot: selectionAdmissionPointersEqual\(target, selectionRoot\)/);
+  assert.match(passive, /!leftPointer\.isNull\(\) && !rightPointer\.isNull\(\)/);
+  assert.match(passive, /targetRole: cachedTarget \? cachedTarget\.role : null/);
+  assert.match(passive, /cachedTarget\.index === selectionAdmissionRoleCache\.listSelected189/);
+  for (const role of ['selection-root', 'slot22-', 'slot32-']) {
+    assert.match(passive, new RegExp(role));
+  }
+  assert.doesNotMatch(passive, /selection-primary-|selection-secondary-/);
+  assert.doesNotMatch(latch, /for\s*\(|selectionAdmissionTargetRoles|refreshSelectionAdmissionRoleCache/);
+  assert.doesNotMatch(admission, /for\s*\(|selectionAdmissionTargetRoles|refreshSelectionAdmissionRoleCache/);
+  assert.match(latch, /noteSelectionAdmission\('latch', entry\)/);
+  assert.match(latch, /if \(selectionAdmissionObjectChanged/);
+  assert.match(admission, /noteSelectionAdmission\('admission', entry\)/);
+  assert.match(admission, /entry\.retvalLow8 !== 0/);
+  assert.match(admission, /selectionListBefore: selectionAdmissionListState\(\)/);
+  assert.match(admission, /entry\.selectionListAfter = selectionAdmissionListState\(\)/);
+  assert.match(passive, /pushSelectionAdmissionTimeline\(entry\)/);
+  assert.match(passive, /pushSelectionAdmissionEvent2\('event2Enqueue'/);
+  assert.match(passive, /pushSelectionAdmissionEvent2\('event2Dequeue'/);
+  assert.match(registry, /existingCallbacks\.push\(callbacks\)/);
+  assert.doesNotMatch(registry, /return false/);
+  for (const address of [
+    '0x005024b0', '0x00507f20', '0x00501e30', '0x00501ed0', '0x005015f0',
+    '0x004f6680', '0x00506280', '0x004fd7a0', '0x004fd100',
+  ]) {
+    assert.match(passive, new RegExp(`attachSystemDetailHook\\('${address}'`));
+  }
+  assert.match(passive, /requestedGate05: safe\(\(\) => args\[0\]\.toInt32\(\) & 0xff\)/);
+  assert.match(passive, /const target = safe\(\(\) => ptr\(args\[0\]\), ptr\('0x0'\)\);/);
+  assert.match(passive, /const eventKind = safe\(\(\) => args\[0\]\.toInt32\(\)\);/);
+  assert.match(passive, /if \(eventKind !== 2\) return;/);
+  assert.match(passive, /const target = safe\(\(\) => ptr\(args\[1\]\), ptr\('0x0'\)\);/);
+  assert.match(passive, /consume: safe\(\(\) => args\[3\]\.toInt32\(\)\)/);
+  assert.match(passive, /callerVa: systemDetailCallerVa\(this\.returnAddress\)/);
+  assert.match(passive, /timestamp: Date\.now\(\)/);
+  assert.match(passive, /eventQueueCount3f4/);
+  assert.match(passive, /eventKeys470/);
+  assert.match(passive, /Math\.min\(count, 0x1c\)/);
+  assert.match(passive, /entry\.retvalLow8 = safe\(\(\) => retval\.toInt32\(\) & 0xff\)/);
+  assert.match(source, /selectionAdmission: selectionAdmissionState/);
+  assert.doesNotMatch(passive, /\.write(?:U8|U16|U32|Pointer|ByteArray)?\s*\(/);
+  assert.doesNotMatch(passive, /new NativeFunction\s*\(/);
+  assert.doesNotMatch(passive, /retval\.replace\s*\(/);
+  assert.doesNotMatch(passive, /force/i);
+});
+
+test('C002 직무카드·유닛 행 진단은 marker·unit-row·double 기준별 admission 차분을 출력한다', async () => {
+  // Given: 자연 성계 마커와 C002 직무카드·유닛 행 클릭 진단기
+  const source = await readFile(PROBE_URL, 'utf8');
+  const diagnostic = sliceBetween(
+    source,
+    "if os.environ.get('LOGH_CLICK_STRATEGY_SYSTEM_MARKER') == '1'",
+    "if os.environ.get('LOGH_FORCE_SELECTGRID_BEFORE_SWEEP') == '1'",
+  );
+
+  // When/Then: 각 fresh baseline에서 writer/latch/event2/admission/producer 차분을 계산한다.
+  assert.match(source, /SELECTION_ADMISSION_METRIC_KEYS = \(/);
+  for (const field of [
+    'selectionAdmissionWriterCalls', 'selectionAdmissionLatchCalls',
+    'selectionAdmissionEvent2EnqueueCalls', 'selectionAdmissionEvent2DequeueCalls',
+    'selectionAdmissionCalls', 'selectionAdmissionAccepted',
+    'selectionAdmissionModeApplyCalls', 'selectionAdmissionLayoutOpenCalls',
+    'selectionAdmissionHudModeSetCalls', 'selectionAdmissionHudFrameTransitionCalls',
+  ]) {
+    assert.match(source, new RegExp(`'${field}'`));
+  }
+  assert.match(source, /def selection_admission_metrics\(system_detail\):/);
+  assert.match(source, /'selectionAdmissionLast': admission\.get\('last'\)/);
+  assert.match(source, /'selectionAdmissionListBase': selection_list\.get\('base'\)/);
+  assert.match(source, /'selectionAdmissionListCount188': selection_list\.get\('listCount188'\)/);
+  assert.match(source, /'selectionAdmissionListSelected189': selection_list\.get\('listSelected189'\)/);
+  assert.match(source, /def selection_admission_delta\(current, baseline\):/);
+  assert.match(source, /def selection_admission_phase\(before_snapshot, after_snapshot\):/);
+  assert.match(source, /entry\.get\('sequence'\) or 0/);
+  assert.match(source, /for key in SELECTION_ADMISSION_METRIC_KEYS/);
+  for (const detail of ['before_detail', 'single_detail', 'row_before_detail', 'row_detail', 'double_before_detail', 'double_detail']) {
+    assert.match(diagnostic, new RegExp(`\\*\\*selection_admission_metrics\\(${detail}\\)`));
+  }
+  assert.match(diagnostic, /\*\*selection_admission_delta\(single_metrics, before_metrics\)/);
+  assert.match(diagnostic, /\*\*selection_admission_delta\(row_metrics, row_before_metrics\)/);
+  assert.match(diagnostic, /\*\*selection_admission_delta\(double_metrics, double_before_metrics\)/);
+  assert.match(diagnostic, /\*\*selection_admission_delta\(final_metrics, before_metrics\)/);
+  assert.match(diagnostic, /'selectionAdmissionLast': \{/);
+  for (const phase of ['markerBefore', 'single', 'rowBefore', 'row', 'doubleBefore', 'double', 'final']) {
+    assert.match(diagnostic, new RegExp(`'${phase}'`));
+  }
 });
 
 test('자연 성계 마커 진단은 단일 클릭 뒤 패널 미활성 때만 더블 클릭하고 증거를 남긴다', async () => {
@@ -535,8 +703,8 @@ test('자연 성계 마커 진단은 단일 클릭 뒤 패널 미활성 때만 �
   assert.doesNotMatch(diagnostic.slice(firstClickIndex), /raise RuntimeError/);
 });
 
-test('성계 마커 진단은 origin 0을 전역 좌표로 쓰지 않고 HUD mode1 고정 행을 자연 클릭한다', async () => {
-  // Given: 성계 마커 진단 블록
+test('성계 마커 진단은 origin 0을 전역 좌표로 쓰지 않고 C002 직무카드·유닛 행을 클릭한다', async () => {
+  // Given: 성계 마커 뒤 C002 직무카드·유닛 행 진단 블록
   const source = await readFile(PROBE_URL, 'utf8');
   const diagnostic = sliceBetween(
     source,
@@ -545,7 +713,7 @@ test('성계 마커 진단은 origin 0을 전역 좌표로 쓰지 않고 HUD mod
   );
 
   // When/Then: origin 0은 실측 좌하단 행으로 대체하고 정상 origin만 동적 중심에 쓴다.
-  assert.match(source, /STRATEGY_SYSTEM_ROW_MODE1 = \(158, 456\)/);
+  assert.match(source, /STRATEGY_C002_UNIT_ROW_MODE1 = \(158, 456\)/);
   assert.match(diagnostic, /if single_panel_delta <= 0 and row_geometry_valid:/);
   assert.match(diagnostic, /\(selection\.get\('listCount188'\) or 0\) >= 1/);
   assert.match(diagnostic, /selection\.get\('hudModeF4'\) == 1/);
@@ -553,15 +721,15 @@ test('성계 마커 진단은 origin 0을 전역 좌표로 쓰지 않고 HUD mod
   assert.match(diagnostic, /selection_origin\.get\('y'\) == 0/);
   assert.match(diagnostic, /selection_origin\.get\('x'\) != 0 or selection_origin\.get\('y'\) != 0/);
   assert.match(diagnostic, /if row_mode1_zero_origin:/);
-  assert.match(diagnostic, /row_reference_point = STRATEGY_SYSTEM_ROW_MODE1/);
+  assert.match(diagnostic, /row_reference_point = STRATEGY_C002_UNIT_ROW_MODE1/);
   assert.match(diagnostic, /row_point_source = 'hud-mode1-fixed'/);
   assert.match(diagnostic, /row_point_source = 'dynamic-origin'/);
   assert.match(diagnostic, /row_primary\.get\('rectW2c'\) or 0/);
   assert.match(diagnostic, /row_primary\.get\('rectH30'\) or 0/);
   assert.match(diagnostic, /selection_origin\['x'\] \+ row_primary\['rectX20'\] \+ row_primary\['rectW2c'\] \/\/ 2/);
   assert.match(diagnostic, /selection_origin\['y'\] \+ row_primary\['rectY24'\] \+ row_primary\['rectH30'\] \/\/ 2/);
-  assert.match(diagnostic, /strategy-system-row-before\.png/);
-  assert.match(diagnostic, /strategy-system-row-after\.png/);
+  assert.match(diagnostic, /strategy-c002-unit-row-before\.png/);
+  assert.match(diagnostic, /strategy-c002-unit-row-after\.png/);
   assert.match(diagnostic, /row_before_snapshot = script\.exports_sync\.snapshot\(\)/);
   assert.match(diagnostic, /row_snapshot = script\.exports_sync\.snapshot\(\)/);
   const rowClickBlock = sliceBetween(
@@ -642,4 +810,243 @@ test('성계 마커 진단은 origin 0을 전역 좌표로 쓰지 않고 HUD mod
   assert.doesNotMatch(diagnostic, /'doubleFromSingle'/);
   assert.match(diagnostic, /'row': row_snapshot/);
   assert.doesNotMatch(diagnostic, /new NativeFunction|\.write(?:U8|U16|U32|Pointer|ByteArray)?\s*\(|exports_sync\.(?!snapshot)/);
+});
+
+test('성계 상세 출력 역추적은 0305 factory부터 031f·0327 sink까지 수동 trace로 고정한다', async () => {
+  // Given: 기존 wire/cache 계측과 callback multiplex가 있는 Frida 스냅샷
+  const source = await readFile(FRIDA_URL, 'utf8');
+  const passive = sliceBetween(
+    source,
+    'const SYSTEM_DETAIL_PROTOCOL_CODES = new Set([',
+    'const selectionHitState =',
+  );
+  const dispatcher = sliceBetween(
+    passive,
+    "attachSystemDetailHook('0x004ba2b0'",
+    'function boundedIdTableSnapshot',
+  );
+
+  // When/Then: 출력 sink에서 0305 command-card와 SelectDialog producer까지 역으로 연결한다.
+  assert.match(passive, /const SYSTEM_OUTPUT_STAGE_NAMES = \[/);
+  for (const stage of [
+    'commandCard0305', 'factory41Granted', 'factory41Selected', 'factory41Handler',
+    'selectDialogCtor', 'selectDialogTick',
+    'genericListRow70', 'selector', 'refresh031f', 'refresh0327',
+    'panelDispatch', 'renderSink',
+  ]) {
+    assert.match(passive, new RegExp(`'${stage}'`));
+  }
+  assert.match(passive, /const SYSTEM_OUTPUT_DEPENDENCY_STAGE_NAMES = \[/);
+  for (const dependency of ['wire031f', 'cache031f', 'response031f', 'response0327']) {
+    assert.match(passive, new RegExp(`'${dependency}'`));
+  }
+  assert.match(passive, /const SYSTEM_OUTPUT_COMMAND_CATEGORY_CAP = 300;/);
+  assert.match(passive, /const SYSTEM_OUTPUT_FACTORY_CAP = 24;/);
+  assert.match(passive, /function systemOutputCommandCardData\(rawCategoryCount, readCommandCount, readFactoryId\)/);
+  assert.match(passive, /function systemOutputCommandCardSnapshot\(\)/);
+  assert.match(passive, /const rawCategoryCount = readU32\(table\.add\(8\)\);/);
+  assert.match(passive, /factory41Granted: factoryIds\.includes\(0x41\)/);
+  assert.match(passive, /if \(after\.reason === null && after\.factory41Granted\) \{/);
+  assert.match(passive, /const SYSTEM_OUTPUT_TRACE_RING_LIMIT = \d+;/);
+  assert.match(passive, /const SYSTEM_OUTPUT_SINK_RING_LIMIT = \d+;/);
+  assert.match(passive, /const SYSTEM_OUTPUT_BACKTRACE_LIMIT = 12;/);
+  assert.match(passive, /counts: \{/);
+  assert.match(passive, /last: \{/);
+  assert.match(passive, /timeline: \[\]/);
+  assert.match(passive, /sinkTimeline: \[\]/);
+  assert.match(passive, /byStage: \{/);
+  assert.match(passive, /function noteSystemOutputStage\(stage, entry\)/);
+  assert.match(passive, /systemOutputTraceState\.last\[stage\] =/);
+  assert.match(passive, /systemOutputTraceState\.timeline\.length > SYSTEM_OUTPUT_TRACE_RING_LIMIT/);
+  assert.match(passive, /systemOutputTraceState\.sinkTimeline\.length > SYSTEM_OUTPUT_SINK_RING_LIMIT/);
+  assert.match(passive, /function systemOutputBacktrace\(context\)/);
+  assert.match(passive, /Thread\.backtrace\(context, Backtracer\.ACCURATE\)/);
+  assert.match(passive, /\.slice\(0, SYSTEM_OUTPUT_BACKTRACE_LIMIT\)/);
+  assert.match(passive, /catch \(_error\)/);
+
+  for (const address of [
+    '0x004c4a10', '0x004f58c0', '0x00584c90',
+    '0x00570eb0', '0x00571870', '0x00577e70', '0x0057bbc0', '0x00577050',
+    '0x00576d40', '0x00579fd0', '0x00579e60', '0x0057aa90',
+  ]) {
+    assert.match(passive, new RegExp(`attachSystemDetailHook\\('${address}'`));
+  }
+  const unsafeCaseAddress = ['0x004b', 'ad1a'].join('');
+  assert.equal(source.includes(unsafeCaseAddress), false);
+  assert.match(dispatcher, /if \(code === 0x0305\) \{/);
+  assert.match(dispatcher, /boundary: 'dispatcher-entry'/);
+  assert.match(dispatcher, /noteSystemOutputTransition\('dispatch0305', commandCardEntry\)/);
+  assert.match(dispatcher, /noteSystemOutputStage\('commandCard0305', commandCardEntry\)/);
+  assert.equal((passive.match(/noteSystemOutputStage\('commandCard0305'/g) || []).length, 1);
+  assert.match(source, /hookNativeCall\('factory', '0x004f93c0', 4\)/);
+  assert.match(source, /if \(factoryId === 0x41\) noteSystemOutputStage\('factory41Selected', entry\)/);
+  assert.equal((passive.match(/attachSystemDetailHook\('0x0057aa90'/g) || []).length, 1);
+  assert.equal((passive.match(/attachSystemDetailHook\('0x00576d40'/g) || []).length, 1);
+  assert.match(passive, /requestedKind: safe\(\(\) => args\[0\]\.toInt32\(\)\)/);
+  assert.match(passive, /dialogKind: readS32\(dialog\.add\(0x28\)\)/);
+  assert.match(passive, /dialogController: ptrHex\(readPtr\(dialog\.add\(0x50\)\)\)/);
+  assert.match(passive, /requestedRebuild: safe\(\(\) => args\[1\]\.toInt32\(\) & 0xff\)/);
+  assert.match(passive, /panelKindBefore: readS32\(parent\.add\(0x234\)\)/);
+  assert.match(passive, /panelStateBefore: readS32\(parent\.add\(0x238\)\)/);
+  assert.match(passive, /const rowBaseId = safe\(\(\) => args\[1\]\.toInt32\(\)\);/);
+  assert.match(passive, /if \(rowBaseId !== SYSTEM_DETAIL_EXPECTED_BASE_ID\) return;/);
+  assert.match(passive, /const phase = readS32\(parent\.add\(0x1584\)\);/);
+  assert.match(passive, /const baseId = record\.isNull\(\) \? null : readU32\(record\.add\(8\)\);/);
+  assert.match(passive, /phase === 0 \? 'refresh031f' : 'refresh0327'/);
+  assert.match(passive, /selectedIndex: readS32\(parent\.add\(0xb2c\)\)/);
+  assert.match(passive, /selectedRecord: ptrHex\(selectedRecord\)/);
+  assert.match(passive, /backtrace: systemOutputBacktrace\(this\.context\)/);
+  assert.match(passive, /directDependencies: \{/);
+  assert.match(passive, /response031f/);
+  assert.match(passive, /response0327/);
+  assert.match(passive, /parallelDependency: \{/);
+  assert.match(passive, /response0321/);
+  assert.match(passive, /response0305/);
+  assert.match(passive, /commandCard0305: \{/);
+  assert.match(passive, /missingRequiredResponse0327/);
+  assert.match(passive, /entry\.sequence > requestEntry\.sequence/);
+  assert.match(passive, /responseDispatchTimeline/);
+  assert.match(passive, /panelStateMachineWaitsFor0327Ack: false/);
+  assert.match(passive, /firstMissingStage/);
+  assert.match(passive, /orderedId70Complete/);
+  assert.match(passive, /systemOutputTrace: systemOutputTraceSnapshot\(\)/);
+  assert.doesNotMatch(passive, /\.write(?:U8|U16|U32|Pointer|ByteArray)?\s*\(/);
+  assert.doesNotMatch(passive, /new NativeFunction\s*\(/);
+  assert.doesNotMatch(passive, /retval\.replace\s*\(/);
+  assert.doesNotMatch(passive, /force/i);
+
+  const decoderSource = sliceBetween(
+    passive,
+    'function systemOutputCommandCardData(rawCategoryCount, readCommandCount, readFactoryId) {',
+    'function systemOutputCommandCardSnapshot() {',
+  ).trim();
+  const decodeCommandCard = Function(
+    'SYSTEM_OUTPUT_COMMAND_CATEGORY_CAP',
+    'SYSTEM_OUTPUT_FACTORY_CAP',
+    `return (${decoderSource});`,
+  )(300, 24);
+  const visitedCategories = [];
+  const decoded = decodeCommandCard(
+    2,
+    (category) => {
+      visitedCategories.push(category);
+      return category === 15 ? 229 : 1;
+    },
+    () => 0x2b,
+  );
+  assert.deepEqual(visitedCategories, [0, 1]);
+  assert.deepEqual(decoded.factoryIds, [0x2b]);
+  assert.equal(decoded.factory41Granted, false);
+  assert.equal(decoded.reason, null);
+  const unreadableOuter = decodeCommandCard(null, () => 1, () => 0x41);
+  assert.deepEqual(unreadableOuter.factoryIds, []);
+  assert.equal(unreadableOuter.factory41Granted, false);
+  assert.equal(unreadableOuter.reason, 'category-count-unreadable');
+  const oversizedOuter = decodeCommandCard(301, () => 1, () => 0x41);
+  assert.deepEqual(oversizedOuter.factoryIds, []);
+  assert.equal(oversizedOuter.factory41Granted, false);
+  assert.equal(oversizedOuter.reason, 'category-count-exceeds-cap');
+  const unreadableRow = decodeCommandCard(2, (category) => (category === 1 ? null : 1), () => 0x41);
+  assert.deepEqual(unreadableRow.factoryIds, []);
+  assert.equal(unreadableRow.factory41Granted, false);
+  assert.equal(unreadableRow.reason, 'factory-count-unreadable');
+  const oversizedRow = decodeCommandCard(2, (category) => (category === 1 ? 25 : 1), () => 0x41);
+  assert.deepEqual(oversizedRow.factoryIds, []);
+  assert.equal(oversizedRow.factory41Granted, false);
+  assert.equal(oversizedRow.reason, 'factory-count-exceeds-cap');
+  const unreadableFactory = decodeCommandCard(1, () => 1, () => null);
+  assert.deepEqual(unreadableFactory.factoryIds, []);
+  assert.equal(unreadableFactory.factory41Granted, false);
+  assert.equal(unreadableFactory.reason, 'factory-id-unreadable');
+});
+
+test('성계 상세 출력 phase는 whole-run 병목과 구간 관측을 분리한다', async () => {
+  // Given: 마커 전후 snapshot을 기록하는 Python 진단기
+  const source = await readFile(PROBE_URL, 'utf8');
+  const metrics = sliceBetween(
+    source,
+    'def system_output_trace_metrics(system_detail):',
+    'def main():',
+  );
+  const phaseMetrics = sliceBetween(
+    source,
+    'def system_output_trace_phase(before_snapshot, after_snapshot):',
+    'def main():',
+  );
+  const diagnostic = sliceBetween(
+    source,
+    "if os.environ.get('LOGH_CLICK_STRATEGY_SYSTEM_MARKER') == '1'",
+    "if os.environ.get('LOGH_FORCE_SELECTGRID_BEFORE_SWEEP') == '1'",
+  );
+
+  // When/Then: 클릭 인과를 승격하지 않고 관측된 ID/순서와 첫 단절만 보존한다.
+  assert.match(source, /SYSTEM_OUTPUT_STAGE_KEYS = \(/);
+  assert.match(metrics, /def system_output_trace_delta\(current, baseline\):/);
+  assert.match(metrics, /def system_output_trace_phase\(before_snapshot, after_snapshot\):/);
+  assert.match(metrics, /'panelDispatchDelta'/);
+  assert.match(metrics, /'renderSinkDelta'/);
+  assert.match(metrics, /'panelDispatchId70'/);
+  assert.match(metrics, /'renderSinkId70'/);
+  assert.match(metrics, /'orderedId70Complete'/);
+  assert.match(metrics, /'firstMissingStage'/);
+  assert.match(metrics, /'missingStages'/);
+  assert.match(metrics, /'missingRequiredResponse0327'/);
+  assert.match(metrics, /'panelStateMachineWaitsFor0327Ack'/);
+  assert.match(metrics, /'factory41Granted'/);
+  assert.match(metrics, /'factory41GrantedCalls'/);
+  assert.match(metrics, /entry\.get\('sequence'\) or 0/);
+  assert.doesNotMatch(metrics, /selectionIndexValidCalls|selectionIndexChangedCalls|clickCausal|clickSuccess/);
+  assert.match(phaseMetrics, /'orderedId70Complete': after_metrics\.get\('orderedId70Complete'\) is True/);
+  assert.match(phaseMetrics, /'firstMissingStage': after_metrics\.get\('firstMissingStage'\)/);
+  assert.match(phaseMetrics, /'missingStages': after_metrics\.get\('missingStages'\) or \[\]/);
+  assert.match(phaseMetrics, /'missingRequiredResponse0327': after_metrics\.get\('missingRequiredResponse0327'\) is True/);
+  assert.match(phaseMetrics, /'runCorrelation': \{/);
+  assert.match(phaseMetrics, /'phaseObservedStages'/);
+  assert.match(phaseMetrics, /'phaseTimeline'/);
+  assert.match(phaseMetrics, /'phaseFirstUnobservedStage'/);
+  assert.doesNotMatch(phaseMetrics, /'firstMissingStage': phase_first_unobserved_stage/);
+  assert.match(diagnostic, /'systemOutputTrace': \{/);
+  for (const phase of ['singleFromBefore', 'rowFromRowBefore', 'doubleFromDoubleBefore', 'finalFromBefore']) {
+    assert.match(diagnostic, new RegExp(`'${phase}'`));
+  }
+  assert.match(diagnostic, /system_output_trace_phase\(before_snapshot, final_snapshot\)/);
+
+  const fixture = String.raw`
+import json
+import _strategy_table_probe as probe
+
+def snapshot():
+    return {'systemDetail': {'systemOutputTrace': {
+        'sequence': 1,
+        'timeline': [{'stage': 'commandCard0305', 'sequence': 1}],
+        'counts': {'commandCard0305': 1},
+        'last': {},
+        'correlation': {
+            'orderedId70Complete': False,
+            'firstMissingStage': 'factory41Granted',
+            'missingStages': ['factory41Granted'],
+        },
+        'commandCard0305': {'runtime': {'factoryIds': [], 'factory41Granted': False}},
+        'missingRequiredResponse0327': True,
+        'panelStateMachineWaitsFor0327Ack': False,
+    }}}
+
+report = probe.system_output_trace_phase(snapshot(), snapshot())
+print(json.dumps({
+    'orderedId70Complete': report['orderedId70Complete'],
+    'firstMissingStage': report['firstMissingStage'],
+    'missingStages': report['missingStages'],
+    'missingRequiredResponse0327': report['missingRequiredResponse0327'],
+    'phaseObservedStages': report['phaseObservedStages'],
+    'phaseFirstUnobservedStage': report['phaseFirstUnobservedStage'],
+}))
+`;
+  const { stdout } = await execFileAsync('py', ['-3', '-c', fixture], { cwd: LIVE_DIR });
+  const report = JSON.parse(stdout);
+  assert.equal(report.orderedId70Complete, false);
+  assert.equal(report.firstMissingStage, 'factory41Granted');
+  assert.deepEqual(report.missingStages, ['factory41Granted']);
+  assert.equal(report.missingRequiredResponse0327, true);
+  assert.deepEqual(report.phaseObservedStages, []);
+  assert.equal(report.phaseFirstUnobservedStage, 'commandCard0305');
 });

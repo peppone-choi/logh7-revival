@@ -142,7 +142,7 @@ const SYSTEM_DETAIL_RING_LIMIT = 128;
 const SYSTEM_DETAIL_STATIC_CAP = 350;
 const SYSTEM_DETAIL_STATIC_STRIDE = 0x250;
 const SYSTEM_DETAIL_EXPECTED_BASE_ID = 70;
-const systemDetailAttachedAddresses = new Set();
+const systemDetailHookCallbacks = new Map();
 const systemDetailProtocolState = {
   onrecv: [],
   dispatch: [],
@@ -163,6 +163,454 @@ const systemDetailSelectionIndexState = {
   infoPanelSelectionChangedCalls: 0,
   ring: [],
 };
+const SYSTEM_OUTPUT_STAGE_NAMES = [
+  'commandCard0305',
+  'factory41Granted',
+  'factory41Selected',
+  'factory41Handler',
+  'selectDialogCtor',
+  'selectDialogTick',
+  'genericListRow70',
+  'selector',
+  'refresh031f',
+  'refresh0327',
+  'panelDispatch',
+  'renderSink',
+];
+const SYSTEM_OUTPUT_DEPENDENCY_STAGE_NAMES = [
+  'wire031f',
+  'cache031f',
+  'response031f',
+  'response0327',
+];
+const SYSTEM_OUTPUT_ID_STAGE_NAMES = new Set([
+  'genericListRow70',
+  'selector',
+  'refresh031f',
+  'refresh0327',
+  'response031f',
+  'response0327',
+  'panelDispatch',
+  'renderSink',
+]);
+const SYSTEM_OUTPUT_PROTOCOL_CODES = new Set([0x0305, 0x031f, 0x0321, 0x0327]);
+const SYSTEM_OUTPUT_TRACE_RING_LIMIT = 128;
+const SYSTEM_OUTPUT_STAGE_RING_LIMIT = 16;
+const SYSTEM_OUTPUT_SINK_RING_LIMIT = 32;
+const SYSTEM_OUTPUT_BACKTRACE_LIMIT = 12;
+const SYSTEM_OUTPUT_COMMAND_CATEGORY_CAP = 300;
+const SYSTEM_OUTPUT_FACTORY_CAP = 24;
+const systemOutputTraceState = {
+  counts: {
+    wire031f: 0,
+    cache031f: 0,
+    response031f: 0,
+    response0327: 0,
+    commandCard0305: 0,
+    factory41Granted: 0,
+    factory41Selected: 0,
+    factory41Handler: 0,
+    selectDialogCtor: 0,
+    selectDialogTick: 0,
+    genericListRow70: 0,
+    selector: 0,
+    refresh031f: 0,
+    refresh0327: 0,
+    panelDispatch: 0,
+    renderSink: 0,
+  },
+  last: {
+    wire031f: null,
+    cache031f: null,
+    response031f: null,
+    response0327: null,
+    commandCard0305: null,
+    factory41Granted: null,
+    factory41Selected: null,
+    factory41Handler: null,
+    selectDialogCtor: null,
+    selectDialogTick: null,
+    genericListRow70: null,
+    selector: null,
+    refresh031f: null,
+    refresh0327: null,
+    panelDispatch: null,
+    renderSink: null,
+  },
+  byStage: {
+    wire031f: [],
+    cache031f: [],
+    response031f: [],
+    response0327: [],
+    commandCard0305: [],
+    factory41Granted: [],
+    factory41Selected: [],
+    factory41Handler: [],
+    selectDialogCtor: [],
+    selectDialogTick: [],
+    genericListRow70: [],
+    selector: [],
+    refresh031f: [],
+    refresh0327: [],
+    panelDispatch: [],
+    renderSink: [],
+  },
+  timeline: [],
+  sinkTimeline: [],
+  sequence: 0,
+  transitions: {
+    dispatch0305: { totalCalls: 0, last: null, ring: [] },
+    commandCardImport: { totalCalls: 0, last: null, ring: [] },
+    commandRowHit: { totalCalls: 0, last: null, ring: [] },
+    factoryLaunch: { totalCalls: 0, last: null, ring: [] },
+    panelSetter: { totalCalls: 0, last: null, ring: [] },
+    kind5Builder: { totalCalls: 0, last: null, ring: [] },
+  },
+  responses: {
+    response0305: { onrecvCalls: 0, dispatchCalls: 0, lastOnRecv: null, lastDispatch: null },
+    response031f: { onrecvCalls: 0, dispatchCalls: 0, lastOnRecv: null, lastDispatch: null },
+    response0321: { onrecvCalls: 0, dispatchCalls: 0, lastOnRecv: null, lastDispatch: null },
+    response0327: { onrecvCalls: 0, dispatchCalls: 0, lastOnRecv: null, lastDispatch: null },
+  },
+};
+let systemOutputLastDialogTickKey = null;
+
+function noteSystemOutputStage(stage, entry) {
+  systemOutputTraceState.sequence += 1;
+  const sequenced = {
+    ...entry,
+    stage,
+    sequence: systemOutputTraceState.sequence,
+  };
+  systemOutputTraceState.counts[stage] += 1;
+  systemOutputTraceState.last[stage] = sequenced;
+  systemOutputTraceState.byStage[stage].push(sequenced);
+  if (systemOutputTraceState.byStage[stage].length > SYSTEM_OUTPUT_STAGE_RING_LIMIT) {
+    systemOutputTraceState.byStage[stage].shift();
+  }
+  systemOutputTraceState.timeline.push(sequenced);
+  if (systemOutputTraceState.timeline.length > SYSTEM_OUTPUT_TRACE_RING_LIMIT) {
+    systemOutputTraceState.timeline.shift();
+  }
+  if (stage === 'panelDispatch' || stage === 'renderSink') {
+    systemOutputTraceState.sinkTimeline.push(sequenced);
+    if (systemOutputTraceState.sinkTimeline.length > SYSTEM_OUTPUT_SINK_RING_LIMIT) {
+      systemOutputTraceState.sinkTimeline.shift();
+    }
+  }
+  return sequenced;
+}
+
+function noteSystemOutputTransition(name, entry) {
+  const transition = systemOutputTraceState.transitions[name];
+  transition.totalCalls += 1;
+  transition.last = entry;
+  transition.ring.push(entry);
+  if (transition.ring.length > SYSTEM_OUTPUT_SINK_RING_LIMIT) transition.ring.shift();
+}
+
+function systemOutputImageVa(address) {
+  return safe(() => {
+    const value = ptr(address);
+    const moduleEnd = moduleBase.add(module.size);
+    if (value.compare(moduleBase) < 0 || value.compare(moduleEnd) >= 0) return value.toString();
+    return value.sub(moduleBase).add(IMAGE_BASE).toString();
+  });
+}
+
+function systemOutputBacktrace(context) {
+  try {
+    return Thread.backtrace(context, Backtracer.ACCURATE)
+      .slice(0, SYSTEM_OUTPUT_BACKTRACE_LIMIT)
+      .map((address) => systemOutputImageVa(address));
+  } catch (_error) {
+    return [];
+  }
+}
+
+function systemOutputResponseState(code) {
+  if (code === 0x0305) return systemOutputTraceState.responses.response0305;
+  if (code === 0x031f) return systemOutputTraceState.responses.response031f;
+  if (code === 0x0321) return systemOutputTraceState.responses.response0321;
+  if (code === 0x0327) return systemOutputTraceState.responses.response0327;
+  return null;
+}
+
+function noteSystemOutputResponse(boundary, code, entry) {
+  const state = systemOutputResponseState(code);
+  if (!state) return;
+  if (boundary === 'onrecv') {
+    state.onrecvCalls += 1;
+    state.lastOnRecv = entry;
+  } else {
+    state.dispatchCalls += 1;
+    state.lastDispatch = entry;
+  }
+}
+
+function systemOutputResponseRecord(code, record) {
+  if (!record || record.isNull()) return { baseIds: [], baseId: null };
+  if (code === 0x0305) return { baseIds: [], baseId: null };
+  if (code === 0x031f || code === 0x0321) {
+    const count = readU8(record);
+    const stride = code === 0x031f ? 0x180 : 0x2378;
+    const baseIds = [];
+    if (Number.isInteger(count)) {
+      for (let index = 0; index < Math.min(count, 4); index += 1) {
+        baseIds.push(readU32(record.add(4 + index * stride)));
+      }
+    }
+    return { count, baseIds, baseId: null };
+  }
+  if (code === 0x0327) {
+    const baseId = readU32(record);
+    return { baseIds: Number.isInteger(baseId) ? [baseId] : [], baseId };
+  }
+  return { baseIds: [], baseId: null };
+}
+
+function systemOutputCommandCardData(rawCategoryCount, readCommandCount, readFactoryId) {
+  const failure = (reason, details = {}) => ({
+    rawCategoryCount,
+    categories: [],
+    factoryIds: [],
+    factory41Granted: false,
+    reason,
+    ...details,
+  });
+  if (!Number.isInteger(rawCategoryCount)) return failure('category-count-unreadable');
+  if (rawCategoryCount < 0 || rawCategoryCount > SYSTEM_OUTPUT_COMMAND_CATEGORY_CAP) {
+    return failure('category-count-exceeds-cap');
+  }
+
+  const categories = [];
+  const factoryIds = [];
+  for (let category = 0; category < rawCategoryCount; category += 1) {
+    const rawCount = readCommandCount(category);
+    if (!Number.isInteger(rawCount)) {
+      return failure('factory-count-unreadable', { invalidCategory: category });
+    }
+    if (rawCount < 0 || rawCount > SYSTEM_OUTPUT_FACTORY_CAP) {
+      return failure('factory-count-exceeds-cap', {
+        invalidCategory: category,
+        invalidFactoryCount: rawCount,
+      });
+    }
+
+    const factories = [];
+    for (let index = 0; index < rawCount; index += 1) {
+      const factoryId = readFactoryId(category, index);
+      if (!Number.isInteger(factoryId)) {
+        return failure('factory-id-unreadable', {
+          invalidCategory: category,
+          invalidFactoryIndex: index,
+        });
+      }
+      factories.push(factoryId);
+      if (!factoryIds.includes(factoryId)) factoryIds.push(factoryId);
+    }
+    categories.push({
+      category,
+      rawCount,
+      boundedCount: rawCount,
+      truncated: false,
+      factoryIds: factories,
+    });
+  }
+  return {
+    rawCategoryCount,
+    categories,
+    factoryIds,
+    factory41Granted: factoryIds.includes(0x41),
+    reason: null,
+  };
+}
+
+function systemOutputCommandCardSnapshot() {
+  const base = clientBase();
+  if (!base || base.isNull()) {
+    return {
+      clientBase: null,
+      table: null,
+      rawCategoryCount: null,
+      categories: [],
+      factoryIds: [],
+      factory41Granted: false,
+      reason: 'client-base-unavailable',
+    };
+  }
+  const table = base.add(0x3416d8);
+  const rawCategoryCount = readU32(table.add(8));
+  const data = systemOutputCommandCardData(
+    rawCategoryCount,
+    (category) => readU8(table.add(category * 0x46 + 0x1e)),
+    (category, index) => readU16(table.add(category * 0x46 + 0x20 + index * 2)),
+  );
+  return {
+    clientBase: ptrHex(base),
+    table: ptrHex(table),
+    guard00: readU8(table),
+    ...data,
+  };
+}
+
+function systemOutputSelectionRecord(list, index) {
+  if (!list || list.isNull() || !Number.isInteger(index) || index < 0) return ptr('0x0');
+  const itemCount = readS32(list.add(0x8e4));
+  if (!Number.isInteger(itemCount) || index >= itemCount) return ptr('0x0');
+  const sentinel = readPtr(list.add(0x8e0));
+  if (sentinel.isNull()) return ptr('0x0');
+  let node = readPtr(sentinel);
+  for (let current = 0; current < Math.min(itemCount, SYSTEM_OUTPUT_TRACE_RING_LIMIT); current += 1) {
+    if (node.isNull() || node.equals(sentinel)) return ptr('0x0');
+    if (current === index) return node.add(8);
+    node = readPtr(node);
+  }
+  return ptr('0x0');
+}
+
+function systemOutputLastLookup(state, baseId) {
+  for (let index = state.ring.length - 1; index >= 0; index -= 1) {
+    const entry = state.ring[index];
+    if (entry.arg0 === baseId) return entry;
+  }
+  return null;
+}
+
+function systemOutputCacheJoin(baseId) {
+  const base = clientBase();
+  const baseAvailable = Boolean(base && !base.isNull());
+  const source031f = boundedIdTableSnapshot(base, 0x3facf4, 0x3facf8, 0x180, 4);
+  const source0321 = boundedIdTableSnapshot(base, 0x3fb2f8, 0x3fb2fc, 0x2378, 4);
+  const warehouse0327BaseId = baseAvailable ? readU32(base.add(0x3e098c)) : null;
+  const baseLookup = systemOutputLastLookup(systemDetailLookupState.base031f, baseId);
+  const institutionLookup = systemOutputLastLookup(systemDetailLookupState.institution0321, baseId);
+  return {
+    directDependencies: {
+      response031f: {
+        cacheContainsId: source031f.ids.includes(baseId),
+        lookupObserved: Boolean(baseLookup),
+        lookupFound: baseLookup ? baseLookup.found === true : null,
+      },
+      response0327: {
+        warehouseBaseId: warehouse0327BaseId,
+        cacheMatchesId: warehouse0327BaseId === baseId,
+      },
+    },
+    parallelDependency: {
+      response0321: {
+        cacheContainsId: source0321.ids.includes(baseId),
+        lookupObserved: Boolean(institutionLookup),
+        lookupFound: institutionLookup ? institutionLookup.found === true : null,
+      },
+    },
+    lookupCausality: 'observational-only-idle-lookups-not-click-causal',
+  };
+}
+
+function systemOutputStageMatches(stage, entry) {
+  if (SYSTEM_OUTPUT_ID_STAGE_NAMES.has(stage)) {
+    return entry.baseId === SYSTEM_DETAIL_EXPECTED_BASE_ID;
+  }
+  if (stage === 'factory41Granted'
+      || stage === 'factory41Selected'
+      || stage === 'factory41Handler') {
+    return entry.factoryId === 0x41;
+  }
+  return true;
+}
+
+function systemOutputCorrelation() {
+  const ordered = [];
+  const orderedByStage = {};
+  let previousSequence = 0;
+  let previousTimestamp = 0;
+  let firstMissingStage = null;
+  for (const stage of SYSTEM_OUTPUT_STAGE_NAMES) {
+    const candidate = systemOutputTraceState.byStage[stage].find((entry) => (
+      entry.sequence > previousSequence
+      && entry.timestamp >= previousTimestamp
+      && systemOutputStageMatches(stage, entry)
+    ));
+    if (!candidate) {
+      firstMissingStage = stage;
+      break;
+    }
+    ordered.push(candidate);
+    orderedByStage[stage] = candidate;
+    previousSequence = candidate.sequence;
+    previousTimestamp = candidate.timestamp;
+  }
+  const responseDispatchTimeline = [];
+  for (const [requestStage, responseStage] of [
+    ['refresh031f', 'response031f'],
+    ['refresh0327', 'response0327'],
+  ]) {
+    const requestEntry = orderedByStage[requestStage];
+    const responseEntry = requestEntry
+      ? systemOutputTraceState.byStage[responseStage].find((entry) => (
+        entry.sequence > requestEntry.sequence && systemOutputStageMatches(responseStage, entry)
+      ))
+      : null;
+    if (responseEntry) responseDispatchTimeline.push(responseEntry);
+    if (firstMissingStage === null && !responseEntry) firstMissingStage = responseStage;
+  }
+  const missingStages = SYSTEM_OUTPUT_STAGE_NAMES.filter(
+    (stage) => systemOutputTraceState.counts[stage] === 0,
+  );
+  for (const responseStage of ['response031f', 'response0327']) {
+    if (!responseDispatchTimeline.some((entry) => entry.stage === responseStage)) {
+      missingStages.push(responseStage);
+    }
+  }
+  const completeTimeline = [...ordered, ...responseDispatchTimeline]
+    .sort((left, right) => left.sequence - right.sequence);
+  return {
+    orderedId70Complete: firstMissingStage === null,
+    firstMissingStage,
+    missingStages,
+    orderedStages: completeTimeline.map((entry) => entry.stage),
+    orderedTimeline: completeTimeline,
+    responseDispatchTimeline,
+  };
+}
+
+function systemOutputTraceSnapshot() {
+  const correlation = systemOutputCorrelation();
+  const response0305 = systemOutputTraceState.responses.response0305;
+  const response031f = systemOutputTraceState.responses.response031f;
+  const response0321 = systemOutputTraceState.responses.response0321;
+  const response0327 = systemOutputTraceState.responses.response0327;
+  return {
+    expectedBaseId: SYSTEM_DETAIL_EXPECTED_BASE_ID,
+    expectedFactoryId: 0x41,
+    stageOrder: SYSTEM_OUTPUT_STAGE_NAMES,
+    dependencyStages: SYSTEM_OUTPUT_DEPENDENCY_STAGE_NAMES,
+    sequence: systemOutputTraceState.sequence,
+    counts: systemOutputTraceState.counts,
+    last: systemOutputTraceState.last,
+    byStage: systemOutputTraceState.byStage,
+    timeline: systemOutputTraceState.timeline,
+    sinkTimeline: systemOutputTraceState.sinkTimeline,
+    transitions: systemOutputTraceState.transitions,
+    correlation,
+    commandCard0305: {
+      response: response0305,
+      runtime: systemOutputCommandCardSnapshot(),
+    },
+    directDependencies: {
+      response031f,
+      response0327,
+    },
+    parallelDependency: {
+      response0321,
+    },
+    missingRequiredResponse0327: !correlation.responseDispatchTimeline.some(
+      (entry) => entry.stage === 'response0327',
+    ),
+    panelStateMachineWaitsFor0327Ack: false,
+  };
+}
 
 function pushSystemDetailRing(ring, entry) {
   ring.push(entry);
@@ -178,40 +626,120 @@ function systemDetailCallerVa(returnAddress) {
 }
 
 function attachSystemDetailHook(va, callbacks) {
-  if (systemDetailAttachedAddresses.has(va)) return false;
-  systemDetailAttachedAddresses.add(va);
-  Interceptor.attach(abs(va), callbacks);
+  const existingCallbacks = systemDetailHookCallbacks.get(va);
+  if (existingCallbacks) {
+    existingCallbacks.push(callbacks);
+    return true;
+  }
+  const callbackGroup = [callbacks];
+  systemDetailHookCallbacks.set(va, callbackGroup);
+  Interceptor.attach(abs(va), {
+    onEnter(args) {
+      this.systemDetailCallbackStates = callbackGroup.map((callback) => {
+        const state = {
+          context: this.context,
+          returnAddress: this.returnAddress,
+        };
+        if (callback.onEnter) callback.onEnter.call(state, args);
+        return { callback, state };
+      });
+    },
+    onLeave(retval) {
+      for (const item of this.systemDetailCallbackStates || []) {
+        if (!item.callback.onLeave) continue;
+        item.state.context = this.context;
+        item.state.returnAddress = this.returnAddress;
+        item.callback.onLeave.call(item.state, retval);
+      }
+    },
+  });
   return true;
 }
 
 attachSystemDetailHook('0x004ae0d0', {
   onEnter(args) {
     const code = safe(() => args[0].toInt32() & 0xffff);
-    if (!SYSTEM_DETAIL_PROTOCOL_CODES.has(code)) return;
-    systemDetailProtocolState.totalOnRecv += 1;
-    pushSystemDetailRing(systemDetailProtocolState.onrecv, {
+    if (!SYSTEM_DETAIL_PROTOCOL_CODES.has(code) && !SYSTEM_OUTPUT_PROTOCOL_CODES.has(code)) return;
+    const entry = {
       code,
       codeHex: systemDetailCodeHex(code),
       callerVa: systemDetailCallerVa(this.returnAddress),
       timestamp: Date.now(),
       client: ptrHex(this.context.ecx),
       payload: ptrHex(args[2]),
-    });
+    };
+    if (SYSTEM_DETAIL_PROTOCOL_CODES.has(code)) {
+      systemDetailProtocolState.totalOnRecv += 1;
+      pushSystemDetailRing(systemDetailProtocolState.onrecv, entry);
+    }
+    if (SYSTEM_OUTPUT_PROTOCOL_CODES.has(code)) {
+      noteSystemOutputResponse('onrecv', code, entry);
+    }
   },
 });
 
 attachSystemDetailHook('0x004ba2b0', {
   onEnter(args) {
     const code = safe(() => args[0].toInt32() & 0xffff);
-    if (!SYSTEM_DETAIL_PROTOCOL_CODES.has(code)) return;
-    systemDetailProtocolState.totalDispatch += 1;
-    pushSystemDetailRing(systemDetailProtocolState.dispatch, {
+    if (!SYSTEM_DETAIL_PROTOCOL_CODES.has(code) && !SYSTEM_OUTPUT_PROTOCOL_CODES.has(code)) return;
+    const client = safe(() => ptr(this.context.ecx), ptr('0x0'));
+    const record = safe(() => ptr(args[1]), ptr('0x0'));
+    const recordData = systemOutputResponseRecord(code, record);
+    const entry = {
       code,
       codeHex: systemDetailCodeHex(code),
       callerVa: systemDetailCallerVa(this.returnAddress),
       timestamp: Date.now(),
-      client: ptrHex(this.context.ecx),
-      record: ptrHex(args[1]),
+      client: ptrHex(client),
+      record: ptrHex(record),
+      recordData,
+    };
+    if (SYSTEM_DETAIL_PROTOCOL_CODES.has(code)) {
+      systemDetailProtocolState.totalDispatch += 1;
+      pushSystemDetailRing(systemDetailProtocolState.dispatch, entry);
+    }
+    if (SYSTEM_OUTPUT_PROTOCOL_CODES.has(code)) {
+      noteSystemOutputResponse('dispatch', code, entry);
+    }
+    if (code === 0x0305) {
+      const commandCardEntry = {
+        ...entry,
+        direction: 'response',
+        boundary: 'dispatcher-entry',
+        runtimeBeforeImport: systemOutputCommandCardSnapshot(),
+      };
+      noteSystemOutputTransition('dispatch0305', commandCardEntry);
+      noteSystemOutputStage('commandCard0305', commandCardEntry);
+    }
+    if (code === 0x031f && recordData.baseIds.includes(SYSTEM_DETAIL_EXPECTED_BASE_ID)) {
+      const responseEntry = {
+        ...entry,
+        baseId: SYSTEM_DETAIL_EXPECTED_BASE_ID,
+        direction: 'response',
+      };
+      noteSystemOutputStage('wire031f', responseEntry);
+      noteSystemOutputStage('response031f', responseEntry);
+    }
+    if (code === 0x0327 && recordData.baseIds.includes(SYSTEM_DETAIL_EXPECTED_BASE_ID)) {
+      noteSystemOutputStage('response0327', {
+        ...entry,
+        baseId: SYSTEM_DETAIL_EXPECTED_BASE_ID,
+        direction: 'response',
+      });
+    }
+    this.systemOutputDispatchCode = code;
+    this.systemOutputDispatchClient = client;
+  },
+  onLeave() {
+    if (this.systemOutputDispatchCode !== 0x031f) return;
+    const client = this.systemOutputDispatchClient;
+    const cache = boundedIdTableSnapshot(client, 0x3facf4, 0x3facf8, 0x180, 4);
+    if (!cache.ids.includes(SYSTEM_DETAIL_EXPECTED_BASE_ID)) return;
+    noteSystemOutputStage('cache031f', {
+      timestamp: Date.now(),
+      baseId: SYSTEM_DETAIL_EXPECTED_BASE_ID,
+      client: ptrHex(client),
+      cache,
     });
   },
 });
@@ -335,9 +863,168 @@ function attachSystemDetailLookup(va, state) {
 attachSystemDetailLookup('0x004c5470', systemDetailLookupState.base031f);
 attachSystemDetailLookup('0x004c54d0', systemDetailLookupState.institution0321);
 
+attachSystemDetailHook('0x004c4a10', {
+  onEnter() {
+    this.systemOutputCommandCardBefore = systemOutputCommandCardSnapshot();
+  },
+  onLeave() {
+    const after = systemOutputCommandCardSnapshot();
+    const entry = {
+      timestamp: Date.now(),
+      before: this.systemOutputCommandCardBefore,
+      after,
+    };
+    noteSystemOutputTransition('commandCardImport', entry);
+    if (after.reason === null && after.factory41Granted) {
+      noteSystemOutputStage('factory41Granted', {
+        ...entry,
+        factoryId: 0x41,
+      });
+    }
+  },
+});
+
+attachSystemDetailHook('0x004f58c0', {
+  onEnter(args) {
+    const menu = safe(() => ptr(this.context.ecx), ptr('0x0'));
+    noteSystemOutputTransition('commandRowHit', {
+      timestamp: Date.now(),
+      menu: ptrHex(menu),
+      resultFlag: ptrHex(args[0]),
+      selectedRow: menu.isNull() ? null : readS32(menu.add(0x354)),
+      rowCount: menu.isNull() ? null : readS32(menu.add(0x350)),
+      category: menu.isNull() ? null : readS32(menu.add(0x358)),
+    });
+  },
+});
+
+attachSystemDetailHook('0x00584c90', {
+  onEnter() {
+    noteSystemOutputStage('factory41Handler', {
+      timestamp: Date.now(),
+      factoryId: 0x41,
+      callerVa: systemDetailCallerVa(this.returnAddress),
+    });
+  },
+});
+
+attachSystemDetailHook('0x00570eb0', {
+  onEnter(args) {
+    const dialog = safe(() => ptr(this.context.ecx), ptr('0x0'));
+    this.systemOutputDialogCtor = {
+      dialog,
+      requestedKind: safe(() => args[0].toInt32()),
+      callerVa: systemDetailCallerVa(this.returnAddress),
+    };
+  },
+  onLeave() {
+    const captured = this.systemOutputDialogCtor;
+    if (!captured || captured.dialog.isNull()) return;
+    const entry = {
+      timestamp: Date.now(),
+      dialog: ptrHex(captured.dialog),
+      requestedKind: captured.requestedKind,
+      dialogKind: readS32(captured.dialog.add(0x28)),
+      dialogController: ptrHex(readPtr(captured.dialog.add(0x50))),
+      callerVa: captured.callerVa,
+    };
+    if (entry.requestedKind !== 5 && entry.requestedKind !== 0x11
+        && entry.dialogKind !== 5 && entry.dialogKind !== 0x11) return;
+    systemOutputLastDialogTickKey = null;
+    noteSystemOutputStage('selectDialogCtor', entry);
+  },
+});
+
+attachSystemDetailHook('0x00571870', {
+  onEnter() {
+    const dialog = safe(() => ptr(this.context.ecx), ptr('0x0'));
+    if (dialog.isNull()) return;
+    const entry = {
+      timestamp: Date.now(),
+      dialog: ptrHex(dialog),
+      dialogKind: readS32(dialog.add(0x28)),
+      dialogController: ptrHex(readPtr(dialog.add(0x50))),
+      callerVa: systemDetailCallerVa(this.returnAddress),
+    };
+    if (entry.dialogKind !== 5 && entry.dialogKind !== 0x11) return;
+    const tickKey = `${entry.dialog}:${entry.dialogKind}`;
+    if (tickKey === systemOutputLastDialogTickKey) return;
+    systemOutputLastDialogTickKey = tickKey;
+    noteSystemOutputStage('selectDialogTick', entry);
+  },
+});
+
+attachSystemDetailHook('0x00577e70', {
+  onEnter(args) {
+    const parent = safe(() => ptr(this.context.ecx), ptr('0x0'));
+    const entry = {
+      timestamp: Date.now(),
+      parent: ptrHex(parent),
+      requestedKind: safe(() => args[0].toInt32()),
+      requestedRebuild: safe(() => args[1].toInt32() & 0xff),
+      panelKindBefore: readS32(parent.add(0x234)),
+      panelStateBefore: readS32(parent.add(0x238)),
+      callerVa: systemDetailCallerVa(this.returnAddress),
+      backtrace: systemOutputBacktrace(this.context),
+    };
+    if (entry.requestedKind !== 5 && entry.requestedKind !== 0x11
+        && entry.panelKindBefore !== 5 && entry.panelKindBefore !== 0x11) return;
+    this.systemOutputPanelSetter = { parent, entry };
+  },
+  onLeave() {
+    const captured = this.systemOutputPanelSetter;
+    if (!captured || captured.parent.isNull()) return;
+    const entry = captured.entry;
+    entry.panelKindAfter = readS32(captured.parent.add(0x234));
+    entry.panelStateAfter = readS32(captured.parent.add(0x238));
+    entry.timestampAfter = Date.now();
+    noteSystemOutputTransition('panelSetter', entry);
+  },
+});
+
+attachSystemDetailHook('0x0057bbc0', {
+  onEnter() {
+    const parent = safe(() => ptr(this.context.ecx), ptr('0x0'));
+    noteSystemOutputTransition('kind5Builder', {
+      timestamp: Date.now(),
+      parent: ptrHex(parent),
+      panelKind: parent.isNull() ? null : readS32(parent.add(0x234)),
+      panelState: parent.isNull() ? null : readS32(parent.add(0x238)),
+      callerVa: systemDetailCallerVa(this.returnAddress),
+    });
+  },
+});
+
+attachSystemDetailHook('0x00577050', {
+  onEnter(args) {
+    const rowBaseId = safe(() => args[1].toInt32());
+    if (rowBaseId !== SYSTEM_DETAIL_EXPECTED_BASE_ID) return;
+    const list = safe(() => ptr(this.context.ecx), ptr('0x0'));
+    this.systemOutputGenericRow = {
+      timestamp: Date.now(),
+      list,
+      baseId: rowBaseId,
+      rowCountBefore: list.isNull() ? null : readS32(list.add(0x8e4)),
+      callerVa: systemDetailCallerVa(this.returnAddress),
+    };
+  },
+  onLeave(retval) {
+    const entry = this.systemOutputGenericRow;
+    if (!entry) return;
+    noteSystemOutputStage('genericListRow70', {
+      ...entry,
+      list: ptrHex(entry.list),
+      rowCountAfter: entry.list.isNull() ? null : readS32(entry.list.add(0x8e4)),
+      retval: safe(() => retval.toInt32()),
+    });
+  },
+});
+
 attachSystemDetailHook('0x0057aa90', {
   onEnter(args) {
     const argument = safe(() => ptr(args[0]), ptr('0x0'));
+    const parent = safe(() => ptr(this.context.ecx), ptr('0x0'));
+    const selectedRecord = argument;
     const entry = {
       arg0: ptrHex(argument),
       selectedBaseId: argument.isNull() ? null : readU32(argument.add(8)),
@@ -346,6 +1033,21 @@ attachSystemDetailHook('0x0057aa90', {
     };
     systemDetailPanelState.totalCalls += 1;
     pushSystemDetailRing(systemDetailPanelState.ring, entry);
+    const panelKind = parent.isNull() ? null : readS32(parent.add(0x234));
+    if (panelKind !== 5 && panelKind !== 0x11) return;
+    noteSystemOutputStage('renderSink', {
+      ...entry,
+      parent: ptrHex(parent),
+      panelKind,
+      panelState: readS32(parent.add(0x238)),
+      selectedIndex: readS32(parent.add(0xb2c)),
+      selectedRecord: ptrHex(selectedRecord),
+      baseId: entry.selectedBaseId,
+      cacheJoin: Number.isInteger(entry.selectedBaseId)
+        ? systemOutputCacheJoin(entry.selectedBaseId)
+        : null,
+      backtrace: systemOutputBacktrace(this.context),
+    });
   },
 });
 
@@ -353,22 +1055,35 @@ attachSystemDetailHook('0x00576d40', {
   onEnter(args) {
     systemDetailSelectionIndexState.totalCalls += 1;
     const index = safe(() => args[0].toInt32());
+    const list = safe(() => ptr(this.context.ecx), ptr('0x0'));
+    const parent = list.isNull() ? ptr('0x0') : list.sub(0x244);
+    const panelKind = parent.isNull() ? null : readS32(parent.add(0x234));
+    this.systemOutputSelector = {
+      timestamp: Date.now(),
+      list,
+      parent,
+      requestedIndex: index,
+      panelKind,
+      panelState: parent.isNull() ? null : readS32(parent.add(0x238)),
+      selectedBefore: list.isNull() ? null : readS32(list.add(0x8e8)),
+      callerVa: systemDetailCallerVa(this.returnAddress),
+    };
     if (!Number.isInteger(index) || index === -1 || index < 0) return;
-    const controller = safe(() => ptr(this.context.ecx), ptr('0x0'));
-    const panelKind = controller.isNull() ? null : readS32(controller.add(0x234));
-    const itemCount = controller.isNull() ? null : readS32(controller.add(0x8e4));
+    // 00579d60/00579e60은 generic-info parent+0x244를 list ECX로 넘긴다.
+    const itemCount = list.isNull() ? null : readS32(list.add(0x8e4));
     const inRange = Number.isInteger(itemCount) && index < itemCount;
     const entry = {
-      controller: ptrHex(controller),
+      list: ptrHex(list),
+      parent: ptrHex(parent),
       index,
       callerVa: systemDetailCallerVa(this.returnAddress),
       timestamp: Date.now(),
       itemCount,
       inRange,
-      selectedBefore: controller.isNull() ? null : readS32(controller.add(0x8e8)),
+      selectedBefore: list.isNull() ? null : readS32(list.add(0x8e8)),
       panelKind,
-      panelState: controller.isNull() ? null : readS32(controller.add(0x238)),
-      infoSelectedIndex: controller.isNull() ? null : readS32(controller.add(0xb2c)),
+      panelState: parent.isNull() ? null : readS32(parent.add(0x238)),
+      infoSelectedIndex: parent.isNull() ? null : readS32(parent.add(0xb2c)),
       retval: null,
       selectedAfter: null,
       infoSelectedIndexAfter: null,
@@ -383,15 +1098,34 @@ attachSystemDetailHook('0x00576d40', {
     }
     pushSystemDetailRing(systemDetailSelectionIndexState.ring, entry);
     this.systemDetailSelectionIndexEntry = entry;
-    this.systemDetailSelectionIndexController = controller;
+    this.systemDetailSelectionIndexList = list;
+    this.systemDetailSelectionIndexParent = parent;
   },
   onLeave(retval) {
+    const outputEntry = this.systemOutputSelector;
+    if (outputEntry && !outputEntry.list.isNull() && !outputEntry.parent.isNull()
+        && (outputEntry.panelKind === 5 || outputEntry.panelKind === 0x11)) {
+      const selectedIndex = readS32(outputEntry.list.add(0x8e8));
+      const selectedRecord = systemOutputSelectionRecord(outputEntry.list, selectedIndex);
+      const baseId = selectedRecord.isNull() ? null : readU32(selectedRecord.add(8));
+      noteSystemOutputStage('selector', {
+        ...outputEntry,
+        timestampAfter: Date.now(),
+        list: ptrHex(outputEntry.list),
+        parent: ptrHex(outputEntry.parent),
+        selectedIndex,
+        selectedRecord: ptrHex(selectedRecord),
+        baseId,
+        retval: safe(() => retval.toInt32()),
+      });
+    }
     const entry = this.systemDetailSelectionIndexEntry;
-    const controller = this.systemDetailSelectionIndexController;
-    if (!entry || !controller || controller.isNull()) return;
+    const list = this.systemDetailSelectionIndexList;
+    const parent = this.systemDetailSelectionIndexParent;
+    if (!entry || !list || list.isNull() || !parent || parent.isNull()) return;
     entry.retval = safe(() => retval.toInt32());
-    entry.selectedAfter = readS32(controller.add(0x8e8));
-    entry.infoSelectedIndexAfter = readS32(controller.add(0xb2c));
+    entry.selectedAfter = readS32(list.add(0x8e8));
+    entry.infoSelectedIndexAfter = readS32(parent.add(0xb2c));
     entry.selectionChanged = (
       entry.inRange === true
       && Number.isInteger(entry.selectedBefore)
@@ -405,6 +1139,596 @@ attachSystemDetailHook('0x00576d40', {
         systemDetailSelectionIndexState.infoPanelSelectionChangedCalls += 1;
       }
     }
+  },
+});
+
+attachSystemDetailHook('0x00579fd0', {
+  onEnter(args) {
+    const parent = safe(() => ptr(this.context.ecx), ptr('0x0'));
+    const record = safe(() => ptr(args[0]), ptr('0x0'));
+    if (parent.isNull()) return;
+    const panelKind = readS32(parent.add(0x234));
+    if (panelKind !== 5 && panelKind !== 0x11) return;
+    const phase = readS32(parent.add(0x1584));
+    if (phase !== 0 && phase !== 1) return;
+    const baseId = record.isNull() ? null : readU32(record.add(8));
+    const stage = phase === 0 ? 'refresh031f' : 'refresh0327';
+    const requestCode = phase === 0 ? 0x031e : 0x0326;
+    const responseCode = phase === 0 ? 0x031f : 0x0327;
+    noteSystemOutputStage(stage, {
+      timestamp: Date.now(),
+      direction: 'request',
+      requestCode,
+      requestCodeHex: systemDetailCodeHex(requestCode),
+      responseCode,
+      responseCodeHex: systemDetailCodeHex(responseCode),
+      parent: ptrHex(parent),
+      record: ptrHex(record),
+      panelKind,
+      panelState: readS32(parent.add(0x238)),
+      phase,
+      baseId,
+      callerVa: systemDetailCallerVa(this.returnAddress),
+    });
+  },
+});
+
+attachSystemDetailHook('0x00579e60', {
+  onEnter() {
+    const parent = safe(() => ptr(this.context.ecx), ptr('0x0'));
+    if (parent.isNull()) return;
+    const panelKind = readS32(parent.add(0x234));
+    if (panelKind !== 5 && panelKind !== 0x11) return;
+    const list = parent.add(0x244);
+    const entry = {
+      timestamp: Date.now(),
+      parent: ptrHex(parent),
+      panelKind,
+      panelState: readS32(parent.add(0x238)),
+      selectedIndex: readS32(parent.add(0xb2c)),
+      callerVa: systemDetailCallerVa(this.returnAddress),
+      backtrace: systemOutputBacktrace(this.context),
+    };
+    const selectedRecord = systemOutputSelectionRecord(list, entry.selectedIndex);
+    const baseId = selectedRecord.isNull() ? null : readU32(selectedRecord.add(8));
+    noteSystemOutputStage('panelDispatch', {
+      ...entry,
+      list: ptrHex(list),
+      selectedRecord: ptrHex(selectedRecord),
+      baseId,
+      cacheJoin: Number.isInteger(baseId) ? systemOutputCacheJoin(baseId) : null,
+    });
+  },
+});
+
+const SELECTION_ADMISSION_RING_LIMIT = 128;
+const selectionAdmissionState = {
+  counts: {
+    writer: 0,
+    latch: 0,
+    event2Enqueue: 0,
+    event2Dequeue: 0,
+    admission: 0,
+    admissionAccepted: 0,
+    modeApply: 0,
+    layoutOpen: 0,
+    hudModeSet: 0,
+    hudFrameTransition: 0,
+  },
+  last: {
+    writer: null,
+    latch: null,
+    event2Enqueue: null,
+    event2Dequeue: null,
+    admission: null,
+    modeApply: null,
+    layoutOpen: null,
+    hudModeSet: null,
+    hudFrameTransition: null,
+  },
+  sequence: 0,
+  selectionList: null,
+  ring: [],
+};
+const selectionAdmissionRoleCache = {
+  selectionListBase: ptrHex(abs('0x00c9eac4')),
+  selectionRoot: null,
+  listCount188: null,
+  listSelected189: null,
+  byPointer: {},
+};
+
+function selectionAdmissionEventKeys(target) {
+  const count = readS32(ptr(target).add(0x3f4));
+  const keys = [];
+  if (!Number.isInteger(count) || count <= 0) return keys;
+  const boundedCount = Math.min(count, 0x1c);
+  for (let index = 0; index < boundedCount; index += 1) {
+    keys.push(readS32(ptr(target).add(0x470 + index * 4)));
+  }
+  return keys;
+}
+
+function selectionAdmissionTargetState(target) {
+  const row = safe(() => ptr(target), ptr('0x0'));
+  if (row.isNull()) {
+    return {
+      gate04: null,
+      gate05: null,
+      valid08: null,
+      flag15: null,
+      latchB00: null,
+      latchB01: null,
+      latchB02: null,
+      eventQueueCount3f4: null,
+    };
+  }
+  return {
+    gate04: readU8(row.add(4)),
+    gate05: readU8(row.add(5)),
+    valid08: readU8(row.add(8)),
+    flag15: readU8(row.add(0x15)),
+    latchB00: readU8(row.add(0xb00)),
+    latchB01: readU8(row.add(0xb01)),
+    latchB02: readU8(row.add(0xb02)),
+    eventQueueCount3f4: readS32(row.add(0x3f4)),
+  };
+}
+
+function selectionAdmissionEventState(target) {
+  return {
+    ...selectionAdmissionTargetState(target),
+    eventKeys470: selectionAdmissionEventKeys(target),
+  };
+}
+
+function selectionAdmissionListState() {
+  const list = abs('0x00c9eac4');
+  return {
+    base: ptrHex(list),
+    selectionRoot: ptrHex(readPtr(list)),
+    listCount188: readS32(list.add(0x188 * 4)),
+    listSelected189: readS32(list.add(0x189 * 4)),
+  };
+}
+
+function refreshSelectionAdmissionRoleCache() {
+  const list = abs('0x00c9eac4');
+  const listState = selectionAdmissionListState();
+  const byPointer = {};
+  const selectionRoot = readPtr(list);
+  const rootKey = ptrHex(selectionRoot);
+  if (rootKey !== null) {
+    byPointer[rootKey] = { role: 'selection-root', index: null };
+  }
+  const count = listState.listCount188;
+  const boundedCount = Number.isInteger(count) ? Math.max(0, Math.min(count, 8)) : 0;
+  for (let index = 0; index < boundedCount; index += 1) {
+    const slot22Key = ptrHex(readPtr(list.add((0x22 + index) * 4)));
+    const slot32Key = ptrHex(readPtr(list.add((0x32 + index) * 4)));
+    if (slot22Key !== null && byPointer[slot22Key] === undefined) {
+      byPointer[slot22Key] = { role: `slot22-${index}`, index };
+    }
+    if (slot32Key !== null && byPointer[slot32Key] === undefined) {
+      byPointer[slot32Key] = { role: `slot32-${index}`, index };
+    }
+  }
+  selectionAdmissionRoleCache.selectionRoot = listState.selectionRoot;
+  selectionAdmissionRoleCache.listCount188 = listState.listCount188;
+  selectionAdmissionRoleCache.listSelected189 = listState.listSelected189;
+  selectionAdmissionRoleCache.byPointer = byPointer;
+  return listState;
+}
+
+function selectionAdmissionPointersEqual(left, right) {
+  const leftPointer = safe(() => ptr(left), ptr('0x0'));
+  const rightPointer = safe(() => ptr(right), ptr('0x0'));
+  return !leftPointer.isNull() && !rightPointer.isNull()
+    && pointerEquals(leftPointer, rightPointer);
+}
+
+function selectionAdmissionCachedIdentity(controller, target) {
+  const list = abs('0x00c9eac4');
+  selectionAdmissionRoleCache.listSelected189 = readS32(list.add(0x189 * 4));
+  const selectionRoot = safe(
+    () => ptr(selectionAdmissionRoleCache.selectionRoot),
+    ptr('0x0'),
+  );
+  const targetKey = ptrHex(target);
+  const cachedTarget = targetKey === null
+    ? null
+    : selectionAdmissionRoleCache.byPointer[targetKey] || null;
+  return {
+    selectionRoot: ptrHex(selectionRoot),
+    controller: ptrHex(controller),
+    controllerMatchesSelectionRoot: selectionAdmissionPointersEqual(controller, selectionRoot),
+    target: ptrHex(target),
+    targetMatchesSelectionRoot: selectionAdmissionPointersEqual(target, selectionRoot),
+    targetRole: cachedTarget ? cachedTarget.role : null,
+    targetSlotIndex: cachedTarget ? cachedTarget.index : null,
+    selectedTargetRole: (
+      cachedTarget !== null
+      && Number.isInteger(cachedTarget.index)
+      && cachedTarget.index === selectionAdmissionRoleCache.listSelected189
+    ) ? cachedTarget.role : null,
+  };
+}
+
+function selectionAdmissionRelated(identity) {
+  return identity.controllerMatchesSelectionRoot
+    || identity.targetMatchesSelectionRoot
+    || identity.targetRole !== null;
+}
+
+function selectionAdmissionObjectChanged(before, after) {
+  if (!before || !after) return false;
+  return before.gate04 !== after.gate04
+    || before.gate05 !== after.gate05
+    || before.valid08 !== after.valid08
+    || before.flag15 !== after.flag15
+    || before.latchB00 !== after.latchB00
+    || before.latchB01 !== after.latchB01
+    || before.latchB02 !== after.latchB02
+    || before.eventQueueCount3f4 !== after.eventQueueCount3f4;
+}
+
+function selectionAdmissionListChanged(before, after) {
+  if (!before || !after) return false;
+  return before.selectionRoot !== after.selectionRoot
+    || before.listCount188 !== after.listCount188
+    || before.listSelected189 !== after.listSelected189;
+}
+
+function noteSelectionAdmission(stage, entry) {
+  selectionAdmissionState.counts[stage] += 1;
+  selectionAdmissionState.last[stage] = entry;
+}
+
+function pushSelectionAdmissionTimeline(entry) {
+  selectionAdmissionState.sequence += 1;
+  entry.sequence = selectionAdmissionState.sequence;
+  selectionAdmissionState.ring.push(entry);
+  if (selectionAdmissionState.ring.length > SELECTION_ADMISSION_RING_LIMIT) {
+    selectionAdmissionState.ring.shift();
+  }
+}
+
+function pushSelectionAdmissionEvent2(stage, entry) {
+  noteSelectionAdmission(stage, entry);
+  pushSelectionAdmissionTimeline(entry);
+}
+
+refreshSelectionAdmissionRoleCache();
+
+attachSystemDetailHook('0x005024b0', {
+  onEnter(args) {
+    const controller = safe(() => ptr(this.context.ecx), ptr('0x0'));
+    const identity = selectionAdmissionCachedIdentity(controller, controller);
+    if (!selectionAdmissionRelated(identity)) return;
+    const entry = {
+      stage: 'writer',
+      ...identity,
+      registerEcx: ptrHex(this.context.ecx),
+      requestedGate05: safe(() => args[0].toInt32() & 0xff),
+      callerVa: systemDetailCallerVa(this.returnAddress),
+      timestamp: Date.now(),
+      before: selectionAdmissionTargetState(controller),
+      selectionListBefore: selectionAdmissionListState(),
+      after: null,
+      selectionListAfter: null,
+    };
+    this.selectionAdmissionEntry = entry;
+    this.selectionAdmissionTarget = controller;
+    noteSelectionAdmission('writer', entry);
+  },
+  onLeave() {
+    const entry = this.selectionAdmissionEntry;
+    if (!entry) return;
+    entry.after = selectionAdmissionTargetState(this.selectionAdmissionTarget);
+    entry.selectionListAfter = selectionAdmissionListState();
+    if (selectionAdmissionObjectChanged(entry.before, entry.after)
+      || selectionAdmissionListChanged(entry.selectionListBefore, entry.selectionListAfter)) {
+      pushSelectionAdmissionTimeline(entry);
+    }
+  },
+});
+
+attachSystemDetailHook('0x00507f20', {
+  onEnter(args) {
+    const target = safe(() => ptr(args[0]), ptr('0x0'));
+    const controller = safe(() => ptr(this.context.ecx), ptr('0x0'));
+    const identity = selectionAdmissionCachedIdentity(controller, target);
+    if (!selectionAdmissionRelated(identity)) return;
+    const entry = {
+      stage: 'latch',
+      ...identity,
+      registerEcx: ptrHex(this.context.ecx),
+      callerVa: systemDetailCallerVa(this.returnAddress),
+      timestamp: Date.now(),
+      controllerBefore: selectionAdmissionTargetState(controller),
+      targetBefore: selectionAdmissionTargetState(target),
+      selectionListBefore: selectionAdmissionListState(),
+      controllerAfter: null,
+      targetAfter: null,
+      selectionListAfter: null,
+    };
+    this.selectionAdmissionEntry = entry;
+    this.selectionAdmissionController = controller;
+    this.selectionAdmissionTarget = target;
+    noteSelectionAdmission('latch', entry);
+  },
+  onLeave() {
+    const entry = this.selectionAdmissionEntry;
+    if (!entry) return;
+    entry.controllerAfter = selectionAdmissionTargetState(
+      this.selectionAdmissionController,
+    );
+    entry.targetAfter = selectionAdmissionTargetState(
+      this.selectionAdmissionTarget,
+    );
+    entry.selectionListAfter = selectionAdmissionListState();
+    if (selectionAdmissionObjectChanged(entry.controllerBefore, entry.controllerAfter)
+      || selectionAdmissionObjectChanged(entry.targetBefore, entry.targetAfter)
+      || selectionAdmissionListChanged(entry.selectionListBefore, entry.selectionListAfter)) {
+      pushSelectionAdmissionTimeline(entry);
+    }
+  },
+});
+
+attachSystemDetailHook('0x00501e30', {
+  onEnter(args) {
+    const eventKind = safe(() => args[0].toInt32());
+    if (eventKind !== 2) return;
+    const target = safe(() => ptr(args[1]), ptr('0x0'));
+    const identity = selectionAdmissionCachedIdentity(ptr('0x0'), target);
+    if (!selectionAdmissionRelated(identity)) return;
+    const entry = {
+      stage: 'event2Enqueue',
+      ...identity,
+      registerEcx: ptrHex(this.context.ecx),
+      eventKind,
+      payload: ptrHex(args[2]),
+      callerVa: systemDetailCallerVa(this.returnAddress),
+      timestamp: Date.now(),
+      targetBefore: selectionAdmissionEventState(target),
+      targetAfter: null,
+    };
+    this.selectionAdmissionEntry = entry;
+    this.selectionAdmissionTarget = target;
+    pushSelectionAdmissionEvent2('event2Enqueue', entry);
+  },
+  onLeave() {
+    if (!this.selectionAdmissionEntry) return;
+    this.selectionAdmissionEntry.targetAfter = selectionAdmissionEventState(
+      this.selectionAdmissionTarget,
+    );
+  },
+});
+
+attachSystemDetailHook('0x00501ed0', {
+  onEnter(args) {
+    const eventKind = safe(() => args[1].toInt32());
+    if (eventKind !== 2) return;
+    const target = safe(() => ptr(args[0]), ptr('0x0'));
+    const identity = selectionAdmissionCachedIdentity(ptr('0x0'), target);
+    if (!selectionAdmissionRelated(identity)) return;
+    const entry = {
+      stage: 'event2Dequeue',
+      ...identity,
+      registerEcx: ptrHex(this.context.ecx),
+      eventKind,
+      output: ptrHex(args[2]),
+      consume: safe(() => args[3].toInt32()),
+      callerVa: systemDetailCallerVa(this.returnAddress),
+      timestamp: Date.now(),
+      targetBefore: selectionAdmissionEventState(target),
+      targetAfter: null,
+      retvalLow8: null,
+    };
+    this.selectionAdmissionEntry = entry;
+    this.selectionAdmissionTarget = target;
+    pushSelectionAdmissionEvent2('event2Dequeue', entry);
+  },
+  onLeave(retval) {
+    const entry = this.selectionAdmissionEntry;
+    if (!entry) return;
+    entry.targetAfter = selectionAdmissionEventState(this.selectionAdmissionTarget);
+    entry.retvalLow8 = safe(() => retval.toInt32() & 0xff);
+  },
+});
+
+attachSystemDetailHook('0x005015f0', {
+  onEnter(args) {
+    const eventKind = safe(() => args[0].toInt32());
+    if (eventKind !== 2) return;
+    const target = safe(() => ptr(args[1]), ptr('0x0'));
+    const controller = safe(() => ptr(this.context.ecx), ptr('0x0'));
+    const identity = selectionAdmissionCachedIdentity(controller, target);
+    if (!selectionAdmissionRelated(identity)) return;
+    const entry = {
+      stage: 'admission',
+      ...identity,
+      registerEcx: ptrHex(this.context.ecx),
+      eventKind,
+      output: ptrHex(args[2]),
+      param4: safe(() => args[3].toInt32()),
+      callerVa: systemDetailCallerVa(this.returnAddress),
+      timestamp: Date.now(),
+      controllerBefore: selectionAdmissionTargetState(controller),
+      targetBefore: selectionAdmissionTargetState(target),
+      selectionListBefore: selectionAdmissionListState(),
+      controllerAfter: null,
+      targetAfter: null,
+      selectionListAfter: null,
+      selectedTargetRoleAfter: null,
+      retvalLow8: null,
+    };
+    this.selectionAdmissionEntry = entry;
+    this.selectionAdmissionController = controller;
+    this.selectionAdmissionTarget = target;
+    noteSelectionAdmission('admission', entry);
+  },
+  onLeave(retval) {
+    const entry = this.selectionAdmissionEntry;
+    if (!entry) return;
+    entry.controllerAfter = selectionAdmissionTargetState(this.selectionAdmissionController);
+    entry.targetAfter = selectionAdmissionTargetState(this.selectionAdmissionTarget);
+    entry.selectionListAfter = selectionAdmissionListState();
+    entry.retvalLow8 = safe(() => retval.toInt32() & 0xff);
+    entry.selectedTargetRoleAfter = (
+      Number.isInteger(entry.targetSlotIndex)
+      && entry.targetSlotIndex === entry.selectionListAfter.listSelected189
+    ) ? entry.targetRole : null;
+    if (entry.retvalLow8 !== 0 && entry.retvalLow8 !== null) {
+      selectionAdmissionState.counts.admissionAccepted += 1;
+    }
+    if (entry.retvalLow8 !== 0
+      || selectionAdmissionObjectChanged(entry.controllerBefore, entry.controllerAfter)
+      || selectionAdmissionObjectChanged(entry.targetBefore, entry.targetAfter)
+      || selectionAdmissionListChanged(entry.selectionListBefore, entry.selectionListAfter)) {
+      pushSelectionAdmissionTimeline(entry);
+    }
+  },
+});
+
+attachSystemDetailHook('0x004f6680', {
+  onEnter(args) {
+    const selectionListBefore = refreshSelectionAdmissionRoleCache();
+    const controller = safe(() => ptr(this.context.ecx), ptr('0x0'));
+    const target = readPtr(abs('0x00c9eac4'));
+    const identity = selectionAdmissionCachedIdentity(controller, target);
+    const entry = {
+      stage: 'modeApply',
+      ...identity,
+      registerEcx: ptrHex(this.context.ecx),
+      requestedMode: safe(() => args[0].toInt32()),
+      callerVa: systemDetailCallerVa(this.returnAddress),
+      timestamp: Date.now(),
+      rootBefore: selectionAdmissionTargetState(target),
+      selectionListBefore,
+      rootAfter: null,
+      selectionListAfter: null,
+      retvalLow8: null,
+    };
+    this.selectionAdmissionEntry = entry;
+    noteSelectionAdmission('modeApply', entry);
+  },
+  onLeave(retval) {
+    const entry = this.selectionAdmissionEntry;
+    if (!entry) return;
+    entry.rootAfter = selectionAdmissionTargetState(readPtr(abs('0x00c9eac4')));
+    entry.selectionListAfter = refreshSelectionAdmissionRoleCache();
+    entry.retvalLow8 = safe(() => retval.toInt32() & 0xff);
+    pushSelectionAdmissionTimeline(entry);
+  },
+});
+
+attachSystemDetailHook('0x00506280', {
+  onEnter(args) {
+    const selectionListBefore = refreshSelectionAdmissionRoleCache();
+    const target = safe(() => ptr(this.context.ecx), ptr('0x0'));
+    const identity = selectionAdmissionCachedIdentity(target, target);
+    if (!selectionAdmissionRelated(identity)) return;
+    const entry = {
+      stage: 'layoutOpen',
+      ...identity,
+      registerEcx: ptrHex(this.context.ecx),
+      arg0: safe(() => args[0].toInt32()),
+      callerVa: systemDetailCallerVa(this.returnAddress),
+      timestamp: Date.now(),
+      before: selectionAdmissionTargetState(target),
+      selectionListBefore,
+      after: null,
+      selectionListAfter: null,
+      retvalLow8: null,
+    };
+    this.selectionAdmissionEntry = entry;
+    this.selectionAdmissionTarget = target;
+    noteSelectionAdmission('layoutOpen', entry);
+  },
+  onLeave(retval) {
+    const entry = this.selectionAdmissionEntry;
+    if (!entry) return;
+    entry.after = selectionAdmissionTargetState(this.selectionAdmissionTarget);
+    entry.selectionListAfter = refreshSelectionAdmissionRoleCache();
+    entry.retvalLow8 = safe(() => retval.toInt32() & 0xff);
+    pushSelectionAdmissionTimeline(entry);
+  },
+});
+
+attachSystemDetailHook('0x004fd7a0', {
+  onEnter(args) {
+    const selectionListBefore = refreshSelectionAdmissionRoleCache();
+    const controller = safe(() => ptr(this.context.ecx), ptr('0x0'));
+    const target = readPtr(abs('0x00c9eac4'));
+    const entry = {
+      stage: 'hudModeSet',
+      ...selectionAdmissionCachedIdentity(controller, target),
+      registerEcx: ptrHex(this.context.ecx),
+      requestedHudMode: safe(() => args[0].toInt32()),
+      pushHistory: safe(() => args[1].toInt32()),
+      callerVa: systemDetailCallerVa(this.returnAddress),
+      timestamp: Date.now(),
+      hudModeBefore: readS32(abs('0x00c9e638').add(0xf4)),
+      rootBefore: selectionAdmissionTargetState(target),
+      selectionListBefore,
+      hudModeAfter: null,
+      rootAfter: null,
+      selectionListAfter: null,
+      retvalLow8: null,
+    };
+    this.selectionAdmissionEntry = entry;
+    noteSelectionAdmission('hudModeSet', entry);
+  },
+  onLeave(retval) {
+    const entry = this.selectionAdmissionEntry;
+    if (!entry) return;
+    entry.hudModeAfter = readS32(abs('0x00c9e638').add(0xf4));
+    entry.rootAfter = selectionAdmissionTargetState(readPtr(abs('0x00c9eac4')));
+    entry.selectionListAfter = refreshSelectionAdmissionRoleCache();
+    entry.retvalLow8 = safe(() => retval.toInt32() & 0xff);
+    if (entry.hudModeBefore !== entry.hudModeAfter
+      || selectionAdmissionObjectChanged(entry.rootBefore, entry.rootAfter)
+      || selectionAdmissionListChanged(entry.selectionListBefore, entry.selectionListAfter)) {
+      pushSelectionAdmissionTimeline(entry);
+    }
+  },
+});
+
+attachSystemDetailHook('0x004fd100', {
+  onEnter() {
+    const selectionListBefore = selectionAdmissionListState();
+    if (selectionAdmissionListChanged(selectionAdmissionRoleCache, selectionListBefore)) {
+      refreshSelectionAdmissionRoleCache();
+    }
+    const controller = safe(() => ptr(this.context.ecx), ptr('0x0'));
+    const target = readPtr(abs('0x00c9eac4'));
+    this.selectionAdmissionFrame = {
+      stage: 'hudFrameTransition',
+      ...selectionAdmissionCachedIdentity(controller, target),
+      registerEcx: ptrHex(this.context.ecx),
+      callerVa: systemDetailCallerVa(this.returnAddress),
+      timestamp: Date.now(),
+      hudModeBefore: readS32(abs('0x00c9e638').add(0xf4)),
+      rootBefore: selectionAdmissionTargetState(target),
+      selectionListBefore,
+      hudModeAfter: null,
+      rootAfter: null,
+      selectionListAfter: null,
+    };
+  },
+  onLeave() {
+    const entry = this.selectionAdmissionFrame;
+    if (!entry) return;
+    entry.hudModeAfter = readS32(abs('0x00c9e638').add(0xf4));
+    entry.rootAfter = selectionAdmissionTargetState(readPtr(abs('0x00c9eac4')));
+    entry.selectionListAfter = selectionAdmissionListState();
+    if (entry.hudModeBefore === entry.hudModeAfter
+      && !selectionAdmissionObjectChanged(entry.rootBefore, entry.rootAfter)
+      && !selectionAdmissionListChanged(entry.selectionListBefore, entry.selectionListAfter)) return;
+    refreshSelectionAdmissionRoleCache();
+    noteSelectionAdmission('hudFrameTransition', entry);
+    pushSelectionAdmissionTimeline(entry);
   },
 });
 
@@ -476,6 +1800,7 @@ function systemDetailProtocolSummary() {
 }
 
 function systemDetailState(base) {
+  selectionAdmissionState.selectionList = selectionAdmissionListState();
   const baseAvailable = Boolean(base && !base.isNull());
   const clientSpotResolverBase = baseAvailable ? readU32(base.add(0x358)) : null;
   let clientSpotResolverBaseReason = baseAvailable ? null : 'client-base-unavailable';
@@ -543,6 +1868,8 @@ function systemDetailState(base) {
     lookups: systemDetailLookupState,
     panel: systemDetailPanelState,
     selectionIndex: systemDetailSelectionIndexState,
+    selectionAdmission: selectionAdmissionState,
+    systemOutputTrace: systemOutputTraceSnapshot(),
     joins: {
       expectedBaseId: SYSTEM_DETAIL_EXPECTED_BASE_ID,
       expected: expectedJoin,
@@ -693,6 +2020,17 @@ function hookNativeCall(name, address, argCount) {
       nativeCallState[name].calls += 1;
       this.nativeCall = { values, t: Date.now() };
       nativeCallState[name].last = this.nativeCall;
+      if (name === 'factory') {
+        const factoryId = values[0];
+        const entry = {
+          timestamp: this.nativeCall.t,
+          factoryId,
+          category: values[1],
+          manager: ptrHex(this.context.ecx),
+        };
+        noteSystemOutputTransition('factoryLaunch', entry);
+        if (factoryId === 0x41) noteSystemOutputStage('factory41Selected', entry);
+      }
       if (name === 'sendWarp') {
         this.nativeCall.context = sendWarpContextState(args);
       }
@@ -1028,7 +2366,7 @@ function armHudMode2Force() {
           const count = readS32(list.add(0x188 * 4));
           const base = clientBase();
           const unitCount = base && !base.isNull() ? readU16(base.add(0x41a364)) : 0;
-          const payloadCount = payload && !payload.isNull() ? readS32(payload.add(0x270)) : 0;
+          const payloadCount = payload && !payload.isNull() ? readU8(payload.add(0x270)) : 0;
           if (count >= 1 && payloadCount >= 1 && unitCount >= 1) {
             mode2ForcePending = false;
             invokeHudMode2();
@@ -1272,6 +2610,8 @@ function commandState() {
   };
 }
 
+const SELECTION_CARD_KIND_CAP = 8;
+
 function selectionState() {
   const list = abs('0x00c9eac4');
   const root = readPtr(list);
@@ -1279,6 +2619,14 @@ function selectionState() {
   const payload = readPtr(list.add(0x18a * 4));
   const hud = abs('0x00c9e638');
   const count = readS32(list.add(0x188 * 4));
+  const payloadCount = payload.isNull() ? 0 : readU8(payload.add(0x270));
+  const boundedPayloadCount = Number.isInteger(payloadCount)
+    ? Math.min(payloadCount, SELECTION_CARD_KIND_CAP)
+    : 0;
+  const cardKinds = [];
+  for (let index = 0; index < boundedPayloadCount; index += 1) {
+    cardKinds.push(readU16(payload.add(0x274 + index * 8)));
+  }
   const rows = [];
   for (let i = 0; i < Math.max(0, Math.min(count || 0, 8)); i += 1) {
     rows.push({
@@ -1288,6 +2636,7 @@ function selectionState() {
     });
   }
   return {
+    listBase: ptrHex(list),
     root: { ...rowState(root), raw: root && !root.isNull() ? readHex(root, 0x40) : null },
     origin,
     hudModeF4: readS32(hud.add(0xf4)),
@@ -1296,10 +2645,10 @@ function selectionState() {
     listCount188: count,
     listSelected189: readS32(list.add(0x189 * 4)),
     listPayload18a: ptrHex(payload),
-    payloadCount270: readS32(payload.add(0x270)),
-    payloadCount270U8: readU8(payload.add(0x270)),
-    payloadWord26c: readU16(payload.add(0x26c)),
-    payloadWord274: readU16(payload.add(0x274)),
+    payloadCount270: payloadCount,
+    cardKinds,
+    cardKindsTruncated: Number.isInteger(payloadCount)
+      && payloadCount > SELECTION_CARD_KIND_CAP,
     rows,
   };
 }
