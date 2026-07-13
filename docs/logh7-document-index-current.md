@@ -1,12 +1,14 @@
 # LOGH VII Current Document Index
 
+2026-07-13 전략맵 성계 상세 복원 현황: [[logh7-strategy-system-detail-current|전략맵 성계 상세 복원]]에 `cell 2588 → runtime base ID 70`, `031d → 031f → 0321 → 0f03`, B67 행 좌표 오판정, B68b의 `unit[0]+0x40=70`·base/institution lookup 복원, 다음 병목 `controllerGate05`/selection activation을 정리했다. 제품·운영 권위는 아래 startup entrypoint에 있고, 이 노트는 현재 구현·라이브 QA를 잇는 현황 기록이다.
+
 2026-07-04 G070 Unity 클라이언트 완전 삭제: `client-unity/` 작업트리 제거(보존 `dbf3b43` → 제거 `ca24dd3`). 아래 `client-unity/README.md` 등 Unity 경로를 가리키는 인덱스 항목은 더 이상 작업트리에 존재하지 않으며, 참조하려면 git 히스토리에서 복원해야 한다.
 
 2026-07-04 G069 방향 전환: 레거시 클라이언트(`G7MTClient.exe`) 직접 수정이 잠정 주 경로로 재오픈됨(Unity 픽셀-패러티 시연 후 사용자 명시적 지시). Unity(`client-unity/`)는 RE 완료 후 재이식 목표로 보류. 상세는 `docs/logh7-requirements-current.md`/`docs/logh7-architecture-operations-current.md`/`.omo/plans/logh7-internal-validation-plan.md`의 동일 날짜 항목과 메모리 `logh7-legacy-client-reopen-2026-07-04` 참조.
 
 2026-07-04 G048 Unity scene-panel manifest evidence: current Unity player visual reference includes `.omo/ulw-loop/evidence/g048-scene-panel-manifest-player-battle-20260704.png`, manifest proof `.omo/ulw-loop/evidence/g048-scene-panel-manifest-proof-20260704.log`, and build log `g048-scene-panel-manifest-unity-build-20260704.log`.
 
-Updated: 2026-07-04
+Updated: 2026-07-13
 
 2026-07-04 Unity scene-panel evidence: current Unity player visual reference includes `.omo/ulw-loop/evidence/g047-scene-panel-surfaces-compact-20260704/contact-sheet.png`, representative `.omo/ulw-loop/evidence/g047-scene-panel-surfaces-compact-20260704/09-battle.png`, and `g047-scene-panel-compact-unity-windows-build-20260704.log`.
 
@@ -61,6 +63,12 @@ only an oracle for data mining and diagnostics.
 | `.omo/rules/logh7-capability-harness.md` | Capability harness and skill/tool routing rules. |
 | `AGENTS.md`, `CLAUDE.md`, `.claude/CLAUDE.md` | Agent startup rules mirrored from the current path. |
 | `server/AGENTS.md`, `server/README.md` | Server/data-pipeline local rules and command surface. |
+
+## Current Work Notes
+
+| Path | Role |
+| --- | --- |
+| `docs/logh7-strategy-system-detail-current.md` | Current strategy-map system-detail wire/cache/lookup status, B63/B67/B68b evidence ruling, and pending selection/panel gate. Subordinate to the startup authorities above. |
 
 ## Current Code And Data Surfaces
 
