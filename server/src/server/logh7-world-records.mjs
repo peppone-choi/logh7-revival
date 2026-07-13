@@ -13,6 +13,12 @@
 import { buildNotifyInformationCharacterInner } from './codec/personnel-action-list.mjs';
 import { buildResponseInformationBaseInner } from './codec/base-record.mjs';
 import { buildResponseInformationInstitutionInner } from './codec/institution-record.mjs';
+import {
+  REQ_INFO_WAREHOUSE_CODE,
+  RESP_INFO_WAREHOUSE_BODY_BYTES,
+  RESP_INFO_WAREHOUSE_CODE,
+  buildResponseInformationWarehouseInner,
+} from './codec/warehouse-record.mjs';
 
 export function buildMsg32Inner(code, body = Buffer.alloc(0)) {
   const bodyBuf = Buffer.isBuffer(body) ? body : Buffer.from(body);
@@ -840,6 +846,8 @@ export const CODE_REQ_INFORMATION_BASE = 0x031e; // C→S 선택 성계 base det
 export const CODE_RESP_INFORMATION_BASE = 0x031f; // S→C base detail (고정 0x604B)
 export const CODE_REQ_INFORMATION_INSTITUTION = 0x0320; // C→S 선택 성계 시설 정보 요청
 export const CODE_RESP_INFORMATION_INSTITUTION = 0x0321; // S→C institution detail (고정 0x8de4B)
+export const CODE_REQ_INFORMATION_WAREHOUSE = REQ_INFO_WAREHOUSE_CODE;
+export const CODE_RESP_INFORMATION_WAREHOUSE = RESP_INFO_WAREHOUSE_CODE;
 
 /**
  * static-info 어드미션 응답 opcode → body 바이트 크기 (클라 사이저 FUN_004b8b00 직접 인용, RE 확정).
@@ -867,6 +875,7 @@ export const STATIC_INFO_BODY_SIZES = Object.freeze({
   0x031d: 0x520c, // 21004 static-base
   0x031f: 0x0604, // 1540 ResponseInformationBase
   0x0321: 0x8de4, // 36324 ResponseInformationInstitution
+  [CODE_RESP_INFORMATION_WAREHOUSE]: RESP_INFO_WAREHOUSE_BODY_BYTES, // 768 ResponseInformationWarehouse
   0x032b: 0x0af4, // 2804 ResponseInformationOutfit (전용 빌더 buildOutfitInfo032b, count≥1)
 });
 
@@ -1107,6 +1116,7 @@ const ADMISSION_DEDICATED_BUILDERS = Object.freeze({
   // 같은 request code를 가로채 현재 cell/selector로 populated record를 만든다.
   [CODE_REQ_INFORMATION_BASE]: () => buildResponseInformationBaseInner(), // 0x031e → 0x031f
   [CODE_REQ_INFORMATION_INSTITUTION]: () => buildResponseInformationInstitutionInner(), // 0x0320 → 0x0321
+  [CODE_REQ_INFORMATION_WAREHOUSE]: () => buildResponseInformationWarehouseInner(), // 0x0326 → 0x0327
   // 0x032a → 0x032b: 라우팅 인식용 등록(isAdmissionRequestCode). 실제 응답은 handleWorldInner 가
   //   플레이어 편성으로 가로채 생성한다(0x0f02/0x0314 와 동일 패턴). 여기 fallback 은 플레이어
   //   컨텍스트 없이 호출될 때 창만 뜨는 안전망(count=1, 값 0) — 정상 경로에선 미사용.
@@ -1492,6 +1502,7 @@ export function listRequiredServerEmitCodes() {
       '0x031d ResponseStaticInformationBase (runtime served; field provenance partial)',
       '0x031f ResponseInformationBase (runtime served; P0 wire shape, id-only payload)',
       '0x0321 ResponseInformationInstitution (runtime served; P0 wire shape, id-only payload)',
+      '0x0327 ResponseInformationWarehouse (runtime served; P0 wire shape, base-id plus P3 zero/empty stock)',
     ],
     omittedUnproven: [],
   };

@@ -619,6 +619,110 @@ test('0x0320 returns a fixed 0x0321 for the same base with no fabricated facilit
   assert.ok(body.subarray(5).every((byte) => byte === 0), 'unproven institution fields stay zero');
 });
 
+test('0x0326 returns one fixed 0x0327 for explicit base 70 with P3 zero/empty stock', () => {
+  const world = createWorldSession();
+  world.seedPlayer({ connectionId: 1, characterId: 5, unitId: 8, cell: 2588, inWorld: true });
+  const request = Buffer.alloc(10);
+  request.writeUInt16BE(0x0326, 0);
+  request.writeUInt32LE(70, 2);
+  request.writeUInt32LE(0, 6);
+
+  const result = world.handleWorldInner({ connectionId: 1, accountId: 'a', inner: request });
+  assert.ok(result, '0x0326 must route to the world session');
+  assert.equal(result.responses.length, 1, 'reactive request emits one paired frame');
+  assert.equal(readMsg32Code(result.responses[0].inner), 0x0327);
+  const body = msg32Body(result.responses[0].inner);
+  assert.equal(body.length, 0x300);
+  assert.equal(body.readUInt32BE(0), 70, 'warehouse joins the explicit static base id');
+  assert.ok(body.subarray(4).every((byte) => byte === 0), 'unproven warehouse stock stays zero/empty');
+});
+
+test('0x0326 invalid or malformed selectors fail closed without player-cell fallback', () => {
+  const world = createWorldSession();
+  world.seedPlayer({ connectionId: 1, characterId: 5, unitId: 8, cell: 2588, inWorld: true });
+  const requests = [];
+
+  const unknown = Buffer.alloc(10);
+  unknown.writeUInt16BE(0x0326, 0);
+  unknown.writeUInt32LE(0x7fffffff, 2);
+  requests.push(unknown);
+
+  const bigEndianAlias = Buffer.alloc(10);
+  bigEndianAlias.writeUInt16BE(0x0326, 0);
+  bigEndianAlias.writeUInt32BE(70, 2);
+  requests.push(bigEndianAlias);
+
+  const truncated = Buffer.alloc(6);
+  truncated.writeUInt16BE(0x0326, 0);
+  truncated.writeUInt32LE(70, 2);
+  requests.push(truncated);
+
+  const trailing = Buffer.alloc(11);
+  trailing.writeUInt16BE(0x0326, 0);
+  trailing.writeUInt32LE(70, 2);
+  requests.push(trailing);
+
+  for (const request of requests) {
+    const result = world.handleWorldInner({ connectionId: 1, accountId: 'a', inner: request });
+    assert.ok(result, 'recognized request still drains the response ring');
+    assert.equal(result.responses.length, 1);
+    assert.equal(readMsg32Code(result.responses[0].inner), 0x0327);
+    assert.ok(msg32Body(result.responses[0].inner).every((byte) => byte === 0),
+      'invalid selector must not alias player cell 2588/base 70');
+  }
+});
+
+test('0x0326 message32 requests remain one-request/one-response across duplicate refreshes', () => {
+  const world = createWorldSession();
+  world.seedPlayer({ connectionId: 1, characterId: 5, unitId: 8, cell: 2588, inWorld: true });
+  const request = Buffer.alloc(14);
+  request.writeUInt32LE(0, 0);
+  request.writeUInt16BE(0x0326, 4);
+  request.writeUInt32LE(70, 6);
+  request.writeUInt32LE(0, 10);
+
+  for (let attempt = 0; attempt < 2; attempt += 1) {
+    const result = world.handleWorldInner({ connectionId: 1, accountId: 'a', inner: request });
+    assert.deepEqual(result.responses.map((entry) => readMsg32Code(entry.inner)), [0x0327]);
+  }
+});
+
+test('base detail refresh preserves the client singleton-cache response order through 0x0327', () => {
+  const world = createWorldSession();
+  world.seedPlayer({ connectionId: 1, characterId: 5, unitId: 8, cell: 2588, inWorld: true });
+  const requests = [0x031e, 0x0320].map((requestCode) => {
+    const request = Buffer.alloc(8);
+    request.writeUInt16BE(requestCode, 0);
+    request.writeUInt16BE(1, 2);
+    request.writeUInt32LE(70, 4);
+    return request;
+  });
+  const warehouse = Buffer.alloc(10);
+  warehouse.writeUInt16BE(0x0326, 0);
+  warehouse.writeUInt32LE(70, 2);
+  warehouse.writeUInt32LE(0, 6);
+  requests.push(warehouse);
+
+  const codes = requests.flatMap((inner) => (
+    world.handleWorldInner({ connectionId: 1, accountId: 'a', inner }).responses
+      .map((entry) => readMsg32Code(entry.inner))
+  ));
+  assert.deepEqual(codes, [0x031f, 0x0321, 0x0327]);
+});
+
+test('0x0326 is admission-routed but 0x0327 is not injected into first grid initialization', () => {
+  assert.equal(isAdmissionRequestCode(0x0326), true);
+  const world = createWorldSession();
+  world.seedPlayer({ connectionId: 1, characterId: 5, unitId: 8, cell: 2588, inWorld: true });
+  const request = Buffer.alloc(2);
+  request.writeUInt16BE(0x0f02, 0);
+  const result = world.handleWorldInner({ connectionId: 1, accountId: 'a', inner: request });
+  const codes = result.responses.map((entry) => readMsg32Code(entry.inner));
+  assert.equal(codes.includes(0x0327), false, 'warehouse stays reactive to client 0x0326');
+  assert.ok(codes.indexOf(0x031f) < codes.indexOf(0x0321));
+  assert.ok(codes.indexOf(0x0321) < codes.indexOf(0x0f03));
+});
+
 test('0x031e/0x0320 request selector overrides the player cell with the same joined base id', () => {
   const world = createWorldSession();
   world.seedPlayer({ connectionId: 1, characterId: 5, unitId: 8, cell: 2588, inWorld: true });

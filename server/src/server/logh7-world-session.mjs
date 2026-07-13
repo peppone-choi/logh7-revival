@@ -26,6 +26,7 @@ import {
   CODE_REQ_STATIC_BASE,
   CODE_REQ_INFORMATION_BASE,
   CODE_REQ_INFORMATION_INSTITUTION,
+  CODE_REQ_INFORMATION_WAREHOUSE,
   CODE_REQ_GRID_INIT,
   CODE_REQ_OUTFIT_INFO,
   buildOutfitInfo032b,
@@ -43,6 +44,10 @@ import {
 } from './logh7-static-base.mjs';
 import { buildResponseInformationBaseInner } from './codec/base-record.mjs';
 import { buildResponseInformationInstitutionInner } from './codec/institution-record.mjs';
+import {
+  buildResponseInformationWarehouseInner,
+  decodeRequestInformationWarehouse,
+} from './codec/warehouse-record.mjs';
 
 /**
  * @typedef {{
@@ -503,6 +508,21 @@ export function createWorldSession({
         : buildResponseInformationInstitutionInner({
           institutions: selected ? [{ id: selected.id, institutions: [] }] : [],
         });
+      return {
+        kind: 'admission',
+        reqCode: code,
+        respCode: readMsg32Code(response),
+        responses: [{ targets: [connectionId], inner: response, isMsg32: true }],
+      };
+    }
+
+    // 0x0326은 송신 serializer(0x40c2d0)가 base/outfit 두 u32LE를 정확히 8바이트로 보낸다.
+    // 선택 base가 정적 catalog에 있을 때만 조인하고, 재고 정본이 없으므로 base 외 값은 P3 0/empty다.
+    // malformed/unknown selector도 player cell로 대체하지 않고 빈 0x0327 하나로 ring을 닫는다.
+    if (code === CODE_REQ_INFORMATION_WAREHOUSE) {
+      const request = decodeRequestInformationWarehouse(rawForDecode);
+      const selected = request ? findStaticBase({ systemId: request.base }) : null;
+      const response = buildResponseInformationWarehouseInner(selected ? { base: selected.id } : {});
       return {
         kind: 'admission',
         reqCode: code,
