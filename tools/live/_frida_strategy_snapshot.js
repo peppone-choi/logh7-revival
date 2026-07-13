@@ -132,6 +132,450 @@ Interceptor.attach(CONST_MSG_LOOKUP, {
   },
 });
 
+const SYSTEM_DETAIL_PROTOCOL_CODES = new Set([
+  0x031d,
+  0x031f,
+  0x0321,
+  0x0f03,
+]);
+const SYSTEM_DETAIL_RING_LIMIT = 128;
+const SYSTEM_DETAIL_STATIC_CAP = 350;
+const SYSTEM_DETAIL_STATIC_STRIDE = 0x250;
+const SYSTEM_DETAIL_EXPECTED_BASE_ID = 70;
+const systemDetailAttachedAddresses = new Set();
+const systemDetailProtocolState = {
+  onrecv: [],
+  dispatch: [],
+  totalOnRecv: 0,
+  totalDispatch: 0,
+};
+const systemDetailLookupState = {
+  base031f: { totalCalls: 0, ring: [] },
+  institution0321: { totalCalls: 0, ring: [] },
+};
+const systemDetailPanelState = { totalCalls: 0, ring: [] };
+const systemDetailSelectionIndexState = {
+  totalCalls: 0,
+  validCalls: 0,
+  inRangeCalls: 0,
+  selectionChangedCalls: 0,
+  infoPanelCandidateCalls: 0,
+  infoPanelSelectionChangedCalls: 0,
+  ring: [],
+};
+
+function pushSystemDetailRing(ring, entry) {
+  ring.push(entry);
+  if (ring.length > SYSTEM_DETAIL_RING_LIMIT) ring.shift();
+}
+
+function systemDetailCodeHex(code) {
+  return `0x${code.toString(16).padStart(4, '0')}`;
+}
+
+function systemDetailCallerVa(returnAddress) {
+  return safe(() => ptr(returnAddress).sub(moduleBase).add(IMAGE_BASE).toString());
+}
+
+function attachSystemDetailHook(va, callbacks) {
+  if (systemDetailAttachedAddresses.has(va)) return false;
+  systemDetailAttachedAddresses.add(va);
+  Interceptor.attach(abs(va), callbacks);
+  return true;
+}
+
+attachSystemDetailHook('0x004ae0d0', {
+  onEnter(args) {
+    const code = safe(() => args[0].toInt32() & 0xffff);
+    if (!SYSTEM_DETAIL_PROTOCOL_CODES.has(code)) return;
+    systemDetailProtocolState.totalOnRecv += 1;
+    pushSystemDetailRing(systemDetailProtocolState.onrecv, {
+      code,
+      codeHex: systemDetailCodeHex(code),
+      callerVa: systemDetailCallerVa(this.returnAddress),
+      timestamp: Date.now(),
+      client: ptrHex(this.context.ecx),
+      payload: ptrHex(args[2]),
+    });
+  },
+});
+
+attachSystemDetailHook('0x004ba2b0', {
+  onEnter(args) {
+    const code = safe(() => args[0].toInt32() & 0xffff);
+    if (!SYSTEM_DETAIL_PROTOCOL_CODES.has(code)) return;
+    systemDetailProtocolState.totalDispatch += 1;
+    pushSystemDetailRing(systemDetailProtocolState.dispatch, {
+      code,
+      codeHex: systemDetailCodeHex(code),
+      callerVa: systemDetailCallerVa(this.returnAddress),
+      timestamp: Date.now(),
+      client: ptrHex(this.context.ecx),
+      record: ptrHex(args[1]),
+    });
+  },
+});
+
+function boundedIdTableSnapshot(base, countOffset, idsOffset, stride, cap) {
+  const countAddress = base && !base.isNull() ? base.add(countOffset) : ptr('0x0');
+  const idsAddress = base && !base.isNull() ? base.add(idsOffset) : ptr('0x0');
+  if (countAddress.isNull() || idsAddress.isNull()) {
+    return {
+      countAddress: null,
+      idsAddress: null,
+      rawCount: null,
+      boundedCount: 0,
+      cap,
+      stride,
+      truncated: false,
+      ids: [],
+      reason: 'client-base-unavailable',
+    };
+  }
+  const rawCount = readU8(countAddress);
+  if (!Number.isInteger(rawCount)) {
+    return {
+      countAddress: ptrHex(countAddress),
+      idsAddress: ptrHex(idsAddress),
+      rawCount: null,
+      boundedCount: 0,
+      cap,
+      stride,
+      truncated: false,
+      ids: [],
+      reason: 'count-unreadable',
+    };
+  }
+  const boundedCount = Math.min(rawCount, cap);
+  const ids = [];
+  let reason = rawCount > cap ? 'count-exceeds-cap' : null;
+  for (let index = 0; index < boundedCount; index += 1) {
+    const id = readU32(idsAddress.add(index * stride));
+    ids.push(id);
+    if (id === null && reason === null) reason = 'id-unreadable';
+  }
+  return {
+    countAddress: ptrHex(countAddress),
+    idsAddress: ptrHex(idsAddress),
+    rawCount,
+    boundedCount,
+    cap,
+    stride,
+    truncated: rawCount > cap,
+    ids,
+    reason,
+  };
+}
+
+function staticBaseCacheSnapshot(base) {
+  if (!base || base.isNull()) {
+    return {
+      idsAddress: null,
+      tableAddress: null,
+      cap: SYSTEM_DETAIL_STATIC_CAP,
+      stride: SYSTEM_DETAIL_STATIC_STRIDE,
+      importedIds: [],
+      activeIds: [],
+      entries: [],
+      reason: 'client-base-unavailable',
+    };
+  }
+  const idsAddress = base.add(0x2eb288);
+  const tableAddress = base.add(0x2eb800);
+  const importedIds = [];
+  const activeIds = [];
+  const entries = [];
+  let reason = null;
+  for (let index = 0; index < SYSTEM_DETAIL_STATIC_CAP; index += 1) {
+    const id = readU32(idsAddress.add(index * 4));
+    const active = readU8(tableAddress.add(index * SYSTEM_DETAIL_STATIC_STRIDE));
+    if (id === null || active === null) {
+      reason = 'entry-unreadable';
+      break;
+    }
+    if (id !== 0) importedIds.push(id);
+    if (active !== 0 && id !== 0) activeIds.push(id);
+    if (id !== 0 || active !== 0) entries.push({ index, id, active });
+  }
+  return {
+    idsAddress: ptrHex(idsAddress),
+    tableAddress: ptrHex(tableAddress),
+    cap: SYSTEM_DETAIL_STATIC_CAP,
+    stride: SYSTEM_DETAIL_STATIC_STRIDE,
+    importedIds,
+    activeIds,
+    entries,
+    reason,
+  };
+}
+
+function attachSystemDetailLookup(va, state) {
+  attachSystemDetailHook(va, {
+    onEnter(args) {
+      const entry = {
+        arg0: safe(() => args[0].toInt32()),
+        callerVa: systemDetailCallerVa(this.returnAddress),
+        timestamp: Date.now(),
+        client: ptrHex(this.context.ecx),
+        retval: null,
+      };
+      state.totalCalls += 1;
+      pushSystemDetailRing(state.ring, entry);
+      this.systemDetailLookupEntry = entry;
+    },
+    onLeave(retval) {
+      const entry = this.systemDetailLookupEntry;
+      if (!entry) return;
+      entry.retval = ptrHex(retval);
+      entry.found = !retval.isNull();
+    },
+  });
+}
+
+attachSystemDetailLookup('0x004c5470', systemDetailLookupState.base031f);
+attachSystemDetailLookup('0x004c54d0', systemDetailLookupState.institution0321);
+
+attachSystemDetailHook('0x0057aa90', {
+  onEnter(args) {
+    const argument = safe(() => ptr(args[0]), ptr('0x0'));
+    const entry = {
+      arg0: ptrHex(argument),
+      selectedBaseId: argument.isNull() ? null : readU32(argument.add(8)),
+      callerVa: systemDetailCallerVa(this.returnAddress),
+      timestamp: Date.now(),
+    };
+    systemDetailPanelState.totalCalls += 1;
+    pushSystemDetailRing(systemDetailPanelState.ring, entry);
+  },
+});
+
+attachSystemDetailHook('0x00576d40', {
+  onEnter(args) {
+    systemDetailSelectionIndexState.totalCalls += 1;
+    const index = safe(() => args[0].toInt32());
+    if (!Number.isInteger(index) || index === -1 || index < 0) return;
+    const controller = safe(() => ptr(this.context.ecx), ptr('0x0'));
+    const panelKind = controller.isNull() ? null : readS32(controller.add(0x234));
+    const itemCount = controller.isNull() ? null : readS32(controller.add(0x8e4));
+    const inRange = Number.isInteger(itemCount) && index < itemCount;
+    const entry = {
+      controller: ptrHex(controller),
+      index,
+      callerVa: systemDetailCallerVa(this.returnAddress),
+      timestamp: Date.now(),
+      itemCount,
+      inRange,
+      selectedBefore: controller.isNull() ? null : readS32(controller.add(0x8e8)),
+      panelKind,
+      panelState: controller.isNull() ? null : readS32(controller.add(0x238)),
+      infoSelectedIndex: controller.isNull() ? null : readS32(controller.add(0xb2c)),
+      retval: null,
+      selectedAfter: null,
+      infoSelectedIndexAfter: null,
+      selectionChanged: false,
+    };
+    systemDetailSelectionIndexState.validCalls += 1;
+    if (inRange) {
+      systemDetailSelectionIndexState.inRangeCalls += 1;
+      if (panelKind === 5 || panelKind === 0x11) {
+        systemDetailSelectionIndexState.infoPanelCandidateCalls += 1;
+      }
+    }
+    pushSystemDetailRing(systemDetailSelectionIndexState.ring, entry);
+    this.systemDetailSelectionIndexEntry = entry;
+    this.systemDetailSelectionIndexController = controller;
+  },
+  onLeave(retval) {
+    const entry = this.systemDetailSelectionIndexEntry;
+    const controller = this.systemDetailSelectionIndexController;
+    if (!entry || !controller || controller.isNull()) return;
+    entry.retval = safe(() => retval.toInt32());
+    entry.selectedAfter = readS32(controller.add(0x8e8));
+    entry.infoSelectedIndexAfter = readS32(controller.add(0xb2c));
+    entry.selectionChanged = (
+      entry.inRange === true
+      && Number.isInteger(entry.selectedBefore)
+      && Number.isInteger(entry.selectedAfter)
+      && entry.selectedAfter === entry.index
+      && entry.selectedAfter !== entry.selectedBefore
+    );
+    if (entry.selectionChanged) {
+      systemDetailSelectionIndexState.selectionChangedCalls += 1;
+      if (entry.panelKind === 5 || entry.panelKind === 0x11) {
+        systemDetailSelectionIndexState.infoPanelSelectionChangedCalls += 1;
+      }
+    }
+  },
+});
+
+function systemDetailJoinFor(baseId, caches, worldActive, strategyFieldImportFlag2a58fa) {
+  if (!Number.isInteger(baseId) || baseId <= 0) return null;
+  const staticImported = caches.staticBase.importedIds.includes(baseId);
+  const staticActive = caches.staticBase.activeIds.includes(baseId);
+  const source031f = caches.source031f.ids.includes(baseId);
+  const source0321 = caches.source0321.ids.includes(baseId);
+  const live031f = caches.live031f.ids.includes(baseId);
+  const live0321 = caches.live0321.ids.includes(baseId);
+  const base031fJoinComplete = staticImported && staticActive && source031f && live031f;
+  const base0321JoinComplete = staticImported && staticActive && source0321 && live0321;
+  const membershipJoinComplete = base031fJoinComplete && base0321JoinComplete;
+  const worldConsumerActive = Number.isInteger(worldActive) && worldActive !== 0;
+  const strategyFieldImportComplete = (
+    Number.isInteger(strategyFieldImportFlag2a58fa) && strategyFieldImportFlag2a58fa !== 0
+  );
+  const cacheSnapshotsHealthy = (
+    caches.staticBase.reason === null
+    && caches.source031f.reason === null
+    && caches.source031f.truncated === false
+    && caches.source0321.reason === null
+    && caches.source0321.truncated === false
+    && caches.live031f.reason === null
+    && caches.live031f.truncated === false
+    && caches.live0321.reason === null
+    && caches.live0321.truncated === false
+  );
+  const cacheJoinComplete = (
+    membershipJoinComplete
+    && worldConsumerActive
+    && strategyFieldImportComplete
+    && cacheSnapshotsHealthy
+  );
+  return {
+    baseId,
+    staticImported,
+    staticActive,
+    source031f,
+    source0321,
+    live031f,
+    live0321,
+    base031fJoinComplete,
+    base0321JoinComplete,
+    membershipJoinComplete,
+    worldConsumerActive,
+    strategyFieldImportComplete,
+    cacheSnapshotsHealthy,
+    cacheJoinComplete,
+  };
+}
+
+function systemDetailProtocolSummary() {
+  const observed = (ring, code) => ring.some((entry) => entry.code === code);
+  const onrecv = {};
+  const dispatch = {};
+  for (const code of SYSTEM_DETAIL_PROTOCOL_CODES) {
+    const key = systemDetailCodeHex(code);
+    onrecv[key] = observed(systemDetailProtocolState.onrecv, code);
+    dispatch[key] = observed(systemDetailProtocolState.dispatch, code);
+  }
+  return {
+    onrecv,
+    dispatch,
+    allOnRecv: Object.values(onrecv).every((value) => value === true),
+    allDispatch: Object.values(dispatch).every((value) => value === true),
+  };
+}
+
+function systemDetailState(base) {
+  const baseAvailable = Boolean(base && !base.isNull());
+  const clientSpotResolverBase = baseAvailable ? readU32(base.add(0x358)) : null;
+  let clientSpotResolverBaseReason = baseAvailable ? null : 'client-base-unavailable';
+  if (baseAvailable && clientSpotResolverBase === null) {
+    clientSpotResolverBaseReason = 'client-spot-resolver-base-unreadable';
+  }
+
+  const worldActive = baseAvailable ? readU8(base.add(0x2a58f8)) : null;
+  const strategyFieldImportFlag2a58fa = baseAvailable ? readU8(base.add(0x2a58fa)) : null;
+  const unitCount = baseAvailable ? readU16(base.add(0x41a364)) : null;
+  let unit0SpotResolverBase = null;
+  let unit0SpotResolverBaseReason = null;
+  if (!baseAvailable) {
+    unit0SpotResolverBaseReason = 'client-base-unavailable';
+  } else if (!Number.isInteger(worldActive)) {
+    unit0SpotResolverBaseReason = 'world-cache-flag-unreadable';
+  } else if (worldActive === 0) {
+    unit0SpotResolverBaseReason = 'world-cache-inactive';
+  } else if (!Number.isInteger(unitCount)) {
+    unit0SpotResolverBaseReason = 'unit-count-unreadable';
+  } else if (unitCount < 1) {
+    unit0SpotResolverBaseReason = 'unit-table-empty';
+  } else {
+    unit0SpotResolverBase = readU32(base.add(0x41a368 + 0x40));
+    if (unit0SpotResolverBase === null) unit0SpotResolverBaseReason = 'unit0-spot-base-unreadable';
+  }
+
+  const caches = {
+    staticBase: staticBaseCacheSnapshot(base),
+    source031f: boundedIdTableSnapshot(base, 0x3facf4, 0x3facf8, 0x180, 4),
+    source0321: boundedIdTableSnapshot(base, 0x3fb2f8, 0x3fb2fc, 0x2378, 4),
+    live031f: boundedIdTableSnapshot(base, 0x2b6a74, 0x2b6a78, 0x180, 4),
+    live0321: boundedIdTableSnapshot(base, 0x2b7078, 0x2b707c, 0x2378, 4),
+  };
+  const panelLast = systemDetailPanelState.ring.length > 0
+    ? systemDetailPanelState.ring[systemDetailPanelState.ring.length - 1]
+    : null;
+  const protocolSummary = systemDetailProtocolSummary();
+  const expectedJoin = systemDetailJoinFor(
+    SYSTEM_DETAIL_EXPECTED_BASE_ID,
+    caches,
+    worldActive,
+    strategyFieldImportFlag2a58fa,
+  );
+  return {
+    available: baseAvailable,
+    reason: baseAvailable ? null : 'client-base-unavailable',
+    clientSpotResolverBase,
+    clientSpotResolverBaseReason,
+    unit0SpotResolverBase,
+    unit0SpotResolverBaseReason,
+    unitCount,
+    importFlags: {
+      worldActive2a58f8: worldActive,
+      strategyFieldImportFlag2a58fa,
+    },
+    protocol: {
+      onrecv: systemDetailProtocolState.onrecv,
+      dispatch: systemDetailProtocolState.dispatch,
+      totalOnRecv: systemDetailProtocolState.totalOnRecv,
+      totalDispatch: systemDetailProtocolState.totalDispatch,
+      summary: protocolSummary,
+    },
+    caches,
+    lookups: systemDetailLookupState,
+    panel: systemDetailPanelState,
+    selectionIndex: systemDetailSelectionIndexState,
+    joins: {
+      expectedBaseId: SYSTEM_DETAIL_EXPECTED_BASE_ID,
+      expected: expectedJoin,
+      clientSpotResolver: systemDetailJoinFor(
+        clientSpotResolverBase,
+        caches,
+        worldActive,
+        strategyFieldImportFlag2a58fa,
+      ),
+      unit0SpotResolver: systemDetailJoinFor(
+        unit0SpotResolverBase,
+        caches,
+        worldActive,
+        strategyFieldImportFlag2a58fa,
+      ),
+      panelSelected: systemDetailJoinFor(
+        panelLast ? panelLast.selectedBaseId : null,
+        caches,
+        worldActive,
+        strategyFieldImportFlag2a58fa,
+      ),
+    },
+    summary: {
+      expectedBaseId: SYSTEM_DETAIL_EXPECTED_BASE_ID,
+      protocolAllOnRecv: protocolSummary.allOnRecv,
+      protocolAllDispatch: protocolSummary.allDispatch,
+      expectedBase031fJoin: expectedJoin ? expectedJoin.base031fJoinComplete : false,
+      expectedBase0321Join: expectedJoin ? expectedJoin.base0321JoinComplete : false,
+      cacheJoinComplete: expectedJoin ? expectedJoin.cacheJoinComplete : false,
+    },
+  };
+}
+
 const selectionHitState = { calls: 0, accepted: 0, rejected: 0, last: null };
 const commandHitState = { calls: 0, accepted: 0, rejected: 0, last: null };
 const nativeCallState = {
@@ -963,6 +1407,7 @@ function snapshot() {
     selection: selectionState(),
     runtimeTables: runtimeTables(base),
     linkage: linkageState(base),
+    systemDetail: systemDetailState(base),
     selectionHit: selectionHitState,
     commandHit: commandHitState,
     constMsgLookups: constMsgLookupState,

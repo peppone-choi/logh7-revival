@@ -16,6 +16,22 @@ from pathlib import Path
 
 user32 = ctypes.windll.user32
 kernel32 = ctypes.windll.kernel32
+user32.GetForegroundWindow.argtypes = []
+user32.GetForegroundWindow.restype = wintypes.HWND
+kernel32.GetCurrentThreadId.argtypes = []
+kernel32.GetCurrentThreadId.restype = wintypes.DWORD
+user32.GetWindowThreadProcessId.argtypes = [wintypes.HWND, ctypes.POINTER(wintypes.DWORD)]
+user32.GetWindowThreadProcessId.restype = wintypes.DWORD
+user32.AttachThreadInput.argtypes = [wintypes.DWORD, wintypes.DWORD, wintypes.BOOL]
+user32.AttachThreadInput.restype = wintypes.BOOL
+user32.SetForegroundWindow.argtypes = [wintypes.HWND]
+user32.SetForegroundWindow.restype = wintypes.BOOL
+user32.ShowWindow.argtypes = [wintypes.HWND, ctypes.c_int]
+user32.ShowWindow.restype = wintypes.BOOL
+user32.IsWindowVisible.argtypes = [wintypes.HWND]
+user32.IsWindowVisible.restype = wintypes.BOOL
+user32.GetWindowTextLengthW.argtypes = [wintypes.HWND]
+user32.GetWindowTextLengthW.restype = ctypes.c_int
 
 # ── Win32 상수 ────────────────────────────────────────────────────────────────
 INPUT_MOUSE = 0
@@ -68,6 +84,12 @@ CREATE_CONFIRM = (820, 700)
 CREATE_OK = (560, 420)  # 중앙 확인 다이얼로그
 
 
+class ForegroundActivationError(RuntimeError):
+    def __init__(self, hwnd: int) -> None:
+        self.hwnd = hwnd
+        super().__init__(f"창 전면 활성화 실패: hwnd={hwnd}")
+
+
 class POINT(ctypes.Structure):
     _fields_ = [("x", wintypes.LONG), ("y", wintypes.LONG)]
 
@@ -75,6 +97,14 @@ class POINT(ctypes.Structure):
 class RECT(ctypes.Structure):
     _fields_ = [("left", wintypes.LONG), ("top", wintypes.LONG),
                 ("right", wintypes.LONG), ("bottom", wintypes.LONG)]
+
+
+user32.GetClientRect.argtypes = [wintypes.HWND, ctypes.POINTER(RECT)]
+user32.GetClientRect.restype = wintypes.BOOL
+user32.GetWindowRect.argtypes = [wintypes.HWND, ctypes.POINTER(RECT)]
+user32.GetWindowRect.restype = wintypes.BOOL
+user32.ClientToScreen.argtypes = [wintypes.HWND, ctypes.POINTER(POINT)]
+user32.ClientToScreen.restype = wintypes.BOOL
 
 
 class MOUSEINPUT(ctypes.Structure):
@@ -168,7 +198,19 @@ def client_geometry(hwnd: int):
 
 def foreground(hwnd: int):
     user32.ShowWindow(hwnd, SW_RESTORE)
-    user32.SetForegroundWindow(hwnd)
+    foreground_hwnd = user32.GetForegroundWindow()
+    current_thread_id = kernel32.GetCurrentThreadId()
+    foreground_thread_id = user32.GetWindowThreadProcessId(foreground_hwnd, None)
+    attached = bool(foreground_thread_id) and foreground_thread_id != current_thread_id
+    if attached:
+        attached = bool(user32.AttachThreadInput(current_thread_id, foreground_thread_id, True))
+    try:
+        activated = bool(user32.SetForegroundWindow(hwnd))
+    finally:
+        if attached:
+            user32.AttachThreadInput(current_thread_id, foreground_thread_id, False)
+    if not activated:
+        raise ForegroundActivationError(hwnd)
     time.sleep(0.25)
 
 

@@ -29,6 +29,8 @@ GAME_START = (125, 191)
 CHAR_CARD = (655, 305)
 STRATEGY_REF = (1028, 772)
 STRATEGY_AUTHORITY_TAB = (735, 580)
+STRATEGY_SYSTEM_MARKER = (515, 390)
+STRATEGY_SYSTEM_ROW_MODE1 = (158, 456)
 EXPECTED_CANONICAL_CLIENT_SHA256 = '9c97de2ae426f011680992d6c8d88b25488b5f51555ce5784aeef677f334bb51'
 
 STORE = {
@@ -191,6 +193,61 @@ def main():
                 mouse_click(ox + x, oy + y)
                 time.sleep(1)
                 mouse_click(ox + x, oy + y)
+            world_entry_started = time.monotonic()
+            world_entry_deadline = time.monotonic() + 8
+            world_entry_ok = False
+            retry_attempted = False
+            retry_game_start_point = None
+            retry_char_card_point = None
+            while time.monotonic() < world_entry_deadline and client.poll() is None:
+                try:
+                    world_entry_log = server_log.read_text(encoding='utf-8', errors='ignore')
+                except OSError:
+                    world_entry_log = ''
+                if 'ss-login-ok-sent' in world_entry_log:
+                    world_entry_ok = True
+                    break
+                time.sleep(0.25)
+            if not world_entry_ok and client.poll() is None:
+                retry_attempted = True
+                ox, oy, width, height = client_geometry(hwnd)
+                x, y = scale(LOBBY_REF, GAME_START, width, height)
+                retry_game_start_point = (ox + x, oy + y)
+                foreground(hwnd)
+                mouse_click(ox + x, oy + y)
+                time.sleep(3)
+                ox, oy, width, height = client_geometry(hwnd)
+                x, y = scale(LOBBY_REF, CHAR_CARD, width, height)
+                retry_char_card_point = (ox + x, oy + y)
+                mouse_click(ox + x, oy + y)
+                time.sleep(1)
+                mouse_click(ox + x, oy + y)
+                retry_deadline = time.monotonic() + 8
+                while time.monotonic() < retry_deadline and client.poll() is None:
+                    try:
+                        world_entry_log = server_log.read_text(encoding='utf-8', errors='ignore')
+                    except OSError:
+                        world_entry_log = ''
+                    if 'ss-login-ok-sent' in world_entry_log:
+                        world_entry_ok = True
+                        break
+                    time.sleep(0.25)
+            world_entry_result = {
+                'success': world_entry_ok,
+                'retryAttempted': retry_attempted,
+                'elapsed': time.monotonic() - world_entry_started,
+                'clientExitCode': client.poll(),
+                'points': {
+                    'retryGameStart': retry_game_start_point,
+                    'retryCharCard': retry_char_card_point,
+                },
+            }
+            (evdir / 'world-entry-gate.json').write_text(
+                json.dumps(world_entry_result, ensure_ascii=False, indent=2),
+                encoding='utf-8',
+            )
+            if not world_entry_ok:
+                raise RuntimeError('world entry success marker was not observed')
             if os.environ.get('LOGH_INPUT_TICK') == '1' and client.poll() is None:
                 armed = script.exports_sync.itick()
                 time.sleep(1)
@@ -388,8 +445,23 @@ def main():
                     selection = ready_snapshot.get('selection') or {}
                     linkage = ready_snapshot.get('linkage') or {}
                     selection_origin = selection.get('origin') or {}
+                    selection_hud_mode = selection.get('hudModeF4')
+                    selection_origin_x = selection_origin.get('x')
+                    selection_origin_y = selection_origin.get('y')
+                    selection_origin_ready = (
+                        (
+                            selection_hud_mode == 1
+                            and selection_origin_x == 0
+                            and selection_origin_y == 0
+                        )
+                        or (
+                            selection_origin_x is not None
+                            and selection_origin_y is not None
+                            and (selection_origin_x != 0 or selection_origin_y != 0)
+                        )
+                    )
                     ready = (
-                        ((selection_origin.get('x') or 0) > 0)
+                        selection_origin_ready
                         and len(selection.get('rows') or []) > 0
                         and ((linkage.get('unit0Id') or 0) > 0)
                         and ((linkage.get('char0Flagship') or 0) > 0)
@@ -406,6 +478,420 @@ def main():
                     ready_payload['timeout'] = True
                 (evdir / 'strategy-ready.json').write_text(
                     json.dumps(ready_payload, ensure_ascii=False, indent=2),
+                    encoding='utf-8',
+                )
+                if not ready:
+                    raise RuntimeError('strategy map did not become ready')
+            if os.environ.get('LOGH_CLICK_STRATEGY_SYSTEM_MARKER') == '1' and client.poll() is None:
+                system_detail_ready_started = time.monotonic()
+                system_detail_ready_deadline = system_detail_ready_started + 30
+                system_detail_ready_snapshot = None
+                system_detail_ready = False
+                system_detail = {}
+                summary = {}
+                while time.monotonic() < system_detail_ready_deadline and client.poll() is None:
+                    try:
+                        system_detail_ready_snapshot = script.exports_sync.snapshot()
+                    except (OSError, RuntimeError, TypeError, ValueError, frida.InvalidOperationError):
+                        break
+                    system_detail = system_detail_ready_snapshot.get('systemDetail') or {}
+                    summary = system_detail.get('summary') or {}
+                    system_detail_ready = (
+                        summary.get('protocolAllDispatch') is True
+                        and summary.get('cacheJoinComplete') is True
+                    )
+                    if system_detail_ready:
+                        break
+                    time.sleep(0.25)
+                system_detail_ready_result = {
+                    'ready': system_detail_ready,
+                    'elapsed': time.monotonic() - system_detail_ready_started,
+                    'lastSummary': summary,
+                    'lastProtocol': system_detail.get('protocol'),
+                    'lastCaches': system_detail.get('caches'),
+                }
+                (evdir / 'strategy-system-detail-ready.json').write_text(
+                    json.dumps(system_detail_ready_result, ensure_ascii=False, indent=2),
+                    encoding='utf-8',
+                )
+                if not system_detail_ready:
+                    raise RuntimeError('system detail cache did not become ready')
+
+                time.sleep(1.5)
+                render_settled_at = time.time()
+                ox, oy, width, height = client_geometry(hwnd)
+                x, y = scale(STRATEGY_REF, STRATEGY_SYSTEM_MARKER, width, height)
+                foreground(hwnd)
+
+                before_captured_at = time.time()
+                before_snapshot = script.exports_sync.snapshot()
+                screenshot(hwnd, shots / 'strategy-system-marker-before.png')
+                before_detail = before_snapshot.get('systemDetail') or {}
+                before_lookups = before_detail.get('lookups') or {}
+                before_base_lookup = before_lookups.get('base031f') or {}
+                before_institution_lookup = before_lookups.get('institution0321') or {}
+                before_panel = before_detail.get('panel') or {}
+                before_selection_index = before_detail.get('selectionIndex') or {}
+                before_selection_hit = before_snapshot.get('selectionHit') or {}
+                before_metrics = {
+                    'clientSpotResolverBase': before_detail.get('clientSpotResolverBase'),
+                    'clientSpotResolverBaseReason': before_detail.get('clientSpotResolverBaseReason'),
+                    'unit0SpotResolverBase': before_detail.get('unit0SpotResolverBase'),
+                    'baseLookupTotalCalls': before_base_lookup.get('totalCalls') or 0,
+                    'institutionLookupTotalCalls': before_institution_lookup.get('totalCalls') or 0,
+                    'panelTotalCalls': before_panel.get('totalCalls') or 0,
+                    'selectionIndexValidCalls': before_selection_index.get('validCalls') or 0,
+                    'selectionIndexInRangeCalls': before_selection_index.get('inRangeCalls') or 0,
+                    'selectionIndexChangedCalls': before_selection_index.get('selectionChangedCalls') or 0,
+                    'infoPanelCandidateCalls': before_selection_index.get('infoPanelCandidateCalls') or 0,
+                    'infoPanelSelectionChangedCalls': before_selection_index.get('infoPanelSelectionChangedCalls') or 0,
+                    'selectionHitCalls': before_selection_hit.get('calls') or 0,
+                    'selectionHitAccepted': before_selection_hit.get('accepted') or 0,
+                    'selectionHitRejected': before_selection_hit.get('rejected') or 0,
+                }
+
+                mouse_click(ox + x, oy + y)
+                single_clicked_at = time.time()
+                time.sleep(0.5)
+                single_captured_at = time.time()
+                single_snapshot = script.exports_sync.snapshot()
+                screenshot(hwnd, shots / 'strategy-system-marker-single.png')
+                single_detail = single_snapshot.get('systemDetail') or {}
+                single_lookups = single_detail.get('lookups') or {}
+                single_base_lookup = single_lookups.get('base031f') or {}
+                single_institution_lookup = single_lookups.get('institution0321') or {}
+                single_panel = single_detail.get('panel') or {}
+                single_selection_index = single_detail.get('selectionIndex') or {}
+                single_selection_hit = single_snapshot.get('selectionHit') or {}
+                single_metrics = {
+                    'clientSpotResolverBase': single_detail.get('clientSpotResolverBase'),
+                    'clientSpotResolverBaseReason': single_detail.get('clientSpotResolverBaseReason'),
+                    'unit0SpotResolverBase': single_detail.get('unit0SpotResolverBase'),
+                    'baseLookupTotalCalls': single_base_lookup.get('totalCalls') or 0,
+                    'institutionLookupTotalCalls': single_institution_lookup.get('totalCalls') or 0,
+                    'panelTotalCalls': single_panel.get('totalCalls') or 0,
+                    'selectionIndexValidCalls': single_selection_index.get('validCalls') or 0,
+                    'selectionIndexInRangeCalls': single_selection_index.get('inRangeCalls') or 0,
+                    'selectionIndexChangedCalls': single_selection_index.get('selectionChangedCalls') or 0,
+                    'infoPanelCandidateCalls': single_selection_index.get('infoPanelCandidateCalls') or 0,
+                    'infoPanelSelectionChangedCalls': single_selection_index.get('infoPanelSelectionChangedCalls') or 0,
+                    'selectionHitCalls': single_selection_hit.get('calls') or 0,
+                    'selectionHitAccepted': single_selection_hit.get('accepted') or 0,
+                    'selectionHitRejected': single_selection_hit.get('rejected') or 0,
+                }
+                single_delta = {
+                    'baseLookupTotalCalls': single_metrics['baseLookupTotalCalls'] - before_metrics['baseLookupTotalCalls'],
+                    'institutionLookupTotalCalls': single_metrics['institutionLookupTotalCalls'] - before_metrics['institutionLookupTotalCalls'],
+                    'panelTotalCalls': single_metrics['panelTotalCalls'] - before_metrics['panelTotalCalls'],
+                    'selectionIndexValidCalls': single_metrics['selectionIndexValidCalls'] - before_metrics['selectionIndexValidCalls'],
+                    'selectionIndexInRangeCalls': single_metrics['selectionIndexInRangeCalls'] - before_metrics['selectionIndexInRangeCalls'],
+                    'selectionIndexChangedCalls': single_metrics['selectionIndexChangedCalls'] - before_metrics['selectionIndexChangedCalls'],
+                    'infoPanelCandidateCalls': single_metrics['infoPanelCandidateCalls'] - before_metrics['infoPanelCandidateCalls'],
+                    'infoPanelSelectionChangedCalls': single_metrics['infoPanelSelectionChangedCalls'] - before_metrics['infoPanelSelectionChangedCalls'],
+                    'selectionHitCalls': single_metrics['selectionHitCalls'] - before_metrics['selectionHitCalls'],
+                    'selectionHitAccepted': single_metrics['selectionHitAccepted'] - before_metrics['selectionHitAccepted'],
+                    'selectionHitRejected': single_metrics['selectionHitRejected'] - before_metrics['selectionHitRejected'],
+                }
+                single_panel_delta = single_delta['panelTotalCalls']
+
+                row_click_attempted = False
+                row_reference_point = None
+                row_screen_point = None
+                row_point_source = None
+                row_before_captured_at = None
+                row_clicked_at = None
+                row_captured_at = None
+                row_before_snapshot = None
+                row_before_metrics = None
+                row_snapshot = None
+                row_metrics = None
+                row_delta = None
+                row_panel_activated = False
+                row_selection_activated = False
+                row_info_panel_selection_activated = False
+                row_activated = False
+                selection = single_snapshot.get('selection') or {}
+                selection_origin = selection.get('origin')
+                selection_rows = selection.get('rows') or []
+                row_primary = selection_rows[0].get('primary') if selection_rows else None
+                row_mode1_zero_origin = (
+                    selection.get('hudModeF4') == 1
+                    and selection_origin is not None
+                    and selection_origin.get('x') == 0
+                    and selection_origin.get('y') == 0
+                )
+                row_dynamic_origin = (
+                    selection_origin is not None
+                    and selection_origin.get('x') is not None
+                    and selection_origin.get('y') is not None
+                    and (selection_origin.get('x') != 0 or selection_origin.get('y') != 0)
+                )
+                row_geometry_valid = (
+                    (selection.get('listCount188') or 0) >= 1
+                    and (row_mode1_zero_origin or row_dynamic_origin)
+                    and row_primary is not None
+                    and row_primary.get('rectX20') is not None
+                    and row_primary.get('rectY24') is not None
+                    and (row_primary.get('rectW2c') or 0) > 0
+                    and (row_primary.get('rectH30') or 0) > 0
+                )
+                if single_panel_delta <= 0 and row_geometry_valid:
+                    row_click_attempted = True
+                    if row_mode1_zero_origin:
+                        row_reference_point = STRATEGY_SYSTEM_ROW_MODE1
+                        row_point_source = 'hud-mode1-fixed'
+                    else:
+                        row_reference_point = (
+                            selection_origin['x'] + row_primary['rectX20'] + row_primary['rectW2c'] // 2,
+                            selection_origin['y'] + row_primary['rectY24'] + row_primary['rectH30'] // 2,
+                        )
+                        row_point_source = 'dynamic-origin'
+                    row_ox, row_oy, row_width, row_height = client_geometry(hwnd)
+                    row_x, row_y = scale(STRATEGY_REF, row_reference_point, row_width, row_height)
+                    row_screen_point = (row_ox + row_x, row_oy + row_y)
+                    foreground(hwnd)
+                    row_before_captured_at = time.time()
+                    row_before_snapshot = script.exports_sync.snapshot()
+                    screenshot(hwnd, shots / 'strategy-system-row-before.png')
+                    row_before_detail = row_before_snapshot.get('systemDetail') or {}
+                    row_before_lookups = row_before_detail.get('lookups') or {}
+                    row_before_base_lookup = row_before_lookups.get('base031f') or {}
+                    row_before_institution_lookup = row_before_lookups.get('institution0321') or {}
+                    row_before_panel = row_before_detail.get('panel') or {}
+                    row_before_selection_index = row_before_detail.get('selectionIndex') or {}
+                    row_before_selection_hit = row_before_snapshot.get('selectionHit') or {}
+                    row_before_metrics = {
+                        'clientSpotResolverBase': row_before_detail.get('clientSpotResolverBase'),
+                        'clientSpotResolverBaseReason': row_before_detail.get('clientSpotResolverBaseReason'),
+                        'unit0SpotResolverBase': row_before_detail.get('unit0SpotResolverBase'),
+                        'baseLookupTotalCalls': row_before_base_lookup.get('totalCalls') or 0,
+                        'institutionLookupTotalCalls': row_before_institution_lookup.get('totalCalls') or 0,
+                        'panelTotalCalls': row_before_panel.get('totalCalls') or 0,
+                        'selectionIndexValidCalls': row_before_selection_index.get('validCalls') or 0,
+                        'selectionIndexInRangeCalls': row_before_selection_index.get('inRangeCalls') or 0,
+                        'selectionIndexChangedCalls': row_before_selection_index.get('selectionChangedCalls') or 0,
+                        'infoPanelCandidateCalls': row_before_selection_index.get('infoPanelCandidateCalls') or 0,
+                        'infoPanelSelectionChangedCalls': row_before_selection_index.get('infoPanelSelectionChangedCalls') or 0,
+                        'selectionHitCalls': row_before_selection_hit.get('calls') or 0,
+                        'selectionHitAccepted': row_before_selection_hit.get('accepted') or 0,
+                        'selectionHitRejected': row_before_selection_hit.get('rejected') or 0,
+                    }
+                    mouse_click(row_ox + row_x, row_oy + row_y)
+                    row_clicked_at = time.time()
+                    time.sleep(0.5)
+                    row_captured_at = time.time()
+                    row_snapshot = script.exports_sync.snapshot()
+                    screenshot(hwnd, shots / 'strategy-system-row-after.png')
+                    row_detail = row_snapshot.get('systemDetail') or {}
+                    row_lookups = row_detail.get('lookups') or {}
+                    row_base_lookup = row_lookups.get('base031f') or {}
+                    row_institution_lookup = row_lookups.get('institution0321') or {}
+                    row_panel = row_detail.get('panel') or {}
+                    row_selection_index = row_detail.get('selectionIndex') or {}
+                    row_selection_hit = row_snapshot.get('selectionHit') or {}
+                    row_metrics = {
+                        'clientSpotResolverBase': row_detail.get('clientSpotResolverBase'),
+                        'clientSpotResolverBaseReason': row_detail.get('clientSpotResolverBaseReason'),
+                        'unit0SpotResolverBase': row_detail.get('unit0SpotResolverBase'),
+                        'baseLookupTotalCalls': row_base_lookup.get('totalCalls') or 0,
+                        'institutionLookupTotalCalls': row_institution_lookup.get('totalCalls') or 0,
+                        'panelTotalCalls': row_panel.get('totalCalls') or 0,
+                        'selectionIndexValidCalls': row_selection_index.get('validCalls') or 0,
+                        'selectionIndexInRangeCalls': row_selection_index.get('inRangeCalls') or 0,
+                        'selectionIndexChangedCalls': row_selection_index.get('selectionChangedCalls') or 0,
+                        'infoPanelCandidateCalls': row_selection_index.get('infoPanelCandidateCalls') or 0,
+                        'infoPanelSelectionChangedCalls': row_selection_index.get('infoPanelSelectionChangedCalls') or 0,
+                        'selectionHitCalls': row_selection_hit.get('calls') or 0,
+                        'selectionHitAccepted': row_selection_hit.get('accepted') or 0,
+                        'selectionHitRejected': row_selection_hit.get('rejected') or 0,
+                    }
+                    row_delta = {
+                        'baseLookupTotalCalls': row_metrics['baseLookupTotalCalls'] - row_before_metrics['baseLookupTotalCalls'],
+                        'institutionLookupTotalCalls': row_metrics['institutionLookupTotalCalls'] - row_before_metrics['institutionLookupTotalCalls'],
+                        'panelTotalCalls': row_metrics['panelTotalCalls'] - row_before_metrics['panelTotalCalls'],
+                        'selectionIndexValidCalls': row_metrics['selectionIndexValidCalls'] - row_before_metrics['selectionIndexValidCalls'],
+                        'selectionIndexInRangeCalls': row_metrics['selectionIndexInRangeCalls'] - row_before_metrics['selectionIndexInRangeCalls'],
+                        'selectionIndexChangedCalls': row_metrics['selectionIndexChangedCalls'] - row_before_metrics['selectionIndexChangedCalls'],
+                        'infoPanelCandidateCalls': row_metrics['infoPanelCandidateCalls'] - row_before_metrics['infoPanelCandidateCalls'],
+                        'infoPanelSelectionChangedCalls': row_metrics['infoPanelSelectionChangedCalls'] - row_before_metrics['infoPanelSelectionChangedCalls'],
+                        'selectionHitCalls': row_metrics['selectionHitCalls'] - row_before_metrics['selectionHitCalls'],
+                        'selectionHitAccepted': row_metrics['selectionHitAccepted'] - row_before_metrics['selectionHitAccepted'],
+                        'selectionHitRejected': row_metrics['selectionHitRejected'] - row_before_metrics['selectionHitRejected'],
+                    }
+                    row_panel_activated = row_delta['panelTotalCalls'] > 0
+                    row_selection_activated = row_delta['selectionIndexChangedCalls'] > 0
+                    row_info_panel_selection_activated = row_delta['infoPanelSelectionChangedCalls'] > 0
+                    row_activated = row_panel_activated or row_selection_activated
+
+                double_before_captured_at = None
+                double_before_snapshot = None
+                double_before_metrics = None
+                double_clicked_at = None
+                double_captured_at = None
+                double_snapshot = None
+                double_metrics = None
+                double_delta = None
+                fallback_attempted = False
+                if single_panel_delta <= 0 and not row_activated:
+                    fallback_attempted = True
+                    double_before_captured_at = time.time()
+                    double_before_snapshot = script.exports_sync.snapshot()
+                    double_before_detail = double_before_snapshot.get('systemDetail') or {}
+                    double_before_lookups = double_before_detail.get('lookups') or {}
+                    double_before_base_lookup = double_before_lookups.get('base031f') or {}
+                    double_before_institution_lookup = double_before_lookups.get('institution0321') or {}
+                    double_before_panel = double_before_detail.get('panel') or {}
+                    double_before_selection_index = double_before_detail.get('selectionIndex') or {}
+                    double_before_selection_hit = double_before_snapshot.get('selectionHit') or {}
+                    double_before_metrics = {
+                        'clientSpotResolverBase': double_before_detail.get('clientSpotResolverBase'),
+                        'clientSpotResolverBaseReason': double_before_detail.get('clientSpotResolverBaseReason'),
+                        'unit0SpotResolverBase': double_before_detail.get('unit0SpotResolverBase'),
+                        'baseLookupTotalCalls': double_before_base_lookup.get('totalCalls') or 0,
+                        'institutionLookupTotalCalls': double_before_institution_lookup.get('totalCalls') or 0,
+                        'panelTotalCalls': double_before_panel.get('totalCalls') or 0,
+                        'selectionIndexValidCalls': double_before_selection_index.get('validCalls') or 0,
+                        'selectionIndexInRangeCalls': double_before_selection_index.get('inRangeCalls') or 0,
+                        'selectionIndexChangedCalls': double_before_selection_index.get('selectionChangedCalls') or 0,
+                        'infoPanelCandidateCalls': double_before_selection_index.get('infoPanelCandidateCalls') or 0,
+                        'infoPanelSelectionChangedCalls': double_before_selection_index.get('infoPanelSelectionChangedCalls') or 0,
+                        'selectionHitCalls': double_before_selection_hit.get('calls') or 0,
+                        'selectionHitAccepted': double_before_selection_hit.get('accepted') or 0,
+                        'selectionHitRejected': double_before_selection_hit.get('rejected') or 0,
+                    }
+                    mouse_click(ox + x, oy + y)
+                    time.sleep(0.15)
+                    mouse_click(ox + x, oy + y)
+                    double_clicked_at = time.time()
+                    time.sleep(0.5)
+                    double_captured_at = time.time()
+                    double_snapshot = script.exports_sync.snapshot()
+                    screenshot(hwnd, shots / 'strategy-system-marker-double.png')
+                    double_detail = double_snapshot.get('systemDetail') or {}
+                    double_lookups = double_detail.get('lookups') or {}
+                    double_base_lookup = double_lookups.get('base031f') or {}
+                    double_institution_lookup = double_lookups.get('institution0321') or {}
+                    double_panel = double_detail.get('panel') or {}
+                    double_selection_index = double_detail.get('selectionIndex') or {}
+                    double_selection_hit = double_snapshot.get('selectionHit') or {}
+                    double_metrics = {
+                        'clientSpotResolverBase': double_detail.get('clientSpotResolverBase'),
+                        'clientSpotResolverBaseReason': double_detail.get('clientSpotResolverBaseReason'),
+                        'unit0SpotResolverBase': double_detail.get('unit0SpotResolverBase'),
+                        'baseLookupTotalCalls': double_base_lookup.get('totalCalls') or 0,
+                        'institutionLookupTotalCalls': double_institution_lookup.get('totalCalls') or 0,
+                        'panelTotalCalls': double_panel.get('totalCalls') or 0,
+                        'selectionIndexValidCalls': double_selection_index.get('validCalls') or 0,
+                        'selectionIndexInRangeCalls': double_selection_index.get('inRangeCalls') or 0,
+                        'selectionIndexChangedCalls': double_selection_index.get('selectionChangedCalls') or 0,
+                        'infoPanelCandidateCalls': double_selection_index.get('infoPanelCandidateCalls') or 0,
+                        'infoPanelSelectionChangedCalls': double_selection_index.get('infoPanelSelectionChangedCalls') or 0,
+                        'selectionHitCalls': double_selection_hit.get('calls') or 0,
+                        'selectionHitAccepted': double_selection_hit.get('accepted') or 0,
+                        'selectionHitRejected': double_selection_hit.get('rejected') or 0,
+                    }
+                    double_delta = {
+                        'baseLookupTotalCalls': double_metrics['baseLookupTotalCalls'] - double_before_metrics['baseLookupTotalCalls'],
+                        'institutionLookupTotalCalls': double_metrics['institutionLookupTotalCalls'] - double_before_metrics['institutionLookupTotalCalls'],
+                        'panelTotalCalls': double_metrics['panelTotalCalls'] - double_before_metrics['panelTotalCalls'],
+                        'selectionIndexValidCalls': double_metrics['selectionIndexValidCalls'] - double_before_metrics['selectionIndexValidCalls'],
+                        'selectionIndexInRangeCalls': double_metrics['selectionIndexInRangeCalls'] - double_before_metrics['selectionIndexInRangeCalls'],
+                        'selectionIndexChangedCalls': double_metrics['selectionIndexChangedCalls'] - double_before_metrics['selectionIndexChangedCalls'],
+                        'infoPanelCandidateCalls': double_metrics['infoPanelCandidateCalls'] - double_before_metrics['infoPanelCandidateCalls'],
+                        'infoPanelSelectionChangedCalls': double_metrics['infoPanelSelectionChangedCalls'] - double_before_metrics['infoPanelSelectionChangedCalls'],
+                        'selectionHitCalls': double_metrics['selectionHitCalls'] - double_before_metrics['selectionHitCalls'],
+                        'selectionHitAccepted': double_metrics['selectionHitAccepted'] - double_before_metrics['selectionHitAccepted'],
+                        'selectionHitRejected': double_metrics['selectionHitRejected'] - double_before_metrics['selectionHitRejected'],
+                    }
+
+                final_metrics = double_metrics or row_metrics or single_metrics
+                final_snapshot = double_snapshot or row_snapshot or single_snapshot
+                final_delta = {
+                    'baseLookupTotalCalls': final_metrics['baseLookupTotalCalls'] - before_metrics['baseLookupTotalCalls'],
+                    'institutionLookupTotalCalls': final_metrics['institutionLookupTotalCalls'] - before_metrics['institutionLookupTotalCalls'],
+                    'panelTotalCalls': final_metrics['panelTotalCalls'] - before_metrics['panelTotalCalls'],
+                    'selectionIndexValidCalls': final_metrics['selectionIndexValidCalls'] - before_metrics['selectionIndexValidCalls'],
+                    'selectionIndexInRangeCalls': final_metrics['selectionIndexInRangeCalls'] - before_metrics['selectionIndexInRangeCalls'],
+                    'selectionIndexChangedCalls': final_metrics['selectionIndexChangedCalls'] - before_metrics['selectionIndexChangedCalls'],
+                    'infoPanelCandidateCalls': final_metrics['infoPanelCandidateCalls'] - before_metrics['infoPanelCandidateCalls'],
+                    'infoPanelSelectionChangedCalls': final_metrics['infoPanelSelectionChangedCalls'] - before_metrics['infoPanelSelectionChangedCalls'],
+                    'selectionHitCalls': final_metrics['selectionHitCalls'] - before_metrics['selectionHitCalls'],
+                    'selectionHitAccepted': final_metrics['selectionHitAccepted'] - before_metrics['selectionHitAccepted'],
+                    'selectionHitRejected': final_metrics['selectionHitRejected'] - before_metrics['selectionHitRejected'],
+                }
+                final_panel_delta = final_delta['panelTotalCalls']
+                marker_result = {
+                    'point': {
+                        'reference': STRATEGY_SYSTEM_MARKER,
+                        'screen': (ox + x, oy + y),
+                    },
+                    'gesture': {
+                        'primary': 'single-left-click',
+                        'fallback': 'double-left-click',
+                        'fallbackAttempted': fallback_attempted,
+                        'fallbackCondition': 'single panel delta <= 0 and row did not activate panel or selection index',
+                        'doubleIntervalSeconds': 0.15,
+                    },
+                    'rowClickAttempted': row_click_attempted,
+                    'rowPoint': {
+                        'reference': row_reference_point,
+                        'screen': row_screen_point,
+                    },
+                    'rowPointSource': row_point_source,
+                    'rowPanelActivated': row_panel_activated,
+                    'rowSelectionActivated': row_selection_activated,
+                    'rowInfoPanelSelectionActivated': row_info_panel_selection_activated,
+                    'rowActivated': row_activated,
+                    'renderSettleSeconds': 1.5,
+                    'renderSettledAt': render_settled_at,
+                    'timestamps': {
+                        'beforeCapturedAt': before_captured_at,
+                        'singleClickedAt': single_clicked_at,
+                        'singleCapturedAt': single_captured_at,
+                        'rowBeforeCapturedAt': row_before_captured_at,
+                        'rowClickedAt': row_clicked_at,
+                        'rowCapturedAt': row_captured_at,
+                        'doubleBeforeCapturedAt': double_before_captured_at,
+                        'doubleClickedAt': double_clicked_at,
+                        'doubleCapturedAt': double_captured_at,
+                    },
+                    'before': before_metrics,
+                    'single': single_metrics,
+                    'rowBefore': row_before_metrics,
+                    'row': row_metrics,
+                    'doubleBefore': double_before_metrics,
+                    'double': double_metrics,
+                    'after': final_metrics,
+                    'baselines': {
+                        'marker': before_metrics,
+                        'row': row_before_metrics,
+                        'double': double_before_metrics,
+                    },
+                    'deltas': {
+                        'singleFromBefore': single_delta,
+                        'rowFromRowBefore': row_delta,
+                        'doubleFromDoubleBefore': double_delta,
+                        'finalFromBefore': final_delta,
+                    },
+                    'snapshots': {
+                        'before': before_snapshot,
+                        'single': single_snapshot,
+                        'rowBefore': row_before_snapshot,
+                        'row': row_snapshot,
+                        'doubleBefore': double_before_snapshot,
+                        'double': double_snapshot,
+                        'after': final_snapshot,
+                    },
+                    'consumerActivated': final_panel_delta > 0,
+                    'selectionActivated': final_delta['selectionIndexChangedCalls'] > 0,
+                    'infoPanelSelectionActivated': final_delta['infoPanelSelectionChangedCalls'] > 0,
+                    'lookupActivated': (
+                        final_delta['baseLookupTotalCalls'] > 0
+                        or final_delta['institutionLookupTotalCalls'] > 0
+                    ),
+                }
+                (evdir / 'strategy-system-marker-click.json').write_text(
+                    json.dumps(marker_result, ensure_ascii=False, indent=2),
                     encoding='utf-8',
                 )
             if os.environ.get('LOGH_FORCE_SELECTGRID_BEFORE_SWEEP') == '1' and client.poll() is None:

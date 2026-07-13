@@ -39,6 +39,42 @@ test('로그인 성공 마커가 없으면 로비 안정화와 클릭 전에 중
   assert.match(login, /raise RuntimeError\('lobby login success marker was not observed'\)/);
 });
 
+test('월드 진입은 최초 캐릭터 더블 클릭 뒤 한 번만 자연 재시도하고 증거를 남긴다', async () => {
+  // Given: 로비 로그인 이후 캐릭터 선택 구간
+  const source = await readFile(PROBE_URL, 'utf8');
+
+  // When: 최초 게임 시작부터 첫 QA 옵션 전까지를 분리한다.
+  const navigation = sliceBetween(
+    source,
+    'if client.poll() is None:',
+    "if os.environ.get('LOGH_INPUT_TICK') == '1'",
+  );
+  const retry = sliceBetween(
+    navigation,
+    'if not world_entry_ok and client.poll() is None:',
+    "(evdir / 'world-entry-gate.json').write_text(",
+  );
+
+  // Then: 최초 더블 클릭을 마친 뒤에만 전체 자연 이동을 최대 한 번 재시도한다.
+  const initialCardIndex = navigation.indexOf('scale(LOBBY_REF, CHAR_CARD, width, height)');
+  const gateIndex = navigation.indexOf('world_entry_started = time.monotonic()');
+  const artifactIndex = navigation.indexOf("(evdir / 'world-entry-gate.json').write_text(");
+  const failureIndex = navigation.indexOf("raise RuntimeError('world entry success marker was not observed')");
+  assert.ok(initialCardIndex >= 0);
+  assert.ok(gateIndex > initialCardIndex);
+  assert.match(navigation, /'ss-login-ok-sent' in world_entry_log/);
+  assert.match(navigation, /world_entry_deadline = time\.monotonic\(\) \+ 8/);
+  assert.match(retry, /retry_attempted = True/);
+  assert.match(retry, /scale\(LOBBY_REF, GAME_START, width, height\)/);
+  assert.match(retry, /scale\(LOBBY_REF, CHAR_CARD, width, height\)/);
+  assert.equal(retry.match(/mouse_click\(ox \+ x, oy \+ y\)/g)?.length, 3);
+  assert.equal(navigation.match(/retry_attempted = True/g)?.length, 1);
+  assert.match(navigation, /'retryGameStart': retry_game_start_point/);
+  assert.match(navigation, /'retryCharCard': retry_char_card_point/);
+  assert.ok(artifactIndex > gateIndex);
+  assert.ok(failureIndex > artifactIndex);
+});
+
 test('전략 프로브는 명령표 주입·적용과 초점 셀 뒤에 HUD 전환을 실행한다', async () => {
   const source = await readFile(PROBE_URL, 'utf8');
   const markers = [
@@ -61,12 +97,28 @@ test('전략 readiness는 선택 행만 기다리고 명령 원점은 선택 클
   const readiness = sliceBetween(
     source,
     "if os.environ.get('LOGH_WAIT_STRATEGY_READY') == '1'",
-    "if os.environ.get('LOGH_FORCE_SELECTGRID_BEFORE_SWEEP') == '1'",
+    "if os.environ.get('LOGH_CLICK_STRATEGY_SYSTEM_MARKER') == '1'",
   );
 
   assert.match(readiness, /selection_origin/);
+  assert.match(readiness, /selection_hud_mode = selection\.get\('hudModeF4'\)/);
+  assert.match(readiness, /selection_origin_x = selection_origin\.get\('x'\)/);
+  assert.match(readiness, /selection_origin_y = selection_origin\.get\('y'\)/);
+  assert.match(readiness, /selection_hud_mode == 1/);
+  assert.match(readiness, /selection_origin_x == 0/);
+  assert.match(readiness, /selection_origin_y == 0/);
+  assert.match(readiness, /selection_origin_x != 0 or selection_origin_y != 0/);
+  assert.match(readiness, /selection_origin_ready/);
+  assert.doesNotMatch(readiness, /\(\(selection_origin\.get\('x'\) or 0\) > 0\)/);
+  assert.match(readiness, /len\(selection\.get\('rows'\) or \[\]\) > 0/);
+  assert.match(readiness, /linkage\.get\('unit0Id'\)/);
+  assert.match(readiness, /linkage\.get\('char0Flagship'\)/);
   assert.doesNotMatch(readiness, /command_origin/);
   assert.doesNotMatch(readiness, /len\(command\.get\('rows'\)/);
+  const artifactIndex = readiness.indexOf("(evdir / 'strategy-ready.json').write_text(");
+  const failureIndex = readiness.indexOf("raise RuntimeError('strategy map did not become ready')");
+  assert.ok(artifactIndex >= 0);
+  assert.ok(failureIndex > artifactIndex);
 });
 
 test('동적 클릭은 선택 뒤 새 명령 원점으로 명령 좌표를 다시 만든다', async () => {
@@ -259,4 +311,335 @@ test('constmsg 조회 계측은 대상 그룹과 호출자 및 반환 원문만 
   assert.doesNotMatch(hook, /\.write(?:U8|U16|U32|Pointer|ByteArray)?\(/);
   assert.doesNotMatch(hook, /force/i);
   assert.match(source, /constMsgLookups: constMsgLookupState,/);
+});
+
+test('성계 상세 프로토콜 계측은 네 응답의 OnRecv와 dispatcher를 bounded ring에 남긴다', async () => {
+  const source = await readFile(FRIDA_URL, 'utf8');
+  const passive = sliceBetween(
+    source,
+    'const SYSTEM_DETAIL_PROTOCOL_CODES = new Set([',
+    'const selectionHitState =',
+  );
+
+  for (const code of ['0x031d', '0x031f', '0x0321', '0x0f03']) {
+    assert.match(passive, new RegExp(code));
+  }
+  assert.match(passive, /const SYSTEM_DETAIL_RING_LIMIT = 128;/);
+  assert.match(passive, /attachSystemDetailHook\('0x004ae0d0'/);
+  assert.match(passive, /attachSystemDetailHook\('0x004ba2b0'/);
+  assert.match(passive, /systemDetailProtocolState\.onrecv/);
+  assert.match(passive, /systemDetailProtocolState\.dispatch/);
+  assert.match(passive, /callerVa/);
+  assert.match(passive, /timestamp: Date\.now\(\)/);
+  assert.match(passive, /systemDetailAttachedAddresses\.has\(va\)/);
+});
+
+test('성계 상세 스냅샷은 정적·031f·0321 캐시를 안전한 상한으로 읽고 base id 조인을 계산한다', async () => {
+  const source = await readFile(FRIDA_URL, 'utf8');
+  const passive = sliceBetween(
+    source,
+    'const SYSTEM_DETAIL_PROTOCOL_CODES = new Set([',
+    'const selectionHitState =',
+  );
+
+  for (const offset of [
+    '0x358', '0x41a368 + 0x40', '0x2eb288', '0x2eb800',
+    '0x3facf4', '0x3facf8', '0x3fb2f8', '0x3fb2fc',
+    '0x2b6a74', '0x2b6a78', '0x2b7078', '0x2b707c',
+    '0x2a58f8', '0x2a58fa',
+  ]) {
+    assert.match(passive, new RegExp(offset.replaceAll('+', '\\+')));
+  }
+  assert.match(passive, /const SYSTEM_DETAIL_STATIC_CAP = 350;/);
+  assert.match(passive, /const SYSTEM_DETAIL_STATIC_STRIDE = 0x250;/);
+  assert.match(passive, /boundedIdTableSnapshot\(base, 0x3facf4, 0x3facf8, 0x180, 4\)/);
+  assert.match(passive, /boundedIdTableSnapshot\(base, 0x3fb2f8, 0x3fb2fc, 0x2378, 4\)/);
+  assert.match(passive, /boundedIdTableSnapshot\(base, 0x2b6a74, 0x2b6a78, 0x180, 4\)/);
+  assert.match(passive, /boundedIdTableSnapshot\(base, 0x2b7078, 0x2b707c, 0x2378, 4\)/);
+  assert.match(passive, /attachSystemDetailLookup\('0x004c5470'/);
+  assert.match(passive, /attachSystemDetailLookup\('0x004c54d0'/);
+  assert.match(passive, /attachSystemDetailHook\('0x0057aa90'/);
+  assert.match(passive, /const worldActive = baseAvailable \? readU8\(base\.add\(0x2a58f8\)\) : null;/);
+  assert.match(passive, /const strategyFieldImportFlag2a58fa = baseAvailable \? readU8\(base\.add\(0x2a58fa\)\) : null;/);
+  assert.match(passive, /strategyFieldImportFlag2a58fa,/);
+  assert.doesNotMatch(passive, /institutionActive/);
+  assert.match(passive, /function systemDetailJoinFor\(baseId, caches, worldActive, strategyFieldImportFlag2a58fa\)/);
+  assert.match(passive, /const membershipJoinComplete = base031fJoinComplete && base0321JoinComplete;/);
+  assert.match(passive, /const worldConsumerActive = Number\.isInteger\(worldActive\) && worldActive !== 0;/);
+  assert.match(passive, /const strategyFieldImportComplete = \(\s+Number\.isInteger\(strategyFieldImportFlag2a58fa\) && strategyFieldImportFlag2a58fa !== 0\s+\);/);
+  assert.match(passive, /const cacheSnapshotsHealthy = \(/);
+  assert.match(passive, /caches\.staticBase\.reason === null/);
+  for (const cache of ['source031f', 'source0321', 'live031f', 'live0321']) {
+    assert.match(passive, new RegExp(`caches\\.${cache}\\.reason === null`));
+    assert.match(passive, new RegExp(`caches\\.${cache}\\.truncated === false`));
+  }
+  assert.match(passive, /const cacheJoinComplete = \(\s+membershipJoinComplete\s+&& worldConsumerActive\s+&& strategyFieldImportComplete\s+&& cacheSnapshotsHealthy\s+\);/);
+  assert.match(passive, /membershipJoinComplete,/);
+  assert.match(passive, /systemDetailJoinFor\(\s+SYSTEM_DETAIL_EXPECTED_BASE_ID,\s+caches,\s+worldActive,\s+strategyFieldImportFlag2a58fa,/);
+  assert.match(passive, /else if \(worldActive === 0\) \{/);
+  assert.match(passive, /unit0SpotResolverBaseReason = 'world-cache-inactive';/);
+  assert.match(passive, /expectedBaseId: SYSTEM_DETAIL_EXPECTED_BASE_ID/);
+  assert.match(passive, /cacheJoinComplete/);
+  assert.match(source, /systemDetail: systemDetailState\(base\),/);
+});
+
+test('client+0x358은 UI 선택이 아닌 client spot resolver로만 노출한다', async () => {
+  // Given: 성계 상세 스냅샷과 마커 증거 생성부
+  const source = await readFile(FRIDA_URL, 'utf8');
+  const probe = await readFile(PROBE_URL, 'utf8');
+  const state = sliceBetween(source, 'function systemDetailState(base) {', 'const selectionHitState =');
+  const panel = sliceBetween(
+    source,
+    "attachSystemDetailHook('0x0057aa90'",
+    "attachSystemDetailHook('0x00576d40'",
+  );
+  const marker = sliceBetween(
+    probe,
+    "if os.environ.get('LOGH_CLICK_STRATEGY_SYSTEM_MARKER') == '1'",
+    "if os.environ.get('LOGH_FORCE_SELECTGRID_BEFORE_SWEEP') == '1'",
+  );
+
+  // When/Then: 0x358은 resolver 이름과 join을 쓰고 실제 UI 선택 ID는 panel 인자에만 남긴다.
+  assert.match(state, /const clientSpotResolverBase = baseAvailable \? readU32\(base\.add\(0x358\)\) : null/);
+  assert.match(state, /clientSpotResolverBaseReason/);
+  assert.match(state, /clientSpotResolver: systemDetailJoinFor\(\s+clientSpotResolverBase,\s+caches,\s+worldActive,\s+strategyFieldImportFlag2a58fa,/);
+  assert.doesNotMatch(state, /const selectedBaseId = baseAvailable/);
+  assert.doesNotMatch(state, /selectedBaseIdReason/);
+  assert.doesNotMatch(state, /selected: systemDetailJoinFor/);
+  assert.match(panel, /selectedBaseId: argument\.isNull\(\) \? null : readU32\(argument\.add\(8\)\)/);
+  assert.match(marker, /'clientSpotResolverBase'/);
+  assert.match(marker, /'clientSpotResolverBaseReason'/);
+  assert.doesNotMatch(marker, /'selectedBaseId'/);
+});
+
+test('성계 상세 계측 블록은 읽기 전용이며 함수 호출이나 강제 경로가 없다', async () => {
+  const source = await readFile(FRIDA_URL, 'utf8');
+  const passive = sliceBetween(
+    source,
+    'const SYSTEM_DETAIL_PROTOCOL_CODES = new Set([',
+    'const selectionHitState =',
+  );
+
+  assert.doesNotMatch(passive, /\.write(?:U8|U16|U32|Pointer|ByteArray)?\s*\(/);
+  assert.doesNotMatch(passive, /new NativeFunction\s*\(/);
+  assert.doesNotMatch(passive, /retval\.replace\s*\(/);
+  assert.doesNotMatch(passive, /force/i);
+});
+
+test('성계 상세 선택 인덱스 계측은 음수 선택을 버리고 정보 패널 후보만 bounded ring에 남긴다', async () => {
+  // Given: 성계 상세 전용 수동 계측 구간
+  const source = await readFile(FRIDA_URL, 'utf8');
+  const passive = sliceBetween(
+    source,
+    'const SYSTEM_DETAIL_PROTOCOL_CODES = new Set([',
+    'const selectionHitState =',
+  );
+  const hook = sliceBetween(
+    passive,
+    'const systemDetailSelectionIndexState =',
+    'function systemDetailJoinFor',
+  );
+
+  // When/Then: 00576d40의 유효 선택과 정보 패널 후보만 읽기 전용으로 축적한다.
+  assert.match(hook, /totalCalls: 0/);
+  assert.match(hook, /validCalls: 0/);
+  assert.match(hook, /inRangeCalls: 0/);
+  assert.match(hook, /selectionChangedCalls: 0/);
+  assert.match(hook, /infoPanelCandidateCalls: 0/);
+  assert.match(hook, /infoPanelSelectionChangedCalls: 0/);
+  assert.match(hook, /attachSystemDetailHook\('0x00576d40'/);
+  assert.match(hook, /systemDetailSelectionIndexState\.totalCalls \+= 1/);
+  assert.match(hook, /index === -1/);
+  assert.match(hook, /index < 0/);
+  assert.match(hook, /systemDetailSelectionIndexState\.validCalls \+= 1/);
+  assert.match(hook, /const inRange = Number\.isInteger\(itemCount\) && index < itemCount;/);
+  assert.match(hook, /if \(inRange\) \{/);
+  assert.match(hook, /systemDetailSelectionIndexState\.inRangeCalls \+= 1/);
+  assert.match(hook, /panelKind === 5 \|\| panelKind === 0x11/);
+  assert.match(hook, /systemDetailSelectionIndexState\.infoPanelCandidateCalls \+= 1/);
+  for (const offset of ['0x8e4', '0x8e8', '0x234', '0x238', '0xb2c']) {
+    assert.match(hook, new RegExp(offset));
+  }
+  assert.match(hook, /controller: ptrHex\(controller\)/);
+  assert.match(hook, /callerVa: systemDetailCallerVa\(this\.returnAddress\)/);
+  assert.match(hook, /timestamp: Date\.now\(\)/);
+  assert.match(hook, /entry\.retval =/);
+  assert.match(hook, /entry\.selectedAfter =/);
+  assert.match(hook, /entry\.infoSelectedIndexAfter =/);
+  assert.match(hook, /entry\.selectionChanged =/);
+  assert.match(hook, /entry\.selectedAfter === entry\.index/);
+  assert.match(hook, /entry\.selectedAfter !== entry\.selectedBefore/);
+  assert.match(hook, /systemDetailSelectionIndexState\.selectionChangedCalls \+= 1/);
+  assert.match(hook, /systemDetailSelectionIndexState\.infoPanelSelectionChangedCalls \+= 1/);
+  assert.match(hook, /pushSystemDetailRing\(systemDetailSelectionIndexState\.ring, entry\)/);
+  assert.match(passive, /selectionIndex: systemDetailSelectionIndexState/);
+  assert.doesNotMatch(hook, /\.write(?:U8|U16|U32|Pointer|ByteArray)?\s*\(/);
+  assert.doesNotMatch(hook, /new NativeFunction\s*\(/);
+  assert.doesNotMatch(hook, /retval\.replace\s*\(/);
+  assert.doesNotMatch(hook, /force/i);
+});
+
+test('자연 성계 마커 진단은 단일 클릭 뒤 패널 미활성 때만 더블 클릭하고 증거를 남긴다', async () => {
+  // Given: readiness와 기존 클릭 스윕이 포함된 전략 프로브
+  const source = await readFile(PROBE_URL, 'utf8');
+
+  // When: 성계 마커 진단 블록을 찾는다.
+  const diagnostic = sliceBetween(
+    source,
+    "if os.environ.get('LOGH_CLICK_STRATEGY_SYSTEM_MARKER') == '1'",
+    "if os.environ.get('LOGH_FORCE_SELECTGRID_BEFORE_SWEEP') == '1'",
+  );
+
+  // Then: 실측 좌표에서 단일 클릭을 먼저 시도하고 패널 호출이 없을 때만 더블 클릭한다.
+  assert.match(source, /STRATEGY_SYSTEM_MARKER = \(515, 390\)/);
+  assert.ok(source.indexOf("if os.environ.get('LOGH_WAIT_STRATEGY_READY') == '1'") < source.indexOf(diagnostic));
+  assert.ok(source.indexOf(diagnostic) < source.indexOf("if os.environ.get('LOGH_STRATEGY_CLICK_SWEEP') == '1'"));
+  assert.match(diagnostic, /system_detail_ready_deadline = system_detail_ready_started \+ 30/);
+  assert.match(diagnostic, /summary\.get\('protocolAllDispatch'\) is True/);
+  assert.match(diagnostic, /summary\.get\('cacheJoinComplete'\) is True/);
+  assert.match(diagnostic, /strategy-system-detail-ready\.json/);
+  assert.match(diagnostic, /before_snapshot = script\.exports_sync\.snapshot\(\)/);
+  assert.doesNotMatch(diagnostic, /before_snapshot = system_detail_ready_snapshot/);
+  assert.match(diagnostic, /scale\(STRATEGY_REF, STRATEGY_SYSTEM_MARKER, width, height\)/);
+  assert.match(diagnostic, /if single_panel_delta <= 0 and not row_activated:/);
+  assert.ok(diagnostic.match(/mouse_click\(ox \+ x, oy \+ y\)/g)?.length === 3);
+  assert.match(diagnostic, /mouse_click\(ox \+ x, oy \+ y\)\s+time\.sleep\(0\.15\)\s+mouse_click\(ox \+ x, oy \+ y\)/);
+  for (const name of ['before', 'single', 'double']) {
+    assert.match(diagnostic, new RegExp(`strategy-system-marker-${name}\\.png`));
+  }
+  assert.match(diagnostic, /strategy-system-marker-click\.json/);
+  assert.match(diagnostic, /'consumerActivated': final_panel_delta > 0/);
+  assert.match(diagnostic, /'selectionIndexValidCalls'/);
+  assert.match(diagnostic, /'infoPanelCandidateCalls'/);
+  assert.match(diagnostic, /'selectionActivated': final_delta\['selectionIndexChangedCalls'\] > 0/);
+  assert.match(diagnostic, /'infoPanelSelectionActivated': final_delta\['infoPanelSelectionChangedCalls'\] > 0/);
+  assert.match(diagnostic, /'renderSettleSeconds': 1\.5/);
+  assert.match(diagnostic, /'renderSettledAt': render_settled_at/);
+  const readyArtifactIndex = diagnostic.indexOf("(evdir / 'strategy-system-detail-ready.json').write_text(");
+  const preconditionFailureIndex = diagnostic.indexOf("raise RuntimeError('system detail cache did not become ready')");
+  const renderSettleIndex = diagnostic.indexOf('time.sleep(1.5)');
+  const geometryIndex = diagnostic.indexOf('ox, oy, width, height = client_geometry(hwnd)');
+  const foregroundIndex = diagnostic.indexOf('foreground(hwnd)', geometryIndex);
+  const beforeSnapshotIndex = diagnostic.indexOf('before_snapshot = script.exports_sync.snapshot()');
+  const firstScreenshotIndex = diagnostic.indexOf("screenshot(hwnd, shots / 'strategy-system-marker-before.png')");
+  const firstClickIndex = diagnostic.indexOf('mouse_click(ox + x, oy + y)');
+  assert.ok(readyArtifactIndex >= 0);
+  assert.ok(preconditionFailureIndex > readyArtifactIndex);
+  assert.ok(renderSettleIndex > preconditionFailureIndex);
+  assert.ok(geometryIndex > renderSettleIndex);
+  assert.ok(foregroundIndex > geometryIndex);
+  assert.ok(beforeSnapshotIndex > foregroundIndex);
+  assert.ok(firstScreenshotIndex > preconditionFailureIndex);
+  assert.ok(firstScreenshotIndex > beforeSnapshotIndex);
+  assert.ok(firstClickIndex > firstScreenshotIndex);
+  assert.doesNotMatch(diagnostic.slice(firstClickIndex), /raise RuntimeError/);
+});
+
+test('성계 마커 진단은 origin 0을 전역 좌표로 쓰지 않고 HUD mode1 고정 행을 자연 클릭한다', async () => {
+  // Given: 성계 마커 진단 블록
+  const source = await readFile(PROBE_URL, 'utf8');
+  const diagnostic = sliceBetween(
+    source,
+    "if os.environ.get('LOGH_CLICK_STRATEGY_SYSTEM_MARKER') == '1'",
+    "if os.environ.get('LOGH_FORCE_SELECTGRID_BEFORE_SWEEP') == '1'",
+  );
+
+  // When/Then: origin 0은 실측 좌하단 행으로 대체하고 정상 origin만 동적 중심에 쓴다.
+  assert.match(source, /STRATEGY_SYSTEM_ROW_MODE1 = \(158, 456\)/);
+  assert.match(diagnostic, /if single_panel_delta <= 0 and row_geometry_valid:/);
+  assert.match(diagnostic, /\(selection\.get\('listCount188'\) or 0\) >= 1/);
+  assert.match(diagnostic, /selection\.get\('hudModeF4'\) == 1/);
+  assert.match(diagnostic, /selection_origin\.get\('x'\) == 0/);
+  assert.match(diagnostic, /selection_origin\.get\('y'\) == 0/);
+  assert.match(diagnostic, /selection_origin\.get\('x'\) != 0 or selection_origin\.get\('y'\) != 0/);
+  assert.match(diagnostic, /if row_mode1_zero_origin:/);
+  assert.match(diagnostic, /row_reference_point = STRATEGY_SYSTEM_ROW_MODE1/);
+  assert.match(diagnostic, /row_point_source = 'hud-mode1-fixed'/);
+  assert.match(diagnostic, /row_point_source = 'dynamic-origin'/);
+  assert.match(diagnostic, /row_primary\.get\('rectW2c'\) or 0/);
+  assert.match(diagnostic, /row_primary\.get\('rectH30'\) or 0/);
+  assert.match(diagnostic, /selection_origin\['x'\] \+ row_primary\['rectX20'\] \+ row_primary\['rectW2c'\] \/\/ 2/);
+  assert.match(diagnostic, /selection_origin\['y'\] \+ row_primary\['rectY24'\] \+ row_primary\['rectH30'\] \/\/ 2/);
+  assert.match(diagnostic, /strategy-system-row-before\.png/);
+  assert.match(diagnostic, /strategy-system-row-after\.png/);
+  assert.match(diagnostic, /row_before_snapshot = script\.exports_sync\.snapshot\(\)/);
+  assert.match(diagnostic, /row_snapshot = script\.exports_sync\.snapshot\(\)/);
+  const rowClickBlock = sliceBetween(
+    diagnostic,
+    'if single_panel_delta <= 0 and row_geometry_valid:',
+    'double_clicked_at = None',
+  );
+  const rowDelta = sliceBetween(rowClickBlock, 'row_delta = {', 'row_panel_activated =');
+  const rowGeometryIndex = rowClickBlock.indexOf('row_ox, row_oy, row_width, row_height = client_geometry(hwnd)');
+  const rowForegroundIndex = rowClickBlock.indexOf('foreground(hwnd)');
+  const rowBeforeSnapshotIndex = rowClickBlock.indexOf('row_before_snapshot = script.exports_sync.snapshot()');
+  const rowClickIndex = rowClickBlock.indexOf('mouse_click(row_ox + row_x, row_oy + row_y)');
+  assert.ok(rowGeometryIndex >= 0);
+  assert.ok(rowForegroundIndex > rowGeometryIndex);
+  assert.ok(rowBeforeSnapshotIndex > rowForegroundIndex);
+  assert.ok(rowClickIndex > rowBeforeSnapshotIndex);
+  assert.match(rowClickBlock, /row_before_metrics = \{/);
+  for (const field of [
+    'baseLookupTotalCalls', 'institutionLookupTotalCalls', 'panelTotalCalls',
+    'selectionIndexValidCalls', 'selectionIndexInRangeCalls', 'selectionIndexChangedCalls',
+    'infoPanelCandidateCalls', 'infoPanelSelectionChangedCalls', 'selectionHitCalls',
+    'selectionHitAccepted', 'selectionHitRejected',
+  ]) {
+    assert.match(rowDelta, new RegExp(`row_metrics\\['${field}'\\] - row_before_metrics\\['${field}'\\]`));
+  }
+  assert.doesNotMatch(rowDelta, /single_metrics/);
+  assert.match(diagnostic, /if single_panel_delta <= 0 and not row_activated:/);
+  const doubleBlock = sliceBetween(diagnostic, 'double_clicked_at = None', 'final_snapshot =');
+  const doubleDelta = sliceBetween(doubleBlock, 'double_delta = {', 'final_metrics =');
+  const doubleBeforeSnapshotIndex = doubleBlock.indexOf('double_before_snapshot = script.exports_sync.snapshot()');
+  const doubleClickIndex = doubleBlock.indexOf('mouse_click(ox + x, oy + y)');
+  assert.ok(doubleBeforeSnapshotIndex >= 0);
+  assert.ok(doubleClickIndex > doubleBeforeSnapshotIndex);
+  assert.match(doubleBlock, /double_before_metrics = \{/);
+  for (const field of [
+    'baseLookupTotalCalls', 'institutionLookupTotalCalls', 'panelTotalCalls',
+    'selectionIndexValidCalls', 'selectionIndexInRangeCalls', 'selectionIndexChangedCalls',
+    'infoPanelCandidateCalls', 'infoPanelSelectionChangedCalls', 'selectionHitCalls',
+    'selectionHitAccepted', 'selectionHitRejected',
+  ]) {
+    assert.match(doubleDelta, new RegExp(`double_metrics\\['${field}'\\] - double_before_metrics\\['${field}'\\]`));
+  }
+  assert.doesNotMatch(doubleDelta, /single_metrics/);
+  assert.match(diagnostic, /row_selection_activated = row_delta\['selectionIndexChangedCalls'\] > 0/);
+  assert.match(diagnostic, /row_info_panel_selection_activated = row_delta\['infoPanelSelectionChangedCalls'\] > 0/);
+  const rowIndex = diagnostic.indexOf('row_click_attempted = True');
+  const doubleIndex = diagnostic.indexOf('fallback_attempted = True');
+  assert.ok(rowIndex >= 0);
+  assert.ok(doubleIndex > rowIndex);
+  for (const field of [
+    'selectionHitCalls', 'selectionHitAccepted', 'selectionHitRejected',
+    'selectionIndexValidCalls', 'selectionIndexInRangeCalls', 'selectionIndexChangedCalls',
+    'infoPanelCandidateCalls', 'infoPanelSelectionChangedCalls',
+  ]) {
+    assert.match(diagnostic, new RegExp(`'${field}'`));
+  }
+  for (const field of [
+    'rowClickAttempted', 'rowPoint', 'rowPanelActivated', 'rowSelectionActivated',
+    'rowInfoPanelSelectionActivated', 'rowActivated', 'rowBeforeCapturedAt',
+    'rowClickedAt', 'rowCapturedAt', 'rowBefore', 'rowFromRowBefore', 'rowPointSource',
+    'doubleBeforeCapturedAt', 'doubleBefore', 'doubleFromDoubleBefore',
+  ]) {
+    assert.match(diagnostic, new RegExp(`'${field}'`));
+  }
+  assert.match(diagnostic, /'row': row_metrics/);
+  assert.match(diagnostic, /'rowBefore': row_before_metrics/);
+  assert.match(diagnostic, /'baselines': \{/);
+  assert.match(diagnostic, /'marker': before_metrics/);
+  assert.match(diagnostic, /'row': row_before_metrics/);
+  assert.match(diagnostic, /'rowFromRowBefore': row_delta/);
+  assert.match(diagnostic, /'doubleBefore': double_before_metrics/);
+  assert.match(diagnostic, /'double': double_before_metrics/);
+  assert.match(diagnostic, /'doubleFromDoubleBefore': double_delta/);
+  assert.match(diagnostic, /'selectionActivated': final_delta\['selectionIndexChangedCalls'\] > 0/);
+  assert.match(diagnostic, /'infoPanelSelectionActivated': final_delta\['infoPanelSelectionChangedCalls'\] > 0/);
+  assert.doesNotMatch(diagnostic, /'selectionActivated': final_delta\['selectionIndexValidCalls'\] > 0/);
+  assert.doesNotMatch(diagnostic, /'rowFromSingle'/);
+  assert.doesNotMatch(diagnostic, /'doubleFromSingle'/);
+  assert.match(diagnostic, /'row': row_snapshot/);
+  assert.doesNotMatch(diagnostic, /new NativeFunction|\.write(?:U8|U16|U32|Pointer|ByteArray)?\s*\(|exports_sync\.(?!snapshot)/);
 });
