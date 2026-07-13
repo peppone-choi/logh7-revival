@@ -2843,6 +2843,167 @@ function linkageState(base) {
   };
 }
 
+// 拠点(base destination) SelectDialog 좌측 목록 위젯 노출.
+// row-add=FUN_00577050(정본 EXE sha256 9c97… VA 0x577050 실바이트 검증: 64a1.. 6aff 68 d86a6600 = push &LAB_00666ad8).
+// 위젯 객체=0x00ca3954(정적), 부모 정보패널=0x00ca3710.
+// 확정 구조(FUN_00577050/FUN_00576ec0/FUN_00577d20 정적):
+//   list+0x8e0 = 연결리스트 sentinel(readPtr)  · list+0x8e4 = itemCount(readS32)
+//   list+0x8e8 = 선택 index               · list+0xc   = columnCount · list+0x20 = 컬럼-셀 위젯 배열(ptr[col])
+//   행 노드: +0 next / +4 prev / +8 payload.  payload+0x08 = baseId(=70/0x46).
+// 화면 rect는 행 노드에 {x,y,w,h}로 저장되지 않음(0x502/0x503 GPU 그리드 렌더 계열이 draw 시점에 계산).
+// 따라서 (1) 위젯/컬럼셀 절대 원점(FUN_00507090) + (2) list/셀/행 raw 덤프를 노출해 라이브 스크린 클릭좌표와 대조한다.
+const SPOT_DIALOG_LIST = abs('0x00ca3954');
+const SPOT_DIALOG_PARENT = abs('0x00ca3710');
+const SPOT_DIALOG_ROW_CAP = 12;
+const SPOT_DIALOG_COL_CAP = 12;
+
+// 화면 좌표로 인정할 상한. 원점 자리에서 포인터값(0x1337xxxx 등)이 읽히는 사고를
+// 프로세스 안에서 즉시 걸러낸다 — B74 는 원점 (322313472, 322290148) 을 그대로 믿고
+// 화면 밖 (322313510, 322290155) 을 클릭해 런 전체를 날렸다.
+const SPOT_MAX_SCREEN_COORD = 4096;
+
+function spotIsPlausibleXY(x, y) {
+  return Number.isInteger(x) && Number.isInteger(y)
+    && x >= 0 && x <= SPOT_MAX_SCREEN_COORD
+    && y >= 0 && y <= SPOT_MAX_SCREEN_COORD;
+}
+
+// dword 영역을 s32/f32/hex 3중 해석으로 덤프(원점·geometry 필드가 int인지 float인지 라이브에서 판정용).
+function spotDwordView(address, dwordCount) {
+  return safe(() => {
+    const rows = [];
+    for (let i = 0; i < dwordCount; i += 1) {
+      const a = ptr(address).add(i * 4);
+      rows.push({ off: `0x${(i * 4).toString(16)}`, s32: readS32(a), f32: readF32(a), hex: readHex(a, 4) });
+    }
+    return rows;
+  }, null);
+}
+
+// 위젯 포인터가 그럴듯하면(vtable 존재) 절대 원점을 읽음. AV 위험 최소화 위해 vtable 널체크 후 safe 호출.
+// vtable 후보가 포인터 대역이 아니면(예: list+0 == 56) 위젯이 아니므로 호출하지 않는다.
+function spotTryOrigin(target) {
+  return safe(() => {
+    const p = ptr(target);
+    if (p.isNull()) return null;
+    const vtable = readPtr(p);
+    if (vtable.isNull()) return null;
+    if (vtable.compare(ptr('0x10000')) < 0) return null;
+    return absoluteOriginState(p).output;
+  }, null);
+}
+
+// 원점 후보를 여러 파생 경로로 만들고 각각을 프로세스 안에서 검증해 plausible 플래그를 붙인다.
+// 드라이버는 plausible 한 첫 후보만 쓰고, 하나도 없으면 fail-closed 한다(좌표 추측 금지).
+function spotOriginCandidates(list, parent, columns) {
+  const out = [];
+  const push = (name, source, origin) => {
+    if (!origin) { out.push({ name, source, x: null, y: null, plausible: false }); return; }
+    out.push({ name, source, x: origin.x, y: origin.y, plausible: spotIsPlausibleXY(origin.x, origin.y) });
+  };
+  push('listStatic', ptrHex(list), spotTryOrigin(list));
+  push('listDeref', ptrHex(readPtr(list)), spotTryOrigin(readPtr(list)));
+  push('parentStatic', ptrHex(parent), spotTryOrigin(parent));
+  push('parentDeref', ptrHex(readPtr(parent)), spotTryOrigin(readPtr(parent)));
+  for (let i = 0; i < columns.length; i += 1) {
+    const col = columns[i];
+    if (!col || !col.ptr) continue;
+    push(`column${i}`, col.ptr, col.origin);
+  }
+  return out;
+}
+
+function spotDialogListState() {
+  const list = SPOT_DIALOG_LIST;
+  const parent = SPOT_DIALOG_PARENT;
+  const itemCount = readS32(list.add(0x8e4));
+  const columnCount = readS32(list.add(0xc));
+  const sentinel = readPtr(list.add(0x8e0));
+
+  const meta = {
+    listBase: ptrHex(list),
+    parentBase: ptrHex(parent),
+    itemCount8e4: itemCount,
+    selectedIndex8e8: readS32(list.add(0x8e8)),
+    columnCount0c: columnCount,
+    mode8d4: readS32(list.add(0x8d4)),
+    state8d8: readS32(list.add(0x8d8)),
+    sentinel8e0: ptrHex(sentinel),
+    gridArray20: ptrHex(readPtr(list.add(0x20))),
+  };
+
+  const listOrigin = spotTryOrigin(list);
+  const parentOrigin = spotTryOrigin(parent);
+
+  // list 위젯 헤드 raw + s32/f32 (원점/geometry 필드 탐색용 폴백).
+  const widgetHead = { raw: readHex(list, 0x40), dwords: spotDwordView(list, 0x10) };
+
+  // 컬럼-셀 위젯 배열(list+0x20 + col*4). 각 셀은 실제 화면 위젯이므로 원점/rect(+0x20/0x24/0x2c/0x30) 후보 노출.
+  const cols = Number.isInteger(columnCount) && columnCount > 0
+    ? Math.min(columnCount, SPOT_DIALOG_COL_CAP) : 1;
+  const columns = [];
+  for (let c = 0; c < cols; c += 1) {
+    const cell = readPtr(list.add(0x20 + c * 4));
+    if (cell.isNull()) { columns.push({ col: c, ptr: null }); continue; }
+    columns.push({
+      col: c,
+      ptr: ptrHex(cell),
+      origin: spotTryOrigin(cell),
+      rectAt20: rectState(cell),
+      head: spotDwordView(cell, 0x10),
+    });
+  }
+
+  // 행 연결리스트 순회. payload=node+8, payload dword[2](off 0x08)=baseId(70 확인 지점).
+  const rows = [];
+  if (!sentinel.isNull()) {
+    let node = readPtr(sentinel);
+    const cap = Number.isInteger(itemCount) ? Math.max(0, Math.min(itemCount, SPOT_DIALOG_ROW_CAP)) : 0;
+    for (let r = 0; r < cap; r += 1) {
+      if (node.isNull() || node.equals(sentinel)) break;
+      const payload = node.add(8);
+      rows.push({
+        index: r,
+        nodePtr: ptrHex(node),
+        baseIdAt08: readS32(payload.add(8)),
+        payload: spotDwordView(payload, 0x0a),
+        payloadHex: readHex(payload, 0x40),
+      });
+      node = readPtr(node);
+    }
+  }
+
+  // 검증된 원점 후보 집합. plausible=false 인 값은 드라이버가 절대 클릭에 쓰지 않는다.
+  const originCandidates = spotOriginCandidates(list, parent, columns);
+
+  // 부모(정보패널) 위젯 raw 덤프 — 지금까지 한 번도 안 떴다. 목록 다이얼로그의 진짜
+  // 절대 원점이 어느 필드에 있는지 다음 라이브 런에서 확정하기 위한 관측 데이터.
+  const parentHead = { raw: readHex(parent, 0x40), dwords: spotDwordView(parent, 0x10) };
+  const parentRect = rectState(parent);
+
+  // 행 기하. 행 rect 는 메모리에 {x,y,w,h} 로 저장되지 않고(0x502/0x503 그리드 렌더가
+  // draw 시점에 계산) 확정 소스가 아직 없다. 따라서 rowHeight 를 추측해 채우지 않는다 —
+  // null 이면 드라이버가 fail-closed 한다. 후보 스칼라만 노출해 다음 런에서 확정한다.
+  const cell0 = columns.length > 0 ? columns[0] : null;
+  const cellRect = cell0 && cell0.rectAt20 ? cell0.rectAt20 : null;
+  const rowGeometry = {
+    rowHeight: null,
+    rowTop: null,
+    rowWidth: cellRect ? cellRect.width : null,
+    candidates: {
+      listHead04: readS32(list.add(0x4)),
+      listHead08: readS32(list.add(0x8)),
+      cellRect,
+      itemCount,
+    },
+  };
+
+  return {
+    ...meta, listOrigin, parentOrigin, originCandidates,
+    widgetHead, parentHead, parentRect, rowGeometry, columns, rows,
+  };
+}
+
 function snapshot() {
   const base = clientBase();
   return {
@@ -2862,6 +3023,7 @@ function snapshot() {
     inputState: { ...rowState(INPUT_STATE), raw: readHex(INPUT_STATE, 0x180) },
     inputTickResult,
     selectGrid: selectGridState(),
+    spotDialogList: spotDialogListState(),
     geometryForceEnabled,
     geometryTargetOnly,
     occlusionForceEnabled,
