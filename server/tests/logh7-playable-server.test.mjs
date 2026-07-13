@@ -513,15 +513,15 @@ test('playable server boots twice and serves login+world+move sequence', async (
       pushCodes.indexOf(0x0325) < pushCodes.indexOf(0x0323),
       `boot ${boot} 0x0325 must precede 0x0323`,
     );
-    // ★정합(TCP 레벨): 0x0323 flagship(body+0x24 BE) == 0x0325 unit[0].id(body+0x04 BE).
-    //   count와 유닛 원소 id 필드는 모두 정본 aligned-BE — docs/logh7-focusid-lookup-re.md §8.7.
+    // ★정합(TCP 레벨): FUN_00419ca0 wire cursor는 u16 BE count 직후 body+0x02에서
+    //   첫 unit id를 u32 BE로 읽는다. native destination의 +0x04 pad/offset을 wire에 적용하지 않는다.
     const unitBody = decodeInnerBody(pushFrames.find((fr) => decodeInnerCode(fr) === 0x0325));
     const charBody = decodeInnerBody(pushFrames.find((fr) => decodeInnerCode(fr) === 0x0323));
     assert.ok(unitBody.readUInt16BE(0x00) >= 1, `boot ${boot} 0x0325 count ≥ 1 (BE)`);
     assert.equal(
       charBody.readUInt32BE(0x24),
-      unitBody.readUInt32BE(0x04),
-      `boot ${boot} char flagship(+0x24 BE) must equal unit[0].id(+0x04 BE)`,
+      unitBody.readUInt32BE(0x02),
+      `boot ${boot} char flagship(+0x24 BE) must equal compact unit[0].id(+0x02 BE)`,
     );
 
     // move 0x0b01 (push 완전 소진 후이므로 소켓은 move 응답만 남는다)
@@ -584,9 +584,9 @@ test('playable server boots twice and serves login+world+move sequence', async (
         .trim().split('\n').map((line) => JSON.parse(line));
       const routeMoveTrace = traceLines.filter((line) => line.event === 'world-response-sent' && line.kind === 'move').at(-1);
       assert.equal(routeMoveTrace.cell, 2887);
-      assert.equal(routeMoveTrace.cellSource, 'route-candidate-qa-gated');
+      assert.equal(routeMoveTrace.cellSource, 'decoded-route-cell');
       assert.equal(routeMoveTrace.configuredFallback, null);
-      assert.equal(routeMoveTrace.unresolved, true);
+      assert.equal(routeMoveTrace.unresolved, false);
     } finally {
       if (previousRouteFallback === undefined) delete process.env.LOGH_DEV_GRID_MOVE_FALLBACK_CELL;
       else process.env.LOGH_DEV_GRID_MOVE_FALLBACK_CELL = previousRouteFallback;

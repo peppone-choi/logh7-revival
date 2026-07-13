@@ -21,12 +21,46 @@ import {
   readMsg32Code,
   CODE_INFO_UNIT,
   CODE_INFO_UNIT_BYTES,
-  CODE_INFO_UNIT_HEADER,
-  CODE_INFO_UNIT_STRIDE,
-  UNIT_ELEM,
 } from '../src/server/logh7-world-records.mjs';
 
-const unitBase = (i) => CODE_INFO_UNIT_HEADER + i * CODE_INFO_UNIT_STRIDE;
+function decodeInformationUnitsLikeFun419ca0(body) {
+  const count = body.readUInt16BE(0);
+  const rows = [];
+  let cursor = 2;
+  for (let index = 0; index < count; index += 1) {
+    const wireStart = cursor;
+    const id = body.readUInt32BE(cursor); cursor += 4;
+    const faction = body.readUInt16BE(cursor); cursor += 2;
+    cursor += 1; // native +0x06
+    const commander = body.readUInt32BE(cursor); cursor += 4;
+    const cell = body.readUInt32BE(cursor); cursor += 4;
+    const owner = body.readUInt32BE(cursor); cursor += 4;
+    const boatsCount = body.readUInt8(cursor); cursor += 1;
+    assert.ok(boatsCount <= 10, `row ${index} boats count cap`);
+    const boats = [];
+    for (let boatIndex = 0; boatIndex < boatsCount; boatIndex += 1) {
+      boats.push(body.readUInt32BE(cursor));
+      cursor += 4;
+    }
+    const spotResolverBase = body.readUInt32BE(cursor); cursor += 4;
+    cursor += 1 + 1 + 2;
+    const mapSection = body.readUInt16BE(cursor); cursor += 2;
+    cursor += 4 + 4 + 4;
+    rows.push({
+      wireStart,
+      wireEnd: cursor,
+      id,
+      faction,
+      commander,
+      cell,
+      owner,
+      boats,
+      spotResolverBase,
+      mapSection,
+    });
+  }
+  return { count, rows, cursor };
+}
 
 test('getDeploymentFleetUnits: 제국12+동맹12 실 유닛, 유효 cell, 유니크 id', () => {
   _resetDeploymentUnitsCache();
@@ -58,52 +92,80 @@ test('buildDeploymentFleetList: 플레이어 unit[0] 앵커 + NPC, id 충돌 제
   assert.equal(ids.size, list.length, '플레이어 포함 id 유니크');
 });
 
-test('buildDeploymentFleetList: 기본 commander는 characterId를 유지한다', () => {
-  const list = buildDeploymentFleetList({ unitId: 7, cell: 2588, characterId: 42, faction: FACTION_EMPIRE });
-  assert.equal(list[0].commander, 42, '기본 경로는 commander에 characterId를 사용');
+test('buildDeploymentFleetList: env와 무관하게 player native +0x08은 cell이고 NPC commander는 0이다', () => {
+  const previous = process.env.LOGH_PLAYER_FOCUS_CELL;
+  const bodies = [];
+  try {
+    for (const value of [undefined, '0', '1']) {
+      if (value === undefined) delete process.env.LOGH_PLAYER_FOCUS_CELL;
+      else process.env.LOGH_PLAYER_FOCUS_CELL = value;
+      const fleets = buildDeploymentFleetList({
+        unitId: 7,
+        cell: 2588,
+        characterId: 42,
+        faction: FACTION_ALLIANCE,
+      });
+      const label = `LOGH_PLAYER_FOCUS_CELL=${value ?? 'unset'}`;
+      assert.equal(fleets[0].commander, 2588, `${label}: player current-cell source`);
+      assert.equal(fleets[0].cell, 2588, `${label}: player location`);
+      assert.equal(fleets[0].owner, 42, `${label}: character identity stays in owner`);
+      assert.ok(fleets.slice(1).every((fleet) => fleet.commander === 0), `${label}: NPC commander remains unknown/zero`);
+
+      const body = msg32Body(buildInformationUnitInner({ unitId: 7, fleets }));
+      const decoded = decodeInformationUnitsLikeFun419ca0(body);
+      assert.equal(decoded.rows[0].commander, 2588, `${label}: serialized native +0x08`);
+      assert.equal(decoded.rows[0].cell, 2588, `${label}: serialized native +0x0c`);
+      bodies.push(body);
+    }
+    assert.deepEqual(bodies[1], bodies[0], 'env=0 cannot change 0x0325 bytes');
+    assert.deepEqual(bodies[2], bodies[0], 'env=1 cannot change 0x0325 bytes');
+  } finally {
+    if (previous === undefined) delete process.env.LOGH_PLAYER_FOCUS_CELL;
+    else process.env.LOGH_PLAYER_FOCUS_CELL = previous;
+  }
 });
 
-test('buildDeploymentFleetList: focusCell 게이트는 commander에 플레이어 cell을 사용한다', () => {
-  const list = buildDeploymentFleetList({
-    unitId: 7,
-    cell: 2014,
-    characterId: 42,
-    faction: FACTION_ALLIANCE,
-    focusCell: true,
-  });
-  assert.equal(list[0].commander, 2014, 'focusCell 경로는 commander에 함대 cell을 주입');
-});
-
-test('0x0325 full form: 고정 52804B, count BE == fleets 수, unit[0].id BE', () => {
+test('0x0325 full form: 고정 52804B에서 전체 함대를 compact cursor로 연속 디코드한다', () => {
   const fleets = buildDeploymentFleetList({ unitId: 5, cell: 100, characterId: 9, faction: FACTION_ALLIANCE });
   const inner = buildInformationUnitInner({ unitId: 5, fleets });
   assert.equal(readMsg32Code(inner), CODE_INFO_UNIT);
   const body = msg32Body(inner);
+  const decoded = decodeInformationUnitsLikeFun419ca0(body);
   assert.equal(body.length, CODE_INFO_UNIT_BYTES, '고정 52804B 유지');
   assert.equal(body.readUInt16BE(0), fleets.length, 'count BE == fleets 수');
   // unit[0] = 플레이어 (앵커: flagship 링크)
-  assert.equal(body.readUInt32BE(unitBase(0) + UNIT_ELEM.ID), 5, 'unit[0].id BE @ +0x04 == unitId');
-  assert.equal(body.readUInt32BE(unitBase(0) + UNIT_ELEM.CELL), 100, 'unit[0].cell BE');
-  // unit[1] = 첫 NPC: id/cell/faction 이 레코드 오프셋에 정확히 실림 (active 조건)
+  assert.equal(decoded.rows[0].id, 5, 'decoded unit[0].id == unitId');
+  assert.equal(decoded.rows[0].cell, 100, 'decoded unit[0].cell');
+  // unit[1] = 첫 NPC: id/cell/faction이 클라이언트 cursor 모델에서 정확히 복원된다.
   const npc0 = fleets[1];
-  assert.equal(body.readUInt32BE(unitBase(1) + UNIT_ELEM.ID), npc0.id, 'unit[1].id BE');
-  assert.equal(body.readUInt32BE(unitBase(1) + UNIT_ELEM.CELL), npc0.cell, 'unit[1].cell BE');
-  assert.equal(body.readUInt16BE(unitBase(1) + UNIT_ELEM.FACTION), npc0.faction, 'unit[1].faction BE');
-  // 마지막 NPC 도 버퍼 안에 있음(24+1=25 records < 600 cap, 52804/0x58≈599)
+  assert.equal(decoded.rows[1].id, npc0.id, 'decoded unit[1].id');
+  assert.equal(decoded.rows[1].cell, npc0.cell, 'decoded unit[1].cell');
+  assert.equal(decoded.rows[1].faction, npc0.faction, 'decoded unit[1].faction');
+  assert.equal(decoded.rows[1].wireStart, decoded.rows[0].wireEnd, 'NPC row starts at the prior row cursor');
+  // 마지막 NPC도 고정 body 안에서 동일 cursor 계약으로 복원된다.
   const last = fleets.length - 1;
-  assert.ok(unitBase(last) + CODE_INFO_UNIT_STRIDE <= body.length, '전 레코드 버퍼 내');
-  assert.equal(body.readUInt32BE(unitBase(last) + UNIT_ELEM.ID), fleets[last].id, '마지막 unit.id BE');
+  assert.ok(decoded.cursor <= body.length, '전 레코드 버퍼 내');
+  assert.equal(decoded.rows[last].id, fleets[last].id, '마지막 decoded unit.id');
 });
 
-test('0x0325 minimal form 회귀: fleets 미지정 시 count+id 만 (byte-identical)', () => {
+test('0x0325 minimal form도 full parser가 소비할 한 행 전체를 compact wire로 보낸다', () => {
   const inner = buildInformationUnitInner({ unitId: 5, unitCount: 1, cell: 2588 });
   const body = msg32Body(inner);
+  const decoded = decodeInformationUnitsLikeFun419ca0(body);
   assert.equal(body.length, CODE_INFO_UNIT_BYTES);
   assert.equal(body.readUInt16BE(0), 1, 'count=1 (BE)');
-  assert.equal(body.readUInt32BE(4), 5, 'unit[0].id=5');
-  // 여분 필드 0 (minimal 은 cell/faction 미방출)
-  assert.equal(body.readUInt32BE(unitBase(0) + UNIT_ELEM.CELL), 0, 'minimal: cell 미방출');
-  assert.equal(body.readUInt16BE(unitBase(0) + UNIT_ELEM.FACTION), 0, 'minimal: faction 미방출');
+  assert.deepEqual(
+    {
+      id: decoded.rows[0].id,
+      faction: decoded.rows[0].faction,
+      commander: decoded.rows[0].commander,
+      cell: decoded.rows[0].cell,
+      owner: decoded.rows[0].owner,
+    },
+    { id: 5, faction: 0, commander: 0, cell: 2588, owner: 0 },
+  );
+  assert.equal(decoded.rows[0].wireStart, 2);
+  assert.equal(decoded.rows[0].wireEnd, 44);
 });
 
 test('world-enter fleets: 0x0325 unit[0].id == gridUnitId (flagship 링크 유지) + N>1 레코드', () => {
@@ -111,8 +173,9 @@ test('world-enter fleets: 0x0325 unit[0].id == gridUnitId (flagship 링크 유�
   const emits = buildWorldEntryInners({ characterId: 42, gridUnitId: 7, power: 2, spot: 1, fleets });
   const unitRec = emits.find((i) => readMsg32Code(i) === CODE_INFO_UNIT);
   const ub = msg32Body(unitRec);
-  assert.equal(ub.readUInt16BE(0), fleets.length, 'count > 1 (레지스트리 충전, BE)');
-  assert.equal(ub.readUInt32BE(4), 7, 'unit[0].id BE == gridUnitId (링크 앵커)');
+  const decoded = decodeInformationUnitsLikeFun419ca0(ub);
+  assert.equal(decoded.count, fleets.length, 'count > 1 (레지스트리 충전, BE)');
+  assert.equal(decoded.rows[0].id, 7, 'decoded unit[0].id == gridUnitId (링크 앵커)');
 });
 
 test('grid-init spawn fleets: 0x0325 가 N개 실 레코드로 레지스트리 충전', () => {
@@ -121,6 +184,7 @@ test('grid-init spawn fleets: 0x0325 가 N개 실 레코드로 레지스트리 �
   const unitRec = inners.find((i) => readMsg32Code(i) === CODE_INFO_UNIT);
   assert.ok(unitRec, '0x0325 present in grid-init spawn');
   const ub = msg32Body(unitRec);
-  assert.equal(ub.readUInt16BE(0), fleets.length, 'spawn count == fleets 수 (BE)');
-  assert.equal(ub.readUInt32BE(4), 3, 'unit[0].id == unitId');
+  const decoded = decodeInformationUnitsLikeFun419ca0(ub);
+  assert.equal(decoded.count, fleets.length, 'spawn count == fleets 수 (BE)');
+  assert.equal(decoded.rows[0].id, 3, 'decoded unit[0].id == unitId');
 });

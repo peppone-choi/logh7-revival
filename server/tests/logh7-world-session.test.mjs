@@ -23,8 +23,6 @@ import {
   isAdmissionRequestCode,
   readMsg32Code,
   msg32Body,
-  CODE_INFO_UNIT_HEADER,
-  UNIT_ELEM,
 } from '../src/server/logh7-world-records.mjs';
 import {
   runLoginSuccessPath,
@@ -32,6 +30,33 @@ import {
   SAMPLE_CREDENTIAL_INNER,
 } from '../src/server/logh7-playable-pipeline.mjs';
 import { parseGin7CredentialInner } from '../src/server/logh7-gin7-credential.mjs';
+
+function decodeInformationUnitsLikeFun419ca0(body) {
+  const count = body.readUInt16BE(0);
+  const rows = [];
+  let cursor = 2;
+  for (let index = 0; index < count; index += 1) {
+    const id = body.readUInt32BE(cursor); cursor += 4;
+    const faction = body.readUInt16BE(cursor); cursor += 2;
+    cursor += 1; // native +0x06
+    const commander = body.readUInt32BE(cursor); cursor += 4;
+    const cell = body.readUInt32BE(cursor); cursor += 4;
+    const owner = body.readUInt32BE(cursor); cursor += 4;
+    const boatsCount = body.readUInt8(cursor); cursor += 1;
+    assert.ok(boatsCount <= 10, `row ${index} boats count cap`);
+    const boats = [];
+    for (let boatIndex = 0; boatIndex < boatsCount; boatIndex += 1) {
+      boats.push(body.readUInt32BE(cursor));
+      cursor += 4;
+    }
+    const spotResolverBase = body.readUInt32BE(cursor); cursor += 4;
+    cursor += 1 + 1 + 2;
+    const mapSection = body.readUInt16BE(cursor); cursor += 2;
+    cursor += 4 + 4 + 4;
+    rows.push({ id, faction, commander, cell, owner, boats, spotResolverBase, mapSection });
+  }
+  return { count, rows, cursor };
+}
 
 test('enterWorld emits character/unit records and marks inWorld', () => {
   const world = createWorldSession();
@@ -43,22 +68,43 @@ test('enterWorld emits character/unit records and marks inWorld', () => {
   assert.equal(world.getPlayer(1).inWorld, true);
 });
 
-test('enterWorld focus-cell gate projects player cell into the 0x0325 commander slot', () => {
+test('world-enter와 grid-init은 focus env 없이도 decoded commander/cell=2588을 동일 투영한다', () => {
   const previous = process.env.LOGH_PLAYER_FOCUS_CELL;
-  process.env.LOGH_PLAYER_FOCUS_CELL = '1';
+  const enterBodies = [];
+  const gridBodies = [];
   try {
-    const world = createWorldSession();
-    world.seedPlayer({ connectionId: 1, characterId: 42, unitId: 7, cell: 2014, inWorld: false });
-    const { emits } = world.enterWorld({ connectionId: 1 });
-    const unitRec = emits.find((inner) => readMsg32Code(inner) === CODE_INFO_UNIT);
-    assert.ok(unitRec, '0x0325 present');
-    const body = msg32Body(unitRec);
-    const playerUnitBase = CODE_INFO_UNIT_HEADER;
-    assert.equal(
-      body.readUInt32BE(playerUnitBase + UNIT_ELEM.COMMANDER),
-      2014,
-      'call site gate carries fleet cell through commander',
-    );
+    for (const value of [undefined, '0', '1']) {
+      if (value === undefined) delete process.env.LOGH_PLAYER_FOCUS_CELL;
+      else process.env.LOGH_PLAYER_FOCUS_CELL = value;
+      const label = `LOGH_PLAYER_FOCUS_CELL=${value ?? 'unset'}`;
+      const world = createWorldSession();
+      world.seedPlayer({ connectionId: 1, characterId: 42, unitId: 7, cell: 2588, inWorld: false });
+
+      const { emits } = world.enterWorld({ connectionId: 1 });
+      const enterUnit = emits.find((inner) => readMsg32Code(inner) === CODE_INFO_UNIT);
+      assert.ok(enterUnit, `${label}: world-enter 0x0325 present`);
+      const enterBody = msg32Body(enterUnit);
+      const enterDecoded = decodeInformationUnitsLikeFun419ca0(enterBody);
+      assert.equal(enterDecoded.rows[0].commander, 2588, `${label}: world-enter native +0x08`);
+      assert.equal(enterDecoded.rows[0].cell, 2588, `${label}: world-enter native +0x0c`);
+
+      const req = Buffer.alloc(2);
+      req.writeUInt16BE(0x0f02, 0);
+      const grid = world.handleWorldInner({ connectionId: 1, accountId: 'a', inner: req });
+      const gridUnit = grid.responses.find((entry) => readMsg32Code(entry.inner) === CODE_INFO_UNIT)?.inner;
+      assert.ok(gridUnit, `${label}: grid-init 0x0325 present`);
+      const gridBody = msg32Body(gridUnit);
+      const gridDecoded = decodeInformationUnitsLikeFun419ca0(gridBody);
+      assert.equal(gridDecoded.rows[0].commander, 2588, `${label}: grid-init native +0x08`);
+      assert.equal(gridDecoded.rows[0].cell, 2588, `${label}: grid-init native +0x0c`);
+      assert.deepEqual(gridBody, enterBody, `${label}: both production callsites emit identical 0x0325 bytes`);
+      enterBodies.push(enterBody);
+      gridBodies.push(gridBody);
+    }
+    assert.deepEqual(enterBodies[1], enterBodies[0], 'world-enter env=0 cannot change bytes');
+    assert.deepEqual(enterBodies[2], enterBodies[0], 'world-enter env=1 cannot change bytes');
+    assert.deepEqual(gridBodies[1], gridBodies[0], 'grid-init env=0 cannot change bytes');
+    assert.deepEqual(gridBodies[2], gridBodies[0], 'grid-init env=1 cannot change bytes');
   } finally {
     if (previous === undefined) delete process.env.LOGH_PLAYER_FOCUS_CELL;
     else process.env.LOGH_PLAYER_FOCUS_CELL = previous;
@@ -369,10 +415,17 @@ test('handleWorldInner first 0x0f02 injects spawn burst with grid-enter brackets
   const endRec = result.responses.find((r) => readMsg32Code(r.inner) === CODE_NOTIFY_ENTER_GRID_END).inner;
   assert.equal(msg32Body(beginRec).readUInt8(0), 0, '0x0b09 body value=0');
   assert.equal(msg32Body(endRec).readUInt8(0), 0, '0x0b0a body value=0');
-  // flagship↔unit 정합: 0x0323 flagship(+0x24 BE) == 0x0325 unit[0].id(+0x04 BE).
+  // 0x0204 self id는 캐릭터 ID이고, 0x0323 flagship만 FUN_00419ca0 decoded unit id와 연결된다.
+  const selfRec = result.responses.find((r) => readMsg32Code(r.inner) === CODE_SS_CHARACTER_ID).inner;
   const unitRec = result.responses.find((r) => readMsg32Code(r.inner) === CODE_INFO_UNIT).inner;
   const charRec = result.responses.find((r) => readMsg32Code(r.inner) === CODE_INFO_CHARACTER).inner;
-  assert.equal(msg32Body(charRec).readUInt32BE(0x24), msg32Body(unitRec).readUInt32BE(0x04));
+  const selfId = msg32Body(selfRec).readUInt32BE(0);
+  const flagshipId = msg32Body(charRec).readUInt32BE(0x24);
+  const unitId = decodeInformationUnitsLikeFun419ca0(msg32Body(unitRec)).rows[0].id;
+  assert.equal(selfId, 5, '0x0204 selected character id');
+  assert.equal(flagshipId, 8, '0x0323 flagship keeps the independent unit id');
+  assert.notEqual(selfId, flagshipId, 'character id and flagship unit id are distinct domains');
+  assert.equal(flagshipId, unitId, '0x0323 flagship == decoded 0x0325 unit id');
   for (const r of result.responses) {
     assert.deepEqual(r.targets, [1]);
     assert.equal(r.isMsg32, true);
@@ -643,8 +696,9 @@ test('live SendWarp move prefers a valid route candidate over the QA fallback', 
     const result = world.handleMoveCommand({ connectionId: 1, accountId: 'owner', inner: moveInner });
     assert.equal(result.unitId, 1);
     assert.equal(result.cell, 2489);
-    assert.equal(result.cellSource, 'route-candidate-qa-gated');
+    assert.equal(result.cellSource, 'decoded-route-cell');
     assert.equal(result.configuredFallback, 2115);
+    assert.equal(result.unresolved, false);
     assert.equal(world.getPlayer(1).cell, 2489);
   } finally {
     if (previous === undefined) delete process.env.LOGH_DEV_GRID_MOVE_FALLBACK_CELL;
@@ -665,10 +719,10 @@ test('live SendWarp move accepts a valid route candidate without the QA fallback
     const result = world.handleMoveCommand({ connectionId: 1, accountId: 'owner', inner: moveInner });
     assert.equal(result.unitId, 1);
     assert.equal(result.cell, 2489);
-    assert.equal(result.cellSource, 'route-candidate-qa-gated');
+    assert.equal(result.cellSource, 'decoded-route-cell');
     assert.equal(result.routeCellCandidate, 2489);
     assert.equal(result.configuredFallback, null);
-    assert.equal(result.unresolved, true);
+    assert.equal(result.unresolved, false);
     assert.equal(world.getPlayer(1).cell, 2489);
   } finally {
     if (previous === undefined) delete process.env.LOGH_DEV_GRID_MOVE_FALLBACK_CELL;
@@ -869,9 +923,9 @@ test('full login→roster→world→move pipeline (shipped codecs) dual-session'
 //   0x0b09(begin) → 0x0325(유닛) + 0x0323(캐릭터 refresh) → 0x0b0a(end, 렌더 트리거) → 0x0f03(GridInit OK).
 // 순서 엄수: 0x0f03(월드초기화)는 반드시 0x0b0a 이후 (render-contract: 조기 push 크래시).
 
-test('buildWorldReadyPushInners pushes 0x0325×1 + 0x0323×1 inside 0x0b09/0x0b0a with flagship↔unit alignment', () => {
-  // 정본 aligned-BE 경로: 0x0323 flagship(+0x24)=0x0325 unit id(+0x04).
-  // 클라 FUN_004c2a80 는 선택 char 의 flagship(+0x24)을 unit id(+0x04)와 링크해 플레이어 오브젝트를
+test('buildWorldReadyPushInners pushes compact 0x0325×1 + 0x0323×1 inside 0x0b09/0x0b0a', () => {
+  // 0x0323 flagship(+0x24)=FUN_00419ca0가 compact wire에서 디코드한 unit id.
+  // 클라 FUN_004c2a80 는 선택 char 의 flagship(+0x24)을 decoded unit id와 링크해 플레이어 오브젝트를
   // 빌드한다. 링크가 성립하면 오브젝트 테이블(clientBase+0xc)이 채워져 NOW LOADING 이 해제된다.
   // 이전 P7 ×2 재전송은 정합이 아니라 타이밍 추측이었고 중복 스텁을 만든다 — 각 레코드 정확히 1회로
   // 되돌리되 정합(flagship==unit id)과 count≥1 을 계약으로 고정한다.
@@ -897,17 +951,18 @@ test('buildWorldReadyPushInners pushes 0x0325×1 + 0x0323×1 inside 0x0b09/0x0b0
     }
   }
   assert.ok(iInit > iEnd, '0x0f03 world-init must come AFTER 0x0b0a (early push crashes)');
-  // ★정합(정본 aligned BE): 0x0323 flagship(body+0x24 BE) == 0x0325 unit[0].id(body+0x04 BE) AND count≥1.
+  // ★정합: 0x0323 flagship(body+0x24 BE) == decoded 0x0325 unit[0].id, count≥1.
   const unitRec = inners.find((i) => readMsg32Code(i) === CODE_INFO_UNIT);
   const charRec = inners.find((i) => readMsg32Code(i) === CODE_INFO_CHARACTER);
   const unitBody = msg32Body(unitRec);
   const charBody = msg32Body(charRec);
-  assert.ok(unitBody.readUInt16BE(0x00) >= 1, '0x0325 count ≥ 1 (unit array non-empty, BE)');
-  assert.equal(unitBody.readUInt32BE(0x04), 8, 'unit[0].id(+0x04 BE) = real fleet id');
+  const decoded = decodeInformationUnitsLikeFun419ca0(unitBody);
+  assert.ok(decoded.count >= 1, '0x0325 count ≥ 1 (unit array non-empty, BE)');
+  assert.equal(decoded.rows[0].id, 8, 'decoded unit[0].id = real fleet id');
   assert.equal(
     charBody.readUInt32BE(0x24),
-    unitBody.readUInt32BE(0x04),
-    'char flagship(+0x24 BE) must equal unit[0].id(+0x04 BE) — client char→flagship→unit link',
+    decoded.rows[0].id,
+    'char flagship(+0x24 BE) must equal decoded unit[0].id — client char→flagship→unit link',
   );
 });
 

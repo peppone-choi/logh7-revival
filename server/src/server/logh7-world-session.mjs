@@ -244,7 +244,6 @@ export function createWorldSession({
       cell: p.cell,
       characterId: p.characterId,
       faction: seed?.power ?? p.power ?? 0,
-      focusCell: process.env.LOGH_PLAYER_FOCUS_CELL === '1',
     });
 
     const emits = buildWorldEntryInners({
@@ -298,9 +297,12 @@ export function createWorldSession({
     }
     const unitId = cmd.unitId || player.unitId;
     const cell = cmd.unresolved ? (hasRouteCell ? routeCellCandidate : fallbackCell) : cmd.cell >>> 0;
-    const cellSource = cmd.unresolved
-      ? (hasRouteCell ? 'route-candidate-qa-gated' : 'configured-fallback-qa-gated')
-      : 'decoded-cell';
+    // live 31-byte SendWarp의 범위 내 route cell은 decoder가 확정한 목적지로 취급한다.
+    const cellSource = cmd.format === 'sendwarp-live-v1' && !cmd.unresolved
+      ? 'decoded-route-cell'
+      : cmd.unresolved
+        ? (hasRouteCell ? 'route-candidate-qa-gated' : 'configured-fallback-qa-gated')
+        : 'decoded-cell';
     if (!Number.isInteger(cell) || cell < 0 || cell >= 5000) {
       throw new Error('move rejected: invalid grid cell');
     }
@@ -513,7 +515,6 @@ export function createWorldSession({
             cell: player.cell,
             characterId: player.characterId,
             faction: player.power ?? 0,
-            focusCell: process.env.LOGH_PLAYER_FOCUS_CELL === '1',
           }),
         });
         logEvent('grid-init-spawn', connectionId, { codes: listWorldEntryCodes(spawnInners) });

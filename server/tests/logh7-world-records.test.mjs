@@ -45,6 +45,58 @@ import {
 } from '../src/server/logh7-world-records.mjs';
 import { buildInformationCharacterRecordInner } from './fixtures/logh7-old-character-record.mjs';
 
+// 정본 클라이언트 FUN_00419ca0의 wire cursor 소비 순서를 그대로 모델링한다.
+// native destination은 0x58 stride지만 wire에는 정렬 패딩이 없고 각 행이 연속된다.
+function decodeInformationUnitsLikeFun419ca0(body) {
+  const count = body.readUInt16BE(0);
+  const rows = [];
+  let cursor = 2;
+  for (let index = 0; index < count; index += 1) {
+    const wireStart = cursor;
+    const id = body.readUInt32BE(cursor); cursor += 4;
+    const faction = body.readUInt16BE(cursor); cursor += 2;
+    const field06 = body.readUInt8(cursor); cursor += 1;
+    const commander = body.readUInt32BE(cursor); cursor += 4;
+    const cell = body.readUInt32BE(cursor); cursor += 4;
+    const owner = body.readUInt32BE(cursor); cursor += 4;
+    const boatsCount = body.readUInt8(cursor); cursor += 1;
+    assert.ok(boatsCount <= 10, `row ${index} boats count cap`);
+    const boats = [];
+    for (let boatIndex = 0; boatIndex < boatsCount; boatIndex += 1) {
+      boats.push(body.readUInt32BE(cursor));
+      cursor += 4;
+    }
+    const spotResolverBase = body.readUInt32BE(cursor); cursor += 4;
+    const tail44 = body.readUInt8(cursor); cursor += 1;
+    const tail45 = body.readUInt8(cursor); cursor += 1;
+    const tail46 = body.readUInt16BE(cursor); cursor += 2;
+    const mapSection = body.readUInt16BE(cursor); cursor += 2;
+    const tail4c = body.readUInt32BE(cursor); cursor += 4;
+    const tail50 = body.readUInt32BE(cursor); cursor += 4;
+    const tail54 = body.readFloatBE(cursor); cursor += 4;
+    rows.push({
+      wireStart,
+      wireEnd: cursor,
+      id,
+      faction,
+      field06,
+      commander,
+      cell,
+      owner,
+      boats,
+      spotResolverBase,
+      tail44,
+      tail45,
+      tail46,
+      mapSection,
+      tail4c,
+      tail50,
+      tail54,
+    });
+  }
+  return { count, rows, cursor };
+}
+
 test('0x0323 character record is message32 with 724B body and id/flagship anchors (aligned BE)', () => {
   // 정본 wire = struct-aligned BIG-ENDIAN. id@0x00 BE, flagship@0x24 BE.
   const inner = buildInformationCharacterInner({ characterId: 7, gridUnitId: 42 });
@@ -55,26 +107,69 @@ test('0x0323 character record is message32 with 724B body and id/flagship anchor
   assert.equal(body.readUInt32BE(0x24), 42);
 });
 
+test('0x0325 wire rows follow the FUN_00419ca0 compact cursor without native padding', () => {
+  const body = msg32Body(buildInformationUnitInner({
+    fleets: [
+      { id: 1, faction: 2, commander: 2588, cell: 2588, owner: 1 },
+      {
+        id: 2,
+        faction: 3,
+        commander: 77,
+        cell: 2489,
+        owner: 42,
+        boats: [101, 102],
+        spotResolverBase: 9,
+        mapSection: 12,
+      },
+    ],
+  }));
+
+  const decoded = decodeInformationUnitsLikeFun419ca0(body);
+  assert.equal(body.length, CODE_INFO_UNIT_BYTES, 'fixed 0xce44 body is retained');
+  assert.deepEqual(
+    decoded.rows.map(({ id, faction, commander, cell, owner, boats }) => (
+      { id, faction, commander, cell, owner, boats }
+    )),
+    [
+      { id: 1, faction: 2, commander: 2588, cell: 2588, owner: 1, boats: [] },
+      { id: 2, faction: 3, commander: 77, cell: 2489, owner: 42, boats: [101, 102] },
+    ],
+  );
+  assert.deepEqual(
+    decoded.rows.map(({ wireStart, wireEnd }) => ({ wireStart, wireEnd })),
+    [
+      { wireStart: 2, wireEnd: 44 },
+      { wireStart: 44, wireEnd: 94 },
+    ],
+    'row1 starts exactly where row0 cursor ends; two boats add eight wire bytes',
+  );
+  assert.equal(decoded.cursor, 94);
+  assert.ok(body.subarray(decoded.cursor).every((value) => value === 0), 'unused fixed body tail remains zero');
+});
+
 test('0x0325 unit record is fixed 52804B: count BE, unit id BE', () => {
-  // count @0 는 u16 BE, record[0].id 는 BE (aligned canonical layout).
+  // count @0 는 u16 BE, record[0].id 는 count 직후 u32 BE다.
   const inner = buildInformationUnitInner({ unitId: 5, unitCount: 1, cell: 2588 });
   assert.equal(readMsg32Code(inner), CODE_INFO_UNIT);
   const body = msg32Body(inner);
+  const decoded = decodeInformationUnitsLikeFun419ca0(body);
   assert.equal(body.length, CODE_INFO_UNIT_BYTES);
   assert.equal(body.readUInt16BE(0), 1, 'count BE == 1');
-  assert.equal(body.readUInt32BE(4), 5, 'unit[0].id BE');
+  assert.equal(body.readUInt32BE(2), 5, 'unit[0].id BE begins immediately after count');
+  assert.equal(decoded.rows[0].id, 5);
+  assert.equal(decoded.rows[0].cell, 2588);
 });
 
 test('0x0325 count and unit id fields are BIG-ENDIAN: count=1 → bytes [00 01]', () => {
   // 라이브+정적 실측 확정(docs/logh7-focusid-lookup-re.md §8.7): 실 핸들러
   // FUN_00419ca0 게이트가 count 를 [eax+0x20] 스왑(ntohs) 리더로 읽는다. BE `00 19`(25) → edi `19 00`
-  // → ax=0x0019=25 ≤ 600 → 스테이징 통과. 유닛 원소 id도 정본 aligned-BE 레코드다.
+  // → ax=0x0019=25 ≤ 600 → 스테이징 통과. 유닛 원소 id도 BE이며 count 직후 시작한다.
   const inner = buildInformationUnitInner({ unitId: 9, unitCount: 1, cell: 2588 });
   const body = msg32Body(inner);
   assert.equal(body.readUInt8(0), 0x00, 'count byte0 = 0x00 (BE high byte)');
   assert.equal(body.readUInt8(1), 0x01, 'count byte1 = 0x01 (BE low byte)');
   assert.equal(body.readUInt16BE(0), 1, 'client-visible count == 1 (after ntohs swap)');
-  assert.equal(body.readUInt32BE(4), 9, 'unit[0].id BE (flagship self-match anchor)');
+  assert.equal(body.readUInt32BE(2), 9, 'unit[0].id BE (flagship self-match anchor)');
 });
 
 test('live client layout profile links the packed flagship and unit anchors', () => {
@@ -123,89 +218,43 @@ test('0x0323 diagnostic grid-unit offset20 gate writes flagship at body+0x20 wit
   assert.equal(body.readUInt32BE(0x24), 0, 'offset20 diagnostic leaves canonical body+0x24 clear');
 });
 
-test('0x0325 diagnostic header3 gate writes player unit id at body+0x03 as LE', () => {
-  const body = msg32Body(buildInformationUnitInner({
-    unitId: 1,
-    unitCount: 1,
-    diagnosticUnitHeader3: true,
-  }));
-  assert.deepEqual(
-    [...body.subarray(0x03, 0x07)],
-    [0x01, 0x00, 0x00, 0x00],
-    'diagnostic player id bytes are native LE at body+0x03',
-  );
-});
-
-test('0x0325 diagnostic header3 gate shifts full fleet row id with the player anchor', () => {
-  const body = msg32Body(buildInformationUnitInner({
-    fleets: [{ id: 1, faction: 2, commander: 1, cell: 2588, owner: 1 }],
-    diagnosticUnitHeader3: true,
-  }));
-  assert.deepEqual(
-    [...body.subarray(0x03, 0x07)],
-    [0x01, 0x00, 0x00, 0x00],
-    'diagnostic full row id bytes are native LE at body+0x03',
-  );
-});
-
-test('0x0325 diagnostic ID-LE gate keeps header4 and writes minimal id at body+0x04', () => {
-  const body = msg32Body(buildInformationUnitInner({
-    unitId: 1,
-    unitCount: 1,
-    diagnosticUnitIdLe: true,
-  }));
-  assert.equal(body.readUInt16BE(0), 1, 'header4 count remains BE at body+0x00');
-  assert.deepEqual(
-    [...body.subarray(0x04, 0x08)],
-    [0x01, 0x00, 0x00, 0x00],
-    'diagnostic ID-LE gate writes native LE id at body+0x04',
-  );
-  assert.equal(body.readUInt8(0x03), 0, 'header4 pad byte remains before row');
-});
-
-test('0x0325 diagnostic ID-LE gate keeps header4 for a full fleet row', () => {
-  const body = msg32Body(buildInformationUnitInner({
-    fleets: [{ id: 1, faction: 2, commander: 1, cell: 2588, owner: 1 }],
-    diagnosticUnitIdLe: true,
-  }));
-  assert.equal(body.readUInt16BE(0), 1, 'full-row count remains BE at body+0x00');
-  assert.deepEqual(
-    [...body.subarray(0x04, 0x08)],
-    [0x01, 0x00, 0x00, 0x00],
-    'diagnostic full row id uses native LE at header4 row start',
-  );
-  assert.equal(body.readUInt8(0x03), 0, 'full-row header4 pad byte remains before row');
-});
-
-test('0x0325 diagnostic ID-offset2 gate keeps count BE and writes minimal id at body+0x02 BE', () => {
-  const body = msg32Body(buildInformationUnitInner({
-    unitId: 1,
-    unitCount: 1,
-    diagnosticUnitIdOffset2Be: true,
-  }));
-  assert.equal(body.readUInt16BE(0), 1, 'count remains BE at body+0x00');
-  assert.deepEqual(
-    [...body.subarray(0x02, 0x06)],
-    [0x00, 0x00, 0x00, 0x01],
-    'diagnostic offset2 gate writes BE id at body+0x02',
-  );
-});
-
-test('0x0325 diagnostic ID-offset2 gate keeps header4 stride for a full fleet', () => {
-  const body = msg32Body(buildInformationUnitInner({
+test('retired 0x0325 ID diagnostic envs cannot reintroduce the hybrid wire layout', () => {
+  const envNames = [
+    'LOGH_DIAG_0325_HEADER3_LE',
+    'LOGH_DIAG_0325_ID_LE',
+    'LOGH_DIAG_0325_ID_OFFSET2_BE',
+  ];
+  const previous = new Map(envNames.map((name) => [name, process.env[name]]));
+  const canonical = msg32Body(buildInformationUnitInner({
     fleets: [
-      { id: 1, faction: 2, commander: 1, cell: 2588, owner: 1 },
-      { id: 2, faction: 2, commander: 2, cell: 2589, owner: 1 },
+      { id: 1, faction: 2, commander: 2588, cell: 2588, owner: 1 },
+      { id: 2, faction: 3, commander: 42, cell: 2489, owner: 42 },
     ],
-    diagnosticUnitIdOffset2Be: true,
   }));
-  assert.equal(body.readUInt16BE(0), 2, 'full-row count remains BE at body+0x00');
-  assert.deepEqual(
-    [...body.subarray(0x02, 0x06)],
-    [0x00, 0x00, 0x00, 0x01],
-    'first full-row id uses BE body+0x02 diagnostic slot',
-  );
-  assert.equal(body.readUInt32BE(0x04 + 0x58), 2, 'second row keeps header4 stride');
+  try {
+    for (const name of envNames) process.env[name] = '1';
+    const withRetiredEnvs = msg32Body(buildInformationUnitInner({
+      fleets: [
+        { id: 1, faction: 2, commander: 2588, cell: 2588, owner: 1 },
+        { id: 2, faction: 3, commander: 42, cell: 2489, owner: 42 },
+      ],
+    }));
+    assert.deepEqual(withRetiredEnvs, canonical);
+    assert.deepEqual(
+      decodeInformationUnitsLikeFun419ca0(withRetiredEnvs).rows.map(({ id, commander, cell }) => (
+        { id, commander, cell }
+      )),
+      [
+        { id: 1, commander: 2588, cell: 2588 },
+        { id: 2, commander: 42, cell: 2489 },
+      ],
+    );
+  } finally {
+    for (const [name, value] of previous) {
+      if (value === undefined) delete process.env[name];
+      else process.env[name] = value;
+    }
+  }
 });
 
 // ─── self-id ↔ record[0] 정수 불변식 (self-match 정합 잠금) ────────────────
@@ -271,7 +320,7 @@ test('world entry batch = unsolicited table-fill only (request-response codes re
   //   0x0206 SSGameLoginOK(0x0205 응답, 선두), 0x0204 캐릭터 id,
   //   0x0325 유닛 테이블 → 0x0323 캐릭 레코드
   // ★순서: 0x0325(유닛)가 0x0323(캐릭터)보다 먼저다(라이브 크래시 회귀 수정, qa-marker2 확정).
-  //   클라는 0x0323 flagship(+0x24)→유닛 링크로 unit[0].id(+0x04)를 찾아 그 유닛의 +0x14 를 deref 한다.
+  //   클라는 0x0323 flagship(+0x24)→유닛 링크로 decoded unit[0].id(native +0x04)를 찾아 +0x14 를 deref 한다.
   //   유닛(0x0325)이 캐릭터(0x0323)보다 먼저 도착해 오브젝트 테이블에 resident 여야 null(+0x14) deref
   //   (STATUS_ACCESS_VIOLATION, memAddr=0x14)를 피한다. char→unit 순서면 결정적 하드크래시.
   assert.deepEqual(codes, [
@@ -293,13 +342,13 @@ test('world entry batch = unsolicited table-fill only (request-response codes re
   const unitRec = emits.find((i) => listWorldEntryCodes([i])[0] === CODE_INFO_UNIT);
   assert.equal(msg32Body(charRec).length, 0x2d4);
   assert.equal(msg32Body(unitRec).length, 0xce44);
-  // self-match 무결(순서 바꿔도 링크 유지): 0x0323 flagship(+0x24 BE) == 0x0325 unit[0].id(+0x04 BE).
+  // self-match 무결: 0x0323 flagship(+0x24 BE) == FUN_00419ca0가 디코드한 unit[0].id.
   //   두 앵커가 동일 gridUnitId(=9) 여야 클라가 flagship→유닛 링크를 찾는다.
   const flagship = msg32Body(charRec).readUInt32BE(0x24);
-  const unitId0 = msg32Body(unitRec).readUInt32BE(0x04);
+  const unitId0 = decodeInformationUnitsLikeFun419ca0(msg32Body(unitRec)).rows[0].id;
   assert.equal(flagship, 9, '0x0323 flagship(+0x24 BE) == gridUnitId');
-  assert.equal(unitId0, 9, '0x0325 unit[0].id(+0x04 BE) == gridUnitId');
-  assert.equal(flagship, unitId0, 'flagship(+0x24 BE) == unit[0].id(+0x04 BE) — char↔unit self-match 유지');
+  assert.equal(unitId0, 9, '0x0325 decoded unit[0].id == gridUnitId');
+  assert.equal(flagship, unitId0, 'flagship(+0x24 BE) == decoded unit[0].id — char↔unit self-match 유지');
 });
 
 test('reactive: request-response codes answered by admission handler, not world-enter batch', () => {
@@ -423,6 +472,44 @@ test('0x0b01 live SendWarp payload keeps coordinate fields separate from unit ow
   assert.equal(cmd.fields.terminalByte, 5);
 });
 
+test('0x0b01 live SendWarp promotes an in-range route cell while retaining diagnostics', () => {
+  const inner = Buffer.from(
+    '0b01033500880335008800000001000003350098ffffffff09b977000000000005',
+    'hex',
+  );
+  const cmd = decodeMoveGridCommand(inner);
+  assert.equal(cmd.format, 'sendwarp-live-v1');
+  assert.equal(cmd.unitId, null);
+  assert.equal(cmd.cell, 2489);
+  assert.equal(cmd.unresolved, false);
+  assert.equal(cmd.fields.routeCellCandidate, 2489);
+  assert.equal(cmd.fields.rawHex, inner.subarray(2).toString('hex'));
+});
+
+test('0x0b01 live SendWarp route 셀 범위 경계를 고정한다', () => {
+  const fixture = Buffer.from(
+    '0b01033500880335008800000001000003350098ffffffff09b977000000000005',
+    'hex',
+  );
+  const cases = [
+    { candidate: 0, cell: 0, unresolved: false },
+    { candidate: 4999, cell: 4999, unresolved: false },
+    { candidate: 5000, cell: null, unresolved: true },
+    { candidate: 0xffff, cell: null, unresolved: true },
+  ];
+
+  for (const expected of cases) {
+    const inner = Buffer.from(fixture);
+    inner.writeUInt16BE(expected.candidate, 2 + 0x16);
+    const cmd = decodeMoveGridCommand(inner);
+    assert.deepEqual(
+      { cell: cmd.cell, unresolved: cmd.unresolved },
+      { cell: expected.cell, unresolved: expected.unresolved },
+      `routeCellCandidate=${expected.candidate}`,
+    );
+  }
+});
+
 test('0x0b01 move decoder rejects truncated and unknown body lengths', () => {
   for (const bodyLength of [0, 1, 7, 9, 0x20, 0x23, 0x25]) {
     const inner = Buffer.alloc(2 + bodyLength);
@@ -506,32 +593,48 @@ test('buildAdmissionResponseInner: each admission request → full-size static-i
   assert.equal(buildAdmissionResponseInner(0x7abc), null);
 });
 
-test('command-table probe fills 0x0305/0x0307 with the RE-confirmed move factory ids', () => {
+test('command-table preload emits compact BE 0x0305 records with a fixed zero tail', () => {
   const previous = process.env.LOGH_COMMAND_TABLE_PRELOAD_PROBE;
   try {
     delete process.env.LOGH_COMMAND_TABLE_PRELOAD_PROBE;
-    assert.equal(msg32Body(buildAdmissionResponseInner(0x0304)).readUInt16LE(0x00), 0, 'gate default is empty 0x0305');
-    assert.equal(msg32Body(buildAdmissionResponseInner(0x0306)).readUInt16LE(0x00), 0, 'gate default is empty 0x0307');
+    assert.equal(msg32Body(buildAdmissionResponseInner(0x0304)).readUInt16BE(0x00), 0, 'gate default is empty 0x0305');
+    assert.equal(msg32Body(buildAdmissionResponseInner(0x0306)).readUInt16BE(0x00), 0, 'gate default is empty 0x0307');
     process.env.LOGH_COMMAND_TABLE_PRELOAD_PROBE = '1';
-    const factoryIds = [0x0019, 0x003f, 0x0040, 0x002b];
+    const factoryIds = [0x002b, 0x0041];
+    const categories = [0, 1];
     const card = msg32Body(buildAdmissionResponseInner(0x0304));
-    assert.equal(card.readUInt16LE(0x00), 1, '0x0305 card count');
-    assert.equal(card.readUInt16LE(0x02), 0, 'card id');
-    assert.equal(card.readUInt8(0x02 + 0x14), factoryIds.length, 'card command count');
-    for (let i = 0; i < factoryIds.length; i += 1) {
-      assert.equal(card.readUInt16LE(0x02 + 0x16 + i * 2), factoryIds[i], `0x0305 factory ${i}`);
-    }
+    assert.equal(card.readUInt16BE(0x00), 2, '0x0305 outer count is BE');
+    assert.equal(card.length, 0x520a, '0x0305 fixed body size');
+    assert.equal(card.readUInt16BE(0x02), categories[0], '0x0305 compact card id 0');
+    assert.equal(card.readUInt8(0x14), factoryIds.length, '0x0305 compact command count 0');
+    assert.equal(card.readUInt16BE(0x15), factoryIds[0], '0x0305 compact factory 0/0');
+    assert.equal(card.readUInt16BE(0x17), factoryIds[1], '0x0305 compact factory 0/1');
+    assert.equal(card.readUInt16BE(0x19), categories[1], '0x0305 compact card id 1');
+    assert.equal(card.readUInt8(0x2b), factoryIds.length, '0x0305 compact command count 1');
+    assert.equal(card.readUInt16BE(0x2c), factoryIds[0], '0x0305 compact factory 1/0');
+    assert.equal(card.readUInt16BE(0x2e), factoryIds[1], '0x0305 compact factory 1/1');
+    assert.ok(card.subarray(0x30).every((value) => value === 0), '0x0305 compact tail is zero-filled');
 
     const command = msg32Body(buildAdmissionResponseInner(0x0306));
-    assert.equal(command.readUInt16LE(0x00), 1, '0x0307 card count');
-    assert.equal(command.readUInt16LE(0x02), 0, '0x0307 card id');
-    assert.equal(command.readUInt8(0x02 + 0x02), factoryIds.length, '0x0307 descriptor count');
-    for (let i = 0; i < factoryIds.length; i += 1) {
-      assert.equal(command.readUInt16LE(0x02 + 0x04 + i * 8), factoryIds[i], `0x0307 descriptor ${i}`);
-      assert.equal(command.readUIntLE(0x02 + 0x04 + i * 8 + 2, 3), 0, `0x0307 packed ${i} remains unknown`);
-      assert.equal(command.readUInt16LE(0x02 + 0x04 + i * 8 + 5), 0, `0x0307 w ${i} remains unknown`);
-      assert.equal(command.readUInt8(0x02 + 0x04 + i * 8 + 7), 0, `0x0307 flag ${i} remains unknown`);
+    assert.equal(command.readUInt16BE(0x00), 2, '0x0307 outer count is BE');
+    assert.equal(command.length, 0xe5b2, '0x0307 fixed body size');
+    assert.equal(command.readUInt16BE(0x02), categories[0], '0x0307 compact card id 0');
+    assert.equal(command.readUInt8(0x04), factoryIds.length, '0x0307 compact descriptor count 0');
+    for (const [index, off] of [0x05, 0x0d].entries()) {
+      assert.equal(command.readUInt16BE(off), factoryIds[index], `0x0307 compact descriptor 0/${index}`);
+      assert.equal(command.readUIntBE(off + 2, 3), 0, `0x0307 packed 0/${index} remains unknown`);
+      assert.equal(command.readUInt16BE(off + 5), 0, `0x0307 w 0/${index} remains unknown`);
+      assert.equal(command.readUInt8(off + 7), 0, `0x0307 flag 0/${index} remains unknown`);
     }
+    assert.equal(command.readUInt16BE(0x15), categories[1], '0x0307 compact card id 1');
+    assert.equal(command.readUInt8(0x17), factoryIds.length, '0x0307 compact descriptor count 1');
+    for (const [index, off] of [0x18, 0x20].entries()) {
+      assert.equal(command.readUInt16BE(off), factoryIds[index], `0x0307 compact descriptor 1/${index}`);
+      assert.equal(command.readUIntBE(off + 2, 3), 0, `0x0307 packed 1/${index} remains unknown`);
+      assert.equal(command.readUInt16BE(off + 5), 0, `0x0307 w 1/${index} remains unknown`);
+      assert.equal(command.readUInt8(off + 7), 0, `0x0307 flag 1/${index} remains unknown`);
+    }
+    assert.ok(command.subarray(0x28).every((value) => value === 0), '0x0307 compact tail is zero-filled');
   } finally {
     if (previous === undefined) delete process.env.LOGH_COMMAND_TABLE_PRELOAD_PROBE;
     else process.env.LOGH_COMMAND_TABLE_PRELOAD_PROBE = previous;
@@ -666,9 +769,9 @@ test('world entry 0x0323 carries real seed character stats (registerable object,
 //   0x0323 flagship은 body+0x24 aligned 필드에 있다.
 //
 // 이 테스트는 세 가지를 잠근다:
-//   (1) 크로스-레코드: 0x0323 flagship(+0x24 BE) == 0x0325 unit[0].id(+0x04 BE), 둘 다 ≠0.
+//   (1) 크로스-레코드: 0x0323 flagship(+0x24 BE) == 0x0325 decoded unit[0].id, 둘 다 ≠0.
 //   (2) 앞 필드 정합: id@0x00, power@0x04, spot@0x1c aligned 테이블대로 자리 지킴.
-test('0x0323 flagship lands at body+0x24 (aligned BE) == 0x0325 unit id (+0x04 BE), no drift', () => {
+test('0x0323 flagship at body+0x24 equals the FUN_00419ca0-decoded 0x0325 unit id', () => {
   const emits = buildWorldEntryInners({ characterId: 42, gridUnitId: 7, power: 2, spot: 1 });
   const charRec = emits.find((i) => readMsg32Code(i) === CODE_INFO_CHARACTER);
   const unitRec = emits.find((i) => readMsg32Code(i) === CODE_INFO_UNIT);
@@ -681,12 +784,12 @@ test('0x0323 flagship lands at body+0x24 (aligned BE) == 0x0325 unit id (+0x04 B
   assert.equal(cb.readUInt8(0x04), 2, 'power @ body+0x04');
   assert.equal(cb.readUInt32BE(0x1c), 1, 'spot @ body+0x1c BE');
 
-  // flagship 정확히 0x24 BE, unit id 정확히 0x04 BE, 크로스-레코드 동일·≠0
+  // flagship은 0x24 BE, unit id는 compact wire를 클라이언트 모델로 디코드해 비교한다.
   const flagship = cb.readUInt32BE(0x24);
-  const unitId0 = ub.readUInt32BE(0x04);
+  const unitId0 = decodeInformationUnitsLikeFun419ca0(ub).rows[0].id;
   assert.equal(flagship, 7, 'flagship (grid-unit id) @ body+0x24 BE');
-  assert.equal(unitId0, 7, '0x0325 unit[0].id @ body+0x04 BE');
-  assert.equal(flagship, unitId0, 'flagship(+0x24 BE) == unit id(+0x04 BE) — char↔unit link');
+  assert.equal(unitId0, 7, '0x0325 decoded unit[0].id');
+  assert.equal(flagship, unitId0, 'flagship(+0x24 BE) == decoded unit id — char↔unit link');
   assert.notEqual(flagship, 0, 'flagship ≠ 0 (FUN_004c2a80 link requires non-zero)');
 
   assert.equal(cb.readUInt32BE(0x20), 0, 'body+0x20 spot_owner remains 0');
@@ -698,7 +801,7 @@ test('0x0323 flagship lands at body+0x24 (aligned BE) == 0x0325 unit id (+0x04 B
 // 근거: 옛 렌더코드 5bd249c buildInformationCharacterRecordInner wireEndian:'be' + 라이브 실측.
 //   앵커/링크 필드(id·spot·spot_owner·flagship·seat entries)는 멀티바이트 BIG-ENDIAN,
 //   표시 스탯(fame/pcp/mcp/ability)은 고정 LITTLE-ENDIAN. 서버 body 가 이 테이블과 바이트 단위로
-//   일치해야 flagship(+0x24 BE)==0x0325 unit[0].id(+0x04 BE) 링크(FUN_004c2a80)와
+//   일치해야 flagship(+0x24 BE)==0x0325 decoded unit[0].id 링크(FUN_004c2a80)와
 //   record[0]==self-id(0x0204 BE) self-match 가 성립한다.
 //
 // 이 테스트는 각 필드에 서로 다른 값을 넣어 엔디안 오염(LE)/오프셋 drift/seat count 누락을 잡는다.
@@ -736,15 +839,15 @@ test('0x0323 canonical wire layout: anchors BIG-ENDIAN, stats LE, seat count@0x2
   assert.equal(b.readUInt32BE(0x258), 0, 'seat[0].role@0x258 u32 BE = 0');
 });
 
-test('grid-enter refresh (0x0b09/0x0325/0x0323/0x0b0a) keeps flagship(+0x24 BE)==unit id(+0x04 BE)', () => {
+test('grid-enter refresh keeps flagship(+0x24 BE)==FUN_00419ca0-decoded unit id', () => {
   const inners = buildWorldReadyPushInners({ unitId: 11, commander: 5, power: 3, spot: 1 });
   const charRec = inners.find((i) => readMsg32Code(i) === CODE_INFO_CHARACTER);
   const unitRec = inners.find((i) => readMsg32Code(i) === CODE_INFO_UNIT);
   assert.ok(charRec && unitRec, '0x0323/0x0325 present between grid-enter begin/end');
   const flagship = msg32Body(charRec).readUInt32BE(0x24);
-  const unitId0 = msg32Body(unitRec).readUInt32BE(0x04);
+  const unitId0 = decodeInformationUnitsLikeFun419ca0(msg32Body(unitRec)).rows[0].id;
   assert.equal(flagship, 11, 'refresh flagship @ +0x24 BE');
-  assert.equal(unitId0, 11, 'refresh unit id @ +0x04 BE');
+  assert.equal(unitId0, 11, 'refresh decoded unit id');
   assert.equal(flagship, unitId0, 'refresh link flagship(BE) == unit id(BE)');
   assert.notEqual(flagship, 0, 'refresh flagship ≠ 0');
   // seat count@0x24c ≥ 1 (commander 자신 1행)

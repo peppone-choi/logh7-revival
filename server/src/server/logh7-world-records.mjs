@@ -46,14 +46,14 @@ export const CODE_INFO_CHARACTER_BYTES = 0x02d4; // 724
 export const CODE_NOTIFY_INFORMATION_CHARACTER = 0x0356;
 export const CODE_INFO_UNIT = 0x0325; // S→C ResponseInformationUnit
 export const CODE_INFO_UNIT_BYTES = 0xce44; // 52804 fixed receive size
-export const CODE_INFO_UNIT_HEADER = 4; // [u16 count][u16 pad]
-export const CODE_INFO_UNIT_STRIDE = 0x58; // 88B element
+export const CODE_INFO_UNIT_HEADER = 4; // 클라이언트 native destination: [u16 count][u16 pad]
+export const CODE_INFO_UNIT_WIRE_HEADER = 2; // wire cursor: u16 count 직후 첫 행 시작
+export const CODE_INFO_UNIT_STRIDE = 0x58; // 클라이언트 native destination element stride
 export const CODE_INFO_UNIT_MAX = 600; // 클라 파서 reject "information_size > 600" (0x763848)
 export const UNIT_BOATS_MAX = 10; // troop_units cap (FUN_00419ca0/FUN_00419fd0: "> 10")
 
-// 0x0325 유닛 레코드(0x58/88B) 필드 오프셋 — 요소 base B 상대. 레이아웃 P0(dual-parser proven,
-// FUN_00419ca0/FUN_00419fd0 동일 순서: *+0x1c=u32, *+0x20=u16, *+0x24=u8). 근거: 옛 proven
-// 5bd249c logh7-login-protocol.mjs UNIT_ELEM. id 만 role-pinned(앵커), 나머지 슬롯 value=P3.
+// 0x0325 클라이언트 native destination(0x58/88B) 필드 오프셋이다. wire offset이 아니다.
+// FUN_00419ca0은 이 native 구조체에 쓰되 wire에서는 필드를 cursor-packed로 연속 소비한다.
 export const UNIT_ELEM = Object.freeze({
   ID: 0x00, // u32 앵커 (== 0x0323 flagship+0x24, char↔unit 링크)
   FACTION: 0x04, // u16
@@ -347,83 +347,43 @@ export function buildInformationCharacterInner({
   return buildMsg32Inner(CODE_INFO_CHARACTER, body);
 }
 
-// ─── 0x0325 ResponseInformationUnit (최소 count+id) ───────────────────────────
+// ─── 0x0325 ResponseInformationUnit ──────────────────────────────────────────
 
-// 옛 proven 빌더(5bd249c buildInformationUnitRecordInner) 바이트 충실 포팅.
-//
-// 두 형태:
-//   - minimal (fleets 미지정): count + unit[0].id 만. 옛 G164 world-load 경로와 byte-identical.
-//   - full (fleets 지정): 각 유닛의 0x58B 레코드를 UNIT_ELEM 레이아웃으로 채움. 빈 레지스트리
-//     (@0x7db3c8 activeCount=0) → 마커 클릭 null-deref 크래시 해소. fleets[0].id 는 반드시
-//     gridUnitId(=0x0323 flagship+0x24)여야 char↔unit 링크가 유지된다.
-// 프레이밍: count @0 는 u16 BIG-ENDIAN (별도 스왑 리더), unit[0] @ payload+4, 레코드 필드값은 aligned BE.
-//   count BE 근거(라이브+정적 실측 확정, docs/logh7-focusid-lookup-re.md §6.3-6.4): 실제
-//   0x0325 핸들러는 FUN_00419ca0. 그 게이트가 count 를 `call [eax+0x20]` 스트림 read 로 읽는데 이 read 가
-//   ntohs(네트워크 바이트순서, 바이트스왑)한다. 서버가 BE `00 19`(count=25) 를 보내면 [eax+0x20] 스왑 →
-//   edi `19 00` → mov ax,[edi] LE 읽기 = 0x0019 = 25 ≤ 600(레지스트리 슬롯수) → 유닛 스테이징 통과.
-//   ★ 유닛 원소 필드는 전부 BE (§6.3 라이브 실측상 BE 상태에서 ucnt=25 로드 성립; LE/header 변형은 진단 게이트).
+// 정본 클라이언트 FUN_00419ca0은 고정 0xce44 wire body를 native 0x58 구조체로 디코드한다.
+// wire에는 native pad/stride가 없다. u16 BE count 직후부터 각 행을 다음 순서로 연속 소비한다.
+//   u32 id, u16 faction, u8 native+0x06, u32 commander/cell/owner,
+//   u8 boats count + u32 boats[], u32 spotResolverBase,
+//   u8 tail44, u8 tail45, u16 tail46, u16 mapSection, u32 tail4c, u32 tail50, float tail54.
+// 근거: 0x419cd2(count), 0x419dba..0x419dff(행 본문), 0x419e3d..0x419e96(tail).
+// 의미가 확인되지 않은 native+0x06 및 tail 값은 Buffer.alloc의 0을 그대로 소비시킨다.
 export function buildInformationUnitInner({
-  unitId = 1, unitCount = 1, cell = 0, commander = 0, wireEndian = 'be', fleets = null,
-  // 최신 charstage A/B 진단용: 기본 record 시작(0x04)은 유지하고, opt-in 시 body+0x03부터
-  // native LE unit id를 쓴다. 기본값은 기존 안정 경로(header4/BE)다.
-  diagnosticUnitHeader3 = undefined,
-  // 정적 변환 버퍼 결과 재현용: header4는 유지하고 ID 필드만 native LE로 쓴다. 기본 off.
-  diagnosticUnitIdLe = undefined,
-  // 정적 변환 버퍼 후보 재현용: count 뒤 body+0x02에 첫 unit id를 BE로 쓴다. 기본 off.
-  diagnosticUnitIdOffset2Be = undefined,
+  unitId = 1, unitCount = 1, cell = 0, commander = 0, fleets = null,
 } = {}) {
   const list = Array.isArray(fleets) && fleets.length ? fleets : null;
   const count = list ? Math.min(list.length, CODE_INFO_UNIT_MAX) : Math.max(0, Math.min(unitCount, CODE_INFO_UNIT_MAX));
   const body = Buffer.alloc(CODE_INFO_UNIT_BYTES);
-  const useDiagnosticUnitHeader3 = diagnosticUnitHeader3 === true
-    || (diagnosticUnitHeader3 === undefined && process.env.LOGH_DIAG_0325_HEADER3_LE === '1');
-  const useDiagnosticUnitIdLe = diagnosticUnitIdLe === true
-    || (diagnosticUnitIdLe === undefined && process.env.LOGH_DIAG_0325_ID_LE === '1');
-  const useDiagnosticUnitIdOffset2Be = diagnosticUnitIdOffset2Be === true
-    || (diagnosticUnitIdOffset2Be === undefined
-      && (process.env.LOGH_DIAG_0325_ID_OFFSET2_BE === '1' || process.env.LOGH_LIVE_CLIENT_LAYOUT === '1'));
-  const unitHeader = useDiagnosticUnitIdOffset2Be
-    ? CODE_INFO_UNIT_HEADER
-    : (useDiagnosticUnitHeader3 ? CODE_INFO_UNIT_HEADER - 1 : CODE_INFO_UNIT_HEADER);
-  const unitIdWireEndian = useDiagnosticUnitIdOffset2Be
-    ? 'be'
-    : ((useDiagnosticUnitHeader3 || useDiagnosticUnitIdLe) ? 'le' : wireEndian);
-  const unitIdWireOffset = (rowIndex, rowBase) => (
-    useDiagnosticUnitIdOffset2Be && rowIndex === 0 ? 0x02 : rowBase + UNIT_ELEM.ID
-  );
-
-  const writeU16 = (v, off) => (wireEndian === 'be' ? body.writeUInt16BE(v & 0xffff, off) : body.writeUInt16LE(v & 0xffff, off));
-
-  if (!list) {
-    // minimal: header [u16 count BE][u16 pad] @0x00, unit[0].id @ payload+HEADER(4) (stride 0x58).
-    // count 는 u16 BIG-ENDIAN (실 핸들러 FUN_00419ca0 의 [eax+0x20] 스왑 스트림리더가 ntohs 로 읽음).
-    // unit[0].id(+0x00)는 aligned-BE 레코드 필드다.
-    body.writeUInt16BE(count & 0xffff, 0);
-    if (count > 0) {
-      writeWireU32(body, unitId, unitIdWireOffset(0, unitHeader), unitIdWireEndian);
-    }
-    return buildMsg32Inner(CODE_INFO_UNIT, body);
-  }
-  // full: count + N개 0x58B 레코드. 고정 52804B 버퍼를 넘기지 않게 캡.
-  // ★주의: aligned-BE 레코드 필드 전체를 기본 wireEndian으로 쓴다.
-  //        0x0325 전체 LE 전환은 진단 게이트에서만 허용한다(카운트 헤더 붕괴 방지). §7.1
   body.writeUInt16BE(count & 0xffff, 0);
+  let cursor = CODE_INFO_UNIT_WIRE_HEADER;
   for (let i = 0; i < count; i += 1) {
-    const base = unitHeader + i * CODE_INFO_UNIT_STRIDE;
-    if (base + CODE_INFO_UNIT_STRIDE > body.length) break;
-    const f = list[i] ?? {};
-    writeWireU32(body, f.id ?? 0, unitIdWireOffset(i, base), unitIdWireEndian);
-    writeU16(f.faction ?? 0, base + UNIT_ELEM.FACTION);
-    writeWireU32(body, f.commander ?? 0, base + UNIT_ELEM.COMMANDER, wireEndian);
-    writeWireU32(body, f.cell ?? 0, base + UNIT_ELEM.CELL, wireEndian);
-    writeWireU32(body, f.owner ?? 0, base + UNIT_ELEM.OWNER, wireEndian);
+    const f = list?.[i] ?? (i === 0 ? { id: unitId, commander, cell } : {});
+    writeWireU32(body, f.id ?? 0, cursor, 'be'); cursor += 4;
+    body.writeUInt16BE((f.faction ?? 0) & 0xffff, cursor); cursor += 2;
+    cursor += 1; // native +0x06: 의미 미확정, zero 유지
+    writeWireU32(body, f.commander ?? 0, cursor, 'be'); cursor += 4;
+    writeWireU32(body, f.cell ?? 0, cursor, 'be'); cursor += 4;
+    writeWireU32(body, f.owner ?? 0, cursor, 'be'); cursor += 4;
     const boats = Array.isArray(f.boats) ? f.boats.slice(0, UNIT_BOATS_MAX) : [];
-    body.writeUInt8(boats.length & 0xff, base + UNIT_ELEM.BOATS_COUNT); // troop_units count (role-pinned)
-    for (let b = 0; b < boats.length; b += 1) {
-      writeWireU32(body, boats[b] ?? 0, base + UNIT_ELEM.BOATS_ARRAY + b * 4, wireEndian);
+    body.writeUInt8(boats.length & 0xff, cursor); cursor += 1;
+    for (const boat of boats) {
+      writeWireU32(body, boat ?? 0, cursor, 'be'); cursor += 4;
     }
-    writeWireU32(body, f.spotResolverBase ?? 0, base + UNIT_ELEM.SPOT_RESOLVER_BASE, wireEndian);
-    writeU16(f.mapSection ?? 0, base + UNIT_ELEM.MAP_SECTION);
+    writeWireU32(body, f.spotResolverBase ?? 0, cursor, 'be'); cursor += 4;
+    cursor += 2; // native +0x44/+0x45: u8×2, 의미 미확정
+    cursor += 2; // native +0x46: u16, 의미 미확정
+    body.writeUInt16BE((f.mapSection ?? 0) & 0xffff, cursor); cursor += 2;
+    cursor += 4; // native +0x4c: u32, 의미 미확정
+    cursor += 4; // native +0x50: u32, 의미 미확정
+    cursor += 4; // native +0x54: float, 의미 미확정
   }
   return buildMsg32Inner(CODE_INFO_UNIT, body);
 }
@@ -543,13 +503,15 @@ export function decodeMoveGridCommand(inner) {
       }
     }
     const routeCellCandidate = body.readUInt16BE(0x16);
+    // 100×50 전략 그리드 범위 안의 후보만 실제 목적지 셀로 승격한다.
+    const decodedRouteCell = routeCellCandidate < 5000 ? routeCellCandidate : null;
     const routeTailWord = body.readUInt16BE(0x18);
     return {
       code,
       unitId: null,
-      cell: null,
+      cell: decodedRouteCell,
       format: 'sendwarp-live-v1',
-      unresolved: true,
+      unresolved: decodedRouteCell === null,
       bodyLength: body.length,
       fields: {
         coord0: { x: body.readUInt16BE(0x00), y: body.readUInt16BE(0x02) },
@@ -961,19 +923,21 @@ export function buildStaticInformationGridTypeInner({ objects = [] } = {}) {
  * 명령 테이블 프리로드는 기본 경로가 아닌 명시적 진단 게이트다.
  *
  * 근거:
- *   - 0x0305: count u16 LE, card stride 0x46, command_count @record+0x14,
- *     factory ids u16 LE @record+0x16 (FUN_004f5cb0).
- *   - 0x0307: count u16 LE, card stride 0xc4, descriptor id u16 LE @record+0x04,
- *     descriptor stride 8 (FUN_004ba2b0/FUN_005312b0).
- *   - 0x19/0x3f/0x40: selected-factory branch가 정적으로 확인된 명령 ID.
- *   - 0x2b: SelectGrid(0x0b01→0x0b07) factory anchor가 정적으로 확인된 호환 슬롯.
+ *   - 0x0305: wire 외곽 count는 u16 BE이고 레코드는 compact cursor로 이어진다.
+ *     wire의 card/factory id는 u16 BE, count는 record+0x12, factory 배열은 record+0x13부터다.
+ *     클라이언트 native destination만 고정 0x46 stride이며 command_count/factory는 native +0x14/+0x16이다.
+ *   - 0x0307: wire 외곽 count와 compact record/descriptor의 u16은 모두 BE다.
+ *     wire descriptor stride는 8이며, 클라이언트 native destination만 card stride 0xc4다
+ *     (FUN_004ba2b0/FUN_005312b0).
+ *   - 현재 probe에서 확인한 factory id는 0x2b/0x41이다. category/card id 0/1을 함께 보내야
+ *     FUN_004c4a10의 one-shot staging→runtime 변환에서 category 1이 빈 채로 고정되지 않는다.
  * packed/w/flag의 의미는 미확정이므로 0으로 둔다.
  */
 export const COMMAND_TABLE_PRELOAD_ENV = 'LOGH_COMMAND_TABLE_PRELOAD_PROBE';
-export const COMMAND_TABLE_PRELOAD_FACTORY_IDS = Object.freeze([0x0019, 0x003f, 0x0040, 0x002b]);
-export const STATIC_INFORMATION_CARD_STRIDE = 0x46;
+export const COMMAND_TABLE_PRELOAD_FACTORY_IDS = Object.freeze([0x002b, 0x0041]);
+export const STATIC_INFORMATION_CARD_STRIDE = 0x46; // 0x0305 native destination stride (wire는 compact)
 export const STATIC_INFORMATION_CARD_MAX = 300;
-export const STATIC_INFORMATION_CARD_COMMAND_STRIDE = 0xc4;
+export const STATIC_INFORMATION_CARD_COMMAND_STRIDE = 0xc4; // 0x0307 native destination stride (wire는 compact)
 export const STATIC_INFORMATION_CARD_COMMAND_RECORD_MAX = 300;
 export const STATIC_INFORMATION_CARD_COMMAND_ENTRY_STRIDE = 8;
 export const STATIC_INFORMATION_CARD_COMMAND_MAX = 24;
@@ -991,18 +955,24 @@ function clampU16(value) {
 export function buildStaticInformationCardInner({ cards = [] } = {}) {
   const body = Buffer.alloc(STATIC_INFO_BODY_SIZES[0x0305]);
   const list = Array.isArray(cards) ? cards.slice(0, STATIC_INFORMATION_CARD_MAX) : [];
-  body.writeUInt16LE(list.length, 0x00);
-  for (let i = 0; i < list.length; i += 1) {
-    const card = list[i] ?? {};
-    const base = 2 + i * STATIC_INFORMATION_CARD_STRIDE;
-    if (base + STATIC_INFORMATION_CARD_STRIDE > body.length) break;
-    body.writeUInt16LE(clampU16(card.id ?? card.cardId), base + 0x00);
-    const commands = Array.isArray(card.commands)
+  // 0x0305 wire는 외곽 count와 compact record의 모든 u16을 BE로 읽는다.
+  body.writeUInt16BE(list.length, 0x00);
+  let cursor = 2;
+  for (const card of list) {
+    const wireBase = cursor;
+    const commands = Array.isArray(card?.commands)
       ? card.commands.slice(0, STATIC_INFORMATION_CARD_COMMAND_MAX)
       : [];
-    body.writeUInt8(commands.length, base + 0x14);
-    for (let j = 0; j < commands.length; j += 1) {
-      body.writeUInt16LE(clampU16(commands[j]), base + 0x16 + j * 2);
+    const wireEnd = wireBase + 0x13 + commands.length * 2;
+    if (wireEnd > body.length) break;
+    body.writeUInt16BE(clampU16(card?.id ?? card?.cardId), wireBase + 0x00);
+    // 0x02..0x11은 parser가 소비하는 미확정 필드이며 Buffer.alloc의 0을 유지한다.
+    cursor = wireBase + 0x12;
+    body.writeUInt8(commands.length, cursor);
+    cursor += 1;
+    for (const command of commands) {
+      body.writeUInt16BE(clampU16(command?.id ?? command), cursor);
+      cursor += 2;
     }
   }
   return buildMsg32Inner(0x0305, body);
@@ -1012,20 +982,24 @@ export function buildStaticInformationCardInner({ cards = [] } = {}) {
 export function buildStaticInformationCardCommandInner({ cards = [] } = {}) {
   const body = Buffer.alloc(STATIC_INFO_BODY_SIZES[0x0307]);
   const list = Array.isArray(cards) ? cards.slice(0, STATIC_INFORMATION_CARD_COMMAND_RECORD_MAX) : [];
-  body.writeUInt16LE(list.length, 0x00);
-  for (let i = 0; i < list.length; i += 1) {
-    const card = list[i] ?? {};
-    const base = 2 + i * STATIC_INFORMATION_CARD_COMMAND_STRIDE;
-    if (base + STATIC_INFORMATION_CARD_COMMAND_STRIDE > body.length) break;
-    body.writeUInt16LE(clampU16(card.id ?? card.cardId), base + 0x00);
-    const commands = Array.isArray(card.commands)
+  // 0x0307도 외곽 count와 compact record/descriptor의 모든 u16을 BE로 읽는다.
+  body.writeUInt16BE(list.length, 0x00);
+  let cursor = 2;
+  for (const card of list) {
+    const wireBase = cursor;
+    const commands = Array.isArray(card?.commands)
       ? card.commands.slice(0, STATIC_INFORMATION_CARD_COMMAND_MAX)
       : [];
-    body.writeUInt8(commands.length, base + 0x02);
-    for (let j = 0; j < commands.length; j += 1) {
-      const off = base + 0x04 + j * STATIC_INFORMATION_CARD_COMMAND_ENTRY_STRIDE;
-      body.writeUInt16LE(clampU16(commands[j]?.id ?? commands[j]), off + 0x00);
+    const wireEnd = wireBase + 0x03 + commands.length * STATIC_INFORMATION_CARD_COMMAND_ENTRY_STRIDE;
+    if (wireEnd > body.length) break;
+    body.writeUInt16BE(clampU16(card?.id ?? card?.cardId), wireBase + 0x00);
+    body.writeUInt8(commands.length, wireBase + 0x02);
+    cursor = wireBase + 0x03;
+    for (const command of commands) {
+      const off = cursor;
+      body.writeUInt16BE(clampU16(command?.id ?? command), off + 0x00);
       // packed u24, w u16, flag u8의 의미는 미확정 — Buffer.alloc의 0을 유지한다.
+      cursor += STATIC_INFORMATION_CARD_COMMAND_ENTRY_STRIDE;
     }
   }
   return buildMsg32Inner(0x0307, body);
@@ -1033,16 +1007,27 @@ export function buildStaticInformationCardCommandInner({ cards = [] } = {}) {
 
 export function buildCommandTablePreloadCardInner() {
   return buildStaticInformationCardInner({
-    cards: [{ id: 0, commands: COMMAND_TABLE_PRELOAD_FACTORY_IDS }],
+    // FUN_004c4a10의 one-shot staging 변환 전에 category 0/1을 모두 채운다.
+    cards: [
+      { id: 0, commands: COMMAND_TABLE_PRELOAD_FACTORY_IDS },
+      { id: 1, commands: COMMAND_TABLE_PRELOAD_FACTORY_IDS },
+    ],
   });
 }
 
 export function buildCommandTablePreloadCommandInner() {
   return buildStaticInformationCardCommandInner({
-    cards: [{
-      id: 0,
-      commands: COMMAND_TABLE_PRELOAD_FACTORY_IDS.map((id) => ({ id })),
-    }],
+    // category 1도 함께 보내야 초기 native command table이 빈 채로 고정되지 않는다.
+    cards: [
+      {
+        id: 0,
+        commands: COMMAND_TABLE_PRELOAD_FACTORY_IDS.map((id) => ({ id })),
+      },
+      {
+        id: 1,
+        commands: COMMAND_TABLE_PRELOAD_FACTORY_IDS.map((id) => ({ id })),
+      },
+    ],
   });
 }
 
@@ -1149,11 +1134,11 @@ export function isAdmissionRequestCode(code) {
  * 순서 (RE: 0x0206 이 월드 파이프라인 활성 0x35837e → 레코드가 흐른다):
  *   0x0206 SSGameLoginOK (선두, 0x0205 응답)
  *   0x0204 선택 캐릭터 id
- *   0x0325 유닛 테이블 (고정 52804B, 최소 count+id) — ★캐릭터보다 먼저 (아래 순서 주의)
+ *   0x0325 유닛 테이블 (고정 52804B, compact cursor 행) — ★캐릭터보다 먼저 (아래 순서 주의)
  *   0x0323 캐릭터 레코드 (724B — 오브젝트 테이블 채움, 렌더러 크래시 방지 필수)
  *
  * ★유닛→캐릭터 순서 (라이브 크래시 회귀 수정, qa-marker2 확정): 클라는 0x0323 flagship(+0x24)
- *   →유닛 링크로 0x0325 unit[0].id(+0x04)를 찾아 그 유닛의 +0x14 를 deref 한다. 유닛이 캐릭터보다
+ *   →유닛 링크로 디코드된 0x0325 unit[0].id(native +0x04)를 찾아 그 유닛의 +0x14 를 deref 한다. 유닛이 캐릭터보다
  *   먼저 도착해 오브젝트 테이블에 resident 여야 null(+0x14) deref(0xc0000005, memAddr=0x14)를
  *   피한다. 캐릭터를 먼저 보내면 flagship→유닛 링크가 null 이라 결정적 하드크래시.
  *
@@ -1208,7 +1193,7 @@ export function buildWorldEntryInners({
     buildSsGameLoginOkInner({ status: 1 }),
     buildSsCharacterIdInner({ characterId }),
     // ★0x0325(유닛)를 0x0323(캐릭터)보다 먼저 방출(라이브 크래시 회귀 수정, qa-marker2 확정).
-    //   클라는 0x0323 flagship(+0x24)→유닛 링크로 unit[0].id(+0x04)를 찾아 그 유닛의 +0x14 를 deref 한다.
+    //   클라는 0x0323 flagship(+0x24)→유닛 링크로 decoded unit[0].id(native +0x04)를 찾아 +0x14 를 deref 한다.
     //   유닛(0x0325)이 캐릭터(0x0323)보다 먼저 도착해 오브젝트 테이블에 resident 여야 null(+0x14) deref
     //   (STATUS_ACCESS_VIOLATION 0xc0000005, memAddr=0x14)를 피한다. char→unit 순서면 결정적 하드크래시.
     buildInformationUnitInner({
@@ -1318,9 +1303,9 @@ export function buildWorldReadyPushInners({
   }
   // 계약 순서(render-contract L102) + M3 정합 수정:
   //   0x0b09(begin) → 0x0325(유닛) + 0x0323(캐릭터) → 0x0b0a(end) → 0x0f03. 각 정확히 1회.
-  // ★정합이 NOW LOADING 을 해제한다: 0x0323 flagship(+0x24)=0x0325 unit id(+0x04).
+  // ★정합이 NOW LOADING 을 해제한다: 0x0323 flagship(+0x24)=decoded 0x0325 unit id(native +0x04).
   //   클라 FUN_004c2a80 은 begin/end 사이에서 char.flagship(+0x24)을
-  //   unit id(+0x04)와 링크해 플레이어 오브젝트(clientBase+0xc)를 빌드한다. makeChar 의
+  //   decoded unit id(native +0x04)와 링크해 플레이어 오브젝트(clientBase+0xc)를 빌드한다. makeChar 의
   //   gridUnitId 와 makeUnit 의 unitId 는 동일 `unitId` 라서 flagship==unit[0].id 가 성립한다.
   //   이전 P7 ×2 재전송은 정합이 아니라 타이밍 추측이었다 — 링크가 성립하면 1회로 충분하며,
   //   중복 방출은 불필요한 중복 스텁일 뿐이라 각 레코드 1회로 되돌린다.
