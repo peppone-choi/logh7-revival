@@ -1,0 +1,14 @@
+node_modules
+tests
+tools
+tmp-*.mjs
+audit-response-lengths.mjs
+test_output.txt
+data/*.sqlite
+data/*.sqlite-shm
+data/*.sqlite-wal
+data/*.png
+data/*.log
+data/m3-*
+data/agent-drive
+**/*.test.mjs

@@ -1,0 +1,47 @@
+# LOGH VII 부활 — 운영 인프라 스켈레톤 (Track C)
+#
+# 목적: 콜드스타트/재시작 시 상태를 보존하는 서버 + PostgreSQL 골격.
+# 현 상태(스켈레톤): 서버는 아직 SQLite 로 부팅한다(async PG 포트 미착지).
+#   postgres 서비스는 마이그레이션·전환 타깃으로 미리 세워 둔 것.
+#   다음 배치에서 server 가 DATABASE_URL 을 소비하도록 연결하면 db 로 전환된다.
+#
+# 기동:  docker compose up --build
+# 상태:  named volume 두 개(pgdata, serverdata)로 재시작 간 보존.
+
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: logh7
+      POSTGRES_PASSWORD: logh7
+      POSTGRES_DB: logh7
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U logh7 -d logh7"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    restart: unless-stopped
+
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      # 다음 배치에서 server 부팅이 이 값을 소비(설정 시 PG, 미설정 시 SQLite).
+      DATABASE_URL: postgres://logh7:logh7@db:5432/logh7
+      LOGH_ALLOW_DEV_ACCOUNTS: "1"
+    ports:
+      - "47900:47900"
+    volumes:
+      # SQLite 파일·계정/캐릭터 JSON 보존(현 경로). PG 전환 후에는 불필요.
+      - serverdata:/app/data
+    restart: unless-stopped
+
+volumes:
+  pgdata:
+  serverdata:
