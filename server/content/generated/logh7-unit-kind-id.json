@@ -1,0 +1,55 @@
+{
+  "provenance": {
+    "sourceExe": "g7mtclient.exe",
+    "sha256": "9c97de2ae426f011680992d6c8d88b25488b5f51555ce5784aeef677f334bb51",
+    "arrayVA": "0x771c84",
+    "fileOffset": "0x371c84",
+    "stringPoolVA": "0x771d00",
+    "grade": "A",
+    "extractedBy": "unit-kindid-re",
+    "extractedDate": "2026-07-13",
+    "note": "정본 EXE 문자열풀에서 char* 배열로 추출. 세대 로마숫자(戦艦Ⅰ~Ⅷ 등)는 kind-id에 미인코딩 — 세대 정보는 UnitShip 마스터데이터 0x030b 필드별 관리."
+  },
+  "ships": [
+    { "id": 0, "nameJa": "専用旗艦" },
+    { "id": 1, "nameJa": "盾艦" },
+    { "id": 2, "nameJa": "民間船" },
+    { "id": 3, "nameJa": "戦艦" },
+    { "id": 4, "nameJa": "高速戦艦" },
+    { "id": 5, "nameJa": "巡航艦" },
+    { "id": 6, "nameJa": "駆逐艦" },
+    { "id": 7, "nameJa": "戦闘艇母艦" },
+    { "id": 8, "nameJa": "雷撃艇母艦" },
+    { "id": 9, "nameJa": "工作艦" },
+    { "id": 10, "nameJa": "輸送艦" },
+    { "id": 11, "nameJa": "兵員輸送艦" },
+    { "id": 12, "nameJa": "揚陸艦" },
+    { "id": 13, "nameJa": "打撃巡航艦" },
+    { "id": 14, "nameJa": "商船" },
+    { "id": 15, "nameJa": "海賊船" }
+  ],
+  "troops": [
+    { "id": 16, "nameJa": "軽装陸戦兵" },
+    { "id": 17, "nameJa": "装甲擲弾兵" },
+    { "id": 18, "nameJa": "装甲兵" },
+    { "id": 19, "nameJa": "艦隊乗組員" }
+  ],
+  "crewGrades": [
+    { "value": -1, "nameJa": "未経験" },
+    { "value": 0, "nameJa": "グリーン" },
+    { "value": 1, "nameJa": "ノーマル" },
+    { "value": 2, "nameJa": "ベテラン" },
+    { "value": 3, "nameJa": "エリート" }
+  ],
+  "unresolved": [
+    {
+      "issue": "揚陸艇 missing from EXE",
+      "context": "auto-production system references 揚陸艇, but EXE string pool contains only 揚陸艦 (id 12). No separate ship type id for 揚陸艇 found in static analysis (VA 0x771c84).",
+      "possibleExplanations": [
+        "揚陸艇 may be client-side alias or subtype of 揚陸艦 (not encoded as separate kind-id)",
+        "揚陸艇 data in auto-production may refer to 揚陸艦 id 12",
+        "揚陸艇 may be synthesized from UnitShip 마스터 필드 (not in kind-id enum)"
+      ]
+    }
+  ]
+}
