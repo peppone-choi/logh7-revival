@@ -7,6 +7,7 @@ import {
   assignCharacterId,
 } from '../../domain/entities.mjs';
 import { normalizeAuthorityCards } from '../../domain/authority-cards.mjs';
+import { withTransaction } from './Database.mjs';
 
 /**
  * @param {{ db: import('node:sqlite').DatabaseSync }} connection openDatabase() 결과
@@ -175,8 +176,8 @@ export function createUnitOfWork(connection) {
 
   function flush() {
     if (!active) throw new Error('UnitOfWork closed');
-    db.exec('BEGIN IMMEDIATE');
-    try {
+    // 카드 delete→insert 교체를 포함한 모든 쓰기는 하나의 트랜잭션 — 중간 실패 시 전부 롤백.
+    withTransaction(db, () => {
       for (const entity of newEntities) {
         if (entity._type === 'Account' && entity.id == null) {
           const info = db.prepare(
@@ -188,10 +189,13 @@ export function createUnitOfWork(connection) {
           track(entity);
         } else if (entity._type === 'Character' && entity.id == null) {
           const info = db.prepare(
+            // authority_cards_seeded=1: 카드 계약이 적용된 신규 행. 카드 0장(명시적 revoke)이어도
+            // 재오픈 시 legacy backfill 이 다시 시드하지 못하게 한다.
             `INSERT INTO characters(
                account_id, power, blood, sex, lastname, firstname, face, rank,
-               unit_id, cell, online, ability8_json, created_at, revision, updated_at
-             ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
+               unit_id, cell, online, ability8_json, authority_cards_seeded,
+               created_at, revision, updated_at
+             ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,1,?,?,?)`,
           ).run(
             entity.accountId,
             entity.power,
@@ -281,12 +285,7 @@ export function createUnitOfWork(connection) {
         insertEvent.run(ev.type, JSON.stringify(ev.payload), Date.now());
       }
       events.length = 0;
-
-      db.exec('COMMIT');
-    } catch (error) {
-      db.exec('ROLLBACK');
-      throw error;
-    }
+    });
   }
 
   function clear() {

@@ -4,10 +4,15 @@ import { timingSafeEqual } from 'node:crypto';
 import {
   createAccountEntity,
   createCharacterEntity,
+  setCharacterAuthorityCards,
   setCharacterCell,
   setCharacterOnline,
   ensureUnitId,
 } from '../domain/entities.mjs';
+import {
+  grantAuthorityCard,
+  revokeAuthorityCard,
+} from '../domain/authority-cards.mjs';
 
 function safeEqualString(a, b) {
   const ba = Buffer.from(String(a), 'utf8');
@@ -85,6 +90,30 @@ export function registerGameHandlers({ commandBus, queryBus }) {
     // deleteCharacter 는 즉시 SQL — 이벤트만 flush
     uow.flush();
     return { ok: true };
+  });
+
+  // 권한카드 부여/회수. 도메인 게이트가 승인 kind(0/59/195)만 허용하고
+  // setCharacterAuthorityCards 가 UoW dirty-flush 경로로 영속한다.
+  commandBus.register('GrantAuthorityCard', (cmd, { uow }) => {
+    const character = uow.findCharacterById(cmd.characterId);
+    if (!character) throw new Error('character not found');
+    setCharacterAuthorityCards(
+      character,
+      grantAuthorityCard(character.authorityCards, cmd.kind, { spot: cmd.spot ?? 0 }),
+    );
+    uow.flush();
+    return { ok: true, authorityCards: character.authorityCards.map((card) => ({ ...card })) };
+  });
+
+  commandBus.register('RevokeAuthorityCard', (cmd, { uow }) => {
+    const character = uow.findCharacterById(cmd.characterId);
+    if (!character) throw new Error('character not found');
+    setCharacterAuthorityCards(
+      character,
+      revokeAuthorityCard(character.authorityCards, cmd.kind),
+    );
+    uow.flush();
+    return { ok: true, authorityCards: character.authorityCards.map((card) => ({ ...card })) };
   });
 
   commandBus.register('EnterWorld', (cmd, { uow }) => {

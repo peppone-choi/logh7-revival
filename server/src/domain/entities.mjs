@@ -2,7 +2,7 @@
 
 import {
   normalizeAuthorityCards,
-  seedAuthorityCardsForPower,
+  resolveAuthorityCards,
 } from './authority-cards.mjs';
 
 let nextTempId = -1;
@@ -76,13 +76,18 @@ export function createCharacterEntity({
     cell: cell == null ? 0 : Number(cell),
     online: Boolean(online),
     ability8: Array.isArray(ability8) ? ability8.slice(0, 8) : null,
-    authorityCards: normalizeAuthorityCards(
-      authorityCards ?? seedAuthorityCardsForPower(power & 0xff),
-    ),
+    // 필드 부재 → canonical grant 시드, 명시적 [] → 의도적 revoke 유지.
+    authorityCards: resolveAuthorityCards(authorityCards, power & 0xff),
     createdAt,
     revision,
     updatedAt: createdAt,
   };
+}
+
+/** 권한카드 교체. UoW dirty-flush 경로로 영속된다(빈 배열 = revoke). */
+export function setCharacterAuthorityCards(character, cards) {
+  character.authorityCards = normalizeAuthorityCards(cards, { fallbackToPersonal: false });
+  return markDirty(character);
 }
 
 export function setCharacterCell(character, cell) {

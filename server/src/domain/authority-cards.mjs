@@ -20,6 +20,20 @@ const PROVENANCE = Object.freeze({
   ALLIANCE_CAPTAIN: 'p0-constmsg-group3+p1-manual:normal-alliance-captain',
 });
 
+// grant 가 허용하는 kind. P0/P1 근거가 있는 보편 카드만 — 반란 variant(123/257)와
+// factory 계열(0x41/0x43)은 camp 근거가 없어 제외한다.
+export const GRANTABLE_CARD_KINDS = Object.freeze([
+  PERSONAL_CARD_KIND,
+  NORMAL_EMPIRE_CAPTAIN_CARD_KIND,
+  NORMAL_ALLIANCE_CAPTAIN_CARD_KIND,
+]);
+
+const GRANTABLE_CARD_PROVENANCE = Object.freeze({
+  [PERSONAL_CARD_KIND]: PROVENANCE.PERSONAL,
+  [NORMAL_EMPIRE_CAPTAIN_CARD_KIND]: PROVENANCE.EMPIRE_CAPTAIN,
+  [NORMAL_ALLIANCE_CAPTAIN_CARD_KIND]: PROVENANCE.ALLIANCE_CAPTAIN,
+});
+
 function seededCard(ordinal, kind, provenance) {
   return { ordinal, kind, spot: 0, provenance };
 }
@@ -86,6 +100,50 @@ export function normalizeAuthorityCards(cards, { fallbackToPersonal = true } = {
   });
   normalized.sort((left, right) => left.ordinal - right.ordinal);
   return normalized;
+}
+
+/**
+ * seed 와 revoke 를 가르는 단일 게이트. 카드 배열이 들어오는 모든 경계
+ * (엔티티 생성 / JSON store 로드-백필 / store.addCharacter)는 이 함수를 통과한다.
+ *
+ * - `undefined`/`null` (필드 부재) → power 별 canonical grant 를 시드한다.
+ * - `[]` (명시적 빈 배열)          → 의도적 revoke. 카드 없음을 그대로 유지한다.
+ */
+export function resolveAuthorityCards(cards, power) {
+  if (cards == null) {
+    return normalizeAuthorityCards(seedAuthorityCardsForPower(power));
+  }
+  return normalizeAuthorityCards(cards);
+}
+
+/** 승인된 kind 를 부여한다. 이미 있으면 무변화(멱등). ordinal 은 뒤에 이어붙인다. */
+export function grantAuthorityCard(cards, kind, { spot = 0 } = {}) {
+  if (!GRANTABLE_CARD_KINDS.includes(kind)) {
+    throw new RangeError(`authority card kind ${kind} is not grantable`);
+  }
+  const current = normalizeAuthorityCards(cards, { fallbackToPersonal: false });
+  if (current.some((card) => card.kind === kind)) return current;
+  const granted = [
+    ...current,
+    {
+      ordinal: current.length,
+      kind,
+      spot: requireInteger(spot, 'spot must be an unsigned 32-bit integer', 0, 0xffffffff),
+      provenance: GRANTABLE_CARD_PROVENANCE[kind],
+    },
+  ];
+  return normalizeAuthorityCards(granted, { fallbackToPersonal: false });
+}
+
+/** kind 를 회수하고 남은 카드의 ordinal 을 0..n-1 로 재압축한다. 없는 kind 면 무변화. */
+export function revokeAuthorityCard(cards, kind) {
+  const current = normalizeAuthorityCards(cards, { fallbackToPersonal: false });
+  const remaining = current.filter((card) => card.kind !== kind);
+  if (remaining.length === current.length) return current;
+  return normalizeAuthorityCards(
+    remaining.map((card, index) => ({ ...card, ordinal: index })),
+    { fallbackToPersonal: false },
+  );
 }
 
 /** 0305/0307용 0..maxKind 행. 검증된 항행 명령은 정상 함장 kind 59/195에만 둔다. */

@@ -11,10 +11,7 @@
 
 import { readFileSync, writeFileSync, renameSync, mkdirSync } from 'node:fs';
 import { dirname, join } from 'node:path';
-import {
-  normalizeAuthorityCards,
-  seedAuthorityCardsForPower,
-} from '../domain/authority-cards.mjs';
+import { resolveAuthorityCards } from '../domain/authority-cards.mjs';
 
 /**
  * @typedef {{ id: number, [key: string]: any }} CharRecord
@@ -33,10 +30,9 @@ export function createCharacterStore(storePath) {
   for (const records of Object.values(data.accounts)) {
     if (!Array.isArray(records)) continue;
     for (const record of records) {
+      // 필드 부재만 백필 대상. 명시적 [] 는 의도적 revoke 이므로 재시드하지 않는다.
       if (record.authorityCards == null) authorityBackfilled = true;
-      record.authorityCards = normalizeAuthorityCards(
-        record.authorityCards ?? seedAuthorityCardsForPower(record.power),
-      );
+      record.authorityCards = resolveAuthorityCards(record.authorityCards, record.power);
     }
   }
 
@@ -88,9 +84,7 @@ export function createCharacterStore(storePath) {
     const record = {
       ...charData,
       id,
-      authorityCards: normalizeAuthorityCards(
-        charData.authorityCards ?? seedAuthorityCardsForPower(charData.power),
-      ),
+      authorityCards: resolveAuthorityCards(charData.authorityCards, charData.power),
     };
     data.accounts[key].push(record);
     _save();

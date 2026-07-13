@@ -36,6 +36,8 @@ CREATE TABLE IF NOT EXISTS characters (
   cell INTEGER NOT NULL DEFAULT 2588,
   online INTEGER NOT NULL DEFAULT 0,
   ability8_json TEXT,
+  -- 1 = 권한카드 계약이 이미 적용된 캐릭터. 카드 0장이어도 재시드하지 않는다(의도적 revoke 보존).
+  authority_cards_seeded INTEGER NOT NULL DEFAULT 0,
   created_at INTEGER NOT NULL,
   revision INTEGER NOT NULL DEFAULT 0,
   updated_at INTEGER NOT NULL
@@ -183,6 +185,22 @@ CREATE TABLE IF NOT EXISTS seed_provenance (
 `;
 
 /**
+ * SQLite 트랜잭션 헬퍼. node:sqlite(DatabaseSync)는 전용 API가 없어 BEGIN/COMMIT/ROLLBACK 을 직접 쓴다.
+ * 중간 실패 시 부분 쓰기가 남지 않도록 모든 다중행 쓰기는 이 헬퍼를 통과시킨다.
+ */
+export function withTransaction(db, fn) {
+  db.exec('BEGIN IMMEDIATE');
+  try {
+    const result = fn();
+    db.exec('COMMIT');
+    return result;
+  } catch (error) {
+    db.exec('ROLLBACK');
+    throw error;
+  }
+}
+
+/**
  * @param {{ dbPath?: string }} [options]
  * @returns {{ db: DatabaseSync, path: string, close: () => void, exec: (sql:string)=>void, prepare: (sql:string)=>any }}
  */
@@ -192,28 +210,56 @@ export function openDatabase({ dbPath = DEFAULT_DB_PATH } = {}) {
   db.exec('PRAGMA journal_mode = WAL;');
   db.exec('PRAGMA foreign_keys = ON;');
   db.exec(MIGRATIONS);
-  // 구 DB는 카드 테이블이 없었다. 카드 행이 전혀 없는 캐릭터만 P0/P1 정본으로 멱등 보정한다.
-  const legacyCharacters = db.prepare(`
-    SELECT c.id, c.power
-    FROM characters c
-    WHERE NOT EXISTS (
-      SELECT 1 FROM character_authority_cards a WHERE a.character_id = c.id
-    )
-    ORDER BY c.id
-  `).all();
-  const insertAuthorityCard = db.prepare(`
-    INSERT INTO character_authority_cards(character_id, ordinal, kind, spot, provenance)
-    VALUES (?, ?, ?, ?, ?)
+  // 구 DB 보정: characters.authority_cards_seeded 컬럼이 없으면 추가하고,
+  // 이미 카드 행을 가진 캐릭터는 seeded=1 로 표시한다(재시드 대상에서 제외).
+  const characterCols = db.prepare("PRAGMA table_info('characters')").all();
+  if (characterCols.length > 0 && !characterCols.some((c) => c.name === 'authority_cards_seeded')) {
+    db.exec('ALTER TABLE characters ADD COLUMN authority_cards_seeded INTEGER NOT NULL DEFAULT 0');
+    db.exec(`
+      UPDATE characters SET authority_cards_seeded = 1
+      WHERE EXISTS (SELECT 1 FROM character_authority_cards a WHERE a.character_id = characters.id)
+    `);
+    // 스키마 업그레이드 완료 — version 3 → 4
+    db.prepare('UPDATE schema_version SET version = 4 WHERE version < 4').run();
+  }
+  // 구 DB 보정(컬럼 재추가 후): 기존 카드가 있지만 아직 seeded=0으로 표시된 캐릭터들을 정리한다.
+  // (컬럼 추가 단계에서 표시되지 않은 경우 대비)
+  db.exec(`
+    UPDATE characters SET authority_cards_seeded = 1
+    WHERE authority_cards_seeded = 0
+    AND EXISTS (SELECT 1 FROM character_authority_cards a WHERE a.character_id = characters.id)
   `);
-  for (const character of legacyCharacters) {
-    for (const card of seedAuthorityCardsForPower(character.power)) {
-      insertAuthorityCard.run(
-        character.id,
-        card.ordinal,
-        card.kind,
-        card.spot,
-        card.provenance,
-      );
+  // 카드 테이블이 없던 구 DB의 캐릭터만 P0/P1 정본으로 보정한다.
+  // seeded=1 인 캐릭터는 카드 0장이어도 건드리지 않는다 — 명시적 revoke 를 부활시키지 않기 위해.
+  // 백필은 all-or-nothing: 한 캐릭터의 카드가 실패하면 전체를 롤백한다.
+  const legacyCharacters = db.prepare(`
+    SELECT id, power FROM characters WHERE authority_cards_seeded = 0 ORDER BY id
+  `).all();
+  if (legacyCharacters.length > 0) {
+    try {
+      withTransaction(db, () => {
+        const insertAuthorityCard = db.prepare(`
+          INSERT INTO character_authority_cards(character_id, ordinal, kind, spot, provenance)
+          VALUES (?, ?, ?, ?, ?)
+        `);
+        const markSeeded = db.prepare('UPDATE characters SET authority_cards_seeded = 1 WHERE id = ?');
+        for (const character of legacyCharacters) {
+          for (const card of seedAuthorityCardsForPower(character.power)) {
+            insertAuthorityCard.run(
+              character.id,
+              card.ordinal,
+              card.kind,
+              card.spot,
+              card.provenance,
+            );
+          }
+          markSeeded.run(character.id);
+        }
+      });
+    } catch (error) {
+      // 백필 실패로 openDatabase 가 실패하면 연결도 닫는다(핸들 누수 방지).
+      db.close();
+      throw error;
     }
   }
   // 기존 DB 보정: canon_characters.source 컬럼이 없으면 추가 (구 스키마 → NPC 수용).
@@ -224,9 +270,9 @@ export function openDatabase({ dbPath = DEFAULT_DB_PATH } = {}) {
   }
   const row = db.prepare('SELECT COUNT(*) AS c FROM schema_version').get();
   if (!row || row.c === 0) {
-    db.prepare('INSERT INTO schema_version(version) VALUES (?)').run(3);
+    db.prepare('INSERT INTO schema_version(version) VALUES (?)').run(4);
   } else {
-    db.prepare('UPDATE schema_version SET version = 3 WHERE version < 3').run();
+    db.prepare('UPDATE schema_version SET version = 4 WHERE version < 4').run();
   }
   return {
     db,
