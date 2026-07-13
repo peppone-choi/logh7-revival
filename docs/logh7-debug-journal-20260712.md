@@ -128,3 +128,34 @@
 남은 경계:
 
 - 자연 이동은 env/Frida focus 강제 없이 닫혔다. 남은 서버 보조 플래그는 `LOGH_POSTLOAD_ACTION_LIST`와 `LOGH_COMMAND_TABLE_PRELOAD_PROBE`이며, 두 데이터 경로를 운영 기본값으로 승격할 근거와 회귀 검증이 필요하다.
+
+## 2026-07-13 B56-B59 서버 보조 환경변수 제거
+
+### B56/B57 action-list 기본 경로
+
+- B56 음성 대조에서는 `LOGH_POSTLOAD_ACTION_LIST` 없이도 로그인, 월드 진입, character↔unit 링크가 정상이었다. 다만 grid-init 응답이 `0x0f03`으로 끝나고 `0x0356`이 없었으며, `listCount188=0`, `payloadCount270=0`으로 30초 readiness가 실패했다.
+- 이 결과로 `LOGH_POSTLOAD_ACTION_LIST`와 `includeActionList` 분기를 제거했다. 첫 grid-init의 core 마지막 `0x0f03` 직후 `0x0356`을 항상 정확히 한 번 보내고, 별도 category 진단값이 없으면 action-list의 seat character에 실제 `characterId`를 쓴다. 허용되는 tail은 `0x0f03→0x0356`뿐이다.
+- B57은 같은 POSTLOAD env 미설정 조건에서 grid codes가 `…→0x0f03→0x0356`으로 끝났고, `0x0356` action-list 1회, `listCount188=1`, `payloadCount270=1`, `currentRaw11178=2588`을 확인했다. 자연 입력은 `sendWarp/gridMove=[2388,0,1]`을 만들었고, `0x0b01→0x0b07 cell=2388` 왕복이 성공했다.
+
+### B58/B59 command-table 기본 경로
+
+- B58 음성 대조에서는 `0x0356` action-list 1회, `listCount188=1`, `payloadCount270=1`, `ready=true`였지만, runtime `0x0305`의 category 0/1 count가 모두 `0`, runtime `0x0307` record count가 `0`이었다. 선택 뒤 command build는 한 번 호출됐으나 command row는 `0`이었고, factory, SelectGrid, SendWarp, gridMove는 모두 호출되지 않았다.
+- CD, MDX, 공식 매뉴얼, 리셋 전 스냅샷 `5bd249c`를 역추적했지만 canonical card/category→factory 숫자 매핑은 찾지 못했다. `0x2b`만 P0 SelectGrid와 P1 라이브 근거가 있고, `0x41`, category `0`, card `0/1` 숫자 매핑은 P3 호환성 값이다. 따라서 이 데이터는 B48/B55에서 검증된 `live-compatible playable baseline`이며, 정본 전체 권한표가 완성됐다는 뜻이 아니다.
+- `LOGH_COMMAND_TABLE_PRELOAD_PROBE` env gate와 관련 enable/preload 심볼을 제거했다. `0x0304→0x0305`는 compact BE card `0/1`을, `0x0306→0x0307`은 compact BE record `0/1`을 항상 직접 반환하며, 각 card/record의 factory 배열은 `[0x002b,0x0041]`이다.
+- B59는 서버 helper env 없이 `0x0356` action-list 1회, `listCount188=1`, `payloadCount270=1`, runtime `0x0305` category 0/1 count가 각각 `2`, 첫 factory가 `43(0x2b)`, runtime `0x0307` record count가 `2`임을 확인했다. command row `2`, factory `1`, SelectGrid `1`이 자연 생성됐고, `sendWarp/gridMove=[2388,0,1]`, `0x0b01→0x0b07`이 이어졌다. 서버 판정은 `cellSource=decoded-route-cell`, `configuredFallback=null`이었고 모든 Frida force 플래그는 `false`였다.
+
+### 검증과 증거
+
+- worker 전체 서버 테스트는 `312/312` 통과했다. main focused 검증은 action-list 경로 `64/64`, command-table 경로 `103/103` 통과했다.
+- 원본 EXE SHA-256은 `9c97de2ae426f011680992d6c8d88b25488b5f51555ce5784aeef677f334bb51`, UI patched SHA-256은 `d1ef22b75e97462bc1b098848db2732fb4388e4445ab4924203671d88a3e1146`이다. 종료 뒤 클라이언트와 TCP 47900 listener는 모두 `0`이었다.
+
+증거:
+
+- `.omo/live-qa/m3-strategy-command-origin-B56-no-postload-action-list-20260713`
+- `.omo/live-qa/m3-strategy-command-origin-B57-default-action-list-20260713`
+- `.omo/live-qa/m3-strategy-command-origin-B58-no-command-table-env-20260713`
+- `.omo/live-qa/m3-strategy-command-origin-B59-no-server-helper-envs-20260713`
+
+남은 경계:
+
+- action-list와 command-table의 helper-env 병목은 닫혔다. 다만 baseline의 `0x41`과 card/category 숫자 매핑은 P3 호환성에 머문다. 이후 별도 최소 권한 A/B로 값을 축소·대조해야 하며, 그전에는 canonical 전체 권한표 완료를 주장하지 않는다.
