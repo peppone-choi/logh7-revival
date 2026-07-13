@@ -1,6 +1,6 @@
 # LOGH VII Current Document Index
 
-2026-07-13 전략맵 성계 상세 복원 현황: [[logh7-strategy-system-detail-current|전략맵 성계 상세 복원]]에 `cell 2588 → runtime base ID 70`, `031d → 031f → 0321 → 0f03`, B67 행 좌표 오판정, B68b의 `unit[0]+0x40=70`·base/institution lookup 복원, 다음 병목 `controllerGate05`/selection activation을 정리했다. 제품·운영 권위는 아래 startup entrypoint에 있고, 이 노트는 현재 구현·라이브 QA를 잇는 현황 기록이다.
+2026-07-13 전략맵 성계 상세 복원 현황: [[logh7-strategy-system-detail-current|전략맵 성계 상세 복원]]과 [[logh7-m4-strategy-system-detail-handoff-2026-07-13|M4 전략 성계 상세 핸드오프]]에 `cell 2588 → runtime base ID 70`, static prerequisite `0x031d`, phase `0`의 `0x031e → 0x031f`, phase `1`의 `0x0326 → 0x0327`, generic info factory `0x19/0x2d/0x43 → FUN_00579e60 → FUN_0057aa90`을 정리했다. 권한카드 브리지는 `6720faf2`로 커밋됐고 자동 검증을 마쳤다. 현재 열린 경계는 자연 Captain kind `59 → 0x2d`의 B71 라이브 출력이다. 제품·운영 권위는 아래 startup entrypoint에 있다.
 
 2026-07-04 G070 Unity 클라이언트 완전 삭제: `client-unity/` 작업트리 제거(보존 `dbf3b43` → 제거 `ca24dd3`). 아래 `client-unity/README.md` 등 Unity 경로를 가리키는 인덱스 항목은 더 이상 작업트리에 존재하지 않으며, 참조하려면 git 히스토리에서 복원해야 한다.
 
@@ -46,10 +46,9 @@ This index is subordinate to the three startup entrypoints:
 2. `docs/logh7-architecture-operations-current.md`
 3. `.omo/plans/logh7-internal-validation-plan.md`
 
-The project has been re-bootstrapped away from legacy-client modification. Do
-not use deleted pre-bootstrap handoffs, roadmaps, patch-builder notes, live
-runtime notes, or old status ledgers as planning authority. The legacy client is
-only an oracle for data mining and diagnostics.
+Since 2026-07-04 G069, direct restoration of the original `G7MTClient.exe` is
+the active client path. Treat deleted pre-bootstrap notes as historical evidence;
+use the current requirements, architecture, and plans for implementation and live QA.
 
 ## Current Authority
 
@@ -68,7 +67,8 @@ only an oracle for data mining and diagnostics.
 
 | Path | Role |
 | --- | --- |
-| `docs/logh7-strategy-system-detail-current.md` | Current strategy-map system-detail wire/cache/lookup status, B63/B67/B68b evidence ruling, and pending selection/panel gate. Subordinate to the startup authorities above. |
+| `docs/logh7-strategy-system-detail-current.md` | Current strategy-map system-detail wire/cache/lookup status, generic-info factory routes, authority-card bottleneck, and B71 live gate. Subordinate to the startup authorities above. |
+| `docs/logh7-m4-strategy-system-detail-handoff-2026-07-13.md` | HEAD/worktree/evidence-separated handoff for the late-M3/early-M4 authority-card → factory `0x2d` → detail-renderer bridge. |
 
 ## Current Code And Data Surfaces
 
