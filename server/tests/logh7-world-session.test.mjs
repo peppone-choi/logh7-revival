@@ -283,7 +283,7 @@ test('0x0205 SSGameLoginRequest batch emits 0x0206 before 0x0204', () => {
 // 8종 월드레코드 수신 후 클라가 0x0304(2B, 페이로드 없음)를 보낸다. 이전엔
 // handleWorldInner 가 라우팅 안 해 "알 수 없는 코드 0x0304" → NOW LOADING 영구 정지.
 
-test('handleWorldInner routes admission 0x0304 → populated playable-baseline 0x0305', () => {
+test('handleWorldInner routes admission 0x0304 → personal-only fallback 0x0305', () => {
   const previous = process.env.LOGH_COMMAND_TABLE_PRELOAD_PROBE;
   delete process.env.LOGH_COMMAND_TABLE_PRELOAD_PROBE;
   try {
@@ -297,23 +297,10 @@ test('handleWorldInner routes admission 0x0304 → populated playable-baseline 0
     assert.equal(result.responses.length, 1);
     assert.equal(readMsg32Code(result.responses[0].inner), 0x0305);
     const body = msg32Body(result.responses[0].inner);
-    assert.equal(body.readUInt16BE(0x00), 2, '0x0305 card count');
-    assert.deepEqual(
-      [body.readUInt16BE(0x02), body.readUInt16BE(0x17)],
-      [0, 1],
-      '0x0305 card ids',
-    );
-    assert.deepEqual(
-      [body.readUInt8(0x14), body.readUInt8(0x29)],
-      [1, 1],
-      '0x0305 command counts',
-    );
-    assert.deepEqual(
-      [body.readUInt16BE(0x15), body.readUInt16BE(0x2a)],
-      [0x002b, 0x002b],
-      '0x0305 factories',
-    );
-    assert.ok(body.subarray(0x2c).every((byte) => byte === 0), '0x0305 zero tail');
+    assert.equal(body.readUInt16BE(0x00), 1, '0x0305 card count');
+    assert.equal(body.readUInt16BE(0x02), 0, '0x0305 personal card id');
+    assert.equal(body.readUInt8(0x14), 0, '0x0305 personal command count');
+    assert.ok(body.subarray(0x15).every((byte) => byte === 0), '0x0305 zero tail');
     assert.deepEqual(result.responses[0].targets, [1]);
     assert.equal(result.responses[0].isMsg32, true);
   } finally {
@@ -322,7 +309,7 @@ test('handleWorldInner routes admission 0x0304 → populated playable-baseline 0
   }
 });
 
-test('handleWorldInner routes admission 0x0306 → populated playable-baseline 0x0307', () => {
+test('handleWorldInner routes admission 0x0306 → personal-only fallback 0x0307', () => {
   const previous = process.env.LOGH_COMMAND_TABLE_PRELOAD_PROBE;
   delete process.env.LOGH_COMMAND_TABLE_PRELOAD_PROBE;
   try {
@@ -335,23 +322,10 @@ test('handleWorldInner routes admission 0x0306 → populated playable-baseline 0
     assert.equal(result.kind, 'admission');
     assert.equal(readMsg32Code(result.responses[0].inner), 0x0307);
     const body = msg32Body(result.responses[0].inner);
-    assert.equal(body.readUInt16BE(0x00), 2, '0x0307 record count');
-    assert.deepEqual(
-      [body.readUInt16BE(0x02), body.readUInt16BE(0x0d)],
-      [0, 1],
-      '0x0307 card ids',
-    );
-    assert.deepEqual(
-      [body.readUInt8(0x04), body.readUInt8(0x0f)],
-      [1, 1],
-      '0x0307 descriptor counts',
-    );
-    assert.deepEqual(
-      [body.readUInt16BE(0x05), body.readUInt16BE(0x10)],
-      [0x002b, 0x002b],
-      '0x0307 descriptors',
-    );
-    assert.ok(body.subarray(0x18).every((byte) => byte === 0), '0x0307 zero tail');
+    assert.equal(body.readUInt16BE(0x00), 1, '0x0307 record count');
+    assert.equal(body.readUInt16BE(0x02), 0, '0x0307 personal card id');
+    assert.equal(body.readUInt8(0x04), 0, '0x0307 personal descriptor count');
+    assert.ok(body.subarray(0x05).every((byte) => byte === 0), '0x0307 zero tail');
   } finally {
     if (previous === undefined) delete process.env.LOGH_COMMAND_TABLE_PRELOAD_PROBE;
     else process.env.LOGH_COMMAND_TABLE_PRELOAD_PROBE = previous;

@@ -48,6 +48,7 @@ import {
   buildResponseInformationWarehouseInner,
   decodeRequestInformationWarehouse,
 } from './codec/warehouse-record.mjs';
+import { normalizeAuthorityCards } from '../domain/authority-cards.mjs';
 
 /**
  * @typedef {{
@@ -57,6 +58,7 @@ import {
  *   unitId: number,
  *   cell: number,
  *   inWorld: boolean,
+ *   authorityCards: Array<{ordinal:number,kind:number,spot:number,provenance:string}>,
  * }} WorldPlayer
  */
 
@@ -121,6 +123,7 @@ export function createWorldSession({
         face: 0,
         rank: 0,
         ability8: null,
+        authorityCards: [],
       };
       players.set(connectionId, pending);
       logEvent('session-login-create-pending', connectionId, { sessionId });
@@ -152,6 +155,7 @@ export function createWorldSession({
       face: character?.face ?? 0,
       rank: character?.rank ?? 0,
       ability8: Array.isArray(character?.ability8) ? character.ability8.slice(0, 8) : null,
+      authorityCards: normalizeAuthorityCards(character?.authorityCards),
     };
     players.set(connectionId, player);
     logEvent('session-login', connectionId, { characterId, unitId, sessionId });
@@ -245,6 +249,9 @@ export function createWorldSession({
       p.face = Number.isInteger(seed.face) ? seed.face : p.face;
       p.rank = Number.isInteger(seed.rank) ? seed.rank : p.rank;
       p.ability8 = seedAbilities ? seedAbilities.slice(0, 8) : p.ability8;
+      if (Array.isArray(seed.authorityCards)) {
+        p.authorityCards = normalizeAuthorityCards(seed.authorityCards);
+      }
     }
 
     const selectedBase = findStaticBase({ cell: p.cell });
@@ -570,6 +577,7 @@ export function createWorldSession({
             spotResolverBase: selectedBase?.id ?? 0,
           }),
           baseId: selectedBase?.id ?? null,
+          authorityCards: player.authorityCards,
         });
         logEvent('grid-init-spawn', connectionId, { codes: listWorldEntryCodes(spawnInners) });
         return {
@@ -633,7 +641,10 @@ export function createWorldSession({
     // 8종 월드레코드 수신 후 클라가 0x0304/0x0306/0x0312/0x030a/0x030e/0x0310 등
     // 페이로드 없는 부트스트랩 요청을 보낸다. 대응 응답(code+1)을 안 주면 영구 정지.
     // 근거: docs/reference/restored-from-git/logh7-inworld-progress.md P27/P29.
-    const admissionInner = buildAdmissionResponseInner(code);
+    const admissionPlayer = players.get(connectionId);
+    const admissionInner = buildAdmissionResponseInner(code, {
+      authorityCards: admissionPlayer?.authorityCards,
+    });
     if (admissionInner) {
       return {
         kind: 'admission',
@@ -648,11 +659,17 @@ export function createWorldSession({
 
   function getPlayer(connectionId) {
     const p = players.get(connectionId);
-    return p ? { ...p } : null;
+    return p ? {
+      ...p,
+      authorityCards: p.authorityCards.map((card) => ({ ...card })),
+    } : null;
   }
 
   function listPlayers() {
-    return [...players.values()].map((p) => ({ ...p }));
+    return [...players.values()].map((p) => ({
+      ...p,
+      authorityCards: p.authorityCards.map((card) => ({ ...card })),
+    }));
   }
 
   function getEventLog() {
@@ -683,6 +700,7 @@ export function createWorldSession({
       face: player.face ?? 0,
       rank: player.rank ?? 0,
       ability8: Array.isArray(player.ability8) ? player.ability8.slice(0, 8) : null,
+      authorityCards: normalizeAuthorityCards(player.authorityCards),
     };
     players.set(p.connectionId, p);
     return { ...p };

@@ -11,6 +11,10 @@
 
 import { readFileSync, writeFileSync, renameSync, mkdirSync } from 'node:fs';
 import { dirname, join } from 'node:path';
+import {
+  normalizeAuthorityCards,
+  seedAuthorityCardsForPower,
+} from '../domain/authority-cards.mjs';
 
 /**
  * @typedef {{ id: number, [key: string]: any }} CharRecord
@@ -25,6 +29,16 @@ import { dirname, join } from 'node:path';
 export function createCharacterStore(storePath) {
   // 초기 로드
   let data = _load(storePath);
+  let authorityBackfilled = false;
+  for (const records of Object.values(data.accounts)) {
+    if (!Array.isArray(records)) continue;
+    for (const record of records) {
+      if (record.authorityCards == null) authorityBackfilled = true;
+      record.authorityCards = normalizeAuthorityCards(
+        record.authorityCards ?? seedAuthorityCardsForPower(record.power),
+      );
+    }
+  }
 
   function _load(path) {
     try {
@@ -49,10 +63,15 @@ export function createCharacterStore(storePath) {
     renameSync(tmp, storePath);
   }
 
+  if (authorityBackfilled) _save();
+
   /** 계정의 캐릭터 목록 반환 (없으면 빈 배열) */
   function getCharacters(accountId) {
     const key = String(accountId);
-    return (data.accounts[key] ?? []).slice(); // 방어 복사
+    return (data.accounts[key] ?? []).map((record) => ({
+      ...record,
+      authorityCards: record.authorityCards.map((card) => ({ ...card })),
+    }));
   }
 
   /**
@@ -66,10 +85,19 @@ export function createCharacterStore(storePath) {
     if (!data.accounts[key]) data.accounts[key] = [];
     const id = data.nextId;
     data.nextId += 1;
-    const record = { ...charData, id };
+    const record = {
+      ...charData,
+      id,
+      authorityCards: normalizeAuthorityCards(
+        charData.authorityCards ?? seedAuthorityCardsForPower(charData.power),
+      ),
+    };
     data.accounts[key].push(record);
     _save();
-    return { ...record };
+    return {
+      ...record,
+      authorityCards: record.authorityCards.map((card) => ({ ...card })),
+    };
   }
 
   /**

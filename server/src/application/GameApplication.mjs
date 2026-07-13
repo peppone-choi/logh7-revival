@@ -69,6 +69,7 @@ export function createGameApplication({
             unitId: c.unitId,
             cell: c.cell,
             ability8: c.ability8,
+            authorityCards: c.authorityCards.map((card) => ({ ...card })),
           }));
         } finally {
           uow.close();
@@ -95,6 +96,7 @@ export function createGameApplication({
             rank: charData.rank,
             cell: charData.cell,
             ability8: charData.ability8,
+            authorityCards: charData.authorityCards,
           }));
           uow.flush();
           ensureUnitId(character);
@@ -112,6 +114,7 @@ export function createGameApplication({
             unitId: character.unitId,
             cell: character.cell,
             ability8: character.ability8,
+            authorityCards: character.authorityCards.map((card) => ({ ...card })),
           };
         } finally {
           uow.close();

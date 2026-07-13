@@ -3,7 +3,7 @@
 
 export const CODE_NOTIFY_INFORMATION_CHARACTER = 0x0356;
 export const NOTIFY_INFORMATION_CHARACTER_BYTES = 0x2d8;
-export const MAX_SEATS_PER_OUTFIT = 16;
+export const MAX_AUTHORITY_CARDS_PER_CHARACTER = 16;
 
 function message32(code, payload) {
   const body = Buffer.isBuffer(payload) ? payload : Buffer.from(payload ?? []);
@@ -77,7 +77,7 @@ export function buildNotifyInformationCharacterInner({
   rank = null,
   title = null,
   face = null,
-  seatEntries = null,
+  cardEntries = null,
   coupConduct = null,
   spotResolverBase = null,
   together = null,
@@ -146,13 +146,25 @@ export function buildNotifyInformationCharacterInner({
   streamU8(parts, Number.isInteger(influence) ? influence : 0);
   streamU8(parts, Number.isInteger(stamina) ? stamina : 0);
   streamU8(parts, 0); // special ability count
-  const seats = Array.isArray(seatEntries) ? seatEntries.slice(0, MAX_SEATS_PER_OUTFIT) : [];
-  streamU8(parts, seats.length);
-  for (const entry of seats) {
-    const character = Number(entry?.character ?? entry?.characterId ?? entry?.cardId ?? entry?.id ?? 0);
-    const role = Number(entry?.role ?? entry?.seatRole ?? 0);
-    streamU16(parts, Number.isInteger(character) ? character : 0, wireEndian);
-    streamU32(parts, Number.isInteger(role) ? role : 0, wireEndian);
+  if (cardEntries != null && !Array.isArray(cardEntries)) {
+    throw new TypeError('cardEntries must be an array');
+  }
+  const cards = cardEntries ?? [];
+  if (cards.length > MAX_AUTHORITY_CARDS_PER_CHARACTER) {
+    throw new RangeError(`at most ${MAX_AUTHORITY_CARDS_PER_CHARACTER} authority cards are allowed`);
+  }
+  streamU8(parts, cards.length);
+  for (const [index, entry] of cards.entries()) {
+    const kind = entry?.kind;
+    const cardSpot = entry?.spot ?? 0;
+    if (!Number.isInteger(kind) || kind < 0 || kind > 0xffff) {
+      throw new RangeError(`cardEntries[${index}].kind must be an unsigned 16-bit integer`);
+    }
+    if (!Number.isInteger(cardSpot) || cardSpot < 0 || cardSpot > 0xffffffff) {
+      throw new RangeError(`cardEntries[${index}].spot must be an unsigned 32-bit integer`);
+    }
+    streamU16(parts, kind, wireEndian);
+    streamU32(parts, cardSpot, wireEndian);
   }
   streamU8(parts, Number.isInteger(together) ? together : 0);
   return message32(CODE_NOTIFY_INFORMATION_CHARACTER, Buffer.concat(parts));
@@ -246,10 +258,10 @@ export function decodeNotifyInformationCharacterStream(payload, { wireEndian = '
   for (let i = 0; i < specialCount; i += 1) {
     if (!putU16(0x1b0 + i * 2)) return null;
   }
-  const seatCount = readU8();
-  if (seatCount == null || seatCount > MAX_SEATS_PER_OUTFIT) return null;
-  out.writeUInt8(seatCount, 0x250);
-  for (let i = 0; i < seatCount; i += 1) {
+  const cardCount = readU8();
+  if (cardCount == null || cardCount > MAX_AUTHORITY_CARDS_PER_CHARACTER) return null;
+  out.writeUInt8(cardCount, 0x250);
+  for (let i = 0; i < cardCount; i += 1) {
     if (!putU16(0x254 + i * 8) || !putU32(0x258 + i * 8)) return null;
   }
   if (!putU8(0x2d4)) return null;

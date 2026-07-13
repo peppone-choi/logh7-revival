@@ -1,5 +1,10 @@
 // 도메인 엔티티 — 와이어와 무관한 권위 상태
 
+import {
+  normalizeAuthorityCards,
+  seedAuthorityCardsForPower,
+} from './authority-cards.mjs';
+
 let nextTempId = -1;
 
 function markDirty(entity) {
@@ -43,6 +48,7 @@ export function createCharacterEntity({
   cell = null,
   online = false,
   ability8 = null,
+  authorityCards = null,
   createdAt = Date.now(),
   revision = 0,
 } = {}) {
@@ -70,6 +76,9 @@ export function createCharacterEntity({
     cell: cell == null ? 0 : Number(cell),
     online: Boolean(online),
     ability8: Array.isArray(ability8) ? ability8.slice(0, 8) : null,
+    authorityCards: normalizeAuthorityCards(
+      authorityCards ?? seedAuthorityCardsForPower(power & 0xff),
+    ),
     createdAt,
     revision,
     updatedAt: createdAt,

@@ -69,6 +69,7 @@ export function registerGameHandlers({ commandBus, queryBus }) {
       rank: cmd.rank ?? 0,
       cell: cmd.cell ?? 0,
       ability8: cmd.ability8 ?? null,
+      authorityCards: cmd.authorityCards,
     }));
     uow.flush();
     ensureUnitId(character);

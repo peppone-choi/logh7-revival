@@ -6,6 +6,7 @@ import {
   assignAccountId,
   assignCharacterId,
 } from '../../domain/entities.mjs';
+import { normalizeAuthorityCards } from '../../domain/authority-cards.mjs';
 
 /**
  * @param {{ db: import('node:sqlite').DatabaseSync }} connection openDatabase() 결과
@@ -67,6 +68,33 @@ export function createUnitOfWork(connection) {
 
   // ── Character ────────────────────────────────────────────────────────────
 
+  function findAuthorityCardsByCharacterId(characterId) {
+    return db.prepare(`
+      SELECT ordinal, kind, spot, provenance
+      FROM character_authority_cards
+      WHERE character_id = ?
+      ORDER BY ordinal
+    `).all(characterId).map((row) => ({
+      ordinal: row.ordinal,
+      kind: row.kind,
+      spot: row.spot,
+      provenance: row.provenance,
+    }));
+  }
+
+  function replaceAuthorityCards(character) {
+    const cards = normalizeAuthorityCards(character.authorityCards);
+    character.authorityCards = cards;
+    db.prepare('DELETE FROM character_authority_cards WHERE character_id = ?').run(character.id);
+    const insert = db.prepare(`
+      INSERT INTO character_authority_cards(character_id, ordinal, kind, spot, provenance)
+      VALUES (?, ?, ?, ?, ?)
+    `);
+    for (const card of cards) {
+      insert.run(character.id, card.ordinal, card.kind, card.spot, card.provenance);
+    }
+  }
+
   function findCharactersByAccount(accountId) {
     const rows = db.prepare(
       `SELECT id, account_id, power, blood, sex, lastname, firstname, face, rank,
@@ -90,6 +118,7 @@ export function createUnitOfWork(connection) {
         cell: row.cell,
         online: row.online === 1,
         ability8: row.ability8_json ? JSON.parse(row.ability8_json) : null,
+        authorityCards: findAuthorityCardsByCharacterId(row.id),
         createdAt: row.created_at,
         revision: row.revision,
       });
@@ -121,6 +150,7 @@ export function createUnitOfWork(connection) {
       cell: row.cell,
       online: row.online === 1,
       ability8: row.ability8_json ? JSON.parse(row.ability8_json) : null,
+      authorityCards: findAuthorityCardsByCharacterId(row.id),
       createdAt: row.created_at,
       revision: row.revision,
     });
@@ -184,6 +214,7 @@ export function createUnitOfWork(connection) {
             entity.unitId = entity.id;
             db.prepare('UPDATE characters SET unit_id = ? WHERE id = ?').run(entity.id, entity.id);
           }
+          replaceAuthorityCards(entity);
           entity._dirty = false;
           track(entity);
         }
@@ -218,6 +249,7 @@ export function createUnitOfWork(connection) {
             entity.updatedAt,
             entity.id,
           );
+          replaceAuthorityCards(entity);
           // world_fleet 프로젝션 (읽기 모델 CQRS)
           if (entity.unitId != null) {
             db.prepare(

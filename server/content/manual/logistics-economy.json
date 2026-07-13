@@ -5,8 +5,8 @@
     "PDF-verified against gin7manual_djvu.txt OCR (the verbatim text layer of .omo/work/gin7manual/gin7manual.pdf): Phezzan/production OCR lines 1967-2008, warehouses 2011-2033, allocation (割当) 2042-2079, reorganization (再編成) 2085-2113, replenishment (補充) 2116-2163.",
     "OCR printed footer numbers run ~one or two behind the manual's stated pages: Phezzan/production sit on OCR footer p38-40 (lines 1964/2008), warehouses footer p41 (line 2039), 割当 footer p42 (line 2082), 再編成+補充 footer p43-44 (lines 2144/2166). Consistent with digest §8 pp.41-45.",
     "§8.2 fractional/auto-merge note (digest flagged extraction-uncertain): OCR lines 2032-2033 are intact in meaning — '再編成は補充によって、残り隻数が端数になっているユニットが部隊倉庫内で発生した場合、再編成または補充を実行した時点で、自動的にユニットの合算が行われます。' Verified, not garbled.",
-    "Allocation authority table (割当を実行する職務と担当, OCR lines 2052-2056) recovered: columns 艦隊/巡察隊/輸送艦隊/地上部隊. Row 1 統帥本部作戦一課長 = O X X X; Row 2 統帥本部作戦二課長 = X O O O. Row 3 is OCR-garbled ('統合作戦本部第三次長 還識本 O O') — only the last two cells (輸送艦隊/地上部隊 = O O) are legible; first two cells could not be read. Marked _uncertain.",
-    "The third allocation role label is OCR-uncertain: rendered '統合作戦本部第三次長'. Empire-side作戦課 vs 統合作戦本部 (Alliance) split is plausible but the exact post name for row 3 is not confidently recoverable from OCR. Marked _uncertain.",
+    "Allocation authority table (割当を実行する職務と担当) was visually verified against docs/reference/manual_saved.pdf printed page 42: columns 艦隊/巡察隊/輸送艦隊/地上部隊. Row 1 統帥本部作戦一課長 = O X X X; Row 2 統帥本部作戦二課長 = X O O O; Row 3 統合作戦本部第三次長 = O O O O.",
+    "The direct PDF reading supersedes the garbled OCR for the third allocation row: the role label is 統合作戦本部第三次長 and all four responsibility cells are marked ○.",
     "OCR misreads corrected: 造兵工廠 appears as 造兵工厳/造兵工茂/造兵工厳 (line 1979-1980); 募兵 as 募兵 (clear); 修練度 as 修練度 (clear); 要塞 frequently as 要寒/要泰 (recognized variant); 商船 (line 2162) confirms merchant-ship crew exemption.",
     "Sweep range '400 ly' (line 1958) OCR-rendered as '400 兆 年' = misread of 400光年 (light-years); this belongs to operations §7 (pp.38-40) and is cross-referenced only.",
     "While allocation/reorganize/replenish are active, a 搬出入 (transport in/out) command is mutually excluded (OCR line 2078). 搬出入 itself is documented elsewhere; captured here as a mutual-exclusion lock only.",
@@ -164,11 +164,9 @@
           "地上部隊": true
         },
         {
-          "role": { "ja": "統合作戦本部第三次長 (?)", "en": "Joint Operations HQ 3rd Deputy Chief (?)", "ko": "통합작전본부 제3차장(?)" },
-          "_uncertain": true,
-          "uncertainNote": "OCR line 2056 garbled ('統合作戦本部第三次長 還識本 O O'). Role label uncertain; first two cells (艦隊/巡察隊) unreadable, only last two cells legible.",
-          "艦隊": null,
-          "巡察隊": null,
+          "role": { "ja": "統合作戦本部第三次長", "en": "Joint Operations HQ 3rd Deputy Chief", "ko": "통합작전본부 제3차장" },
+          "艦隊": true,
+          "巡察隊": true,
           "輸送艦隊": true,
           "地上部隊": true
         }

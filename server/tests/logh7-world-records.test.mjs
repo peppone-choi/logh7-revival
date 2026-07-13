@@ -600,7 +600,7 @@ test('buildAdmissionResponseInner: each admission request → full-size static-i
   assert.equal(buildAdmissionResponseInner(0x7abc), null);
 });
 
-test('playable command baseline은 env unset/0/1에서 동일한 compact BE 0x0305/0x0307을 보낸다', () => {
+test('context 없는 command baseline은 env와 무관하게 personal-only compact BE 0x0305/0x0307을 보낸다', () => {
   const previous = process.env.LOGH_COMMAND_TABLE_PRELOAD_PROBE;
   const cardFrames = [];
   const commandFrames = [];
@@ -609,42 +609,31 @@ test('playable command baseline은 env unset/0/1에서 동일한 compact BE 0x03
       if (value === undefined) delete process.env.LOGH_COMMAND_TABLE_PRELOAD_PROBE;
       else process.env.LOGH_COMMAND_TABLE_PRELOAD_PROBE = value;
       const label = `LOGH_COMMAND_TABLE_PRELOAD_PROBE=${value ?? 'unset'}`;
-      const factoryIds = [0x002b];
-      const categories = [0, 1];
+      const factoryIds = [];
+      const categories = [0];
       const cardInner = buildAdmissionResponseInner(0x0304);
       const card = msg32Body(cardInner);
-      assert.equal(card.readUInt16BE(0x00), 2, `${label}: 0x0305 outer count is BE`);
+      assert.equal(card.readUInt16BE(0x00), 1, `${label}: 0x0305 outer count is BE`);
       assert.equal(card.length, 0x520a, `${label}: 0x0305 fixed body size`);
       assert.equal(card.readUInt16BE(0x02), categories[0], `${label}: 0x0305 card id 0`);
       assert.equal(card.readUInt8(0x14), factoryIds.length, `${label}: 0x0305 command count 0`);
-      assert.equal(card.readUInt16BE(0x15), factoryIds[0], `${label}: 0x0305 factory 0/0`);
-      assert.equal(card.readUInt16BE(0x17), categories[1], `${label}: 0x0305 card id 1`);
-      assert.equal(card.readUInt8(0x29), factoryIds.length, `${label}: 0x0305 command count 1`);
-      assert.equal(card.readUInt16BE(0x2a), factoryIds[0], `${label}: 0x0305 factory 1/0`);
-      assert.ok(card.subarray(0x2c).every((byte) => byte === 0), `${label}: 0x0305 zero tail`);
+      assert.ok(card.subarray(0x15).every((byte) => byte === 0), `${label}: 0x0305 zero tail`);
       cardFrames.push(cardInner);
 
       const commandInner = buildAdmissionResponseInner(0x0306);
       const command = msg32Body(commandInner);
-      assert.equal(command.readUInt16BE(0x00), 2, `${label}: 0x0307 outer count is BE`);
+      assert.equal(command.readUInt16BE(0x00), 1, `${label}: 0x0307 outer count is BE`);
       assert.equal(command.length, 0xe5b2, `${label}: 0x0307 fixed body size`);
       assert.equal(command.readUInt16BE(0x02), categories[0], `${label}: 0x0307 card id 0`);
       assert.equal(command.readUInt8(0x04), factoryIds.length, `${label}: 0x0307 descriptor count 0`);
-      for (const [index, off] of [0x05].entries()) {
-        assert.equal(command.readUInt16BE(off), factoryIds[index], `${label}: 0x0307 descriptor 0/${index}`);
+      for (const [index, factoryId] of factoryIds.entries()) {
+        const off = 0x05 + index * 8;
+        assert.equal(command.readUInt16BE(off), factoryId, `${label}: 0x0307 descriptor 0/${index}`);
         assert.equal(command.readUIntBE(off + 2, 3), 0, `${label}: 0x0307 packed 0/${index}`);
         assert.equal(command.readUInt16BE(off + 5), 0, `${label}: 0x0307 w 0/${index}`);
         assert.equal(command.readUInt8(off + 7), 0, `${label}: 0x0307 flag 0/${index}`);
       }
-      assert.equal(command.readUInt16BE(0x0d), categories[1], `${label}: 0x0307 card id 1`);
-      assert.equal(command.readUInt8(0x0f), factoryIds.length, `${label}: 0x0307 descriptor count 1`);
-      for (const [index, off] of [0x10].entries()) {
-        assert.equal(command.readUInt16BE(off), factoryIds[index], `${label}: 0x0307 descriptor 1/${index}`);
-        assert.equal(command.readUIntBE(off + 2, 3), 0, `${label}: 0x0307 packed 1/${index}`);
-        assert.equal(command.readUInt16BE(off + 5), 0, `${label}: 0x0307 w 1/${index}`);
-        assert.equal(command.readUInt8(off + 7), 0, `${label}: 0x0307 flag 1/${index}`);
-      }
-      assert.ok(command.subarray(0x18).every((byte) => byte === 0), `${label}: 0x0307 zero tail`);
+      assert.ok(command.subarray(0x05).every((byte) => byte === 0), `${label}: 0x0307 zero tail`);
       commandFrames.push(commandInner);
     }
     assert.deepEqual(cardFrames[1], cardFrames[0], '0x0305 env=0 bytes equal unset');

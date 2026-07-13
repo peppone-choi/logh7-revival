@@ -5,6 +5,7 @@ import { mkdirSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { DatabaseSync } from 'node:sqlite';
+import { seedAuthorityCardsForPower } from '../../domain/authority-cards.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 export const DEFAULT_DB_PATH = join(HERE, '..', '..', '..', 'data', 'logh7.sqlite');
@@ -40,6 +41,18 @@ CREATE TABLE IF NOT EXISTS characters (
   updated_at INTEGER NOT NULL
 );
 CREATE INDEX IF NOT EXISTS idx_characters_account ON characters(account_id);
+CREATE TABLE IF NOT EXISTS character_authority_cards (
+  character_id INTEGER NOT NULL,
+  ordinal INTEGER NOT NULL CHECK (ordinal BETWEEN 0 AND 15),
+  kind INTEGER NOT NULL CHECK (kind BETWEEN 0 AND 299),
+  spot INTEGER NOT NULL CHECK (spot BETWEEN 0 AND 4294967295),
+  provenance TEXT NOT NULL CHECK (length(provenance) > 0),
+  PRIMARY KEY (character_id, ordinal),
+  UNIQUE (character_id, kind),
+  FOREIGN KEY (character_id) REFERENCES characters(id) ON DELETE CASCADE
+);
+CREATE INDEX IF NOT EXISTS idx_authority_cards_character
+  ON character_authority_cards(character_id, ordinal);
 CREATE TABLE IF NOT EXISTS world_fleet (
   unit_id INTEGER PRIMARY KEY,
   character_id INTEGER NOT NULL,
@@ -179,6 +192,30 @@ export function openDatabase({ dbPath = DEFAULT_DB_PATH } = {}) {
   db.exec('PRAGMA journal_mode = WAL;');
   db.exec('PRAGMA foreign_keys = ON;');
   db.exec(MIGRATIONS);
+  // 구 DB는 카드 테이블이 없었다. 카드 행이 전혀 없는 캐릭터만 P0/P1 정본으로 멱등 보정한다.
+  const legacyCharacters = db.prepare(`
+    SELECT c.id, c.power
+    FROM characters c
+    WHERE NOT EXISTS (
+      SELECT 1 FROM character_authority_cards a WHERE a.character_id = c.id
+    )
+    ORDER BY c.id
+  `).all();
+  const insertAuthorityCard = db.prepare(`
+    INSERT INTO character_authority_cards(character_id, ordinal, kind, spot, provenance)
+    VALUES (?, ?, ?, ?, ?)
+  `);
+  for (const character of legacyCharacters) {
+    for (const card of seedAuthorityCardsForPower(character.power)) {
+      insertAuthorityCard.run(
+        character.id,
+        card.ordinal,
+        card.kind,
+        card.spot,
+        card.provenance,
+      );
+    }
+  }
   // 기존 DB 보정: canon_characters.source 컬럼이 없으면 추가 (구 스키마 → NPC 수용).
   const canonCols = db.prepare("PRAGMA table_info('canon_characters')").all();
   if (canonCols.length > 0 && !canonCols.some((c) => c.name === 'source')) {
@@ -187,7 +224,9 @@ export function openDatabase({ dbPath = DEFAULT_DB_PATH } = {}) {
   }
   const row = db.prepare('SELECT COUNT(*) AS c FROM schema_version').get();
   if (!row || row.c === 0) {
-    db.prepare('INSERT INTO schema_version(version) VALUES (?)').run(2);
+    db.prepare('INSERT INTO schema_version(version) VALUES (?)').run(3);
+  } else {
+    db.prepare('UPDATE schema_version SET version = 3 WHERE version < 3').run();
   }
   return {
     db,

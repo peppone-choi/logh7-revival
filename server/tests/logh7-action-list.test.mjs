@@ -33,7 +33,7 @@ function readNativePstr16(object, lengthOffset, charsOffset) {
 
 test('0x0356 compact builder expands to the native action-list object', () => {
   const inner = buildNotifyInformationCharacterInner({
-    characterId: 1,
+    characterId: 0x10203040,
     gridUnitId: 1,
     power: 2,
     spot: 1,
@@ -41,7 +41,7 @@ test('0x0356 compact builder expands to the native action-list object', () => {
     lastname: 'PANEL',
     firstname: 'TEST',
     rank: 4,
-    seatEntries: [{ character: 1, role: 0 }],
+    cardEntries: [{ kind: 59, spot: 0x11223344 }],
   });
 
   assert.equal(readMsg32Code(inner), CODE_NOTIFY_INFORMATION_CHARACTER);
@@ -54,13 +54,52 @@ test('0x0356 compact builder expands to the native action-list object', () => {
   assert.equal(decoded.consumed, payload.length);
   assert.equal(decoded.trailing, 0);
   assert.equal(decoded.object.length, NOTIFY_INFORMATION_CHARACTER_BYTES);
-  assert.equal(decoded.object.readUInt32LE(0x04), 1);
+  assert.equal(decoded.object.readUInt32LE(0x04), 0x10203040);
   assert.equal(decoded.object.readUInt32LE(0x28), 1);
   assert.equal(decoded.object.readUInt16LE(0x18c), 90);
   assert.equal(decoded.object.readUInt16LE(0x18c + 7 * 4), 20);
-  assert.equal(decoded.object.readUInt8(0x250), 1, 'native action-list seat count');
-  assert.equal(decoded.object.readUInt16LE(0x254), 1);
-  assert.equal(decoded.object.readUInt32LE(0x258), 0);
+  assert.equal(decoded.object.readUInt8(0x250), 1, 'native authority card count');
+  assert.equal(decoded.object.readUInt16LE(0x254), 59, 'card kind is not character id');
+  assert.equal(decoded.object.readUInt32LE(0x258), 0x11223344, 'card spot');
+});
+
+test('0x0356 compact tail writes exact BE kind/spot pairs and rejects more than 16 cards', () => {
+  const inner = buildNotifyInformationCharacterInner({
+    characterId: 7,
+    cardEntries: [
+      { kind: 0x1234, spot: 0x89abcdef },
+      { kind: 0x00ff, spot: 0x01020304 },
+    ],
+    together: 0x7f,
+  });
+
+  assert.equal(body(inner).subarray(-14).toString('hex'), '02123489abcdef00ff010203047f');
+  const decoded = decodeNotifyInformationCharacterStream(body(inner));
+  assert.ok(decoded);
+  assert.equal(decoded.object.readUInt8(0x250), 2);
+  assert.equal(decoded.object.readUInt16LE(0x254), 0x1234);
+  assert.equal(decoded.object.readUInt32LE(0x258), 0x89abcdef);
+  assert.equal(decoded.object.readUInt16LE(0x25c), 0x00ff);
+  assert.equal(decoded.object.readUInt32LE(0x260), 0x01020304);
+  assert.equal(decoded.object.readUInt8(0x2d4), 0x7f);
+
+  assert.throws(
+    () => buildNotifyInformationCharacterInner({
+      characterId: 7,
+      cardEntries: Array.from({ length: 17 }, (_, kind) => ({ kind, spot: 0 })),
+    }),
+    /at most 16 authority cards/,
+  );
+});
+
+test('0x0356 no longer treats seatEntries character aliases as authority card kinds', () => {
+  const inner = buildNotifyInformationCharacterInner({
+    characterId: 0x10203040,
+    seatEntries: [{ characterId: 0x1234, role: 9 }],
+  });
+  const decoded = decodeNotifyInformationCharacterStream(body(inner));
+  assert.ok(decoded);
+  assert.equal(decoded.object.readUInt8(0x250), 0);
 });
 
 test('grid-init은 postload env와 무관하게 0x0f03 직후 동일한 0x0356을 정확히 한 번 보낸다', () => {
@@ -101,7 +140,7 @@ test('grid-init은 postload env와 무관하게 0x0f03 직후 동일한 0x0356�
       assert.equal(readNativePstr16(decoded.object, 0xa0, 0xa2), 'TEST', `${label}: firstname`);
       assert.equal(decoded.object.readUInt16LE(0x85 + 0x55), 4, `${label}: rank`);
       assert.equal(decoded.object.readUInt8(0x250), 1, `${label}: seat count`);
-      assert.equal(decoded.object.readUInt16LE(0x254), 1, `${label}: default seat character`);
+      assert.equal(decoded.object.readUInt16LE(0x254), 0, `${label}: personal card kind`);
       actionFrames.push(action);
     }
     assert.deepEqual(actionFrames[1], actionFrames[0], 'env=0 cannot change 0x0356 bytes');
@@ -153,7 +192,7 @@ test('world-session 0x0f02도 postload env와 무관하게 동일한 player 0x03
       assert.equal(readNativePstr16(decoded.object, 0xa0, 0xa2), 'TEST');
       assert.equal(decoded.object.readUInt16LE(0x85 + 0x55), 4);
       assert.equal(decoded.object.readUInt8(0x250), 1);
-      assert.equal(decoded.object.readUInt16LE(0x254), 1);
+      assert.equal(decoded.object.readUInt16LE(0x254), 0);
       actionFrames.push(actions[0].inner);
     }
     assert.deepEqual(actionFrames[1], actionFrames[0], 'world-session env=0 bytes');
@@ -164,28 +203,38 @@ test('world-session 0x0f02도 postload env와 무관하게 동일한 player 0x03
   }
 });
 
-test('action-list category selects the native card seat id', () => {
+test('LOGH_ACTION_LIST_CATEGORY cannot override persisted authority cards', () => {
   const previousCategory = process.env.LOGH_ACTION_LIST_CATEGORY;
   const previousPostload = process.env.LOGH_POSTLOAD_ACTION_LIST;
   delete process.env.LOGH_POSTLOAD_ACTION_LIST;
   try {
     process.env.LOGH_ACTION_LIST_CATEGORY = '0';
-    const categoryZero = buildGridInitializeSpawnInners({ characterId: 1, unitId: 1 })
+    const categoryZero = buildGridInitializeSpawnInners({
+      characterId: 1,
+      unitId: 1,
+      authorityCards: [{ ordinal: 0, kind: 59, spot: 3, provenance: 'test' }],
+    })
       .find((inner) => readMsg32Code(inner) === CODE_NOTIFY_INFORMATION_CHARACTER);
     assert.ok(categoryZero);
     const zeroDecoded = decodeNotifyInformationCharacterStream(msg32Body(categoryZero));
     assert.ok(zeroDecoded);
-    assert.equal(zeroDecoded.object.readUInt16LE(0x254), 0x0000);
+    assert.equal(zeroDecoded.object.readUInt16LE(0x254), 59);
+    assert.equal(zeroDecoded.object.readUInt32LE(0x258), 3);
 
 
     process.env.LOGH_ACTION_LIST_CATEGORY = '2';
-    const categoryTwo = buildGridInitializeSpawnInners({ characterId: 1, unitId: 1 })
+    const categoryTwo = buildGridInitializeSpawnInners({
+      characterId: 1,
+      unitId: 1,
+      authorityCards: [{ ordinal: 0, kind: 59, spot: 3, provenance: 'test' }],
+    })
       .find((inner) => readMsg32Code(inner) === CODE_NOTIFY_INFORMATION_CHARACTER);
     assert.ok(categoryTwo);
     const twoDecoded = decodeNotifyInformationCharacterStream(msg32Body(categoryTwo));
     assert.ok(twoDecoded);
-    assert.equal(twoDecoded.object.readUInt16LE(0x254), 2);
-    assert.equal(twoDecoded.object.readUInt32LE(0x258), 0);
+    assert.equal(twoDecoded.object.readUInt16LE(0x254), 59);
+    assert.equal(twoDecoded.object.readUInt32LE(0x258), 3);
+    assert.deepEqual(categoryTwo, categoryZero);
 
   } finally {
     if (previousPostload == null) delete process.env.LOGH_POSTLOAD_ACTION_LIST;

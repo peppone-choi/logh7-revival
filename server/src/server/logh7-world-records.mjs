@@ -14,6 +14,10 @@ import { buildNotifyInformationCharacterInner } from './codec/personnel-action-l
 import { buildResponseInformationBaseInner } from './codec/base-record.mjs';
 import { buildResponseInformationInstitutionInner } from './codec/institution-record.mjs';
 import {
+  buildAuthorityCommandRows,
+  normalizeAuthorityCards,
+} from '../domain/authority-cards.mjs';
+import {
   REQ_INFO_WAREHOUSE_CODE,
   RESP_INFO_WAREHOUSE_BODY_BYTES,
   RESP_INFO_WAREHOUSE_CODE,
@@ -946,15 +950,16 @@ export function buildStaticInformationGridTypeInner({ objects = [] } = {}) {
  *   - 0x0307: wire 외곽 count와 compact record/descriptor의 u16은 모두 BE다.
  *     wire descriptor stride는 8이며, 클라이언트 native destination만 card stride 0xc4다
  *     (FUN_004ba2b0/FUN_005312b0).
- *   - 0x2b는 P0 SelectGrid와 B48/B55/B59 라이브 근거가 있는 factory다. 0x41은
- *     FUN_00584c90 organize/dialog 경로에 대응하지만 이 카드가 이를 부여한다는 정본 근거는 없다.
- *     B61 live에서는 id=1 단일 레코드가 runtime category 0에 들어가고 category 1은 비었다.
- *     즉 변환은 card id가 아니라 record ordinal로 runtime slot을 채운다. category 0 레코드는
- *     canonical grant가 아니라 category 1 runtime slot에 도달하기 위한 구조적 ordinal padding이다.
+ *   - 0x2b(任意のグリッドへ移動)와 0x2d(星系グリッド内の惑星間を移動)는 P0 handler/숫자 조인과
+ *     P1 공식 매뉴얼의 함장 카드 워프/성계 내 항행 설명이 교차 확인한다. 개인 kind 0은 비우고,
+ *     실제 보유한 정상 제국/동맹 함장 kind 59/195에만 두 명령을 부여한다. 반란군 kind 123/257은
+ *     camp 정본이 없어 시드·부여하지 않는다. 0x41/0x43 handler는 확인됐지만 canonical card 소유권은
+ *     미복구라 어떤 행에도 부여하지 않는다. 명령 배열의 단일 소스는 authority-cards 도메인이다.
+ *   - 클라이언트 importer는 card id가 아니라 compact record ordinal K를 runtime slot K로 승격한다.
+ *     따라서 실제 보유 kind의 최댓값까지 0..maxKind 행을 모두 내고, 미보유 중간 행은 빈 padding이다.
  * 이 시드는 정본 전체 권한표가
  * 완성됐다는 뜻이 아니다. packed/w/flag의 의미도 미확정이므로 0으로 둔다.
  */
-export const PLAYABLE_BASELINE_COMMAND_FACTORY_IDS = Object.freeze([0x002b]);
 export const STATIC_INFORMATION_CARD_STRIDE = 0x46; // 0x0305 native destination stride (wire는 compact)
 export const STATIC_INFORMATION_CARD_MAX = 300;
 export const STATIC_INFORMATION_CARD_COMMAND_STRIDE = 0xc4; // 0x0307 native destination stride (wire는 compact)
@@ -1021,29 +1026,18 @@ export function buildStaticInformationCardCommandInner({ cards = [] } = {}) {
   return buildMsg32Inner(0x0307, body);
 }
 
-export function buildPlayableBaselineCommandCardInner() {
+export function buildPlayableBaselineCommandCardInner({ authorityCards = null } = {}) {
   return buildStaticInformationCardInner({
-    // 첫 레코드는 category 1 runtime slot까지 변환을 진행시키는 ordinal padding이다.
-    cards: [
-      { id: 0, commands: PLAYABLE_BASELINE_COMMAND_FACTORY_IDS },
-      { id: 1, commands: PLAYABLE_BASELINE_COMMAND_FACTORY_IDS },
-    ],
+    cards: buildAuthorityCommandRows(authorityCards),
   });
 }
 
-export function buildPlayableBaselineCommandDescriptorInner() {
+export function buildPlayableBaselineCommandDescriptorInner({ authorityCards = null } = {}) {
   return buildStaticInformationCardCommandInner({
-    // B61 live 근거에 따라 descriptor도 두 ordinal을 모두 채운다.
-    cards: [
-      {
-        id: 0,
-        commands: PLAYABLE_BASELINE_COMMAND_FACTORY_IDS.map((id) => ({ id })),
-      },
-      {
-        id: 1,
-        commands: PLAYABLE_BASELINE_COMMAND_FACTORY_IDS.map((id) => ({ id })),
-      },
-    ],
+    cards: buildAuthorityCommandRows(authorityCards).map((card) => ({
+      id: card.id,
+      commands: card.commands.map((id) => ({ id })),
+    })),
   });
 }
 
@@ -1127,10 +1121,14 @@ const ADMISSION_DEDICATED_BUILDERS = Object.freeze({
  * 어드미션 요청 code → 응답 message32. handleWorldInner 가 사용.
  * 명령 기준선(0x0305/0x0307)과 전용 빌더(0x0313/0x0315)는 실제 바디, 나머지는 빈 walker다.
  */
-export function buildAdmissionResponseInner(reqCode) {
+export function buildAdmissionResponseInner(reqCode, { authorityCards = null } = {}) {
   const code = reqCode & 0xffff;
-  if (code === CODE_REQ_SESSION_WALKER) return buildPlayableBaselineCommandCardInner();
-  if (code === CODE_REQ_DUTY_WALKER) return buildPlayableBaselineCommandDescriptorInner();
+  if (code === CODE_REQ_SESSION_WALKER) {
+    return buildPlayableBaselineCommandCardInner({ authorityCards });
+  }
+  if (code === CODE_REQ_DUTY_WALKER) {
+    return buildPlayableBaselineCommandDescriptorInner({ authorityCards });
+  }
   const dedicated = ADMISSION_DEDICATED_BUILDERS[code];
   if (dedicated) return dedicated();
   const respCode = ADMISSION_WALKER_REQ_RESP[code];
@@ -1372,6 +1370,8 @@ export function buildGridInitializeSpawnInners({
   fleets = null,
   // 0x031d/0x031f/0x0321 조인 키. 현재 cell이 정적 catalog에 없으면 null로 두어 상세 push를 생략한다.
   baseId = null,
+  // 0x0356/0305/0307과 공유하는 영속 권한카드. 문맥이 없을 때만 personal kind 0으로 폴백한다.
+  authorityCards = null,
 } = {}) {
   if (!Number.isInteger(characterId) || characterId <= 0) {
     throw new Error('buildGridInitializeSpawnInners: characterId required (no default id=1 / emperor trap)');
@@ -1379,12 +1379,7 @@ export function buildGridInitializeSpawnInners({
   if (!Number.isInteger(unitId) || unitId <= 0) {
     throw new Error('buildGridInitializeSpawnInners: unitId required (no synthetic id)');
   }
-  const category = Number(process.env.LOGH_ACTION_LIST_CATEGORY);
-  const hasCategory = process.env.LOGH_ACTION_LIST_CATEGORY !== undefined
-    && Number.isInteger(category) && category >= 0 && category <= 0xffff;
-  const actionSeatCharacter = hasCategory
-    ? (category === 0 ? 0x10000 : category)
-    : characterId;
+  const resolvedAuthorityCards = normalizeAuthorityCards(authorityCards);
   const inners = [];
   // 1) 0x0204 선택 캐릭터 id (self-match 앵커: 0x0323 record[0](+0x00 BE)와 바이트 동일)
   inners.push(buildSsCharacterIdInner({ characterId }));
@@ -1448,8 +1443,8 @@ export function buildGridInitializeSpawnInners({
   inners.push(buildGridInitOkInner({ status: 1 }));
   // 9) 0x0356은 정상 플레이어 HUD의 필수 action-list다. B56에서 이 프레임만 빼자 링크는 정상인데도
   //    hudModeF4=1, listCount188=0, payloadCount270=0으로 30초 readiness가 실패했다.
-  //    core 초기화 순서를 보존하도록 0x0f03 직후 정확히 한 번 보내며, category 진단이 없으면
-  //    기본 seat character는 실제 characterId를 유지한다.
+  //    core 초기화 순서를 보존하도록 0x0f03 직후 정확히 한 번 보낸다. tail은 character id가 아니라
+  //    영속 authority card의 {kind, spot}이며, 진단 env로 바꾸지 않는다.
   inners.push(buildNotifyInformationCharacterInner({
     characterId,
     gridUnitId: unitId,
@@ -1463,7 +1458,7 @@ export function buildGridInitializeSpawnInners({
     rank,
     abilities: Array.isArray(abilities) && abilities.length ? abilities : null,
     spotResolverBase: spot,
-    seatEntries: [{ character: actionSeatCharacter, role: 0 }],
+    cardEntries: resolvedAuthorityCards.map(({ kind, spot: cardSpot }) => ({ kind, spot: cardSpot })),
   }));
   return inners;
 }
