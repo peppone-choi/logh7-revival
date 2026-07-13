@@ -929,13 +929,15 @@ export function buildStaticInformationGridTypeInner({ objects = [] } = {}) {
  *   - 0x0307: wire 외곽 count와 compact record/descriptor의 u16은 모두 BE다.
  *     wire descriptor stride는 8이며, 클라이언트 native destination만 card stride 0xc4다
  *     (FUN_004ba2b0/FUN_005312b0).
- *   - 0x2b는 P0 SelectGrid + P1 라이브 근거가 있는 factory다. 0x41, category 0, card 숫자 매핑은
- *     P3 호환성 값이며 정본 권한 의미로 승격하지 않는다. category/card id 0/1을 함께 보내야
- *     FUN_004c4a10의 one-shot staging→runtime 변환에서 category 1이 빈 채로 고정되지 않는다.
- * 이 시드는 B48/B55에서 확인한 live-compatible playable baseline일 뿐이며, 정본 전체 권한표가
+ *   - 0x2b는 P0 SelectGrid와 B48/B55/B59 라이브 근거가 있는 factory다. 0x41은
+ *     FUN_00584c90 organize/dialog 경로에 대응하지만 이 카드가 이를 부여한다는 정본 근거는 없다.
+ *     B61 live에서는 id=1 단일 레코드가 runtime category 0에 들어가고 category 1은 비었다.
+ *     즉 변환은 card id가 아니라 record ordinal로 runtime slot을 채운다. category 0 레코드는
+ *     canonical grant가 아니라 category 1 runtime slot에 도달하기 위한 구조적 ordinal padding이다.
+ * 이 시드는 정본 전체 권한표가
  * 완성됐다는 뜻이 아니다. packed/w/flag의 의미도 미확정이므로 0으로 둔다.
  */
-export const PLAYABLE_BASELINE_COMMAND_FACTORY_IDS = Object.freeze([0x002b, 0x0041]);
+export const PLAYABLE_BASELINE_COMMAND_FACTORY_IDS = Object.freeze([0x002b]);
 export const STATIC_INFORMATION_CARD_STRIDE = 0x46; // 0x0305 native destination stride (wire는 compact)
 export const STATIC_INFORMATION_CARD_MAX = 300;
 export const STATIC_INFORMATION_CARD_COMMAND_STRIDE = 0xc4; // 0x0307 native destination stride (wire는 compact)
@@ -1004,7 +1006,7 @@ export function buildStaticInformationCardCommandInner({ cards = [] } = {}) {
 
 export function buildPlayableBaselineCommandCardInner() {
   return buildStaticInformationCardInner({
-    // FUN_004c4a10의 one-shot staging 변환 전에 category 0/1을 모두 채운다.
+    // 첫 레코드는 category 1 runtime slot까지 변환을 진행시키는 ordinal padding이다.
     cards: [
       { id: 0, commands: PLAYABLE_BASELINE_COMMAND_FACTORY_IDS },
       { id: 1, commands: PLAYABLE_BASELINE_COMMAND_FACTORY_IDS },
@@ -1014,7 +1016,7 @@ export function buildPlayableBaselineCommandCardInner() {
 
 export function buildPlayableBaselineCommandDescriptorInner() {
   return buildStaticInformationCardCommandInner({
-    // category 1도 함께 보내야 초기 native command table이 빈 채로 고정되지 않는다.
+    // B61 live 근거에 따라 descriptor도 두 ordinal을 모두 채운다.
     cards: [
       {
         id: 0,

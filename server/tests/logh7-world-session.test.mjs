@@ -256,15 +256,21 @@ test('handleWorldInner routes admission 0x0304 → populated playable-baseline 0
     const body = msg32Body(result.responses[0].inner);
     assert.equal(body.readUInt16BE(0x00), 2, '0x0305 card count');
     assert.deepEqual(
-      [body.readUInt16BE(0x02), body.readUInt16BE(0x19)],
+      [body.readUInt16BE(0x02), body.readUInt16BE(0x17)],
       [0, 1],
       '0x0305 card ids',
     );
     assert.deepEqual(
-      [body.readUInt16BE(0x15), body.readUInt16BE(0x17)],
-      [0x002b, 0x0041],
+      [body.readUInt8(0x14), body.readUInt8(0x29)],
+      [1, 1],
+      '0x0305 command counts',
+    );
+    assert.deepEqual(
+      [body.readUInt16BE(0x15), body.readUInt16BE(0x2a)],
+      [0x002b, 0x002b],
       '0x0305 factories',
     );
+    assert.ok(body.subarray(0x2c).every((byte) => byte === 0), '0x0305 zero tail');
     assert.deepEqual(result.responses[0].targets, [1]);
     assert.equal(result.responses[0].isMsg32, true);
   } finally {
@@ -288,15 +294,21 @@ test('handleWorldInner routes admission 0x0306 → populated playable-baseline 0
     const body = msg32Body(result.responses[0].inner);
     assert.equal(body.readUInt16BE(0x00), 2, '0x0307 record count');
     assert.deepEqual(
-      [body.readUInt16BE(0x02), body.readUInt16BE(0x15)],
+      [body.readUInt16BE(0x02), body.readUInt16BE(0x0d)],
       [0, 1],
       '0x0307 card ids',
     );
     assert.deepEqual(
-      [body.readUInt16BE(0x05), body.readUInt16BE(0x0d)],
-      [0x002b, 0x0041],
+      [body.readUInt8(0x04), body.readUInt8(0x0f)],
+      [1, 1],
+      '0x0307 descriptor counts',
+    );
+    assert.deepEqual(
+      [body.readUInt16BE(0x05), body.readUInt16BE(0x10)],
+      [0x002b, 0x002b],
       '0x0307 descriptors',
     );
+    assert.ok(body.subarray(0x18).every((byte) => byte === 0), '0x0307 zero tail');
   } finally {
     if (previous === undefined) delete process.env.LOGH_COMMAND_TABLE_PRELOAD_PROBE;
     else process.env.LOGH_COMMAND_TABLE_PRELOAD_PROBE = previous;
