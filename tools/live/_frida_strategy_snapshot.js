@@ -2503,6 +2503,61 @@ function armInputTick() {
   return { armed: true, t: Date.now() };
 }
 
+// ===== 경로 B: 拠点 SelectDialog 인덱스 직접 선택 (FUN_00576d40(index), ECX=list) =====
+// 경로 A(0xe/grid)가 좌측 목록 행을 못 짚을 때의 우회. 決定은 누르지 않는다 — index 선택까지만.
+// 네이티브 호출은 반드시 게임 메인스레드에서 실행한다(STRATEGY_TICK onEnter). 이는
+// invokeHudMode2 와 동일한 검증된 패턴이라 스레드 경합/크래시를 피한다. panelKind!=5 이거나
+// index 범위를 벗어나면 호출하지 않고 fail-closed(관측만).
+let spotSelectPending = false;
+let spotSelectIndexArg = 0;
+let spotSelectResult = null;
+let spotSelectHook = null;
+
+function invokeSpotSelectIndex(index) {
+  const before = snapshot();
+  try {
+    const list = SPOT_DIALOG_LIST;
+    const parent = list.sub(0x244);
+    const panelKind = readS32(parent.add(0x234));
+    const itemCount = readS32(list.add(0x8e4));
+    if (panelKind !== 5) {
+      spotSelectResult = { ok: false, reason: 'panelKind!=5', panelKind, itemCount, t: Date.now() };
+      return;
+    }
+    if (!(Number.isInteger(itemCount) && index >= 0 && index < itemCount)) {
+      spotSelectResult = { ok: false, reason: 'index-out-of-range', index, itemCount, t: Date.now() };
+      return;
+    }
+    const selectedBefore = readS32(list.add(0x8e8));
+    const fn = new NativeFunction(abs('0x00576d40'), 'int', ['pointer', 'int'], { abi: 'thiscall' });
+    const ret = fn(list, index);
+    spotSelectResult = {
+      ok: true, index, panelKind, itemCount, ret,
+      selectedBefore, selectedAfter: readS32(list.add(0x8e8)),
+      before, after: snapshot(), t: Date.now(),
+    };
+  } catch (error) {
+    spotSelectResult = { ok: false, index, error: String(error), before, after: snapshot(), t: Date.now() };
+  }
+}
+
+function armSpotSelectB(index) {
+  spotSelectIndexArg = index >>> 0;
+  spotSelectPending = true;
+  spotSelectResult = null;
+  if (spotSelectHook === null) {
+    spotSelectHook = Interceptor.attach(STRATEGY_TICK, {
+      onEnter() {
+        if (spotSelectPending && spotSelectResult === null) {
+          spotSelectPending = false;
+          invokeSpotSelectIndex(spotSelectIndexArg);
+        }
+      },
+    });
+  }
+  return { armed: true, index: spotSelectIndexArg, t: Date.now() };
+}
+
 function armGeometryForce() {
   geometryForceEnabled = true;
   geometryTargetOnly = false;
@@ -2857,6 +2912,76 @@ const SPOT_DIALOG_PARENT = abs('0x00ca3710');
 const SPOT_DIALOG_ROW_CAP = 12;
 const SPOT_DIALOG_COL_CAP = 12;
 
+// ===== 경로 A: 拠点 SelectDialog 행 draw-time 화면 좌표 캡처 =====
+// 정적 RE 확정: 행 rect 는 메모리에 저장되지 않고 입력/렌더 엔진 FUN_005015f0 이
+// draw/hit-test 시점에 전역 상태로부터 계산한다. 그래서 정적 원점 후보가 전부 실패했다.
+// 여기서 그 함수를 함수 경계에서 훅해, param_1==0xe(draw/measure) 호출의 out-struct
+// (param_3) 좌표를 캡처한다. param_3[2]/[3]=행 좌표(RE 브리프). param_2==grid 인 호출이
+// 목표(拠点 목록은 itemCount=1 이라 grid rect 가 곧 유일 행 rect). 성능·안정 위해
+// 드라이버가 STEP D 에서 armpatha() 로 무장하기 전에는 즉시 return(오버헤드 0, keysetup 안전).
+let pathAArmed = false;
+let pathAGridRect = null;         // param_2==grid 정확 매치(최신)
+// 타깃별 캡처. 다이얼로그 최초 draw 때 모든 위젯이 0xe 를 낸다 — idle 프레임 churn 이
+// 초기 draw 를 밀어내지 않도록 target 별로 first/last 좌표를 보존한다(FIFO 링 대신 map).
+const pathATargets = Object.create(null);
+const PATH_A_TARGET_CAP = 1024;
+
+function pathASpotActive() {
+  return safe(() => (
+    readS32(SPOT_DIALOG_LIST.add(0x8d4)) === 2
+    && readS32(SPOT_DIALOG_LIST.add(0x8d8)) === 2
+    && readS32(SPOT_DIALOG_LIST.add(0x8e4)) >= 1
+  ), false);
+}
+
+function pathAReadOut(out, target, isGrid) {
+  return safe(() => {
+    if (!out || out.isNull()) return null;
+    const dw = [];
+    for (let i = 0; i < 8; i += 1) dw.push(readS32(out.add(i * 4)));
+    return {
+      target: ptrHex(target),
+      isGrid,
+      out: ptrHex(out),
+      dwords: dw,
+      // RE 브리프: param_3[2]/[3] 이 좌표. int32 배열 기준 off 0x08/0x0c.
+      x: dw[2],
+      y: dw[3],
+      t: Date.now(),
+    };
+  }, null);
+}
+
+Interceptor.attach(abs('0x005015f0'), {
+  onEnter(args) {
+    if (!pathAArmed) return;
+    const kind = safe(() => args[0].toInt32(), -1);
+    if (kind !== 0xe) return;
+    // 다이얼로그가 활성일 때(=초기 draw 포함)만 캡처. 그 전 전략맵 draw 는 무시(오버헤드/노이즈).
+    if (!pathASpotActive()) return;
+    this.pathAOut = safe(() => ptr(args[2]), ptr('0x0'));
+    this.pathATarget = safe(() => ptr(args[1]), ptr('0x0'));
+    const grid = safe(() => readPtr(SPOT_DIALOG_LIST.add(0x20)), ptr('0x0'));
+    this.pathAIsGrid = !grid.isNull() && !this.pathATarget.isNull()
+      && this.pathATarget.equals(grid);
+    this.pathAHit = true;
+  },
+  onLeave() {
+    if (!pathAArmed || !this.pathAHit) return;
+    const rec = pathAReadOut(this.pathAOut, this.pathATarget, this.pathAIsGrid);
+    if (!rec) return;
+    if (this.pathAIsGrid) pathAGridRect = rec;
+    const key = rec.target;
+    const prev = pathATargets[key];
+    if (prev) {
+      prev.count += 1;
+      prev.last = rec;
+    } else if (Object.keys(pathATargets).length < PATH_A_TARGET_CAP) {
+      pathATargets[key] = { target: key, isGrid: rec.isGrid, count: 1, first: rec, last: rec };
+    }
+  },
+});
+
 // 화면 좌표로 인정할 상한. 원점 자리에서 포인터값(0x1337xxxx 등)이 읽히는 사고를
 // 프로세스 안에서 즉시 걸러낸다 — B74 는 원점 (322313472, 322290148) 을 그대로 믿고
 // 화면 밖 (322313510, 322290155) 을 클릭해 런 전체를 날렸다.
@@ -3101,4 +3226,29 @@ rpc.exports = {
     }
     return armFocusCellForce(cell);
   },
+  // 경로 A: 拠点 행 draw-time 좌표 캡처 무장/해제/조회.
+  armpatha() {
+    pathAArmed = true;
+    pathAGridRect = null;
+    for (const k of Object.keys(pathATargets)) delete pathATargets[k];
+    return true;
+  },
+  disarmpatha() { pathAArmed = false; return true; },
+  patha() {
+    return {
+      armed: pathAArmed,
+      spotActive: pathASpotActive(),
+      gridRect: pathAGridRect,
+      targets: Object.keys(pathATargets).map((k) => pathATargets[k]),
+    };
+  },
+  // 경로 B: 拠点 인덱스 직접 선택(決定 미포함).
+  selectbaseb(value) {
+    const index = Number(value);
+    if (!Number.isInteger(index) || index < 0 || index >= 4096) {
+      throw new Error('select index must be an integer in [0, 4095]');
+    }
+    return armSpotSelectB(index);
+  },
+  selectbasebresult() { return spotSelectResult; },
 };

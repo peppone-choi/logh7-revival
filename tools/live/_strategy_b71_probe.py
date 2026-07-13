@@ -30,7 +30,7 @@ from logh7_agent_drive import (
     screenshot,
 )
 from _spot_dialog_geometry import SpotRowUnresolved, resolve_base_row_click
-from _strategy_ready_gate import StrategyNotReady, wait_strategy_ready
+from _strategy_ready_gate import StrategyNotReady, is_plausible_screen_xy, wait_strategy_ready
 # 검증된 상수·STORE·경로는 기존 드라이버에서 재사용한다(main() 은 __main__ 아래라 임포트해도 실행 안 됨).
 from _strategy_table_probe import (
     CANONICAL_CLIENT_EXE,
@@ -79,6 +79,67 @@ def rect_center_point(origin, primary):
     if None in (ox, oy, rx, ry):
         return None
     return (ox + rx + rw // 2, oy + ry + rh // 2)
+
+
+# 拠点 SelectDialog 좌측 목록(=행이 있는 곳)의 화면 영역(client px). 실측(B80 run1
+# 스크린샷)으로 확인: 좌측 리스트 패널 x≈178..415, 행 y≈205..560. 이 박스는 draw 출력
+# 좌표를 "어느 위젯이냐"로 거르는 필터일 뿐, 좌표 자체는 엔진(FUN_005015f0)이 만든 값을
+# 그대로 쓴다(좌표 날조 아님). 우측 情報 패널(x≈425..835)의 grid 는 여기서 제외된다.
+LEFT_LIST_BOX = {'x0': 168, 'x1': 420, 'y0': 195, 'y1': 570}
+
+
+def _rec_point(rec, width, height):
+    """캡처 rec 의 (x,y)=param_3[2]/[3] 를 검증하고 행 내부 클릭점을 만든다."""
+    if not isinstance(rec, dict):
+        return None
+    px, py = rec.get('x'), rec.get('y')
+    if not isinstance(px, int) or not isinstance(py, int):
+        return None
+    if not is_plausible_screen_xy(px, py, width, height):
+        return None
+    dw = rec.get('dwords') or []
+    cw = dw[4] if len(dw) > 4 else None
+    ch = dw[5] if len(dw) > 5 else None
+    if isinstance(cw, int) and 0 < cw <= width and isinstance(ch, int) and 0 < ch <= height:
+        cx, cy = px + cw // 2, py + ch // 2
+    else:
+        cx, cy = px + 12, py + 10
+    if not is_plausible_screen_xy(cx, cy, width, height):
+        return None
+    return (px, py, cx, cy)
+
+
+def _in_left_box(px, py):
+    b = LEFT_LIST_BOX
+    return b['x0'] <= px <= b['x1'] and b['y0'] <= py <= b['y1']
+
+
+def pick_path_a_point(patha: dict, width: int, height: int):
+    """경로 A 캡처(patha.targets)에서 base 행 클릭점(client-area 픽셀)을 고른다.
+
+    다이얼로그 최초 draw 때 모든 위젯이 param_1==0xe 를 낸다. 그중 좌측 목록 박스에
+    떨어지는 위젯(=목적지 拠点 행)을 고른다. 여러 개면 y 가 가장 작은(최상단=행0) 것.
+    반환 (chosenRec, (cx,cy)) 또는 (None, None). 좌표는 엔진 draw 출력 그대로.
+    """
+    targets = (patha or {}).get('targets') or []
+    left_candidates = []
+    for tgt in targets:
+        # first draw 좌표를 우선(초기 레이아웃), 없으면 last.
+        for which in ('first', 'last'):
+            rec = (tgt or {}).get(which)
+            pt = _rec_point(rec, width, height)
+            if pt is None:
+                continue
+            px, py, cx, cy = pt
+            if _in_left_box(px, py):
+                left_candidates.append((py, px, cx, cy, tgt.get('target'), tgt.get('count')))
+            break
+    if left_candidates:
+        left_candidates.sort()  # 최상단(y 최소) 행
+        py, px, cx, cy, tgtptr, cnt = left_candidates[0]
+        return ({'target': tgtptr, 'x': px, 'y': py, 'count': cnt, 'source': 'left-box'},
+                (cx, cy))
+    return (None, None)
 
 
 def main():
@@ -418,6 +479,10 @@ def main():
                 return 0
             ox, oy, width, height = client_geometry(hwnd)
             rx, ry = scale(STRATEGY_REF, row_point, width, height)
+            # 경로 A 를 다이얼로그가 열리기 직전에 무장한다. 拠点 SelectDialog 가 활성화되며
+            # 최초 draw 될 때 모든 위젯(좌측 목록 행 포함)이 param_1==0xe 를 낸다 — 그 초기
+            # draw 를 잡아야 좌측 행 좌표가 나온다(idle 프레임엔 우측 grid 만 다시 그려짐).
+            script.exports_sync.armpatha()
             foreground(hwnd)
             mouse_click(ox + rx, oy + ry)
             time.sleep(2.0)
@@ -456,23 +521,72 @@ def main():
                 json.dumps(spot, ensure_ascii=False, indent=2), encoding='utf-8')
 
             ox, oy, width, height = client_geometry(hwnd)
-            try:
-                resolved = resolve_base_row_click(spot, TARGET_BASE_ID, width, height)
-            except SpotRowUnresolved as exc:
+
+            # ----- 경로 A: FUN_005015f0 경계 훅으로 행 draw-time 좌표 캡처 -----
+            # 정적 원점(resolve_base_row_click)은 구조적으로 실패한다(rect 는 메모리에 없음).
+            # 훅은 STEP C 에서 다이얼로그 열기 직전에 이미 무장됐다. 여기서는 최초 draw 로
+            # 채워진 타깃별 좌표(patha.targets)를 읽어, 좌측 목록 박스에 떨어지는 위젯(=행)을
+            # 고른다. 좌표는 엔진 draw 출력 그대로(scale 금지).
+            path_a = {'gridRect': None, 'targets': []}
+            capture_deadline = time.monotonic() + 5
+            best = (None, None)
+            while time.monotonic() < capture_deadline and client.poll() is None:
+                foreground(hwnd)
+                time.sleep(0.4)
+                path_a = script.exports_sync.patha()
+                best = pick_path_a_point(path_a, width, height)
+                if best[1] is not None:
+                    break
+            script.exports_sync.disarmpatha()
+            rec, point = best
+            (evdir / 'path-a-capture.json').write_text(json.dumps({
+                'armed': path_a.get('armed') if isinstance(path_a, dict) else None,
+                'spotActive': (path_a or {}).get('spotActive'),
+                'gridRect': (path_a or {}).get('gridRect'),
+                'targetCount': len((path_a or {}).get('targets') or []),
+                'targets': (path_a or {}).get('targets'),
+                'chosenRec': rec, 'clickPointClientPx': point,
+                'clientOrigin': [ox, oy], 'clientSize': [width, height],
+            }, ensure_ascii=False, indent=2), encoding='utf-8')
+
+            path_b_enabled = os.environ.get('LOGH_B71_PATH_B') == '1'
+            click_screen = None
+            if point is not None:
+                # 경로 A 좌표는 이미 client-area 픽셀 — scale() 금지. 창 원점만 더한다.
+                resolved = {'point': list(point), 'source': 'pathA',
+                            'chosenRec': rec, 'rowIndex': 0, 'baseId': TARGET_BASE_ID}
+                dx, dy = point
+                foreground(hwnd)
+                mouse_click(ox + dx, oy + dy)
+                click_screen = [ox + dx, oy + dy]
+            elif path_b_enabled:
+                # 경로 A 3회 실패 → 경로 B: FUN_00576d40(0) 인덱스 직접 선택(決定 미포함).
+                pb_arm = script.exports_sync.selectbaseb(0)
+                pb_res = None
+                pb_deadline = time.monotonic() + 6
+                while time.monotonic() < pb_deadline and client.poll() is None:
+                    time.sleep(0.4)
+                    pb_res = script.exports_sync.selectbasebresult()
+                    if pb_res is not None:
+                        break
+                (evdir / 'path-b-select.json').write_text(json.dumps({
+                    'arm': pb_arm, 'result': pb_res,
+                }, ensure_ascii=False, indent=2), encoding='utf-8')
+                resolved = {'source': 'pathB', 'index': 0, 'baseId': TARGET_BASE_ID,
+                            'pbOk': (pb_res or {}).get('ok'),
+                            'selectedAfter': (pb_res or {}).get('selectedAfter')}
+            else:
                 (evdir / 'step-d-base-row.json').write_text(json.dumps({
-                    'success': False, 'reason': exc.reason, 'detail': exc.detail,
+                    'success': False, 'reason': 'path-a-no-left-row-coordinate',
+                    'gridRect': (path_a or {}).get('gridRect'),
+                    'targetCount': len((path_a or {}).get('targets') or []),
                     'itemCount': spot.get('itemCount8e4'),
                     'rowBaseIds': [(r or {}).get('baseIdAt08') for r in (spot.get('rows') or [])],
-                    'originCandidates': spot.get('originCandidates'),
-                    'rowGeometry': spot.get('rowGeometry'),
+                    'why': '경로 A 가 좌측 목록 박스 안에서 타당한 draw 좌표를 못 냈다',
                 }, ensure_ascii=False, indent=2), encoding='utf-8')
                 steps.append(('base-row-70', False))
-                raise RuntimeError(f'base row click point unresolved: {exc.reason}')
+                raise RuntimeError('path A produced no plausible left-row coordinate')
 
-            bx, by = resolved['point']
-            dx, dy = scale(STRATEGY_REF, (bx, by), width, height)
-            foreground(hwnd)
-            mouse_click(ox + dx, oy + dy)
             base_after = base_before
             selected_base = None
             sel_deadline = time.monotonic() + 5
@@ -487,7 +601,7 @@ def main():
             v_base = b71_verdict(base_after)
             (evdir / 'step-d-base-row.json').write_text(json.dumps({
                 'success': v_base.get('selectedBaseId') == TARGET_BASE_ID,
-                'resolved': resolved, 'screen': [ox + dx, oy + dy],
+                'resolved': resolved, 'screen': click_screen,
                 'itemCount': spot.get('itemCount8e4'),
                 'selectedBaseIdAfter': v_base.get('selectedBaseId'),
                 'phase0SeenAfter': v_base.get('phase0Seen'),
