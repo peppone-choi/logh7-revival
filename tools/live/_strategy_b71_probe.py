@@ -479,10 +479,8 @@ def main():
                 return 0
             ox, oy, width, height = client_geometry(hwnd)
             rx, ry = scale(STRATEGY_REF, row_point, width, height)
-            # 경로 A 를 다이얼로그가 열리기 직전에 무장한다. 拠点 SelectDialog 가 활성화되며
-            # 최초 draw 될 때 모든 위젯(좌측 목록 행 포함)이 param_1==0xe 를 낸다 — 그 초기
-            # draw 를 잡아야 좌측 행 좌표가 나온다(idle 프레임엔 우측 grid 만 다시 그려짐).
-            script.exports_sync.armpatha()
+            # 拠点 SelectDialog 를 연다. (B81: 행 좌표는 draw-time 훅 캡처가 아니라 고정모달
+            # 상수로 STEP D 에서 결정적으로 계산하므로 경로 A 무장은 더 이상 하지 않는다.)
             foreground(hwnd)
             mouse_click(ox + rx, oy + ry)
             time.sleep(2.0)
@@ -493,99 +491,87 @@ def main():
             steps.append(('factory-0x2d', True))
             screenshot(hwnd, shots / '06-factory-0x2d-after.png')
 
-            # ===== STEP D: kind5 SelectDialog 좌측 拠点 목록에서 base 70(ヴァルハラ) 행 자연 클릭 =====
+            # ===== STEP D: kind5 SelectDialog 좌측 拠点 목록에서 base 70 결정적 첫행 클릭 =====
             # 상세가 렌더되는 지점까지만 — 決定/取消し(최종 이동 확정) 버튼은 누르지 않는다.
-            # 결함 B 수정: 행 좌표를 클라 메모리 기하에서 결정적으로 계산한다.
-            # 과거: B73 은 화면 좌표 세로 스윕(카메라가 세션마다 움직여 무의미),
-            #       B74 는 tracer 의 parentOrigin 을 검증 없이 믿었는데 그 값은 포인터
-            #       쓰레기값(322313472, 322290148)이라 화면 밖을 클릭했다 → 둘 다 실패.
-            # 이제: 행 인덱스는 목록 데이터(baseIdAt08)로 매칭하고, 원점은 plausible 한
-            #       후보만 쓰며, 좌표를 못 만들면 좌표를 지어내지 않고 fail-closed 한다.
+            #
+            # B81(2026-07-14) 접근 전환. 행 rect 를 메모리 기하에서 유도하는 경로 A/B 는
+            # 구조적으로 실패한다: 정적 RE 확정으로 행 rect 는 메모리에 없고 draw-time 계산이며
+            # (docs/logh7-spot-select-dialog-row-re-2026-07-14.md), 경로 A(FUN_005015f0 0xe)는
+            # 좌측 목록이 아니라 우측 상세 grid 를 짚고, 경로 B(FUN_00576d40 인덱스선택)는
+            # parent+0xb2c 를 갱신하지 않아 031e 를 발행하지 않는 불완전 선택이다(B80 확정:
+            # selectedAfter=0 인데 selectedBaseId=null, phase0Seen=false).
+            #
+            # 그러나 拠点 SelectDialog 는 고정 해상도(1028×772) 고정위치 모달이다 — 카메라가
+            # 움직이는 것은 맵의 별이지 이 모달이 아니다. 첫 행의 화면 위치는 화면 상수이며
+            # B71 run8 이 자연 클릭으로 실측 검증했다: baseReferencePoint(client-px)=[296,222],
+            # selectedBaseId=70, phase0/phase1/renderer 발화
+            # (.omo/live-qa/m3-system-output-B71-captain-0x2d-natural-20260713-run8/step-d-base-row.json).
+            # 따라서 목표 base 가 목록에 실재함을 tracer 로 확인한 뒤(fail-closed), 그 base 의
+            # 리스트 인덱스 i 위치를 고정 UI 상수로 클릭한다. 좌표 날조가 아니라 고정모달 상수다.
+
+            # 전제조건을 짧게 폴링해 확정한다(다이얼로그 population race 방지).
+            # panelKind5(SelectDialog 열림) ∧ itemCount>=1 ∧ 목표 base 가 rowBaseIds 에 존재.
+            spot = {}
             base_before = script.exports_sync.snapshot()
+            precond_ok = False
+            target_index = None
+            row_base_ids = []
+            precond_deadline = time.monotonic() + 6
+            while time.monotonic() < precond_deadline and client.poll() is None:
+                base_before = script.exports_sync.snapshot()
+                v_pre = b71_verdict(base_before)
+                spot = base_before.get('spotDialogList') or {}
+                item_count = spot.get('itemCount8e4')
+                row_base_ids = [(r or {}).get('baseIdAt08') for r in (spot.get('rows') or [])]
+                if (v_pre.get('panelKind5') and isinstance(item_count, int) and item_count >= 1
+                        and TARGET_BASE_ID in row_base_ids):
+                    target_index = row_base_ids.index(TARGET_BASE_ID)
+                    precond_ok = True
+                    break
+                time.sleep(0.4)
             append_snapshot(snapshots, 'base-row-before', base_before)
             screenshot(hwnd, shots / '06b-base-row-before.png')
-            spot = base_before.get('spotDialogList') or {}
-
-            # 행 기하 확정 소스가 아직 없다(행 rect 는 draw 시점 계산). tracer 가 rowGeometry.rowHeight
-            # 를 못 채우면 기본은 fail-closed. 가설 검증용 주입만 LOGH_B71_ROW_GEOMETRY 로 허용한다.
-            raw_geom = os.environ.get('LOGH_B71_ROW_GEOMETRY', '').strip()
-            if raw_geom:
-                try:
-                    gh, gt, gw = (int(v) for v in raw_geom.split(','))
-                    spot = dict(spot)
-                    spot['rowGeometry'] = {'rowHeight': gh, 'rowTop': gt, 'rowWidth': gw,
-                                           'source': 'LOGH_B71_ROW_GEOMETRY'}
-                except ValueError:
-                    pass
             (evdir / 'spot-dialog-list.json').write_text(
                 json.dumps(spot, ensure_ascii=False, indent=2), encoding='utf-8')
 
             ox, oy, width, height = client_geometry(hwnd)
-
-            # ----- 경로 A: FUN_005015f0 경계 훅으로 행 draw-time 좌표 캡처 -----
-            # 정적 원점(resolve_base_row_click)은 구조적으로 실패한다(rect 는 메모리에 없음).
-            # 훅은 STEP C 에서 다이얼로그 열기 직전에 이미 무장됐다. 여기서는 최초 draw 로
-            # 채워진 타깃별 좌표(patha.targets)를 읽어, 좌측 목록 박스에 떨어지는 위젯(=행)을
-            # 고른다. 좌표는 엔진 draw 출력 그대로(scale 금지).
-            path_a = {'gridRect': None, 'targets': []}
-            capture_deadline = time.monotonic() + 5
-            best = (None, None)
-            while time.monotonic() < capture_deadline and client.poll() is None:
-                foreground(hwnd)
-                time.sleep(0.4)
-                path_a = script.exports_sync.patha()
-                best = pick_path_a_point(path_a, width, height)
-                if best[1] is not None:
-                    break
-            script.exports_sync.disarmpatha()
-            rec, point = best
-            (evdir / 'path-a-capture.json').write_text(json.dumps({
-                'armed': path_a.get('armed') if isinstance(path_a, dict) else None,
-                'spotActive': (path_a or {}).get('spotActive'),
-                'gridRect': (path_a or {}).get('gridRect'),
-                'targetCount': len((path_a or {}).get('targets') or []),
-                'targets': (path_a or {}).get('targets'),
-                'chosenRec': rec, 'clickPointClientPx': point,
-                'clientOrigin': [ox, oy], 'clientSize': [width, height],
-            }, ensure_ascii=False, indent=2), encoding='utf-8')
-
-            path_b_enabled = os.environ.get('LOGH_B71_PATH_B') == '1'
-            click_screen = None
-            if point is not None:
-                # 경로 A 좌표는 이미 client-area 픽셀 — scale() 금지. 창 원점만 더한다.
-                resolved = {'point': list(point), 'source': 'pathA',
-                            'chosenRec': rec, 'rowIndex': 0, 'baseId': TARGET_BASE_ID}
-                dx, dy = point
-                foreground(hwnd)
-                mouse_click(ox + dx, oy + dy)
-                click_screen = [ox + dx, oy + dy]
-            elif path_b_enabled:
-                # 경로 A 3회 실패 → 경로 B: FUN_00576d40(0) 인덱스 직접 선택(決定 미포함).
-                pb_arm = script.exports_sync.selectbaseb(0)
-                pb_res = None
-                pb_deadline = time.monotonic() + 6
-                while time.monotonic() < pb_deadline and client.poll() is None:
-                    time.sleep(0.4)
-                    pb_res = script.exports_sync.selectbasebresult()
-                    if pb_res is not None:
-                        break
-                (evdir / 'path-b-select.json').write_text(json.dumps({
-                    'arm': pb_arm, 'result': pb_res,
-                }, ensure_ascii=False, indent=2), encoding='utf-8')
-                resolved = {'source': 'pathB', 'index': 0, 'baseId': TARGET_BASE_ID,
-                            'pbOk': (pb_res or {}).get('ok'),
-                            'selectedAfter': (pb_res or {}).get('selectedAfter')}
-            else:
+            if not precond_ok:
+                # fail-closed: SelectDialog 가 안 열렸거나 목표 base 가 목록에 없다. 좌표를
+                # 지어내 클릭하지 않는다 — 목표가 리스트에 실재해야만 첫행을 클릭한다.
                 (evdir / 'step-d-base-row.json').write_text(json.dumps({
-                    'success': False, 'reason': 'path-a-no-left-row-coordinate',
-                    'gridRect': (path_a or {}).get('gridRect'),
-                    'targetCount': len((path_a or {}).get('targets') or []),
+                    'success': False, 'reason': 'precondition-not-met',
+                    'panelKind5': b71_verdict(base_before).get('panelKind5'),
                     'itemCount': spot.get('itemCount8e4'),
-                    'rowBaseIds': [(r or {}).get('baseIdAt08') for r in (spot.get('rows') or [])],
-                    'why': '경로 A 가 좌측 목록 박스 안에서 타당한 draw 좌표를 못 냈다',
+                    'rowBaseIds': row_base_ids, 'targetBaseId': TARGET_BASE_ID,
+                    'why': 'panelKind5 ∧ itemCount>=1 ∧ target∈rowBaseIds 중 하나 미충족',
                 }, ensure_ascii=False, indent=2), encoding='utf-8')
                 steps.append(('base-row-70', False))
-                raise RuntimeError('path A produced no plausible left-row coordinate')
+                raise RuntimeError(
+                    f'SelectDialog precondition failed (panelKind5='
+                    f'{b71_verdict(base_before).get("panelKind5")}, itemCount='
+                    f'{spot.get("itemCount8e4")}, rowBaseIds={row_base_ids})')
+
+            # 고정 모달 첫행 상수(client-area px). LEFT_LIST_BOX(실측 B80 run1): x0=168, x1=420,
+            # y0=195. 가로 중앙 = (168+420)//2 = 294. 행높이 = 50: B71 run8 역산 —
+            # 첫 행(i=0) 중심 y≈220, y0=195 → 반행높이≈25 → 행높이≈50. 인덱스 i 행 중심:
+            #   y = y0 + ROW_HEIGHT*(i+0.5).  base 70 은 i=0 이므로 y = 195 + 25 = 220,
+            #   x = 294 → B71 run8 실측점 client-px[296,222] 와 같은 행 0(오차 2px, 행높이 50).
+            ROW_HEIGHT = 50
+            client_x = (LEFT_LIST_BOX['x0'] + LEFT_LIST_BOX['x1']) // 2
+            client_y = int(round(LEFT_LIST_BOX['y0'] + ROW_HEIGHT * (target_index + 0.5)))
+            b71_match = (target_index == 0 and client_x == 294 and client_y == 220)
+
+            resolved = {
+                'source': 'deterministic-first-row', 'rowIndex': target_index,
+                'baseId': TARGET_BASE_ID, 'clientPoint': [client_x, client_y],
+                'rowHeight': ROW_HEIGHT, 'leftListBox': LEFT_LIST_BOX,
+                'rowBaseIds': row_base_ids, 'matchesB71ClientPoint294_220': b71_match,
+            }
+            # click_guarded 는 화면(screen) 좌표를 받는다 — 창 원점을 더한다. occlusion 가드 통과.
+            click_screen = [ox + client_x, oy + client_y]
+            resolved['clickGuarded'] = click_guarded(
+                hwnd, ox + client_x, oy + client_y, label='base-row-70')
+            time.sleep(1.5)
 
             base_after = base_before
             selected_base = None
