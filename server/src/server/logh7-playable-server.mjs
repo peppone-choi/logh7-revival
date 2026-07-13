@@ -659,6 +659,8 @@ export function createPlayableServer({
                 configuredFallback: result.configuredFallback ?? null,
                 unresolved: result.unresolved ?? null,
                 textLength: typeof result.text === 'string' ? result.text.length : null,
+                // 핸들러가 실은 원시 바이트/디코드 관측치(0x0326 레이아웃 판별용)를 stdout 트레이스로 낸다.
+                debug: result.debug ?? null,
               });
             } else {
               // 로비 캐릭터 라우터 (0x1000/0x2003/0x2005/0x1008 등)

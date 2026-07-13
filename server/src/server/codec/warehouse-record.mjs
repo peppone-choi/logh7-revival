@@ -3,6 +3,7 @@
 // 0x300바이트 native cache의 별도 offset에 저장한다. 따라서 wire에는 cache padding을 쓰지 않는다.
 
 export const REQ_INFO_WAREHOUSE_CODE = 0x0326;
+// 0030-decoded innerLen=10 은 inner 전체(코드 2B + body 8B)다 → 요청 body 는 8바이트.
 export const REQ_INFO_WAREHOUSE_BODY_BYTES = 0x08;
 export const RESP_INFO_WAREHOUSE_CODE = 0x0327;
 export const RESP_INFO_WAREHOUSE_BODY_BYTES = 0x300;
@@ -31,7 +32,8 @@ function writeU32(body, cursor, value) {
 }
 
 /**
- * 클라이언트 송신 serializer(0x40c2d0)의 정확한 두 필드 요청을 읽는다.
+ * 클라이언트 송신 serializer(0x40c2d0)의 8바이트 요청 body를 읽는다.
+ * 라이브 run7 관측(0030-decoded innerLen=10): 요청 body는 8바이트, base는 오프셋 0의 u32BE.
  * raw/message32/body-only 외의 길이는 selector alias를 막기 위해 fail-closed 한다.
  */
 export function decodeRequestInformationWarehouse(input) {
@@ -53,9 +55,13 @@ export function decodeRequestInformationWarehouse(input) {
   } else {
     return null;
   }
+  const body = buf.subarray(bodyOffset, bodyOffset + REQ_INFO_WAREHOUSE_BODY_BYTES);
   return {
-    base: buf.readUInt32LE(bodyOffset),
-    outfit: buf.readUInt32LE(bodyOffset + 4),
+    // base: 오프셋 0의 u32BE. run7 라이브 관측에서 u32BE 읽기만이 catalog 조인에 성공(base=70).
+    // outfit: 같은 wire record에서 base가 BE이므로 outfit도 BE가 맞다 (실측 바이트 0x00는 엔디안 구분 불가, 일관성 근거).
+    base: body.readUInt32BE(0),
+    outfit: body.readUInt32BE(4),
+    bodyHex: body.toString('hex'),
   };
 }
 

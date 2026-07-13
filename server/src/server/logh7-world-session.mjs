@@ -523,18 +523,28 @@ export function createWorldSession({
       };
     }
 
-    // 0x0326은 송신 serializer(0x40c2d0)가 base/outfit 두 u32LE를 정확히 8바이트로 보낸다.
+    // 0x0326 요청 body는 8바이트다(0030-decoded innerLen=10 = 코드 2B + body 8B).
+    // base 오프셋/엔디안 확정: u32BE@0 (run7 라이브 관측).
     // 선택 base가 정적 catalog에 있을 때만 조인하고, 재고 정본이 없으므로 base 외 값은 P3 0/empty다.
-    // malformed/unknown selector도 player cell로 대체하지 않고 빈 0x0327 하나로 ring을 닫는다.
+    // malformed 요청은 player cell로 alias하지 않고 빈 0x0327 하나로 ring을 닫는다.
     if (code === CODE_REQ_INFORMATION_WAREHOUSE) {
       const request = decodeRequestInformationWarehouse(rawForDecode);
+      // 0x031e와 같은 매칭 함수(findStaticBase: id 우선, 없으면 grid cell).
       const selected = request ? findStaticBase({ systemId: request.base }) : null;
       const response = buildResponseInformationWarehouseInner(selected ? { base: selected.id } : {});
+
       return {
         kind: 'admission',
         reqCode: code,
         respCode: readMsg32Code(response),
         responses: [{ targets: [connectionId], inner: response, isMsg32: true }],
+        debug: {
+          reqInnerHex: rawForDecode.toString('hex'),
+          reqBodyHex: request ? request.bodyHex : null,
+          decodeStatus: request ? 'ok' : 'fail-closed',
+          selectedBaseId: selected ? selected.id : null,
+          respBodyHex16: response.subarray(6, 22).toString('hex'),
+        },
       };
     }
 

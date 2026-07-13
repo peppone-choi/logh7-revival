@@ -161,32 +161,66 @@ test('0x0327 codec caps arrays and saturates scalar fields without wrapping', ()
   assert.equal(decoded.mineral, 4);
 });
 
-test('0x0326 decoder accepts only the exact two-u32 little-endian request shape', () => {
+// 0x0326 요청 body는 8바이트다(라이브 0030-decoded innerLen=10 = 코드 2B + body 8B).
+// 라이브 run7 실측 바이트: base는 오프셋 0의 u32BE, outfit도 BE.
+const REQ_BODY_8B = Buffer.from('0000004600000000', 'hex'); // base=70, outfit=0
+const EXPECTED_8B = {
+  base: 70, // u32BE @0 — run7 라이브 관측에서 catalog 조인 성공
+  outfit: 0, // u32BE @4
+  bodyHex: '0000004600000000',
+};
+
+test('0x0326 decoder reads the 8-byte body as BE and decodes to base=70', () => {
+  // raw envelope: 0x0326 opcode + 8-byte body
   const raw = Buffer.alloc(10);
   raw.writeUInt16BE(REQ_INFO_WAREHOUSE_CODE, 0);
-  raw.writeUInt32LE(70, 2);
-  raw.writeUInt32LE(9, 6);
-  assert.deepEqual(decodeRequestInformationWarehouse(raw), { base: 70, outfit: 9 });
+  REQ_BODY_8B.copy(raw, 2);
+  assert.deepEqual(decodeRequestInformationWarehouse(raw), EXPECTED_8B);
 
+  // message32 envelope: [u32 0][u16 0x0326] + 8-byte body
   const message32 = Buffer.alloc(14);
   message32.writeUInt32LE(0, 0);
   message32.writeUInt16BE(REQ_INFO_WAREHOUSE_CODE, 4);
-  message32.writeUInt32LE(70, 6);
-  message32.writeUInt32LE(9, 10);
-  assert.deepEqual(decodeRequestInformationWarehouse(message32), { base: 70, outfit: 9 });
+  REQ_BODY_8B.copy(message32, 6);
+  assert.deepEqual(decodeRequestInformationWarehouse(message32), EXPECTED_8B);
 
-  const bodyOnly = Buffer.alloc(8);
-  bodyOnly.writeUInt32LE(70, 0);
-  bodyOnly.writeUInt32LE(9, 4);
-  assert.deepEqual(decodeRequestInformationWarehouse(bodyOnly), { base: 70, outfit: 9 });
+  // body-only: 8-byte body without envelope
+  assert.deepEqual(decodeRequestInformationWarehouse(REQ_BODY_8B), EXPECTED_8B);
+});
 
-  assert.equal(decodeRequestInformationWarehouse(raw.subarray(0, 9)), null, 'truncated request');
-  assert.equal(decodeRequestInformationWarehouse(raw.subarray(0, 8)), null,
-    'truncated raw envelope cannot alias the eight-byte body-only diagnostic shape');
+test('0x0326 decoder fail-closed on any body length other than 8', () => {
+  const raw = Buffer.alloc(10);
+  raw.writeUInt16BE(REQ_INFO_WAREHOUSE_CODE, 0);
+  REQ_BODY_8B.copy(raw, 2);
+
+  // 7바이트 body(raw 9B / body-only 7B)
+  assert.equal(decodeRequestInformationWarehouse(raw.subarray(0, 9)), null, '7-byte body under raw envelope');
+  assert.equal(decodeRequestInformationWarehouse(REQ_BODY_8B.subarray(0, 7)), null, '7-byte body-only');
+
+  // 10바이트 body(직전 count-prefixed 가설) — 되살아나면 안 된다
+  const raw10 = Buffer.alloc(12);
+  raw10.writeUInt16BE(REQ_INFO_WAREHOUSE_CODE, 0);
+  raw10.writeUInt16BE(1, 2);
+  raw10.writeUInt32LE(70, 4);
+  raw10.writeUInt32LE(9, 8);
+  assert.equal(decodeRequestInformationWarehouse(raw10), null, '10-byte body under raw envelope');
+  assert.equal(decodeRequestInformationWarehouse(raw10.subarray(2)), null, '10-byte body-only');
+
+  // trailing byte / 잘린 message32 / 잘못된 opcode
   assert.equal(decodeRequestInformationWarehouse(Buffer.concat([raw, Buffer.from([0])])), null, 'trailing byte');
-  assert.equal(decodeRequestInformationWarehouse(message32.subarray(0, 8)), null,
-    'truncated message32 envelope cannot alias the eight-byte body-only diagnostic shape');
+  const message32 = Buffer.alloc(14);
+  message32.writeUInt32LE(0, 0);
+  message32.writeUInt16BE(REQ_INFO_WAREHOUSE_CODE, 4);
+  REQ_BODY_8B.copy(message32, 6);
+  assert.equal(decodeRequestInformationWarehouse(message32.subarray(0, 13)), null, 'truncated message32 envelope');
   const wrongCode = Buffer.from(raw);
   wrongCode.writeUInt16BE(0x0328, 0);
   assert.equal(decodeRequestInformationWarehouse(wrongCode), null, 'wrong opcode');
+});
+
+test('0x0326 decoder fail-closed with malformed/truncated request without player cell fallback', () => {
+  // This matches the world-session behavior: malformed requests are not substituted with player cell
+  assert.equal(decodeRequestInformationWarehouse(Buffer.alloc(0)), null, 'empty request');
+  assert.equal(decodeRequestInformationWarehouse(Buffer.from([0x03, 0x26])), null, 'opcode-only');
+  assert.equal(decodeRequestInformationWarehouse(Buffer.from([0x03, 0x26, 0x00, 0x01])), null, 'missing base/outfit');
 });

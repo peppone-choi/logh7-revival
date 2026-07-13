@@ -596,10 +596,10 @@ test('0x0320 returns a fixed 0x0321 for the same base with no fabricated facilit
 test('0x0326 returns one fixed 0x0327 for explicit base 70 with P3 zero/empty stock', () => {
   const world = createWorldSession();
   world.seedPlayer({ connectionId: 1, characterId: 5, unitId: 8, cell: 2588, inWorld: true });
-  const request = Buffer.alloc(10);
+  const request = Buffer.alloc(10); // raw envelope: 0x0326 (2) + body (8)
   request.writeUInt16BE(0x0326, 0);
-  request.writeUInt32LE(70, 2);
-  request.writeUInt32LE(0, 6);
+  request.writeUInt32BE(70, 2); // base (u32BE @0 of body)
+  request.writeUInt32BE(0, 6);  // outfit
 
   const result = world.handleWorldInner({ connectionId: 1, accountId: 'a', inner: request });
   assert.ok(result, '0x0326 must route to the world session');
@@ -611,29 +611,72 @@ test('0x0326 returns one fixed 0x0327 for explicit base 70 with P3 zero/empty st
   assert.ok(body.subarray(4).every((byte) => byte === 0), 'unproven warehouse stock stays zero/empty');
 });
 
+// 0x0326 요청 body: base 오프셋 0의 u32BE (run7 라이브 관측 확정).
+// 핸들러가 debug를 result에 실어 회귀 판별에 필요한 최소 필드를 남긴다.
+test('0x0326 result carries the raw bytes and diagnostic fields for verification', () => {
+  const world = createWorldSession();
+  world.seedPlayer({ connectionId: 1, characterId: 5, unitId: 8, cell: 2588, inWorld: true });
+  const request = Buffer.alloc(10);
+  request.writeUInt16BE(0x0326, 0);
+  request.writeUInt32BE(70, 2); // base (u32BE)
+  request.writeUInt32BE(0, 6);  // outfit (u32BE)
+
+  const { debug } = world.handleWorldInner({ connectionId: 1, accountId: 'a', inner: request });
+  assert.ok(debug, '0x0326 must expose diagnostic info on the result');
+  assert.equal(debug.decodeStatus, 'ok');
+  assert.equal(debug.reqInnerHex, request.toString('hex'), 'full inner hex is traced');
+  assert.equal(debug.reqBodyHex, '0000004600000000', 'the 8-byte request body is traced (base=70 u32BE)');
+  assert.equal(debug.selectedBaseId, 70, 'catalog join confirms base 70');
+  assert.equal(debug.respBodyHex16.slice(0, 8), '00000046', '0x0327 response body starts with base as u32BE');
+
+  const failClosed = world.handleWorldInner({
+    connectionId: 1,
+    accountId: 'a',
+    inner: Buffer.from([0x03, 0x26, 0x00]),
+  });
+  assert.equal(failClosed.debug.decodeStatus, 'fail-closed');
+  assert.equal(failClosed.debug.reqBodyHex, null);
+});
+
 test('0x0326 invalid or malformed selectors fail closed without player-cell fallback', () => {
   const world = createWorldSession();
   world.seedPlayer({ connectionId: 1, characterId: 5, unitId: 8, cell: 2588, inWorld: true });
   const requests = [];
 
+  // unknown base (0x7fffffff not in catalog, no fallback to player cell)
   const unknown = Buffer.alloc(10);
   unknown.writeUInt16BE(0x0326, 0);
-  unknown.writeUInt32LE(0x7fffffff, 2);
+  unknown.writeUInt32BE(0x7fffffff, 2);
+  unknown.writeUInt32BE(0, 6);
   requests.push(unknown);
 
-  const bigEndianAlias = Buffer.alloc(10);
-  bigEndianAlias.writeUInt16BE(0x0326, 0);
-  bigEndianAlias.writeUInt32BE(70, 2);
-  requests.push(bigEndianAlias);
+  // little-endian base (wrong endian, should fail the join not fall back)
+  const littleEndianAlias = Buffer.alloc(10);
+  littleEndianAlias.writeUInt16BE(0x0326, 0);
+  littleEndianAlias.writeUInt32LE(70, 2); // WRONG: join reads BE
+  littleEndianAlias.writeUInt32BE(0, 6);
+  requests.push(littleEndianAlias);
 
-  const truncated = Buffer.alloc(6);
+  // count-prefixed 10-byte body (직전 가설) — 되살아나면 안 된다
+  const countPrefixed = Buffer.alloc(12);
+  countPrefixed.writeUInt16BE(0x0326, 0);
+  countPrefixed.writeUInt16BE(1, 2);
+  countPrefixed.writeUInt32BE(70, 4);
+  countPrefixed.writeUInt32BE(0, 8);
+  requests.push(countPrefixed);
+
+  // truncated (missing outfit → 7-byte body)
+  const truncated = Buffer.alloc(9);
   truncated.writeUInt16BE(0x0326, 0);
-  truncated.writeUInt32LE(70, 2);
+  truncated.writeUInt32BE(70, 2);
   requests.push(truncated);
 
+  // trailing byte
   const trailing = Buffer.alloc(11);
   trailing.writeUInt16BE(0x0326, 0);
-  trailing.writeUInt32LE(70, 2);
+  trailing.writeUInt32BE(70, 2);
+  trailing.writeUInt32BE(0, 6);
+  // trailing[10] is uninitialized (0)
   requests.push(trailing);
 
   for (const request of requests) {
@@ -649,11 +692,11 @@ test('0x0326 invalid or malformed selectors fail closed without player-cell fall
 test('0x0326 message32 requests remain one-request/one-response across duplicate refreshes', () => {
   const world = createWorldSession();
   world.seedPlayer({ connectionId: 1, characterId: 5, unitId: 8, cell: 2588, inWorld: true });
-  const request = Buffer.alloc(14);
+  const request = Buffer.alloc(14); // message32 envelope (6) + body (8)
   request.writeUInt32LE(0, 0);
   request.writeUInt16BE(0x0326, 4);
-  request.writeUInt32LE(70, 6);
-  request.writeUInt32LE(0, 10);
+  request.writeUInt32BE(70, 6); // base
+  request.writeUInt32BE(0, 10); // outfit
 
   for (let attempt = 0; attempt < 2; attempt += 1) {
     const result = world.handleWorldInner({ connectionId: 1, accountId: 'a', inner: request });
@@ -671,10 +714,10 @@ test('base detail refresh preserves the client singleton-cache response order th
     request.writeUInt32LE(70, 4);
     return request;
   });
-  const warehouse = Buffer.alloc(10);
+  const warehouse = Buffer.alloc(10); // raw envelope: 0x0326 (2) + body (8)
   warehouse.writeUInt16BE(0x0326, 0);
-  warehouse.writeUInt32LE(70, 2);
-  warehouse.writeUInt32LE(0, 6);
+  warehouse.writeUInt32BE(70, 2); // base
+  warehouse.writeUInt32BE(0, 6);  // outfit
   requests.push(warehouse);
 
   const codes = requests.flatMap((inner) => (
