@@ -1091,7 +1091,8 @@ export const ADMISSION_WALKER_REQ_RESP = Object.freeze({
  *     오승격 적발(loop-state journal). render-contract 는 라이브 관측(P1/P2)만 기록·레이아웃 없음.
  *   0x0f04→0x0f05 / 0x0f08→0x0f09: UI 아이콘 트리거(부트스트랩 아님)·트리 내 빌더/포맷 없음.
  *   0x0322→0x0323 / 0x034e→0x034f: 월드 진입 후 메뉴 PULL 리드(NOW LOADING 정지 경로 아님).
- *   0x033b: 후속 base 패널 요청 — 현재 리셋 트리에 빌더 없음.
+ *   0x033a→0x033b: 전술 함선 상태 빌더는 codec/tactical-position-records.mjs에 복원됐지만,
+ *     권위 battle state와 세션 라우팅이 없으므로 여기서 자동 응답하지 않는다.
  */
 const ADMISSION_DEDICATED_BUILDERS = Object.freeze({
   // 0x0312 → 0x0313: 빈 팔레트(count=0) 대신 최소 유효 섹터그리드 타입(플라스마 폭풍/공간/항행불능,
