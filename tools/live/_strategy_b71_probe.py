@@ -602,6 +602,11 @@ def main():
             verdict = b71_verdict(final_snap)
             idx = 0
             phase1_shot = False
+            # B82: phase1(0326→0327) 발화 직후 창고 캐시(clientBase+0x3e098c)를
+            # 순수 메모리 읽기(warehouse export)로 덤프한다. 첫 phase1 시점과 이후
+            # 안정화 시점을 모두 수집해 값이 정착했는지 본다. env 게이트로만 켠다.
+            warehouse_dump_enabled = os.environ.get('LOGH_B82_WAREHOUSE_DUMP') == '1'
+            warehouse_dumps = []
             while time.monotonic() < verdict_deadline and client.poll() is None:
                 final_snap = script.exports_sync.snapshot()
                 verdict = b71_verdict(final_snap)
@@ -609,11 +614,25 @@ def main():
                 if verdict.get('phase1Seen') and not phase1_shot:
                     screenshot(hwnd, shots / '06d-phase1-rendered.png')
                     phase1_shot = True
+                if warehouse_dump_enabled and verdict.get('phase1Seen'):
+                    dump = script.exports_sync.warehouse()
+                    warehouse_dumps.append({'settleIdx': idx, 't': time.time(), 'dump': dump})
                 if verdict.get('pass'):
                     break
                 idx += 1
                 time.sleep(0.5)
             screenshot(hwnd, shots / '07-final.png')
+            if warehouse_dump_enabled:
+                # phase1 후 한 번 더 확정 덤프(안정화 후 최종값).
+                if client.poll() is None:
+                    warehouse_dumps.append({'settleIdx': 'final', 't': time.time(),
+                                            'dump': script.exports_sync.warehouse()})
+                (evdir / 'warehouse-cache-dumps.json').write_text(json.dumps({
+                    'phase1Seen': verdict.get('phase1Seen'),
+                    'markerEnv': os.environ.get('LOGH_QA_WAREHOUSE_MARKER'),
+                    'dumpCount': len(warehouse_dumps),
+                    'dumps': warehouse_dumps,
+                }, ensure_ascii=False, indent=2), encoding='utf-8')
 
             (evdir / 'b71-verdict.json').write_text(json.dumps({
                 'verdict': verdict,

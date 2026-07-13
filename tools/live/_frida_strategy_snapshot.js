@@ -3163,6 +3163,44 @@ function spotDialogListState() {
   };
 }
 
+// B82: 창고 캐시(clientBase+0x3e098c, 0x300B) 순수 메모리 읽기. 무변조.
+// 서버 마커(LOGH_QA_WAREHOUSE_MARKER=1)가 실은 값이 클라 파서가 캐시 슬롯에
+// 흩은 뒤 어느 엔디안으로 안착하는지 확정한다. raw hex 우선, BE/LE 해석 병기.
+function warehouseCacheDump() {
+  const base = clientBase();
+  if (!base || base.isNull()) return { ok: false, reason: 'client-base-unavailable' };
+  const cache = base.add(0x3e098c);
+  const be16 = (o) => readU16BE(cache.add(o));
+  const le16 = (o) => readU16(cache.add(o));
+  return {
+    ok: true,
+    clientBase: ptrHex(base),
+    cacheBase: ptrHex(cache),
+    // raw hex 우선 (판정을 raw보다 앞세우지 않는다).
+    raw: {
+      full300: readHex(cache, 0x300),
+      at0C_1: readHex(cache.add(0x0c), 1),           // 재고 엔트리 수 u8
+      at0E_8: readHex(cache.add(0x0e), 8),           // 재고 첫 스트라이드(kind/qty/boat)
+      at10_6: readHex(cache.add(0x10), 6),           // 재고 첫 스트라이드(수량 자리 포함)
+      at260_1: readHex(cache.add(0x260), 1),         // 카테고리 수 u8
+      at262_12: readHex(cache.add(0x262), 12),       // 카테고리 첫 두 엔트리(stride 6 * 2)
+      at2F4_4: readHex(cache.add(0x2f4), 4),         // 스칼라 u32
+    },
+    interp: {
+      inventoryCount0C_u8: readU8(cache.add(0x0c)),      // 기대 1
+      inventoryKind0E_be: be16(0x0e), inventoryKind0E_le: le16(0x0e),
+      inventoryQty10_u8: readU8(cache.add(0x10)),        // 기대 66 (u8이라 엔디안 무관)
+      categoryCount260_u8: readU8(cache.add(0x260)),     // 기대 2
+      cat0_tag262_be: be16(0x262), cat0_tag262_le: le16(0x262),  // 기대 0x10
+      cat0_val266_be: be16(0x266), cat0_val266_le: le16(0x266),  // 기대 100
+      cat1_tag268_be: be16(0x268), cat1_tag268_le: le16(0x268),  // 기대 0x11
+      cat1_val26c_be: be16(0x26c), cat1_val26c_le: le16(0x26c),  // 기대 200
+      scalar2F4_be: readU32BE(cache.add(0x2f4)),         // 기대 1234
+      scalar2F4_le: readU32(cache.add(0x2f4)),           // 기대 1234
+    },
+  };
+}
+
 function snapshot() {
   const base = clientBase();
   return {
@@ -3202,6 +3240,7 @@ function snapshot() {
 send({ ev: 'ready', moduleBase: ptrHex(moduleBase) });
 rpc.exports = {
   snapshot,
+  warehouse() { return warehouseCacheDump(); },
   force() { return armHudMode2Force(); },
   result() { return mode2ForceResult; },
   itick() { return armInputTick(); },
