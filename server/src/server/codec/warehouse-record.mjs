@@ -10,12 +10,49 @@ export const RESP_INFO_WAREHOUSE_BODY_BYTES = 0x300;
 export const WAREHOUSE_SHIPS_MAX = 99;
 export const WAREHOUSE_TROOPS_MAX = 24;
 
+// ── QA 마커 (제품 경로 아님) ────────────────────────────────────────────────
+// 목적: 성계 상세 renderer FUN_0057aa90(VA 0x57aa90)가 창고 캐시(base+0x3e098c, 0x300B)에서
+// 읽는 필드의 엔디안·tag 의미를 라이브 화면 관측으로 확정하기 위한 positive control.
+// 자연 데이터와 겹치지 않는 구별값을 실어 보내고, 화면 어느 자리에 뜨는지로 해석을 검증한다.
+// 반드시 환경변수 LOGH_QA_WAREHOUSE_MARKER=1 게이트 뒤에서만 동작한다. 기본은 바이트 단위로 무변경.
+export const QA_WAREHOUSE_MARKER_ENV = 'LOGH_QA_WAREHOUSE_MARKER';
+
+// 마커 값은 이전 실험/라이브 기대치와 묶여 있다. 임의로 바꾸지 말 것.
+// - 재고 합 66  : 캐시 +0xC(u8 엔트리 수) / +0x10 stride 6 / +0(u8 수량). 엔트리 1개에 66을 실어
+//                 "엔트리별 수량"으로 읽히든 "합계"로 읽히든 화면에 66이 뜨게 한다.
+// - 카테고리 tag: 캐시 +0x260(u8 카테고리 수) / +0x262 stride 6 / +0(u16 tag) / +4(u16 값).
+//                 tag 0x10 → 100, tag 0x11 → 200.
+// - 스칼라 1234 : 캐시 +0x2F4(u32).
+export const QA_WAREHOUSE_MARKER_RECORD = Object.freeze({
+  ships: Object.freeze([
+    // wire ship 엔트리 = 캐시 +0x0e{kind u16} +0x10{unitNumber u8} +0x12{boatNumber u16}.
+    // renderer가 읽는 "수량"은 +0x10 의 u8 → unitNumber 슬롯에 66.
+    Object.freeze({ kind: 1, unitNumber: 66, boatNumber: 0 }),
+  ]),
+  troops: Object.freeze([
+    // wire troop 엔트리 = 캐시 +0x262{kind u16=tag} +0x264{troopGrade u8} +0x266{unitNumber u16=값}.
+    Object.freeze({ kind: 0x10, troopGrade: 0, unitNumber: 100 }),
+    Object.freeze({ kind: 0x11, troopGrade: 0, unitNumber: 200 }),
+  ]),
+  supplies: 1234,
+});
+
+/** 게이트는 호출 시점에 읽는다(테스트에서 토글 가능). '1'일 때만 켜진다. */
+export function isQaWarehouseMarkerEnabled(env = process.env) {
+  return env?.[QA_WAREHOUSE_MARKER_ENV] === '1';
+}
+
 function clampInteger(value, max) {
   const number = Number(value);
   if (!Number.isFinite(number)) return 0;
   return Math.max(0, Math.min(max, Math.trunc(number)));
 }
 
+// ── 엔디안 가정 (단일 지점) ────────────────────────────────────────────────
+// 0x0327 응답 body는 fixed compact big-endian 스트림이다.
+// 근거: B71 라이브에서 body 첫 4바이트 00000046 = base 70 으로 관측(u32BE).
+// QA 마커 필드도 같은 규약을 따른다. 라이브에서 BE가 반증되면 아래 writeU16/writeU32
+// 두 함수의 writeUInt*BE 만 LE로 뒤집으면 된다(다른 곳에 엔디안 분기 없음).
 function writeU8(body, cursor, value) {
   body.writeUInt8(clampInteger(value, 0xff), cursor);
   return cursor + 1;
@@ -69,9 +106,13 @@ export function decodeRequestInformationWarehouse(input) {
  * 0x0327 고정 프레임 안에 client parser가 소비하는 compact BE stream을 기록한다.
  * 확인되지 않은 값은 호출자가 생략할 수 있으며 Buffer.alloc의 0으로 유지된다.
  */
-export function buildResponseInformationWarehouseInner(record = {}) {
+export function buildResponseInformationWarehouseInner(record = {}, options = {}) {
   const body = Buffer.alloc(RESP_INFO_WAREHOUSE_BODY_BYTES);
-  const source = record && typeof record === 'object' ? record : {};
+  const base = record && typeof record === 'object' ? record : {};
+  // QA 마커 게이트가 켜졌을 때만 base/outfit/index 는 그대로 두고 재고·카테고리·스칼라를 마커값으로 덮는다.
+  // 게이트가 꺼진 기본 경로에서는 record 를 손대지 않는다 → 기존 바이트와 완전 동일.
+  const markerEnabled = isQaWarehouseMarkerEnabled(options.env ?? process.env);
+  const source = markerEnabled ? { ...base, ...QA_WAREHOUSE_MARKER_RECORD } : base;
   const ships = Array.isArray(source.ships)
     ? source.ships.slice(0, WAREHOUSE_SHIPS_MAX)
     : [];
