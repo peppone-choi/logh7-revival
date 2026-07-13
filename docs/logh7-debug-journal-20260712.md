@@ -73,3 +73,58 @@
 - Remaining client blocker: the canonical client-side destination writer is timing/layout-sensitive and still emits `routeCellCandidate=0xffff` in B29/B30. B28 produced a valid candidate (`2887`) and the server accepted it without a fallback; standard-profile natural reliability is not yet proven.
 
 원본 `g7mtclient.exe`는 모든 세션에서 수정하지 않았고, runtime table/state writes는 Frida QA 프로세스 안에서만 수행했다.
+
+## 2026-07-13 B43-B46 선택·명령·이동 루프
+
+- B43b에서 HUD mode 2와 선택 행은 생성됐지만, 명령 원점은 선택 전 `(0,0)`이었다. 자연 선택 행 클릭 뒤에만 HUD `2→3`, 명령 원점 `(665,136)`, category 1이 생성됐다.
+- 하네스는 명령 좌표를 선택 전에 계산하고 있었고, QA 명령표는 category 0만 채웠다. HUD 로드 뒤 category 0·1을 함께 채우고, 선택 클릭 뒤 명령 좌표를 다시 계산하도록 RED→GREEN 테스트를 추가했다.
+- B44에서 첫 재계산 명령 클릭이 factory `43`과 SelectGrid mode `1`을 열었다. 이후 명령 좌표를 더 누르면 이미 열린 목표 선택 모드에서 그 좌표가 목적지로 처리되므로, SelectGrid가 열리면 남은 명령 행을 건너뛰고 지정 목적지를 누르도록 수정했다.
+- 자연 워프 확인 대화상자 클릭이 SelectGrid 강제 플래그 아래에 잘못 중첩돼 있었다. 강제 상태 변경과 자연 확인 클릭을 독립 분기로 분리했다.
+- B45b에서 QA로 명령 데이터/HUD를 준비한 뒤의 사용자 입력은 모두 자연 경로로 진행됐다. 선택 행 → 명령 행 → factory `43` → SelectGrid → 목적지 → 확인을 거쳐 클라이언트가 `0x0b01`(`innerLen=33`)을 보냈고 서버가 셀 `2388`의 `0x0b07`을 반환했다.
+- B28의 native 목적지 `2887 == body+0x16`과 B45b의 `2388 == body+0x16`이 독립적으로 일치했다. 따라서 live 31-byte SendWarp의 body `+0x16` 값이 `0..4999`이면 정본 목적지 셀로 승격하고 `decoded-route-cell`, `unresolved=false`로 기록한다. `0xffff`와 범위 밖 값은 기존 QA fallback 또는 기본 fail-closed를 유지한다.
+- B46에서 수정된 서버를 원본 클라이언트와 다시 연결했다. Frida `gridMove=2388`, client `0x0b01`, server `0x0b07 cell=2388`, `cellSource=decoded-route-cell`, `configuredFallback=null`, `unresolved=false`가 한 실행에서 일치했다.
+- 전체 서버 회귀는 `308/308` 통과했다. 원본 EXE SHA-256은 `9c97de2ae426f011680992d6c8d88b25488b5f51555ce5784aeef677f334bb51` 그대로이며, 실행 뒤 클라이언트와 TCP 47900 listener는 남지 않았다.
+
+증거:
+
+- `.omo/live-qa/m3-strategy-command-origin-B43b-post-hud-apply-20260713`
+- `.omo/live-qa/m3-strategy-command-origin-B44-staged-click-20260713`
+- `.omo/live-qa/m3-strategy-command-origin-B45b-natural-confirm-20260713`
+- `.omo/live-qa/m3-strategy-command-origin-B46-decoded-route-cell-20260713`
+
+남은 경계:
+
+- B46은 원본 EXE와 자연 클릭·확인 경로를 사용했지만, action-list 전송, runtime command table, HUD mode, focus cell 준비는 명시적 QA 플래그다. 다음 병목은 이 메모리 강제를 서버의 정본 `0x0305/0x0307/0x0356` 데이터와 자연 UI 상태 전이로 대체하는 것이다.
+
+## 2026-07-13 B47-B55 자연 전략 이동 기본 경로
+
+- B47/B48에서 `0x0305/0x0307`을 클라이언트 native stride가 아닌 compact BE cursor wire로 고치자 runtime command build, factory `43`, SelectGrid가 서버 데이터만으로 자연 생성됐다.
+- B49-B50b에서 우하단 전략 HUD의 `職務権限カード`와 `同スポットキャラクター`를 확인했고, 자연 `職務権限カード` 탭 클릭으로 명령 경로에 진입했다.
+- B50c의 `0x5786be` 등 네 위치만 바꾸는 가설은 확인창 표시 공급자가 아니어서 기각됐다. B50d runtime ConstMsg 추적으로 실제 visible caller `0x56f310`/`0x56f3aa`를 찾았다.
+- B50e는 UI 코드만 건드리는 8바이트 패치로 HUD 탭, 전략 명령 대화상자, 실제 common dialog의 group을 `0x67→0x62`로 맞췄고 화면에서 `決定`/`取消し`를 확인했다. patched SHA-256은 `d1ef22b75e97462bc1b098848db2732fb4388e4445ab4924203671d88a3e1146`이다.
+- B51에서 focus 강제 없이 `currentRaw11178=0x02000000`이 되어 `sendWarp=0`이었다. B52는 서버 `LOGH_PLAYER_FOCUS_CELL=1`만 켜도 hybrid `0x0325` 정렬 때문에 같은 실패가 유지됐다.
+- 정본 `FUN_00419ca0` 실바이트 디스어셈블로 `u16 BE count` 직후 각 행을 `id u32, faction u16, field06 u8, commander/cell/owner u32, boats count/list, tail` 순으로 읽는 compact cursor 규격을 확정했다. native `0x58` stride와 padding은 wire 규격이 아니다.
+- B53에서 compact `0x0325` serializer와 서버 focus env를 사용하자 Frida focus 강제 없이 unit commander/cell/current가 모두 `2588`이 됐다. `sendWarp/gridMove=[2388,0,1]`, `0x0b01→0x0b07`이 성공했다.
+- B54에서 서버 focus env까지 빼자 player commander/current가 캐릭터 ID `1`로 돌아가 `sendWarp=0`이었다. native unit `+0x08`이 `FUN_004c2c80 source+0x320→FUN_004c4170→currentRaw11178`로 흐르는 초점 셀 공급자임을 분리했다.
+- B55는 player commander 슬롯을 항상 playerCell로 투영하고 production의 focus env 참조를 제거했다. env/Frida force 없이 `currentRaw11178=2588`, `sendWarp/gridMove=[2388,0,1]`, `0x0b01→0x0b07`이 성공했고 서버는 `cellSource=decoded-route-cell`, `configuredFallback=null`로 처리했다.
+- 관련 main 테스트는 `110/110`, worker 전체 서버 테스트는 `312/312` 통과했다. 원본 SHA-256은 `9c97de2ae426f011680992d6c8d88b25488b5f51555ce5784aeef677f334bb51`, UI patched SHA-256은 `d1ef22b75e97462bc1b098848db2732fb4388e4445ab4924203671d88a3e1146`이며 종료 뒤 클라이언트와 TCP 47900 listener는 모두 `0`이었다.
+
+증거:
+
+- `.omo/live-qa/m3-strategy-command-origin-B47-wire-command-table-20260713`
+- `.omo/live-qa/m3-strategy-command-origin-B48-compact-wire-20260713`
+- `.omo/live-qa/m3-strategy-command-origin-B49-hud-label-natural-tab-20260713`
+- `.omo/live-qa/m3-strategy-command-origin-B50-hud-label-natural-tab-ready-20260713`
+- `.omo/live-qa/m3-strategy-command-origin-B50b-hud-label-natural-tab-ready-20260713`
+- `.omo/live-qa/m3-strategy-command-origin-B50c-strategy-ui-labels-20260713`
+- `.omo/live-qa/m3-strategy-command-origin-B50d-constmsg-trace-20260713`
+- `.omo/live-qa/m3-strategy-command-origin-B50e-common-dialog-labels-20260713`
+- `.omo/live-qa/m3-strategy-command-origin-B51-no-focus-force-20260713`
+- `.omo/live-qa/m3-strategy-command-origin-B52-server-focus-cell-20260713`
+- `.omo/live-qa/m3-strategy-command-origin-B53-packed-0325-no-focus-force-20260713`
+- `.omo/live-qa/m3-strategy-command-origin-B54-packed-0325-no-focus-env-20260713`
+- `.omo/live-qa/m3-strategy-command-origin-B55-default-focus-cell-no-env-20260713`
+
+남은 경계:
+
+- 자연 이동은 env/Frida focus 강제 없이 닫혔다. 남은 서버 보조 플래그는 `LOGH_POSTLOAD_ACTION_LIST`와 `LOGH_COMMAND_TABLE_PRELOAD_PROBE`이며, 두 데이터 경로를 운영 기본값으로 승격할 근거와 회귀 검증이 필요하다.
