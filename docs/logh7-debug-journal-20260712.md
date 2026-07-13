@@ -159,3 +159,28 @@
 남은 경계:
 
 - action-list와 command-table의 helper-env 병목은 닫혔다. 다만 baseline의 `0x41`과 card/category 숫자 매핑은 P3 호환성에 머문다. 이후 별도 최소 권한 A/B로 값을 축소·대조해야 하며, 그전에는 canonical 전체 권한표 완료를 주장하지 않는다.
+
+## 2026-07-13 B60/B61 command-table 최소권한 A/B
+
+### B60 — `0x2b` 단일 factory, 두 ordinal 유지
+
+- card/record id `0/1` 두 개는 유지하되 각 command/descriptor를 `0x2b` 하나로 줄이고 `0x41`을 제거했다. 서버 helper env와 모든 Frida force를 사용하지 않은 자연 입력 대조였다.
+- action/list readiness는 정상적으로 열렸다. runtime `0x0305`의 category 0/1 command count는 각각 `1`, runtime `0x0307`은 record `2`개에 각각 command count `1`과 descriptor `43(0x2b)`을 보유했다.
+- 선택 뒤 command row `1`개, factory `43(0x2b)` 호출 1회, SelectGrid 호출 1회가 자연 생성됐다. `sendWarp/gridMove=[2388,0,1]`에 이어 서버에서 `0x0b01→0x0b07 cell=2388` 왕복을 확인했다.
+
+### B61 — card id `1` 단독 전송 실패
+
+- category 0 중복을 제거하는 가설로 card/record id `1` 하나만 보냈다. wire/runtime `0x0307`은 `recordCount=1`, 첫 record id `1`, command count `1`, descriptor `43`으로 수신됐다.
+- 그러나 runtime `0x0305`는 category 0 count가 `1`, category 1 count가 `0`이었다. 클라이언트 변환은 card id가 아니라 record ordinal 순서대로 runtime category slot을 채운다.
+- command build는 1회 호출됐지만 command row, factory, SelectGrid, SendWarp, gridMove는 모두 `0`이었다. 모든 force가 꺼진 상태였으므로 B61은 자연 경로 실패로 판정했다.
+
+### 결론과 검증
+
+- B61을 rollback하고 B60을 최종 상태로 복원했다. 두 card/record ordinal은 중복 canonical grant가 아니라 category 1 runtime slot까지 변환을 진행시키는 구조적 padding이다. 두 ordinal이 싣는 factory는 각각 `0x2b` 하나뿐이며 `0x41`은 제거된 상태다.
+- focused 테스트는 `96/96`, 서버 전체 테스트는 `312/312` 통과했다.
+- 원본 EXE SHA-256은 `9c97de2ae426f011680992d6c8d88b25488b5f51555ce5784aeef677f334bb51`로 유지됐다. 종료 뒤 클라이언트 프로세스와 TCP 47900 listener는 각각 `0`이었다.
+
+증거:
+
+- `.omo/live-qa/m3-strategy-command-origin-B60-minimal-authority-0x2b-only-20260713`
+- `.omo/live-qa/m3-strategy-command-origin-B61-category1-only-0x2b-20260713`
