@@ -1,0 +1,5860 @@
+{
+  "id": "logh7-celestial-model-catalog",
+  "generatedAt": "2026-07-13T06:10:05.413Z",
+  "generator": {
+    "path": "tools/extract/build_celestial_model_catalog.mjs",
+    "sha256": "fc36743a406f99c45fa8d24f0ceb2ea28b786c6c856ab95d0b3505b47878d0e7"
+  },
+  "scope": "MDX 모델 로컬 시각 자산. 전략 성계 연결은 기존 79개 정합만 허용하며 전술/월드 배치를 뜻하지 않는다.",
+  "sources": {
+    "models": "server/content/generated/models.json",
+    "alignment": "server/content/extracted/model-galaxy-alignment.json",
+    "galaxy": "server/content/galaxy.json"
+  },
+  "families": [
+    {
+      "code": "ds",
+      "baseModelCount": 1,
+      "coordinateSpace": "model_local",
+      "gameplayJoin": null,
+      "baseModels": [
+        {
+          "id": "ds000",
+          "gameplayJoin": null,
+          "variants": [
+            {
+              "variant": "low",
+              "path": "planets/ds000_low.mdx",
+              "sha256": "f1bb69e55bf183bbb0760b607671aae7a7cab3951da5bdae382603a4d9b9a621",
+              "nodeCount": 1,
+              "modelLocalStaticTrs": {
+                "coordinateSpace": "model_local",
+                "translation": [
+                  0,
+                  0,
+                  0
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "variant": "base",
+              "path": "planets/ds000.mdx",
+              "sha256": "f1bb69e55bf183bbb0760b607671aae7a7cab3951da5bdae382603a4d9b9a621",
+              "nodeCount": 1,
+              "modelLocalStaticTrs": {
+                "coordinateSpace": "model_local",
+                "translation": [
+                  0,
+                  0,
+                  0
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "code": "fs",
+      "baseModelCount": 7,
+      "coordinateSpace": "model_local",
+      "gameplayJoin": null,
+      "baseModels": [
+        {
+          "id": "fs000",
+          "gameplayJoin": null,
+          "variants": [
+            {
+              "variant": "low",
+              "path": "planets/fs000_low.mdx",
+              "sha256": "b6b9ba600448fa0a7c5f4a198fa07f51eeeb02b50036563af442437e66a11d84",
+              "nodeCount": 1,
+              "modelLocalStaticTrs": {
+                "coordinateSpace": "model_local",
+                "translation": [
+                  0,
+                  0,
+                  0
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "variant": "mid",
+              "path": "planets/fs000_mid.mdx",
+              "sha256": "457ac9139cc2031b6556c0288b999949d2ff6f4d6cd0feb36ce2fa1e6ee0416e",
+              "nodeCount": 1,
+              "modelLocalStaticTrs": {
+                "coordinateSpace": "model_local",
+                "translation": [
+                  0,
+                  0,
+                  0
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "variant": "base",
+              "path": "planets/fs000.mdx",
+              "sha256": "c7013ef29f9b2bbe1fbd56653a0c9de6b65ef7a41b1015386fe1c75175906e17",
+              "nodeCount": 1,
+              "modelLocalStaticTrs": {
+                "coordinateSpace": "model_local",
+                "translation": [
+                  0,
+                  0,
+                  0
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": "fs001",
+          "gameplayJoin": null,
+          "variants": [
+            {
+              "variant": "low",
+              "path": "planets/fs001_low.mdx",
+              "sha256": "b94f3e7c23e9973821eee901c9378d94bda4820055b3c4ec7bb2798c816dddec",
+              "nodeCount": 1,
+              "modelLocalStaticTrs": {
+                "coordinateSpace": "model_local",
+                "translation": [
+                  0,
+                  0,
+                  0
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "variant": "mid",
+              "path": "planets/fs001_mid.mdx",
+              "sha256": "18e03136171f91a38225a1499cb12d27bb1e5df751dcaf4c6a8b424ac34d6016",
+              "nodeCount": 1,
+              "modelLocalStaticTrs": {
+                "coordinateSpace": "model_local",
+                "translation": [
+                  0,
+                  0,
+                  0
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "variant": "base",
+              "path": "planets/fs001.mdx",
+              "sha256": "618da7ea45e1d3eb68fa9b53e83a417b00fc901646695ddfc757e2e090f0e4f7",
+              "nodeCount": 1,
+              "modelLocalStaticTrs": {
+                "coordinateSpace": "model_local",
+                "translation": [
+                  0,
+                  0,
+                  0
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": "fs002",
+          "gameplayJoin": null,
+          "variants": [
+            {
+              "variant": "low",
+              "path": "planets/fs002_low.mdx",
+              "sha256": "7af0e6691261554813e28c10b40d744935a1387102c69cfc589b9ed55843651d",
+              "nodeCount": 1,
+              "modelLocalStaticTrs": {
+                "coordinateSpace": "model_local",
+                "translation": [
+                  0,
+                  0,
+                  0
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "variant": "mid",
+              "path": "planets/fs002_mid.mdx",
+              "sha256": "ee828e8f23dccb869928a91e0760bc707b43b0faf4dd369c4ccc257c1bda7dda",
+              "nodeCount": 1,
+              "modelLocalStaticTrs": {
+                "coordinateSpace": "model_local",
+                "translation": [
+                  0,
+                  0,
+                  0
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "variant": "base",
+              "path": "planets/fs002.mdx",
+              "sha256": "b24147239da78095f124b1a3d0d1b4c4ba227fce148ab59ba219210c2b64afa0",
+              "nodeCount": 1,
+              "modelLocalStaticTrs": {
+                "coordinateSpace": "model_local",
+                "translation": [
+                  0,
+                  0,
+                  0
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": "fs003",
+          "gameplayJoin": null,
+          "variants": [
+            {
+              "variant": "low",
+              "path": "planets/fs003_low.mdx",
+              "sha256": "caa34fa5ff9790cfeae749fd58f94dfcdf64d1d5b859dc0f2307e8606b405eff",
+              "nodeCount": 1,
+              "modelLocalStaticTrs": {
+                "coordinateSpace": "model_local",
+                "translation": [
+                  0,
+                  0,
+                  0
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "variant": "mid",
+              "path": "planets/fs003_mid.mdx",
+              "sha256": "c8d3c0eaebb8a0d6a046e02e700e8127e20ea4f8fe1b0344d652a56362f6bde2",
+              "nodeCount": 1,
+              "modelLocalStaticTrs": {
+                "coordinateSpace": "model_local",
+                "translation": [
+                  0,
+                  0,
+                  0
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "variant": "base",
+              "path": "planets/fs003.mdx",
+              "sha256": "5a404b1623276840d35acd6dc32bb106379d2041c733e98430ca1f8870796dcb",
+              "nodeCount": 1,
+              "modelLocalStaticTrs": {
+                "coordinateSpace": "model_local",
+                "translation": [
+                  0,
+                  0,
+                  0
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": "fs004",
+          "gameplayJoin": null,
+          "variants": [
+            {
+              "variant": "low",
+              "path": "planets/fs004_low.mdx",
+              "sha256": "591fdbfdefef441d8d3f75e411dcb73710ad0acb2554c25f5fe8d833bd39022c",
+              "nodeCount": 1,
+              "modelLocalStaticTrs": {
+                "coordinateSpace": "model_local",
+                "translation": [
+                  0,
+                  0,
+                  0
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "variant": "mid",
+              "path": "planets/fs004_mid.mdx",
+              "sha256": "00b7c1e30de3e854feb93abf494535a7ff9815c1a6885d772b11a49fe08c3f17",
+              "nodeCount": 1,
+              "modelLocalStaticTrs": {
+                "coordinateSpace": "model_local",
+                "translation": [
+                  0,
+                  0,
+                  0
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "variant": "base",
+              "path": "planets/fs004.mdx",
+              "sha256": "dd9ce96a29bd8f4cd4bf6720c59cce13b596e6576d009d7d908bcb550381ec49",
+              "nodeCount": 1,
+              "modelLocalStaticTrs": {
+                "coordinateSpace": "model_local",
+                "translation": [
+                  0,
+                  0,
+                  0
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": "fs005",
+          "gameplayJoin": null,
+          "variants": [
+            {
+              "variant": "low",
+              "path": "planets/fs005_low.mdx",
+              "sha256": "7fbee3e07d3d1f24d39aac6f1ebe0da5a6953894857b56f04d7502b80e78c7a3",
+              "nodeCount": 1,
+              "modelLocalStaticTrs": {
+                "coordinateSpace": "model_local",
+                "translation": [
+                  0,
+                  0,
+                  0
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "variant": "mid",
+              "path": "planets/fs005_mid.mdx",
+              "sha256": "cfe6ebcb4fad1ae0fced94c8fdcb40cd691df1b966fc6b0109c45dd5b56e13db",
+              "nodeCount": 1,
+              "modelLocalStaticTrs": {
+                "coordinateSpace": "model_local",
+                "translation": [
+                  0,
+                  0,
+                  0
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "variant": "base",
+              "path": "planets/fs005.mdx",
+              "sha256": "694408505d02cb236d1505d8a096640fa00c4637d3793dbb78b2d03bc90377ae",
+              "nodeCount": 1,
+              "modelLocalStaticTrs": {
+                "coordinateSpace": "model_local",
+                "translation": [
+                  0,
+                  0,
+                  0
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": "fs006",
+          "gameplayJoin": null,
+          "variants": [
+            {
+              "variant": "low",
+              "path": "planets/fs006_low.mdx",
+              "sha256": "d58f18c7621b8ecb65baa7ec55834e24e94c84ac925e375633c845696be50f3e",
+              "nodeCount": 1,
+              "modelLocalStaticTrs": {
+                "coordinateSpace": "model_local",
+                "translation": [
+                  0,
+                  0,
+                  0
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "variant": "mid",
+              "path": "planets/fs006_mid.mdx",
+              "sha256": "7a712d39b0a777a1d9b16b553958ea3b34df36388041b5af7c771475239f2431",
+              "nodeCount": 1,
+              "modelLocalStaticTrs": {
+                "coordinateSpace": "model_local",
+                "translation": [
+                  0,
+                  0,
+                  0
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "variant": "base",
+              "path": "planets/fs006.mdx",
+              "sha256": "013a08ee05ed509ac7589edf428dcdfe3bf85501cc8f3ebccdc017113b682aa9",
+              "nodeCount": 1,
+              "modelLocalStaticTrs": {
+                "coordinateSpace": "model_local",
+                "translation": [
+                  0,
+                  0,
+                  0
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "code": "p",
+      "baseModelCount": 24,
+      "coordinateSpace": "model_local",
+      "gameplayJoin": null,
+      "baseModels": [
+        {
+          "id": "p000",
+          "gameplayJoin": null,
+          "variants": [
+            {
+              "variant": "low",
+              "path": "planets/p000_low.mdx",
+              "sha256": "2b665c9b66e668ea5137bcff6568e9a430b4172ba9e82f98d584e723596ce60a",
+              "nodeCount": 1,
+              "modelLocalStaticTrs": {
+                "coordinateSpace": "model_local",
+                "translation": [
+                  0,
+                  0,
+                  0
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "variant": "mid",
+              "path": "planets/p000_mid.mdx",
+              "sha256": "cce99f4decd31d942e67282a3a5524775ff8477fa578f91c12429aa061b88a47",
+              "nodeCount": 1,
+              "modelLocalStaticTrs": {
+                "coordinateSpace": "model_local",
+                "translation": [
+                  0,
+                  0,
+                  0
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "variant": "base",
+              "path": "planets/p000.mdx",
+              "sha256": "71a105b2fb5bb1688ae1e6fe78850476469054eabd3dbd69cb449d2ded8e5e3e",
+              "nodeCount": 1,
+              "modelLocalStaticTrs": {
+                "coordinateSpace": "model_local",
+                "translation": [
+                  0,
+                  0,
+                  0
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": "p001",
+          "gameplayJoin": null,
+          "variants": [
+            {
+              "variant": "low",
+              "path": "planets/p001_low.mdx",
+              "sha256": "1bba3c73257296788496358423df538aea24d0b7f1816d6bb3a7331ba9e356a1",
+              "nodeCount": 1,
+              "modelLocalStaticTrs": {
+                "coordinateSpace": "model_local",
+                "translation": [
+                  0,
+                  0,
+                  0
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "variant": "mid",
+              "path": "planets/p001_mid.mdx",
+              "sha256": "021d412c98582ccb06186a36ec1114a515b77a9f802c7354c4a8b1f99a8ce6e0",
+              "nodeCount": 1,
+              "modelLocalStaticTrs": {
+                "coordinateSpace": "model_local",
+                "translation": [
+                  0,
+                  0,
+                  0
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "variant": "base",
+              "path": "planets/p001.mdx",
+              "sha256": "b27f77cc30542dba3b9504b4309c49b24fbd022edb73b85b8c132b9db5ed0422",
+              "nodeCount": 1,
+              "modelLocalStaticTrs": {
+                "coordinateSpace": "model_local",
+                "translation": [
+                  0,
+                  0,
+                  0
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": "p010",
+          "gameplayJoin": null,
+          "variants": [
+            {
+              "variant": "low",
+              "path": "planets/p010_low.mdx",
+              "sha256": "501d531e2ddf6737d64d9286889fac2177bbdcdb27a8e8eec7d5192a2c80d4f6",
+              "nodeCount": 1,
+              "modelLocalStaticTrs": {
+                "coordinateSpace": "model_local",
+                "translation": [
+                  0,
+                  0,
+                  0
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "variant": "mid",
+              "path": "planets/p010_mid.mdx",
+              "sha256": "98d20302c0eb44319806eb98818503414c6f159eaced7b831f8ee42b0725154c",
+              "nodeCount": 1,
+              "modelLocalStaticTrs": {
+                "coordinateSpace": "model_local",
+                "translation": [
+                  0,
+                  0,
+                  0
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "variant": "base",
+              "path": "planets/p010.mdx",
+              "sha256": "3ab5bdfb94fc02357ba0492f6d2d1781de0357aa34757cbacbeef6a09233d05b",
+              "nodeCount": 1,
+              "modelLocalStaticTrs": {
+                "coordinateSpace": "model_local",
+                "translation": [
+                  0,
+                  0,
+                  0
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": "p011",
+          "gameplayJoin": null,
+          "variants": [
+            {
+              "variant": "low",
+              "path": "planets/p011_low.mdx",
+              "sha256": "c24141801db4d7641d81832bb56054197f6a9cabbb8f055744e1c3200e16989a",
+              "nodeCount": 1,
+              "modelLocalStaticTrs": {
+                "coordinateSpace": "model_local",
+                "translation": [
+                  0,
+                  0,
+                  0
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "variant": "mid",
+              "path": "planets/p011_mid.mdx",
+              "sha256": "ae00aeca37407e210bdde4d6e62317711e36aae1753d26709b29f70ca293e454",
+              "nodeCount": 1,
+              "modelLocalStaticTrs": {
+                "coordinateSpace": "model_local",
+                "translation": [
+                  0,
+                  0,
+                  0
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "variant": "base",
+              "path": "planets/p011.mdx",
+              "sha256": "132dfdff575b1b5f48b6120ad679353e117d966521059dbf61445b91baeb7fee",
+              "nodeCount": 1,
+              "modelLocalStaticTrs": {
+                "coordinateSpace": "model_local",
+                "translation": [
+                  0,
+                  0,
+                  0
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": "p020",
+          "gameplayJoin": null,
+          "variants": [
+            {
+              "variant": "low",
+              "path": "planets/p020_low.mdx",
+              "sha256": "27b3b6da91ca94fa55c47998fdfd09f2b33e3bbe0badcad734e270b3c4c02c63",
+              "nodeCount": 1,
+              "modelLocalStaticTrs": {
+                "coordinateSpace": "model_local",
+                "translation": [
+                  0,
+                  0,
+                  0
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "variant": "mid",
+              "path": "planets/p020_mid.mdx",
+              "sha256": "5ef9add3211f4047c2c876fca26e9206efe42c3c56457573754336913ed38945",
+              "nodeCount": 1,
+              "modelLocalStaticTrs": {
+                "coordinateSpace": "model_local",
+                "translation": [
+                  0,
+                  0,
+                  0
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "variant": "base",
+              "path": "planets/p020.mdx",
+              "sha256": "73acaf47dc9f3f5b7b9f663e05bf30ed71eb620449693a32e79beea932962b82",
+              "nodeCount": 1,
+              "modelLocalStaticTrs": {
+                "coordinateSpace": "model_local",
+                "translation": [
+                  0,
+                  0,
+                  0
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": "p021",
+          "gameplayJoin": null,
+          "variants": [
+            {
+              "variant": "low",
+              "path": "planets/p021_low.mdx",
+              "sha256": "28ba72300fe2808cfa9f254c26d5fdfb2ab59d5e2ec1db57e8b57340657379af",
+              "nodeCount": 1,
+              "modelLocalStaticTrs": {
+                "coordinateSpace": "model_local",
+                "translation": [
+                  0,
+                  0,
+                  0
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "variant": "mid",
+              "path": "planets/p021_mid.mdx",
+              "sha256": "5c53d5fdc0b50928177edfecf74db71c4e0dd50f32ddf36ec015bade80e11ea7",
+              "nodeCount": 1,
+              "modelLocalStaticTrs": {
+                "coordinateSpace": "model_local",
+                "translation": [
+                  0,
+                  0,
+                  0
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "variant": "base",
+              "path": "planets/p021.mdx",
+              "sha256": "5a8b0a8c6ebe21e4bed3d8365258d1502035e99a817375ad340ed9048d784ed4",
+              "nodeCount": 1,
+              "modelLocalStaticTrs": {
+                "coordinateSpace": "model_local",
+                "translation": [
+                  0,
+                  0,
+                  0
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": "p030",
+          "gameplayJoin": null,
+          "variants": [
+            {
+              "variant": "low",
+              "path": "planets/p030_low.mdx",
+              "sha256": "66342a1ba1fbae7586fbe16586e20c5b7ff3a4567c29f71ba1ea30c94c30cb95",
+              "nodeCount": 1,
+              "modelLocalStaticTrs": {
+                "coordinateSpace": "model_local",
+                "translation": [
+                  0,
+                  0,
+                  0
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "variant": "mid",
+              "path": "planets/p030_mid.mdx",
+              "sha256": "5eae1c934d6a2159a32a580fbc8194414e9c1e5f2bb9a33ec2a7e8b63bb9123c",
+              "nodeCount": 1,
+              "modelLocalStaticTrs": {
+                "coordinateSpace": "model_local",
+                "translation": [
+                  0,
+                  0,
+                  0
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "variant": "base",
+              "path": "planets/p030.mdx",
+              "sha256": "8c61261220b04e4eedbb19bb2ea9f8bf6231dd7be8ae095300e40670afc9f483",
+              "nodeCount": 1,
+              "modelLocalStaticTrs": {
+                "coordinateSpace": "model_local",
+                "translation": [
+                  0,
+                  0,
+                  0
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": "p031",
+          "gameplayJoin": null,
+          "variants": [
+            {
+              "variant": "low",
+              "path": "planets/p031_low.mdx",
+              "sha256": "8e9f0ef3a24ddb72fa179c2a227da2a888158c270b821a0fca9b78db7cf6151e",
+              "nodeCount": 1,
+              "modelLocalStaticTrs": {
+                "coordinateSpace": "model_local",
+                "translation": [
+                  0,
+                  0,
+                  0
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "variant": "mid",
+              "path": "planets/p031_mid.mdx",
+              "sha256": "465e7b440055c08ea4e0811429937212eb01996a55f8ee0c68db1fb5e8c73b1e",
+              "nodeCount": 1,
+              "modelLocalStaticTrs": {
+                "coordinateSpace": "model_local",
+                "translation": [
+                  0,
+                  0,
+                  0
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "variant": "base",
+              "path": "planets/p031.mdx",
+              "sha256": "6aee1f78b26cd0c3221eafe0a4450922fabd3e7b65521230ca0b9f787c12994b",
+              "nodeCount": 1,
+              "modelLocalStaticTrs": {
+                "coordinateSpace": "model_local",
+                "translation": [
+                  0,
+                  0,
+                  0
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": "p032",
+          "gameplayJoin": null,
+          "variants": [
+            {
+              "variant": "low",
+              "path": "planets/p032_low.mdx",
+              "sha256": "09da5bc8473db10af63550def2b47e7e03dc99d53222cdb21e821b5fe1a57af5",
+              "nodeCount": 1,
+              "modelLocalStaticTrs": {
+                "coordinateSpace": "model_local",
+                "translation": [
+                  0,
+                  0,
+                  0
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "variant": "mid",
+              "path": "planets/p032_mid.mdx",
+              "sha256": "9744553515c3ec6f25f54d8cd1ab3861fc8a3090a6870bd9b8f08b6b335bbb5a",
+              "nodeCount": 1,
+              "modelLocalStaticTrs": {
+                "coordinateSpace": "model_local",
+                "translation": [
+                  0,
+                  0,
+                  0
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "variant": "base",
+              "path": "planets/p032.mdx",
+              "sha256": "bdb33598db7e693b5775c5b24e929a8c586022de16e3ba6d08000a1f29c3271c",
+              "nodeCount": 1,
+              "modelLocalStaticTrs": {
+                "coordinateSpace": "model_local",
+                "translation": [
+                  0,
+                  0,
+                  0
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": "p040",
+          "gameplayJoin": null,
+          "variants": [
+            {
+              "variant": "low",
+              "path": "planets/p040_low.mdx",
+              "sha256": "b24586ae81281a06afc5bf4defe171978c6987f37a2f50d85e4be5f4fff6d5d0",
+              "nodeCount": 1,
+              "modelLocalStaticTrs": {
+                "coordinateSpace": "model_local",
+                "translation": [
+                  0,
+                  0,
+                  0
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "variant": "mid",
+              "path": "planets/p040_mid.mdx",
+              "sha256": "9f0b567459f35bec31ff641bc7014b93a78794e6f5030cfa7e16b9c32edf0ae8",
+              "nodeCount": 1,
+              "modelLocalStaticTrs": {
+                "coordinateSpace": "model_local",
+                "translation": [
+                  0,
+                  0,
+                  0
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "variant": "base",
+              "path": "planets/p040.mdx",
+              "sha256": "3399f23435297a2fe2846a3e39a3424c842cf8badc5511b4a7867e04a7800feb",
+              "nodeCount": 1,
+              "modelLocalStaticTrs": {
+                "coordinateSpace": "model_local",
+                "translation": [
+                  0,
+                  0,
+                  0
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": "p041",
+          "gameplayJoin": null,
+          "variants": [
+            {
+              "variant": "low",
+              "path": "planets/p041_low.mdx",
+              "sha256": "9bf3ad8582a018ae321bec2b2c888ab037dc028c2b4d5dd1fd5735e174e6c8ef",
+              "nodeCount": 1,
+              "modelLocalStaticTrs": {
+                "coordinateSpace": "model_local",
+                "translation": [
+                  0,
+                  0,
+                  0
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "variant": "mid",
+              "path": "planets/p041_mid.mdx",
+              "sha256": "29c70ccb95fc665cf951807e0e430a8a53f43637ce576ccf3b862056d20d6ef5",
+              "nodeCount": 1,
+              "modelLocalStaticTrs": {
+                "coordinateSpace": "model_local",
+                "translation": [
+                  0,
+                  0,
+                  0
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "variant": "base",
+              "path": "planets/p041.mdx",
+              "sha256": "d571677e402c6b1c610de6f43269688396e9dca59647950b372fdcad5dc2b66b",
+              "nodeCount": 1,
+              "modelLocalStaticTrs": {
+                "coordinateSpace": "model_local",
+                "translation": [
+                  0,
+                  0,
+                  0
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": "p050",
+          "gameplayJoin": null,
+          "variants": [
+            {
+              "variant": "low",
+              "path": "planets/p050_low.mdx",
+              "sha256": "3a97dff6fe41a6d7b4e0dc98bc75dd531b0c81dc32744c68036789bd4578fca4",
+              "nodeCount": 1,
+              "modelLocalStaticTrs": {
+                "coordinateSpace": "model_local",
+                "translation": [
+                  0,
+                  0,
+                  0
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "variant": "mid",
+              "path": "planets/p050_mid.mdx",
+              "sha256": "3960d6a8e3156f6719ae2bbee9709075be2d19620f803a4affce067c241c4876",
+              "nodeCount": 1,
+              "modelLocalStaticTrs": {
+                "coordinateSpace": "model_local",
+                "translation": [
+                  0,
+                  0,
+                  0
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "variant": "base",
+              "path": "planets/p050.mdx",
+              "sha256": "aec5b1222cdf88fbf3c47760f3d57e69ab605f9d5b7eea36eade200732466130",
+              "nodeCount": 1,
+              "modelLocalStaticTrs": {
+                "coordinateSpace": "model_local",
+                "translation": [
+                  0,
+                  0,
+                  0
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": "p051",
+          "gameplayJoin": null,
+          "variants": [
+            {
+              "variant": "low",
+              "path": "planets/p051_low.mdx",
+              "sha256": "e285a532b772350deadd55e8acb2745097d2c618f0c8e7060399577fbe470c58",
+              "nodeCount": 1,
+              "modelLocalStaticTrs": {
+                "coordinateSpace": "model_local",
+                "translation": [
+                  0,
+                  0,
+                  0
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "variant": "mid",
+              "path": "planets/p051_mid.mdx",
+              "sha256": "d6b2b734069973761a7c849f72be24ea14b0011382d44dfe76424e8fe4e9c75b",
+              "nodeCount": 1,
+              "modelLocalStaticTrs": {
+                "coordinateSpace": "model_local",
+                "translation": [
+                  0,
+                  0,
+                  0
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "variant": "base",
+              "path": "planets/p051.mdx",
+              "sha256": "3d0ef09e1a778ad93c9d95dc50598031d0f7a0ba08043a9a30cf26204812a172",
+              "nodeCount": 1,
+              "modelLocalStaticTrs": {
+                "coordinateSpace": "model_local",
+                "translation": [
+                  0,
+                  0,
+                  0
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": "p060",
+          "gameplayJoin": null,
+          "variants": [
+            {
+              "variant": "low",
+              "path": "planets/p060_low.mdx",
+              "sha256": "266cd5f4ef3049a1b87e950d0cb6fca6c449d5457a8b7dbe095f150feb2c22ec",
+              "nodeCount": 1,
+              "modelLocalStaticTrs": {
+                "coordinateSpace": "model_local",
+                "translation": [
+                  0,
+                  0,
+                  0
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "variant": "mid",
+              "path": "planets/p060_mid.mdx",
+              "sha256": "722300b58f9eef2b8cdb88a2d15402859dd1baee6fc71b88aad2c77d827f4f39",
+              "nodeCount": 1,
+              "modelLocalStaticTrs": {
+                "coordinateSpace": "model_local",
+                "translation": [
+                  0,
+                  0,
+                  0
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "variant": "base",
+              "path": "planets/p060.mdx",
+              "sha256": "17ed6dacc784e89447e5490b9a03a564cca8246d9a94638452245eb751b6b008",
+              "nodeCount": 1,
+              "modelLocalStaticTrs": {
+                "coordinateSpace": "model_local",
+                "translation": [
+                  0,
+                  0,
+                  0
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": "p061",
+          "gameplayJoin": null,
+          "variants": [
+            {
+              "variant": "low",
+              "path": "planets/p061_low.mdx",
+              "sha256": "55d5de8329af644fea6fd8ce5cc0a5caed10d1da36bda8b55773e240933d89dd",
+              "nodeCount": 1,
+              "modelLocalStaticTrs": {
+                "coordinateSpace": "model_local",
+                "translation": [
+                  0,
+                  0,
+                  0
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "variant": "mid",
+              "path": "planets/p061_mid.mdx",
+              "sha256": "bcc7d1c7a8d2c1abc8cc6707de2d5a267bdf3851611a731f7d05b427412ad767",
+              "nodeCount": 1,
+              "modelLocalStaticTrs": {
+                "coordinateSpace": "model_local",
+                "translation": [
+                  0,
+                  0,
+                  0
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "variant": "base",
+              "path": "planets/p061.mdx",
+              "sha256": "6890ff54be086447c98c56d4461b59308fe652665e7387d868d28b08c34cd92b",
+              "nodeCount": 1,
+              "modelLocalStaticTrs": {
+                "coordinateSpace": "model_local",
+                "translation": [
+                  0,
+                  0,
+                  0
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": "p070",
+          "gameplayJoin": null,
+          "variants": [
+            {
+              "variant": "low",
+              "path": "planets/p070_low.mdx",
+              "sha256": "e60d6ac9c9dcc012c287e69d7a23df1fd3839a471c54cfa31cd319d96e811f2c",
+              "nodeCount": 1,
+              "modelLocalStaticTrs": {
+                "coordinateSpace": "model_local",
+                "translation": [
+                  0,
+                  0,
+                  0
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "variant": "mid",
+              "path": "planets/p070_mid.mdx",
+              "sha256": "806348b0e610d92288c079e123dc1c5cb80caeb6463d2ccc1c4f79807c2277ec",
+              "nodeCount": 1,
+              "modelLocalStaticTrs": {
+                "coordinateSpace": "model_local",
+                "translation": [
+                  0,
+                  0,
+                  0
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "variant": "base",
+              "path": "planets/p070.mdx",
+              "sha256": "70bc19c920e2ba15faf060a35a5707af828e09077dc1349aae2659b2c6aa3bf0",
+              "nodeCount": 1,
+              "modelLocalStaticTrs": {
+                "coordinateSpace": "model_local",
+                "translation": [
+                  0,
+                  0,
+                  0
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": "p071",
+          "gameplayJoin": null,
+          "variants": [
+            {
+              "variant": "low",
+              "path": "planets/p071_low.mdx",
+              "sha256": "10a00a46b70aa6414dc0ec448d9e48acbffcb3ab2adfbe6f4924c34824135f62",
+              "nodeCount": 1,
+              "modelLocalStaticTrs": {
+                "coordinateSpace": "model_local",
+                "translation": [
+                  0,
+                  0,
+                  0
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "variant": "mid",
+              "path": "planets/p071_mid.mdx",
+              "sha256": "556759e712bc4ffe13a3211165cae0dc403d59b0ccf1c62cecde34a0d11b2e93",
+              "nodeCount": 1,
+              "modelLocalStaticTrs": {
+                "coordinateSpace": "model_local",
+                "translation": [
+                  0,
+                  0,
+                  0
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "variant": "base",
+              "path": "planets/p071.mdx",
+              "sha256": "2e466013bb2b9b0fac467b87b32367cc7d80cf087602f37b50b1ace8bbf4daa3",
+              "nodeCount": 1,
+              "modelLocalStaticTrs": {
+                "coordinateSpace": "model_local",
+                "translation": [
+                  0,
+                  0,
+                  0
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": "p080",
+          "gameplayJoin": null,
+          "variants": [
+            {
+              "variant": "low",
+              "path": "planets/p080_low.mdx",
+              "sha256": "8b4bbfd483fdfad253cac49d8eed50dae4bf05ad54fee7f1aceb1510a2a00aff",
+              "nodeCount": 1,
+              "modelLocalStaticTrs": {
+                "coordinateSpace": "model_local",
+                "translation": [
+                  0,
+                  0,
+                  0
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "variant": "mid",
+              "path": "planets/p080_mid.mdx",
+              "sha256": "a79bde1618340af47afc9f71fa527db492744efb10d489f3f348dd6ddb5bc51b",
+              "nodeCount": 1,
+              "modelLocalStaticTrs": {
+                "coordinateSpace": "model_local",
+                "translation": [
+                  0,
+                  0,
+                  0
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "variant": "base",
+              "path": "planets/p080.mdx",
+              "sha256": "7346902f938317e8ca139cca98dfb7e88d71a62b20643503e47e8216463fce89",
+              "nodeCount": 1,
+              "modelLocalStaticTrs": {
+                "coordinateSpace": "model_local",
+                "translation": [
+                  0,
+                  0,
+                  0
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": "p081",
+          "gameplayJoin": null,
+          "variants": [
+            {
+              "variant": "low",
+              "path": "planets/p081_low.mdx",
+              "sha256": "906547bb466c43ef1a6373c8ae8d5322342aee843a15e5a99dafcb37691ae91d",
+              "nodeCount": 1,
+              "modelLocalStaticTrs": {
+                "coordinateSpace": "model_local",
+                "translation": [
+                  0,
+                  0,
+                  0
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "variant": "mid",
+              "path": "planets/p081_mid.mdx",
+              "sha256": "bb8b54ec909e2290928c61425e641746ff054aef7f715e27880451f629770ab8",
+              "nodeCount": 1,
+              "modelLocalStaticTrs": {
+                "coordinateSpace": "model_local",
+                "translation": [
+                  0,
+                  0,
+                  0
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "variant": "base",
+              "path": "planets/p081.mdx",
+              "sha256": "83f91dd310e226d1ea5b972373d7f1dbf0e41580484131608333145f38bda715",
+              "nodeCount": 1,
+              "modelLocalStaticTrs": {
+                "coordinateSpace": "model_local",
+                "translation": [
+                  0,
+                  0,
+                  0
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": "p090",
+          "gameplayJoin": null,
+          "variants": [
+            {
+              "variant": "low",
+              "path": "planets/p090_low.mdx",
+              "sha256": "525c75fa95fa027c994fd8aea0f573fef6f48b48661c930bf190edfbebe020b7",
+              "nodeCount": 1,
+              "modelLocalStaticTrs": {
+                "coordinateSpace": "model_local",
+                "translation": [
+                  0,
+                  0,
+                  0
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "variant": "mid",
+              "path": "planets/p090_mid.mdx",
+              "sha256": "d586d0bc8ebe1db0e42d4b743bb39e9600cded555c90e6059aabc85316ed1be5",
+              "nodeCount": 1,
+              "modelLocalStaticTrs": {
+                "coordinateSpace": "model_local",
+                "translation": [
+                  0,
+                  0,
+                  0
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "variant": "base",
+              "path": "planets/p090.mdx",
+              "sha256": "f921d81c4d315030a6d4770f4dfb4ca939df05e42f23958b32f7717078bf85e1",
+              "nodeCount": 1,
+              "modelLocalStaticTrs": {
+                "coordinateSpace": "model_local",
+                "translation": [
+                  0,
+                  0,
+                  0
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": "p091",
+          "gameplayJoin": null,
+          "variants": [
+            {
+              "variant": "low",
+              "path": "planets/p091_low.mdx",
+              "sha256": "5569d94f5d078544cbc9aeb4a50cb734b8a4763606e6ada9d8110be807894c83",
+              "nodeCount": 1,
+              "modelLocalStaticTrs": {
+                "coordinateSpace": "model_local",
+                "translation": [
+                  0,
+                  0,
+                  0
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "variant": "mid",
+              "path": "planets/p091_mid.mdx",
+              "sha256": "109ec6b9ec7ff03d7ffafb9d8df3aa691eea22f76a4b6c60ef1c0846c59bb369",
+              "nodeCount": 1,
+              "modelLocalStaticTrs": {
+                "coordinateSpace": "model_local",
+                "translation": [
+                  0,
+                  0,
+                  0
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "variant": "base",
+              "path": "planets/p091.mdx",
+              "sha256": "ce785272d8ac64a1e3bf3eedfa49baf90cefadf9953e87598e16ae3aba02fbe6",
+              "nodeCount": 1,
+              "modelLocalStaticTrs": {
+                "coordinateSpace": "model_local",
+                "translation": [
+                  0,
+                  0,
+                  0
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": "p100",
+          "gameplayJoin": null,
+          "variants": [
+            {
+              "variant": "low",
+              "path": "planets/p100_low.mdx",
+              "sha256": "fb9ed34f1653685a1ad3283be8e453669b2a775a57753245633affbf0cabce51",
+              "nodeCount": 1,
+              "modelLocalStaticTrs": {
+                "coordinateSpace": "model_local",
+                "translation": [
+                  0,
+                  0,
+                  0
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "variant": "mid",
+              "path": "planets/p100_mid.mdx",
+              "sha256": "d986da6501b44a49c0040f9bed037f20268c7e726f2f8125947a8238653eb955",
+              "nodeCount": 1,
+              "modelLocalStaticTrs": {
+                "coordinateSpace": "model_local",
+                "translation": [
+                  0,
+                  0,
+                  0
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "variant": "base",
+              "path": "planets/p100.mdx",
+              "sha256": "a6010c183ae052771afae04b1557ffb3c38d55ed218000f7b581181f4d7cfca9",
+              "nodeCount": 1,
+              "modelLocalStaticTrs": {
+                "coordinateSpace": "model_local",
+                "translation": [
+                  0,
+                  0,
+                  0
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": "p101",
+          "gameplayJoin": null,
+          "variants": [
+            {
+              "variant": "low",
+              "path": "planets/p101_low.mdx",
+              "sha256": "d20022d55427875df85ef703315af65cbf94b23ee94c623f6e4d596e0a3dc1f7",
+              "nodeCount": 1,
+              "modelLocalStaticTrs": {
+                "coordinateSpace": "model_local",
+                "translation": [
+                  0,
+                  0,
+                  0
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "variant": "mid",
+              "path": "planets/p101_mid.mdx",
+              "sha256": "7f826b1708c975b02434a9c2f8701cf0980e9d917811dd6ab37c29d7b8d713fd",
+              "nodeCount": 1,
+              "modelLocalStaticTrs": {
+                "coordinateSpace": "model_local",
+                "translation": [
+                  0,
+                  0,
+                  0
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "variant": "base",
+              "path": "planets/p101.mdx",
+              "sha256": "bce8ed94dfd1f04b65fb9398bc3326ce4103c3f87d26e61aced47aecbfa90225",
+              "nodeCount": 1,
+              "modelLocalStaticTrs": {
+                "coordinateSpace": "model_local",
+                "translation": [
+                  0,
+                  0,
+                  0
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": "p102",
+          "gameplayJoin": null,
+          "variants": [
+            {
+              "variant": "low",
+              "path": "planets/p102_low.mdx",
+              "sha256": "6efca138f0582a40c6a5556dfce0f8429f834f39766a3ba0391a11777ccfaa58",
+              "nodeCount": 1,
+              "modelLocalStaticTrs": {
+                "coordinateSpace": "model_local",
+                "translation": [
+                  0,
+                  0,
+                  0
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "variant": "mid",
+              "path": "planets/p102_mid.mdx",
+              "sha256": "18d54d79354de965033fea9e6776239f3967a35991dc8442d9aad8e11042f955",
+              "nodeCount": 1,
+              "modelLocalStaticTrs": {
+                "coordinateSpace": "model_local",
+                "translation": [
+                  0,
+                  0,
+                  0
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "variant": "base",
+              "path": "planets/p102.mdx",
+              "sha256": "3d24c8b6ba4602015b68264c82465c80f9fe7fd5f36f2aca738e119835b6d2b8",
+              "nodeCount": 1,
+              "modelLocalStaticTrs": {
+                "coordinateSpace": "model_local",
+                "translation": [
+                  0,
+                  0,
+                  0
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "code": "y",
+      "baseModelCount": 6,
+      "coordinateSpace": "model_local",
+      "gameplayJoin": null,
+      "baseModels": [
+        {
+          "id": "y001",
+          "gameplayJoin": null,
+          "variants": [
+            {
+              "variant": "low",
+              "path": "planets/y001_low.mdx",
+              "sha256": "9b603bea1dd611ecb7a53ef08c02e14d49ee2b80618f2684e7218fde660e7c7e",
+              "nodeCount": 1,
+              "modelLocalStaticTrs": null
+            },
+            {
+              "variant": "base",
+              "path": "planets/y001.mdx",
+              "sha256": "9b603bea1dd611ecb7a53ef08c02e14d49ee2b80618f2684e7218fde660e7c7e",
+              "nodeCount": 1,
+              "modelLocalStaticTrs": null
+            }
+          ]
+        },
+        {
+          "id": "y002",
+          "gameplayJoin": null,
+          "variants": [
+            {
+              "variant": "low",
+              "path": "planets/y002_low.mdx",
+              "sha256": "88afae8493fc1a0af356106816a1488716631a4b7b673baca5ed2bf69e4546ab",
+              "nodeCount": 1,
+              "modelLocalStaticTrs": {
+                "coordinateSpace": "model_local",
+                "translation": [
+                  0,
+                  0,
+                  0
+                ],
+                "rotation": [
+                  0,
+                  1.919862151145935,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "variant": "base",
+              "path": "planets/y002.mdx",
+              "sha256": "88afae8493fc1a0af356106816a1488716631a4b7b673baca5ed2bf69e4546ab",
+              "nodeCount": 1,
+              "modelLocalStaticTrs": {
+                "coordinateSpace": "model_local",
+                "translation": [
+                  0,
+                  0,
+                  0
+                ],
+                "rotation": [
+                  0,
+                  1.919862151145935,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": "y003",
+          "gameplayJoin": null,
+          "variants": [
+            {
+              "variant": "low",
+              "path": "planets/y003_low.mdx",
+              "sha256": "58f5cf4c4764ae92d71ef3d1211756cea3c6dba7d3ad4931bead3d07b7a983b3",
+              "nodeCount": 1,
+              "modelLocalStaticTrs": {
+                "coordinateSpace": "model_local",
+                "translation": [
+                  0,
+                  0,
+                  0
+                ],
+                "rotation": [
+                  0,
+                  -0.6108652353286743,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "variant": "base",
+              "path": "planets/y003.mdx",
+              "sha256": "58f5cf4c4764ae92d71ef3d1211756cea3c6dba7d3ad4931bead3d07b7a983b3",
+              "nodeCount": 1,
+              "modelLocalStaticTrs": {
+                "coordinateSpace": "model_local",
+                "translation": [
+                  0,
+                  0,
+                  0
+                ],
+                "rotation": [
+                  0,
+                  -0.6108652353286743,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": "y004",
+          "gameplayJoin": null,
+          "variants": [
+            {
+              "variant": "low",
+              "path": "planets/y004_low.mdx",
+              "sha256": "60756f25b332cfb405f649728aa93e73c9090af1ecc42d70058f6b467a7a0084",
+              "nodeCount": 1,
+              "modelLocalStaticTrs": {
+                "coordinateSpace": "model_local",
+                "translation": [
+                  -0.02025695890188217,
+                  0,
+                  -0.04571274667978287
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "variant": "base",
+              "path": "planets/y004.mdx",
+              "sha256": "60756f25b332cfb405f649728aa93e73c9090af1ecc42d70058f6b467a7a0084",
+              "nodeCount": 1,
+              "modelLocalStaticTrs": {
+                "coordinateSpace": "model_local",
+                "translation": [
+                  -0.02025695890188217,
+                  0,
+                  -0.04571274667978287
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": "y005",
+          "gameplayJoin": null,
+          "variants": [
+            {
+              "variant": "low",
+              "path": "planets/y005_low.mdx",
+              "sha256": "fd860608ed2a8eb8ac3a6dcaba2fb1617e9501209647e455e9fbe43e1a78979e",
+              "nodeCount": 1,
+              "modelLocalStaticTrs": {
+                "coordinateSpace": "model_local",
+                "translation": [
+                  0,
+                  0,
+                  0
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "variant": "base",
+              "path": "planets/y005.mdx",
+              "sha256": "fd860608ed2a8eb8ac3a6dcaba2fb1617e9501209647e455e9fbe43e1a78979e",
+              "nodeCount": 1,
+              "modelLocalStaticTrs": {
+                "coordinateSpace": "model_local",
+                "translation": [
+                  0,
+                  0,
+                  0
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": "y009",
+          "gameplayJoin": null,
+          "variants": [
+            {
+              "variant": "low",
+              "path": "planets/y009_low.mdx",
+              "sha256": "cb0c8837b9cb1baea6397ae6e6a528f86dfcc68286db66b88e1fb2c066067260",
+              "nodeCount": 1,
+              "modelLocalStaticTrs": {
+                "coordinateSpace": "model_local",
+                "translation": [
+                  0,
+                  0,
+                  0
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "variant": "base",
+              "path": "planets/y009.mdx",
+              "sha256": "cb0c8837b9cb1baea6397ae6e6a528f86dfcc68286db66b88e1fb2c066067260",
+              "nodeCount": 1,
+              "modelLocalStaticTrs": {
+                "coordinateSpace": "model_local",
+                "translation": [
+                  0,
+                  0,
+                  0
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "nullGalaxy": {
+    "modelPath": "strategy/null_galaxy.mdx",
+    "sourceSha256": "073f96eee8ce514eab9f57a991e1b7906cb3ea08c8d647beda4548bdd3652283",
+    "coordinateSpace": "model_local",
+    "counts": {
+      "total": 85,
+      "star": 79,
+      "blackhole": 3,
+      "neutronStar": 3,
+      "alignmentPairs": 79
+    },
+    "flattening": {
+      "sourceChannels": [
+        "Tx",
+        "Tz"
+      ],
+      "note": "MDX 모델 로컬 X/Z 평면 투영이며 전술 월드 좌표가 아니다."
+    },
+    "alignment": {
+      "authority": "server/content/extracted/model-galaxy-alignment.json",
+      "maxResidualNorm": 0.0357,
+      "acceptanceThreshold": 0.05
+    },
+    "nodes": [
+      {
+        "sourceNodeIndex": 0,
+        "mdxIndex": 1,
+        "name": "star_01_G",
+        "kind": "star",
+        "spectralClass": "G",
+        "parentIndex": -1,
+        "modelLocalTranslation": [
+          18.75,
+          0,
+          0.25
+        ],
+        "modelLocalRotation": [
+          0,
+          0,
+          0
+        ],
+        "modelLocalScale": [
+          1,
+          1,
+          1
+        ],
+        "flatModelCoordinates": [
+          18.75,
+          0.25
+        ],
+        "system": "ヴァルハラ",
+        "cell": 2588,
+        "strategicJoin": {
+          "authority": "null_galaxy_alignment",
+          "systemArrayIndex": 69,
+          "canonCol": 88,
+          "canonRow": 25,
+          "residualNorm": 0.0192
+        }
+      },
+      {
+        "sourceNodeIndex": 1,
+        "mdxIndex": 2,
+        "name": "star_02_O",
+        "kind": "star",
+        "spectralClass": "O",
+        "parentIndex": -1,
+        "modelLocalTranslation": [
+          15.25,
+          0,
+          -3.75
+        ],
+        "modelLocalRotation": [
+          0,
+          0,
+          0
+        ],
+        "modelLocalScale": [
+          1,
+          1,
+          1
+        ],
+        "flatModelCoordinates": [
+          15.25,
+          -3.75
+        ],
+        "system": "アルテナ",
+        "cell": 3381,
+        "strategicJoin": {
+          "authority": "null_galaxy_alignment",
+          "systemArrayIndex": 63,
+          "canonCol": 81,
+          "canonRow": 33,
+          "residualNorm": 0.0136
+        }
+      },
+      {
+        "sourceNodeIndex": 2,
+        "mdxIndex": 3,
+        "name": "star_03_F",
+        "kind": "star",
+        "spectralClass": "F",
+        "parentIndex": -1,
+        "modelLocalTranslation": [
+          21.25,
+          0,
+          4.75
+        ],
+        "modelLocalRotation": [
+          0,
+          0,
+          0
+        ],
+        "modelLocalScale": [
+          1,
+          1,
+          1
+        ],
+        "flatModelCoordinates": [
+          21.25,
+          4.75
+        ],
+        "system": "ヴァナヘイム",
+        "cell": 1594,
+        "strategicJoin": {
+          "authority": "null_galaxy_alignment",
+          "systemArrayIndex": 75,
+          "canonCol": 94,
+          "canonRow": 15,
+          "residualNorm": 0.0117
+        }
+      },
+      {
+        "sourceNodeIndex": 3,
+        "mdxIndex": 4,
+        "name": "star_04_A",
+        "kind": "star",
+        "spectralClass": "A",
+        "parentIndex": -1,
+        "modelLocalTranslation": [
+          19.25,
+          0,
+          3.25
+        ],
+        "modelLocalRotation": [
+          0,
+          0,
+          0
+        ],
+        "modelLocalScale": [
+          1,
+          1,
+          1
+        ],
+        "flatModelCoordinates": [
+          19.25,
+          3.25
+        ],
+        "system": "ニヴルヘイム",
+        "cell": 1889,
+        "strategicJoin": {
+          "authority": "null_galaxy_alignment",
+          "systemArrayIndex": 71,
+          "canonCol": 89,
+          "canonRow": 18,
+          "residualNorm": 0.0074
+        }
+      },
+      {
+        "sourceNodeIndex": 4,
+        "mdxIndex": 5,
+        "name": "star_05_A",
+        "kind": "star",
+        "spectralClass": "A",
+        "parentIndex": -1,
+        "modelLocalTranslation": [
+          20.75,
+          0,
+          -2.25
+        ],
+        "modelLocalRotation": [
+          0,
+          0,
+          0
+        ],
+        "modelLocalScale": [
+          1,
+          1,
+          1
+        ],
+        "flatModelCoordinates": [
+          20.75,
+          -2.25
+        ],
+        "system": "アスガルド",
+        "cell": 3093,
+        "strategicJoin": {
+          "authority": "null_galaxy_alignment",
+          "systemArrayIndex": 74,
+          "canonCol": 93,
+          "canonRow": 30,
+          "residualNorm": 0.0185
+        }
+      },
+      {
+        "sourceNodeIndex": 5,
+        "mdxIndex": 6,
+        "name": "star_06_G",
+        "kind": "star",
+        "spectralClass": "G",
+        "parentIndex": -1,
+        "modelLocalTranslation": [
+          17.25,
+          0,
+          7.75
+        ],
+        "modelLocalRotation": [
+          0,
+          0,
+          0
+        ],
+        "modelLocalScale": [
+          1,
+          1,
+          1
+        ],
+        "flatModelCoordinates": [
+          17.25,
+          7.75
+        ],
+        "system": "ヴィレンシュタイン",
+        "cell": 985,
+        "strategicJoin": {
+          "authority": "null_galaxy_alignment",
+          "systemArrayIndex": 66,
+          "canonCol": 85,
+          "canonRow": 9,
+          "residualNorm": 0.0118
+        }
+      },
+      {
+        "sourceNodeIndex": 6,
+        "mdxIndex": 7,
+        "name": "star_07_B",
+        "kind": "star",
+        "spectralClass": "B",
+        "parentIndex": -1,
+        "modelLocalTranslation": [
+          9.75,
+          0,
+          -4.25
+        ],
+        "modelLocalRotation": [
+          0,
+          0,
+          0
+        ],
+        "modelLocalScale": [
+          1,
+          1,
+          1
+        ],
+        "flatModelCoordinates": [
+          9.75,
+          -4.25
+        ],
+        "system": "フレイア",
+        "cell": 3470,
+        "strategicJoin": {
+          "authority": "null_galaxy_alignment",
+          "systemArrayIndex": 54,
+          "canonCol": 70,
+          "canonRow": 34,
+          "residualNorm": 0.0198
+        }
+      },
+      {
+        "sourceNodeIndex": 7,
+        "mdxIndex": 8,
+        "name": "star_08_M",
+        "kind": "star",
+        "spectralClass": "M",
+        "parentIndex": -1,
+        "modelLocalTranslation": [
+          6.25,
+          0,
+          3.25
+        ],
+        "modelLocalRotation": [
+          0,
+          0,
+          0
+        ],
+        "modelLocalScale": [
+          1,
+          1,
+          1
+        ],
+        "flatModelCoordinates": [
+          6.25,
+          3.25
+        ],
+        "system": "ヴァンステイド",
+        "cell": 1863,
+        "strategicJoin": {
+          "authority": "null_galaxy_alignment",
+          "systemArrayIndex": 46,
+          "canonCol": 63,
+          "canonRow": 18,
+          "residualNorm": 0.0126
+        }
+      },
+      {
+        "sourceNodeIndex": 8,
+        "mdxIndex": 9,
+        "name": "star_09_G",
+        "kind": "star",
+        "spectralClass": "G",
+        "parentIndex": -1,
+        "modelLocalTranslation": [
+          20.75,
+          0,
+          8.25
+        ],
+        "modelLocalRotation": [
+          0,
+          0,
+          0
+        ],
+        "modelLocalScale": [
+          1,
+          1,
+          1
+        ],
+        "flatModelCoordinates": [
+          20.75,
+          8.25
+        ],
+        "system": "カストロプ",
+        "cell": 892,
+        "strategicJoin": {
+          "authority": "null_galaxy_alignment",
+          "systemArrayIndex": 73,
+          "canonCol": 92,
+          "canonRow": 8,
+          "residualNorm": 0.0225
+        }
+      },
+      {
+        "sourceNodeIndex": 9,
+        "mdxIndex": 10,
+        "name": "star_10_B",
+        "kind": "star",
+        "spectralClass": "B",
+        "parentIndex": -1,
+        "modelLocalTranslation": [
+          18.75,
+          0,
+          -3.25
+        ],
+        "modelLocalRotation": [
+          0,
+          0,
+          0
+        ],
+        "modelLocalScale": [
+          1,
+          1,
+          1
+        ],
+        "flatModelCoordinates": [
+          18.75,
+          -3.25
+        ],
+        "system": "シャンタウ",
+        "cell": 3288,
+        "strategicJoin": {
+          "authority": "null_galaxy_alignment",
+          "systemArrayIndex": 70,
+          "canonCol": 88,
+          "canonRow": 32,
+          "residualNorm": 0.02
+        }
+      },
+      {
+        "sourceNodeIndex": 10,
+        "mdxIndex": 11,
+        "name": "star_11_G",
+        "kind": "star",
+        "spectralClass": "G",
+        "parentIndex": -1,
+        "modelLocalTranslation": [
+          8.25,
+          0,
+          -9.25
+        ],
+        "modelLocalRotation": [
+          0,
+          0,
+          0
+        ],
+        "modelLocalScale": [
+          1,
+          1,
+          1
+        ],
+        "flatModelCoordinates": [
+          8.25,
+          -9.25
+        ],
+        "system": "ブラウンシュヴァイク",
+        "cell": 4467,
+        "strategicJoin": {
+          "authority": "null_galaxy_alignment",
+          "systemArrayIndex": 50,
+          "canonCol": 67,
+          "canonRow": 44,
+          "residualNorm": 0.0061
+        }
+      },
+      {
+        "sourceNodeIndex": 11,
+        "mdxIndex": 12,
+        "name": "star_12_G",
+        "kind": "star",
+        "spectralClass": "G",
+        "parentIndex": -1,
+        "modelLocalTranslation": [
+          15.75,
+          0,
+          -9.25
+        ],
+        "modelLocalRotation": [
+          0,
+          0,
+          0
+        ],
+        "modelLocalScale": [
+          1,
+          1,
+          1
+        ],
+        "flatModelCoordinates": [
+          15.75,
+          -9.25
+        ],
+        "system": "リッテンハイム",
+        "cell": 4482,
+        "strategicJoin": {
+          "authority": "null_galaxy_alignment",
+          "systemArrayIndex": 64,
+          "canonCol": 82,
+          "canonRow": 44,
+          "residualNorm": 0.0098
+        }
+      },
+      {
+        "sourceNodeIndex": 12,
+        "mdxIndex": 13,
+        "name": "star_13_K",
+        "kind": "star",
+        "spectralClass": "K",
+        "parentIndex": -1,
+        "modelLocalTranslation": [
+          8.75,
+          0,
+          8.75
+        ],
+        "modelLocalRotation": [
+          0,
+          0,
+          0
+        ],
+        "modelLocalScale": [
+          1,
+          1,
+          1
+        ],
+        "flatModelCoordinates": [
+          8.75,
+          8.75
+        ],
+        "system": "ボルソルン",
+        "cell": 768,
+        "strategicJoin": {
+          "authority": "null_galaxy_alignment",
+          "systemArrayIndex": 51,
+          "canonCol": 68,
+          "canonRow": 7,
+          "residualNorm": 0.0081
+        }
+      },
+      {
+        "sourceNodeIndex": 13,
+        "mdxIndex": 14,
+        "name": "star_14_F",
+        "kind": "star",
+        "spectralClass": "F",
+        "parentIndex": -1,
+        "modelLocalTranslation": [
+          6.25,
+          0,
+          -7.25
+        ],
+        "modelLocalRotation": [
+          0,
+          0,
+          0
+        ],
+        "modelLocalScale": [
+          1,
+          1,
+          1
+        ],
+        "flatModelCoordinates": [
+          6.25,
+          -7.25
+        ],
+        "system": "ヨーツンヘイム",
+        "cell": 4063,
+        "strategicJoin": {
+          "authority": "null_galaxy_alignment",
+          "systemArrayIndex": 45,
+          "canonCol": 63,
+          "canonRow": 40,
+          "residualNorm": 0.0168
+        }
+      },
+      {
+        "sourceNodeIndex": 14,
+        "mdxIndex": 15,
+        "name": "star_15_M",
+        "kind": "star",
+        "spectralClass": "M",
+        "parentIndex": -1,
+        "modelLocalTranslation": [
+          6.75,
+          0,
+          -3.75
+        ],
+        "modelLocalRotation": [
+          0,
+          0,
+          0
+        ],
+        "modelLocalScale": [
+          1,
+          1,
+          1
+        ],
+        "flatModelCoordinates": [
+          6.75,
+          -3.75
+        ],
+        "system": "アルメントフベール",
+        "cell": 3364,
+        "strategicJoin": {
+          "authority": "null_galaxy_alignment",
+          "systemArrayIndex": 48,
+          "canonCol": 64,
+          "canonRow": 33,
+          "residualNorm": 0.01
+        }
+      },
+      {
+        "sourceNodeIndex": 15,
+        "mdxIndex": 16,
+        "name": "star_16_K",
+        "kind": "star",
+        "spectralClass": "K",
+        "parentIndex": -1,
+        "modelLocalTranslation": [
+          10.25,
+          0,
+          4.75
+        ],
+        "modelLocalRotation": [
+          0,
+          0,
+          0
+        ],
+        "modelLocalScale": [
+          1,
+          1,
+          1
+        ],
+        "flatModelCoordinates": [
+          10.25,
+          4.75
+        ],
+        "system": "ヤヴァンハール",
+        "cell": 1571,
+        "strategicJoin": {
+          "authority": "null_galaxy_alignment",
+          "systemArrayIndex": 55,
+          "canonCol": 71,
+          "canonRow": 15,
+          "residualNorm": 0.0099
+        }
+      },
+      {
+        "sourceNodeIndex": 16,
+        "mdxIndex": 17,
+        "name": "star_17_K",
+        "kind": "star",
+        "spectralClass": "K",
+        "parentIndex": -1,
+        "modelLocalTranslation": [
+          3.75,
+          0,
+          -6.25
+        ],
+        "modelLocalRotation": [
+          0,
+          0,
+          0
+        ],
+        "modelLocalScale": [
+          1,
+          1,
+          1
+        ],
+        "flatModelCoordinates": [
+          3.75,
+          -6.25
+        ],
+        "system": "アイゼンヘルツ",
+        "cell": 3857,
+        "strategicJoin": {
+          "authority": "null_galaxy_alignment",
+          "systemArrayIndex": 42,
+          "canonCol": 57,
+          "canonRow": 38,
+          "residualNorm": 0.0169
+        }
+      },
+      {
+        "sourceNodeIndex": 17,
+        "mdxIndex": 18,
+        "name": "star_18_A",
+        "kind": "star",
+        "spectralClass": "A",
+        "parentIndex": -1,
+        "modelLocalTranslation": [
+          11.25,
+          0,
+          -9.75
+        ],
+        "modelLocalRotation": [
+          0,
+          0,
+          0
+        ],
+        "modelLocalScale": [
+          1,
+          1,
+          1
+        ],
+        "flatModelCoordinates": [
+          11.25,
+          -9.75
+        ],
+        "system": "キフォイザー",
+        "cell": 4573,
+        "strategicJoin": {
+          "authority": "null_galaxy_alignment",
+          "systemArrayIndex": 56,
+          "canonCol": 73,
+          "canonRow": 45,
+          "residualNorm": 0.0159
+        }
+      },
+      {
+        "sourceNodeIndex": 18,
+        "mdxIndex": 19,
+        "name": "star_19_K",
+        "kind": "star",
+        "spectralClass": "K",
+        "parentIndex": -1,
+        "modelLocalTranslation": [
+          8.75,
+          0,
+          6.25
+        ],
+        "modelLocalRotation": [
+          0,
+          0,
+          0
+        ],
+        "modelLocalScale": [
+          1,
+          1,
+          1
+        ],
+        "flatModelCoordinates": [
+          8.75,
+          6.25
+        ],
+        "system": "ドヴェルグ",
+        "cell": 1268,
+        "strategicJoin": {
+          "authority": "null_galaxy_alignment",
+          "systemArrayIndex": 52,
+          "canonCol": 68,
+          "canonRow": 12,
+          "residualNorm": 0.0131
+        }
+      },
+      {
+        "sourceNodeIndex": 19,
+        "mdxIndex": 20,
+        "name": "star_20_G",
+        "kind": "star",
+        "spectralClass": "G",
+        "parentIndex": -1,
+        "modelLocalTranslation": [
+          6.75,
+          0,
+          -0.25
+        ],
+        "modelLocalRotation": [
+          0,
+          0,
+          0
+        ],
+        "modelLocalScale": [
+          1,
+          1,
+          1
+        ],
+        "flatModelCoordinates": [
+          6.75,
+          -0.25
+        ],
+        "system": "トラーバッハ",
+        "cell": 2664,
+        "strategicJoin": {
+          "authority": "null_galaxy_alignment",
+          "systemArrayIndex": 49,
+          "canonCol": 64,
+          "canonRow": 26,
+          "residualNorm": 0.012
+        }
+      },
+      {
+        "sourceNodeIndex": 20,
+        "mdxIndex": 21,
+        "name": "star_21_M",
+        "kind": "star",
+        "spectralClass": "M",
+        "parentIndex": -1,
+        "modelLocalTranslation": [
+          6.75,
+          0,
+          9.75
+        ],
+        "modelLocalRotation": [
+          0,
+          0,
+          0
+        ],
+        "modelLocalScale": [
+          1,
+          1,
+          1
+        ],
+        "flatModelCoordinates": [
+          6.75,
+          9.75
+        ],
+        "system": "ビルロスト",
+        "cell": 564,
+        "strategicJoin": {
+          "authority": "null_galaxy_alignment",
+          "systemArrayIndex": 47,
+          "canonCol": 64,
+          "canonRow": 5,
+          "residualNorm": 0.0184
+        }
+      },
+      {
+        "sourceNodeIndex": 21,
+        "mdxIndex": 22,
+        "name": "star_22_M",
+        "kind": "star",
+        "spectralClass": "M",
+        "parentIndex": -1,
+        "modelLocalTranslation": [
+          5.25,
+          0,
+          -10.75
+        ],
+        "modelLocalRotation": [
+          0,
+          0,
+          0
+        ],
+        "modelLocalScale": [
+          1,
+          1,
+          1
+        ],
+        "flatModelCoordinates": [
+          5.25,
+          -10.75
+        ],
+        "system": "フォルゲン",
+        "cell": 4761,
+        "strategicJoin": {
+          "authority": "null_galaxy_alignment",
+          "systemArrayIndex": 44,
+          "canonCol": 61,
+          "canonRow": 47,
+          "residualNorm": 0.0163
+        }
+      },
+      {
+        "sourceNodeIndex": 22,
+        "mdxIndex": 23,
+        "name": "star_23_M",
+        "kind": "star",
+        "spectralClass": "M",
+        "parentIndex": -1,
+        "modelLocalTranslation": [
+          5.25,
+          0,
+          6.25
+        ],
+        "modelLocalRotation": [
+          0,
+          0,
+          0
+        ],
+        "modelLocalScale": [
+          1,
+          1,
+          1
+        ],
+        "flatModelCoordinates": [
+          5.25,
+          6.25
+        ],
+        "system": "アムリッツァ",
+        "cell": 1261,
+        "strategicJoin": {
+          "authority": "null_galaxy_alignment",
+          "systemArrayIndex": 43,
+          "canonCol": 61,
+          "canonRow": 12,
+          "residualNorm": 0.0102
+        }
+      },
+      {
+        "sourceNodeIndex": 23,
+        "mdxIndex": 24,
+        "name": "star_24_F",
+        "kind": "star",
+        "spectralClass": "F",
+        "parentIndex": -1,
+        "modelLocalTranslation": [
+          12.75,
+          0,
+          -1.25
+        ],
+        "modelLocalRotation": [
+          0,
+          0,
+          0
+        ],
+        "modelLocalScale": [
+          1,
+          1,
+          1
+        ],
+        "flatModelCoordinates": [
+          12.75,
+          -1.25
+        ],
+        "system": "アルヴィース",
+        "cell": 2876,
+        "strategicJoin": {
+          "authority": "null_galaxy_alignment",
+          "systemArrayIndex": 57,
+          "canonCol": 76,
+          "canonRow": 28,
+          "residualNorm": 0.0118
+        }
+      },
+      {
+        "sourceNodeIndex": 24,
+        "mdxIndex": 25,
+        "name": "star_25_M",
+        "kind": "star",
+        "spectralClass": "M",
+        "parentIndex": -1,
+        "modelLocalTranslation": [
+          1.75,
+          0,
+          6.25
+        ],
+        "modelLocalRotation": [
+          0,
+          0,
+          0
+        ],
+        "modelLocalScale": [
+          1,
+          1,
+          1
+        ],
+        "flatModelCoordinates": [
+          1.75,
+          6.25
+        ],
+        "system": "イゼルローン",
+        "cell": 1253,
+        "strategicJoin": {
+          "authority": "null_galaxy_alignment",
+          "systemArrayIndex": 41,
+          "canonCol": 53,
+          "canonRow": 12,
+          "residualNorm": 0.0081
+        }
+      },
+      {
+        "sourceNodeIndex": 25,
+        "mdxIndex": 26,
+        "name": "star_26_K",
+        "kind": "star",
+        "spectralClass": "K",
+        "parentIndex": -1,
+        "modelLocalTranslation": [
+          13.25,
+          0,
+          -10.75
+        ],
+        "modelLocalRotation": [
+          0,
+          0,
+          0
+        ],
+        "modelLocalScale": [
+          1,
+          1,
+          1
+        ],
+        "flatModelCoordinates": [
+          13.25,
+          -10.75
+        ],
+        "system": "バルドル",
+        "cell": 4777,
+        "strategicJoin": {
+          "authority": "null_galaxy_alignment",
+          "systemArrayIndex": 59,
+          "canonCol": 77,
+          "canonRow": 47,
+          "residualNorm": 0.0132
+        }
+      },
+      {
+        "sourceNodeIndex": 26,
+        "mdxIndex": 27,
+        "name": "star_27_G",
+        "kind": "star",
+        "spectralClass": "G",
+        "parentIndex": -1,
+        "modelLocalTranslation": [
+          13.75,
+          0,
+          6.75
+        ],
+        "modelLocalRotation": [
+          0,
+          0,
+          0
+        ],
+        "modelLocalScale": [
+          1,
+          1,
+          1
+        ],
+        "flatModelCoordinates": [
+          13.75,
+          6.75
+        ],
+        "system": "リンダーホーフ",
+        "cell": 1178,
+        "strategicJoin": {
+          "authority": "null_galaxy_alignment",
+          "systemArrayIndex": 60,
+          "canonCol": 78,
+          "canonRow": 11,
+          "residualNorm": 0.0106
+        }
+      },
+      {
+        "sourceNodeIndex": 27,
+        "mdxIndex": 28,
+        "name": "star_28_G",
+        "kind": "star",
+        "spectralClass": "G",
+        "parentIndex": -1,
+        "modelLocalTranslation": [
+          12.75,
+          0,
+          10.75
+        ],
+        "modelLocalRotation": [
+          0,
+          0,
+          0
+        ],
+        "modelLocalScale": [
+          1,
+          1,
+          1
+        ],
+        "flatModelCoordinates": [
+          12.75,
+          10.75
+        ],
+        "system": "太陽系",
+        "cell": 376,
+        "strategicJoin": {
+          "authority": "null_galaxy_alignment",
+          "systemArrayIndex": 58,
+          "canonCol": 76,
+          "canonRow": 3,
+          "residualNorm": 0.0318
+        }
+      },
+      {
+        "sourceNodeIndex": 28,
+        "mdxIndex": 29,
+        "name": "star_29_K",
+        "kind": "star",
+        "spectralClass": "K",
+        "parentIndex": -1,
+        "modelLocalTranslation": [
+          14.75,
+          0,
+          11.75
+        ],
+        "modelLocalRotation": [
+          0,
+          0,
+          0
+        ],
+        "modelLocalScale": [
+          1,
+          1,
+          1
+        ],
+        "flatModelCoordinates": [
+          14.75,
+          11.75
+        ],
+        "system": "シリウス",
+        "cell": 180,
+        "strategicJoin": {
+          "authority": "null_galaxy_alignment",
+          "systemArrayIndex": 61,
+          "canonCol": 80,
+          "canonRow": 1,
+          "residualNorm": 0.0178
+        }
+      },
+      {
+        "sourceNodeIndex": 29,
+        "mdxIndex": 30,
+        "name": "star_30_M",
+        "kind": "star",
+        "spectralClass": "M",
+        "parentIndex": -1,
+        "modelLocalTranslation": [
+          14.75,
+          0,
+          10.25
+        ],
+        "modelLocalRotation": [
+          0,
+          0,
+          0
+        ],
+        "modelLocalScale": [
+          1,
+          1,
+          1
+        ],
+        "flatModelCoordinates": [
+          14.75,
+          10.25
+        ],
+        "system": "ヴェガ",
+        "cell": 480,
+        "strategicJoin": {
+          "authority": "null_galaxy_alignment",
+          "systemArrayIndex": 62,
+          "canonCol": 80,
+          "canonRow": 4,
+          "residualNorm": 0.022
+        }
+      },
+      {
+        "sourceNodeIndex": 30,
+        "mdxIndex": 31,
+        "name": "star_31_M",
+        "kind": "star",
+        "spectralClass": "M",
+        "parentIndex": -1,
+        "modelLocalTranslation": [
+          9.75,
+          0,
+          1.75
+        ],
+        "modelLocalRotation": [
+          0,
+          0,
+          0
+        ],
+        "modelLocalScale": [
+          1,
+          1,
+          1
+        ],
+        "flatModelCoordinates": [
+          9.75,
+          1.75
+        ],
+        "system": "アルタイル",
+        "cell": 2170,
+        "strategicJoin": {
+          "authority": "null_galaxy_alignment",
+          "systemArrayIndex": 53,
+          "canonCol": 70,
+          "canonRow": 21,
+          "residualNorm": 0.0129
+        }
+      },
+      {
+        "sourceNodeIndex": 31,
+        "mdxIndex": 32,
+        "name": "star_32_K",
+        "kind": "star",
+        "spectralClass": "K",
+        "parentIndex": -1,
+        "modelLocalTranslation": [
+          18.75,
+          0,
+          -6.25
+        ],
+        "modelLocalRotation": [
+          0,
+          0,
+          0
+        ],
+        "modelLocalScale": [
+          1,
+          1,
+          1
+        ],
+        "flatModelCoordinates": [
+          18.75,
+          -6.25
+        ],
+        "system": "ヴァルデマール",
+        "cell": 3888,
+        "strategicJoin": {
+          "authority": "null_galaxy_alignment",
+          "systemArrayIndex": 68,
+          "canonCol": 88,
+          "canonRow": 38,
+          "residualNorm": 0.0152
+        }
+      },
+      {
+        "sourceNodeIndex": 32,
+        "mdxIndex": 33,
+        "name": "star_33_G",
+        "kind": "star",
+        "spectralClass": "G",
+        "parentIndex": -1,
+        "modelLocalTranslation": [
+          21.25,
+          0,
+          -6.25
+        ],
+        "modelLocalRotation": [
+          0,
+          0,
+          0
+        ],
+        "modelLocalScale": [
+          1,
+          1,
+          1
+        ],
+        "flatModelCoordinates": [
+          21.25,
+          -6.25
+        ],
+        "system": "ヴィッテルスバッハ",
+        "cell": 3894,
+        "strategicJoin": {
+          "authority": "null_galaxy_alignment",
+          "systemArrayIndex": 76,
+          "canonCol": 94,
+          "canonRow": 38,
+          "residualNorm": 0.0199
+        }
+      },
+      {
+        "sourceNodeIndex": 33,
+        "mdxIndex": 34,
+        "name": "star_34_G",
+        "kind": "star",
+        "spectralClass": "G",
+        "parentIndex": -1,
+        "modelLocalTranslation": [
+          23.25,
+          0,
+          -4.75
+        ],
+        "modelLocalRotation": [
+          0,
+          0,
+          0
+        ],
+        "modelLocalScale": [
+          1,
+          1,
+          1
+        ],
+        "flatModelCoordinates": [
+          23.25,
+          -4.75
+        ],
+        "system": "ヴィンスティンゲン",
+        "cell": 3598,
+        "strategicJoin": {
+          "authority": "null_galaxy_alignment",
+          "systemArrayIndex": 78,
+          "canonCol": 98,
+          "canonRow": 35,
+          "residualNorm": 0.0305
+        }
+      },
+      {
+        "sourceNodeIndex": 34,
+        "mdxIndex": 35,
+        "name": "star_35_M",
+        "kind": "star",
+        "spectralClass": "M",
+        "parentIndex": -1,
+        "modelLocalTranslation": [
+          18.75,
+          0,
+          4.75
+        ],
+        "modelLocalRotation": [
+          0,
+          0,
+          0
+        ],
+        "modelLocalScale": [
+          1,
+          1,
+          1
+        ],
+        "flatModelCoordinates": [
+          18.75,
+          4.75
+        ],
+        "system": "ハインスベルク",
+        "cell": 1588,
+        "strategicJoin": {
+          "authority": "null_galaxy_alignment",
+          "systemArrayIndex": 67,
+          "canonCol": 88,
+          "canonRow": 15,
+          "residualNorm": 0.0101
+        }
+      },
+      {
+        "sourceNodeIndex": 35,
+        "mdxIndex": 36,
+        "name": "star_36_M",
+        "kind": "star",
+        "spectralClass": "M",
+        "parentIndex": -1,
+        "modelLocalTranslation": [
+          22.25,
+          0,
+          0.75
+        ],
+        "modelLocalRotation": [
+          0,
+          0,
+          0
+        ],
+        "modelLocalScale": [
+          1,
+          1,
+          1
+        ],
+        "flatModelCoordinates": [
+          22.25,
+          0.75
+        ],
+        "system": "ルイトポルディング",
+        "cell": 2496,
+        "strategicJoin": {
+          "authority": "null_galaxy_alignment",
+          "systemArrayIndex": 77,
+          "canonCol": 96,
+          "canonRow": 24,
+          "residualNorm": 0.019
+        }
+      },
+      {
+        "sourceNodeIndex": 36,
+        "mdxIndex": 37,
+        "name": "star_37_K",
+        "kind": "star",
+        "spectralClass": "K",
+        "parentIndex": -1,
+        "modelLocalTranslation": [
+          23.75,
+          0,
+          -2.25
+        ],
+        "modelLocalRotation": [
+          0,
+          0,
+          0
+        ],
+        "modelLocalScale": [
+          1,
+          1,
+          1
+        ],
+        "flatModelCoordinates": [
+          23.75,
+          -2.25
+        ],
+        "system": "ウォームスガウ",
+        "cell": 3099,
+        "strategicJoin": {
+          "authority": "null_galaxy_alignment",
+          "systemArrayIndex": 79,
+          "canonCol": 99,
+          "canonRow": 30,
+          "residualNorm": 0.0223
+        }
+      },
+      {
+        "sourceNodeIndex": 37,
+        "mdxIndex": 38,
+        "name": "star_38_K",
+        "kind": "star",
+        "spectralClass": "K",
+        "parentIndex": -1,
+        "modelLocalTranslation": [
+          19.25,
+          0,
+          -8.75
+        ],
+        "modelLocalRotation": [
+          0,
+          0,
+          0
+        ],
+        "modelLocalScale": [
+          1,
+          1,
+          1
+        ],
+        "flatModelCoordinates": [
+          19.25,
+          -8.75
+        ],
+        "system": "ランメルスベルク",
+        "cell": 4389,
+        "strategicJoin": {
+          "authority": "null_galaxy_alignment",
+          "systemArrayIndex": 72,
+          "canonCol": 89,
+          "canonRow": 43,
+          "residualNorm": 0.0197
+        }
+      },
+      {
+        "sourceNodeIndex": 38,
+        "mdxIndex": 39,
+        "name": "star_39_B",
+        "kind": "star",
+        "spectralClass": "B",
+        "parentIndex": -1,
+        "modelLocalTranslation": [
+          16.25,
+          0,
+          1.25
+        ],
+        "modelLocalRotation": [
+          0,
+          0,
+          0
+        ],
+        "modelLocalScale": [
+          1,
+          1,
+          1
+        ],
+        "flatModelCoordinates": [
+          16.25,
+          1.25
+        ],
+        "system": "ヴェルラ",
+        "cell": 2383,
+        "strategicJoin": {
+          "authority": "null_galaxy_alignment",
+          "systemArrayIndex": 65,
+          "canonCol": 83,
+          "canonRow": 23,
+          "residualNorm": 0.0156
+        }
+      },
+      {
+        "sourceNodeIndex": 39,
+        "mdxIndex": 40,
+        "name": "star_40_G",
+        "kind": "star",
+        "spectralClass": "G",
+        "parentIndex": -1,
+        "modelLocalTranslation": [
+          -17.25,
+          0,
+          2.25
+        ],
+        "modelLocalRotation": [
+          0,
+          0,
+          0
+        ],
+        "modelLocalScale": [
+          1,
+          1,
+          1
+        ],
+        "flatModelCoordinates": [
+          -17.25,
+          2.25
+        ],
+        "system": "バーラト",
+        "cell": 2014,
+        "strategicJoin": {
+          "authority": "null_galaxy_alignment",
+          "systemArrayIndex": 6,
+          "canonCol": 14,
+          "canonRow": 20,
+          "residualNorm": 0.0066
+        }
+      },
+      {
+        "sourceNodeIndex": 40,
+        "mdxIndex": 41,
+        "name": "star_41_G",
+        "kind": "star",
+        "spectralClass": "G",
+        "parentIndex": -1,
+        "modelLocalTranslation": [
+          -15.25,
+          0,
+          5.25
+        ],
+        "modelLocalRotation": [
+          0,
+          0,
+          0
+        ],
+        "modelLocalScale": [
+          1,
+          1,
+          1
+        ],
+        "flatModelCoordinates": [
+          -15.25,
+          5.25
+        ],
+        "system": "ケリム",
+        "cell": 1418,
+        "strategicJoin": {
+          "authority": "null_galaxy_alignment",
+          "systemArrayIndex": 8,
+          "canonCol": 18,
+          "canonRow": 14,
+          "residualNorm": 0.0026
+        }
+      },
+      {
+        "sourceNodeIndex": 41,
+        "mdxIndex": 42,
+        "name": "star_42_G",
+        "kind": "star",
+        "spectralClass": "G",
+        "parentIndex": -1,
+        "modelLocalTranslation": [
+          -19.75,
+          0,
+          -0.75
+        ],
+        "modelLocalRotation": [
+          0,
+          0,
+          0
+        ],
+        "modelLocalScale": [
+          1,
+          1,
+          1
+        ],
+        "flatModelCoordinates": [
+          -19.75,
+          -0.75
+        ],
+        "system": "タナトス",
+        "cell": 2709,
+        "strategicJoin": {
+          "authority": "null_galaxy_alignment",
+          "systemArrayIndex": 3,
+          "canonCol": 9,
+          "canonRow": 27,
+          "residualNorm": 0.0141
+        }
+      },
+      {
+        "sourceNodeIndex": 42,
+        "mdxIndex": 43,
+        "name": "star_43_G",
+        "kind": "star",
+        "spectralClass": "G",
+        "parentIndex": -1,
+        "modelLocalTranslation": [
+          -20.75,
+          0,
+          -4.25
+        ],
+        "modelLocalRotation": [
+          0,
+          0,
+          0
+        ],
+        "modelLocalScale": [
+          1,
+          1,
+          1
+        ],
+        "flatModelCoordinates": [
+          -20.75,
+          -4.25
+        ],
+        "system": "エリューセラ",
+        "cell": 3407,
+        "strategicJoin": {
+          "authority": "null_galaxy_alignment",
+          "systemArrayIndex": 2,
+          "canonCol": 7,
+          "canonRow": 34,
+          "residualNorm": 0.0191
+        }
+      },
+      {
+        "sourceNodeIndex": 43,
+        "mdxIndex": 44,
+        "name": "star_44_M",
+        "kind": "star",
+        "spectralClass": "M",
+        "parentIndex": -1,
+        "modelLocalTranslation": [
+          -13.75,
+          0,
+          -1.25
+        ],
+        "modelLocalRotation": [
+          0,
+          0,
+          0
+        ],
+        "modelLocalScale": [
+          1,
+          1,
+          1
+        ],
+        "flatModelCoordinates": [
+          -13.75,
+          -1.25
+        ],
+        "system": "バーミリオン",
+        "cell": 2822,
+        "strategicJoin": {
+          "authority": "null_galaxy_alignment",
+          "systemArrayIndex": 11,
+          "canonCol": 22,
+          "canonRow": 28,
+          "residualNorm": 0.0113
+        }
+      },
+      {
+        "sourceNodeIndex": 44,
+        "mdxIndex": 45,
+        "name": "star_45_G",
+        "kind": "star",
+        "spectralClass": "G",
+        "parentIndex": -1,
+        "modelLocalTranslation": [
+          -12.25,
+          0,
+          4.25
+        ],
+        "modelLocalRotation": [
+          0,
+          0,
+          0
+        ],
+        "modelLocalScale": [
+          1,
+          1,
+          1
+        ],
+        "flatModelCoordinates": [
+          -12.25,
+          4.25
+        ],
+        "system": "ジャムシード",
+        "cell": 1625,
+        "strategicJoin": {
+          "authority": "null_galaxy_alignment",
+          "systemArrayIndex": 15,
+          "canonCol": 25,
+          "canonRow": 16,
+          "residualNorm": 0.0218
+        }
+      },
+      {
+        "sourceNodeIndex": 45,
+        "mdxIndex": 46,
+        "name": "star_46_G",
+        "kind": "star",
+        "spectralClass": "G",
+        "parentIndex": -1,
+        "modelLocalTranslation": [
+          -21.25,
+          0,
+          5.25
+        ],
+        "modelLocalRotation": [
+          0,
+          0,
+          0
+        ],
+        "modelLocalScale": [
+          1,
+          1,
+          1
+        ],
+        "flatModelCoordinates": [
+          -21.25,
+          5.25
+        ],
+        "system": "シロン",
+        "cell": 1406,
+        "strategicJoin": {
+          "authority": "null_galaxy_alignment",
+          "systemArrayIndex": 1,
+          "canonCol": 6,
+          "canonRow": 14,
+          "residualNorm": 0.0072
+        }
+      },
+      {
+        "sourceNodeIndex": 46,
+        "mdxIndex": 47,
+        "name": "star_47_M",
+        "kind": "star",
+        "spectralClass": "M",
+        "parentIndex": -1,
+        "modelLocalTranslation": [
+          -18.75,
+          0,
+          -3.75
+        ],
+        "modelLocalRotation": [
+          0,
+          0,
+          0
+        ],
+        "modelLocalScale": [
+          1,
+          1,
+          1
+        ],
+        "flatModelCoordinates": [
+          -18.75,
+          -3.75
+        ],
+        "system": "リオ・ヴェルデ",
+        "cell": 3311,
+        "strategicJoin": {
+          "authority": "null_galaxy_alignment",
+          "systemArrayIndex": 4,
+          "canonCol": 11,
+          "canonRow": 33,
+          "residualNorm": 0.0135
+        }
+      },
+      {
+        "sourceNodeIndex": 47,
+        "mdxIndex": 48,
+        "name": "star_48_M",
+        "kind": "star",
+        "spectralClass": "M",
+        "parentIndex": -1,
+        "modelLocalTranslation": [
+          -11.25,
+          0,
+          -2.25
+        ],
+        "modelLocalRotation": [
+          0,
+          0,
+          0
+        ],
+        "modelLocalScale": [
+          1,
+          1,
+          1
+        ],
+        "flatModelCoordinates": [
+          -11.25,
+          -2.25
+        ],
+        "system": "タッシリ",
+        "cell": 3027,
+        "strategicJoin": {
+          "authority": "null_galaxy_alignment",
+          "systemArrayIndex": 17,
+          "canonCol": 27,
+          "canonRow": 30,
+          "residualNorm": 0.0017
+        }
+      },
+      {
+        "sourceNodeIndex": 48,
+        "mdxIndex": 49,
+        "name": "star_49_M",
+        "kind": "star",
+        "spectralClass": "M",
+        "parentIndex": -1,
+        "modelLocalTranslation": [
+          -11.75,
+          0,
+          -6.75
+        ],
+        "modelLocalRotation": [
+          0,
+          0,
+          0
+        ],
+        "modelLocalScale": [
+          1,
+          1,
+          1
+        ],
+        "flatModelCoordinates": [
+          -11.75,
+          -6.75
+        ],
+        "system": "トリプラ",
+        "cell": 3926,
+        "strategicJoin": {
+          "authority": "null_galaxy_alignment",
+          "systemArrayIndex": 16,
+          "canonCol": 26,
+          "canonRow": 39,
+          "residualNorm": 0.002
+        }
+      },
+      {
+        "sourceNodeIndex": 49,
+        "mdxIndex": 50,
+        "name": "star_50_K",
+        "kind": "star",
+        "spectralClass": "K",
+        "parentIndex": -1,
+        "modelLocalTranslation": [
+          -8.25,
+          0,
+          -4.25
+        ],
+        "modelLocalRotation": [
+          0,
+          0,
+          0
+        ],
+        "modelLocalScale": [
+          1,
+          1,
+          1
+        ],
+        "flatModelCoordinates": [
+          -8.25,
+          -4.25
+        ],
+        "system": "ガンダルヴァ",
+        "cell": 3433,
+        "strategicJoin": {
+          "authority": "null_galaxy_alignment",
+          "systemArrayIndex": 22,
+          "canonCol": 33,
+          "canonRow": 34,
+          "residualNorm": 0.0097
+        }
+      },
+      {
+        "sourceNodeIndex": 50,
+        "mdxIndex": 51,
+        "name": "star_51_K",
+        "kind": "star",
+        "spectralClass": "K",
+        "parentIndex": -1,
+        "modelLocalTranslation": [
+          -12.75,
+          0,
+          0.75
+        ],
+        "modelLocalRotation": [
+          0,
+          0,
+          0
+        ],
+        "modelLocalScale": [
+          1,
+          1,
+          1
+        ],
+        "flatModelCoordinates": [
+          -12.75,
+          0.75
+        ],
+        "system": "リューカス",
+        "cell": 2424,
+        "strategicJoin": {
+          "authority": "null_galaxy_alignment",
+          "systemArrayIndex": 12,
+          "canonCol": 24,
+          "canonRow": 24,
+          "residualNorm": 0.011
+        }
+      },
+      {
+        "sourceNodeIndex": 51,
+        "mdxIndex": 52,
+        "name": "star_52_M",
+        "kind": "star",
+        "spectralClass": "M",
+        "parentIndex": -1,
+        "modelLocalTranslation": [
+          -21.75,
+          0,
+          2.25
+        ],
+        "modelLocalRotation": [
+          0,
+          0,
+          0
+        ],
+        "modelLocalScale": [
+          1,
+          1,
+          1
+        ],
+        "flatModelCoordinates": [
+          -21.75,
+          2.25
+        ],
+        "system": "ルンビーニ",
+        "cell": 2005,
+        "strategicJoin": {
+          "authority": "null_galaxy_alignment",
+          "systemArrayIndex": 0,
+          "canonCol": 5,
+          "canonRow": 20,
+          "residualNorm": 0.0162
+        }
+      },
+      {
+        "sourceNodeIndex": 52,
+        "mdxIndex": 53,
+        "name": "star_53_M",
+        "kind": "star",
+        "spectralClass": "M",
+        "parentIndex": -1,
+        "modelLocalTranslation": [
+          -13.75,
+          0,
+          -4.75
+        ],
+        "modelLocalRotation": [
+          0,
+          0,
+          0
+        ],
+        "modelLocalScale": [
+          1,
+          1,
+          1
+        ],
+        "flatModelCoordinates": [
+          -13.75,
+          -4.75
+        ],
+        "system": "ライガール",
+        "cell": 3521,
+        "strategicJoin": {
+          "authority": "null_galaxy_alignment",
+          "systemArrayIndex": 10,
+          "canonCol": 21,
+          "canonRow": 35,
+          "residualNorm": 0.005
+        }
+      },
+      {
+        "sourceNodeIndex": 53,
+        "mdxIndex": 54,
+        "name": "star_54_M",
+        "kind": "star",
+        "spectralClass": "M",
+        "parentIndex": -1,
+        "modelLocalTranslation": [
+          -7.75,
+          0,
+          0.25
+        ],
+        "modelLocalRotation": [
+          0,
+          0,
+          0
+        ],
+        "modelLocalScale": [
+          1,
+          1,
+          1
+        ],
+        "flatModelCoordinates": [
+          -7.75,
+          0.25
+        ],
+        "system": "ランテマリオ",
+        "cell": 2534,
+        "strategicJoin": {
+          "authority": "null_galaxy_alignment",
+          "systemArrayIndex": 23,
+          "canonCol": 34,
+          "canonRow": 25,
+          "residualNorm": 0.0053
+        }
+      },
+      {
+        "sourceNodeIndex": 54,
+        "mdxIndex": 55,
+        "name": "star_55_M",
+        "kind": "star",
+        "spectralClass": "M",
+        "parentIndex": -1,
+        "modelLocalTranslation": [
+          -12.25,
+          0,
+          9.25
+        ],
+        "modelLocalRotation": [
+          0,
+          0,
+          0
+        ],
+        "modelLocalScale": [
+          1,
+          1,
+          1
+        ],
+        "flatModelCoordinates": [
+          -12.25,
+          9.25
+        ],
+        "system": "ハダト",
+        "cell": 625,
+        "strategicJoin": {
+          "authority": "null_galaxy_alignment",
+          "systemArrayIndex": 14,
+          "canonCol": 25,
+          "canonRow": 6,
+          "residualNorm": 0.0014
+        }
+      },
+      {
+        "sourceNodeIndex": 55,
+        "mdxIndex": 56,
+        "name": "star_56_G",
+        "kind": "star",
+        "spectralClass": "G",
+        "parentIndex": -1,
+        "modelLocalTranslation": [
+          -17.75,
+          0,
+          6.75
+        ],
+        "modelLocalRotation": [
+          0,
+          0,
+          0
+        ],
+        "modelLocalScale": [
+          1,
+          1,
+          1
+        ],
+        "flatModelCoordinates": [
+          -17.75,
+          6.75
+        ],
+        "system": "ロフォーテン",
+        "cell": 1113,
+        "strategicJoin": {
+          "authority": "null_galaxy_alignment",
+          "systemArrayIndex": 5,
+          "canonCol": 13,
+          "canonRow": 11,
+          "residualNorm": 0.0098
+        }
+      },
+      {
+        "sourceNodeIndex": 56,
+        "mdxIndex": 57,
+        "name": "star_57_K",
+        "kind": "star",
+        "spectralClass": "K",
+        "parentIndex": -1,
+        "modelLocalTranslation": [
+          -7.25,
+          0,
+          8.25
+        ],
+        "modelLocalRotation": [
+          0,
+          0,
+          0
+        ],
+        "modelLocalScale": [
+          1,
+          1,
+          1
+        ],
+        "flatModelCoordinates": [
+          -7.25,
+          8.25
+        ],
+        "system": "エルゴン",
+        "cell": 835,
+        "strategicJoin": {
+          "authority": "null_galaxy_alignment",
+          "systemArrayIndex": 25,
+          "canonCol": 35,
+          "canonRow": 8,
+          "residualNorm": 0.0137
+        }
+      },
+      {
+        "sourceNodeIndex": 57,
+        "mdxIndex": 58,
+        "name": "star_58_F",
+        "kind": "star",
+        "spectralClass": "F",
+        "parentIndex": -1,
+        "modelLocalTranslation": [
+          -7.75,
+          0,
+          -9.75
+        ],
+        "modelLocalRotation": [
+          0,
+          0,
+          0
+        ],
+        "modelLocalScale": [
+          1,
+          1,
+          1
+        ],
+        "flatModelCoordinates": [
+          -7.75,
+          -9.75
+        ],
+        "system": "メルカルト",
+        "cell": 4534,
+        "strategicJoin": {
+          "authority": "null_galaxy_alignment",
+          "systemArrayIndex": 24,
+          "canonCol": 34,
+          "canonRow": 45,
+          "residualNorm": 0.0175
+        }
+      },
+      {
+        "sourceNodeIndex": 58,
+        "mdxIndex": 59,
+        "name": "star_59_K",
+        "kind": "star",
+        "spectralClass": "K",
+        "parentIndex": -1,
+        "modelLocalTranslation": [
+          -5.75,
+          0,
+          -1.75
+        ],
+        "modelLocalRotation": [
+          0,
+          0,
+          0
+        ],
+        "modelLocalScale": [
+          1,
+          1,
+          1
+        ],
+        "flatModelCoordinates": [
+          -5.75,
+          -1.75
+        ],
+        "system": "マル・アデッタ",
+        "cell": 2938,
+        "strategicJoin": {
+          "authority": "null_galaxy_alignment",
+          "systemArrayIndex": 26,
+          "canonCol": 38,
+          "canonRow": 29,
+          "residualNorm": 0.0017
+        }
+      },
+      {
+        "sourceNodeIndex": 59,
+        "mdxIndex": 60,
+        "name": "star_60_K",
+        "kind": "star",
+        "spectralClass": "K",
+        "parentIndex": -1,
+        "modelLocalTranslation": [
+          -9.75,
+          0,
+          6.25
+        ],
+        "modelLocalRotation": [
+          0,
+          0,
+          0
+        ],
+        "modelLocalScale": [
+          1,
+          1,
+          1
+        ],
+        "flatModelCoordinates": [
+          -9.75,
+          6.25
+        ],
+        "system": "ドーリア",
+        "cell": 1230,
+        "strategicJoin": {
+          "authority": "null_galaxy_alignment",
+          "systemArrayIndex": 19,
+          "canonCol": 30,
+          "canonRow": 12,
+          "residualNorm": 0.0042
+        }
+      },
+      {
+        "sourceNodeIndex": 60,
+        "mdxIndex": 61,
+        "name": "star_61_G",
+        "kind": "star",
+        "spectralClass": "G",
+        "parentIndex": -1,
+        "modelLocalTranslation": [
+          -8.75,
+          0,
+          3.75
+        ],
+        "modelLocalRotation": [
+          0,
+          0,
+          0
+        ],
+        "modelLocalScale": [
+          1,
+          1,
+          1
+        ],
+        "flatModelCoordinates": [
+          -8.75,
+          3.75
+        ],
+        "system": "エル・ファシル",
+        "cell": 1732,
+        "strategicJoin": {
+          "authority": "null_galaxy_alignment",
+          "systemArrayIndex": 21,
+          "canonCol": 32,
+          "canonRow": 17,
+          "residualNorm": 0.012
+        }
+      },
+      {
+        "sourceNodeIndex": 61,
+        "mdxIndex": 62,
+        "name": "star_62_K",
+        "kind": "star",
+        "spectralClass": "K",
+        "parentIndex": -1,
+        "modelLocalTranslation": [
+          -11.25,
+          0,
+          -10.25
+        ],
+        "modelLocalRotation": [
+          0,
+          0,
+          0
+        ],
+        "modelLocalScale": [
+          1,
+          1,
+          1
+        ],
+        "flatModelCoordinates": [
+          -11.25,
+          -10.25
+        ],
+        "system": "シュパーラ",
+        "cell": 4627,
+        "strategicJoin": {
+          "authority": "null_galaxy_alignment",
+          "systemArrayIndex": 18,
+          "canonCol": 27,
+          "canonRow": 46,
+          "residualNorm": 0.021
+        }
+      },
+      {
+        "sourceNodeIndex": 62,
+        "mdxIndex": 63,
+        "name": "star_63_A",
+        "kind": "star",
+        "spectralClass": "A",
+        "parentIndex": -1,
+        "modelLocalTranslation": [
+          -2.75,
+          0,
+          -6.25
+        ],
+        "modelLocalRotation": [
+          0,
+          0,
+          0
+        ],
+        "modelLocalScale": [
+          1,
+          1,
+          1
+        ],
+        "flatModelCoordinates": [
+          -2.75,
+          -6.25
+        ],
+        "system": "ポレヴィト",
+        "cell": 3844,
+        "strategicJoin": {
+          "authority": "null_galaxy_alignment",
+          "systemArrayIndex": 35,
+          "canonCol": 44,
+          "canonRow": 38,
+          "residualNorm": 0.0233
+        }
+      },
+      {
+        "sourceNodeIndex": 63,
+        "mdxIndex": 64,
+        "name": "star_64_F",
+        "kind": "star",
+        "spectralClass": "F",
+        "parentIndex": -1,
+        "modelLocalTranslation": [
+          -15.25,
+          0,
+          8.75
+        ],
+        "modelLocalRotation": [
+          0,
+          0,
+          0
+        ],
+        "modelLocalScale": [
+          1,
+          1,
+          1
+        ],
+        "flatModelCoordinates": [
+          -15.25,
+          8.75
+        ],
+        "system": "ファラーファラ",
+        "cell": 718,
+        "strategicJoin": {
+          "authority": "null_galaxy_alignment",
+          "systemArrayIndex": 7,
+          "canonCol": 18,
+          "canonRow": 7,
+          "residualNorm": 0.0135
+        }
+      },
+      {
+        "sourceNodeIndex": 64,
+        "mdxIndex": 65,
+        "name": "star_65_M",
+        "kind": "star",
+        "spectralClass": "M",
+        "parentIndex": -1,
+        "modelLocalTranslation": [
+          -15.25,
+          0,
+          -10.25
+        ],
+        "modelLocalRotation": [
+          0,
+          0,
+          0
+        ],
+        "modelLocalScale": [
+          1,
+          1,
+          1
+        ],
+        "flatModelCoordinates": [
+          -15.25,
+          -10.25
+        ],
+        "system": "ポリスーン",
+        "cell": 4618,
+        "strategicJoin": {
+          "authority": "null_galaxy_alignment",
+          "systemArrayIndex": 9,
+          "canonCol": 18,
+          "canonRow": 46,
+          "residualNorm": 0.011
+        }
+      },
+      {
+        "sourceNodeIndex": 65,
+        "mdxIndex": 66,
+        "name": "star_66_K",
+        "kind": "star",
+        "spectralClass": "K",
+        "parentIndex": -1,
+        "modelLocalTranslation": [
+          -4.75,
+          0,
+          9.25
+        ],
+        "modelLocalRotation": [
+          0,
+          0,
+          0
+        ],
+        "modelLocalScale": [
+          1,
+          1,
+          1
+        ],
+        "flatModelCoordinates": [
+          -4.75,
+          9.25
+        ],
+        "system": "ダゴン",
+        "cell": 640,
+        "strategicJoin": {
+          "authority": "null_galaxy_alignment",
+          "systemArrayIndex": 29,
+          "canonCol": 40,
+          "canonRow": 6,
+          "residualNorm": 0.0129
+        }
+      },
+      {
+        "sourceNodeIndex": 66,
+        "mdxIndex": 67,
+        "name": "star_67_A",
+        "kind": "star",
+        "spectralClass": "A",
+        "parentIndex": -1,
+        "modelLocalTranslation": [
+          -9.25,
+          0,
+          10.25
+        ],
+        "modelLocalRotation": [
+          0,
+          0,
+          0
+        ],
+        "modelLocalScale": [
+          1,
+          1,
+          1
+        ],
+        "flatModelCoordinates": [
+          -9.25,
+          10.25
+        ],
+        "system": "シヴァ",
+        "cell": 431,
+        "strategicJoin": {
+          "authority": "null_galaxy_alignment",
+          "systemArrayIndex": 20,
+          "canonCol": 31,
+          "canonRow": 4,
+          "residualNorm": 0.003
+        }
+      },
+      {
+        "sourceNodeIndex": 67,
+        "mdxIndex": 68,
+        "name": "star_68_M",
+        "kind": "star",
+        "spectralClass": "M",
+        "parentIndex": -1,
+        "modelLocalTranslation": [
+          -4.75,
+          0,
+          4.75
+        ],
+        "modelLocalRotation": [
+          0,
+          0,
+          0
+        ],
+        "modelLocalScale": [
+          1,
+          1,
+          1
+        ],
+        "flatModelCoordinates": [
+          -4.75,
+          4.75
+        ],
+        "system": "ティアマト",
+        "cell": 1540,
+        "strategicJoin": {
+          "authority": "null_galaxy_alignment",
+          "systemArrayIndex": 30,
+          "canonCol": 40,
+          "canonRow": 15,
+          "residualNorm": 0.0158
+        }
+      },
+      {
+        "sourceNodeIndex": 68,
+        "mdxIndex": 69,
+        "name": "star_69_F",
+        "kind": "star",
+        "spectralClass": "F",
+        "parentIndex": -1,
+        "modelLocalTranslation": [
+          -3.25,
+          0,
+          6.75
+        ],
+        "modelLocalRotation": [
+          0,
+          0,
+          0
+        ],
+        "modelLocalScale": [
+          1,
+          1,
+          1
+        ],
+        "flatModelCoordinates": [
+          -3.25,
+          6.75
+        ],
+        "system": "アスターテ",
+        "cell": 1143,
+        "strategicJoin": {
+          "authority": "null_galaxy_alignment",
+          "systemArrayIndex": 33,
+          "canonCol": 43,
+          "canonRow": 11,
+          "residualNorm": 0.0078
+        }
+      },
+      {
+        "sourceNodeIndex": 69,
+        "mdxIndex": 70,
+        "name": "star_70_B",
+        "kind": "star",
+        "spectralClass": "B",
+        "parentIndex": -1,
+        "modelLocalTranslation": [
+          -1.75,
+          0,
+          6.25
+        ],
+        "modelLocalRotation": [
+          0,
+          0,
+          0
+        ],
+        "modelLocalScale": [
+          1,
+          1,
+          1
+        ],
+        "flatModelCoordinates": [
+          -1.75,
+          6.25
+        ],
+        "system": "ヴァンフリート",
+        "cell": 1246,
+        "strategicJoin": {
+          "authority": "null_galaxy_alignment",
+          "systemArrayIndex": 39,
+          "canonCol": 46,
+          "canonRow": 12,
+          "residualNorm": 0.0132
+        }
+      },
+      {
+        "sourceNodeIndex": 70,
+        "mdxIndex": 71,
+        "name": "star_71_F",
+        "kind": "star",
+        "spectralClass": "F",
+        "parentIndex": -1,
+        "modelLocalTranslation": [
+          -2.75,
+          0,
+          2.75
+        ],
+        "modelLocalRotation": [
+          0,
+          0,
+          0
+        ],
+        "modelLocalScale": [
+          1,
+          1,
+          1
+        ],
+        "flatModelCoordinates": [
+          -2.75,
+          2.75
+        ],
+        "system": "アルレスハイム",
+        "cell": 1944,
+        "strategicJoin": {
+          "authority": "null_galaxy_alignment",
+          "systemArrayIndex": 36,
+          "canonCol": 44,
+          "canonRow": 19,
+          "residualNorm": 0.0062
+        }
+      },
+      {
+        "sourceNodeIndex": 71,
+        "mdxIndex": 72,
+        "name": "star_72_A",
+        "kind": "star",
+        "spectralClass": "A",
+        "parentIndex": -1,
+        "modelLocalTranslation": [
+          -2.75,
+          0,
+          0.25
+        ],
+        "modelLocalRotation": [
+          0,
+          0,
+          0
+        ],
+        "modelLocalScale": [
+          1,
+          1,
+          1
+        ],
+        "flatModelCoordinates": [
+          -2.75,
+          0.25
+        ],
+        "system": "パランティア",
+        "cell": 2544,
+        "strategicJoin": {
+          "authority": "null_galaxy_alignment",
+          "systemArrayIndex": 37,
+          "canonCol": 44,
+          "canonRow": 25,
+          "residualNorm": 0.0158
+        }
+      },
+      {
+        "sourceNodeIndex": 72,
+        "mdxIndex": 73,
+        "name": "star_73_F",
+        "kind": "star",
+        "spectralClass": "F",
+        "parentIndex": -1,
+        "modelLocalTranslation": [
+          -3.25,
+          0,
+          -1.75
+        ],
+        "modelLocalRotation": [
+          0,
+          0,
+          0
+        ],
+        "modelLocalScale": [
+          1,
+          1,
+          1
+        ],
+        "flatModelCoordinates": [
+          -3.25,
+          -1.75
+        ],
+        "system": "ファイアザード",
+        "cell": 2943,
+        "strategicJoin": {
+          "authority": "null_galaxy_alignment",
+          "systemArrayIndex": 34,
+          "canonCol": 43,
+          "canonRow": 29,
+          "residualNorm": 0.0121
+        }
+      },
+      {
+        "sourceNodeIndex": 73,
+        "mdxIndex": 74,
+        "name": "star_74_M",
+        "kind": "star",
+        "spectralClass": "M",
+        "parentIndex": -1,
+        "modelLocalTranslation": [
+          -5.25,
+          0,
+          -7.75
+        ],
+        "modelLocalRotation": [
+          0,
+          0,
+          0
+        ],
+        "modelLocalScale": [
+          1,
+          1,
+          1
+        ],
+        "flatModelCoordinates": [
+          -5.25,
+          -7.75
+        ],
+        "system": "バラトループ",
+        "cell": 4139,
+        "strategicJoin": {
+          "authority": "null_galaxy_alignment",
+          "systemArrayIndex": 27,
+          "canonCol": 39,
+          "canonRow": 41,
+          "residualNorm": 0.0036
+        }
+      },
+      {
+        "sourceNodeIndex": 74,
+        "mdxIndex": 75,
+        "name": "star_75_O",
+        "kind": "star",
+        "spectralClass": "O",
+        "parentIndex": -1,
+        "modelLocalTranslation": [
+          -5.25,
+          0,
+          -3.75
+        ],
+        "modelLocalRotation": [
+          0,
+          0,
+          0
+        ],
+        "modelLocalScale": [
+          1,
+          1,
+          1
+        ],
+        "flatModelCoordinates": [
+          -5.25,
+          -3.75
+        ],
+        "system": "シャンダルーア",
+        "cell": 3339,
+        "strategicJoin": {
+          "authority": "null_galaxy_alignment",
+          "systemArrayIndex": 28,
+          "canonCol": 39,
+          "canonRow": 33,
+          "residualNorm": 0.0037
+        }
+      },
+      {
+        "sourceNodeIndex": 75,
+        "mdxIndex": 76,
+        "name": "star_76_B",
+        "kind": "star",
+        "spectralClass": "B",
+        "parentIndex": -1,
+        "modelLocalTranslation": [
+          -4.25,
+          0,
+          2.75
+        ],
+        "modelLocalRotation": [
+          0,
+          0,
+          0
+        ],
+        "modelLocalScale": [
+          1,
+          1,
+          1
+        ],
+        "flatModelCoordinates": [
+          -4.25,
+          2.75
+        ],
+        "system": "ドラゴニア",
+        "cell": 1941,
+        "strategicJoin": {
+          "authority": "null_galaxy_alignment",
+          "systemArrayIndex": 31,
+          "canonCol": 41,
+          "canonRow": 19,
+          "residualNorm": 0.0023
+        }
+      },
+      {
+        "sourceNodeIndex": 76,
+        "mdxIndex": 77,
+        "name": "star_77_A",
+        "kind": "star",
+        "spectralClass": "A",
+        "parentIndex": -1,
+        "modelLocalTranslation": [
+          -1.75,
+          0,
+          5.25
+        ],
+        "modelLocalRotation": [
+          0,
+          0,
+          0
+        ],
+        "modelLocalScale": [
+          1,
+          1,
+          1
+        ],
+        "flatModelCoordinates": [
+          -1.75,
+          5.25
+        ],
+        "system": "アルトミュール",
+        "cell": 1446,
+        "strategicJoin": {
+          "authority": "null_galaxy_alignment",
+          "systemArrayIndex": 38,
+          "canonCol": 46,
+          "canonRow": 14,
+          "residualNorm": 0.0357
+        }
+      },
+      {
+        "sourceNodeIndex": 77,
+        "mdxIndex": 78,
+        "name": "star_78_K",
+        "kind": "star",
+        "spectralClass": "K",
+        "parentIndex": -1,
+        "modelLocalTranslation": [
+          -12.75,
+          0,
+          11.25
+        ],
+        "modelLocalRotation": [
+          0,
+          0,
+          0
+        ],
+        "modelLocalScale": [
+          1,
+          1,
+          1
+        ],
+        "flatModelCoordinates": [
+          -12.75,
+          11.25
+        ],
+        "system": "マローヴィア",
+        "cell": 224,
+        "strategicJoin": {
+          "authority": "null_galaxy_alignment",
+          "systemArrayIndex": 13,
+          "canonCol": 24,
+          "canonRow": 2,
+          "residualNorm": 0.0124
+        }
+      },
+      {
+        "sourceNodeIndex": 78,
+        "mdxIndex": 79,
+        "name": "star_79_G",
+        "kind": "star",
+        "spectralClass": "G",
+        "parentIndex": -1,
+        "modelLocalTranslation": [
+          0.75,
+          0,
+          -6.25
+        ],
+        "modelLocalRotation": [
+          0,
+          0,
+          0
+        ],
+        "modelLocalScale": [
+          1,
+          1,
+          1
+        ],
+        "flatModelCoordinates": [
+          0.75,
+          -6.25
+        ],
+        "system": "フェザーン",
+        "cell": 3751,
+        "strategicJoin": {
+          "authority": "null_galaxy_alignment",
+          "systemArrayIndex": 40,
+          "canonCol": 51,
+          "canonRow": 37,
+          "residualNorm": 0.0119
+        }
+      },
+      {
+        "sourceNodeIndex": 79,
+        "mdxIndex": 80,
+        "name": "bh_01",
+        "kind": "blackhole",
+        "spectralClass": null,
+        "parentIndex": -1,
+        "modelLocalTranslation": [
+          5.25,
+          0,
+          -2.75
+        ],
+        "modelLocalRotation": [
+          0,
+          0,
+          0
+        ],
+        "modelLocalScale": [
+          1,
+          1,
+          1
+        ],
+        "flatModelCoordinates": [
+          5.25,
+          -2.75
+        ],
+        "system": null,
+        "cell": null,
+        "strategicJoin": null
+      },
+      {
+        "sourceNodeIndex": 80,
+        "mdxIndex": 81,
+        "name": "bh_02",
+        "kind": "blackhole",
+        "spectralClass": null,
+        "parentIndex": -1,
+        "modelLocalTranslation": [
+          -13.25,
+          0,
+          -6.25
+        ],
+        "modelLocalRotation": [
+          0,
+          0,
+          0
+        ],
+        "modelLocalScale": [
+          1,
+          1,
+          1
+        ],
+        "flatModelCoordinates": [
+          -13.25,
+          -6.25
+        ],
+        "system": null,
+        "cell": null,
+        "strategicJoin": null
+      },
+      {
+        "sourceNodeIndex": 81,
+        "mdxIndex": 82,
+        "name": "bh_03",
+        "kind": "blackhole",
+        "spectralClass": null,
+        "parentIndex": -1,
+        "modelLocalTranslation": [
+          -9.25,
+          0,
+          8.25
+        ],
+        "modelLocalRotation": [
+          0,
+          0,
+          0
+        ],
+        "modelLocalScale": [
+          1,
+          1,
+          1
+        ],
+        "flatModelCoordinates": [
+          -9.25,
+          8.25
+        ],
+        "system": null,
+        "cell": null,
+        "strategicJoin": null
+      },
+      {
+        "sourceNodeIndex": 82,
+        "mdxIndex": 83,
+        "name": "ns_01",
+        "kind": "neutronStar",
+        "spectralClass": null,
+        "parentIndex": -1,
+        "modelLocalTranslation": [
+          12.75,
+          0,
+          3.25
+        ],
+        "modelLocalRotation": [
+          0,
+          0,
+          0
+        ],
+        "modelLocalScale": [
+          1,
+          1,
+          1
+        ],
+        "flatModelCoordinates": [
+          12.75,
+          3.25
+        ],
+        "system": null,
+        "cell": null,
+        "strategicJoin": null
+      },
+      {
+        "sourceNodeIndex": 83,
+        "mdxIndex": 84,
+        "name": "ns_02",
+        "kind": "neutronStar",
+        "spectralClass": null,
+        "parentIndex": -1,
+        "modelLocalTranslation": [
+          -6.25,
+          0,
+          -5.25
+        ],
+        "modelLocalRotation": [
+          0,
+          0,
+          0
+        ],
+        "modelLocalScale": [
+          1,
+          1,
+          1
+        ],
+        "flatModelCoordinates": [
+          -6.25,
+          -5.25
+        ],
+        "system": null,
+        "cell": null,
+        "strategicJoin": null
+      },
+      {
+        "sourceNodeIndex": 84,
+        "mdxIndex": 85,
+        "name": "ns_03",
+        "kind": "neutronStar",
+        "spectralClass": null,
+        "parentIndex": -1,
+        "modelLocalTranslation": [
+          -16.25,
+          0,
+          -8.25
+        ],
+        "modelLocalRotation": [
+          0,
+          0,
+          0
+        ],
+        "modelLocalScale": [
+          1,
+          1,
+          1
+        ],
+        "flatModelCoordinates": [
+          -16.25,
+          -8.25
+        ],
+        "system": null,
+        "cell": null,
+        "strategicJoin": null
+      }
+    ]
+  }
+}
