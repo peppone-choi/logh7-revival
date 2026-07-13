@@ -165,9 +165,9 @@ const systemDetailSelectionIndexState = {
 };
 const SYSTEM_OUTPUT_STAGE_NAMES = [
   'commandCard0305',
-  'factory41Granted',
-  'factory41Selected',
-  'factory41Handler',
+  'factoryGrant',
+  'factorySelected',
+  'factoryHandler',
   'selectDialogCtor',
   'selectDialogTick',
   'genericListRow70',
@@ -194,6 +194,16 @@ const SYSTEM_OUTPUT_ID_STAGE_NAMES = new Set([
   'renderSink',
 ]);
 const SYSTEM_OUTPUT_PROTOCOL_CODES = new Set([0x0305, 0x031f, 0x0321, 0x0327]);
+// 정적 RE로 고정된 유효 factory 3종(핸드오프 2026-07-13). 0x41은 whitelist 밖 — 필수 조건 아님, 관측만.
+const SYSTEM_OUTPUT_WHITELIST_FACTORIES = [0x19, 0x2d, 0x43];
+const SYSTEM_OUTPUT_WHITELIST_FACTORY_SET = new Set(SYSTEM_OUTPUT_WHITELIST_FACTORIES);
+// factory handler 진입 주소(Ghidra 이름 → 이미지 base 상대 VA). 함수 경계 훅 전용.
+const SYSTEM_OUTPUT_HANDLER_ADDRESSES = {
+  0x19: '0x0058ba40', // FUN_0058ba40, panel kind 5
+  0x2d: '0x00582060', // FUN_00582060, panel kind 5, B71 대상(星系グリッド内の惑星間を移動)
+  0x43: '0x00585150', // FUN_00585150, panel kind 0x11
+};
+const SYSTEM_OUTPUT_B71_FACTORY_ID = 0x2d;
 const SYSTEM_OUTPUT_TRACE_RING_LIMIT = 128;
 const SYSTEM_OUTPUT_STAGE_RING_LIMIT = 16;
 const SYSTEM_OUTPUT_SINK_RING_LIMIT = 32;
@@ -207,9 +217,9 @@ const systemOutputTraceState = {
     response031f: 0,
     response0327: 0,
     commandCard0305: 0,
-    factory41Granted: 0,
-    factory41Selected: 0,
-    factory41Handler: 0,
+    factoryGrant: 0,
+    factorySelected: 0,
+    factoryHandler: 0,
     selectDialogCtor: 0,
     selectDialogTick: 0,
     genericListRow70: 0,
@@ -225,9 +235,9 @@ const systemOutputTraceState = {
     response031f: null,
     response0327: null,
     commandCard0305: null,
-    factory41Granted: null,
-    factory41Selected: null,
-    factory41Handler: null,
+    factoryGrant: null,
+    factorySelected: null,
+    factoryHandler: null,
     selectDialogCtor: null,
     selectDialogTick: null,
     genericListRow70: null,
@@ -243,9 +253,9 @@ const systemOutputTraceState = {
     response031f: [],
     response0327: [],
     commandCard0305: [],
-    factory41Granted: [],
-    factory41Selected: [],
-    factory41Handler: [],
+    factoryGrant: [],
+    factorySelected: [],
+    factoryHandler: [],
     selectDialogCtor: [],
     selectDialogTick: [],
     genericListRow70: [],
@@ -258,6 +268,12 @@ const systemOutputTraceState = {
   timeline: [],
   sinkTimeline: [],
   sequence: 0,
+  // whitelist 밖 0x41 관측 기록(판정 비게이팅). 관측되면 true로만 남긴다.
+  observations: {
+    factory41InGrant: false,
+    factory41Selected: false,
+    factory41Handler: false,
+  },
   transitions: {
     dispatch0305: { totalCalls: 0, last: null, ring: [] },
     commandCardImport: { totalCalls: 0, last: null, ring: [] },
@@ -370,11 +386,18 @@ function systemOutputResponseRecord(code, record) {
 }
 
 function systemOutputCommandCardData(rawCategoryCount, readCommandCount, readFactoryId) {
+  const emptyWhitelistGranted = () => {
+    const granted = {};
+    for (const fid of SYSTEM_OUTPUT_WHITELIST_FACTORIES) granted[fid] = false;
+    return granted;
+  };
   const failure = (reason, details = {}) => ({
     rawCategoryCount,
     categories: [],
     factoryIds: [],
-    factory41Granted: false,
+    whitelistGranted: emptyWhitelistGranted(),
+    factory2dGranted: false,
+    factory41Observed: false,
     reason,
     ...details,
   });
@@ -417,11 +440,15 @@ function systemOutputCommandCardData(rawCategoryCount, readCommandCount, readFac
       factoryIds: factories,
     });
   }
+  const whitelistGranted = {};
+  for (const fid of SYSTEM_OUTPUT_WHITELIST_FACTORIES) whitelistGranted[fid] = factoryIds.includes(fid);
   return {
     rawCategoryCount,
     categories,
     factoryIds,
-    factory41Granted: factoryIds.includes(0x41),
+    whitelistGranted,
+    factory2dGranted: factoryIds.includes(SYSTEM_OUTPUT_B71_FACTORY_ID),
+    factory41Observed: factoryIds.includes(0x41),
     reason: null,
   };
 }
@@ -435,7 +462,13 @@ function systemOutputCommandCardSnapshot() {
       rawCategoryCount: null,
       categories: [],
       factoryIds: [],
-      factory41Granted: false,
+      whitelistGranted: (() => {
+        const granted = {};
+        for (const fid of SYSTEM_OUTPUT_WHITELIST_FACTORIES) granted[fid] = false;
+        return granted;
+      })(),
+      factory2dGranted: false,
+      factory41Observed: false,
       reason: 'client-base-unavailable',
     };
   }
@@ -512,10 +545,10 @@ function systemOutputStageMatches(stage, entry) {
   if (SYSTEM_OUTPUT_ID_STAGE_NAMES.has(stage)) {
     return entry.baseId === SYSTEM_DETAIL_EXPECTED_BASE_ID;
   }
-  if (stage === 'factory41Granted'
-      || stage === 'factory41Selected'
-      || stage === 'factory41Handler') {
-    return entry.factoryId === 0x41;
+  if (stage === 'factoryGrant'
+      || stage === 'factorySelected'
+      || stage === 'factoryHandler') {
+    return SYSTEM_OUTPUT_WHITELIST_FACTORY_SET.has(entry.factoryId);
   }
   return true;
 }
@@ -575,6 +608,48 @@ function systemOutputCorrelation() {
   };
 }
 
+// B71 자연 출력 판정: Captain kind 59 → factory 0x2d → handler FUN_00582060 → kind 5 →
+// selected +8 == base 70 → phase0(031e/031f) → phase1(0326/0327) → renderer(0057aa90).
+function systemOutputB71Verdict() {
+  const grantEntries = systemOutputTraceState.byStage.factoryGrant;
+  const handlerEntries = systemOutputTraceState.byStage.factoryHandler;
+  const selectedEntries = systemOutputTraceState.byStage.factorySelected;
+  const factory2dGranted = grantEntries.some((entry) => entry.factoryId === SYSTEM_OUTPUT_B71_FACTORY_ID);
+  const factory2dSelected = selectedEntries.some((entry) => entry.factoryId === SYSTEM_OUTPUT_B71_FACTORY_ID);
+  const handler2dEntered = handlerEntries.some((entry) => entry.factoryId === SYSTEM_OUTPUT_B71_FACTORY_ID);
+  // panel kind 5: renderSink 또는 panelDispatch 어느 쪽이든 kind 5 관측.
+  const panelKind5 = systemOutputTraceState.byStage.renderSink.some((entry) => entry.panelKind === 5)
+    || systemOutputTraceState.byStage.panelDispatch.some((entry) => entry.panelKind === 5);
+  const renderLast = systemOutputTraceState.last.renderSink;
+  const selectedBaseId = renderLast && Number.isInteger(renderLast.baseId) ? renderLast.baseId : null;
+  const phase0Seen = systemOutputTraceState.counts.refresh031f > 0
+    && systemOutputTraceState.counts.response031f > 0;
+  const phase1Seen = systemOutputTraceState.counts.refresh0327 > 0
+    && systemOutputTraceState.counts.response0327 > 0;
+  const rendererCalled = systemOutputTraceState.counts.renderSink > 0;
+  const pass = factory2dGranted
+    && handler2dEntered
+    && panelKind5
+    && selectedBaseId === SYSTEM_DETAIL_EXPECTED_BASE_ID
+    && phase0Seen
+    && phase1Seen
+    && rendererCalled;
+  return {
+    targetFactoryId: SYSTEM_OUTPUT_B71_FACTORY_ID,
+    targetBaseId: SYSTEM_DETAIL_EXPECTED_BASE_ID,
+    factory2dGranted,
+    factory2dSelected,
+    handler2dEntered,
+    panelKind5,
+    selectedBaseId,
+    phase0Seen,
+    phase1Seen,
+    rendererCalled,
+    pass,
+    factory41Observations: systemOutputTraceState.observations,
+  };
+}
+
 function systemOutputTraceSnapshot() {
   const correlation = systemOutputCorrelation();
   const response0305 = systemOutputTraceState.responses.response0305;
@@ -583,7 +658,8 @@ function systemOutputTraceSnapshot() {
   const response0327 = systemOutputTraceState.responses.response0327;
   return {
     expectedBaseId: SYSTEM_DETAIL_EXPECTED_BASE_ID,
-    expectedFactoryId: 0x41,
+    whitelistFactories: SYSTEM_OUTPUT_WHITELIST_FACTORIES,
+    b71Verdict: systemOutputB71Verdict(),
     stageOrder: SYSTEM_OUTPUT_STAGE_NAMES,
     dependencyStages: SYSTEM_OUTPUT_DEPENDENCY_STAGE_NAMES,
     sequence: systemOutputTraceState.sequence,
@@ -875,11 +951,15 @@ attachSystemDetailHook('0x004c4a10', {
       after,
     };
     noteSystemOutputTransition('commandCardImport', entry);
-    if (after.reason === null && after.factory41Granted) {
-      noteSystemOutputStage('factory41Granted', {
-        ...entry,
-        factoryId: 0x41,
-      });
+    if (after.reason === null) {
+      for (const factoryId of SYSTEM_OUTPUT_WHITELIST_FACTORIES) {
+        if (after.whitelistGranted[factoryId]) {
+          noteSystemOutputStage('factoryGrant', { ...entry, factoryId });
+        }
+      }
+      if (after.factory41Observed) {
+        systemOutputTraceState.observations.factory41InGrant = true;
+      }
     }
   },
 });
@@ -898,13 +978,26 @@ attachSystemDetailHook('0x004f58c0', {
   },
 });
 
+// 유효 factory 3종 handler 진입 훅(함수 경계). 진입 시 factoryId·타임스탬프 기록.
+function attachFactoryHandler(va, factoryId) {
+  attachSystemDetailHook(va, {
+    onEnter() {
+      noteSystemOutputStage('factoryHandler', {
+        timestamp: Date.now(),
+        factoryId,
+        callerVa: systemDetailCallerVa(this.returnAddress),
+      });
+    },
+  });
+}
+for (const [factoryId, handlerVa] of Object.entries(SYSTEM_OUTPUT_HANDLER_ADDRESSES)) {
+  attachFactoryHandler(handlerVa, Number(factoryId));
+}
+
+// 0x41 handler(FUN_00584c90)은 whitelist 밖 — 관측만 기록, 판정에 쓰지 않음.
 attachSystemDetailHook('0x00584c90', {
   onEnter() {
-    noteSystemOutputStage('factory41Handler', {
-      timestamp: Date.now(),
-      factoryId: 0x41,
-      callerVa: systemDetailCallerVa(this.returnAddress),
-    });
+    systemOutputTraceState.observations.factory41Handler = true;
   },
 });
 
@@ -2029,7 +2122,11 @@ function hookNativeCall(name, address, argCount) {
           manager: ptrHex(this.context.ecx),
         };
         noteSystemOutputTransition('factoryLaunch', entry);
-        if (factoryId === 0x41) noteSystemOutputStage('factory41Selected', entry);
+        if (SYSTEM_OUTPUT_WHITELIST_FACTORY_SET.has(factoryId)) {
+          noteSystemOutputStage('factorySelected', entry);
+        } else if (factoryId === 0x41) {
+          systemOutputTraceState.observations.factory41Selected = true;
+        }
       }
       if (name === 'sendWarp') {
         this.nativeCall.context = sendWarpContextState(args);

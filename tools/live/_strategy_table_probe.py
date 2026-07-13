@@ -46,9 +46,9 @@ SELECTION_ADMISSION_METRIC_KEYS = (
 )
 SYSTEM_OUTPUT_STAGE_KEYS = (
     'commandCard0305',
-    'factory41Granted',
-    'factory41Selected',
-    'factory41Handler',
+    'factoryGrant',
+    'factorySelected',
+    'factoryHandler',
     'selectDialogCtor',
     'selectDialogTick',
     'genericListRow70',
@@ -70,9 +70,9 @@ SYSTEM_OUTPUT_ID_STAGE_KEYS = {
     'renderSink',
 }
 SYSTEM_OUTPUT_FACTORY_STAGE_KEYS = {
-    'factory41Granted',
-    'factory41Selected',
-    'factory41Handler',
+    'factoryGrant',
+    'factorySelected',
+    'factoryHandler',
 }
 
 STORE = {
@@ -157,16 +157,16 @@ def system_output_trace_metrics(system_detail):
         'sequence': trace.get('sequence') or 0,
         'stageCounts': {key: counts.get(key) or 0 for key in SYSTEM_OUTPUT_STAGE_KEYS},
         'commandCard0305Calls': counts.get('commandCard0305') or 0,
-        'factory41GrantedCalls': counts.get('factory41Granted') or 0,
-        'factory41SelectedCalls': counts.get('factory41Selected') or 0,
-        'factory41HandlerCalls': counts.get('factory41Handler') or 0,
+        'factoryGrantCalls': counts.get('factoryGrant') or 0,
+        'factorySelectedCalls': counts.get('factorySelected') or 0,
+        'factoryHandlerCalls': counts.get('factoryHandler') or 0,
         'panelDispatchCalls': counts.get('panelDispatch') or 0,
         'renderSinkCalls': counts.get('renderSink') or 0,
         'response031fCalls': counts.get('response031f') or 0,
         'response0327Calls': counts.get('response0327') or 0,
         'panelDispatchId70': panel_dispatch.get('baseId') == 70,
         'renderSinkId70': render_sink.get('baseId') == 70,
-        'factory41Granted': runtime.get('factory41Granted') is True,
+        'factory2dGranted': runtime.get('factory2dGranted') is True,
         'runtimeFactoryIds': runtime.get('factoryIds') or [],
         'orderedId70Complete': correlation.get('orderedId70Complete') is True,
         'firstMissingStage': correlation.get('firstMissingStage'),
@@ -194,7 +194,7 @@ def system_output_trace_delta(current, baseline):
         ),
         'panelDispatchId70': current.get('panelDispatchId70') is True,
         'renderSinkId70': current.get('renderSinkId70') is True,
-        'factory41Granted': current.get('factory41Granted') is True,
+        'factory2dGranted': current.get('factory2dGranted') is True,
         'orderedId70Complete': current.get('orderedId70Complete') is True,
         'firstMissingStage': current.get('firstMissingStage'),
         'missingStages': current.get('missingStages') or [],
@@ -209,7 +209,7 @@ def _system_output_trace_entry_matches(stage, entry):
     if stage in SYSTEM_OUTPUT_ID_STAGE_KEYS:
         return entry.get('baseId') == 70
     if stage in SYSTEM_OUTPUT_FACTORY_STAGE_KEYS:
-        return entry.get('factoryId') == 0x41
+        return entry.get('factoryId') == 0x2d
     return True
 
 
@@ -283,8 +283,8 @@ def system_output_trace_phase(before_snapshot, after_snapshot):
         entry.get('stage') == 'renderSink' and entry.get('baseId') == 70
         for entry in phase_timeline
     )
-    phase_factory41_granted = any(
-        entry.get('stage') == 'factory41Granted' and entry.get('factoryId') == 0x41
+    phase_factory2d_granted = any(
+        entry.get('stage') == 'factoryGrant' and entry.get('factoryId') == 0x2d
         for entry in phase_timeline
     )
     phase_response0327_observed = any(
@@ -295,7 +295,7 @@ def system_output_trace_phase(before_snapshot, after_snapshot):
     delta.update({
         'phasePanelDispatchId70': phase_panel_dispatch_id70,
         'phaseRenderSinkId70': phase_render_sink_id70,
-        'phaseFactory41Granted': phase_factory41_granted,
+        'phaseFactory2dGranted': phase_factory2d_granted,
         'phaseSequenceComplete': phase_first_unobserved_stage is None,
         'phaseFirstUnobservedStage': phase_first_unobserved_stage,
         'phaseUnobservedStages': phase_unobserved_stages,
@@ -333,7 +333,7 @@ def system_output_trace_phase(before_snapshot, after_snapshot):
         'phaseResponseDispatchTimeline': phase_response_dispatch_timeline,
         'phasePanelDispatchId70': phase_panel_dispatch_id70,
         'phaseRenderSinkId70': phase_render_sink_id70,
-        'phaseFactory41Granted': phase_factory41_granted,
+        'phaseFactory2dGranted': phase_factory2d_granted,
         'phaseSequenceComplete': phase_first_unobserved_stage is None,
         'phaseFirstUnobservedStage': phase_first_unobserved_stage,
         'phaseUnobservedStages': phase_unobserved_stages,

@@ -829,7 +829,7 @@ test('성계 상세 출력 역추적은 0305 factory부터 031f·0327 sink까지
   // When/Then: 출력 sink에서 0305 command-card와 SelectDialog producer까지 역으로 연결한다.
   assert.match(passive, /const SYSTEM_OUTPUT_STAGE_NAMES = \[/);
   for (const stage of [
-    'commandCard0305', 'factory41Granted', 'factory41Selected', 'factory41Handler',
+    'commandCard0305', 'factoryGrant', 'factorySelected', 'factoryHandler',
     'selectDialogCtor', 'selectDialogTick',
     'genericListRow70', 'selector', 'refresh031f', 'refresh0327',
     'panelDispatch', 'renderSink',
@@ -845,8 +845,8 @@ test('성계 상세 출력 역추적은 0305 factory부터 031f·0327 sink까지
   assert.match(passive, /function systemOutputCommandCardData\(rawCategoryCount, readCommandCount, readFactoryId\)/);
   assert.match(passive, /function systemOutputCommandCardSnapshot\(\)/);
   assert.match(passive, /const rawCategoryCount = readU32\(table\.add\(8\)\);/);
-  assert.match(passive, /factory41Granted: factoryIds\.includes\(0x41\)/);
-  assert.match(passive, /if \(after\.reason === null && after\.factory41Granted\) \{/);
+  assert.match(passive, /factory2dGranted: factoryIds\.includes\(SYSTEM_OUTPUT_B71_FACTORY_ID\)/);
+  assert.match(passive, /if \(after\.reason === null\)/);
   assert.match(passive, /const SYSTEM_OUTPUT_TRACE_RING_LIMIT = \d+;/);
   assert.match(passive, /const SYSTEM_OUTPUT_SINK_RING_LIMIT = \d+;/);
   assert.match(passive, /const SYSTEM_OUTPUT_BACKTRACE_LIMIT = 12;/);
@@ -879,7 +879,9 @@ test('성계 상세 출력 역추적은 0305 factory부터 031f·0327 sink까지
   assert.match(dispatcher, /noteSystemOutputStage\('commandCard0305', commandCardEntry\)/);
   assert.equal((passive.match(/noteSystemOutputStage\('commandCard0305'/g) || []).length, 1);
   assert.match(source, /hookNativeCall\('factory', '0x004f93c0', 4\)/);
-  assert.match(source, /if \(factoryId === 0x41\) noteSystemOutputStage\('factory41Selected', entry\)/);
+  assert.match(source, /SYSTEM_OUTPUT_WHITELIST_FACTORY_SET\.has\(factoryId\)/);
+  assert.match(source, /noteSystemOutputStage\('factorySelected'/);
+  assert.match(source, /factoryId === 0x41[\s\S]*?factory41Selected/);
   assert.equal((passive.match(/attachSystemDetailHook\('0x0057aa90'/g) || []).length, 1);
   assert.equal((passive.match(/attachSystemDetailHook\('0x00576d40'/g) || []).length, 1);
   assert.match(passive, /requestedKind: safe\(\(\) => args\[0\]\.toInt32\(\)\)/);
@@ -923,8 +925,10 @@ test('성계 상세 출력 역추적은 0305 factory부터 031f·0327 sink까지
   const decodeCommandCard = Function(
     'SYSTEM_OUTPUT_COMMAND_CATEGORY_CAP',
     'SYSTEM_OUTPUT_FACTORY_CAP',
+    'SYSTEM_OUTPUT_WHITELIST_FACTORIES',
+    'SYSTEM_OUTPUT_B71_FACTORY_ID',
     `return (${decoderSource});`,
-  )(300, 24);
+  )(300, 24, [0x19, 0x2d, 0x43], 0x2d);
   const visitedCategories = [];
   const decoded = decodeCommandCard(
     2,
@@ -936,27 +940,27 @@ test('성계 상세 출력 역추적은 0305 factory부터 031f·0327 sink까지
   );
   assert.deepEqual(visitedCategories, [0, 1]);
   assert.deepEqual(decoded.factoryIds, [0x2b]);
-  assert.equal(decoded.factory41Granted, false);
+  assert.equal(decoded.factory2dGranted, false);
   assert.equal(decoded.reason, null);
   const unreadableOuter = decodeCommandCard(null, () => 1, () => 0x41);
   assert.deepEqual(unreadableOuter.factoryIds, []);
-  assert.equal(unreadableOuter.factory41Granted, false);
+  assert.equal(unreadableOuter.factory2dGranted, false);
   assert.equal(unreadableOuter.reason, 'category-count-unreadable');
   const oversizedOuter = decodeCommandCard(301, () => 1, () => 0x41);
   assert.deepEqual(oversizedOuter.factoryIds, []);
-  assert.equal(oversizedOuter.factory41Granted, false);
+  assert.equal(oversizedOuter.factory2dGranted, false);
   assert.equal(oversizedOuter.reason, 'category-count-exceeds-cap');
   const unreadableRow = decodeCommandCard(2, (category) => (category === 1 ? null : 1), () => 0x41);
   assert.deepEqual(unreadableRow.factoryIds, []);
-  assert.equal(unreadableRow.factory41Granted, false);
+  assert.equal(unreadableRow.factory2dGranted, false);
   assert.equal(unreadableRow.reason, 'factory-count-unreadable');
   const oversizedRow = decodeCommandCard(2, (category) => (category === 1 ? 25 : 1), () => 0x41);
   assert.deepEqual(oversizedRow.factoryIds, []);
-  assert.equal(oversizedRow.factory41Granted, false);
+  assert.equal(oversizedRow.factory2dGranted, false);
   assert.equal(oversizedRow.reason, 'factory-count-exceeds-cap');
   const unreadableFactory = decodeCommandCard(1, () => 1, () => null);
   assert.deepEqual(unreadableFactory.factoryIds, []);
-  assert.equal(unreadableFactory.factory41Granted, false);
+  assert.equal(unreadableFactory.factory2dGranted, false);
   assert.equal(unreadableFactory.reason, 'factory-id-unreadable');
 });
 
@@ -992,8 +996,8 @@ test('성계 상세 출력 phase는 whole-run 병목과 구간 관측을 분리�
   assert.match(metrics, /'missingStages'/);
   assert.match(metrics, /'missingRequiredResponse0327'/);
   assert.match(metrics, /'panelStateMachineWaitsFor0327Ack'/);
-  assert.match(metrics, /'factory41Granted'/);
-  assert.match(metrics, /'factory41GrantedCalls'/);
+  assert.match(metrics, /'factory2dGranted'/);
+  assert.match(metrics, /'factoryGrantCalls'/);
   assert.match(metrics, /entry\.get\('sequence'\) or 0/);
   assert.doesNotMatch(metrics, /selectionIndexValidCalls|selectionIndexChangedCalls|clickCausal|clickSuccess/);
   assert.match(phaseMetrics, /'orderedId70Complete': after_metrics\.get\('orderedId70Complete'\) is True/);
@@ -1023,10 +1027,10 @@ def snapshot():
         'last': {},
         'correlation': {
             'orderedId70Complete': False,
-            'firstMissingStage': 'factory41Granted',
-            'missingStages': ['factory41Granted'],
+            'firstMissingStage': 'factoryGrant',
+            'missingStages': ['factoryGrant'],
         },
-        'commandCard0305': {'runtime': {'factoryIds': [], 'factory41Granted': False}},
+        'commandCard0305': {'runtime': {'factoryIds': [], 'factory2dGranted': False}},
         'missingRequiredResponse0327': True,
         'panelStateMachineWaitsFor0327Ack': False,
     }}}
@@ -1044,8 +1048,8 @@ print(json.dumps({
   const { stdout } = await execFileAsync('py', ['-3', '-c', fixture], { cwd: LIVE_DIR });
   const report = JSON.parse(stdout);
   assert.equal(report.orderedId70Complete, false);
-  assert.equal(report.firstMissingStage, 'factory41Granted');
-  assert.deepEqual(report.missingStages, ['factory41Granted']);
+  assert.equal(report.firstMissingStage, 'factoryGrant');
+  assert.deepEqual(report.missingStages, ['factoryGrant']);
   assert.equal(report.missingRequiredResponse0327, true);
   assert.deepEqual(report.phaseObservedStages, []);
   assert.equal(report.phaseFirstUnobservedStage, 'commandCard0305');
