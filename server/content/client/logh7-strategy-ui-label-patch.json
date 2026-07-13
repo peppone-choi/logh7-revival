@@ -2,13 +2,13 @@
   "id": "logh7-strategy-ui-label-patch",
   "schemaVersion": 1,
   "status": "ready",
-  "purpose": "전략 UI의 HUD 탭과 확인창 라벨이 잘못된 ConstMsg 그룹을 참조하는 EXE 상수 오류를 되돌릴 수 있게 교정한다.",
+  "purpose": "전략 HUD 탭의 실제 표시 문구와 확인창 라벨의 잘못된 ConstMsg 참조를 되돌릴 수 있게 교정한다.",
   "targetExe": {
     "name": "g7mtclient.exe",
     "sha256": "9c97de2ae426f011680992d6c8d88b25488b5f51555ce5784aeef677f334bb51",
     "imageBase": 4194304
   },
-  "expectedPatchedSha256": "d1ef22b75e97462bc1b098848db2732fb4388e4445ab4924203671d88a3e1146",
+  "expectedPatchedSha256": "e62a8a30dd512cb588fe8ebaa874e24cd3536a99830b40e0a12178ab75c33308",
   "policy": {
     "sameLengthOnly": true,
     "requireOriginalBytes": true,
@@ -16,28 +16,35 @@
   },
   "patches": [
     {
-      "id": "strategy-hud-right-tab-label-group",
+      "id": "strategy-hud-right-tab-member-list-label",
       "childIndex": 8,
-      "constMsgSubId": 2,
+      "constMsgSubId": null,
+      "eventCode": 165,
+      "targetHudMode": 6,
+      "visibleText": "メンバーリスト",
+      "literalVa": 6115984,
       "sourceExeSha256": "9c97de2ae426f011680992d6c8d88b25488b5f51555ce5784aeef677f334bb51",
       "addressKind": "offset",
       "offset": 1035701,
       "originalBytes": "6a65b900742102e84f520200",
-      "patchedBytes": "6a60b900742102e84f520200",
+      "patchedBytes": "83c404b890525d0090909090",
       "rollbackBytes": "6a65b900742102e84f520200",
-      "reason": "전략 HUD 오른쪽 탭(child 8)이 ConstMsg group 0x65/sub 2의 사운드 설정을 잘못 표시하므로 같은 subId를 유지한 채 group 0x60의 同スポットキャラクター로 교정한다."
+      "reason": "전략 HUD 오른쪽 탭 child 8은 event 0xa5를 거쳐 FUN_004fd7a0 mode 6의 동일 스폿 인물 목록을 열지만, 공식 매뉴얼 p18 화면의 실제 버튼 표기는 メンバーリスト다. 현재 ConstMsg에는 기능 설명인 同スポットキャラクター만 있으므로 스택을 정리한 뒤 전용 CP932 리터럴 주소 0x005d5290을 반환하도록 교정한다."
     },
     {
       "id": "strategy-hud-left-tab-label-group",
       "childIndex": 9,
       "constMsgSubId": 3,
+      "eventCode": 164,
+      "targetHudMode": 2,
+      "visibleText": "職務権限カード",
       "sourceExeSha256": "9c97de2ae426f011680992d6c8d88b25488b5f51555ce5784aeef677f334bb51",
       "addressKind": "offset",
       "offset": 1035903,
       "originalBytes": "6a65b900742102e885510200",
       "patchedBytes": "6a60b900742102e885510200",
       "rollbackBytes": "6a65b900742102e885510200",
-      "reason": "전략 HUD 왼쪽 탭(child 9)이 ConstMsg group 0x65/sub 3의 게임 중단 문구를 잘못 표시하므로 같은 subId를 유지한 채 group 0x60의 職務権限カード로 교정한다."
+      "reason": "전략 HUD 왼쪽 탭 child 9는 event 0xa4를 거쳐 FUN_004fd7a0 mode 2의 직무권한 카드 목록을 열며, 공식 매뉴얼 p18 화면의 실제 버튼 표기와 같은 ConstMsg group 0x60/sub 3의 職務権限カード로 교정한다."
     },
     {
       "id": "common-dialog-confirm-label-group",
@@ -104,6 +111,21 @@
       "patchedBytes": "6a62b900742102e8e195faff",
       "rollbackBytes": "6a67b900742102e8e195faff",
       "reason": "전략 커맨드 UI FUN_005780f0의 최소 조건 계급 필드가 ConstMsg group 0x67/sub 3의 중복 로그인 문구를 잘못 표시하므로 group 0x62/sub 3의 最低条件階級으로 교정한다."
+    },
+    {
+      "id": "strategy-hud-member-list-label-data",
+      "constMsgSubId": null,
+      "literalForPatch": "strategy-hud-right-tab-member-list-label",
+      "visibleText": "メンバーリスト",
+      "encoding": "cp932-nul",
+      "va": 6115984,
+      "sourceExeSha256": "9c97de2ae426f011680992d6c8d88b25488b5f51555ce5784aeef677f334bb51",
+      "addressKind": "offset",
+      "offset": 1921680,
+      "originalBytes": "cccccccccccccccccccccccccccccc",
+      "patchedBytes": "83818393836f815b838a8358836700",
+      "rollbackBytes": "cccccccccccccccccccccccccccccc",
+      "reason": "FUN_005d5140 뒤와 다음 MMX 코드 사이의 48바이트 INT3 정렬 패딩 중 15바이트에 공식 버튼 표기 メンバーリスト의 CP932 NUL 문자열을 보관한다. 실행 흐름을 우회하지 않고 오른쪽 탭 생성 코드가 읽기 전용 리터럴로만 참조한다."
     }
   ]
 }

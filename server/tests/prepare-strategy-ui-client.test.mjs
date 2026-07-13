@@ -23,7 +23,7 @@ function sha256(buffer) {
 
 async function makeFixture() {
   const manifest = JSON.parse(await readFile(manifestPath, 'utf8'));
-  assert.equal(manifest.patches.length, 8);
+  assert.equal(manifest.patches.length, 9);
   const fixtureSize = Math.max(...manifest.patches.map(
     (patch) => patch.offset + Buffer.from(patch.originalBytes, 'hex').length,
   ));
@@ -69,11 +69,11 @@ test('prepareStrategyUiClient applies all guarded patches without changing the s
     sourcePath: fixture.sourcePath,
   });
 
-  // Then: 원본은 보존되고 8개 패치와 보조 파일이 별도 디렉터리에 놓인다.
+  // Then: 원본은 보존되고 9개 패치와 보조 파일이 별도 디렉터리에 놓인다.
   assert.equal(receipt.mode, 'applied');
   assert.equal(receipt.applied, true);
   assert.equal(receipt.reused, false);
-  assert.equal(receipt.patchCount, 8);
+  assert.equal(receipt.patchCount, 9);
   assert.equal(receipt.sha256, sha256(fixture.patched));
   assert.deepEqual(await readFile(fixture.sourcePath), fixture.source);
   assert.deepEqual(await readFile(fixture.outputPath), fixture.patched);

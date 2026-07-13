@@ -31,7 +31,7 @@ test('strategy UI label manifest pins the canonical guarded byte patches', async
   // Given: 전략 HUD와 확인창 라벨용 정본 패치 매니페스트
   const manifest = await readJson(manifestPath);
 
-  // When: 대상 해시와 여덟 패치의 계약을 읽는다.
+  // When: 대상 해시와 아홉 패치의 계약을 읽는다.
   const patchContract = manifest.patches.map((patch) => ({
     id: patch.id,
     childIndex: patch.childIndex ?? null,
@@ -48,7 +48,7 @@ test('strategy UI label manifest pins the canonical guarded byte patches', async
   assert.equal(manifest.id, 'logh7-strategy-ui-label-patch');
   assert.equal(
     manifest.purpose,
-    '전략 UI의 HUD 탭과 확인창 라벨이 잘못된 ConstMsg 그룹을 참조하는 EXE 상수 오류를 되돌릴 수 있게 교정한다.',
+    '전략 HUD 탭의 실제 표시 문구와 확인창 라벨의 잘못된 ConstMsg 참조를 되돌릴 수 있게 교정한다.',
   );
   assert.deepEqual(manifest.targetExe, {
     name: 'g7mtclient.exe',
@@ -57,10 +57,10 @@ test('strategy UI label manifest pins the canonical guarded byte patches', async
   });
   assert.equal(
     manifest.expectedPatchedSha256,
-    'd1ef22b75e97462bc1b098848db2732fb4388e4445ab4924203671d88a3e1146',
+    'e62a8a30dd512cb588fe8ebaa874e24cd3536a99830b40e0a12178ab75c33308',
   );
   const expectedPatches = [
-    ['strategy-hud-right-tab-label-group', 8, 2, 0x0fcdb5, '6a65b900742102e84f520200', '6a60b900742102e84f520200'],
+    ['strategy-hud-right-tab-member-list-label', 8, null, 0x0fcdb5, '6a65b900742102e84f520200', '83c404b890525d0090909090'],
     ['strategy-hud-left-tab-label-group', 9, 3, 0x0fce7f, '6a65b900742102e885510200', '6a60b900742102e885510200'],
     ['common-dialog-confirm-label-group', null, 0, 0x16f304, '6a67b900742102e8002dfbff', '6a62b900742102e8002dfbff'],
     ['common-dialog-cancel-label-group', null, 1, 0x16f39a, '6a67b90074210289442430e8662cfbff', '6a62b90074210289442430e8662cfbff'],
@@ -68,6 +68,7 @@ test('strategy UI label manifest pins the canonical guarded byte patches', async
     ['strategy-command-ui-cancel-label-group', null, 1, 0x17875c, '6a67b900742102e8a898faff', '6a62b900742102e8a898faff'],
     ['strategy-command-ui-remaining-count-label-group', null, 2, 0x1787fb, '6a67b900742102e80998faff', '6a62b900742102e80998faff'],
     ['strategy-command-ui-minimum-rank-label-group', null, 3, 0x178a23, '6a67b900742102e8e195faff', '6a62b900742102e8e195faff'],
+    ['strategy-hud-member-list-label-data', null, null, 0x1d5290, 'cccccccccccccccccccccccccccccc', '83818393836f815b838a8358836700'],
   ].map(([id, childIndex, constMsgSubId, offset, originalBytes, patchedBytes]) => ({
     id,
     childIndex,
@@ -96,7 +97,7 @@ test('strategy UI label manifest pins the canonical guarded byte patches', async
   }
 });
 
-test('strategy UI label patches select the intended ConstMsg labels', async () => {
+test('strategy HUD tab labels match the official visible labels and click handlers', async () => {
   // Given: EXE 소비처를 기준으로 복원한 ConstMsg 그룹과 원문 레코드
   const [{ groups }, msgdat] = await Promise.all([
     readJson(constMsgGroupsPath),
@@ -108,7 +109,47 @@ test('strategy UI label patches select the intended ConstMsg labels', async () =
     return records.find((record) => record.id === baseId + subId).text;
   };
 
-  // When/Then: 패치 전 그룹과 패치 후 그룹의 같은 subId를 대조한다.
+  // When: 전략 HUD 좌우 탭 패치와 전용 표시 문자열을 읽는다.
+  const manifest = await readJson(manifestPath);
+  const leftTab = manifest.patches.find((patch) => patch.id === 'strategy-hud-left-tab-label-group');
+  const rightTab = manifest.patches.find((patch) => patch.id === 'strategy-hud-right-tab-member-list-label');
+  const memberListData = manifest.patches.find((patch) => patch.id === 'strategy-hud-member-list-label-data');
+  const memberListBytes = Buffer.from(memberListData.patchedBytes, 'hex');
+
+  // Then: 매뉴얼 화면의 표시 문구와 정적 핸들러 mode가 각각 일치한다.
+  assert.deepEqual(
+    {
+      childIndex: leftTab.childIndex,
+      eventCode: leftTab.eventCode,
+      targetHudMode: leftTab.targetHudMode,
+      visibleText: leftTab.visibleText,
+    },
+    { childIndex: 9, eventCode: 0xa4, targetHudMode: 2, visibleText: '職務権限カード' },
+  );
+  assert.deepEqual(
+    {
+      childIndex: rightTab.childIndex,
+      eventCode: rightTab.eventCode,
+      literalVa: rightTab.literalVa,
+      targetHudMode: rightTab.targetHudMode,
+      visibleText: rightTab.visibleText,
+    },
+    {
+      childIndex: 8,
+      eventCode: 0xa5,
+      literalVa: 0x005d5290,
+      targetHudMode: 6,
+      visibleText: 'メンバーリスト',
+    },
+  );
+  assert.equal(memberListData.literalForPatch, rightTab.id);
+  assert.equal(memberListBytes.at(-1), 0);
+  assert.equal(
+    new TextDecoder('shift_jis', { fatal: true }).decode(memberListBytes.subarray(0, -1)),
+    'メンバーリスト',
+  );
+
+  // 기능 설명용 ConstMsg와 실제 버튼 표시는 구분한다.
   assert.equal(textAt(0x60, 2), '同スポットキャラクター');
   assert.equal(textAt(0x60, 3), '職務権限カード');
   assert.equal(textAt(0x65, 2), 'サウンド設定');
@@ -129,7 +170,7 @@ test('strategy UI label patches select the intended ConstMsg labels', async () =
 });
 
 test('strategy UI label patches apply and roll back on a sparse fixture', async () => {
-  // Given: 실제 EXE 없이 여덟 오프셋과 원본 바이트만 담은 희소 fixture
+  // Given: 실제 EXE 없이 아홉 오프셋과 원본 바이트만 담은 희소 fixture
   const manifest = await readJson(manifestPath);
   const fixtureSize = Math.max(...manifest.patches.map(
     (patch) => patch.offset + Buffer.from(patch.originalBytes, 'hex').length,
