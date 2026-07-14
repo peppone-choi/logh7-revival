@@ -164,3 +164,59 @@ test('playable runtime boots with ORM store on ephemeral port', async () => {
     await rm(dir, { recursive: true, force: true });
   }
 });
+
+test('playable runtime world move persists through SQLite runtime recreation', async () => {
+  const dir = await mkdtemp(join(tmpdir(), 'logh7-rt-move-'));
+  const dbPath = join(dir, 't.sqlite');
+  const accountsPath = join(dir, 'accounts.json');
+  await writeFile(accountsPath, JSON.stringify({
+    accounts: [{ accountId: 'inei00', password: 'dummy' }],
+  }), 'utf8');
+  let runtime = createPlayableRuntime({
+    port: 0,
+    host: '127.0.0.1',
+    dbPath,
+    accountsPath,
+    logger: { debug() {} },
+  });
+  try {
+    const character = runtime.characterStore.addCharacter('inei00', {
+      lastname: 'Runtime',
+      firstname: 'Move',
+      power: 1,
+      cell: 2588,
+    });
+    runtime.worldSession.seedPlayer({
+      connectionId: 1,
+      accountId: 'inei00',
+      characterId: character.id,
+      unitId: character.unitId,
+      cell: 2588,
+      inWorld: true,
+    });
+    const moveInner = Buffer.alloc(10);
+    moveInner.writeUInt16BE(0x0b01, 0);
+    moveInner.writeUInt32LE(character.unitId, 2);
+    moveInner.writeUInt32LE(2597, 6);
+
+    runtime.worldSession.handleMoveCommand({
+      connectionId: 1,
+      accountId: 'inei00',
+      inner: moveInner,
+    });
+
+    assert.equal(runtime.characterStore.getCharacters('inei00')[0].cell, 2597);
+    await runtime.close();
+    runtime = createPlayableRuntime({
+      port: 0,
+      host: '127.0.0.1',
+      dbPath,
+      accountsPath,
+      logger: { debug() {} },
+    });
+    assert.equal(runtime.characterStore.getCharacters('inei00')[0].cell, 2597);
+  } finally {
+    await runtime.close();
+    await rm(dir, { recursive: true, force: true });
+  }
+});

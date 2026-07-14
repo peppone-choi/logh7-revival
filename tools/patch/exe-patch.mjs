@@ -201,14 +201,6 @@ async function writeFileAtomic(filePath, buffer) {
   const tmpPath = join(dirname(filePath), `${basename(filePath)}.${process.pid}.${randomUUID()}.tmp`);
   await writeFile(tmpPath, buffer);
   try {
-    await unlink(filePath);
-  } catch (error) {
-    if (error?.code !== 'ENOENT') {
-      await unlink(tmpPath).catch(() => {});
-      throw error;
-    }
-  }
-  try {
     await rename(tmpPath, filePath);
   } catch (error) {
     await unlink(tmpPath).catch(() => {});

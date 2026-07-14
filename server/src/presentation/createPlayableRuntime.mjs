@@ -31,6 +31,7 @@ export function createPlayableRuntime({
 
   const characterStore = app.createCharacterStoreAdapter();
   const worldSession = createWorldSession({
+    characterStore,
     worldRedirect: { ip: host === '0.0.0.0' ? '127.0.0.1' : host, port, token: 1 },
   });
 

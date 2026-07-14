@@ -2,7 +2,7 @@
   "id": "logh7-hangul-charset-patch",
   "schemaVersion": 1,
   "status": "available",
-  "purpose": "정본 클라이언트의 GDI 폰트 charset을 SHIFT_JIS(0x80)에서 HANGUL(0x81)로 바꾸는 되돌릴 수 있는 2바이트 패치. 캐릭터 이름 등 UTF-16LE 무손실 텍스트가 ACP 949(CP949) 구동 시 한글 글꼴로 렌더되게 한다. 원본은 절대 덮어쓰지 않고 별도 출력본을 생성한다.",
+  "purpose": "설치된 정본 클라이언트의 GDI 폰트 charset을 SHIFT_JIS(0x80)에서 HANGUL(0x81)로 바꾸는 2바이트 패치. 캐릭터 이름 등 UTF-16LE 무손실 텍스트가 ACP 949(CP949) 구동 시 한글 글꼴로 렌더되게 하며, 최종 배포 경로에서는 g7mtclient.exe 자체에 직접 적용한다.",
   "targetExe": {
     "name": "g7mtclient.exe",
     "sha256": "9c97de2ae426f011680992d6c8d88b25488b5f51555ce5784aeef677f334bb51",
@@ -19,7 +19,7 @@
     "requireOriginalBytes": true,
     "requireRollbackBytes": true,
     "supportsDryRun": true,
-    "neverOverwriteOriginal": true
+    "neverOverwriteOriginal": false
   },
   "patches": [
     {
