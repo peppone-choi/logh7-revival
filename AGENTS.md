@@ -15,12 +15,14 @@
 
 - `artifacts/logh7-cd/Logh7.bin|.cue` — https://archive.org/details/logh-7 CD 이미지 (md5 검증 완료: `bf87c6a8...`/`8784...`, gitignored — 없으면 재다운로드)
 - `docs/reference/*.pdf` — 공식 매뉴얼 5종 (게임 규칙의 근거)
+- `docs/logh7-reference-haul.md` — 트랙별 외부 레포·도구·방법론 수집본. 모든 LOGH VII 작업은 착수 전에 관련 트랙을 반드시 확인하되, 캐논 데이터 근거로 승격하거나 외부 코드를 복사하지 말고 라이선스를 지킨다.
 - `docs/logh7-requirements-current.md`, `docs/logh7-architecture-operations-current.md` — 이전 사이클 지식 베이스 (역사적 참고 — 코드 경로 언급은 리셋 전 기준이므로 신뢰하지 말 것)
 - `docs/logh7-document-index-current.md` — 구 문서 분류 인덱스
 
 ## 개발 규칙
 
 - **CodeGraph 필수**: `.codegraph/`가 있으면 코드 위치/호출경로/영향범위 질문은 codegraph 먼저, rg로 확인.
+- **참고 목록 필수**: LOGH VII 작업은 `docs/logh7-reference-haul.md`의 해당 트랙을 먼저 읽고 방법론을 차용한다. 참고 레포를 받을 때는 gitignored `reference/` 아래에 두며, 설계 참고만 하고 라이선스가 다른 코드를 서버에 직접 이식하지 않는다.
 - **Blocked-Loop Rule**: 같은 증상 3회 실패 또는 새 증거 없는 조사 2회면 접근을 전환하고 블로커 보고서를 쓴다.
 - 코드 주석은 한글로 쓴다 (캐논 일본어 용어·바이너리 오프셋은 원문 유지).
 - 라이브 검증 없이 완료 주장 금지. 테스트 출력·스크린샷 등 증거를 남긴다.
@@ -84,4 +86,3 @@ Agent 도구로 위임하고 작업 성격에 맞춰 `gpt-5.4`, `gpt-5.4-mini`, 
 Worker의 완료 보고를 그대로 믿지 마라. diff와 테스트로 직접 확인한 뒤 승인하라
 검증 실패는 수정 브리프로 재위임하라. 직접 수정은 사소한 마무리에만 허용된다
 한두 줄 수정처럼 위임 오버헤드가 더 큰 작업은 직접 처리해도 된다
-
