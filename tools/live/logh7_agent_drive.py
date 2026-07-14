@@ -8,7 +8,6 @@ from __future__ import annotations
 
 import argparse
 import ctypes
-import struct
 import subprocess
 import sys
 import time
@@ -260,6 +259,11 @@ def foreground(hwnd: int, timeout_s: float = 30.0):
     while True:
         user32.ShowWindow(hwnd, SW_RESTORE)
         foreground_hwnd = user32.GetForegroundWindow()
+        foreground_info = describe_window(foreground_hwnd)
+        if is_notification_toast(foreground_info):
+            toast_result = dismiss_toast(foreground_info, reason='전경 활성화 차단')
+            if toast_result.get('gone'):
+                continue
         current_thread_id = kernel32.GetCurrentThreadId()
         foreground_thread_id = user32.GetWindowThreadProcessId(foreground_hwnd, None)
         attached = bool(foreground_thread_id) and foreground_thread_id != current_thread_id
@@ -411,7 +415,7 @@ def dismiss_toast(info: dict, reason: str) -> dict:
     )
     try:
         out = subprocess.run(['powershell', '-NoProfile', '-ExecutionPolicy', 'Bypass', '-Command', ps],
-                             capture_output=True, text=True, timeout=25)
+                             capture_output=True, text=True, encoding='utf-8', errors='replace', timeout=25)
         record['uiaStdout'] = (out.stdout or '').strip()[:300]
     except (OSError, subprocess.SubprocessError) as exc:
         record['uiaError'] = str(exc)[:200]
