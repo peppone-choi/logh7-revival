@@ -7,6 +7,7 @@ import { join } from 'node:path';
 import net from 'node:net';
 
 import { createPlayableServer } from '../src/server/logh7-playable-server.mjs';
+import { createWorldSession } from '../src/server/logh7-world-session.mjs';
 import {
   encryptBuffer,
   decryptBuffer,
@@ -23,6 +24,26 @@ const CREDENTIAL_INNER = Buffer.from(
   '700047494e370001000000070069006e006500690030003000000600640075006d006d00790000',
   'hex',
 );
+
+function buildCredentialInner(account, password) {
+  const accountText = `${account}\0`;
+  const passwordText = `${password}\0`;
+  const inner = Buffer.alloc(12 + accountText.length * 2 + 2 + passwordText.length * 2);
+  inner.writeUInt16BE(0x7000, 0);
+  inner.write('GIN7', 2, 'ascii');
+  inner.writeUInt16BE(1, 6);
+  inner.writeUInt16BE(0, 8);
+  inner.writeUInt16BE(accountText.length, 10);
+  for (let index = 0; index < accountText.length; index += 1) {
+    inner.writeUInt16BE(accountText.charCodeAt(index), 12 + index * 2);
+  }
+  const passwordLengthOffset = 12 + accountText.length * 2;
+  inner.writeUInt16LE(passwordText.length, passwordLengthOffset);
+  for (let index = 0; index < passwordText.length; index += 1) {
+    inner.writeUInt16LE(passwordText.charCodeAt(index), passwordLengthOffset + 2 + index * 2);
+  }
+  return inner;
+}
 
 function fold16(value) {
   return ((value >>> 16) ^ value) & 0xffff;
@@ -74,6 +95,11 @@ async function readFrames(socket, count, timeoutMs = 3000) {
     collected.push(...parser.push(chunk));
   }
   return collected;
+}
+
+function decodeServer0030(frame, tables) {
+  const body = decryptBuffer(frame.body.subarray(4), expandChildCodecKey(DECIPHER_KEY, tables));
+  return parse0030Body(body);
 }
 
 test('playable server: handshake + GIN7 login returns keysetup+redirect', async () => {
@@ -296,6 +322,118 @@ test('playable server preserves the authenticated account across the stock three
     assert.equal(worldFrames.length, 4);
     third.end();
     await once(third, 'close');
+  } finally {
+    for (const socket of sockets) socket.destroy();
+    await server.close().catch(() => {});
+    await rm(dir, { recursive: true, force: true });
+  }
+});
+
+test('playable server assigns a broadcast move reply id from each authenticated socket sequence', async () => {
+  const dir = await mkdtemp(join(tmpdir(), 'logh7-ps-dual-seq-'));
+  const tables = loadChildCodecTables();
+  const accountsPath = join(dir, 'accounts.json');
+  await writeFile(accountsPath, JSON.stringify({
+    accounts: [
+      { accountId: 'first', password: 'first-pass' },
+      { accountId: 'observer', password: 'observer-pass' },
+    ],
+  }), 'utf8');
+  const world = createWorldSession();
+  const server = createPlayableServer({
+    port: 0,
+    host: '127.0.0.1',
+    accountsPath,
+    tracePath: join(dir, 'trace.jsonl'),
+    worldSession: world,
+    tables,
+    transportKey: TRANSPORT_KEY,
+    decipherKey: DECIPHER_KEY,
+  });
+  const sockets = [];
+  const connectAuthenticated = async ({ account, password, keyHex, sequence }) => {
+    const socket = net.connect(server.address());
+    sockets.push(socket);
+    await once(socket, 'connect');
+    const phase1Key = Buffer.from(keyHex, 'hex');
+    socket.write(buildPhase1Frame({ phase1Key, sequence, tables }));
+    await readFrames(socket, 1);
+    socket.write(build0030Transport({
+      phase1Key,
+      id: 1,
+      inner: buildCredentialInner(account, password),
+      tables,
+    }));
+    await readFrames(socket, 2);
+    return { socket, phase1Key };
+  };
+
+  try {
+    await server.listen();
+    const first = await connectAuthenticated({
+      account: 'first',
+      password: 'first-pass',
+      keyHex: '00112233445566778899aabbccddeeff',
+      sequence: 1,
+    });
+    const observer = await connectAuthenticated({
+      account: 'observer',
+      password: 'observer-pass',
+      keyHex: '102132435465768798a9bacbdcedfe0f',
+      sequence: 2,
+    });
+    world.seedPlayer({
+      connectionId: 1,
+      accountId: 'first',
+      characterId: 11,
+      unitId: 21,
+      cell: 2588,
+      inWorld: true,
+    });
+    world.seedPlayer({
+      connectionId: 2,
+      accountId: 'observer',
+      characterId: 12,
+      unitId: 22,
+      cell: 2597,
+      inWorld: true,
+    });
+
+    const responseTimeRequest = Buffer.alloc(2);
+    responseTimeRequest.writeUInt16BE(0x0300, 0);
+    observer.socket.write(build0030Transport({
+      phase1Key: observer.phase1Key,
+      id: 100,
+      inner: responseTimeRequest,
+      tables,
+    }));
+    const [observerAdvancedFrame] = await readFrames(observer.socket, 1);
+    const observerAdvanced = decodeServer0030(observerAdvancedFrame, tables);
+    assert.equal(observerAdvanced.inner.readUInt16BE(4), 0x0301);
+    assert.ok(observerAdvanced.id > 100);
+
+    const moveRequest = Buffer.alloc(10);
+    moveRequest.writeUInt16BE(0x0b01, 0);
+    moveRequest.writeUInt32LE(21, 2);
+    moveRequest.writeUInt32LE(2601, 6);
+    first.socket.write(build0030Transport({
+      phase1Key: first.phase1Key,
+      id: 10,
+      inner: moveRequest,
+      tables,
+    }));
+    const [[firstMoveFrame], [observerMoveFrame]] = await Promise.all([
+      readFrames(first.socket, 1),
+      readFrames(observer.socket, 1),
+    ]);
+    const firstMove = decodeServer0030(firstMoveFrame, tables);
+    const observerMove = decodeServer0030(observerMoveFrame, tables);
+    for (const parsed of [firstMove, observerMove]) {
+      assert.equal(parsed.inner.readUInt16BE(4), 0x0b07);
+      assert.equal(parsed.inner.readUInt32LE(6 + 0x18), 2601);
+    }
+    assert.ok(firstMove.id > 10);
+    assert.ok(observerMove.id > observerAdvanced.id);
   } finally {
     for (const socket of sockets) socket.destroy();
     await server.close().catch(() => {});

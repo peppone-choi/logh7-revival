@@ -5,6 +5,7 @@
 //   store.getCharacters(accountId)           → CharRecord[]
 //   store.addCharacter(accountId, charData)  → CharRecord (id 자동 배정)
 //   store.deleteCharacter(accountId, charId) → boolean
+//   store.updateCharacterCell(accountId, charId, cell) → boolean
 //
 // 영속 형식: JSON { accounts: { [accountId]: CharRecord[] } }
 // 원자적 쓰기: temp 파일 write → rename (플랫폼 rename 원자성 활용)
@@ -111,5 +112,15 @@ export function createCharacterStore(storePath) {
     return deleted;
   }
 
-  return { getCharacters, addCharacter, deleteCharacter };
+  /** 권위 이동 셀 갱신. 대상 캐릭터가 없으면 쓰지 않고 false. */
+  function updateCharacterCell(accountId, charId, cell) {
+    const record = data.accounts[String(accountId)]
+      ?.find((character) => character.id === charId);
+    if (!record) return false;
+    record.cell = cell;
+    _save();
+    return true;
+  }
+
+  return { getCharacters, addCharacter, deleteCharacter, updateCharacterCell };
 }

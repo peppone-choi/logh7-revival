@@ -1372,6 +1372,8 @@ export function buildGridInitializeSpawnInners({
   baseId = null,
   // 0x0356/0305/0307과 공유하는 영속 권한카드. 문맥이 없을 때만 personal kind 0으로 폴백한다.
   authorityCards = null,
+  // target self와 같은 staging transaction에 추가할 live peer 캐릭터.
+  additionalCharacters = [],
 } = {}) {
   if (!Number.isInteger(characterId) || characterId <= 0) {
     throw new Error('buildGridInitializeSpawnInners: characterId required (no default id=1 / emperor trap)');
@@ -1408,6 +1410,14 @@ export function buildGridInitializeSpawnInners({
     // seat count@0x24c 최소 1 (commander 자신 1행) — 0 이면 C002 유닛리스트 미렌더.
     officerCount: Math.max(1, officerCount),
   }));
+  for (const character of additionalCharacters) {
+    if (!(Number.isInteger(character?.characterId) && character.characterId > 0)) continue;
+    inners.push(buildInformationCharacterInner({
+      ...character,
+      online: character.online !== false,
+      officerCount: Math.max(1, Number.isInteger(character.officerCount) ? character.officerCount : 0),
+    }));
+  }
   // 5) 0x0b0a NotifyEnterGridEnd (value=0) — grid-enter 괄호 終了 = 적재 트리거.
   //    이 프레임이 FUN_004c2a80 을 호출해 캐릭터 테이블(0x0323)을 순회하며 self 캐릭터를
   //    렌더 레지스트리로 스폰(0x0325 스테이징 flagship 링크 소비). 반드시 0x0325/0x0323 **뒤**.

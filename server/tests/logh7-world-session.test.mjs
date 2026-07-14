@@ -5,6 +5,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
 import { createWorldSession } from '../src/server/logh7-world-session.mjs';
+import { createCharacterStore } from '../src/server/logh7-character-store.mjs';
 import {
   CODE_NOTIFY_MOVED_GRID,
   CODE_INFO_CHARACTER,
@@ -68,6 +69,179 @@ test('enterWorld emits character/unit records and marks inWorld', () => {
   assert.ok(codes.includes(CODE_INFO_CHARACTER));
   assert.ok(emits.length >= 4);
   assert.equal(world.getPlayer(1).inWorld, true);
+});
+
+test('second world entry commits a target-specific aggregate registry inside begin/end', () => {
+  const world = createWorldSession();
+  world.seedPlayer({
+    connectionId: 1,
+    accountId: 'first',
+    characterId: 11,
+    unitId: 21,
+    cell: 2588,
+    power: 1,
+    lastname: 'First',
+    firstname: 'Pilot',
+    inWorld: true,
+  });
+  world.seedPlayer({
+    connectionId: 2,
+    accountId: 'second',
+    characterId: 12,
+    unitId: 22,
+    cell: 2597,
+    power: 2,
+    lastname: 'Second',
+    firstname: 'Pilot',
+    inWorld: false,
+  });
+
+  const request = Buffer.alloc(2);
+  request.writeUInt16BE(CODE_SS_GAME_LOGIN_REQ, 0);
+  const result = world.handleWorldInner({ connectionId: 2, accountId: 'second', inner: request });
+
+  const selfCodes = result.responses
+    .filter((response) => response.targets.length === 1 && response.targets[0] === 2)
+    .slice(0, 4)
+    .map((response) => readMsg32Code(response.inner));
+  assert.deepEqual(selfCodes, [0x0206, 0x0204, CODE_INFO_UNIT, CODE_INFO_CHARACTER]);
+
+  const peerResponses = result.responses.slice(4);
+  assert.equal(peerResponses.some((response) => readMsg32Code(response.inner) === 0x0204), false);
+  for (const [target, selfUnit, peerUnit, peerCharacter, peerPower, peerCell] of [
+    [2, 22, 21, 11, 1, 2588],
+    [1, 21, 22, 12, 2, 2597],
+  ]) {
+    const responses = peerResponses.filter((response) => response.targets[0] === target);
+    const codes = responses.map((response) => readMsg32Code(response.inner));
+    assert.deepEqual(codes, [
+      CODE_NOTIFY_ENTER_GRID_BEGIN,
+      CODE_INFO_UNIT,
+      CODE_INFO_CHARACTER,
+      CODE_NOTIFY_ENTER_GRID_END,
+    ]);
+    const aggregate = decodeInformationUnitsLikeFun419ca0(
+      msg32Body(responses.find((response) => readMsg32Code(response.inner) === CODE_INFO_UNIT).inner),
+    );
+    assert.equal(aggregate.rows[0].id, selfUnit, `target ${target} keeps self in slot 0`);
+    const peerRow = aggregate.rows.find((row) => row.id === peerUnit);
+    assert.ok(peerRow);
+    assert.equal(peerRow.faction, peerPower);
+    assert.equal(peerRow.commander, peerCell);
+    assert.equal(peerRow.cell, peerCell);
+    assert.equal(peerRow.owner, peerCharacter);
+    assert.equal(new Set(aggregate.rows.map((row) => row.id)).size, aggregate.count);
+    assert.ok(aggregate.count > 2, `target ${target} aggregate includes deployment NPCs`);
+    const character = responses.find((response) =>
+      readMsg32Code(response.inner) === CODE_INFO_CHARACTER);
+    const characterBody = msg32Body(character.inner);
+    assert.equal(characterBody.readUInt32BE(0), peerCharacter);
+    assert.equal(characterBody.readUInt8(4), peerPower);
+    assert.equal(characterBody.readUInt32BE(0x24), peerUnit);
+    assert.ok(characterBody.readUInt8(0x24c) >= 1, 'peer character carries at least one officer seat');
+  }
+});
+
+test('aggregate registry deduplicates colliding live unit ids while keeping target self first', () => {
+  const world = createWorldSession();
+  world.seedPlayer({ connectionId: 1, accountId: 'first', characterId: 11, unitId: 21, inWorld: true });
+  world.seedPlayer({ connectionId: 2, accountId: 'second', characterId: 12, unitId: 21, inWorld: false });
+  const request = Buffer.alloc(2);
+  request.writeUInt16BE(CODE_SS_GAME_LOGIN_REQ, 0);
+  const result = world.handleWorldInner({ connectionId: 2, accountId: 'second', inner: request });
+  const aggregateResponse = result.responses.slice(4).find((response) =>
+    response.targets[0] === 2 && readMsg32Code(response.inner) === CODE_INFO_UNIT);
+  const aggregate = decodeInformationUnitsLikeFun419ca0(msg32Body(aggregateResponse.inner));
+  assert.equal(aggregate.rows[0].id, 21);
+  assert.equal(aggregate.rows.filter((row) => row.id === 21).length, 1);
+  assert.equal(new Set(aggregate.rows.map((row) => row.id)).size, aggregate.count);
+});
+
+test('third world entry sends one non-overwriting aggregate and every peer character per target', () => {
+  const world = createWorldSession();
+  for (const player of [
+    { connectionId: 1, accountId: 'first', characterId: 11, unitId: 21, cell: 2588, inWorld: true },
+    { connectionId: 2, accountId: 'second', characterId: 12, unitId: 22, cell: 2597, inWorld: true },
+    { connectionId: 3, accountId: 'third', characterId: 13, unitId: 23, cell: 2601, inWorld: false },
+  ]) world.seedPlayer(player);
+
+  const request = Buffer.alloc(2);
+  request.writeUInt16BE(CODE_SS_GAME_LOGIN_REQ, 0);
+  const result = world.handleWorldInner({ connectionId: 3, accountId: 'third', inner: request });
+  const peerResponses = result.responses.slice(4);
+
+  for (const target of [1, 2, 3]) {
+    const responses = peerResponses.filter((response) => response.targets[0] === target);
+    const codes = responses.map((response) => readMsg32Code(response.inner));
+    assert.deepEqual(codes, [
+      CODE_NOTIFY_ENTER_GRID_BEGIN,
+      CODE_INFO_UNIT,
+      CODE_INFO_CHARACTER,
+      CODE_INFO_CHARACTER,
+      CODE_NOTIFY_ENTER_GRID_END,
+    ]);
+    assert.equal(codes.filter((code) => code === CODE_INFO_UNIT).length, 1);
+    const aggregate = decodeInformationUnitsLikeFun419ca0(
+      msg32Body(responses.find((response) => readMsg32Code(response.inner) === CODE_INFO_UNIT).inner),
+    );
+    const expectedSelf = 20 + target;
+    assert.equal(aggregate.rows[0].id, expectedSelf);
+    assert.deepEqual(
+      aggregate.rows.filter((row) => [21, 22, 23].includes(row.id)).map((row) => row.id).sort(),
+      [21, 22, 23],
+    );
+    assert.equal(new Set(aggregate.rows.map((row) => row.id)).size, aggregate.count);
+    const characterIds = responses
+      .filter((response) => readMsg32Code(response.inner) === CODE_INFO_CHARACTER)
+      .map((response) => msg32Body(response.inner).readUInt32BE(0))
+      .sort();
+    assert.deepEqual(characterIds, [11, 12, 13].filter((id) => id !== 10 + target));
+  }
+});
+
+test('new player first 0x0f02 rebuild keeps all live peers in its aggregate registry', () => {
+  const world = createWorldSession();
+  world.seedPlayer({
+    connectionId: 1,
+    accountId: 'first',
+    characterId: 11,
+    unitId: 21,
+    cell: 2588,
+    inWorld: true,
+  });
+  world.seedPlayer({
+    connectionId: 2,
+    accountId: 'second',
+    characterId: 12,
+    unitId: 22,
+    cell: 2597,
+    inWorld: false,
+  });
+  const enter = Buffer.alloc(2);
+  enter.writeUInt16BE(CODE_SS_GAME_LOGIN_REQ, 0);
+  world.handleWorldInner({ connectionId: 2, accountId: 'second', inner: enter });
+
+  const gridInit = Buffer.alloc(2);
+  gridInit.writeUInt16BE(0x0f02, 0);
+  const result = world.handleWorldInner({ connectionId: 2, accountId: 'second', inner: gridInit });
+  const aggregateResponse = result.responses.find((response) =>
+    readMsg32Code(response.inner) === CODE_INFO_UNIT);
+  const aggregate = decodeInformationUnitsLikeFun419ca0(msg32Body(aggregateResponse.inner));
+  assert.equal(aggregate.rows[0].id, 22);
+  assert.equal(aggregate.rows.some((row) => row.id === 21), true);
+  assert.equal(new Set(aggregate.rows.map((row) => row.id)).size, aggregate.count);
+
+  const beginIndex = result.responses.findIndex((response) =>
+    readMsg32Code(response.inner) === CODE_NOTIFY_ENTER_GRID_BEGIN);
+  const unitIndex = result.responses.indexOf(aggregateResponse);
+  const endIndex = result.responses.findIndex((response) =>
+    readMsg32Code(response.inner) === CODE_NOTIFY_ENTER_GRID_END);
+  const characterIds = result.responses
+    .slice(unitIndex + 1, endIndex)
+    .filter((response) => readMsg32Code(response.inner) === CODE_INFO_CHARACTER)
+    .map((response) => msg32Body(response.inner).readUInt32BE(0));
+  assert.ok(beginIndex < unitIndex && unitIndex < endIndex);
+  assert.deepEqual(characterIds.sort(), [11, 12]);
 });
 
 test('world-enter와 grid-init은 focus env 없이도 decoded commander/cell=2588을 동일 투영한다', () => {
@@ -978,6 +1152,24 @@ test('reconnect: enterWorld on a new connectionId rebinds session player by acco
   assert.equal(world.getPlayer(2), null);
 });
 
+test('disconnect removes a player from live aggregates without breaking account rebind', () => {
+  const world = createWorldSession();
+  world.seedPlayer({
+    connectionId: 1,
+    accountId: 'first',
+    characterId: 11,
+    unitId: 21,
+    inWorld: true,
+  });
+
+  assert.equal(world.handleDisconnect(1), true);
+  assert.equal(world.getPlayer(1).inWorld, false);
+  const rebound = world.enterWorld({ connectionId: 2, accountId: 'first' });
+  assert.equal(rebound.player.connectionId, 2);
+  assert.equal(rebound.player.inWorld, true);
+  assert.equal(world.getPlayer(1), null);
+});
+
 test('reconnect guard: unknown account on new connection still refuses synthetic character', () => {
   const world = createWorldSession();
   const req = Buffer.alloc(10);
@@ -1039,6 +1231,40 @@ test('authoritative move updates cell and notifies both sessions', () => {
   assert.equal(readMsg32Code(result.notify), CODE_NOTIFY_MOVED_GRID);
   assert.equal(msg32Body(result.notify).readUInt32LE(0x14), 1);
   assert.equal(msg32Body(result.notify).readUInt32LE(0x18), 2597);
+});
+
+test('authoritative move persists the destination cell across store reload', async () => {
+  const dir = await mkdtemp(join(tmpdir(), 'logh7-move-persist-'));
+  const storePath = join(dir, 'characters.json');
+  try {
+    const store = createCharacterStore(storePath);
+    const character = store.addCharacter('owner', {
+      lastname: 'Persist',
+      firstname: 'Move',
+      cell: 2588,
+      unitId: 1,
+    });
+    const world = createWorldSession({ characterStore: store });
+    world.seedPlayer({
+      connectionId: 1,
+      accountId: 'owner',
+      characterId: character.id,
+      unitId: 1,
+      cell: 2588,
+      inWorld: true,
+    });
+    const moveInner = Buffer.alloc(10);
+    moveInner.writeUInt16BE(0x0b01, 0);
+    moveInner.writeUInt32LE(1, 2);
+    moveInner.writeUInt32LE(2597, 6);
+
+    world.handleMoveCommand({ connectionId: 1, accountId: 'owner', inner: moveInner });
+
+    const reloaded = createCharacterStore(storePath);
+    assert.equal(reloaded.getCharacters('owner')[0].cell, 2597);
+  } finally {
+    await rm(dir, { recursive: true, force: true });
+  }
 });
 
 test('live SendWarp move prefers a valid route candidate over the QA fallback', () => {
@@ -1343,6 +1569,33 @@ test('buildWorldReadyPushInners early-grid (LOGH_STRAT_GRID_EARLY) prepends real
 
 test('buildWorldReadyPushInners requires a real unitId (no synthetic id)', () => {
   assert.throws(() => buildWorldReadyPushInners({ unitId: 0 }));
+});
+
+test('buildGridInitializeSpawnInners inserts additional characters before grid commit end', () => {
+  const inners = buildGridInitializeSpawnInners({
+    characterId: 11,
+    unitId: 21,
+    additionalCharacters: [{
+      characterId: 12,
+      gridUnitId: 22,
+      power: 2,
+      officerCount: 1,
+    }],
+  });
+  const codes = inners.map(readMsg32Code);
+  const beginIndex = codes.indexOf(CODE_NOTIFY_ENTER_GRID_BEGIN);
+  const unitIndex = codes.indexOf(CODE_INFO_UNIT);
+  const characterIndexes = codes
+    .map((code, index) => code === CODE_INFO_CHARACTER ? index : -1)
+    .filter((index) => index >= 0);
+  const endIndex = codes.indexOf(CODE_NOTIFY_ENTER_GRID_END);
+  assert.equal(characterIndexes.length, 2);
+  assert.ok(beginIndex < unitIndex);
+  assert.ok(characterIndexes.every((index) => unitIndex < index && index < endIndex));
+  assert.deepEqual(
+    characterIndexes.map((index) => msg32Body(inners[index]).readUInt32BE(0)),
+    [11, 12],
+  );
 });
 
 // 0x0315 RLE body(고정 5004B: [u8 w][u8 h][u16LE rleLen][(runLen,cellType)…])를 5000셀 배열로 디코드.

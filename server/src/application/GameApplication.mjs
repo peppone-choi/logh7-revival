@@ -4,6 +4,7 @@ import {
   createAccountEntity,
   createCharacterEntity,
   ensureUnitId,
+  setCharacterCell,
 } from '../domain/entities.mjs';
 import { openDatabase, DEFAULT_DB_PATH } from '../infrastructure/persistence/Database.mjs';
 import { createUnitOfWork } from '../infrastructure/persistence/UnitOfWork.mjs';
@@ -124,6 +125,18 @@ export function createGameApplication({
         const uow = createUnitOfWork(connection);
         try {
           uow.deleteCharacter(accountId, charId);
+          return true;
+        } finally {
+          uow.close();
+        }
+      },
+      updateCharacterCell(accountId, charId, cell) {
+        const uow = createUnitOfWork(connection);
+        try {
+          const character = uow.findCharacterById(charId);
+          if (!character || character.accountId !== String(accountId)) return false;
+          setCharacterCell(character, cell);
+          uow.flush();
           return true;
         } finally {
           uow.close();

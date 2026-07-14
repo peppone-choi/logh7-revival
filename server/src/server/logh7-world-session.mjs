@@ -5,6 +5,10 @@
 
 import {
   buildWorldEntryInners,
+  buildInformationCharacterInner,
+  buildInformationUnitInner,
+  buildNotifyEnterGridBeginInner,
+  buildNotifyEnterGridEndInner,
   buildNotifyMovedGridInner,
   buildGridChatInner,
   decodeMoveGridCommand,
@@ -192,6 +196,67 @@ export function createWorldSession({
     return fallback;
   }
 
+  function buildPlayerFleetRecord(player) {
+    const selectedBase = findStaticBase({ cell: player.cell });
+    return {
+      id: player.unitId,
+      cell: player.cell,
+      faction: player.power ?? 0,
+      owner: player.characterId,
+      commander: player.cell,
+      spotResolverBase: selectedBase?.id ?? 0,
+    };
+  }
+
+  function buildPlayerCharacterRecord(player) {
+    const selectedBase = findStaticBase({ cell: player.cell });
+    return {
+      characterId: player.characterId,
+      gridUnitId: player.unitId,
+      power: player.power ?? 0,
+      spot: selectedBase?.id ?? 0,
+      lastname: player.lastname ?? '',
+      firstname: player.firstname ?? '',
+      face: Number.isInteger(player.face) ? player.face : 0,
+      rank: Number.isInteger(player.rank) ? player.rank : 0,
+      abilities: player.ability8,
+      online: true,
+      officerCount: Math.max(1, Number.isInteger(player.officerCount) ? player.officerCount : 0),
+    };
+  }
+
+  function buildPlayerCharacterInner(player) {
+    return buildInformationCharacterInner(buildPlayerCharacterRecord(player));
+  }
+
+  function listLivePlayersForTarget(target) {
+    return [
+      target,
+      ...[...players.values()].filter((player) =>
+        player.inWorld && player.connectionId !== target.connectionId),
+    ];
+  }
+
+  function buildAggregateFleetList(target) {
+    const livePlayers = listLivePlayersForTarget(target);
+    const selectedBase = findStaticBase({ cell: target.cell });
+    const deployment = buildDeploymentFleetList({
+      unitId: target.unitId,
+      cell: target.cell,
+      characterId: target.characterId,
+      faction: target.power ?? 0,
+      spotResolverBase: selectedBase?.id ?? 0,
+    });
+    const aggregate = [];
+    const seenUnitIds = new Set();
+    for (const fleet of [...livePlayers.map(buildPlayerFleetRecord), ...deployment.slice(1)]) {
+      if (seenUnitIds.has(fleet.id)) continue;
+      seenUnitIds.add(fleet.id);
+      aggregate.push(fleet);
+    }
+    return aggregate;
+  }
+
   /**
    * 월드 진입: 필수 info 레코드 방출 + inWorld=true.
    * SSGameLogin(0x0205) 또는 명시적 enter 호출로 사용.
@@ -298,7 +363,29 @@ export function createWorldSession({
       unitId: p.unitId,
       codes: listWorldEntryCodes(emits),
     });
-    return { player: { ...p }, emits, codes: listWorldEntryCodes(emits) };
+    const peerResponses = [];
+    const livePlayers = [...players.values()].filter((candidate) => candidate.inWorld);
+    if (livePlayers.length > 1) {
+      for (const target of livePlayers) {
+        const peers = livePlayers.filter((candidate) => candidate.connectionId !== target.connectionId);
+        // 각 클라이언트의 slot 0은 self로 유지하고 begin/end 사이에서 aggregate를 한 번만 commit한다.
+        const inners = [
+          buildNotifyEnterGridBeginInner({ value: 0 }),
+          buildInformationUnitInner({ fleets: buildAggregateFleetList(target) }),
+          ...peers.map(buildPlayerCharacterInner),
+          buildNotifyEnterGridEndInner({ value: 0 }),
+        ];
+        for (const inner of inners) {
+          peerResponses.push({ targets: [target.connectionId], inner, isMsg32: true });
+        }
+      }
+    }
+    return {
+      player: { ...p },
+      emits,
+      codes: listWorldEntryCodes(emits),
+      peerResponses,
+    };
   }
 
   /**
@@ -342,6 +429,10 @@ export function createWorldSession({
     // 소유 unit 만 이동 (다른 unitId 요청 시 거부)
     if (unitId !== player.unitId) {
       throw new Error(`move rejected: unit ${unitId} not owned by connection ${connectionId}`);
+    }
+    if (characterStore && typeof characterStore.updateCharacterCell === 'function') {
+      const persisted = characterStore.updateCharacterCell(player.accountId, player.characterId, cell);
+      if (!persisted) throw new Error('move rejected: character persistence target missing');
     }
     player.cell = cell;
     const notify = buildNotifyMovedGridInner({
@@ -412,16 +503,19 @@ export function createWorldSession({
     }
 
     if (code === CODE_SS_GAME_LOGIN_REQ) {
-      const { emits, codes, player } = enterWorld({ connectionId, accountId });
+      const { emits, codes, player, peerResponses } = enterWorld({ connectionId, accountId });
       return {
         kind: 'world-enter',
         player,
         codes,
-        responses: emits.map((innerMsg) => ({
-          targets: [connectionId],
-          inner: innerMsg,
-          isMsg32: true,
-        })),
+        responses: [
+          ...emits.map((innerMsg) => ({
+            targets: [connectionId],
+            inner: innerMsg,
+            isMsg32: true,
+          })),
+          ...peerResponses,
+        ],
       };
     }
 
@@ -593,15 +687,12 @@ export function createWorldSession({
           staticCells: getStrategicGridCells([{ cell: player.cell, value: 1 }]),
           // 0x0325 유닛 레지스트리 충전(플레이어 unit[0] + NPC 함대) — 그리드진입 시 레지스트리를
           // 실 유닛으로 채워 마커/오브젝트 클릭 null-deref(FUN_004c9a80) 크래시를 해소한다.
-          fleets: buildDeploymentFleetList({
-            unitId: player.unitId,
-            cell: player.cell,
-            characterId: player.characterId,
-            faction: player.power ?? 0,
-            spotResolverBase: selectedBase?.id ?? 0,
-          }),
+          fleets: buildAggregateFleetList(player),
           baseId: selectedBase?.id ?? null,
           authorityCards: player.authorityCards,
+          additionalCharacters: listLivePlayersForTarget(player)
+            .slice(1)
+            .map(buildPlayerCharacterRecord),
         });
         logEvent('grid-init-spawn', connectionId, { codes: listWorldEntryCodes(spawnInners) });
         return {
@@ -700,6 +791,15 @@ export function createWorldSession({
     return eventLog.slice();
   }
 
+  function handleDisconnect(connectionId) {
+    const player = players.get(connectionId);
+    if (!player) return false;
+    player.inWorld = false;
+    gridInitSpawned.delete(connectionId);
+    logEvent('disconnect', connectionId, { accountId: player.accountId, characterId: player.characterId });
+    return true;
+  }
+
   /** 테스트용: 플레이어를 월드에 직접 배치 */
   /** 테스트/진단용 명시 주입만. 더미 이름·id 자동 채우기 없음. */
   function seedPlayer(player) {
@@ -739,6 +839,7 @@ export function createWorldSession({
     getPlayer,
     listPlayers,
     getEventLog,
+    handleDisconnect,
     seedPlayer,
   };
 }

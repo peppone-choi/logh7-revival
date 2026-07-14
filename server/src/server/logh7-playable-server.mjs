@@ -167,6 +167,8 @@ export function createPlayableServer({
   let listening = false;
   /** @type {Map<number, import('node:net').Socket>} */
   const socketsByConn = new Map();
+  /** @type {Map<number, number>} */
+  const nextReplyIdByConn = new Map();
   const sockets = new Set();
   const reconnectHandoffs = new Map();
   let nextHandoffId = 1;
@@ -243,17 +245,11 @@ export function createPlayableServer({
     return frame;
   }
 
-  function broadcastInner(targets, id, inner, exceptConn = null) {
-    const frames = [];
-    for (const targetId of targets) {
-      if (exceptConn != null && targetId === exceptConn) {
-        // still send to self for move/chat echo (recipients include self)
-      }
-      const sock = socketsByConn.get(targetId);
-      if (!sock) continue;
-      frames.push({ connectionId: targetId, frame: sendInner(sock, targetId, id, inner) });
-    }
-    return frames;
+  function takeReplyIdForConnection(connectionId, minExclusive = 0) {
+    let nextReplyId = nextReplyIdByConn.get(connectionId) ?? 1;
+    if (nextReplyId <= minExclusive) nextReplyId = minExclusive + 1;
+    nextReplyIdByConn.set(connectionId, nextReplyId + 1);
+    return nextReplyId;
   }
 
   const server = createServer((socket) => {
@@ -261,6 +257,7 @@ export function createPlayableServer({
     nextConnectionId += 1;
     sockets.add(socket);
     socketsByConn.set(connectionId, socket);
+    nextReplyIdByConn.set(connectionId, 1);
     const parser = createFrameStreamParser();
     let phase1Key = null;
     let lobbyAccount = null;
@@ -268,12 +265,8 @@ export function createPlayableServer({
     let authRejected = false;
     // S→C 단조 증가 id (해독 시퀀스 게이트 0x645eda: id > cipher+0x20)
     // ★요청 id 재사용 금지 — 0x2001 replyId=3 후 0x2004 에 또 id=3 쓰면 클라가 폐기/FIN.
-    let nextReplyId = 1;
     function takeReplyId(minExclusive = 0) {
-      if (nextReplyId <= minExclusive) nextReplyId = minExclusive + 1;
-      const id = nextReplyId;
-      nextReplyId += 1;
-      return id;
+      return takeReplyIdForConnection(connectionId, minExclusive);
     }
 
     writeTrace({
@@ -637,10 +630,11 @@ export function createPlayableServer({
               }
 
               for (const resp of result.responses) {
-                const replyId = takeReplyId(parsed0030.id >>> 0);
                 for (const targetId of resp.targets) {
                   const sock = socketsByConn.get(targetId);
                   if (!sock) continue;
+                  const minExclusive = targetId === connectionId ? parsed0030.id >>> 0 : 0;
+                  const replyId = takeReplyIdForConnection(targetId, minExclusive);
                   sendInner(sock, targetId, replyId, resp.inner);
                 }
               }
@@ -707,8 +701,13 @@ export function createPlayableServer({
                 });
                 if (worldResult) {
                   for (const resp of worldResult.responses) {
-                    const replyId = takeReplyId(parsed0030.id >>> 0);
-                    broadcastInner(resp.targets, replyId, resp.inner);
+                    for (const targetId of resp.targets) {
+                      const sock = socketsByConn.get(targetId);
+                      if (!sock) continue;
+                      const minExclusive = targetId === connectionId ? parsed0030.id >>> 0 : 0;
+                      const replyId = takeReplyIdForConnection(targetId, minExclusive);
+                      sendInner(sock, targetId, replyId, resp.inner);
+                    }
                   }
                   writeTrace({
                     event: 'world-response-sent',
@@ -744,6 +743,10 @@ export function createPlayableServer({
     socket.on('close', (hadError) => {
       sockets.delete(socket);
       socketsByConn.delete(connectionId);
+      nextReplyIdByConn.delete(connectionId);
+      if (typeof resolvedWorld.handleDisconnect === 'function') {
+        resolvedWorld.handleDisconnect(connectionId);
+      }
       writeTrace({ event: 'connection-closed', connectionId, hadError });
     });
   });
