@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { mkdtemp, readFile, writeFile } from 'node:fs/promises';
+import { chmod, mkdtemp, readFile, readdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 import { fileURLToPath } from 'node:url';
@@ -114,4 +114,33 @@ test('apply and rollback round-trip a temp copy', async () => {
   const rollbackReport = await rollbackPatchManifest(manifest, patchedPath, rolledBackPath);
   assert.equal(rollbackReport.patchCount, 1);
   assert.equal((await readFile(rolledBackPath)).toString('hex'), buffer.toString('hex'));
+});
+
+test('원자 쓰기가 기존 파일을 먼저 삭제하지 않는다', async () => {
+  const source = await readFile(cliPath, 'utf8');
+  const start = source.indexOf('async function writeFileAtomic(');
+  const end = source.indexOf('\n}\n', start);
+  assert.ok(start >= 0 && end > start);
+  assert.doesNotMatch(source.slice(start, end), /unlink\(filePath\)/);
+});
+
+test('Windows rename 교체 성공 시 기존 파일만 남는다', async () => {
+  const { dir, exePath, buffer } = await makeFixture();
+  await applyPatchManifest(baseManifest(buffer), exePath);
+  assert.equal((await readFile(exePath)).toString('hex'), 'aabb3344ccdd');
+  assert.deepEqual(await readdir(dir), ['fixture.exe']);
+});
+
+test('Windows rename 교체 실패 시 원본을 보존하고 temp를 지운다', {
+  skip: process.platform !== 'win32',
+}, async () => {
+  const { dir, exePath, buffer } = await makeFixture();
+  await chmod(exePath, 0o444);
+  try {
+    await assert.rejects(() => applyPatchManifest(baseManifest(buffer), exePath), /EPERM/);
+    assert.equal((await readFile(exePath)).toString('hex'), buffer.toString('hex'));
+    assert.deepEqual(await readdir(dir), ['fixture.exe']);
+  } finally {
+    await chmod(exePath, 0o666);
+  }
 });

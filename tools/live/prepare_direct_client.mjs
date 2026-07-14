@@ -1,5 +1,3 @@
-// prepare_hangul_charset_client.mjs — 한글 charset을 설치 EXE에 제자리 적용
-
 import { createHash } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
@@ -11,9 +9,9 @@ const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const SHA256_PATTERN = /^[0-9a-f]{64}$/;
 export const DEFAULT_MANIFEST_PATH = resolve(
   ROOT,
-  'server/content/client/logh7-hangul-charset-patch.json',
+  'server/content/client/logh7-direct-client-patch.json',
 );
-export const DEFAULT_SOURCE_PATH = resolve(
+export const DEFAULT_EXE_PATH = resolve(
   ROOT,
   'artifacts/logh7-install/____________s___/____/exe/g7mtclient.exe',
 );
@@ -22,15 +20,11 @@ async function sha256File(path) {
   return createHash('sha256').update(await readFile(path)).digest('hex');
 }
 
-export async function prepareHangulCharsetClient({
-  cp949AssetsReady = false,
+export async function prepareDirectClient({
   manifestPath = DEFAULT_MANIFEST_PATH,
-  sourcePath = DEFAULT_SOURCE_PATH,
-  exePath = sourcePath,
+  exePath = DEFAULT_EXE_PATH,
+  dryRun = false,
 } = {}) {
-  if (cp949AssetsReady !== true) {
-    throw new Error('CP949 assets are not ready; pass cp949AssetsReady=true (CLI: --cp949-assets).');
-  }
   const resolvedManifestPath = resolve(manifestPath);
   const resolvedExePath = resolve(exePath);
   const manifest = JSON.parse(await readFile(resolvedManifestPath, 'utf8'));
@@ -58,10 +52,27 @@ export async function prepareHangulCharsetClient({
     );
   }
 
-  const dryRun = await applyPatchManifest(manifest, resolvedExePath, resolvedExePath, { dryRun: true });
-  if (dryRun.sha256 !== expectedSha256) {
-    throw new Error(`patched SHA-256 mismatch: expected ${expectedSha256}, calculated ${dryRun.sha256}`);
+  const report = await applyPatchManifest(
+    manifest,
+    resolvedExePath,
+    resolvedExePath,
+    { dryRun: true },
+  );
+  if (report.sha256 !== expectedSha256) {
+    throw new Error(`patched SHA-256 mismatch: expected ${expectedSha256}, calculated ${report.sha256}`);
   }
+  if (dryRun) {
+    return {
+      path: resolvedExePath,
+      sha256: report.sha256,
+      manifestId: manifest.id ?? null,
+      patchCount: report.patchCount,
+      mode: 'dry-run',
+      applied: false,
+      reused: false,
+    };
+  }
+
   const applied = await applyPatchManifest(manifest, resolvedExePath);
   if (applied.sha256 !== expectedSha256) {
     throw new Error(`patched SHA-256 mismatch: expected ${expectedSha256}, applied ${applied.sha256}`);
@@ -81,16 +92,15 @@ export async function runCli(argv = process.argv.slice(2)) {
   const { values } = parseArgs({
     args: argv,
     options: {
-      'cp949-assets': { type: 'boolean', default: false },
       exe: { type: 'string' },
       manifest: { type: 'string' },
-      source: { type: 'string' },
+      'dry-run': { type: 'boolean', default: false },
     },
   });
-  const receipt = await prepareHangulCharsetClient({
-    cp949AssetsReady: values['cp949-assets'],
+  const receipt = await prepareDirectClient({
     manifestPath: values.manifest ?? DEFAULT_MANIFEST_PATH,
-    exePath: values.exe ?? values.source ?? DEFAULT_SOURCE_PATH,
+    exePath: values.exe ?? DEFAULT_EXE_PATH,
+    dryRun: values['dry-run'],
   });
   process.stdout.write(`${JSON.stringify(receipt)}\n`);
   return 0;

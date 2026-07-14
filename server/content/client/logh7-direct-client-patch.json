@@ -1,0 +1,149 @@
+{
+  "id": "logh7-direct-client-patch",
+  "schemaVersion": 1,
+  "status": "ready",
+  "purpose": "한글 리소스가 적용된 설치 EXE를 보조 launcher·overlay 없이 직접 실행하기 위한 최종 고정 길이 패치.",
+  "targetExe": {
+    "name": "g7mtclient.exe",
+    "sha256": "24d79d90e1618309f05932156787e5a140d5f6d57ce008f6c09b00360da3ab3b",
+    "imageBase": 4194304,
+    "size": 3956736,
+    "pathHints": [
+      "artifacts/logh7-install/**/exe/g7mtclient.exe"
+    ],
+    "note": "hardcoded-ui-ko.json의 PE 리소스 136개가 적용된 post-resource EXE."
+  },
+  "expectedPatchedSha256": "5bdd64f1f9a8cca93f5b1002291d6a2c7e8f5ce555b062b8cb48337b96277d89",
+  "policy": {
+    "sameLengthOnly": true,
+    "requireOriginalBytes": true,
+    "requireRollbackBytes": true,
+    "supportsDryRun": true,
+    "neverOverwriteOriginal": false
+  },
+  "patches": [
+    {
+      "id": "strategy-hud-right-tab-member-list-label",
+      "childIndex": 8,
+      "constMsgSubId": null,
+      "eventCode": 165,
+      "targetHudMode": 6,
+      "visibleText": "メンバーリスト",
+      "literalVa": 6115984,
+      "sourceExeSha256": "24d79d90e1618309f05932156787e5a140d5f6d57ce008f6c09b00360da3ab3b",
+      "addressKind": "offset",
+      "offset": 1035701,
+      "originalBytes": "6a65b900742102e84f520200",
+      "patchedBytes": "83c404b890525d0090909090",
+      "rollbackBytes": "6a65b900742102e84f520200",
+      "reason": "전략 HUD 오른쪽 탭 child 8은 event 0xa5를 거쳐 FUN_004fd7a0 mode 6의 동일 스폿 인물 목록을 열지만, 공식 매뉴얼 p18 화면의 실제 버튼 표기는 メンバーリスト다. 현재 ConstMsg에는 기능 설명인 同スポットキャラクター만 있으므로 스택을 정리한 뒤 전용 CP932 리터럴 주소 0x005d5290을 반환하도록 교정한다."
+    },
+    {
+      "id": "strategy-hud-left-tab-label-group",
+      "childIndex": 9,
+      "constMsgSubId": 3,
+      "eventCode": 164,
+      "targetHudMode": 2,
+      "visibleText": "職務権限カード",
+      "sourceExeSha256": "24d79d90e1618309f05932156787e5a140d5f6d57ce008f6c09b00360da3ab3b",
+      "addressKind": "offset",
+      "offset": 1035903,
+      "originalBytes": "6a65b900742102e885510200",
+      "patchedBytes": "6a60b900742102e885510200",
+      "rollbackBytes": "6a65b900742102e885510200",
+      "reason": "전략 HUD 왼쪽 탭 child 9는 event 0xa4를 거쳐 FUN_004fd7a0 mode 2의 직무권한 카드 목록을 열며, 공식 매뉴얼 p18 화면의 실제 버튼 표기와 같은 ConstMsg group 0x60/sub 3의 職務権限カード로 교정한다."
+    },
+    {
+      "id": "common-dialog-confirm-label-group",
+      "constMsgSubId": 0,
+      "sourceExeSha256": "24d79d90e1618309f05932156787e5a140d5f6d57ce008f6c09b00360da3ab3b",
+      "addressKind": "offset",
+      "offset": 1504004,
+      "originalBytes": "6a67b900742102e8002dfbff",
+      "patchedBytes": "6a62b900742102e8002dfbff",
+      "rollbackBytes": "6a67b900742102e8002dfbff",
+      "reason": "공통 확인창 생성자 FUN_0056ebf0의 child 6 라벨이 ConstMsg group 0x67/sub 0의 로그인 실패 문구를 잘못 표시하므로 group 0x62/sub 0의 決定으로 교정한다."
+    },
+    {
+      "id": "common-dialog-cancel-label-group",
+      "constMsgSubId": 1,
+      "sourceExeSha256": "24d79d90e1618309f05932156787e5a140d5f6d57ce008f6c09b00360da3ab3b",
+      "addressKind": "offset",
+      "offset": 1504154,
+      "originalBytes": "6a67b90074210289442430e8662cfbff",
+      "patchedBytes": "6a62b90074210289442430e8662cfbff",
+      "rollbackBytes": "6a67b90074210289442430e8662cfbff",
+      "reason": "공통 확인창 생성자 FUN_0056ebf0의 child 7 라벨이 ConstMsg group 0x67/sub 1의 버전 오류 문구를 잘못 표시하므로 group 0x62/sub 1의 取消し로 교정한다."
+    },
+    {
+      "id": "strategy-command-ui-confirm-label-group",
+      "constMsgSubId": 0,
+      "sourceExeSha256": "24d79d90e1618309f05932156787e5a140d5f6d57ce008f6c09b00360da3ab3b",
+      "addressKind": "offset",
+      "offset": 1541822,
+      "originalBytes": "6a67b900742102e84699faff",
+      "patchedBytes": "6a62b900742102e84699faff",
+      "rollbackBytes": "6a67b900742102e84699faff",
+      "reason": "전략 커맨드 UI FUN_005780f0의 결정 필드가 ConstMsg group 0x67/sub 0의 로그인 실패 문구를 잘못 표시하므로 group 0x62/sub 0의 決定으로 교정한다."
+    },
+    {
+      "id": "strategy-command-ui-cancel-label-group",
+      "constMsgSubId": 1,
+      "sourceExeSha256": "24d79d90e1618309f05932156787e5a140d5f6d57ce008f6c09b00360da3ab3b",
+      "addressKind": "offset",
+      "offset": 1541980,
+      "originalBytes": "6a67b900742102e8a898faff",
+      "patchedBytes": "6a62b900742102e8a898faff",
+      "rollbackBytes": "6a67b900742102e8a898faff",
+      "reason": "전략 커맨드 UI FUN_005780f0의 취소 필드가 ConstMsg group 0x67/sub 1의 버전 오류 문구를 잘못 표시하므로 group 0x62/sub 1의 取消し로 교정한다."
+    },
+    {
+      "id": "strategy-command-ui-remaining-count-label-group",
+      "constMsgSubId": 2,
+      "sourceExeSha256": "24d79d90e1618309f05932156787e5a140d5f6d57ce008f6c09b00360da3ab3b",
+      "addressKind": "offset",
+      "offset": 1542139,
+      "originalBytes": "6a67b900742102e80998faff",
+      "patchedBytes": "6a62b900742102e80998faff",
+      "rollbackBytes": "6a67b900742102e80998faff",
+      "reason": "전략 커맨드 UI FUN_005780f0의 남은 매수 필드가 ConstMsg group 0x67/sub 2의 서버 혼잡 문구를 잘못 표시하므로 group 0x62/sub 2의 残り枚数로 교정한다."
+    },
+    {
+      "id": "strategy-command-ui-minimum-rank-label-group",
+      "constMsgSubId": 3,
+      "sourceExeSha256": "24d79d90e1618309f05932156787e5a140d5f6d57ce008f6c09b00360da3ab3b",
+      "addressKind": "offset",
+      "offset": 1542691,
+      "originalBytes": "6a67b900742102e8e195faff",
+      "patchedBytes": "6a62b900742102e8e195faff",
+      "rollbackBytes": "6a67b900742102e8e195faff",
+      "reason": "전략 커맨드 UI FUN_005780f0의 최소 조건 계급 필드가 ConstMsg group 0x67/sub 3의 중복 로그인 문구를 잘못 표시하므로 group 0x62/sub 3의 最低条件階級으로 교정한다."
+    },
+    {
+      "id": "strategy-hud-member-list-label-data",
+      "constMsgSubId": null,
+      "literalForPatch": "strategy-hud-right-tab-member-list-label",
+      "visibleText": "メンバーリスト",
+      "encoding": "cp932-nul",
+      "va": 6115984,
+      "sourceExeSha256": "24d79d90e1618309f05932156787e5a140d5f6d57ce008f6c09b00360da3ab3b",
+      "addressKind": "offset",
+      "offset": 1921680,
+      "originalBytes": "cccccccccccccccccccccccccccccc",
+      "patchedBytes": "83818393836f815b838a8358836700",
+      "rollbackBytes": "cccccccccccccccccccccccccccccc",
+      "reason": "FUN_005d5140 뒤와 다음 MMX 코드 사이의 48바이트 INT3 정렬 패딩 중 15바이트에 공식 버튼 표기 メンバーリスト의 CP932 NUL 문자열을 보관한다. 실행 흐름을 우회하지 않고 오른쪽 탭 생성 코드가 읽기 전용 리터럴로만 참조한다."
+    },
+    {
+      "id": "direct-hangul-menu-mode",
+      "sourceExeSha256": "24d79d90e1618309f05932156787e5a140d5f6d57ce008f6c09b00360da3ab3b",
+      "addressKind": "offset",
+      "offset": 2366400,
+      "virtualAddressHex": "0x00641BC0",
+      "originalBytes": "1e",
+      "patchedBytes": "1f",
+      "rollbackBytes": "1e",
+      "reason": "FUN_00641b90의 메뉴 모드 기본값을 VA 0x641BC0(raw 0x241BC0)에서 0x1E(일본어)→0x1F(한글)로 고정한다. win.ini hangeulmenu 설정이나 실행 보조프로그램 없이 g7mtclient.exe 직접 실행 시 한글 메뉴 모드를 선택한다."
+    }
+  ]
+}
