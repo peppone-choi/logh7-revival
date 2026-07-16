@@ -19,6 +19,6 @@
 - 테스트: `cd server && npm test`.
 
 ## 활성 계약 (`.ai/task.md`)
-- Status: ACTIVE — AI 업무 시스템 고도화. Phase 1+2 완료·PR #6 리뷰 중, 남은 것 Phase 3 E2E(SRV-CORR).
+- Status: ACTIVE — AI 업무 시스템 고도화. Phase 1+2 merge 완료(PR #6→main), Phase 3 E2E(SRV-CORR) 진행: Issue #7·Jira LOGH7-8, 브랜치 feat/e2e-srv-corr.
 - main 직접 커밋·push·PR·merge 금지 — 작업 브랜치 commit만 허용.
 - 시크릿(`ANTHROPIC_API_KEY` 등)은 사람이 직접 등록, 에이전트는 접근하지 않는다.

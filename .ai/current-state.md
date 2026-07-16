@@ -2,17 +2,21 @@
 
 - Updated at: 2026-07-16
 - Active agent: Claude Code (메인 세션, Advisor) + 서브에이전트
-- Branch: feat/ai-work-system (베이스라인 34b4b36d, main 0e64a152에서 분기)
-- Current phase: AI 업무 시스템 고도화 — Phase 2 완료(게이트 PASS), Phase 3 대기
+- Branch: feat/e2e-srv-corr (main `be6499a3` = PR #6 merge 후 분기; feat/ai-work-system은 병합·삭제됨)
+- Current phase: AI 업무 시스템 고도화 — Phase 1+2 main 병합 완료, Phase 3 E2E(SRV-CORR) 진행 중 (Issue #7)
 - Completed: 딥 인터뷰 스펙(9.0% PASSED) → ralplan 합의 → 전면 승인 → 브랜치·베이스라인(34b4b36d) → 계약 ACTIVE → **P0-0 스파이크 FEASIBLE** — E2E 슬라이스 확정: `SRV-CORR`(서버 correlation 레코드 builder/validator, 신규 `server/src/server/logh7-correlation-record.mjs` + `logh7-playable-server.mjs:258 writeTrace` 배선, 테스트 `server/tests/logh7-correlation-record.test.mjs`, Sentry 경로 = validate throw). 차선: FRAME-OBS
-- In progress: 없음 — Phase 2 완료, Phase 3(E2E SRV-CORR)는 착수 전 task.md allowed-files 확장 필요
+- In progress: Phase 3(E2E SRV-CORR) — 구현·게이트 완료, 커밋→push/PR 승인 대기
 - Phase 2 산출물: 2A/2B `.github/workflows/ci.yml`(Node 24 LTS, npm ci+test)·`claude.yml`(GHA v1, 커스텀 리뷰 규칙 5종+방어적 맥락)·`.coderabbit.yaml`(ko-KR, negative path filter 4종) / 2C `@sentry/node@10.66.0` + `main.mjs` env-guard(동적 import — 정적 import는 모듈 로드 5.3초로 테스트 2건 timeout 회귀 유발해 전환) / 2D `.mcp.json`(code-review-graph+atlassian **`/v1/mcp` http로 갱신** — SSE는 2026-06-30 지원종료 공지)·settings.local allowlist 전환(enableAll:false)·`.gitignore`·Jira 분해 루틴(lifecycle-planning)·verification.md 행 추가(+6/-0)·헌법 각 +1줄
 - 사람 셋업 점검(2026-07-16, 사용자와 공동 진행, 4/4 완료): ①GitHub Secret `ANTHROPIC_API_KEY` 등록 확인(`gh secret list`) ②CodeRabbit App 설치 — 사람 확인, 라이브 검증은 첫 PR ③Sentry 프로젝트+DSN — `~/.zshrc` 환경변수 보관(repo 미기록), 에이전트 비대화형 셸은 `source ~/.zshrc` 필요 ④Jira — 신규 사이트 `pepponechoi-jira.atlassian.net`, **이 세션의 atlassian MCP 직접 OAuth로 접근 확인**(프로젝트 1개: 키 `SCRUM` "내 소프트웨어 팀"; claude.ai Rovo 커넥터는 여전히 옛 사이트만 grant)
 - Files changed: Phase 1 전체 — key-facts.md·inject-key-facts.sh(×2)·stop-doc-gate.sh(×2)·settings(×3) / prompt-pack.md(+6팩)·커맨드 7종 / context-strategy·스텁 2건·TL;DR 3건 / CLAUDE.md·AGENTS.md(추가만)
 - Verification run: Phase 2 종료 게이트(메인 세션 신규 실행) — YAML 3건+JSON 2건 파싱, 시크릿/DSN 스캔 0건, 헌법 diff +1/-0×2, verification.md 삭제줄 0, `cd server && npm test`(489/485 pass/0 fail/4 skip, exit 0), `node --check main.mjs`, 무DSN 부팅 스모크(47900 기동+`[sentry] DSN 미설정 — 비활성` 로그), settings.local allowlist 상태 확인, Jira 신규 사이트 프로젝트 조회 성공
 - Verification result: PHASE2_GATE=PASS (전부 exit 0). 라이브 미검증(push 승인 후 가능): GitHub Actions 첫 런 녹색, CodeRabbit·Claude GHA 실제 PR 코멘트, 실 DSN Sentry 캡처
 - Failed approaches: 없음
-- 승인 이력 추가: 2026-07-16 사용자 "전체 승인" → push(`feat/ai-work-system` origin 반영)·**PR #6 생성** 완료, CI·CodeRabbit·Claude GHA 라이브 검증 진행 중(`gh pr checks 6 --watch` 백그라운드)
-- Open questions: Phase 3 착수 시 `.ai/task.md` allowed-files에 신규 `server/src/server/logh7-correlation-record.mjs` 명시 확장 / Jira 프로젝트 키 `SCRUM`→`LOGH7` rename 여부(사람 결정, 이슈 생성 전) / 향후 세션에서 Jira 쓰려면 사람이 settings.local `enabledMcpjsonServers`에 `"atlassian"` 추가(의도적 활성화 정책, 엔드포인트 교체로 재인증 1회 필요할 수 있음) / merge는 리뷰 결과 확인 후 별도 승인
-- Next action: PR #6 체크·리뷰 코멘트 라이브 확인 → 결과 보고 → (merge 승인 별도) → Phase 3 E2E(SRV-CORR)
+- 승인 이력 추가: 2026-07-16 사용자 "전체 승인"(push·PR·Phase 3 착수) + "Merge 승인" → **PR #6 merge `be6499a3`**. 라이브 검증: CI 녹색 2회(41s·39s), CodeRabbit 스킵 코멘트 실게시(57>50파일 제한), Claude GHA는 첫 PR 정상 스킵(main 병합 후 활성)
+- Phase 3 착수(Issue #7): task.md allowed-files 확장 완료(신규 correlation-record 모듈 + playable-server writeTrace 배선 한정), 구현은 server-dev 서브에이전트 위임
+- Open questions: 향후 세션 Jira는 settings.local allowlist에 `"atlassian"` 사람 추가 + 재인증 1회 (이 세션은 직접 OAuth로 해결)
+- Jira 분해 완료(2026-07-16, 프로젝트 `LOGH7` 실물 확인): Epic **LOGH7-6**(AI 업무 시스템 고도화) / Story **LOGH7-7**(Phase 3 E2E SRV-CORR, parent=Epic) / Task **LOGH7-8**(계약 단위, parent=Epic, Relates→Story) ↔ GitHub Issue #7 제목 `[LOGH7-8]` 병기 + 매핑 코멘트. task.md Related issue에 병기 완료
+- SRV-CORR 구현 완료(dev-3-srvcorr, 메인 세션 fresh 게이트): `cd server && npm test` → **499 tests / 495 pass / 0 fail / 4 skip, exit 0**. 신규 correlation-record 모듈+테스트 10건+writeTrace 배선 리뷰 승인
+- **AC-5 완료(2026-07-16)**: scratchpad 스크립트로 의도적 correlation 검증 실패 1건을 프로덕션 경로(reportCorrelationFailure 기본 동적 import + main.mjs 동일 init 패턴)로 실 DSN 캡처(`reported=true`·`flush=true`·exit 0) → Sentry API 수신 확인: org `tekken-75` 프로젝트 `node`(id 4511745134428160) Issue **NODE-1**(count 1, env `ac5-verification`, release `logh7-revival@feat-e2e-srv-corr`) → **Seer AI 분석 성공**(connectionId 타입 위반 + "deliberate test case" 식별). Sentry API 토큰도 `~/.zshrc` 보관(사용자 전달분 — 채팅 노출이라 회전 권장)
+- Next action: push+PR 사람 승인 요청(feat/e2e-srv-corr, 커밋 4c4524ec·8022687c+) → CodeRabbit·Claude GHA 실리뷰 확인(둘 다 이번엔 실동작 예상: ≤50파일·workflow on main) → merge 승인 별도 → Issue #7 종결·계약 DONE
 - Must-read files for next action: `.omc/plans/logh7-ai-work-system-plan.md` §3, `.ai/task.md`, `docs/agent/verification.md`

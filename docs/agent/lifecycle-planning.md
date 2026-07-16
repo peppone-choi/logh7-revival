@@ -1,7 +1,7 @@
 # Lifecycle Runbook: Planning
 
 ## Status
-PARTIAL — 계획 도구는 로컬 Markdown(`.ai/task.md`, `.omc/plans/`)이 기본. Jira MCP **정의**는 `.mcp.json`(`atlassian`, SSE, 시크릿 미기입)으로 커밋됨 — **활성화**는 사람이 `.claude/settings.local.json`의 `enabledMcpjsonServers`에 `atlassian`을 명시 추가해야 하며 현재 미포함(의도적 미활성). 세션에는 별도로 claude.ai Atlassian 커넥터(`mcp__claude_ai_Atlassian_Rovo__*`)가 연결되어 있고 워크스페이스 `pepponechoi.atlassian.net`이 존재하나, 조회 시 `Tenant is restricted: suspended-inactivity`(403)로 확인됨 — Jira 프로젝트 생성 전 사람이 사이트를 재활성화해야 한다. GitHub Issues는 `gh`로 가능.
+PARTIAL — 계획 도구는 로컬 Markdown(`.ai/task.md`, `.omc/plans/`)이 기본. Jira MCP **정의**는 `.mcp.json`(`atlassian`, `https://mcp.atlassian.com/v1/mcp` http — SSE는 2026-06-30 지원종료, 시크릿 미기입)으로 커밋됨 — **활성화**는 사람이 `.claude/settings.local.json`의 `enabledMcpjsonServers`에 `atlassian`을 명시 추가해야 하며 현재 미포함(의도적 미활성). 신규 사이트 `pepponechoi-jira.atlassian.net` + 프로젝트 `LOGH7`("은하영웅전설7 부활")로 아래 분해 루틴 첫 실행 실증됨(2026-07-16, 세션 직접 OAuth): Epic LOGH7-6 / Story LOGH7-7 / Task LOGH7-8 ↔ GitHub Issue #7. 옛 `pepponechoi.atlassian.net`은 suspended — 사용 안 함. GitHub Issues는 `gh`로 가능.
 
 ## Read This When
 새 기능·마일스톤 작업을 시작하기 전, `.ai/task.md`가 EMPTY일 때.

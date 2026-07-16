@@ -8,6 +8,7 @@
 import { appendFileSync, mkdirSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { createServer } from 'node:net';
+import { randomUUID } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 
 import {
@@ -61,6 +62,11 @@ import {
   DEFAULT_ACCOUNTS_PATH,
   DEFAULT_CHARACTERS_PATH,
 } from './logh7-account-auth.mjs';
+import {
+  buildCorrelationRecord,
+  validateCorrelationRecord,
+  reportCorrelationFailure,
+} from './logh7-correlation-record.mjs';
 
 const PHASE1_CODE = 0x0034;
 const PHASE3_CODE = 0x0035;
@@ -255,10 +261,33 @@ export function createPlayableServer({
     return handoff.account;
   };
 
+  // SRV-CORR(Issue #7): 이 서버 프로세스 실행 전체를 식별하는 runId.
+  // eventId는 writeTrace 호출마다 새로 발급한다(레코드별 고유값).
+  const correlationRunId = randomUUID();
+
   const writeTrace = (record) => {
     const line = JSON.stringify({ ts: new Date().toISOString(), ...record });
     if (tracePath) appendFileSync(tracePath, `${line}\n`);
     logger?.debug?.(record);
+
+    // 기존 trace 라인(위)은 포맷 변경 없이 그대로 두고, M4-OBS-001 23키 correlation
+    // 레코드를 별도 라인으로 추가 기록한다. build/validate 실패가 게임 서버를 죽이면
+    // 안 되므로(순수 관측 부가 기능) 여기서 흡수하고 Sentry는 설정된 경우에만 통지한다.
+    try {
+      const correlationRecord = buildCorrelationRecord({
+        runId: correlationRunId,
+        eventId: randomUUID(),
+        source: 'server',
+        stage: typeof record.event === 'string' ? record.event : null,
+        connectionId: typeof record.connectionId === 'number' ? record.connectionId : null,
+        outcome: typeof record.message === 'string' ? 'failed' : 'ok',
+      });
+      validateCorrelationRecord(correlationRecord);
+      if (tracePath) appendFileSync(tracePath, `${JSON.stringify(correlationRecord)}\n`);
+    } catch (error) {
+      logger?.error?.({ event: 'srv-corr-invalid', message: error.message });
+      reportCorrelationFailure(error).catch(() => {});
+    }
   };
 
   const traceInner = (inner) => {
