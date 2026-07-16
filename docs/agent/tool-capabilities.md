@@ -43,5 +43,6 @@
 | 2026-07-09 | 플러그인·스킬 추가 | oh-my-claudecode, gptaku, 프로젝트 스킬 | 오케스트레이션·RE 도구 보강 |
 | 2026-07-14 | 참고 레포 트랙 도입 | `docs/logh7-reference-haul.md` + gitignored `reference/` | 방법론 차용, 코드 이식 금지 |
 | 2026-07-16 | Agent OS 부트스트랩 | `.ai/`, `docs/agent/`, `.claude/commands/`, 보호·검증 훅, `scripts/agent/`, 진입 문서 재구조화 | 근거: `.ai/decisions.md` ADR-LITE-001~005 |
+| 2026-07-16 | AI 업무 시스템 고도화 착수 | 부트스트랩 베이스라인 커밋(34b4b36d, feat/ai-work-system), `.ai/task.md` ACTIVE | 딥 인터뷰 스펙 + ralplan 합의 계획(`.omc/plans/logh7-ai-work-system-plan.md`) 사람 전면 승인. 예정: NIAH 재주입 훅·팩 배선·CI·GHA·CodeRabbit·Sentry·`.mcp.json` |
 
 참고: `fable on`이면 `ANTHROPIC_DEFAULT_SONNET_MODEL=claude-haiku-4-5`로 sonnet 고정 서브에이전트(OMC 실행 에이전트 등)까지 haiku로 강등된다.

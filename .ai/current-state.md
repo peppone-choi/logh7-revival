@@ -6,7 +6,7 @@
 - Current phase: AI 업무 시스템 고도화 — Phase 0 (계약·소유·스파이크)
 - Completed: 딥 인터뷰 스펙(모호도 9.0% PASSED) → ralplan 합의(Planner→Architect→Critic, 전건 반영) → 계획 전면 승인(사람) → 작업 브랜치 생성 → 부트스트랩 베이스라인 커밋(34b4b36d) → `.ai/task.md` ACTIVE → ownership 행 정리(부트스트랩 done)
 - In progress: P0-0 미션 실현가능성 스파이크(M4-OBS-001 서버-테스트 슬라이스, Wine 무의존 5단계 판정)
-- Files changed: `.ai/task.md`, `.ai/ownership.md`, `.ai/current-state.md` (Phase 0 상태 갱신)
+- Files changed: `.ai/task.md`, `.ai/ownership.md`, `.ai/current-state.md`, `docs/agent/tool-capabilities.md` (Phase 0 상태·이력 갱신)
 - Verification run: 훅 9종 `bash -n` + settings/hooks.json JSON 파싱 (베이스라인 커밋 전)
 - Verification result: 전부 OK, exit 0
 - Failed approaches: 없음
