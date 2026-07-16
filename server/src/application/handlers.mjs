@@ -10,6 +10,7 @@ import {
   ensureUnitId,
 } from '../domain/entities.mjs';
 import {
+  buildAuthorityCommandRows,
   grantAuthorityCard,
   revokeAuthorityCard,
 } from '../domain/authority-cards.mjs';
@@ -31,9 +32,10 @@ function safeEqualString(a, b) {
 
 /**
  * @param {{ commandBus: ReturnType<import('./bus.mjs').createCommandBus>,
- *           queryBus: ReturnType<import('./bus.mjs').createQueryBus> }} buses
+ *           queryBus: ReturnType<import('./bus.mjs').createQueryBus>,
+ *           isGridCellNavigable: (cell: number) => boolean }} buses
  */
-export function registerGameHandlers({ commandBus, queryBus }) {
+export function registerGameHandlers({ commandBus, queryBus, isGridCellNavigable }) {
   // ── Commands ─────────────────────────────────────────────────────────────
 
   commandBus.register('EnsureDevAccount', (cmd, { uow }) => {
@@ -143,6 +145,10 @@ export function registerGameHandlers({ commandBus, queryBus }) {
       throw new Error('character not owned');
     }
     if (!character.online) throw new Error('not in world');
+    if (!buildAuthorityCommandRows(character.authorityCards)
+      .some((row) => row.commands.includes(0x2b))) {
+      throw new Error('warp authority required');
+    }
     const unitId = ensureUnitId(character);
     if (cmd.unitId != null && cmd.unitId !== unitId) {
       throw new Error('unit not owned');
@@ -150,6 +156,9 @@ export function registerGameHandlers({ commandBus, queryBus }) {
     const cell = Number(cmd.cell);
     if (!Number.isInteger(cell) || cell < 0 || cell >= 5000) {
       throw new Error('invalid grid cell');
+    }
+    if (!isGridCellNavigable(cell)) {
+      throw new Error('grid cell not navigable');
     }
     setCharacterCell(character, cell);
     uow.registerEvent('GridMoved', {
