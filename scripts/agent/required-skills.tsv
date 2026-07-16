@@ -1,0 +1,39 @@
+# required-skills.tsv — 프로젝트가 참조하는 스킬 매니페스트 (scripts/agent/bootstrap-skills.sh 입력)
+# 형식: 스킬명<TAB>타깃(claude|codex|both|candidate)<TAB>참조근거
+# target=claude       → canonical(.agents/skills/<name>)을 .claude/skills/<name>과 대조, 없거나 다르면 MISSING/STALE
+# target=codex        → Codex는 .codex/agents/*.toml이 .agents/skills/<name>(canonical)을 직접 참조한다(실증:
+#                       skills.sh 조사). 물리 복사 불필요 — canonical 경로 실존만 확인, .codex/skills/는 건드리지 않음
+# target=both         → claude와 동일(물리 복사 검증). Codex 쪽은 어차피 canonical 존재만으로 충분하므로 별도 처리 불필요
+#                       (2026-07-17 보정 전에는 .codex/skills/ 물리 복사까지 요구했으나, Codex 실제 로드 방식과 맞지 않아 폐기)
+# target=candidate    → 어디에도 설치돼 있지 않은 게 정상(문서화된 설치 후보). 동기화 대상 아님, skills.sh find 안내만
+# 이 파일은 사람이 직접 갱신한다 — bootstrap-skills.sh는 읽기만 하고 쓰지 않는다.
+logh7-orchestrator	claude	CLAUDE.md 하네스 섹션; docs/agent/tool-capabilities.md:32; docs/logh7-work-plan-current.md:90,114
+ghidra	claude	docs/agent/tool-capabilities.md:32
+protocol-reverse-engineering	claude	docs/agent/tool-capabilities.md:32; .claude/agents/wire-engineer.md
+rev-frida	claude	docs/agent/tool-capabilities.md:32
+find-skills	claude	docs/agent/tool-capabilities.md:32
+systematic-debugging	claude	docs/agent/tool-capabilities.md:32; .claude/agents/live-qa.md:6
+test-driven-development	claude	.claude/agents/wire-engineer.md:14; .claude/agents/server-dev.md:3
+verification-before-completion	claude	.claude/agents/server-dev.md:3; .claude/agents/live-qa.md:6
+binary-triage	claude	.claude/agents/re-analyst.md:6; .codex/agents/re-analyst.toml:2(canonical 직접 참조, 물리 복사 불필요); docs/logh7-work-plan-current.md:104,115
+grammar-checker	claude	.claude/agents/localizer.md:6; .codex/agents/localizer.toml:2(canonical 직접 참조, 물리 복사 불필요); docs/logh7-work-plan-current.md:107,122
+humanize-korean	claude	.claude/agents/localizer.md:6; .codex/agents/localizer.toml:2(canonical 직접 참조, 물리 복사 불필요); docs/logh7-work-plan-current.md:107,123
+humanizer	claude	docs/logh7-work-plan-current.md:107,123
+style-guide	claude	docs/logh7-work-plan-current.md:107,124
+karpathy-guidelines	claude	docs/logh7-work-plan-current.md:106,121
+logh7-wine-live-qa	codex	.codex/agents/live-qa.toml:6; docs/agent/prompt-pack.md:264,274
+logh7-asset-provenance	codex	docs/agent/tool-capabilities.md:32
+logh7-engine-spike	codex	docs/agent/tool-capabilities.md:32
+harness	codex	docs/agent/tool-capabilities.md:32
+rev-struct	candidate	docs/logh7-work-plan-current.md:104,116; docs/logh7-reference-haul.md:187
+stop-slop	candidate	docs/logh7-work-plan-current.md:125
+check-work	candidate	docs/logh7-work-plan-current.md:126
+pdf-ocr-extraction	candidate	docs/logh7-work-plan-current.md:103,127; docs/logh7-reference-haul.md:188
+smart-ocr	candidate	docs/logh7-work-plan-current.md:103,127; docs/logh7-reference-haul.md:188
+image-upscaling	candidate	docs/logh7-work-plan-current.md:128,326
+game-assets	candidate	docs/logh7-work-plan-current.md:129,326
+game-3d-assets	candidate	docs/logh7-work-plan-current.md:129,326
+meshyai	candidate	docs/logh7-work-plan-current.md:129
+game-engine	candidate	docs/logh7-work-plan-current.md:130
+web-cloning	candidate	docs/logh7-reference-haul.md:186
+real-source-first	candidate	docs/logh7-reference-haul.md:186
