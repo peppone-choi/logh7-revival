@@ -17,7 +17,7 @@
 | E2E (Playwright 등) | ❌ | ❌ | NOT_CONFIGURED | UI 검증은 원본 클라이언트 + 스크린샷 증거 |
 | CI/CD | ✅ (`.github/workflows/ci.yml`·`claude.yml`, `.coderabbit.yaml`) | — | ✅ **라이브** — Secret 등록·CodeRabbit App 설치 완료(2026-07-16), PR #6에서 CI 첫 런 녹색(41s·39s, 489 테스트). Claude GHA 리뷰는 main 병합 후 다음 PR부터(첫 PR 스킵은 공식 정상 동작), CodeRabbit 실리뷰는 50파일 이하 PR에서 | 첫 실리뷰 실측은 Phase 3 소형 PR |
 | Jira | ⚠️ `.mcp.json`에 `atlassian`(`/v1/mcp` http — SSE 지원종료 공지 반영) 정의 커밋, 활성화는 `.claude/settings.local.json` allowlist 사람 추가 필요(현재 미포함) | ❌ (Atlassian MCP 미정의) | ✅ 사이트 `pepponechoi-jira.atlassian.net`, 프로젝트 **`LOGH7`**("은하영웅전설7 부활") — 분해 루틴 첫 실행 실증(2026-07-16, 직접 OAuth): Epic LOGH7-6 / Story LOGH7-7 / Task LOGH7-8(↔GitHub Issue #7 제목 병기+코멘트). 옛 `pepponechoi` 사이트는 suspended — 사용 안 함. 엔드포인트 교체로 세션 재인증 1회 필요할 수 있음 | 계획은 로컬 Markdown이 기본 폴백, Jira 분해 루틴은 `docs/agent/lifecycle-planning.md` |
-| Sentry / 모니터링 | ✅ `@sentry/node@10.66.0`·`main.mjs` DSN env-guard 배선 | ❌ | ✅ 프로젝트 생성·DSN 발급 완료(2026-07-16, 사람 `~/.zshrc` 보관 — repo 미기록, 에이전트 비대화형 셸은 `source ~/.zshrc` 필요) | DSN 미설정 시 no-op. 실캡처·AI 분석은 Phase 3 실측(AC-5) |
+| Sentry / 모니터링 | ✅ `@sentry/node@10.66.0`·`main.mjs` DSN env-guard 배선 | ❌ | ✅ **AC-5 실측 완료(2026-07-16)**: 실 DSN으로 의도적 correlation 검증 실패 1건 캡처(`reported=true`·`flush=true`·exit 0) → API로 수신 확인(org `tekken-75`, 프로젝트 `node`, Issue `NODE-1`) → Seer AI 분석 성공(타입 위반·의도적 테스트임을 식별). DSN·API 토큰은 사람 `~/.zshrc` 보관 — repo 미기록, 에이전트 비대화형 셸은 `source ~/.zshrc` 필요 | DSN 미설정 시 no-op. 채팅 경유로 전달된 토큰은 회전 권장 |
 | Terraform / AWS | ❌ | ❌ | NOT_CONFIGURED | 운영 배포 대상 없음 |
 
 ## Claude 전용 vs 공통

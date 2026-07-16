@@ -17,5 +17,6 @@
 - Open questions: 향후 세션 Jira는 settings.local allowlist에 `"atlassian"` 사람 추가 + 재인증 1회 (이 세션은 직접 OAuth로 해결)
 - Jira 분해 완료(2026-07-16, 프로젝트 `LOGH7` 실물 확인): Epic **LOGH7-6**(AI 업무 시스템 고도화) / Story **LOGH7-7**(Phase 3 E2E SRV-CORR, parent=Epic) / Task **LOGH7-8**(계약 단위, parent=Epic, Relates→Story) ↔ GitHub Issue #7 제목 `[LOGH7-8]` 병기 + 매핑 코멘트. task.md Related issue에 병기 완료
 - SRV-CORR 구현 완료(dev-3-srvcorr, 메인 세션 fresh 게이트): `cd server && npm test` → **499 tests / 495 pass / 0 fail / 4 skip, exit 0**. 신규 correlation-record 모듈+테스트 10건+writeTrace 배선 리뷰 승인
-- Next action: 구현+상태문서 커밋(feat/e2e-srv-corr) → push+PR 사람 승인 요청 → CodeRabbit·Claude GHA 실리뷰 확인(둘 다 이번엔 실동작 예상) → merge 승인 별도 → Sentry 의도적 에러 캡처 + AI 분석(AC-5, `source ~/.zshrc` 필요)
+- **AC-5 완료(2026-07-16)**: scratchpad 스크립트로 의도적 correlation 검증 실패 1건을 프로덕션 경로(reportCorrelationFailure 기본 동적 import + main.mjs 동일 init 패턴)로 실 DSN 캡처(`reported=true`·`flush=true`·exit 0) → Sentry API 수신 확인: org `tekken-75` 프로젝트 `node`(id 4511745134428160) Issue **NODE-1**(count 1, env `ac5-verification`, release `logh7-revival@feat-e2e-srv-corr`) → **Seer AI 분석 성공**(connectionId 타입 위반 + "deliberate test case" 식별). Sentry API 토큰도 `~/.zshrc` 보관(사용자 전달분 — 채팅 노출이라 회전 권장)
+- Next action: push+PR 사람 승인 요청(feat/e2e-srv-corr, 커밋 4c4524ec·8022687c+) → CodeRabbit·Claude GHA 실리뷰 확인(둘 다 이번엔 실동작 예상: ≤50파일·workflow on main) → merge 승인 별도 → Issue #7 종결·계약 DONE
 - Must-read files for next action: `.omc/plans/logh7-ai-work-system-plan.md` §3, `.ai/task.md`, `docs/agent/verification.md`
