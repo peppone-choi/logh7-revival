@@ -20,5 +20,6 @@
 
 ## 활성 계약 (`.ai/task.md`)
 - Status: DONE(2026-07-16) — AI 업무 시스템 고도화 Phase 0~3 완주: PR #6·#8 merge, Issue #7·Jira LOGH7-6/7/8 종료. 새 계약은 EMPTY — 사람 승인 전 구현 금지.
+- 진행(2026-07-17): 문서 전수 분해 → Jira LOGH7 백로그 일괄 생성(Epic 9·Story 25·Task 50, GitHub 병기) + 스킬 부트스트랩(`scripts/agent/bootstrap-skills.sh` --check/--sync/--once, 스킬 갭 6종 해소·사람 결정 4건은 known-issues).
 - main 직접 커밋·push·PR·merge 금지 — 작업 브랜치 commit만 허용.
 - 시크릿(`ANTHROPIC_API_KEY` 등)은 사람이 직접 등록, 에이전트는 접근하지 않는다.

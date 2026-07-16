@@ -21,3 +21,8 @@
   - writeTrace correlation catch 경로(실패 주입) 통합 테스트 미커버.
   - Jira 안내 문구가 다른 진입 문서·문서 인덱스와 동기화됐는지 점검(lifecycle-planning은 갱신됨).
 - 테스트 수치(서버 460, Python 16/16 등)는 2026-07-16 historical baseline — exact 명령·환경으로 재실행 전에는 fresh gate 아님.
+- 스킬 부트스트랩(2026-07-17, bootstrap-skills.sh 도입) 잔여 — 사람 결정 필요 4건:
+  - `.claude/skills/logh7-orchestrator`가 canonical `.agents/skills/` 판보다 구버전(STALE, diff 100줄+) — 어느 판이 정본인지 결정 후 `--force` 동기화 또는 canonical 역갱신.
+  - `agent/skills/`(점 없는 최상위 디렉터리)는 skills.sh도 인식 못 하는 고아 — 폐기 여부 결정.
+  - `docs/logh7-work-plan-current.md` "필수 스킬" 표가 `.claude/agents/*.md` 실제 참조보다 넓음 — persona에 humanizer/style-guide/karpathy-guidelines 추가 여부 결정.
+  - `skills-lock.json`의 humanize·humanize-redo 항목 skillPath가 실제 파일과 불일치(stale) — lock 정리 여부 결정.
