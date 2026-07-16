@@ -25,3 +25,35 @@ __pycache__/
 *.sqlite-shm
 *.sqlite-wal
 .aider*
+
+# Claude Code 훅 턴 상태 (문서 게이트)
+/.claude/state/
+
+# 로컬 오케스트레이션·RE·라이브 QA 산출물 (정본 계획은 .omo/plans에 보존)
+/.belt/
+/.superpowers/
+/.omo/.current-*
+/.omo/artifacts/
+/.omo/boulder.json
+/.omo/cd-mining/
+/.omo/drafts/
+/.omo/ghidra/
+/.omo/live-qa/*
+/.omo/re-custom/
+/.omo/re-galaxy/
+/.omo/re-targets/
+/.omo/remaster-lab/
+/.omo/start-work/
+/.omo/tmp/
+/.omo/ui-experiments/
+/.omo/ulw-loop/
+/.omo/ulw-research/
+/.omo/work/
+/server/.omo/
+/server/data/
+/server/test_output.txt
+/tools/live/.omc/
+/tools/live/_ev/
+/NUL
+/_ok.txt
+/*.stackdump
