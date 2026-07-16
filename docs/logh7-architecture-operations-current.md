@@ -124,6 +124,13 @@ Current bootstrap has a data/spec path, a direct-client product path, and a diag
 
 Server/data/tests/tooling must remain developable on macOS and Windows. Do not add Windows-only shell, registry, or process assumptions to current data/spec pipeline code.
 
+## Distribution and Repository Split Plan (2026-07-17)
+
+- 게임을 플레이하는 유저가 내려받는 **클라이언트**와 게임을 구동하는 **서버**는 별도 레포지토리로 분리해 배포한다. 현재 저장소는 분리 전까지 개발 모노레포로 유지된다.
+- 클라이언트는 유저가 쉽게 바로 플레이할 수 있도록 **부트스트랩된 버전**(원본 클라이언트 + 검증된 패치 + 서버 접속 설정이 준비된 형태)을 최종 배포본으로 제공한다.
+- 부트스트랩 배포본도 클라이언트 계보 문서(`docs/logh7-client-lineage-current.md`)의 EXE hash·image base·sentinel fail-closed 기준을 그대로 따른다. 원본 자산 재배포 범위는 배포 시점에 별도 검토한다.
+- 근거 결정: `.ai/decisions.md` ADR-LITE-006 (2026-07-17 사용자 지시).
+
 ## Components
 
 ### Data/Spec Package

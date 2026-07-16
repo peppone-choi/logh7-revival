@@ -2,6 +2,7 @@
 
 | Agent | Task | Branch/worktree | Owned files | Status | Updated at |
 |---|---|---|---|---|---|
+| Claude Code (메인+서브에이전트) | Claude Code 사용자 매뉴얼 레포 맞춤 개작 + 루트 README 신설 + 배포 방침 문서화(ADR-LITE-006) + 사용자 승인 merge | codex/codex-user-manual | — (소유 해제) | done | 2026-07-17 |
 | Codex (root) | Codex AI 자동 업무 관리 시스템 사용자 매뉴얼 작성 | current workspace | — (소유 해제) | done | 2026-07-17 |
 | Codex (root) | Codex-native Claude automation parity and project-scoped skills.sh acquisition | codex/codex-harness-parity | — (소유 해제; `CLAUDE.md`와 `.codex/config.toml`의 동시 변경은 미수정) | done | 2026-07-17 |
 | Claude Code (메인) | Agent OS 부트스트랩 | feat/ai-work-system (베이스라인 커밋 34b4b36d) | — (소유 해제) | done | 2026-07-16 |
