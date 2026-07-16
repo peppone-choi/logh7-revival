@@ -15,5 +15,9 @@
 ## 인프라·도구
 
 - lint/type check: NOT_CONFIGURED (eslint·tsconfig 없음). 구문 검사(`node --check`, `py_compile`)가 유일한 정적 검사.
-- CI/CD: NOT_CONFIGURED (`.github/workflows` 없음). 모든 검증은 로컬 실행.
+- SRV-CORR(PR #8) 리뷰 비차단 follow-up — Claude GHA·CodeRabbit 수렴 2건 + nit 2건 (2026-07-16):
+  - `writeTrace`의 correlation `outcome`이 `record.message` 존재로 추론됨 — 정보성 라인에 message가 생기면 오분류. 명시적 outcome 인자 또는 event 기반 분류로 개선.
+  - `monotonicTimestampNs = Number(hrtime.bigint())`는 2^53ns(~104일 uptime) 초과 시 정밀도 손실 — 필요시 string 직렬화. 단 23키 스키마 계약 변경이라 proxy(`tools/live`)와 동시 변경+schemaVersion 검토 필요.
+  - writeTrace correlation catch 경로(실패 주입) 통합 테스트 미커버.
+  - Jira 안내 문구가 다른 진입 문서·문서 인덱스와 동기화됐는지 점검(lifecycle-planning은 갱신됨).
 - 테스트 수치(서버 460, Python 16/16 등)는 2026-07-16 historical baseline — exact 명령·환경으로 재실행 전에는 fresh gate 아님.

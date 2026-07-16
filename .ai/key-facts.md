@@ -4,7 +4,7 @@
 ## P0 게이트 상태
 - 다음 P0 게이트: M4-OBS-001 (47900→47901 프록시 correlation 슬라이스).
 - Wine 게이트 차단 중: `runtime_support_manifest_missing` (exit 2, `fullPassEligible=false`) — V1 runtime-support manifest·sentinel 복구 전 launch 금지.
-- E2E 슬라이스 SRV-CORR = 서버 correlation 레코드 모듈(서버-테스트 가능 범위, Wine 라이브 게이트 미포함).
+- E2E 슬라이스 SRV-CORR = 서버 correlation 레코드 모듈(서버-테스트 가능 범위, Wine 라이브 게이트 미포함) — 완료(PR #8 `3fd847b1`).
 
 ## 불변식
 - 서버 포트 47900.
@@ -19,6 +19,6 @@
 - 테스트: `cd server && npm test`.
 
 ## 활성 계약 (`.ai/task.md`)
-- Status: ACTIVE — AI 업무 시스템 고도화. Phase 1+2 merge 완료(PR #6→main), Phase 3 E2E(SRV-CORR) 진행: Issue #7·Jira LOGH7-8, 브랜치 feat/e2e-srv-corr.
+- Status: DONE(2026-07-16) — AI 업무 시스템 고도화 Phase 0~3 완주: PR #6·#8 merge, Issue #7·Jira LOGH7-6/7/8 종료. 새 계약은 EMPTY — 사람 승인 전 구현 금지.
 - main 직접 커밋·push·PR·merge 금지 — 작업 브랜치 commit만 허용.
 - 시크릿(`ANTHROPIC_API_KEY` 등)은 사람이 직접 등록, 에이전트는 접근하지 않는다.

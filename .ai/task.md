@@ -1,6 +1,6 @@
 # Current Task
 
-- Status: ACTIVE — 사람 승인 2026-07-16 "전면 승인" (계획 정본: `.omc/plans/logh7-ai-work-system-plan.md`, 스펙: `.omc/specs/deep-interview-logh7-ai-work-system.md`)
+- Status: DONE — 2026-07-16 완료. Phase 0~3 전체 종결: PR #6(Phase 1+2, `be6499a3`)·PR #8(Phase 3 SRV-CORR, `3fd847b1`) merge, GitHub Issue #7 종료, Jira LOGH7-6/7/8 완료 전환. 최종 검증: merge 시점 fresh `npm test` 499/495/0/4 exit 0, AC-5 Sentry `NODE-1` 캡처+Seer AI 분석. (승인 이력: 사람 "전면 승인"·PR별 push/merge 승인. 계획 정본: `.omc/plans/logh7-ai-work-system-plan.md`)
 - Goal: 기존 AI 하네스를 실전 개발용으로 고도화 — NIAH 키팩트 카드·재주입 훅·신선도 게이트, 프롬프트 팩 커맨드 배선(7섹션 표준)+도메인 팩 4종, 컨텍스트 전략 통합, 최소 CI·Claude GHA·CodeRabbit·Sentry·Jira MCP 연동, E2E는 M4-OBS-001 서버-테스트 슬라이스 1건 완주로 판정
 - User value: 사람+에이전트가 같은 하네스로 기획→구현→테스트→리뷰→모니터링을 증거 기반으로 완주할 수 있다
 - In scope: 계획 §3 Phase 0~3 전체 (P0-0 스파이크, 1A NIAH, 1B 팩, 1C 컨텍스트·스텁, 1D 헌법 3줄, 2A CI, 2B GHA+CodeRabbit, 2C Sentry, 2D MCP 정의/활성화 분리, 3 E2E)
