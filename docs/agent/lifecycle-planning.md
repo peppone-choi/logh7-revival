@@ -1,7 +1,7 @@
 # Lifecycle Runbook: Planning
 
 ## Status
-PARTIAL — 계획 도구는 로컬 Markdown(`.ai/task.md`, `.omc/plans/`)이 기본. Jira MCP **정의**는 `.mcp.json`(`atlassian`, `https://mcp.atlassian.com/v1/mcp` http — SSE는 2026-06-30 지원종료, 시크릿 미기입)으로 커밋됨 — **활성화**는 사람이 `.claude/settings.local.json`의 `enabledMcpjsonServers`에 `atlassian`을 명시 추가해야 하며 현재 미포함(의도적 미활성). 신규 사이트 `pepponechoi-jira.atlassian.net` + 프로젝트 `LOGH7`("은하영웅전설7 부활")로 아래 분해 루틴 첫 실행 실증됨(2026-07-16, 세션 직접 OAuth): Epic LOGH7-6 / Story LOGH7-7 / Task LOGH7-8 ↔ GitHub Issue #7. 옛 `pepponechoi.atlassian.net`은 suspended — 사용 안 함. GitHub Issues는 `gh`로 가능.
+PARTIAL — 계획 도구는 로컬 Markdown(`.ai/task.md`, `.omc/plans/`)이 기본. Jira MCP **정의**는 `.mcp.json`(`atlassian`, `https://mcp.atlassian.com/v1/mcp` http — SSE는 2026-06-30 지원종료, 시크릿 미기입)으로 커밋됨 — **활성화**는 사람이 `.claude/settings.local.json`의 `enabledMcpjsonServers`에 `atlassian`을 명시 추가해야 하며 현재 미포함(의도적 미활성). 신규 사이트 `pepponechoi-jira.atlassian.net` + 프로젝트 `LOGH7`("은하영웅전설7 부활")로 아래 분해 루틴 첫 실행 실증됨(2026-07-16, 세션 직접 OAuth): Epic LOGH7-6 / Story LOGH7-7 / Task LOGH7-8 ↔ GitHub Issue #7. 2026-07-17 문서 전수 분해 백로그 일괄 생성 실증: Epic LOGH7-9~17 / Story LOGH7-18~42 / Task LOGH7-43~92 ↔ GitHub Issue #10~#59(`backlog` 라벨, 상호 링크·코멘트) — 분해 정본은 `.omc/plans/logh7-full-backlog-2026-07-16.md`, 이후 정본은 Jira. 옛 `pepponechoi.atlassian.net`은 suspended — 사용 안 함. GitHub Issues는 `gh`로 가능.
 
 ## Read This When
 새 기능·마일스톤 작업을 시작하기 전, `.ai/task.md`가 EMPTY일 때.

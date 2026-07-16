@@ -1,14 +1,13 @@
 # Current State
 
-- Updated at: 2026-07-16
-- Active agent: Claude Code (메인 세션, Advisor) + 서브에이전트
-- Branch: chore/phase3-closeout (main `3fd847b1` = PR #8 merge에서 분기; feat/e2e-srv-corr는 병합·삭제됨)
-- Current phase: **AI 업무 시스템 고도화 계약 완료(DONE)** — Phase 0~3 전체 종결, 종결 커밋 push/PR 승인 대기
-- Completed: 딥 인터뷰 스펙 → ralplan 합의 → 전면 승인 → Phase 0 스파이크(FEASIBLE) → Phase 1(NIAH·팩·컨텍스트·헌법) → Phase 2(CI·Claude GHA·CodeRabbit·Sentry·MCP 분리) = PR #6 `be6499a3` → **Phase 3 E2E SRV-CORR = PR #8 `3fd847b1` merge**
-- Phase 3 완주 증거: 기획(Jira LOGH7-6 Epic/LOGH7-7 Story/LOGH7-8 Task ↔ GitHub Issue #7 상호 링크) → 구현(TDD, correlation 모듈+writeTrace 배선+테스트 10건) → 테스트(fresh `npm test` 499/495/0/4 exit 0, merge 시점 재실행 포함) → 리뷰(CI 37s pass·Claude GHA 4m6s pass 규칙위반 0건·CodeRabbit pass 비차단 4건 — 봇 2종 첫 실동작) → 모니터링(AC-5: 실 DSN 캡처 → Sentry Issue `NODE-1` API 수신 확인 → Seer AI 분석 성공)
-- 종결 처리 완료: Issue #7 자동 종료(Closes), Jira 3건 완료 전환+Epic 종결 코멘트, `.ai/task.md` DONE, `.ai/handoff.md` 작성, known-issues에 리뷰 follow-up 4건 기록(수렴 2건: outcome 추론 결합·hrtime 정밀도 / nit 2건: catch 경로 테스트·문서 동기화), CI/CD NOT_CONFIGURED 행 삭제(라이브 실증)
-- 시크릿 상태: `SENTRY_DSN`·`SENTRY_AUTH_TOKEN` 사람 `~/.zshrc` 보관(repo 미기록) — 토큰은 채팅 경유 전달분이라 회전 권장
-- Failed approaches: 없음 (이번 턴)
-- Open questions: 향후 세션 Jira는 settings.local allowlist에 `"atlassian"` 사람 추가 + 재인증 1회 (이 세션은 직접 OAuth로 해결)
-- Next action: **PR #9(종결 커밋, push+PR+merge 일괄 승인 기수령)** CI 녹색 확인 후 merge → 계약 EMPTY 상태로 복귀. 새 작업은 사람 승인 계약부터(후보: known-issues follow-up 4건, 로드맵 M4-OBS-001 잔여·Wine 게이트)
-- Must-read files for next action: `.ai/handoff.md`, `.ai/known-issues.md`, `docs/logh7-roadmap-current.md`
+- Updated at: 2026-07-17
+- Active agent: Claude Code (메인 세션, Advisor) + 서브에이전트 / **주의: 같은 체크아웃에서 Codex CLI 동시 가동 이력(2026-07-17) — `.codex/config.toml` 미커밋 변경은 타 에이전트 소유, 커밋 금지**
+- Branch: chore/backlog-ticketization (베이스 main `f64d30e1`)
+- Current phase: **문서 전수 분해 티켓화 + 스킬 부트스트랩 완료** (2026-07-16~17 사용자 지시 2건 이행) — push/PR 사람 승인 대기
+- 티켓화 결과 (실패 0): Jira LOGH7 **Epic 9(LOGH7-9~17) / Story 25(LOGH7-18~42) / Task 50(LOGH7-43~92)** + GitHub Issue **#10~#59**(`backlog` 라벨) 전 Task 병기·상호 링크. 분해 원본: 서브에이전트 3기(domain·tracks·harness) 병합, `.omc/plans/logh7-full-backlog-2026-07-16.md`(gitignored) — **이후 백로그 정본은 Jira**. 스팟 검증: gh 라벨 카운트 50, LOGH7-49/92 실존·parent 확인.
+- 첫 착수 권장: **LOGH7-49** (GitHub #16) — M4-OBS-001 닫기(proxy·client 면 라이브 join 1런). 착수하려면 사람이 `.ai/task.md` 새 계약 승인 필요.
+- 스킬 부트스트랩 (사용자 지시 "skills.sh에서 찾아 프로젝트 단위 설치"): `scripts/agent/bootstrap-skills.sh`(--check/--sync/--once/--strict/--force) + `required-skills.tsv` 매니페스트, SessionStart 훅 양쪽(additive·fail-open) 배선. `.agents/skills/`=skills.sh 표준 canonical임을 실증. Claude 갭 6종+Codex 3종 동기화 완료(이 세션에 라이브 로드 확인). 신규 외부 스킬은 `npx skills find/add` 안내만(자동 설치 금지). 사람 결정 4건은 known-issues 참조.
+- Failed approaches: 없음 (트랜스크립트 추출 1회 재시도 — JSONL 이스케이프 매칭 이슈, 해결)
+- Open questions: `.codex/config.toml` 미커밋 변경([agents] max_threads 삭제)이 코덱스 작업인지 사용자 확인 필요 / logh7-orchestrator STALE 정본 방향 / `agent/skills/` 고아 폐기 / skills-lock stale 2건 (known-issues 상세)
+- Next action: **PR #60 생성 완료(push+PR+merge 일괄 승인, 2026-07-17)** — CI green 확인 후 merge → LOGH7-49 계약 작성(사람) → 착수. 토큰 회전 권장(채팅 경유 Sentry 토큰) 유지.
+- Must-read files for next action: `.ai/known-issues.md`, `docs/agent/lifecycle-planning.md`(Jira 루틴), Jira LOGH7 백로그

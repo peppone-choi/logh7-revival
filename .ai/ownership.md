@@ -4,6 +4,7 @@
 |---|---|---|---|---|---|
 | Claude Code (메인) | Agent OS 부트스트랩 | feat/ai-work-system (베이스라인 커밋 34b4b36d) | — (소유 해제) | done | 2026-07-16 |
 | Claude Code (메인+서브에이전트) | AI 업무 시스템 고도화 (`.ai/task.md` DONE, 계획 `.omc/plans/logh7-ai-work-system-plan.md`) — Phase 1+2 PR #6 `be6499a3`, Phase 3 SRV-CORR PR #8 `3fd847b1` merge 완료 | chore/phase3-closeout (종결 커밋만) | — (소유 해제; 종결 브랜치 push/PR 승인 대기) | done | 2026-07-16 |
+| Claude Code (메인+서브에이전트) | 문서 전수 분해 티켓화(Jira LOGH7-9~92, GH #10~59) + 스킬 부트스트랩(bootstrap-skills.sh) | chore/backlog-ticketization | — (소유 해제; push/PR 승인 대기) | done | 2026-07-17 |
 
 ## 규칙 (정본: docs/agent/collaboration-protocol.md)
 

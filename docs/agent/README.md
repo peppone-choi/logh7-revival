@@ -22,6 +22,7 @@
 | 배포·운영·인프라 | `lifecycle-ops.md`, `tool-capabilities.md` |
 | 문서화 | `project-overview.md`, `architecture.md` |
 | 병렬·다중 에이전트 작업 | `collaboration-protocol.md`, `lifecycle-collaboration.md` |
+| 신규 세션·스킬 누락/오래됨 문제 | `bash scripts/agent/bootstrap-skills.sh --check` (필요 시 `--sync`), `tool-capabilities.md` |
 | 긴 작업 재개 | `.ai/current-state.md`, `.ai/handoff.md` |
 | 작업 방식 선택 (사람/AI 역할) | `workflow-before-after.md` |
 | 프롬프트 작성 | `prompt-pack.md` |
