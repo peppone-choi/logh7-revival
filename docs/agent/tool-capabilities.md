@@ -15,9 +15,9 @@
 | CodeGraph | ✅ MCP + CLI | ✅ CLI | ✅ `.codegraph/` 존재 | 코드 위치·영향범위는 codegraph 먼저 |
 | Browser 자동화 | ⚠️ Claude 전용 (Claude-in-Chrome MCP, 세션 연결 시) | ❌ | NOT_CONFIGURED (프로젝트 검증 절차에 미포함) | 클라이언트는 브라우저가 아님 — 라이브 QA는 Wine 하네스 |
 | E2E (Playwright 등) | ❌ | ❌ | NOT_CONFIGURED | UI 검증은 원본 클라이언트 + 스크린샷 증거 |
-| CI/CD | ✅ (`.github/workflows/ci.yml`·`claude.yml`, `.coderabbit.yaml` 코드 배선 완료) | — | 정의/코드 배선 완료, **활성화는 사람 셋업 대기**(GitHub Secret `ANTHROPIC_API_KEY` 등록·CodeRabbit GitHub App 설치) | 첫 런 결과는 push/PR 후 실측 (`docs/agent/verification.md` 신규 행) |
-| Jira | ⚠️ `.mcp.json`에 `atlassian`(SSE) 정의 커밋, 활성화는 `.claude/settings.local.json` allowlist 사람 추가 필요(현재 미포함) | ❌ (Atlassian MCP 미정의, GitHub MCP만 존재) | 정의 완료, **활성화는 사람 셋업 대기** — Jira 사이트(`pepponechoi.atlassian.net`) 존재 확인되나 `suspended-inactivity`(403)로 재활성화 필요 | 계획은 로컬 Markdown이 기본 폴백, 활성화 후 Jira 분해 루틴 사용(`docs/agent/lifecycle-planning.md`) |
-| Sentry / 모니터링 | ⚠️ `@sentry/node` 의존성 추가·`server/src/presentation/main.mjs` DSN env-guard 배선 완료 | ❌ | 정의/코드 배선 완료, **활성화는 사람 셋업 대기**(Sentry 프로젝트 생성·`SENTRY_DSN` 환경변수 발급) | DSN 미설정 시 no-op, 설정 시 캡처는 Phase 3 실측 |
+| CI/CD | ✅ (`.github/workflows/ci.yml`·`claude.yml`, `.coderabbit.yaml`) | — | ✅ **라이브** — Secret 등록·CodeRabbit App 설치 완료(2026-07-16), PR #6에서 CI 첫 런 녹색(41s·39s, 489 테스트). Claude GHA 리뷰는 main 병합 후 다음 PR부터(첫 PR 스킵은 공식 정상 동작), CodeRabbit 실리뷰는 50파일 이하 PR에서 | 첫 실리뷰 실측은 Phase 3 소형 PR |
+| Jira | ⚠️ `.mcp.json`에 `atlassian`(`/v1/mcp` http — SSE 지원종료 공지 반영) 정의 커밋, 활성화는 `.claude/settings.local.json` allowlist 사람 추가 필요(현재 미포함) | ❌ (Atlassian MCP 미정의) | ✅ 사이트 `pepponechoi-jira.atlassian.net`, 프로젝트 **`LOGH7`**("은하영웅전설7 부활") — 분해 루틴 첫 실행 실증(2026-07-16, 직접 OAuth): Epic LOGH7-6 / Story LOGH7-7 / Task LOGH7-8(↔GitHub Issue #7 제목 병기+코멘트). 옛 `pepponechoi` 사이트는 suspended — 사용 안 함. 엔드포인트 교체로 세션 재인증 1회 필요할 수 있음 | 계획은 로컬 Markdown이 기본 폴백, Jira 분해 루틴은 `docs/agent/lifecycle-planning.md` |
+| Sentry / 모니터링 | ✅ `@sentry/node@10.66.0`·`main.mjs` DSN env-guard 배선 | ❌ | ✅ 프로젝트 생성·DSN 발급 완료(2026-07-16, 사람 `~/.zshrc` 보관 — repo 미기록, 에이전트 비대화형 셸은 `source ~/.zshrc` 필요) | DSN 미설정 시 no-op. 실캡처·AI 분석은 Phase 3 실측(AC-5) |
 | Terraform / AWS | ❌ | ❌ | NOT_CONFIGURED | 운영 배포 대상 없음 |
 
 ## Claude 전용 vs 공통
