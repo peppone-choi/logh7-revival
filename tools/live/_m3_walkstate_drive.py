@@ -1,0 +1,288 @@
+#!/usr/bin/env python3
+"""M3 워크 0x0314 정지 결정적 실측 드라이버 (진단 전용, 서버/클라 무변조).
+
+시드 우회: evdir/store.json 에 생성완료 캐릭터를 심고 → _m2_launch.mjs(47900) 기동 →
+클라 런치 → Frida(_frida_m3_walkstate.js) attach(0.5s 자동 덤프) →
+로그인 inei00 → 로비 → 게임개시(125,191) → 카드(655,305) → 월드 진입 →
+NOW LOADING 감시하며 클라 대기 응답 코드(clientBase+0x357ec8)를 스트리밍 수집.
+
+usage: python _m3_walkstate_drive.py <evidence-dir>
+"""
+from __future__ import annotations
+
+import json
+import sys
+import time
+import subprocess
+import ctypes
+from ctypes import wintypes
+from pathlib import Path
+
+import frida
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from logh7_agent_drive import (  # noqa: E402
+    find_client_hwnd, foreground, client_geometry, screenshot, do_login, mouse_click,
+)
+
+user32 = ctypes.windll.user32
+
+ROOT = Path(__file__).resolve().parents[2]
+CLIENT_EXE = r"E:\logh7-revival\artifacts\logh7-install\____________s___\____\exe\g7mtclient.exe"
+PROBE_JS = Path(__file__).resolve().parent / "_frida_m3_walkstate.js"
+M2_LAUNCH = ROOT / "tools" / "live" / "_m2_launch.mjs"
+
+LOBBY_REF = (1024, 768)
+GAME_START = (125, 191)
+CHAR_CARD = (655, 305)
+
+SEED_STORE = {
+    "accounts": {
+        "inei00": [{
+            "id": 1, "power": 2, "camp": 2, "blood": 1, "sex": 0, "generated": 1,
+            "lastname": "Reinhard", "firstname": "Lohengramm", "face": 305419896,
+            "ability8": [80, 75, 70, 65, 60, 55, 50, 45],
+            "bonusPoint": 0, "specialAbilityNum": 0, "title": 0, "rank": 13,
+            "charState": 1, "age": 20,
+        }]
+    },
+    "nextId": 2,
+}
+
+
+def scale(ref, pt, cw, ch):
+    return int(pt[0] * cw / ref[0]), int(pt[1] * ch / ref[1])
+
+
+def wait_window(timeout=30.0):
+    t0 = time.time()
+    while time.time() - t0 < timeout:
+        try:
+            h = find_client_hwnd()
+            if h:
+                return h
+        except Exception:
+            pass
+        time.sleep(0.5)
+    return None
+
+
+def main() -> int:
+    evdir = Path(sys.argv[1])
+    evdir.mkdir(parents=True, exist_ok=True)
+    shots = evdir / "shots"
+    shots.mkdir(parents=True, exist_ok=True)
+    events = []
+    log = []
+
+    def note(msg):
+        line = f"[{time.strftime('%H:%M:%S')}] {msg}"
+        print(line, flush=True)
+        log.append(line)
+        (evdir / "drive-log.txt").write_text("\n".join(log), encoding="utf-8")
+
+    # 0) 시드 store.json
+    (evdir / "store.json").write_text(json.dumps(SEED_STORE, ensure_ascii=False, indent=2),
+                                      encoding="utf-8")
+    note(f"seeded {evdir/'store.json'}")
+
+    # 1) 서버 기동 (_m2_launch.mjs), m2-server-ready 대기
+    srv_log = open(evdir / "server-stdout.log", "w", encoding="utf-8")
+    note(f"launch server: node {M2_LAUNCH} {evdir}")
+    srv = subprocess.Popen(["node", str(M2_LAUNCH), str(evdir)],
+                           cwd=str(ROOT), stdout=srv_log, stderr=subprocess.STDOUT)
+    ready = False
+    t0 = time.time()
+    while time.time() - t0 < 20:
+        try:
+            txt = (evdir / "server-stdout.log").read_text(encoding="utf-8", errors="ignore")
+            if "m2-server-ready" in txt:
+                ready = True
+                break
+        except Exception:
+            pass
+        if srv.poll() is not None:
+            note(f"FAIL: server exited early rc={srv.returncode}")
+            return 2
+        time.sleep(0.4)
+    if not ready:
+        note("FAIL: server not ready in 20s")
+        srv.terminate()
+        return 2
+    note("m2-server-ready")
+
+    def finish(rc):
+        try:
+            srv.terminate()
+        except Exception:
+            pass
+        srv_log.close()
+        return rc
+
+    # 2) 클라 런치
+    note(f"launch client {CLIENT_EXE}")
+    proc = subprocess.Popen([CLIENT_EXE], cwd=str(Path(CLIENT_EXE).parent))
+    note(f"client pid(spawn)={proc.pid}")
+    hwnd = wait_window(30)
+    if not hwnd:
+        note("FAIL: no client window in 30s")
+        return finish(3)
+    pid = wintypes.DWORD()
+    user32.GetWindowThreadProcessId(hwnd, ctypes.byref(pid))
+    note(f"window hwnd={hwnd:#x} pid={pid.value}")
+
+    # 3) Frida attach + 프로브 로드
+    def on_message(message, _data):
+        if message["type"] == "send":
+            events.append(message["payload"])
+        elif message["type"] == "error":
+            events.append({"ev": "frida-error", "desc": message.get("description")})
+            note(f"frida-error {message.get('description')}")
+
+    session = script = None
+    for attempt in range(3):
+        try:
+            session = frida.attach(pid.value)
+            script = session.create_script(PROBE_JS.read_text(encoding="utf-8"))
+            script.on("message", on_message)
+            script.load()
+            time.sleep(0.6)
+            rdy = [e for e in events if e.get("ev") == "ready"]
+            if rdy:
+                note(f"probe loaded (try {attempt}) base={rdy[0].get('base')}")
+                break
+            note(f"attach try {attempt}: no ready, retry")
+        except Exception as e:
+            note(f"attach try {attempt} FAIL: {e}")
+            time.sleep(1.0)
+    if not script:
+        note("FAIL: frida attach x3")
+        return finish(3)
+
+    foreground(hwnd)
+    screenshot(hwnd, shots / "01-login.png")
+
+    # 4) 로그인
+    ox, oy, cw, ch = client_geometry(hwnd)
+    if cw < 900:
+        note(f"login screen {cw}x{ch} -> do_login")
+        do_login(hwnd, "inei00", "dummy", shots)
+    else:
+        note(f"already lobby-size {cw}x{ch}")
+
+    # 5) 로비 정착(splash 9s)
+    for i in range(20):
+        time.sleep(1)
+        if not user32.IsWindow(hwnd):
+            note(f"client died during settle at {i}s")
+            return finish(4)
+        ox, oy, cw, ch = client_geometry(hwnd)
+        if cw >= 1000:
+            note(f"lobby-size at t+{i}s {cw}x{ch}")
+            break
+    note("wait 9s splash -> lobby menu")
+    time.sleep(9)
+    if user32.IsWindow(hwnd):
+        foreground(hwnd)
+        screenshot(hwnd, shots / "02-lobby.png")
+
+    # 6) 게임개시 -> 카드 -> 월드 진입
+    if user32.IsWindow(hwnd):
+        ox, oy, cw, ch = client_geometry(hwnd)
+        gs = scale(LOBBY_REF, GAME_START, cw, ch)
+        note(f"click GAME_START client={gs}")
+        mouse_click(ox + gs[0], oy + gs[1])
+        time.sleep(3.5)
+        screenshot(hwnd, shots / "03-game-start.png")
+    if user32.IsWindow(hwnd):
+        ox, oy, cw, ch = client_geometry(hwnd)
+        cc = scale(LOBBY_REF, CHAR_CARD, cw, ch)
+        note(f"click CHAR_CARD client={cc}")
+        mouse_click(ox + cc[0], oy + cc[1])
+        time.sleep(1.2)
+        mouse_click(ox + cc[0], oy + cc[1])  # 더블클릭 확정
+        time.sleep(2.5)
+        screenshot(hwnd, shots / "04-char-card.png")
+
+    # 7) NOW LOADING 감시(50s) — 스트리밍 walk 이벤트가 0.5s마다 쌓임
+    note("=== monitor world-load (50s) ===")
+    t0 = time.time()
+    si = 5
+    last = 0
+    while time.time() - t0 < 50:
+        if not user32.IsWindow(hwnd):
+            note("client window gone during monitor")
+            break
+        now = time.time() - t0
+        if now - last >= 5:
+            last = now
+            # 최근 walk 이벤트 상태를 로그에 남긴다
+            walks = [e for e in events if e.get("ev") == "walk"]
+            if walks:
+                g = walks[-1].get("global", {})
+                note(f"t+{int(now)}s walkStep={walks[-1].get('walkStep')} "
+                     f"waitCount={g.get('waitCount')} exp={g.get('headExpCode')} "
+                     f"send={g.get('headSendCode')} fade={g.get('fade')} "
+                     f"walkDone={g.get('walkDone')}")
+            screenshot(hwnd, shots / f"{si:02d}-mon-{int(now)}s.png")
+            si += 1
+        time.sleep(1.0)
+
+    if user32.IsWindow(hwnd):
+        screenshot(hwnd, shots / "99-final.png")
+    alive = bool(user32.IsWindow(hwnd))
+    note(f"client alive={alive}")
+
+    # 8) 덤프
+    (evdir / "frida-events.jsonl").write_text(
+        "\n".join(json.dumps(e, ensure_ascii=False) for e in events) + "\n", encoding="utf-8")
+
+    # 9) 분석 — 클라가 0x0314 정지한 시점의 대기 상태 확정
+    walks = [e for e in events if e.get("ev") == "walk"]
+    note("=== ANALYSIS ===")
+    note(f"total walk snapshots: {len(walks)}")
+    load_enters = [e for e in events if e.get("ev") == "load-enter"]
+    note(f"FUN_004c2a80 entries: {len(load_enters)} "
+         f"ecx={[e.get('ecx') for e in load_enters][:5]}")
+
+    # global(정본) 기준으로 대기 상태가 안정된 마지막 스냅샷들
+    def summarize(which):
+        rows = []
+        for w in walks:
+            st = w.get(which, {})
+            if st.get("readable"):
+                rows.append((w.get("t"), w.get("walkStep"), st.get("waitCount"),
+                             st.get("headSendCode"), st.get("headExpCode"),
+                             st.get("fade"), st.get("walkDone"), st.get("queue")))
+        return rows
+
+    for which in ("global", "ecx"):
+        rows = summarize(which)
+        note(f"--- {which}: {len(rows)} readable snapshots ---")
+        if rows:
+            # 대기카운트>0 이면서 마지막인 상태(정지 시점)
+            stuck = [r for r in rows if isinstance(r[2], int) and r[2] > 0]
+            last = stuck[-1] if stuck else rows[-1]
+            note(f"  LAST[{which}] walkStep={last[1]} waitCount={last[2]} "
+                 f"send={last[3]} exp={last[4]} fade={last[5]} walkDone={last[6]}")
+            note(f"  queue={last[7]}")
+            # 관찰된 기대코드 전 범위
+            exps = sorted(set(r[4] for r in rows if r[4]))
+            note(f"  expCodes seen[{which}]: {exps}")
+            fades = sorted(set(r[5] for r in rows if r[5] is not None))
+            note(f"  fade range[{which}]: {fades[:3]}...{fades[-3:] if len(fades) > 3 else ''}")
+
+    try:
+        session.detach()
+    except Exception:
+        pass
+    try:
+        if user32.IsWindow(hwnd):
+            proc.terminate()
+    except Exception:
+        pass
+    return finish(0)
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
