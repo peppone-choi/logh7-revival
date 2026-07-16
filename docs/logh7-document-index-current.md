@@ -4,6 +4,8 @@
 
 > **현재 플레이어 경로:** 설치 폴더의 수정된 `g7mtclient.exe`를 직접 실행한다. 보조 런처·`ui_explorer`·overlay는 정상 경로가 아니며, 수정 도구 언어(Python 포함)는 제한하지 않는다. 직접 in-place 패치에도 원본 백업, source-hash guard, rollback 경로가 필수다.
 
+2026-07-16 Agent Operating System 부트스트랩: 에이전트 세션 진입 라우팅이 재구조화됐다. 진입은 `CLAUDE.md`(Claude) / `AGENTS.md`(Codex, 도구 독립 계약) → `.ai/task.md`(작업 계약)·`.ai/decisions.md`(승인 결정) → `docs/agent/README.md`(작업 유형별 문서 라우터) 순서다. 검증 행렬은 `docs/agent/verification.md`, 공통 검증 스크립트는 `scripts/agent/verify-changes.sh`(Claude 훅·Codex 수동 공용), 실패 메모리는 `docs/agent/failure-cases.md`. 근거 결정: `.ai/decisions.md` ADR-LITE-001~005.
+
 2026-07-14 현재 상태: run9 EXE SHA256은 `825635783a9fb663ae3b9a2ecf8d4b74df648322256c57ee32f6426c42a23f22`다. `postlogin` 59개 패치(`lobby-res` 8 + layout 13 + `charsel` 38), 로그인 레이아웃 패치 33개 제거, 로그인 내부 644×484와 로그인 후 1920×1080(캡처 1924×1084)을 검증했다. `.omo/live-qa/m3-two-client-persistence-1080p-cp932-20260714-run9/`에서 직접 실행 5회, 두 계정 월드 진입, `0x0b01 → 0x0b07`의 B 반영, cell `2587` 재로그인·서버 재시작 영속, 정리를 포함한 8/8 게이트를 통과했다. M3 완료로 마일스톤은 4/8(50%)이며, 전체 작업량은 보수적으로 35%다.
 
 2026-07-15 M4 현재 상태: production `createPlayableRuntime`가 `EnterWorld`·`MoveGrid`에 동기 CQRS/UoW와 `0x0315 spaceCells ∪ systemCells` navigability policy를 주입한다. 성공 이동만 SQLite cell과 `GridMoved`를 커밋하며 거부 이동은 무변경이다. 이 집합은 runtime consistency일 뿐 canonical promotion이 아니다. `.omo/live-qa/m4-cqrs-two-client-20260715-run3/`의 원본 EXE 8/8은 JSON store live QA라 SQLite CQRS 증거와 분리한다. M4는 81개 중 factory 확인 2개·미해결 79개인 부분 상태다.

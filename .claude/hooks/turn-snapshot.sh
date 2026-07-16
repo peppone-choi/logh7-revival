@@ -6,8 +6,10 @@ cd "$PROJECT_ROOT" 2>/dev/null || exit 0
 git rev-parse --is-inside-work-tree >/dev/null 2>&1 || exit 0
 mkdir -p .claude/state
 
-# 실작업 범위 = 문서·설정을 뺀 나머지 (docs/, CLAUDE.md, AGENTS.md, .claude/ 제외)
-EXCL=(':(exclude)docs' ':(exclude).claude' ':(exclude)CLAUDE.md' ':(exclude)AGENTS.md')
+# 실작업 범위 = 문서·설정·세션상태를 뺀 나머지
+# (docs/, CLAUDE.md, AGENTS.md, .claude/, .codex/, .ai/, scripts/agent/ 제외)
+EXCL=(':(exclude)docs' ':(exclude).claude' ':(exclude)CLAUDE.md' ':(exclude)AGENTS.md'
+      ':(exclude).codex' ':(exclude).ai' ':(exclude)scripts/agent')
 
 { git status --porcelain -- . "${EXCL[@]}"; git diff -- . "${EXCL[@]}"; git diff --cached -- . "${EXCL[@]}"; git rev-parse HEAD; } 2>/dev/null \
   | git hash-object --stdin > .claude/state/work.hash
@@ -15,6 +17,7 @@ EXCL=(':(exclude)docs' ':(exclude).claude' ':(exclude)CLAUDE.md' ':(exclude)AGEN
   | git hash-object --stdin > .claude/state/docs.hash
 git hash-object CLAUDE.md 2>/dev/null > .claude/state/claudemd.hash
 git hash-object AGENTS.md 2>/dev/null > .claude/state/agentsmd.hash
+git hash-object .ai/current-state.md 2>/dev/null > .claude/state/ai-state.hash
 
 # 옵시디언 볼트 프로젝트 노트 (파일 내용 해시 — 볼트는 git 밖)
 VAULT="${LOGH7_VAULT_DIR:-}"

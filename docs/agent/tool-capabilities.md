@@ -1,0 +1,47 @@
+# Tool Capabilities
+
+마지막 검증: 2026-07-16 (이 머신 실사). "일반적으로 가능"과 "이 프로젝트에 설정됨"을 구분한다.
+
+| Capability | Claude Code | Codex | Project configured | Notes |
+|---|---|---|---|---|
+| File read/write | ✅ | ✅ | ✅ | 민감 파일은 훅 차단 (`coding-rules.md` Enforced) |
+| Shell commands | ✅ | ✅ | ✅ | |
+| Git | ✅ | ✅ | ✅ | 정책: ADR-LITE-005 (브랜치 커밋 허용, push/merge는 승인) |
+| GitHub CLI (`gh`) | ✅ | ✅ | ✅ 설치됨 (2.91.0) | PR 생성은 사용자 승인 후 |
+| Node.js | ✅ | ✅ | ✅ v25.9.0 (engines ≥20) | |
+| Python 3 | ✅ | ✅ | ✅ 3.14.5 | pytest는 기본 환경 **미설치** — NEEDS_HUMAN_CONFIRMATION (과거 16/16 실행 환경 불명) |
+| Docker / Compose | ✅ | ✅ | ✅ 설치됨 (29.3.1), `docker-compose.yml`+`server/Dockerfile` | PG는 skeleton — 기본 부팅 SQLite |
+| Wine (라이브 QA) | ✅ | ✅ | ⚠️ PARTIAL — wine-11.0 설치, 단 P0 게이트(run 전용 WINEPREFIX·계보 manifest) 통과 전 launch 차단 | `docs/logh7-roadmap-current.md` P0 참조 |
+| CodeGraph | ✅ MCP + CLI | ✅ CLI | ✅ `.codegraph/` 존재 | 코드 위치·영향범위는 codegraph 먼저 |
+| Browser 자동화 | ⚠️ Claude 전용 (Claude-in-Chrome MCP, 세션 연결 시) | ❌ | NOT_CONFIGURED (프로젝트 검증 절차에 미포함) | 클라이언트는 브라우저가 아님 — 라이브 QA는 Wine 하네스 |
+| E2E (Playwright 등) | ❌ | ❌ | NOT_CONFIGURED | UI 검증은 원본 클라이언트 + 스크린샷 증거 |
+| CI/CD | — | — | NOT_CONFIGURED (`.github/workflows` 없음) | 모든 검증은 로컬 |
+| Jira | ⚠️ 세션에 Atlassian MCP 존재 가능 | ❌ | NOT_CONFIGURED (프로젝트 미사용) | 계획은 로컬 Markdown (`lifecycle-planning.md`) |
+| Sentry / 모니터링 | ❌ | ❌ | NOT_CONFIGURED | |
+| Terraform / AWS | ❌ | ❌ | NOT_CONFIGURED | 운영 배포 대상 없음 |
+
+## Claude 전용 vs 공통
+
+- Claude 전용: `.claude/commands/*` 슬래시 커맨드, MCP 도구(codegraph MCP, context7 등), 서브에이전트(`.claude/agents/`).
+- 공통 (Codex 포함): `scripts/agent/verify-changes.sh`, `docs/agent/` Runbook, `.ai/` 상태 파일, `.codex/hooks/`(미러), codegraph CLI.
+- Claude Command·Hook은 얇은 래퍼다 — 절차 정본은 항상 `docs/agent/`와 `scripts/agent/`에 있다.
+
+## 설치 스택 (하네스)
+
+- 에이전트 팀: `.claude/agents/` + `.codex/agents/` — extract-miner, re-analyst, wire-engineer, server-dev, localizer, live-qa (frontmatter model 없음 — 호출 시점에 지정)
+- 프로젝트 스킬: logh7-orchestrator, ghidra, protocol-reverse-engineering, rev-frida, find-skills, test-driven-development, verification-before-completion, systematic-debugging (+ `.codex/skills/` 4종)
+- 플러그인: oh-my-claudecode, gptaku(pumasi/insane-loop/insane-harness/insane-review)
+- 인덱스: codegraph(`.codegraph/`), code-review-graph MCP
+
+## 하네스 변경 이력
+
+| 날짜 | 변경 | 대상 | 사유 |
+|---|---|---|---|
+| 2026-07-05 | 초기 구성 | 전체 | 리셋 후 재시작 |
+| 2026-07-05 | Advisor Strategy 도입 | agents frontmatter model 제거, 호출시 계층화 | 비용 대비 지능 최적화 |
+| 2026-07-09 | Fable 오케스트레이션 4계층 전역 설치 | `~/.claude/fable/` (deep-reasoner/runner·sonnet→Opus 리매핑·PreToolUse 게이트), 토글 `fable on/off/status` | 권고를 물리 차단으로 |
+| 2026-07-09 | 플러그인·스킬 추가 | oh-my-claudecode, gptaku, 프로젝트 스킬 | 오케스트레이션·RE 도구 보강 |
+| 2026-07-14 | 참고 레포 트랙 도입 | `docs/logh7-reference-haul.md` + gitignored `reference/` | 방법론 차용, 코드 이식 금지 |
+| 2026-07-16 | Agent OS 부트스트랩 | `.ai/`, `docs/agent/`, `.claude/commands/`, 보호·검증 훅, `scripts/agent/`, 진입 문서 재구조화 | 근거: `.ai/decisions.md` ADR-LITE-001~005 |
+
+참고: `fable on`이면 `ANTHROPIC_DEFAULT_SONNET_MODEL=claude-haiku-4-5`로 sonnet 고정 서브에이전트(OMC 실행 에이전트 등)까지 haiku로 강등된다.
