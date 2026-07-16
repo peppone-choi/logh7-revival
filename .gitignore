@@ -13,6 +13,7 @@
 /.codegraph/
 
 # 의존성/빌드/캐시
+.DS_Store
 node_modules/
 dist/
 build/
@@ -48,6 +49,7 @@ __pycache__/
 /.omo/ui-experiments/
 /.omo/ulw-loop/
 /.omo/ulw-research/
+/.omo/venv-vision/
 /.omo/work/
 /server/.omo/
 /server/data/

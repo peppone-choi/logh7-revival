@@ -13,16 +13,17 @@
 
 ## 현재 상태 (2026-07-16)
 
-- **M1 로그인→로비 / M0.5 갤럭시 데이터 / M2 첫 캐릭터 획득 / M3 월드 진입·멀티플레이 영속 — 라이브 완료.** M3는 run9에서 두 계정 동시 월드 진입·이동 브로드캐스트·재로그인/서버 재시작 영속성 8/8 통과 (`.omo/live-qa/m3-two-client-persistence-1080p-cp932-20260714-run9/`).
+- **M1 로그인→로비 / M0.5 갤럭시 데이터 / M2 첫 캐릭터 획득 / M3 월드 진입·멀티플레이 영속 — 완료 이력.** run9에서 두 계정 동시 월드 진입·이동 브로드캐스트·재로그인/서버 재시작 영속성을 통과했으나, 현재 checkout에는 run9/run3/run5 원증거와 당시 exact patch EXE 계보 영수증이 없어 fresh release gate로 재사용하지 않는다.
 - **M4 전략맵 커맨드 부분 진행**: production SQLite runtime의 `EnterWorld`·`MoveGrid`가 동기 CQRS/UoW를 거치며, 성공한 `0x0b01`만 위치와 `GridMoved` 1건을 함께 커밋한다. 81개 카탈로그 중 factory 확인 2개이며 나머지 command outcome·비용·timer/job은 미구현이다.
-- **M6 한글화 부분** (창 제목·메뉴만, CP932 유지), M5 전술·M7 운영 대기. 전체 진척 대표값 ~35%.
+- **M4 개발 재개 선행 게이트**: P0(저장소 밖 run 전용 win32 `WINEPREFIX`·클라이언트 계보·증거 복구) → P1(client/proxy/server 3면 관측·상관관계) → P2(`0x030b` parser/cache/root/FSM) 순서로 닫는다. 첫 티켓은 `M4-OBS-001`의 `47900 → 47901` observe-only proxy다. 기본 `~/.wine`은 금지하고 EXE hash·image base·sentinel 불일치는 launch/attach/patch 전에 fail-closed한다. HEAD `3b09e461`의 fresh `--execute --initialize-prefix`는 launch 전 `runtime_support_manifest_missing`(exit 2, `fullPassEligible=false`)으로 차단되어 Wine/client process 0을 유지했으며, receipt `_workspace/logh7-revival/runs/20260716T051159Z-recovery01/p0-wine-execute-retry-3b09e461.json`(`sha256 3c216e6b...e5d3e1ea`) 기준 다음 P0 게이트는 V1 runtime-support manifest와 sentinel 복구다.
+- **M6 한글화 부분** (창 제목·메뉴만, CP932 유지), M5 전술·M7 운영 대기. 원본 클라이언트는 1차 제품·호환 오라클이며 장기 재이식 엔진은 Unity로 고정하지 않고 Unity·Godot·기타 후보의 동일 계약 PoC를 비교한 뒤 선택한다.
 - 클라이언트는 CD 마운트 없이 직접 실행 + 1080p + 한글 패치 경로 정비 완료. run9/run3 JSON store는 라이브 QA 하네스이고 production SQLite CQRS 증거와 분리한다. PostgreSQL은 아직 skeleton이며 동기 bridge를 async-capable하게 바꾼 뒤 연결한다.
+- UnitShip targeted `132/132`, 전체 server `460 total / 458 pass / 0 fail / 2 pre-existing conditional skips`, Python live harness `16/16`은 2026-07-16 historical baseline이며 exact 명령·환경·산출물로 재실행하기 전에는 fresh gate가 아니다.
 - 마일스톤 상세·데이터 승격 규칙은 `docs/logh7-roadmap-current.md`가 정본 — 이 절은 요약만 유지한다.
 
 ## 소스 오브 트루스
 
-- **정본 소스 EXE (RE·패치 입력, 2026-07-10 확정):** `artifacts/logh7-install/…/exe/g7mtclient.exe` — **sha256 `9c97de2ae426f011680992d6c8d88b25488b5f51555ce5784aeef677f334bb51`**. 정적 RE와 guarded patch는 이 원본 바이트를 기준으로 검증한다. 다른 사본(`g7mtclient-sjis.exe` 등)은 `artifacts/_exe-archive-nonCanonical/`로 격리한다.
-- **run9/run3 라이브 EXE:** 위 정본 소스에 direct-client·1080p·한글 guarded patch를 적용한 **sha256 `825635783a9fb663ae3b9a2ecf8d4b74df648322256c57ee32f6426c42a23f22`** 결과물이다. 라이브 QA는 이 결과물을 실제 구동하며, 매 실행에서 source/output 해시와 패치 매니페스트를 함께 확인한다.
+- **클라이언트 계보:** `docs/logh7-client-lineage-current.md`가 현행 권위다. 재현 가능한 계보는 `bd19263c… → 2848be76… → 9c97de2a… → 24d79d90… → 5bdd64f1… → 82563578…`이며 각 실행은 전체 hash·image base·sentinel과 계보 manifest를 검증한다. 중간 산출물을 독립 pristine/canonical로 부르지 않는다.
 - `artifacts/logh7-cd/Logh7.bin|.cue` — https://archive.org/details/logh-7 CD 이미지 (md5 검증 완료: `bf87c6a8...`/`8784...`, gitignored — 없으면 재다운로드)
 - `docs/reference/*.pdf` — 공식 매뉴얼 5종 (게임 규칙의 근거)
 - `docs/logh7-reference-haul.md` — 트랙별 외부 레포·도구·방법론 수집본 (MHServerEmu 등). 착수 전 관련 트랙 확인 필수 — 단, 캐논 데이터 근거로 승격하거나 외부 코드를 복사하지 말고 라이선스를 지킨다.
@@ -36,7 +37,7 @@
 - **Blocked-Loop Rule**: 같은 증상 3회 실패 또는 새 증거 없는 조사 2회면 접근을 전환하고 블로커 보고서를 쓴다.
 - 코드 주석은 한글로 쓴다 (캐논 일본어 용어·바이너리 오프셋은 원문 유지).
 - 라이브 검증 없이 완료 주장 금지. 테스트 출력·스크린샷 등 증거를 남긴다.
-- **문서 현행화 게이트 (2026-07-14)**: 파일을 변경한 턴은 ①관련 `docs/` 문서, ②CLAUDE.md(현재 상태·규칙), ③옵시디언 볼트 `E:/obsidian-tech-vault/1. 프로젝트/은하영웅전설 7 리바이벌/`의 관련 노트(현재 상태·로드맵·핸드오프)까지 갱신해야 끝난 것이다. Stop 훅(`.claude/hooks/stop-doc-gate.sh`)이 미갱신 종료를 물리적으로 차단한다(볼트는 존재하는 머신에서만 검사). 정말 반영할 내용이 없으면 그 근거를 사용자 보고에 명시한다.
+- **문서 현행화 게이트**: 파일을 변경한 턴은 ①관련 `docs/` 현행 문서, ②루트 `AGENTS.md`와 `CLAUDE.md`, ③현재 머신에 설정된 옵시디언 프로젝트 볼트의 `현재 상태.md`와 `로드맵.md`까지 갱신해야 끝난 것이다. 정말 반영할 지속 상태가 없으면 그 근거를 사용자 보고에 명시한다.
 
 ## 하네스: LOGH VII 부활
 
