@@ -8,7 +8,7 @@
 ## 현재 기준 (2026-07-16)
 
 - 2026-07-05 리셋 전 스냅샷은 커밋 `5bd249c`다. 옛 코드는 참고용으로만 복원하고 현재 구현에 그대로 되살리지 않는다.
-- M0.5/M1/M2/M3는 완료했다. run9에서 두 원본 클라이언트의 월드 진입, 이동 브로드캐스트, 재로그인·서버 재시작 영속성을 통과했다.
+- M0.5/M1/M2/M3는 완료 이력이다. run9에서 두 원본 클라이언트의 월드 진입, 이동 브로드캐스트, 재로그인·서버 재시작 영속성을 통과했으나, 현재 checkout에는 run9/run3/run5 원증거와 당시 exact patch EXE 계보 영수증이 없어 fresh release gate로 재사용하지 않는다.
 - M4는 부분 진행이다. production SQLite runtime의 `EnterWorld`·`MoveGrid`가 동기 CQRS/UoW를 거치며, 성공한 `0x0b01`만 위치와 `GridMoved` 1건을 함께 커밋한다.
 - production `0x030b`는 SQLite 함선 catalog 63행 가운데 원본 클라이언트가 라이브에서 수용한 선두 19행만 `undefined4* + 1`의 4바이트 헤더 뒤 `0x8c` stride로 보낸다. 20행 이상은 admission 정지를 재현하므로 금지한다. 이 slice는 두 클라이언트 월드 진입과 `0x0b01`/`0x0b07` 이동을 보존하지만 함선 마커 root `DAT_009d2fa8`은 여전히 null이고 전략 FSM은 state 2에서 진행하지 않는다.
 - 로그인 클라이언트 영역은 원본 `644×484`를 유지하고, 로그인 뒤 게임 영역만 `1920×1080`으로 전환한다.
@@ -43,18 +43,19 @@
 
 - LOGH VII 자산추출·RE·프로토콜·서버·한글화·라이브 QA 요청에는 `logh7-orchestrator` 스킬을 사용한다.
 - 원본 클라이언트는 frontend, Node 서버는 authoritative backend다. 경계는 presentation/session → application command → domain authority → persistence 순서로 유지한다.
+- M4 개발은 P0(저장소 밖 run 전용 win32 `WINEPREFIX`·클라이언트 계보·증거 복구) → P1(client/proxy/server 3면 관측·상관관계) → P2(`0x030b` parser/cache/root/FSM) 순서로 닫은 뒤 진행한다. 첫 티켓은 `M4-OBS-001`의 `47900 → 47901` observe-only proxy다. 기본 `~/.wine`은 사용하지 않으며 EXE hash·image base·sentinel 불일치는 launch/attach/patch 전에 fail-closed한다. HEAD `3b09e461`의 fresh `--execute --initialize-prefix`는 launch 전 `runtime_support_manifest_missing`(exit 2, `fullPassEligible=false`)으로 차단되어 Wine/client process 0을 유지했으며, receipt `_workspace/logh7-revival/runs/20260716T051159Z-recovery01/p0-wine-execute-retry-3b09e461.json`(`sha256 3c216e6b...e5d3e1ea`) 기준 다음 P0 게이트는 V1 runtime-support manifest와 sentinel 복구다.
 - run9/run3의 JSON store 라이브 QA와 production SQLite 증거를 분리한다. run3는 SQLite CQRS를 실행하지 않았다.
 - `MoveGrid`는 현재 `0x0315`가 내보내는 `spaceCells ∪ systemCells`만 허용하고 정책 미주입 시 fail-closed다. 이는 표시·권위 일치일 뿐 정본 승격이 아니며, `galaxy-passable-cells`와 galaxy trust 데이터는 교차 확인 전까지 provisional이다.
 - M4는 81개 catalog 중 factory 확인 2개·미해결 79개다. PCP/MCP ledger, CP charge, timers/jobs, 실제 command outcome, `0x0327` 미확정 재고, disconnect의 `online=false` 영속화가 남았다. 동기 SQLite bridge는 PostgreSQL 전환 전에 async-capable하게 바꾼다.
 - M6는 현재 CP932 표시 복구와 일부 `.rsrc` 한글화까지만 완료했다. 일본어가 읽힌다는 사실을 전체 한글화 완료로 보고하지 않는다.
-- 리마스터는 로그인 원본 크기와 본게임 1080p 경계를 보존한다. 고해상도 자산은 provenance·원본 fallback·rollback이 갖춰진 뒤 적용한다.
-- 2026-07-16 검증 기준선은 이번 UnitShip targeted `132/132`, 전체 server `460 total / 458 pass / 0 fail / 2 pre-existing conditional skips`다. 원본 클라이언트 run5는 두 클라이언트 월드 진입과 `0x0b01`/`0x0b07` 이동을 보존했지만 post-warp HUD idle gate는 실패했고 함선 마커 root는 null이었다. 기존 Python live harness `16/16`, changed JS LSP error `0`, 비항법 cell `0` 무변경 probe도 유지한다.
+- 원본 클라이언트는 1차 제품·호환 오라클이며 로그인 원본 크기와 본게임 1080p 경계를 보존한다. 고해상도 자산은 provenance·원본 fallback·rollback이 갖춰진 뒤 적용하고, 장기 재이식 엔진은 Unity로 고정하지 않는다. Unity·Godot·기타 후보가 같은 command/event/asset 계약을 구현한 PoC를 비교하기 전에는 `client-unity/`를 활성 제품 계약으로 복원하지 않는다.
+- UnitShip targeted `132/132`, 전체 server `460 total / 458 pass / 0 fail / 2 pre-existing conditional skips`, Python live harness `16/16`, changed JS LSP error `0`, 비항법 cell `0` 무변경 probe는 2026-07-16의 historical baseline이다. exact 명령·환경·산출물로 다시 실행하기 전에는 fresh gate가 아니다. 원본 클라이언트 run5는 두 클라이언트 월드 진입과 `0x0b01`/`0x0b07` 이동을 보존했지만 post-warp HUD idle gate 실패와 함선 마커 root null을 남겼다.
 
 ## 완료 게이트
 
-- 모든 LOGH VII 작업 단위는 종료 전에 루트 `AGENTS.md`를 갱신한다. 해당 작업이 바꾼 현재 상태, 실행 경계, 남은 다음 작업, 검증 근거 중 지속적으로 필요한 내용을 반영한다.
-- 같은 작업에서 영향을 받은 `docs/` 현행 문서와 `E:\\obsidian-tech-vault\\1. 프로젝트\\은하영웅전설 7 리바이벌`의 `현재 상태.md`·로드맵도 실제로 수정해 저장소와 볼트가 같은 상태를 가리키게 한다.
-- `AGENTS.md` 변경을 diff로 확인하고 현재 코드·로드맵과 모순이 없는지 검증하기 전에는 작업을 완료로 보고하거나 커밋을 최종 승인하지 않는다.
+- 모든 LOGH VII 작업 단위는 종료 전에 루트 `AGENTS.md`와 `CLAUDE.md`에 현재 상태, 실행 경계, 남은 다음 작업, 검증 근거 중 지속적으로 필요한 내용을 반영한다.
+- 같은 작업에서 영향을 받은 `docs/` 현행 문서와 현재 머신에 설정된 옵시디언 프로젝트 볼트의 `현재 상태.md`·`로드맵.md`도 실제로 수정해 저장소와 볼트가 같은 상태를 가리키게 한다.
+- `AGENTS.md`·`CLAUDE.md` 변경을 diff로 확인하고 현재 코드·현행 계획·볼트 로드맵과 모순이 없는지 검증하기 전에는 작업을 완료로 보고하거나 커밋을 최종 승인하지 않는다.
 - 단순 진행 로그를 누적하지 않는다. 낡은 지침은 수정·삭제하고, 반복되는 설명은 소스 오브 트루스 한 곳으로 합쳐 문서를 짧고 현행으로 유지한다.
 
 ## 위임·토큰 원칙
