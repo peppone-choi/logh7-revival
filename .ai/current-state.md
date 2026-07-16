@@ -3,7 +3,7 @@
 - Updated at: 2026-07-17
 - Latest change (Claude Code 메인+opus 서브에이전트): 강의(딩코딩코 AI 네이티브 개발자 1~4주차) 방법론을 이 레포 하네스(커맨드 7종·훅 5종·에이전트 6종·MCP·승인 경계·검증 행렬)에 맞춰 개작한 Claude Code 사용자 매뉴얼을 `docs/agent/claude-code-ai-업무관리-매뉴얼.md`(457줄)로 저장하고 `docs/agent/README.md` 라우팅 표에 등록했다. 레포에 없는 강의 일반론(claude-squad·Terraform·Langfuse·Ralph Loop 등)은 부록 참고로 격하. 이어서 사용자 지시(2026-07-17)로 루트 `README.md`를 신설(Claude·Codex 매뉴얼 링크, 배포 계획), `docs/logh7-architecture-operations-current.md`에 Distribution and Repository Split Plan 절(클라이언트/서버 레포 분리, 부트스트랩 클라이언트 최종 배포)을 추가, ADR-LITE-006으로 기록했다. 사용자 승인으로 `codex/codex-user-manual` 브랜치에서 commit·push·PR #167 merge 완료(`cbcd7ea5`, Codex 선행 7커밋 포함). 후속으로 `docs/logh7-document-index-current.md`에 README·매뉴얼 2종·배포 방침을 등재(문서 현행화 게이트). 검증: `verify-changes.sh --file` 변경 문서 전부 exit 0. `.codex/config.toml` 동시 수정분은 스테이징 제외로 보존. `CLAUDE.md`·`AGENTS.md`는 운영 규칙 무변경이라 미갱신. 추가(2026-07-17): 이 맥에 `LOGH7_VAULT_DIR`를 옵시디언 볼트(`~/Desktop/기술팀 옵시디언/최병호`)로 설정(~/.zshrc + settings.local.json env; 새 세션부터 훅 반영), 볼트 프로젝트 노트 현재 상태를 2026-07-17로 현행화, `docs/agent/tool-capabilities.md` 하네스 변경 이력 기록.
 - Active agent: Claude Code (메인) — 직전 Codex (root) 작업은 PR #167로 merge 완료
-- Branch: `main` (codex/codex-user-manual의 볼트 연동·진입 문서 포인터 커밋까지 merge 후 전환; `.codex/config.toml` 동시 수정분은 미커밋 보존)
+- Branch: `main` (codex/codex-user-manual의 볼트 연동·진입 문서 포인터 커밋까지 PR #169로 merge(`2f708402`) 후 전환. 사용자 지시로 잔여 미커밋 전부 정리: `.codex/config.toml` 스레드 설정 3줄 커밋, 볼트 노트도 볼트 레포에 커밋·푸시)
 - Current phase: Codex AI 자동 업무 관리 시스템 사용자 매뉴얼 작성·검증 완료; 사용자가 작업 브랜치 commit·push·PR·merge를 승인했다.
 - Result: `docs/agent/codex-user-manual.md`에 프로젝트 열기, 훅·스킬, 작업 계약, Jira/GitHub, 구현·검증·리뷰, 승인 경계, 체크포인트, 실패 대응, 완료 체크리스트를 사용자 관점으로 정리했다.
 - Routing: `docs/agent/README.md`에서 매뉴얼로 진입할 수 있다.
