@@ -461,13 +461,21 @@ export function decodeLobbySessionLoginReq(inner) {
   return { code, sessionId, characterId };
 }
 
-// ─── 0x0b07 NotifyMovedGrid ───────────────────────────────────────────────────
+// ─── 0x0b01 MoveGrid ACK / 0x0b07 NotifyMovedGrid ────────────────────────────
+
+export function buildMoveGridAckInner({ characterId = 0 } = {}) {
+  const body = Buffer.alloc(0x24);
+  // +0x08은 일반 LE 필드가 아니라 0x0204 self-id 원시 바이트와 맞추는 상관 토큰이다.
+  body.writeUInt32BE(characterId >>> 0, 8);
+  return buildMsg32Inner(CODE_CMD_MOVE_GRID, body);
+}
 
 export function buildNotifyMovedGridInner({ units = [], header = {} } = {}) {
   const body = Buffer.alloc(CODE_NOTIFY_MOVED_GRID_BYTES);
   const count = Math.min(units.length, CODE_NOTIFY_MOVED_GRID_MAX_UNITS);
   body.writeUInt32LE((header.dword0 ?? 0) >>> 0, 0);
-  body.writeUInt32LE((header.dword1 ?? 0) >>> 0, 4);
+  // dword1도 0x0204 self-id 원시 바이트와 맞추는 상관 토큰이며 일반 LE 헤더가 아니다.
+  body.writeUInt32BE((header.dword1 ?? 0) >>> 0, 4);
   body.writeUInt32LE((header.dword2 ?? 0) >>> 0, 8);
   body.writeUInt32LE((header.dword3 ?? 0) >>> 0, 12);
   body.writeUInt16LE((header.flags ?? 0) & 0xffff, 16);

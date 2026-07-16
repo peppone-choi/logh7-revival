@@ -3,6 +3,7 @@
 import { createGameApplication, DEFAULT_DB_PATH } from '../application/GameApplication.mjs';
 import { createPlayableServer } from '../server/logh7-playable-server.mjs';
 import { loadAccountRegistry, DEFAULT_ACCOUNTS_PATH } from '../server/logh7-account-auth.mjs';
+import { isStrategicGridCellNavigable } from '../server/logh7-galaxy-placement.mjs';
 import { createWorldSession } from '../server/logh7-world-session.mjs';
 
 /**
@@ -18,7 +19,9 @@ export function createPlayableRuntime({
   transportKey = undefined,
   decipherKey = undefined,
 } = {}) {
-  const app = createGameApplication({ dbPath });
+  // 정본 production client는 0x0323/0x0325 packed link layout을 쓴다. 명시적 0은 보존한다.
+  if (process.env.LOGH_LIVE_CLIENT_LAYOUT === undefined) process.env.LOGH_LIVE_CLIENT_LAYOUT = '1';
+  const app = createGameApplication({ dbPath, isGridCellNavigable: isStrategicGridCellNavigable });
 
   // JSON 계정 파일과 SQLite accounts 동기 시드
   const loopbackHost = host === '127.0.0.1' || host === '::1' || host === 'localhost';
@@ -32,6 +35,7 @@ export function createPlayableRuntime({
   const characterStore = app.createCharacterStoreAdapter();
   const worldSession = createWorldSession({
     characterStore,
+    dispatchCommandSync: app.dispatchCommandSync,
     worldRedirect: { ip: host === '0.0.0.0' ? '127.0.0.1' : host, port, token: 1 },
   });
 

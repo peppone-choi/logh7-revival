@@ -1,5 +1,23 @@
 # LOGH VII Current Requirements
 
+> **현재 권위 (2026-07-15):** 시작 문서는 이 문서, `docs/logh7-architecture-operations-current.md`, `.omo/plans/logh7-execution-plan-current.md` 세 개다. 정상 플레이어 경로는 설치 폴더의 수정된 `g7mtclient.exe` 직접 실행이며, 보조 런처·`ui_explorer`·overlay는 정상 경로가 아니다. 클라이언트 수정 도구의 언어는 Python을 포함해 제한하지 않는다. 실제 설치 `g7mtclient.exe`를 직접 in-place 패치할 때도 원본 백업, 적용 전 해시 검증, 실패 시 rollback 경로를 반드시 남긴다. 아래 날짜별 G0xx 항목은 결정 근거를 보존한 역사 기록이며, 현재 실행 상태나 로드맵 권위를 갖지 않는다.
+
+2026-07-14 run9 직접 클라이언트 기준선: `tools/live/prepare_direct_client.mjs`가 해시 검증 후 선택한 설치 트리의 `exe/g7mtclient.exe` 최종 SHA256은 `825635783a9fb663ae3b9a2ecf8d4b74df648322256c57ee32f6426c42a23f22`다. `postlogin` 패치 59개는 `lobby-res` 8개, layout 13개, `charsel` 38개이며, 로그인 화면을 늘리던 `login-native-layout` 33개는 제거했다. 로그인 내부 화면은 원래 644×484를 유지하고 로그인 후에는 1920×1080으로 전환한다(창 캡처 1924×1084). 창 제목과 메뉴 한글은 유지하되 CP932 자산 때문에 `CreateFontA` charset `0x81`은 모지바케를 일으켜 `0x80`으로 복귀했다.
+
+라이브 증거 `.omo/live-qa/m3-two-client-persistence-1080p-cp932-20260714-run9/`는 원본 EXE 직접 실행 5회, 두 계정 동시 월드 진입, A의 `0x0b01` 이동 요청에 대한 서버 `0x0b07` 브로드캐스트와 B 적용, cell `2587`의 재로그인·서버 재시작 후 유지, 프로세스와 포트 `47900` 정리를 기록한다. `results.json`의 8개 게이트가 모두 `pass: true`이므로 M3는 완료다.
+
+진척률은 마일스톤 기준 M0.5/M1/M2/M3 `4/8 = 50%`다. 다만 M4~M7에 서버 권위 도메인, 전술·전투, 한글화, 운영이 집중되어 있어 전체 작업량은 보수적으로 `30~40%`, 대표값 `35%`로 본다. 전체 한글화에는 UTF-8 번역 원본, 한글 입력 경로, 그리고 M6 spike에서 선택할 CP949 자산 변환 또는 SJIS tunneling/GDI proxy 경로가 필요하다. 1080p 네이티브 레이아웃은 입증됐지만 고해상도 텍스처·업스케일을 포함한 전체 리마스터는 미완료다.
+
+남은 서버 핵심 범위는 auth/session/audit, character/presence, galaxy/planet/base 권위 상태, fleet/location/visibility, facilities/ownership, 81개 command catalog(팩토리 확인 2개·미해결 79개)와 CP/timers/jobs, economy/warehouse/production, tactical initial state, battle formulas/results, chat/social/notice/logs/backups다. 원본 클라이언트는 UI와 의도 전송을 담당하고 서버는 validation, domain authority, persistence, broadcast를 담당한다. run9 JSON store는 QA harness일 뿐 production ORM/SQLite가 아니며 PostgreSQL skeleton도 아직 연결되지 않았다.
+
+2026-07-15 M4 첫 production slice: `createPlayableRuntime`가 `EnterWorld`와 `MoveGrid`를 동기 CQRS/UoW로 production SQLite runtime에 주입한다. 성공한 `0x0b01`은 cell과 `GridMoved` event 1건을 같은 트랜잭션으로 영속화한다. 잘못된 account·unit, offline character, 비항법 cell `0`은 DB cell, in-memory session cell, domain event 수, session move event와 응답을 모두 바꾸지 않는다. application `MoveGrid`는 navigability policy가 없으면 fail-closed다.
+
+현재 항법 정책은 `logh7-galaxy-placement.mjs`가 실제 `0x0315`로 내보내는 `spaceCells ∪ systemCells`와 정확히 같은 집합이다. 이는 클라이언트 표시와 서버 권위를 맞춘 것일 뿐 canonical promotion이 아니다. `galaxy-passable-cells.json`과 galaxy trust 데이터는 교차 출처 확인 전까지 provisional/blocked다.
+
+네이티브 라이브 증거 `.omo/live-qa/m4-cqrs-two-client-20260715-run3/results.json`은 SHA256 `825635783a9fb663ae3b9a2ecf8d4b74df648322256c57ee32f6426c42a23f22`인 원본 EXE 직접 실행에서 8/8을 통과했다. `0x0b01 → 0x0b07` cell `2587`, B notification delta `1`/lookup miss `0`, 재로그인·서버 재시작 유지와 정리를 확인했다. 로그인은 644×484, 로그인 후 게임은 1920×1080(외곽 캡처 1924×1084)이다. harness 수정은 confirm `(1018,656)`을 보이는 중심 `(1018,642)`로 옮긴 것뿐이며, run1/run2는 `0x0b01`이 없었던 실패 control이다. 이 run3도 JSON store를 썼으므로 production SQLite CQRS 증거는 아니다.
+
+fresh 검증은 movement/galaxy/world/server targeted `97/97`, 전체 server `458 total / 456 pass / 0 fail / 2 pre-existing conditional skips`, Python live harness `16/16`, changed JS LSP error `0`, diff-check clean이다. 수동 runtime probe는 `grid cell not navigable`, 응답 없음, DB/session cell `2588`, `GridMoved 0`, session move `0`을 확인했다. M4는 여전히 부분 상태다. PCP/MCP ledger·CP charge·timers/jobs·실제 command outcome이 없고 `0x0327` 미확정 stock은 zero-fill이며 disconnect의 `online=false` 영속화도 남았다. 동기 SQLite bridge는 PostgreSQL 전에 async-capable하게 바꿔야 한다. 다음은 M4 command authority/ledger/timer/job과 galaxy/fleet/facility/economy canon/data, 이어 M5, M6 전체 한글화, M7 운영·리마스터 순이다.
+
 2026-07-04 G070 Unity 클라이언트 완전 삭제: 사용자가 "완전 삭제"를 명시적으로 선택함에 따라 `client-unity/` 작업트리를 제거했다. 삭제 직전 상태(스테이징된 2026-07-03/04 메달 리마스터 아트 포함)는 커밋 `dbf3b43`에 전량 보존했고, 커밋 `ca24dd3`(9226 files deleted)로 작업트리에서 제거했다. G069의 "RE 완료 후 Unity 재이식" 장기 목표는 유지되며, 재이식 시 `client-unity/`를 git 히스토리에서 복원하는 것부터 시작한다. 이 문서의 이후 G0xx Unity 관련 항목(픽셀 패러티, 로비/로그인 재현, StreamingAssets export 등)은 모두 과거 기록이며 현재 작업트리에서 재현할 수 없다.
 
 2026-07-04 G069 방향 전환(사용자 명시적 재오픈): Unity 경로를 잠정 중단하고 **레거시 클라이언트(`G7MTClient.exe`) 직접 수정을 현재 주 개발 경로로 재개**한다. 계기: G066-G068에서 원본 화면 픽셀 패러티(title.tga/bg005.jpg 재현)+실서버 로그인/로비 E2E까지 시연했음에도 사용자가 "실게임과 다름/EXE가 맞지도 않음"으로 판정. 장기 계획은 유지: RE(리버스엔지니어링)가 전부 끝나면 Unity로 재이식한다. 이 문서의 "2026-07-03 Objective Reorientation"(데이터/스펙 마이닝+게임로직 재구현 우선, 레거시 클라 수정 배제)은 이 전환으로 잠정 대체된다 — 데이터/스펙 마이닝 산출물(카탈로그/매니페스트)은 계속 유효한 소스지만, 그 소비처가 Unity에서 레거시 클라 직접 패치로 바뀐다. 재개 시 우선 처리해야 할 기지 리스크: C002(마우스클릭→커맨드 미도달, 수개월 RE 미해결), cp932 한글 채팅 인코딩 손상, 단일 EXE 패치의 크래시 취약성.
@@ -76,7 +94,7 @@ Capability harness: all LOGH VII work units must also apply `.omo/rules/logh7-ca
 
 2026-07-04 ULW final status: durable loop now has `complete=39`, `pending=0`, `blocked=5`. Remaining blocked items are Unity product-surface tasks gated by Unity Licensing IPC; the revival objective is not complete until that external blocker is repaired and Unity manual QA/build validation can run.
 
-Updated: 2026-07-04
+Updated: 2026-07-15
 
 2026-07-03 Unity scene implementation requirement: EXE/Ghidra/MsgDat scene inventory now drives Unity scene production. `npm --prefix server run catalog:scenes` emits `server/content/generated/logh7-scene-inventory.json` with 12 evidence-backed scene groups, and `npm --prefix server run export:unity-scenes` creates 12 Unity placeholder scenes under `client-unity/Assets/Scenes/` plus per-scene evidence notes. Each scene remains placeholder until its UI and logic contract is closed with CD/manual/Ghidra/live/wire evidence.
 
@@ -96,7 +114,7 @@ Updated: 2026-07-04
 
 2026-07-03 ship-stat slice: `server/content/ship-stats.json` now generates `server/content/generated/logh7-ship-stat-catalog.json` through `npm --prefix server run catalog:ship-stats`. `server/src/server/logh7-ship-stat-rules.mjs` evaluates explicit pool availability only; it preserves missing `beamPower`/`defense`/`maxShield` gaps and does not infer combat formulas.
 
-2026-07-03 strategic-grid slice: `server/src/server/logh7-strategic-grid-rules.mjs` consumes `server/content/galaxy-passable-cells.json` and `server/content/manual/terrain-navigability.json`. It implements evidence-bound grid entry gates: passable-mask membership, manual 300-unit faction cap, manual 2-faction grid cap, terrain-obstacle block, and lone-flagship star-system restriction.
+2026-07-15 current strategic-grid slice: `server/src/server/logh7-galaxy-placement.mjs`의 `isStrategicGridCellNavigable`이 현재 `0x0315`의 `spaceCells ∪ systemCells`를 판정하고, `createPlayableRuntime`가 이를 application handler policy로 주입한다. 이 runtime consistency gate는 `galaxy-passable-cells.json`이나 galaxy trust 데이터의 정본 승격을 뜻하지 않는다.
 
 2026-07-03 command-rule slice: `server/src/server/logh7-strategy-command-rules.mjs` consumes the generated strategy-command catalog. It implements evidence-bound fixed CP payment/insufficient-CP checks and timing specs; `cost.kind=variable` remains unresolved rather than parsing CP ranges from descriptions.
 
@@ -106,11 +124,11 @@ Cleanup note: pre-bootstrap non-material files are removed from the active path.
 
 2026-07-03 cleanup follow-up removed remaining old campaign/progress/session/layout/modding-plan/tooling documents and moved the spot background contact sheet into `docs/reference/logh7-spot-bg-contact-sheet.jpg` as source visual material.
 
-This is the current requirements authority for LOGH VII revival planning. New agents must read this document, `docs/logh7-architecture-operations-current.md`, and `.omo/plans/logh7-internal-validation-plan.md` first. Older documents are evidence or historical context unless a current document points to them.
+This is the current requirements authority for LOGH VII revival planning. New agents must read this document, `docs/logh7-architecture-operations-current.md`, and `.omo/plans/logh7-execution-plan-current.md` first. Older documents are evidence or historical context unless a current document points to them.
 
 All current policies in this document apply retroactively. Existing plans, docs, patch artifacts, remaster/mod assumptions, and dashboard status that conflict with current policy must be reclassified, migrated, pruned, or marked non-compliant rather than grandfathered.
 
-## 2026-07-03 Objective Reorientation
+## 2026-07-03 Objective Reorientation (Historical Unity Policy; Superseded 2026-07-14)
 
 The project objective is now asset/data mining and game-logic reimplementation, not continued legacy-client modification as product path. The original LOGH VII client, manuals, extracted resources, live traces, and current documents are evidence sources and oracle surfaces. Product work must build canonical data/spec pipelines and implement gameplay logic against that evidence.
 
@@ -130,11 +148,11 @@ Source-root registry now lives at `server/content/original-data/logh7-source-roo
 
 `npm --prefix server run export:tcf-portraits -- --limit-per-archive 2` exports visual BMP samples to `.omo/ulw-loop/evidence/tcf-portrait-bmp-sample/` plus manifest `.omo/ulw-loop/evidence/tcf-portrait-bmp-sample.json`. Current evidence: 14 BMP samples, representative `oam-slot0001-64x80.bmp` visually inspected as a valid portrait image. This is evidence/export tooling, not a committed full portrait asset dump.
 
-Legacy live-client validation remains diagnostic-only. Use it to prove interpretation of records, assets, UI behavior, and protocol/logic observations; do not make EXE patching, Python playable builders, JSON patch descriptors, Frida runtime patches, or direct EXE launches the normal implementation path.
+Historical Unity-era rule: legacy live-client validation was diagnostic-only. It is retained for provenance, but the current product path is the modified install-folder `g7mtclient.exe`; `ui_explorer`, Frida, and trace harnesses remain diagnostic helpers.
 
 ## North Star
 
-Normal product path should let a rebuilt game consume canonical LOGH VII source data/specs, run gameplay logic backed by extracted/manual evidence, and use original client behavior only as an oracle when facts are ambiguous.
+The normal product path runs the modified install-folder `g7mtclient.exe` directly against the authoritative rebuilt server, using canonical LOGH VII data/specs and evidence-backed gameplay logic.
 
 The first internal validation milestone is for the reboot:
 
@@ -142,16 +160,16 @@ The first internal validation milestone is for the reboot:
 2. MDX, TCF, manual, text, roster, galaxy, ship, economy, command data mined into reproducible catalogs.
 3. Every generated artifact records provenance, source path, regeneration command, and confidence/limits.
 4. Gameplay rules implemented against canonical fixtures, not speculative packet behavior.
-5. Unity client imports generated catalogs through explicit manifests.
+5. The modified legacy client consumes verified assets, resources, and server records through the proven native protocol paths.
 6. Original assets remain fallback/reference inputs; remaster/mod outputs remain optional, reversible, provenance-labeled.
-7. Legacy client oracle checks are run only for targeted ambiguity and never become normal runtime shortcuts.
+7. Direct legacy-client execution is the normal player path; `ui_explorer`, Frida, preseed flags, and trace harnesses remain targeted diagnostics.
 
 ## Actors
 
 - **Data/spec developer**: inventories source roots, extracts assets/data/manual rules, records provenance, regenerates catalogs.
 - **Gameplay logic developer**: implements rules against canonical fixtures, not speculative packets or legacy shortcut behavior.
-- **Unity client developer**: consumes generated catalogs through manifests and keeps original assets as fallback/reference inputs.
-- **Legacy oracle worker**: may use original client diagnostics only to resolve targeted ambiguity with fresh evidence paths.
+- **Modified-client developer**: applies and verifies native client resources/patches while preserving remaster/mod/canonical-source boundaries.
+- **Live QA/RE worker**: validates the direct client product path and uses `ui_explorer`, Frida, or traces only for targeted diagnostics.
 
 ## Core Scope
 
@@ -159,7 +177,7 @@ The first internal validation milestone is for the reboot:
 
 - Server first deployment target: Docker Compose service-style runtime.
 - Direct Node commands are development helpers only.
-- Launcher first scope: server address/config, update/patch check, game launch, web signup entry, notice/board entry.
+- Player entry starts the modified installation-folder `g7mtclient.exe` directly; server address/config and updates must not require a helper launcher or overlay.
 - Web account creation is required. Legacy client handles login only.
 - Password storage, sessions, authorization, admin separation, and account persistence are security-critical.
 
@@ -351,7 +369,7 @@ Milestone evidence requires all three:
 
 - Automated tests for parsers, records, persistence, web/community behavior, command execution, and security-sensitive paths.
 - Real-client live QA proving the legacy client consumes server data and shows expected screens/effects.
-- Normal run path validation through launcher plus Docker Compose service server.
+- Normal run path validation through the directly launched modified `g7mtclient.exe` plus the stable service server.
 
 `ui_explorer` traces, screenshots, and probes are valid diagnostic evidence, but diagnostic harness proof alone is insufficient for readiness.
 
@@ -446,20 +464,20 @@ This sync applies to the three current docs, `docs/logh7-document-index-current.
 
 ## Must Not Do
 
-- Do not use Python to indirectly modify, regenerate, or overwrite `G7MTClient.exe` or launcher EXEs. EXE changes must be direct, explicit patch operations with original signature checks, target hash recording, byte-level review, rollback, and live QA.
-- This applies retroactively: existing indirect EXE patch artifacts must be audited and migrated to direct patch descriptors before they can count as implementation or verification evidence.
+- Do not restrict client-modification tools by implementation language; Python and other suitable tools are allowed.
+- Do not apply a direct in-place patch to the installed `g7mtclient.exe` without an original backup, source-hash guard, and tested rollback path.
 - Do not use old forced/preseeded placeholder characters as QA subjects.
 - Do not move gameplay character creation into the web app or launcher.
 - Do not make server notices web-only.
-- Do not turn `ui_explorer` into the normal launcher.
-- Do not make direct `G7MTClient.exe` execution the player-facing normal path.
+- Do not put a helper launcher, `ui_explorer`, or overlay in the routine player path.
+- The routine player path is direct execution of the modified `g7mtclient.exe` from the installation folder.
 - Do not require players/operators to use RE harnesses, preseed flags, PID cleanup scripts, or trace sessions for routine play.
 - Do not hide server startup behind many bespoke flags unless packaged into one stable operator action.
 - Do not label generated/upscaled assets as canonical originals.
 - Do not build public mod distribution before the playable loop and pack safety model are stable.
 - Do not close work after implementation review alone. Completion is implementation, verification, review, CSO/security, compound learning capture, and updated docs.
 
-## 2026-07-03 Unity Session Entry Requirement
+## 2026-07-03 Unity Session Entry Requirement (Historical; Superseded 2026-07-14)
 
 - Unity client normal entry must not jump directly into StrategicMap. The required product flow is Boot/launcher -> LoginSession -> LobbySession -> CharacterSelect/CharacterCreate -> CharacterAuthority -> WorldSession -> StrategicMap.
 - The original EXE remains oracle/data-mining only for this flow. `ui_explorer`, direct EXE launch, direct Node commands, preseed flags, and trace tools remain diagnostics and must not become normal player/operator runtime.

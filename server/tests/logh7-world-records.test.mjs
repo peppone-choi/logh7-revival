@@ -6,6 +6,7 @@ import {
   CODE_INFO_CHARACTER_BYTES,
   CODE_INFO_UNIT,
   CODE_INFO_UNIT_BYTES,
+  CODE_CMD_MOVE_GRID,
   CODE_NOTIFY_MOVED_GRID,
   CODE_NOTIFY_MOVED_GRID_BYTES,
   CODE_SS_CHARACTER_ID,
@@ -27,6 +28,7 @@ import {
   buildSsLoginOkInner,
   buildSsGameLoginOkInner,
   buildCharacterRosterTransaction,
+  buildMoveGridAckInner,
   buildNotifyMovedGridInner,
   buildGridChatInner,
   buildWorldEntryInners,
@@ -285,11 +287,30 @@ test('0x0204 self-id integer == 0x0323 record[0] integer — self-match invarian
   }
 });
 
-test('0x0b07 NotifyMovedGrid is 580B with unit@0x14 LE', () => {
-  const inner = buildNotifyMovedGridInner({ units: [{ unitId: 1, cell: 2597 }] });
+test('0x0b01 move ACK correlates with the raw 0x0204 self-id bytes', () => {
+  const inner = buildMoveGridAckInner({ characterId: 11 });
+  assert.equal(inner.length, 42);
+  assert.equal(readMsg32Code(inner), CODE_CMD_MOVE_GRID);
+  const body = msg32Body(inner);
+  const selfId = msg32Body(buildSsCharacterIdInner({ characterId: 11 }));
+  const expected = Buffer.alloc(36);
+  selfId.copy(expected, 8);
+  assert.deepEqual(body.subarray(8, 12), selfId);
+  assert.equal(body.readUInt32BE(8), 11);
+  assert.deepEqual(body, expected);
+});
+
+test('0x0b07 NotifyMovedGrid correlates with the raw 0x0204 self-id bytes', () => {
+  const inner = buildNotifyMovedGridInner({
+    units: [{ unitId: 1, cell: 2597 }],
+    header: { dword1: 11 },
+  });
   assert.equal(readMsg32Code(inner), CODE_NOTIFY_MOVED_GRID);
   const body = msg32Body(inner);
+  const selfId = msg32Body(buildSsCharacterIdInner({ characterId: 11 }));
   assert.equal(body.length, CODE_NOTIFY_MOVED_GRID_BYTES);
+  assert.deepEqual(body.subarray(4, 8), selfId);
+  assert.equal(body.readUInt32BE(4), 11);
   assert.equal(body.readUInt8(0x12), 1);
   assert.equal(body.readUInt32LE(0x14), 1);
   assert.equal(body.readUInt32LE(0x18), 2597);

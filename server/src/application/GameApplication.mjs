@@ -21,6 +21,7 @@ export function createGameApplication({
   dbPath = DEFAULT_DB_PATH,
   seedDir = DEFAULT_SEED_DIR,
   seed = true,
+  isGridCellNavigable = () => false,
 } = {}) {
   const connection = openDatabase({ dbPath });
   const worldCatalog = createWorldCatalog(connection);
@@ -30,7 +31,7 @@ export function createGameApplication({
   }
   const commandBus = createCommandBus();
   const queryBus = createQueryBus();
-  registerGameHandlers({ commandBus, queryBus });
+  registerGameHandlers({ commandBus, queryBus, isGridCellNavigable });
 
   function withUnitOfWork(fn) {
     const uow = createUnitOfWork(connection);
@@ -41,8 +42,12 @@ export function createGameApplication({
     }
   }
 
-  async function dispatchCommand(command) {
+  function dispatchCommandSync(command) {
     return withUnitOfWork((uow, db) => commandBus.execute(command, { uow, db, worldCatalog }));
+  }
+
+  async function dispatchCommand(command) {
+    return dispatchCommandSync(command);
   }
 
   async function dispatchQuery(query) {
@@ -164,6 +169,7 @@ export function createGameApplication({
     commandBus,
     queryBus,
     dispatchCommand,
+    dispatchCommandSync,
     dispatchQuery,
     withUnitOfWork,
     createCharacterStoreAdapter,

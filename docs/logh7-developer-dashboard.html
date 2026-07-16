@@ -107,66 +107,80 @@
 <body>
   <header>
     <h1>LOGH VII Developer Dashboard</h1>
-    <p class="meta">Updated: 2026-07-04 KST. Derived from current docs; not a startup authority document.</p>
+    <p class="meta">Updated: 2026-07-15 KST. Derived status only; not a startup authority document.</p>
   </header>
 
   <main>
     <section class="grid" aria-label="Current status">
       <article class="panel">
-        <h2>2026-07-04 G069: Direction Reversal</h2>
-        <p><span class="status amber">reopened</span>Legacy client (<code>G7MTClient.exe</code>) direct patching is the current primary path again, by explicit user direction, after Unity pixel-parity demos (G066-G068) were judged not close enough to the real game. Unity is paused (not deleted) for a post-RE re-port. Re-check known blockers before resuming: C002 mouse-click-to-command dispatch, cp932 Korean chat encoding, single-patch crash fragility.</p>
-      </article>
-
-      <article class="panel">
-        <h2>Current Objective</h2>
-        <p><span class="status blue">cd-first</span>Rebuild from verified original CD extraction, hidden-data search, data mining, and evidence-backed gameplay logic.</p>
+        <h2>Current Authority</h2>
+        <p><span class="status blue">current</span>Start from the requirements, architecture/operations, and execution plan.</p>
         <ul>
-          <li>(2026-07-04 G069) Legacy client modification is now the current primary path, not oracle-only — see banner above.</li>
-          <li>Unity import/runtime now consumes generated bootstrap/runtime manifests under <code>client-unity/</code>; CD/manual/RE evidence still gates canonical promotion.</li>
-          <li><code>server/src/server/logh7-operation-state.mjs</code> starts state-changing gameplay logic from manual operation gates.</li>
- <li>Old Python/JSON patch builders, old server runtime, dangling tests, tool downloads, and caches are outside the current path.</li>
-          <li>Legacy evidence docs are isolated under <code>docs/reference/legacy-evidence/</code>.</li>
+          <li><code>docs/logh7-requirements-current.md</code></li>
+          <li><code>docs/logh7-architecture-operations-current.md</code></li>
+          <li><code>.omo/plans/logh7-execution-plan-current.md</code></li>
+          <li>Handoffs, roadmaps, and this dashboard are supporting or derived records, not startup authority.</li>
+          <li>Normal player path: run <code>tools/live/prepare_direct_client.mjs</code>, then directly launch the hash-verified install-tree <code>exe/g7mtclient.exe</code>. Helper launchers, <code>ui_explorer</code>, overlays, and Locale Emulator are not required.</li>
+          <li>클라이언트 수정 도구는 Python을 포함해 제한하지 않는다. 직접 in-place 패치에도 원본 백업, source-hash guard, rollback 경로가 필수다.</li>
+          <li>run9 EXE SHA256: <code>825635783a9fb663ae3b9a2ecf8d4b74df648322256c57ee32f6426c42a23f22</code>. <code>postlogin</code> 59개 = <code>lobby-res</code> 8 + layout 13 + <code>charsel</code> 38; <code>login-native-layout</code> 33개 제거.</li>
+          <li>Direct launch shows title <code>은하영웅전설7</code> and menus <code>파일(F)</code>/<code>도움말(H)</code>.</li>
         </ul>
       </article>
 
       <article class="panel">
-        <h2>Preserved Inputs</h2>
-        <p><span class="status green">kept</span>Original and extracted source material remain evidence inputs.</p>
+        <h2>M3 멀티플레이 게이트</h2>
+        <p><span class="status green">8/8 완료</span>run9에서 원본 EXE를 5회 직접 실행했다. 두 계정이 동시에 월드에 진입했고 A의 <code>0x0b01</code> 이동이 서버 <code>0x0b07</code>을 거쳐 B에 반영됐다.</p>
+        <p class="meta">cell <code>2587</code>은 재로그인과 서버 재시작 뒤에도 유지됐고, 종료 후 클라이언트 프로세스와 포트 <code>47900</code> listener가 남지 않았다.</p>
+      </article>
+
+      <article class="panel">
+        <h2>M4 Production Slice</h2>
         <ul>
-          <li><code>server/content/</code></li>
-          <li><code>RE/content/</code></li>
-          <li><code>.omo/ghidra/</code></li>
-          <li><code>.omo/work/logh7-installed/{data,fonts,doc}/</code></li>
-          <li><code>.omo/work/logh7-installed/data/model/Ship/GE</code> 제국 함선 Imperial MDX source root, 117 files.</li>
-          <li><code>client-unity/Assets/ArtSource/reference/imperial-crest/</code> 제국 문장 Imperial double-eagle crest masks; use these for Empire crest/medal/UI art.</li>
-          <li><code>.omo/work/logh7-installed/data/image/Field/ShipMark.tga</code> original ship/faction mark sheet.</li>
-          <li><code>tmp/manual_extract/</code>, <code>tmp/manual_alt_render/</code></li>
-          <li><code>docs/reference/</code></li>
+          <li><strong>SQLite CQRS/UoW:</strong> production <code>createPlayableRuntime</code> routes <code>EnterWorld</code> and <code>MoveGrid</code> through one synchronous transaction boundary. Only a successful <code>0x0b01</code> persists the cell and one <code>GridMoved</code> event.</li>
+          <li><strong>Fail-closed authority:</strong> wrong account/unit, offline character, and non-navigable cell <code>0</code> leave DB/session/events/responses unchanged. The handler rejects movement when no navigability policy is injected.</li>
+          <li><strong>Navigability:</strong> <code>logh7-galaxy-placement.mjs</code> uses exactly the emitted <code>0x0315 spaceCells ∪ systemCells</code>. This is runtime consistency, not canonical promotion; galaxy passability/trust data remain provisional.</li>
+          <li><strong>B81:</strong> deterministic first-row click reached base <code>70</code>, phase 0/1, and the <code>0x2d</code> renderer; verdict passed.</li>
+          <li><strong>B82:</strong> marker ON/OFF control confirmed the warehouse cache is native little-endian while wire <code>0x0327</code> is big-endian; tag/value offsets are grade A.</li>
         </ul>
       </article>
 
       <article class="panel">
-        <h2>Generated Surfaces</h2>
+        <h2>Fresh Baseline and Canon Verdicts</h2>
         <ul>
-          <li><code>server/content/generated/logh7-mdx-catalog.json</code></li>
-          <li><code>server/content/generated/logh7-null-galaxy-template.json</code></li>
-          <li><code>server/content/generated/logh7-logistics-allocation-catalog.json</code></li>
-          <li><code>server/content/generated/logh7-operation-catalog.json</code></li>
-          <li><code>server/content/generated/logh7-rank-promotion-catalog.json</code></li>
-          <li><code>server/content/generated/logh7-ship-stat-catalog.json</code></li>
-          <li><code>server/content/generated/logh7-empire-ship-reference-manifest.json</code></li>
-          <li><code>server/content/generated/logh7-imperial-crest-mask-manifest.json</code></li>
-          <li><code>client-unity/Assets/StreamingAssets/logh7/logh7-unity-streamingassets-export.json</code></li>
-          <li><code>server/content/generated/logh7-strategy-command-catalog.json</code></li>
-          <li><code>server/content/generated/logh7-face-tcf-catalog.json</code></li>
-          <li><code>server/content/generated/logh7-face-portrait-catalog.json</code></li>
-          <li><code>server/content/generated/logh7-cd-media-manifest.json</code></li>
-          <li><code>server/content/generated/logh7-hidden-data-candidates.json</code></li>
-          <li><code>server/content/generated/logh7-hidden-data-classification.json</code></li>
-          <li><code>server/content/generated/logh7-hidden-data-watchlist.json</code></li>
+          <li><span class="status green">fresh</span>Movement/galaxy/world/server targeted <code>97/97</code>; full server <code>458 total / 456 pass / 0 fail / 2 pre-existing conditional skips</code>; Python live harness <code>16/16</code>; changed JS LSP error <code>0</code>.</li>
+          <li>Manual cell <code>0</code> probe: <code>grid cell not navigable</code>, no response, persisted/session cell <code>2588</code>, <code>GridMoved 0</code>, session move <code>0</code>.</li>
+          <li>Live evidence: <code>.omo/live-qa/m4-cqrs-two-client-20260715-run3/results.json</code> 8/8, cell <code>2587</code>, B notification delta <code>1</code>/miss <code>0</code>, relogin/restart retention and cleanup. This JSON-store run did not exercise SQLite CQRS.</li>
+          <li>Economy fields stay blank/zero: the original shipped with economy unimplemented.</li>
+          <li>Warehouse layout and meaning are canonical, but base inventory values have no surviving canon; an empty warehouse is the honest default, and future simulated values must be labeled P3.</li>
+          <li>로그인은 내부 644×484, 로그인 후는 1920×1080(창 캡처 1924×1084)이다.</li>
+          <li>한글은 창 제목과 메뉴만 적용했다. CP932 자산에서 charset <code>0x81</code>은 모지바케를 일으켜 <code>0x80</code>으로 복귀했다.</li>
+        </ul>
+      </article>
+
+      <article class="panel">
+        <h2>개발 진척</h2>
+        <p><span class="status blue">마일스톤 50%</span>M0.5/M1/M2/M3, 4/8 완료.</p>
+        <p><span class="status amber">전체 작업량 35%</span>M4~M7의 명령·경제·전술·전투·한글화·운영 비중을 반영한 보수적 추정 범위는 30~40%다.</p>
+        <p>1080p 네이티브 레이아웃은 입증됐지만 고해상도 texture·upscale 전체 리마스터는 미완료다.</p>
+      </article>
+
+      <article class="panel">
+        <h2>남은 서버 핵심</h2>
+        <p>원본 클라이언트는 UI와 의도를 보내고 서버는 validation, domain authority, persistence, broadcast를 맡는다.</p>
+        <ul>
+          <li>auth/session/audit, character/presence</li>
+          <li>galaxy/planet/base, fleet/location/visibility, facilities/ownership</li>
+          <li>81개 command catalog: factory 확인 2, 미해결 79; CP/timers/jobs</li>
+          <li>economy/warehouse/production, tactical initial state, battle formulas/results</li>
+          <li>chat/social/notice/logs/backups</li>
+          <li>run9/run3 JSON store는 QA harness이며 production SQLite 증거와 분리한다.</li>
+          <li>PCP/MCP ledger, CP charge, timers/jobs, real outcomes, disconnect <code>online=false</code>, PostgreSQL용 async bridge가 남았다. <code>0x0327</code> 미확정 stock은 zero-fill이다.</li>
         </ul>
       </article>
     </section>
+
+    <h2>Historical Dashboard Archive (through 2026-07-04)</h2>
+    <p class="meta">The material below preserves prior evidence and status. It is not current startup or roadmap authority.</p>
 
     <section class="grid" aria-label="Verification status">
       <article class="panel">
@@ -227,7 +241,7 @@
           <li><code>logh7-rank-promotion-rules.mjs</code>: explicit rank headcount-cap rules; promotion formulas and fame costs unresolved</li>
           <li><code>logh7-ship-stat-rules.mjs</code>: explicit pool-readiness rules; combat formulas not inferred</li>
           <li><code>logh7-strategy-command-rules.mjs</code>: fixed CP payment/timing rules; variable CP remains unresolved</li>
-          <li><code>logh7-strategic-grid-rules.mjs</code>: passable-mask manual entry gates</li>
+          <li>Historical passable-mask entry-gate experiment; current runtime uses <code>logh7-galaxy-placement.mjs</code> plus the injected fail-closed <code>MoveGrid</code> handler policy.</li>
         </ul>
       </article>
     </section>

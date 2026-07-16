@@ -5,83 +5,63 @@
 2008년 서비스 종료된 일본 MMO **은하영웅전설 VII (LOGH VII)** 를 되살린다.
 원본 클라이언트(archive.org CD)에 자체 구현 서버를 붙여 멀티플레이 온라인 게임으로 복원한다.
 
-## 2026-07-05 전체 리셋
+## 현재 기준 (2026-07-16)
 
-- 사용자 지시로 기존 작업트리 전체 삭제. `docs/`와 매뉴얼 PDF만 보존.
-- 삭제 직전 전체 스냅샷: 커밋 `5bd249c` — 이전 코드/도구 복원은 `git checkout 5bd249c -- <path>`.
-- 이전 사이클의 지식(와이어 프로토콜 해독, RE 결과, 갤럭시 데이터, 요구사항)은 `docs/`에 문서로 남아 있다. 코드는 전부 새로 작성한다.
+- 2026-07-05 리셋 전 스냅샷은 커밋 `5bd249c`다. 옛 코드는 참고용으로만 복원하고 현재 구현에 그대로 되살리지 않는다.
+- M0.5/M1/M2/M3는 완료했다. run9에서 두 원본 클라이언트의 월드 진입, 이동 브로드캐스트, 재로그인·서버 재시작 영속성을 통과했다.
+- M4는 부분 진행이다. production SQLite runtime의 `EnterWorld`·`MoveGrid`가 동기 CQRS/UoW를 거치며, 성공한 `0x0b01`만 위치와 `GridMoved` 1건을 함께 커밋한다.
+- 로그인 클라이언트 영역은 원본 `644×484`를 유지하고, 로그인 뒤 게임 영역만 `1920×1080`으로 전환한다.
+- 현재 주력은 M4 전략 커맨드·서버 데이터이며, 전체 한글화·전술/전투·운영은 아직 완료가 아니다.
 
 ## 소스 오브 트루스
 
 - `artifacts/logh7-cd/Logh7.bin|.cue` — https://archive.org/details/logh-7 CD 이미지 (md5 검증 완료: `bf87c6a8...`/`8784...`, gitignored — 없으면 재다운로드)
 - `docs/reference/*.pdf` — 공식 매뉴얼 5종 (게임 규칙의 근거)
-- `docs/logh7-requirements-current.md`, `docs/logh7-architecture-operations-current.md` — 이전 사이클 지식 베이스 (역사적 참고 — 코드 경로 언급은 리셋 전 기준이므로 신뢰하지 말 것)
-- `docs/logh7-document-index-current.md` — 구 문서 분류 인덱스
+- `docs/logh7-requirements-current.md`, `docs/logh7-architecture-operations-current.md` — 현재 요구사항·구현 경계·운영 기준
+- `.omo/plans/logh7-execution-plan-current.md` — 현재 실행 순서와 완료 게이트
+- `docs/logh7-document-index-current.md` — 현행·역사 문서 라우팅 인덱스
+- `docs/logh7-reference-haul.md` — 트랙별 외부 레포·도구·방법론 라우터. 관련 작업 전에 반드시 읽되 캐논 근거로 쓰지 않는다.
 
 ## 개발 규칙
 
 - **CodeGraph 필수**: `.codegraph/`가 있으면 코드 위치/호출경로/영향범위 질문은 codegraph 먼저, rg로 확인.
+- **참고 목록 필수**: LOGH VII 작업은 `docs/logh7-reference-haul.md`의 해당 트랙을 먼저 읽는다.
 - **Blocked-Loop Rule**: 같은 증상 3회 실패 또는 새 증거 없는 조사 2회면 접근을 전환하고 블로커 보고서를 쓴다.
 - 코드 주석은 한글로 쓴다 (캐논 일본어 용어·바이너리 오프셋은 원문 유지).
 - 라이브 검증 없이 완료 주장 금지. 테스트 출력·스크린샷 등 증거를 남긴다.
 
-## 하네스: LOGH VII 부활
+## 참고 방법론 적용 기준
 
-**목표:** 원본 클라이언트 + 자체 서버로 죽은 MMO를 멀티플레이 온라인 게임으로 복원.
+- **증거 우선순위**: `docs/logh7-reference-haul.md`는 방법론 라우터이지 캐논 데이터가 아니다. 게임 규칙·값·와이어 판정은 CD, 공식 매뉴얼, 정본 EXE, 패킷, 라이브 관측으로 다시 입증한다.
+- **백엔드·프런트엔드 경계**: MHServerEmu 사례처럼 원본 클라이언트는 표시와 입력 의도, 제한적 prediction만 맡는다. 자체 서버가 입력 검증, 상태 권위, 영속화, 다른 클라이언트 브로드캐스트를 맡는다.
+- **RE 도구 차용**: Frida 예제와 Ghidra 자동화 레포는 훅·전수 분석 패턴만 참고한다. 정본 EXE 해시와 오프셋을 매 실행에서 확인하고, 외부 코드는 라이선스 확인 없이 복사하지 않는다.
+- **한글화 의사결정**: CP932 자산을 임의로 UTF-8 저장하지 않는다. 전체 한글화는 CP949 자산 변환과 SJIS tunneling + GDI proxy/font/IME 경로를 같은 시나리오로 비교한 뒤 선택하며, 원본 백업·해시 guard·rollback을 필수로 둔다.
+- **외부 레포 격리**: 참고 레포는 `/reference/` 아래에서만 clone하고 커밋하지 않는다. 프레임워크를 바로 도입하지 말고 현재 프로토콜·서버 경계에 필요한 패턴만 최소 이식한다.
 
-**트리거:** logh7 관련 작업(자산추출/RE/프로토콜/서버/한글화/라이브QA) 요청 시 `logh7-orchestrator` 스킬 사용. 단순 질문은 직접 응답.
+## 하네스와 현재 구현 경계
 
-**설치된 스택:**
-- 에이전트 팀: `.codex/agents/` (extract-miner, re-analyst, wire-engineer, server-dev, localizer, live-qa - 호출 시 Codex 모델 계층화)
-- 스킬: binary-triage(RE), test-driven-development, verification-before-completion, systematic-debugging, humanize-korean, humanizer, grammar-checker, style-guide, karpathy-guidelines
-- 플러그인: gptaku(insane-search/design/review/research 등 14종), harness
-- 인덱스: codegraph(`.codegraph/`)
+- LOGH VII 자산추출·RE·프로토콜·서버·한글화·라이브 QA 요청에는 `logh7-orchestrator` 스킬을 사용한다.
+- 원본 클라이언트는 frontend, Node 서버는 authoritative backend다. 경계는 presentation/session → application command → domain authority → persistence 순서로 유지한다.
+- run9/run3의 JSON store 라이브 QA와 production SQLite 증거를 분리한다. run3는 SQLite CQRS를 실행하지 않았다.
+- `MoveGrid`는 현재 `0x0315`가 내보내는 `spaceCells ∪ systemCells`만 허용하고 정책 미주입 시 fail-closed다. 이는 표시·권위 일치일 뿐 정본 승격이 아니며, `galaxy-passable-cells`와 galaxy trust 데이터는 교차 확인 전까지 provisional이다.
+- M4는 81개 catalog 중 factory 확인 2개·미해결 79개다. PCP/MCP ledger, CP charge, timers/jobs, 실제 command outcome, `0x0327` 미확정 재고, disconnect의 `online=false` 영속화가 남았다. 동기 SQLite bridge는 PostgreSQL 전환 전에 async-capable하게 바꾼다.
+- M6는 현재 CP932 표시 복구와 일부 `.rsrc` 한글화까지만 완료했다. 일본어가 읽힌다는 사실을 전체 한글화 완료로 보고하지 않는다.
+- 리마스터는 로그인 원본 크기와 본게임 1080p 경계를 보존한다. 고해상도 자산은 provenance·원본 fallback·rollback이 갖춰진 뒤 적용한다.
+- 2026-07-16 검증 기준선은 targeted movement/galaxy/world/server `97/97`, 전체 server `458 total / 456 pass / 0 fail / 2 pre-existing conditional skips`, Python live harness `16/16`, changed JS LSP error `0`, 비항법 cell `0` 무변경 probe다.
 
-**변경 이력:**
-| 날짜 | 변경 | 대상 | 사유 |
-|---|---|---|---|
-| 2026-07-05 | 초기 구성 | 전체 | 리셋 후 재시작 |
-| 2026-07-05 | Advisor Strategy 도입 | agents frontmatter model 제거, 호출시 계층화 | 비용 대비 지능 최적화(Codex.com/blog/the-advisor-strategy) |
+## 완료 게이트
 
-## Fable 5 운영 전략
+- 모든 LOGH VII 작업 단위는 종료 전에 루트 `AGENTS.md`를 갱신한다. 해당 작업이 바꾼 현재 상태, 실행 경계, 남은 다음 작업, 검증 근거 중 지속적으로 필요한 내용을 반영한다.
+- 같은 작업에서 영향을 받은 `docs/` 현행 문서와 `E:\\obsidian-tech-vault\\1. 프로젝트\\은하영웅전설 7 리바이벌`의 `현재 상태.md`·로드맵도 실제로 수정해 저장소와 볼트가 같은 상태를 가리키게 한다.
+- `AGENTS.md` 변경을 diff로 확인하고 현재 코드·로드맵과 모순이 없는지 검증하기 전에는 작업을 완료로 보고하거나 커밋을 최종 승인하지 않는다.
+- 단순 진행 로그를 누적하지 않는다. 낡은 지침은 수정·삭제하고, 반복되는 설명은 소스 오브 트루스 한 곳으로 합쳐 문서를 짧고 현행으로 유지한다.
 
-Anthropic Fable 5 프롬프팅 가이드 반영:
-- **장기 자율성**: 충분한 정보가 모이면 바로 행동한다. 이미 정한 결정을 재논쟁하지 않고, 추구하지 않을 선택지를 나열하지 않는다.
-- **effort 튜닝**: 대부분 high, 어려운 크리티컬 작업만 xhigh, 일상 작업은 medium/low.
-- **과설계 금지**: 태스크가 요구하는 최소 구현. 버그 수정에 주변 정리 끼워넣지 말 것. 시스템 경계(사용자 입력/외부 API)에서만 검증, 내부 코드는 신뢰.
-- **결과 우선 보고**: 첫 문장에 "무슨 일이 있었나/무엇을 찾았나". 읽기 쉬움 > 짧음. 화살표 사슬·약어·전문용어 남발 금지.
-- **비동기 잡 선호**: 오래 걸리는 작업은 블로킹 대기 대신 background로 돌리고 재진입.
-- **위임**: 독립 작업은 서브에이전트 병렬 위임. Worker 완료 보고는 diff/테스트로 직접 검증 후 승인.
+## 위임·토큰 원칙
 
-## Advisor Strategy (Codex.com/blog/the-advisor-strategy)
-
-실행자-조언자 역전 구조로 비용 대비 지능 극대화. 큰 모델이 오케스트레이션하고 작은 모델에 위임하는 대신, 작은 모델이 실행을 주도하고 큰 모델은 판단만 조언한다:
-- **실행자 계층화(Codex)**: 기계적/반복 작업(전수 파싱, 인덱싱, 파일 스윕, 단순 대조 검증)은 `gpt-5.3-codex-spark` 또는 `gpt-5.4-mini` 실행자로. 일반 개발 Worker는 `gpt-5.4`/`gpt-5.4-mini`. 어려운 판단(RE 구조 해석, 프로토콜 설계, 근본원인 진단, 최종 판정)은 메인 Advisor `gpt-5.5 high/xhigh`.
-- **조언자 패턴**: 실행자가 막히면 태스크를 통째로 최고 모델에 재위임하지 말고, 판단 질문만 추출해 Advisor급 모델에 짧게 물어(계획 400~700토큰 수준) 그 지시로 실행자가 재개. 조언 호출 횟수 제한(태스크당 ~3회).
-- **Workflow 적용**: `spawn_agent` 호출 시 mechanical 스테이지는 `model: "gpt-5.3-codex-spark"` 또는 `model: "gpt-5.4-mini"`, 일반 개발은 `gpt-5.4`/`gpt-5.4-mini`, 판정/설계는 메인 세션에서 처리한다.
-- **에이전트 팀 적용**: `.codex/agents/`는 역할 프롬프트만 보유한다. 모델은 호출 시점에 계층화해 지정한다.
-
-모델 역할 분담: Advisor / Worker
-
-너는 Advisor다. 판단에 집중하고, 구현 노동은 Worker에게 위임하라.
-
-Advisor(너, 메인 세션)가 직접 하는 일:
-요구사항 분석, 작업 분해, 설계 결정
-Worker에게 줄 작업 브리프 작성
-결과 검증: diff 직접 확인, 테스트 직접 실행
-최종 커밋 승인, 사용자 보고
-
-Worker(Codex 서브에이전트)에게 위임하는 일:
-코드 작성과 수정, 테스트 작성 등 구현 작업 전부
-Agent 도구로 위임하고 작업 성격에 맞춰 `gpt-5.4`, `gpt-5.4-mini`, `gpt-5.3-codex-spark`를 지정한다
-서로 독립적인 작업은 병렬로 위임한다
-
-브리프 기준:
-네가 이미 파악한 컨텍스트를 담아 Worker가 재탐색하지 않게 하라
-파일 경로, 프로젝트 컨벤션, 알려진 함정, 완료 기준(통과해야 할 테스트)을 포함하라
-
-경계:
-Worker의 완료 보고를 그대로 믿지 마라. diff와 테스트로 직접 확인한 뒤 승인하라
-검증 실패는 수정 브리프로 재위임하라. 직접 수정은 사소한 마무리에만 허용된다
-한두 줄 수정처럼 위임 오버헤드가 더 큰 작업은 직접 처리해도 된다
-
+- 메인 Advisor는 요구사항 분해, 설계 결정, diff·테스트·라이브 증거 검증, 커밋 승인을 맡는다.
+- 구현 노동은 경계가 명확한 Worker 한 명에게 우선 위임한다. 부모 Worker의 하위 에이전트 생성은 메인이 명시한 경우가 아니면 금지한다.
+- 독립 작업도 필요한 수만 병렬화하고, 같은 파일·같은 증거를 여러 에이전트가 중복 조사하지 않는다.
+- 브리프에 파일 경로, 이미 확인한 사실, 금지 범위, 완료 테스트를 넣어 재탐색을 막는다.
+- Worker 보고는 그대로 승인하지 않는다. 메인이 변경 diff와 검증 출력을 직접 확인한다.
+- 한두 줄 수정, 커밋·푸시, 좁은 문서 정리는 위임 오버헤드가 더 크면 직접 처리한다.
+- 같은 증상 3회 또는 새 증거 없는 조사 2회에 도달하면 반복 실행을 중단하고 접근을 바꾼다.

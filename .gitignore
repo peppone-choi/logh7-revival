@@ -1,6 +1,9 @@
 # 원본 CD 이미지 (218MB, GitHub 한도 초과 — archive.org에서 재다운로드 가능)
 /artifacts/
 
+# 외부 참고 레포 (방법론 검토용, 라이선스가 다른 코드는 이식하지 않음)
+/reference/
+
 # 훅/플러그인 런타임 상태 (자동 재생성)
 /.omc/
 /server/.omc/
@@ -22,3 +25,35 @@ __pycache__/
 *.sqlite-shm
 *.sqlite-wal
 .aider*
+
+# Claude Code 훅 턴 상태 (문서 게이트)
+/.claude/state/
+
+# 로컬 오케스트레이션·RE·라이브 QA 산출물 (정본 계획은 .omo/plans에 보존)
+/.belt/
+/.superpowers/
+/.omo/.current-*
+/.omo/artifacts/
+/.omo/boulder.json
+/.omo/cd-mining/
+/.omo/drafts/
+/.omo/ghidra/
+/.omo/live-qa/*
+/.omo/re-custom/
+/.omo/re-galaxy/
+/.omo/re-targets/
+/.omo/remaster-lab/
+/.omo/start-work/
+/.omo/tmp/
+/.omo/ui-experiments/
+/.omo/ulw-loop/
+/.omo/ulw-research/
+/.omo/work/
+/server/.omo/
+/server/data/
+/server/test_output.txt
+/tools/live/.omc/
+/tools/live/_ev/
+/NUL
+/_ok.txt
+/*.stackdump

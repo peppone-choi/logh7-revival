@@ -1,14 +1,22 @@
 # LOGH VII Current Document Index
 
-2026-07-13 전략맵 성계 상세 복원 현황: [[logh7-strategy-system-detail-current|전략맵 성계 상세 복원]]과 [[logh7-m4-strategy-system-detail-handoff-2026-07-13|M4 전략 성계 상세 핸드오프]]에 `cell 2588 → runtime base ID 70`, static prerequisite `0x031d`, phase `0`의 `0x031e → 0x031f`, phase `1`의 `0x0326 → 0x0327`, generic info factory `0x19/0x2d/0x43 → FUN_00579e60 → FUN_0057aa90`을 정리했다. 권한카드 브리지는 `6720faf2`로 커밋됐고 자동 검증을 마쳤다. 현재 열린 경계는 자연 Captain kind `59 → 0x2d`의 B71 라이브 출력이다. 제품·운영 권위는 아래 startup entrypoint에 있다.
+> **현재 라우팅 (2026-07-15):** 시작 권위는 아래 세 문서뿐이다. 핸드오프·로드맵·대시보드는 근거 또는 파생 상태이며 계획 권위가 아니다.
+
+> **현재 플레이어 경로:** 설치 폴더의 수정된 `g7mtclient.exe`를 직접 실행한다. 보조 런처·`ui_explorer`·overlay는 정상 경로가 아니며, 수정 도구 언어(Python 포함)는 제한하지 않는다. 직접 in-place 패치에도 원본 백업, source-hash guard, rollback 경로가 필수다.
+
+2026-07-14 현재 상태: run9 EXE SHA256은 `825635783a9fb663ae3b9a2ecf8d4b74df648322256c57ee32f6426c42a23f22`다. `postlogin` 59개 패치(`lobby-res` 8 + layout 13 + `charsel` 38), 로그인 레이아웃 패치 33개 제거, 로그인 내부 644×484와 로그인 후 1920×1080(캡처 1924×1084)을 검증했다. `.omo/live-qa/m3-two-client-persistence-1080p-cp932-20260714-run9/`에서 직접 실행 5회, 두 계정 월드 진입, `0x0b01 → 0x0b07`의 B 반영, cell `2587` 재로그인·서버 재시작 영속, 정리를 포함한 8/8 게이트를 통과했다. M3 완료로 마일스톤은 4/8(50%)이며, 전체 작업량은 보수적으로 35%다.
+
+2026-07-15 M4 현재 상태: production `createPlayableRuntime`가 `EnterWorld`·`MoveGrid`에 동기 CQRS/UoW와 `0x0315 spaceCells ∪ systemCells` navigability policy를 주입한다. 성공 이동만 SQLite cell과 `GridMoved`를 커밋하며 거부 이동은 무변경이다. 이 집합은 runtime consistency일 뿐 canonical promotion이 아니다. `.omo/live-qa/m4-cqrs-two-client-20260715-run3/`의 원본 EXE 8/8은 JSON store live QA라 SQLite CQRS 증거와 분리한다. M4는 81개 중 factory 확인 2개·미해결 79개인 부분 상태다.
+
+2026-07-13 역사적 핸드오프 스냅샷: [[logh7-strategy-system-detail-current|전략맵 성계 상세 복원]]과 [[logh7-m4-strategy-system-detail-handoff-2026-07-13|M4 전략 성계 상세 핸드오프]]에 `cell 2588 → runtime base ID 70`, static prerequisite `0x031d`, phase `0`의 `0x031e → 0x031f`, phase `1`의 `0x0326 → 0x0327`, generic info factory `0x19/0x2d/0x43 → FUN_00579e60 → FUN_0057aa90`을 정리했다. 권한카드 브리지는 `6720faf2`로 커밋됐고 자동 검증을 마쳤다. 당시 열린 경계는 자연 Captain kind `59 → 0x2d`의 B71 라이브 출력이었다. 현재 상태는 실행 계획과 파생 대시보드를 따른다.
 
 2026-07-04 G070 Unity 클라이언트 완전 삭제: `client-unity/` 작업트리 제거(보존 `dbf3b43` → 제거 `ca24dd3`). 아래 `client-unity/README.md` 등 Unity 경로를 가리키는 인덱스 항목은 더 이상 작업트리에 존재하지 않으며, 참조하려면 git 히스토리에서 복원해야 한다.
 
-2026-07-04 G069 방향 전환: 레거시 클라이언트(`G7MTClient.exe`) 직접 수정이 잠정 주 경로로 재오픈됨(Unity 픽셀-패러티 시연 후 사용자 명시적 지시). Unity(`client-unity/`)는 RE 완료 후 재이식 목표로 보류. 상세는 `docs/logh7-requirements-current.md`/`docs/logh7-architecture-operations-current.md`/`.omo/plans/logh7-internal-validation-plan.md`의 동일 날짜 항목과 메모리 `logh7-legacy-client-reopen-2026-07-04` 참조.
+2026-07-04 G069 방향 전환: 레거시 클라이언트(`G7MTClient.exe`) 직접 수정이 잠정 주 경로로 재오픈됨(Unity 픽셀-패러티 시연 후 사용자 명시적 지시). Unity(`client-unity/`)는 RE 완료 후 재이식 목표로 보류. 상세는 `docs/logh7-requirements-current.md`/`docs/logh7-architecture-operations-current.md`/`.omo/plans/logh7-execution-plan-current.md`와 메모리 `logh7-legacy-client-reopen-2026-07-04` 참조.
 
 2026-07-04 G048 Unity scene-panel manifest evidence: current Unity player visual reference includes `.omo/ulw-loop/evidence/g048-scene-panel-manifest-player-battle-20260704.png`, manifest proof `.omo/ulw-loop/evidence/g048-scene-panel-manifest-proof-20260704.log`, and build log `g048-scene-panel-manifest-unity-build-20260704.log`.
 
-Updated: 2026-07-13
+Updated: 2026-07-15
 
 2026-07-04 Unity scene-panel evidence: current Unity player visual reference includes `.omo/ulw-loop/evidence/g047-scene-panel-surfaces-compact-20260704/contact-sheet.png`, representative `.omo/ulw-loop/evidence/g047-scene-panel-surfaces-compact-20260704/09-battle.png`, and `g047-scene-panel-compact-unity-windows-build-20260704.log`.
 
@@ -44,7 +52,7 @@ This index is subordinate to the three startup entrypoints:
 
 1. `docs/logh7-requirements-current.md`
 2. `docs/logh7-architecture-operations-current.md`
-3. `.omo/plans/logh7-internal-validation-plan.md`
+3. `.omo/plans/logh7-execution-plan-current.md`
 
 Since 2026-07-04 G069, direct restoration of the original `G7MTClient.exe` is
 the active client path. Treat deleted pre-bootstrap notes as historical evidence;
@@ -56,19 +64,29 @@ use the current requirements, architecture, and plans for implementation and liv
 | --- | --- |
 | `docs/logh7-requirements-current.md` | Product and evidence requirements. |
 | `docs/logh7-architecture-operations-current.md` | Architecture, workflow, and operating boundaries. |
-| `.omo/plans/logh7-internal-validation-plan.md` | Current validation and implementation plan. |
+| `.omo/plans/logh7-execution-plan-current.md` | Current validation and implementation plan. |
 | `docs/logh7-document-index-current.md` | This routing index. |
+
+## Derived Status And Reference Routing
+
+| Path | Role |
+| --- | --- |
 | `docs/logh7-developer-dashboard.html` | Derived dashboard only; not a startup authority. |
+| `docs/logh7-roadmap-current.md` | 마일스톤 파생 현황과 보수적 전체 진척률. |
+| `docs/logh7-remaster-prep-current.md` | 1080p 네이티브 레이아웃과 미완료 리마스터 범위. |
+| `docs/logh7-localization-font-current.md` | CP932/CP949, 폰트 charset, 한글화 현재 판정. |
+| `docs/reference/logh7-remaster-asset-inventory.md` | 원본 자산과 해상도·리마스터 스코핑 근거. |
+| `docs/logh7-reference-haul.md` | 모든 LOGH VII 작업의 트랙별 방법론·외부 레포 라우팅. canonical game data가 아니며, 라이선스 확인 없는 코드 복사는 금지하고 `reference/` clone은 gitignored로 유지한다. |
 | `.omo/rules/logh7-capability-harness.md` | Capability harness and skill/tool routing rules. |
 | `AGENTS.md`, `CLAUDE.md`, `.claude/CLAUDE.md` | Agent startup rules mirrored from the current path. |
 | `server/AGENTS.md`, `server/README.md` | Server/data-pipeline local rules and command surface. |
 
-## Current Work Notes
+## Supporting Work Notes (Not Startup Authority)
 
 | Path | Role |
 | --- | --- |
-| `docs/logh7-strategy-system-detail-current.md` | Current strategy-map system-detail wire/cache/lookup status, generic-info factory routes, authority-card bottleneck, and B71 live gate. Subordinate to the startup authorities above. |
-| `docs/logh7-m4-strategy-system-detail-handoff-2026-07-13.md` | HEAD/worktree/evidence-separated handoff for the late-M3/early-M4 authority-card → factory `0x2d` → detail-renderer bridge. |
+| `docs/logh7-strategy-system-detail-current.md` | Supporting strategy-map system-detail wire/cache/lookup evidence through B81/B82. Subordinate to the startup authorities above. |
+| `docs/logh7-m4-strategy-system-detail-handoff-2026-07-13.md` | Historical handoff/evidence trail for the late-M3/early-M4 authority-card → factory `0x2d` → detail-renderer bridge. |
 
 ## Current Code And Data Surfaces
 
@@ -78,18 +96,18 @@ use the current requirements, architecture, and plans for implementation and liv
 | Path | Role |
 | --- | --- |
 | `server/content/` | Canonical normalized content, manual fixtures, extracted records, generated catalogs, and original-source manifests. |
-| `server/src/server/` | Current data-mining/catalog modules only. |
+| `server/src/server/` | Current playable server/protocol/world-session runtime and data-mining/catalog modules. |
 | `server/src/server/logh7-logistics-allocation-catalog.mjs` | Manual logistics allocation authority catalog over role/unit table. |
 | `server/src/server/logh7-logistics-allocation-rules.mjs` | Explicit logistics allocation authority rules preserving uncertain OCR cells. |
-`server/src/server/logh7-rank-promotion-catalog.mjs`,Manual rank ladder/headcount-cap catalog preserving promotion/fame uncertainty.
-`server/src/server/logh7-rank-promotion-rules.mjs`,Explicit rank headcount-cap rules; no promotion formula or fame-cost inference.
+| `server/src/server/logh7-rank-promotion-catalog.mjs` | Manual rank ladder/headcount-cap catalog preserving promotion/fame uncertainty. |
+| `server/src/server/logh7-rank-promotion-rules.mjs` | Explicit rank headcount-cap rules; no promotion formula or fame-cost inference. |
 | `server/src/server/logh7-ship-stat-catalog.mjs` | Ship stat evidence catalog over normalized manual/OCR data and documented transforms. |
 | `server/src/server/logh7-ship-stat-rules.mjs` | Explicit ship pool-readiness rules; no combat formula or missing-pool inference. |
 | `server/src/server/logh7-operation-catalog.mjs` | Manual operation planning catalog preserving purposes, gates, duration, results, unresolved CP range. |
 | `server/src/server/logh7-operation-rules.mjs` | Explicit operation draft gate rules; no CP formula or outcome simulation inference. |
 | `server/src/server/logh7-operation-state.mjs` | First state-changing operation gameplay consumer; writes planned records only after explicit draft gates pass. |
 | `server/src/server/logh7-strategy-command-rules.mjs` | First command-catalog gameplay-rule consumer; fixed CP/timing only, variable CP unresolved. |
-| `server/src/server/logh7-strategic-grid-rules.mjs` | Strategic grid entry gates over passable-mask and manual terrain/navigability evidence. |
+| `server/src/server/logh7-galaxy-placement.mjs`, `server/src/application/handlers.mjs`, `server/src/presentation/createPlayableRuntime.mjs` | 현재 `0x0315` cell 집합과 동일한 runtime navigability predicate, fail-closed `MoveGrid` policy, production handler injection. Canonical galaxy promotion은 아님. |
 | `server/tools/` | Current server-side inventory, verification, and catalog CLIs. |
 | `server/tests/server/` | Focused tests for current source/data catalog modules. |
 | `server/content/generated/logh7-logistics-allocation-catalog.json` | Generated logistics allocation authority catalog. |
@@ -187,10 +205,10 @@ and promote only the evidence into `server/content/` or a current evidence doc.
 | `server/content/generated/logh7-imperial-medal-source-lock-manifest.json` | Source lock requiring exact Imperial crest and original Empire ship data; reports 121 Empire records, 120 `Ship/GE` files, 117 MDX, 3 MDS, and 39 render hulls. |
 | (2026-07-04 G070 이후 과거 기록 — client-unity/ 삭제로 재현 불가, git 히스토리 dbf3b43에서 복원 필요) `client-unity/Assets/ArtSource/remaster/imperial-medal-prototypes-1024/779-expeditionary-campaign-source-locked-crest-ship-v2.png` / `client-unity/Assets/ArtSource/remaster/imperial-medal-prototypes-1024/767-grand-double-eagle-order-source-locked-crest-v2.png` | QA correction samples: original Empire ship-data motif and exact double-eagle crest kept visibly legible. |
 | `server/content/generated/logh7-mdx-render-source-manifest.json` | Current generated evidence for Imperial medal ship-art source prep: first target `data/model/Ship/GE/EH001.mdx`, exact Imperial crest reference/mask, recovered node names, texture presence, and missing authoring/bump assets. Regenerate with `npm --prefix server run catalog:mdx-render-sources`. |
-| `server/content/generated/logh7-server-servable-data-family.json` | Current G004 generated evidence map for server-servable data families. Lists 14 families, source manifest paths, mandatory watch categories, and keeps all families `suspect-cross-check-required`; regenerate with `npm --prefix server run catalog:server-data-family`. |
+| `server/content/generated/logh7-server-servable-data-family.json` | Current G004 generated evidence map for server-servable data families. Lists 15 families, source manifest paths, mandatory watch categories, and keeps all families `suspect-cross-check-required`; regenerate with `npm --prefix server run catalog:server-data-family`. |
 | `server/content/generated/logh7-current-content-crosscheck.json` | Current G005 generated evidence map for pre-canonical-promotion cross-check. Inventories `server/content`, `RE/content`, `.omo/work/logh7-installed`, evidence-channel roots, and generated catalogs; all entries remain `suspect-cross-check-required`. Regenerate with `npm --prefix server run catalog:current-content-crosscheck`. |
 | `server/content/generated/logh7-galaxy-trust-crosscheck.json` | Current G008 trust gate for existing galaxy positions, star colors, planet lists, passable cells, and generated catalogs. Keeps all listed sources suspect and blocks canonical promotion; `systemPositions` remains report-immediately with no newly confirmed positions. Regenerate with `npm --prefix server run catalog:galaxy-trust-crosscheck`. |
-| `server/content/generated/logh7-runtime-boundary-manifest.json` | Current G009 runtime boundary contract. Keeps normal runtime to Docker Compose server plus Unity player/launcher; legacy EXE, Frida, `ui_explorer`, preseed flags, and patch builders are diagnostic/oracle-only and forbidden as normal runtime. Regenerate with `npm --prefix server run catalog:runtime-boundary`. |
+| `server/content/generated/logh7-runtime-boundary-manifest.json` | Historical G009 Unity runtime-boundary artifact. Its Unity/launcher normal-path policy is superseded by the 2026-07-14 current authority above. |
 | `server/content/generated/logh7-asset-overwrite-guard.json` | Current G010 asset overwrite guard. Protects original/installed/CD/original-data roots as read-only fallback, permits remaster/reference/concept outputs, and reports overwrite violations before remaster provenance can treat a pack as clean. Regenerate with `npm --prefix server run catalog:asset-overwrite-guard`. |
 | `server/content/generated/logh7-unity-source-pack-manifest.json` (server-side manifest still current; 2026-07-04 G070 이후 `client-unity/Assets/StreamingAssets/logh7/logh7-unity-source-pack-manifest.json` 미러는 client-unity/ 삭제로 재현 불가하며, G071 이후 생성기가 이 client-unity 경로에 더 이상 dual-write하지 않음, git 히스토리 dbf3b43에서 복원 필요) | Current G006 Unity pack contract. Separates required original fallback from reversible remaster pack; keeps `verifiedRecords` empty while canonical promotion remains blocked. Regenerate with `npm --prefix server run catalog:unity-source-pack`. |
 | `server/content/generated/logh7-remaster-provenance-manifest.json` (server-side manifest still current; 2026-07-04 G070 이후 `client-unity/Assets/StreamingAssets/logh7/logh7-remaster-provenance-manifest.json` 미러는 client-unity/ 삭제로 재현 불가하며, G071 이후 생성기가 이 client-unity 경로에 더 이상 dual-write하지 않음, git 히스토리 dbf3b43에서 복원 필요) | Current G007 remaster provenance contract. Keeps `remaster-hd` disabled by default, reversible, conflict-checked, provenance-labeled, manifest-driven, original-fallback-backed, and tracks `imperial-crest-mask` plus original Empire ship-derived `empire-ship-reference`. Regenerate with `npm --prefix server run catalog:remaster-provenance`. |

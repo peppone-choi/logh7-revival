@@ -93,3 +93,36 @@ test('foreground fails closed when Windows rejects activation', async () => {
     /if time\.monotonic\(\) >= deadline:\s+raise ForegroundActivationError\(hwnd\)/,
   );
 });
+
+test('foreground dismisses only a verified notification toast before retrying activation', async () => {
+  const source = await readFile(DRIVER_URL, 'utf8');
+  const foreground = sliceBetween(source, 'def foreground(', 'GA_ROOT = 2');
+
+  const getForegroundIndex = foreground.indexOf('foreground_hwnd = user32.GetForegroundWindow()');
+  const describeIndex = foreground.indexOf('foreground_info = describe_window(foreground_hwnd)');
+  const toastCheckIndex = foreground.indexOf('if is_notification_toast(foreground_info):');
+  const dismissIndex = foreground.indexOf(
+    "toast_result = dismiss_toast(foreground_info, reason='전경 활성화 차단')",
+  );
+  const goneCheckIndex = foreground.indexOf("if toast_result.get('gone'):", dismissIndex);
+  const continueIndex = foreground.indexOf('\n                continue', goneCheckIndex);
+  const activationIndex = foreground.indexOf('activated = bool(user32.SetForegroundWindow(hwnd))');
+
+  assert.ok(getForegroundIndex >= 0);
+  assert.ok(describeIndex > getForegroundIndex);
+  assert.ok(toastCheckIndex > describeIndex);
+  assert.ok(dismissIndex > toastCheckIndex);
+  assert.ok(goneCheckIndex > dismissIndex);
+  assert.ok(continueIndex > goneCheckIndex);
+  assert.ok(activationIndex > continueIndex);
+});
+
+test('UIA toast dismissal decodes PowerShell output as UTF-8', async () => {
+  const source = await readFile(DRIVER_URL, 'utf8');
+  const dismissToast = sliceBetween(source, 'def dismiss_toast(', 'def click_guarded(');
+
+  assert.match(
+    dismissToast,
+    /capture_output=True, text=True, encoding='utf-8', errors='replace', timeout=25/,
+  );
+});

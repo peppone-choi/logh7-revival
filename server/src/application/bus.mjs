@@ -17,7 +17,7 @@ export function createCommandBus() {
      * @param {Message} command
      * @param {{ uow?: object }} [ctx]
      */
-    async execute(command, ctx = {}) {
+    execute(command, ctx = {}) {
       const handler = handlers.get(command.type);
       if (!handler) throw new Error(`no command handler for ${command.type}`);
       return handler(command, ctx);

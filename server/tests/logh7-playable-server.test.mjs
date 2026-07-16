@@ -428,8 +428,10 @@ test('playable server assigns a broadcast move reply id from each authenticated 
     ]);
     const firstMove = decodeServer0030(firstMoveFrame, tables);
     const observerMove = decodeServer0030(observerMoveFrame, tables);
+    const selfId = Buffer.from([0x00, 0x00, 0x00, 0x0b]);
     for (const parsed of [firstMove, observerMove]) {
       assert.equal(parsed.inner.readUInt16BE(4), 0x0b07);
+      assert.deepEqual(parsed.inner.subarray(6 + 0x04, 6 + 0x08), selfId);
       assert.equal(parsed.inner.readUInt32LE(6 + 0x18), 2601);
     }
     assert.ok(firstMove.id > 10);
@@ -676,7 +678,7 @@ test('playable server boots twice and serves login+world+move sequence', async (
     moveInner.writeUInt32LE(player.unitId, 2);
     moveInner.writeUInt32LE(2700 + boot, 6);
     socket.write(build0030Transport({ phase1Key, id: 6, inner: moveInner, tables }));
-    const [moveFrame] = await collectUntilCode(0x0b07, 6000);
+    const moveFrame = (await collectUntilCode(0x0b07, 6000)).at(-1);
     const moveBody = decryptBuffer(moveFrame.body.subarray(4), expandChildCodecKey(DECIPHER_KEY, tables));
     const moveParsed = parse0030Body(moveBody);
     assert.equal(moveParsed.inner.readUInt16BE(4), 0x0b07);
@@ -691,7 +693,7 @@ test('playable server boots twice and serves login+world+move sequence', async (
         'hex',
       );
       socket.write(build0030Transport({ phase1Key, id: 7, inner: liveMoveInner, tables }));
-      const [liveMoveFrame] = await collectUntilCode(0x0b07, 6000);
+      const liveMoveFrame = (await collectUntilCode(0x0b07, 6000)).at(-1);
       const liveMoveBody = decryptBuffer(
         liveMoveFrame.body.subarray(4),
         expandChildCodecKey(DECIPHER_KEY, tables),
@@ -717,7 +719,7 @@ test('playable server boots twice and serves login+world+move sequence', async (
         'hex',
       );
       socket.write(build0030Transport({ phase1Key, id: 8, inner: routeMoveInner, tables }));
-      const [routeMoveFrame] = await collectUntilCode(0x0b07, 6000);
+      const routeMoveFrame = (await collectUntilCode(0x0b07, 6000)).at(-1);
       const routeMoveBody = decryptBuffer(
         routeMoveFrame.body.subarray(4),
         expandChildCodecKey(DECIPHER_KEY, tables),

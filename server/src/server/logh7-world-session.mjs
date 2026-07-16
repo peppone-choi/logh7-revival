@@ -70,6 +70,8 @@ import { normalizeAuthorityCards } from '../domain/authority-cards.mjs';
 export function createWorldSession({
   defaultCell = 2588,
   worldRedirect = { ip: '127.0.0.1', port: 47900, token: 1 },
+  // TCP 라우터는 동기이므로 프로덕션 CQRS/UoW 실행기도 동기 경계로 주입한다.
+  dispatchCommandSync = null,
   // 시드 캐릭터 조회용(선택). enterWorld 가 0x0323 을 실 캐릭터로 채우는 데 사용한다.
   // 없으면 세션 로그인 때 캐시된 플레이어 필드로 폴백(하위호환).
   characterStore = null,
@@ -294,7 +296,18 @@ export function createWorldSession({
       );
     }
     const p = player;
-    if (characterId) p.characterId = characterId;
+    if (dispatchCommandSync) {
+      const entered = dispatchCommandSync({
+        type: 'EnterWorld',
+        accountId,
+        characterId: characterId || p.characterId,
+      });
+      p.characterId = entered.character.id;
+      p.unitId = entered.unitId;
+      p.cell = entered.cell;
+    } else if (characterId) {
+      p.characterId = characterId;
+    }
     p.createPending = false;
     p.inWorld = true;
 
@@ -430,14 +443,22 @@ export function createWorldSession({
     if (unitId !== player.unitId) {
       throw new Error(`move rejected: unit ${unitId} not owned by connection ${connectionId}`);
     }
-    if (characterStore && typeof characterStore.updateCharacterCell === 'function') {
+    if (dispatchCommandSync) {
+      dispatchCommandSync({
+        type: 'MoveGrid',
+        accountId,
+        characterId: player.characterId,
+        unitId,
+        cell,
+      });
+    } else if (characterStore && typeof characterStore.updateCharacterCell === 'function') {
       const persisted = characterStore.updateCharacterCell(player.accountId, player.characterId, cell);
       if (!persisted) throw new Error('move rejected: character persistence target missing');
     }
     player.cell = cell;
     const notify = buildNotifyMovedGridInner({
       units: [{ unitId, cell }],
-      header: { dword2: connectionId, dword3: cell },
+      header: { dword1: player.characterId, dword2: connectionId, dword3: cell },
     });
     const recipients = [...players.values()].filter((p) => p.inWorld).map((p) => p.connectionId);
     logEvent('move', connectionId, { unitId, cell, recipients });

@@ -48,6 +48,7 @@ const SPECTRAL_SLOT = Object.freeze({ O: 0, B: 1, A: 2, F: 3, G: 4, K: 5, M: 6 }
 const SPECTRAL_UNKNOWN_VARIANT = 8; // 미상 스펙트럼 → 블랙홀 슬롯 폴백(그 외 값은 렌더 skip)
 
 let cache = null;
+let navigableCellCache = null;
 
 function loadJson(...rel) {
   return JSON.parse(readFileSync(join(CONTENT_DIR, ...rel), 'utf8'));
@@ -176,6 +177,22 @@ export function getStrategicGridCells(extraCells = []) {
   return [...p.spaceCells, ...extra, ...p.systemCells];
 }
 
+/**
+ * 현재 0x0315로 송신하는 전략 그리드에서 항법 가능한 셀인지 확인한다.
+ * 데이터의 정본 승격 판정이 아니라, 클라이언트에 보인 항법 게이트와 서버 이동 권위를 맞추는 규칙이다.
+ */
+export function isStrategicGridCellNavigable(cell) {
+  if (!Number.isInteger(cell) || cell < 0 || cell >= GRID_W * GRID_H) return false;
+  if (!navigableCellCache) {
+    const placement = getStrategicGalaxyPlacement();
+    navigableCellCache = new Set(
+      [...placement.spaceCells, ...placement.systemCells]
+        .map(({ col, row }) => row * placement.width + col),
+    );
+  }
+  return navigableCellCache.has(cell);
+}
+
 /** 0x0313 팔레트 오브젝트(터레인 3 + 성계 N). */
 export function getStrategicPaletteObjects() {
   return getStrategicGalaxyPlacement().paletteObjects;
@@ -184,4 +201,5 @@ export function getStrategicPaletteObjects() {
 /** 테스트/재시드용 캐시 무효화. */
 export function _resetGalaxyPlacementCache() {
   cache = null;
+  navigableCellCache = null;
 }
