@@ -9,5 +9,5 @@
 - 스킬 부트스트랩 (사용자 지시 "skills.sh에서 찾아 프로젝트 단위 설치"): `scripts/agent/bootstrap-skills.sh`(--check/--sync/--once/--strict/--force) + `required-skills.tsv` 매니페스트, SessionStart 훅 양쪽(additive·fail-open) 배선. `.agents/skills/`=skills.sh 표준 canonical임을 실증. Claude 갭 6종+Codex 3종 동기화 완료(이 세션에 라이브 로드 확인). 신규 외부 스킬은 `npx skills find/add` 안내만(자동 설치 금지). 사람 결정 4건은 known-issues 참조.
 - Failed approaches: 없음 (트랜스크립트 추출 1회 재시도 — JSONL 이스케이프 매칭 이슈, 해결)
 - Open questions: `.codex/config.toml` 미커밋 변경([agents] max_threads 삭제)이 코덱스 작업인지 사용자 확인 필요 / logh7-orchestrator STALE 정본 방향 / `agent/skills/` 고아 폐기 / skills-lock stale 2건 (known-issues 상세)
-- Next action: push/PR 승인 → merge 후 LOGH7-49 계약 작성(사람) → 착수. 토큰 회전 권장(채팅 경유 Sentry 토큰) 유지.
+- Next action: **PR #60 생성 완료(push+PR+merge 일괄 승인, 2026-07-17)** — CI green 확인 후 merge → LOGH7-49 계약 작성(사람) → 착수. 토큰 회전 권장(채팅 경유 Sentry 토큰) 유지.
 - Must-read files for next action: `.ai/known-issues.md`, `docs/agent/lifecycle-planning.md`(Jira 루틴), Jira LOGH7 백로그
