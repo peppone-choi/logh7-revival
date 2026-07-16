@@ -10,5 +10,5 @@
 - 시크릿 상태: `SENTRY_DSN`·`SENTRY_AUTH_TOKEN` 사람 `~/.zshrc` 보관(repo 미기록) — 토큰은 채팅 경유 전달분이라 회전 권장
 - Failed approaches: 없음 (이번 턴)
 - Open questions: 향후 세션 Jira는 settings.local allowlist에 `"atlassian"` 사람 추가 + 재인증 1회 (이 세션은 직접 OAuth로 해결)
-- Next action: chore/phase3-closeout push+PR 사람 승인 → merge 후 계약 EMPTY 상태로 복귀. 새 작업은 사람 승인 계약부터(후보: known-issues follow-up 4건, 로드맵 M4-OBS-001 잔여·Wine 게이트)
+- Next action: **PR #9(종결 커밋, push+PR+merge 일괄 승인 기수령)** CI 녹색 확인 후 merge → 계약 EMPTY 상태로 복귀. 새 작업은 사람 승인 계약부터(후보: known-issues follow-up 4건, 로드맵 M4-OBS-001 잔여·Wine 게이트)
 - Must-read files for next action: `.ai/handoff.md`, `.ai/known-issues.md`, `docs/logh7-roadmap-current.md`
