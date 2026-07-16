@@ -44,5 +44,6 @@
 | 2026-07-14 | 참고 레포 트랙 도입 | `docs/logh7-reference-haul.md` + gitignored `reference/` | 방법론 차용, 코드 이식 금지 |
 | 2026-07-16 | Agent OS 부트스트랩 | `.ai/`, `docs/agent/`, `.claude/commands/`, 보호·검증 훅, `scripts/agent/`, 진입 문서 재구조화 | 근거: `.ai/decisions.md` ADR-LITE-001~005 |
 | 2026-07-16 | AI 업무 시스템 고도화 착수 | 부트스트랩 베이스라인 커밋(34b4b36d, feat/ai-work-system), `.ai/task.md` ACTIVE | 딥 인터뷰 스펙 + ralplan 합의 계획(`.omc/plans/logh7-ai-work-system-plan.md`) 사람 전면 승인. 예정: NIAH 재주입 훅·팩 배선·CI·GHA·CodeRabbit·Sentry·`.mcp.json` |
+| 2026-07-16 | Phase 1 기반 하네스 완성 | NIAH: `.ai/key-facts.md`(24줄)+`inject-key-facts.sh`(UserPromptSubmit, fail-open, `.codex` 미러)+stop-doc-gate 신선도 additive(+10줄) / 팩: 신규 6종(7섹션)+커맨드 7:팩 매핑 / 컨텍스트: context-strategy 4섹션+redirect 스텁 2건+TL;DR 3건 / 헌법: CLAUDE.md·AGENTS.md 라우팅 추가만(삭제 0) | 종료 게이트 PASS(훅 10종 bash -n, JSON 3, fail-open 시뮬, README 참조 100%, 4케이스 격리 fixture 회귀 0). `.mcp.json` 라우팅 줄은 Phase 2D에서 추가(참조 대상 실재 후) |
 
 참고: `fable on`이면 `ANTHROPIC_DEFAULT_SONNET_MODEL=claude-haiku-4-5`로 sonnet 고정 서브에이전트(OMC 실행 에이전트 등)까지 haiku로 강등된다.

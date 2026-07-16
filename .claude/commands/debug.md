@@ -3,6 +3,8 @@ description: 가설 기반 디버깅 — 근본 원인 확인 전 수정 금지
 ---
 # /debug
 
+이 커맨드는 `docs/agent/prompt-pack.md`의 "근본 원인 디버깅" 섹션을 로드해 적용한다.
+
 $ARGUMENTS: 증상 (실패 테스트, 오류 메시지, 잘못된 동작).
 
 절차 (프롬프트 템플릿: `docs/agent/prompt-pack.md`의 "근본 원인 디버깅", 스킬: systematic-debugging):

@@ -37,6 +37,16 @@ if [ -n "$VAULT" ] && [ -d "$VAULT" ]; then
     | LC_ALL=C sort | git hash-object --stdin)
   [ "$vault_now" = "$(cat "$S/vault.hash" 2>/dev/null)" ] && missing="${missing:+$missing, }옵시디언 볼트(LOGH7_VAULT_DIR)"
 fi
+
+# NIAH 키팩트 카드 신선도 — 판정 기준: HEAD 대비 uncommitted diff.
+# 파생 원천(roadmap·known-issues·task)이 HEAD 대비 uncommitted인데 key-facts.md가 미갱신이면 missing에 추가.
+NIAH_SOURCES=(docs/logh7-roadmap-current.md .ai/known-issues.md .ai/task.md)
+sources_dirty=$({ git status --porcelain -- "${NIAH_SOURCES[@]}"; git diff HEAD -- "${NIAH_SOURCES[@]}"; } 2>/dev/null)
+if [ -n "$sources_dirty" ]; then
+  keyfacts_dirty=$({ git status --porcelain -- .ai/key-facts.md; git diff HEAD -- .ai/key-facts.md; } 2>/dev/null)
+  [ -z "$keyfacts_dirty" ] && missing="${missing:+$missing, }.ai/key-facts.md"
+fi
+
 [ -z "$missing" ] && exit 0
 
 echo $((n+1)) > "$S/stop-retries"

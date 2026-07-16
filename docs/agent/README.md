@@ -1,5 +1,7 @@
 # Agent Documentation Router
 
+> **TL;DR** 이 문서는 작업 유형 → 필요 문서 라우팅 테이블. 모든 문서를 읽지 말고 필요한 것만 선택해 진입한다(Progressive Disclosure). 각 문서의 TL;DR 블록부터 읽기.
+
 에이전트 공통 문서의 라우터. **모든 문서를 읽지 말고 현재 작업에 필요한 것만 선택한다.**
 (Progressive Disclosure — 근거: `context-strategy.md`)
 

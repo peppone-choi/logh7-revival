@@ -33,6 +33,15 @@
             "timeout": 30
           }
         ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash .codex/hooks/inject-key-facts.sh",
+            "timeout": 10
+          }
+        ]
       }
     ],
     "Stop": [

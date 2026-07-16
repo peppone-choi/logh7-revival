@@ -3,6 +3,8 @@ description: 세션 상태 체크포인트 — .ai/ 상태 파일 최신화
 ---
 # /checkpoint
 
+이 커맨드는 `docs/agent/prompt-pack.md`의 "작업 인수인계" 섹션을 로드해 적용한다.
+
 $ARGUMENTS: (선택) 체크포인트 사유 — 컨텍스트 리셋 전, 인수인계 전, 주요 단계 완료 후.
 
 절차:

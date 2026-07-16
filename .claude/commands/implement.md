@@ -3,6 +3,8 @@ description: 승인된 계획 구현 — 최소 범위, 소유 파일만, 검증
 ---
 # /implement
 
+이 커맨드는 `docs/agent/prompt-pack.md`의 "기능 구현" 섹션을 로드해 적용한다.
+
 $ARGUMENTS: 구현할 항목 (승인된 계획의 일부여야 함).
 
 전제 조건 — 하나라도 어긋나면 중단하고 보고:
