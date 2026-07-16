@@ -1,43 +1,41 @@
 # Agent Handoff
 
 ## Goal
-Make the existing Claude automation and verification system directly usable by Codex, including safe project-scoped discovery and installation of missing skills from skills.sh.
+사용자가 Codex와 프로젝트의 AI 자동 업무 관리·검증 시스템으로 업무를 시작하고 완료하는 방법을 Markdown 매뉴얼로 제공한다.
 
 ## Current result
-Implementation is complete on `codex/codex-harness-parity`. Codex now has native lifecycle hooks, eight repository workflow skills, project-open local skill checks, and an on-demand vetted skills.sh installation path. Local executable verification is green; live hook activation still requires the user's `/hooks` trust action in a new task.
+`docs/agent/codex-user-manual.md` 작성과 라우터 연결이 완료됐다. 매뉴얼은 처음 설정부터 Jira 업무 선택, 작업 계약, 스킬 사용, 구현·검증·리뷰, 외부 승인, 실패·재개, 완료 체크리스트까지 사용자 여정을 다룬다.
 
 ## Decisions already made
-- `.agents/skills/` is the canonical project skill directory; no `.codex/skills/` mirror and no global install.
-- SessionStart never performs network search or installation. It runs `bootstrap-skills.sh --check || true` every project open.
-- External installation requires source review plus the explicit `--reviewed` attestation. Existing project skills are not overwritten through this path.
-- Claude Commands, Codex skills, and both native hook sets remain thin adapters over `docs/agent/` and `scripts/agent/`.
-- `CLAUDE.md` and `.codex/config.toml` contain concurrent changes and were intentionally preserved.
+- 문서 위치는 운영 문서 정본인 `docs/agent/`다.
+- 기술 문서 어조는 `~합니다`로, 독자 명칭은 `사용자`로 통일했다.
+- 교안 예시를 복제하지 않고 현재 프로젝트의 실제 하네스·승인 규칙을 우선했다.
+- Jira는 상태 정본, `.ai/task.md`는 현재 실행 계약 정본, GitHub는 코드 논의·PR 연결로 설명했다.
+- Atlassian 도구는 Codex 작업에 Rovo 커넥터가 노출될 때만 사용하고, 없으면 로컬 Markdown으로 폴백한다.
 
 ## Files changed
-- Codex hooks: `.codex/hooks.json`, `.codex/hooks/{protect-sensitive-files,inject-key-facts,verify-changes,turn-snapshot,stop-doc-gate}.sh`
-- Project skills: `.agents/skills/logh7-{start-task,analyze,implement,debug,verify,review,checkpoint,skill-manager}/`
-- Bootstrap/tests: `scripts/agent/{bootstrap-skills.sh,required-skills.tsv,test-codex-hooks.sh}`, `.gitignore`
-- Contracts/docs/state: `AGENTS.md`, `docs/agent/{README,prompt-pack,tool-capabilities,verification,lifecycle-testing,context-strategy,collaboration-protocol}.md`, `.ai/{task,key-facts,current-state,handoff,known-issues,ownership}.md`
+- 신규: `docs/agent/codex-user-manual.md`
+- 라우팅: `docs/agent/README.md`
+- 현행화: `docs/agent/lifecycle-planning.md`
+- 계약·상태: `.ai/task.md`, `.ai/current-state.md`, `.ai/handoff.md`, `.ai/ownership.md`
 
-## Commands executed and verification result
-- `bash scripts/agent/test-codex-hooks.sh` → 26 passed, 0 failed, exit 0.
-- `bash -n scripts/agent/bootstrap-skills.sh scripts/agent/test-codex-hooks.sh .codex/hooks/*.sh` → exit 0.
-- `python3 .../skill-creator/scripts/quick_validate.py .agents/skills/<each-new-skill>` → 8/8 valid, exit 0.
-- cached official skills CLI `list --json` → exit 0; all eight new skills reported `scope: project` and Codex compatibility.
-- `bash scripts/agent/bootstrap-skills.sh --check` → exit 0, `OK=25 MISSING=0 STALE=1`; candidates are informational.
-- `bash scripts/agent/bootstrap-skills.sh --strict` → exit 1 from the pre-existing Claude `logh7-orchestrator` STALE copy; not caused or overwritten by this task.
-- `codex --strict-config --version` plus hooks JSON parse → exit 0; CLI 0.144.5. PATH alias creation emitted a sandbox warning only.
+## Verification result
+- `git diff --check` → exit 0.
+- `bash scripts/agent/verify-changes.sh --file <path>` → 매뉴얼, README, planning, task, current-state, handoff, ownership 각 exit 0.
+- 관련 문서 내부 링크 대상 9개 → 모두 존재.
+- 구조 확인 → 매뉴얼 461줄, H1~H3 제목 41개.
+- 제품 코드·서버 테스트 → NOT RUN, 문서 전용 변경이라 비대상.
 
 ## Failed approaches and recovery
-- Initial skill scaffolding was denied because `.agents/skills` was sandbox-read-only; the approved project-only escalation created all eight with the official initializer.
-- A multi-file skill patch exceeded edit-tool diagnostics time after four files; the remaining files were patched individually and all eight validators pass.
-- Bash LSP diagnostics timed out after hook edits; fresh `bash -n` and behavioral payload tests replaced that diagnostic and pass.
-- Direct `npx --yes skills list --json` did not return a usable exit/output in the tool wrapper during final verification. Running the same cached official skills CLI directly returned exit 0 and complete project discovery JSON.
+- NFD 파일명을 대화의 문자열로 직접 재사용한 첫 PDF 추출은 파일을 찾지 못했다. `/Users/apple/Downloads`에서 `[1`~`[4` 접두 파일을 검색하는 방식으로 전환해 네 PDF의 텍스트 추출을 exit 0으로 완료했다.
+- PDF 내 일부 embedded font mismatch 경고가 있었지만 텍스트 파일이 생성됐고 네 문서의 표지 렌더를 직접 확인했다. 원본 PDF는 수정하지 않았다.
+- 첫 ownership 패치는 Markdown 표 구분자 열 수를 잘못 가정해 실패했다. 실제 파일을 다시 읽고 올바른 문맥으로 적용했다.
 
 ## Remaining work
-- User: run `/hooks`, trust the project hook hash, and verify the hooks are active in a new Codex task.
-- Optional human decision: choose the canonical `logh7-orchestrator` version and whether to repair the two historical `skills-lock.json` paths; these pre-existing issues keep `--strict` red.
-- Push, PR, merge, and commit were not performed.
+- 사용자가 매뉴얼 내용과 상세 수준을 검토한다.
+- 사용자가 작업 브랜치 commit·push·PR 생성·merge를 승인했다.
+- 기존 하네스의 `/hooks` 신뢰 checkpoint는 여전히 사람 작업이다.
+- 기존 `.codex/config.toml` dirty 변경은 이 작업과 무관하며 보존했다.
 
 ## Files to read first
-`.ai/task.md`, `.ai/current-state.md`, `.ai/known-issues.md`, `AGENTS.md`, `docs/agent/tool-capabilities.md`, `scripts/agent/test-codex-hooks.sh`.
+`docs/agent/codex-user-manual.md`, `.ai/task.md`, `.ai/current-state.md`, `AGENTS.md`, `docs/agent/tool-capabilities.md`.

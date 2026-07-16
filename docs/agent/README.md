@@ -16,6 +16,7 @@
 
 | 작업 유형 | 읽을 문서 |
 |---|---|
+| Codex로 AI 자동 업무 시스템 사용 | `codex-user-manual.md` |
 | 신규 기능 | `architecture.md`, `coding-rules.md`, `lifecycle-planning.md`, `lifecycle-testing.md` |
 | 버그 수정·테스트 실패 | `failure-cases.md`, `verification.md`, `lifecycle-testing.md` |
 | 코드 리뷰 | `lifecycle-review.md`, `coding-rules.md`, `verification.md` |
