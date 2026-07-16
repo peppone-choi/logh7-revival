@@ -70,7 +70,7 @@ single-writer-per-file. 시작 전 `.ai/ownership.md` 등록, 종료 시 해제.
 ## Completion Report
 
 - 보고에 포함: 변경 파일, 실행 검증(명령+종료 코드), 미실행 검증, 남은 일, 필요한 사람 결정.
-- **문서 현행화 게이트**: 파일을 변경한 턴은 관련 `docs/` 현행 문서, `AGENTS.md`·`CLAUDE.md`, `.ai/current-state.md`, (`LOGH7_VAULT_DIR` 설정 머신에서는) 옵시디언 볼트까지 갱신해야 끝난다. 반영할 것이 없으면 그 근거를 보고에 명시한다. 진행 로그를 누적하지 말고 낡은 지침은 수정·삭제한다.
+- **문서 현행화 게이트**: 파일을 변경한 턴은 관련 `docs/` 현행 문서, `AGENTS.md`·`CLAUDE.md`, `.ai/current-state.md`, (`LOGH7_VAULT_DIR` 설정 머신에서는) 옵시디언 볼트까지 갱신해야 끝난다. 반영할 것이 없으면 그 근거를 보고에 명시한다. 진행 로그를 누적하지 말고 낡은 지침은 수정·삭제한다. 볼트 정본은 `peppone-choi/obsidian-tech-vault` 클론 — 머신별 경로 설정은 `docs/agent/tool-capabilities.md` 하네스 이력 참조.
 - 세션 종료 전 `.ai/handoff.md` 갱신 — 다음 에이전트가 대화 기록 없이 재개 가능해야 한다.
 
 ## Tool Notes
