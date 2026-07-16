@@ -15,9 +15,9 @@
 | CodeGraph | ✅ MCP + CLI | ✅ CLI | ✅ `.codegraph/` 존재 | 코드 위치·영향범위는 codegraph 먼저 |
 | Browser 자동화 | ⚠️ Claude 전용 (Claude-in-Chrome MCP, 세션 연결 시) | ❌ | NOT_CONFIGURED (프로젝트 검증 절차에 미포함) | 클라이언트는 브라우저가 아님 — 라이브 QA는 Wine 하네스 |
 | E2E (Playwright 등) | ❌ | ❌ | NOT_CONFIGURED | UI 검증은 원본 클라이언트 + 스크린샷 증거 |
-| CI/CD | — | — | NOT_CONFIGURED (`.github/workflows` 없음) | 모든 검증은 로컬 |
-| Jira | ⚠️ 세션에 Atlassian MCP 존재 가능 | ❌ | NOT_CONFIGURED (프로젝트 미사용) | 계획은 로컬 Markdown (`lifecycle-planning.md`) |
-| Sentry / 모니터링 | ❌ | ❌ | NOT_CONFIGURED | |
+| CI/CD | ✅ (`.github/workflows/ci.yml`·`claude.yml`, `.coderabbit.yaml` 코드 배선 완료) | — | 정의/코드 배선 완료, **활성화는 사람 셋업 대기**(GitHub Secret `ANTHROPIC_API_KEY` 등록·CodeRabbit GitHub App 설치) | 첫 런 결과는 push/PR 후 실측 (`docs/agent/verification.md` 신규 행) |
+| Jira | ⚠️ `.mcp.json`에 `atlassian`(SSE) 정의 커밋, 활성화는 `.claude/settings.local.json` allowlist 사람 추가 필요(현재 미포함) | ❌ (Atlassian MCP 미정의, GitHub MCP만 존재) | 정의 완료, **활성화는 사람 셋업 대기** — Jira 사이트(`pepponechoi.atlassian.net`) 존재 확인되나 `suspended-inactivity`(403)로 재활성화 필요 | 계획은 로컬 Markdown이 기본 폴백, 활성화 후 Jira 분해 루틴 사용(`docs/agent/lifecycle-planning.md`) |
+| Sentry / 모니터링 | ⚠️ `@sentry/node` 의존성 추가·`server/src/presentation/main.mjs` DSN env-guard 배선 완료 | ❌ | 정의/코드 배선 완료, **활성화는 사람 셋업 대기**(Sentry 프로젝트 생성·`SENTRY_DSN` 환경변수 발급) | DSN 미설정 시 no-op, 설정 시 캡처는 Phase 3 실측 |
 | Terraform / AWS | ❌ | ❌ | NOT_CONFIGURED | 운영 배포 대상 없음 |
 
 ## Claude 전용 vs 공통
@@ -45,5 +45,6 @@
 | 2026-07-16 | Agent OS 부트스트랩 | `.ai/`, `docs/agent/`, `.claude/commands/`, 보호·검증 훅, `scripts/agent/`, 진입 문서 재구조화 | 근거: `.ai/decisions.md` ADR-LITE-001~005 |
 | 2026-07-16 | AI 업무 시스템 고도화 착수 | 부트스트랩 베이스라인 커밋(34b4b36d, feat/ai-work-system), `.ai/task.md` ACTIVE | 딥 인터뷰 스펙 + ralplan 합의 계획(`.omc/plans/logh7-ai-work-system-plan.md`) 사람 전면 승인. 예정: NIAH 재주입 훅·팩 배선·CI·GHA·CodeRabbit·Sentry·`.mcp.json` |
 | 2026-07-16 | Phase 1 기반 하네스 완성 | NIAH: `.ai/key-facts.md`(24줄)+`inject-key-facts.sh`(UserPromptSubmit, fail-open, `.codex` 미러)+stop-doc-gate 신선도 additive(+10줄) / 팩: 신규 6종(7섹션)+커맨드 7:팩 매핑 / 컨텍스트: context-strategy 4섹션+redirect 스텁 2건+TL;DR 3건 / 헌법: CLAUDE.md·AGENTS.md 라우팅 추가만(삭제 0) | 종료 게이트 PASS(훅 10종 bash -n, JSON 3, fail-open 시뮬, README 참조 100%, 4케이스 격리 fixture 회귀 0). `.mcp.json` 라우팅 줄은 Phase 2D에서 추가(참조 대상 실재 후) |
+| 2026-07-16 | Phase 2 외부 연동 배선 | CI: `.github/workflows/ci.yml`·`claude.yml`, `.coderabbit.yaml` / Sentry: `@sentry/node`+`main.mjs` DSN env-guard / MCP: `.mcp.json` 신규 커밋(`code-review-graph`+`atlassian` SSE, 시크릿 0)+`settings.local.json` `enableAllProjectMcpServers:false` 전환·명시 allowlist(`code-review-graph`만, atlassian 의도적 미활성)+`.gitignore` 1줄 / 기획: Jira Epic→Story→Task 분해 루틴 문서화(`lifecycle-planning.md`) | 정의/코드 배선은 완료, **활성화 전부 사람 셋업 대기**(GitHub Secret·CodeRabbit App·Sentry DSN·Jira 사이트 재활성화) — 각 행 상세는 위 표. Phase 3 E2E에서 실측 예정 |
 
 참고: `fable on`이면 `ANTHROPIC_DEFAULT_SONNET_MODEL=claude-haiku-4-5`로 sonnet 고정 서브에이전트(OMC 실행 에이전트 등)까지 haiku로 강등된다.

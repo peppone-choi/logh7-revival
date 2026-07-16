@@ -79,3 +79,4 @@ single-writer-per-file. 시작 전 `.ai/ownership.md` 등록, 종료 시 해제.
 - 도구 실사·설치 스택: `docs/agent/tool-capabilities.md`.
 - 키팩트 카드 `.ai/key-facts.md`(≤40줄): 매 턴 자동 주입(`inject-key-facts` 훅, `.codex/hooks/` 미러). 파생 원천(roadmap·known-issues·task.md) 변경 시 카드도 갱신 — stop-doc-gate가 강제.
 - 커맨드↔프롬프트 팩 매핑(7섹션 표준): `docs/agent/prompt-pack.md` 앞머리 표 — Codex는 커맨드 래퍼 없이 해당 팩 섹션을 직접 로드한다.
+- MCP 정의는 `.mcp.json`(커밋), 활성화는 `.claude/settings.local.json` 명시 allowlist — Jira 기획 루틴은 `docs/agent/lifecycle-planning.md` 참조. Codex는 `.mcp.json`을 읽지 않고 `.codex/config.toml`의 별도 레지스트리를 사용한다.

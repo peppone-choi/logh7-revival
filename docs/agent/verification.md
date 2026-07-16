@@ -12,6 +12,8 @@
 | `cd server && node --test tests/<파일>.test.mjs` | 특정 테스트만 | |
 | `node --check <파일>` / `python3 -m py_compile <파일>` / `bash -n <파일>` | 구문만 | |
 | `python3 -m pytest tools/tests -q` | Python 도구 테스트 | 기본 python3(3.14)에 pytest **미설치** — 실행 환경은 NEEDS_HUMAN_CONFIRMATION |
+| `python3 -c "import yaml,sys; yaml.safe_load(open(sys.argv[1]))" <파일>` | YAML 구문 검증 (workflow·`.coderabbit.yaml`) | 이 머신 PyYAML 설치 확인됨(2026-07-16 실사) |
+| `node -e "JSON.parse(require('fs').readFileSync('<파일>','utf8'))"` | JSON 구문 검증 (`.mcp.json` 등) | |
 
 ## 변경 유형별 최소 검증 행렬
 
@@ -24,6 +26,10 @@
 | `server/migrations/*.sql` | SQL 구문 검토 + `migrations/README.md` 컨벤션 준수 | 적용은 자동 실행 금지 (PG는 skeleton) | 사람 승인 후에만 적용 |
 | 문서 (`docs/`, `*.md`) | 참조 경로·링크 실재 확인 | — | 링크 대상 파일 존재 |
 | 훅·스크립트 (`.claude/`, `.codex/`, `scripts/agent/`) | `bash -n` + 대표 입력 시뮬레이션 | settings JSON은 파싱 검사 | 시뮬레이션 출력 확인 |
+| `.github/workflows/*.yml` | YAML 파싱(`python3 -c "import yaml..."`) | GitHub Actions 첫 런 결과 확인 (push/PR 후 실측) | 파싱 통과 + 첫 런 로그·링크 기록 (미실행이면 미실행 명시) |
+| `.coderabbit.yaml` | YAML 파싱 | CodeRabbit App 설치 완료 후 실제 PR 코멘트 출현 확인 | 파싱 통과 (PR 코멘트는 Phase 3 실측) |
+| `.mcp.json` | JSON 파싱(`node -e "JSON.parse(...)"`) | `.claude/settings.local.json`의 `enabledMcpjsonServers` allowlist 상태 확인 | 파싱 통과 + 시크릿 값 기입 0 |
+| 서버 Sentry 배선 (`server/src/presentation/main.mjs` 등 DSN env-guard) | `cd server && npm test` 전체 (`SENTRY_DSN` 미설정 상태) | `SENTRY_DSN` 설정 시 의도적 에러 1건 캡처 확인 (Phase 3 실측) | 종료 코드 0·회귀 0 + no-op 부팅 확인 |
 
 ## 보고 규칙
 

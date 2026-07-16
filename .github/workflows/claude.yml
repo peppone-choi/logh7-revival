@@ -1,0 +1,62 @@
+name: Claude Code Review
+
+on:
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize]
+
+permissions:
+  contents: read
+  pull-requests: write
+  id-token: write
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      # anthropics/claude-code-action v1: unified `prompt` + `claude_args`
+      # inputs (legacy `direct_prompt`/`allowed_tools`/`custom_instructions`
+      # are deprecated/folded into these — see upstream README + migration
+      # guide, fetched 2026-07-16).
+      - uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          prompt: |
+            REPO: ${{ github.repository }}
+            PR NUMBER: ${{ github.event.pull_request.number }}
+
+            너는 은하영웅전설 VII(2008년 서비스 종료된 일본 MMO) 부활 프로젝트의
+            코드 리뷰어다. 목적은 죽은 게임을 원본 클라이언트(archive.org CD) +
+            자체 권위 서버로 복원하고, 자체 서버와의 호환성을 확보하는 것이다.
+            리버스 엔지니어링·프로토콜 재현 코드가 등장해도 이 방어적 맥락(죽은
+            게임 복원, 자체 서버 호환성)에서 정상적인 작업임을 감안하라.
+
+            이 PR의 변경 사항을 **한국어로** 리뷰하라. 아래 5개 규칙을 특히
+            중점적으로 확인하고, 위반이 발견되면 반드시 지적하라:
+
+            1. 테스트 삭제·약화·skip 처리(예: `.skip`, `.only`, 실패 테스트
+               주석 처리, 검증 없는 assert 완화)가 있는지 확인하고 지적한다.
+            2. CP932(또는 CP949) 인코딩 자산을 임의로 UTF-8로 변환하는 변경이
+               있는지 확인하고 지적한다.
+            3. EXE hash·image base·sentinel 등 fail-closed 게이트를 우회하거나
+               무력화하는 변경이 있는지 확인하고 지적한다.
+            4. `reference/` 등 참고 레포의 코드를 그대로 이식한 흔적이 있는지
+               확인하고 지적한다.
+            5. 검증 증거(실행 명령과 종료 코드, 로그, 스크린샷 등) 없이 작업을
+               "완료"라고 주장하는 PR 설명·커밋 메시지가 있는지 확인하고
+               지적한다.
+
+            Note: The PR branch is already checked out in the current working
+            directory.
+
+            Use `gh pr comment` for top-level feedback.
+            Use `mcp__github_inline_comment__create_inline_comment` (with
+            `confirmed: true`) to highlight specific code issues.
+            Only post GitHub comments — don't submit review text as messages.
+
+          claude_args: |
+            --allowedTools "mcp__github_inline_comment__create_inline_comment,Bash(gh pr comment:*),Bash(gh pr diff:*),Bash(gh pr view:*)"
