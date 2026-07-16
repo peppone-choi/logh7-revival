@@ -2,6 +2,7 @@
 
 | Agent | Task | Branch/worktree | Owned files | Status | Updated at |
 |---|---|---|---|---|---|
+| Codex (root) | Codex AI 자동 업무 관리 시스템 사용자 매뉴얼 작성 | current workspace | — (소유 해제) | done | 2026-07-17 |
 | Codex (root) | Codex-native Claude automation parity and project-scoped skills.sh acquisition | codex/codex-harness-parity | — (소유 해제; `CLAUDE.md`와 `.codex/config.toml`의 동시 변경은 미수정) | done | 2026-07-17 |
 | Claude Code (메인) | Agent OS 부트스트랩 | feat/ai-work-system (베이스라인 커밋 34b4b36d) | — (소유 해제) | done | 2026-07-16 |
 | Claude Code (메인+서브에이전트) | AI 업무 시스템 고도화 (`.ai/task.md` DONE, 계획 `.omc/plans/logh7-ai-work-system-plan.md`) — Phase 1+2 PR #6 `be6499a3`, Phase 3 SRV-CORR PR #8 `3fd847b1` merge 완료 | chore/phase3-closeout (종결 커밋만) | — (소유 해제; 종결 브랜치 push/PR 승인 대기) | done | 2026-07-16 |

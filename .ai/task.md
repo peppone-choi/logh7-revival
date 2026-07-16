@@ -1,5 +1,17 @@
 # Current Task
 
+## Completed Contract: Codex 사용자 매뉴얼
+
+- Status: DONE — 2026-07-17 사용자 직접 요청. 사용자 매뉴얼 작성, 라우터 연결, Jira/Codex 현행 설명 보정 완료.
+- Goal: 첨부된 1~4주차 AI 네이티브 개발 방법론을 참고하여, 사용자가 Codex와 프로젝트의 AI 자동 업무 관리·검증 시스템으로 실제 업무를 시작하고 완료하는 방법을 Markdown 매뉴얼로 작성한다.
+- In scope: 프로젝트 열기, 훅·스킬 점검, 자연어/명시적 스킬 호출, 업무 계약, Jira·GitHub 흐름, 구현·검증·리뷰·체크포인트, 외부 쓰기 승인, 장애·운영·문서 현행화 절차.
+- Out of scope: 제품 코드 수정, 첨부 PDF 복제·재배포, 새 외부 서비스 연결, commit·push·PR·merge.
+- Acceptance criteria: (1) 사용자 관점의 처음부터 끝까지 흐름, (2) 복사 가능한 요청 예시, (3) 자동 처리와 사용자 승인 경계, (4) 스킬·상태 파일·Jira/GitHub 관계, (5) 실패·재개·완료 체크리스트, (6) 문서 라우터 연결.
+- Allowed files: `docs/agent/codex-user-manual.md`, `docs/agent/README.md`, `docs/agent/lifecycle-planning.md`, `.ai/task.md`, `.ai/current-state.md`, `.ai/handoff.md`, `.ai/ownership.md`.
+- Protected concurrent files: `.codex/config.toml`, `CLAUDE.md` 및 사용자/다른 에이전트 변경 전체.
+- Required verification: Markdown 구조·내부 링크·용어 일관성, 변경 diff 검토.
+- Publication: 2026-07-17 사용자 직접 지시로 작업 브랜치 commit·push·PR 생성·merge 승인.
+
 ## Completed Contract: Codex harness parity
 
 - Status: DONE — 2026-07-17. Codex native hooks, eight workflow skills, and vetted project-only skills.sh acquisition implemented and locally verified. Live activation remains the user's `/hooks` trust checkpoint.
