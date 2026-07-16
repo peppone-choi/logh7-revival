@@ -69,7 +69,9 @@ VISUAL_PROBE_JS: Final = Path(__file__).with_name("_frida_render_probe.js")
 LOADING_DISMISSED_FADE: Final = 1.0 - 1e-5
 
 
-def _start_client(config: HarnessConfig, account: AccountSpec, phase: Path) -> LiveClient:
+def _start_client(
+    config: HarnessConfig, account: AccountSpec, phase: Path, *, probe_js: Path = PROBE_JS,
+) -> LiveClient:
     driver = load_live_module("tools.live.logh7_agent_drive")
     launch = direct_launch(config.exe)
     process = subprocess.Popen(list(launch.argv), cwd=launch.cwd)  # noqa: S603
@@ -77,7 +79,7 @@ def _start_client(config: HarnessConfig, account: AccountSpec, phase: Path) -> L
     try:
         hwnd = wait_hwnd(process.pid)
         session = frida.attach(process.pid)
-        script = session.create_script(PROBE_JS.read_text(encoding="utf-8"))
+        script = session.create_script(probe_js.read_text(encoding="utf-8"))
         script.load()
         visual_script = session.create_script(VISUAL_PROBE_JS.read_text(encoding="utf-8"))
         visual_script.load()

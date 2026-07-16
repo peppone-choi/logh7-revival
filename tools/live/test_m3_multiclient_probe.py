@@ -81,8 +81,10 @@ class FakeVisualScript(FakeScript):
 class FakeSession:
     def __init__(self, script: FakeScript, visual_script: FakeVisualScript) -> None:
         self.scripts = iter((script, visual_script))
+        self.sources: list[str] = []
 
-    def create_script(self, _source: str) -> FakeScript:
+    def create_script(self, source: str) -> FakeScript:
+        self.sources.append(source)
         return next(self.scripts)
 
 
@@ -117,6 +119,7 @@ def test_world_screenshot_rechecks_world_after_fade_and_nine_second_settle(
     process = FakeProcess()
     script = FakeScript()
     visual_script = FakeVisualScript(events)
+    session = FakeSession(script, visual_script)
     driver = FakeWorldDriver(events)
 
     def fake_popen(_argv: list[str], *, cwd: Path) -> FakeProcess:
@@ -127,7 +130,7 @@ def test_world_screenshot_rechecks_world_after_fade_and_nine_second_settle(
         return driver
 
     def fake_attach(_pid: int) -> FakeSession:
-        return FakeSession(script, visual_script)
+        return session
 
     def fake_drive_lobby_entry(
         _driver: support.LobbyDriver, _hwnd: int, _pause: Callable[[float], None],
@@ -153,10 +156,15 @@ def test_world_screenshot_rechecks_world_after_fade_and_nine_second_settle(
         tmp_path, tmp_path / "g7mtclient.exe",
         support.parse_account(support.ACCOUNT_A_RAW), support.parse_account(support.ACCOUNT_B_RAW),
     )
+    custom_probe = tmp_path / "observer.js"
+    custom_probe.write_text("custom observer", encoding="utf-8")
 
-    client = probe._start_client(config, config.account_a, tmp_path / "phase")
+    client = probe._start_client(
+        config, config.account_a, tmp_path / "phase", probe_js=custom_probe,
+    )
 
     assert client.process.pid == process.pid
+    assert session.sources[0] == "custom observer"
     assert events == [
         "login", "probe", "fade:0.75", "sleep:0.35", "probe", "fade:1.0", "sleep:9.0",
         "probe", "fade:1.0", "foreground", "screenshot",
@@ -218,13 +226,13 @@ def test_natural_move_steps_keep_legacy_coordinates_below_native_width() -> None
     )
 
 
-def test_natural_move_steps_use_native_coordinates_at_1920_width() -> None:
+def test_native_confirm_click_targets_button_center_at_1920_width() -> None:
     assert support.natural_move_steps(1924) == (
         ("authority-tab", (1631, 892)),
         ("captain-card", (1719, 794)),
         ("warp-command", (1618, 594)),
         ("destination-cell", (833, 545)),
-        ("confirm", (1018, 656)),
+        ("confirm", (1018, 642)),
     )
 
 
@@ -236,6 +244,22 @@ def test_config_rejects_missing_executable(tmp_path: Path) -> None:
             account_a="inei00:dummy:1:1",
             account_b="dummy:dummy:2:2",
         )
+
+
+def test_harness_errors_keep_detail_string_and_accept_traceback() -> None:
+    with pytest.raises(RuntimeError) as caught:
+        raise RuntimeError("trace source")
+    source_traceback = caught.value.__traceback__
+    assert source_traceback is not None
+
+    for error, detail in (
+        (support.HarnessInputError("input detail"), "input detail"),
+        (support.HarnessRuntimeError("runtime detail"), "runtime detail"),
+    ):
+        error.__traceback__ = source_traceback
+        assert error.__traceback__ is source_traceback
+        assert error.detail == detail
+        assert str(error) == detail
 
 
 def test_config_rejects_wrong_account_contract(tmp_path: Path) -> None:

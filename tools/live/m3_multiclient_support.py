@@ -50,7 +50,7 @@ NATIVE_MOVE_STEPS: Final = (
     ("captain-card", (1719, 794)),
     ("warp-command", (1618, 594)),
     ("destination-cell", (833, 545)),
-    ("confirm", (1018, 656)),
+    ("confirm", (1018, 642)),
 )
 RESULT_NAMES: Final = (
     "twoDirectProcesses", "bothWorld", "aMoveRequest", "bNotifyReceived",
@@ -58,20 +58,20 @@ RESULT_NAMES: Final = (
 )
 
 
-@dataclass(frozen=True, slots=True)
 class HarnessInputError(Exception):
     detail: str
 
-    def __str__(self) -> str:
-        return self.detail
+    def __init__(self, detail: str) -> None:
+        super().__init__(detail)
+        self.detail = detail
 
 
-@dataclass(frozen=True, slots=True)
 class HarnessRuntimeError(Exception):
     detail: str
 
-    def __str__(self) -> str:
-        return self.detail
+    def __init__(self, detail: str) -> None:
+        super().__init__(detail)
+        self.detail = detail
 
 
 @dataclass(frozen=True, slots=True)
