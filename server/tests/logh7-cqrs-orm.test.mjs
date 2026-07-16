@@ -201,6 +201,36 @@ test('playable runtime boots with ORM store on ephemeral port', async () => {
   }
 });
 
+test('playable runtime caps the 63-row SQLite catalog to the live-safe 19-row 0x030b prefix', async () => {
+  const dir = await mkdtemp(join(tmpdir(), 'logh7-rt-ships-'));
+  const dbPath = join(dir, 't.sqlite');
+  const accountsPath = join(dir, 'accounts.json');
+  await writeFile(accountsPath, JSON.stringify({ accounts: [] }), 'utf8');
+  const runtime = createPlayableRuntime({ dbPath, accountsPath, logger: { debug() {} } });
+  try {
+    // Given: production runtime이 시드한 WorldCatalog.getShips() 정본 63행.
+    assert.equal(runtime.app.worldCatalog.getShips().length, 63);
+    const request = Buffer.alloc(2);
+    request.writeUInt16BE(0x030a, 0);
+
+    // When
+    const result = runtime.worldSession.handleWorldInner({ connectionId: 1, accountId: 'a', inner: request });
+    const body = msg32Body(result.responses[0].inner);
+
+    // Then: 라이브 안전 prefix 19행이며 undefined4* + 1의 4바이트 헤더와 stride를 보존한다.
+    assert.equal(body.length, 0x6d64);
+    assert.equal(body.readUInt8(0), 19);
+    assert.equal(body.readUInt16LE(4), 1);
+    assert.equal(body.readUInt16LE(4 + 0x06), 0);
+    assert.equal(body.readUInt8(4 + 0x08), 3);
+    assert.equal(body.subarray(4 + 0x0a, 4 + 0x10).toString('utf16le'), 'A72');
+    assert.equal(body.readUInt16LE(4 + 0x8c), 2);
+  } finally {
+    await runtime.close();
+    await rm(dir, { recursive: true, force: true });
+  }
+});
+
 test('playable runtime routes world enter and wire move through CQRS/UoW', async () => {
   const dir = await mkdtemp(join(tmpdir(), 'logh7-rt-move-'));
   const dbPath = join(dir, 't.sqlite');

@@ -75,6 +75,8 @@ export function createWorldSession({
   // 시드 캐릭터 조회용(선택). enterWorld 가 0x0323 을 실 캐릭터로 채우는 데 사용한다.
   // 없으면 세션 로그인 때 캐시된 플레이어 필드로 폴백(하위호환).
   characterStore = null,
+  // production runtime의 SQLite WorldCatalog.getShips() 정적 함선 마스터.
+  ships = [],
   // LOGH_STRAT_GRID_EARLY=1: world-ready push 에서 0x0313 grid-type 를 조기 방출(reactive 0x0312
   // 응답과 합쳐 ×2). 스펙 §미방출 3(early-grid) 근거. 기본은 env 로 결정(프로덕션 opt-in).
   stratGridEarly = process.env.LOGH_STRAT_GRID_EARLY === '1',
@@ -780,6 +782,7 @@ export function createWorldSession({
     const admissionPlayer = players.get(connectionId);
     const admissionInner = buildAdmissionResponseInner(code, {
       authorityCards: admissionPlayer?.authorityCards,
+      ships,
     });
     if (admissionInner) {
       return {

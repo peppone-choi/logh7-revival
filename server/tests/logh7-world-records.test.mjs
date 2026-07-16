@@ -586,6 +586,28 @@ test('buildEmptyWalkerInner keeps empty body for pure-ack codes not in size tabl
   assert.equal(msg32Body(inner).length, 0);
 });
 
+test('0x030b UnitShip ship master writes catalog kind and cache label at the client offsets', () => {
+  // Given: WorldCatalog.getShips()와 같은 정렬된 행. 짧은 함선 키를 캐시 표시명으로 쓴다.
+  const ships = [
+    { ship_key: 'A72', name: '兵員輸送艦', side: 'empire', shipClass: 'trooper', pools: {} },
+    { ship_key: 'SS75', name: '標準戦艦', side: 'empire', shipClass: 'battleship', pools: {} },
+  ];
+
+  // When
+  const body = msg32Body(buildAdmissionResponseInner(0x030a, { ships }));
+
+  // Then: decompile의 undefined4* + 1은 4바이트 전진이므로 count 헤더 뒤 body+4가 첫 레코드다.
+  assert.equal(body.length, 0x6d64);
+  assert.equal(body.readUInt8(0x00), 2);
+  assert.equal(body.readUInt16LE(0x04), 1);
+  assert.equal(body.readUInt16LE(0x0a), 0, 'model code는 미확정이므로 0 유지');
+  assert.equal(body.readUInt8(0x0c), 3);
+  assert.equal(body.subarray(0x0e, 0x14).toString('utf16le'), 'A72');
+  assert.equal(body.readUInt16LE(0x04 + 0x8c), 2);
+  assert.equal(body.readUInt8(0x04 + 0x8c + 0x08), 4);
+  assert.equal(body.subarray(0x04 + 0x8c + 0x0a, 0x04 + 0x8c + 0x12).toString('utf16le'), 'SS75');
+});
+
 test('buildAdmissionResponseInner: each admission request → full-size static-info response', () => {
   const cases = [
     { req: 0x0304, resp: 0x0305, size: 0x520a, allZero: false },
