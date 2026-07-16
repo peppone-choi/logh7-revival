@@ -10,7 +10,8 @@ S=.claude/state
 n=$(cat "$S/stop-retries" 2>/dev/null || echo 0)
 [ "$n" -ge 2 ] 2>/dev/null && exit 0
 
-EXCL=(':(exclude)docs' ':(exclude).claude' ':(exclude)CLAUDE.md' ':(exclude)AGENTS.md')
+EXCL=(':(exclude)docs' ':(exclude).claude' ':(exclude)CLAUDE.md' ':(exclude)AGENTS.md'
+      ':(exclude).codex' ':(exclude).ai' ':(exclude)scripts/agent')
 work_now=$({ git status --porcelain -- . "${EXCL[@]}"; git diff -- . "${EXCL[@]}"; git diff --cached -- . "${EXCL[@]}"; git rev-parse HEAD; } 2>/dev/null | git hash-object --stdin)
 [ "$work_now" = "$(cat "$S/work.hash")" ] && exit 0  # 이번 턴 실작업 없음 → 통과
 
@@ -23,6 +24,12 @@ missing=""
 [ "$claudemd_now" = "$(cat "$S/claudemd.hash")" ] && missing="${missing:+$missing, }CLAUDE.md"
 [ "$agentsmd_now" = "$(cat "$S/agentsmd.hash")" ] && missing="${missing:+$missing, }AGENTS.md"
 
+# 세션 동적 상태 (.ai/current-state.md — 존재하는 경우에만 검사)
+if [ -f .ai/current-state.md ]; then
+  aistate_now=$(git hash-object .ai/current-state.md 2>/dev/null)
+  [ "$aistate_now" = "$(cat "$S/ai-state.hash" 2>/dev/null)" ] && missing="${missing:+$missing, }.ai/current-state.md"
+fi
+
 # 옵시디언 볼트 프로젝트 노트 — 경로가 설정되고 존재하는 머신에서만 검사
 VAULT="${LOGH7_VAULT_DIR:-}"
 if [ -n "$VAULT" ] && [ -d "$VAULT" ]; then
@@ -30,8 +37,18 @@ if [ -n "$VAULT" ] && [ -d "$VAULT" ]; then
     | LC_ALL=C sort | git hash-object --stdin)
   [ "$vault_now" = "$(cat "$S/vault.hash" 2>/dev/null)" ] && missing="${missing:+$missing, }옵시디언 볼트(LOGH7_VAULT_DIR)"
 fi
+
+# NIAH 키팩트 카드 신선도 — 판정 기준: HEAD 대비 uncommitted diff.
+# 파생 원천(roadmap·known-issues·task)이 HEAD 대비 uncommitted인데 key-facts.md가 미갱신이면 missing에 추가.
+NIAH_SOURCES=(docs/logh7-roadmap-current.md .ai/known-issues.md .ai/task.md)
+sources_dirty=$({ git status --porcelain -- "${NIAH_SOURCES[@]}"; git diff HEAD -- "${NIAH_SOURCES[@]}"; } 2>/dev/null)
+if [ -n "$sources_dirty" ]; then
+  keyfacts_dirty=$({ git status --porcelain -- .ai/key-facts.md; git diff HEAD -- .ai/key-facts.md; } 2>/dev/null)
+  [ -z "$keyfacts_dirty" ] && missing="${missing:+$missing, }.ai/key-facts.md"
+fi
+
 [ -z "$missing" ] && exit 0
 
 echo $((n+1)) > "$S/stop-retries"
-printf '{"decision":"block","reason":"작업 미완료: 이번 턴에서 파일이 변경됐지만 [%s]가 갱신되지 않았다. 이 프로젝트에서 일은 문서 현행화까지 해야 끝난다. (1) 이번 작업 결과를 관련 docs/ 문서(로드맵·핸드오프·RE 정본 등)에 반영하고 (2) AGENTS.md와 CLAUDE.md 현재 상태/규칙을 갱신하고 (3) LOGH7_VAULT_DIR가 설정된 환경에서는 해당 옵시디언 볼트의 관련 노트(현재 상태·로드맵·핸드오프)를 갱신하라. 정말 반영할 내용이 없다면 그 근거를 사용자 보고에 명시하라."}' "$missing"
+printf '{"decision":"block","reason":"작업 미완료: 이번 턴에서 파일이 변경됐지만 [%s]가 갱신되지 않았다. 이 프로젝트에서 일은 문서 현행화까지 해야 끝난다. (1) 이번 작업 결과를 관련 docs/ 문서(로드맵·핸드오프·RE 정본 등)에 반영하고 (2) AGENTS.md와 CLAUDE.md 현재 상태/규칙을 갱신하고 (3) .ai/current-state.md 세션 상태를 갱신하고 (4) LOGH7_VAULT_DIR가 설정된 환경에서는 해당 옵시디언 볼트의 관련 노트(현재 상태·로드맵·핸드오프)를 갱신하라. 정말 반영할 내용이 없다면 그 근거를 사용자 보고에 명시하라."}' "$missing"
 exit 0

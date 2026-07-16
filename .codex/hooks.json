@@ -1,5 +1,29 @@
 {
   "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Read|Edit|Write|NotebookEdit|Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash .codex/hooks/protect-sensitive-files.sh",
+            "timeout": 15
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash .codex/hooks/verify-changes.sh",
+            "timeout": 120
+          }
+        ]
+      }
+    ],
     "UserPromptSubmit": [
       {
         "hooks": [
@@ -7,6 +31,15 @@
             "type": "command",
             "command": "bash .codex/hooks/turn-snapshot.sh",
             "timeout": 30
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash .codex/hooks/inject-key-facts.sh",
+            "timeout": 10
           }
         ]
       }

@@ -1,69 +1,82 @@
-# LOGH VII Revival
+# LOGH VII Revival — Agent Working Agreement
 
-## 미션
+2008년 서비스 종료된 일본 MMO **은하영웅전설 VII**를 원본 클라이언트 + 자체 권위 서버로 복원한다.
+이 문서는 Codex를 포함한 **모든 코딩 에이전트의 도구 독립 실행 계약**이다. Claude 전용 규칙은 `CLAUDE.md`.
 
-2008년 서비스 종료된 일본 MMO **은하영웅전설 VII (LOGH VII)** 를 되살린다.
-원본 클라이언트(archive.org CD)에 자체 구현 서버를 붙여 멀티플레이 온라인 게임으로 복원한다.
+## Read Order
 
-## 현재 기준 (2026-07-16)
+1. `.ai/task.md` — 현재 작업 계약. EMPTY면 사람 승인 전 구현 금지.
+2. `.ai/decisions.md` — 인간 승인 결정
+3. `docs/agent/README.md` — 작업 유형별 문서 라우팅 (모든 문서를 읽지 않는다)
+4. `.ai/current-state.md`, `.ai/handoff.md`, `.ai/ownership.md` — 재개·병렬 작업 시
+5. 현재 작업 유형의 Runbook (`docs/agent/lifecycle-*.md`)
 
-- 2026-07-05 리셋 전 스냅샷은 커밋 `5bd249c`다. 옛 코드는 참고용으로만 복원하고 현재 구현에 그대로 되살리지 않는다.
-- M0.5/M1/M2/M3는 완료 이력이다. run9에서 두 원본 클라이언트의 월드 진입, 이동 브로드캐스트, 재로그인·서버 재시작 영속성을 통과했으나, 현재 checkout에는 run9/run3/run5 원증거와 당시 exact patch EXE 계보 영수증이 없어 fresh release gate로 재사용하지 않는다.
-- M4는 부분 진행이다. production SQLite runtime의 `EnterWorld`·`MoveGrid`가 동기 CQRS/UoW를 거치며, 성공한 `0x0b01`만 위치와 `GridMoved` 1건을 함께 커밋한다.
-- production `0x030b`는 SQLite 함선 catalog 63행 가운데 원본 클라이언트가 라이브에서 수용한 선두 19행만 `undefined4* + 1`의 4바이트 헤더 뒤 `0x8c` stride로 보낸다. 20행 이상은 admission 정지를 재현하므로 금지한다. 이 slice는 두 클라이언트 월드 진입과 `0x0b01`/`0x0b07` 이동을 보존하지만 함선 마커 root `DAT_009d2fa8`은 여전히 null이고 전략 FSM은 state 2에서 진행하지 않는다.
-- 로그인 클라이언트 영역은 원본 `644×484`를 유지하고, 로그인 뒤 게임 영역만 `1920×1080`으로 전환한다.
-- 현재 주력은 M4 전략 커맨드·서버 데이터이며, 전체 한글화·전술/전투·운영은 아직 완료가 아니다.
+## Instruction Hierarchy
 
-## 소스 오브 트루스
+충돌 시 위가 우선한다. 조용히 하나를 고르지 말고 충돌을 보고한다.
 
-- `artifacts/logh7-cd/Logh7.bin|.cue` — https://archive.org/details/logh-7 CD 이미지 (md5 검증 완료: `bf87c6a8...`/`8784...`, gitignored — 없으면 재다운로드)
-- `docs/reference/*.pdf` — 공식 매뉴얼 5종 (게임 규칙의 근거)
-- `docs/logh7-requirements-current.md`, `docs/logh7-architecture-operations-current.md` — 현재 요구사항·구현 경계·운영 기준
-- `.omo/plans/logh7-execution-plan-current.md` — 현재 실행 순서와 완료 게이트
-- `docs/logh7-document-index-current.md` — 현행·역사 문서 라우팅 인덱스
-- `docs/logh7-reference-haul.md` — 트랙별 외부 레포·도구·방법론 라우터. 관련 작업 전에 반드시 읽되 캐논 근거로 쓰지 않는다.
+1. 사용자의 현재 직접 지시
+2. `.ai/task.md` 계약
+3. `.ai/decisions.md` 승인 결정
+4. `CLAUDE.md`·`AGENTS.md` 영구 규칙
+5. 실행 가능한 설정·테스트·빌드 파일
+6. `docs/agent/` Runbook
+7. 코드베이스의 반복 패턴
+8. `.ai/current-state.md`·`handoff.md`
+9. 에이전트의 추론·가정
 
-## 개발 규칙
+```md
+## Instruction Conflict
+- Source A: / Source B: / Conflict: / Safe temporary behavior: / Human decision required:
+```
 
-- **CodeGraph 필수**: `.codegraph/`가 있으면 코드 위치/호출경로/영향범위 질문은 codegraph 먼저, rg로 확인.
-- **참고 목록 필수**: LOGH VII 작업은 `docs/logh7-reference-haul.md`의 해당 트랙을 먼저 읽는다.
-- **Blocked-Loop Rule**: 같은 증상 3회 실패 또는 새 증거 없는 조사 2회면 접근을 전환하고 블로커 보고서를 쓴다.
-- 코드 주석은 한글로 쓴다 (캐논 일본어 용어·바이너리 오프셋은 원문 유지).
-- 라이브 검증 없이 완료 주장 금지. 테스트 출력·스크린샷 등 증거를 남긴다.
+## Repository Boundaries
 
-## 참고 방법론 적용 기준
+- 수정 전 `.ai/task.md`의 Allowed files와 `.ai/ownership.md` 소유를 확인한다.
+- 보호: 비밀 파일(`.env*`, `*.pem`, `*.key`, `credentials*`, `secrets*`, `terraform.tfstate*`) 읽기·쓰기 금지, `server/data/` 라이브 데이터 삭제 금지, `reference/`의 외부 코드 이식 금지.
+- 역사 문서(`docs/logh7-document-index-current.md`가 historical로 분류)의 코드 경로는 불신한다.
+- 정본 라우팅: 마일스톤·게이트 = `docs/logh7-roadmap-current.md`, 클라이언트 계보 = `docs/logh7-client-lineage-current.md`, 방법론 = `docs/logh7-reference-haul.md`.
 
-- **증거 우선순위**: `docs/logh7-reference-haul.md`는 방법론 라우터이지 캐논 데이터가 아니다. 게임 규칙·값·와이어 판정은 CD, 공식 매뉴얼, 정본 EXE, 패킷, 라이브 관측으로 다시 입증한다.
-- **백엔드·프런트엔드 경계**: MHServerEmu 사례처럼 원본 클라이언트는 표시와 입력 의도, 제한적 prediction만 맡는다. 자체 서버가 입력 검증, 상태 권위, 영속화, 다른 클라이언트 브로드캐스트를 맡는다.
-- **RE 도구 차용**: Frida 예제와 Ghidra 자동화 레포는 훅·전수 분석 패턴만 참고한다. 정본 EXE 해시와 오프셋을 매 실행에서 확인하고, 외부 코드는 라이선스 확인 없이 복사하지 않는다.
-- **한글화 의사결정**: CP932 자산을 임의로 UTF-8 저장하지 않는다. 전체 한글화는 CP949 자산 변환과 SJIS tunneling + GDI proxy/font/IME 경로를 같은 시나리오로 비교한 뒤 선택하며, 원본 백업·해시 guard·rollback을 필수로 둔다.
-- **외부 레포 격리**: 참고 레포는 `/reference/` 아래에서만 clone하고 커밋하지 않는다. 프레임워크를 바로 도입하지 말고 현재 프로토콜·서버 경계에 필요한 패턴만 최소 이식한다.
+## Required Workflow
 
-## 하네스와 현재 구현 경계
+Explore → Plan → (필요시 범위 확인) → Implement minimally → Verify → Review diff → Update state → Report.
+Blocked-Loop Rule: 같은 증상 3회 실패 또는 새 증거 없는 조사 2회 → 접근 전환 + 블로커 보고.
+코드 주석은 한글 (캐논 일본어 용어·바이너리 오프셋은 원문 유지). 코딩 규칙: `docs/agent/coding-rules.md`.
 
-- LOGH VII 자산추출·RE·프로토콜·서버·한글화·라이브 QA 요청에는 `logh7-orchestrator` 스킬을 사용한다.
-- 원본 클라이언트는 frontend, Node 서버는 authoritative backend다. 경계는 presentation/session → application command → domain authority → persistence 순서로 유지한다.
-- M4 개발은 P0(저장소 밖 run 전용 win32 `WINEPREFIX`·클라이언트 계보·증거 복구) → P1(client/proxy/server 3면 관측·상관관계) → P2(`0x030b` parser/cache/root/FSM) 순서로 닫은 뒤 진행한다. 첫 티켓은 `M4-OBS-001`의 `47900 → 47901` observe-only proxy다. 기본 `~/.wine`은 사용하지 않으며 EXE hash·image base·sentinel 불일치는 launch/attach/patch 전에 fail-closed한다. HEAD `3b09e461`의 fresh `--execute --initialize-prefix`는 launch 전 `runtime_support_manifest_missing`(exit 2, `fullPassEligible=false`)으로 차단되어 Wine/client process 0을 유지했으며, receipt `_workspace/logh7-revival/runs/20260716T051159Z-recovery01/p0-wine-execute-retry-3b09e461.json`(`sha256 3c216e6b...e5d3e1ea`) 기준 다음 P0 게이트는 V1 runtime-support manifest와 sentinel 복구다.
-- run9/run3의 JSON store 라이브 QA와 production SQLite 증거를 분리한다. run3는 SQLite CQRS를 실행하지 않았다.
-- `MoveGrid`는 현재 `0x0315`가 내보내는 `spaceCells ∪ systemCells`만 허용하고 정책 미주입 시 fail-closed다. 이는 표시·권위 일치일 뿐 정본 승격이 아니며, `galaxy-passable-cells`와 galaxy trust 데이터는 교차 확인 전까지 provisional이다.
-- M4는 81개 catalog 중 factory 확인 2개·미해결 79개다. PCP/MCP ledger, CP charge, timers/jobs, 실제 command outcome, `0x0327` 미확정 재고, disconnect의 `online=false` 영속화가 남았다. 동기 SQLite bridge는 PostgreSQL 전환 전에 async-capable하게 바꾼다.
-- M6는 현재 CP932 표시 복구와 일부 `.rsrc` 한글화까지만 완료했다. 일본어가 읽힌다는 사실을 전체 한글화 완료로 보고하지 않는다.
-- 원본 클라이언트는 1차 제품·호환 오라클이며 로그인 원본 크기와 본게임 1080p 경계를 보존한다. 고해상도 자산은 provenance·원본 fallback·rollback이 갖춰진 뒤 적용하고, 장기 재이식 엔진은 Unity로 고정하지 않는다. Unity·Godot·기타 후보가 같은 command/event/asset 계약을 구현한 PoC를 비교하기 전에는 `client-unity/`를 활성 제품 계약으로 복원하지 않는다.
-- UnitShip targeted `132/132`, 전체 server `460 total / 458 pass / 0 fail / 2 pre-existing conditional skips`, Python live harness `16/16`, changed JS LSP error `0`, 비항법 cell `0` 무변경 probe는 2026-07-16의 historical baseline이다. exact 명령·환경·산출물로 다시 실행하기 전에는 fresh gate가 아니다. 원본 클라이언트 run5는 두 클라이언트 월드 진입과 `0x0b01`/`0x0b07` 이동을 보존했지만 post-warp HUD idle gate 실패와 함선 마커 root null을 남겼다.
+## Verification Contract
 
-## 완료 게이트
+- 정본: `docs/agent/verification.md` (변경 유형별 최소 검증 행렬).
+- 공통 명령: `bash scripts/agent/verify-changes.sh --file <경로>` / `--full`, `cd server && npm test`.
+- 실행한 명령과 종료 코드를 기록한다. 미실행 검증은 미실행으로 구분한다. 실패 테스트 삭제·약화·skip 금지.
+- 클라이언트 가시 변경은 라이브 증거 없이 완료 주장 금지. 과거 수치는 historical baseline이지 fresh gate가 아니다.
 
-- 모든 LOGH VII 작업 단위는 종료 전에 루트 `AGENTS.md`와 `CLAUDE.md`에 현재 상태, 실행 경계, 남은 다음 작업, 검증 근거 중 지속적으로 필요한 내용을 반영한다.
-- 같은 작업에서 영향을 받은 `docs/` 현행 문서와 현재 머신에 설정된 옵시디언 프로젝트 볼트의 `현재 상태.md`·`로드맵.md`도 실제로 수정해 저장소와 볼트가 같은 상태를 가리키게 한다.
-- `AGENTS.md`·`CLAUDE.md` 변경을 diff로 확인하고 현재 코드·현행 계획·볼트 로드맵과 모순이 없는지 검증하기 전에는 작업을 완료로 보고하거나 커밋을 최종 승인하지 않는다.
-- 단순 진행 로그를 누적하지 않는다. 낡은 지침은 수정·삭제하고, 반복되는 설명은 소스 오브 트루스 한 곳으로 합쳐 문서를 짧고 현행으로 유지한다.
+## Git Safety (근거: `.ai/decisions.md` ADR-LITE-005)
 
-## 위임·토큰 원칙
+- 작업 브랜치 commit: 검증 통과 후 허용. 관례: `codex/*` 등 작업 브랜치 → PR.
+- push, PR 생성, merge, main 직접 커밋, 히스토리 재작성: **사용자 승인 필수.**
+- `git reset --hard`·작업트리 초기화·다른 에이전트 변경 덮어쓰기 금지.
 
-- 메인 Advisor는 요구사항 분해, 설계 결정, diff·테스트·라이브 증거 검증, 커밋 승인을 맡는다.
-- 구현 노동은 경계가 명확한 Worker 한 명에게 우선 위임한다. 부모 Worker의 하위 에이전트 생성은 메인이 명시한 경우가 아니면 금지한다.
-- 독립 작업도 필요한 수만 병렬화하고, 같은 파일·같은 증거를 여러 에이전트가 중복 조사하지 않는다.
-- 브리프에 파일 경로, 이미 확인한 사실, 금지 범위, 완료 테스트를 넣어 재탐색을 막는다.
-- Worker 보고는 그대로 승인하지 않는다. 메인이 변경 diff와 검증 출력을 직접 확인한다.
-- 한두 줄 수정, 커밋·푸시, 좁은 문서 정리는 위임 오버헤드가 더 크면 직접 처리한다.
-- 같은 증상 3회 또는 새 증거 없는 조사 2회에 도달하면 반복 실행을 중단하고 접근을 바꾼다.
+## Sensitive Data Policy
+
+비밀값은 읽지도 출력하지도 않는다. 설정 예시는 `.env.example` 류로 대체한다.
+(Claude/Codex 훅이 차단하지만, 훅 부재 환경에서도 이 계약은 유효하다.)
+
+## Multi-Agent Ownership
+
+single-writer-per-file. 시작 전 `.ai/ownership.md` 등록, 종료 시 해제. 다른 에이전트 소유 파일은 읽기만.
+동일 기능 병렬 구현 금지. 결과 전달은 `.ai/handoff.md` — 추측(Inferred)을 사실로 승격하지 않는다.
+상세: `docs/agent/collaboration-protocol.md`, `docs/agent/lifecycle-collaboration.md`.
+
+## Completion Report
+
+- 보고에 포함: 변경 파일, 실행 검증(명령+종료 코드), 미실행 검증, 남은 일, 필요한 사람 결정.
+- **문서 현행화 게이트**: 파일을 변경한 턴은 관련 `docs/` 현행 문서, `AGENTS.md`·`CLAUDE.md`, `.ai/current-state.md`, (`LOGH7_VAULT_DIR` 설정 머신에서는) 옵시디언 볼트까지 갱신해야 끝난다. 반영할 것이 없으면 그 근거를 보고에 명시한다. 진행 로그를 누적하지 말고 낡은 지침은 수정·삭제한다.
+- 세션 종료 전 `.ai/handoff.md` 갱신 — 다음 에이전트가 대화 기록 없이 재개 가능해야 한다.
+
+## Tool Notes
+
+- Claude 전용 Commands(`.claude/commands/`)·Hooks는 얇은 래퍼다 — 절차 정본은 `docs/agent/`와 `scripts/agent/`에 있고, Codex는 같은 스크립트를 수동 실행한다 (`.codex/hooks/`는 미러).
+- 도구 실사·설치 스택: `docs/agent/tool-capabilities.md`.
+- 키팩트 카드 `.ai/key-facts.md`(≤40줄): 매 턴 자동 주입(`inject-key-facts` 훅, `.codex/hooks/` 미러). 파생 원천(roadmap·known-issues·task.md) 변경 시 카드도 갱신 — stop-doc-gate가 강제.
+- 커맨드↔프롬프트 팩 매핑(7섹션 표준): `docs/agent/prompt-pack.md` 앞머리 표 — Codex는 커맨드 래퍼 없이 해당 팩 섹션을 직접 로드한다.
+- MCP 정의는 `.mcp.json`(커밋), 활성화는 `.claude/settings.local.json` 명시 allowlist — Jira 기획 루틴은 `docs/agent/lifecycle-planning.md` 참조. Codex는 `.mcp.json`을 읽지 않고 `.codex/config.toml`의 별도 레지스트리를 사용한다.

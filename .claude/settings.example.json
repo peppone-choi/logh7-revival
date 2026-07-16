@@ -1,4 +1,5 @@
 {
+  "_comment": "현재 활성 .claude/settings.json 과 동일한 예시. 훅 스키마는 이 저장소에서 동작 검증됨 (Claude Code 2026-07 기준). protect-sensitive-files=민감 파일 차단(PreToolUse), verify-changes=편집 파일 구문+관련 테스트(PostToolUse), turn-snapshot/stop-doc-gate=문서 현행화 게이트(UserPromptSubmit/Stop). 검증 로직 정본은 scripts/agent/verify-changes.sh — Codex는 같은 스크립트를 수동 실행한다.",
   "hooks": {
     "PreToolUse": [
       {

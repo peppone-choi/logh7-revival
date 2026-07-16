@@ -1,5 +1,14 @@
 // 실 유저 경로 진입점 — 3티어 playable runtime (47900 + SQLite + accounts)
 
+// Sentry 초기화 — SENTRY_DSN 미설정 시 완전 no-op. 모듈 로드 자체가 수 초 걸리므로
+// 동적 import로 감싸 미설정 시 부팅 시간에 전혀 영향이 없게 한다 (Phase 2C: env-guard 배선만, 캡처 계측은 이후 단계)
+if (process.env.SENTRY_DSN) {
+  const Sentry = await import('@sentry/node');
+  Sentry.init({ dsn: process.env.SENTRY_DSN });
+} else {
+  process.stdout.write('[sentry] DSN 미설정 — 비활성\n');
+}
+
 import { parseArgs } from 'node:util';
 import { resolve } from 'node:path';
 import { createPlayableRuntime } from './createPlayableRuntime.mjs';

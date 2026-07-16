@@ -1,0 +1,33 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Node 24 = Active LTS (LTS since 2025-10, EOL 2028-04). Local dev runs
+      # v25.9.0 (Current/non-LTS); CI pins to the stable LTS line instead.
+      # server/package.json engines requires >=20 — 24 satisfies that floor.
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: npm
+          cache-dependency-path: server/package-lock.json
+
+      - name: Install server dependencies
+        working-directory: server
+        run: npm ci
+
+      - name: Run server tests
+        working-directory: server
+        run: npm test
