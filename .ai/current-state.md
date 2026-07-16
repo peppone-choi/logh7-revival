@@ -1,7 +1,7 @@
 # Current State
 
 - Updated at: 2026-07-17
-- Latest change (Claude Code 메인+opus 서브에이전트): 강의(딩코딩코 AI 네이티브 개발자 1~4주차) 방법론을 이 레포 하네스(커맨드 7종·훅 5종·에이전트 6종·MCP·승인 경계·검증 행렬)에 맞춰 개작한 Claude Code 사용자 매뉴얼을 `docs/agent/claude-code-ai-업무관리-매뉴얼.md`(457줄)로 저장하고 `docs/agent/README.md` 라우팅 표에 등록했다. 레포에 없는 강의 일반론(claude-squad·Terraform·Langfuse·Ralph Loop 등)은 부록 참고로 격하. 이어서 사용자 지시(2026-07-17)로 루트 `README.md`를 신설(Claude·Codex 매뉴얼 링크, 배포 계획), `docs/logh7-architecture-operations-current.md`에 Distribution and Repository Split Plan 절(클라이언트/서버 레포 분리, 부트스트랩 클라이언트 최종 배포)을 추가, ADR-LITE-006으로 기록했다. 사용자 승인으로 `codex/codex-user-manual` 브랜치에서 commit·push·PR·merge 진행(Codex 선행 7커밋 포함). 검증: `verify-changes.sh --file` 변경 문서 전부 exit 0. `.codex/config.toml` 동시 수정분은 스테이징 제외로 보존.
+- Latest change (Claude Code 메인+opus 서브에이전트): 강의(딩코딩코 AI 네이티브 개발자 1~4주차) 방법론을 이 레포 하네스(커맨드 7종·훅 5종·에이전트 6종·MCP·승인 경계·검증 행렬)에 맞춰 개작한 Claude Code 사용자 매뉴얼을 `docs/agent/claude-code-ai-업무관리-매뉴얼.md`(457줄)로 저장하고 `docs/agent/README.md` 라우팅 표에 등록했다. 레포에 없는 강의 일반론(claude-squad·Terraform·Langfuse·Ralph Loop 등)은 부록 참고로 격하. 이어서 사용자 지시(2026-07-17)로 루트 `README.md`를 신설(Claude·Codex 매뉴얼 링크, 배포 계획), `docs/logh7-architecture-operations-current.md`에 Distribution and Repository Split Plan 절(클라이언트/서버 레포 분리, 부트스트랩 클라이언트 최종 배포)을 추가, ADR-LITE-006으로 기록했다. 사용자 승인으로 `codex/codex-user-manual` 브랜치에서 commit·push·PR #167 merge 완료(`cbcd7ea5`, Codex 선행 7커밋 포함). 후속으로 `docs/logh7-document-index-current.md`에 README·매뉴얼 2종·배포 방침을 등재(문서 현행화 게이트). 검증: `verify-changes.sh --file` 변경 문서 전부 exit 0. `.codex/config.toml` 동시 수정분은 스테이징 제외로 보존. `CLAUDE.md`·`AGENTS.md`는 운영 규칙 무변경이라 미갱신.
 - Active agent: Codex (root)
 - Branch: `codex/codex-user-manual`
 - Current phase: Codex AI 자동 업무 관리 시스템 사용자 매뉴얼 작성·검증 완료; 사용자가 작업 브랜치 commit·push·PR·merge를 승인했다.
