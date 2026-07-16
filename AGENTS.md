@@ -10,6 +10,7 @@
 - 2026-07-05 리셋 전 스냅샷은 커밋 `5bd249c`다. 옛 코드는 참고용으로만 복원하고 현재 구현에 그대로 되살리지 않는다.
 - M0.5/M1/M2/M3는 완료했다. run9에서 두 원본 클라이언트의 월드 진입, 이동 브로드캐스트, 재로그인·서버 재시작 영속성을 통과했다.
 - M4는 부분 진행이다. production SQLite runtime의 `EnterWorld`·`MoveGrid`가 동기 CQRS/UoW를 거치며, 성공한 `0x0b01`만 위치와 `GridMoved` 1건을 함께 커밋한다.
+- production `0x030b`는 SQLite 함선 catalog 63행 가운데 원본 클라이언트가 라이브에서 수용한 선두 19행만 `undefined4* + 1`의 4바이트 헤더 뒤 `0x8c` stride로 보낸다. 20행 이상은 admission 정지를 재현하므로 금지한다. 이 slice는 두 클라이언트 월드 진입과 `0x0b01`/`0x0b07` 이동을 보존하지만 함선 마커 root `DAT_009d2fa8`은 여전히 null이고 전략 FSM은 state 2에서 진행하지 않는다.
 - 로그인 클라이언트 영역은 원본 `644×484`를 유지하고, 로그인 뒤 게임 영역만 `1920×1080`으로 전환한다.
 - 현재 주력은 M4 전략 커맨드·서버 데이터이며, 전체 한글화·전술/전투·운영은 아직 완료가 아니다.
 
@@ -47,7 +48,7 @@
 - M4는 81개 catalog 중 factory 확인 2개·미해결 79개다. PCP/MCP ledger, CP charge, timers/jobs, 실제 command outcome, `0x0327` 미확정 재고, disconnect의 `online=false` 영속화가 남았다. 동기 SQLite bridge는 PostgreSQL 전환 전에 async-capable하게 바꾼다.
 - M6는 현재 CP932 표시 복구와 일부 `.rsrc` 한글화까지만 완료했다. 일본어가 읽힌다는 사실을 전체 한글화 완료로 보고하지 않는다.
 - 리마스터는 로그인 원본 크기와 본게임 1080p 경계를 보존한다. 고해상도 자산은 provenance·원본 fallback·rollback이 갖춰진 뒤 적용한다.
-- 2026-07-16 검증 기준선은 targeted movement/galaxy/world/server `97/97`, 전체 server `458 total / 456 pass / 0 fail / 2 pre-existing conditional skips`, Python live harness `16/16`, changed JS LSP error `0`, 비항법 cell `0` 무변경 probe다.
+- 2026-07-16 검증 기준선은 이번 UnitShip targeted `132/132`, 전체 server `460 total / 458 pass / 0 fail / 2 pre-existing conditional skips`다. 원본 클라이언트 run5는 두 클라이언트 월드 진입과 `0x0b01`/`0x0b07` 이동을 보존했지만 post-warp HUD idle gate는 실패했고 함선 마커 root는 null이었다. 기존 Python live harness `16/16`, changed JS LSP error `0`, 비항법 cell `0` 무변경 probe도 유지한다.
 
 ## 완료 게이트
 

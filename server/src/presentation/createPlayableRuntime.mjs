@@ -36,6 +36,8 @@ export function createPlayableRuntime({
   const worldSession = createWorldSession({
     characterStore,
     dispatchCommandSync: app.dispatchCommandSync,
+    // 원본 클라이언트 라이브에서 20행 이상은 정지하므로 검증된 선두 19행만 보낸다.
+    ships: app.worldCatalog.getShips().slice(0, 19),
     worldRedirect: { ip: host === '0.0.0.0' ? '127.0.0.1' : host, port, token: 1 },
   });
 

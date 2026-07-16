@@ -831,8 +831,8 @@ export function buildStaticInformationGridInner({
 //   0x0313 ResponseStaticInformationGridType — 문서 확정 (render-interaction-contract L178):
 //     고정 5004B, payload[0]=count, 레코드는 1 + value*3 에 [contentId, klass, variant].
 //   0x0315 ResponseStaticInformationGrid — 문서 확정 (L179): 기존 buildStaticInformationGridInner.
-//   0x0305/0x0307/0x030b/0x030f/0x0311 — 바디 포맷 문서 미확정. "빈 walker"(코드만) 최소 응답.
-//     (P1 라이브: empty walker 응답은 decode no-op → walk 안 멈춤. 안전.)
+//   0x0305/0x0307은 권위 카드 기준선, 0x030b는 라이브 안전 19행 UnitShip 전용 빌더다.
+//   0x030f/0x0311 등 미확정 응답만 풀사이즈 zero-fill walker로 유지한다.
 
 export const CODE_REQ_SESSION_WALKER = 0x0304; // C→S
 export const CODE_RESP_SESSION_WALKER = 0x0305; // S→C (빈 InformationSession walker)
@@ -869,9 +869,9 @@ export const CODE_RESP_INFORMATION_WAREHOUSE = RESP_INFO_WAREHOUSE_CODE;
  * 서버가 빈(0바이트) body 로 응답하면 클라가 최대 21KB 앞으로 over-read → access violation
  * ("abnormal program termination"). 따라서 이 표의 opcode 는 반드시 풀사이즈 body 로 응답한다.
  *
- * zero-fill 안전성(RE 확정): walker 가 고정 루프에서 body 로부터 count/포인터를 유도하지
- * 않으므로 전부 0이면 "빈 테이블"로 무해하게 소비된다. 데이터 날조가 아니라 빈(0) 테이블이며,
- * 실제 세션/캐릭터/맵 콘텐츠는 미승격이다.
+ * zero-fill 안전성(RE 확정): 전용 데이터 빌더가 없는 walker는 고정 루프에서 body 로부터
+ * count/포인터를 유도하지 않으므로 전부 0이면 "빈 테이블"로 무해하게 소비된다. 데이터 날조가
+ * 아니라 빈(0) 테이블이며, 실제 세션/캐릭터/맵 콘텐츠는 미승격이다.
  */
 export const STATIC_INFO_BODY_SIZES = Object.freeze({
   0x0305: 0x520a, // 21002 InformationSession walker
@@ -974,6 +974,9 @@ export const STATIC_INFORMATION_CARD_COMMAND_STRIDE = 0xc4; // 0x0307 native des
 export const STATIC_INFORMATION_CARD_COMMAND_RECORD_MAX = 300;
 export const STATIC_INFORMATION_CARD_COMMAND_ENTRY_STRIDE = 8;
 export const STATIC_INFORMATION_CARD_COMMAND_MAX = 24;
+const STATIC_INFORMATION_UNIT_SHIP_STRIDE = 0x8c;
+const STATIC_INFORMATION_UNIT_SHIP_MAX = 200;
+const STATIC_INFORMATION_UNIT_SHIP_NAME_MAX = 13;
 
 function clampU16(value) {
   const n = Number(value);
@@ -1047,6 +1050,24 @@ export function buildPlayableBaselineCommandDescriptorInner({ authorityCards = n
       commands: card.commands.map((id) => ({ id })),
     })),
   });
+}
+
+/** 0x030b ResponseStaticInformationUnitShip — SQLite 함선 키를 캐시 표시명으로 보낸다. */
+export function buildStaticInformationUnitShipInner({ ships = [] } = {}) {
+  const body = Buffer.alloc(STATIC_INFO_BODY_SIZES[0x030b]);
+  const list = Array.isArray(ships) ? ships.slice(0, STATIC_INFORMATION_UNIT_SHIP_MAX) : [];
+  body.writeUInt8(list.length, 0x00);
+  for (let index = 0; index < list.length; index += 1) {
+    // decompile의 param_2는 undefined4*이므로 +1은 1바이트가 아니라 4바이트 전진이다.
+    const base = 4 + index * STATIC_INFORMATION_UNIT_SHIP_STRIDE;
+    const shipKey = [...String(list[index]?.ship_key ?? '')].slice(0, STATIC_INFORMATION_UNIT_SHIP_NAME_MAX);
+    body.writeUInt16LE(index + 1, base + 0x00);
+    body.writeUInt8(shipKey.length, base + 0x08);
+    for (let charIndex = 0; charIndex < shipKey.length; charIndex += 1) {
+      body.writeUInt16LE(shipKey[charIndex].charCodeAt(0), base + 0x0a + charIndex * 2);
+    }
+  }
+  return buildMsg32Inner(CODE_RESP_ADMISSION_030B, body);
 }
 
 export function buildEmptyWalkerInner(code) {
@@ -1127,15 +1148,19 @@ const ADMISSION_DEDICATED_BUILDERS = Object.freeze({
 
 /**
  * 어드미션 요청 code → 응답 message32. handleWorldInner 가 사용.
- * 명령 기준선(0x0305/0x0307)과 전용 빌더(0x0313/0x0315)는 실제 바디, 나머지는 빈 walker다.
+ * 명령 기준선(0x0305/0x0307), UnitShip(0x030b), grid 전용 빌더(0x0313/0x0315)는
+ * 실제 바디를 만들고 나머지 미확정 응답은 풀사이즈 zero-fill walker다.
  */
-export function buildAdmissionResponseInner(reqCode, { authorityCards = null } = {}) {
+export function buildAdmissionResponseInner(reqCode, { authorityCards = null, ships = null } = {}) {
   const code = reqCode & 0xffff;
   if (code === CODE_REQ_SESSION_WALKER) {
     return buildPlayableBaselineCommandCardInner({ authorityCards });
   }
   if (code === CODE_REQ_DUTY_WALKER) {
     return buildPlayableBaselineCommandDescriptorInner({ authorityCards });
+  }
+  if (code === CODE_REQ_ADMISSION_030A && Array.isArray(ships)) {
+    return buildStaticInformationUnitShipInner({ ships });
   }
   const dedicated = ADMISSION_DEDICATED_BUILDERS[code];
   if (dedicated) return dedicated();

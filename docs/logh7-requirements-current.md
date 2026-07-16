@@ -1,6 +1,6 @@
 # LOGH VII Current Requirements
 
-> **현재 권위 (2026-07-15):** 시작 문서는 이 문서, `docs/logh7-architecture-operations-current.md`, `.omo/plans/logh7-execution-plan-current.md` 세 개다. 정상 플레이어 경로는 설치 폴더의 수정된 `g7mtclient.exe` 직접 실행이며, 보조 런처·`ui_explorer`·overlay는 정상 경로가 아니다. 클라이언트 수정 도구의 언어는 Python을 포함해 제한하지 않는다. 실제 설치 `g7mtclient.exe`를 직접 in-place 패치할 때도 원본 백업, 적용 전 해시 검증, 실패 시 rollback 경로를 반드시 남긴다. 아래 날짜별 G0xx 항목은 결정 근거를 보존한 역사 기록이며, 현재 실행 상태나 로드맵 권위를 갖지 않는다.
+> **현재 권위 (2026-07-16):** 시작 문서는 이 문서, `docs/logh7-architecture-operations-current.md`, `.omo/plans/logh7-execution-plan-current.md` 세 개다. 정상 플레이어 경로는 설치 폴더의 수정된 `g7mtclient.exe` 직접 실행이며, 보조 런처·`ui_explorer`·overlay는 정상 경로가 아니다. 클라이언트 수정 도구의 언어는 Python을 포함해 제한하지 않는다. 실제 설치 `g7mtclient.exe`를 직접 in-place 패치할 때도 원본 백업, 적용 전 해시 검증, 실패 시 rollback 경로를 반드시 남긴다. 아래 날짜별 G0xx 항목은 결정 근거를 보존한 역사 기록이며, 현재 실행 상태나 로드맵 권위를 갖지 않는다.
 
 2026-07-14 run9 직접 클라이언트 기준선: `tools/live/prepare_direct_client.mjs`가 해시 검증 후 선택한 설치 트리의 `exe/g7mtclient.exe` 최종 SHA256은 `825635783a9fb663ae3b9a2ecf8d4b74df648322256c57ee32f6426c42a23f22`다. `postlogin` 패치 59개는 `lobby-res` 8개, layout 13개, `charsel` 38개이며, 로그인 화면을 늘리던 `login-native-layout` 33개는 제거했다. 로그인 내부 화면은 원래 644×484를 유지하고 로그인 후에는 1920×1080으로 전환한다(창 캡처 1924×1084). 창 제목과 메뉴 한글은 유지하되 CP932 자산 때문에 `CreateFontA` charset `0x81`은 모지바케를 일으켜 `0x80`으로 복귀했다.
 
@@ -12,11 +12,13 @@
 
 2026-07-15 M4 첫 production slice: `createPlayableRuntime`가 `EnterWorld`와 `MoveGrid`를 동기 CQRS/UoW로 production SQLite runtime에 주입한다. 성공한 `0x0b01`은 cell과 `GridMoved` event 1건을 같은 트랜잭션으로 영속화한다. 잘못된 account·unit, offline character, 비항법 cell `0`은 DB cell, in-memory session cell, domain event 수, session move event와 응답을 모두 바꾸지 않는다. application `MoveGrid`는 navigability policy가 없으면 fail-closed다.
 
+2026-07-16 M4 정적 함선 slice: production `0x030b ResponseStaticInformationUnitShip`는 SQLite catalog 63행 중 라이브 안전 경계인 선두 19행만 보낸다. 첫 record는 decompile의 `undefined4* + 1`에 맞춰 body+4에서 시작하고 stride는 `0x8c`다. 20행 이상은 원본 클라이언트 admission 정지를 재현한다. `.omo/live-qa/m4-ship-master-20260716-run5-aligned19/`의 19행 run은 두 클라이언트 월드 진입과 `0x0b01`/`0x0b07` 이동을 보존했지만 `DAT_009d2fa8` 함선 마커 root와 전략 FSM은 복구하지 못했으므로 M4 완료 근거가 아니다.
+
 현재 항법 정책은 `logh7-galaxy-placement.mjs`가 실제 `0x0315`로 내보내는 `spaceCells ∪ systemCells`와 정확히 같은 집합이다. 이는 클라이언트 표시와 서버 권위를 맞춘 것일 뿐 canonical promotion이 아니다. `galaxy-passable-cells.json`과 galaxy trust 데이터는 교차 출처 확인 전까지 provisional/blocked다.
 
 네이티브 라이브 증거 `.omo/live-qa/m4-cqrs-two-client-20260715-run3/results.json`은 SHA256 `825635783a9fb663ae3b9a2ecf8d4b74df648322256c57ee32f6426c42a23f22`인 원본 EXE 직접 실행에서 8/8을 통과했다. `0x0b01 → 0x0b07` cell `2587`, B notification delta `1`/lookup miss `0`, 재로그인·서버 재시작 유지와 정리를 확인했다. 로그인은 644×484, 로그인 후 게임은 1920×1080(외곽 캡처 1924×1084)이다. harness 수정은 confirm `(1018,656)`을 보이는 중심 `(1018,642)`로 옮긴 것뿐이며, run1/run2는 `0x0b01`이 없었던 실패 control이다. 이 run3도 JSON store를 썼으므로 production SQLite CQRS 증거는 아니다.
 
-fresh 검증은 movement/galaxy/world/server targeted `97/97`, 전체 server `458 total / 456 pass / 0 fail / 2 pre-existing conditional skips`, Python live harness `16/16`, changed JS LSP error `0`, diff-check clean이다. 수동 runtime probe는 `grid cell not navigable`, 응답 없음, DB/session cell `2588`, `GridMoved 0`, session move `0`을 확인했다. M4는 여전히 부분 상태다. PCP/MCP ledger·CP charge·timers/jobs·실제 command outcome이 없고 `0x0327` 미확정 stock은 zero-fill이며 disconnect의 `online=false` 영속화도 남았다. 동기 SQLite bridge는 PostgreSQL 전에 async-capable하게 바꿔야 한다. 다음은 M4 command authority/ledger/timer/job과 galaxy/fleet/facility/economy canon/data, 이어 M5, M6 전체 한글화, M7 운영·리마스터 순이다.
+fresh 검증은 UnitShip 포함 targeted `132/132`, 전체 server `460 total / 458 pass / 0 fail / 2 pre-existing conditional skips`, Python live harness `16/16`, changed JS LSP error `0`, diff-check clean이다. 수동 runtime probe는 `grid cell not navigable`, 응답 없음, DB/session cell `2588`, `GridMoved 0`, session move `0`을 확인했다. M4는 여전히 부분 상태다. PCP/MCP ledger·CP charge·timers/jobs·실제 command outcome이 없고 `0x0327` 미확정 stock은 zero-fill이며 disconnect의 `online=false` 영속화도 남았다. 동기 SQLite bridge는 PostgreSQL 전에 async-capable하게 바꿔야 한다. 다음은 M4 command authority/ledger/timer/job과 galaxy/fleet/facility/economy canon/data, 이어 M5, M6 전체 한글화, M7 운영·리마스터 순이다.
 
 2026-07-04 G070 Unity 클라이언트 완전 삭제: 사용자가 "완전 삭제"를 명시적으로 선택함에 따라 `client-unity/` 작업트리를 제거했다. 삭제 직전 상태(스테이징된 2026-07-03/04 메달 리마스터 아트 포함)는 커밋 `dbf3b43`에 전량 보존했고, 커밋 `ca24dd3`(9226 files deleted)로 작업트리에서 제거했다. G069의 "RE 완료 후 Unity 재이식" 장기 목표는 유지되며, 재이식 시 `client-unity/`를 git 히스토리에서 복원하는 것부터 시작한다. 이 문서의 이후 G0xx Unity 관련 항목(픽셀 패러티, 로비/로그인 재현, StreamingAssets export 등)은 모두 과거 기록이며 현재 작업트리에서 재현할 수 없다.
 
