@@ -2,7 +2,8 @@
 # PreToolUse 훅 — 비밀/민감 파일 접근 차단 (Read/Edit/Write/NotebookEdit/Bash).
 # exit 2 = 차단(stderr가 에이전트에 전달). 스키마는 exit-code 방식(버전 간 가장 안정적)을 쓴다.
 # 보호 목록 근거: .ai/decisions.md ADR-LITE-003 (표준 목록).
-PROJECT_ROOT="${CLAUDE_PROJECT_DIR:-${CODEX_PROJECT_DIR:-.}}"
+SCRIPT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+PROJECT_ROOT="${CODEX_PROJECT_DIR:-${CLAUDE_PROJECT_DIR:-$SCRIPT_ROOT}}"
 cd "$PROJECT_ROOT" 2>/dev/null || exit 0
 HOOK_INPUT="$(cat)"
 export HOOK_INPUT
@@ -19,7 +20,7 @@ ti = d.get("tool_input", {}) or {}
 
 # basename 기준 보호 패턴. .env.example/.env.sample/.env.template은 허용.
 PROT = re.compile(
-    r"^(\.env(\..+)?|.*\.pem|.*\.key|credentials.*|secrets.*|terraform\.tfstate(\..*)?)$", re.I)
+    r"^(\.env.*|.*\.pem|.*\.key|credentials.*|secrets.*|terraform\.tfstate.*)$", re.I)
 ALLOW = re.compile(r"^\.env\.(example|sample|template)$", re.I)
 
 def protected(path):
@@ -31,6 +32,15 @@ if tool in ("Read", "Edit", "Write", "NotebookEdit"):
     p = ti.get("file_path") or ti.get("notebook_path") or ""
     if p and protected(p):
         hits.add(p)
+elif tool == "apply_patch":
+    command = ti.get("command", "")
+    for path in re.findall(
+            r"^\*\*\* (?:Add|Update|Delete) File: (.+)$|^\*\*\* Move to: (.+)$",
+            command,
+            re.MULTILINE):
+        candidate = next((value for value in path if value), "").strip()
+        if candidate and protected(candidate):
+            hits.add(candidate)
 elif tool == "Bash":
     for tok in re.findall(r"""[^\s"';|&()<>]+""", ti.get("command", "")):
         if protected(tok):

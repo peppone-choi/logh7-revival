@@ -25,6 +25,14 @@ logh7-wine-live-qa	codex	.codex/agents/live-qa.toml:6; docs/agent/prompt-pack.md
 logh7-asset-provenance	codex	docs/agent/tool-capabilities.md:32
 logh7-engine-spike	codex	docs/agent/tool-capabilities.md:32
 harness	codex	docs/agent/tool-capabilities.md:32
+logh7-start-task	codex	docs/agent/prompt-pack.md:140; docs/agent/lifecycle-planning.md
+logh7-analyze	codex	docs/agent/prompt-pack.md:27
+logh7-implement	codex	docs/agent/prompt-pack.md:50; docs/agent/verification.md
+logh7-debug	codex	docs/agent/prompt-pack.md:73; docs/agent/failure-cases.md
+logh7-verify	codex	docs/agent/prompt-pack.md:163; docs/agent/verification.md
+logh7-review	codex	docs/agent/prompt-pack.md:96; docs/agent/lifecycle-review.md
+logh7-checkpoint	codex	docs/agent/prompt-pack.md:118; docs/agent/lifecycle-collaboration.md
+logh7-skill-manager	codex	docs/agent/tool-capabilities.md
 rev-struct	candidate	docs/logh7-work-plan-current.md:104,116; docs/logh7-reference-haul.md:187
 stop-slop	candidate	docs/logh7-work-plan-current.md:125
 check-work	candidate	docs/logh7-work-plan-current.md:126

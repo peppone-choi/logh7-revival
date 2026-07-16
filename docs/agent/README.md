@@ -22,10 +22,10 @@
 | 배포·운영·인프라 | `lifecycle-ops.md`, `tool-capabilities.md` |
 | 문서화 | `project-overview.md`, `architecture.md` |
 | 병렬·다중 에이전트 작업 | `collaboration-protocol.md`, `lifecycle-collaboration.md` |
-| 신규 세션·스킬 누락/오래됨 문제 | `bash scripts/agent/bootstrap-skills.sh --check` (필요 시 `--sync`), `tool-capabilities.md` |
+| 신규 세션·스킬 누락/오래됨 문제 | 로컬 점검 `bash scripts/agent/bootstrap-skills.sh --check`; 전문 스킬 부재 시 Codex `logh7-skill-manager`; `tool-capabilities.md` |
 | 긴 작업 재개 | `.ai/current-state.md`, `.ai/handoff.md` |
 | 작업 방식 선택 (사람/AI 역할) | `workflow-before-after.md` |
-| 프롬프트 작성 | `prompt-pack.md` |
+| 프롬프트 작성·Codex 워크플로 스킬 | `prompt-pack.md`의 대응 섹션만 |
 
 ## LOGH VII 도메인 라우팅 (기존 정본 유지)
 
@@ -40,5 +40,5 @@
 
 - 현재 작업 유형과 무관한 lifecycle 문서
 - `docs/`의 역사 문서 (`logh7-document-index-current.md`가 historical로 분류한 것)
-- `prompt-pack.md` (프롬프트를 실제로 작성할 때만)
+- `prompt-pack.md` 전체 (프롬프트 작성 또는 Codex 워크플로 스킬이 요구한 대응 섹션만 읽는다)
 - 과거 로그, 긴 예시, 폐기된 계획

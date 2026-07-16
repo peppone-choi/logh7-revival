@@ -14,6 +14,9 @@
 
 ## 인프라·도구
 
+- Codex 프로젝트 훅은 로컬 payload 회귀 26/26을 통과했지만, `.codex/hooks.json` 변경 hash를 사용자가 `/hooks`에서 신뢰하고 새 task를 시작하기 전까지 라이브 활성은 미검증이다.
+- Codex Pre/Post 훅은 현재 `apply_patch`와 Bash 경로를 보호·후검증한다. 통합 실행기나 웹 도구 등 훅 matcher 밖의 경로는 자동 차단 범위가 아니므로 `AGENTS.md` 계약과 수동 검증이 계속 적용된다.
+
 - lint/type check: NOT_CONFIGURED (eslint·tsconfig 없음). 구문 검사(`node --check`, `py_compile`)가 유일한 정적 검사.
 - SRV-CORR(PR #8) 리뷰 비차단 follow-up — Claude GHA·CodeRabbit 수렴 2건 + nit 2건 (2026-07-16):
   - `writeTrace`의 correlation `outcome`이 `record.message` 존재로 추론됨 — 정보성 라인에 message가 생기면 오분류. 명시적 outcome 인자 또는 event 기반 분류로 개선.

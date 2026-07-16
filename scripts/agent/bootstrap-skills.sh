@@ -1,20 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# LOGH VII Revival — 프로젝트 단위 스킬 부트스트랩 (Claude Code + Codex 공통)
-#
-# canonical 저장소(.agents/skills/ — skills.sh 프로젝트 스코프 규약, `npx skills list --json`로
-# 실증)를 기준으로 Claude Code(.claude/skills/) 로드 경로의 누락(MISSING)/불일치(STALE)/
-# 미설치(UNKNOWN·CANDIDATE)를 scripts/agent/required-skills.tsv 매니페스트대로 점검한다.
-# Codex는 .codex/agents/*.toml이 .agents/skills/<name>(canonical)을 직접 참조하므로
-# 물리 복사가 필요 없다(실증 — 2026-07-17 보정, 이전에는 .codex/skills/까지 복사했으나 폐기) —
-# canonical 경로 실존만 확인한다. 이미 .agents/skills/에 있는 스킬만 안전하게 로컬 동기화하며,
-# 신규 외부 스킬 설치는 항상 안내만 한다 — 사람 승인 없는 자동 설치 금지(CLAUDE.md
-# "의존성 추가 승인 필요" 규칙).
-#
-# --check/--sync/--once/--strict는 매니페스트+로컬 디렉터리 비교만 수행한다 — 네트워크·npx
-# 호출 없음(SessionStart 훅에서 fresh 머신에도 안전). skills.sh 레지스트리 조회·검색은
-# --status/--search 수동 모드로 분리되어 있으며, 이 모드들만 `npx skills`를 호출한다.
+# LOGH VII Revival 프로젝트 스킬 부트스트랩.
+# SessionStart는 네트워크 없는 --check만 실행한다. 외부 스킬은 출처와 내용을 검토한 뒤
+# --reviewed를 명시한 온디맨드 호출에서만 Codex 프로젝트 범위로 설치한다.
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 cd "$REPO_ROOT"
@@ -31,33 +20,33 @@ STRICT=0
 FORCE=0
 STATUS_MODE=0
 SEARCH_QUERY=""
+INSTALL_PACKAGE=""
+INSTALL_SKILL=""
+DRY_RUN=0
+REVIEWED=0
 
 usage() {
   cat <<'EOF'
 사용법: bootstrap-skills.sh [--check|--sync] [--once] [--strict] [--force]
        bootstrap-skills.sh --status
        bootstrap-skills.sh --search <query>
+       bootstrap-skills.sh --install <owner/repo> --skill <name> --reviewed [--dry-run]
 
-로컬 전용 (네트워크·npx 호출 없음 — SessionStart 훅에서 안전):
-  --check   (기본) 매니페스트 기준 MISSING/STALE/UNKNOWN 리포트만 출력. exit 0 (fail-open)
-  --sync    canonical(.agents/skills/)에 있고 .claude/skills/에 없는 스킬만 디렉터리 복사(cp -R).
-            Codex는 canonical을 직접 참조하므로 .codex/skills/는 건드리지 않는다.
-            내용이 다른 STALE 스킬은 경고만 하고 건너뜀(--force 없이는 덮어쓰지 않음)
-  --once    스탬프(.omc/state/skills-bootstrap.stamp)가 있으면 skip.
-            없으면 1회 점검을 실행한 뒤 스탬프를 기록한다 (세션/설치당 1회 스윕용)
-  --strict  MISSING 또는 STALE 갭이 하나라도 있으면 exit 1 (기본은 항상 exit 0 — 훅에서
-            fail-open으로 쓰기 위함)
-  --force   (--sync 전용, 기본 비활성) STALE 스킬도 canonical 내용으로 덮어씀
+로컬 전용:
+  --check   매니페스트와 프로젝트 스킬을 비교한다. 네트워크를 사용하지 않는다.
+  --sync    canonical 스킬을 Claude 프로젝트 로드 경로에 복사한다.
+  --once    저장소 스탬프가 없을 때 한 번만 로컬 점검한다. SessionStart에서는 사용하지 않는다.
+  --strict  MISSING 또는 STALE이 있으면 실패한다.
+  --force   --sync에서 STALE Claude 복사본도 교체한다.
 
-수동 전용 (npx로 skills.sh 레지스트리 네트워크 호출 — 훅에서 절대 사용 금지):
-  --status        `npx skills list --json` 조회로 skills.sh 관점 설치 상태 출력
-  --search <query> `npx skills find <query>` 검색 결과 출력 + 설치 안내
-                   (설치는 절대 자동 실행하지 않음 — 사람 승인 후 아래 명령을 직접 실행)
-                   npx skills add <owner/repo> -a claude-code codex -s <skill> -y
+수동 네트워크 모드:
+  --status          skills.sh 기준 프로젝트 설치 상태를 조회한다.
+  --search <query>  skills.sh 후보를 검색한다. 설치하지 않는다.
+  --install         검토한 후보 하나를 Codex 프로젝트 범위에만 복사 설치한다.
+  --reviewed        호출자가 후보의 출처, SKILL.md, 스크립트와 권한을 검토했음을 확인한다.
+  --dry-run         실행할 프로젝트 범위 설치 명령만 출력한다.
 
-이 스크립트는 이미 .agents/skills/에 존재하는 스킬의 Claude 쪽 로컬 동기화만 담당한다.
-target=candidate(매니페스트) 스킬은 canonical에도 없는 게 정상이며 항상 안내만 하고
-자동 설치하지 않는다.
+전역 설치(-g, --global)와 기존 프로젝트 스킬 덮어쓰기는 허용하지 않는다.
 EOF
 }
 
@@ -72,90 +61,157 @@ while [ "$#" -gt 0 ]; do
     --search)
       shift
       SEARCH_QUERY="${1:-}"
-      if [ -z "$SEARCH_QUERY" ]; then
-        echo "[bootstrap-skills] ERROR: --search 뒤에 검색어가 필요함" >&2
-        exit 1
-      fi
+      [ -n "$SEARCH_QUERY" ] || { echo "[bootstrap-skills] ERROR: --search requires a query" >&2; exit 1; }
       ;;
+    --install)
+      shift
+      INSTALL_PACKAGE="${1:-}"
+      [ -n "$INSTALL_PACKAGE" ] || { echo "[bootstrap-skills] ERROR: --install requires owner/repo" >&2; exit 1; }
+      ;;
+    --skill)
+      shift
+      INSTALL_SKILL="${1:-}"
+      [ -n "$INSTALL_SKILL" ] || { echo "[bootstrap-skills] ERROR: --skill requires a name" >&2; exit 1; }
+      ;;
+    --reviewed) REVIEWED=1 ;;
+    --dry-run) DRY_RUN=1 ;;
     -h|--help) usage; exit 0 ;;
-    *) echo "[bootstrap-skills] 경고: 알 수 없는 옵션 '$1' 무시" >&2 ;;
+    *) echo "[bootstrap-skills] ERROR: unknown option: $1" >&2; exit 1 ;;
   esac
   shift
 done
 
-# --status/--search는 로컬 점검(--check/--sync/--once)과 별개인 수동 전용 모드 —
-# skills.sh 레지스트리에 npx로 네트워크 접근한다. 조회/검색만 하고 절대 설치하지 않는다.
-if [ "$STATUS_MODE" -eq 1 ]; then
-  if ! command -v npx >/dev/null 2>&1; then
-    echo "[bootstrap-skills] ERROR: npx 없음 — Node.js 필요 (--status는 skills.sh 네트워크 조회)" >&2
+SAFE_SEGMENT_RE='^[A-Za-z0-9]([A-Za-z0-9._-]*[A-Za-z0-9])?$'
+
+is_safe_name() {
+  [[ "$1" =~ $SAFE_SEGMENT_RE ]]
+}
+
+is_safe_package() {
+  local package="$1" owner repo
+  [[ "$package" == */* ]] || return 1
+  owner="${package%%/*}"
+  repo="${package#*/}"
+  [[ "$repo" != */* ]] || return 1
+  is_safe_name "$owner" && is_safe_name "$repo"
+}
+
+validate_skill_file() {
+  python3 - "$1" "$2" <<'PY'
+import re
+import sys
+from pathlib import Path
+
+path = Path(sys.argv[1])
+expected_name = sys.argv[2]
+text = path.read_text(encoding="utf-8") if path.is_file() else ""
+match = re.match(r"^---\n(.*?)\n---\n", text, re.S)
+if not match:
+    raise SystemExit(1)
+frontmatter = match.group(1)
+if not re.search(rf"^name:\s*{re.escape(expected_name)}\s*$", frontmatter, re.M):
+    raise SystemExit(1)
+description = re.search(r"^description:\s*(.+)$", frontmatter, re.M)
+if not description or "TODO" in description.group(1):
+    raise SystemExit(1)
+PY
+}
+
+if [ -n "$INSTALL_PACKAGE" ]; then
+  [ -n "$INSTALL_SKILL" ] || { echo "[bootstrap-skills] ERROR: --install requires --skill <name>" >&2; exit 1; }
+  [ "$REVIEWED" -eq 1 ] || { echo "[bootstrap-skills] ERROR: vetted installs require --reviewed" >&2; exit 1; }
+  is_safe_package "$INSTALL_PACKAGE" || { echo "[bootstrap-skills] ERROR: invalid owner/repo: $INSTALL_PACKAGE" >&2; exit 1; }
+  is_safe_name "$INSTALL_SKILL" || { echo "[bootstrap-skills] ERROR: invalid skill name: $INSTALL_SKILL" >&2; exit 1; }
+
+  printf 'npx --yes skills add %s --agent codex --skill %s --copy --yes\n' "$INSTALL_PACKAGE" "$INSTALL_SKILL"
+  [ "$DRY_RUN" -eq 1 ] && exit 0
+
+  [ ! -e "$CANONICAL_DIR/$INSTALL_SKILL" ] || {
+    echo "[bootstrap-skills] ERROR: existing project skill will not be overwritten: $CANONICAL_DIR/$INSTALL_SKILL" >&2
     exit 1
-  fi
-  echo "[bootstrap-skills] --status: npx skills list --json (skills.sh 레지스트리 관점, 네트워크 호출)"
-  npx -y skills list --json
+  }
+  command -v npx >/dev/null 2>&1 || { echo "[bootstrap-skills] ERROR: npx is required" >&2; exit 1; }
+  npx --yes skills add "$INSTALL_PACKAGE" --agent codex --skill "$INSTALL_SKILL" --copy --yes
+
+  validate_skill_file "$CANONICAL_DIR/$INSTALL_SKILL/SKILL.md" "$INSTALL_SKILL" || {
+    echo "[bootstrap-skills] ERROR: installed SKILL.md failed frontmatter validation" >&2
+    exit 1
+  }
+  node - "$LOCK_FILE" "$INSTALL_SKILL" "$INSTALL_PACKAGE" <<'NODE'
+const fs = require("fs");
+const [lockPath, name, source] = process.argv.slice(2);
+const lock = JSON.parse(fs.readFileSync(lockPath, "utf8"));
+const entry = (lock.skills || {})[name];
+if (!entry || entry.source !== source || !entry.computedHash) process.exit(1);
+NODE
+  npx --yes skills list --json >/dev/null
+  echo "[bootstrap-skills] verified project install: $INSTALL_SKILL <- $INSTALL_PACKAGE"
+  exit 0
+fi
+
+if [ -n "$INSTALL_SKILL" ] || [ "$REVIEWED" -eq 1 ] || [ "$DRY_RUN" -eq 1 ]; then
+  echo "[bootstrap-skills] ERROR: --skill, --reviewed and --dry-run require --install" >&2
+  exit 1
+fi
+
+if [ "$STATUS_MODE" -eq 1 ]; then
+  [ -z "$SEARCH_QUERY" ] || { echo "[bootstrap-skills] ERROR: choose --status or --search" >&2; exit 1; }
+  command -v npx >/dev/null 2>&1 || { echo "[bootstrap-skills] ERROR: npx is required" >&2; exit 1; }
+  npx --yes skills list --json
   exit $?
 fi
 
 if [ -n "$SEARCH_QUERY" ]; then
-  if ! command -v npx >/dev/null 2>&1; then
-    echo "[bootstrap-skills] ERROR: npx 없음 — Node.js 필요 (--search는 skills.sh 네트워크 조회)" >&2
-    exit 1
-  fi
-  echo "[bootstrap-skills] --search '$SEARCH_QUERY': npx skills find (skills.sh 레지스트리 관점, 네트워크 호출)"
-  npx -y skills find "$SEARCH_QUERY"
+  command -v npx >/dev/null 2>&1 || { echo "[bootstrap-skills] ERROR: npx is required" >&2; exit 1; }
+  npx --yes skills find "$SEARCH_QUERY"
   status=$?
-  echo ""
-  echo "설치는 사람 승인 후에만 직접 실행: npx skills add <owner/repo> -a claude-code codex -s ${SEARCH_QUERY} -y"
+  echo "검토 후 프로젝트 설치: bash scripts/agent/bootstrap-skills.sh --install <owner/repo> --skill <name> --reviewed"
   exit "$status"
 fi
 
-# 두 디렉터리가 내용까지 동일한지 확인한다. `diff -rq`는 재귀 비교를 단일 프로세스로
-# 처리해, 파일마다 해시 프로세스를 새로 띄우는 방식보다 스킬 수가 많을 때 훨씬 빠르다
-# (실측: 20개 스킬 기준 파일별 shasum 방식 1분40초대 -> diff -rq 방식 수 초대).
-dirs_differ() {
-  local a="$1" b="$2"
-  ! diff -rq "$a" "$b" >/dev/null 2>&1
+[ "$FORCE" -eq 0 ] || [ "$MODE" = "sync" ] || {
+  echo "[bootstrap-skills] ERROR: --force requires --sync" >&2
+  exit 1
 }
 
 if [ "$ONCE" -eq 1 ] && [ -f "$STAMP_FILE" ]; then
-  echo "[bootstrap-skills] 스탬프 존재($STAMP_FILE) — 이미 1회 스윕 완료, skip"
+  echo "[bootstrap-skills] repository stamp exists; skipping legacy --once check"
   exit 0
 fi
 
-if [ ! -f "$MANIFEST" ]; then
-  echo "[bootstrap-skills] ERROR: 매니페스트 없음: $MANIFEST" >&2
-  exit 1
-fi
+[ -f "$MANIFEST" ] || { echo "[bootstrap-skills] ERROR: missing manifest: $MANIFEST" >&2; exit 1; }
 
 missing_count=0
 stale_count=0
 unknown_count=0
 ok_count=0
 
-check_target() {
-  local name="$1" target_dir="$2" target_label="$3" canonical_path="$4"
-  local t="$target_dir/$name"
+dirs_differ() {
+  ! diff -rq "$1" "$2" >/dev/null 2>&1
+}
 
-  if [ ! -d "$t" ]; then
+check_claude_target() {
+  local name="$1" canonical="$2" target=".claude/skills/$1"
+  if [ ! -d "$target" ]; then
     missing_count=$((missing_count + 1))
-    echo "  [MISSING] $name -> $target_label ($t 없음)"
+    echo "  [MISSING] $name -> Claude ($target)"
     if [ "$MODE" = "sync" ]; then
-      mkdir -p "$target_dir"
-      cp -R "$canonical_path" "$t"
-      echo "    [sync] 복사 완료: $canonical_path -> $t"
+      mkdir -p .claude/skills
+      cp -R "$canonical" "$target"
+      echo "    [sync] copied $canonical -> $target"
     fi
-    return 0
+    return
   fi
-
-  if dirs_differ "$canonical_path" "$t"; then
+  if dirs_differ "$canonical" "$target"; then
     stale_count=$((stale_count + 1))
-    echo "  [STALE] $name -> $target_label ($t 내용이 canonical과 다름)"
+    echo "  [STALE] $name -> Claude"
     if [ "$MODE" = "sync" ]; then
       if [ "$FORCE" -eq 1 ]; then
-        rm -rf "$t"
-        cp -R "$canonical_path" "$t"
-        echo "    [sync --force] 덮어씀: $canonical_path -> $t"
+        rm -rf "$target"
+        cp -R "$canonical" "$target"
+        echo "    [sync --force] replaced $target"
       else
-        echo "    [sync] 건너뜀 — 덮어쓰려면 --force 필요(이번 실행엔 미사용 권장)"
+        echo "    [sync] skipped; --force is required to replace a stale copy"
       fi
     fi
   else
@@ -165,78 +221,73 @@ check_target() {
 
 echo "=== bootstrap-skills.sh (mode=$MODE) ==="
 while IFS=$'\t' read -r name target reference || [ -n "${name:-}" ]; do
-  [ -z "${name:-}" ] && continue
-  case "$name" in
-    \#*) continue ;;
-  esac
+  [ -n "${name:-}" ] || continue
+  case "$name" in \#*) continue ;; esac
+  is_safe_name "$name" || {
+    echo "[bootstrap-skills] ERROR: unsafe skill name in manifest: $name" >&2
+    exit 1
+  }
 
-  canonical_path="$CANONICAL_DIR/$name"
-
+  canonical="$CANONICAL_DIR/$name"
   if [ "$target" = "candidate" ]; then
     unknown_count=$((unknown_count + 1))
-    if [ -d "$canonical_path" ]; then
-      echo "  [CANDIDATE->검토] $name: canonical에 이미 존재 — 매니페스트 target 승격 검토 ($reference)"
+    if [ -d "$canonical" ]; then
+      echo "  [CANDIDATE->REVIEW] $name exists; consider promoting the manifest target ($reference)"
     else
-      echo "  [CANDIDATE] $name: 미설치(문서화된 설치 후보). 탐색: npx skills find ${name} — 사람 승인 후에만 add ($reference)"
+      echo "  [CANDIDATE] $name is not installed; use the skill manager to search and vet it ($reference)"
     fi
     continue
   fi
 
-  if [ ! -d "$canonical_path" ]; then
+  if [ ! -d "$canonical" ]; then
     unknown_count=$((unknown_count + 1))
-    echo "  [UNKNOWN] $name: canonical($canonical_path)에 없음. 탐색: npx skills find ${name} — 사람 승인 필요 ($reference)"
+    echo "  [UNKNOWN] missing canonical skill: $name ($reference)"
     continue
   fi
+  validate_skill_file "$canonical/SKILL.md" "$name" || {
+    echo "[bootstrap-skills] ERROR: invalid canonical SKILL.md: $canonical/SKILL.md" >&2
+    exit 1
+  }
 
   case "$target" in
-    claude|both) check_target "$name" ".claude/skills" "Claude" "$canonical_path" ;;
-    codex)
-      # Codex는 .codex/agents/*.toml이 canonical(.agents/skills/<name>)을 직접 참조한다 —
-      # 물리 복사가 필요 없으므로(실증, 2026-07-17 보정) .codex/skills/는 확인·동기화 대상이 아니다.
-      # canonical 존재는 위 UNKNOWN 분기에서 이미 확인됨 → 참조 경로 OK로만 카운트.
-      ok_count=$((ok_count + 1))
-      ;;
-    *)
-      echo "  [경고] 알 수 없는 target '$target' (skill=$name)" >&2
-      ;;
+    claude|both) check_claude_target "$name" "$canonical" ;;
+    codex) ok_count=$((ok_count + 1)) ;;
+    *) echo "[bootstrap-skills] ERROR: invalid manifest target '$target' for $name" >&2; exit 1 ;;
   esac
 done < "$MANIFEST"
 
-# skills-lock.json은 읽기만 한다 — stale(기록된 로컬 경로가 실제로는 없는) 항목 개수만 리포트.
-# skillPath가 로컬 스킬 디렉터리 접두사로 시작하는 경우만 검사 대상(업스트림 소스 상대경로는 제외).
 lock_stale_count=0
 lock_stale_names=""
-if [ -f "$LOCK_FILE" ] && command -v node >/dev/null 2>&1; then
-  lock_report="$(node -e '
+if [ -f "$LOCK_FILE" ]; then
+  command -v node >/dev/null 2>&1 || { echo "[bootstrap-skills] ERROR: node is required to validate $LOCK_FILE" >&2; exit 1; }
+  lock_report="$(node - "$LOCK_FILE" <<'NODE'
 const fs = require("fs");
+const lock = JSON.parse(fs.readFileSync(process.argv[2], "utf8"));
 const prefixes = [".claude/skills/", ".codex/skills/", ".agents/skills/", "agent/skills/"];
-const lock = JSON.parse(fs.readFileSync("skills-lock.json", "utf8"));
 const stale = [];
 for (const [name, info] of Object.entries(lock.skills || {})) {
-  const p = info.skillPath || "";
-  if (prefixes.some((pre) => p.startsWith(pre)) && !fs.existsSync(p)) {
-    stale.push(name);
-  }
+  const path = info.skillPath || "";
+  if (prefixes.some((prefix) => path.startsWith(prefix)) && !fs.existsSync(path)) stale.push(name);
 }
-process.stdout.write(stale.length + "\t" + stale.join(","));
-' 2>/dev/null || printf '0\t')"
+process.stdout.write(`${stale.length}\t${stale.join(",")}`);
+NODE
+)" || { echo "[bootstrap-skills] ERROR: invalid $LOCK_FILE" >&2; exit 1; }
   lock_stale_count="${lock_report%%$'\t'*}"
   lock_stale_names="${lock_report#*$'\t'}"
 fi
 
 echo "---"
-echo "요약: OK=$ok_count MISSING=$missing_count STALE=$stale_count UNKNOWN/CANDIDATE=$unknown_count"
-if [ "$lock_stale_count" != "0" ]; then
-  echo "skills-lock.json stale 경로(기록됨 vs 실제 없음): ${lock_stale_count}건 (${lock_stale_names}) — 수정하지 않음, 확인만"
+echo "summary: OK=$ok_count MISSING=$missing_count STALE=$stale_count UNKNOWN/CANDIDATE=$unknown_count"
+if [ "$lock_stale_count" -eq 0 ]; then
+  echo "skills-lock.json stale paths: 0"
 else
-  echo "skills-lock.json stale 경로: 0건"
+  echo "skills-lock.json stale paths: $lock_stale_count ($lock_stale_names)"
 fi
 echo "==========================================="
 
 if [ "$ONCE" -eq 1 ]; then
   mkdir -p "$STAMP_DIR"
   date -u +"%Y-%m-%dT%H:%M:%SZ" > "$STAMP_FILE"
-  echo "[bootstrap-skills] 스탬프 기록: $STAMP_FILE"
 fi
 
 if [ "$STRICT" -eq 1 ] && { [ "$missing_count" -gt 0 ] || [ "$stale_count" -gt 0 ]; }; then
