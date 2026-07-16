@@ -1,0 +1,2836 @@
+{
+  "_purpose": "Consolidated GROUND-TRUTH attestation for all place/person/ship names in LOGH VII revival content. attested=true => name appears in the official manual PDF and/or byte-verified client MsgDat strings. attested=false => no ground-truth source found anywhere (AI_INVENTED candidate; may be real canon but needs external/prior-game sourcing).",
+  "_ground_truth_sources": {
+    "manual": "/Users/apple/Downloads/gin7manual/gin7manual.pdf (101pp JP) + .omo/work/manual.layout.txt",
+    "binary_strings": "content/extracted/msgdat-full.json (9582/9582 records byte-exact vs ROOT/data/MsgDat/*.dat)",
+    "manual_starmap": "gin7manual.pdf p101 (80 /Text annotation Rects -> system coords)"
+  },
+  "_counts": {
+    "total": 469,
+    "by_type": {
+      "person": 70,
+      "ship_class": 32,
+      "place_system": 80,
+      "place_planet": 281,
+      "place_fortress": 6
+    },
+    "attested_true": 380,
+    "attested_false": 89
+  },
+  "names": [
+    {
+      "name": "G.ミュッケンベルガー",
+      "type": "person",
+      "attested": true,
+      "source": "gin7manual.pdf p59 初期職務権限カード保持情報 (vision)"
+    },
+    {
+      "name": "アーベントロート",
+      "type": "person",
+      "attested": true,
+      "source": "gin7manual.pdf p59 初期職務権限カード保持情報 (vision)"
+    },
+    {
+      "name": "エーレンベルグ",
+      "type": "person",
+      "attested": true,
+      "source": "gin7manual.pdf p59 初期職務権限カード保持情報 (vision)"
+    },
+    {
+      "name": "オッペンハイマー",
+      "type": "person",
+      "attested": true,
+      "source": "gin7manual.pdf p59 初期職務権限カード保持情報 (vision)"
+    },
+    {
+      "name": "オフレッサー",
+      "type": "person",
+      "attested": true,
+      "source": "gin7manual.pdf p59 初期職務権限カード保持情報 (vision)"
+    },
+    {
+      "name": "キルヒアイス",
+      "type": "person",
+      "attested": true,
+      "source": "gin7manual.pdf p59 初期職務権限カード保持情報 (vision)"
+    },
+    {
+      "name": "クラーゼン",
+      "type": "person",
+      "attested": true,
+      "source": "gin7manual.pdf p59 初期職務権限カード保持情報 (vision)"
+    },
+    {
+      "name": "グライフス",
+      "type": "person",
+      "attested": true,
+      "source": "gin7manual.pdf p59 初期職務権限カード保持情報 (vision)"
+    },
+    {
+      "name": "ゲルラッハ",
+      "type": "person",
+      "attested": true,
+      "source": "gin7manual.pdf p59 初期職務権限カード保持情報 (vision)"
+    },
+    {
+      "name": "シャフト",
+      "type": "person",
+      "attested": true,
+      "source": "gin7manual.pdf p59 初期職務権限カード保持情報 (vision)"
+    },
+    {
+      "name": "シュタインホフ",
+      "type": "person",
+      "attested": true,
+      "source": "gin7manual.pdf p59 初期職務権限カード保持情報 (vision)"
+    },
+    {
+      "name": "シュターデン",
+      "type": "person",
+      "attested": true,
+      "source": "gin7manual.pdf p59 初期職務権限カード保持情報 (vision)"
+    },
+    {
+      "name": "ハウプト",
+      "type": "person",
+      "attested": true,
+      "source": "gin7manual.pdf p59 初期職務権限カード保持情報 (vision)"
+    },
+    {
+      "name": "ヒルデスハイム",
+      "type": "person",
+      "attested": true,
+      "source": "gin7manual.pdf p59 初期職務権限カード保持情報 (vision)"
+    },
+    {
+      "name": "フォーゲル",
+      "type": "person",
+      "attested": true,
+      "source": "gin7manual.pdf p59 初期職務権限カード保持情報 (vision)"
+    },
+    {
+      "name": "フリードリヒⅣ世",
+      "type": "person",
+      "attested": true,
+      "source": "gin7manual.pdf p59 初期職務権限カード保持情報 (vision)"
+    },
+    {
+      "name": "メルカッツ",
+      "type": "person",
+      "attested": true,
+      "source": "gin7manual.pdf p59 初期職務権限カード保持情報 (vision)"
+    },
+    {
+      "name": "リヒテンラーデ",
+      "type": "person",
+      "attested": true,
+      "source": "gin7manual.pdf p59 初期職務権限カード保持情報 (vision)"
+    },
+    {
+      "name": "レムシャイト",
+      "type": "person",
+      "attested": true,
+      "source": "gin7manual.pdf p59 初期職務権限カード保持情報 (vision)"
+    },
+    {
+      "name": "ローエングラム",
+      "type": "person",
+      "attested": true,
+      "source": "gin7manual.pdf p59 初期職務権限カード保持情報 (vision)"
+    },
+    {
+      "name": "グリューネマン",
+      "type": "person",
+      "attested": true,
+      "source": "gin7manual.pdf p60 初期職務権限カード保持情報 (vision)"
+    },
+    {
+      "name": "グルーゼンシュテルン",
+      "type": "person",
+      "attested": true,
+      "source": "gin7manual.pdf p60 初期職務権限カード保持情報 (vision)"
+    },
+    {
+      "name": "シュトックハウゼン",
+      "type": "person",
+      "attested": true,
+      "source": "gin7manual.pdf p60 初期職務権限カード保持情報 (vision)"
+    },
+    {
+      "name": "ゼークト",
+      "type": "person",
+      "attested": true,
+      "source": "gin7manual.pdf p60 初期職務権限カード保持情報 (vision)"
+    },
+    {
+      "name": "ディッタースドルフ",
+      "type": "person",
+      "attested": true,
+      "source": "gin7manual.pdf p60 初期職務権限カード保持情報 (vision)"
+    },
+    {
+      "name": "フレーゲル",
+      "type": "person",
+      "attested": true,
+      "source": "gin7manual.pdf p60 初期職務権限カード保持情報 (vision)"
+    },
+    {
+      "name": "ホフマイスター",
+      "type": "person",
+      "attested": true,
+      "source": "gin7manual.pdf p60 初期職務権限カード保持情報 (vision)"
+    },
+    {
+      "name": "ミッターマイヤー",
+      "type": "person",
+      "attested": true,
+      "source": "gin7manual.pdf p60 初期職務権限カード保持情報 (vision)"
+    },
+    {
+      "name": "ランズベルク",
+      "type": "person",
+      "attested": true,
+      "source": "gin7manual.pdf p60 初期職務権限カード保持情報 (vision)"
+    },
+    {
+      "name": "レンネンカンプ",
+      "type": "person",
+      "attested": true,
+      "source": "gin7manual.pdf p60 初期職務権限カード保持情報 (vision)"
+    },
+    {
+      "name": "ロイエンタール",
+      "type": "person",
+      "attested": true,
+      "source": "gin7manual.pdf p60 初期職務権限カード保持情報 (vision)"
+    },
+    {
+      "name": "D.グリーンヒル",
+      "type": "person",
+      "attested": true,
+      "source": "gin7manual.pdf p65 初期職務権限カード保持情報 (vision)"
+    },
+    {
+      "name": "アップルトン",
+      "type": "person",
+      "attested": true,
+      "source": "gin7manual.pdf p65 初期職務権限カード保持情報 (vision)"
+    },
+    {
+      "name": "アル・サレム",
+      "type": "person",
+      "attested": true,
+      "source": "gin7manual.pdf p65 初期職務権限カード保持情報 (vision)"
+    },
+    {
+      "name": "アーメド",
+      "type": "person",
+      "attested": true,
+      "source": "gin7manual.pdf p65 初期職務権限カード保持情報 (vision)"
+    },
+    {
+      "name": "ウィンザー",
+      "type": "person",
+      "attested": true,
+      "source": "gin7manual.pdf p65 初期職務権限カード保持情報 (vision)"
+    },
+    {
+      "name": "ウランフ",
+      "type": "person",
+      "attested": true,
+      "source": "gin7manual.pdf p65 初期職務権限カード保持情報 (vision)"
+    },
+    {
+      "name": "カールセン",
+      "type": "person",
+      "attested": true,
+      "source": "gin7manual.pdf p65 初期職務権限カード保持情報 (vision)"
+    },
+    {
+      "name": "クブルスリー",
+      "type": "person",
+      "attested": true,
+      "source": "gin7manual.pdf p65 初期職務権限カード保持情報 (vision)"
+    },
+    {
+      "name": "グローブナー",
+      "type": "person",
+      "attested": true,
+      "source": "gin7manual.pdf p65 初期職務権限カード保持情報 (vision)"
+    },
+    {
+      "name": "コナリー",
+      "type": "person",
+      "attested": true,
+      "source": "gin7manual.pdf p65 初期職務権限カード保持情報 (vision)"
+    },
+    {
+      "name": "サンフォード",
+      "type": "person",
+      "attested": true,
+      "source": "gin7manual.pdf p65 初期職務権限カード保持情報 (vision)"
+    },
+    {
+      "name": "シトレ",
+      "type": "person",
+      "attested": true,
+      "source": "gin7manual.pdf p65 初期職務権限カード保持情報 (vision)"
+    },
+    {
+      "name": "タナンチャイ",
+      "type": "person",
+      "attested": true,
+      "source": "gin7manual.pdf p65 初期職務権限カード保持情報 (vision)"
+    },
+    {
+      "name": "チェン",
+      "type": "person",
+      "attested": true,
+      "source": "gin7manual.pdf p65 初期職務権限カード保持情報 (vision)"
+    },
+    {
+      "name": "トリューニヒト",
+      "type": "person",
+      "attested": true,
+      "source": "gin7manual.pdf p65 初期職務権限カード保持情報 (vision)"
+    },
+    {
+      "name": "ドーソン",
+      "type": "person",
+      "attested": true,
+      "source": "gin7manual.pdf p65 初期職務権限カード保持情報 (vision)"
+    },
+    {
+      "name": "パエッタ",
+      "type": "person",
+      "attested": true,
+      "source": "gin7manual.pdf p65 初期職務権限カード保持情報 (vision)"
+    },
+    {
+      "name": "パストーレ",
+      "type": "person",
+      "attested": true,
+      "source": "gin7manual.pdf p65 初期職務権限カード保持情報 (vision)"
+    },
+    {
+      "name": "ビュコック",
+      "type": "person",
+      "attested": true,
+      "source": "gin7manual.pdf p65 初期職務権限カード保持情報 (vision)"
+    },
+    {
+      "name": "ブロンズ",
+      "type": "person",
+      "attested": true,
+      "source": "gin7manual.pdf p65 初期職務権限カード保持情報 (vision)"
+    },
+    {
+      "name": "ヘンスロー",
+      "type": "person",
+      "attested": true,
+      "source": "gin7manual.pdf p65 初期職務権限カード保持情報 (vision)"
+    },
+    {
+      "name": "ホワン",
+      "type": "person",
+      "attested": true,
+      "source": "gin7manual.pdf p65 初期職務権限カード保持情報 (vision)"
+    },
+    {
+      "name": "ホーウッド",
+      "type": "person",
+      "attested": true,
+      "source": "gin7manual.pdf p65 初期職務権限カード保持情報 (vision)"
+    },
+    {
+      "name": "ホーランド",
+      "type": "person",
+      "attested": true,
+      "source": "gin7manual.pdf p65 初期職務権限カード保持情報 (vision)"
+    },
+    {
+      "name": "ボロディン",
+      "type": "person",
+      "attested": true,
+      "source": "gin7manual.pdf p65 初期職務権限カード保持情報 (vision)"
+    },
+    {
+      "name": "マリネッティ",
+      "type": "person",
+      "attested": true,
+      "source": "gin7manual.pdf p65 初期職務権限カード保持情報 (vision)"
+    },
+    {
+      "name": "ムーア",
+      "type": "person",
+      "attested": true,
+      "source": "gin7manual.pdf p65 初期職務権限カード保持情報 (vision)"
+    },
+    {
+      "name": "モンシャルマン",
+      "type": "person",
+      "attested": true,
+      "source": "gin7manual.pdf p65 初期職務権限カード保持情報 (vision)"
+    },
+    {
+      "name": "モートン",
+      "type": "person",
+      "attested": true,
+      "source": "gin7manual.pdf p65 初期職務権限カード保持情報 (vision)"
+    },
+    {
+      "name": "ルフェーブル",
+      "type": "person",
+      "attested": true,
+      "source": "gin7manual.pdf p65 初期職務権限カード保持情報 (vision)"
+    },
+    {
+      "name": "レベロ",
+      "type": "person",
+      "attested": true,
+      "source": "gin7manual.pdf p65 初期職務権限カード保持情報 (vision)"
+    },
+    {
+      "name": "ロックウェル",
+      "type": "person",
+      "attested": true,
+      "source": "gin7manual.pdf p65 初期職務権限カード保持情報 (vision)"
+    },
+    {
+      "name": "ロボス",
+      "type": "person",
+      "attested": true,
+      "source": "gin7manual.pdf p65 初期職務権限カード保持情報 (vision)"
+    },
+    {
+      "name": "アラルコン",
+      "type": "person",
+      "attested": true,
+      "source": "gin7manual.pdf p66 初期職務権限カード保持情報 (vision)"
+    },
+    {
+      "name": "グエン",
+      "type": "person",
+      "attested": true,
+      "source": "gin7manual.pdf p66 初期職務権限カード保持情報 (vision)"
+    },
+    {
+      "name": "ザーニアル",
+      "type": "person",
+      "attested": true,
+      "source": "gin7manual.pdf p66 初期職務権限カード保持情報 (vision)"
+    },
+    {
+      "name": "デッシュ",
+      "type": "person",
+      "attested": true,
+      "source": "gin7manual.pdf p66 初期職務権限カード保持情報 (vision)"
+    },
+    {
+      "name": "マスカーニ",
+      "type": "person",
+      "attested": true,
+      "source": "gin7manual.pdf p66 初期職務権限カード保持情報 (vision)"
+    },
+    {
+      "name": "ルグランジュ",
+      "type": "person",
+      "attested": true,
+      "source": "gin7manual.pdf p66 初期職務権限カード保持情報 (vision)"
+    },
+    {
+      "name": "標準戦艦 (SS75型)",
+      "type": "ship_class",
+      "attested": true,
+      "source": "msgdat-full.json verified binary string + manual p79 別表 (empire)"
+    },
+    {
+      "name": "高速戦艦 (PK86型)",
+      "type": "ship_class",
+      "attested": true,
+      "source": "msgdat-full.json verified binary string + manual p80 別表 (empire)"
+    },
+    {
+      "name": "巡航艦 (SK80型)",
+      "type": "ship_class",
+      "attested": true,
+      "source": "msgdat-full.json verified binary string + manual p81 別表 (empire)"
+    },
+    {
+      "name": "駆逐艦 (Z82型)",
+      "type": "ship_class",
+      "attested": true,
+      "source": "msgdat-full.json verified binary string + manual p82 別表 (empire)"
+    },
+    {
+      "name": "戦闘艇母艦 (FR88型)",
+      "type": "ship_class",
+      "attested": true,
+      "source": "msgdat-full.json verified binary string + manual p83 別表 (empire)"
+    },
+    {
+      "name": "雷撃艇母艦 (TR88型)",
+      "type": "ship_class",
+      "attested": true,
+      "source": "msgdat-full.json verified binary string + manual p84 別表 (empire)"
+    },
+    {
+      "name": "工作艦 (A76型)",
+      "type": "ship_class",
+      "attested": true,
+      "source": "msgdat-full.json verified binary string + manual p85 別表 (empire)"
+    },
+    {
+      "name": "輸送艦 (A74型)",
+      "type": "ship_class",
+      "attested": true,
+      "source": "msgdat-full.json verified binary string + manual p86 別表 (empire)"
+    },
+    {
+      "name": "兵員輸送艦 (A72型)",
+      "type": "ship_class",
+      "attested": true,
+      "source": "msgdat-full.json verified binary string + manual p87 別表 (empire)"
+    },
+    {
+      "name": "揚陸艦 (A78型)",
+      "type": "ship_class",
+      "attested": true,
+      "source": "msgdat-full.json verified binary string + manual p88 別表 (empire)"
+    },
+    {
+      "name": "民間船 / 商船 ((no型code))",
+      "type": "ship_class",
+      "attested": true,
+      "source": "msgdat-full.json verified binary string + manual p89 別表 (empire)"
+    },
+    {
+      "name": "標準戦艦 (787年型)",
+      "type": "ship_class",
+      "attested": true,
+      "source": "msgdat-full.json verified binary string + manual p90 別表 (alliance)"
+    },
+    {
+      "name": "巡航艦 (795年型)",
+      "type": "ship_class",
+      "attested": true,
+      "source": "msgdat-full.json verified binary string + manual p91 別表 (alliance)"
+    },
+    {
+      "name": "打撃巡航艦 (794年型)",
+      "type": "ship_class",
+      "attested": true,
+      "source": "msgdat-full.json verified binary string + manual p92 別表 (alliance)"
+    },
+    {
+      "name": "駆逐艦 (796年型)",
+      "type": "ship_class",
+      "attested": true,
+      "source": "msgdat-full.json verified binary string + manual p93 別表 (alliance)"
+    },
+    {
+      "name": "戦闘艇母艦 (796年型)",
+      "type": "ship_class",
+      "attested": true,
+      "source": "msgdat-full.json verified binary string + manual p94 別表 (alliance)"
+    },
+    {
+      "name": "工作艦 (793年型)",
+      "type": "ship_class",
+      "attested": true,
+      "source": "msgdat-full.json verified binary string + manual p95 別表 (alliance)"
+    },
+    {
+      "name": "輸送艦 (792年型)",
+      "type": "ship_class",
+      "attested": true,
+      "source": "msgdat-full.json verified binary string + manual p96 別表 (alliance)"
+    },
+    {
+      "name": "兵員輸送艦 (788年型)",
+      "type": "ship_class",
+      "attested": true,
+      "source": "msgdat-full.json verified binary string + manual p97 別表 (alliance)"
+    },
+    {
+      "name": "揚陸艦 (795年型 (variants reference 786年型))",
+      "type": "ship_class",
+      "attested": true,
+      "source": "msgdat-full.json verified binary string + manual p98 別表 (alliance)"
+    },
+    {
+      "name": "民間船 / 商船 ((no型code))",
+      "type": "ship_class",
+      "attested": true,
+      "source": "msgdat-full.json verified binary string + manual p99 別表 (alliance)"
+    },
+    {
+      "name": "軽装陸戦兵",
+      "type": "ship_class",
+      "attested": true,
+      "source": "manual p100 兵員ユニット 別表"
+    },
+    {
+      "name": "近衛兵",
+      "type": "ship_class",
+      "attested": true,
+      "source": "manual p100 兵員ユニット 別表"
+    },
+    {
+      "name": "装甲擲弾兵",
+      "type": "ship_class",
+      "attested": true,
+      "source": "manual p100 兵員ユニット 別表"
+    },
+    {
+      "name": "擲弾兵教導",
+      "type": "ship_class",
+      "attested": true,
+      "source": "manual p100 兵員ユニット 別表"
+    },
+    {
+      "name": "装甲兵",
+      "type": "ship_class",
+      "attested": true,
+      "source": "manual p100 兵員ユニット 別表"
+    },
+    {
+      "name": "艦隊乗組員",
+      "type": "ship_class",
+      "attested": true,
+      "source": "manual p100 兵員ユニット 別表"
+    },
+    {
+      "name": "軽装陸戦兵",
+      "type": "ship_class",
+      "attested": true,
+      "source": "manual p100 兵員ユニット 別表"
+    },
+    {
+      "name": "装甲擲弾兵",
+      "type": "ship_class",
+      "attested": true,
+      "source": "manual p100 兵員ユニット 別表"
+    },
+    {
+      "name": "薔薇の騎士",
+      "type": "ship_class",
+      "attested": true,
+      "source": "manual p100 兵員ユニット 別表"
+    },
+    {
+      "name": "装甲兵",
+      "type": "ship_class",
+      "attested": true,
+      "source": "manual p100 兵員ユニット 別表"
+    },
+    {
+      "name": "艦隊乗組員",
+      "type": "ship_class",
+      "attested": true,
+      "source": "manual p100 兵員ユニット 別表"
+    },
+    {
+      "name": "ルンビーニ",
+      "type": "place_system",
+      "attested": true,
+      "source": "msgdat-full.json, manual text"
+    },
+    {
+      "name": "バグタプール",
+      "type": "place_planet",
+      "attested": false,
+      "source": "NONE (AI_INVENTED candidate)"
+    },
+    {
+      "name": "カライヤ",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "バドガオン",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "シロン",
+      "type": "place_system",
+      "attested": true,
+      "source": "msgdat-full.json, manual text"
+    },
+    {
+      "name": "ネプティス",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "ジャライン",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "アヌビス",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "オシリス",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "エリューセラ",
+      "type": "place_system",
+      "attested": true,
+      "source": "msgdat-full.json, manual text"
+    },
+    {
+      "name": "コルテラッツォ",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "ポンテ・クレパルド",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "クルッキド",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "アンドロス",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "タナトス",
+      "type": "place_system",
+      "attested": true,
+      "source": "msgdat-full.json, manual text"
+    },
+    {
+      "name": "エコニア",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "プロスキナス",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "マスジット",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "ケール",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "リオ・ヴェルデ",
+      "type": "place_system",
+      "attested": true,
+      "source": "msgdat-full.json, manual text"
+    },
+    {
+      "name": "メサ・デル・アグア",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "サン・カルロス",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "リアノ・ブランコ",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "イスラ・ブランカ",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "ロフォーテン",
+      "type": "place_system",
+      "attested": true,
+      "source": "msgdat-full.json, manual text"
+    },
+    {
+      "name": "アルスタッド",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "バルスタッド",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "スボルヴェア",
+      "type": "place_planet",
+      "attested": false,
+      "source": "NONE (AI_INVENTED candidate)"
+    },
+    {
+      "name": "ルドミラ",
+      "type": "place_fortress",
+      "attested": true,
+      "source": "manual/msgdat (fortress)"
+    },
+    {
+      "name": "バーラト",
+      "type": "place_system",
+      "attested": true,
+      "source": "msgdat-full.json, manual text"
+    },
+    {
+      "name": "テルヌーゼン",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "カスバ・ナグム",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "ハイネセン",
+      "type": "place_planet",
+      "attested": true,
+      "source": "msgdat-full.json, manual text"
+    },
+    {
+      "name": "シリューナガル",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "ファラーファラ",
+      "type": "place_system",
+      "attested": true,
+      "source": "msgdat-full.json, manual text"
+    },
+    {
+      "name": "アラム・バダー",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "ラムル",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "ミセヌム",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "アスワン",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "ケリム",
+      "type": "place_system",
+      "attested": true,
+      "source": "msgdat-full.json, manual text"
+    },
+    {
+      "name": "カッシナ",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "バフラ",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "アユディン",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "パラス",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "ポリスーン",
+      "type": "place_system",
+      "attested": true,
+      "source": "msgdat-full.json, manual text"
+    },
+    {
+      "name": "エルデン",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "ベレケト",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "キルニス",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "ダヤン・ハーン",
+      "type": "place_fortress",
+      "attested": true,
+      "source": "manual/msgdat (fortress)"
+    },
+    {
+      "name": "ライガール",
+      "type": "place_system",
+      "attested": true,
+      "source": "msgdat-full.json, manual text"
+    },
+    {
+      "name": "シンガラ",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "ミルパラ",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "アユアラ",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "バーミリオン",
+      "type": "place_system",
+      "attested": true,
+      "source": "msgdat-full.json"
+    },
+    {
+      "name": "エイクロン",
+      "type": "place_planet",
+      "attested": false,
+      "source": "NONE (AI_INVENTED candidate)"
+    },
+    {
+      "name": "ロートン",
+      "type": "place_planet",
+      "attested": false,
+      "source": "NONE (AI_INVENTED candidate)"
+    },
+    {
+      "name": "カスケード",
+      "type": "place_planet",
+      "attested": false,
+      "source": "NONE (AI_INVENTED candidate)"
+    },
+    {
+      "name": "リューカス",
+      "type": "place_system",
+      "attested": true,
+      "source": "msgdat-full.json, manual text"
+    },
+    {
+      "name": "ザカリアス",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "インコバネ",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "ヴァルミー",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "マローヴィア",
+      "type": "place_system",
+      "attested": true,
+      "source": "msgdat-full.json"
+    },
+    {
+      "name": "ハダト",
+      "type": "place_system",
+      "attested": true,
+      "source": "msgdat-full.json, manual text"
+    },
+    {
+      "name": "シャンプール",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "ベラスィ",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "アンジャル",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "ジャムシード",
+      "type": "place_system",
+      "attested": true,
+      "source": "msgdat-full.json, manual text"
+    },
+    {
+      "name": "タフテ・ジャムジード",
+      "type": "place_planet",
+      "attested": false,
+      "source": "NONE (AI_INVENTED candidate)"
+    },
+    {
+      "name": "カッファー",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "ムハバット",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "アバダナ",
+      "type": "place_planet",
+      "attested": false,
+      "source": "NONE (AI_INVENTED candidate)"
+    },
+    {
+      "name": "トリプラ",
+      "type": "place_system",
+      "attested": true,
+      "source": "msgdat-full.json, manual text"
+    },
+    {
+      "name": "パルメレンド",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "アガタラ",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "カリャンプール",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "イスファハン",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "タッシリ",
+      "type": "place_system",
+      "attested": true,
+      "source": "msgdat-full.json, manual text"
+    },
+    {
+      "name": "タッシリ・ナジェール",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "アドラル・ソアフ",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "トゥアレグ",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "シュパーラ",
+      "type": "place_system",
+      "attested": true,
+      "source": "msgdat-full.json, manual text"
+    },
+    {
+      "name": "アルンキパ",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "ヴィスカ・グランデ",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "シウダ・ロドリゴ",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "ヴィシュコフ",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "ドーリア",
+      "type": "place_system",
+      "attested": true,
+      "source": "msgdat-full.json, manual text"
+    },
+    {
+      "name": "モンテカプラロ",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "カスタノーラ",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "ビエヴェッタ",
+      "type": "place_planet",
+      "attested": false,
+      "source": "NONE (AI_INVENTED candidate)"
+    },
+    {
+      "name": "ボルケーゼ",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "シヴァ",
+      "type": "place_system",
+      "attested": true,
+      "source": "msgdat-full.json"
+    },
+    {
+      "name": "パールヴァティ",
+      "type": "place_planet",
+      "attested": false,
+      "source": "NONE (AI_INVENTED candidate)"
+    },
+    {
+      "name": "ガンガー",
+      "type": "place_planet",
+      "attested": false,
+      "source": "NONE (AI_INVENTED candidate)"
+    },
+    {
+      "name": "ナンディ",
+      "type": "place_planet",
+      "attested": false,
+      "source": "NONE (AI_INVENTED candidate)"
+    },
+    {
+      "name": "アナンタ",
+      "type": "place_planet",
+      "attested": false,
+      "source": "NONE (AI_INVENTED candidate)"
+    },
+    {
+      "name": "エル・ファシル",
+      "type": "place_system",
+      "attested": true,
+      "source": "msgdat-full.json, manual text"
+    },
+    {
+      "name": "カルタヘナ",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "ラス・カシタス",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "サンタ・アナ",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "サルバドル",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "ガンダルヴァ",
+      "type": "place_system",
+      "attested": true,
+      "source": "msgdat-full.json"
+    },
+    {
+      "name": "ウルヴァシー",
+      "type": "place_planet",
+      "attested": false,
+      "source": "NONE (AI_INVENTED candidate)"
+    },
+    {
+      "name": "カルティケーヤ",
+      "type": "place_planet",
+      "attested": false,
+      "source": "NONE (AI_INVENTED candidate)"
+    },
+    {
+      "name": "アガスティア",
+      "type": "place_planet",
+      "attested": false,
+      "source": "NONE (AI_INVENTED candidate)"
+    },
+    {
+      "name": "ヴァルナ",
+      "type": "place_planet",
+      "attested": false,
+      "source": "NONE (AI_INVENTED candidate)"
+    },
+    {
+      "name": "ランテマリオ",
+      "type": "place_system",
+      "attested": true,
+      "source": "msgdat-full.json"
+    },
+    {
+      "name": "ルエヴィト",
+      "type": "place_planet",
+      "attested": false,
+      "source": "NONE (AI_INVENTED candidate)"
+    },
+    {
+      "name": "スヴェン・ヴィト",
+      "type": "place_planet",
+      "attested": false,
+      "source": "NONE (AI_INVENTED candidate)"
+    },
+    {
+      "name": "ヤロヴィト",
+      "type": "place_planet",
+      "attested": false,
+      "source": "NONE (AI_INVENTED candidate)"
+    },
+    {
+      "name": "メルカルト",
+      "type": "place_system",
+      "attested": true,
+      "source": "msgdat-full.json, manual text"
+    },
+    {
+      "name": "アシュール",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "ネルガル",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "バール・ザフォン",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "エルゴン",
+      "type": "place_system",
+      "attested": true,
+      "source": "msgdat-full.json, manual text"
+    },
+    {
+      "name": "カモロク",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "ブタンディガ",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "ムバレ",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "カンパラ",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "マル・アデッタ",
+      "type": "place_system",
+      "attested": true,
+      "source": "msgdat-full.json"
+    },
+    {
+      "name": "バラセット",
+      "type": "place_planet",
+      "attested": false,
+      "source": "NONE (AI_INVENTED candidate)"
+    },
+    {
+      "name": "アヴェラノス",
+      "type": "place_planet",
+      "attested": false,
+      "source": "NONE (AI_INVENTED candidate)"
+    },
+    {
+      "name": "ファルネーゼ",
+      "type": "place_planet",
+      "attested": false,
+      "source": "NONE (AI_INVENTED candidate)"
+    },
+    {
+      "name": "マントヴァ",
+      "type": "place_planet",
+      "attested": false,
+      "source": "NONE (AI_INVENTED candidate)"
+    },
+    {
+      "name": "バラトループ",
+      "type": "place_system",
+      "attested": true,
+      "source": "msgdat-full.json"
+    },
+    {
+      "name": "バラトループ1",
+      "type": "place_planet",
+      "attested": false,
+      "source": "NONE (AI_INVENTED candidate)"
+    },
+    {
+      "name": "バラトループ2",
+      "type": "place_planet",
+      "attested": false,
+      "source": "NONE (AI_INVENTED candidate)"
+    },
+    {
+      "name": "バラトループ3",
+      "type": "place_planet",
+      "attested": false,
+      "source": "NONE (AI_INVENTED candidate)"
+    },
+    {
+      "name": "シャンダルーア",
+      "type": "place_system",
+      "attested": true,
+      "source": "msgdat-full.json"
+    },
+    {
+      "name": "シャンダルーア1",
+      "type": "place_planet",
+      "attested": false,
+      "source": "NONE (AI_INVENTED candidate)"
+    },
+    {
+      "name": "シャンダルーア2",
+      "type": "place_planet",
+      "attested": false,
+      "source": "NONE (AI_INVENTED candidate)"
+    },
+    {
+      "name": "シャンダルーア3",
+      "type": "place_planet",
+      "attested": false,
+      "source": "NONE (AI_INVENTED candidate)"
+    },
+    {
+      "name": "ダゴン",
+      "type": "place_system",
+      "attested": true,
+      "source": "msgdat-full.json"
+    },
+    {
+      "name": "ダゴン1",
+      "type": "place_planet",
+      "attested": false,
+      "source": "NONE (AI_INVENTED candidate)"
+    },
+    {
+      "name": "ダゴン2",
+      "type": "place_planet",
+      "attested": false,
+      "source": "NONE (AI_INVENTED candidate)"
+    },
+    {
+      "name": "ダゴン3",
+      "type": "place_planet",
+      "attested": false,
+      "source": "NONE (AI_INVENTED candidate)"
+    },
+    {
+      "name": "ダゴン4",
+      "type": "place_planet",
+      "attested": false,
+      "source": "NONE (AI_INVENTED candidate)"
+    },
+    {
+      "name": "ティアマト",
+      "type": "place_system",
+      "attested": true,
+      "source": "msgdat-full.json"
+    },
+    {
+      "name": "ティアマト1",
+      "type": "place_planet",
+      "attested": false,
+      "source": "NONE (AI_INVENTED candidate)"
+    },
+    {
+      "name": "ティアマト2",
+      "type": "place_planet",
+      "attested": false,
+      "source": "NONE (AI_INVENTED candidate)"
+    },
+    {
+      "name": "ティアマト3",
+      "type": "place_planet",
+      "attested": false,
+      "source": "NONE (AI_INVENTED candidate)"
+    },
+    {
+      "name": "ティアマト4",
+      "type": "place_planet",
+      "attested": false,
+      "source": "NONE (AI_INVENTED candidate)"
+    },
+    {
+      "name": "ドラゴニア",
+      "type": "place_system",
+      "attested": true,
+      "source": "msgdat-full.json"
+    },
+    {
+      "name": "ドラゴニア1",
+      "type": "place_planet",
+      "attested": false,
+      "source": "NONE (AI_INVENTED candidate)"
+    },
+    {
+      "name": "ドラゴニア2",
+      "type": "place_planet",
+      "attested": false,
+      "source": "NONE (AI_INVENTED candidate)"
+    },
+    {
+      "name": "ドラゴニア3",
+      "type": "place_planet",
+      "attested": false,
+      "source": "NONE (AI_INVENTED candidate)"
+    },
+    {
+      "name": "フォルセティ",
+      "type": "place_system",
+      "attested": true,
+      "source": "msgdat-full.json"
+    },
+    {
+      "name": "アスターテ",
+      "type": "place_system",
+      "attested": true,
+      "source": "msgdat-full.json"
+    },
+    {
+      "name": "アスターテ1",
+      "type": "place_planet",
+      "attested": false,
+      "source": "NONE (AI_INVENTED candidate)"
+    },
+    {
+      "name": "アスターテ2",
+      "type": "place_planet",
+      "attested": false,
+      "source": "NONE (AI_INVENTED candidate)"
+    },
+    {
+      "name": "アスターテ3",
+      "type": "place_planet",
+      "attested": false,
+      "source": "NONE (AI_INVENTED candidate)"
+    },
+    {
+      "name": "アスターテ4",
+      "type": "place_planet",
+      "attested": false,
+      "source": "NONE (AI_INVENTED candidate)"
+    },
+    {
+      "name": "ファイアザード",
+      "type": "place_system",
+      "attested": true,
+      "source": "msgdat-full.json"
+    },
+    {
+      "name": "ファイアザード1",
+      "type": "place_planet",
+      "attested": false,
+      "source": "NONE (AI_INVENTED candidate)"
+    },
+    {
+      "name": "ファイアザード2",
+      "type": "place_planet",
+      "attested": false,
+      "source": "NONE (AI_INVENTED candidate)"
+    },
+    {
+      "name": "ファイアザード3",
+      "type": "place_planet",
+      "attested": false,
+      "source": "NONE (AI_INVENTED candidate)"
+    },
+    {
+      "name": "ポレヴィト",
+      "type": "place_system",
+      "attested": true,
+      "source": "msgdat-full.json, manual text"
+    },
+    {
+      "name": "ルジアーナ",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "チェルノボーグ",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "スヴァローグ",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "ポレヴィーク",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "アルレスハイム",
+      "type": "place_system",
+      "attested": true,
+      "source": "msgdat-full.json"
+    },
+    {
+      "name": "アルレスハイム1",
+      "type": "place_planet",
+      "attested": false,
+      "source": "NONE (AI_INVENTED candidate)"
+    },
+    {
+      "name": "アルレスハイム2",
+      "type": "place_planet",
+      "attested": false,
+      "source": "NONE (AI_INVENTED candidate)"
+    },
+    {
+      "name": "アルレスハイム3",
+      "type": "place_planet",
+      "attested": false,
+      "source": "NONE (AI_INVENTED candidate)"
+    },
+    {
+      "name": "アルレスハイム4",
+      "type": "place_planet",
+      "attested": false,
+      "source": "NONE (AI_INVENTED candidate)"
+    },
+    {
+      "name": "パランティア",
+      "type": "place_system",
+      "attested": true,
+      "source": "msgdat-full.json"
+    },
+    {
+      "name": "パランティア1",
+      "type": "place_planet",
+      "attested": false,
+      "source": "NONE (AI_INVENTED candidate)"
+    },
+    {
+      "name": "パランティア2",
+      "type": "place_planet",
+      "attested": false,
+      "source": "NONE (AI_INVENTED candidate)"
+    },
+    {
+      "name": "パランティア3",
+      "type": "place_planet",
+      "attested": false,
+      "source": "NONE (AI_INVENTED candidate)"
+    },
+    {
+      "name": "パランティア4",
+      "type": "place_planet",
+      "attested": false,
+      "source": "NONE (AI_INVENTED candidate)"
+    },
+    {
+      "name": "アルトミュール",
+      "type": "place_system",
+      "attested": true,
+      "source": "msgdat-full.json"
+    },
+    {
+      "name": "カプチェランカ",
+      "type": "place_planet",
+      "attested": false,
+      "source": "NONE (AI_INVENTED candidate)"
+    },
+    {
+      "name": "ヴァウブジフ",
+      "type": "place_planet",
+      "attested": false,
+      "source": "NONE (AI_INVENTED candidate)"
+    },
+    {
+      "name": "エディルネ",
+      "type": "place_planet",
+      "attested": false,
+      "source": "NONE (AI_INVENTED candidate)"
+    },
+    {
+      "name": "レグニッツァ",
+      "type": "place_planet",
+      "attested": false,
+      "source": "NONE (AI_INVENTED candidate)"
+    },
+    {
+      "name": "ヴァンフリート",
+      "type": "place_system",
+      "attested": true,
+      "source": "msgdat-full.json"
+    },
+    {
+      "name": "ヴァンフリート1",
+      "type": "place_planet",
+      "attested": false,
+      "source": "NONE (AI_INVENTED candidate)"
+    },
+    {
+      "name": "ヴァンフリート2",
+      "type": "place_planet",
+      "attested": false,
+      "source": "NONE (AI_INVENTED candidate)"
+    },
+    {
+      "name": "ヴァンフリート3",
+      "type": "place_planet",
+      "attested": false,
+      "source": "NONE (AI_INVENTED candidate)"
+    },
+    {
+      "name": "ヴァンフリート4",
+      "type": "place_planet",
+      "attested": false,
+      "source": "NONE (AI_INVENTED candidate)"
+    },
+    {
+      "name": "フェザーン",
+      "type": "place_system",
+      "attested": true,
+      "source": "msgdat-full.json, manual text"
+    },
+    {
+      "name": "ジラー",
+      "type": "place_planet",
+      "attested": false,
+      "source": "NONE (AI_INVENTED candidate)"
+    },
+    {
+      "name": "リウドルフィンク",
+      "type": "place_planet",
+      "attested": false,
+      "source": "NONE (AI_INVENTED candidate)"
+    },
+    {
+      "name": "ザリエル",
+      "type": "place_planet",
+      "attested": false,
+      "source": "NONE (AI_INVENTED candidate)"
+    },
+    {
+      "name": "フェザーン",
+      "type": "place_planet",
+      "attested": true,
+      "source": "msgdat-full.json, manual text"
+    },
+    {
+      "name": "イゼルローン",
+      "type": "place_system",
+      "attested": true,
+      "source": "msgdat-full.json, manual text"
+    },
+    {
+      "name": "イゼルローン",
+      "type": "place_fortress",
+      "attested": true,
+      "source": "manual/msgdat (fortress)"
+    },
+    {
+      "name": "アイゼンヘルツ",
+      "type": "place_system",
+      "attested": true,
+      "source": "msgdat-full.json, manual text"
+    },
+    {
+      "name": "ヒンターヴィルド",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "ラドメール",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "ゴータ",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "ガイエスブルク",
+      "type": "place_fortress",
+      "attested": true,
+      "source": "manual/msgdat (fortress)"
+    },
+    {
+      "name": "アムリッツァ",
+      "type": "place_system",
+      "attested": true,
+      "source": "msgdat-full.json, manual text"
+    },
+    {
+      "name": "クラインゲルト",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "モールゲン",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "ダンク",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "ハーフェン",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "フォルゲン",
+      "type": "place_system",
+      "attested": true,
+      "source": "msgdat-full.json, manual text"
+    },
+    {
+      "name": "シュヴァンガウ",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "フュッセン",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "ボーデルスベルグ",
+      "type": "place_planet",
+      "attested": false,
+      "source": "NONE (AI_INVENTED candidate)"
+    },
+    {
+      "name": "ヨーツンヘイム",
+      "type": "place_system",
+      "attested": true,
+      "source": "msgdat-full.json, manual text"
+    },
+    {
+      "name": "ウトガルド",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "ヨーツンヘイム",
+      "type": "place_planet",
+      "attested": true,
+      "source": "msgdat-full.json, manual text"
+    },
+    {
+      "name": "エーリヴァーガル",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "ヴァンステイド",
+      "type": "place_system",
+      "attested": true,
+      "source": "msgdat-full.json, manual text"
+    },
+    {
+      "name": "ラブンストラップ",
+      "type": "place_planet",
+      "attested": false,
+      "source": "NONE (AI_INVENTED candidate)"
+    },
+    {
+      "name": "レグステッド",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "ファルドガルデ",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "ビルロスト",
+      "type": "place_system",
+      "attested": true,
+      "source": "msgdat-full.json, manual text"
+    },
+    {
+      "name": "ヘイムダル",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "ヒミンギョルグ",
+      "type": "place_planet",
+      "attested": false,
+      "source": "NONE (AI_INVENTED candidate)"
+    },
+    {
+      "name": "ブルトガング",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "ギャランホルン",
+      "type": "place_planet",
+      "attested": false,
+      "source": "NONE (AI_INVENTED candidate)"
+    },
+    {
+      "name": "アルメントフベール",
+      "type": "place_system",
+      "attested": true,
+      "source": "msgdat-full.json, manual text"
+    },
+    {
+      "name": "ビッケンバッハ",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "ゲルンスハイム",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "アルスバッハ",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "クレーベルク",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "トラーバッハ",
+      "type": "place_system",
+      "attested": true,
+      "source": "msgdat-full.json, manual text"
+    },
+    {
+      "name": "ヴォルフェルスドルフ",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "ファルクヴィーラー",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "シュテルネンベルク",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "トラーベン",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "ブラウンシュヴァイク",
+      "type": "place_system",
+      "attested": true,
+      "source": "msgdat-full.json, manual text"
+    },
+    {
+      "name": "ヴェスターラント",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "ヴェーデル",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "ショーペンシュタット",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "フォルケンローデ",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "ボルソルン",
+      "type": "place_system",
+      "attested": true,
+      "source": "msgdat-full.json, manual text"
+    },
+    {
+      "name": "ベストラ",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "ボルソルン",
+      "type": "place_planet",
+      "attested": true,
+      "source": "msgdat-full.json, manual text"
+    },
+    {
+      "name": "ヴァイセンバッハ",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "ボル",
+      "type": "place_planet",
+      "attested": true,
+      "source": "msgdat-full.json, manual text"
+    },
+    {
+      "name": "ドヴェルグ",
+      "type": "place_system",
+      "attested": true,
+      "source": "msgdat-full.json, manual text"
+    },
+    {
+      "name": "グレイプニル",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "イーヴァンルディ",
+      "type": "place_planet",
+      "attested": false,
+      "source": "NONE (AI_INVENTED candidate)"
+    },
+    {
+      "name": "レージング",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "カバール",
+      "type": "place_planet",
+      "attested": false,
+      "source": "NONE (AI_INVENTED candidate)"
+    },
+    {
+      "name": "アルタイル",
+      "type": "place_system",
+      "attested": true,
+      "source": "msgdat-full.json, manual text"
+    },
+    {
+      "name": "カタラウヌム",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "アンティノウス",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "テルモビュレー",
+      "type": "place_planet",
+      "attested": false,
+      "source": "NONE (AI_INVENTED candidate)"
+    },
+    {
+      "name": "アルタイル",
+      "type": "place_planet",
+      "attested": true,
+      "source": "msgdat-full.json, manual text"
+    },
+    {
+      "name": "フレイア",
+      "type": "place_system",
+      "attested": true,
+      "source": "msgdat-full.json, manual text"
+    },
+    {
+      "name": "フォールクヴァング",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "フェンサリル",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "ブリシンガメン",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "レンテンベルグ",
+      "type": "place_fortress",
+      "attested": true,
+      "source": "manual/msgdat (fortress)"
+    },
+    {
+      "name": "ヤヴァンハール",
+      "type": "place_system",
+      "attested": true,
+      "source": "msgdat-full.json, manual text"
+    },
+    {
+      "name": "ハールバルド",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "リューゲン",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "ヴィスマール",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "シュヴェリーン",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "キフォイザー",
+      "type": "place_system",
+      "attested": true,
+      "source": "msgdat-full.json, manual text"
+    },
+    {
+      "name": "ロールバッハ",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "ヴァーゲンバッハ",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "ヴァルテンキルヒェン",
+      "type": "place_planet",
+      "attested": false,
+      "source": "NONE (AI_INVENTED candidate)"
+    },
+    {
+      "name": "ガルミッシュ",
+      "type": "place_fortress",
+      "attested": true,
+      "source": "manual/msgdat (fortress)"
+    },
+    {
+      "name": "アルヴィース",
+      "type": "place_system",
+      "attested": true,
+      "source": "msgdat-full.json, manual text"
+    },
+    {
+      "name": "ビルスキルニル",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "スルード",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "ウンターグリューン",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "ヴァンガル",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "太陽系",
+      "type": "place_system",
+      "attested": true,
+      "source": "msgdat-full.json"
+    },
+    {
+      "name": "○水星",
+      "type": "place_planet",
+      "attested": false,
+      "source": "NONE (AI_INVENTED candidate)"
+    },
+    {
+      "name": "○金星",
+      "type": "place_planet",
+      "attested": false,
+      "source": "NONE (AI_INVENTED candidate)"
+    },
+    {
+      "name": "○地球",
+      "type": "place_planet",
+      "attested": false,
+      "source": "NONE (AI_INVENTED candidate)"
+    },
+    {
+      "name": "○火星",
+      "type": "place_planet",
+      "attested": false,
+      "source": "NONE (AI_INVENTED candidate)"
+    },
+    {
+      "name": "バルドル",
+      "type": "place_system",
+      "attested": true,
+      "source": "msgdat-full.json, manual text"
+    },
+    {
+      "name": "ブレイザブリク",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "フリングオルニ",
+      "type": "place_planet",
+      "attested": false,
+      "source": "NONE (AI_INVENTED candidate)"
+    },
+    {
+      "name": "グリトニル",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "ホズ",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "リンダーホーフ",
+      "type": "place_system",
+      "attested": true,
+      "source": "msgdat-full.json, manual text"
+    },
+    {
+      "name": "ノイシュヴァンシュタイン",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "キームゼー",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "ホーエンシュヴァンガウ",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "オーバーアマガウ",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "シリウス",
+      "type": "place_system",
+      "attested": true,
+      "source": "msgdat-full.json"
+    },
+    {
+      "name": "ポ・トロ",
+      "type": "place_planet",
+      "attested": false,
+      "source": "NONE (AI_INVENTED candidate)"
+    },
+    {
+      "name": "エンメ・ヤ",
+      "type": "place_planet",
+      "attested": false,
+      "source": "NONE (AI_INVENTED candidate)"
+    },
+    {
+      "name": "ノンモ",
+      "type": "place_planet",
+      "attested": false,
+      "source": "NONE (AI_INVENTED candidate)"
+    },
+    {
+      "name": "ロンドリーナ",
+      "type": "place_planet",
+      "attested": false,
+      "source": "NONE (AI_INVENTED candidate)"
+    },
+    {
+      "name": "ヴェガ",
+      "type": "place_system",
+      "attested": true,
+      "source": "msgdat-full.json"
+    },
+    {
+      "name": "オルフェウス",
+      "type": "place_planet",
+      "attested": false,
+      "source": "NONE (AI_INVENTED candidate)"
+    },
+    {
+      "name": "エウリュディケ",
+      "type": "place_planet",
+      "attested": false,
+      "source": "NONE (AI_INVENTED candidate)"
+    },
+    {
+      "name": "アクリシオス",
+      "type": "place_planet",
+      "attested": false,
+      "source": "NONE (AI_INVENTED candidate)"
+    },
+    {
+      "name": "ベルセボネー",
+      "type": "place_planet",
+      "attested": false,
+      "source": "NONE (AI_INVENTED candidate)"
+    },
+    {
+      "name": "アルテナ",
+      "type": "place_system",
+      "attested": true,
+      "source": "msgdat-full.json, manual text"
+    },
+    {
+      "name": "ヴェセルデ",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "ナッハロート",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "ノイエンラーデ",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "ヘートフェルト",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "リッテンハイム",
+      "type": "place_system",
+      "attested": true,
+      "source": "msgdat-full.json, manual text"
+    },
+    {
+      "name": "インゲンハイム",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "デュンツェンハイム",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "アルテンハイム",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "ローゲンドルフ",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "ヴェルラ",
+      "type": "place_system",
+      "attested": true,
+      "source": "msgdat-full.json, manual text"
+    },
+    {
+      "name": "マルクト",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "ヤコビ",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "シュテファニ",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "ヴィレンシュタイン",
+      "type": "place_system",
+      "attested": true,
+      "source": "msgdat-full.json, manual text"
+    },
+    {
+      "name": "ウイツィッヒハウゼン",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "ヴァイセンホルン",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "グラフェルツホーフェン",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "オーベンハウゼン",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "ハインスベルク",
+      "type": "place_system",
+      "attested": true,
+      "source": "msgdat-full.json, manual text"
+    },
+    {
+      "name": "ランデラート",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "ダッセル",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "ミュレンアルク",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "ヴァルデマール",
+      "type": "place_system",
+      "attested": true,
+      "source": "msgdat-full.json, manual text"
+    },
+    {
+      "name": "ウーファー",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "パウル",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "リンケ",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "ヴァルハラ",
+      "type": "place_system",
+      "attested": true,
+      "source": "msgdat-full.json, manual text"
+    },
+    {
+      "name": "ゾースト",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "オーディン",
+      "type": "place_planet",
+      "attested": true,
+      "source": "msgdat-full.json, manual text"
+    },
+    {
+      "name": "トゥール",
+      "type": "place_planet",
+      "attested": true,
+      "source": "msgdat-full.json, manual text"
+    },
+    {
+      "name": "ヴァルグリンド",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "シャンタウ",
+      "type": "place_system",
+      "attested": true,
+      "source": "msgdat-full.json, manual text"
+    },
+    {
+      "name": "クネスドルフ",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "ハーケンドルフ",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "ノイエンキルヒェン",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "ゼードルフ",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "ニヴルヘイム",
+      "type": "place_system",
+      "attested": true,
+      "source": "msgdat-full.json, manual text"
+    },
+    {
+      "name": "エリューズニル",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "ギョッル",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "フヴェルゲルミル",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "ランメルスベルク",
+      "type": "place_system",
+      "attested": true,
+      "source": "msgdat-full.json, manual text"
+    },
+    {
+      "name": "ハルスブリュッケ",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "ハルテンシュタイン",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "ヒンメルスフュルスト",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "シュレマ",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "カストロプ",
+      "type": "place_system",
+      "attested": true,
+      "source": "msgdat-full.json, manual text"
+    },
+    {
+      "name": "カストロプ",
+      "type": "place_planet",
+      "attested": true,
+      "source": "msgdat-full.json, manual text"
+    },
+    {
+      "name": "ニーダー・ヴィンデンボルン",
+      "type": "place_planet",
+      "attested": false,
+      "source": "NONE (AI_INVENTED candidate)"
+    },
+    {
+      "name": "ヴォルディングボルグ",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "マリーンドルフ",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "アスガルド",
+      "type": "place_system",
+      "attested": true,
+      "source": "msgdat-full.json, manual text"
+    },
+    {
+      "name": "ミーミル",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "ギンヌンガガガブ",
+      "type": "place_planet",
+      "attested": false,
+      "source": "NONE (AI_INVENTED candidate)"
+    },
+    {
+      "name": "トイトブルク",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "イーダリル",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "ヴァナヘイム",
+      "type": "place_system",
+      "attested": true,
+      "source": "msgdat-full.json, manual text"
+    },
+    {
+      "name": "エインヘリヤル",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "ノーアトゥーン",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "ニョルド",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "フレイ",
+      "type": "place_planet",
+      "attested": true,
+      "source": "msgdat-full.json, manual text"
+    },
+    {
+      "name": "ヴィッテルスバッハ",
+      "type": "place_system",
+      "attested": true,
+      "source": "msgdat-full.json, manual text"
+    },
+    {
+      "name": "レジデンツ",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "ニュンフェンブルク",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "ヴィクトアーリエン",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "ルイトポルディング",
+      "type": "place_system",
+      "attested": true,
+      "source": "msgdat-full.json, manual text"
+    },
+    {
+      "name": "ルイトポルト",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "ベルトホルト",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "アルヌルフ",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "ヴィンスティンゲン",
+      "type": "place_system",
+      "attested": true,
+      "source": "msgdat-full.json, manual text"
+    },
+    {
+      "name": "フォルマール",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "ヴィート",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "イーゼンブルク",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "ウォームスガウ",
+      "type": "place_system",
+      "attested": true,
+      "source": "msgdat-full.json, manual text"
+    },
+    {
+      "name": "ヴェルナー",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "コンラート",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "ブルーノ",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    },
+    {
+      "name": "リウドルフ",
+      "type": "place_planet",
+      "attested": true,
+      "source": "manual text"
+    }
+  ]
+}

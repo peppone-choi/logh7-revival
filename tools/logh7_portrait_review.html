@@ -1,0 +1,593 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LOGH VII Portrait Review</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f3f4f6;
+      --panel: #ffffff;
+      --line: #d7dce3;
+      --ink: #1b2430;
+      --muted: #687386;
+      --blue: #2457a6;
+      --green: #1b7f5f;
+      --red: #a94343;
+      --yellow: #fff3c4;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font: 14px/1.45 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background: var(--bg);
+    }
+    header {
+      height: 56px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 0 18px;
+      border-bottom: 1px solid var(--line);
+      background: #fbfbfc;
+      position: sticky;
+      top: 0;
+      z-index: 3;
+    }
+    h1 { font-size: 17px; margin: 0; min-width: 218px; }
+    input, select, textarea, button {
+      font: inherit;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: #fff;
+      color: var(--ink);
+    }
+    input, select { height: 34px; padding: 0 10px; }
+    button {
+      height: 34px;
+      padding: 0 12px;
+      cursor: pointer;
+      background: #f8fafc;
+    }
+    button.primary {
+      color: #fff;
+      background: var(--blue);
+      border-color: var(--blue);
+    }
+    main {
+      display: grid;
+      grid-template-columns: minmax(520px, 1fr) 430px;
+      min-height: calc(100vh - 56px);
+    }
+    .list {
+      border-right: 1px solid var(--line);
+      overflow: auto;
+      padding: 14px;
+    }
+    .detail {
+      position: sticky;
+      top: 56px;
+      height: calc(100vh - 56px);
+      overflow: auto;
+      padding: 14px;
+      background: #eef1f5;
+    }
+    .slot-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(248px, 1fr));
+      gap: 10px;
+    }
+    .slot-card {
+      min-height: 142px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+      padding: 10px;
+      display: grid;
+      grid-template-columns: 76px 1fr;
+      gap: 10px;
+      cursor: pointer;
+    }
+    .slot-card.selected { outline: 2px solid var(--blue); }
+    .slot-card img.portrait, .detail-head img {
+      width: 64px;
+      height: 80px;
+      border: 1px solid #b8c0cc;
+      background: #111827;
+    }
+    .slot-id { font-weight: 700; letter-spacing: 0; }
+    .muted { color: var(--muted); }
+    .badge-row { display: flex; gap: 5px; flex-wrap: wrap; margin-top: 4px; }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      min-height: 20px;
+      padding: 0 6px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      font-size: 12px;
+      color: #39465a;
+      background: #f8fafc;
+    }
+    .badge.confirmed { color: #fff; background: var(--green); border-color: var(--green); }
+    .badge.probable, .badge.candidate, .badge.needs_source {
+      color: #4b3400;
+      background: var(--yellow);
+      border-color: #efd37d;
+    }
+    .badge.high, .badge.nameplate_strong {
+      color: #fff;
+      background: #2457a6;
+      border-color: #2457a6;
+    }
+    .badge.weak { color: #5b6473; background: #edf0f4; }
+    .badge.rejected { color: #fff; background: var(--red); border-color: var(--red); }
+    .candidate-list {
+      margin-top: 8px;
+      display: flex;
+      gap: 6px;
+      overflow: hidden;
+    }
+    .candidate-thumb {
+      width: 38px;
+      height: 52px;
+      object-fit: cover;
+      border: 1px solid #c6ccd5;
+      background: #fff;
+    }
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 12px;
+    }
+    .detail-head {
+      display: grid;
+      grid-template-columns: 82px 1fr;
+      gap: 12px;
+      align-items: start;
+    }
+    .field-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .field-grid label, .wide label {
+      display: grid;
+      gap: 4px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .field-grid input, .field-grid select, textarea { width: 100%; }
+    textarea {
+      min-height: 82px;
+      padding: 8px 10px;
+      resize: vertical;
+    }
+    .match-row {
+      display: grid;
+      grid-template-columns: 58px 1fr;
+      gap: 10px;
+      padding: 8px 0;
+      border-top: 1px solid #edf0f4;
+    }
+    .match-row:first-child { border-top: 0; }
+    .match-row img {
+      width: 50px;
+      max-height: 74px;
+      object-fit: contain;
+      border: 1px solid #c6ccd5;
+      background: #fff;
+    }
+    .evidence-row {
+      display: grid;
+      grid-template-columns: 52px 72px 1fr;
+      gap: 8px;
+      padding: 8px 0;
+      border-top: 1px solid #edf0f4;
+    }
+    .evidence-row:first-child { border-top: 0; }
+    .evidence-row img {
+      width: 48px;
+      max-height: 64px;
+      object-fit: contain;
+      border: 1px solid #c6ccd5;
+      background: #fff;
+    }
+    .evidence-row img.evidence-crop {
+      width: 68px;
+      max-height: 64px;
+    }
+    .scoreline {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .sources {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 8px;
+    }
+    .source-box {
+      border: 1px solid #e1e5eb;
+      border-radius: 6px;
+      padding: 8px;
+      background: #fafbfc;
+    }
+    .suggestion-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      padding: 9px 0;
+      border-top: 1px solid #edf0f4;
+    }
+    .suggestion-row:first-child { border-top: 0; }
+    .suggestion-title { font-weight: 700; }
+    .toolbar-spacer { flex: 1; }
+    @media (max-width: 1040px) {
+      main { grid-template-columns: 1fr; }
+      .detail { position: static; height: auto; border-top: 1px solid var(--line); }
+      .list { border-right: 0; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>LOGH VII 포트레잇 분류</h1>
+    <input id="search" type="search" placeholder="번호, 이름, 출처 검색" aria-label="검색">
+    <select id="statusFilter" aria-label="판정 필터">
+      <option value="">전체 판정</option>
+      <option value="confirmed">확정</option>
+      <option value="probable">유력</option>
+      <option value="candidate">후보</option>
+      <option value="unknown">미정</option>
+      <option value="needs_source">근거 필요</option>
+      <option value="rejected">제외</option>
+    </select>
+    <div class="toolbar-spacer"></div>
+    <span id="summary" class="muted"></span>
+  </header>
+  <main>
+    <section class="list">
+      <div id="slotGrid" class="slot-grid"></div>
+    </section>
+    <aside class="detail">
+      <div id="detail"></div>
+    </aside>
+  </main>
+  <script>
+    const state = { data: null, selectedSlot: null, query: "", status: "" };
+    const byId = (id) => document.getElementById(id);
+    const fileUrl = (p) => p ? "/file?path=" + encodeURIComponent(p) : "";
+    const fmt = (n) => typeof n === "number" ? n.toFixed(3) : "";
+    const escapeHtml = (value) => String(value ?? "").replace(/[&<>"']/g, (ch) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;" }[ch]));
+
+    function decisionFor(slot) {
+      return state.data.decisions.decisions["slot:" + slot] || { slot, status: "unknown", nameJa: "", nameKo: "", nameEn: "", sourceReferenceId: "", note: "" };
+    }
+
+    function suggestionsFor(slot) {
+      return state.data.aiSuggestionsBySlot?.[slot]?.suggestions || [];
+    }
+
+    function topSuggestionFor(slot) {
+      return suggestionsFor(slot)[0] || null;
+    }
+
+    function suggestionStatus(reliability) {
+      if (reliability === "nameplate_strong") return "confirmed";
+      if (reliability === "high" || reliability === "probable") return "probable";
+      if (reliability === "candidate") return "candidate";
+      return "unknown";
+    }
+
+    function searchableText(slot, candidates, decision, suggestions) {
+      return [
+        slot,
+        decision.status,
+        decision.nameJa,
+        decision.nameKo,
+        decision.nameEn,
+        ...suggestions.flatMap((suggestion) => [
+          suggestion.displayName,
+          suggestion.nameKo,
+          suggestion.nameJa,
+          suggestion.nameEn,
+          suggestion.reliability,
+        ]),
+        ...candidates.flatMap((candidate) => [
+          candidate.sourceLabel,
+          candidate.reference?.title,
+          candidate.reference?.source_name,
+          candidate.reference?.identifier,
+        ]),
+      ].join(" ").toLowerCase();
+    }
+
+    function render() {
+      const grid = byId("slotGrid");
+      const query = state.query.trim().toLowerCase();
+      const cards = [];
+      let visible = 0;
+      for (const portrait of state.data.portraits) {
+        const candidates = state.data.candidatesBySlot[portrait.slot] || [];
+        const suggestions = suggestionsFor(portrait.slot);
+        const topSuggestion = suggestions[0];
+        const decision = decisionFor(portrait.slot);
+        if (state.status && decision.status !== state.status) continue;
+        if (query && !searchableText(portrait.slot, candidates, decision, suggestions).includes(query)) continue;
+        visible += 1;
+        const badges = [
+          `<span class="badge ${escapeHtml(decision.status)}">${escapeHtml(decision.status || "unknown")}</span>`,
+          topSuggestion ? `<span class="badge ${escapeHtml(topSuggestion.reliability)}">AI ${escapeHtml(topSuggestion.reliability)}</span>` : "",
+          candidates.length ? `<span class="badge">후보 ${candidates.length}</span>` : `<span class="badge">후보 없음</span>`,
+        ].filter(Boolean).join("");
+        const names = [decision.nameKo, decision.nameJa, decision.nameEn].filter(Boolean).join(" / ");
+        const aiName = topSuggestion ? `${topSuggestion.displayName} · ${topSuggestion.fusedScore.toFixed(2)}` : "";
+        const thumbs = candidates.slice(0, 5).map((candidate) => `<img class="candidate-thumb" src="${fileUrl(candidate.reference?.local_path)}" title="${escapeHtml(candidate.reference?.title || "")}">`).join("");
+        cards.push(`
+          <article class="slot-card ${state.selectedSlot === portrait.slot ? "selected" : ""}" data-slot="${portrait.slot}">
+            <img class="portrait" src="${fileUrl(portrait.path)}" alt="${portrait.slot}">
+            <div>
+              <div class="slot-id">${portrait.slot}</div>
+              <div class="muted">${escapeHtml(names || aiName || "이름 미정")}</div>
+              <div class="badge-row">${badges}</div>
+              <div class="candidate-list">${thumbs}</div>
+            </div>
+          </article>
+        `);
+      }
+      grid.innerHTML = cards.join("");
+      byId("summary").textContent = `${visible} / ${state.data.counts.portraits} slots`;
+      for (const card of grid.querySelectorAll(".slot-card")) {
+        card.addEventListener("click", () => {
+          state.selectedSlot = card.dataset.slot;
+          render();
+          renderDetail();
+        });
+      }
+      renderDetail();
+    }
+
+    function renderDetail() {
+      const detail = byId("detail");
+      if (!state.selectedSlot) state.selectedSlot = state.data.portraits[0]?.slot || null;
+      const slot = state.selectedSlot;
+      const portrait = state.data.portraits.find((item) => item.slot === slot);
+      if (!portrait) {
+        detail.innerHTML = "<div class='panel'>선택할 포트레잇이 없습니다.</div>";
+        return;
+      }
+      const decision = decisionFor(slot);
+      const candidates = state.data.candidatesBySlot[slot] || [];
+      const suggestions = suggestionsFor(slot);
+      const topSuggestion = suggestions[0];
+      const candidateOptions = candidates.map((candidate) => {
+        const id = candidate.reference?.identifier || "";
+        const label = `${candidate.sourceLabel}: ${candidate.reference?.title || candidate.reference?.source_name || id}`;
+        return `<option value="${escapeHtml(id)}" ${decision.sourceReferenceId === id ? "selected" : ""}>${escapeHtml(label)}</option>`;
+      }).join("");
+      detail.innerHTML = `
+        <div class="panel detail-head">
+          <img src="${fileUrl(portrait.path)}" alt="${slot}">
+          <div>
+            <div class="slot-id">${slot}</div>
+            <div class="muted">VII 원본 포트레잇</div>
+            <div class="badge-row">
+              <span class="badge ${escapeHtml(decision.status)}">${escapeHtml(decision.status)}</span>
+              <span class="badge">자동 후보 ${candidates.length}</span>
+              ${topSuggestion ? `<span class="badge ${escapeHtml(topSuggestion.reliability)}">AI ${escapeHtml(topSuggestion.reliability)}</span>` : ""}
+            </div>
+          </div>
+        </div>
+        <form id="decisionForm" class="panel">
+          <div class="field-grid">
+            <label>판정
+              <select name="status">
+                ${["unknown", "confirmed", "probable", "candidate", "needs_source", "rejected"].map((status) => `<option value="${status}" ${decision.status === status ? "selected" : ""}>${status}</option>`).join("")}
+              </select>
+            </label>
+            <label>근거 후보
+              <select name="sourceReferenceId">
+                <option value="">직접 선택 없음</option>
+                ${candidateOptions}
+              </select>
+            </label>
+            <label>한국어 이름<input name="nameKo" value="${escapeHtml(decision.nameKo)}"></label>
+            <label>일본어 이름<input name="nameJa" value="${escapeHtml(decision.nameJa)}"></label>
+            <label>영문/로마자<input name="nameEn" value="${escapeHtml(decision.nameEn)}"></label>
+          </div>
+          <div class="wide" style="margin-top:8px">
+            <label>메모<textarea name="note">${escapeHtml(decision.note)}</textarea></label>
+          </div>
+          <div style="display:flex; gap:8px; margin-top:10px; align-items:center">
+            <button class="primary" type="submit">저장</button>
+            <span id="saveStatus" class="muted"></span>
+          </div>
+        </form>
+        <div class="panel">
+          <strong>AI 최종 추천</strong>
+          <div style="margin-top:8px">${renderAiSuggestions(suggestions)}</div>
+        </div>
+        <div class="panel">
+          <strong>자동 후보</strong>
+          <div style="margin-top:8px">${renderCandidates(candidates)}</div>
+        </div>
+        <div class="panel">
+          <strong>이름판 확정 근거</strong>
+          <div style="margin-top:8px">${renderDirectEvidence()}</div>
+        </div>
+        <div class="panel">
+          <strong>자료 출처</strong>
+          <div class="sources" style="margin-top:8px">${renderSources()}</div>
+        </div>
+      `;
+      byId("decisionForm").addEventListener("submit", saveDecision);
+      for (const button of detail.querySelectorAll("[data-apply-suggestion]")) {
+        button.addEventListener("click", applySuggestion);
+      }
+    }
+
+    function renderAiSuggestions(suggestions) {
+      if (!suggestions.length) return `<div class="muted">fusion 결과가 아직 없습니다.</div>`;
+      return suggestions.slice(0, 6).map((suggestion, index) => `
+        <div class="suggestion-row">
+          <div>
+            <div class="suggestion-title">${escapeHtml(suggestion.displayName)}</div>
+            <div class="badge-row">
+              <span class="badge ${escapeHtml(suggestion.reliability)}">${escapeHtml(suggestion.reliability)}</span>
+              <span class="badge">fused ${suggestion.fusedScore.toFixed(3)}</span>
+              <span class="badge">lead ${suggestion.lead.toFixed(3)}</span>
+              <span class="badge">sources ${suggestion.sourceCount}</span>
+              ${suggestion.nameplateSourceCount ? `<span class="badge">nameplate ${suggestion.nameplateSourceCount}</span>` : ""}
+            </div>
+            <div class="muted">${escapeHtml(suggestion.sourceIds.join(", "))}</div>
+          </div>
+          <button type="button" data-apply-suggestion="${index}">적용</button>
+        </div>
+      `).join("");
+    }
+
+    function applySuggestion(event) {
+      const index = Number(event.currentTarget.dataset.applySuggestion);
+      const suggestion = suggestionsFor(state.selectedSlot)[index];
+      if (!suggestion) return;
+      const form = byId("decisionForm");
+      form.elements.status.value = suggestionStatus(suggestion.reliability);
+      form.elements.nameKo.value = suggestion.nameKo || "";
+      form.elements.nameJa.value = suggestion.nameJa || "";
+      form.elements.nameEn.value = suggestion.nameEn || "";
+      form.elements.sourceReferenceId.value = "";
+      form.elements.note.value = [
+        `AI fusion: ${suggestion.displayName}`,
+        `reliability=${suggestion.reliability}`,
+        `fused=${suggestion.fusedScore.toFixed(3)}`,
+        `lead=${suggestion.lead.toFixed(3)}`,
+        `sources=${suggestion.sourceIds.join(",")}`,
+      ].join("; ");
+    }
+
+    function renderCandidates(candidates) {
+      if (!candidates.length) return `<div class="muted">이 슬롯을 가리킨 자동 후보가 없습니다.</div>`;
+      return candidates.slice(0, 20).map((candidate) => `
+        <div class="match-row">
+          <img src="${fileUrl(candidate.reference?.local_path)}" alt="">
+          <div>
+            <div><strong>${escapeHtml(candidate.reference?.title || candidate.reference?.source_name || "untitled")}</strong></div>
+            <div class="muted">${escapeHtml(candidate.sourceLabel)} · ${escapeHtml(candidate.reference?.identifier || "")}</div>
+            <div class="scoreline">
+              <span>rank ${candidate.rank}</span>
+              <span>score ${fmt(candidate.match?.score)}</span>
+              <span>best ${fmt(candidate.bestScore)}</span>
+              <span>gap ${fmt(candidate.gap)}</span>
+              <span>${escapeHtml(candidate.sourceStatus)}</span>
+              <span>${escapeHtml(candidate.match?.variant || "")}</span>
+            </div>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    function renderDirectEvidence() {
+      const queryNames = new Set();
+      const slot = state.selectedSlot;
+      const candidates = state.data.candidatesBySlot[slot] || [];
+      for (const candidate of candidates) {
+        for (const value of [candidate.reference?.title, candidate.reference?.name_ko, candidate.reference?.name_ja, candidate.reference?.name_en]) {
+          if (value) queryNames.add(String(value).replace(/\s+/g, "").toLowerCase());
+        }
+      }
+      const entries = state.data.directEvidence.flatMap((source) => (source.entries || []).map((entry) => ({ source, entry })));
+      const scored = entries.map((item) => {
+        const names = [item.entry.name_kr, item.entry.name_ja, item.entry.name_en, item.entry.source_name].filter(Boolean);
+        const hit = names.some((name) => queryNames.has(String(name).replace(/\s+/g, "").toLowerCase()));
+        return { ...item, hit };
+      }).sort((a, b) => Number(b.hit) - Number(a.hit));
+      if (!scored.length) return `<div class="muted">이름판 확정 근거가 아직 없습니다.</div>`;
+      return scored.slice(0, 24).map(({ source, entry, hit }) => `
+        <div class="evidence-row">
+          <img src="${fileUrl(entry.local_path || entry.portrait_path)}" alt="">
+          <img class="evidence-crop" src="${fileUrl(entry.evidence_path || entry.local_path)}" alt="">
+          <div>
+            <div><strong>${escapeHtml([entry.name_kr, entry.name_ja].filter(Boolean).join(" / ") || entry.source_name || source.label)}</strong></div>
+            <div class="muted">${escapeHtml(source.label)}${hit ? " · 후보명 일치" : ""}</div>
+            <div class="scoreline">
+              <span>${escapeHtml(entry.transcription_status || "visible")}</span>
+              <span>${escapeHtml(entry.source_name || entry.id || "")}</span>
+            </div>
+            ${entry.note ? `<div class="muted">${escapeHtml(entry.note)}</div>` : ""}
+          </div>
+        </div>
+      `).join("");
+    }
+
+    function renderSources() {
+      const rankings = state.data.rankingSources.map((source) => `
+        <div class="source-box">
+          <strong>${escapeHtml(source.label)}</strong>
+          <div class="muted">${escapeHtml(source.kind)}</div>
+          <div>${escapeHtml(JSON.stringify(source.counts || {}))}</div>
+        </div>
+      `).join("");
+      const manifests = state.data.manifests.map((manifest) => `
+        <div class="source-box">
+          <strong>${escapeHtml(manifest.label)}</strong>
+          <div class="muted">${escapeHtml(manifest.kind)}</div>
+          <div>${escapeHtml(JSON.stringify(manifest.counts || {}))}</div>
+        </div>
+      `).join("");
+      const direct = state.data.directEvidence.map((source) => `
+        <div class="source-box">
+          <strong>${escapeHtml(source.label)}</strong>
+          <div class="muted">direct evidence</div>
+          <div>${escapeHtml(JSON.stringify(source.counts || {}))}</div>
+        </div>
+      `).join("");
+      const fusion = state.data.fusionSummary ? `
+        <div class="source-box">
+          <strong>AI fusion</strong>
+          <div class="muted">slot-level final suggestions</div>
+          <div>${escapeHtml(JSON.stringify(state.data.fusionSummary.counts || {}))}</div>
+        </div>
+      ` : "";
+      return fusion + rankings + manifests + direct;
+    }
+
+    async function saveDecision(event) {
+      event.preventDefault();
+      const form = event.currentTarget;
+      const payload = Object.fromEntries(new FormData(form).entries());
+      payload.slot = state.selectedSlot;
+      const response = await fetch("/api/decision", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error || "save failed");
+      state.data.decisions.decisions["slot:" + state.selectedSlot] = result.decision;
+      state.data.decisions.updatedAt = result.decision.updatedAt;
+      byId("saveStatus").textContent = "저장됨 " + new Date(result.decision.updatedAt).toLocaleTimeString();
+      render();
+    }
+
+    async function init() {
+      const response = await fetch("/api/data");
+      state.data = await response.json();
+      byId("search").addEventListener("input", (event) => { state.query = event.target.value; render(); });
+      byId("statusFilter").addEventListener("change", (event) => { state.status = event.target.value; render(); });
+      render();
+    }
+
+    init().catch((error) => {
+      document.body.innerHTML = "<pre>" + escapeHtml(error.stack || error.message || String(error)) + "</pre>";
+    });
+  </script>
+</body>
+</html>

@@ -8,6 +8,8 @@ const { values } = parseArgs({
   options: {
     port: { type: 'string', default: '47900' },
     host: { type: 'string', default: '127.0.0.1' },
+    'advertise-host': { type: 'string' },
+    'advertise-port': { type: 'string' },
     trace: { type: 'string' },
     db: { type: 'string' },
   },
@@ -16,12 +18,28 @@ const { values } = parseArgs({
 
 const port = Number(values.port);
 const host = values.host;
+const hasAdvertiseHost = values['advertise-host'] !== undefined;
+const hasAdvertisePort = values['advertise-port'] !== undefined;
+if (hasAdvertiseHost !== hasAdvertisePort) {
+  throw new Error('--advertise-host and --advertise-port must be provided together');
+}
+const advertisedPort = hasAdvertisePort ? Number(values['advertise-port']) : port;
+if (!Number.isInteger(advertisedPort) || advertisedPort < 1 || advertisedPort > 0xffff) {
+  throw new Error(`invalid --advertise-port: ${values['advertise-port'] ?? values.port}`);
+}
+const advertisedEndpoint = {
+  ip: hasAdvertiseHost
+    ? values['advertise-host']
+    : (host === '0.0.0.0' ? '127.0.0.1' : host),
+  port: advertisedPort,
+};
 const tracePath = values.trace ? resolve(values.trace) : null;
 const dbPath = values.db ? resolve(values.db) : undefined;
 
 const runtime = createPlayableRuntime({
   port,
   host,
+  advertisedEndpoint,
   tracePath,
   dbPath,
   logger: {

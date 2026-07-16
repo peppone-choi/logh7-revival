@@ -1,0 +1,219 @@
+{
+  "_source_kind": "online_beta_evidence",
+  "_created": "2026-06-14",
+  "_purpose": "Public/archive evidence for LOGH VII / 은하영웅전설 온라인 original-character draw, partial beta stats, and attested player-held canon characters. Keep separate from canon_reference and from confirmed client/server tables.",
+  "_scope_note": "This is partial community evidence, not a complete game roster and not private server data.",
+  "sources": [
+    {
+      "id": "noweuncle_beta_board",
+      "kind": "korean_community_board",
+      "url": "http://noweuncle.nayana.kr/zibi/zboard.php?id=beta",
+      "local_artifact": ".omo/work/logh7-korean/noweuncle/live-beta/",
+      "notes": "Live 나우은클 은영전 온라인 베타테스트 board; 125 posts indexed, 63 posts downloaded successfully due server timeouts."
+    },
+    {
+      "id": "noweuncle_no_100",
+      "kind": "korean_beta_post",
+      "url": "http://noweuncle.nayana.kr/zibi/zboard.php?id=beta&page=2&sn1=&divpage=1&sn=off&ss=on&sc=on&select_arrange=headnum&desc=asc&no=100",
+      "local_artifact": ".omo/work/logh7-korean/noweuncle/live-beta/targeted/decoded/no-100.txt",
+      "notes": "Post title: [와렌] 동맹 오리지날 장수들 능력치 일람."
+    },
+    {
+      "id": "noweuncle_no_37",
+      "kind": "korean_beta_post",
+      "url": "http://noweuncle.nayana.kr/zibi/zboard.php?id=beta&page=4&sn1=&divpage=1&sn=off&ss=on&sc=on&select_arrange=headnum&desc=asc&no=37",
+      "local_artifact": ".omo/work/logh7-korean/noweuncle/live-beta/targeted/decoded/no-37.txt",
+      "notes": "Post title: 베타 테스터 진영&게임 닉네임 일람!"
+    },
+    {
+      "id": "noweuncle_no_36",
+      "kind": "korean_beta_post",
+      "url": "http://noweuncle.nayana.kr/zibi/zboard.php?id=beta&page=4&sn1=&divpage=1&sn=off&ss=on&sc=on&select_arrange=headnum&desc=asc&no=36",
+      "local_artifact": ".omo/work/logh7-korean/noweuncle/live-beta/targeted/decoded/no-36.txt",
+      "notes": "Post title: [메크링거] 고유 캐릭터 당첨 됐습니다."
+    },
+    {
+      "id": "noweuncle_no_28",
+      "kind": "korean_beta_post",
+      "url": "http://noweuncle.nayana.kr/zibi/zboard.php?id=beta&page=4&sn1=&divpage=1&sn=off&ss=on&sc=on&select_arrange=headnum&desc=asc&no=28",
+      "local_artifact": ".omo/work/logh7-korean/noweuncle/live-beta/targeted/decoded/no-28.txt",
+      "notes": "Post title: [폰루인베르] 현재 로엔그람 오리지널 캐릭은.."
+    },
+    {
+      "id": "noweuncle_no_5",
+      "kind": "korean_beta_post",
+      "url": "http://noweuncle.nayana.kr/zibi/zboard.php?id=beta&page=5&sn1=&divpage=1&sn=off&ss=on&sc=on&select_arrange=headnum&desc=asc&no=5",
+      "local_artifact": ".omo/work/logh7-korean/noweuncle/live-beta/targeted/decoded/no-5.txt",
+      "notes": "Post title: 기존케릭 신청했더니..."
+    },
+    {
+      "id": "noweuncle_no_122",
+      "kind": "korean_translated_patch_notice",
+      "url": "http://noweuncle.nayana.kr/zibi/zboard.php?id=beta&no=122",
+      "local_artifact": ".omo/work/logh7-korean/noweuncle/live-beta/posts/no-122.txt",
+      "notes": "Japanese server 2004-06-24 patch translated by community; mentions original-character draw interval and cancellation bug."
+    },
+    {
+      "id": "noweuncle_no_113",
+      "kind": "korean_beta_feedback",
+      "url": "http://noweuncle.nayana.kr/zibi/zboard.php?id=beta&no=113",
+      "local_artifact": ".omo/work/logh7-korean/noweuncle/live-beta/posts/no-113.txt",
+      "notes": "Beta feedback on draw wait, fame/merit gating, unselected originals controlled by AI, and Korean name confusion."
+    },
+    {
+      "id": "itmedia_2003_09_25",
+      "kind": "japanese_official_press",
+      "url": "https://www.itmedia.co.jp/broadband/0309/25/lp01.html",
+      "local_artifact": ".omo/work/logh7-japanese-community/itmedia-lp01.txt",
+      "notes": "Official preview; confirms points enable one-session original/canon character play and popular characters are decided by lottery."
+    },
+    {
+      "id": "rap_ar101724",
+      "kind": "japanese_player_recollection",
+      "url": "https://web.archive.org/web/20180301015714id_/http://ch.nicovideo.jp:80/rap/blomaga/ar101724",
+      "local_artifact": ".omo/work/logh7-japanese-community/nico-ar101724/20180301015714-AACW4TSS.txt",
+      "notes": "RAP blog part 1, Attenborough arc; player recollection, useful but lower reliability than official/board evidence."
+    },
+    {
+      "id": "rap_ar101992",
+      "kind": "japanese_player_recollection",
+      "url": "https://web.archive.org/web/20140901064119id_/http://ch.nicovideo.jp:80/rap/blomaga/ar101992",
+      "local_artifact": ".omo/work/logh7-japanese-community/nico-ar101992/20140901064119.txt",
+      "notes": "RAP blog part 2, Yang Wen-li arc."
+    },
+    {
+      "id": "rap_ar102364",
+      "kind": "japanese_player_recollection",
+      "url": "https://web.archive.org/web/20140901070619id_/http://ch.nicovideo.jp:80/rap/blomaga/ar102364",
+      "local_artifact": ".omo/work/logh7-japanese-community/nico-ar102364/20140901070619.txt",
+      "notes": "RAP blog part 3, Reinhard arc I."
+    },
+    {
+      "id": "rap_ar103772",
+      "kind": "japanese_player_recollection",
+      "url": "https://web.archive.org/web/20140901070649id_/http://ch.nicovideo.jp:80/rap/blomaga/ar103772",
+      "local_artifact": ".omo/work/logh7-japanese-community/nico-ar103772/20140901070649.txt",
+      "notes": "RAP blog part 4, Reinhard arc II."
+    }
+  ],
+  "mechanics": [
+    {
+      "id": "original_character_lottery_confirmed",
+      "claim": "Original/canon characters were not just selected freely; they used a draw/lottery flow when contested.",
+      "evidence": [
+        {
+          "source_id": "itmedia_2003_09_25",
+          "local_lines": "115-116",
+          "summary": "Official preview says accumulated points allow original-character play for one session, and high-demand characters are decided by lottery."
+        },
+        {
+          "source_id": "noweuncle_no_36",
+          "local_lines": "36-42",
+          "summary": "Korean CBT player reports selecting Mecklinger and winning that character."
+        },
+        {
+          "source_id": "noweuncle_no_5",
+          "local_lines": "36-66",
+          "summary": "Korean CBT player reports being stuck after applying for an existing/canon character and asks when the draw will finish."
+        },
+        {
+          "source_id": "noweuncle_no_122",
+          "local_lines": "50-56",
+          "summary": "Patch note changes original-character draw interval from 12 hours to 3 hours and fixes a draw-cancel character-creation bug."
+        }
+      ]
+    },
+    {
+      "id": "unselected_originals_as_ai",
+      "claim": "At least some community testers expected unselected original/canon characters to remain active as AI/NPCs, then transfer to users if won later.",
+      "evidence": [
+        {
+          "source_id": "noweuncle_no_113",
+          "local_lines": "48-50",
+          "summary": "Feedback proposes fame/merit gating for draw and AI control for unselected original characters."
+        }
+      ]
+    },
+    {
+      "id": "five_choice_draw_ui",
+      "claim": "Japanese beta draw UI accepted first through fifth desired character choices.",
+      "evidence": [
+        {
+          "source_id": "rap_ar102364",
+          "local_lines": "124-132",
+          "summary": "Player recollection says they filled first to fifth choices with Reinhard and became Reinhard von Lohengramm."
+        }
+      ]
+    }
+  ],
+  "partial_stat_tables": [
+    {
+      "id": "alliance_original_stats_no_100",
+      "source_id": "noweuncle_no_100",
+      "faction": "alliance",
+      "title": "동맹 오리지날 장수들 능력치 일람",
+      "stat_order_ko": ["통솔", "정치", "운영", "정보", "지휘", "기동", "공격", "방어"],
+      "caveat": "Poster says the order may be uncertain, and explicitly says key characters Yang Wen-li and Attenborough are missing. Treat as partial beta evidence.",
+      "characters": [
+        {"name_ko_post": "우란프", "stats": [92, 68, 45, 68, 85, 87, 93, 83]},
+        {"name_ko_post": "구엔", "stats": [54, 47, 40, 32, 54, 90, 96, 60]},
+        {"name_ko_post": "뷰코크", "stats": [94, 79, 43, 69, 92, 75, 80, 94]},
+        {"name_ko_post": "홀란드", "stats": [84, 72, 67, 50, 52, 86, 81, 63]},
+        {"name_ko_post": "D.그린힐", "stats": [58, 79, 94, 59, 81, 71, 72, 82]},
+        {"name_ko_post": "파에타", "stats": [58, 79, 74, 59, 81, 71, 72, 82]},
+        {"name_ko_post": "쟈니알", "stats": [51, 61, 42, 26, 68, 57, 77, 55]},
+        {"name_ko_post": "애플턴", "stats": [66, 66, 80, 64, 84, 78, 69, 76]},
+        {"name_ko_post": "보로딘", "stats": [83, 71, 63, 72, 87, 80, 77, 91]},
+        {"name_ko_post": "구브슬리", "stats": [79, 85, 86, 78, 78, 74, 66, 74]},
+        {"name_ko_post": "쳉", "stats": [49, 65, 71, 73, 70, 47, 55, 58]},
+        {"name_ko_post": "피셔", "stats": [50, 21, 60, 46, 73, 100, 61, 57]},
+        {"name_ko_post": "코네프", "stats": [35, 39, 66, 47, 83, 58, 49, 61]}
+      ]
+    }
+  ],
+  "attested_korean_beta_original_holders": [
+    {"source_id": "noweuncle_no_37", "faction": "empire", "name_ko_post": "바이에른라인", "evidence_type": "tester_list_original"},
+    {"source_id": "noweuncle_no_37", "faction": "empire", "name_ko_post": "케슬러", "evidence_type": "tester_list_original"},
+    {"source_id": "noweuncle_no_37", "faction": "alliance", "name_ko_post": "이반 코네프", "rank_or_note": "중위", "evidence_type": "tester_list_original"},
+    {"source_id": "noweuncle_no_37", "faction": "empire", "name_ko_post": "아우구스트 자무엘 와렌", "rank_or_note": "준장", "evidence_type": "tester_list_original"},
+    {"source_id": "noweuncle_no_37", "faction": "alliance", "name_ko_post": "크로이첼", "rank_or_note": "쉔코프딸", "evidence_type": "tester_list_original"},
+    {"source_id": "noweuncle_no_37", "faction": "empire", "name_ko_post": "슈타인메츠", "evidence_type": "tester_list_original"},
+    {"source_id": "noweuncle_no_37", "faction": "empire", "name_ko_post": "베르겐그륀", "evidence_type": "tester_list_original"},
+    {"source_id": "noweuncle_no_37", "faction": "empire", "name_ko_post": "로이엔탈", "evidence_type": "tester_list_original"},
+    {"source_id": "noweuncle_no_37", "faction": "alliance", "name_ko_post": "보로딘", "evidence_type": "tester_list_original"},
+    {"source_id": "noweuncle_no_36", "faction": "empire", "name_ko_post": "메크링거", "evidence_type": "draw_win"},
+    {"source_id": "noweuncle_no_28", "faction": "empire", "name_ko_post": "로엔그람", "rank_or_note": "Daum cafe player; Brunhild not yet flagship", "evidence_type": "reported_current_holder"}
+  ],
+  "attested_japanese_player_recollection_characters": [
+    {"source_id": "rap_ar101724", "faction": "alliance", "name_ja": "ダスティ・アッテンボロー", "evidence_type": "self_character"},
+    {"source_id": "rap_ar101724", "faction": "empire", "name_ja": "アンスバッハ", "evidence_type": "friend_character"},
+    {"source_id": "rap_ar101724", "faction": "empire", "name_ja": "ビッテンフェルト", "evidence_type": "later_assigned_or_chosen"},
+    {"source_id": "rap_ar101724", "faction": "alliance", "name_ja": "ヤン・ウェンリー", "evidence_type": "later_self_character"},
+    {"source_id": "rap_ar101992", "faction": "alliance", "name_ja": "ウランフ", "evidence_type": "strong_character_distributed"},
+    {"source_id": "rap_ar101992", "faction": "alliance", "name_ja": "アッテンボロー", "evidence_type": "strong_character_distributed"},
+    {"source_id": "rap_ar101992", "faction": "alliance", "name_ja": "ラップ", "evidence_type": "strong_character_distributed"},
+    {"source_id": "rap_ar101992", "faction": "alliance", "name_ja": "フィッシャー", "evidence_type": "strong_character_distributed"},
+    {"source_id": "rap_ar101992", "faction": "alliance", "name_ja": "アンドリュー・フォーク", "evidence_type": "assigned_to_player"},
+    {"source_id": "rap_ar101992", "faction": "empire", "name_ja": "オーベルシュタイン", "evidence_type": "assigned_to_player"},
+    {"source_id": "rap_ar101992", "faction": "empire", "name_ja": "キルヒアイス", "evidence_type": "major_character_observed"},
+    {"source_id": "rap_ar101992", "faction": "empire", "name_ja": "ロイエンタール", "evidence_type": "major_character_observed"},
+    {"source_id": "rap_ar101992", "faction": "empire", "name_ja": "ウォルフ", "evidence_type": "major_character_observed"},
+    {"source_id": "rap_ar101992", "faction": "empire", "name_ja": "ミュラー", "evidence_type": "major_character_observed"},
+    {"source_id": "rap_ar101992", "faction": "empire", "name_ja": "ラインハルト", "evidence_type": "major_character_observed"},
+    {"source_id": "rap_ar102364", "faction": "empire", "name_ja": "ラインハルト・フォン・ローエングラム", "rank_or_note": "中将", "evidence_type": "self_character_after_draw"},
+    {"source_id": "rap_ar103772", "faction": "empire", "name_ja": "ラインハルト・フォン・ローエングラム", "rank_or_note": "元帥 after promotions", "evidence_type": "self_character_promotion_recollection"},
+    {"source_id": "rap_ar103772", "faction": "empire", "name_ja": "アンネローゼ・フォン・グリューネワルト", "rank_or_note": "reported as unimplemented", "evidence_type": "negative_implementation_note"},
+    {"source_id": "rap_ar103772", "faction": "empire", "name_ja": "フリードリヒ4世", "evidence_type": "gm_roleplay_character"},
+    {"source_id": "rap_ar101992", "faction": "alliance", "name_ja": "ヨブ・トリューニヒト", "evidence_type": "gm_roleplay_character"}
+  ],
+  "canon_reference_layer": {
+    "source_kind": "canon_reference",
+    "records": 530,
+    "files": [
+      "content/roster/canon-reference-wikipedia.tsv",
+      "content/roster/canon-reference-wikipedia.json",
+      ".omo/work/logh7-canon/canon-reference-wikipedia.tsv"
+    ],
+    "usage": "Name dictionary for matching Korean/Japanese spellings and portrait candidates. Do not import as game roster without online/game cross-attestation."
+  }
+}

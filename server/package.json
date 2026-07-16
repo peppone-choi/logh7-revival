@@ -11,6 +11,7 @@
     "test": "node --test",
     "start": "node src/presentation/main.mjs",
     "serve:playable": "node src/presentation/main.mjs",
-    "serve:wire-only": "node src/server/logh7-playable-server.mjs"
+    "serve:wire-only": "node src/server/logh7-playable-server.mjs",
+    "serve:packet-lab": "node ../tools/live/logh7_packet_lab_proxy.mjs"
   }
 }

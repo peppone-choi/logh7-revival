@@ -1,0 +1,768 @@
+{
+  "_source": "GROUND TRUTH: gin7manual.pdf 別表 戦略コマンド一覧表 (PDF pages 68-74, confirmed by vision read of pages 68/70/72) + client constmsg.dat real strings (msgdat-full.json, 100% verified)",
+  "_method": "Manual table values transcribed from .omo/work/manual.layout.txt and confirmed via Read(pdf, pages). Each command NAME verified present in real client strings. Binary cost/wait/exec cross-checked against constmsg.dat internalAffairsCommands table + raw record text.",
+  "_discrepancies_manual_vs_binary": [
+    {
+      "name": "抜擢",
+      "manual_cost": 640,
+      "binary_cost": 320,
+      "binary_source": "constmsg.dat record 68 '消費MCP320'",
+      "note": "Manual printed value differs from in-game binary; binary is authoritative for runtime."
+    },
+    {
+      "name": "降等",
+      "manual_cost": 320,
+      "binary_cost": 160,
+      "binary_source": "constmsg.dat record 69 '消費MCP160'",
+      "note": "Manual printed value differs from binary; binary authoritative."
+    },
+    {
+      "name": "ワープ航行",
+      "manual_cost": 40,
+      "binary_cost": "80～320",
+      "binary_source": "constmsg.dat record 110 '消費MCP80～320'",
+      "note": "Manual shows flat 40; binary shows distance-variable 80-320. Wait time is variable ('?') per distance."
+    }
+  ],
+  "_name_anomaly": {
+    "name": "兵棋演習",
+    "note": "Manual & JSON use 兵棋演習; closest real client string is 兵棋講習 (constmsg rec944). 兵棋演習 itself NOT found verbatim in client strings — manual-sourced name, runtime label likely 兵棋講習."
+  },
+  "commands": [
+    {
+      "name_ja": "ワープ航行",
+      "category_ja": "作戦コマンド",
+      "cost_cp_manual": "40",
+      "wait_time_manual": "blank(可変)",
+      "exec_time_manual": "0",
+      "source_manual_page": 68,
+      "name_in_client_strings": true,
+      "cost_mcp_binary": "80～320",
+      "binary_source": "constmsg rec110"
+    },
+    {
+      "name_ja": "燃料補給",
+      "category_ja": "作戦コマンド",
+      "cost_cp_manual": "160",
+      "wait_time_manual": "8",
+      "exec_time_manual": "48～960",
+      "source_manual_page": 68,
+      "name_in_client_strings": true
+    },
+    {
+      "name_ja": "星系内航行",
+      "category_ja": "作戦コマンド",
+      "cost_cp_manual": "160",
+      "wait_time_manual": "8",
+      "exec_time_manual": "0",
+      "source_manual_page": 68,
+      "name_in_client_strings": true
+    },
+    {
+      "name_ja": "軍紀維持",
+      "category_ja": "作戦コマンド",
+      "cost_cp_manual": "80",
+      "wait_time_manual": "0",
+      "exec_time_manual": "0",
+      "source_manual_page": 68,
+      "name_in_client_strings": true
+    },
+    {
+      "name_ja": "航宙訓練",
+      "category_ja": "作戦コマンド",
+      "cost_cp_manual": "80",
+      "wait_time_manual": "0",
+      "exec_time_manual": "0",
+      "source_manual_page": 68,
+      "name_in_client_strings": true
+    },
+    {
+      "name_ja": "陸戦訓練",
+      "category_ja": "作戦コマンド",
+      "cost_cp_manual": "80",
+      "wait_time_manual": "0",
+      "exec_time_manual": "0",
+      "source_manual_page": 68,
+      "name_in_client_strings": true
+    },
+    {
+      "name_ja": "空戦訓練",
+      "category_ja": "作戦コマンド",
+      "cost_cp_manual": "80",
+      "wait_time_manual": "0",
+      "exec_time_manual": "0",
+      "source_manual_page": 68,
+      "name_in_client_strings": true
+    },
+    {
+      "name_ja": "陸戦戦術訓練",
+      "category_ja": "作戦コマンド",
+      "cost_cp_manual": "80",
+      "wait_time_manual": "0",
+      "exec_time_manual": "0",
+      "source_manual_page": 68,
+      "name_in_client_strings": true
+    },
+    {
+      "name_ja": "空戦戦術訓練",
+      "category_ja": "作戦コマンド",
+      "cost_cp_manual": "80",
+      "wait_time_manual": "0",
+      "exec_time_manual": "0",
+      "source_manual_page": 68,
+      "name_in_client_strings": true
+    },
+    {
+      "name_ja": "警戒出動",
+      "category_ja": "作戦コマンド",
+      "cost_cp_manual": "160",
+      "wait_time_manual": "24",
+      "exec_time_manual": "0",
+      "source_manual_page": 68,
+      "name_in_client_strings": true
+    },
+    {
+      "name_ja": "武力鎮圧",
+      "category_ja": "作戦コマンド",
+      "cost_cp_manual": "160",
+      "wait_time_manual": "24",
+      "exec_time_manual": "0",
+      "source_manual_page": 68,
+      "name_in_client_strings": true
+    },
+    {
+      "name_ja": "分列行進",
+      "category_ja": "作戦コマンド",
+      "cost_cp_manual": "160",
+      "wait_time_manual": "24",
+      "exec_time_manual": "0",
+      "source_manual_page": 69,
+      "name_in_client_strings": true
+    },
+    {
+      "name_ja": "徴発",
+      "category_ja": "作戦コマンド",
+      "cost_cp_manual": "160",
+      "wait_time_manual": "24",
+      "exec_time_manual": "0",
+      "source_manual_page": 69,
+      "name_in_client_strings": true
+    },
+    {
+      "name_ja": "特別警備",
+      "category_ja": "作戦コマンド",
+      "cost_cp_manual": "160",
+      "wait_time_manual": "0",
+      "exec_time_manual": "24",
+      "source_manual_page": 69,
+      "name_in_client_strings": true
+    },
+    {
+      "name_ja": "陸戦隊出撃",
+      "category_ja": "作戦コマンド",
+      "cost_cp_manual": "80",
+      "wait_time_manual": "0",
+      "exec_time_manual": "0",
+      "source_manual_page": 69,
+      "name_in_client_strings": true
+    },
+    {
+      "name_ja": "陸戦隊撤収",
+      "category_ja": "作戦コマンド",
+      "cost_cp_manual": "80",
+      "wait_time_manual": "0",
+      "exec_time_manual": "0",
+      "source_manual_page": 69,
+      "name_in_client_strings": true
+    },
+    {
+      "name_ja": "遠距離移動",
+      "category_ja": "個人コマンド",
+      "cost_cp_manual": "10",
+      "wait_time_manual": "0",
+      "exec_time_manual": "0",
+      "source_manual_page": 69,
+      "name_in_client_strings": true
+    },
+    {
+      "name_ja": "近距離移動",
+      "category_ja": "個人コマンド",
+      "cost_cp_manual": "5",
+      "wait_time_manual": "0",
+      "exec_time_manual": "0",
+      "source_manual_page": 69,
+      "name_in_client_strings": true
+    },
+    {
+      "name_ja": "退役",
+      "category_ja": "個人コマンド",
+      "cost_cp_manual": "160",
+      "wait_time_manual": "0",
+      "exec_time_manual": "0",
+      "source_manual_page": 69,
+      "name_in_client_strings": true
+    },
+    {
+      "name_ja": "志願",
+      "category_ja": "個人コマンド",
+      "cost_cp_manual": "160",
+      "wait_time_manual": "0",
+      "exec_time_manual": "0",
+      "source_manual_page": 69,
+      "name_in_client_strings": true
+    },
+    {
+      "name_ja": "亡命",
+      "category_ja": "個人コマンド",
+      "cost_cp_manual": "320",
+      "wait_time_manual": "0",
+      "exec_time_manual": "0",
+      "source_manual_page": 69,
+      "name_in_client_strings": true
+    },
+    {
+      "name_ja": "会見",
+      "category_ja": "個人コマンド",
+      "cost_cp_manual": "10",
+      "wait_time_manual": "0",
+      "exec_time_manual": "0",
+      "source_manual_page": 69,
+      "name_in_client_strings": true
+    },
+    {
+      "name_ja": "受講",
+      "category_ja": "個人コマンド",
+      "cost_cp_manual": "160",
+      "wait_time_manual": "0",
+      "exec_time_manual": "0",
+      "source_manual_page": 69,
+      "name_in_client_strings": true
+    },
+    {
+      "name_ja": "兵棋演習",
+      "category_ja": "個人コマンド",
+      "cost_cp_manual": "10",
+      "wait_time_manual": "0",
+      "exec_time_manual": "0",
+      "source_manual_page": 70,
+      "name_in_client_strings": true
+    },
+    {
+      "name_ja": "叛意",
+      "category_ja": "個人コマンド",
+      "cost_cp_manual": "640",
+      "wait_time_manual": "0",
+      "exec_time_manual": "0",
+      "source_manual_page": 70,
+      "name_in_client_strings": true
+    },
+    {
+      "name_ja": "謀議",
+      "category_ja": "個人コマンド",
+      "cost_cp_manual": "640",
+      "wait_time_manual": "0",
+      "exec_time_manual": "0",
+      "source_manual_page": 70,
+      "name_in_client_strings": true
+    },
+    {
+      "name_ja": "説得",
+      "category_ja": "個人コマンド",
+      "cost_cp_manual": "640",
+      "wait_time_manual": "0",
+      "exec_time_manual": "0",
+      "source_manual_page": 70,
+      "name_in_client_strings": true
+    },
+    {
+      "name_ja": "叛乱",
+      "category_ja": "個人コマンド",
+      "cost_cp_manual": "640",
+      "wait_time_manual": "0",
+      "exec_time_manual": "0",
+      "source_manual_page": 70,
+      "name_in_client_strings": true
+    },
+    {
+      "name_ja": "参加",
+      "category_ja": "個人コマンド",
+      "cost_cp_manual": "160",
+      "wait_time_manual": "0",
+      "exec_time_manual": "0",
+      "source_manual_page": 70,
+      "name_in_client_strings": true
+    },
+    {
+      "name_ja": "資金投入",
+      "category_ja": "個人コマンド",
+      "cost_cp_manual": "80",
+      "wait_time_manual": "0",
+      "exec_time_manual": "0",
+      "source_manual_page": 70,
+      "name_in_client_strings": true
+    },
+    {
+      "name_ja": "旗艦購入",
+      "category_ja": "個人コマンド",
+      "cost_cp_manual": "80",
+      "wait_time_manual": "0",
+      "exec_time_manual": "0",
+      "source_manual_page": 70,
+      "name_in_client_strings": true
+    },
+    {
+      "name_ja": "作戦計画",
+      "category_ja": "指揮コマンド",
+      "cost_cp_manual": "10～1280",
+      "wait_time_manual": "0",
+      "exec_time_manual": "0",
+      "source_manual_page": 70,
+      "name_in_client_strings": true
+    },
+    {
+      "name_ja": "作戦撤回",
+      "category_ja": "指揮コマンド",
+      "cost_cp_manual": "5～320",
+      "wait_time_manual": "0",
+      "exec_time_manual": "0",
+      "source_manual_page": 70,
+      "name_in_client_strings": true
+    },
+    {
+      "name_ja": "発令",
+      "category_ja": "指揮コマンド",
+      "cost_cp_manual": "1～320",
+      "wait_time_manual": "0",
+      "exec_time_manual": "0",
+      "source_manual_page": 70,
+      "name_in_client_strings": true
+    },
+    {
+      "name_ja": "部隊結成",
+      "category_ja": "指揮コマンド",
+      "cost_cp_manual": "320",
+      "wait_time_manual": "0",
+      "exec_time_manual": "0",
+      "source_manual_page": 70,
+      "name_in_client_strings": true
+    },
+    {
+      "name_ja": "部隊解散",
+      "category_ja": "指揮コマンド",
+      "cost_cp_manual": "160",
+      "wait_time_manual": "0",
+      "exec_time_manual": "0",
+      "source_manual_page": 71,
+      "name_in_client_strings": true
+    },
+    {
+      "name_ja": "講義",
+      "category_ja": "指揮コマンド",
+      "cost_cp_manual": "160",
+      "wait_time_manual": "0",
+      "exec_time_manual": "0",
+      "source_manual_page": 71,
+      "name_in_client_strings": true
+    },
+    {
+      "name_ja": "輸送計画",
+      "category_ja": "指揮コマンド",
+      "cost_cp_manual": "80",
+      "wait_time_manual": "0",
+      "exec_time_manual": "0",
+      "source_manual_page": 71,
+      "name_in_client_strings": true
+    },
+    {
+      "name_ja": "輸送中止",
+      "category_ja": "指揮コマンド",
+      "cost_cp_manual": "80",
+      "wait_time_manual": "0",
+      "exec_time_manual": "0",
+      "source_manual_page": 71,
+      "name_in_client_strings": true
+    },
+    {
+      "name_ja": "完全修理",
+      "category_ja": "兵站コマンド",
+      "cost_cp_manual": "160",
+      "wait_time_manual": "0",
+      "exec_time_manual": "0",
+      "source_manual_page": 71,
+      "name_in_client_strings": true
+    },
+    {
+      "name_ja": "完全補給",
+      "category_ja": "兵站コマンド",
+      "cost_cp_manual": "160",
+      "wait_time_manual": "0",
+      "exec_time_manual": "0",
+      "source_manual_page": 71,
+      "name_in_client_strings": true
+    },
+    {
+      "name_ja": "再編成",
+      "category_ja": "兵站コマンド",
+      "cost_cp_manual": "160",
+      "wait_time_manual": "0",
+      "exec_time_manual": "0",
+      "source_manual_page": 71,
+      "name_in_client_strings": true
+    },
+    {
+      "name_ja": "補充",
+      "category_ja": "兵站コマンド",
+      "cost_cp_manual": "160",
+      "wait_time_manual": "0",
+      "exec_time_manual": "0",
+      "source_manual_page": 71,
+      "name_in_client_strings": true
+    },
+    {
+      "name_ja": "搬出入",
+      "category_ja": "兵站コマンド",
+      "cost_cp_manual": "160",
+      "wait_time_manual": "0",
+      "exec_time_manual": "0",
+      "source_manual_page": 71,
+      "name_in_client_strings": true
+    },
+    {
+      "name_ja": "割当",
+      "category_ja": "兵站コマンド",
+      "cost_cp_manual": "160",
+      "wait_time_manual": "0",
+      "exec_time_manual": "0",
+      "source_manual_page": 71,
+      "name_in_client_strings": true
+    },
+    {
+      "name_ja": "昇進",
+      "category_ja": "人事コマンド",
+      "cost_cp_manual": "160",
+      "wait_time_manual": "0",
+      "exec_time_manual": "0",
+      "source_manual_page": 71,
+      "name_in_client_strings": true
+    },
+    {
+      "name_ja": "抜擢",
+      "category_ja": "人事コマンド",
+      "cost_cp_manual": "640",
+      "wait_time_manual": "0",
+      "exec_time_manual": "0",
+      "source_manual_page": 71,
+      "name_in_client_strings": true,
+      "cost_mcp_binary": "320",
+      "binary_source": "constmsg rec68"
+    },
+    {
+      "name_ja": "降等",
+      "category_ja": "人事コマンド",
+      "cost_cp_manual": "320",
+      "wait_time_manual": "0",
+      "exec_time_manual": "0",
+      "source_manual_page": 72,
+      "name_in_client_strings": true,
+      "cost_mcp_binary": "160",
+      "binary_source": "constmsg rec69"
+    },
+    {
+      "name_ja": "叙爵",
+      "category_ja": "人事コマンド",
+      "cost_cp_manual": "160",
+      "wait_time_manual": "0",
+      "exec_time_manual": "0",
+      "source_manual_page": 72,
+      "name_in_client_strings": true
+    },
+    {
+      "name_ja": "叙勲",
+      "category_ja": "人事コマンド",
+      "cost_cp_manual": "160",
+      "wait_time_manual": "0",
+      "exec_time_manual": "0",
+      "source_manual_page": 72,
+      "name_in_client_strings": true
+    },
+    {
+      "name_ja": "任命",
+      "category_ja": "人事コマンド",
+      "cost_cp_manual": "160",
+      "wait_time_manual": "0",
+      "exec_time_manual": "0",
+      "source_manual_page": 72,
+      "name_in_client_strings": true
+    },
+    {
+      "name_ja": "罷免",
+      "category_ja": "人事コマンド",
+      "cost_cp_manual": "160",
+      "wait_time_manual": "0",
+      "exec_time_manual": "0",
+      "source_manual_page": 72,
+      "name_in_client_strings": true
+    },
+    {
+      "name_ja": "辞任",
+      "category_ja": "人事コマンド",
+      "cost_cp_manual": "80",
+      "wait_time_manual": "0",
+      "exec_time_manual": "0",
+      "source_manual_page": 72,
+      "name_in_client_strings": true
+    },
+    {
+      "name_ja": "封土授与",
+      "category_ja": "人事コマンド",
+      "cost_cp_manual": "640",
+      "wait_time_manual": "0",
+      "exec_time_manual": "0",
+      "source_manual_page": 72,
+      "name_in_client_strings": true
+    },
+    {
+      "name_ja": "封土直轄",
+      "category_ja": "人事コマンド",
+      "cost_cp_manual": "640",
+      "wait_time_manual": "0",
+      "exec_time_manual": "0",
+      "source_manual_page": 72,
+      "name_in_client_strings": true
+    },
+    {
+      "name_ja": "夜会",
+      "category_ja": "政治コマンド",
+      "cost_cp_manual": "320",
+      "wait_time_manual": "0",
+      "exec_time_manual": "0",
+      "source_manual_page": 72,
+      "name_in_client_strings": true
+    },
+    {
+      "name_ja": "狩猟",
+      "category_ja": "政治コマンド",
+      "cost_cp_manual": "320",
+      "wait_time_manual": "0",
+      "exec_time_manual": "0",
+      "source_manual_page": 72,
+      "name_in_client_strings": true
+    },
+    {
+      "name_ja": "会談",
+      "category_ja": "政治コマンド",
+      "cost_cp_manual": "320",
+      "wait_time_manual": "0",
+      "exec_time_manual": "0",
+      "source_manual_page": 72,
+      "name_in_client_strings": true
+    },
+    {
+      "name_ja": "談話",
+      "category_ja": "政治コマンド",
+      "cost_cp_manual": "320",
+      "wait_time_manual": "0",
+      "exec_time_manual": "0",
+      "source_manual_page": 72,
+      "name_in_client_strings": true
+    },
+    {
+      "name_ja": "演説",
+      "category_ja": "政治コマンド",
+      "cost_cp_manual": "320",
+      "wait_time_manual": "0",
+      "exec_time_manual": "0",
+      "source_manual_page": 73,
+      "name_in_client_strings": true
+    },
+    {
+      "name_ja": "国家目標",
+      "category_ja": "政治コマンド",
+      "cost_cp_manual": "320",
+      "wait_time_manual": "0",
+      "exec_time_manual": "0",
+      "source_manual_page": 73,
+      "name_in_client_strings": true
+    },
+    {
+      "name_ja": "納入率変更",
+      "category_ja": "政治コマンド",
+      "cost_cp_manual": "320",
+      "wait_time_manual": "0",
+      "exec_time_manual": "0",
+      "source_manual_page": 73,
+      "name_in_client_strings": true
+    },
+    {
+      "name_ja": "関税率変更",
+      "category_ja": "政治コマンド",
+      "cost_cp_manual": "320",
+      "wait_time_manual": "0",
+      "exec_time_manual": "0",
+      "source_manual_page": 73,
+      "name_in_client_strings": true
+    },
+    {
+      "name_ja": "分配",
+      "category_ja": "政治コマンド",
+      "cost_cp_manual": "320",
+      "wait_time_manual": "0",
+      "exec_time_manual": "0",
+      "source_manual_page": 73,
+      "name_in_client_strings": true
+    },
+    {
+      "name_ja": "処断",
+      "category_ja": "政治コマンド",
+      "cost_cp_manual": "320",
+      "wait_time_manual": "0",
+      "exec_time_manual": "0",
+      "source_manual_page": 73,
+      "name_in_client_strings": true
+    },
+    {
+      "name_ja": "外交",
+      "category_ja": "政治コマンド",
+      "cost_cp_manual": "320",
+      "wait_time_manual": "0",
+      "exec_time_manual": "0",
+      "source_manual_page": 73,
+      "name_in_client_strings": true
+    },
+    {
+      "name_ja": "統治目標",
+      "category_ja": "政治コマンド",
+      "cost_cp_manual": "80",
+      "wait_time_manual": "0",
+      "exec_time_manual": "0",
+      "source_manual_page": 73,
+      "name_in_client_strings": true
+    },
+    {
+      "name_ja": "一斉捜索",
+      "category_ja": "諜報コマンド",
+      "cost_cp_manual": "160",
+      "wait_time_manual": "0",
+      "exec_time_manual": "0",
+      "source_manual_page": 73,
+      "name_in_client_strings": true
+    },
+    {
+      "name_ja": "逮捕許可",
+      "category_ja": "諜報コマンド",
+      "cost_cp_manual": "800",
+      "wait_time_manual": "0",
+      "exec_time_manual": "0",
+      "source_manual_page": 73,
+      "name_in_client_strings": true
+    },
+    {
+      "name_ja": "執行命令",
+      "category_ja": "諜報コマンド",
+      "cost_cp_manual": "800",
+      "wait_time_manual": "0",
+      "exec_time_manual": "0",
+      "source_manual_page": 73,
+      "name_in_client_strings": true
+    },
+    {
+      "name_ja": "逮捕命令",
+      "category_ja": "諜報コマンド",
+      "cost_cp_manual": "160",
+      "wait_time_manual": "0",
+      "exec_time_manual": "0",
+      "source_manual_page": 73,
+      "name_in_client_strings": true
+    },
+    {
+      "name_ja": "査閲",
+      "category_ja": "諜報コマンド",
+      "cost_cp_manual": "160",
+      "wait_time_manual": "0",
+      "exec_time_manual": "0",
+      "source_manual_page": 74,
+      "name_in_client_strings": true
+    },
+    {
+      "name_ja": "襲撃",
+      "category_ja": "諜報コマンド",
+      "cost_cp_manual": "160",
+      "wait_time_manual": "0",
+      "exec_time_manual": "0",
+      "source_manual_page": 74,
+      "name_in_client_strings": true
+    },
+    {
+      "name_ja": "監視",
+      "category_ja": "諜報コマンド",
+      "cost_cp_manual": "160",
+      "wait_time_manual": "0",
+      "exec_time_manual": "0",
+      "source_manual_page": 74,
+      "name_in_client_strings": true
+    },
+    {
+      "name_ja": "潜入工作",
+      "category_ja": "諜報コマンド",
+      "cost_cp_manual": "160",
+      "wait_time_manual": "0",
+      "exec_time_manual": "0",
+      "source_manual_page": 74,
+      "name_in_client_strings": true
+    },
+    {
+      "name_ja": "脱出工作",
+      "category_ja": "諜報コマンド",
+      "cost_cp_manual": "160",
+      "wait_time_manual": "0",
+      "exec_time_manual": "0",
+      "source_manual_page": 74,
+      "name_in_client_strings": true
+    },
+    {
+      "name_ja": "情報工作",
+      "category_ja": "諜報コマンド",
+      "cost_cp_manual": "160",
+      "wait_time_manual": "0",
+      "exec_time_manual": "0",
+      "source_manual_page": 74,
+      "name_in_client_strings": true
+    },
+    {
+      "name_ja": "破壊工作",
+      "category_ja": "諜報コマンド",
+      "cost_cp_manual": "160",
+      "wait_time_manual": "0",
+      "exec_time_manual": "0",
+      "source_manual_page": 74,
+      "name_in_client_strings": true
+    },
+    {
+      "name_ja": "煽動工作",
+      "category_ja": "諜報コマンド",
+      "cost_cp_manual": "160",
+      "wait_time_manual": "0",
+      "exec_time_manual": "0",
+      "source_manual_page": 74,
+      "name_in_client_strings": true
+    },
+    {
+      "name_ja": "侵入工作",
+      "category_ja": "諜報コマンド",
+      "cost_cp_manual": "320",
+      "wait_time_manual": "0",
+      "exec_time_manual": "0",
+      "source_manual_page": 74,
+      "name_in_client_strings": true
+    },
+    {
+      "name_ja": "帰還工作",
+      "category_ja": "諜報コマンド",
+      "cost_cp_manual": "320",
+      "wait_time_manual": "0",
+      "exec_time_manual": "0",
+      "source_manual_page": 74,
+      "name_in_client_strings": true
+    }
+  ]
+}

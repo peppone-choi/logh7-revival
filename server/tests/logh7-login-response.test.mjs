@@ -85,8 +85,21 @@ async function readFrames(socket, count) {
 test('ipToRedirectU32 octet-packs low byte first (matches client %d.%d.%d.%d)', () => {
   // 127.0.0.1 -> octet0(127) 하위바이트, octet3(1) 상위바이트 -> 0x0100007f
   assert.equal(ipToRedirectU32('127.0.0.1'), 0x0100007f);
+  assert.equal(ipToRedirectU32('0.0.0.0'), 0);
   assert.throws(() => ipToRedirectU32('256.0.0.1'));
   assert.throws(() => ipToRedirectU32('127.0.0'));
+  for (const invalidIp of [
+    '127..0.1',
+    '1e2.0.0.1',
+    ' 127.0.0.1',
+    '127.0.0.1 ',
+    '+127.0.0.1',
+    '0x7f.0.0.1',
+    '127.00.0.1',
+    '127.01.0.1',
+  ]) {
+    assert.throws(() => ipToRedirectU32(invalidIp), /invalid canonical IPv4 address/);
+  }
 });
 
 test('buildRedirectInner reproduces the proven 127.0.0.1:47900 redirect frame', () => {

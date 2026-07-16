@@ -2,7 +2,8 @@
   "id": "logh7-exe-patch-manifest",
   "schemaVersion": 1,
   "status": "applied",
-  "purpose": "Authoritative record of the reversible .text patches present in the canonical LOGH VII client. Rebuilt 2026-07-11 from a byte-diff of the pristine install-tree EXE (source) against the canonical EXE (target). Serves as the reversible-patch gate before any further direct client change is promoted.",
+  "purpose": "Historical applied receipt for the 6 reversible .text patches present in the 9c97 client. The executable input contract is now split into server/content/client/logh7-loopback-client-patch.json (bd192 -> 2848) and logh7-canonical-client-patch.json (2848 -> 9c97). Do not pass this receipt to exe-patch.mjs as an apply manifest.",
+  "provenanceCorrection": "2026-07-16 byte-for-byte reconstruction proved that 2848be76 is not pristine or an official update build. It is bd19263c with the 13-byte 202.8.80.179\\0 slot replaced by 127.0.0.1 plus NUL padding.",
   "targetExe": {
     "name": "g7mtclient.exe",
     "sha256": "9c97de2ae426f011680992d6c8d88b25488b5f51555ce5784aeef677f334bb51",
@@ -11,12 +12,12 @@
     "pathHints": [
       "artifacts/logh7-install/**/exe/g7mtclient.exe"
     ],
-    "note": "Canonical EXE is ALREADY patched: it equals the pristine install-tree build (sha256 2848be76a7662e25159353463bdfd8ff2f270ac5845ef4cea62983443c155345, kept as g7mtclient.exe.bak-pre-font) plus the 6 patches below (39 bytes, all in .text). Loopback connection default 127.0.0.1 @ offset 3599932 and port 47900 @ offset 3599924 are RESIDENT in the pristine build (identical in both) — they are the compiled-in defaults, NOT a tool-applied patch, so they are not tracked as reversible patches here. Original live server IP 202.8.80.179 does not appear anywhere in the binary."
+    "note": "Canonical 9c97 EXE equals the loopback-prepared 2848 build plus the 6 patches below (39 bytes, all in .text). The earlier claim that 127.0.0.1 was pristine/compiled-in is superseded: CD/install source bd192 contains 202.8.80.179\\0 at raw offset 3599932, and the first reversible lineage stage replaces that 13-byte slot with 127.0.0.1 plus NUL padding."
   },
   "sourceExe": {
     "name": "g7mtclient.exe.bak-pre-font",
     "sha256": "2848be76a7662e25159353463bdfd8ff2f270ac5845ef4cea62983443c155345",
-    "note": "Pristine install-tree EXE prior to any of our patches. originalBytes/rollbackBytes below are measured from this file; patchedBytes are measured from the canonical target."
+    "note": "Loopback-prepared project build, not pristine and not the official 2004 updater. originalBytes/rollbackBytes for the six .text patches below are measured from this stage; its own input is bd19263c as recorded by logh7-loopback-client-patch.json."
   },
   "policy": {
     "sameLengthOnly": true,
