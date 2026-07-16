@@ -47,6 +47,7 @@ M4 코드 변경 전에 아래 순서를 지킨다. PCAP/proxy는 **host network
 - `127.0.0.1:47900` client-facing → `127.0.0.1:47901` server-facing lab proxy를 observe-only, byte-identical pass-through로 시작한다.
 - Frida 평문 trace, proxy byte trace/PCAP, server frame/opcode/DB/event trace를 `runId`, `connectionId`, `direction`, `frameSeq`, `messageId`, `transportCode`, `innerCode`, `payloadLength`, `payloadSha256`, `stage`, `monotonicTimestamp`, `outcome`으로 결합한다.
 - 양방향 byte count와 payload SHA-256가 end-to-end 일치하고 secret이 기본 redaction돼야 한다.
+- 진행(2026-07-16, PR #8): **server 면 착지** — `server/src/server/logh7-correlation-record.mjs`(23키 스키마, proxy 정본 `tools/live/logh7_packet_lab_proxy.mjs`와 테스트 drift guard로 동기) + `logh7-playable-server.mjs` writeTrace 배선. 검증 실패는 흡수·Sentry 보고(관측이 서버를 죽이지 않음). proxy·client(Frida) 면과 격리 Wine 라이브 join은 잔여 — `M4-OBS-001` 게이트는 여전히 열려 있다.
 
 ### P2 - `0x030b` 소비 경계 확정
 
