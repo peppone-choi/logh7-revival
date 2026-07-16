@@ -2,11 +2,11 @@
   "hooks": {
     "PreToolUse": [
       {
-        "matcher": "Read|Edit|Write|NotebookEdit|Bash",
+        "matcher": "Bash|apply_patch",
         "hooks": [
           {
             "type": "command",
-            "command": "bash .codex/hooks/protect-sensitive-files.sh",
+            "command": "bash \"$(git rev-parse --show-toplevel)/.codex/hooks/protect-sensitive-files.sh\"",
             "timeout": 15
           }
         ]
@@ -14,11 +14,11 @@
     ],
     "PostToolUse": [
       {
-        "matcher": "Edit|Write",
+        "matcher": "apply_patch",
         "hooks": [
           {
             "type": "command",
-            "command": "bash .codex/hooks/verify-changes.sh",
+            "command": "bash \"$(git rev-parse --show-toplevel)/.codex/hooks/verify-changes.sh\"",
             "timeout": 120
           }
         ]
@@ -29,7 +29,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash .codex/hooks/turn-snapshot.sh",
+            "command": "bash \"$(git rev-parse --show-toplevel)/.codex/hooks/turn-snapshot.sh\"",
             "timeout": 30
           }
         ]
@@ -38,7 +38,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash .codex/hooks/inject-key-facts.sh",
+            "command": "bash \"$(git rev-parse --show-toplevel)/.codex/hooks/inject-key-facts.sh\"",
             "timeout": 10
           }
         ]
@@ -49,7 +49,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash .codex/hooks/stop-doc-gate.sh",
+            "command": "bash \"$(git rev-parse --show-toplevel)/.codex/hooks/stop-doc-gate.sh\"",
             "timeout": 30,
             "statusMessage": "문서 현행화 게이트 검사 중"
           }
@@ -61,8 +61,9 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash scripts/agent/bootstrap-skills.sh --once || true",
-            "timeout": 60
+            "command": "bash \"$(git rev-parse --show-toplevel)/scripts/agent/bootstrap-skills.sh\" --check || true",
+            "timeout": 60,
+            "statusMessage": "프로젝트 스킬 갭 점검 중"
           }
         ]
       }

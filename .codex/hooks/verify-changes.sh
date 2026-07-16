@@ -1,34 +1,68 @@
 #!/usr/bin/env bash
-# PostToolUse(Edit|Write) 훅 — 편집된 파일을 scripts/agent/verify-changes.sh --file 로 검증.
-# 실패 시 exit 2 + stderr → 에이전트에 피드백. 로직 정본은 scripts/agent/ (Codex도 수동 실행).
-# 무한 수정 루프 방지: 같은 파일 연속 실패 6회부터는 차단 대신 경고만 남긴다.
-PROJECT_ROOT="${CLAUDE_PROJECT_DIR:-${CODEX_PROJECT_DIR:-.}}"
+SCRIPT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+PROJECT_ROOT="${CODEX_PROJECT_DIR:-${CLAUDE_PROJECT_DIR:-$SCRIPT_ROOT}}"
 cd "$PROJECT_ROOT" 2>/dev/null || exit 0
+export PROJECT_ROOT
 HOOK_INPUT="$(cat)"
-FILE=$(printf '%s' "$HOOK_INPUT" | python3 -c '
-import json, sys
+PARSED=$(printf '%s' "$HOOK_INPUT" | python3 -c '
+import json, os, re, sys
 try:
     d = json.load(sys.stdin)
-    print(d.get("tool_input", {}).get("file_path", ""))
 except Exception:
-    pass' 2>/dev/null)
-[ -n "$FILE" ] || exit 0
+    d = {}
+ti = d.get("tool_input", {}) or {}
+root = os.environ["PROJECT_ROOT"]
+cwd = d.get("cwd") or root
+if not os.path.isabs(cwd):
+    cwd = os.path.join(root, cwd)
+paths = []
+legacy = ti.get("file_path", "")
+if legacy:
+    paths.append(legacy)
+if d.get("tool_name") == "apply_patch":
+    command = ti.get("command", "")
+    for match in re.finditer(
+            r"^\*\*\* (?:Add|Update|Delete) File: (.+)$|^\*\*\* Move to: (.+)$",
+            command,
+            re.MULTILINE):
+        paths.append(next(value for value in match.groups() if value).strip())
+print(d.get("session_id") or "unknown")
+for path in dict.fromkeys(paths):
+    if not os.path.isabs(path):
+        path = os.path.join(cwd, path)
+    print(os.path.normpath(path))
+' 2>/dev/null)
+SESSION_ID="${PARSED%%$'\n'*}"
+FILES="${PARSED#*$'\n'}"
+[ "$FILES" != "$PARSED" ] || FILES=""
+[ -n "$FILES" ] || exit 0
 [ -f "scripts/agent/verify-changes.sh" ] || exit 0
 
-S=.claude/state; mkdir -p "$S"
-KEY=$(printf '%s' "$FILE" | git hash-object --stdin 2>/dev/null || echo k)
-CNT="$S/verify-fail-$KEY"
+SESSION_KEY=$(printf '%s' "$SESSION_ID" | git hash-object --stdin 2>/dev/null || printf unknown)
+STATE_DIR=".codex/state/$SESSION_KEY"
+mkdir -p "$STATE_DIR"
+result=0
 
-OUT=$(bash scripts/agent/verify-changes.sh --file "$FILE" 2>&1); rc=$?
-if [ $rc -ne 0 ]; then
-  n=$(cat "$CNT" 2>/dev/null || echo 0)
-  echo $((n + 1)) > "$CNT"
-  if [ "$n" -ge 5 ]; then
-    echo "verify-changes: 같은 파일 검증 실패 6회째 — 자동 피드백 중단. Blocked-Loop Rule에 따라 접근을 바꾸고 사람에게 보고하라: $FILE" >&2
-    exit 0
+while IFS= read -r FILE; do
+  [ -n "$FILE" ] || continue
+  FILE_KEY=$(printf '%s' "$FILE" | git hash-object --stdin 2>/dev/null || printf file)
+  COUNTER="$STATE_DIR/verify-fail-$FILE_KEY"
+  OUT=$(bash scripts/agent/verify-changes.sh --file "$FILE" 2>&1)
+  rc=$?
+  if [ $rc -ne 0 ]; then
+    count=$(cat "$COUNTER" 2>/dev/null || printf 0)
+    printf '%s\n' $((count + 1)) > "$COUNTER"
+    if [ "$count" -ge 5 ]; then
+      printf 'verify-changes: same-file failure reached six attempts; change approach and report the blocker: %s\n' "$FILE" >&2
+      continue
+    fi
+    printf '%s\n' "$OUT" >&2
+    result=2
+  else
+    rm -f "$COUNTER" 2>/dev/null
   fi
-  echo "$OUT" >&2
-  exit 2
-fi
-rm -f "$CNT" 2>/dev/null
-exit 0
+done <<EOF
+$FILES
+EOF
+
+exit "$result"

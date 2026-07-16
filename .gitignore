@@ -29,6 +29,7 @@ __pycache__/
 
 # Claude Code 훅 턴 상태 (문서 게이트)
 /.claude/state/
+/.codex/state/
 
 # Claude Code 로컬 전용 설정 (계정별 MCP 활성화 allowlist — 다른 머신 재현성 목적, 이 머신은 전역 ignore로 이미 미추적)
 /.claude/settings.local.json
