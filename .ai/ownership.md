@@ -2,7 +2,8 @@
 
 | Agent | Task | Branch/worktree | Owned files | Status | Updated at |
 |---|---|---|---|---|---|
-| Claude Code (메인) | Agent OS 부트스트랩 | main | `CLAUDE.md`, `AGENTS.md`, `docs/agent/**`, `.ai/**`, `.claude/**`, `.codex/hooks/**`, `scripts/agent/**` | in-progress | 2026-07-16 |
+| Claude Code (메인) | Agent OS 부트스트랩 | feat/ai-work-system (베이스라인 커밋 34b4b36d) | — (소유 해제) | done | 2026-07-16 |
+| Claude Code (메인+서브에이전트) | AI 업무 시스템 고도화 (`.ai/task.md` ACTIVE, 계획 `.omc/plans/logh7-ai-work-system-plan.md`) | feat/ai-work-system | `CLAUDE.md`, `AGENTS.md`, `docs/agent/**`, `.ai/**`, `.claude/**`, `.codex/**`, `scripts/agent/**`, `.github/**`, `.mcp.json`, `.coderabbit.yaml`, `server/src/**`(Sentry 한정), `server/tests/**`(E2E 슬라이스) | in-progress | 2026-07-16 |
 
 ## 규칙 (정본: docs/agent/collaboration-protocol.md)
 
