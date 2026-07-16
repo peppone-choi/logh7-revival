@@ -1,0 +1,34 @@
+{
+  "id": "logh7-loopback-client-patch",
+  "schemaVersion": 1,
+  "status": "ready",
+  "purpose": "CD/설치 원본 클라이언트의 종료된 로그인 서버 주소를 같은 길이의 로컬 loopback 주소로 바꾸는 첫 번째 가역 계보 단계.",
+  "targetExe": {
+    "name": "G7MTClient.exe",
+    "sha256": "bd19263c10decc3d58373165a82d42a9267868400d407da87d5f4f4109ab6e16",
+    "imageBase": 4194304,
+    "size": 3956736,
+    "note": "archive.org CD/설치 트리에서 확인한 실제 입력 EXE. 이 파일에는 raw 0x36ee3c에 202.8.80.179\\0이 존재한다."
+  },
+  "expectedPatchedSha256": "2848be76a7662e25159353463bdfd8ff2f270ac5845ef4cea62983443c155345",
+  "policy": {
+    "sameLengthOnly": true,
+    "requireOriginalBytes": true,
+    "requireRollbackBytes": true,
+    "supportsDryRun": true,
+    "neverOverwriteOriginal": true
+  },
+  "patches": [
+    {
+      "id": "login-server-ip-loopback",
+      "sourceExeSha256": "bd19263c10decc3d58373165a82d42a9267868400d407da87d5f4f4109ab6e16",
+      "addressKind": "offset",
+      "offset": 3599932,
+      "virtualAddressHex": "0x0076ee3c",
+      "originalBytes": "3230322e382e38302e31373900",
+      "patchedBytes": "3132372e302e302e3100000000",
+      "rollbackBytes": "3230322e382e38302e31373900",
+      "reason": "로그인 서버 literal 202.8.80.179\\0(13바이트)을 127.0.0.1 뒤 NUL 4바이트로 패딩한 동일 길이 literal로 교체한다. 포트 47900은 인접 원본 바이트를 그대로 보존한다."
+    }
+  ]
+}

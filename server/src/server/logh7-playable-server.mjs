@@ -25,7 +25,12 @@ import {
 } from './logh7-envelope-0030.mjs';
 import { buildTransportFrame, createFrameStreamParser } from './logh7-frame-stream.mjs';
 import { LOGIN_INNER_CODE } from './logh7-gin7-credential.mjs';
-import { buildLoginResponseFrames, buildLoginNgResponseFrame } from './logh7-login-response.mjs';
+import {
+  buildLoginResponseFrames,
+  buildLoginNgResponseFrame,
+  buildRedirectInner,
+  ipToRedirectU32,
+} from './logh7-login-response.mjs';
 import {
   CODE_LOBBY_SESSION_INIT,
   CODE_LOBBY_LOGIN_REQUEST,
@@ -126,12 +131,41 @@ function encryptInnerFrame({ tables, decipherKey, id, inner, subheaderLen = LOBB
 }
 
 /**
+ * 클라이언트에 광고할 endpoint를 TCP/와이어 생성 전에 fail-closed 검증한다.
+ * @param {{ip:string, port:number}|null|undefined} advertisedEndpoint
+ * @returns {{ip:string, port:number}|null}
+ */
+export function validateAdvertisedEndpoint(advertisedEndpoint) {
+  if (advertisedEndpoint === undefined || advertisedEndpoint === null) return null;
+  if (typeof advertisedEndpoint !== 'object' || Array.isArray(advertisedEndpoint)) {
+    throw new TypeError('advertisedEndpoint must be an { ip, port } object');
+  }
+  const ip = advertisedEndpoint.ip;
+  const advertisedPort = advertisedEndpoint.port;
+  if (typeof ip !== 'string' || ip.length === 0) {
+    throw new TypeError('advertisedEndpoint.ip must be a non-empty IPv4 string');
+  }
+  try {
+    ipToRedirectU32(ip);
+  } catch (error) {
+    throw new RangeError(`advertisedEndpoint.ip must be a valid IPv4 address: ${ip}`, {
+      cause: error,
+    });
+  }
+  if (!Number.isInteger(advertisedPort) || advertisedPort < 1 || advertisedPort > 0xffff) {
+    throw new RangeError(`advertisedEndpoint.port must be an integer in 1..65535: ${advertisedPort}`);
+  }
+  return { ip, port: advertisedPort };
+}
+
+/**
  * 최소 플레이어블 서버 팩토리.
  * 반환 객체: listen/close/address + worldSession + characterStore
  */
 export function createPlayableServer({
   port = 47900,
   host = '127.0.0.1',
+  advertisedEndpoint = undefined,
   tracePath = null,
   logger = console,
   tables = loadChildCodecTables(),
@@ -142,7 +176,19 @@ export function createPlayableServer({
   accountsPath = DEFAULT_ACCOUNTS_PATH,
   worldSession = null,
 } = {}) {
+  const validatedAdvertisedEndpoint = validateAdvertisedEndpoint(advertisedEndpoint);
   if (tracePath) mkdirSync(dirname(tracePath), { recursive: true });
+
+  // bind endpoint와 원본 클라이언트에 알릴 endpoint를 분리한다.
+  // 미지정 API 호출은 기존 0x7001 기본 템플릿을 그대로 쓰고,
+  // 명시하면 0x7001과 내부에서 생성한 0x200a가 같은 endpoint를 쓴다.
+  let resolvedAdvertisedEndpoint = null;
+  let loginRedirectInner;
+  if (validatedAdvertisedEndpoint) {
+    const { ip, port: advertisedPort } = validatedAdvertisedEndpoint;
+    loginRedirectInner = buildRedirectInner({ ip, port: advertisedPort, token: 1 });
+    resolvedAdvertisedEndpoint = { ip, port: advertisedPort, token: 1 };
+  }
 
   // 실 서버 data/ 경로 (유저 환경과 동일). accounts 시드 보장.
   const loopbackHost = isLoopbackHost(host);
@@ -155,7 +201,8 @@ export function createPlayableServer({
   const resolvedCharacterStore = characterStore
     ?? createCharacterStore(characterStorePath ?? DEFAULT_CHARACTERS_PATH);
   const resolvedWorld = worldSession ?? createWorldSession({
-    worldRedirect: { ip: host === '0.0.0.0' ? '127.0.0.1' : host, port, token: 1 },
+    worldRedirect: resolvedAdvertisedEndpoint
+      ?? { ip: host === '0.0.0.0' ? '127.0.0.1' : host, port, token: 1 },
     // 0x0323 world-enter 레코드를 실 시드 캐릭터로 채우도록 스토어 주입(빈 테이블 크래시 해소).
     characterStore: resolvedCharacterStore,
   });
@@ -378,6 +425,7 @@ export function createPlayableServer({
                   tables,
                   decipherKey: resolvedDecipherKey.bytes,
                   decodedBody,
+                  redirectInner: loginRedirectInner,
                 });
                 socket.write(Buffer.concat([keysetupFrame, redirectFrame]));
                 writeTrace({
@@ -792,13 +840,46 @@ export function createPlayableServer({
 
 // ─── CLI ──────────────────────────────────────────────────────────────────────
 
+function parseAdvertisedPort(value) {
+  const advertisedPort = Number(value);
+  if (!Number.isInteger(advertisedPort) || advertisedPort < 1 || advertisedPort > 0xffff) {
+    throw new Error(`invalid --advertise-port: ${value}`);
+  }
+  return advertisedPort;
+}
+
 function parseArgs(argv) {
-  const opts = { port: 47900, host: '127.0.0.1', tracePath: null };
+  const opts = {
+    port: 47900,
+    host: '127.0.0.1',
+    tracePath: null,
+    advertiseHost: null,
+    advertisePort: null,
+  };
   for (let i = 0; i < argv.length; i += 1) {
     if (argv[i] === '--port' && argv[i + 1]) opts.port = Number(argv[++i]);
     else if (argv[i] === '--host' && argv[i + 1]) opts.host = argv[++i];
     else if (argv[i] === '--trace' && argv[i + 1]) opts.tracePath = argv[++i];
+    else if (argv[i] === '--advertise-host') {
+      if (!argv[i + 1] || argv[i + 1].startsWith('--')) {
+        throw new Error('--advertise-host requires a value');
+      }
+      opts.advertiseHost = argv[++i];
+    } else if (argv[i] === '--advertise-port') {
+      if (!argv[i + 1] || argv[i + 1].startsWith('--')) {
+        throw new Error('--advertise-port requires a value');
+      }
+      opts.advertisePort = parseAdvertisedPort(argv[++i]);
+    }
   }
+  const hasAdvertiseHost = opts.advertiseHost !== null;
+  const hasAdvertisePort = opts.advertisePort !== null;
+  if (hasAdvertiseHost !== hasAdvertisePort) {
+    throw new Error('--advertise-host and --advertise-port must be provided together');
+  }
+  opts.advertisedEndpoint = hasAdvertiseHost
+    ? { ip: opts.advertiseHost, port: opts.advertisePort }
+    : { ip: opts.host === '0.0.0.0' ? '127.0.0.1' : opts.host, port: opts.port };
   return opts;
 }
 
@@ -808,6 +889,7 @@ if (isMain) {
   const srv = createPlayableServer({
     port: opts.port,
     host: opts.host,
+    advertisedEndpoint: opts.advertisedEndpoint,
     tracePath: opts.tracePath,
     logger: console,
   });

@@ -1,0 +1,4153 @@
+{
+ "_purpose": "Ground-truth verified galaxy geography for LOGH VII. Built by cross-checking content/galaxy.json against (1) client MsgDat decoded strings [msgdat-full.json], (2) official manual text [manual.layout.txt], (3) manual PDF page-101 star-map Text annotations [gin7manual.pdf], (4) client 3D index [Null_galaxy.mdx].",
+ "_ground_truth_sources": {
+  "msgdat": "client data/MsgDat decoded (msgdat-full.json) - trustworthy decoded strings",
+  "manual_text": ".omo/work/manual.layout.txt (official manual, 101pp)",
+  "manual_pdf_annotations": "gin7manual.pdf page 101: 80 /Text annotations (Rect coords match galaxy.json cx exactly, m=1.0000)",
+  "client_mdx": "data/model/strategy/Null_galaxy.mdx: 79 star_NN_<class> nodes + 3 bh + 3 ns (generic IDs, NO names)"
+ },
+ "_findings_summary": {
+  "systems_total": 80,
+  "systems_attested_in_msgdat": 80,
+  "systems_attested_in_manual_text": 59,
+  "system_names_verdict": "VERIFIED - all 80 system names found in client MsgDat strings",
+  "coordinates_verdict": "VERIFIED-SOURCE - cx/cy extracted from 80 PDF Text annotations on manual p101 star map (cx exact match, cy constant-offset match). NOT AI-invented.",
+  "faction_verdict": "PARTIAL - 34 systems match manual deployment army split (帝国軍/同盟軍) exactly; Fezzan=neutral confirmed manual p41; remaining 45 are lore-inferred, not source-attested. NOTE: faction does NOT match map marker color geography.",
+  "mdx_index_note": "Client mdx galaxy index uses generic star_01..79 IDs with spectral class only; contains NO Japanese system/planet/fortress names. Binary cannot attest names."
+ },
+ "systems": [
+  {
+   "system": "ルンビーニ",
+   "faction": "alliance",
+   "cx": 259.2,
+   "cy": 63.3,
+   "rect": [
+    249.18018,
+    52.316888,
+    269.18019,
+    74.31689
+   ],
+   "attestation": {
+    "name": {
+     "in_msgdat": true,
+     "in_manual_text": true
+    },
+    "coords_source": "manual_pdf_p101_text_annotation (verified: cx exact-match to PDF annot centers)",
+    "faction_source": "lore_inferred_UNVERIFIED"
+   },
+   "planets": [
+    {
+     "name": "バグタプール",
+     "orbit": 1,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": false
+     }
+    },
+    {
+     "name": "カライヤ",
+     "orbit": 2,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "バドガオン",
+     "orbit": 3,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    }
+   ],
+   "fortresses": []
+  },
+  {
+   "system": "シロン",
+   "faction": "alliance",
+   "cx": 217.7,
+   "cy": 69.9,
+   "rect": [
+    207.65015,
+    58.874269,
+    227.65015,
+    80.87427
+   ],
+   "attestation": {
+    "name": {
+     "in_msgdat": true,
+     "in_manual_text": true
+    },
+    "coords_source": "manual_pdf_p101_text_annotation (verified: cx exact-match to PDF annot centers)",
+    "faction_source": "lore_inferred_UNVERIFIED"
+   },
+   "planets": [
+    {
+     "name": "ネプティス",
+     "orbit": 1,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "ジャライン",
+     "orbit": 2,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "アヌビス",
+     "orbit": 3,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "オシリス",
+     "orbit": 4,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    }
+   ],
+   "fortresses": []
+  },
+  {
+   "system": "エリューセラ",
+   "faction": "alliance",
+   "cx": 351.5,
+   "cy": 78.6,
+   "rect": [
+    341.52986,
+    67.61743,
+    361.52986,
+    89.617427
+   ],
+   "attestation": {
+    "name": {
+     "in_msgdat": true,
+     "in_manual_text": true
+    },
+    "coords_source": "manual_pdf_p101_text_annotation (verified: cx exact-match to PDF annot centers)",
+    "faction_source": "lore_inferred_UNVERIFIED"
+   },
+   "planets": [
+    {
+     "name": "コルテラッツォ",
+     "orbit": 1,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "ポンテ・クレパルド",
+     "orbit": 2,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "クルッキド",
+     "orbit": 3,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "アンドロス",
+     "orbit": 4,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    }
+   ],
+   "fortresses": []
+  },
+  {
+   "system": "タナトス",
+   "faction": "alliance",
+   "cx": 302.3,
+   "cy": 91.2,
+   "rect": [
+    292.34956,
+    80.18573,
+    312.34956,
+    102.18573
+   ],
+   "attestation": {
+    "name": {
+     "in_msgdat": true,
+     "in_manual_text": true
+    },
+    "coords_source": "manual_pdf_p101_text_annotation (verified: cx exact-match to PDF annot centers)",
+    "faction_source": "lore_inferred_UNVERIFIED"
+   },
+   "planets": [
+    {
+     "name": "エコニア",
+     "orbit": 1,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "プロスキナス",
+     "orbit": 2,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "マスジット",
+     "orbit": 3,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "ケール",
+     "orbit": 4,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    }
+   ],
+   "fortresses": []
+  },
+  {
+   "system": "リオ・ヴェルデ",
+   "faction": "alliance",
+   "cx": 347.2,
+   "cy": 105.9,
+   "rect": [
+    337.15827,
+    94.93982,
+    357.15827,
+    116.93982
+   ],
+   "attestation": {
+    "name": {
+     "in_msgdat": true,
+     "in_manual_text": true
+    },
+    "coords_source": "manual_pdf_p101_text_annotation (verified: cx exact-match to PDF annot centers)",
+    "faction_source": "manual_p75_deployment"
+   },
+   "planets": [
+    {
+     "name": "メサ・デル・アグア",
+     "orbit": 1,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "サン・カルロス",
+     "orbit": 2,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "リアノ・ブランコ",
+     "orbit": 3,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "イスラ・ブランカ",
+     "orbit": 4,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    }
+   ],
+   "fortresses": []
+  },
+  {
+   "system": "ロフォーテン",
+   "faction": "alliance",
+   "cx": 197.4,
+   "cy": 121.2,
+   "rect": [
+    187.43158,
+    110.24036,
+    207.43158,
+    132.24036
+   ],
+   "attestation": {
+    "name": {
+     "in_msgdat": true,
+     "in_manual_text": true
+    },
+    "coords_source": "manual_pdf_p101_text_annotation (verified: cx exact-match to PDF annot centers)",
+    "faction_source": "manual_p75_deployment"
+   },
+   "planets": [
+    {
+     "name": "アルスタッド",
+     "orbit": 1,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "バルスタッド",
+     "orbit": 2,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "スボルヴェア",
+     "orbit": 3,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": false
+     }
+    }
+   ],
+   "fortresses": [
+    {
+     "name": "ルドミラ",
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    }
+   ]
+  },
+  {
+   "system": "バーラト",
+   "faction": "alliance",
+   "cx": 260.8,
+   "cy": 127.3,
+   "rect": [
+    250.81952,
+    116.251277,
+    270.81953,
+    138.25128
+   ],
+   "attestation": {
+    "name": {
+     "in_msgdat": true,
+     "in_manual_text": true
+    },
+    "coords_source": "manual_pdf_p101_text_annotation (verified: cx exact-match to PDF annot centers)",
+    "faction_source": "manual_p75_deployment"
+   },
+   "planets": [
+    {
+     "name": "テルヌーゼン",
+     "orbit": 1,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "カスバ・ナグム",
+     "orbit": 2,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "ハイネセン",
+     "orbit": 3,
+     "name_attestation": {
+      "in_msgdat": true,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "シリューナガル",
+     "orbit": 4,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    }
+   ],
+   "fortresses": []
+  },
+  {
+   "system": "ファラーファラ",
+   "faction": "alliance",
+   "cx": 166.8,
+   "cy": 156.8,
+   "rect": [
+    156.8305,
+    145.75946,
+    176.8305,
+    167.75946
+   ],
+   "attestation": {
+    "name": {
+     "in_msgdat": true,
+     "in_manual_text": true
+    },
+    "coords_source": "manual_pdf_p101_text_annotation (verified: cx exact-match to PDF annot centers)",
+    "faction_source": "manual_p75_deployment"
+   },
+   "planets": [
+    {
+     "name": "アラム・バダー",
+     "orbit": 1,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "ラムル",
+     "orbit": 2,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "ミセヌム",
+     "orbit": 3,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "アスワン",
+     "orbit": 4,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    }
+   ],
+   "fortresses": []
+  },
+  {
+   "system": "ケリム",
+   "faction": "alliance",
+   "cx": 217.7,
+   "cy": 156.8,
+   "rect": [
+    207.65015,
+    145.75946,
+    227.65015,
+    167.75946
+   ],
+   "attestation": {
+    "name": {
+     "in_msgdat": true,
+     "in_manual_text": true
+    },
+    "coords_source": "manual_pdf_p101_text_annotation (verified: cx exact-match to PDF annot centers)",
+    "faction_source": "manual_p75_deployment"
+   },
+   "planets": [
+    {
+     "name": "カッシナ",
+     "orbit": 1,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "バフラ",
+     "orbit": 2,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "アユディン",
+     "orbit": 3,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "パラス",
+     "orbit": 4,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    }
+   ],
+   "fortresses": []
+  },
+  {
+   "system": "ポリスーン",
+   "faction": "alliance",
+   "cx": 439.5,
+   "cy": 158.4,
+   "rect": [
+    429.5079,
+    147.3988,
+    449.5079,
+    169.39879
+   ],
+   "attestation": {
+    "name": {
+     "in_msgdat": true,
+     "in_manual_text": true
+    },
+    "coords_source": "manual_pdf_p101_text_annotation (verified: cx exact-match to PDF annot centers)",
+    "faction_source": "lore_inferred_UNVERIFIED"
+   },
+   "planets": [
+    {
+     "name": "エルデン",
+     "orbit": 1,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "ベレケト",
+     "orbit": 2,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "キルニス",
+     "orbit": 3,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    }
+   ],
+   "fortresses": [
+    {
+     "name": "ダヤン・ハーン",
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    }
+   ]
+  },
+  {
+   "system": "ライガール",
+   "faction": "alliance",
+   "cx": 360.8,
+   "cy": 178.6,
+   "rect": [
+    350.81947,
+    167.61737,
+    370.81947,
+    189.61737
+   ],
+   "attestation": {
+    "name": {
+     "in_msgdat": true,
+     "in_manual_text": true
+    },
+    "coords_source": "manual_pdf_p101_text_annotation (verified: cx exact-match to PDF annot centers)",
+    "faction_source": "lore_inferred_UNVERIFIED"
+   },
+   "planets": [
+    {
+     "name": "シンガラ",
+     "orbit": 1,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "ミルパラ",
+     "orbit": 2,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "アユアラ",
+     "orbit": 3,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    }
+   ],
+   "fortresses": []
+  },
+  {
+   "system": "バーミリオン",
+   "faction": "alliance",
+   "cx": 309.5,
+   "cy": 179.2,
+   "rect": [
+    299.45338,
+    168.16382,
+    319.45338,
+    190.16382
+   ],
+   "attestation": {
+    "name": {
+     "in_msgdat": true,
+     "in_manual_text": false
+    },
+    "coords_source": "manual_pdf_p101_text_annotation (verified: cx exact-match to PDF annot centers)",
+    "faction_source": "lore_inferred_UNVERIFIED"
+   },
+   "planets": [
+    {
+     "name": "エイクロン",
+     "orbit": 1,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": false
+     }
+    },
+    {
+     "name": "ロートン",
+     "orbit": 2,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": false
+     }
+    },
+    {
+     "name": "カスケード",
+     "orbit": 3,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": false
+     }
+    }
+   ],
+   "fortresses": []
+  },
+  {
+   "system": "リューカス",
+   "faction": "alliance",
+   "cx": 281.0,
+   "cy": 192.8,
+   "rect": [
+    271.0381,
+    181.82501,
+    291.0381,
+    203.82501
+   ],
+   "attestation": {
+    "name": {
+     "in_msgdat": true,
+     "in_manual_text": true
+    },
+    "coords_source": "manual_pdf_p101_text_annotation (verified: cx exact-match to PDF annot centers)",
+    "faction_source": "manual_p75_deployment"
+   },
+   "planets": [
+    {
+     "name": "ザカリアス",
+     "orbit": 1,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "インコバネ",
+     "orbit": 2,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "ヴァルミー",
+     "orbit": 3,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    }
+   ],
+   "fortresses": []
+  },
+  {
+   "system": "マローヴィア",
+   "faction": "alliance",
+   "cx": 131.3,
+   "cy": 193.4,
+   "rect": [
+    121.31139,
+    182.37146,
+    141.3114,
+    204.37146
+   ],
+   "attestation": {
+    "name": {
+     "in_msgdat": true,
+     "in_manual_text": false
+    },
+    "coords_source": "manual_pdf_p101_text_annotation (verified: cx exact-match to PDF annot centers)",
+    "faction_source": "lore_inferred_UNVERIFIED"
+   },
+   "planets": [],
+   "fortresses": []
+  },
+  {
+   "system": "ハダト",
+   "faction": "alliance",
+   "cx": 160.8,
+   "cy": 199.9,
+   "rect": [
+    150.81958,
+    188.92882,
+    170.81958,
+    210.92882
+   ],
+   "attestation": {
+    "name": {
+     "in_msgdat": true,
+     "in_manual_text": true
+    },
+    "coords_source": "manual_pdf_p101_text_annotation (verified: cx exact-match to PDF annot centers)",
+    "faction_source": "lore_inferred_UNVERIFIED"
+   },
+   "planets": [
+    {
+     "name": "シャンプール",
+     "orbit": 1,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "ベラスィ",
+     "orbit": 2,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "アンジャル",
+     "orbit": 3,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    }
+   ],
+   "fortresses": []
+  },
+  {
+   "system": "ジャムシード",
+   "faction": "alliance",
+   "cx": 230.2,
+   "cy": 201.0,
+   "rect": [
+    220.21843,
+    190.02173,
+    240.21843,
+    212.02173
+   ],
+   "attestation": {
+    "name": {
+     "in_msgdat": true,
+     "in_manual_text": true
+    },
+    "coords_source": "manual_pdf_p101_text_annotation (verified: cx exact-match to PDF annot centers)",
+    "faction_source": "manual_p75_deployment"
+   },
+   "planets": [
+    {
+     "name": "タフテ・ジャムジード",
+     "orbit": 1,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": false
+     }
+    },
+    {
+     "name": "カッファー",
+     "orbit": 2,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "ムハバット",
+     "orbit": 3,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "アバダナ",
+     "orbit": 4,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": false
+     }
+    }
+   ],
+   "fortresses": []
+  },
+  {
+   "system": "トリプラ",
+   "faction": "alliance",
+   "cx": 388.7,
+   "cy": 207.0,
+   "rect": [
+    378.6883,
+    196.03264,
+    398.6883,
+    218.03264
+   ],
+   "attestation": {
+    "name": {
+     "in_msgdat": true,
+     "in_manual_text": true
+    },
+    "coords_source": "manual_pdf_p101_text_annotation (verified: cx exact-match to PDF annot centers)",
+    "faction_source": "lore_inferred_UNVERIFIED"
+   },
+   "planets": [
+    {
+     "name": "パルメレンド",
+     "orbit": 1,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "アガタラ",
+     "orbit": 2,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "カリャンプール",
+     "orbit": 3,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "イスファハン",
+     "orbit": 4,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    }
+   ],
+   "fortresses": []
+  },
+  {
+   "system": "タッシリ",
+   "faction": "alliance",
+   "cx": 324.8,
+   "cy": 214.1,
+   "rect": [
+    314.7539,
+    203.13646,
+    334.7539,
+    225.13646
+   ],
+   "attestation": {
+    "name": {
+     "in_msgdat": true,
+     "in_manual_text": true
+    },
+    "coords_source": "manual_pdf_p101_text_annotation (verified: cx exact-match to PDF annot centers)",
+    "faction_source": "lore_inferred_UNVERIFIED"
+   },
+   "planets": [
+    {
+     "name": "タッシリ・ナジェール",
+     "orbit": 1,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "アドラル・ソアフ",
+     "orbit": 2,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "トゥアレグ",
+     "orbit": 3,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    }
+   ],
+   "fortresses": []
+  },
+  {
+   "system": "シュパーラ",
+   "faction": "alliance",
+   "cx": 440.6,
+   "cy": 214.1,
+   "rect": [
+    430.60084,
+    203.13646,
+    450.60084,
+    225.13646
+   ],
+   "attestation": {
+    "name": {
+     "in_msgdat": true,
+     "in_manual_text": true
+    },
+    "coords_source": "manual_pdf_p101_text_annotation (verified: cx exact-match to PDF annot centers)",
+    "faction_source": "manual_p75_deployment"
+   },
+   "planets": [
+    {
+     "name": "アルンキパ",
+     "orbit": 1,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "ヴィスカ・グランデ",
+     "orbit": 2,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "シウダ・ロドリゴ",
+     "orbit": 3,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "ヴィシュコフ",
+     "orbit": 4,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    }
+   ],
+   "fortresses": []
+  },
+  {
+   "system": "ドーリア",
+   "faction": "alliance",
+   "cx": 203.4,
+   "cy": 236.5,
+   "rect": [
+    193.44249,
+    225.54082,
+    213.44249,
+    247.54082
+   ],
+   "attestation": {
+    "name": {
+     "in_msgdat": true,
+     "in_manual_text": true
+    },
+    "coords_source": "manual_pdf_p101_text_annotation (verified: cx exact-match to PDF annot centers)",
+    "faction_source": "manual_p75_deployment"
+   },
+   "planets": [
+    {
+     "name": "モンテカプラロ",
+     "orbit": 1,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "カスタノーラ",
+     "orbit": 2,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "ビエヴェッタ",
+     "orbit": 3,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": false
+     }
+    },
+    {
+     "name": "ボルケーゼ",
+     "orbit": 4,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    }
+   ],
+   "fortresses": []
+  },
+  {
+   "system": "シヴァ",
+   "faction": "alliance",
+   "cx": 146.6,
+   "cy": 243.6,
+   "rect": [
+    136.61194,
+    232.64464,
+    156.61194,
+    254.64464
+   ],
+   "attestation": {
+    "name": {
+     "in_msgdat": true,
+     "in_manual_text": false
+    },
+    "coords_source": "manual_pdf_p101_text_annotation (verified: cx exact-match to PDF annot centers)",
+    "faction_source": "lore_inferred_UNVERIFIED"
+   },
+   "planets": [
+    {
+     "name": "パールヴァティ",
+     "orbit": 1,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": false
+     }
+    },
+    {
+     "name": "ガンガー",
+     "orbit": 2,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": false
+     }
+    },
+    {
+     "name": "ナンディ",
+     "orbit": 3,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": false
+     }
+    },
+    {
+     "name": "アナンタ",
+     "orbit": 4,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": false
+     }
+    }
+   ],
+   "fortresses": []
+  },
+  {
+   "system": "エル・ファシル",
+   "faction": "alliance",
+   "cx": 239.0,
+   "cy": 252.4,
+   "rect": [
+    228.96161,
+    241.38782,
+    248.96161,
+    263.38783
+   ],
+   "attestation": {
+    "name": {
+     "in_msgdat": true,
+     "in_manual_text": true
+    },
+    "coords_source": "manual_pdf_p101_text_annotation (verified: cx exact-match to PDF annot centers)",
+    "faction_source": "manual_p75_deployment"
+   },
+   "planets": [
+    {
+     "name": "カルタヘナ",
+     "orbit": 1,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "ラス・カシタス",
+     "orbit": 2,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "サンタ・アナ",
+     "orbit": 3,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "サルバドル",
+     "orbit": 4,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    }
+   ],
+   "fortresses": []
+  },
+  {
+   "system": "ガンダルヴァ",
+   "faction": "alliance",
+   "cx": 353.7,
+   "cy": 258.9,
+   "rect": [
+    343.71565,
+    247.94519,
+    363.71565,
+    269.9452
+   ],
+   "attestation": {
+    "name": {
+     "in_msgdat": true,
+     "in_manual_text": false
+    },
+    "coords_source": "manual_pdf_p101_text_annotation (verified: cx exact-match to PDF annot centers)",
+    "faction_source": "lore_inferred_UNVERIFIED"
+   },
+   "planets": [
+    {
+     "name": "ウルヴァシー",
+     "orbit": 1,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": false
+     }
+    },
+    {
+     "name": "カルティケーヤ",
+     "orbit": 2,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": false
+     }
+    },
+    {
+     "name": "アガスティア",
+     "orbit": 3,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": false
+     }
+    },
+    {
+     "name": "ヴァルナ",
+     "orbit": 4,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": false
+     }
+    }
+   ],
+   "fortresses": []
+  },
+  {
+   "system": "ランテマリオ",
+   "faction": "alliance",
+   "cx": 289.2,
+   "cy": 265.5,
+   "rect": [
+    279.2348,
+    254.50255,
+    299.2348,
+    276.50257
+   ],
+   "attestation": {
+    "name": {
+     "in_msgdat": true,
+     "in_manual_text": false
+    },
+    "coords_source": "manual_pdf_p101_text_annotation (verified: cx exact-match to PDF annot centers)",
+    "faction_source": "lore_inferred_UNVERIFIED"
+   },
+   "planets": [
+    {
+     "name": "ルエヴィト",
+     "orbit": 1,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": false
+     }
+    },
+    {
+     "name": "スヴェン・ヴィト",
+     "orbit": 2,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": false
+     }
+    },
+    {
+     "name": "ヤロヴィト",
+     "orbit": 3,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": false
+     }
+    }
+   ],
+   "fortresses": []
+  },
+  {
+   "system": "メルカルト",
+   "faction": "alliance",
+   "cx": 433.0,
+   "cy": 266.0,
+   "rect": [
+    422.95057,
+    255.049,
+    442.95057,
+    277.049
+   ],
+   "attestation": {
+    "name": {
+     "in_msgdat": true,
+     "in_manual_text": true
+    },
+    "coords_source": "manual_pdf_p101_text_annotation (verified: cx exact-match to PDF annot centers)",
+    "faction_source": "manual_p75_deployment"
+   },
+   "planets": [
+    {
+     "name": "アシュール",
+     "orbit": 1,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "ネルガル",
+     "orbit": 2,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "バール・ザフォン",
+     "orbit": 3,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    }
+   ],
+   "fortresses": []
+  },
+  {
+   "system": "エルゴン",
+   "faction": "alliance",
+   "cx": 173.9,
+   "cy": 271.5,
+   "rect": [
+    163.93433,
+    260.5135,
+    183.93433,
+    282.5135
+   ],
+   "attestation": {
+    "name": {
+     "in_msgdat": true,
+     "in_manual_text": true
+    },
+    "coords_source": "manual_pdf_p101_text_annotation (verified: cx exact-match to PDF annot centers)",
+    "faction_source": "lore_inferred_UNVERIFIED"
+   },
+   "planets": [
+    {
+     "name": "カモロク",
+     "orbit": 1,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "ブタンディガ",
+     "orbit": 2,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "ムバレ",
+     "orbit": 3,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "カンパラ",
+     "orbit": 4,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    }
+   ],
+   "fortresses": []
+  },
+  {
+   "system": "マル・アデッタ",
+   "faction": "alliance",
+   "cx": 317.7,
+   "cy": 293.4,
+   "rect": [
+    307.6501,
+    282.3714,
+    327.6501,
+    304.3714
+   ],
+   "attestation": {
+    "name": {
+     "in_msgdat": true,
+     "in_manual_text": false
+    },
+    "coords_source": "manual_pdf_p101_text_annotation (verified: cx exact-match to PDF annot centers)",
+    "faction_source": "lore_inferred_UNVERIFIED"
+   },
+   "planets": [
+    {
+     "name": "バラセット",
+     "orbit": 1,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": false
+     }
+    },
+    {
+     "name": "アヴェラノス",
+     "orbit": 2,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": false
+     }
+    },
+    {
+     "name": "ファルネーゼ",
+     "orbit": 3,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": false
+     }
+    },
+    {
+     "name": "マントヴァ",
+     "orbit": 4,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": false
+     }
+    }
+   ],
+   "fortresses": []
+  },
+  {
+   "system": "バラトループ",
+   "faction": "alliance",
+   "cx": 403.4,
+   "cy": 300.5,
+   "rect": [
+    393.44239,
+    289.47523,
+    413.44239,
+    311.47523
+   ],
+   "attestation": {
+    "name": {
+     "in_msgdat": true,
+     "in_manual_text": false
+    },
+    "coords_source": "manual_pdf_p101_text_annotation (verified: cx exact-match to PDF annot centers)",
+    "faction_source": "lore_inferred_UNVERIFIED"
+   },
+   "planets": [
+    {
+     "name": "バラトループ1",
+     "orbit": 1,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": false
+     }
+    },
+    {
+     "name": "バラトループ2",
+     "orbit": 2,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": false
+     }
+    },
+    {
+     "name": "バラトループ3",
+     "orbit": 3,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": false
+     }
+    }
+   ],
+   "fortresses": []
+  },
+  {
+   "system": "シャンダルーア",
+   "faction": "alliance",
+   "cx": 346.1,
+   "cy": 301.0,
+   "rect": [
+    336.06538,
+    290.02168,
+    356.06538,
+    312.02168
+   ],
+   "attestation": {
+    "name": {
+     "in_msgdat": true,
+     "in_manual_text": false
+    },
+    "coords_source": "manual_pdf_p101_text_annotation (verified: cx exact-match to PDF annot centers)",
+    "faction_source": "lore_inferred_UNVERIFIED"
+   },
+   "planets": [
+    {
+     "name": "シャンダルーア1",
+     "orbit": 1,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": false
+     }
+    },
+    {
+     "name": "シャンダルーア2",
+     "orbit": 2,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": false
+     }
+    },
+    {
+     "name": "シャンダルーア3",
+     "orbit": 3,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": false
+     }
+    }
+   ],
+   "fortresses": []
+  },
+  {
+   "system": "ダゴン",
+   "faction": "alliance",
+   "cx": 161.9,
+   "cy": 308.7,
+   "rect": [
+    151.91248,
+    297.67195,
+    171.91248,
+    319.67195
+   ],
+   "attestation": {
+    "name": {
+     "in_msgdat": true,
+     "in_manual_text": false
+    },
+    "coords_source": "manual_pdf_p101_text_annotation (verified: cx exact-match to PDF annot centers)",
+    "faction_source": "lore_inferred_UNVERIFIED"
+   },
+   "planets": [
+    {
+     "name": "ダゴン1",
+     "orbit": 1,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": false
+     }
+    },
+    {
+     "name": "ダゴン2",
+     "orbit": 2,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": false
+     }
+    },
+    {
+     "name": "ダゴン3",
+     "orbit": 3,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": false
+     }
+    },
+    {
+     "name": "ダゴン4",
+     "orbit": 4,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": false
+     }
+    }
+   ],
+   "fortresses": []
+  },
+  {
+   "system": "ティアマト",
+   "faction": "alliance",
+   "cx": 223.7,
+   "cy": 308.7,
+   "rect": [
+    213.66107,
+    297.67195,
+    233.66106,
+    319.67195
+   ],
+   "attestation": {
+    "name": {
+     "in_msgdat": true,
+     "in_manual_text": false
+    },
+    "coords_source": "manual_pdf_p101_text_annotation (verified: cx exact-match to PDF annot centers)",
+    "faction_source": "lore_inferred_UNVERIFIED"
+   },
+   "planets": [
+    {
+     "name": "ティアマト1",
+     "orbit": 1,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": false
+     }
+    },
+    {
+     "name": "ティアマト2",
+     "orbit": 2,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": false
+     }
+    },
+    {
+     "name": "ティアマト3",
+     "orbit": 3,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": false
+     }
+    },
+    {
+     "name": "ティアマト4",
+     "orbit": 4,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": false
+     }
+    }
+   ],
+   "fortresses": []
+  },
+  {
+   "system": "ドラゴニア",
+   "faction": "alliance",
+   "cx": 253.7,
+   "cy": 314.7,
+   "rect": [
+    243.7157,
+    303.68287,
+    263.7157,
+    325.68287
+   ],
+   "attestation": {
+    "name": {
+     "in_msgdat": true,
+     "in_manual_text": false
+    },
+    "coords_source": "manual_pdf_p101_text_annotation (verified: cx exact-match to PDF annot centers)",
+    "faction_source": "lore_inferred_UNVERIFIED"
+   },
+   "planets": [
+    {
+     "name": "ドラゴニア1",
+     "orbit": 1,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": false
+     }
+    },
+    {
+     "name": "ドラゴニア2",
+     "orbit": 2,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": false
+     }
+    },
+    {
+     "name": "ドラゴニア3",
+     "orbit": 3,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": false
+     }
+    }
+   ],
+   "fortresses": []
+  },
+  {
+   "system": "フォルセティ",
+   "faction": "alliance",
+   "cx": 289.2,
+   "cy": 315.8,
+   "rect": [
+    279.2348,
+    304.77577,
+    299.2348,
+    326.77577
+   ],
+   "attestation": {
+    "name": {
+     "in_msgdat": true,
+     "in_manual_text": false
+    },
+    "coords_source": "manual_pdf_p101_text_annotation (verified: cx exact-match to PDF annot centers)",
+    "faction_source": "lore_inferred_UNVERIFIED"
+   },
+   "planets": [],
+   "fortresses": []
+  },
+  {
+   "system": "アスターテ",
+   "faction": "alliance",
+   "cx": 195.8,
+   "cy": 328.9,
+   "rect": [
+    185.79224,
+    317.8905,
+    205.79224,
+    339.8905
+   ],
+   "attestation": {
+    "name": {
+     "in_msgdat": true,
+     "in_manual_text": false
+    },
+    "coords_source": "manual_pdf_p101_text_annotation (verified: cx exact-match to PDF annot centers)",
+    "faction_source": "lore_inferred_UNVERIFIED"
+   },
+   "planets": [
+    {
+     "name": "アスターテ1",
+     "orbit": 1,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": false
+     }
+    },
+    {
+     "name": "アスターテ2",
+     "orbit": 2,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": false
+     }
+    },
+    {
+     "name": "アスターテ3",
+     "orbit": 3,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": false
+     }
+    },
+    {
+     "name": "アスターテ4",
+     "orbit": 4,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": false
+     }
+    }
+   ],
+   "fortresses": []
+  },
+  {
+   "system": "ファイアザード",
+   "faction": "alliance",
+   "cx": 318.7,
+   "cy": 328.9,
+   "rect": [
+    308.74299,
+    317.8905,
+    328.74299,
+    339.8905
+   ],
+   "attestation": {
+    "name": {
+     "in_msgdat": true,
+     "in_manual_text": false
+    },
+    "coords_source": "manual_pdf_p101_text_annotation (verified: cx exact-match to PDF annot centers)",
+    "faction_source": "lore_inferred_UNVERIFIED"
+   },
+   "planets": [
+    {
+     "name": "ファイアザード1",
+     "orbit": 1,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": false
+     }
+    },
+    {
+     "name": "ファイアザード2",
+     "orbit": 2,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": false
+     }
+    },
+    {
+     "name": "ファイアザード3",
+     "orbit": 3,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": false
+     }
+    }
+   ],
+   "fortresses": []
+  },
+  {
+   "system": "ポレヴィト",
+   "faction": "alliance",
+   "cx": 383.8,
+   "cy": 335.4,
+   "rect": [
+    373.77027,
+    324.44789,
+    393.77027,
+    346.44789
+   ],
+   "attestation": {
+    "name": {
+     "in_msgdat": true,
+     "in_manual_text": true
+    },
+    "coords_source": "manual_pdf_p101_text_annotation (verified: cx exact-match to PDF annot centers)",
+    "faction_source": "manual_p75_deployment"
+   },
+   "planets": [
+    {
+     "name": "ルジアーナ",
+     "orbit": 1,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "チェルノボーグ",
+     "orbit": 2,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "スヴァローグ",
+     "orbit": 3,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "ポレヴィーク",
+     "orbit": 4,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    }
+   ],
+   "fortresses": []
+  },
+  {
+   "system": "アルレスハイム",
+   "faction": "alliance",
+   "cx": 253.2,
+   "cy": 337.1,
+   "rect": [
+    243.16925,
+    326.08723,
+    263.16926,
+    348.08723
+   ],
+   "attestation": {
+    "name": {
+     "in_msgdat": true,
+     "in_manual_text": false
+    },
+    "coords_source": "manual_pdf_p101_text_annotation (verified: cx exact-match to PDF annot centers)",
+    "faction_source": "lore_inferred_UNVERIFIED"
+   },
+   "planets": [
+    {
+     "name": "アルレスハイム1",
+     "orbit": 1,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": false
+     }
+    },
+    {
+     "name": "アルレスハイム2",
+     "orbit": 2,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": false
+     }
+    },
+    {
+     "name": "アルレスハイム3",
+     "orbit": 3,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": false
+     }
+    },
+    {
+     "name": "アルレスハイム4",
+     "orbit": 4,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": false
+     }
+    }
+   ],
+   "fortresses": []
+  },
+  {
+   "system": "パランティア",
+   "faction": "alliance",
+   "cx": 288.1,
+   "cy": 338.2,
+   "rect": [
+    278.1419,
+    327.1801,
+    298.1419,
+    349.1801
+   ],
+   "attestation": {
+    "name": {
+     "in_msgdat": true,
+     "in_manual_text": false
+    },
+    "coords_source": "manual_pdf_p101_text_annotation (verified: cx exact-match to PDF annot centers)",
+    "faction_source": "lore_inferred_UNVERIFIED"
+   },
+   "planets": [
+    {
+     "name": "パランティア1",
+     "orbit": 1,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": false
+     }
+    },
+    {
+     "name": "パランティア2",
+     "orbit": 2,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": false
+     }
+    },
+    {
+     "name": "パランティア3",
+     "orbit": 3,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": false
+     }
+    },
+    {
+     "name": "パランティア4",
+     "orbit": 4,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": false
+     }
+    }
+   ],
+   "fortresses": []
+  },
+  {
+   "system": "アルトミュール",
+   "faction": "alliance",
+   "cx": 220.9,
+   "cy": 348.0,
+   "rect": [
+    210.92882,
+    337.01618,
+    230.92882,
+    359.01618
+   ],
+   "attestation": {
+    "name": {
+     "in_msgdat": true,
+     "in_manual_text": false
+    },
+    "coords_source": "manual_pdf_p101_text_annotation (verified: cx exact-match to PDF annot centers)",
+    "faction_source": "lore_inferred_UNVERIFIED"
+   },
+   "planets": [
+    {
+     "name": "カプチェランカ",
+     "orbit": 1,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": false
+     }
+    },
+    {
+     "name": "ヴァウブジフ",
+     "orbit": 2,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": false
+     }
+    },
+    {
+     "name": "エディルネ",
+     "orbit": 3,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": false
+     }
+    },
+    {
+     "name": "レグニッツァ",
+     "orbit": 4,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": false
+     }
+    }
+   ],
+   "fortresses": []
+  },
+  {
+   "system": "ヴァンフリート",
+   "faction": "alliance",
+   "cx": 202.9,
+   "cy": 352.4,
+   "rect": [
+    192.89606,
+    341.38777,
+    212.89606,
+    363.38777
+   ],
+   "attestation": {
+    "name": {
+     "in_msgdat": true,
+     "in_manual_text": false
+    },
+    "coords_source": "manual_pdf_p101_text_annotation (verified: cx exact-match to PDF annot centers)",
+    "faction_source": "lore_inferred_UNVERIFIED"
+   },
+   "planets": [
+    {
+     "name": "ヴァンフリート1",
+     "orbit": 1,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": false
+     }
+    },
+    {
+     "name": "ヴァンフリート2",
+     "orbit": 2,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": false
+     }
+    },
+    {
+     "name": "ヴァンフリート3",
+     "orbit": 3,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": false
+     }
+    },
+    {
+     "name": "ヴァンフリート4",
+     "orbit": 4,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": false
+     }
+    }
+   ],
+   "fortresses": []
+  },
+  {
+   "system": "フェザーン",
+   "faction": "neutral",
+   "cx": 381.0,
+   "cy": 387.9,
+   "rect": [
+    371.03804,
+    376.90687,
+    391.03804,
+    398.90687
+   ],
+   "attestation": {
+    "name": {
+     "in_msgdat": true,
+     "in_manual_text": true
+    },
+    "coords_source": "manual_pdf_p101_text_annotation (verified: cx exact-match to PDF annot centers)",
+    "faction_source": "manual_p41"
+   },
+   "planets": [
+    {
+     "name": "ジラー",
+     "orbit": 1,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": false
+     }
+    },
+    {
+     "name": "リウドルフィンク",
+     "orbit": 2,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": false
+     }
+    },
+    {
+     "name": "ザリエル",
+     "orbit": 3,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": false
+     }
+    },
+    {
+     "name": "フェザーン",
+     "orbit": 4,
+     "name_attestation": {
+      "in_msgdat": true,
+      "in_manual_text": true
+     }
+    }
+   ],
+   "fortresses": []
+  },
+  {
+   "system": "イゼルローン",
+   "faction": "empire",
+   "cx": 202.9,
+   "cy": 400.5,
+   "rect": [
+    192.89606,
+    389.47517,
+    212.89606,
+    411.47517
+   ],
+   "attestation": {
+    "name": {
+     "in_msgdat": true,
+     "in_manual_text": true
+    },
+    "coords_source": "manual_pdf_p101_text_annotation (verified: cx exact-match to PDF annot centers)",
+    "faction_source": "manual_p75_deployment"
+   },
+   "planets": [],
+   "fortresses": [
+    {
+     "name": "イゼルローン",
+     "name_attestation": {
+      "in_msgdat": true,
+      "in_manual_text": true
+     }
+    }
+   ]
+  },
+  {
+   "system": "アイゼンヘルツ",
+   "faction": "empire",
+   "cx": 383.2,
+   "cy": 430.0,
+   "rect": [
+    373.22383,
+    418.98335,
+    393.22383,
+    440.98335
+   ],
+   "attestation": {
+    "name": {
+     "in_msgdat": true,
+     "in_manual_text": true
+    },
+    "coords_source": "manual_pdf_p101_text_annotation (verified: cx exact-match to PDF annot centers)",
+    "faction_source": "manual_p75_deployment"
+   },
+   "planets": [
+    {
+     "name": "ヒンターヴィルド",
+     "orbit": 1,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "ラドメール",
+     "orbit": 2,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "ゴータ",
+     "orbit": 3,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    }
+   ],
+   "fortresses": [
+    {
+     "name": "ガイエスブルク",
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    }
+   ]
+  },
+  {
+   "system": "アムリッツァ",
+   "faction": "empire",
+   "cx": 202.9,
+   "cy": 451.8,
+   "rect": [
+    192.89606,
+    440.84126,
+    212.89606,
+    462.84126
+   ],
+   "attestation": {
+    "name": {
+     "in_msgdat": true,
+     "in_manual_text": true
+    },
+    "coords_source": "manual_pdf_p101_text_annotation (verified: cx exact-match to PDF annot centers)",
+    "faction_source": "manual_p75_deployment"
+   },
+   "planets": [
+    {
+     "name": "クラインゲルト",
+     "orbit": 1,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "モールゲン",
+     "orbit": 2,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "ダンク",
+     "orbit": 3,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "ハーフェン",
+     "orbit": 4,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    }
+   ],
+   "fortresses": []
+  },
+  {
+   "system": "フォルゲン",
+   "faction": "empire",
+   "cx": 447.2,
+   "cy": 451.8,
+   "rect": [
+    437.1582,
+    440.84126,
+    457.1582,
+    462.84126
+   ],
+   "attestation": {
+    "name": {
+     "in_msgdat": true,
+     "in_manual_text": true
+    },
+    "coords_source": "manual_pdf_p101_text_annotation (verified: cx exact-match to PDF annot centers)",
+    "faction_source": "manual_p75_deployment"
+   },
+   "planets": [
+    {
+     "name": "シュヴァンガウ",
+     "orbit": 1,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "フュッセン",
+     "orbit": 2,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "ボーデルスベルグ",
+     "orbit": 3,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": false
+     }
+    }
+   ],
+   "fortresses": []
+  },
+  {
+   "system": "ヨーツンヘイム",
+   "faction": "empire",
+   "cx": 397.4,
+   "cy": 466.0,
+   "rect": [
+    387.43147,
+    455.0489,
+    407.43147,
+    477.0489
+   ],
+   "attestation": {
+    "name": {
+     "in_msgdat": true,
+     "in_manual_text": true
+    },
+    "coords_source": "manual_pdf_p101_text_annotation (verified: cx exact-match to PDF annot centers)",
+    "faction_source": "lore_inferred_UNVERIFIED"
+   },
+   "planets": [
+    {
+     "name": "ウトガルド",
+     "orbit": 1,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "ヨーツンヘイム",
+     "orbit": 2,
+     "name_attestation": {
+      "in_msgdat": true,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "エーリヴァーガル",
+     "orbit": 3,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    }
+   ],
+   "fortresses": []
+  },
+  {
+   "system": "ヴァンステイド",
+   "faction": "empire",
+   "cx": 247.2,
+   "cy": 466.6,
+   "rect": [
+    237.15833,
+    455.59535,
+    257.15834,
+    477.59535
+   ],
+   "attestation": {
+    "name": {
+     "in_msgdat": true,
+     "in_manual_text": true
+    },
+    "coords_source": "manual_pdf_p101_text_annotation (verified: cx exact-match to PDF annot centers)",
+    "faction_source": "manual_p75_deployment"
+   },
+   "planets": [
+    {
+     "name": "ラブンストラップ",
+     "orbit": 1,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": false
+     }
+    },
+    {
+     "name": "レグステッド",
+     "orbit": 2,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "ファルドガルデ",
+     "orbit": 3,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    }
+   ],
+   "fortresses": []
+  },
+  {
+   "system": "ビルロスト",
+   "faction": "empire",
+   "cx": 152.1,
+   "cy": 472.1,
+   "rect": [
+    142.07642,
+    461.05979,
+    162.07642,
+    483.05979
+   ],
+   "attestation": {
+    "name": {
+     "in_msgdat": true,
+     "in_manual_text": true
+    },
+    "coords_source": "manual_pdf_p101_text_annotation (verified: cx exact-match to PDF annot centers)",
+    "faction_source": "manual_p75_deployment"
+   },
+   "planets": [
+    {
+     "name": "ヘイムダル",
+     "orbit": 1,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "ヒミンギョルグ",
+     "orbit": 2,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": false
+     }
+    },
+    {
+     "name": "ブルトガング",
+     "orbit": 3,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "ギャランホルン",
+     "orbit": 4,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": false
+     }
+    }
+   ],
+   "fortresses": []
+  },
+  {
+   "system": "アルメントフベール",
+   "faction": "empire",
+   "cx": 346.6,
+   "cy": 473.7,
+   "rect": [
+    336.61183,
+    462.69917,
+    356.61183,
+    484.69917
+   ],
+   "attestation": {
+    "name": {
+     "in_msgdat": true,
+     "in_manual_text": true
+    },
+    "coords_source": "manual_pdf_p101_text_annotation (verified: cx exact-match to PDF annot centers)",
+    "faction_source": "lore_inferred_UNVERIFIED"
+   },
+   "planets": [
+    {
+     "name": "ビッケンバッハ",
+     "orbit": 1,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "ゲルンスハイム",
+     "orbit": 2,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "アルスバッハ",
+     "orbit": 3,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "クレーベルク",
+     "orbit": 4,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    }
+   ],
+   "fortresses": []
+  },
+  {
+   "system": "トラーバッハ",
+   "faction": "empire",
+   "cx": 295.8,
+   "cy": 474.2,
+   "rect": [
+    285.79219,
+    463.2456,
+    305.79219,
+    485.2456
+   ],
+   "attestation": {
+    "name": {
+     "in_msgdat": true,
+     "in_manual_text": true
+    },
+    "coords_source": "manual_pdf_p101_text_annotation (verified: cx exact-match to PDF annot centers)",
+    "faction_source": "lore_inferred_UNVERIFIED"
+   },
+   "planets": [
+    {
+     "name": "ヴォルフェルスドルフ",
+     "orbit": 1,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "ファルクヴィーラー",
+     "orbit": 2,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "シュテルネンベルク",
+     "orbit": 3,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "トラーベン",
+     "orbit": 4,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    }
+   ],
+   "fortresses": []
+  },
+  {
+   "system": "ブラウンシュヴァイク",
+   "faction": "empire",
+   "cx": 424.8,
+   "cy": 494.5,
+   "rect": [
+    414.75386,
+    483.46418,
+    434.75386,
+    505.46418
+   ],
+   "attestation": {
+    "name": {
+     "in_msgdat": true,
+     "in_manual_text": true
+    },
+    "coords_source": "manual_pdf_p101_text_annotation (verified: cx exact-match to PDF annot centers)",
+    "faction_source": "lore_inferred_UNVERIFIED"
+   },
+   "planets": [
+    {
+     "name": "ヴェスターラント",
+     "orbit": 1,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "ヴェーデル",
+     "orbit": 2,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "ショーペンシュタット",
+     "orbit": 3,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "フォルケンローデ",
+     "orbit": 4,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    }
+   ],
+   "fortresses": []
+  },
+  {
+   "system": "ボルソルン",
+   "faction": "empire",
+   "cx": 167.4,
+   "cy": 501.6,
+   "rect": [
+    157.37696,
+    490.56797,
+    177.37696,
+    512.568
+   ],
+   "attestation": {
+    "name": {
+     "in_msgdat": true,
+     "in_manual_text": true
+    },
+    "coords_source": "manual_pdf_p101_text_annotation (verified: cx exact-match to PDF annot centers)",
+    "faction_source": "lore_inferred_UNVERIFIED"
+   },
+   "planets": [
+    {
+     "name": "ベストラ",
+     "orbit": 1,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "ボルソルン",
+     "orbit": 2,
+     "name_attestation": {
+      "in_msgdat": true,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "ヴァイセンバッハ",
+     "orbit": 3,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "ボル",
+     "orbit": 4,
+     "name_attestation": {
+      "in_msgdat": true,
+      "in_manual_text": true
+     }
+    }
+   ],
+   "fortresses": []
+  },
+  {
+   "system": "ドヴェルグ",
+   "faction": "empire",
+   "cx": 202.9,
+   "cy": 502.7,
+   "rect": [
+    192.89606,
+    491.6609,
+    212.89606,
+    513.6609
+   ],
+   "attestation": {
+    "name": {
+     "in_msgdat": true,
+     "in_manual_text": true
+    },
+    "coords_source": "manual_pdf_p101_text_annotation (verified: cx exact-match to PDF annot centers)",
+    "faction_source": "manual_p75_deployment"
+   },
+   "planets": [
+    {
+     "name": "グレイプニル",
+     "orbit": 1,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "イーヴァンルディ",
+     "orbit": 2,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": false
+     }
+    },
+    {
+     "name": "レージング",
+     "orbit": 3,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "カバール",
+     "orbit": 4,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": false
+     }
+    }
+   ],
+   "fortresses": []
+  },
+  {
+   "system": "アルタイル",
+   "faction": "empire",
+   "cx": 267.4,
+   "cy": 517.4,
+   "rect": [
+    257.3769,
+    506.41499,
+    277.3769,
+    528.415
+   ],
+   "attestation": {
+    "name": {
+     "in_msgdat": true,
+     "in_manual_text": true
+    },
+    "coords_source": "manual_pdf_p101_text_annotation (verified: cx exact-match to PDF annot centers)",
+    "faction_source": "lore_inferred_UNVERIFIED"
+   },
+   "planets": [
+    {
+     "name": "カタラウヌム",
+     "orbit": 1,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "アンティノウス",
+     "orbit": 2,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "テルモビュレー",
+     "orbit": 3,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": false
+     }
+    },
+    {
+     "name": "アルタイル",
+     "orbit": 4,
+     "name_attestation": {
+      "in_msgdat": true,
+      "in_manual_text": true
+     }
+    }
+   ],
+   "fortresses": []
+  },
+  {
+   "system": "フレイア",
+   "faction": "empire",
+   "cx": 352.1,
+   "cy": 518.0,
+   "rect": [
+    342.0763,
+    506.96144,
+    362.0763,
+    528.9614
+   ],
+   "attestation": {
+    "name": {
+     "in_msgdat": true,
+     "in_manual_text": true
+    },
+    "coords_source": "manual_pdf_p101_text_annotation (verified: cx exact-match to PDF annot centers)",
+    "faction_source": "manual_p75_deployment"
+   },
+   "planets": [
+    {
+     "name": "フォールクヴァング",
+     "orbit": 1,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "フェンサリル",
+     "orbit": 2,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "ブリシンガメン",
+     "orbit": 3,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    }
+   ],
+   "fortresses": [
+    {
+     "name": "レンテンベルグ",
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    }
+   ]
+  },
+  {
+   "system": "ヤヴァンハール",
+   "faction": "empire",
+   "cx": 225.3,
+   "cy": 524.0,
+   "rect": [
+    215.30042,
+    512.97238,
+    235.30042,
+    534.97238
+   ],
+   "attestation": {
+    "name": {
+     "in_msgdat": true,
+     "in_manual_text": true
+    },
+    "coords_source": "manual_pdf_p101_text_annotation (verified: cx exact-match to PDF annot centers)",
+    "faction_source": "lore_inferred_UNVERIFIED"
+   },
+   "planets": [
+    {
+     "name": "ハールバルド",
+     "orbit": 1,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "リューゲン",
+     "orbit": 2,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "ヴィスマール",
+     "orbit": 3,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "シュヴェリーン",
+     "orbit": 4,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    }
+   ],
+   "fortresses": []
+  },
+  {
+   "system": "キフォイザー",
+   "faction": "empire",
+   "cx": 433.0,
+   "cy": 537.1,
+   "rect": [
+    422.95057,
+    526.0871,
+    442.95057,
+    548.0871
+   ],
+   "attestation": {
+    "name": {
+     "in_msgdat": true,
+     "in_manual_text": true
+    },
+    "coords_source": "manual_pdf_p101_text_annotation (verified: cx exact-match to PDF annot centers)",
+    "faction_source": "manual_p75_deployment"
+   },
+   "planets": [
+    {
+     "name": "ロールバッハ",
+     "orbit": 1,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "ヴァーゲンバッハ",
+     "orbit": 2,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "ヴァルテンキルヒェン",
+     "orbit": 3,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": false
+     }
+    }
+   ],
+   "fortresses": [
+    {
+     "name": "ガルミッシュ",
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    }
+   ]
+  },
+  {
+   "system": "アルヴィース",
+   "faction": "empire",
+   "cx": 309.5,
+   "cy": 558.9,
+   "rect": [
+    299.45338,
+    547.945,
+    319.45338,
+    569.945
+   ],
+   "attestation": {
+    "name": {
+     "in_msgdat": true,
+     "in_manual_text": true
+    },
+    "coords_source": "manual_pdf_p101_text_annotation (verified: cx exact-match to PDF annot centers)",
+    "faction_source": "lore_inferred_UNVERIFIED"
+   },
+   "planets": [
+    {
+     "name": "ビルスキルニル",
+     "orbit": 1,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "スルード",
+     "orbit": 2,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "ウンターグリューン",
+     "orbit": 3,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "ヴァンガル",
+     "orbit": 4,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    }
+   ],
+   "fortresses": []
+  },
+  {
+   "system": "太陽系",
+   "faction": "empire",
+   "cx": 136.8,
+   "cy": 560.0,
+   "rect": [
+    126.77588,
+    549.0379,
+    146.77588,
+    571.0379
+   ],
+   "attestation": {
+    "name": {
+     "in_msgdat": true,
+     "in_manual_text": false
+    },
+    "coords_source": "manual_pdf_p101_text_annotation (verified: cx exact-match to PDF annot centers)",
+    "faction_source": "lore_inferred_UNVERIFIED"
+   },
+   "planets": [
+    {
+     "name": "○水星",
+     "orbit": 1,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": false
+     }
+    },
+    {
+     "name": "○金星",
+     "orbit": 2,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": false
+     }
+    },
+    {
+     "name": "○地球",
+     "orbit": 3,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": false
+     }
+    },
+    {
+     "name": "○火星",
+     "orbit": 4,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": false
+     }
+    }
+   ],
+   "fortresses": []
+  },
+  {
+   "system": "バルドル",
+   "faction": "empire",
+   "cx": 446.6,
+   "cy": 567.1,
+   "rect": [
+    436.61177,
+    556.1417,
+    456.61177,
+    578.1417
+   ],
+   "attestation": {
+    "name": {
+     "in_msgdat": true,
+     "in_manual_text": true
+    },
+    "coords_source": "manual_pdf_p101_text_annotation (verified: cx exact-match to PDF annot centers)",
+    "faction_source": "manual_p75_deployment"
+   },
+   "planets": [
+    {
+     "name": "ブレイザブリク",
+     "orbit": 1,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "フリングオルニ",
+     "orbit": 2,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": false
+     }
+    },
+    {
+     "name": "グリトニル",
+     "orbit": 3,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "ホズ",
+     "orbit": 4,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    }
+   ],
+   "fortresses": []
+  },
+  {
+   "system": "リンダーホーフ",
+   "faction": "empire",
+   "cx": 195.8,
+   "cy": 573.7,
+   "rect": [
+    185.79224,
+    562.6991,
+    205.79224,
+    584.6991
+   ],
+   "attestation": {
+    "name": {
+     "in_msgdat": true,
+     "in_manual_text": true
+    },
+    "coords_source": "manual_pdf_p101_text_annotation (verified: cx exact-match to PDF annot centers)",
+    "faction_source": "manual_p75_deployment"
+   },
+   "planets": [
+    {
+     "name": "ノイシュヴァンシュタイン",
+     "orbit": 1,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "キームゼー",
+     "orbit": 2,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "ホーエンシュヴァンガウ",
+     "orbit": 3,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "オーバーアマガウ",
+     "orbit": 4,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    }
+   ],
+   "fortresses": []
+  },
+  {
+   "system": "シリウス",
+   "faction": "empire",
+   "cx": 123.7,
+   "cy": 587.4,
+   "rect": [
+    113.661128,
+    576.3603,
+    133.66114,
+    598.3603
+   ],
+   "attestation": {
+    "name": {
+     "in_msgdat": true,
+     "in_manual_text": false
+    },
+    "coords_source": "manual_pdf_p101_text_annotation (verified: cx exact-match to PDF annot centers)",
+    "faction_source": "lore_inferred_UNVERIFIED"
+   },
+   "planets": [
+    {
+     "name": "ポ・トロ",
+     "orbit": 1,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": false
+     }
+    },
+    {
+     "name": "エンメ・ヤ",
+     "orbit": 2,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": false
+     }
+    },
+    {
+     "name": "ノンモ",
+     "orbit": 3,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": false
+     }
+    },
+    {
+     "name": "ロンドリーナ",
+     "orbit": 4,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": false
+     }
+    }
+   ],
+   "fortresses": []
+  },
+  {
+   "system": "ヴェガ",
+   "faction": "empire",
+   "cx": 145.0,
+   "cy": 589.0,
+   "rect": [
+    134.9726,
+    577.99966,
+    154.9726,
+    599.99966
+   ],
+   "attestation": {
+    "name": {
+     "in_msgdat": true,
+     "in_manual_text": false
+    },
+    "coords_source": "manual_pdf_p101_text_annotation (verified: cx exact-match to PDF annot centers)",
+    "faction_source": "lore_inferred_UNVERIFIED"
+   },
+   "planets": [
+    {
+     "name": "オルフェウス",
+     "orbit": 1,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": false
+     }
+    },
+    {
+     "name": "エウリュディケ",
+     "orbit": 2,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": false
+     }
+    },
+    {
+     "name": "アクリシオス",
+     "orbit": 3,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": false
+     }
+    },
+    {
+     "name": "ベルセボネー",
+     "orbit": 4,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": false
+     }
+    }
+   ],
+   "fortresses": []
+  },
+  {
+   "system": "アルテナ",
+   "faction": "empire",
+   "cx": 347.2,
+   "cy": 595.0,
+   "rect": [
+    337.15827,
+    584.01058,
+    357.15827,
+    606.01058
+   ],
+   "attestation": {
+    "name": {
+     "in_msgdat": true,
+     "in_manual_text": true
+    },
+    "coords_source": "manual_pdf_p101_text_annotation (verified: cx exact-match to PDF annot centers)",
+    "faction_source": "manual_p75_deployment"
+   },
+   "planets": [
+    {
+     "name": "ヴェセルデ",
+     "orbit": 1,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "ナッハロート",
+     "orbit": 2,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "ノイエンラーデ",
+     "orbit": 3,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "ヘートフェルト",
+     "orbit": 4,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    }
+   ],
+   "fortresses": []
+  },
+  {
+   "system": "リッテンハイム",
+   "faction": "empire",
+   "cx": 424.8,
+   "cy": 602.7,
+   "rect": [
+    414.75386,
+    591.6608,
+    434.75386,
+    613.6608
+   ],
+   "attestation": {
+    "name": {
+     "in_msgdat": true,
+     "in_manual_text": true
+    },
+    "coords_source": "manual_pdf_p101_text_annotation (verified: cx exact-match to PDF annot centers)",
+    "faction_source": "lore_inferred_UNVERIFIED"
+   },
+   "planets": [
+    {
+     "name": "インゲンハイム",
+     "orbit": 1,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "デュンツェンハイム",
+     "orbit": 2,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "アルテンハイム",
+     "orbit": 3,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "ローゲンドルフ",
+     "orbit": 4,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    }
+   ],
+   "fortresses": []
+  },
+  {
+   "system": "ヴェルラ",
+   "faction": "empire",
+   "cx": 273.9,
+   "cy": 610.3,
+   "rect": [
+    263.93428,
+    599.3111,
+    283.93428,
+    621.3111
+   ],
+   "attestation": {
+    "name": {
+     "in_msgdat": true,
+     "in_manual_text": true
+    },
+    "coords_source": "manual_pdf_p101_text_annotation (verified: cx exact-match to PDF annot centers)",
+    "faction_source": "manual_p75_deployment"
+   },
+   "planets": [
+    {
+     "name": "マルクト",
+     "orbit": 1,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "ヤコビ",
+     "orbit": 2,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "シュテファニ",
+     "orbit": 3,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    }
+   ],
+   "fortresses": []
+  },
+  {
+   "system": "ヴィレンシュタイン",
+   "faction": "empire",
+   "cx": 182.7,
+   "cy": 624.5,
+   "rect": [
+    172.67749,
+    613.51876,
+    192.67749,
+    635.51876
+   ],
+   "attestation": {
+    "name": {
+     "in_msgdat": true,
+     "in_manual_text": true
+    },
+    "coords_source": "manual_pdf_p101_text_annotation (verified: cx exact-match to PDF annot centers)",
+    "faction_source": "manual_p75_deployment"
+   },
+   "planets": [
+    {
+     "name": "ウイツィッヒハウゼン",
+     "orbit": 1,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "ヴァイセンホルン",
+     "orbit": 2,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "グラフェルツホーフェン",
+     "orbit": 3,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "オーベンハウゼン",
+     "orbit": 4,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    }
+   ],
+   "fortresses": []
+  },
+  {
+   "system": "ハインスベルク",
+   "faction": "empire",
+   "cx": 224.8,
+   "cy": 645.8,
+   "rect": [
+    214.75397,
+    634.8302,
+    234.75397,
+    656.8302
+   ],
+   "attestation": {
+    "name": {
+     "in_msgdat": true,
+     "in_manual_text": true
+    },
+    "coords_source": "manual_pdf_p101_text_annotation (verified: cx exact-match to PDF annot centers)",
+    "faction_source": "lore_inferred_UNVERIFIED"
+   },
+   "planets": [
+    {
+     "name": "ランデラート",
+     "orbit": 1,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "ダッセル",
+     "orbit": 2,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "ミュレンアルク",
+     "orbit": 3,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    }
+   ],
+   "fortresses": []
+  },
+  {
+   "system": "ヴァルデマール",
+   "faction": "empire",
+   "cx": 381.0,
+   "cy": 646.4,
+   "rect": [
+    371.03804,
+    635.37667,
+    391.03804,
+    657.37667
+   ],
+   "attestation": {
+    "name": {
+     "in_msgdat": true,
+     "in_manual_text": true
+    },
+    "coords_source": "manual_pdf_p101_text_annotation (verified: cx exact-match to PDF annot centers)",
+    "faction_source": "lore_inferred_UNVERIFIED"
+   },
+   "planets": [
+    {
+     "name": "ウーファー",
+     "orbit": 1,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "パウル",
+     "orbit": 2,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "リンケ",
+     "orbit": 3,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    }
+   ],
+   "fortresses": []
+  },
+  {
+   "system": "ヴァルハラ",
+   "faction": "empire",
+   "cx": 288.1,
+   "cy": 646.9,
+   "rect": [
+    278.1419,
+    635.9231,
+    298.1419,
+    657.9231
+   ],
+   "attestation": {
+    "name": {
+     "in_msgdat": true,
+     "in_manual_text": true
+    },
+    "coords_source": "manual_pdf_p101_text_annotation (verified: cx exact-match to PDF annot centers)",
+    "faction_source": "manual_p75_deployment"
+   },
+   "planets": [
+    {
+     "name": "ゾースト",
+     "orbit": 1,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "オーディン",
+     "orbit": 2,
+     "name_attestation": {
+      "in_msgdat": true,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "トゥール",
+     "orbit": 3,
+     "name_attestation": {
+      "in_msgdat": true,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "ヴァルグリンド",
+     "orbit": 4,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    }
+   ],
+   "fortresses": []
+  },
+  {
+   "system": "シャンタウ",
+   "faction": "empire",
+   "cx": 340.1,
+   "cy": 646.9,
+   "rect": [
+    330.05445,
+    635.9231,
+    350.05445,
+    657.9231
+   ],
+   "attestation": {
+    "name": {
+     "in_msgdat": true,
+     "in_manual_text": true
+    },
+    "coords_source": "manual_pdf_p101_text_annotation (verified: cx exact-match to PDF annot centers)",
+    "faction_source": "manual_p75_deployment"
+   },
+   "planets": [
+    {
+     "name": "クネスドルフ",
+     "orbit": 1,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "ハーケンドルフ",
+     "orbit": 2,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "ノイエンキルヒェン",
+     "orbit": 3,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "ゼードルフ",
+     "orbit": 4,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    }
+   ],
+   "fortresses": []
+  },
+  {
+   "system": "ニヴルヘイム",
+   "faction": "empire",
+   "cx": 246.6,
+   "cy": 652.4,
+   "rect": [
+    236.61188,
+    641.3876,
+    256.61189,
+    663.3876
+   ],
+   "attestation": {
+    "name": {
+     "in_msgdat": true,
+     "in_manual_text": true
+    },
+    "coords_source": "manual_pdf_p101_text_annotation (verified: cx exact-match to PDF annot centers)",
+    "faction_source": "manual_p75_deployment"
+   },
+   "planets": [
+    {
+     "name": "エリューズニル",
+     "orbit": 1,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "ギョッル",
+     "orbit": 2,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "フヴェルゲルミル",
+     "orbit": 3,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    }
+   ],
+   "fortresses": []
+  },
+  {
+   "system": "ランメルスベルク",
+   "faction": "empire",
+   "cx": 418.7,
+   "cy": 653.5,
+   "rect": [
+    408.74293,
+    642.48049,
+    428.74293,
+    664.48049
+   ],
+   "attestation": {
+    "name": {
+     "in_msgdat": true,
+     "in_manual_text": true
+    },
+    "coords_source": "manual_pdf_p101_text_annotation (verified: cx exact-match to PDF annot centers)",
+    "faction_source": "lore_inferred_UNVERIFIED"
+   },
+   "planets": [
+    {
+     "name": "ハルスブリュッケ",
+     "orbit": 1,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "ハルテンシュタイン",
+     "orbit": 2,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "ヒンメルスフュルスト",
+     "orbit": 3,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "シュレマ",
+     "orbit": 4,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    }
+   ],
+   "fortresses": []
+  },
+  {
+   "system": "カストロプ",
+   "faction": "empire",
+   "cx": 173.4,
+   "cy": 674.8,
+   "rect": [
+    163.38788,
+    663.79196,
+    183.38788,
+    685.79196
+   ],
+   "attestation": {
+    "name": {
+     "in_msgdat": true,
+     "in_manual_text": true
+    },
+    "coords_source": "manual_pdf_p101_text_annotation (verified: cx exact-match to PDF annot centers)",
+    "faction_source": "lore_inferred_UNVERIFIED"
+   },
+   "planets": [
+    {
+     "name": "カストロプ",
+     "orbit": 1,
+     "name_attestation": {
+      "in_msgdat": true,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "ニーダー・ヴィンデンボルン",
+     "orbit": 2,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": false
+     }
+    },
+    {
+     "name": "ヴォルディングボルグ",
+     "orbit": 3,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "マリーンドルフ",
+     "orbit": 4,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    }
+   ],
+   "fortresses": []
+  },
+  {
+   "system": "アスガルド",
+   "faction": "empire",
+   "cx": 324.2,
+   "cy": 675.9,
+   "rect": [
+    314.20747,
+    664.8848,
+    334.20747,
+    686.8848
+   ],
+   "attestation": {
+    "name": {
+     "in_msgdat": true,
+     "in_manual_text": true
+    },
+    "coords_source": "manual_pdf_p101_text_annotation (verified: cx exact-match to PDF annot centers)",
+    "faction_source": "manual_p75_deployment"
+   },
+   "planets": [
+    {
+     "name": "ミーミル",
+     "orbit": 1,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "ギンヌンガガガブ",
+     "orbit": 2,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": false
+     }
+    },
+    {
+     "name": "トイトブルク",
+     "orbit": 3,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "イーダリル",
+     "orbit": 4,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    }
+   ],
+   "fortresses": []
+  },
+  {
+   "system": "ヴァナヘイム",
+   "faction": "empire",
+   "cx": 224.8,
+   "cy": 681.9,
+   "rect": [
+    214.75397,
+    670.89578,
+    234.75397,
+    692.89578
+   ],
+   "attestation": {
+    "name": {
+     "in_msgdat": true,
+     "in_manual_text": true
+    },
+    "coords_source": "manual_pdf_p101_text_annotation (verified: cx exact-match to PDF annot centers)",
+    "faction_source": "manual_p75_deployment"
+   },
+   "planets": [
+    {
+     "name": "エインヘリヤル",
+     "orbit": 1,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "ノーアトゥーン",
+     "orbit": 2,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "ニョルド",
+     "orbit": 3,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "フレイ",
+     "orbit": 4,
+     "name_attestation": {
+      "in_msgdat": true,
+      "in_manual_text": true
+     }
+    }
+   ],
+   "fortresses": []
+  },
+  {
+   "system": "ヴィッテルスバッハ",
+   "faction": "empire",
+   "cx": 381.6,
+   "cy": 683.5,
+   "rect": [
+    371.58448,
+    672.5351,
+    391.58448,
+    694.5351
+   ],
+   "attestation": {
+    "name": {
+     "in_msgdat": true,
+     "in_manual_text": true
+    },
+    "coords_source": "manual_pdf_p101_text_annotation (verified: cx exact-match to PDF annot centers)",
+    "faction_source": "manual_p75_deployment"
+   },
+   "planets": [
+    {
+     "name": "レジデンツ",
+     "orbit": 1,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "ニュンフェンブルク",
+     "orbit": 2,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "ヴィクトアーリエン",
+     "orbit": 3,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    }
+   ],
+   "fortresses": []
+  },
+  {
+   "system": "ルイトポルディング",
+   "faction": "empire",
+   "cx": 283.2,
+   "cy": 696.6,
+   "rect": [
+    273.22389,
+    685.64987,
+    293.22389,
+    707.64987
+   ],
+   "attestation": {
+    "name": {
+     "in_msgdat": true,
+     "in_manual_text": true
+    },
+    "coords_source": "manual_pdf_p101_text_annotation (verified: cx exact-match to PDF annot centers)",
+    "faction_source": "lore_inferred_UNVERIFIED"
+   },
+   "planets": [
+    {
+     "name": "ルイトポルト",
+     "orbit": 1,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "ベルトホルト",
+     "orbit": 2,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "アルヌルフ",
+     "orbit": 3,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    }
+   ],
+   "fortresses": []
+  },
+  {
+   "system": "ヴィンスティンゲン",
+   "faction": "empire",
+   "cx": 362.5,
+   "cy": 712.0,
+   "rect": [
+    352.4588,
+    700.9504,
+    372.4588,
+    722.9504
+   ],
+   "attestation": {
+    "name": {
+     "in_msgdat": true,
+     "in_manual_text": true
+    },
+    "coords_source": "manual_pdf_p101_text_annotation (verified: cx exact-match to PDF annot centers)",
+    "faction_source": "lore_inferred_UNVERIFIED"
+   },
+   "planets": [
+    {
+     "name": "フォルマール",
+     "orbit": 1,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "ヴィート",
+     "orbit": 2,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "イーゼンブルク",
+     "orbit": 3,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    }
+   ],
+   "fortresses": []
+  },
+  {
+   "system": "ウォームスガウ",
+   "faction": "empire",
+   "cx": 325.8,
+   "cy": 719.1,
+   "rect": [
+    315.8468,
+    708.0542,
+    335.8468,
+    730.0542
+   ],
+   "attestation": {
+    "name": {
+     "in_msgdat": true,
+     "in_manual_text": true
+    },
+    "coords_source": "manual_pdf_p101_text_annotation (verified: cx exact-match to PDF annot centers)",
+    "faction_source": "manual_p75_deployment"
+   },
+   "planets": [
+    {
+     "name": "ヴェルナー",
+     "orbit": 1,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "コンラート",
+     "orbit": 2,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "ブルーノ",
+     "orbit": 3,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    },
+    {
+     "name": "リウドルフ",
+     "orbit": 4,
+     "name_attestation": {
+      "in_msgdat": false,
+      "in_manual_text": true
+     }
+    }
+   ],
+   "fortresses": []
+  }
+ ]
+}

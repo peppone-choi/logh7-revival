@@ -54,6 +54,7 @@ __pycache__/
 /server/test_output.txt
 /tools/live/.omc/
 /tools/live/_ev/
+/_workspace/
 /NUL
 /_ok.txt
 /*.stackdump

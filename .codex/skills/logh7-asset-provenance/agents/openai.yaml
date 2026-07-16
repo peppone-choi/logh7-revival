@@ -1,0 +1,4 @@
+interface:
+  display_name: "LOGH VII Asset Provenance"
+  short_description: "원본과 리마스터 자산의 출처·등급·롤백을 검증"
+  default_prompt: "Use $logh7-asset-provenance to classify and package LOGH VII assets with provenance and rollback."

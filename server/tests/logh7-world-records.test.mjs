@@ -431,6 +431,21 @@ test('0x2009/0x200a session login codec', () => {
   assert.equal(ok.readUInt16BE(0), CODE_LOBBY_SESSION_LOGIN_OK);
   assert.equal(ok.readUInt16BE(6), 47900);
   assert.equal(ok.readUInt32BE(10), 9);
+  for (const invalidIp of [
+    '127..0.1',
+    '1e2.0.0.1',
+    ' 127.0.0.1',
+    '127.0.0.1 ',
+    '+127.0.0.1',
+    '0x7f.0.0.1',
+    '127.00.0.1',
+    '127.01.0.1',
+  ]) {
+    assert.throws(
+      () => buildLobbySessionLoginOkRaw({ ip: invalidIp, port: 47900 }),
+      /invalid canonical IPv4 address/,
+    );
+  }
 
   // create 경로 라이브 실측: innerLen=4 → session only, characterId=0
   const short = Buffer.alloc(4);

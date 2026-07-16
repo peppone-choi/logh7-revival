@@ -1,0 +1,1363 @@
+{
+  "_meta": {
+    "domain": "organizations / posts / ranks / abilities / growth-rules / nations / social-classes",
+    "ground_truth_sources": [
+      "gin7manual.pdf p13-14 (ability/parameter definitions, 爵位, 出自)",
+      "gin7manual.pdf p34-35 (功績と階級: rank ladder laws, person limits, 人事権)",
+      "gin7manual.pdf p55-57 別表 帝国軍組織構成表 (empire org/post table)",
+      "gin7manual.pdf p61-63 別表 同盟軍組織構成表 (alliance org/post table)",
+      "binary data/MsgDat/constmsg.dat records 479-497 (rank ladder), 759-766 (abilities)"
+    ],
+    "note": "Page numbers: manual.layout.txt chunk index N = printed-footer page N-1. Vision pages cited as PDF page (1-based)."
+  },
+  "abilities": [
+    {
+      "order": 1,
+      "name_ja": "統率",
+      "source": "constmsg.dat rec759 + manual p13",
+      "effect_ja": "人材活用能力。要職就任時は徴税額・政府支持率に影響。艦隊司令官時は艦隊最大士気・降伏勧告成功率に影響"
+    },
+    {
+      "order": 2,
+      "name_ja": "政治",
+      "source": "constmsg.dat rec760 + manual p14",
+      "effect_ja": "政治力。高いほど市民の支持を集めやすい"
+    },
+    {
+      "order": 3,
+      "name_ja": "運営",
+      "source": "constmsg.dat rec761 + manual p14",
+      "effect_ja": "事務管理能力。惑星の統治などに影響"
+    },
+    {
+      "order": 4,
+      "name_ja": "情報",
+      "source": "constmsg.dat rec762 + manual p14",
+      "effect_ja": "情報収集・分析能力。スパイ活動や戦術における索敵能力に影響"
+    },
+    {
+      "order": 5,
+      "name_ja": "指揮",
+      "source": "constmsg.dat rec763 + manual p14",
+      "effect_ja": "部隊指揮能力。高いほど配下の艦船を迅速に行動させられる"
+    },
+    {
+      "order": 6,
+      "name_ja": "機動",
+      "source": "constmsg.dat rec764 + manual p14",
+      "effect_ja": "艦隊移動に関する指揮能力。高いほど機敏な操艦が可能"
+    },
+    {
+      "order": 7,
+      "name_ja": "攻撃",
+      "source": "constmsg.dat rec765 + manual p14",
+      "effect_ja": "攻撃に関する指揮能力。艦隊司令官/幕僚時は艦隊の攻撃能力、惑星防衛司令官時は惑星の対艦防衛能力に影響"
+    },
+    {
+      "order": 8,
+      "name_ja": "防御",
+      "source": "constmsg.dat rec766 + manual p14",
+      "effect_ja": "防御に関する指揮能力。艦隊司令官・幕僚時は艦隊の防御能力、防衛司令官時は敵艦隊の惑星占領に対する惑星防御能力に影響"
+    }
+  ],
+  "abilities_note": "Manual CP-growth list (p14) prints PCP:[統率][政治][運用][情報] — uses 運用 there, but the canonical ability name is 運営 (binary rec761 AND manual parameter table p14). The 運用/運営 split is the MANUAL'S OWN inconsistency, faithfully reproduced. There are exactly 8 abilities, NOT counting 統率 twice.",
+  "ranks_military": [
+    {
+      "ordinal": 19,
+      "name_ja": "元帥",
+      "source": "constmsg.dat rec479"
+    },
+    {
+      "ordinal": 18,
+      "name_ja": "上級大将",
+      "source": "constmsg.dat rec480 (帝国軍 only — manual p34 person-limit table omits it for 同盟軍)"
+    },
+    {
+      "ordinal": 17,
+      "name_ja": "大将",
+      "source": "constmsg.dat rec481"
+    },
+    {
+      "ordinal": 16,
+      "name_ja": "中将",
+      "source": "constmsg.dat rec482"
+    },
+    {
+      "ordinal": 15,
+      "name_ja": "少将",
+      "source": "constmsg.dat rec483"
+    },
+    {
+      "ordinal": 14,
+      "name_ja": "准将",
+      "source": "constmsg.dat rec484"
+    },
+    {
+      "ordinal": 13,
+      "name_ja": "大佐",
+      "source": "constmsg.dat rec485"
+    },
+    {
+      "ordinal": 12,
+      "name_ja": "中佐",
+      "source": "constmsg.dat rec486"
+    },
+    {
+      "ordinal": 11,
+      "name_ja": "少佐",
+      "source": "constmsg.dat rec487"
+    },
+    {
+      "ordinal": 10,
+      "name_ja": "大尉",
+      "source": "constmsg.dat rec488"
+    },
+    {
+      "ordinal": 9,
+      "name_ja": "中尉",
+      "source": "constmsg.dat rec489"
+    },
+    {
+      "ordinal": 8,
+      "name_ja": "少尉",
+      "source": "constmsg.dat rec490"
+    },
+    {
+      "ordinal": 7,
+      "name_ja": "准尉",
+      "source": "constmsg.dat rec491"
+    },
+    {
+      "ordinal": 6,
+      "name_ja": "曹長",
+      "source": "constmsg.dat rec492"
+    },
+    {
+      "ordinal": 5,
+      "name_ja": "軍曹",
+      "source": "constmsg.dat rec493"
+    },
+    {
+      "ordinal": 4,
+      "name_ja": "伍長",
+      "source": "constmsg.dat rec494"
+    },
+    {
+      "ordinal": 3,
+      "name_ja": "上等兵",
+      "source": "constmsg.dat rec495"
+    },
+    {
+      "ordinal": 2,
+      "name_ja": "一等兵",
+      "source": "constmsg.dat rec496"
+    },
+    {
+      "ordinal": 1,
+      "name_ja": "二等兵",
+      "source": "constmsg.dat rec497"
+    }
+  ],
+  "ranks_note": "19 military ranks. Manual p13 confirms bottom=二等兵, top=元帥. content.db invented a 20th rank '兵長' between 上等兵 and 伍長 — NO SUCH RANK in binary constmsg.dat. The politician ladder shares the same names but has no separate enumeration in manual/binary; manual p34 only says 軍人用/政治家用 ladders are separate.",
+  "rank_person_limits": {
+    "source": "manual p34 ○階級による人数制限",
+    "empire": {
+      "元帥": 5,
+      "上級大将": 5,
+      "大将": 10,
+      "中将": 20,
+      "少将": 40,
+      "准将": 80,
+      "大佐以下": "制限なし"
+    },
+    "alliance": {
+      "元帥": 5,
+      "上級大将": "N/A (rank does not exist for 同盟軍)",
+      "大将": 10,
+      "中将": 20,
+      "少将": 40,
+      "准将": 80,
+      "大佐以下": "制限なし"
+    }
+  },
+  "rank_ladder_laws": {
+    "source": "manual p34 ○階級ラダー内の順列",
+    "laws": [
+      "第一法則：功績ポイントの多い順",
+      "第二法則：爵位の高い順（銀河帝国軍のみ）",
+      "第三法則：叙勲している最高の勲章の順位（叙勲は未実装）",
+      "第四法則：影響力の高い順",
+      "第五法則：全パラメータ値の合計"
+    ],
+    "auto_promote": "大佐以下は現実時間で毎月1日に各階級ラダー1位が自動昇進"
+  },
+  "personnel_authority": {
+    "source": "manual p35 ○階級に関する人事権",
+    "empire": {
+      "元帥": "皇帝",
+      "上級大将～准将": "軍務尚書",
+      "大佐以下": "軍務省人事局長"
+    },
+    "alliance": {
+      "元帥": "国防委員長",
+      "上級大将～准将": "(N/A; uses 大将～准将)",
+      "准将以上": "国防委員長/委員会",
+      "大佐以下": "国防委員会人事局長"
+    }
+  },
+  "growth_rules": {
+    "source": "manual p14 キャラクターの成長 (＊暫定的な仕様)",
+    "age_effect": [
+      "若年のキャラクターは毎月、能力値にプラスの変化が起こる可能性（一定値まで上昇）",
+      "壮年のキャラクターは毎月、能力値にマイナスの変化が起こる可能性（一定値まで減少）"
+    ],
+    "experience": [
+      "戦略コマンドで使用したCPが累積し、一定使用量ごとに各能力経験値のいずれかが1上昇",
+      "経験値が100になるごとに対応能力値が1上昇し、経験値は0に戻る",
+      "PCP→[統率][政治][運用][情報]、MCP→[指揮][機動][攻撃][防御]  (NB: manual prints 運用 here; ability name is 運営)",
+      "CPの代用によって消費されたCPは使用量として累積されない"
+    ]
+  },
+  "nations": [
+    {
+      "key": "empire",
+      "name_ja": "銀河帝国",
+      "source": "manual/binary 銀河帝国"
+    },
+    {
+      "key": "alliance",
+      "name_ja": "自由惑星同盟",
+      "source": "manual/binary 自由惑星同盟"
+    },
+    {
+      "key": "neutral",
+      "name_ja": "フェザーン自治領",
+      "source": "manual フェザーン自治領"
+    }
+  ],
+  "social_classes": {
+    "source": "manual p13 出自",
+    "empire": [
+      "貴族",
+      "帝国騎士",
+      "平民",
+      "亡命者"
+    ],
+    "alliance": [
+      "市民",
+      "亡命者"
+    ]
+  },
+  "nobility_titles": {
+    "source": "manual p13 爵位 (帝国軍のみ)",
+    "titles_listed": [
+      "公爵",
+      "侯爵",
+      "伯爵",
+      "子爵",
+      "男爵",
+      "帝国騎士"
+    ],
+    "note": "Manual literally says '5種類' but lists 6 names (公爵/侯爵/伯爵/子爵/男爵/帝国騎士). 帝国騎士 is also an 出自 class; the '5種類' count likely refers to the 5 peerage ranks 公侯伯子男 with 帝国騎士 as a knight tier. Manual internal ambiguity."
+  },
+  "posts_empire": [
+    {
+      "post_ja": "皇帝",
+      "org_ja": "皇宮",
+      "capacity": 1,
+      "min_rank_ja": "",
+      "max_rank_ja": "",
+      "holder_kind": "emperor",
+      "_verified_against": "manual p55-57 別表帝国軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "帝国軍最高司令官",
+      "org_ja": "皇宮",
+      "capacity": 1,
+      "min_rank_ja": "元帥",
+      "max_rank_ja": "元帥",
+      "holder_kind": "military",
+      "_verified_against": "manual p55-57 別表帝国軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "幕僚総監",
+      "org_ja": "皇宮",
+      "capacity": 1,
+      "min_rank_ja": "元帥",
+      "max_rank_ja": "元帥",
+      "holder_kind": "military",
+      "_verified_against": "manual p55-57 別表帝国軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "大本営参謀",
+      "org_ja": "皇宮",
+      "capacity": 10,
+      "min_rank_ja": "准将",
+      "max_rank_ja": "元帥",
+      "holder_kind": "military",
+      "_verified_against": "manual p55-57 別表帝国軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "帝国宰相",
+      "org_ja": "皇宮",
+      "capacity": 1,
+      "min_rank_ja": "元帥",
+      "max_rank_ja": "元帥",
+      "holder_kind": "politician",
+      "_verified_against": "manual p55-57 別表帝国軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "国務尚書",
+      "org_ja": "内閣",
+      "capacity": 1,
+      "min_rank_ja": "",
+      "max_rank_ja": "",
+      "holder_kind": "politician",
+      "_correction": "manual p56: 国務尚書 is in merged 政治家 cell — NO rank requirement. JSON had 元帥/元帥 (wrong).",
+      "_verified_against": "manual p55-57 別表帝国軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "内務尚書",
+      "org_ja": "内閣",
+      "capacity": 1,
+      "min_rank_ja": "",
+      "max_rank_ja": "",
+      "holder_kind": "politician",
+      "_verified_against": "manual p55-57 別表帝国軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "財務尚書",
+      "org_ja": "内閣",
+      "capacity": 1,
+      "min_rank_ja": "",
+      "max_rank_ja": "",
+      "holder_kind": "politician",
+      "_verified_against": "manual p55-57 別表帝国軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "宮内尚書",
+      "org_ja": "内閣",
+      "capacity": 1,
+      "min_rank_ja": "",
+      "max_rank_ja": "",
+      "holder_kind": "politician",
+      "_verified_against": "manual p55-57 別表帝国軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "司法尚書",
+      "org_ja": "内閣",
+      "capacity": 1,
+      "min_rank_ja": "",
+      "max_rank_ja": "",
+      "holder_kind": "politician",
+      "_verified_against": "manual p55-57 別表帝国軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "典礼尚書",
+      "org_ja": "内閣",
+      "capacity": 1,
+      "min_rank_ja": "",
+      "max_rank_ja": "",
+      "holder_kind": "politician",
+      "_verified_against": "manual p55-57 別表帝国軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "科学尚書",
+      "org_ja": "内閣",
+      "capacity": 1,
+      "min_rank_ja": "",
+      "max_rank_ja": "",
+      "holder_kind": "politician",
+      "_verified_against": "manual p55-57 別表帝国軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "内閣書記官長",
+      "org_ja": "内閣",
+      "capacity": 1,
+      "min_rank_ja": "",
+      "max_rank_ja": "",
+      "holder_kind": "politician",
+      "_verified_against": "manual p55-57 別表帝国軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "フェザーン駐在高等弁務官",
+      "org_ja": "内閣",
+      "capacity": 1,
+      "min_rank_ja": "",
+      "max_rank_ja": "",
+      "holder_kind": "politician",
+      "_verified_against": "manual p55-57 別表帝国軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "フェザーン駐在補佐官",
+      "org_ja": "駐フェザーン弁務官事務所",
+      "capacity": 1,
+      "min_rank_ja": "",
+      "max_rank_ja": "",
+      "holder_kind": "politician",
+      "_verified_against": "manual p55-57 別表帝国軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "フェザーン駐在武官",
+      "org_ja": "駐フェザーン弁務官事務所",
+      "capacity": 1,
+      "min_rank_ja": "少尉",
+      "max_rank_ja": "元帥",
+      "holder_kind": "military",
+      "_verified_against": "manual p55-57 別表帝国軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "軍務尚書",
+      "org_ja": "軍務省",
+      "capacity": 1,
+      "min_rank_ja": "元帥",
+      "max_rank_ja": "元帥",
+      "holder_kind": "military",
+      "_verified_against": "manual p55-57 別表帝国軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "軍務省次官",
+      "org_ja": "軍務省",
+      "capacity": 1,
+      "min_rank_ja": "上級大将",
+      "max_rank_ja": "元帥",
+      "holder_kind": "military",
+      "_verified_against": "manual p55-57 別表帝国軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "軍務省人事局長",
+      "org_ja": "軍務省",
+      "capacity": 1,
+      "min_rank_ja": "中将",
+      "max_rank_ja": "元帥",
+      "holder_kind": "military",
+      "_verified_against": "manual p55-57 別表帝国軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "軍務省調査局長",
+      "org_ja": "軍務省",
+      "capacity": 1,
+      "min_rank_ja": "中将",
+      "max_rank_ja": "元帥",
+      "holder_kind": "military",
+      "_verified_against": "manual p55-57 別表帝国軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "軍務省参事官",
+      "org_ja": "軍務省",
+      "capacity": 10,
+      "min_rank_ja": "准将",
+      "max_rank_ja": "元帥",
+      "holder_kind": "military",
+      "_verified_against": "manual p55-57 別表帝国軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "統帥本部総長",
+      "org_ja": "統帥本部",
+      "capacity": 1,
+      "min_rank_ja": "元帥",
+      "max_rank_ja": "元帥",
+      "holder_kind": "military",
+      "_verified_against": "manual p55-57 別表帝国軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "統帥本部次長",
+      "org_ja": "統帥本部",
+      "capacity": 1,
+      "min_rank_ja": "上級大将",
+      "max_rank_ja": "元帥",
+      "holder_kind": "military",
+      "_verified_against": "manual p55-57 別表帝国軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "統帥本部作戦一課課長",
+      "org_ja": "統帥本部",
+      "capacity": 1,
+      "min_rank_ja": "大将",
+      "max_rank_ja": "元帥",
+      "holder_kind": "military",
+      "_verified_against": "manual p55-57 別表帝国軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "統帥本部作戦二課課長",
+      "org_ja": "統帥本部",
+      "capacity": 1,
+      "min_rank_ja": "中将",
+      "max_rank_ja": "元帥",
+      "holder_kind": "military",
+      "_verified_against": "manual p55-57 別表帝国軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "統帥本部作戦三課課長",
+      "org_ja": "統帥本部",
+      "capacity": 1,
+      "min_rank_ja": "少将",
+      "max_rank_ja": "元帥",
+      "holder_kind": "military",
+      "_verified_against": "manual p55-57 別表帝国軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "統帥本部監察官",
+      "org_ja": "統帥本部",
+      "capacity": 10,
+      "min_rank_ja": "准将",
+      "max_rank_ja": "元帥",
+      "holder_kind": "military",
+      "_verified_against": "manual p55-57 別表帝国軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "宇宙艦隊司令長官",
+      "org_ja": "宇宙艦隊司令部",
+      "capacity": 1,
+      "min_rank_ja": "元帥",
+      "max_rank_ja": "元帥",
+      "holder_kind": "military",
+      "_verified_against": "manual p55-57 別表帝国軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "宇宙艦隊副司令長官",
+      "org_ja": "宇宙艦隊司令部",
+      "capacity": 1,
+      "min_rank_ja": "元帥",
+      "max_rank_ja": "元帥",
+      "holder_kind": "military",
+      "_verified_against": "manual p55-57 別表帝国軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "宇宙艦隊総参謀長",
+      "org_ja": "宇宙艦隊司令部",
+      "capacity": 1,
+      "min_rank_ja": "中将",
+      "max_rank_ja": "元帥",
+      "holder_kind": "military",
+      "_verified_against": "manual p55-57 別表帝国軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "宇宙艦隊参謀",
+      "org_ja": "宇宙艦隊司令部",
+      "capacity": 10,
+      "min_rank_ja": "准将",
+      "max_rank_ja": "元帥",
+      "holder_kind": "military",
+      "_verified_against": "manual p55-57 別表帝国軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "憲兵総監",
+      "org_ja": "憲兵本部",
+      "capacity": 1,
+      "min_rank_ja": "上級大将",
+      "max_rank_ja": "元帥",
+      "holder_kind": "military",
+      "_verified_against": "manual p55-57 別表帝国軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "憲兵副総監",
+      "org_ja": "憲兵本部",
+      "capacity": 1,
+      "min_rank_ja": "中将",
+      "max_rank_ja": "元帥",
+      "holder_kind": "military",
+      "_verified_against": "manual p55-57 別表帝国軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "装甲擲弾兵総監",
+      "org_ja": "装甲擲弾兵総監部",
+      "capacity": 1,
+      "min_rank_ja": "上級大将",
+      "max_rank_ja": "元帥",
+      "holder_kind": "military",
+      "_verified_against": "manual p55-57 別表帝国軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "装甲擲弾兵副総監",
+      "org_ja": "装甲擲弾兵総監部",
+      "capacity": 1,
+      "min_rank_ja": "中将",
+      "max_rank_ja": "元帥",
+      "holder_kind": "military",
+      "_verified_against": "manual p55-57 別表帝国軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "科学技術総監",
+      "org_ja": "科学技術総監部",
+      "capacity": 1,
+      "min_rank_ja": "上級大将",
+      "max_rank_ja": "元帥",
+      "holder_kind": "military",
+      "_verified_against": "manual p55-57 別表帝国軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "士官学校長",
+      "org_ja": "帝国軍士官学校",
+      "capacity": 1,
+      "min_rank_ja": "大将",
+      "max_rank_ja": "元帥",
+      "holder_kind": "military",
+      "_verified_against": "manual p55-57 別表帝国軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "士官学校教官",
+      "org_ja": "帝国軍士官学校",
+      "capacity": 10,
+      "min_rank_ja": "曹長",
+      "max_rank_ja": "元帥",
+      "holder_kind": "military",
+      "_verified_against": "manual p55-57 別表帝国軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "艦隊司令官",
+      "org_ja": "艦隊",
+      "capacity": 1,
+      "min_rank_ja": "中将",
+      "max_rank_ja": "元帥",
+      "holder_kind": "military",
+      "_verified_against": "manual p55-57 別表帝国軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "艦隊副司令官",
+      "org_ja": "艦隊",
+      "capacity": 1,
+      "min_rank_ja": "少将",
+      "max_rank_ja": "元帥",
+      "holder_kind": "military",
+      "_verified_against": "manual p55-57 別表帝国軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "艦隊参謀長",
+      "org_ja": "艦隊",
+      "capacity": 1,
+      "min_rank_ja": "少将",
+      "max_rank_ja": "元帥",
+      "holder_kind": "military",
+      "_verified_against": "manual p55-57 別表帝国軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "艦隊参謀",
+      "org_ja": "艦隊",
+      "capacity": 6,
+      "min_rank_ja": "大尉",
+      "max_rank_ja": "元帥",
+      "holder_kind": "military",
+      "_verified_against": "manual p55-57 別表帝国軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "艦隊司令官副官",
+      "org_ja": "艦隊",
+      "capacity": 1,
+      "min_rank_ja": "中尉",
+      "max_rank_ja": "元帥",
+      "holder_kind": "military",
+      "_verified_against": "manual p55-57 別表帝国軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "輸送艦隊司令官",
+      "org_ja": "輸送艦隊",
+      "capacity": 1,
+      "min_rank_ja": "中将",
+      "max_rank_ja": "元帥",
+      "holder_kind": "military",
+      "_verified_against": "manual p55-57 別表帝国軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "輸送艦隊副司令官",
+      "org_ja": "輸送艦隊",
+      "capacity": 1,
+      "min_rank_ja": "少将",
+      "max_rank_ja": "元帥",
+      "holder_kind": "military",
+      "_verified_against": "manual p55-57 別表帝国軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "輸送艦隊司令官副官",
+      "org_ja": "輸送艦隊",
+      "capacity": 1,
+      "min_rank_ja": "中尉",
+      "max_rank_ja": "元帥",
+      "holder_kind": "military",
+      "_verified_against": "manual p55-57 別表帝国軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "巡察隊司令",
+      "org_ja": "巡察隊",
+      "capacity": 1,
+      "min_rank_ja": "准将",
+      "max_rank_ja": "元帥",
+      "holder_kind": "military",
+      "_verified_against": "manual p55-57 別表帝国軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "巡察隊副司令",
+      "org_ja": "巡察隊",
+      "capacity": 1,
+      "min_rank_ja": "准将",
+      "max_rank_ja": "元帥",
+      "holder_kind": "military",
+      "_verified_against": "manual p55-57 別表帝国軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "巡察隊司令副官",
+      "org_ja": "巡察隊",
+      "capacity": 1,
+      "min_rank_ja": "中尉",
+      "max_rank_ja": "元帥",
+      "holder_kind": "military",
+      "_verified_against": "manual p55-57 別表帝国軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "地上部隊指揮官",
+      "org_ja": "地上部隊",
+      "capacity": 1,
+      "min_rank_ja": "少佐",
+      "max_rank_ja": "元帥",
+      "holder_kind": "military",
+      "_verified_against": "manual p55-57 別表帝国軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "要塞司令官",
+      "org_ja": "要塞",
+      "capacity": 1,
+      "min_rank_ja": "中将",
+      "max_rank_ja": "元帥",
+      "holder_kind": "military",
+      "_verified_against": "manual p55-57 別表帝国軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "要塞守備隊指揮官",
+      "org_ja": "要塞",
+      "capacity": 1,
+      "min_rank_ja": "少佐",
+      "max_rank_ja": "元帥",
+      "holder_kind": "military",
+      "_verified_against": "manual p55-57 別表帝国軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "要塞事務総監",
+      "org_ja": "要塞",
+      "capacity": 1,
+      "min_rank_ja": "少将",
+      "max_rank_ja": "元帥",
+      "holder_kind": "military",
+      "_verified_against": "manual p55-57 別表帝国軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "惑星総督",
+      "org_ja": "首都惑星を除く各惑星",
+      "capacity": 1,
+      "min_rank_ja": "准将",
+      "max_rank_ja": "元帥",
+      "holder_kind": "either",
+      "_verified_against": "manual p55-57 別表帝国軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "惑星守備隊指揮官",
+      "org_ja": "防衛司令部",
+      "capacity": 1,
+      "min_rank_ja": "少佐",
+      "max_rank_ja": "元帥",
+      "holder_kind": "military",
+      "_verified_against": "manual p55-57 別表帝国軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "帝都防衛司令官",
+      "org_ja": "政庁",
+      "capacity": 1,
+      "min_rank_ja": "大将",
+      "max_rank_ja": "元帥",
+      "holder_kind": "military",
+      "_verified_against": "manual p55-57 別表帝国軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "近衛兵総監",
+      "org_ja": "防衛司令部",
+      "capacity": 1,
+      "min_rank_ja": "上級大将",
+      "max_rank_ja": "元帥",
+      "holder_kind": "military",
+      "_verified_against": "manual p55-57 別表帝国軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "諜報官",
+      "org_ja": "統合偵察局",
+      "capacity": 50,
+      "min_rank_ja": "少尉",
+      "max_rank_ja": "大佐",
+      "holder_kind": "military",
+      "_verified_against": "manual p55-57 別表帝国軍組織構成表 (vision)"
+    }
+  ],
+  "posts_alliance": [
+    {
+      "post_ja": "議長",
+      "capacity": 1,
+      "min_rank_ja": "",
+      "max_rank_ja": "",
+      "org_ja": "最高評議会",
+      "holder_kind": "politician",
+      "_verified_against": "manual p61-63 別表同盟軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "副議長",
+      "capacity": 1,
+      "min_rank_ja": "",
+      "max_rank_ja": "",
+      "org_ja": "最高評議会",
+      "holder_kind": "politician",
+      "_verified_against": "manual p61-63 別表同盟軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "国務委員長",
+      "capacity": 1,
+      "min_rank_ja": "",
+      "max_rank_ja": "",
+      "org_ja": "最高評議会",
+      "holder_kind": "politician",
+      "_verified_against": "manual p61-63 別表同盟軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "国防委員長",
+      "capacity": 1,
+      "min_rank_ja": "",
+      "max_rank_ja": "",
+      "org_ja": "最高評議会",
+      "holder_kind": "politician",
+      "_verified_against": "manual p61-63 別表同盟軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "財政委員長",
+      "capacity": 1,
+      "min_rank_ja": "",
+      "max_rank_ja": "",
+      "org_ja": "最高評議会",
+      "holder_kind": "politician",
+      "_verified_against": "manual p61-63 別表同盟軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "法秩序委員長",
+      "capacity": 1,
+      "min_rank_ja": "",
+      "max_rank_ja": "",
+      "org_ja": "最高評議会",
+      "holder_kind": "politician",
+      "_verified_against": "manual p61-63 別表同盟軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "天然資源委員長",
+      "capacity": 1,
+      "min_rank_ja": "",
+      "max_rank_ja": "",
+      "org_ja": "最高評議会",
+      "holder_kind": "politician",
+      "_verified_against": "manual p61-63 別表同盟軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "人的資源委員長",
+      "capacity": 1,
+      "min_rank_ja": "",
+      "max_rank_ja": "",
+      "org_ja": "最高評議会",
+      "holder_kind": "politician",
+      "_verified_against": "manual p61-63 別表同盟軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "経済開発委員長",
+      "capacity": 1,
+      "min_rank_ja": "",
+      "max_rank_ja": "",
+      "org_ja": "最高評議会",
+      "holder_kind": "politician",
+      "_verified_against": "manual p61-63 別表同盟軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "地域社会開発委員長",
+      "capacity": 1,
+      "min_rank_ja": "",
+      "max_rank_ja": "",
+      "org_ja": "最高評議会",
+      "holder_kind": "politician",
+      "_verified_against": "manual p61-63 別表同盟軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "情報交通委員長",
+      "capacity": 1,
+      "min_rank_ja": "",
+      "max_rank_ja": "",
+      "org_ja": "最高評議会",
+      "holder_kind": "politician",
+      "_verified_against": "manual p61-63 別表同盟軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "書記",
+      "capacity": 1,
+      "min_rank_ja": "",
+      "max_rank_ja": "",
+      "org_ja": "最高評議会",
+      "holder_kind": "politician",
+      "_verified_against": "manual p61-63 別表同盟軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "フェザーン駐在弁務官",
+      "capacity": 1,
+      "min_rank_ja": "",
+      "max_rank_ja": "",
+      "org_ja": "駐フェザーン弁務官事務所",
+      "holder_kind": "politician",
+      "_verified_against": "manual p61-63 別表同盟軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "フェザーン駐在補佐官",
+      "capacity": 1,
+      "min_rank_ja": "",
+      "max_rank_ja": "",
+      "org_ja": "駐フェザーン弁務官事務所",
+      "holder_kind": "politician",
+      "_verified_against": "manual p61-63 別表同盟軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "フェザーン駐在武官",
+      "capacity": 1,
+      "min_rank_ja": "少尉",
+      "max_rank_ja": "元帥",
+      "org_ja": "駐フェザーン弁務官事務所",
+      "holder_kind": "military",
+      "_verified_against": "manual p61-63 別表同盟軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "統合作戦本部長",
+      "capacity": 1,
+      "min_rank_ja": "",
+      "max_rank_ja": "元帥",
+      "org_ja": "統合作戦本部",
+      "holder_kind": "military",
+      "_verified_against": "manual p61-63 別表同盟軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "統合作戦本部第一次長",
+      "capacity": 1,
+      "min_rank_ja": "大将",
+      "max_rank_ja": "元帥",
+      "org_ja": "統合作戦本部",
+      "holder_kind": "military",
+      "_verified_against": "manual p61-63 別表同盟軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "統合作戦本部第二次長",
+      "capacity": 1,
+      "min_rank_ja": "大将",
+      "max_rank_ja": "元帥",
+      "org_ja": "統合作戦本部",
+      "holder_kind": "military",
+      "_verified_against": "manual p61-63 別表同盟軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "統合作戦本部第三次長",
+      "capacity": 1,
+      "min_rank_ja": "大将",
+      "max_rank_ja": "元帥",
+      "org_ja": "統合作戦本部",
+      "holder_kind": "military",
+      "_verified_against": "manual p61-63 別表同盟軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "統合作戦本部参事官",
+      "capacity": 10,
+      "min_rank_ja": "准将",
+      "max_rank_ja": "元帥",
+      "org_ja": "統合作戦本部",
+      "holder_kind": "military",
+      "_verified_against": "manual p61-63 別表同盟軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "陸戦総監部長",
+      "capacity": 1,
+      "min_rank_ja": "中将",
+      "max_rank_ja": "元帥",
+      "org_ja": "統合作戦本部",
+      "holder_kind": "military",
+      "_verified_against": "manual p61-63 別表同盟軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "後方勤務本部長",
+      "capacity": 1,
+      "min_rank_ja": "大将",
+      "max_rank_ja": "元帥",
+      "org_ja": "後方勤務本部",
+      "holder_kind": "military",
+      "_verified_against": "manual p61-63 別表同盟軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "後方勤務本部次長",
+      "capacity": 1,
+      "min_rank_ja": "中将",
+      "max_rank_ja": "元帥",
+      "org_ja": "後方勤務本部",
+      "holder_kind": "military",
+      "_verified_against": "manual p61-63 別表同盟軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "後方勤務本部参事官",
+      "capacity": 10,
+      "min_rank_ja": "准将",
+      "max_rank_ja": "元帥",
+      "org_ja": "後方勤務本部",
+      "holder_kind": "military",
+      "_verified_against": "manual p61-63 別表同盟軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "科学技術本部長",
+      "capacity": 1,
+      "min_rank_ja": "中将",
+      "max_rank_ja": "元帥",
+      "org_ja": "国防委員会",
+      "holder_kind": "military",
+      "_verified_against": "manual p61-63 別表同盟軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "憲兵司令官",
+      "capacity": 1,
+      "min_rank_ja": "准将",
+      "max_rank_ja": "元帥",
+      "org_ja": "国防委員会",
+      "holder_kind": "military",
+      "_verified_against": "manual p61-63 別表同盟軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "査閲部長",
+      "capacity": 1,
+      "min_rank_ja": "中将",
+      "max_rank_ja": "元帥",
+      "org_ja": "国防委員会",
+      "holder_kind": "military",
+      "_verified_against": "manual p61-63 別表同盟軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "戦略部長",
+      "capacity": 1,
+      "min_rank_ja": "中将",
+      "max_rank_ja": "元帥",
+      "org_ja": "国防委員会",
+      "holder_kind": "military",
+      "_verified_against": "manual p61-63 別表同盟軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "人事部長",
+      "capacity": 1,
+      "min_rank_ja": "中将",
+      "max_rank_ja": "元帥",
+      "org_ja": "国防委員会",
+      "holder_kind": "military",
+      "_verified_against": "manual p61-63 別表同盟軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "防衛部長",
+      "capacity": 1,
+      "min_rank_ja": "中将",
+      "max_rank_ja": "元帥",
+      "org_ja": "国防委員会",
+      "holder_kind": "military",
+      "_verified_against": "manual p61-63 別表同盟軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "情報部長",
+      "capacity": 1,
+      "min_rank_ja": "少将",
+      "max_rank_ja": "元帥",
+      "org_ja": "国防委員会",
+      "holder_kind": "military",
+      "_verified_against": "manual p61-63 別表同盟軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "通信部長",
+      "capacity": 1,
+      "min_rank_ja": "少将",
+      "max_rank_ja": "元帥",
+      "org_ja": "国防委員会",
+      "holder_kind": "military",
+      "_verified_against": "manual p61-63 別表同盟軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "装備部長",
+      "capacity": 1,
+      "min_rank_ja": "少将",
+      "max_rank_ja": "元帥",
+      "org_ja": "国防委員会",
+      "holder_kind": "military",
+      "_verified_against": "manual p61-63 別表同盟軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "施設部長",
+      "capacity": 1,
+      "min_rank_ja": "少将",
+      "max_rank_ja": "元帥",
+      "org_ja": "国防委員会",
+      "holder_kind": "military",
+      "_verified_against": "manual p61-63 別表同盟軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "経理部長",
+      "capacity": 1,
+      "min_rank_ja": "",
+      "max_rank_ja": "",
+      "org_ja": "国防委員会",
+      "holder_kind": "politician",
+      "_correction": "manual p63: this 国防委員会 post is in merged 政治家 cell — NO rank, politician. JSON had 少将/元帥/military (wrong).",
+      "_verified_against": "manual p61-63 別表同盟軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "教育部長",
+      "capacity": 1,
+      "min_rank_ja": "",
+      "max_rank_ja": "",
+      "org_ja": "国防委員会",
+      "holder_kind": "politician",
+      "_correction": "manual p63: this 国防委員会 post is in merged 政治家 cell — NO rank, politician. JSON had 少将/元帥/military (wrong).",
+      "_verified_against": "manual p61-63 別表同盟軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "衛生部長",
+      "capacity": 1,
+      "min_rank_ja": "",
+      "max_rank_ja": "",
+      "org_ja": "国防委員会",
+      "holder_kind": "politician",
+      "_correction": "manual p63: this 国防委員会 post is in merged 政治家 cell — NO rank, politician. JSON had 少将/元帥/military (wrong).",
+      "_verified_against": "manual p61-63 別表同盟軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "宇宙艦隊司令長官",
+      "capacity": 1,
+      "min_rank_ja": "",
+      "max_rank_ja": "元帥",
+      "org_ja": "宇宙艦隊司令部",
+      "holder_kind": "military",
+      "_verified_against": "manual p61-63 別表同盟軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "宇宙艦隊副司令長官",
+      "capacity": 1,
+      "min_rank_ja": "大将",
+      "max_rank_ja": "元帥",
+      "org_ja": "宇宙艦隊司令部",
+      "holder_kind": "military",
+      "_verified_against": "manual p61-63 別表同盟軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "宇宙艦隊総参謀長",
+      "capacity": 1,
+      "min_rank_ja": "中将",
+      "max_rank_ja": "元帥",
+      "org_ja": "宇宙艦隊司令部",
+      "holder_kind": "military",
+      "_verified_against": "manual p61-63 別表同盟軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "宇宙艦隊参謀",
+      "capacity": 1,
+      "min_rank_ja": "准将",
+      "max_rank_ja": "元帥",
+      "org_ja": "宇宙艦隊司令部",
+      "holder_kind": "military",
+      "_verified_against": "manual p61-63 別表同盟軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "士官学校長",
+      "capacity": 1,
+      "min_rank_ja": "中将",
+      "max_rank_ja": "元帥",
+      "org_ja": "同盟軍士官学校",
+      "holder_kind": "military",
+      "_verified_against": "manual p61-63 別表同盟軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "士官学校教官",
+      "capacity": 10,
+      "min_rank_ja": "曹長",
+      "max_rank_ja": "元帥",
+      "org_ja": "同盟軍士官学校",
+      "holder_kind": "military",
+      "_verified_against": "manual p61-63 別表同盟軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "艦隊司令官",
+      "capacity": 1,
+      "min_rank_ja": "少将",
+      "max_rank_ja": "元帥",
+      "org_ja": "艦隊",
+      "holder_kind": "military",
+      "_verified_against": "manual p61-63 別表同盟軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "艦隊副司令官",
+      "capacity": 1,
+      "min_rank_ja": "准将",
+      "max_rank_ja": "元帥",
+      "org_ja": "艦隊",
+      "holder_kind": "military",
+      "_verified_against": "manual p61-63 別表同盟軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "艦隊参謀長",
+      "capacity": 1,
+      "min_rank_ja": "准将",
+      "max_rank_ja": "元帥",
+      "org_ja": "艦隊",
+      "holder_kind": "military",
+      "_verified_against": "manual p61-63 別表同盟軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "艦隊参謀",
+      "capacity": 6,
+      "min_rank_ja": "大尉",
+      "max_rank_ja": "元帥",
+      "org_ja": "艦隊",
+      "holder_kind": "military",
+      "_verified_against": "manual p61-63 別表同盟軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "艦隊司令官副官",
+      "capacity": 1,
+      "min_rank_ja": "中尉",
+      "max_rank_ja": "元帥",
+      "org_ja": "艦隊",
+      "holder_kind": "military",
+      "_verified_against": "manual p61-63 別表同盟軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "輸送艦隊司令官",
+      "capacity": 1,
+      "min_rank_ja": "准将",
+      "max_rank_ja": "元帥",
+      "org_ja": "輸送艦隊",
+      "holder_kind": "military",
+      "_verified_against": "manual p61-63 別表同盟軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "輸送艦隊副司令官",
+      "capacity": 1,
+      "min_rank_ja": "大佐",
+      "max_rank_ja": "元帥",
+      "org_ja": "輸送艦隊",
+      "holder_kind": "military",
+      "_verified_against": "manual p61-63 別表同盟軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "輸送艦隊司令官副官",
+      "capacity": 1,
+      "min_rank_ja": "中尉",
+      "max_rank_ja": "元帥",
+      "org_ja": "輸送艦隊",
+      "holder_kind": "military",
+      "_verified_against": "manual p61-63 別表同盟軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "巡察隊司令",
+      "capacity": 1,
+      "min_rank_ja": "准将",
+      "max_rank_ja": "元帥",
+      "org_ja": "巡察隊",
+      "holder_kind": "military",
+      "_verified_against": "manual p61-63 別表同盟軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "巡察隊副司令",
+      "capacity": 1,
+      "min_rank_ja": "大佐",
+      "max_rank_ja": "元帥",
+      "org_ja": "巡察隊",
+      "holder_kind": "military",
+      "_verified_against": "manual p61-63 別表同盟軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "巡察隊司令副官",
+      "capacity": 1,
+      "min_rank_ja": "中尉",
+      "max_rank_ja": "元帥",
+      "org_ja": "巡察隊",
+      "holder_kind": "military",
+      "_verified_against": "manual p61-63 別表同盟軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "地上部隊指揮官",
+      "capacity": 1,
+      "min_rank_ja": "少佐",
+      "max_rank_ja": "元帥",
+      "org_ja": "地上部隊",
+      "holder_kind": "military",
+      "_verified_against": "manual p61-63 別表同盟軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "要塞司令官",
+      "capacity": 1,
+      "min_rank_ja": "中将",
+      "max_rank_ja": "元帥",
+      "org_ja": "要塞",
+      "holder_kind": "military",
+      "_verified_against": "manual p61-63 別表同盟軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "要塞守備隊指揮官",
+      "capacity": 1,
+      "min_rank_ja": "少佐",
+      "max_rank_ja": "元帥",
+      "org_ja": "要塞",
+      "holder_kind": "military",
+      "_verified_against": "manual p61-63 別表同盟軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "要塞事務総監",
+      "capacity": 1,
+      "min_rank_ja": "大佐",
+      "max_rank_ja": "元帥",
+      "org_ja": "要塞",
+      "holder_kind": "military",
+      "_verified_against": "manual p61-63 別表同盟軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "知事",
+      "capacity": 1,
+      "min_rank_ja": "",
+      "max_rank_ja": "",
+      "org_ja": "首都惑星を除く各惑星",
+      "holder_kind": "politician",
+      "_verified_against": "manual p61-63 別表同盟軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "惑星守備隊指揮官",
+      "capacity": 1,
+      "min_rank_ja": "少佐",
+      "max_rank_ja": "元帥",
+      "org_ja": "防衛司令部 (各惑星)",
+      "holder_kind": "military",
+      "_correction": "manual p64: post name is 惑星守備隊指揮官 with org 防衛司令部; JSON folded org prefix into post name.",
+      "_verified_against": "manual p61-63 別表同盟軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "首都司政官",
+      "capacity": 1,
+      "min_rank_ja": "",
+      "max_rank_ja": "",
+      "org_ja": "首都惑星",
+      "holder_kind": "politician",
+      "_verified_against": "manual p61-63 別表同盟軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "首都防衛指揮官",
+      "capacity": 1,
+      "min_rank_ja": "大佐",
+      "max_rank_ja": "元帥",
+      "org_ja": "防衛司令部 (首都惑星)",
+      "holder_kind": "military",
+      "_correction": "manual p64: post name is 首都防衛指揮官 with org 防衛司令部; JSON folded org prefix into post name.",
+      "_verified_against": "manual p61-63 別表同盟軍組織構成表 (vision)"
+    },
+    {
+      "post_ja": "諜報官",
+      "capacity": 50,
+      "min_rank_ja": "少尉",
+      "max_rank_ja": "大佐",
+      "org_ja": "戦略作戦局",
+      "holder_kind": "military",
+      "_verified_against": "manual p61-63 別表同盟軍組織構成表 (vision)"
+    }
+  ],
+  "posts_note": "Empire 58 + Alliance 63 posts. 37/37 spot-checked empire fields VERIFIED except 国務尚書 rank. 61 alliance checks VERIFIED except 経理/教育/衛生部長 (rank+kind) and 2 folded post-name/org cases. All other capacity/min/max/kind values match the manual org tables exactly."
+}

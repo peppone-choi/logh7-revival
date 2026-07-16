@@ -1,0 +1,4288 @@
+{
+  "_created": "2026-06-14",
+  "_source": "Archive.org advancedsearch + metadata API over English/Japanese LOGH queries",
+  "_scope": "Public Archive.org items only. This catalog records research leads, not redistributed game contents.",
+  "counts": {
+    "catalog_items": 28,
+    "vii_primary": 2,
+    "prior_or_early_games": 14,
+    "manual_or_scan_items": 8
+  },
+  "items": [
+    {
+      "identifier": "logh-7",
+      "title": "Legend Of Galactic Heroes VII (Ginga Eiyuu Densetsu VII)",
+      "role": "vii_primary_disc",
+      "priority": 100,
+      "note": "Primary VII CD image; extract client/resources/Face data. Already mirrored locally in artifacts/. Highest for VII assets, not name labels by itself.",
+      "archive_url": "https://archive.org/details/logh-7",
+      "file_count": 9,
+      "extensions": {
+        "jpg": 3,
+        "xml": 2,
+        "bin": 1,
+        "cue": 1,
+        "sqlite": 1,
+        "torrent": 1
+      },
+      "candidate_files": [
+        {
+          "name": "Logh7.bin",
+          "format": "Unknown",
+          "size": "229070688",
+          "source": "original",
+          "extension": "bin",
+          "direct_url": "https://archive.org/download/logh-7/Logh7.bin",
+          "usefulness": "extractable_game_or_package"
+        },
+        {
+          "name": "Logh7.cue",
+          "format": "Cue Sheet",
+          "size": "71",
+          "source": "original",
+          "extension": "cue",
+          "direct_url": "https://archive.org/download/logh-7/Logh7.cue",
+          "usefulness": "extractable_game_or_package"
+        },
+        {
+          "name": "Logh7.jpg",
+          "format": "JPEG",
+          "size": "60037",
+          "source": "original",
+          "extension": "jpg",
+          "direct_url": "https://archive.org/download/logh-7/Logh7.jpg",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "Logh7_thumb.jpg",
+          "format": "JPEG Thumb",
+          "size": "7882",
+          "source": "derivative",
+          "extension": "jpg",
+          "direct_url": "https://archive.org/download/logh-7/Logh7_thumb.jpg",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "__ia_thumb.jpg",
+          "format": "Item Tile",
+          "size": "16350",
+          "source": "original",
+          "extension": "jpg",
+          "direct_url": "https://archive.org/download/logh-7/__ia_thumb.jpg",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "logh-7_archive.torrent",
+          "format": "Archive BitTorrent",
+          "size": "10989",
+          "source": "metadata",
+          "extension": "torrent",
+          "direct_url": "https://archive.org/download/logh-7/logh-7_archive.torrent",
+          "usefulness": "metadata_only"
+        },
+        {
+          "name": "logh-7_files.xml",
+          "format": "Metadata",
+          "size": null,
+          "source": "original",
+          "extension": "xml",
+          "direct_url": "https://archive.org/download/logh-7/logh-7_files.xml",
+          "usefulness": "ocr_or_manual_text"
+        },
+        {
+          "name": "logh-7_meta.xml",
+          "format": "Metadata",
+          "size": "2119",
+          "source": "original",
+          "extension": "xml",
+          "direct_url": "https://archive.org/download/logh-7/logh-7_meta.xml",
+          "usefulness": "ocr_or_manual_text"
+        }
+      ]
+    },
+    {
+      "identifier": "gin7manual",
+      "title": "Ginga Eiyuu Densetsu VII Manual PDF",
+      "role": "vii_primary_manual",
+      "priority": 100,
+      "note": "Primary VII manual PDF/OCR; authoritative for systems, commands, and any roster/portrait screenshots inside.",
+      "archive_url": "https://archive.org/details/gin7manual",
+      "file_count": 15,
+      "extensions": {
+        "xml": 4,
+        "gz": 3,
+        "html": 1,
+        "jpg": 1,
+        "json": 1,
+        "pdf": 1,
+        "sqlite": 1,
+        "torrent": 1,
+        "txt": 1,
+        "zip": 1
+      },
+      "candidate_files": [
+        {
+          "name": "__ia_thumb.jpg",
+          "format": "Item Tile",
+          "size": "6933",
+          "source": "original",
+          "extension": "jpg",
+          "direct_url": "https://archive.org/download/gin7manual/__ia_thumb.jpg",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gin7manual.pdf",
+          "format": "Text PDF",
+          "size": "3165027",
+          "source": "original",
+          "extension": "pdf",
+          "direct_url": "https://archive.org/download/gin7manual/gin7manual.pdf",
+          "usefulness": "ocr_or_manual_text"
+        },
+        {
+          "name": "gin7manual_archive.torrent",
+          "format": "Archive BitTorrent",
+          "size": "5311",
+          "source": "metadata",
+          "extension": "torrent",
+          "direct_url": "https://archive.org/download/gin7manual/gin7manual_archive.torrent",
+          "usefulness": "metadata_only"
+        },
+        {
+          "name": "gin7manual_djvu.txt",
+          "format": "DjVuTXT",
+          "size": "246072",
+          "source": "derivative",
+          "extension": "txt",
+          "direct_url": "https://archive.org/download/gin7manual/gin7manual_djvu.txt",
+          "usefulness": "ocr_or_manual_text"
+        },
+        {
+          "name": "gin7manual_djvu.xml",
+          "format": "Djvu XML",
+          "size": "3757841",
+          "source": "derivative",
+          "extension": "xml",
+          "direct_url": "https://archive.org/download/gin7manual/gin7manual_djvu.xml",
+          "usefulness": "ocr_or_manual_text"
+        },
+        {
+          "name": "gin7manual_files.xml",
+          "format": "Metadata",
+          "size": null,
+          "source": "original",
+          "extension": "xml",
+          "direct_url": "https://archive.org/download/gin7manual/gin7manual_files.xml",
+          "usefulness": "ocr_or_manual_text"
+        },
+        {
+          "name": "gin7manual_hocr_searchtext.txt.gz",
+          "format": "OCR Search Text",
+          "size": "59192",
+          "source": "derivative",
+          "extension": "gz",
+          "direct_url": "https://archive.org/download/gin7manual/gin7manual_hocr_searchtext.txt.gz",
+          "usefulness": "ocr_or_manual_text"
+        },
+        {
+          "name": "gin7manual_jp2.zip",
+          "format": "Single Page Processed JP2 ZIP",
+          "size": "34098020",
+          "source": "derivative",
+          "extension": "zip",
+          "direct_url": "https://archive.org/download/gin7manual/gin7manual_jp2.zip",
+          "usefulness": "extractable_game_or_package"
+        },
+        {
+          "name": "gin7manual_meta.xml",
+          "format": "Metadata",
+          "size": "1723",
+          "source": "original",
+          "extension": "xml",
+          "direct_url": "https://archive.org/download/gin7manual/gin7manual_meta.xml",
+          "usefulness": "ocr_or_manual_text"
+        },
+        {
+          "name": "gin7manual_scandata.xml",
+          "format": "Scandata",
+          "size": "34105",
+          "source": "derivative",
+          "extension": "xml",
+          "direct_url": "https://archive.org/download/gin7manual/gin7manual_scandata.xml",
+          "usefulness": "ocr_or_manual_text"
+        }
+      ]
+    },
+    {
+      "identifier": "logh-v-grand",
+      "title": "Legend Of Galactic Heroes V-Grand (Ginga Eiyuu Densetsu V-Grand)",
+      "role": "prior_game_disc",
+      "priority": 80,
+      "note": "V Grand disc; useful for prior stats/art reference.",
+      "archive_url": "https://archive.org/details/logh-v-grand",
+      "file_count": 8,
+      "extensions": {
+        "jpg": 3,
+        "xml": 2,
+        "iso": 1,
+        "sqlite": 1,
+        "torrent": 1
+      },
+      "candidate_files": [
+        {
+          "name": "Ginga Eiyuu Densetsu V Grand.iso",
+          "format": "ISO Image",
+          "size": "378296320",
+          "source": "original",
+          "extension": "iso",
+          "direct_url": "https://archive.org/download/logh-v-grand/Ginga Eiyuu Densetsu V Grand.iso",
+          "usefulness": "extractable_game_or_package"
+        },
+        {
+          "name": "LoGHVGrand.jpg",
+          "format": "JPEG",
+          "size": "24259",
+          "source": "original",
+          "extension": "jpg",
+          "direct_url": "https://archive.org/download/logh-v-grand/LoGHVGrand.jpg",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "LoGHVGrand_thumb.jpg",
+          "format": "JPEG Thumb",
+          "size": "9651",
+          "source": "derivative",
+          "extension": "jpg",
+          "direct_url": "https://archive.org/download/logh-v-grand/LoGHVGrand_thumb.jpg",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "__ia_thumb.jpg",
+          "format": "Item Tile",
+          "size": "20230",
+          "source": "original",
+          "extension": "jpg",
+          "direct_url": "https://archive.org/download/logh-v-grand/__ia_thumb.jpg",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "logh-v-grand_archive.torrent",
+          "format": "Archive BitTorrent",
+          "size": "16572",
+          "source": "metadata",
+          "extension": "torrent",
+          "direct_url": "https://archive.org/download/logh-v-grand/logh-v-grand_archive.torrent",
+          "usefulness": "metadata_only"
+        },
+        {
+          "name": "logh-v-grand_files.xml",
+          "format": "Metadata",
+          "size": null,
+          "source": "original",
+          "extension": "xml",
+          "direct_url": "https://archive.org/download/logh-v-grand/logh-v-grand_files.xml",
+          "usefulness": "ocr_or_manual_text"
+        },
+        {
+          "name": "logh-v-grand_meta.xml",
+          "format": "Metadata",
+          "size": "1831",
+          "source": "original",
+          "extension": "xml",
+          "direct_url": "https://archive.org/download/logh-v-grand/logh-v-grand_meta.xml",
+          "usefulness": "ocr_or_manual_text"
+        }
+      ]
+    },
+    {
+      "identifier": "legend-of-galactic-heroes-iv-ex-win-95",
+      "title": "Legend Of Galactic Heroes IV EX Win 95 (Ginga Eiyuu Densetsu IV EX)",
+      "role": "prior_game_disc",
+      "priority": 80,
+      "note": "IV EX Win95 disc; useful for extracting named character stats/art as reference, not VII face proof.",
+      "archive_url": "https://archive.org/details/legend-of-galactic-heroes-iv-ex-win-95",
+      "file_count": 8,
+      "extensions": {
+        "jpg": 3,
+        "xml": 2,
+        "iso": 1,
+        "sqlite": 1,
+        "torrent": 1
+      },
+      "candidate_files": [
+        {
+          "name": "Legend of Galactic Heroes IV EX Win95 Cover.jpg",
+          "format": "JPEG",
+          "size": "28064",
+          "source": "original",
+          "extension": "jpg",
+          "direct_url": "https://archive.org/download/legend-of-galactic-heroes-iv-ex-win-95/Legend of Galactic Heroes IV EX Win95 Cover.jpg",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "Legend of Galactic Heroes IV EX Win95 Cover_thumb.jpg",
+          "format": "JPEG Thumb",
+          "size": "8223",
+          "source": "derivative",
+          "extension": "jpg",
+          "direct_url": "https://archive.org/download/legend-of-galactic-heroes-iv-ex-win-95/Legend of Galactic Heroes IV EX Win95 Cover_thumb.jpg",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "Legend of Galactic Heroes IV EX Win95.iso",
+          "format": "ISO Image",
+          "size": "435032064",
+          "source": "original",
+          "extension": "iso",
+          "direct_url": "https://archive.org/download/legend-of-galactic-heroes-iv-ex-win-95/Legend of Galactic Heroes IV EX Win95.iso",
+          "usefulness": "extractable_game_or_package"
+        },
+        {
+          "name": "__ia_thumb.jpg",
+          "format": "Item Tile",
+          "size": "19965",
+          "source": "original",
+          "extension": "jpg",
+          "direct_url": "https://archive.org/download/legend-of-galactic-heroes-iv-ex-win-95/__ia_thumb.jpg",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "legend-of-galactic-heroes-iv-ex-win-95_archive.torrent",
+          "format": "Archive BitTorrent",
+          "size": "19041",
+          "source": "metadata",
+          "extension": "torrent",
+          "direct_url": "https://archive.org/download/legend-of-galactic-heroes-iv-ex-win-95/legend-of-galactic-heroes-iv-ex-win-95_archive.torrent",
+          "usefulness": "metadata_only"
+        },
+        {
+          "name": "legend-of-galactic-heroes-iv-ex-win-95_files.xml",
+          "format": "Metadata",
+          "size": null,
+          "source": "original",
+          "extension": "xml",
+          "direct_url": "https://archive.org/download/legend-of-galactic-heroes-iv-ex-win-95/legend-of-galactic-heroes-iv-ex-win-95_files.xml",
+          "usefulness": "ocr_or_manual_text"
+        },
+        {
+          "name": "legend-of-galactic-heroes-iv-ex-win-95_meta.xml",
+          "format": "Metadata",
+          "size": "1172",
+          "source": "original",
+          "extension": "xml",
+          "direct_url": "https://archive.org/download/legend-of-galactic-heroes-iv-ex-win-95/legend-of-galactic-heroes-iv-ex-win-95_meta.xml",
+          "usefulness": "ocr_or_manual_text"
+        }
+      ]
+    },
+    {
+      "identifier": "ginga-eiyuu-densetsu-w98-colection",
+      "title": "Ginga Eiyuu Densetsu Windows 95/98 Collection",
+      "role": "prior_windows_collection",
+      "priority": 80,
+      "note": "Windows 95/98 prior games and update archives; useful for older official character art/stats and possible shared naming/portrait conventions.",
+      "archive_url": "https://archive.org/details/ginga-eiyuu-densetsu-w98-colection",
+      "file_count": 61,
+      "extensions": {
+        "bin": 35,
+        "zip": 13,
+        "cue": 9,
+        "xml": 2,
+        "sqlite": 1,
+        "torrent": 1
+      },
+      "candidate_files": [
+        {
+          "name": "ginga-eiyuu-densetsu-w98-colection_archive.torrent",
+          "format": "Archive BitTorrent",
+          "size": "87113",
+          "source": "metadata",
+          "extension": "torrent",
+          "direct_url": "https://archive.org/download/ginga-eiyuu-densetsu-w98-colection/ginga-eiyuu-densetsu-w98-colection_archive.torrent",
+          "usefulness": "metadata_only"
+        },
+        {
+          "name": "ginga-eiyuu-densetsu-w98-colection_files.xml",
+          "format": "Metadata",
+          "size": null,
+          "source": "original",
+          "extension": "xml",
+          "direct_url": "https://archive.org/download/ginga-eiyuu-densetsu-w98-colection/ginga-eiyuu-densetsu-w98-colection_files.xml",
+          "usefulness": "ocr_or_manual_text"
+        },
+        {
+          "name": "ginga-eiyuu-densetsu-w98-colection_meta.xml",
+          "format": "Metadata",
+          "size": "8955",
+          "source": "original",
+          "extension": "xml",
+          "direct_url": "https://archive.org/download/ginga-eiyuu-densetsu-w98-colection/ginga-eiyuu-densetsu-w98-colection_meta.xml",
+          "usefulness": "ocr_or_manual_text"
+        },
+        {
+          "name": "銀河英雄伝説 UPDATE/Ginga Eiyuu Densetsu III SP UPDATE.zip",
+          "format": "ZIP",
+          "size": "1290506",
+          "source": "original",
+          "extension": "zip",
+          "direct_url": "https://archive.org/download/ginga-eiyuu-densetsu-w98-colection/%E9%8A%80%E6%B2%B3%E8%8B%B1%E9%9B%84%E4%BC%9D%E8%AA%AC UPDATE/Ginga Eiyuu Densetsu III SP UPDATE.zip",
+          "usefulness": "extractable_game_or_package"
+        },
+        {
+          "name": "銀河英雄伝説 UPDATE/Ginga Eiyuu Densetsu IV EX for Windows 95 UPDATE.zip",
+          "format": "ZIP",
+          "size": "29119",
+          "source": "original",
+          "extension": "zip",
+          "direct_url": "https://archive.org/download/ginga-eiyuu-densetsu-w98-colection/%E9%8A%80%E6%B2%B3%E8%8B%B1%E9%9B%84%E4%BC%9D%E8%AA%AC UPDATE/Ginga Eiyuu Densetsu IV EX for Windows 95 UPDATE.zip",
+          "usefulness": "extractable_game_or_package"
+        },
+        {
+          "name": "銀河英雄伝説 UPDATE/Ginga Eiyuu Densetsu VI SG UPDATE V 2.0.5.zip",
+          "format": "ZIP",
+          "size": "17596212",
+          "source": "original",
+          "extension": "zip",
+          "direct_url": "https://archive.org/download/ginga-eiyuu-densetsu-w98-colection/%E9%8A%80%E6%B2%B3%E8%8B%B1%E9%9B%84%E4%BC%9D%E8%AA%AC UPDATE/Ginga Eiyuu Densetsu VI SG UPDATE V 2.0.5.zip",
+          "usefulness": "extractable_game_or_package"
+        },
+        {
+          "name": "銀河英雄伝説 UPDATE/Ginga Eiyuu Densetsu VI UPDATE V 1.2.0.zip",
+          "format": "ZIP",
+          "size": "15510364",
+          "source": "original",
+          "extension": "zip",
+          "direct_url": "https://archive.org/download/ginga-eiyuu-densetsu-w98-colection/%E9%8A%80%E6%B2%B3%E8%8B%B1%E9%9B%84%E4%BC%9D%E8%AA%AC UPDATE/Ginga Eiyuu Densetsu VI UPDATE V 1.2.0.zip",
+          "usefulness": "extractable_game_or_package"
+        },
+        {
+          "name": "銀河英雄伝説/Ginga Eiyuu Densetsu III SP (Japan).zip",
+          "format": "ZIP",
+          "size": "31792141",
+          "source": "original",
+          "extension": "zip",
+          "direct_url": "https://archive.org/download/ginga-eiyuu-densetsu-w98-colection/%E9%8A%80%E6%B2%B3%E8%8B%B1%E9%9B%84%E4%BC%9D%E8%AA%AC/Ginga Eiyuu Densetsu III SP (Japan).zip",
+          "usefulness": "extractable_game_or_package"
+        },
+        {
+          "name": "銀河英雄伝説/Ginga Eiyuu Densetsu III SP (Japan)/Ginga Eiyuu Densetsu III SP (Japan).bin",
+          "format": "Unknown",
+          "size": "34506192",
+          "source": "original",
+          "extension": "bin",
+          "direct_url": "https://archive.org/download/ginga-eiyuu-densetsu-w98-colection/%E9%8A%80%E6%B2%B3%E8%8B%B1%E9%9B%84%E4%BC%9D%E8%AA%AC/Ginga Eiyuu Densetsu III SP (Japan)/Ginga Eiyuu Densetsu III SP (Japan).bin",
+          "usefulness": "extractable_game_or_package"
+        },
+        {
+          "name": "銀河英雄伝説/Ginga Eiyuu Densetsu III SP (Japan)/Ginga Eiyuu Densetsu III SP (Japan).cue",
+          "format": "Cue Sheet",
+          "size": "124",
+          "source": "original",
+          "extension": "cue",
+          "direct_url": "https://archive.org/download/ginga-eiyuu-densetsu-w98-colection/%E9%8A%80%E6%B2%B3%E8%8B%B1%E9%9B%84%E4%BC%9D%E8%AA%AC/Ginga Eiyuu Densetsu III SP (Japan)/Ginga Eiyuu Densetsu III SP (Japan).cue",
+          "usefulness": "extractable_game_or_package"
+        },
+        {
+          "name": "銀河英雄伝説/Ginga Eiyuu Densetsu IV EX for Windows95 (Japan).zip",
+          "format": "ZIP",
+          "size": "484606418",
+          "source": "original",
+          "extension": "zip",
+          "direct_url": "https://archive.org/download/ginga-eiyuu-densetsu-w98-colection/%E9%8A%80%E6%B2%B3%E8%8B%B1%E9%9B%84%E4%BC%9D%E8%AA%AC/Ginga Eiyuu Densetsu IV EX for Windows95 (Japan).zip",
+          "usefulness": "extractable_game_or_package"
+        },
+        {
+          "name": "銀河英雄伝説/Ginga Eiyuu Densetsu IV EX for Windows95 (Japan)/Ginga Eiyuu Densetsu IV EX for Windows95 (Japan).bin",
+          "format": "Unknown",
+          "size": "499576560",
+          "source": "original",
+          "extension": "bin",
+          "direct_url": "https://archive.org/download/ginga-eiyuu-densetsu-w98-colection/%E9%8A%80%E6%B2%B3%E8%8B%B1%E9%9B%84%E4%BC%9D%E8%AA%AC/Ginga Eiyuu Densetsu IV EX for Windows95 (Japan)/Ginga Eiyuu Densetsu IV EX for Windows95 (Japan).bin",
+          "usefulness": "extractable_game_or_package"
+        },
+        {
+          "name": "銀河英雄伝説/Ginga Eiyuu Densetsu IV EX for Windows95 (Japan)/Ginga Eiyuu Densetsu IV EX for Windows95 (Japan).cue",
+          "format": "Cue Sheet",
+          "size": "137",
+          "source": "original",
+          "extension": "cue",
+          "direct_url": "https://archive.org/download/ginga-eiyuu-densetsu-w98-colection/%E9%8A%80%E6%B2%B3%E8%8B%B1%E9%9B%84%E4%BC%9D%E8%AA%AC/Ginga Eiyuu Densetsu IV EX for Windows95 (Japan)/Ginga Eiyuu Densetsu IV EX for Windows95 (Japan).cue",
+          "usefulness": "extractable_game_or_package"
+        },
+        {
+          "name": "銀河英雄伝説/Ginga Eiyuu Densetsu V (Japan).zip",
+          "format": "ZIP",
+          "size": "275721231",
+          "source": "original",
+          "extension": "zip",
+          "direct_url": "https://archive.org/download/ginga-eiyuu-densetsu-w98-colection/%E9%8A%80%E6%B2%B3%E8%8B%B1%E9%9B%84%E4%BC%9D%E8%AA%AC/Ginga Eiyuu Densetsu V (Japan).zip",
+          "usefulness": "extractable_game_or_package"
+        },
+        {
+          "name": "銀河英雄伝説/Ginga Eiyuu Densetsu V (Japan)/Ginga Eiyuu Densetsu V (Japan).bin",
+          "format": "Unknown",
+          "size": "419709696",
+          "source": "original",
+          "extension": "bin",
+          "direct_url": "https://archive.org/download/ginga-eiyuu-densetsu-w98-colection/%E9%8A%80%E6%B2%B3%E8%8B%B1%E9%9B%84%E4%BC%9D%E8%AA%AC/Ginga Eiyuu Densetsu V (Japan)/Ginga Eiyuu Densetsu V (Japan).bin",
+          "usefulness": "extractable_game_or_package"
+        },
+        {
+          "name": "銀河英雄伝説/Ginga Eiyuu Densetsu V (Japan)/Ginga Eiyuu Densetsu V (Japan).cue",
+          "format": "Cue Sheet",
+          "size": "96",
+          "source": "original",
+          "extension": "cue",
+          "direct_url": "https://archive.org/download/ginga-eiyuu-densetsu-w98-colection/%E9%8A%80%E6%B2%B3%E8%8B%B1%E9%9B%84%E4%BC%9D%E8%AA%AC/Ginga Eiyuu Densetsu V (Japan)/Ginga Eiyuu Densetsu V (Japan).cue",
+          "usefulness": "extractable_game_or_package"
+        },
+        {
+          "name": "銀河英雄伝説/Ginga Eiyuu Densetsu V Grand (Japan).zip",
+          "format": "ZIP",
+          "size": "286269879",
+          "source": "original",
+          "extension": "zip",
+          "direct_url": "https://archive.org/download/ginga-eiyuu-densetsu-w98-colection/%E9%8A%80%E6%B2%B3%E8%8B%B1%E9%9B%84%E4%BC%9D%E8%AA%AC/Ginga Eiyuu Densetsu V Grand (Japan).zip",
+          "usefulness": "extractable_game_or_package"
+        },
+        {
+          "name": "銀河英雄伝説/Ginga Eiyuu Densetsu V Grand (Japan)/Ginga Eiyuu Densetsu V Grand (Japan).bin",
+          "format": "Unknown",
+          "size": "434449680",
+          "source": "original",
+          "extension": "bin",
+          "direct_url": "https://archive.org/download/ginga-eiyuu-densetsu-w98-colection/%E9%8A%80%E6%B2%B3%E8%8B%B1%E9%9B%84%E4%BC%9D%E8%AA%AC/Ginga Eiyuu Densetsu V Grand (Japan)/Ginga Eiyuu Densetsu V Grand (Japan).bin",
+          "usefulness": "extractable_game_or_package"
+        },
+        {
+          "name": "銀河英雄伝説/Ginga Eiyuu Densetsu V Grand (Japan)/Ginga Eiyuu Densetsu V Grand (Japan).cue",
+          "format": "Cue Sheet",
+          "size": "102",
+          "source": "original",
+          "extension": "cue",
+          "direct_url": "https://archive.org/download/ginga-eiyuu-densetsu-w98-colection/%E9%8A%80%E6%B2%B3%E8%8B%B1%E9%9B%84%E4%BC%9D%E8%AA%AC/Ginga Eiyuu Densetsu V Grand (Japan)/Ginga Eiyuu Densetsu V Grand (Japan).cue",
+          "usefulness": "extractable_game_or_package"
+        },
+        {
+          "name": "銀河英雄伝説/Ginga Eiyuu Densetsu V Grand - Upgrade Kit (Japan).zip",
+          "format": "ZIP",
+          "size": "286356162",
+          "source": "original",
+          "extension": "zip",
+          "direct_url": "https://archive.org/download/ginga-eiyuu-densetsu-w98-colection/%E9%8A%80%E6%B2%B3%E8%8B%B1%E9%9B%84%E4%BC%9D%E8%AA%AC/Ginga Eiyuu Densetsu V Grand - Upgrade Kit (Japan).zip",
+          "usefulness": "extractable_game_or_package"
+        },
+        {
+          "name": "銀河英雄伝説/Ginga Eiyuu Densetsu V Grand - Upgrade Kit (Japan)/Ginga Eiyuu Densetsu V Grand - Upgrade Kit (Japan).bin",
+          "format": "Unknown",
+          "size": "434374416",
+          "source": "original",
+          "extension": "bin",
+          "direct_url": "https://archive.org/download/ginga-eiyuu-densetsu-w98-colection/%E9%8A%80%E6%B2%B3%E8%8B%B1%E9%9B%84%E4%BC%9D%E8%AA%AC/Ginga Eiyuu Densetsu V Grand - Upgrade Kit (Japan)/Ginga Eiyuu Densetsu V Grand - Upgrade Kit (Japan).bin",
+          "usefulness": "extractable_game_or_package"
+        },
+        {
+          "name": "銀河英雄伝説/Ginga Eiyuu Densetsu V Grand - Upgrade Kit (Japan)/Ginga Eiyuu Densetsu V Grand - Upgrade Kit (Japan).cue",
+          "format": "Cue Sheet",
+          "size": "116",
+          "source": "original",
+          "extension": "cue",
+          "direct_url": "https://archive.org/download/ginga-eiyuu-densetsu-w98-colection/%E9%8A%80%E6%B2%B3%E8%8B%B1%E9%9B%84%E4%BC%9D%E8%AA%AC/Ginga Eiyuu Densetsu V Grand - Upgrade Kit (Japan)/Ginga Eiyuu Densetsu V Grand - Upgrade Kit (Japan).cue",
+          "usefulness": "extractable_game_or_package"
+        },
+        {
+          "name": "銀河英雄伝説/Ginga Eiyuu Densetsu VI (Japan).zip",
+          "format": "ZIP",
+          "size": "647640490",
+          "source": "original",
+          "extension": "zip",
+          "direct_url": "https://archive.org/download/ginga-eiyuu-densetsu-w98-colection/%E9%8A%80%E6%B2%B3%E8%8B%B1%E9%9B%84%E4%BC%9D%E8%AA%AC/Ginga Eiyuu Densetsu VI (Japan).zip",
+          "usefulness": "extractable_game_or_package"
+        },
+        {
+          "name": "銀河英雄伝説/Ginga Eiyuu Densetsu VI (Japan)/Ginga Eiyuu Densetsu VI (Japan) (Track 01).bin",
+          "format": "Unknown",
+          "size": "334905984",
+          "source": "original",
+          "extension": "bin",
+          "direct_url": "https://archive.org/download/ginga-eiyuu-densetsu-w98-colection/%E9%8A%80%E6%B2%B3%E8%8B%B1%E9%9B%84%E4%BC%9D%E8%AA%AC/Ginga Eiyuu Densetsu VI (Japan)/Ginga Eiyuu Densetsu VI (Japan) (Track 01).bin",
+          "usefulness": "extractable_game_or_package"
+        },
+        {
+          "name": "銀河英雄伝説/Ginga Eiyuu Densetsu VI (Japan)/Ginga Eiyuu Densetsu VI (Japan) (Track 02).bin",
+          "format": "Unknown",
+          "size": "25218144",
+          "source": "original",
+          "extension": "bin",
+          "direct_url": "https://archive.org/download/ginga-eiyuu-densetsu-w98-colection/%E9%8A%80%E6%B2%B3%E8%8B%B1%E9%9B%84%E4%BC%9D%E8%AA%AC/Ginga Eiyuu Densetsu VI (Japan)/Ginga Eiyuu Densetsu VI (Japan) (Track 02).bin",
+          "usefulness": "extractable_game_or_package"
+        },
+        {
+          "name": "銀河英雄伝説/Ginga Eiyuu Densetsu VI (Japan)/Ginga Eiyuu Densetsu VI (Japan) (Track 03).bin",
+          "format": "Unknown",
+          "size": "36319584",
+          "source": "original",
+          "extension": "bin",
+          "direct_url": "https://archive.org/download/ginga-eiyuu-densetsu-w98-colection/%E9%8A%80%E6%B2%B3%E8%8B%B1%E9%9B%84%E4%BC%9D%E8%AA%AC/Ginga Eiyuu Densetsu VI (Japan)/Ginga Eiyuu Densetsu VI (Japan) (Track 03).bin",
+          "usefulness": "extractable_game_or_package"
+        },
+        {
+          "name": "銀河英雄伝説/Ginga Eiyuu Densetsu VI (Japan)/Ginga Eiyuu Densetsu VI (Japan) (Track 04).bin",
+          "format": "Unknown",
+          "size": "23905728",
+          "source": "original",
+          "extension": "bin",
+          "direct_url": "https://archive.org/download/ginga-eiyuu-densetsu-w98-colection/%E9%8A%80%E6%B2%B3%E8%8B%B1%E9%9B%84%E4%BC%9D%E8%AA%AC/Ginga Eiyuu Densetsu VI (Japan)/Ginga Eiyuu Densetsu VI (Japan) (Track 04).bin",
+          "usefulness": "extractable_game_or_package"
+        },
+        {
+          "name": "銀河英雄伝説/Ginga Eiyuu Densetsu VI (Japan)/Ginga Eiyuu Densetsu VI (Japan) (Track 05).bin",
+          "format": "Unknown",
+          "size": "25653264",
+          "source": "original",
+          "extension": "bin",
+          "direct_url": "https://archive.org/download/ginga-eiyuu-densetsu-w98-colection/%E9%8A%80%E6%B2%B3%E8%8B%B1%E9%9B%84%E4%BC%9D%E8%AA%AC/Ginga Eiyuu Densetsu VI (Japan)/Ginga Eiyuu Densetsu VI (Japan) (Track 05).bin",
+          "usefulness": "extractable_game_or_package"
+        },
+        {
+          "name": "銀河英雄伝説/Ginga Eiyuu Densetsu VI (Japan)/Ginga Eiyuu Densetsu VI (Japan) (Track 06).bin",
+          "format": "Unknown",
+          "size": "29084832",
+          "source": "original",
+          "extension": "bin",
+          "direct_url": "https://archive.org/download/ginga-eiyuu-densetsu-w98-colection/%E9%8A%80%E6%B2%B3%E8%8B%B1%E9%9B%84%E4%BC%9D%E8%AA%AC/Ginga Eiyuu Densetsu VI (Japan)/Ginga Eiyuu Densetsu VI (Japan) (Track 06).bin",
+          "usefulness": "extractable_game_or_package"
+        },
+        {
+          "name": "銀河英雄伝説/Ginga Eiyuu Densetsu VI (Japan)/Ginga Eiyuu Densetsu VI (Japan) (Track 07).bin",
+          "format": "Unknown",
+          "size": "22741488",
+          "source": "original",
+          "extension": "bin",
+          "direct_url": "https://archive.org/download/ginga-eiyuu-densetsu-w98-colection/%E9%8A%80%E6%B2%B3%E8%8B%B1%E9%9B%84%E4%BC%9D%E8%AA%AC/Ginga Eiyuu Densetsu VI (Japan)/Ginga Eiyuu Densetsu VI (Japan) (Track 07).bin",
+          "usefulness": "extractable_game_or_package"
+        },
+        {
+          "name": "銀河英雄伝説/Ginga Eiyuu Densetsu VI (Japan)/Ginga Eiyuu Densetsu VI (Japan) (Track 08).bin",
+          "format": "Unknown",
+          "size": "24881808",
+          "source": "original",
+          "extension": "bin",
+          "direct_url": "https://archive.org/download/ginga-eiyuu-densetsu-w98-colection/%E9%8A%80%E6%B2%B3%E8%8B%B1%E9%9B%84%E4%BC%9D%E8%AA%AC/Ginga Eiyuu Densetsu VI (Japan)/Ginga Eiyuu Densetsu VI (Japan) (Track 08).bin",
+          "usefulness": "extractable_game_or_package"
+        },
+        {
+          "name": "銀河英雄伝説/Ginga Eiyuu Densetsu VI (Japan)/Ginga Eiyuu Densetsu VI (Japan) (Track 09).bin",
+          "format": "Unknown",
+          "size": "29284752",
+          "source": "original",
+          "extension": "bin",
+          "direct_url": "https://archive.org/download/ginga-eiyuu-densetsu-w98-colection/%E9%8A%80%E6%B2%B3%E8%8B%B1%E9%9B%84%E4%BC%9D%E8%AA%AC/Ginga Eiyuu Densetsu VI (Japan)/Ginga Eiyuu Densetsu VI (Japan) (Track 09).bin",
+          "usefulness": "extractable_game_or_package"
+        },
+        {
+          "name": "銀河英雄伝説/Ginga Eiyuu Densetsu VI (Japan)/Ginga Eiyuu Densetsu VI (Japan) (Track 10).bin",
+          "format": "Unknown",
+          "size": "20434176",
+          "source": "original",
+          "extension": "bin",
+          "direct_url": "https://archive.org/download/ginga-eiyuu-densetsu-w98-colection/%E9%8A%80%E6%B2%B3%E8%8B%B1%E9%9B%84%E4%BC%9D%E8%AA%AC/Ginga Eiyuu Densetsu VI (Japan)/Ginga Eiyuu Densetsu VI (Japan) (Track 10).bin",
+          "usefulness": "extractable_game_or_package"
+        },
+        {
+          "name": "銀河英雄伝説/Ginga Eiyuu Densetsu VI (Japan)/Ginga Eiyuu Densetsu VI (Japan) (Track 11).bin",
+          "format": "Unknown",
+          "size": "22339296",
+          "source": "original",
+          "extension": "bin",
+          "direct_url": "https://archive.org/download/ginga-eiyuu-densetsu-w98-colection/%E9%8A%80%E6%B2%B3%E8%8B%B1%E9%9B%84%E4%BC%9D%E8%AA%AC/Ginga Eiyuu Densetsu VI (Japan)/Ginga Eiyuu Densetsu VI (Japan) (Track 11).bin",
+          "usefulness": "extractable_game_or_package"
+        },
+        {
+          "name": "銀河英雄伝説/Ginga Eiyuu Densetsu VI (Japan)/Ginga Eiyuu Densetsu VI (Japan) (Track 12).bin",
+          "format": "Unknown",
+          "size": "26989200",
+          "source": "original",
+          "extension": "bin",
+          "direct_url": "https://archive.org/download/ginga-eiyuu-densetsu-w98-colection/%E9%8A%80%E6%B2%B3%E8%8B%B1%E9%9B%84%E4%BC%9D%E8%AA%AC/Ginga Eiyuu Densetsu VI (Japan)/Ginga Eiyuu Densetsu VI (Japan) (Track 12).bin",
+          "usefulness": "extractable_game_or_package"
+        },
+        {
+          "name": "銀河英雄伝説/Ginga Eiyuu Densetsu VI (Japan)/Ginga Eiyuu Densetsu VI (Japan) (Track 13).bin",
+          "format": "Unknown",
+          "size": "33906432",
+          "source": "original",
+          "extension": "bin",
+          "direct_url": "https://archive.org/download/ginga-eiyuu-densetsu-w98-colection/%E9%8A%80%E6%B2%B3%E8%8B%B1%E9%9B%84%E4%BC%9D%E8%AA%AC/Ginga Eiyuu Densetsu VI (Japan)/Ginga Eiyuu Densetsu VI (Japan) (Track 13).bin",
+          "usefulness": "extractable_game_or_package"
+        },
+        {
+          "name": "銀河英雄伝説/Ginga Eiyuu Densetsu VI (Japan)/Ginga Eiyuu Densetsu VI (Japan) (Track 14).bin",
+          "format": "Unknown",
+          "size": "39779376",
+          "source": "original",
+          "extension": "bin",
+          "direct_url": "https://archive.org/download/ginga-eiyuu-densetsu-w98-colection/%E9%8A%80%E6%B2%B3%E8%8B%B1%E9%9B%84%E4%BC%9D%E8%AA%AC/Ginga Eiyuu Densetsu VI (Japan)/Ginga Eiyuu Densetsu VI (Japan) (Track 14).bin",
+          "usefulness": "extractable_game_or_package"
+        },
+        {
+          "name": "銀河英雄伝説/Ginga Eiyuu Densetsu VI (Japan)/Ginga Eiyuu Densetsu VI (Japan).cue",
+          "format": "Cue Sheet",
+          "size": "1746",
+          "source": "original",
+          "extension": "cue",
+          "direct_url": "https://archive.org/download/ginga-eiyuu-densetsu-w98-colection/%E9%8A%80%E6%B2%B3%E8%8B%B1%E9%9B%84%E4%BC%9D%E8%AA%AC/Ginga Eiyuu Densetsu VI (Japan)/Ginga Eiyuu Densetsu VI (Japan).cue",
+          "usefulness": "extractable_game_or_package"
+        },
+        {
+          "name": "銀河英雄伝説/Ginga Eiyuu Densetsu VI SG (Japan) (Rerelease).zip",
+          "format": "ZIP",
+          "size": "648550002",
+          "source": "original",
+          "extension": "zip",
+          "direct_url": "https://archive.org/download/ginga-eiyuu-densetsu-w98-colection/%E9%8A%80%E6%B2%B3%E8%8B%B1%E9%9B%84%E4%BC%9D%E8%AA%AC/Ginga Eiyuu Densetsu VI SG (Japan) (Rerelease).zip",
+          "usefulness": "extractable_game_or_package"
+        },
+        {
+          "name": "銀河英雄伝説/Ginga Eiyuu Densetsu VI SG (Japan) (Rerelease)/Ginga Eiyuu Densetsu VI SG (Japan) (Rerelease) (Track 01).bin",
+          "format": "Unknown",
+          "size": "336331296",
+          "source": "original",
+          "extension": "bin",
+          "direct_url": "https://archive.org/download/ginga-eiyuu-densetsu-w98-colection/%E9%8A%80%E6%B2%B3%E8%8B%B1%E9%9B%84%E4%BC%9D%E8%AA%AC/Ginga Eiyuu Densetsu VI SG (Japan) (Rerelease)/Ginga Eiyuu Densetsu VI SG (Japan) (Rerelease) (Track 01).bin",
+          "usefulness": "extractable_game_or_package"
+        },
+        {
+          "name": "銀河英雄伝説/Ginga Eiyuu Densetsu VI SG (Japan) (Rerelease)/Ginga Eiyuu Densetsu VI SG (Japan) (Rerelease) (Track 02).bin",
+          "format": "Unknown",
+          "size": "24950016",
+          "source": "original",
+          "extension": "bin",
+          "direct_url": "https://archive.org/download/ginga-eiyuu-densetsu-w98-colection/%E9%8A%80%E6%B2%B3%E8%8B%B1%E9%9B%84%E4%BC%9D%E8%AA%AC/Ginga Eiyuu Densetsu VI SG (Japan) (Rerelease)/Ginga Eiyuu Densetsu VI SG (Japan) (Rerelease) (Track 02).bin",
+          "usefulness": "extractable_game_or_package"
+        },
+        {
+          "name": "銀河英雄伝説/Ginga Eiyuu Densetsu VI SG (Japan) (Rerelease)/Ginga Eiyuu Densetsu VI SG (Japan) (Rerelease) (Track 03).bin",
+          "format": "Unknown",
+          "size": "36418368",
+          "source": "original",
+          "extension": "bin",
+          "direct_url": "https://archive.org/download/ginga-eiyuu-densetsu-w98-colection/%E9%8A%80%E6%B2%B3%E8%8B%B1%E9%9B%84%E4%BC%9D%E8%AA%AC/Ginga Eiyuu Densetsu VI SG (Japan) (Rerelease)/Ginga Eiyuu Densetsu VI SG (Japan) (Rerelease) (Track 03).bin",
+          "usefulness": "extractable_game_or_package"
+        },
+        {
+          "name": "銀河英雄伝説/Ginga Eiyuu Densetsu VI SG (Japan) (Rerelease)/Ginga Eiyuu Densetsu VI SG (Japan) (Rerelease) (Track 04).bin",
+          "format": "Unknown",
+          "size": "23741088",
+          "source": "original",
+          "extension": "bin",
+          "direct_url": "https://archive.org/download/ginga-eiyuu-densetsu-w98-colection/%E9%8A%80%E6%B2%B3%E8%8B%B1%E9%9B%84%E4%BC%9D%E8%AA%AC/Ginga Eiyuu Densetsu VI SG (Japan) (Rerelease)/Ginga Eiyuu Densetsu VI SG (Japan) (Rerelease) (Track 04).bin",
+          "usefulness": "extractable_game_or_package"
+        },
+        {
+          "name": "銀河英雄伝説/Ginga Eiyuu Densetsu VI SG (Japan) (Rerelease)/Ginga Eiyuu Densetsu VI SG (Japan) (Rerelease) (Track 05).bin",
+          "format": "Unknown",
+          "size": "25815552",
+          "source": "original",
+          "extension": "bin",
+          "direct_url": "https://archive.org/download/ginga-eiyuu-densetsu-w98-colection/%E9%8A%80%E6%B2%B3%E8%8B%B1%E9%9B%84%E4%BC%9D%E8%AA%AC/Ginga Eiyuu Densetsu VI SG (Japan) (Rerelease)/Ginga Eiyuu Densetsu VI SG (Japan) (Rerelease) (Track 05).bin",
+          "usefulness": "extractable_game_or_package"
+        },
+        {
+          "name": "銀河英雄伝説/Ginga Eiyuu Densetsu VI SG (Japan) (Rerelease)/Ginga Eiyuu Densetsu VI SG (Japan) (Rerelease) (Track 06).bin",
+          "format": "Unknown",
+          "size": "29042496",
+          "source": "original",
+          "extension": "bin",
+          "direct_url": "https://archive.org/download/ginga-eiyuu-densetsu-w98-colection/%E9%8A%80%E6%B2%B3%E8%8B%B1%E9%9B%84%E4%BC%9D%E8%AA%AC/Ginga Eiyuu Densetsu VI SG (Japan) (Rerelease)/Ginga Eiyuu Densetsu VI SG (Japan) (Rerelease) (Track 06).bin",
+          "usefulness": "extractable_game_or_package"
+        },
+        {
+          "name": "銀河英雄伝説/Ginga Eiyuu Densetsu VI SG (Japan) (Rerelease)/Ginga Eiyuu Densetsu VI SG (Japan) (Rerelease) (Track 07).bin",
+          "format": "Unknown",
+          "size": "22819104",
+          "source": "original",
+          "extension": "bin",
+          "direct_url": "https://archive.org/download/ginga-eiyuu-densetsu-w98-colection/%E9%8A%80%E6%B2%B3%E8%8B%B1%E9%9B%84%E4%BC%9D%E8%AA%AC/Ginga Eiyuu Densetsu VI SG (Japan) (Rerelease)/Ginga Eiyuu Densetsu VI SG (Japan) (Rerelease) (Track 07).bin",
+          "usefulness": "extractable_game_or_package"
+        },
+        {
+          "name": "銀河英雄伝説/Ginga Eiyuu Densetsu VI SG (Japan) (Rerelease)/Ginga Eiyuu Densetsu VI SG (Japan) (Rerelease) (Track 08).bin",
+          "format": "Unknown",
+          "size": "24893568",
+          "source": "original",
+          "extension": "bin",
+          "direct_url": "https://archive.org/download/ginga-eiyuu-densetsu-w98-colection/%E9%8A%80%E6%B2%B3%E8%8B%B1%E9%9B%84%E4%BC%9D%E8%AA%AC/Ginga Eiyuu Densetsu VI SG (Japan) (Rerelease)/Ginga Eiyuu Densetsu VI SG (Japan) (Rerelease) (Track 08).bin",
+          "usefulness": "extractable_game_or_package"
+        },
+        {
+          "name": "銀河英雄伝説/Ginga Eiyuu Densetsu VI SG (Japan) (Rerelease)/Ginga Eiyuu Densetsu VI SG (Japan) (Rerelease) (Track 09).bin",
+          "format": "Unknown",
+          "size": "29272992",
+          "source": "original",
+          "extension": "bin",
+          "direct_url": "https://archive.org/download/ginga-eiyuu-densetsu-w98-colection/%E9%8A%80%E6%B2%B3%E8%8B%B1%E9%9B%84%E4%BC%9D%E8%AA%AC/Ginga Eiyuu Densetsu VI SG (Japan) (Rerelease)/Ginga Eiyuu Densetsu VI SG (Japan) (Rerelease) (Track 09).bin",
+          "usefulness": "extractable_game_or_package"
+        },
+        {
+          "name": "銀河英雄伝説/Ginga Eiyuu Densetsu VI SG (Japan) (Rerelease)/Ginga Eiyuu Densetsu VI SG (Japan) (Rerelease) (Track 10).bin",
+          "format": "Unknown",
+          "size": "20283648",
+          "source": "original",
+          "extension": "bin",
+          "direct_url": "https://archive.org/download/ginga-eiyuu-densetsu-w98-colection/%E9%8A%80%E6%B2%B3%E8%8B%B1%E9%9B%84%E4%BC%9D%E8%AA%AC/Ginga Eiyuu Densetsu VI SG (Japan) (Rerelease)/Ginga Eiyuu Densetsu VI SG (Japan) (Rerelease) (Track 10).bin",
+          "usefulness": "extractable_game_or_package"
+        },
+        {
+          "name": "銀河英雄伝説/Ginga Eiyuu Densetsu VI SG (Japan) (Rerelease)/Ginga Eiyuu Densetsu VI SG (Japan) (Rerelease) (Track 11).bin",
+          "format": "Unknown",
+          "size": "22358112",
+          "source": "original",
+          "extension": "bin",
+          "direct_url": "https://archive.org/download/ginga-eiyuu-densetsu-w98-colection/%E9%8A%80%E6%B2%B3%E8%8B%B1%E9%9B%84%E4%BC%9D%E8%AA%AC/Ginga Eiyuu Densetsu VI SG (Japan) (Rerelease)/Ginga Eiyuu Densetsu VI SG (Japan) (Rerelease) (Track 11).bin",
+          "usefulness": "extractable_game_or_package"
+        },
+        {
+          "name": "銀河英雄伝説/Ginga Eiyuu Densetsu VI SG (Japan) (Rerelease)/Ginga Eiyuu Densetsu VI SG (Japan) (Rerelease) (Track 12).bin",
+          "format": "Unknown",
+          "size": "26968032",
+          "source": "original",
+          "extension": "bin",
+          "direct_url": "https://archive.org/download/ginga-eiyuu-densetsu-w98-colection/%E9%8A%80%E6%B2%B3%E8%8B%B1%E9%9B%84%E4%BC%9D%E8%AA%AC/Ginga Eiyuu Densetsu VI SG (Japan) (Rerelease)/Ginga Eiyuu Densetsu VI SG (Japan) (Rerelease) (Track 12).bin",
+          "usefulness": "extractable_game_or_package"
+        },
+        {
+          "name": "銀河英雄伝説/Ginga Eiyuu Densetsu VI SG (Japan) (Rerelease)/Ginga Eiyuu Densetsu VI SG (Japan) (Rerelease) (Track 13).bin",
+          "format": "Unknown",
+          "size": "33882912",
+          "source": "original",
+          "extension": "bin",
+          "direct_url": "https://archive.org/download/ginga-eiyuu-densetsu-w98-colection/%E9%8A%80%E6%B2%B3%E8%8B%B1%E9%9B%84%E4%BC%9D%E8%AA%AC/Ginga Eiyuu Densetsu VI SG (Japan) (Rerelease)/Ginga Eiyuu Densetsu VI SG (Japan) (Rerelease) (Track 13).bin",
+          "usefulness": "extractable_game_or_package"
+        },
+        {
+          "name": "銀河英雄伝説/Ginga Eiyuu Densetsu VI SG (Japan) (Rerelease)/Ginga Eiyuu Densetsu VI SG (Japan) (Rerelease) (Track 14).bin",
+          "format": "Unknown",
+          "size": "40087488",
+          "source": "original",
+          "extension": "bin",
+          "direct_url": "https://archive.org/download/ginga-eiyuu-densetsu-w98-colection/%E9%8A%80%E6%B2%B3%E8%8B%B1%E9%9B%84%E4%BC%9D%E8%AA%AC/Ginga Eiyuu Densetsu VI SG (Japan) (Rerelease)/Ginga Eiyuu Densetsu VI SG (Japan) (Rerelease) (Track 14).bin",
+          "usefulness": "extractable_game_or_package"
+        },
+        {
+          "name": "銀河英雄伝説/Ginga Eiyuu Densetsu VI SG (Japan) (Rerelease)/Ginga Eiyuu Densetsu VI SG (Japan) (Rerelease).cue",
+          "format": "Cue Sheet",
+          "size": "1979",
+          "source": "original",
+          "extension": "cue",
+          "direct_url": "https://archive.org/download/ginga-eiyuu-densetsu-w98-colection/%E9%8A%80%E6%B2%B3%E8%8B%B1%E9%9B%84%E4%BC%9D%E8%AA%AC/Ginga Eiyuu Densetsu VI SG (Japan) (Rerelease)/Ginga Eiyuu Densetsu VI SG (Japan) (Rerelease).cue",
+          "usefulness": "extractable_game_or_package"
+        },
+        {
+          "name": "銀河英雄伝説/Ginga Eiyuu Densetsu VI SG (Japan).zip",
+          "format": "ZIP",
+          "size": "18538572",
+          "source": "original",
+          "extension": "zip",
+          "direct_url": "https://archive.org/download/ginga-eiyuu-densetsu-w98-colection/%E9%8A%80%E6%B2%B3%E8%8B%B1%E9%9B%84%E4%BC%9D%E8%AA%AC/Ginga Eiyuu Densetsu VI SG (Japan).zip",
+          "usefulness": "extractable_game_or_package"
+        },
+        {
+          "name": "銀河英雄伝説/Ginga Eiyuu Densetsu VI SG (Japan)/Ginga Eiyuu Densetsu VI SG (Japan).bin",
+          "format": "Unknown",
+          "size": "19792080",
+          "source": "original",
+          "extension": "bin",
+          "direct_url": "https://archive.org/download/ginga-eiyuu-densetsu-w98-colection/%E9%8A%80%E6%B2%B3%E8%8B%B1%E9%9B%84%E4%BC%9D%E8%AA%AC/Ginga Eiyuu Densetsu VI SG (Japan)/Ginga Eiyuu Densetsu VI SG (Japan).bin",
+          "usefulness": "extractable_game_or_package"
+        },
+        {
+          "name": "銀河英雄伝説/Ginga Eiyuu Densetsu VI SG (Japan)/Ginga Eiyuu Densetsu VI SG (Japan).cue",
+          "format": "Cue Sheet",
+          "size": "123",
+          "source": "original",
+          "extension": "cue",
+          "direct_url": "https://archive.org/download/ginga-eiyuu-densetsu-w98-colection/%E9%8A%80%E6%B2%B3%E8%8B%B1%E9%9B%84%E4%BC%9D%E8%AA%AC/Ginga Eiyuu Densetsu VI SG (Japan)/Ginga Eiyuu Densetsu VI SG (Japan).cue",
+          "usefulness": "extractable_game_or_package"
+        },
+        {
+          "name": "銀河英雄伝説/Ginga Eiyuu Densetsu VS (Japan).zip",
+          "format": "ZIP",
+          "size": "504220829",
+          "source": "original",
+          "extension": "zip",
+          "direct_url": "https://archive.org/download/ginga-eiyuu-densetsu-w98-colection/%E9%8A%80%E6%B2%B3%E8%8B%B1%E9%9B%84%E4%BC%9D%E8%AA%AC/Ginga Eiyuu Densetsu VS (Japan).zip",
+          "usefulness": "extractable_game_or_package"
+        },
+        {
+          "name": "銀河英雄伝説/Ginga Eiyuu Densetsu VS (Japan)/Ginga Eiyuu Densetsu VS (Japan).bin",
+          "format": "Unknown",
+          "size": "521116176",
+          "source": "original",
+          "extension": "bin",
+          "direct_url": "https://archive.org/download/ginga-eiyuu-densetsu-w98-colection/%E9%8A%80%E6%B2%B3%E8%8B%B1%E9%9B%84%E4%BC%9D%E8%AA%AC/Ginga Eiyuu Densetsu VS (Japan)/Ginga Eiyuu Densetsu VS (Japan).bin",
+          "usefulness": "extractable_game_or_package"
+        },
+        {
+          "name": "銀河英雄伝説/Ginga Eiyuu Densetsu VS (Japan)/Ginga Eiyuu Densetsu VS (Japan).cue",
+          "format": "Cue Sheet",
+          "size": "97",
+          "source": "original",
+          "extension": "cue",
+          "direct_url": "https://archive.org/download/ginga-eiyuu-densetsu-w98-colection/%E9%8A%80%E6%B2%B3%E8%8B%B1%E9%9B%84%E4%BC%9D%E8%AA%AC/Ginga Eiyuu Densetsu VS (Japan)/Ginga Eiyuu Densetsu VS (Japan).cue",
+          "usefulness": "extractable_game_or_package"
+        }
+      ]
+    },
+    {
+      "identifier": "ginga-eiyuu-densetsu-vi-sg",
+      "title": "Ginga Eiyuu Densetsu VI SG (Japan)",
+      "role": "prior_game_disc",
+      "priority": 80,
+      "note": "VI SG package with photos; useful for prior-game art/reference and update comparison.",
+      "archive_url": "https://archive.org/details/ginga-eiyuu-densetsu-vi-sg",
+      "file_count": 12,
+      "extensions": {
+        "jpg": 7,
+        "xml": 2,
+        "7z": 1,
+        "sqlite": 1,
+        "torrent": 1
+      },
+      "candidate_files": [
+        {
+          "name": "GIN6SG.7z",
+          "format": "7z",
+          "size": "631574882",
+          "source": "original",
+          "extension": "7z",
+          "direct_url": "https://archive.org/download/ginga-eiyuu-densetsu-vi-sg/GIN6SG.7z",
+          "usefulness": "extractable_game_or_package"
+        },
+        {
+          "name": "IMG_20250111_0004.jpg",
+          "format": "JPEG",
+          "size": "483142",
+          "source": "original",
+          "extension": "jpg",
+          "direct_url": "https://archive.org/download/ginga-eiyuu-densetsu-vi-sg/IMG_20250111_0004.jpg",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "IMG_20250111_0004_thumb.jpg",
+          "format": "JPEG Thumb",
+          "size": "16666",
+          "source": "derivative",
+          "extension": "jpg",
+          "direct_url": "https://archive.org/download/ginga-eiyuu-densetsu-vi-sg/IMG_20250111_0004_thumb.jpg",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "IMG_20250111_0005.jpg",
+          "format": "JPEG",
+          "size": "640913",
+          "source": "original",
+          "extension": "jpg",
+          "direct_url": "https://archive.org/download/ginga-eiyuu-densetsu-vi-sg/IMG_20250111_0005.jpg",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "IMG_20250111_0005_thumb.jpg",
+          "format": "JPEG Thumb",
+          "size": "17561",
+          "source": "derivative",
+          "extension": "jpg",
+          "direct_url": "https://archive.org/download/ginga-eiyuu-densetsu-vi-sg/IMG_20250111_0005_thumb.jpg",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "IMG_20250111_0006.jpg",
+          "format": "JPEG",
+          "size": "854346",
+          "source": "original",
+          "extension": "jpg",
+          "direct_url": "https://archive.org/download/ginga-eiyuu-densetsu-vi-sg/IMG_20250111_0006.jpg",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "IMG_20250111_0006_thumb.jpg",
+          "format": "JPEG Thumb",
+          "size": "14848",
+          "source": "derivative",
+          "extension": "jpg",
+          "direct_url": "https://archive.org/download/ginga-eiyuu-densetsu-vi-sg/IMG_20250111_0006_thumb.jpg",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "__ia_thumb.jpg",
+          "format": "Item Tile",
+          "size": "11411",
+          "source": "original",
+          "extension": "jpg",
+          "direct_url": "https://archive.org/download/ginga-eiyuu-densetsu-vi-sg/__ia_thumb.jpg",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "ginga-eiyuu-densetsu-vi-sg_archive.torrent",
+          "format": "Archive BitTorrent",
+          "size": "27173",
+          "source": "metadata",
+          "extension": "torrent",
+          "direct_url": "https://archive.org/download/ginga-eiyuu-densetsu-vi-sg/ginga-eiyuu-densetsu-vi-sg_archive.torrent",
+          "usefulness": "metadata_only"
+        },
+        {
+          "name": "ginga-eiyuu-densetsu-vi-sg_files.xml",
+          "format": "Metadata",
+          "size": null,
+          "source": "original",
+          "extension": "xml",
+          "direct_url": "https://archive.org/download/ginga-eiyuu-densetsu-vi-sg/ginga-eiyuu-densetsu-vi-sg_files.xml",
+          "usefulness": "ocr_or_manual_text"
+        },
+        {
+          "name": "ginga-eiyuu-densetsu-vi-sg_meta.xml",
+          "format": "Metadata",
+          "size": "845",
+          "source": "original",
+          "extension": "xml",
+          "direct_url": "https://archive.org/download/ginga-eiyuu-densetsu-vi-sg/ginga-eiyuu-densetsu-vi-sg_meta.xml",
+          "usefulness": "ocr_or_manual_text"
+        }
+      ]
+    },
+    {
+      "identifier": "gin-6",
+      "title": "Legend of the Galactic Heroes V Grand andVI",
+      "role": "prior_game_disc",
+      "priority": 80,
+      "note": "V Grand + VI disc images; useful for prior stats/art reference.",
+      "archive_url": "https://archive.org/details/gin-6",
+      "file_count": 7,
+      "extensions": {
+        "xml": 2,
+        "bin": 1,
+        "cue": 1,
+        "iso": 1,
+        "sqlite": 1,
+        "torrent": 1
+      },
+      "candidate_files": [
+        {
+          "name": "GIN5GRAND.ISO",
+          "format": "ISO Image",
+          "size": "378296320",
+          "source": "original",
+          "extension": "iso",
+          "direct_url": "https://archive.org/download/gin-6/GIN5GRAND.ISO",
+          "usefulness": "extractable_game_or_package"
+        },
+        {
+          "name": "GIN6.BIN",
+          "format": "Unknown",
+          "size": "694371552",
+          "source": "original",
+          "extension": "bin",
+          "direct_url": "https://archive.org/download/gin-6/GIN6.BIN",
+          "usefulness": "extractable_game_or_package"
+        },
+        {
+          "name": "GIN6.CUE",
+          "format": "Cue Sheet",
+          "size": "923",
+          "source": "original",
+          "extension": "cue",
+          "direct_url": "https://archive.org/download/gin-6/GIN6.CUE",
+          "usefulness": "extractable_game_or_package"
+        },
+        {
+          "name": "gin-6_archive.torrent",
+          "format": "Archive BitTorrent",
+          "size": "42800",
+          "source": "metadata",
+          "extension": "torrent",
+          "direct_url": "https://archive.org/download/gin-6/gin-6_archive.torrent",
+          "usefulness": "metadata_only"
+        },
+        {
+          "name": "gin-6_files.xml",
+          "format": "Metadata",
+          "size": null,
+          "source": "original",
+          "extension": "xml",
+          "direct_url": "https://archive.org/download/gin-6/gin-6_files.xml",
+          "usefulness": "ocr_or_manual_text"
+        },
+        {
+          "name": "gin-6_meta.xml",
+          "format": "Metadata",
+          "size": "1001",
+          "source": "original",
+          "extension": "xml",
+          "direct_url": "https://archive.org/download/gin-6/gin-6_meta.xml",
+          "usefulness": "ocr_or_manual_text"
+        }
+      ]
+    },
+    {
+      "identifier": "galactic-heroes-series-ch",
+      "title": "Legend of the Galactic Heroes series 银河英雄传说系列",
+      "role": "translated_prior_games",
+      "priority": 80,
+      "note": "Chinese prior-game collection; useful for cross-language file names, lower authority than Japanese originals.",
+      "archive_url": "https://archive.org/details/galactic-heroes-series-ch",
+      "file_count": 21,
+      "extensions": {
+        "jpg": 6,
+        "zip": 6,
+        "png": 5,
+        "xml": 2,
+        "sqlite": 1,
+        "torrent": 1
+      },
+      "candidate_files": [
+        {
+          "name": "Gin3-CHT_DOS.zip",
+          "format": "ZIP",
+          "size": "3527452",
+          "source": "original",
+          "extension": "zip",
+          "direct_url": "https://archive.org/download/galactic-heroes-series-ch/Gin3-CHT_DOS.zip",
+          "usefulness": "extractable_game_or_package"
+        },
+        {
+          "name": "Gin4_CHT_DOS.zip",
+          "format": "ZIP",
+          "size": "506375065",
+          "source": "original",
+          "extension": "zip",
+          "direct_url": "https://archive.org/download/galactic-heroes-series-ch/Gin4_CHT_DOS.zip",
+          "usefulness": "extractable_game_or_package"
+        },
+        {
+          "name": "Gin4_CHT_win.zip",
+          "format": "ZIP",
+          "size": "454670962",
+          "source": "original",
+          "extension": "zip",
+          "direct_url": "https://archive.org/download/galactic-heroes-series-ch/Gin4_CHT_win.zip",
+          "usefulness": "extractable_game_or_package"
+        },
+        {
+          "name": "Gin5-CHT_win.zip",
+          "format": "ZIP",
+          "size": "222955126",
+          "source": "original",
+          "extension": "zip",
+          "direct_url": "https://archive.org/download/galactic-heroes-series-ch/Gin5-CHT_win.zip",
+          "usefulness": "extractable_game_or_package"
+        },
+        {
+          "name": "Gin6-CHS_win.zip",
+          "format": "ZIP",
+          "size": "650779068",
+          "source": "original",
+          "extension": "zip",
+          "direct_url": "https://archive.org/download/galactic-heroes-series-ch/Gin6-CHS_win.zip",
+          "usefulness": "extractable_game_or_package"
+        },
+        {
+          "name": "Gin6-CHT_win.zip",
+          "format": "ZIP",
+          "size": "639924185",
+          "source": "original",
+          "extension": "zip",
+          "direct_url": "https://archive.org/download/galactic-heroes-series-ch/Gin6-CHT_win.zip",
+          "usefulness": "extractable_game_or_package"
+        },
+        {
+          "name": "__ia_thumb.jpg",
+          "format": "Item Tile",
+          "size": "14716",
+          "source": "original",
+          "extension": "jpg",
+          "direct_url": "https://archive.org/download/galactic-heroes-series-ch/__ia_thumb.jpg",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "galactic-heroes-series-ch_archive.torrent",
+          "format": "Archive BitTorrent",
+          "size": "29529",
+          "source": "metadata",
+          "extension": "torrent",
+          "direct_url": "https://archive.org/download/galactic-heroes-series-ch/galactic-heroes-series-ch_archive.torrent",
+          "usefulness": "metadata_only"
+        },
+        {
+          "name": "galactic-heroes-series-ch_files.xml",
+          "format": "Metadata",
+          "size": null,
+          "source": "original",
+          "extension": "xml",
+          "direct_url": "https://archive.org/download/galactic-heroes-series-ch/galactic-heroes-series-ch_files.xml",
+          "usefulness": "ocr_or_manual_text"
+        },
+        {
+          "name": "galactic-heroes-series-ch_meta.xml",
+          "format": "Metadata",
+          "size": "1429",
+          "source": "original",
+          "extension": "xml",
+          "direct_url": "https://archive.org/download/galactic-heroes-series-ch/galactic-heroes-series-ch_meta.xml",
+          "usefulness": "ocr_or_manual_text"
+        },
+        {
+          "name": "gin3dos.png",
+          "format": "PNG",
+          "size": "36288",
+          "source": "original",
+          "extension": "png",
+          "direct_url": "https://archive.org/download/galactic-heroes-series-ch/gin3dos.png",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gin3dos_thumb.jpg",
+          "format": "JPEG Thumb",
+          "size": "8038",
+          "source": "derivative",
+          "extension": "jpg",
+          "direct_url": "https://archive.org/download/galactic-heroes-series-ch/gin3dos_thumb.jpg",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gin4dos.png",
+          "format": "PNG",
+          "size": "31141",
+          "source": "original",
+          "extension": "png",
+          "direct_url": "https://archive.org/download/galactic-heroes-series-ch/gin4dos.png",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gin4dos_thumb.jpg",
+          "format": "JPEG Thumb",
+          "size": "7369",
+          "source": "derivative",
+          "extension": "jpg",
+          "direct_url": "https://archive.org/download/galactic-heroes-series-ch/gin4dos_thumb.jpg",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gin4win.PNG",
+          "format": "PNG",
+          "size": "396430",
+          "source": "original",
+          "extension": "png",
+          "direct_url": "https://archive.org/download/galactic-heroes-series-ch/gin4win.PNG",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gin4win_thumb.jpg",
+          "format": "JPEG Thumb",
+          "size": "8464",
+          "source": "derivative",
+          "extension": "jpg",
+          "direct_url": "https://archive.org/download/galactic-heroes-series-ch/gin4win_thumb.jpg",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gin5win.PNG",
+          "format": "PNG",
+          "size": "629635",
+          "source": "original",
+          "extension": "png",
+          "direct_url": "https://archive.org/download/galactic-heroes-series-ch/gin5win.PNG",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gin5win_thumb.jpg",
+          "format": "JPEG Thumb",
+          "size": "8858",
+          "source": "derivative",
+          "extension": "jpg",
+          "direct_url": "https://archive.org/download/galactic-heroes-series-ch/gin5win_thumb.jpg",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gin6win.png",
+          "format": "PNG",
+          "size": "82617",
+          "source": "original",
+          "extension": "png",
+          "direct_url": "https://archive.org/download/galactic-heroes-series-ch/gin6win.png",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gin6win_thumb.jpg",
+          "format": "JPEG Thumb",
+          "size": "10129",
+          "source": "derivative",
+          "extension": "jpg",
+          "direct_url": "https://archive.org/download/galactic-heroes-series-ch/gin6win_thumb.jpg",
+          "usefulness": "image_reference_candidate"
+        }
+      ]
+    },
+    {
+      "identifier": "msx-legend-of-the-galactic-heroes-power-up-and-scenario-collection-docs",
+      "title": "MSX Legend of the Galactic Heroes Power Up and Scenario Collection documents",
+      "role": "early_manual",
+      "priority": 70,
+      "note": "MSX docs; historical/reference only.",
+      "archive_url": "https://archive.org/details/msx-legend-of-the-galactic-heroes-power-up-and-scenario-collection-docs",
+      "file_count": 41,
+      "extensions": {
+        "gz": 9,
+        "xml": 8,
+        "json": 6,
+        "epub": 3,
+        "html": 3,
+        "pdf": 3,
+        "txt": 3,
+        "zip": 3,
+        "jpg": 1,
+        "sqlite": 1,
+        "torrent": 1
+      },
+      "candidate_files": [
+        {
+          "name": "__ia_thumb.jpg",
+          "format": "Item Tile",
+          "size": "26833",
+          "source": "original",
+          "extension": "jpg",
+          "direct_url": "https://archive.org/download/msx-legend-of-the-galactic-heroes-power-up-and-scenario-collection-docs/__ia_thumb.jpg",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "msx-legend-of-the-galactic-heroes-power-up-and-scenario-collection-docs_archive.torrent",
+          "format": "Archive BitTorrent",
+          "size": "12691",
+          "source": "metadata",
+          "extension": "torrent",
+          "direct_url": "https://archive.org/download/msx-legend-of-the-galactic-heroes-power-up-and-scenario-collection-docs/msx-legend-of-the-galactic-heroes-power-up-and-scenario-collection-docs_archive.torrent",
+          "usefulness": "metadata_only"
+        },
+        {
+          "name": "msx-legend-of-the-galactic-heroes-power-up-and-scenario-collection-docs_files.xml",
+          "format": "Metadata",
+          "size": null,
+          "source": "original",
+          "extension": "xml",
+          "direct_url": "https://archive.org/download/msx-legend-of-the-galactic-heroes-power-up-and-scenario-collection-docs/msx-legend-of-the-galactic-heroes-power-up-and-scenario-collection-docs_files.xml",
+          "usefulness": "ocr_or_manual_text"
+        },
+        {
+          "name": "msx-legend-of-the-galactic-heroes-power-up-and-scenario-collection-docs_meta.xml",
+          "format": "Metadata",
+          "size": "1837",
+          "source": "original",
+          "extension": "xml",
+          "direct_url": "https://archive.org/download/msx-legend-of-the-galactic-heroes-power-up-and-scenario-collection-docs/msx-legend-of-the-galactic-heroes-power-up-and-scenario-collection-docs_meta.xml",
+          "usefulness": "ocr_or_manual_text"
+        },
+        {
+          "name": "msx_legend of the galactic heroes power up and scenario collection_manual.pdf",
+          "format": "Text PDF",
+          "size": "21998710",
+          "source": "original",
+          "extension": "pdf",
+          "direct_url": "https://archive.org/download/msx-legend-of-the-galactic-heroes-power-up-and-scenario-collection-docs/msx_legend of the galactic heroes power up and scenario collection_manual.pdf",
+          "usefulness": "ocr_or_manual_text"
+        },
+        {
+          "name": "msx_legend of the galactic heroes power up and scenario collection_manual_djvu.txt",
+          "format": "DjVuTXT",
+          "size": "134673",
+          "source": "derivative",
+          "extension": "txt",
+          "direct_url": "https://archive.org/download/msx-legend-of-the-galactic-heroes-power-up-and-scenario-collection-docs/msx_legend of the galactic heroes power up and scenario collection_manual_djvu.txt",
+          "usefulness": "ocr_or_manual_text"
+        },
+        {
+          "name": "msx_legend of the galactic heroes power up and scenario collection_manual_djvu.xml",
+          "format": "Djvu XML",
+          "size": "976461",
+          "source": "derivative",
+          "extension": "xml",
+          "direct_url": "https://archive.org/download/msx-legend-of-the-galactic-heroes-power-up-and-scenario-collection-docs/msx_legend of the galactic heroes power up and scenario collection_manual_djvu.xml",
+          "usefulness": "ocr_or_manual_text"
+        },
+        {
+          "name": "msx_legend of the galactic heroes power up and scenario collection_manual_hocr_searchtext.txt.gz",
+          "format": "OCR Search Text",
+          "size": "43067",
+          "source": "derivative",
+          "extension": "gz",
+          "direct_url": "https://archive.org/download/msx-legend-of-the-galactic-heroes-power-up-and-scenario-collection-docs/msx_legend of the galactic heroes power up and scenario collection_manual_hocr_searchtext.txt.gz",
+          "usefulness": "ocr_or_manual_text"
+        },
+        {
+          "name": "msx_legend of the galactic heroes power up and scenario collection_manual_jp2.zip",
+          "format": "Single Page Processed JP2 ZIP",
+          "size": "15751449",
+          "source": "derivative",
+          "extension": "zip",
+          "direct_url": "https://archive.org/download/msx-legend-of-the-galactic-heroes-power-up-and-scenario-collection-docs/msx_legend of the galactic heroes power up and scenario collection_manual_jp2.zip",
+          "usefulness": "extractable_game_or_package"
+        },
+        {
+          "name": "msx_legend of the galactic heroes power up and scenario collection_manual_scandata.xml",
+          "format": "Scandata",
+          "size": "22521",
+          "source": "derivative",
+          "extension": "xml",
+          "direct_url": "https://archive.org/download/msx-legend-of-the-galactic-heroes-power-up-and-scenario-collection-docs/msx_legend of the galactic heroes power up and scenario collection_manual_scandata.xml",
+          "usefulness": "ocr_or_manual_text"
+        },
+        {
+          "name": "msx_legend of the galactic heroes power up and scenario collection_postcard.pdf",
+          "format": "Text PDF",
+          "size": "420674",
+          "source": "original",
+          "extension": "pdf",
+          "direct_url": "https://archive.org/download/msx-legend-of-the-galactic-heroes-power-up-and-scenario-collection-docs/msx_legend of the galactic heroes power up and scenario collection_postcard.pdf",
+          "usefulness": "ocr_or_manual_text"
+        },
+        {
+          "name": "msx_legend of the galactic heroes power up and scenario collection_postcard_djvu.txt",
+          "format": "DjVuTXT",
+          "size": "1588",
+          "source": "derivative",
+          "extension": "txt",
+          "direct_url": "https://archive.org/download/msx-legend-of-the-galactic-heroes-power-up-and-scenario-collection-docs/msx_legend of the galactic heroes power up and scenario collection_postcard_djvu.txt",
+          "usefulness": "ocr_or_manual_text"
+        },
+        {
+          "name": "msx_legend of the galactic heroes power up and scenario collection_postcard_djvu.xml",
+          "format": "Djvu XML",
+          "size": "17346",
+          "source": "derivative",
+          "extension": "xml",
+          "direct_url": "https://archive.org/download/msx-legend-of-the-galactic-heroes-power-up-and-scenario-collection-docs/msx_legend of the galactic heroes power up and scenario collection_postcard_djvu.xml",
+          "usefulness": "ocr_or_manual_text"
+        },
+        {
+          "name": "msx_legend of the galactic heroes power up and scenario collection_postcard_hocr_searchtext.txt.gz",
+          "format": "OCR Search Text",
+          "size": "848",
+          "source": "derivative",
+          "extension": "gz",
+          "direct_url": "https://archive.org/download/msx-legend-of-the-galactic-heroes-power-up-and-scenario-collection-docs/msx_legend of the galactic heroes power up and scenario collection_postcard_hocr_searchtext.txt.gz",
+          "usefulness": "ocr_or_manual_text"
+        },
+        {
+          "name": "msx_legend of the galactic heroes power up and scenario collection_postcard_jp2.zip",
+          "format": "Single Page Processed JP2 ZIP",
+          "size": "349489",
+          "source": "derivative",
+          "extension": "zip",
+          "direct_url": "https://archive.org/download/msx-legend-of-the-galactic-heroes-power-up-and-scenario-collection-docs/msx_legend of the galactic heroes power up and scenario collection_postcard_jp2.zip",
+          "usefulness": "extractable_game_or_package"
+        },
+        {
+          "name": "msx_legend of the galactic heroes power up and scenario collection_postcard_scandata.xml",
+          "format": "Scandata",
+          "size": "961",
+          "source": "derivative",
+          "extension": "xml",
+          "direct_url": "https://archive.org/download/msx-legend-of-the-galactic-heroes-power-up-and-scenario-collection-docs/msx_legend of the galactic heroes power up and scenario collection_postcard_scandata.xml",
+          "usefulness": "ocr_or_manual_text"
+        },
+        {
+          "name": "msx_legend of the galactic heroes power up and scenario collection_poster.pdf",
+          "format": "Text PDF",
+          "size": "3636524",
+          "source": "original",
+          "extension": "pdf",
+          "direct_url": "https://archive.org/download/msx-legend-of-the-galactic-heroes-power-up-and-scenario-collection-docs/msx_legend of the galactic heroes power up and scenario collection_poster.pdf",
+          "usefulness": "ocr_or_manual_text"
+        },
+        {
+          "name": "msx_legend of the galactic heroes power up and scenario collection_poster_djvu.txt",
+          "format": "DjVuTXT",
+          "size": "3583",
+          "source": "derivative",
+          "extension": "txt",
+          "direct_url": "https://archive.org/download/msx-legend-of-the-galactic-heroes-power-up-and-scenario-collection-docs/msx_legend of the galactic heroes power up and scenario collection_poster_djvu.txt",
+          "usefulness": "ocr_or_manual_text"
+        },
+        {
+          "name": "msx_legend of the galactic heroes power up and scenario collection_poster_djvu.xml",
+          "format": "Djvu XML",
+          "size": "76820",
+          "source": "derivative",
+          "extension": "xml",
+          "direct_url": "https://archive.org/download/msx-legend-of-the-galactic-heroes-power-up-and-scenario-collection-docs/msx_legend of the galactic heroes power up and scenario collection_poster_djvu.xml",
+          "usefulness": "ocr_or_manual_text"
+        },
+        {
+          "name": "msx_legend of the galactic heroes power up and scenario collection_poster_hocr_searchtext.txt.gz",
+          "format": "OCR Search Text",
+          "size": "1190",
+          "source": "derivative",
+          "extension": "gz",
+          "direct_url": "https://archive.org/download/msx-legend-of-the-galactic-heroes-power-up-and-scenario-collection-docs/msx_legend of the galactic heroes power up and scenario collection_poster_hocr_searchtext.txt.gz",
+          "usefulness": "ocr_or_manual_text"
+        },
+        {
+          "name": "msx_legend of the galactic heroes power up and scenario collection_poster_jp2.zip",
+          "format": "Single Page Processed JP2 ZIP",
+          "size": "2700644",
+          "source": "derivative",
+          "extension": "zip",
+          "direct_url": "https://archive.org/download/msx-legend-of-the-galactic-heroes-power-up-and-scenario-collection-docs/msx_legend of the galactic heroes power up and scenario collection_poster_jp2.zip",
+          "usefulness": "extractable_game_or_package"
+        },
+        {
+          "name": "msx_legend of the galactic heroes power up and scenario collection_poster_scandata.xml",
+          "format": "Scandata",
+          "size": "642",
+          "source": "derivative",
+          "extension": "xml",
+          "direct_url": "https://archive.org/download/msx-legend-of-the-galactic-heroes-power-up-and-scenario-collection-docs/msx_legend of the galactic heroes power up and scenario collection_poster_scandata.xml",
+          "usefulness": "ocr_or_manual_text"
+        }
+      ]
+    },
+    {
+      "identifier": "gingaeiyuuplusx68k",
+      "title": "Ginga Eiyuu Densetsu + Set X68000 Scans",
+      "role": "box_manual_scans",
+      "priority": 70,
+      "note": "X68000 scans; high-quality packaging/manual images, useful for official art references if names are present.",
+      "archive_url": "https://archive.org/details/gingaeiyuuplusx68k",
+      "file_count": 55,
+      "extensions": {
+        "tif": 46,
+        "jpg": 5,
+        "xml": 2,
+        "sqlite": 1,
+        "torrent": 1
+      },
+      "candidate_files": [
+        {
+          "name": "__ia_thumb.jpg",
+          "format": "Item Tile",
+          "size": "22382",
+          "source": "original",
+          "extension": "jpg",
+          "direct_url": "https://archive.org/download/gingaeiyuuplusx68k/__ia_thumb.jpg",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gingaeiyuu/img001.tif",
+          "format": "TIFF",
+          "size": "85597101",
+          "source": "original",
+          "extension": "tif",
+          "direct_url": "https://archive.org/download/gingaeiyuuplusx68k/gingaeiyuu/img001.tif",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gingaeiyuu/img002.tif",
+          "format": "TIFF",
+          "size": "68673388",
+          "source": "original",
+          "extension": "tif",
+          "direct_url": "https://archive.org/download/gingaeiyuuplusx68k/gingaeiyuu/img002.tif",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gingaeiyuu/img003.tif",
+          "format": "TIFF",
+          "size": "65501914",
+          "source": "original",
+          "extension": "tif",
+          "direct_url": "https://archive.org/download/gingaeiyuuplusx68k/gingaeiyuu/img003.tif",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gingaeiyuu/img004.tif",
+          "format": "TIFF",
+          "size": "47202228",
+          "source": "original",
+          "extension": "tif",
+          "direct_url": "https://archive.org/download/gingaeiyuuplusx68k/gingaeiyuu/img004.tif",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gingaeiyuu/img005.tif",
+          "format": "TIFF",
+          "size": "65520484",
+          "source": "original",
+          "extension": "tif",
+          "direct_url": "https://archive.org/download/gingaeiyuuplusx68k/gingaeiyuu/img005.tif",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gingaeiyuu/img006.tif",
+          "format": "TIFF",
+          "size": "72484948",
+          "source": "original",
+          "extension": "tif",
+          "direct_url": "https://archive.org/download/gingaeiyuuplusx68k/gingaeiyuu/img006.tif",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gingaeiyuu/img007.tif",
+          "format": "TIFF",
+          "size": "81718236",
+          "source": "original",
+          "extension": "tif",
+          "direct_url": "https://archive.org/download/gingaeiyuuplusx68k/gingaeiyuu/img007.tif",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gingaeiyuu/img008.tif",
+          "format": "TIFF",
+          "size": "84656354",
+          "source": "original",
+          "extension": "tif",
+          "direct_url": "https://archive.org/download/gingaeiyuuplusx68k/gingaeiyuu/img008.tif",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gingaeiyuu/img009.tif",
+          "format": "TIFF",
+          "size": "89008800",
+          "source": "original",
+          "extension": "tif",
+          "direct_url": "https://archive.org/download/gingaeiyuuplusx68k/gingaeiyuu/img009.tif",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gingaeiyuu/img010.tif",
+          "format": "TIFF",
+          "size": "91883276",
+          "source": "original",
+          "extension": "tif",
+          "direct_url": "https://archive.org/download/gingaeiyuuplusx68k/gingaeiyuu/img010.tif",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gingaeiyuu/img011.tif",
+          "format": "TIFF",
+          "size": "93105930",
+          "source": "original",
+          "extension": "tif",
+          "direct_url": "https://archive.org/download/gingaeiyuuplusx68k/gingaeiyuu/img011.tif",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gingaeiyuu/img012.tif",
+          "format": "TIFF",
+          "size": "95218854",
+          "source": "original",
+          "extension": "tif",
+          "direct_url": "https://archive.org/download/gingaeiyuuplusx68k/gingaeiyuu/img012.tif",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gingaeiyuu/img013.tif",
+          "format": "TIFF",
+          "size": "98434520",
+          "source": "original",
+          "extension": "tif",
+          "direct_url": "https://archive.org/download/gingaeiyuuplusx68k/gingaeiyuu/img013.tif",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gingaeiyuu/img014.tif",
+          "format": "TIFF",
+          "size": "91467060",
+          "source": "original",
+          "extension": "tif",
+          "direct_url": "https://archive.org/download/gingaeiyuuplusx68k/gingaeiyuu/img014.tif",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gingaeiyuu/img015.tif",
+          "format": "TIFF",
+          "size": "93005958",
+          "source": "original",
+          "extension": "tif",
+          "direct_url": "https://archive.org/download/gingaeiyuuplusx68k/gingaeiyuu/img015.tif",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gingaeiyuu/img016.tif",
+          "format": "TIFF",
+          "size": "90198502",
+          "source": "original",
+          "extension": "tif",
+          "direct_url": "https://archive.org/download/gingaeiyuuplusx68k/gingaeiyuu/img016.tif",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gingaeiyuu/img017.tif",
+          "format": "TIFF",
+          "size": "94595556",
+          "source": "original",
+          "extension": "tif",
+          "direct_url": "https://archive.org/download/gingaeiyuuplusx68k/gingaeiyuu/img017.tif",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gingaeiyuu/img018.tif",
+          "format": "TIFF",
+          "size": "87626048",
+          "source": "original",
+          "extension": "tif",
+          "direct_url": "https://archive.org/download/gingaeiyuuplusx68k/gingaeiyuu/img018.tif",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gingaeiyuu/img019.tif",
+          "format": "TIFF",
+          "size": "90452624",
+          "source": "original",
+          "extension": "tif",
+          "direct_url": "https://archive.org/download/gingaeiyuuplusx68k/gingaeiyuu/img019.tif",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gingaeiyuu/img020.tif",
+          "format": "TIFF",
+          "size": "85794456",
+          "source": "original",
+          "extension": "tif",
+          "direct_url": "https://archive.org/download/gingaeiyuuplusx68k/gingaeiyuu/img020.tif",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gingaeiyuu/img021.tif",
+          "format": "TIFF",
+          "size": "87063354",
+          "source": "original",
+          "extension": "tif",
+          "direct_url": "https://archive.org/download/gingaeiyuuplusx68k/gingaeiyuu/img021.tif",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gingaeiyuu/img022.tif",
+          "format": "TIFF",
+          "size": "82282816",
+          "source": "original",
+          "extension": "tif",
+          "direct_url": "https://archive.org/download/gingaeiyuuplusx68k/gingaeiyuu/img022.tif",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gingaeiyuu/img023.tif",
+          "format": "TIFF",
+          "size": "87327496",
+          "source": "original",
+          "extension": "tif",
+          "direct_url": "https://archive.org/download/gingaeiyuuplusx68k/gingaeiyuu/img023.tif",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gingaeiyuu/img024.tif",
+          "format": "TIFF",
+          "size": "84476056",
+          "source": "original",
+          "extension": "tif",
+          "direct_url": "https://archive.org/download/gingaeiyuuplusx68k/gingaeiyuu/img024.tif",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gingaeiyuu/img025.tif",
+          "format": "TIFF",
+          "size": "89708036",
+          "source": "original",
+          "extension": "tif",
+          "direct_url": "https://archive.org/download/gingaeiyuuplusx68k/gingaeiyuu/img025.tif",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gingaeiyuu/img026.tif",
+          "format": "TIFF",
+          "size": "85330140",
+          "source": "original",
+          "extension": "tif",
+          "direct_url": "https://archive.org/download/gingaeiyuuplusx68k/gingaeiyuu/img026.tif",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gingaeiyuu/img027.tif",
+          "format": "TIFF",
+          "size": "86868144",
+          "source": "original",
+          "extension": "tif",
+          "direct_url": "https://archive.org/download/gingaeiyuuplusx68k/gingaeiyuu/img027.tif",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gingaeiyuu/img028.tif",
+          "format": "TIFF",
+          "size": "85297136",
+          "source": "original",
+          "extension": "tif",
+          "direct_url": "https://archive.org/download/gingaeiyuuplusx68k/gingaeiyuu/img028.tif",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gingaeiyuu/img029.tif",
+          "format": "TIFF",
+          "size": "89938742",
+          "source": "original",
+          "extension": "tif",
+          "direct_url": "https://archive.org/download/gingaeiyuuplusx68k/gingaeiyuu/img029.tif",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gingaeiyuu/img030.tif",
+          "format": "TIFF",
+          "size": "86473780",
+          "source": "original",
+          "extension": "tif",
+          "direct_url": "https://archive.org/download/gingaeiyuuplusx68k/gingaeiyuu/img030.tif",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gingaeiyuu/img031.tif",
+          "format": "TIFF",
+          "size": "89480414",
+          "source": "original",
+          "extension": "tif",
+          "direct_url": "https://archive.org/download/gingaeiyuuplusx68k/gingaeiyuu/img031.tif",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gingaeiyuu/img032.tif",
+          "format": "TIFF",
+          "size": "92124578",
+          "source": "original",
+          "extension": "tif",
+          "direct_url": "https://archive.org/download/gingaeiyuuplusx68k/gingaeiyuu/img032.tif",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gingaeiyuu/img033.tif",
+          "format": "TIFF",
+          "size": "78126094",
+          "source": "original",
+          "extension": "tif",
+          "direct_url": "https://archive.org/download/gingaeiyuuplusx68k/gingaeiyuu/img033.tif",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gingaeiyuu/img034.tif",
+          "format": "TIFF",
+          "size": "55858520",
+          "source": "original",
+          "extension": "tif",
+          "direct_url": "https://archive.org/download/gingaeiyuuplusx68k/gingaeiyuu/img034.tif",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gingaeiyuu/img035.tif",
+          "format": "TIFF",
+          "size": "44017086",
+          "source": "original",
+          "extension": "tif",
+          "direct_url": "https://archive.org/download/gingaeiyuuplusx68k/gingaeiyuu/img035.tif",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gingaeiyuu/img036.tif",
+          "format": "TIFF",
+          "size": "31649926",
+          "source": "original",
+          "extension": "tif",
+          "direct_url": "https://archive.org/download/gingaeiyuuplusx68k/gingaeiyuu/img036.tif",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gingaeiyuu/img037.tif",
+          "format": "TIFF",
+          "size": "9318732",
+          "source": "original",
+          "extension": "tif",
+          "direct_url": "https://archive.org/download/gingaeiyuuplusx68k/gingaeiyuu/img037.tif",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gingaeiyuu/img038.tif",
+          "format": "TIFF",
+          "size": "66266090",
+          "source": "original",
+          "extension": "tif",
+          "direct_url": "https://archive.org/download/gingaeiyuuplusx68k/gingaeiyuu/img038.tif",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gingaeiyuu/img039.tif",
+          "format": "TIFF",
+          "size": "47103320",
+          "source": "original",
+          "extension": "tif",
+          "direct_url": "https://archive.org/download/gingaeiyuuplusx68k/gingaeiyuu/img039.tif",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gingaeiyuu/img040.tif",
+          "format": "TIFF",
+          "size": "23939656",
+          "source": "original",
+          "extension": "tif",
+          "direct_url": "https://archive.org/download/gingaeiyuuplusx68k/gingaeiyuu/img040.tif",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gingaeiyuu/img041.tif",
+          "format": "TIFF",
+          "size": "26715214",
+          "source": "original",
+          "extension": "tif",
+          "direct_url": "https://archive.org/download/gingaeiyuuplusx68k/gingaeiyuu/img041.tif",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gingaeiyuu/img042.tif",
+          "format": "TIFF",
+          "size": "56154564",
+          "source": "original",
+          "extension": "tif",
+          "direct_url": "https://archive.org/download/gingaeiyuuplusx68k/gingaeiyuu/img042.tif",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gingaeiyuu/img043.tif",
+          "format": "TIFF",
+          "size": "28418754",
+          "source": "original",
+          "extension": "tif",
+          "direct_url": "https://archive.org/download/gingaeiyuuplusx68k/gingaeiyuu/img043.tif",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gingaeiyuu/img044.tif",
+          "format": "TIFF",
+          "size": "27935670",
+          "source": "original",
+          "extension": "tif",
+          "direct_url": "https://archive.org/download/gingaeiyuuplusx68k/gingaeiyuu/img044.tif",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gingaeiyuu/img045.tif",
+          "format": "TIFF",
+          "size": "28556064",
+          "source": "original",
+          "extension": "tif",
+          "direct_url": "https://archive.org/download/gingaeiyuuplusx68k/gingaeiyuu/img045.tif",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gingaeiyuu/img046.tif",
+          "format": "TIFF",
+          "size": "27511902",
+          "source": "original",
+          "extension": "tif",
+          "direct_url": "https://archive.org/download/gingaeiyuuplusx68k/gingaeiyuu/img046.tif",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gingaeiyuuplusx68k_archive.torrent",
+          "format": "Archive BitTorrent",
+          "size": "45794",
+          "source": "metadata",
+          "extension": "torrent",
+          "direct_url": "https://archive.org/download/gingaeiyuuplusx68k/gingaeiyuuplusx68k_archive.torrent",
+          "usefulness": "metadata_only"
+        },
+        {
+          "name": "gingaeiyuuplusx68k_files.xml",
+          "format": "Metadata",
+          "size": null,
+          "source": "original",
+          "extension": "xml",
+          "direct_url": "https://archive.org/download/gingaeiyuuplusx68k/gingaeiyuuplusx68k_files.xml",
+          "usefulness": "ocr_or_manual_text"
+        },
+        {
+          "name": "gingaeiyuuplusx68k_meta.xml",
+          "format": "Metadata",
+          "size": "786",
+          "source": "original",
+          "extension": "xml",
+          "direct_url": "https://archive.org/download/gingaeiyuuplusx68k/gingaeiyuuplusx68k_meta.xml",
+          "usefulness": "ocr_or_manual_text"
+        },
+        {
+          "name": "img001.jpg",
+          "format": "JPEG",
+          "size": "17529562",
+          "source": "original",
+          "extension": "jpg",
+          "direct_url": "https://archive.org/download/gingaeiyuuplusx68k/img001.jpg",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "img001_thumb.jpg",
+          "format": "JPEG Thumb",
+          "size": "12697",
+          "source": "derivative",
+          "extension": "jpg",
+          "direct_url": "https://archive.org/download/gingaeiyuuplusx68k/img001_thumb.jpg",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "img003.jpg",
+          "format": "JPEG",
+          "size": "14408255",
+          "source": "original",
+          "extension": "jpg",
+          "direct_url": "https://archive.org/download/gingaeiyuuplusx68k/img003.jpg",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "img003_thumb.jpg",
+          "format": "JPEG Thumb",
+          "size": "10916",
+          "source": "derivative",
+          "extension": "jpg",
+          "direct_url": "https://archive.org/download/gingaeiyuuplusx68k/img003_thumb.jpg",
+          "usefulness": "image_reference_candidate"
+        }
+      ]
+    },
+    {
+      "identifier": "gingaeiyuu2dx",
+      "title": "Ginga Eiyuu Densetsu II DX+ Set X68000 Scans",
+      "role": "box_manual_scans",
+      "priority": 70,
+      "note": "II DX+ scans; high-quality packaging/manual images, useful for official art references if names are present.",
+      "archive_url": "https://archive.org/details/gingaeiyuu2dx",
+      "file_count": 58,
+      "extensions": {
+        "tif": 51,
+        "jpg": 3,
+        "xml": 2,
+        "sqlite": 1,
+        "torrent": 1
+      },
+      "candidate_files": [
+        {
+          "name": "__ia_thumb.jpg",
+          "format": "Item Tile",
+          "size": "14406",
+          "source": "original",
+          "extension": "jpg",
+          "direct_url": "https://archive.org/download/gingaeiyuu2dx/__ia_thumb.jpg",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gingaeiyuu2/img001.jpg",
+          "format": "JPEG",
+          "size": "22812027",
+          "source": "original",
+          "extension": "jpg",
+          "direct_url": "https://archive.org/download/gingaeiyuu2dx/gingaeiyuu2/img001.jpg",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gingaeiyuu2/img001.tif",
+          "format": "TIFF",
+          "size": "89183250",
+          "source": "original",
+          "extension": "tif",
+          "direct_url": "https://archive.org/download/gingaeiyuu2dx/gingaeiyuu2/img001.tif",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gingaeiyuu2/img002.tif",
+          "format": "TIFF",
+          "size": "89088596",
+          "source": "original",
+          "extension": "tif",
+          "direct_url": "https://archive.org/download/gingaeiyuu2dx/gingaeiyuu2/img002.tif",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gingaeiyuu2/img003.tif",
+          "format": "TIFF",
+          "size": "30089500",
+          "source": "original",
+          "extension": "tif",
+          "direct_url": "https://archive.org/download/gingaeiyuu2dx/gingaeiyuu2/img003.tif",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gingaeiyuu2/img004.jpg",
+          "format": "JPEG",
+          "size": "12138820",
+          "source": "original",
+          "extension": "jpg",
+          "direct_url": "https://archive.org/download/gingaeiyuu2dx/gingaeiyuu2/img004.jpg",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gingaeiyuu2/img004.tif",
+          "format": "TIFF",
+          "size": "56300868",
+          "source": "original",
+          "extension": "tif",
+          "direct_url": "https://archive.org/download/gingaeiyuu2dx/gingaeiyuu2/img004.tif",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gingaeiyuu2/img005.tif",
+          "format": "TIFF",
+          "size": "84670430",
+          "source": "original",
+          "extension": "tif",
+          "direct_url": "https://archive.org/download/gingaeiyuu2dx/gingaeiyuu2/img005.tif",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gingaeiyuu2/img006.tif",
+          "format": "TIFF",
+          "size": "93050292",
+          "source": "original",
+          "extension": "tif",
+          "direct_url": "https://archive.org/download/gingaeiyuu2dx/gingaeiyuu2/img006.tif",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gingaeiyuu2/img007.tif",
+          "format": "TIFF",
+          "size": "93015990",
+          "source": "original",
+          "extension": "tif",
+          "direct_url": "https://archive.org/download/gingaeiyuu2dx/gingaeiyuu2/img007.tif",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gingaeiyuu2/img008.tif",
+          "format": "TIFF",
+          "size": "94129258",
+          "source": "original",
+          "extension": "tif",
+          "direct_url": "https://archive.org/download/gingaeiyuu2dx/gingaeiyuu2/img008.tif",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gingaeiyuu2/img009.tif",
+          "format": "TIFF",
+          "size": "95982454",
+          "source": "original",
+          "extension": "tif",
+          "direct_url": "https://archive.org/download/gingaeiyuu2dx/gingaeiyuu2/img009.tif",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gingaeiyuu2/img010.tif",
+          "format": "TIFF",
+          "size": "96623968",
+          "source": "original",
+          "extension": "tif",
+          "direct_url": "https://archive.org/download/gingaeiyuu2dx/gingaeiyuu2/img010.tif",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gingaeiyuu2/img011.tif",
+          "format": "TIFF",
+          "size": "99218658",
+          "source": "original",
+          "extension": "tif",
+          "direct_url": "https://archive.org/download/gingaeiyuu2dx/gingaeiyuu2/img011.tif",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gingaeiyuu2/img012.tif",
+          "format": "TIFF",
+          "size": "97223356",
+          "source": "original",
+          "extension": "tif",
+          "direct_url": "https://archive.org/download/gingaeiyuu2dx/gingaeiyuu2/img012.tif",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gingaeiyuu2/img013.tif",
+          "format": "TIFF",
+          "size": "96586448",
+          "source": "original",
+          "extension": "tif",
+          "direct_url": "https://archive.org/download/gingaeiyuu2dx/gingaeiyuu2/img013.tif",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gingaeiyuu2/img014.tif",
+          "format": "TIFF",
+          "size": "96742112",
+          "source": "original",
+          "extension": "tif",
+          "direct_url": "https://archive.org/download/gingaeiyuu2dx/gingaeiyuu2/img014.tif",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gingaeiyuu2/img015.tif",
+          "format": "TIFF",
+          "size": "96881496",
+          "source": "original",
+          "extension": "tif",
+          "direct_url": "https://archive.org/download/gingaeiyuu2dx/gingaeiyuu2/img015.tif",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gingaeiyuu2/img016.tif",
+          "format": "TIFF",
+          "size": "96471028",
+          "source": "original",
+          "extension": "tif",
+          "direct_url": "https://archive.org/download/gingaeiyuu2dx/gingaeiyuu2/img016.tif",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gingaeiyuu2/img017.tif",
+          "format": "TIFF",
+          "size": "93167708",
+          "source": "original",
+          "extension": "tif",
+          "direct_url": "https://archive.org/download/gingaeiyuu2dx/gingaeiyuu2/img017.tif",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gingaeiyuu2/img018.tif",
+          "format": "TIFF",
+          "size": "90877338",
+          "source": "original",
+          "extension": "tif",
+          "direct_url": "https://archive.org/download/gingaeiyuu2dx/gingaeiyuu2/img018.tif",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gingaeiyuu2/img019.tif",
+          "format": "TIFF",
+          "size": "91359988",
+          "source": "original",
+          "extension": "tif",
+          "direct_url": "https://archive.org/download/gingaeiyuu2dx/gingaeiyuu2/img019.tif",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gingaeiyuu2/img020.tif",
+          "format": "TIFF",
+          "size": "90942344",
+          "source": "original",
+          "extension": "tif",
+          "direct_url": "https://archive.org/download/gingaeiyuu2dx/gingaeiyuu2/img020.tif",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gingaeiyuu2/img021.tif",
+          "format": "TIFF",
+          "size": "84640566",
+          "source": "original",
+          "extension": "tif",
+          "direct_url": "https://archive.org/download/gingaeiyuu2dx/gingaeiyuu2/img021.tif",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gingaeiyuu2/img022.tif",
+          "format": "TIFF",
+          "size": "50890556",
+          "source": "original",
+          "extension": "tif",
+          "direct_url": "https://archive.org/download/gingaeiyuu2dx/gingaeiyuu2/img022.tif",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gingaeiyuu2/img023.tif",
+          "format": "TIFF",
+          "size": "62330000",
+          "source": "original",
+          "extension": "tif",
+          "direct_url": "https://archive.org/download/gingaeiyuu2dx/gingaeiyuu2/img023.tif",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gingaeiyuu2/img024.tif",
+          "format": "TIFF",
+          "size": "90494666",
+          "source": "original",
+          "extension": "tif",
+          "direct_url": "https://archive.org/download/gingaeiyuu2dx/gingaeiyuu2/img024.tif",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gingaeiyuu2/img025.tif",
+          "format": "TIFF",
+          "size": "97590386",
+          "source": "original",
+          "extension": "tif",
+          "direct_url": "https://archive.org/download/gingaeiyuu2dx/gingaeiyuu2/img025.tif",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gingaeiyuu2/img026.tif",
+          "format": "TIFF",
+          "size": "97412572",
+          "source": "original",
+          "extension": "tif",
+          "direct_url": "https://archive.org/download/gingaeiyuu2dx/gingaeiyuu2/img026.tif",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gingaeiyuu2/img027.tif",
+          "format": "TIFF",
+          "size": "101612188",
+          "source": "original",
+          "extension": "tif",
+          "direct_url": "https://archive.org/download/gingaeiyuu2dx/gingaeiyuu2/img027.tif",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gingaeiyuu2/img028.tif",
+          "format": "TIFF",
+          "size": "103027270",
+          "source": "original",
+          "extension": "tif",
+          "direct_url": "https://archive.org/download/gingaeiyuu2dx/gingaeiyuu2/img028.tif",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gingaeiyuu2/img029.tif",
+          "format": "TIFF",
+          "size": "101666286",
+          "source": "original",
+          "extension": "tif",
+          "direct_url": "https://archive.org/download/gingaeiyuu2dx/gingaeiyuu2/img029.tif",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gingaeiyuu2/img030.tif",
+          "format": "TIFF",
+          "size": "98379570",
+          "source": "original",
+          "extension": "tif",
+          "direct_url": "https://archive.org/download/gingaeiyuu2dx/gingaeiyuu2/img030.tif",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gingaeiyuu2/img031.tif",
+          "format": "TIFF",
+          "size": "100865704",
+          "source": "original",
+          "extension": "tif",
+          "direct_url": "https://archive.org/download/gingaeiyuu2dx/gingaeiyuu2/img031.tif",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gingaeiyuu2/img032.tif",
+          "format": "TIFF",
+          "size": "103083836",
+          "source": "original",
+          "extension": "tif",
+          "direct_url": "https://archive.org/download/gingaeiyuu2dx/gingaeiyuu2/img032.tif",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gingaeiyuu2/img033.tif",
+          "format": "TIFF",
+          "size": "103233144",
+          "source": "original",
+          "extension": "tif",
+          "direct_url": "https://archive.org/download/gingaeiyuu2dx/gingaeiyuu2/img033.tif",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gingaeiyuu2/img034.tif",
+          "format": "TIFF",
+          "size": "100939326",
+          "source": "original",
+          "extension": "tif",
+          "direct_url": "https://archive.org/download/gingaeiyuu2dx/gingaeiyuu2/img034.tif",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gingaeiyuu2/img035.tif",
+          "format": "TIFF",
+          "size": "102443180",
+          "source": "original",
+          "extension": "tif",
+          "direct_url": "https://archive.org/download/gingaeiyuu2dx/gingaeiyuu2/img035.tif",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gingaeiyuu2/img036.tif",
+          "format": "TIFF",
+          "size": "102153334",
+          "source": "original",
+          "extension": "tif",
+          "direct_url": "https://archive.org/download/gingaeiyuu2dx/gingaeiyuu2/img036.tif",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gingaeiyuu2/img037.tif",
+          "format": "TIFF",
+          "size": "103786312",
+          "source": "original",
+          "extension": "tif",
+          "direct_url": "https://archive.org/download/gingaeiyuu2dx/gingaeiyuu2/img037.tif",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gingaeiyuu2/img038.tif",
+          "format": "TIFF",
+          "size": "100970144",
+          "source": "original",
+          "extension": "tif",
+          "direct_url": "https://archive.org/download/gingaeiyuu2dx/gingaeiyuu2/img038.tif",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gingaeiyuu2/img039.tif",
+          "format": "TIFF",
+          "size": "98048346",
+          "source": "original",
+          "extension": "tif",
+          "direct_url": "https://archive.org/download/gingaeiyuu2dx/gingaeiyuu2/img039.tif",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gingaeiyuu2/img040.tif",
+          "format": "TIFF",
+          "size": "90239692",
+          "source": "original",
+          "extension": "tif",
+          "direct_url": "https://archive.org/download/gingaeiyuu2dx/gingaeiyuu2/img040.tif",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gingaeiyuu2/img041.tif",
+          "format": "TIFF",
+          "size": "58656170",
+          "source": "original",
+          "extension": "tif",
+          "direct_url": "https://archive.org/download/gingaeiyuu2dx/gingaeiyuu2/img041.tif",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gingaeiyuu2/img042.tif",
+          "format": "TIFF",
+          "size": "55853722",
+          "source": "original",
+          "extension": "tif",
+          "direct_url": "https://archive.org/download/gingaeiyuu2dx/gingaeiyuu2/img042.tif",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gingaeiyuu2/img043.tif",
+          "format": "TIFF",
+          "size": "32279150",
+          "source": "original",
+          "extension": "tif",
+          "direct_url": "https://archive.org/download/gingaeiyuu2dx/gingaeiyuu2/img043.tif",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gingaeiyuu2/img044.tif",
+          "format": "TIFF",
+          "size": "32444812",
+          "source": "original",
+          "extension": "tif",
+          "direct_url": "https://archive.org/download/gingaeiyuu2dx/gingaeiyuu2/img044.tif",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gingaeiyuu2/img045.tif",
+          "format": "TIFF",
+          "size": "30681608",
+          "source": "original",
+          "extension": "tif",
+          "direct_url": "https://archive.org/download/gingaeiyuu2dx/gingaeiyuu2/img045.tif",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gingaeiyuu2/img046.tif",
+          "format": "TIFF",
+          "size": "30897228",
+          "source": "original",
+          "extension": "tif",
+          "direct_url": "https://archive.org/download/gingaeiyuu2dx/gingaeiyuu2/img046.tif",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gingaeiyuu2/img047.tif",
+          "format": "TIFF",
+          "size": "31136010",
+          "source": "original",
+          "extension": "tif",
+          "direct_url": "https://archive.org/download/gingaeiyuu2dx/gingaeiyuu2/img047.tif",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gingaeiyuu2/img048.tif",
+          "format": "TIFF",
+          "size": "30763892",
+          "source": "original",
+          "extension": "tif",
+          "direct_url": "https://archive.org/download/gingaeiyuu2dx/gingaeiyuu2/img048.tif",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gingaeiyuu2/img049.tif",
+          "format": "TIFF",
+          "size": "30759082",
+          "source": "original",
+          "extension": "tif",
+          "direct_url": "https://archive.org/download/gingaeiyuu2dx/gingaeiyuu2/img049.tif",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gingaeiyuu2/img050.tif",
+          "format": "TIFF",
+          "size": "31225454",
+          "source": "original",
+          "extension": "tif",
+          "direct_url": "https://archive.org/download/gingaeiyuu2dx/gingaeiyuu2/img050.tif",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gingaeiyuu2/img051.tif",
+          "format": "TIFF",
+          "size": "30971496",
+          "source": "original",
+          "extension": "tif",
+          "direct_url": "https://archive.org/download/gingaeiyuu2dx/gingaeiyuu2/img051.tif",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gingaeiyuu2dx_archive.torrent",
+          "format": "Archive BitTorrent",
+          "size": "54223",
+          "source": "metadata",
+          "extension": "torrent",
+          "direct_url": "https://archive.org/download/gingaeiyuu2dx/gingaeiyuu2dx_archive.torrent",
+          "usefulness": "metadata_only"
+        },
+        {
+          "name": "gingaeiyuu2dx_files.xml",
+          "format": "Metadata",
+          "size": null,
+          "source": "original",
+          "extension": "xml",
+          "direct_url": "https://archive.org/download/gingaeiyuu2dx/gingaeiyuu2dx_files.xml",
+          "usefulness": "ocr_or_manual_text"
+        },
+        {
+          "name": "gingaeiyuu2dx_meta.xml",
+          "format": "Metadata",
+          "size": "853",
+          "source": "original",
+          "extension": "xml",
+          "direct_url": "https://archive.org/download/gingaeiyuu2dx/gingaeiyuu2dx_meta.xml",
+          "usefulness": "ocr_or_manual_text"
+        }
+      ]
+    },
+    {
+      "identifier": "ginga-eiyuu-densetsu-shvc-ge-sfc-jp-manual-600-dpi",
+      "title": "Ginga Eiyuu Densetsu [SHVC-GE](SFC)(JP) -Manual(600DPI), Box(300DPI)",
+      "role": "console_manual_scan",
+      "priority": 70,
+      "note": "SFC manual/box scans; official but old/different art lineage.",
+      "archive_url": "https://archive.org/details/ginga-eiyuu-densetsu-shvc-ge-sfc-jp-manual-600-dpi",
+      "file_count": 20,
+      "extensions": {
+        "xml": 4,
+        "gz": 3,
+        "jpg": 3,
+        "pdf": 2,
+        "png": 2,
+        "html": 1,
+        "json": 1,
+        "sqlite": 1,
+        "torrent": 1,
+        "txt": 1,
+        "zip": 1
+      },
+      "candidate_files": [
+        {
+          "name": "Ginga Eiyuu Densetsu [SHVC-GE](SFC)(JP) -BoxBack(300DPI).png",
+          "format": "PNG",
+          "size": "10938560",
+          "source": "original",
+          "extension": "png",
+          "direct_url": "https://archive.org/download/ginga-eiyuu-densetsu-shvc-ge-sfc-jp-manual-600-dpi/Ginga Eiyuu Densetsu [SHVC-GE](SFC)(JP) -BoxBack(300DPI).png",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "Ginga Eiyuu Densetsu [SHVC-GE](SFC)(JP) -BoxBack(300DPI)_thumb.jpg",
+          "format": "JPEG Thumb",
+          "size": "7390",
+          "source": "derivative",
+          "extension": "jpg",
+          "direct_url": "https://archive.org/download/ginga-eiyuu-densetsu-shvc-ge-sfc-jp-manual-600-dpi/Ginga Eiyuu Densetsu [SHVC-GE](SFC)(JP) -BoxBack(300DPI)_thumb.jpg",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "Ginga Eiyuu Densetsu [SHVC-GE](SFC)(JP) -BoxFront(300DPI).png",
+          "format": "PNG",
+          "size": "11094275",
+          "source": "original",
+          "extension": "png",
+          "direct_url": "https://archive.org/download/ginga-eiyuu-densetsu-shvc-ge-sfc-jp-manual-600-dpi/Ginga Eiyuu Densetsu [SHVC-GE](SFC)(JP) -BoxFront(300DPI).png",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "Ginga Eiyuu Densetsu [SHVC-GE](SFC)(JP) -BoxFront(300DPI)_thumb.jpg",
+          "format": "JPEG Thumb",
+          "size": "7478",
+          "source": "derivative",
+          "extension": "jpg",
+          "direct_url": "https://archive.org/download/ginga-eiyuu-densetsu-shvc-ge-sfc-jp-manual-600-dpi/Ginga Eiyuu Densetsu [SHVC-GE](SFC)(JP) -BoxFront(300DPI)_thumb.jpg",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "Ginga Eiyuu Densetsu [SHVC-GE](SFC)(JP) -Manual(600DPI).pdf",
+          "format": "Image Container PDF",
+          "size": "158387266",
+          "source": "original",
+          "extension": "pdf",
+          "direct_url": "https://archive.org/download/ginga-eiyuu-densetsu-shvc-ge-sfc-jp-manual-600-dpi/Ginga Eiyuu Densetsu [SHVC-GE](SFC)(JP) -Manual(600DPI).pdf",
+          "usefulness": "ocr_or_manual_text"
+        },
+        {
+          "name": "Ginga Eiyuu Densetsu [SHVC-GE](SFC)(JP) -Manual(600DPI)_djvu.txt",
+          "format": "DjVuTXT",
+          "size": "40909",
+          "source": "derivative",
+          "extension": "txt",
+          "direct_url": "https://archive.org/download/ginga-eiyuu-densetsu-shvc-ge-sfc-jp-manual-600-dpi/Ginga Eiyuu Densetsu [SHVC-GE](SFC)(JP) -Manual(600DPI)_djvu.txt",
+          "usefulness": "ocr_or_manual_text"
+        },
+        {
+          "name": "Ginga Eiyuu Densetsu [SHVC-GE](SFC)(JP) -Manual(600DPI)_djvu.xml",
+          "format": "Djvu XML",
+          "size": "694590",
+          "source": "derivative",
+          "extension": "xml",
+          "direct_url": "https://archive.org/download/ginga-eiyuu-densetsu-shvc-ge-sfc-jp-manual-600-dpi/Ginga Eiyuu Densetsu [SHVC-GE](SFC)(JP) -Manual(600DPI)_djvu.xml",
+          "usefulness": "ocr_or_manual_text"
+        },
+        {
+          "name": "Ginga Eiyuu Densetsu [SHVC-GE](SFC)(JP) -Manual(600DPI)_hocr_searchtext.txt.gz",
+          "format": "OCR Search Text",
+          "size": "15429",
+          "source": "derivative",
+          "extension": "gz",
+          "direct_url": "https://archive.org/download/ginga-eiyuu-densetsu-shvc-ge-sfc-jp-manual-600-dpi/Ginga Eiyuu Densetsu [SHVC-GE](SFC)(JP) -Manual(600DPI)_hocr_searchtext.txt.gz",
+          "usefulness": "ocr_or_manual_text"
+        },
+        {
+          "name": "Ginga Eiyuu Densetsu [SHVC-GE](SFC)(JP) -Manual(600DPI)_jp2.zip",
+          "format": "Single Page Processed JP2 ZIP",
+          "size": "43864004",
+          "source": "derivative",
+          "extension": "zip",
+          "direct_url": "https://archive.org/download/ginga-eiyuu-densetsu-shvc-ge-sfc-jp-manual-600-dpi/Ginga Eiyuu Densetsu [SHVC-GE](SFC)(JP) -Manual(600DPI)_jp2.zip",
+          "usefulness": "extractable_game_or_package"
+        },
+        {
+          "name": "Ginga Eiyuu Densetsu [SHVC-GE](SFC)(JP) -Manual(600DPI)_scandata.xml",
+          "format": "Scandata",
+          "size": "17092",
+          "source": "derivative",
+          "extension": "xml",
+          "direct_url": "https://archive.org/download/ginga-eiyuu-densetsu-shvc-ge-sfc-jp-manual-600-dpi/Ginga Eiyuu Densetsu [SHVC-GE](SFC)(JP) -Manual(600DPI)_scandata.xml",
+          "usefulness": "ocr_or_manual_text"
+        },
+        {
+          "name": "Ginga Eiyuu Densetsu [SHVC-GE](SFC)(JP) -Manual(600DPI)_text.pdf",
+          "format": "Additional Text PDF",
+          "size": "9229906",
+          "source": "derivative",
+          "extension": "pdf",
+          "direct_url": "https://archive.org/download/ginga-eiyuu-densetsu-shvc-ge-sfc-jp-manual-600-dpi/Ginga Eiyuu Densetsu [SHVC-GE](SFC)(JP) -Manual(600DPI)_text.pdf",
+          "usefulness": "ocr_or_manual_text"
+        },
+        {
+          "name": "__ia_thumb.jpg",
+          "format": "Item Tile",
+          "size": "28072",
+          "source": "original",
+          "extension": "jpg",
+          "direct_url": "https://archive.org/download/ginga-eiyuu-densetsu-shvc-ge-sfc-jp-manual-600-dpi/__ia_thumb.jpg",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "ginga-eiyuu-densetsu-shvc-ge-sfc-jp-manual-600-dpi_archive.torrent",
+          "format": "Archive BitTorrent",
+          "size": "14313",
+          "source": "metadata",
+          "extension": "torrent",
+          "direct_url": "https://archive.org/download/ginga-eiyuu-densetsu-shvc-ge-sfc-jp-manual-600-dpi/ginga-eiyuu-densetsu-shvc-ge-sfc-jp-manual-600-dpi_archive.torrent",
+          "usefulness": "metadata_only"
+        },
+        {
+          "name": "ginga-eiyuu-densetsu-shvc-ge-sfc-jp-manual-600-dpi_files.xml",
+          "format": "Metadata",
+          "size": null,
+          "source": "original",
+          "extension": "xml",
+          "direct_url": "https://archive.org/download/ginga-eiyuu-densetsu-shvc-ge-sfc-jp-manual-600-dpi/ginga-eiyuu-densetsu-shvc-ge-sfc-jp-manual-600-dpi_files.xml",
+          "usefulness": "ocr_or_manual_text"
+        },
+        {
+          "name": "ginga-eiyuu-densetsu-shvc-ge-sfc-jp-manual-600-dpi_meta.xml",
+          "format": "Metadata",
+          "size": "2251",
+          "source": "original",
+          "extension": "xml",
+          "direct_url": "https://archive.org/download/ginga-eiyuu-densetsu-shvc-ge-sfc-jp-manual-600-dpi/ginga-eiyuu-densetsu-shvc-ge-sfc-jp-manual-600-dpi_meta.xml",
+          "usefulness": "ocr_or_manual_text"
+        }
+      ]
+    },
+    {
+      "identifier": "ginga-eiyuu-densetsu-ksc-ge-fc-jp-manual-600-dpi",
+      "title": "Ginga Eiyuu Densetsu [KSC-GE](Famicom)(JP) -Manual(600DPI)",
+      "role": "console_manual_scan",
+      "priority": 70,
+      "note": "Famicom manual scan; official but old/different art lineage.",
+      "archive_url": "https://archive.org/details/ginga-eiyuu-densetsu-ksc-ge-fc-jp-manual-600-dpi",
+      "file_count": 16,
+      "extensions": {
+        "xml": 4,
+        "gz": 3,
+        "pdf": 2,
+        "html": 1,
+        "jpg": 1,
+        "json": 1,
+        "sqlite": 1,
+        "torrent": 1,
+        "txt": 1,
+        "zip": 1
+      },
+      "candidate_files": [
+        {
+          "name": "Ginga Eiyuu Densetsu [KSC-GE](FC)(JP) -Manual(600DPI).pdf",
+          "format": "Image Container PDF",
+          "size": "15397872",
+          "source": "original",
+          "extension": "pdf",
+          "direct_url": "https://archive.org/download/ginga-eiyuu-densetsu-ksc-ge-fc-jp-manual-600-dpi/Ginga Eiyuu Densetsu [KSC-GE](FC)(JP) -Manual(600DPI).pdf",
+          "usefulness": "ocr_or_manual_text"
+        },
+        {
+          "name": "Ginga Eiyuu Densetsu [KSC-GE](FC)(JP) -Manual(600DPI)_djvu.txt",
+          "format": "DjVuTXT",
+          "size": "11930",
+          "source": "derivative",
+          "extension": "txt",
+          "direct_url": "https://archive.org/download/ginga-eiyuu-densetsu-ksc-ge-fc-jp-manual-600-dpi/Ginga Eiyuu Densetsu [KSC-GE](FC)(JP) -Manual(600DPI)_djvu.txt",
+          "usefulness": "ocr_or_manual_text"
+        },
+        {
+          "name": "Ginga Eiyuu Densetsu [KSC-GE](FC)(JP) -Manual(600DPI)_djvu.xml",
+          "format": "Djvu XML",
+          "size": "205009",
+          "source": "derivative",
+          "extension": "xml",
+          "direct_url": "https://archive.org/download/ginga-eiyuu-densetsu-ksc-ge-fc-jp-manual-600-dpi/Ginga Eiyuu Densetsu [KSC-GE](FC)(JP) -Manual(600DPI)_djvu.xml",
+          "usefulness": "ocr_or_manual_text"
+        },
+        {
+          "name": "Ginga Eiyuu Densetsu [KSC-GE](FC)(JP) -Manual(600DPI)_hocr_searchtext.txt.gz",
+          "format": "OCR Search Text",
+          "size": "5107",
+          "source": "derivative",
+          "extension": "gz",
+          "direct_url": "https://archive.org/download/ginga-eiyuu-densetsu-ksc-ge-fc-jp-manual-600-dpi/Ginga Eiyuu Densetsu [KSC-GE](FC)(JP) -Manual(600DPI)_hocr_searchtext.txt.gz",
+          "usefulness": "ocr_or_manual_text"
+        },
+        {
+          "name": "Ginga Eiyuu Densetsu [KSC-GE](FC)(JP) -Manual(600DPI)_jp2.zip",
+          "format": "Single Page Processed JP2 ZIP",
+          "size": "6046747",
+          "source": "derivative",
+          "extension": "zip",
+          "direct_url": "https://archive.org/download/ginga-eiyuu-densetsu-ksc-ge-fc-jp-manual-600-dpi/Ginga Eiyuu Densetsu [KSC-GE](FC)(JP) -Manual(600DPI)_jp2.zip",
+          "usefulness": "extractable_game_or_package"
+        },
+        {
+          "name": "Ginga Eiyuu Densetsu [KSC-GE](FC)(JP) -Manual(600DPI)_scandata.xml",
+          "format": "Scandata",
+          "size": "9251",
+          "source": "derivative",
+          "extension": "xml",
+          "direct_url": "https://archive.org/download/ginga-eiyuu-densetsu-ksc-ge-fc-jp-manual-600-dpi/Ginga Eiyuu Densetsu [KSC-GE](FC)(JP) -Manual(600DPI)_scandata.xml",
+          "usefulness": "ocr_or_manual_text"
+        },
+        {
+          "name": "Ginga Eiyuu Densetsu [KSC-GE](FC)(JP) -Manual(600DPI)_text.pdf",
+          "format": "Additional Text PDF",
+          "size": "2324536",
+          "source": "derivative",
+          "extension": "pdf",
+          "direct_url": "https://archive.org/download/ginga-eiyuu-densetsu-ksc-ge-fc-jp-manual-600-dpi/Ginga Eiyuu Densetsu [KSC-GE](FC)(JP) -Manual(600DPI)_text.pdf",
+          "usefulness": "ocr_or_manual_text"
+        },
+        {
+          "name": "__ia_thumb.jpg",
+          "format": "Item Tile",
+          "size": "10606",
+          "source": "original",
+          "extension": "jpg",
+          "direct_url": "https://archive.org/download/ginga-eiyuu-densetsu-ksc-ge-fc-jp-manual-600-dpi/__ia_thumb.jpg",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "ginga-eiyuu-densetsu-ksc-ge-fc-jp-manual-600-dpi_archive.torrent",
+          "format": "Archive BitTorrent",
+          "size": "5314",
+          "source": "metadata",
+          "extension": "torrent",
+          "direct_url": "https://archive.org/download/ginga-eiyuu-densetsu-ksc-ge-fc-jp-manual-600-dpi/ginga-eiyuu-densetsu-ksc-ge-fc-jp-manual-600-dpi_archive.torrent",
+          "usefulness": "metadata_only"
+        },
+        {
+          "name": "ginga-eiyuu-densetsu-ksc-ge-fc-jp-manual-600-dpi_files.xml",
+          "format": "Metadata",
+          "size": null,
+          "source": "original",
+          "extension": "xml",
+          "direct_url": "https://archive.org/download/ginga-eiyuu-densetsu-ksc-ge-fc-jp-manual-600-dpi/ginga-eiyuu-densetsu-ksc-ge-fc-jp-manual-600-dpi_files.xml",
+          "usefulness": "ocr_or_manual_text"
+        },
+        {
+          "name": "ginga-eiyuu-densetsu-ksc-ge-fc-jp-manual-600-dpi_meta.xml",
+          "format": "Metadata",
+          "size": "2225",
+          "source": "original",
+          "extension": "xml",
+          "direct_url": "https://archive.org/download/ginga-eiyuu-densetsu-ksc-ge-fc-jp-manual-600-dpi/ginga-eiyuu-densetsu-ksc-ge-fc-jp-manual-600-dpi_meta.xml",
+          "usefulness": "ocr_or_manual_text"
+        }
+      ]
+    },
+    {
+      "identifier": "gineiden3sp-manual",
+      "title": "Ginga Eiyuu Densetsu III SP Manual PDF",
+      "role": "early_manual",
+      "priority": 70,
+      "note": "III SP manual OCR/PDF; possible labeled character/system art.",
+      "archive_url": "https://archive.org/details/gineiden3sp-manual",
+      "file_count": 15,
+      "extensions": {
+        "xml": 4,
+        "gz": 3,
+        "html": 1,
+        "jpg": 1,
+        "json": 1,
+        "pdf": 1,
+        "sqlite": 1,
+        "torrent": 1,
+        "txt": 1,
+        "zip": 1
+      },
+      "candidate_files": [
+        {
+          "name": "__ia_thumb.jpg",
+          "format": "Item Tile",
+          "size": "15418",
+          "source": "original",
+          "extension": "jpg",
+          "direct_url": "https://archive.org/download/gineiden3sp-manual/__ia_thumb.jpg",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gin3sp.pdf",
+          "format": "Text PDF",
+          "size": "3085963",
+          "source": "original",
+          "extension": "pdf",
+          "direct_url": "https://archive.org/download/gineiden3sp-manual/gin3sp.pdf",
+          "usefulness": "ocr_or_manual_text"
+        },
+        {
+          "name": "gin3sp_djvu.txt",
+          "format": "DjVuTXT",
+          "size": "117333",
+          "source": "derivative",
+          "extension": "txt",
+          "direct_url": "https://archive.org/download/gineiden3sp-manual/gin3sp_djvu.txt",
+          "usefulness": "ocr_or_manual_text"
+        },
+        {
+          "name": "gin3sp_djvu.xml",
+          "format": "Djvu XML",
+          "size": "1836641",
+          "source": "derivative",
+          "extension": "xml",
+          "direct_url": "https://archive.org/download/gineiden3sp-manual/gin3sp_djvu.xml",
+          "usefulness": "ocr_or_manual_text"
+        },
+        {
+          "name": "gin3sp_hocr_searchtext.txt.gz",
+          "format": "OCR Search Text",
+          "size": "24126",
+          "source": "derivative",
+          "extension": "gz",
+          "direct_url": "https://archive.org/download/gineiden3sp-manual/gin3sp_hocr_searchtext.txt.gz",
+          "usefulness": "ocr_or_manual_text"
+        },
+        {
+          "name": "gin3sp_jp2.zip",
+          "format": "Single Page Processed JP2 ZIP",
+          "size": "22973594",
+          "source": "derivative",
+          "extension": "zip",
+          "direct_url": "https://archive.org/download/gineiden3sp-manual/gin3sp_jp2.zip",
+          "usefulness": "extractable_game_or_package"
+        },
+        {
+          "name": "gin3sp_scandata.xml",
+          "format": "Scandata",
+          "size": "25707",
+          "source": "derivative",
+          "extension": "xml",
+          "direct_url": "https://archive.org/download/gineiden3sp-manual/gin3sp_scandata.xml",
+          "usefulness": "ocr_or_manual_text"
+        },
+        {
+          "name": "gineiden3sp-manual_archive.torrent",
+          "format": "Archive BitTorrent",
+          "size": "4664",
+          "source": "metadata",
+          "extension": "torrent",
+          "direct_url": "https://archive.org/download/gineiden3sp-manual/gineiden3sp-manual_archive.torrent",
+          "usefulness": "metadata_only"
+        },
+        {
+          "name": "gineiden3sp-manual_files.xml",
+          "format": "Metadata",
+          "size": null,
+          "source": "original",
+          "extension": "xml",
+          "direct_url": "https://archive.org/download/gineiden3sp-manual/gineiden3sp-manual_files.xml",
+          "usefulness": "ocr_or_manual_text"
+        },
+        {
+          "name": "gineiden3sp-manual_meta.xml",
+          "format": "Metadata",
+          "size": "1599",
+          "source": "original",
+          "extension": "xml",
+          "direct_url": "https://archive.org/download/gineiden3sp-manual/gineiden3sp-manual_meta.xml",
+          "usefulness": "ocr_or_manual_text"
+        }
+      ]
+    },
+    {
+      "identifier": "ginVSmanual",
+      "title": "Ginga Eiyuu Densetsu VS Manual PDF",
+      "role": "later_game_manual",
+      "priority": 70,
+      "note": "VS manual; lower value, manual illustrations may help name-image dictionary with caution.",
+      "archive_url": "https://archive.org/details/ginVSmanual",
+      "file_count": 15,
+      "extensions": {
+        "xml": 4,
+        "gz": 3,
+        "html": 1,
+        "jpg": 1,
+        "json": 1,
+        "pdf": 1,
+        "sqlite": 1,
+        "torrent": 1,
+        "txt": 1,
+        "zip": 1
+      },
+      "candidate_files": [
+        {
+          "name": "Ver100マニュアル.pdf",
+          "format": "Text PDF",
+          "size": "1415863",
+          "source": "original",
+          "extension": "pdf",
+          "direct_url": "https://archive.org/download/ginVSmanual/Ver100%E3%83%9E%E3%83%8B%E3%83%A5%E3%82%A2%E3%83%AB.pdf",
+          "usefulness": "ocr_or_manual_text"
+        },
+        {
+          "name": "Ver100マニュアル_djvu.txt",
+          "format": "DjVuTXT",
+          "size": "100898",
+          "source": "derivative",
+          "extension": "txt",
+          "direct_url": "https://archive.org/download/ginVSmanual/Ver100%E3%83%9E%E3%83%8B%E3%83%A5%E3%82%A2%E3%83%AB_djvu.txt",
+          "usefulness": "ocr_or_manual_text"
+        },
+        {
+          "name": "Ver100マニュアル_djvu.xml",
+          "format": "Djvu XML",
+          "size": "1505709",
+          "source": "derivative",
+          "extension": "xml",
+          "direct_url": "https://archive.org/download/ginVSmanual/Ver100%E3%83%9E%E3%83%8B%E3%83%A5%E3%82%A2%E3%83%AB_djvu.xml",
+          "usefulness": "ocr_or_manual_text"
+        },
+        {
+          "name": "Ver100マニュアル_hocr_searchtext.txt.gz",
+          "format": "OCR Search Text",
+          "size": "20509",
+          "source": "derivative",
+          "extension": "gz",
+          "direct_url": "https://archive.org/download/ginVSmanual/Ver100%E3%83%9E%E3%83%8B%E3%83%A5%E3%82%A2%E3%83%AB_hocr_searchtext.txt.gz",
+          "usefulness": "ocr_or_manual_text"
+        },
+        {
+          "name": "Ver100マニュアル_jp2.zip",
+          "format": "Single Page Processed JP2 ZIP",
+          "size": "10174543",
+          "source": "derivative",
+          "extension": "zip",
+          "direct_url": "https://archive.org/download/ginVSmanual/Ver100%E3%83%9E%E3%83%8B%E3%83%A5%E3%82%A2%E3%83%AB_jp2.zip",
+          "usefulness": "extractable_game_or_package"
+        },
+        {
+          "name": "Ver100マニュアル_scandata.xml",
+          "format": "Scandata",
+          "size": "30168",
+          "source": "derivative",
+          "extension": "xml",
+          "direct_url": "https://archive.org/download/ginVSmanual/Ver100%E3%83%9E%E3%83%8B%E3%83%A5%E3%82%A2%E3%83%AB_scandata.xml",
+          "usefulness": "ocr_or_manual_text"
+        },
+        {
+          "name": "__ia_thumb.jpg",
+          "format": "Item Tile",
+          "size": "10355",
+          "source": "original",
+          "extension": "jpg",
+          "direct_url": "https://archive.org/download/ginVSmanual/__ia_thumb.jpg",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "ginVSmanual_archive.torrent",
+          "format": "Archive BitTorrent",
+          "size": "4170",
+          "source": "metadata",
+          "extension": "torrent",
+          "direct_url": "https://archive.org/download/ginVSmanual/ginVSmanual_archive.torrent",
+          "usefulness": "metadata_only"
+        },
+        {
+          "name": "ginVSmanual_files.xml",
+          "format": "Metadata",
+          "size": null,
+          "source": "original",
+          "extension": "xml",
+          "direct_url": "https://archive.org/download/ginVSmanual/ginVSmanual_files.xml",
+          "usefulness": "ocr_or_manual_text"
+        },
+        {
+          "name": "ginVSmanual_meta.xml",
+          "format": "Metadata",
+          "size": "1575",
+          "source": "original",
+          "extension": "xml",
+          "direct_url": "https://archive.org/download/ginVSmanual/ginVSmanual_meta.xml",
+          "usefulness": "ocr_or_manual_text"
+        }
+      ]
+    },
+    {
+      "identifier": "gineipaedia",
+      "title": "Gineipaedia Archive",
+      "role": "canon_text_database",
+      "priority": 55,
+      "note": "Canon text database; supports aliases/descriptions, not images.",
+      "archive_url": "https://archive.org/details/gineipaedia",
+      "file_count": 7,
+      "extensions": {
+        "xz": 3,
+        "xml": 2,
+        "sqlite": 1,
+        "torrent": 1
+      },
+      "candidate_files": [
+        {
+          "name": "dump.xml.xz",
+          "format": "Unknown",
+          "size": "2932676",
+          "source": "original",
+          "extension": "xz",
+          "direct_url": "https://archive.org/download/gineipaedia/dump.xml.xz",
+          "usefulness": "metadata_only"
+        },
+        {
+          "name": "gineipaedia_archive.torrent",
+          "format": "Archive BitTorrent",
+          "size": "22628",
+          "source": "metadata",
+          "extension": "torrent",
+          "direct_url": "https://archive.org/download/gineipaedia/gineipaedia_archive.torrent",
+          "usefulness": "metadata_only"
+        },
+        {
+          "name": "gineipaedia_files.xml",
+          "format": "Metadata",
+          "size": null,
+          "source": "original",
+          "extension": "xml",
+          "direct_url": "https://archive.org/download/gineipaedia/gineipaedia_files.xml",
+          "usefulness": "ocr_or_manual_text"
+        },
+        {
+          "name": "gineipaedia_meta.xml",
+          "format": "Metadata",
+          "size": "2537",
+          "source": "original",
+          "extension": "xml",
+          "direct_url": "https://archive.org/download/gineipaedia/gineipaedia_meta.xml",
+          "usefulness": "ocr_or_manual_text"
+        }
+      ]
+    },
+    {
+      "identifier": "logh2008_update",
+      "title": "Legend of the Galactic Heroes 2008 (PC) v1.1 patch",
+      "role": "later_game_patch",
+      "priority": 45,
+      "note": "2008 patch; likely low value for VII portraits.",
+      "archive_url": "https://archive.org/details/logh2008_update",
+      "file_count": 5,
+      "extensions": {
+        "xml": 2,
+        "exe": 1,
+        "sqlite": 1,
+        "torrent": 1
+      },
+      "candidate_files": [
+        {
+          "name": "ginei_update.exe",
+          "format": "Windows Executable",
+          "size": "48546680",
+          "source": "original",
+          "extension": "exe",
+          "direct_url": "https://archive.org/download/logh2008_update/ginei_update.exe",
+          "usefulness": "extractable_game_or_package"
+        },
+        {
+          "name": "logh2008_update_archive.torrent",
+          "format": "Archive BitTorrent",
+          "size": "3522",
+          "source": "metadata",
+          "extension": "torrent",
+          "direct_url": "https://archive.org/download/logh2008_update/logh2008_update_archive.torrent",
+          "usefulness": "metadata_only"
+        },
+        {
+          "name": "logh2008_update_files.xml",
+          "format": "Metadata",
+          "size": null,
+          "source": "original",
+          "extension": "xml",
+          "direct_url": "https://archive.org/download/logh2008_update/logh2008_update_files.xml",
+          "usefulness": "ocr_or_manual_text"
+        },
+        {
+          "name": "logh2008_update_meta.xml",
+          "format": "Metadata",
+          "size": "1064",
+          "source": "original",
+          "extension": "xml",
+          "direct_url": "https://archive.org/download/logh2008_update/logh2008_update_meta.xml",
+          "usefulness": "ocr_or_manual_text"
+        }
+      ]
+    },
+    {
+      "identifier": "gineidenVS-opening",
+      "title": "Ginga Eiyuu Densetsu VS  Opening",
+      "role": "later_game_video",
+      "priority": 45,
+      "note": "VS opening thumbnails; low value for VII matching.",
+      "archive_url": "https://archive.org/details/gineidenVS-opening",
+      "file_count": 27,
+      "extensions": {
+        "jpg": 21,
+        "xml": 2,
+        "mp4": 1,
+        "mpg": 1,
+        "sqlite": 1,
+        "torrent": 1
+      },
+      "candidate_files": [
+        {
+          "name": "__ia_thumb.jpg",
+          "format": "Item Tile",
+          "size": "4094",
+          "source": "original",
+          "extension": "jpg",
+          "direct_url": "https://archive.org/download/gineidenVS-opening/__ia_thumb.jpg",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gineidenVS-opening.thumbs/op_000001.jpg",
+          "format": "Thumbnail",
+          "size": "2653",
+          "source": "derivative",
+          "extension": "jpg",
+          "direct_url": "https://archive.org/download/gineidenVS-opening/gineidenVS-opening.thumbs/op_000001.jpg",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gineidenVS-opening.thumbs/op_000005.jpg",
+          "format": "Thumbnail",
+          "size": "15909",
+          "source": "derivative",
+          "extension": "jpg",
+          "direct_url": "https://archive.org/download/gineidenVS-opening/gineidenVS-opening.thumbs/op_000005.jpg",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gineidenVS-opening.thumbs/op_000010.jpg",
+          "format": "Thumbnail",
+          "size": "64708",
+          "source": "derivative",
+          "extension": "jpg",
+          "direct_url": "https://archive.org/download/gineidenVS-opening/gineidenVS-opening.thumbs/op_000010.jpg",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gineidenVS-opening.thumbs/op_000015.jpg",
+          "format": "Thumbnail",
+          "size": "77608",
+          "source": "derivative",
+          "extension": "jpg",
+          "direct_url": "https://archive.org/download/gineidenVS-opening/gineidenVS-opening.thumbs/op_000015.jpg",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gineidenVS-opening.thumbs/op_000020.jpg",
+          "format": "Thumbnail",
+          "size": "79652",
+          "source": "derivative",
+          "extension": "jpg",
+          "direct_url": "https://archive.org/download/gineidenVS-opening/gineidenVS-opening.thumbs/op_000020.jpg",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gineidenVS-opening.thumbs/op_000025.jpg",
+          "format": "Thumbnail",
+          "size": "51307",
+          "source": "derivative",
+          "extension": "jpg",
+          "direct_url": "https://archive.org/download/gineidenVS-opening/gineidenVS-opening.thumbs/op_000025.jpg",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gineidenVS-opening.thumbs/op_000030.jpg",
+          "format": "Thumbnail",
+          "size": "27411",
+          "source": "derivative",
+          "extension": "jpg",
+          "direct_url": "https://archive.org/download/gineidenVS-opening/gineidenVS-opening.thumbs/op_000030.jpg",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gineidenVS-opening.thumbs/op_000035.jpg",
+          "format": "Thumbnail",
+          "size": "32122",
+          "source": "derivative",
+          "extension": "jpg",
+          "direct_url": "https://archive.org/download/gineidenVS-opening/gineidenVS-opening.thumbs/op_000035.jpg",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gineidenVS-opening.thumbs/op_000040.jpg",
+          "format": "Thumbnail",
+          "size": "37221",
+          "source": "derivative",
+          "extension": "jpg",
+          "direct_url": "https://archive.org/download/gineidenVS-opening/gineidenVS-opening.thumbs/op_000040.jpg",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gineidenVS-opening.thumbs/op_000045.jpg",
+          "format": "Thumbnail",
+          "size": "33192",
+          "source": "derivative",
+          "extension": "jpg",
+          "direct_url": "https://archive.org/download/gineidenVS-opening/gineidenVS-opening.thumbs/op_000045.jpg",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gineidenVS-opening.thumbs/op_000050.jpg",
+          "format": "Thumbnail",
+          "size": "43754",
+          "source": "derivative",
+          "extension": "jpg",
+          "direct_url": "https://archive.org/download/gineidenVS-opening/gineidenVS-opening.thumbs/op_000050.jpg",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gineidenVS-opening.thumbs/op_000055.jpg",
+          "format": "Thumbnail",
+          "size": "49264",
+          "source": "derivative",
+          "extension": "jpg",
+          "direct_url": "https://archive.org/download/gineidenVS-opening/gineidenVS-opening.thumbs/op_000055.jpg",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gineidenVS-opening.thumbs/op_000060.jpg",
+          "format": "Thumbnail",
+          "size": "40794",
+          "source": "derivative",
+          "extension": "jpg",
+          "direct_url": "https://archive.org/download/gineidenVS-opening/gineidenVS-opening.thumbs/op_000060.jpg",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gineidenVS-opening.thumbs/op_000065.jpg",
+          "format": "Thumbnail",
+          "size": "34650",
+          "source": "derivative",
+          "extension": "jpg",
+          "direct_url": "https://archive.org/download/gineidenVS-opening/gineidenVS-opening.thumbs/op_000065.jpg",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gineidenVS-opening.thumbs/op_000070.jpg",
+          "format": "Thumbnail",
+          "size": "55668",
+          "source": "derivative",
+          "extension": "jpg",
+          "direct_url": "https://archive.org/download/gineidenVS-opening/gineidenVS-opening.thumbs/op_000070.jpg",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gineidenVS-opening.thumbs/op_000075.jpg",
+          "format": "Thumbnail",
+          "size": "47303",
+          "source": "derivative",
+          "extension": "jpg",
+          "direct_url": "https://archive.org/download/gineidenVS-opening/gineidenVS-opening.thumbs/op_000075.jpg",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gineidenVS-opening.thumbs/op_000080.jpg",
+          "format": "Thumbnail",
+          "size": "64864",
+          "source": "derivative",
+          "extension": "jpg",
+          "direct_url": "https://archive.org/download/gineidenVS-opening/gineidenVS-opening.thumbs/op_000080.jpg",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gineidenVS-opening.thumbs/op_000085.jpg",
+          "format": "Thumbnail",
+          "size": "58797",
+          "source": "derivative",
+          "extension": "jpg",
+          "direct_url": "https://archive.org/download/gineidenVS-opening/gineidenVS-opening.thumbs/op_000085.jpg",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gineidenVS-opening.thumbs/op_000090.jpg",
+          "format": "Thumbnail",
+          "size": "58644",
+          "source": "derivative",
+          "extension": "jpg",
+          "direct_url": "https://archive.org/download/gineidenVS-opening/gineidenVS-opening.thumbs/op_000090.jpg",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gineidenVS-opening.thumbs/op_000095.jpg",
+          "format": "Thumbnail",
+          "size": "62782",
+          "source": "derivative",
+          "extension": "jpg",
+          "direct_url": "https://archive.org/download/gineidenVS-opening/gineidenVS-opening.thumbs/op_000095.jpg",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gineidenVS-opening_archive.torrent",
+          "format": "Archive BitTorrent",
+          "size": "11826",
+          "source": "metadata",
+          "extension": "torrent",
+          "direct_url": "https://archive.org/download/gineidenVS-opening/gineidenVS-opening_archive.torrent",
+          "usefulness": "metadata_only"
+        },
+        {
+          "name": "gineidenVS-opening_files.xml",
+          "format": "Metadata",
+          "size": null,
+          "source": "original",
+          "extension": "xml",
+          "direct_url": "https://archive.org/download/gineidenVS-opening/gineidenVS-opening_files.xml",
+          "usefulness": "ocr_or_manual_text"
+        },
+        {
+          "name": "gineidenVS-opening_meta.xml",
+          "format": "Metadata",
+          "size": "948",
+          "source": "original",
+          "extension": "xml",
+          "direct_url": "https://archive.org/download/gineidenVS-opening/gineidenVS-opening_meta.xml",
+          "usefulness": "ocr_or_manual_text"
+        }
+      ]
+    },
+    {
+      "identifier": "gin-vs-t-02",
+      "title": "Ginga Eiyuu Densetsu VS Trial No Sound",
+      "role": "later_game_trial",
+      "priority": 45,
+      "note": "VS trial with screenshots; lower value, can supply labeled modern images only with caution.",
+      "archive_url": "https://archive.org/details/gin-vs-t-02",
+      "file_count": 11,
+      "extensions": {
+        "jpg": 5,
+        "xml": 2,
+        "exe": 1,
+        "gif": 1,
+        "sqlite": 1,
+        "torrent": 1
+      },
+      "candidate_files": [
+        {
+          "name": "GinVS_T02.exe",
+          "format": "Windows Executable",
+          "size": "12122459",
+          "source": "original",
+          "extension": "exe",
+          "direct_url": "https://archive.org/download/gin-vs-t-02/GinVS_T02.exe",
+          "usefulness": "extractable_game_or_package"
+        },
+        {
+          "name": "__ia_thumb.jpg",
+          "format": "Item Tile",
+          "size": "13540",
+          "source": "original",
+          "extension": "jpg",
+          "direct_url": "https://archive.org/download/gin-vs-t-02/__ia_thumb.jpg",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "cap01.jpg",
+          "format": "JPEG",
+          "size": "7409",
+          "source": "original",
+          "extension": "jpg",
+          "direct_url": "https://archive.org/download/gin-vs-t-02/cap01.jpg",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "cap01_thumb.jpg",
+          "format": "JPEG Thumb",
+          "size": "7643",
+          "source": "derivative",
+          "extension": "jpg",
+          "direct_url": "https://archive.org/download/gin-vs-t-02/cap01_thumb.jpg",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "cap03.jpg",
+          "format": "JPEG",
+          "size": "8345",
+          "source": "original",
+          "extension": "jpg",
+          "direct_url": "https://archive.org/download/gin-vs-t-02/cap03.jpg",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "cap03_thumb.jpg",
+          "format": "JPEG Thumb",
+          "size": "7574",
+          "source": "derivative",
+          "extension": "jpg",
+          "direct_url": "https://archive.org/download/gin-vs-t-02/cap03_thumb.jpg",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "gin-vs-t-02_archive.torrent",
+          "format": "Archive BitTorrent",
+          "size": "3092",
+          "source": "metadata",
+          "extension": "torrent",
+          "direct_url": "https://archive.org/download/gin-vs-t-02/gin-vs-t-02_archive.torrent",
+          "usefulness": "metadata_only"
+        },
+        {
+          "name": "gin-vs-t-02_files.xml",
+          "format": "Metadata",
+          "size": null,
+          "source": "original",
+          "extension": "xml",
+          "direct_url": "https://archive.org/download/gin-vs-t-02/gin-vs-t-02_files.xml",
+          "usefulness": "ocr_or_manual_text"
+        },
+        {
+          "name": "gin-vs-t-02_meta.xml",
+          "format": "Metadata",
+          "size": "1953",
+          "source": "original",
+          "extension": "xml",
+          "direct_url": "https://archive.org/download/gin-vs-t-02/gin-vs-t-02_meta.xml",
+          "usefulness": "ocr_or_manual_text"
+        },
+        {
+          "name": "gin_vs.gif",
+          "format": "Animated GIF",
+          "size": "11660",
+          "source": "original",
+          "extension": "gif",
+          "direct_url": "https://archive.org/download/gin-vs-t-02/gin_vs.gif",
+          "usefulness": "image_reference_candidate"
+        }
+      ]
+    },
+    {
+      "identifier": "Nova_BBGames25_Japan",
+      "title": "Ginga Eiyuu Densetsu VS (Japan)",
+      "role": "later_game_disc",
+      "priority": 45,
+      "note": "VS item with package screenshots; lower value.",
+      "archive_url": "https://archive.org/details/Nova_BBGames25_Japan",
+      "file_count": 12,
+      "extensions": {
+        "jpg": 6,
+        "xml": 3,
+        "7z": 1,
+        "sqlite": 1,
+        "zip": 1
+      },
+      "candidate_files": [
+        {
+          "name": "Ginga Eiyuu Densetsu VS (Japan).7z",
+          "format": "7z",
+          "size": "502955457",
+          "source": "original",
+          "extension": "7z",
+          "direct_url": "https://archive.org/download/Nova_BBGames25_Japan/Ginga Eiyuu Densetsu VS (Japan).7z",
+          "usefulness": "extractable_game_or_package"
+        },
+        {
+          "name": "Ginga Eiyuu Densetsu VS (Japan)/1.jpg",
+          "format": "JPEG",
+          "size": "17396164",
+          "source": "original",
+          "extension": "jpg",
+          "direct_url": "https://archive.org/download/Nova_BBGames25_Japan/Ginga Eiyuu Densetsu VS (Japan)/1.jpg",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "Ginga Eiyuu Densetsu VS (Japan)/2.jpg",
+          "format": "JPEG",
+          "size": "15331334",
+          "source": "original",
+          "extension": "jpg",
+          "direct_url": "https://archive.org/download/Nova_BBGames25_Japan/Ginga Eiyuu Densetsu VS (Japan)/2.jpg",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "Ginga Eiyuu Densetsu VS (Japan)/3.jpg",
+          "format": "JPEG",
+          "size": "9449763",
+          "source": "original",
+          "extension": "jpg",
+          "direct_url": "https://archive.org/download/Nova_BBGames25_Japan/Ginga Eiyuu Densetsu VS (Japan)/3.jpg",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "Ginga Eiyuu Densetsu VS (Japan)/4.jpg",
+          "format": "JPEG",
+          "size": "20509281",
+          "source": "original",
+          "extension": "jpg",
+          "direct_url": "https://archive.org/download/Nova_BBGames25_Japan/Ginga Eiyuu Densetsu VS (Japan)/4.jpg",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "Ginga Eiyuu Densetsu VS (Japan)/5.jpg",
+          "format": "JPEG",
+          "size": "18718789",
+          "source": "original",
+          "extension": "jpg",
+          "direct_url": "https://archive.org/download/Nova_BBGames25_Japan/Ginga Eiyuu Densetsu VS (Japan)/5.jpg",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "Nova_BBGames25_Japan_files.xml",
+          "format": "Metadata",
+          "size": null,
+          "source": "original",
+          "extension": "xml",
+          "direct_url": "https://archive.org/download/Nova_BBGames25_Japan/Nova_BBGames25_Japan_files.xml",
+          "usefulness": "ocr_or_manual_text"
+        },
+        {
+          "name": "Nova_BBGames25_Japan_meta.xml",
+          "format": "Metadata",
+          "size": "986",
+          "source": "original",
+          "extension": "xml",
+          "direct_url": "https://archive.org/download/Nova_BBGames25_Japan/Nova_BBGames25_Japan_meta.xml",
+          "usefulness": "ocr_or_manual_text"
+        },
+        {
+          "name": "Nova_BBGames25_Japan_reviews.xml",
+          "format": "Metadata",
+          "size": "717",
+          "source": "original",
+          "extension": "xml",
+          "direct_url": "https://archive.org/download/Nova_BBGames25_Japan/Nova_BBGames25_Japan_reviews.xml",
+          "usefulness": "ocr_or_manual_text"
+        },
+        {
+          "name": "[LOGS] Ginga Eiyuu Densetsu VS (Japan).zip",
+          "format": "ZIP",
+          "size": "8221393",
+          "source": "original",
+          "extension": "zip",
+          "direct_url": "https://archive.org/download/Nova_BBGames25_Japan/[LOGS] Ginga Eiyuu Densetsu VS (Japan).zip",
+          "usefulness": "extractable_game_or_package"
+        },
+        {
+          "name": "__ia_thumb.jpg",
+          "format": "Item Tile",
+          "size": "13360",
+          "source": "original",
+          "extension": "jpg",
+          "direct_url": "https://archive.org/download/Nova_BBGames25_Japan/__ia_thumb.jpg",
+          "usefulness": "image_reference_candidate"
+        }
+      ]
+    },
+    {
+      "identifier": "LOGHPC",
+      "title": "Legend of the Galactic Heroes (2008 game)",
+      "role": "later_game_disc",
+      "priority": 45,
+      "note": "2008 PC game; lower for VII, useful only as alternate official-ish character imagery if clearly labeled.",
+      "archive_url": "https://archive.org/details/LOGHPC",
+      "file_count": 6,
+      "extensions": {
+        "xml": 2,
+        "rar": 1,
+        "sqlite": 1,
+        "torrent": 1,
+        "zip": 1
+      },
+      "candidate_files": [
+        {
+          "name": "LOGHPC.zip",
+          "format": "ZIP",
+          "size": "1255320098",
+          "source": "original",
+          "extension": "zip",
+          "direct_url": "https://archive.org/download/LOGHPC/LOGHPC.zip",
+          "usefulness": "extractable_game_or_package"
+        },
+        {
+          "name": "LOGHPC_archive.torrent",
+          "format": "Archive BitTorrent",
+          "size": "25686",
+          "source": "metadata",
+          "extension": "torrent",
+          "direct_url": "https://archive.org/download/LOGHPC/LOGHPC_archive.torrent",
+          "usefulness": "metadata_only"
+        },
+        {
+          "name": "LOGHPC_files.xml",
+          "format": "Metadata",
+          "size": null,
+          "source": "original",
+          "extension": "xml",
+          "direct_url": "https://archive.org/download/LOGHPC/LOGHPC_files.xml",
+          "usefulness": "ocr_or_manual_text"
+        },
+        {
+          "name": "LOGHPC_meta.xml",
+          "format": "Metadata",
+          "size": "1130",
+          "source": "original",
+          "extension": "xml",
+          "direct_url": "https://archive.org/download/LOGHPC/LOGHPC_meta.xml",
+          "usefulness": "ocr_or_manual_text"
+        },
+        {
+          "name": "logh_tlpatch_081026-2.rar",
+          "format": "RAR",
+          "size": "33819",
+          "source": "original",
+          "extension": "rar",
+          "direct_url": "https://archive.org/download/LOGHPC/logh_tlpatch_081026-2.rar",
+          "usefulness": "extractable_game_or_package"
+        }
+      ]
+    },
+    {
+      "identifier": "psx_gingaed",
+      "title": "Ginga Eiyuu Densetsu (Jpn)",
+      "role": "console_game_disc",
+      "priority": 0,
+      "note": "PS1 Click Manga/game disc; can yield labeled images but art lineage differs.",
+      "archive_url": "https://archive.org/details/psx_gingaed",
+      "file_count": 7,
+      "extensions": {
+        "jpg": 2,
+        "xml": 2,
+        "chd": 1,
+        "sqlite": 1,
+        "~1~": 1
+      },
+      "candidate_files": [
+        {
+          "name": "__ia_thumb.jpg",
+          "format": "Item Tile",
+          "size": "17746",
+          "source": "original",
+          "extension": "jpg",
+          "direct_url": "https://archive.org/download/psx_gingaed/__ia_thumb.jpg",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "history/files/playstationdisc.chd.~1~",
+          "format": "Unknown",
+          "size": "426217427",
+          "source": "original",
+          "extension": "~1~",
+          "direct_url": "https://archive.org/download/psx_gingaed/history/files/playstationdisc.chd.~1~",
+          "usefulness": "metadata_only"
+        },
+        {
+          "name": "playstationdisc.chd",
+          "format": "Unknown",
+          "size": "426217427",
+          "source": "original",
+          "extension": "chd",
+          "direct_url": "https://archive.org/download/psx_gingaed/playstationdisc.chd",
+          "usefulness": "extractable_game_or_package"
+        },
+        {
+          "name": "psx_gingaed_files.xml",
+          "format": "Metadata",
+          "size": null,
+          "source": "original",
+          "extension": "xml",
+          "direct_url": "https://archive.org/download/psx_gingaed/psx_gingaed_files.xml",
+          "usefulness": "ocr_or_manual_text"
+        },
+        {
+          "name": "psx_gingaed_meta.xml",
+          "format": "Metadata",
+          "size": "1092",
+          "source": "original",
+          "extension": "xml",
+          "direct_url": "https://archive.org/download/psx_gingaed/psx_gingaed_meta.xml",
+          "usefulness": "ocr_or_manual_text"
+        },
+        {
+          "name": "psx_gingaed_screenshot.jpg",
+          "format": "Emulator Screenshot",
+          "size": "42952",
+          "source": "original",
+          "extension": "jpg",
+          "direct_url": "https://archive.org/download/psx_gingaed/psx_gingaed_screenshot.jpg",
+          "usefulness": "image_reference_candidate"
+        }
+      ]
+    },
+    {
+      "identifier": "ginga_eiyuu_densetsu_ii_dx_19_x68k",
+      "title": "Ginga Eiyuu Densetsu II DX+ ",
+      "role": "early_game_disc",
+      "priority": 0,
+      "note": "X68000 II DX+ disks; historical reference.",
+      "archive_url": "https://archive.org/details/ginga_eiyuu_densetsu_ii_dx_19_x68k",
+      "file_count": 11,
+      "extensions": {
+        "zip": 4,
+        "jpg": 2,
+        "xml": 2,
+        "png": 1,
+        "sqlite": 1,
+        "torrent": 1
+      },
+      "candidate_files": [
+        {
+          "name": "Ginga Eiyuu Densetsu II DX+ (1991)(Bothtec)(Disk 1 of 4).zip",
+          "format": "ZIP",
+          "size": "519278",
+          "source": "original",
+          "extension": "zip",
+          "direct_url": "https://archive.org/download/ginga_eiyuu_densetsu_ii_dx_19_x68k/Ginga Eiyuu Densetsu II DX%2B (1991)(Bothtec)(Disk 1 of 4).zip",
+          "usefulness": "extractable_game_or_package"
+        },
+        {
+          "name": "Ginga Eiyuu Densetsu II DX+ (1991)(Bothtec)(Disk 2 of 4).zip",
+          "format": "ZIP",
+          "size": "515180",
+          "source": "original",
+          "extension": "zip",
+          "direct_url": "https://archive.org/download/ginga_eiyuu_densetsu_ii_dx_19_x68k/Ginga Eiyuu Densetsu II DX%2B (1991)(Bothtec)(Disk 2 of 4).zip",
+          "usefulness": "extractable_game_or_package"
+        },
+        {
+          "name": "Ginga Eiyuu Densetsu II DX+ (1991)(Bothtec)(Disk 3 of 4).zip",
+          "format": "ZIP",
+          "size": "1570",
+          "source": "original",
+          "extension": "zip",
+          "direct_url": "https://archive.org/download/ginga_eiyuu_densetsu_ii_dx_19_x68k/Ginga Eiyuu Densetsu II DX%2B (1991)(Bothtec)(Disk 3 of 4).zip",
+          "usefulness": "extractable_game_or_package"
+        },
+        {
+          "name": "Ginga Eiyuu Densetsu II DX+ (1991)(Bothtec)(Disk 4 of 4)(Scenario).zip",
+          "format": "ZIP",
+          "size": "510883",
+          "source": "original",
+          "extension": "zip",
+          "direct_url": "https://archive.org/download/ginga_eiyuu_densetsu_ii_dx_19_x68k/Ginga Eiyuu Densetsu II DX%2B (1991)(Bothtec)(Disk 4 of 4)(Scenario).zip",
+          "usefulness": "extractable_game_or_package"
+        },
+        {
+          "name": "__ia_thumb.jpg",
+          "format": "Item Tile",
+          "size": "17255",
+          "source": "original",
+          "extension": "jpg",
+          "direct_url": "https://archive.org/download/ginga_eiyuu_densetsu_ii_dx_19_x68k/__ia_thumb.jpg",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "ginga_eiyuu_densetsu_ii_dx_19_x68k_archive.torrent",
+          "format": "Archive BitTorrent",
+          "size": "3072",
+          "source": "metadata",
+          "extension": "torrent",
+          "direct_url": "https://archive.org/download/ginga_eiyuu_densetsu_ii_dx_19_x68k/ginga_eiyuu_densetsu_ii_dx_19_x68k_archive.torrent",
+          "usefulness": "metadata_only"
+        },
+        {
+          "name": "ginga_eiyuu_densetsu_ii_dx_19_x68k_files.xml",
+          "format": "Metadata",
+          "size": null,
+          "source": "original",
+          "extension": "xml",
+          "direct_url": "https://archive.org/download/ginga_eiyuu_densetsu_ii_dx_19_x68k/ginga_eiyuu_densetsu_ii_dx_19_x68k_files.xml",
+          "usefulness": "ocr_or_manual_text"
+        },
+        {
+          "name": "ginga_eiyuu_densetsu_ii_dx_19_x68k_meta.xml",
+          "format": "Metadata",
+          "size": "868",
+          "source": "original",
+          "extension": "xml",
+          "direct_url": "https://archive.org/download/ginga_eiyuu_densetsu_ii_dx_19_x68k/ginga_eiyuu_densetsu_ii_dx_19_x68k_meta.xml",
+          "usefulness": "ocr_or_manual_text"
+        },
+        {
+          "name": "snap.png",
+          "format": "PNG",
+          "size": "41088",
+          "source": "original",
+          "extension": "png",
+          "direct_url": "https://archive.org/download/ginga_eiyuu_densetsu_ii_dx_19_x68k/snap.png",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "snap_thumb.jpg",
+          "format": "JPEG Thumb",
+          "size": "10641",
+          "source": "derivative",
+          "extension": "jpg",
+          "direct_url": "https://archive.org/download/ginga_eiyuu_densetsu_ii_dx_19_x68k/snap_thumb.jpg",
+          "usefulness": "image_reference_candidate"
+        }
+      ]
+    },
+    {
+      "identifier": "ginga_eiyuu_densetsu_ii_1990_b_x68k",
+      "title": "Ginga Eiyuu Densetsu II ",
+      "role": "early_game_disc",
+      "priority": 0,
+      "note": "X68000 II disks; historical reference.",
+      "archive_url": "https://archive.org/details/ginga_eiyuu_densetsu_ii_1990_b_x68k",
+      "file_count": 11,
+      "extensions": {
+        "zip": 4,
+        "jpg": 2,
+        "xml": 2,
+        "png": 1,
+        "sqlite": 1,
+        "torrent": 1
+      },
+      "candidate_files": [
+        {
+          "name": "Ginga Eiyuu Densetsu II (1990)(Bothtec)(Disk 1 of 4)(Disk A).zip",
+          "format": "ZIP",
+          "size": "627033",
+          "source": "original",
+          "extension": "zip",
+          "direct_url": "https://archive.org/download/ginga_eiyuu_densetsu_ii_1990_b_x68k/Ginga Eiyuu Densetsu II (1990)(Bothtec)(Disk 1 of 4)(Disk A).zip",
+          "usefulness": "extractable_game_or_package"
+        },
+        {
+          "name": "Ginga Eiyuu Densetsu II (1990)(Bothtec)(Disk 2 of 4)(Disk B).zip",
+          "format": "ZIP",
+          "size": "546049",
+          "source": "original",
+          "extension": "zip",
+          "direct_url": "https://archive.org/download/ginga_eiyuu_densetsu_ii_1990_b_x68k/Ginga Eiyuu Densetsu II (1990)(Bothtec)(Disk 2 of 4)(Disk B).zip",
+          "usefulness": "extractable_game_or_package"
+        },
+        {
+          "name": "Ginga Eiyuu Densetsu II (1990)(Bothtec)(Disk 3 of 4)(Disk C).zip",
+          "format": "ZIP",
+          "size": "510548",
+          "source": "original",
+          "extension": "zip",
+          "direct_url": "https://archive.org/download/ginga_eiyuu_densetsu_ii_1990_b_x68k/Ginga Eiyuu Densetsu II (1990)(Bothtec)(Disk 3 of 4)(Disk C).zip",
+          "usefulness": "extractable_game_or_package"
+        },
+        {
+          "name": "Ginga Eiyuu Densetsu II (1990)(Bothtec)(Disk 4 of 4)(Disk D).zip",
+          "format": "ZIP",
+          "size": "261777",
+          "source": "original",
+          "extension": "zip",
+          "direct_url": "https://archive.org/download/ginga_eiyuu_densetsu_ii_1990_b_x68k/Ginga Eiyuu Densetsu II (1990)(Bothtec)(Disk 4 of 4)(Disk D).zip",
+          "usefulness": "extractable_game_or_package"
+        },
+        {
+          "name": "__ia_thumb.jpg",
+          "format": "Item Tile",
+          "size": "17581",
+          "source": "original",
+          "extension": "jpg",
+          "direct_url": "https://archive.org/download/ginga_eiyuu_densetsu_ii_1990_b_x68k/__ia_thumb.jpg",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "ginga_eiyuu_densetsu_ii_1990_b_x68k_archive.torrent",
+          "format": "Archive BitTorrent",
+          "size": "3086",
+          "source": "metadata",
+          "extension": "torrent",
+          "direct_url": "https://archive.org/download/ginga_eiyuu_densetsu_ii_1990_b_x68k/ginga_eiyuu_densetsu_ii_1990_b_x68k_archive.torrent",
+          "usefulness": "metadata_only"
+        },
+        {
+          "name": "ginga_eiyuu_densetsu_ii_1990_b_x68k_files.xml",
+          "format": "Metadata",
+          "size": null,
+          "source": "original",
+          "extension": "xml",
+          "direct_url": "https://archive.org/download/ginga_eiyuu_densetsu_ii_1990_b_x68k/ginga_eiyuu_densetsu_ii_1990_b_x68k_files.xml",
+          "usefulness": "ocr_or_manual_text"
+        },
+        {
+          "name": "ginga_eiyuu_densetsu_ii_1990_b_x68k_meta.xml",
+          "format": "Metadata",
+          "size": "865",
+          "source": "original",
+          "extension": "xml",
+          "direct_url": "https://archive.org/download/ginga_eiyuu_densetsu_ii_1990_b_x68k/ginga_eiyuu_densetsu_ii_1990_b_x68k_meta.xml",
+          "usefulness": "ocr_or_manual_text"
+        },
+        {
+          "name": "snap.png",
+          "format": "PNG",
+          "size": "51729",
+          "source": "original",
+          "extension": "png",
+          "direct_url": "https://archive.org/download/ginga_eiyuu_densetsu_ii_1990_b_x68k/snap.png",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "snap_thumb.jpg",
+          "format": "JPEG Thumb",
+          "size": "10145",
+          "source": "derivative",
+          "extension": "jpg",
+          "direct_url": "https://archive.org/download/ginga_eiyuu_densetsu_ii_1990_b_x68k/snap_thumb.jpg",
+          "usefulness": "image_reference_candidate"
+        }
+      ]
+    },
+    {
+      "identifier": "ginga_eiyuu_densetsu_1990_both_x68k",
+      "title": "Ginga Eiyuu Densetsu ",
+      "role": "early_game_disc",
+      "priority": 0,
+      "note": "X68000 first game disks; historical reference, possible simple portraits/stats.",
+      "archive_url": "https://archive.org/details/ginga_eiyuu_densetsu_1990_both_x68k",
+      "file_count": 13,
+      "extensions": {
+        "zip": 6,
+        "jpg": 2,
+        "xml": 2,
+        "png": 1,
+        "sqlite": 1,
+        "torrent": 1
+      },
+      "candidate_files": [
+        {
+          "name": "Ginga Eiyuu Densetsu (1990)(Bothtec)(Disk 1 of 3)(Disk A).zip",
+          "format": "ZIP",
+          "size": "472789",
+          "source": "original",
+          "extension": "zip",
+          "direct_url": "https://archive.org/download/ginga_eiyuu_densetsu_1990_both_x68k/Ginga Eiyuu Densetsu (1990)(Bothtec)(Disk 1 of 3)(Disk A).zip",
+          "usefulness": "extractable_game_or_package"
+        },
+        {
+          "name": "Ginga Eiyuu Densetsu (1990)(Bothtec)(Disk 1 of 3)(Disk A)[a].zip",
+          "format": "ZIP",
+          "size": "472564",
+          "source": "original",
+          "extension": "zip",
+          "direct_url": "https://archive.org/download/ginga_eiyuu_densetsu_1990_both_x68k/Ginga Eiyuu Densetsu (1990)(Bothtec)(Disk 1 of 3)(Disk A)[a].zip",
+          "usefulness": "extractable_game_or_package"
+        },
+        {
+          "name": "Ginga Eiyuu Densetsu (1990)(Bothtec)(Disk 2 of 3)(Disk B).zip",
+          "format": "ZIP",
+          "size": "454613",
+          "source": "original",
+          "extension": "zip",
+          "direct_url": "https://archive.org/download/ginga_eiyuu_densetsu_1990_both_x68k/Ginga Eiyuu Densetsu (1990)(Bothtec)(Disk 2 of 3)(Disk B).zip",
+          "usefulness": "extractable_game_or_package"
+        },
+        {
+          "name": "Ginga Eiyuu Densetsu (1990)(Bothtec)(Disk 2 of 3)(Disk B)[a].zip",
+          "format": "ZIP",
+          "size": "456132",
+          "source": "original",
+          "extension": "zip",
+          "direct_url": "https://archive.org/download/ginga_eiyuu_densetsu_1990_both_x68k/Ginga Eiyuu Densetsu (1990)(Bothtec)(Disk 2 of 3)(Disk B)[a].zip",
+          "usefulness": "extractable_game_or_package"
+        },
+        {
+          "name": "Ginga Eiyuu Densetsu (1990)(Bothtec)(Disk 3 of 3)(Disk C).zip",
+          "format": "ZIP",
+          "size": "495872",
+          "source": "original",
+          "extension": "zip",
+          "direct_url": "https://archive.org/download/ginga_eiyuu_densetsu_1990_both_x68k/Ginga Eiyuu Densetsu (1990)(Bothtec)(Disk 3 of 3)(Disk C).zip",
+          "usefulness": "extractable_game_or_package"
+        },
+        {
+          "name": "Ginga Eiyuu Densetsu Power Up & Scenario Shuu (1990)(Bothtec).zip",
+          "format": "ZIP",
+          "size": "511077",
+          "source": "original",
+          "extension": "zip",
+          "direct_url": "https://archive.org/download/ginga_eiyuu_densetsu_1990_both_x68k/Ginga Eiyuu Densetsu Power Up %26 Scenario Shuu (1990)(Bothtec).zip",
+          "usefulness": "extractable_game_or_package"
+        },
+        {
+          "name": "__ia_thumb.jpg",
+          "format": "Item Tile",
+          "size": "24817",
+          "source": "original",
+          "extension": "jpg",
+          "direct_url": "https://archive.org/download/ginga_eiyuu_densetsu_1990_both_x68k/__ia_thumb.jpg",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "ginga_eiyuu_densetsu_1990_both_x68k_archive.torrent",
+          "format": "Archive BitTorrent",
+          "size": "3560",
+          "source": "metadata",
+          "extension": "torrent",
+          "direct_url": "https://archive.org/download/ginga_eiyuu_densetsu_1990_both_x68k/ginga_eiyuu_densetsu_1990_both_x68k_archive.torrent",
+          "usefulness": "metadata_only"
+        },
+        {
+          "name": "ginga_eiyuu_densetsu_1990_both_x68k_files.xml",
+          "format": "Metadata",
+          "size": null,
+          "source": "original",
+          "extension": "xml",
+          "direct_url": "https://archive.org/download/ginga_eiyuu_densetsu_1990_both_x68k/ginga_eiyuu_densetsu_1990_both_x68k_files.xml",
+          "usefulness": "ocr_or_manual_text"
+        },
+        {
+          "name": "ginga_eiyuu_densetsu_1990_both_x68k_meta.xml",
+          "format": "Metadata",
+          "size": "862",
+          "source": "original",
+          "extension": "xml",
+          "direct_url": "https://archive.org/download/ginga_eiyuu_densetsu_1990_both_x68k/ginga_eiyuu_densetsu_1990_both_x68k_meta.xml",
+          "usefulness": "ocr_or_manual_text"
+        },
+        {
+          "name": "snap.png",
+          "format": "PNG",
+          "size": "68419",
+          "source": "original",
+          "extension": "png",
+          "direct_url": "https://archive.org/download/ginga_eiyuu_densetsu_1990_both_x68k/snap.png",
+          "usefulness": "image_reference_candidate"
+        },
+        {
+          "name": "snap_thumb.jpg",
+          "format": "JPEG Thumb",
+          "size": "12555",
+          "source": "derivative",
+          "extension": "jpg",
+          "direct_url": "https://archive.org/download/ginga_eiyuu_densetsu_1990_both_x68k/snap_thumb.jpg",
+          "usefulness": "image_reference_candidate"
+        }
+      ]
+    },
+    {
+      "identifier": "ginga-eiyuu-densetsu-ii-dx-system-disk",
+      "title": "Ginga Eiyuu Densetsu II DX+ (銀河英雄伝説) FM TOWNS version (System Floppy Disk ONLY)",
+      "role": "early_game_disc",
+      "priority": 0,
+      "note": "FM TOWNS system disk only; low direct value.",
+      "archive_url": "https://archive.org/details/ginga-eiyuu-densetsu-ii-dx-system-disk",
+      "file_count": 5,
+      "extensions": {
+        "xml": 2,
+        "sqlite": 1,
+        "torrent": 1,
+        "unixdd": 1
+      },
+      "candidate_files": [
+        {
+          "name": "ginga-eiyuu-densetsu-ii-dx-system-disk_archive.torrent",
+          "format": "Archive BitTorrent",
+          "size": "1977",
+          "source": "metadata",
+          "extension": "torrent",
+          "direct_url": "https://archive.org/download/ginga-eiyuu-densetsu-ii-dx-system-disk/ginga-eiyuu-densetsu-ii-dx-system-disk_archive.torrent",
+          "usefulness": "metadata_only"
+        },
+        {
+          "name": "ginga-eiyuu-densetsu-ii-dx-system-disk_files.xml",
+          "format": "Metadata",
+          "size": null,
+          "source": "original",
+          "extension": "xml",
+          "direct_url": "https://archive.org/download/ginga-eiyuu-densetsu-ii-dx-system-disk/ginga-eiyuu-densetsu-ii-dx-system-disk_files.xml",
+          "usefulness": "ocr_or_manual_text"
+        },
+        {
+          "name": "ginga-eiyuu-densetsu-ii-dx-system-disk_meta.xml",
+          "format": "Metadata",
+          "size": "1422",
+          "source": "original",
+          "extension": "xml",
+          "direct_url": "https://archive.org/download/ginga-eiyuu-densetsu-ii-dx-system-disk/ginga-eiyuu-densetsu-ii-dx-system-disk_meta.xml",
+          "usefulness": "ocr_or_manual_text"
+        }
+      ]
+    },
+    {
+      "identifier": "ginga-eiyuu-densetsu-3-sp",
+      "title": "Ginga Eiyuu Densetsu III SP （銀河英雄伝説Ⅲ SP）",
+      "role": "early_game_disc",
+      "priority": 0,
+      "note": "PC-98 III SP disks; historical reference, possible named stats.",
+      "archive_url": "https://archive.org/details/ginga-eiyuu-densetsu-3-sp",
+      "file_count": 5,
+      "extensions": {
+        "xml": 2,
+        "sqlite": 1,
+        "torrent": 1,
+        "zip": 1
+      },
+      "candidate_files": [
+        {
+          "name": "Ginga Eiyuu Densetsu III SP (Bothtec) (1993-12-03) [PC98] [3.5''] [SCP+MFI+HFE+D88].zip",
+          "format": "ZIP",
+          "size": "129182716",
+          "source": "original",
+          "extension": "zip",
+          "direct_url": "https://archive.org/download/ginga-eiyuu-densetsu-3-sp/Ginga Eiyuu Densetsu III SP (Bothtec) (1993-12-03) [PC98] [3.5%27%27] [SCP%2BMFI%2BHFE%2BD88].zip",
+          "usefulness": "extractable_game_or_package"
+        },
+        {
+          "name": "ginga-eiyuu-densetsu-3-sp_archive.torrent",
+          "format": "Archive BitTorrent",
+          "size": "6635",
+          "source": "metadata",
+          "extension": "torrent",
+          "direct_url": "https://archive.org/download/ginga-eiyuu-densetsu-3-sp/ginga-eiyuu-densetsu-3-sp_archive.torrent",
+          "usefulness": "metadata_only"
+        },
+        {
+          "name": "ginga-eiyuu-densetsu-3-sp_files.xml",
+          "format": "Metadata",
+          "size": null,
+          "source": "original",
+          "extension": "xml",
+          "direct_url": "https://archive.org/download/ginga-eiyuu-densetsu-3-sp/ginga-eiyuu-densetsu-3-sp_files.xml",
+          "usefulness": "ocr_or_manual_text"
+        },
+        {
+          "name": "ginga-eiyuu-densetsu-3-sp_meta.xml",
+          "format": "Metadata",
+          "size": "889",
+          "source": "original",
+          "extension": "xml",
+          "direct_url": "https://archive.org/download/ginga-eiyuu-densetsu-3-sp/ginga-eiyuu-densetsu-3-sp_meta.xml",
+          "usefulness": "ocr_or_manual_text"
+        }
+      ]
+    },
+    {
+      "identifier": "ginga-eiyuu-densetsu-2",
+      "title": "Ginga Eiyuu Densetsu II （銀河英雄伝説Ⅱ）",
+      "role": "early_game_disc",
+      "priority": 0,
+      "note": "PC-98 II disks; historical reference.",
+      "archive_url": "https://archive.org/details/ginga-eiyuu-densetsu-2",
+      "file_count": 5,
+      "extensions": {
+        "xml": 2,
+        "sqlite": 1,
+        "torrent": 1,
+        "zip": 1
+      },
+      "candidate_files": [
+        {
+          "name": "Ginga Eiyuu Densetsu II (Bothtec) (1990-10-05) [PC98] [5.25''] [SCP+MFI+HFE+D88].zip",
+          "format": "ZIP",
+          "size": "66933983",
+          "source": "original",
+          "extension": "zip",
+          "direct_url": "https://archive.org/download/ginga-eiyuu-densetsu-2/Ginga Eiyuu Densetsu II (Bothtec) (1990-10-05) [PC98] [5.25%27%27] [SCP%2BMFI%2BHFE%2BD88].zip",
+          "usefulness": "extractable_game_or_package"
+        },
+        {
+          "name": "ginga-eiyuu-densetsu-2_archive.torrent",
+          "format": "Archive BitTorrent",
+          "size": "4226",
+          "source": "metadata",
+          "extension": "torrent",
+          "direct_url": "https://archive.org/download/ginga-eiyuu-densetsu-2/ginga-eiyuu-densetsu-2_archive.torrent",
+          "usefulness": "metadata_only"
+        },
+        {
+          "name": "ginga-eiyuu-densetsu-2_files.xml",
+          "format": "Metadata",
+          "size": null,
+          "source": "original",
+          "extension": "xml",
+          "direct_url": "https://archive.org/download/ginga-eiyuu-densetsu-2/ginga-eiyuu-densetsu-2_files.xml",
+          "usefulness": "ocr_or_manual_text"
+        },
+        {
+          "name": "ginga-eiyuu-densetsu-2_meta.xml",
+          "format": "Metadata",
+          "size": "888",
+          "source": "original",
+          "extension": "xml",
+          "direct_url": "https://archive.org/download/ginga-eiyuu-densetsu-2/ginga-eiyuu-densetsu-2_meta.xml",
+          "usefulness": "ocr_or_manual_text"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,4 @@
+interface:
+  display_name: "LOGH VII Engine Spike"
+  short_description: "동일 계약으로 미래 클라이언트 엔진 후보를 비교 평가"
+  default_prompt: "Use $logh7-engine-spike to design an engine-neutral LOGH VII client spike and evidence rubric."

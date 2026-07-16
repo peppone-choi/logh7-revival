@@ -1,56 +1,110 @@
 ---
 name: logh7-orchestrator
-description: "LOGH VII(은하영웅전설 VII) 부활 프로젝트의 작업 오케스트레이터. 죽은 MMO를 자체 서버로 되살리는 모든 작업 — CD 자산추출, 바이너리 RE, 와이어 프로토콜, 권위적 서버 구현, 한글화, 라이브 QA — 을 전문 에이전트 팀으로 분해·조율한다. 트리거: 'logh7 작업', '서버 구현', '프로토콜 해독', '자산 추출', '한글화', '라이브 검증', '이 부분 다시/재실행/수정/보완', 로그인·로비·월드·채팅 기능 요청. 단순 질문은 직접 응답."
+description: "Orchestrate the evidence-first revival of LOGH VII with the original legacy client and an authoritative replacement server. Use for CD/data extraction, static or dynamic client reverse engineering, packet capture/proxy intervention, server gameplay restoration, Wine live QA, localization, reversible remastering, or engine-neutral future-client portfolio work."
 ---
 
-# LOGH VII 부활 오케스트레이터
+# LOGH VII Revival Orchestrator
 
-죽은 일본 MMO 은하영웅전설 VII를 원본 클라이언트(archive.org CD) + 자체 구현 서버로 멀티플레이 온라인 게임으로 복원한다.
+원본 `G7MTClient.exe`를 1차 제품·호환성 오라클로 유지하고 자체 서버를 권위 backend로 복원한다. 정적 RE, client runtime, wire, server persistence를 한 evidence chain으로 묶고 리마스터·장기 재이식은 별도 병렬 track으로 관리한다.
 
-## Phase 0: 컨텍스트 확인
-- 세 시작 문서를 먼저 읽는다: `docs/logh7-restart-plan-2026-07-05.md`, `docs/logh7-requirements-current.md`, `docs/logh7-architecture-operations-current.md`.
-- `.codegraph/`가 있으면 코드 위치/호출경로/영향범위는 codegraph 먼저.
-- 기존 산출물(`server/`) 존재 여부로 초기/후속/부분 재실행 판별.
-- ⚠️ docs의 코드 경로 언급은 리셋(2026-07-05) 전 기준 — 역사적 발견은 신뢰하되 파일 경로는 재확인.
+## 시작 계약
 
-## 에이전트 팀 (`.claude/agents/` / `.codex/agents/`) - Codex Advisor Strategy 적용
-Claude 하네스 역할 정의는 Codex에서도 그대로 쓴다. 모델은 호출 시점에 계층화한다: 기계적 실행(파싱/스윕/단순검증)=`gpt-5.3-codex-spark` 또는 `gpt-5.4-mini`, 일반 개발=`gpt-5.4`/`gpt-5.4-mini`, 어려운 판단(RE해석/설계/근본원인/최종판정)=메인 Advisor `gpt-5.5 high/xhigh`. 실행자가 막히면 작업 전체를 최고 모델에 넘기지 말고 판단 질문만 짧게 뽑아 Advisor가 결정한다. 상세는 `docs/logh7-codex-harness-loop.md`.
-| 에이전트 | 역할 | 주요 스킬 |
-|---|---|---|
-| extract-miner | CD 자산·데이터 추출 → 정본 카탈로그 | — |
-| re-analyst | Ghidra 바이너리 RE | binary-triage |
-| wire-engineer | 와이어 프로토콜 코덱 | test-driven-development |
-| server-dev | 권위적 Node.js 서버 | test-driven-development, verification-before-completion |
-| localizer | 한글화(인코딩/폰트/문자열) | grammar-checker, humanize-korean |
-| live-qa | 실클라 라이브 검증 | verification-before-completion, systematic-debugging |
+1. 루트 `AGENTS.md`, `docs/logh7-document-index-current.md`, `docs/logh7-requirements-current.md`, `docs/logh7-architecture-operations-current.md`, `.omo/plans/logh7-execution-plan-current.md`를 읽는다.
+2. 해당 track을 시작하기 전에 `docs/logh7-reference-haul.md`를 읽되 외부 방법론을 canonical 근거로 쓰지 않는다.
+3. `.codegraph/`가 있고 코드 위치·호출경로·영향범위를 묻는 작업이면 CodeGraph를 먼저 쓰고 `rg`로 확인한다.
+4. `docs/harness/logh7-revival/team-spec.md`에서 phase, 역할, handoff, partial-failure 계약을 선택한다.
+5. current checkout의 실제 파일/hash/evidence를 다시 확인한다. 역사 문서의 경로·성공 수치만으로 fresh gate를 만들지 않는다.
 
-## 실행 모드
-파이프라인 + 하이브리드. 데이터 흐름:
-```
-extract-miner ─┐
-re-analyst ────┼─▶ wire-engineer ─▶ server-dev ─▶ live-qa ─(버그 라우팅)─▶ 담당 에이전트
-localizer ─────┘                                        │
-                                                        └─▶ localizer(인게임 한글 검증)
-```
-- 독립 수집(추출·RE·현지화 원문)은 서브에이전트 병렬. 통합·검증은 순차.
-- 모델 지정: 기계적 스테이지 `model: "gpt-5.3-codex-spark"` 또는 `model: "gpt-5.4-mini"`, 일반 개발 `model: "gpt-5.4"`/`"gpt-5.4-mini"`, 판단은 메인 Advisor `gpt-5.5 high/xhigh`.
+## Runtime routing
 
-## 마일스톤 (순서)
-1. CD 추출 + 정본 카탈로그 (extract-miner)
-2. 프로토콜 재확정: 프레이밍·암호화·로그인 (re-analyst → wire-engineer)
-3. 로그인 서버 → 실클라 로그인 성공 (server-dev → live-qa)
-4. 로비 → 월드 진입
-5. 인월드 멀티플레이(이동·채팅) 권위적 처리
-6. 한글화 인게임 검증 (localizer → live-qa)
+- 구체 model 이름이나 context-window 값을 skill에 고정하지 않는다. 현재 runtime 기본값을 상속한다.
+- **low reasoning tier:** 파일·symbol lookup, hash/manifest inventory, 명령 실행, 로그 요약.
+- **standard reasoning tier:** 일반 구현, refactor, codec/test, 문서 동기화.
+- **deep reasoning tier:** RE 가설, architecture/root cause, 상충 증거 판정, phase 합성·최종 승인.
+- worker는 구현 노동과 bounded evidence 수집을 맡고 orchestrator는 요구 분해, write scope, synthesis, review, acceptance를 맡는다.
+- delegation은 한 계층만 사용한다. 독립 read-heavy branch만 병렬화하고 Wine prefix/GUI/ports/DB 같은 stateful 자원은 직렬화한다.
 
-## 데이터 전달 / 에러 핸들링
-- 파일 기반(정본 JSON/코덱) + 반환값 기반. 중간 산출물은 보존.
-- 에러 1회 재시도 후 실패 시 누락 명시하고 진행. 상충 데이터는 출처 병기.
-- Blocked-Loop Rule: 같은 증상 3회 실패 또는 새 증거 없는 조사 2회 → 접근 전환 + 블로커 리포트.
+## 역할과 4-layer RE
 
-## 완료 게이트
-구현만으로 완료 아님. 구현 + 라이브 검증(증거) + 리뷰 + docs 갱신까지.
+세부 역할·산출물은 team spec을 따른다.
 
-## 테스트 시나리오
-- 정상: "로그인 서버 붙여서 실클라 로그인 되게 해줘" → Phase 0 → server-dev 구현 → live-qa 실검증 증거.
-- 에러: RE 근거 없는 프로토콜 추측이 3회 막힘 → 좌표/추측 중단, DPI/정적 RE로 전환 후 블로커 리포트.
+| 층/역할 | 질문 | 완료 증거 |
+| --- | --- | --- |
+| `static` | EXE가 무엇을 parse/call/write하는가 | hash/profile, Ghidra xref/CFG, layout, sentinel |
+| `client` | Wine runtime에서 실제 인자·memory/FSM/UI가 어떻게 변하는가 | hook/breakpoint trace, natural client output |
+| `wire` | client↔proxy↔server bytes/frame이 어떻게 이동하는가 | PCAP/proxy/decoder hash와 sequence |
+| `server` | validation·domain·DB·response/broadcast가 무엇을 확정하는가 | command/event/transaction trace |
+
+`live`는 네 층을 같은 run에서 검증하고, `remaster-engine-portfolio`는 원본 fallback과 engine-neutral PoC를 관리한다. 한 층의 성공으로 다른 층을 추론하지 않는다.
+
+## Phase pipeline
+
+### P0 — lineage와 격리 환경
+
+- canonical/patch EXE lineage, PE metadata, sentinel, backup/rollback을 확정한다.
+- Wine 실행에는 반드시 `$logh7-wine-live-qa`를 사용한다.
+- 모든 Wine command와 진단은 absolute binary와 repo 밖 전용 absolute `WINEPREFIX`를 사용한다. 기본 `~/.wine`과 repo 내부 prefix는 거부한다.
+- run9 evidence가 없으면 normal regression은 fail-closed한다. exact lineage가 확정된 경우에만 team spec의 `recovery-baseline` mode로 새 receipt를 만들 수 있으며 그 run을 regression `pass`로 부르지 않는다.
+
+### P1 — client/proxy/server correlation
+
+- observe-only pass-through를 먼저 실행하고 양방향 byte count와 payload SHA-256 equality를 확인한다.
+- client plaintext/runtime, host PCAP/proxy, server frame/DB/event를 team spec의 JSONL schema로 join한다.
+- host network 판정과 Wine game/Win32/D3D8 판정을 분리한다.
+
+### P2 — `0x030b` root/FSM
+
+- `0x030b → parser/registry allocator → model/cache join → DAT_009d2fa8 → FSM state 2`를 static/client/wire/server 네 층으로 추적한다.
+- 18/19/20행과 one-field A/B로 admission, cache join, marker root, FSM 전이를 분리한다.
+- root producer 확정 전 payload 확대, 순차 ID/model-zero, FSM 직접 변조를 canonical로 승격하지 않는다.
+
+### M4 — Warp vertical slice
+
+실제 UI 입력에서 시작해 wire factory, permission/precondition, resource reservation, command ledger/idempotency, timer/job, domain event, SQLite transaction, A response/B broadcast, 두 client output, restart persistence까지 한 correlation chain으로 닫는다. 실패 case는 무변경을 증명한다.
+
+이 패턴이 닫힌 뒤 확인된 command부터 확장한다. 미확정 command는 fail-closed한다.
+
+## 관측·개입 routing
+
+- **Client-side:** static PE/Ghidra, Frida, debugger, memory trace/dump, GDI/D3D8/input/audio 관측, hash-guarded patch.
+- **Wire:** PCAP/dissector/decoder, observe proxy, replay/drop/delay/one-field mutation. baseline 전 mutation과 unknown auto-response를 금지한다.
+- **Server-side:** session/application/domain/persistence instrumentation, fixture A/B, event/DB inspection.
+- **Cross-layer:** deterministic correlation IDs와 monotonic timeline으로 합성한다.
+
+각 개입은 hypothesis, 원본/변형 hash, 예상 결과, rollback을 먼저 기록한다. 원본 EXE와 canonical asset을 in-place 수정하지 않는다.
+
+## Wine live QA
+
+- `.agents/skills/logh7-wine-live-qa/SKILL.md`를 canonical skill로 사용한다. `.codex/skills/logh7-wine-live-qa/`는 byte-identical mirror다.
+- live owner 한 명만 prefix/install copy/DB/ports/GUI를 소유한다.
+- D3D8, locale/codepage/font, audio, input/IME, drive mapping, registry pre/post hash를 environment receipt에 포함한다.
+- 기록된 PID만 종료하고 port listener, Wine server, registry, EXE, drive mapping rollback을 증명한다.
+- PCAP/proxy 성공은 gameplay 성공이 아니며 Wine screenshot은 server authority/DB 성공이 아니다.
+
+## Remaster와 future-client portfolio
+
+- asset 추출·변환·리마스터·generated/community import에는 `$logh7-asset-provenance`를 사용한다. R0-R3, source/hash/license, generated non-canonical, original fallback, default-off, rollback, proprietary binary commit 금지를 강제한다.
+- future-client 비교에는 `$logh7-engine-spike`를 사용하고 engine-neutral command/event/replay contract를 먼저 고정한다.
+- original asset은 canonical fallback이다. remaster output은 provenance, source hash, reviewer, `enabled: false` 기본, rollback을 가진 reversible overlay로만 실험한다.
+- 로그인 원본 영역 `644×484`와 로그인 뒤 게임 영역 `1920×1080` 경계를 보존한다.
+- 장기 재이식을 Unity에 고정하지 않는다. Godot+Unity equivalent thin slice, Unreal tactical-only spike, Stride/Bevy watch를 같은 portfolio decision에서 비교한다.
+- future client는 legacy protocol adapter와 shared gameplay contract를 분리하고 M4 gate를 대신하지 않는다.
+- future Windows x64 candidate의 Wine acceptance는 별도 Win64 prefix/ports/evidence를 사용하며 legacy `$logh7-wine-live-qa` verdict와 합치지 않는다.
+- 현재 삭제된 `client-unity/`를 engine 결정 전에 active 제품 계약으로 복원하지 않는다.
+
+## Producer-Reviewer와 실패 정책
+
+- producer와 reviewer를 분리하고 review status는 `pass|fix|redo`로 제한한다.
+- revision은 artifact당 최대 2회다.
+- 같은 증상 3회 또는 새 증거 없는 조사 2회면 static/client/wire/server 중 다른 관측층으로 전환하고 blocker를 남긴다.
+- partial branch를 숨기지 않는다. 필수 branch가 없으면 phase 전체를 `pass`로 합성하지 않는다.
+- 완료 전 diff, tests, live evidence, cleanup/rollback, docs/AGENTS/Obsidian sync가 실제 상태와 맞는지 orchestrator가 직접 확인한다.
+
+## 출력
+
+- `_workspace/logh7-revival/runs/<RUN_ID>/` 아래 역할별 branch, review, correlation, evidence manifest, synthesis.
+- 바뀐 code/docs와 exact verification output.
+- confirmed/contradicted/unobserved를 분리한 현재 판정.
+- 남은 blocker, untested surface, 다음 phase의 가장 작은 ticket.
+
+구현, 자동 test, host trace, Wine 화면 중 하나만으로 완료를 주장하지 않는다.

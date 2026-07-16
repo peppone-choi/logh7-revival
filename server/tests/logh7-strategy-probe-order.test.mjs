@@ -10,12 +10,46 @@ const FRIDA_URL = new URL('../../tools/live/_frida_strategy_snapshot.js', import
 const LIVE_DIR = fileURLToPath(new URL('../../tools/live/', import.meta.url));
 const execFileAsync = promisify(execFile);
 
+function resolvePythonInvocation({
+  platform = process.platform,
+  env = process.env,
+} = {}) {
+  const override = typeof env.LOGH7_TEST_PYTHON === 'string'
+    ? env.LOGH7_TEST_PYTHON.trim()
+    : '';
+  if (override) {
+    return { executable: override, prefixArgs: [] };
+  }
+  if (platform === 'win32') {
+    return { executable: 'py', prefixArgs: ['-3'] };
+  }
+  return { executable: 'python3', prefixArgs: [] };
+}
+
 function sliceBetween(source, startMarker, endMarker) {
   const start = source.indexOf(startMarker);
   const end = source.indexOf(endMarker, start + startMarker.length);
   assert.ok(start >= 0 && end > start, `invalid source slice: ${startMarker} -> ${endMarker}`);
   return source.slice(start, end);
 }
+
+test('Python fixture launcher keeps the Windows py -3 default and accepts an explicit executable', () => {
+  assert.deepEqual(
+    resolvePythonInvocation({ platform: 'win32', env: {} }),
+    { executable: 'py', prefixArgs: ['-3'] },
+  );
+  assert.deepEqual(
+    resolvePythonInvocation({ platform: 'darwin', env: {} }),
+    { executable: 'python3', prefixArgs: [] },
+  );
+  assert.deepEqual(
+    resolvePythonInvocation({
+      platform: 'linux',
+      env: { LOGH7_TEST_PYTHON: '/opt/python/bin/python3' },
+    }),
+    { executable: '/opt/python/bin/python3', prefixArgs: [] },
+  );
+});
 
 test('로그인 성공 마커가 없으면 로비 안정화와 클릭 전에 중단한다', async () => {
   const source = await readFile(PROBE_URL, 'utf8');
@@ -1019,8 +1053,42 @@ test('성계 상세 출력 phase는 whole-run 병목과 구간 관측을 분리�
   assert.match(diagnostic, /system_output_trace_phase\(before_snapshot, final_snapshot\)/);
 
   const fixture = String.raw`
+import ast
 import json
-import _strategy_table_probe as probe
+
+path = '_strategy_table_probe.py'
+wanted = {
+    'SYSTEM_OUTPUT_STAGE_KEYS',
+    'SYSTEM_OUTPUT_RESPONSE_STAGE_KEYS',
+    'SYSTEM_OUTPUT_ID_STAGE_KEYS',
+    'SYSTEM_OUTPUT_FACTORY_STAGE_KEYS',
+    'system_output_trace_metrics',
+    'system_output_trace_delta',
+    '_system_output_trace_entry_matches',
+    'system_output_trace_phase',
+}
+tree = ast.parse(open(path, encoding='utf-8').read(), filename=path)
+selected = []
+found = set()
+for node in tree.body:
+    if isinstance(node, ast.Assign):
+        names = {
+            target.id
+            for target in node.targets
+            if isinstance(target, ast.Name)
+        }
+        matched = names & wanted
+        if matched:
+            selected.append(node)
+            found.update(matched)
+    elif isinstance(node, ast.FunctionDef) and node.name in wanted:
+        selected.append(node)
+        found.add(node.name)
+missing = sorted(wanted - found)
+if missing:
+    raise RuntimeError(f'missing probe definitions: {missing}')
+namespace = {}
+exec(compile(ast.Module(body=selected, type_ignores=[]), path, 'exec'), namespace)
 
 def snapshot():
     return {'systemDetail': {'systemOutputTrace': {
@@ -1038,7 +1106,7 @@ def snapshot():
         'panelStateMachineWaitsFor0327Ack': False,
     }}}
 
-report = probe.system_output_trace_phase(snapshot(), snapshot())
+report = namespace['system_output_trace_phase'](snapshot(), snapshot())
 print(json.dumps({
     'orderedId70Complete': report['orderedId70Complete'],
     'firstMissingStage': report['firstMissingStage'],
@@ -1048,7 +1116,12 @@ print(json.dumps({
     'phaseFirstUnobservedStage': report['phaseFirstUnobservedStage'],
 }))
 `;
-  const { stdout } = await execFileAsync('py', ['-3', '-c', fixture], { cwd: LIVE_DIR });
+  const python = resolvePythonInvocation();
+  const { stdout } = await execFileAsync(
+    python.executable,
+    [...python.prefixArgs, '-c', fixture],
+    { cwd: LIVE_DIR },
+  );
   const report = JSON.parse(stdout);
   assert.equal(report.orderedId70Complete, false);
   assert.equal(report.firstMissingStage, 'factoryGrant');

@@ -1,7 +1,10 @@
 // Presentation 조립 — TCP playable + Application(CQRS/ORM)
 
 import { createGameApplication, DEFAULT_DB_PATH } from '../application/GameApplication.mjs';
-import { createPlayableServer } from '../server/logh7-playable-server.mjs';
+import {
+  createPlayableServer,
+  validateAdvertisedEndpoint,
+} from '../server/logh7-playable-server.mjs';
 import { loadAccountRegistry, DEFAULT_ACCOUNTS_PATH } from '../server/logh7-account-auth.mjs';
 import { isStrategicGridCellNavigable } from '../server/logh7-galaxy-placement.mjs';
 import { createWorldSession } from '../server/logh7-world-session.mjs';
@@ -12,6 +15,7 @@ import { createWorldSession } from '../server/logh7-world-session.mjs';
 export function createPlayableRuntime({
   port = 47900,
   host = '127.0.0.1',
+  advertisedEndpoint = undefined,
   dbPath = DEFAULT_DB_PATH,
   accountsPath = DEFAULT_ACCOUNTS_PATH,
   tracePath = null,
@@ -19,6 +23,8 @@ export function createPlayableRuntime({
   transportKey = undefined,
   decipherKey = undefined,
 } = {}) {
+  // DB/계정 시드를 만지기 전에 광고 endpoint를 fail-closed 검증한다.
+  const validatedAdvertisedEndpoint = validateAdvertisedEndpoint(advertisedEndpoint);
   // 정본 production client는 0x0323/0x0325 packed link layout을 쓴다. 명시적 0은 보존한다.
   if (process.env.LOGH_LIVE_CLIENT_LAYOUT === undefined) process.env.LOGH_LIVE_CLIENT_LAYOUT = '1';
   const app = createGameApplication({ dbPath, isGridCellNavigable: isStrategicGridCellNavigable });
@@ -33,17 +39,21 @@ export function createPlayableRuntime({
   }
 
   const characterStore = app.createCharacterStoreAdapter();
+  const worldRedirect = validatedAdvertisedEndpoint == null
+    ? { ip: host === '0.0.0.0' ? '127.0.0.1' : host, port, token: 1 }
+    : { ...validatedAdvertisedEndpoint, token: 1 };
   const worldSession = createWorldSession({
     characterStore,
     dispatchCommandSync: app.dispatchCommandSync,
     // 원본 클라이언트 라이브에서 20행 이상은 정지하므로 검증된 선두 19행만 보낸다.
     ships: app.worldCatalog.getShips().slice(0, 19),
-    worldRedirect: { ip: host === '0.0.0.0' ? '127.0.0.1' : host, port, token: 1 },
+    worldRedirect,
   });
 
   const server = createPlayableServer({
     port,
     host,
+    advertisedEndpoint: validatedAdvertisedEndpoint,
     tracePath,
     logger,
     transportKey,

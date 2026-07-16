@@ -22,6 +22,7 @@ import {
   expandChildCodecKey,
   loadChildCodecTables,
 } from './logh7-child-codec.mjs';
+import { ipv4ToClientU32 } from './logh7-ipv4.mjs';
 
 export const KEYSETUP_INNER_CODE = 0x0031; // inner key-setup (클라 라우터 fast-path)
 export const REDIRECT_INNER_CODE = 0x7001; // S->C 로비 redirect (LGLoginOK)
@@ -50,11 +51,7 @@ function pad8(data) {
  * @returns {number}
  */
 export function ipToRedirectU32(ip) {
-  const octets = ip.split('.').map((part) => Number(part));
-  if (octets.length !== 4 || octets.some((value) => !Number.isInteger(value) || value < 0 || value > 255)) {
-    throw new Error(`invalid IPv4 address: ${ip}`);
-  }
-  return ((octets[3] << 24) | (octets[2] << 16) | (octets[1] << 8) | octets[0]) >>> 0;
+  return ipv4ToClientU32(ip);
 }
 
 /**

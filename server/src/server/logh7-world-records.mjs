@@ -23,6 +23,7 @@ import {
   RESP_INFO_WAREHOUSE_CODE,
   buildResponseInformationWarehouseInner,
 } from './codec/warehouse-record.mjs';
+import { ipv4ToClientU32 } from './logh7-ipv4.mjs';
 
 export function buildMsg32Inner(code, body = Buffer.alloc(0)) {
   const bodyBuf = Buffer.isBuffer(body) ? body : Buffer.from(body);
@@ -404,11 +405,7 @@ export function buildInformationUnitInner({
 
 /** IPv4 → 클라 %d.%d.%d.%d 파서용 u32 (octet0 = 하위 바이트) */
 export function ipToU32(ip) {
-  const octets = String(ip).split('.').map((p) => Number(p));
-  if (octets.length !== 4 || octets.some((v) => !Number.isInteger(v) || v < 0 || v > 255)) {
-    throw new Error(`invalid IPv4: ${ip}`);
-  }
-  return ((octets[3] << 24) | (octets[2] << 16) | (octets[1] << 8) | octets[0]) >>> 0;
+  return ipv4ToClientU32(ip);
 }
 
 /** raw (비-message32) 0x200a — Input_LobbySessionLoginOK 경로 */
