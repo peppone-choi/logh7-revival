@@ -12,6 +12,7 @@
 - Verification run: Phase 2 종료 게이트(메인 세션 신규 실행) — YAML 3건+JSON 2건 파싱, 시크릿/DSN 스캔 0건, 헌법 diff +1/-0×2, verification.md 삭제줄 0, `cd server && npm test`(489/485 pass/0 fail/4 skip, exit 0), `node --check main.mjs`, 무DSN 부팅 스모크(47900 기동+`[sentry] DSN 미설정 — 비활성` 로그), settings.local allowlist 상태 확인, Jira 신규 사이트 프로젝트 조회 성공
 - Verification result: PHASE2_GATE=PASS (전부 exit 0). 라이브 미검증(push 승인 후 가능): GitHub Actions 첫 런 녹색, CodeRabbit·Claude GHA 실제 PR 코멘트, 실 DSN Sentry 캡처
 - Failed approaches: 없음
-- Open questions: Phase 3 착수 시 `.ai/task.md` allowed-files에 신규 `server/src/server/logh7-correlation-record.mjs` 명시 확장 / Jira 프로젝트 키 `SCRUM`→`LOGH7` rename 여부(사람 결정, 이슈 생성 전) / 향후 세션에서 Jira 쓰려면 사람이 settings.local `enabledMcpjsonServers`에 `"atlassian"` 추가(의도적 활성화 정책) / 이슈 생성(Jira·GitHub)은 외부 서비스 쓰기 = 사람 승인 후
-- Next action: push·PR 사람 승인 → CI/CodeRabbit/Claude GHA 라이브 확인 → Phase 3 E2E(SRV-CORR)
+- 승인 이력 추가: 2026-07-16 사용자 "전체 승인" → push(`feat/ai-work-system` origin 반영)·**PR #6 생성** 완료, CI·CodeRabbit·Claude GHA 라이브 검증 진행 중(`gh pr checks 6 --watch` 백그라운드)
+- Open questions: Phase 3 착수 시 `.ai/task.md` allowed-files에 신규 `server/src/server/logh7-correlation-record.mjs` 명시 확장 / Jira 프로젝트 키 `SCRUM`→`LOGH7` rename 여부(사람 결정, 이슈 생성 전) / 향후 세션에서 Jira 쓰려면 사람이 settings.local `enabledMcpjsonServers`에 `"atlassian"` 추가(의도적 활성화 정책, 엔드포인트 교체로 재인증 1회 필요할 수 있음) / merge는 리뷰 결과 확인 후 별도 승인
+- Next action: PR #6 체크·리뷰 코멘트 라이브 확인 → 결과 보고 → (merge 승인 별도) → Phase 3 E2E(SRV-CORR)
 - Must-read files for next action: `.omc/plans/logh7-ai-work-system-plan.md` §3, `.ai/task.md`, `docs/agent/verification.md`

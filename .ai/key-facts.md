@@ -19,6 +19,6 @@
 - 테스트: `cd server && npm test`.
 
 ## 활성 계약 (`.ai/task.md`)
-- Status: ACTIVE — AI 업무 시스템 고도화(NIAH 카드·재주입 훅·신선도 게이트, 프롬프트 팩, 컨텍스트 통합, 최소 CI 등).
+- Status: ACTIVE — AI 업무 시스템 고도화. Phase 1+2 완료·PR #6 리뷰 중, 남은 것 Phase 3 E2E(SRV-CORR).
 - main 직접 커밋·push·PR·merge 금지 — 작업 브랜치 commit만 허용.
 - 시크릿(`ANTHROPIC_API_KEY` 등)은 사람이 직접 등록, 에이전트는 접근하지 않는다.

@@ -7,7 +7,7 @@
 - Out of scope: 과제 제출물·HEART 지표, CLAUDE.md·AGENTS.md 전면 개편, AWS/Terraform/Docker, MCP 서버 자작, 옛 코드(5bd249c) 부활, 게임 기능 자체 구현(E2E 슬라이스 내용물은 별도 계약)
 - Acceptance criteria: 계획 §4 AC-0~AC-9 (판정 명령 포함)
 - Constraints: 헌법 최소 증분(라우팅 3줄 내외), 기존 훅 4종 회귀 금지(additive만·fail-open 재주입), main 직접 커밋 금지, 시크릿은 사람 등록, Codex 레인에서 push/PR/merge/의존성/핵심 훅 변경 금지, key-facts ≤40줄
-- Related issue: (Phase 2D에서 Jira Epic + GitHub Issue 생성 후 기입)
+- Related issue: GitHub PR #6 (Phase 1+2, 2026-07-16 사용자 "전체 승인"으로 push·PR). Jira 키는 Phase 3 분해 시 기입 (사이트 `pepponechoi-jira.atlassian.net`, 프로젝트 `SCRUM`)
 - Allowed files: `docs/agent/**`, `.claude/**`, `.codex/**`, `.ai/**`, `.github/**`, `.mcp.json`, `.coderabbit.yaml`, `scripts/agent/**`, `CLAUDE.md`, `AGENTS.md`, `server/src/**`(Sentry 한정), `server/tests/**`(E2E 슬라이스), 현행 docs TL;DR 헤더(roadmap 등)
 - Protected files: `.env*`, `*.pem`, `*.key`, `credentials*`, `secrets*`, `terraform.tfstate*` (훅으로 차단됨)
 - Required verification: `docs/agent/verification.md` 행렬 + 계획 §6 Phase 종료 게이트
