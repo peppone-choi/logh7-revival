@@ -1,46 +1,43 @@
 # Agent Handoff
 
 ## Goal
-AI 업무 시스템 고도화 (Phase 0~3) — **완료(2026-07-16)**. 계획 정본 `.omc/plans/logh7-ai-work-system-plan.md`, 계약 `.ai/task.md`(DONE).
+Make the existing Claude automation and verification system directly usable by Codex, including safe project-scoped discovery and installation of missing skills from skills.sh.
 
 ## Current result
-- Phase 1+2: PR #6 merge `be6499a3` (NIAH 카드·프롬프트 팩·컨텍스트 전략·CI·Claude GHA·CodeRabbit·Sentry env-guard·MCP 정의/활성화 분리)
-- Phase 3 E2E(SRV-CORR): PR #8 merge `3fd847b1` — 기획(Jira LOGH7-6/7/8)→구현(TDD)→테스트→리뷰(CI+Claude GHA+CodeRabbit 실동작)→모니터링(Sentry NODE-1 캡처+Seer 분석) 전 사이클 완주 실증. GitHub Issue #7 자동 종료, Jira 3건 완료 전환.
+Implementation is complete on `codex/codex-harness-parity`. Codex now has native lifecycle hooks, eight repository workflow skills, project-open local skill checks, and an on-demand vetted skills.sh installation path. Local executable verification is green; live hook activation still requires the user's `/hooks` trust action in a new task.
 
 ## Decisions already made
-- Jira 프로젝트 키 `LOGH7`(사용자 지정), 분해 계층 Epic=계획/Story=게이트/Task=계약(`docs/agent/lifecycle-planning.md` 루틴)
-- Sentry는 DSN env-guard + 동적 import만(정적 import는 5.3s 로드로 테스트 timeout 회귀 실측 — 금지)
-- correlation 23키 정본은 `tools/live/logh7_packet_lab_proxy.mjs`, 서버측은 의도적 복제 + 테스트 drift guard(프로덕션 tools/ 의존 금지)
-- 관측은 부수 채널: writeTrace correlation 실패는 흡수, 절대 서버를 죽이지 않음
+- `.agents/skills/` is the canonical project skill directory; no `.codex/skills/` mirror and no global install.
+- SessionStart never performs network search or installation. It runs `bootstrap-skills.sh --check || true` every project open.
+- External installation requires source review plus the explicit `--reviewed` attestation. Existing project skills are not overwritten through this path.
+- Claude Commands, Codex skills, and both native hook sets remain thin adapters over `docs/agent/` and `scripts/agent/`.
+- `CLAUDE.md` and `.codex/config.toml` contain concurrent changes and were intentionally preserved.
 
 ## Files changed
-PR #8: 신규 `server/src/server/logh7-correlation-record.mjs`·`server/tests/logh7-correlation-record.test.mjs`, `logh7-playable-server.mjs`(writeTrace 배선), 상태·docs 문서. 종결 커밋(이 브랜치): `.ai/*` 계약 DONE·핸드오프·known-issues follow-up.
+- Codex hooks: `.codex/hooks.json`, `.codex/hooks/{protect-sensitive-files,inject-key-facts,verify-changes,turn-snapshot,stop-doc-gate}.sh`
+- Project skills: `.agents/skills/logh7-{start-task,analyze,implement,debug,verify,review,checkpoint,skill-manager}/`
+- Bootstrap/tests: `scripts/agent/{bootstrap-skills.sh,required-skills.tsv,test-codex-hooks.sh}`, `.gitignore`
+- Contracts/docs/state: `AGENTS.md`, `docs/agent/{README,prompt-pack,tool-capabilities,verification,lifecycle-testing,context-strategy,collaboration-protocol}.md`, `.ai/{task,key-facts,current-state,handoff,known-issues,ownership}.md`
 
-## Commands executed
-`cd server && npm test` → 499 tests/495 pass/0 fail/4 skip, exit 0 (구현 후 1회 + merge 시점 fresh 재실행 1회). PR #8 체크: test 37s pass, Claude GHA review 4m6s pass, CodeRabbit pass.
+## Commands executed and verification result
+- `bash scripts/agent/test-codex-hooks.sh` → 26 passed, 0 failed, exit 0.
+- `bash -n scripts/agent/bootstrap-skills.sh scripts/agent/test-codex-hooks.sh .codex/hooks/*.sh` → exit 0.
+- `python3 .../skill-creator/scripts/quick_validate.py .agents/skills/<each-new-skill>` → 8/8 valid, exit 0.
+- cached official skills CLI `list --json` → exit 0; all eight new skills reported `scope: project` and Codex compatibility.
+- `bash scripts/agent/bootstrap-skills.sh --check` → exit 0, `OK=25 MISSING=0 STALE=1`; candidates are informational.
+- `bash scripts/agent/bootstrap-skills.sh --strict` → exit 1 from the pre-existing Claude `logh7-orchestrator` STALE copy; not caused or overwritten by this task.
+- `codex --strict-config --version` plus hooks JSON parse → exit 0; CLI 0.144.5. PATH alias creation emitted a sandbox warning only.
 
-## Verification result
-전부 녹색. AC-0~AC-9 충족 — AC-5는 실 DSN 캡처(`reported=true`·`flush=true`) + Sentry API 수신 확인(org `tekken-75`/프로젝트 `node`/Issue `NODE-1`) + Seer AI 분석 성공.
-
-## Known failures
-없음. 비차단 리뷰 follow-up 4건은 `.ai/known-issues.md` 인프라·도구 절에 기록.
-
-## Do not repeat
-- `@sentry/node` 정적 import 금지(테스트 timeout 회귀)
-- stop-doc-gate가 커밋 후 턴에서 CLAUDE.md/AGENTS.md를 요구하는 오탐: no-op 편집 금지, 근거를 사용자 보고에 명시(2회 상한)
-- 과거 테스트 수치를 fresh gate로 재사용 금지
+## Failed approaches and recovery
+- Initial skill scaffolding was denied because `.agents/skills` was sandbox-read-only; the approved project-only escalation created all eight with the official initializer.
+- A multi-file skill patch exceeded edit-tool diagnostics time after four files; the remaining files were patched individually and all eight validators pass.
+- Bash LSP diagnostics timed out after hook edits; fresh `bash -n` and behavioral payload tests replaced that diagnostic and pass.
+- Direct `npx --yes skills list --json` did not return a usable exit/output in the tool wrapper during final verification. Running the same cached official skills CLI directly returned exit 0 and complete project discovery JSON.
 
 ## Remaining work
-- known-issues의 SRV-CORR follow-up 4건(비차단) — 새 계약으로 착수 여부는 사람 결정
-- 시크릿 위생: 채팅으로 전달된 Sentry API 토큰 회전 권장(`~/.zshrc` 보관 중)
-- 다음 도메인 게이트: M4-OBS-001 잔여(프록시 correlation 슬라이스)·Wine 게이트(`runtime_support_manifest_missing`) — 로드맵 정본 참조
-
-## Recommended next action
-`.ai/task.md`가 DONE이므로 새 작업은 사람 승인 계약부터. 도메인 복귀 시 `docs/logh7-roadmap-current.md` P0 게이트 순서.
-
-## Required human decisions
-- chore/phase3-closeout 브랜치 push+PR 승인(이 종결 커밋)
-- follow-up 4건 착수 여부·우선순위
+- User: run `/hooks`, trust the project hook hash, and verify the hooks are active in a new Codex task.
+- Optional human decision: choose the canonical `logh7-orchestrator` version and whether to repair the two historical `skills-lock.json` paths; these pre-existing issues keep `--strict` red.
+- Push, PR, merge, and commit were not performed.
 
 ## Files to read first
-`.ai/task.md`, `.ai/known-issues.md`, `.ai/current-state.md`, `docs/agent/tool-capabilities.md`(연동 라이브 상태), `docs/logh7-roadmap-current.md`
+`.ai/task.md`, `.ai/current-state.md`, `.ai/known-issues.md`, `AGENTS.md`, `docs/agent/tool-capabilities.md`, `scripts/agent/test-codex-hooks.sh`.

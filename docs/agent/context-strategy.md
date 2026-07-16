@@ -27,7 +27,7 @@
 - 작업 성격 전환 (서버 구현 → RE, 기능 구현 → 장애 대응 등)
 - 확정된 규칙을 반복 누락하거나 이전 결정과 모순되는 행동이 나타남
 - 관련 없는 로그가 컨텍스트 대부분을 차지
-- 리셋 전 반드시 `/checkpoint` (`.ai/current-state.md`·`handoff.md` 갱신)
+- 리셋 전 반드시 Claude `/checkpoint` 또는 Codex `logh7-checkpoint` (`.ai/current-state.md`·`handoff.md` 갱신)
 
 ## 압축 원칙
 
@@ -85,13 +85,14 @@
 - 모든 현행(-current) 문서와 게이트 상태의 축약본
 - 매 턴 맞춤 주입(context 낭비 최소화)
 
-**②자동 재주입 훅**: `.claude/hooks/inject-key-facts.sh` (fail-open)
+**②자동 재주입 훅**: `.claude/hooks/inject-key-facts.sh`와 `.codex/hooks/inject-key-facts.sh` (fail-open)
 - 파일 변경 감지 시 자동으로 카드 콘텐츠를 context에 덧붙인다
 - 훅 실패는 무시하고 작업 진행(fail-open 정책)
 
 **③신선도 게이트**: stop-doc-gate 확장
 - 파일을 변경하면 관련 카드를 강제 갱신(hook 강제, 훅 없이는 끝나지 않음)
 - 예: server/src/ 변경 → logh7-roadmap-current.md M4 섹션 동기 갱신 강제
+- Codex 상태는 `.codex/state/<session-hash>/`로 격리한다. 프로젝트 훅이 미신뢰이거나 부재한 환경에서는 같은 문서 게이트를 수동으로 수행하고 라이브 자동화 미확인을 보고한다.
 
 **④회수 probe 고정**: 맥락 검증용 고정 질문
 - "현재 포트는?" → 47900

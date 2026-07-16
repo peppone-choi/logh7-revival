@@ -1,12 +1,15 @@
 # Verification
 
-마지막 검증: 2026-07-16. 실재하는 명령만 기록한다. 실행하지 않은 검증을 통과로 기록하지 않는다.
+마지막 검증: 2026-07-17. 실재하는 명령만 기록한다. 실행하지 않은 검증을 통과로 기록하지 않는다.
 
 ## 실재 검증 명령
 
 | 명령 | 대상 | 비고 |
 |---|---|---|
-| `bash scripts/agent/verify-changes.sh --file <경로>` | 단일 파일 구문 + 이름 매칭 테스트 | 훅과 동일 로직, Codex 수동 실행 가능 |
+| `bash scripts/agent/verify-changes.sh --file <경로>` | 단일 파일 구문 + 이름 매칭 테스트 | Claude/Codex 후검증 공통 로직; 수동 fallback 가능 |
+| `bash scripts/agent/test-codex-hooks.sh` | Codex 훅·워크플로 스킬·프로젝트 설치 회귀 | 하위 cwd, `apply_patch`, 민감 파일, 세션 격리, stop gate, 옵션 주입 포함 |
+| `bash scripts/agent/bootstrap-skills.sh --check` | 프로젝트 스킬 매니페스트 로컬 점검 | SessionStart와 동일한 네트워크 없는 검사 |
+| `codex --strict-config --version` | Codex 설정 파싱 | 경고와 종료 코드를 함께 기록 |
 | `bash scripts/agent/verify-changes.sh --full` | 서버 전체 + Python 테스트 | pytest 미설치 시 Python은 SKIP으로 보고 |
 | `cd server && npm test` | `node --test` 전체 (2026-07-16 기준 460개) | |
 | `cd server && node --test tests/<파일>.test.mjs` | 특정 테스트만 | |
@@ -25,7 +28,8 @@
 | 와이어 프로토콜·클라이언트 가시 동작 | 위 테스트 전부 | **라이브 QA 증거** (원본 클라이언트 구동 로그·스크린샷) — 단 P0 게이트(run 전용 win32 WINEPREFIX, EXE hash fail-closed) 통과 전에는 라이브 실행 불가를 명시하고 중단 | 테스트 + 라이브 증거, 또는 "라이브 미검증" 명시 보고 |
 | `server/migrations/*.sql` | SQL 구문 검토 + `migrations/README.md` 컨벤션 준수 | 적용은 자동 실행 금지 (PG는 skeleton) | 사람 승인 후에만 적용 |
 | 문서 (`docs/`, `*.md`) | 참조 경로·링크 실재 확인 | — | 링크 대상 파일 존재 |
-| 훅·스크립트 (`.claude/`, `.codex/`, `scripts/agent/`) | `bash -n` + 대표 입력 시뮬레이션 | settings JSON은 파싱 검사 | 시뮬레이션 출력 확인 |
+| Codex 훅·부트스트랩 (`.codex/`, `scripts/agent/`) | `bash -n` + `bash scripts/agent/test-codex-hooks.sh` + hooks JSON 파싱 | 하위 cwd 실제 payload와 SessionStart `--check` 확인. `.codex/hooks.json` 변경 후 사용자가 `/hooks` hash를 신뢰하고 새 task에서 활성 상태를 확인하기 전에는 라이브 미확인 | 모든 로컬 회귀 종료 코드 0 + 라이브 신뢰 여부 구분 |
+| 프로젝트 스킬 (`.agents/skills/**`) | skill-creator `quick_validate.py` + `skills list --json` 프로젝트 발견 | 내부 참조 실재, TODO 부재, 외부 설치면 lock source/hash 확인 | validator 종료 코드 0 + project scope |
 | `.github/workflows/*.yml` | YAML 파싱(`python3 -c "import yaml..."`) | GitHub Actions 첫 런 결과 확인 (push/PR 후 실측) | 파싱 통과 + 첫 런 로그·링크 기록 (미실행이면 미실행 명시) |
 | `.coderabbit.yaml` | YAML 파싱 | CodeRabbit App 설치 완료 후 실제 PR 코멘트 출현 확인 | 파싱 통과 (PR 코멘트는 Phase 3 실측) |
 | `.mcp.json` | JSON 파싱(`node -e "JSON.parse(...)"`) | `.claude/settings.local.json`의 `enabledMcpjsonServers` allowlist 상태 확인 | 파싱 통과 + 시크릿 값 기입 0 |

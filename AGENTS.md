@@ -75,9 +75,9 @@ single-writer-per-file. 시작 전 `.ai/ownership.md` 등록, 종료 시 해제.
 
 ## Tool Notes
 
-- Claude 전용 Commands(`.claude/commands/`)·Hooks는 얇은 래퍼다 — 절차 정본은 `docs/agent/`와 `scripts/agent/`에 있고, Codex는 같은 스크립트를 수동 실행한다 (`.codex/hooks/`는 미러).
+- Claude Commands와 Claude/Codex 네이티브 Hooks는 얇은 어댑터다. 절차 정본은 `docs/agent/`와 `scripts/agent/`이며 두 하네스가 공통 스크립트를 호출한다.
 - 도구 실사·설치 스택: `docs/agent/tool-capabilities.md`.
-- 스킬 부트스트랩: `bash scripts/agent/bootstrap-skills.sh --check` — 스킬 누락/오래됨 점검(Codex는 수동 실행, Claude는 SessionStart 훅 `--once`). canonical `.agents/skills/`(skills.sh), 신규 외부 스킬 설치는 사람 승인.
-- 키팩트 카드 `.ai/key-facts.md`(≤40줄): 매 턴 자동 주입(`inject-key-facts` 훅, `.codex/hooks/` 미러). 파생 원천(roadmap·known-issues·task.md) 변경 시 카드도 갱신 — stop-doc-gate가 강제.
-- 커맨드↔프롬프트 팩 매핑(7섹션 표준): `docs/agent/prompt-pack.md` 앞머리 표 — Codex는 커맨드 래퍼 없이 해당 팩 섹션을 직접 로드한다.
+- Codex SessionStart는 `bootstrap-skills.sh --check`로 로컬 스킬 갭만 점검한다. 전문 스킬이 없을 때 `logh7-skill-manager`로 skills.sh 후보를 검토하고 `--reviewed`를 명시해 `.agents/skills/`에만 설치한다. 전역 설치와 SessionStart 네트워크 설치는 금지한다.
+- 키팩트 카드 `.ai/key-facts.md`(≤40줄)는 Claude/Codex 각 네이티브 `inject-key-facts` 훅이 매 턴 주입한다. 파생 원천(roadmap·known-issues·task.md) 변경 시 각 `stop-doc-gate`가 카드 갱신을 강제한다.
+- 커맨드↔프롬프트 팩 매핑(7섹션 표준): `docs/agent/prompt-pack.md` 앞머리 표. Codex는 대응 `logh7-*` 프로젝트 스킬이 필요한 팩 섹션만 로드한다.
 - MCP 정의는 `.mcp.json`(커밋), 활성화는 `.claude/settings.local.json` 명시 allowlist — Jira 기획 루틴은 `docs/agent/lifecycle-planning.md` 참조. Codex는 `.mcp.json`을 읽지 않고 `.codex/config.toml`의 별도 레지스트리를 사용한다.
