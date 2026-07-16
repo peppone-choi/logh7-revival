@@ -5,10 +5,11 @@
 2008년 서비스 종료된 일본 MMO **은하영웅전설 VII (LOGH VII)** 를 되살린다.
 원본 클라이언트(archive.org CD)에 자체 구현 서버를 붙여 멀티플레이 온라인 게임으로 복원한다.
 
-## 현재 기준 (2026-07-14)
+## 현재 기준 (2026-07-16)
 
 - 2026-07-05 리셋 전 스냅샷은 커밋 `5bd249c`다. 옛 코드는 참고용으로만 복원하고 현재 구현에 그대로 되살리지 않는다.
 - M0.5/M1/M2/M3는 완료했다. run9에서 두 원본 클라이언트의 월드 진입, 이동 브로드캐스트, 재로그인·서버 재시작 영속성을 통과했다.
+- M4는 부분 진행이다. production SQLite runtime의 `EnterWorld`·`MoveGrid`가 동기 CQRS/UoW를 거치며, 성공한 `0x0b01`만 위치와 `GridMoved` 1건을 함께 커밋한다.
 - 로그인 클라이언트 영역은 원본 `644×484`를 유지하고, 로그인 뒤 게임 영역만 `1920×1080`으로 전환한다.
 - 현재 주력은 M4 전략 커맨드·서버 데이터이며, 전체 한글화·전술/전투·운영은 아직 완료가 아니다.
 
@@ -41,10 +42,19 @@
 
 - LOGH VII 자산추출·RE·프로토콜·서버·한글화·라이브 QA 요청에는 `logh7-orchestrator` 스킬을 사용한다.
 - 원본 클라이언트는 frontend, Node 서버는 authoritative backend다. 경계는 presentation/session → application command → domain authority → persistence 순서로 유지한다.
-- run9의 JSON store는 라이브 QA 전용이다. production 영속성으로 간주하지 말고 ORM/SQLite를 우선 연결한 뒤 PostgreSQL로 확장한다.
-- M4는 81개 전략 커맨드의 근거·검증·CP·timer·job과 galaxy/fleet/facility/economy 데이터를 채우는 단계다.
+- run9/run3의 JSON store 라이브 QA와 production SQLite 증거를 분리한다. run3는 SQLite CQRS를 실행하지 않았다.
+- `MoveGrid`는 현재 `0x0315`가 내보내는 `spaceCells ∪ systemCells`만 허용하고 정책 미주입 시 fail-closed다. 이는 표시·권위 일치일 뿐 정본 승격이 아니며, `galaxy-passable-cells`와 galaxy trust 데이터는 교차 확인 전까지 provisional이다.
+- M4는 81개 catalog 중 factory 확인 2개·미해결 79개다. PCP/MCP ledger, CP charge, timers/jobs, 실제 command outcome, `0x0327` 미확정 재고, disconnect의 `online=false` 영속화가 남았다. 동기 SQLite bridge는 PostgreSQL 전환 전에 async-capable하게 바꾼다.
 - M6는 현재 CP932 표시 복구와 일부 `.rsrc` 한글화까지만 완료했다. 일본어가 읽힌다는 사실을 전체 한글화 완료로 보고하지 않는다.
 - 리마스터는 로그인 원본 크기와 본게임 1080p 경계를 보존한다. 고해상도 자산은 provenance·원본 fallback·rollback이 갖춰진 뒤 적용한다.
+- 2026-07-16 검증 기준선은 targeted movement/galaxy/world/server `97/97`, 전체 server `458 total / 456 pass / 0 fail / 2 pre-existing conditional skips`, Python live harness `16/16`, changed JS LSP error `0`, 비항법 cell `0` 무변경 probe다.
+
+## 완료 게이트
+
+- 모든 LOGH VII 작업 단위는 종료 전에 루트 `AGENTS.md`를 갱신한다. 해당 작업이 바꾼 현재 상태, 실행 경계, 남은 다음 작업, 검증 근거 중 지속적으로 필요한 내용을 반영한다.
+- 같은 작업에서 영향을 받은 `docs/` 현행 문서와 `E:\\obsidian-tech-vault\\1. 프로젝트\\은하영웅전설 7 리바이벌`의 `현재 상태.md`·로드맵도 실제로 수정해 저장소와 볼트가 같은 상태를 가리키게 한다.
+- `AGENTS.md` 변경을 diff로 확인하고 현재 코드·로드맵과 모순이 없는지 검증하기 전에는 작업을 완료로 보고하거나 커밋을 최종 승인하지 않는다.
+- 단순 진행 로그를 누적하지 않는다. 낡은 지침은 수정·삭제하고, 반복되는 설명은 소스 오브 트루스 한 곳으로 합쳐 문서를 짧고 현행으로 유지한다.
 
 ## 위임·토큰 원칙
 

@@ -1,5 +1,13 @@
 # LOGH VII Architecture and Operations
 
+> **현재 권위 (2026-07-15):** 시작 문서는 `docs/logh7-requirements-current.md`, 이 문서, `.omo/plans/logh7-execution-plan-current.md` 세 개다. 정상 플레이어 경로는 설치 폴더의 수정된 `g7mtclient.exe` 직접 실행이며, 보조 런처·`ui_explorer`·overlay는 정상 경로가 아니다. 수정 도구의 언어는 Python을 포함해 제한하지 않는다. 실제 설치 `g7mtclient.exe`의 직접 in-place 패치에도 원본 백업, source-hash guard, rollback 경로가 필수다. 아래 날짜별 운영 항목은 역사적 변경 기록이며, 현재 실행 상태는 실행 계획을 따른다.
+
+2026-07-14 클라이언트 경계: 로그인 내부 644×484는 보존하고 로그인 뒤 게임 화면만 1920×1080으로 전환한다. CP932 표시를 유지하며 전체 한글화 경로는 M6 spike에서 CP949 자산 변환과 SJIS tunneling/GDI proxy를 비교해 선택한다. 실행 해시·패치 수·M3 라이브 결과·진척률의 정본은 `docs/logh7-requirements-current.md`에 한 번만 기록한다.
+
+서버 경계는 `presentation/session → application commands → domain → persistence`다. 원본 클라이언트는 UI와 의도를 전송하고, 서버는 validation·domain authority·persistence·broadcast를 수행한다. `createPlayableRuntime`는 TCP session의 `EnterWorld`·`MoveGrid`에 동기 CQRS/UoW를 주입해 production SQLite transaction 안에서 상태와 domain event를 함께 커밋한다. 거부된 이동은 DB/session/event/response를 바꾸지 않는다. 현재 navigability policy는 실제 `0x0315`의 `spaceCells ∪ systemCells`와 같고 미주입 시 fail-closed지만, 이는 canonical promotion이 아니다. run9/run3 JSON live QA는 이 SQLite 경계를 실행하지 않았다.
+
+PostgreSQL 전환 전에는 현재 동기 bridge와 UoW를 async-capable하게 바꿔야 하며, disconnect의 `online=false` 영속화도 미완료다. 남은 도메인은 auth/session/audit, character/presence, galaxy/planet/base, fleet/location/visibility, facilities/ownership, command/CP/timers/jobs, economy/warehouse/production, tactical initial state, battle formulas/results, chat/social/notice/logs/backups다. 81개 command catalog 중 팩토리 확인은 2개뿐이고 79개는 미해결이며, PCP/MCP ledger·CP charge·timers/jobs·실제 outcome도 없다.
+
 2026-07-04 G070 Unity 클라이언트 완전 삭제: 사용자 "완전 삭제" 결정에 따라 `client-unity/` 작업트리를 제거했다(보존 커밋 `dbf3b43` → 제거 커밋 `ca24dd3`, 9226 files deleted). G069의 재이식 장기 목표는 유지되나 현재 작업트리에는 Unity 프로젝트가 없다 — 재이식 착수 시 먼저 git 히스토리에서 복원해야 한다. 이하 G0xx Unity 운영 항목(원본 UI 수출, StreamingAssets export, 로그인 실서버 연동 등)은 과거 기록으로만 유효하다.
 
 2026-07-04 G069 아키텍처 재전환: "2026-07-03 Architecture Reorientation"(레거시 클라 수정→증거기반 재구현 이동)을 잠정 대체하고, 정규 구현 경로를 **레거시 클라이언트 직접 패치**로 되돌린다. 사용자 지시: "안되겠다. 레거시 클라 수정으로 다시 가야겠다. 나중에 이거 RE가 전부 끝나고 돌아갈때 옮겨야 겠어. EXE가 맞지도 않아." Unity(`client-unity/`)는 정규 런타임에서 제외되어 개발 정지 상태로 보류되며, RE 완료 후 재이식 대상으로만 유지한다. 서버(`server/`)의 데이터/스펙 카탈로그·마이닝 파이프라인은 계속 유효한 증거/오라클 소스로 남되, 그 1차 소비자가 Unity에서 레거시 EXE 패치 작업으로 바뀐다. Operating Model의 세 경로(Data/spec, Future game/Unity, Oracle diagnostics) 중 "Oracle diagnostics path"가 현재 정규 실행 경로로 승격된다 — `ui_explorer`/직접 EXE 실행/트레이스 도구는 더 이상 진단 전용이 아니라 정규 개발 도구다.
@@ -50,7 +58,7 @@ Capability harness: use `.omo/rules/logh7-capability-harness.md` as the operatio
 
 2026-07-04 ULW final operation state: loop status is `complete=44`, `pending=0`, `blocked=0`. The former Unity Licensing IPC blocker is repaired (see G045 above); Unity Editor batchmode open, EditMode tests, and validation scene capture are all proven. Future Unity work should still avoid diagnostic-only substitutes for product-surface QA.
 
-Updated: 2026-07-04
+Updated: 2026-07-15
 
 2026-07-03 Unity visible production surface: `server/src/server/logh7-scene-inventory.mjs`, `server/tools/logh7_build_scene_inventory.mjs`, and `server/tools/logh7_export_unity_scene_placeholders.mjs` generate scene inventory and Unity placeholders from EXE/Ghidra/MsgDat evidence. `client-unity/` is now a Unity 6000.5.2f1 project skeleton with `Packages/manifest.json`, `ProjectSettings/ProjectVersion.txt`, runtime/editor scripts, 12 generated scene placeholders, and `Assets/StreamingAssets/logh7/logh7-scene-inventory.json`. Evidence logs: `.omo/ulw-loop/evidence/scene-inventory-run-20260703.log`, `.omo/ulw-loop/evidence/unity-scene-placeholder-export-20260703.log`, `.omo/ulw-loop/evidence/server-test-scene-inventory-20260703.log`.
 
@@ -70,7 +78,7 @@ Updated: 2026-07-04
 
 2026-07-03 ship-stat catalog/rule surface: `server/src/server/logh7-ship-stat-catalog.mjs`, `server/tools/logh7_catalog_ship_stats.mjs`, `server/tests/server/logh7-ship-stat-*.test.mjs`, and generated artifact `server/content/generated/logh7-ship-stat-catalog.json`. This is lookup/readiness logic over normalized ship stat evidence; no combat simulation or missing-pool inference is restored.
 
-2026-07-03 strategic-grid rule surface: `server/src/server/logh7-strategic-grid-rules.mjs` and `server/tests/server/logh7-strategic-grid-rules.test.mjs` are pure server-side gameplay logic over content evidence. They do not restore legacy live-client movement or infer warp fuel/error math absent manual numbers.
+2026-07-15 current strategic-grid rule surface: `server/src/server/logh7-galaxy-placement.mjs`의 `isStrategicGridCellNavigable`이 현재 송신되는 `0x0315` cell 집합을 판정하고, `server/src/presentation/createPlayableRuntime.mjs`가 이를 `server/src/application/handlers.mjs`의 `MoveGrid` policy로 주입한다. 이 경로는 client/server consistency gate이며 warp·연료 공식이나 galaxy canonical data를 추론하지 않는다.
 
 2026-07-03 command-rule surface: `server/src/server/logh7-strategy-command-rules.mjs` and `server/tests/server/logh7-strategy-command-rules.test.mjs` are the first gameplay-rule consumer of a generated catalog. They stay pure and server-side; no legacy-client runtime path is restored.
 
@@ -78,11 +86,11 @@ Updated: 2026-07-04
 
 Cleanup note: pre-bootstrap handoffs, roadmaps, patch/build notes, live-runtime notes, old tests, and tool state are not active architecture. Preserve source material, current data/catalog surfaces, and visual references under `docs/reference/`, then route any older evidence through `docs/reference/legacy-evidence/` and `docs/logh7-document-index-current.md`. Remaining old campaign/progress/session/layout/modding-plan/tooling documents were removed on 2026-07-03.
 
-This document is the current architecture and operations authority. Read it after `docs/logh7-requirements-current.md` and before `.omo/plans/logh7-internal-validation-plan.md`.
+This document is the current architecture and operations authority. Read it after `docs/logh7-requirements-current.md` and before `.omo/plans/logh7-execution-plan-current.md`.
 
 All current architecture and operations rules apply retroactively. Existing tooling paths, EXE patch artifacts, launch flows, remaster/mod pipelines, and operational docs must be brought into compliance or marked non-compliant before they can count as readiness evidence.
 
-## 2026-07-03 Architecture Reorientation
+## 2026-07-03 Architecture Reorientation (Historical Unity Policy; Superseded 2026-07-14)
 
 The canonical implementation path moves from legacy-client modification to evidence-driven reimplementation. Architecture work must treat original media, manuals, extracted assets, protocol traces, and live-client observations as inputs to a canonical data/spec pipeline. Server and future client work should consume that pipeline rather than depend on patched EXE builds.
 
@@ -106,11 +114,11 @@ Source-material inventory is the first canonical data/spec pipeline gate. `serve
 
 ## Operating Model
 
-Current bootstrap has one normal development path and one oracle path.
+Current bootstrap has a data/spec path, a direct-client product path, and a diagnostic path.
 
 - **Data/spec path**: mine original media, installed assets, manuals, RE exports, and traces into canonical data/spec artifacts under `server/content`, `server/src/server`, and `server/tools`.
-- **Future game path**: implement gameplay logic and the new client against those artifacts. `client-unity/` is the current Unity-port placeholder.
-- **Oracle diagnostics path**: legacy client, `ui_explorer`, RE probes, trace scripts, direct `G7MTClient.exe`, and bypass flags may prove facts, but never become product runtime.
+- **Direct-client product path**: run the modified install-folder `g7mtclient.exe` directly against the authoritative rebuilt server.
+- **Diagnostics path**: `ui_explorer`, RE probes, Frida, trace scripts, and bypass flags may prove facts but are not routine player runtime.
 
 Server/data/tests/tooling must remain developable on macOS and Windows. Do not add Windows-only shell, registry, or process assumptions to current data/spec pipeline code.
 
@@ -131,16 +139,16 @@ Current responsibilities:
 - Committed/generated JSON artifacts consumed by later game-logic and Unity work.
 - Focused tests proving catalog parsers and source-root behavior.
 
-Removed pre-bootstrap responsibilities:
+2026-07-03 removed pre-bootstrap responsibilities (historical cleanup list; direct-client policy has since changed):
 
 - Auth/gameplay TCP server runtime.
 - Legacy-login/session bridge.
 - `0x03xx` record emitter implementation product runtime.
-- Python playable-client builders, JSON patch descriptors, direct EXE patch workflow.
+- Then-retired Python playable-client builders, JSON patch descriptors, and direct EXE workflow; the 2026-07-14 policy now permits Python and direct in-place client patching.
 
-### Unity Client
+### Unity Client (Historical 2026-07-03 Direction)
 
-`client-unity/` is the current client reboot placeholder. It should consume canonical data/spec artifacts rather than clone old client modification paths.
+`client-unity/` was the 2026-07-03 reboot direction. It is not the current player runtime; this subsection is retained as historical architecture.
 
 Initial responsibilities:
 
@@ -148,9 +156,9 @@ Initial responsibilities:
 - Keep original assets as fallback/reference inputs, not overwritten runtime outputs.
 - Defer visual remaster/mod pipelines until source/provenance manifests exist.
 
-### Legacy Client Oracle
+### Modified Legacy Client Product Path
 
-The original client remains useful for fact checking UI behavior, asset consumption, packet meaning, and data interpretation. It is not the normal runtime for new implementation work.
+The modified install-folder `g7mtclient.exe` is the normal player runtime. Direct execution proves product behavior; `ui_explorer`, Frida, and traces remain diagnostic tools for ambiguity and failure analysis.
 
 
 
@@ -205,14 +213,14 @@ Current feasibility basis:
 - Server authority path exists: `server/src/server/logh7-command-engine.mjs` is already structured as validate/apply state/emit Notify, so new systems can be added as authoritative server state machines when their outputs fit existing client-visible routes.
 - Command/proposal surface exists: `server/src/server/logh7-dev-command-cards.mjs` reads manual command groups and builds command cards; `server/src/server/logh7-dev-command-executor.mjs` classifies commands including political/announcement-style commands. This is enough to prototype native systems through existing command/report/notice surfaces before new client UI work.
 - Legacy client RE evidence exists for command families: `docs/reference/legacy-evidence/logh7-character-creation-wire.md` records client command codes such as `0x1008 CommandGenerateCharacterCharge`, and `logh7-re` confirms dispatcher/size-table functions such as `FUN_004ba2b0` and `FUN_004b8b00`. New client-consumed system records must get the same level of proof before emission.
-- Legacy-client patch mechanics are no longer a product path. The old Python/JSON patch builder and descriptor stack is retired; any future diagnostic EXE change must be a direct patch operation with original signatures, target hash, changed bytes, rollback notes, and live QA.
+- Legacy-client modification is the product path, and Python/JSON or other suitable builders are allowed. Direct in-place patching still requires an original backup, source-hash guard, rollback path, and live QA.
 
 Native system extension sequence:
 
 1. Define server-domain state, invariants, audit log, and rollback for the system.
 2. Map the user-visible surface to existing client/web routes first: notices, proposal/report text, board/admin, command outcomes, faction/session state.
 3. Use `logh7-re`/`logh7-wire` to prove any client packet, parser, display consumer, or command surface before emitting new bytes.
-4. If existing surfaces cannot express system, prefer the Unity/reimplementation path. Use `logh7-patch` only for diagnostic legacy-client evidence, and use direct patch notes rather than JSON descriptor generation.
+4. If existing surfaces cannot express a system, extend the modified legacy client. Tool language and patch representation are unrestricted; verify client-visible behavior live.
 5. Run `/cso` for voting, admin override, audit log, and client patch supply-chain surfaces.
 
 ## Official Patch Stack Layer
@@ -270,17 +278,14 @@ macOS service development remains supported, but legacy-client playability is ex
 Normal first validation route:
 
 1. Operator starts Docker Compose server.
-2. Player starts launcher.
-3. Launcher checks config/update/remaster/mod status.
-4. Launcher opens web signup/community as needed.
-5. Launcher starts legacy client with the selected server config.
-6. Player logs into legacy client.
-7. Legacy client creates/selects a character.
-8. Server persists the account-character relationship.
-9. Server sends lobby/session notice data through a client-consumed route.
-10. Server sends world/strategic records consumed by the real client.
-11. Server sends tactical/battle records consumed by the real client.
-12. Commands produce server-side state changes and client-visible responses.
+2. Player directly runs the modified `g7mtclient.exe` from the installation folder.
+3. Player logs into the legacy client.
+4. Legacy client creates/selects a character.
+5. Server persists the account-character relationship.
+6. Server sends lobby/session notice data through a client-consumed route.
+7. Server sends world/strategic records consumed by the real client.
+8. Server sends tactical/battle records consumed by the real client.
+9. Commands produce server-side state changes and client-visible responses.
 
 ## Security Boundaries
 
@@ -301,7 +306,7 @@ Operating rules:
 
 - Update the dashboard whenever a work unit changes current slice, release phase, progress percentage, remaining tasks, source evidence, or blocker status.
 - The dashboard must calculate overall development as server-open readiness across phases: internal playable loop, remaster-included closed beta, public operation, and separate expansion/modding tracks.
-- The dashboard must keep the normal/diagnostic path split visible: Docker Compose and launcher are normal paths; `ui_explorer`, direct EXE, direct Node, and preseed flags remain diagnostics.
+- The dashboard must keep the normal/diagnostic path split visible: direct execution of the modified install-folder `g7mtclient.exe` is the normal player path; helper launchers, `ui_explorer`, overlays, direct Node commands, and preseed flags are not.
 - Progress percentage must be source-backed and conservative. A diagnostic-only proof does not close a normal-path item.
 - Keep dashboard evidence/caches on repo-local `E:\logh7-revival` paths. Do not write development caches to `C:`.
 
@@ -386,7 +391,7 @@ Sync targets:
 
 - `docs/logh7-requirements-current.md`
 - `docs/logh7-architecture-operations-current.md`
-- `.omo/plans/logh7-internal-validation-plan.md`
+- `.omo/plans/logh7-execution-plan-current.md`
 - `docs/logh7-document-index-current.md`
 - `AGENTS.md`
 - `CLAUDE.md`
@@ -397,10 +402,9 @@ Do not rewrite unrelated historical evidence. Classify it in the document index 
 ## Operational Simplicity Rules
 
 - Operator path is one stable Docker Compose service action plus documented config.
-- Player path is launcher-first.
-- Direct `G7MTClient.exe`, `ui_explorer`, trace tools, and preseed flags are diagnostics only.
-- EXE changes are direct patch operations only. Do not use Python to indirectly regenerate, copy over, or overwrite `G7MTClient.exe` or launcher EXEs. Patch descriptors must record original signatures, target hash, changed bytes, rollback path, and live-QA evidence.
-- Retroactive migration is required: existing Python-generated, copied-over, or indirectly rebuilt EXE patch outputs are non-compliant until re-expressed as direct patch descriptors and re-verified.
+- Player path is direct execution of the modified `g7mtclient.exe` from the installation folder.
+- Helper launchers, `ui_explorer`, overlays, trace tools, and preseed flags are outside the routine player path.
+- EXE modification tools may use Python or any other suitable language. A direct in-place patch of the installed `g7mtclient.exe` requires an original backup, source-hash guard, rollback path, and live QA.
 - Do not require manual process cleanup for normal play.
 - Do not blanket-kill `node.exe`.
 - Keep live diagnostics in `RE/` with `--server-root ..\server`.

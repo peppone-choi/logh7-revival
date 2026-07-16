@@ -10,14 +10,21 @@ tags:
   - strategy-map
   - live-qa
 status: in-progress
-updated: 2026-07-14
+updated: 2026-07-15
 implementation_baseline: 0b9729d0
 authority_bridge_commit: 6720faf2
 ---
 
 # LOGH VII M4 전략맵 성계 상세 핸드오프
 
-이 문서는 다음 작업자가 전략맵 성계 상세 복원을 즉시 재개하도록 만든 실행 핸드오프다. 전체 부활 로드맵의 완료 문서가 아니다. 현재 위치는 **후반 M3 / 초반 M4의 전략맵 서버-클라이언트 브리지**이며, 전술·전투·소셜·운영은 뒤 단계로 남아 있다.
+이 문서는 B81/B82 전략맵 성계 상세 근거를 보존하는 역사 핸드오프다. M3는 이후 완료됐고 현재는 M4 부분 진행 상태다. 현행 실행 순서는 `.omo/plans/logh7-execution-plan-current.md`를 따른다.
+
+## 2026-07-15 현행 경계
+
+- production `createPlayableRuntime`가 `EnterWorld`·`MoveGrid`를 동기 CQRS/UoW로 SQLite에 연결했다. 성공한 `0x0b01`만 cell과 `GridMoved` 1건을 커밋하며 account/unit/offline/non-navigable 거부는 DB/session/event/response를 바꾸지 않는다.
+- navigability는 현재 `0x0315`가 내보내는 `spaceCells ∪ systemCells`와 동일하고 미주입 시 fail-closed다. 이는 canonical promotion이 아니며 `galaxy-passable-cells`와 galaxy trust 데이터는 provisional/blocked다.
+- `.omo/live-qa/m4-cqrs-two-client-20260715-run3/results.json`의 원본 EXE live QA는 8/8이지만 JSON store를 사용해 SQLite CQRS를 실행하지 않았다. fresh 자동 검증은 targeted `97/97`, full server `458 total / 456 pass / 0 fail / 2 pre-existing conditional skips`, Python `16/16`, changed JS LSP error `0`이다.
+- 81개 command catalog 중 factory 확인은 2개뿐이고 79개가 미해결이다. PCP/MCP ledger·CP charge·timers/jobs·실제 outcome, `0x0327` 미확정 stock(zero-fill), disconnect `online=false`, async PostgreSQL bridge가 남았으므로 M4 완료나 Warp 완료로 읽지 않는다.
 
 ## 먼저 구분할 상태
 
