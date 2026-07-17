@@ -159,3 +159,32 @@ export function buildAuthorityCommandRows(authorityCards) {
       : [],
   }));
 }
+
+/**
+ * LOGH7-62: 확정된 함장 항행 command factory id 여부. 정본이 확인한 id(0x2b/0x2d)만 true.
+ * 미확인 id(예: 0x4f=79)는 false — 어떤 카드로도 승인되지 않는다.
+ */
+export function isCaptainNavigationCommand(commandId) {
+  return CAPTAIN_NAVIGATION_COMMAND_FACTORY_IDS.includes(commandId);
+}
+
+/**
+ * LOGH7-62: 항행 command 권한 게이트(fail-closed 단일 진입점).
+ *
+ * 반환 `{ allowed, reason }`:
+ *   - 미확인 command(확정 factory id 아님)   → { allowed:false, reason:'unknown-command' }
+ *   - 확정 command 이나 카드 권한 부재        → { allowed:false, reason:'no-authority' }
+ *   - 확정 command 이고 카드가 부여함          → { allowed:true,  reason:null }
+ *
+ * 미확인 command 는 카드 보유 여부와 무관하게 항상 거부한다(조용한 실행·크래시 금지).
+ */
+export function authorizeNavigationCommand(authorityCards, commandId) {
+  if (!isCaptainNavigationCommand(commandId)) {
+    return { allowed: false, reason: 'unknown-command' };
+  }
+  const granted = buildAuthorityCommandRows(authorityCards)
+    .some((row) => row.commands.includes(commandId));
+  return granted
+    ? { allowed: true, reason: null }
+    : { allowed: false, reason: 'no-authority' };
+}

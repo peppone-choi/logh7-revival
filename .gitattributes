@@ -1,0 +1,8 @@
+# Pin line-ending-sensitive checked-in artifacts to LF so worktree/clone
+# checkouts under core.autocrlf=true do not materialize CRLF and break tests:
+#  - server/content/generated/models.json: CRLF inflates size past the 3 MiB
+#    budget asserted by tests/logh7-mdx-transform-catalog.test.mjs.
+#  - tools/patch/exe-patch.mjs: tests/exe-patch.test.mjs parses this source as
+#    text and matches an LF-only ('\n}\n') delimiter.
+server/content/generated/models.json text eol=lf
+tools/patch/exe-patch.mjs text eol=lf

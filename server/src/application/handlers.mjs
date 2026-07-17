@@ -10,10 +10,13 @@ import {
   ensureUnitId,
 } from '../domain/entities.mjs';
 import {
-  buildAuthorityCommandRows,
+  authorizeNavigationCommand,
   grantAuthorityCard,
   revokeAuthorityCard,
 } from '../domain/authority-cards.mjs';
+
+// 확정된 warp(성계 이동) command factory id. 미확인 command 는 authorizeNavigationCommand 가 거부한다.
+const WARP_COMMAND_ID = 0x2b;
 
 function safeEqualString(a, b) {
   const ba = Buffer.from(String(a), 'utf8');
@@ -135,6 +138,20 @@ export function registerGameHandlers({ commandBus, queryBus, isGridCellNavigable
     };
   });
 
+  // LOGH7-59: 접속 종료를 권위 상태에 반영한다. online=false 를 영속하되, 소켓 close
+  // 콜백에서 호출되므로 예외를 던지지 않고 soft-fail(ok:false) 한다. 이미 오프라인이면 멱등 no-op.
+  commandBus.register('LeaveWorld', (cmd, { uow }) => {
+    const character = uow.findCharacterById(cmd.characterId);
+    if (!character) return { ok: false, reason: 'character-not-found', changed: false };
+    if (cmd.accountId != null && character.accountId !== String(cmd.accountId)) {
+      return { ok: false, reason: 'character-not-owned', changed: false };
+    }
+    if (!character.online) return { ok: true, changed: false };
+    setCharacterOnline(character, false);
+    uow.flush();
+    return { ok: true, changed: true };
+  });
+
   commandBus.register('MoveGrid', (cmd, { uow }) => {
     const character = uow.findCharacterById(cmd.characterId);
     if (!character) throw new Error('character not found');
@@ -145,8 +162,9 @@ export function registerGameHandlers({ commandBus, queryBus, isGridCellNavigable
       throw new Error('character not owned');
     }
     if (!character.online) throw new Error('not in world');
-    if (!buildAuthorityCommandRows(character.authorityCards)
-      .some((row) => row.commands.includes(0x2b))) {
+    // 항행 command 게이트(fail-closed): 미확인 command 는 unknown-command 로,
+    // 확정 warp(0x2b)이라도 카드 권한 부재면 no-authority 로 거부된다.
+    if (!authorizeNavigationCommand(character.authorityCards, WARP_COMMAND_ID).allowed) {
       throw new Error('warp authority required');
     }
     const unitId = ensureUnitId(character);
@@ -215,7 +233,7 @@ export function registerGameHandlers({ commandBus, queryBus, isGridCellNavigable
     return { characters: worldCatalog.getCanonCharacters() };
   });
 
-  queryBus.register('GetFleetAtCell', (q, { uow, db }) => {
+  queryBus.register('GetFleetAtCell', (q, { db }) => {
     // 읽기 모델: world_fleet 테이블
     const rows = db.prepare(
       'SELECT unit_id, character_id, account_id, cell, revision FROM world_fleet WHERE cell = ?',
