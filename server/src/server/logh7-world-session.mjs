@@ -174,6 +174,8 @@ export function createWorldSession({
       authorityCards: normalizeAuthorityCards(character?.authorityCards),
     };
     players.set(connectionId, player);
+    // LOGH7-60: 이 계정의 이전 연결 세션을 정리해 중복 세션을 남기지 않는다.
+    evictAccountSessions(player.accountId, connectionId);
     logEvent('session-login', connectionId, { characterId, unitId, sessionId });
 
     // M3 확정: mps 트랜스포트는 인바운드 앱 메시지를 message32 유닛으로만 받는다.
@@ -186,6 +188,24 @@ export function createWorldSession({
       responseInner: redirect, // message32 0x200a
       responseIsMsg32: true,
     };
+  }
+
+  /**
+   * LOGH7-60: 계정당 단일 세션 불변식. 같은 account 의 다른 connection 에 남은 실 캐릭터
+   * 세션을 제거해 재접속이 중복 세션·중복 상태를 만들지 않게 한다(멱등). create-pending
+   * 세션은 진행 중인 캐릭터 생성 흐름일 수 있어 건드리지 않는다.
+   */
+  function evictAccountSessions(accountId, keepConnectionId) {
+    if (!accountId) return;
+    const acct = String(accountId);
+    for (const [connId, existing] of players) {
+      if (connId === keepConnectionId) continue;
+      if (existing.accountId === acct && !existing.createPending && existing.characterId > 0) {
+        players.delete(connId);
+        gridInitSpawned.delete(connId);
+        logEvent('session-evict', connId, { accountId: acct, characterId: existing.characterId });
+      }
+    }
   }
 
   /**
@@ -316,6 +336,8 @@ export function createWorldSession({
     }
     p.createPending = false;
     p.inWorld = true;
+    // LOGH7-60: 재접속으로 이 연결이 세션을 소유하면, 같은 계정의 다른 잔여 세션을 제거한다.
+    evictAccountSessions(p.accountId, connectionId);
 
     // 0x0323 실 캐릭터 조회(빈 오브젝트 테이블 크래시 해소): characterStore 가 있으면
     // account 의 실 시드 캐릭터를 characterId 로 찾아 실값(power/ability/이름)을 인코딩한다.
