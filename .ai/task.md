@@ -63,6 +63,7 @@
 - 전달(push/PR/merge)·외부 쓰기(Jira/GitHub)·라이브 실기는 2026-07-17 상시 사전승인. force push·main 직접 commit·히스토리 재작성·linked worktree 정리·server/data 삭제·비밀 접근은 제외·금지.
 - 최종 배치·완료 게이트: ai-slop-cleaner + verification + code-review 통과(ultragoal 계약).
 - durable 추적: `.omc/ultragoal/` 원장(마일스톤 arc G001-G006)은 coarse 진행 추적으로 유지. G001 "M3 월드 진입"은 현재 로드맵상 historical 완료로 보여 재조정 대상(비차단). 배치 체크포인트마다 원장·`.ai` 상태 갱신.
+- Batch #1 매듭(2026-07-17 사용자 결정): Windows 라이브 검증 가능분 LOGH7-47(fail-closed 게이트)·LOGH7-43(native login·입력 신뢰성) 완료. LOGH7-45/44/46은 Wine 호스트(macOS/Linux)·설치 데이터·frozen run9 baseline 필요로 이 호스트 라이브 완료 불가 → Wine-호스트 후속 배치로 이관(가짜 완료 없이 blocker 기록). 다음 live 작업(P1 3면·P2)도 대부분 Wine/게임데이터 의존 — 이 Windows 호스트 live 축은 login+gate로 소진. 후속은 Wine 호스트 세션에서 45/44/46/P1 진행.
 
 ## Subsumed Contract: LOGH7-43 P0 fresh evidence — native Windows 실기 라이브 런
 

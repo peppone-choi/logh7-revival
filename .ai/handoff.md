@@ -15,6 +15,7 @@ P0 게이트(스토리 LOGH7-18) 완주 — LOGH7-47/43/45/44/46을 각 Jira 완
 - 외부 manifest 3건(Jira LOGH7-43 제목+코멘트 10084, LOGH7-18 코멘트 10085, GitHub #10 제목+코멘트)은 적용 완료이며 2026-07-17 read-back으로 manifest 제안 값과 일치를 확인했다. Jira 상태 전환 0건 유지.
 - Jira read-back은 로컬 Atlassian MCP를 사용자 OAuth로 인증해 수행했다(정본 사이트 pepponechoi-jira.atlassian.net, cloudId 300c260a-54a7-4ab5-b843-ae94bf68dcd6). Rovo 커넥터의 pepponechoi.atlassian.net 테넌트는 suspended-inactivity로 사용 불가였다.
 - 전달 완료: commit `572bf8f5`, PR #172, merge `4f8c4281`(2026-07-17 12:20 KST, MERGED read-back). checks: test·CodeRabbit pass, claude review 워크플로는 액션 내부 오류 fail(재분류 금지).
+- Batch #1 매듭: 43·47 Windows 라이브 완료, 45/44/46 Wine-후속 이관(사용자 결정).
 
 ## Decisions already made
 - 완료된 platform-aware 전달 계약은 DONE으로 종결하고 과거 승인을 재사용하지 않는다.
@@ -61,9 +62,9 @@ P0 게이트(스토리 LOGH7-18) 완주 — LOGH7-47/43/45/44/46을 각 Jira 완
 - linked worktree는 오래되고 dirty지만 계약 밖이라 정리·merge하지 않는다.
 
 ## Remaining work
-- live-qa 라이브 런 완료 대기: lineage receipt → 서버 47900 → 클라이언트 실행 → 로그인 시도 → cleanup receipt.
-- 라이브 결과의 .ai 상태·현행 문서 반영, 변경 Markdown 검증, 리뷰, 작업 브랜치 commit.
-- push·PR·merge는 별도 사용자 승인 요청.
+- Wine 호스트(macOS/Linux) 세션에서 LOGH7-45(fullPassEligible 산출기 구현+`--execute --initialize-prefix` 라이브)·44(계보 integration)·46(run9/run3/run5 evidence, frozen baseline 복원 선행) 진행.
+- P1 LOGH7-48/49(proxy/Frida/server 3면 correlation)도 Wine 호스트 의존.
+- 이 Windows 호스트 완료분(43 login·47 gate)은 codex/logh7-43-p0-evidence에 있음 — PR로 main 정리 예정.
 
 ## Required human decisions
 - 현재 계약의 계획·근거 기반 외부 쓰기·push·PR·merge는 2026-07-17 사용자 지시로 승인됐다.
