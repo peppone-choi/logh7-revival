@@ -48,6 +48,12 @@ export function createPlayableRuntime({
     // 원본 클라이언트 라이브에서 20행 이상은 정지하므로 검증된 선두 19행만 보낸다.
     ships: app.worldCatalog.getShips().slice(0, 19),
     worldRedirect,
+    // LOGH7-58 유닛 스테이징: 실 유저 경로는 world-enter 말미에 전술 진입 시퀀스
+    // ([0x0325,0x0323,0x033b,0x0f1f arm])를 방출해야 클라 FSM이 state 2로 진행한다(DAT_009d2fa8 충전).
+    // 2026-07-17 라이브 진단: 게이트 off 기본값 때문에 실행 서버가 0x033b/0x0f1f를 한 번도
+    // 보내지 않아 fleet 스테이징이 정체됐다. production runtime에서는 기본 on으로 배선한다
+    // (LOGH_LIVE_CLIENT_LAYOUT 선례와 동일). LOGH_TACTICAL_ENTRY=0 이면 명시적으로 끌 수 있다(라이브 롤백용).
+    tacticalEntry: process.env.LOGH_TACTICAL_ENTRY !== '0',
   });
 
   const server = createPlayableServer({
