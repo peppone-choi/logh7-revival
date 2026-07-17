@@ -12,6 +12,8 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
+from tools.live.lineage_guard import check_client_lineage
+
 # ctypes 타입 별칭 (wintypes는 Windows 전용이므로 폴백 제공)
 try:
     from ctypes import wintypes as _wintypes  # type: ignore[attr-defined]
@@ -64,6 +66,9 @@ DESCRIPTION = "Minimal LOGH VII live UI driver restored from 5bd249c."
 DETACHED_PROCESS = 0x00000008
 CREATE_NEW_PROCESS_GROUP = 0x00000200
 CREATE_BREAKAWAY_FROM_JOB = 0x01000000
+
+# lineage 게이트가 launch를 차단할 때의 종료 코드 (hash·image base·sentinel 불일치).
+LINEAGE_MISMATCH_EXIT = 3
 
 VK_NAMES: dict[str, int] = {
     "ENTER": 0x0D,
@@ -266,12 +271,27 @@ def _resolve_hwnd(state: dict[str, Any]) -> int:
     return hwnd
 
 
-def _force_foreground(win32gui: Any, hwnd: int) -> None:
-    try:
-        win32gui.ShowWindow(hwnd, 5)
-        win32gui.SetForegroundWindow(hwnd)
-    except Exception:
-        return
+def _force_foreground(win32gui: Any, hwnd: int) -> bool:
+    """대상 창을 포그라운드로 확정한다. 실제 전환이 확인되면 True.
+
+    SetForegroundWindow 는 다른 스레드가 활성이거나 활성화 잠금이 걸리면
+    조용히 실패할 수 있어, GetForegroundWindow 로 확인하며 짧게 재시도한다.
+    전환 직후 포커스가 안정될 시간을 주지 않으면 첫 하드웨어 입력이
+    활성화 레이스에 흡수돼 첫 글자가 누락된다(로그인 id 첫 글자 손실).
+    """
+    for _ in range(5):
+        try:
+            win32gui.ShowWindow(hwnd, 5)
+            win32gui.SetForegroundWindow(hwnd)
+        except Exception:
+            pass
+        try:
+            if win32gui.GetForegroundWindow() == hwnd:
+                return True
+        except Exception:
+            return False
+        time.sleep(0.02)
+    return False
 
 
 def _capture_window(hwnd: int, output_path: Path) -> dict[str, Any]:
@@ -321,40 +341,96 @@ def _send_text(hwnd: int, text: str) -> dict[str, Any]:
 
 # ─── 하드웨어 입력 경로 (SendInput / keybd_event) ────────────────────────────
 
-def _hw_type_text(hwnd: int, text: str) -> dict[str, Any]:
+_VK_BACK = 0x08  # Backspace — 워밍업 더미 문자를 자기상쇄로 지운다
+_WARMUP_DUMMY_CHAR = "x"  # 무해한 단일 unicode 문자 (파이프라인 워밍용)
+
+
+def _build_type_sequence(text: str, *, warmup: bool = True) -> list[dict[str, Any]]:
+    """하드웨어 타이핑 시퀀스를 순수 데이터로 구성한다(Win32 실호출 없음).
+
+    창 세션에서 첫 KEYEVENTF_UNICODE 주입이 삼켜져 첫 실문자가 누락되는
+    문제(라이브 재검증으로 확정: `inei00` → `nei00`)를 막기 위해, 실문자
+    앞에 자기상쇄(self-cancelling) unicode 워밍업을 prepend 한다:
+
+      [더미 unicode 문자][VK_BACK Backspace]
+
+    더미는 반드시 실문자와 동일한 unicode 주입 방식(KEYEVENTF_UNICODE,
+    wScan=ord(ch))이라야 파이프라인을 워밍한다. 두 경우 모두 결정적으로
+    필드에는 진짜 문자만 남는다:
+      - 더미가 첫 unicode로 삼켜지면 → 필드는 비고, Backspace 는 빈 필드
+        no-op → 실문자 전부 land.
+      - 더미가 land 하면 → Backspace 가 지움 → 실문자 전부 land.
+    Backspace 는 삼킴 대상(첫 unicode)이 아니므로 VK_BACK 로 정상 동작한다.
+
+    반환 항목: {"kind": "warmup"|"char", "char": str|None, "vk": int,
+                "scan": int, "unicode": bool}
+    """
+    seq: list[dict[str, Any]] = []
+    if warmup:
+        seq.append(
+            {
+                "kind": "warmup",
+                "char": _WARMUP_DUMMY_CHAR,
+                "vk": 0,
+                "scan": ord(_WARMUP_DUMMY_CHAR),
+                "unicode": True,
+            }
+        )
+        seq.append(
+            {"kind": "warmup", "char": None, "vk": _VK_BACK, "scan": 0, "unicode": False}
+        )
+    for ch in text:
+        seq.append(
+            {"kind": "char", "char": ch, "vk": 0, "scan": ord(ch), "unicode": True}
+        )
+    return seq
+
+
+def _hw_type_text(hwnd: int, text: str, *, warmup: bool = True) -> dict[str, Any]:
     """SendInput + KEYEVENTF_UNICODE 로 유니코드 문자열 하드웨어 타이핑.
 
     PostMessage WM_CHAR 와 달리 GetAsyncKeyState 등에도 반영되므로
-    레거시 Win32 로그인 폼 PW 필드 포커스 문제를 우회한다.
+    레거시 Win32 로그인 폼 PW 필드 포커스 문제를 우회한다. 첫 실문자 앞에
+    자기상쇄 unicode 워밍업(더미 문자+Backspace)을 넣어, 창 세션의 첫
+    KEYEVENTF_UNICODE 주입이 삼켜져 첫 글자가 누락되는 문제를 방지한다.
     """
     _, _, win32gui, _ = _require_pywin32()
-    _force_foreground(win32gui, hwnd)
-    time.sleep(0.05)  # 포그라운드 전환 대기
+    foreground = _force_foreground(win32gui, hwnd)
+    time.sleep(0.05)  # 포그라운드 전환 후 포커스 안정 대기
 
     user32 = ctypes.WinDLL("user32", use_last_error=True)
     pair = (_INPUT * 2)()
     sent_total = 0
 
-    for ch in text:
-        cp = ord(ch)
+    for event in _build_type_sequence(text, warmup=warmup):
+        down_flags = _KEYEVENTF_UNICODE if event["unicode"] else 0
+        up_flags = down_flags | _KEYEVENTF_KEYUP
         # key down
         pair[0].type = _INPUT_KEYBOARD
-        pair[0]._input.ki.wVk   = 0
-        pair[0]._input.ki.wScan = cp
-        pair[0]._input.ki.dwFlags = _KEYEVENTF_UNICODE
+        pair[0]._input.ki.wVk   = event["vk"]
+        pair[0]._input.ki.wScan = event["scan"]
+        pair[0]._input.ki.dwFlags = down_flags
         pair[0]._input.ki.time  = 0
         # key up
         pair[1].type = _INPUT_KEYBOARD
-        pair[1]._input.ki.wVk   = 0
-        pair[1]._input.ki.wScan = cp
-        pair[1]._input.ki.dwFlags = _KEYEVENTF_UNICODE | _KEYEVENTF_KEYUP
+        pair[1]._input.ki.wVk   = event["vk"]
+        pair[1]._input.ki.wScan = event["scan"]
+        pair[1]._input.ki.dwFlags = up_flags
         pair[1]._input.ki.time  = 0
 
         sent = user32.SendInput(2, pair, ctypes.sizeof(_INPUT))
-        sent_total += sent
+        if event["kind"] == "char":
+            sent_total += sent
         time.sleep(0.015)  # 문자 간 딜레이 (구형 Win32 앱 처리 여유)
 
-    return {"mode": "hw-unicode", "text": text, "chars": len(text), "sent": sent_total}
+    return {
+        "mode": "hw-unicode",
+        "text": text,
+        "chars": len(text),
+        "sent": sent_total,
+        "warmup": warmup,
+        "foreground": foreground,
+    }
 
 
 def _hw_send_key(hwnd: int, key_name: str) -> dict[str, Any]:
@@ -431,6 +507,56 @@ def _prepare_default_client() -> tuple[Path, dict[str, Any]]:
     return exe, receipt
 
 
+def _enforce_lineage_gate(session: Path, exe: Path, manifest_path: Path) -> int | None:
+    """manifest가 주어지면 launch 전에 lineage를 강제한다(fail-closed).
+
+    대상 EXE의 sha256·PE image base·sentinel을 manifest ``working`` 블록과
+    대조해 하나라도 불일치하거나 검증 불가면 launch를 막고, 근거를 담은
+    blocked receipt(JSON)를 session에 남긴 뒤 non-zero exit code를 돌려준다.
+    전부 일치하면 ``None``을 돌려줘 정상 launch를 이어가게 한다.
+    """
+    reason: str | None = None
+    working: Any = None
+    try:
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+        if not isinstance(manifest, dict):
+            reason = "manifest must be a JSON object"
+        else:
+            working = manifest.get("working")
+            if working is None:
+                reason = "manifest is missing the working block"
+    except OSError as error:
+        reason = f"manifest unreadable: {error}"
+    except json.JSONDecodeError as error:
+        reason = f"manifest is not valid JSON: {error}"
+
+    if reason is not None:
+        verdict: dict[str, Any] = {"ok": False, "exe": str(exe), "checks": [], "mismatches": [], "reason": reason}
+    else:
+        verdict = check_client_lineage(exe, working)
+
+    if verdict["ok"]:
+        return None
+
+    receipt = {
+        "blocked": True,
+        "reason": "lineage mismatch - launch refused before start",
+        "exe": str(exe),
+        "manifest": str(manifest_path),
+        "exitCode": LINEAGE_MISMATCH_EXIT,
+        "verdict": verdict,
+        "blockedAt": datetime.now(UTC).astimezone().isoformat(),
+    }
+    receipt_path = session / "lineage-blocked.json"
+    receipt_path.write_text(json.dumps(receipt, ensure_ascii=False, indent=2), encoding="utf-8")
+    receipt["receiptPath"] = str(receipt_path)
+    # 콘솔 print는 ASCII-safe로 — cp949/cp932 기본 콘솔에서 non-ASCII(일본어 EXE
+    # 경로·기호)로 UnicodeEncodeError가 나면 exit 3 대신 크래시(exit 1)로 종료된다.
+    # receipt 파일(위)은 UTF-8로 그대로 두고, 콘솔 echo만 이스케이프한다.
+    print(json.dumps(receipt, ensure_ascii=True, indent=2))
+    return LINEAGE_MISMATCH_EXIT
+
+
 def cmd_start(args: argparse.Namespace) -> int:
     _require_windows()
     session: Path = args.session.resolve()
@@ -451,6 +577,11 @@ def cmd_start(args: argparse.Namespace) -> int:
         }
     if not exe.exists():
         raise SystemExit(f"client exe not found: {exe}")
+    lineage_manifest = getattr(args, "lineage_manifest", None)
+    if lineage_manifest is not None:
+        blocked = _enforce_lineage_gate(session, exe, Path(lineage_manifest).resolve())
+        if blocked is not None:
+            return blocked
     creationflags = DETACHED_PROCESS | CREATE_NEW_PROCESS_GROUP | CREATE_BREAKAWAY_FROM_JOB
     process = subprocess.Popen(
         [str(exe)],
@@ -616,6 +747,12 @@ def build_parser() -> argparse.ArgumentParser:
     p_start.add_argument("--settle", type=float, default=5.0)
     p_start.add_argument("--window-timeout", type=float, default=30.0)
     p_start.add_argument("--title-substring", default=None)
+    p_start.add_argument(
+        "--lineage-manifest",
+        type=Path,
+        default=None,
+        help="client lineage manifest v1; 주어지면 launch 전 sha256·image base·sentinel을 강제 검증",
+    )
     p_start.set_defaults(func=cmd_start)
 
     p_shot = sub.add_parser("shot")

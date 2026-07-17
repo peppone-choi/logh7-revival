@@ -2,6 +2,7 @@
 
 | Agent | Task | Branch/worktree | Owned files | Status | Updated at |
 |---|---|---|---|---|---|
+| Claude Code (메인+서브에이전트) | P0 게이트 완주 (LOGH7-43~47, 스토리 LOGH7-18) | codex/logh7-43-p0-evidence | `.ai/{task.md,current-state.md,handoff.md,ownership.md,key-facts.md,known-issues.md}`, `_workspace/**` evidence; 라이브 결과 반영 시 `docs/logh7-wine-live-qa.md`·`docs/logh7-roadmap-current.md`·`docs/agent/tool-capabilities.md` 조건부 소유; 항목 착수 시 tools/live·tools/tests·계보/런타임 매니페스트 스크립트 조건부 소유 | in_progress | 2026-07-17 |
 | Claude Code (메인+서브에이전트, 2026-07-17 사용자 승인으로 Codex에서 인수) | 상태 정합성 복구 | codex/state-consistency-recovery | — (소유 해제; 외부 manifest 적용 확인·상태 종결, 전달은 승인 사슬로 진행) | done | 2026-07-17 |
 | Codex (root) | 플랫폼 분기 하네스 라이브 확인·배포 | codex/platform-aware-live-qa | — (소유 해제; PR #171 merge `a8420b8b`) | done | 2026-07-17 |
 | Codex (root) | 실행 환경별 레거시 클라이언트 라이브 QA 하네스(Codex+Claude) | codex/platform-aware-live-qa | — (소유 해제) | done | 2026-07-17 |

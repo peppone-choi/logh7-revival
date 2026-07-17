@@ -21,6 +21,13 @@ from dataclasses import asdict, dataclass
 from pathlib import Path, PurePosixPath
 from typing import Any, Iterable, Mapping, Sequence
 
+# 이 파일은 `python -m tools.live.logh7_wine_live_qa`(모듈)뿐 아니라 서버 테스트처럼
+# `python tools/live/logh7_wine_live_qa.py`(스크립트 경로)로도 실행된다. 스크립트
+# 모드에선 script dir만 sys.path에 있어 `tools.live` 절대 import가 실패하므로,
+# 공유 lineage_guard를 import하기 전에 repo root를 sys.path에 넣는다.
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+from tools.live.lineage_guard import inspect_pe
+
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 PREFIX_MARKER_NAME = ".logh7-wine-prefix.json"
@@ -275,31 +282,6 @@ def _record_file(
             )
         )
     return actual
-
-
-def inspect_pe(path: Path) -> dict[str, int]:
-    """PE32/PE32+ timestamp와 image base를 외부 의존성 없이 읽는다."""
-
-    data = path.read_bytes()
-    if len(data) < 0x40 or data[:2] != b"MZ":
-        raise ValueError("missing MZ header")
-    pe_offset = struct.unpack_from("<I", data, 0x3C)[0]
-    if pe_offset + 24 > len(data) or data[pe_offset : pe_offset + 4] != b"PE\0\0":
-        raise ValueError("missing PE signature")
-    timestamp = struct.unpack_from("<I", data, pe_offset + 8)[0]
-    optional_offset = pe_offset + 24
-    if optional_offset + 32 > len(data):
-        raise ValueError("truncated optional header")
-    magic = struct.unpack_from("<H", data, optional_offset)[0]
-    if magic == 0x10B:
-        image_base = struct.unpack_from("<I", data, optional_offset + 28)[0]
-    elif magic == 0x20B:
-        if optional_offset + 32 > len(data):
-            raise ValueError("truncated PE32+ optional header")
-        image_base = struct.unpack_from("<Q", data, optional_offset + 24)[0]
-    else:
-        raise ValueError(f"unsupported optional-header magic 0x{magic:04x}")
-    return {"timestamp": timestamp, "imageBase": image_base, "optionalMagic": magic}
 
 
 def _validate_wine_tool(

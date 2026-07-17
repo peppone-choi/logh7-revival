@@ -1,9 +1,11 @@
 # Current State
 
 - Updated at: 2026-07-17
-- Active objective: 상태 정합성 복구 계약은 종결 단계다. 외부 manifest 적용을 read-back으로 확인했고, 남은 것은 승인된 전달 사슬(local commit·push·PR·merge)뿐이다. 다음 계약은 사용자 지시로 LOGH7-43 P0 fresh evidence 확보(native Windows 실기 라이브 런)로 선택됐다.
-- Git baseline: 작업 브랜치의 base는 `main`/로컬 `origin/main`과 같은 `a8420b8b`. 이 commit은 PR #171(`codex/platform-aware-live-qa@9af444d1`) merge이며 GitHub도 2026-07-17 09:37 KST 병합을 확인했다.
-- PR #171 checks: `CI / test`와 CodeRabbit status는 success. `Claude Code Review / review`는 PR이 이미 닫힌 뒤 failure로 끝났고, 제출 review와 inline thread는 0건이다. 따라서 병합 사실과 모든 review gate 통과를 같은 주장으로 취급하지 않는다.
+- Active objective: P0 게이트 완주 계약(LOGH7-43~47, 스토리 LOGH7-18)이 ACTIVE. 구현 순서 LOGH7-47→43→45→44→46. push·PR·merge·외부 쓰기·라이브 실기는 2026-07-17 상시 사전승인. LOGH7-43 라이브 런은 AC-2로 포함.
+- Standing directive (2026-07-17 /ultragoal): 게임 실제 플레이 가능(in-game 월드진입·기본 플레이 라이브 검증)까지 Jira 이슈를 게이트 순 5개씩 배치로 무조건 계속 처리. 현재 배치 #1 = P0 LOGH7-43~47. fail-closed·증거 기반 완료 유지, 가짜 완료 금지. `.omc/ultragoal/` 마일스톤 원장(G001-G006)은 coarse 추적으로 유지하되 G001 "M3 월드 진입"은 현재 로드맵상 완료로 보여 재조정 대상(비차단).
+- Git baseline: `main`은 PR #172 merge `4f8c4281`(상태 정합성 복구, 2026-07-17 12:20 KST). 직전 PR #171 merge는 `a8420b8b`. 작업 브랜치 `codex/logh7-43-p0-evidence`는 `4f8c4281` 기반.
+- PR #171 checks: `CI / test`와 CodeRabbit status는 success. `Claude Code Review / review`는 PR이 이미 닫힌 뒤 failure로 끝났고, 제출 review와 inline thread는 0건이다. 따라서 병합 사실과 모든 review gate 통과를 같은 주장으로 취급하지 않는다. PR #172도 같은 패턴이다 — `CI / test`·CodeRabbit pass, `Claude Code Review / review`는 claude-code-action 내부 오류로 fail이며 성공으로 재분류하지 않는다.
+- Recovery delivery result: 상태 정합성 복구는 commit `572bf8f5` → PR #172 → merge `4f8c4281`로 전달 완료. 외부 manifest 적용·read-back, 검증 exit 0, 독립 리뷰 BLOCKER/MAJOR 0 해소 기록은 merge된 `.ai/handoff.md` 이력과 PR #172 본문에 있다.
 - Platform live-QA result: macOS Wine에서 서버 `127.0.0.1:47900`, 실제 client process, `0x0034 → 0x0035 → 0x0036 → 0x0030` 흐름까지 확인했다. `invalid-credentials`/login-ng와 client exit 3으로 끝났으며 successful login/gameplay는 미검증이다.
 - Remaining P0 evidence: native Windows·Linux 실기, 수정 후 live drive-cleanup receipt, 최신 전체 Wine unittest, run9 exact-hash tracked evidence가 없다. P1 proxy/Frida/server 3면 join과 P2 parser/cache/root/FSM도 열려 있다.
 - Jira snapshot: 2026-07-17 10:41 KST 기준 미완료 188건(`LOGH7-9`~`LOGH7-196`), 전부 `해야 할 일`·Medium·미배정. 에픽 9, 스토리 25, 작업 50, 하위 작업 104이며 진행 중 이슈는 0건이다.
@@ -11,5 +13,6 @@
 - External sync result: LOGH7-43 제목·코멘트(10:53:17 KST), LOGH7-18 코멘트(10:53:19 KST), GitHub #10 제목·코멘트(10:53:58 KST) 적용을 2026-07-17 read-back으로 확인. Jira 전환 0건, Obsidian 미실행(LOGH7_VAULT_DIR unset). Jira 접근은 로컬 Atlassian MCP OAuth(정본 사이트 pepponechoi-jira.atlassian.net) 경유 — Rovo 커넥터의 pepponechoi.atlassian.net 테넌트는 suspended-inactivity.
 - Linked worktree: `agents/commit-push-and-verify-next-steps@0b9c324d`는 main 대비 226 behind/1 ahead이며 staged 3, unstaged 1, untracked 4개다. 읽기 전용 보호 대상으로 유지하고 현재 제품 기준이나 병합 대상으로 사용하지 않는다.
 - Preserved concurrent change: 사용자 소유 `.codex/config.toml` dirty 변경은 읽거나 수정·stage하지 않는다. 소유권은 2026-07-17 사용자 승인으로 Codex→Claude Code로 인수됐다.
-- Current blockers: 제품 관점에서는 P0 fresh evidence와 successful authentication/gameplay 부재가 블로커다. 상태 복구 관점의 블로커는 없다 — 외부 동기화는 적용·검증 완료, 전달만 남았다.
-- Recommended next action after recovery: 복구 브랜치 merge 후 새 작업 브랜치에서 LOGH7-43 P0 fresh evidence 계약(native Windows 실기 라이브 런, lineage fail-closed·포트 47900 직렬화·증거 필수)을 활성화한다. LOGH7-43 제목 정정은 이미 적용됐다.
+- Current blockers: 제품 관점 — P0 fresh evidence와 successful authentication/gameplay 부재. 진행 중인 native Windows 라이브 런이 이 중 native Windows 축을 닫을 수 있다. Linux 실기·최신 전체 Wine suite는 다른 호스트가 필요하다.
+- Batch #1 매듭(43+47 완료, 45/44/46 Wine-후속): LOGH7-47 fail-closed 게이트 라이브 실증·스킬 배선 완료, LOGH7-43 native login·입력 신뢰성(v2) 라이브 실증 완료. LOGH7-45/44/46은 Wine 호스트·run9 baseline 필요로 이관. 세션 커밋 chain 5441f574…15ff2f7c push, CI PR #173, Jira #10086/10087/10088/10089.
+- Next: LOGH7-47 라이브 실증 후 live-qa 스킬에 `--lineage-manifest` 배선 → LOGH7-45(runtime-support manifest)→44(계보 integration)→46(run evidence) 순으로 배치 #1 계속. push·PR·merge·외부 쓰기·라이브는 상시 사전승인.
