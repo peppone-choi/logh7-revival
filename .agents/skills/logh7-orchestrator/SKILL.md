@@ -1,6 +1,6 @@
 ---
 name: logh7-orchestrator
-description: "Orchestrate the evidence-first revival of LOGH VII with the original legacy client and an authoritative replacement server. Use for CD/data extraction, static or dynamic client reverse engineering, packet capture/proxy intervention, server gameplay restoration, Wine live QA, localization, reversible remastering, or engine-neutral future-client portfolio work."
+description: "Orchestrate the evidence-first revival of LOGH VII with the original legacy client and an authoritative replacement server. Use for CD/data extraction, static or dynamic client reverse engineering, packet capture/proxy intervention, server gameplay restoration, platform-aware live QA, localization, reversible remastering, or engine-neutral future-client portfolio work."
 ---
 
 # LOGH VII Revival Orchestrator
@@ -22,7 +22,7 @@ description: "Orchestrate the evidence-first revival of LOGH VII with the origin
 - **standard reasoning tier:** 일반 구현, refactor, codec/test, 문서 동기화.
 - **deep reasoning tier:** RE 가설, architecture/root cause, 상충 증거 판정, phase 합성·최종 승인.
 - worker는 구현 노동과 bounded evidence 수집을 맡고 orchestrator는 요구 분해, write scope, synthesis, review, acceptance를 맡는다.
-- delegation은 한 계층만 사용한다. 독립 read-heavy branch만 병렬화하고 Wine prefix/GUI/ports/DB 같은 stateful 자원은 직렬화한다.
+- delegation은 한 계층만 사용한다. 독립 read-heavy branch만 병렬화하고 client runtime 자원(native session 또는 Wine prefix), GUI, ports, DB 같은 stateful 자원은 직렬화한다.
 
 ## 역할과 4-layer RE
 
@@ -31,7 +31,7 @@ description: "Orchestrate the evidence-first revival of LOGH VII with the origin
 | 층/역할 | 질문 | 완료 증거 |
 | --- | --- | --- |
 | `static` | EXE가 무엇을 parse/call/write하는가 | hash/profile, Ghidra xref/CFG, layout, sentinel |
-| `client` | Wine runtime에서 실제 인자·memory/FSM/UI가 어떻게 변하는가 | hook/breakpoint trace, natural client output |
+| `client` | 선택한 runtime에서 실제 인자·memory/FSM/UI가 어떻게 변하는가 | hook/breakpoint trace, natural client output |
 | `wire` | client↔proxy↔server bytes/frame이 어떻게 이동하는가 | PCAP/proxy/decoder hash와 sequence |
 | `server` | validation·domain·DB·response/broadcast가 무엇을 확정하는가 | command/event/transaction trace |
 
@@ -39,18 +39,19 @@ description: "Orchestrate the evidence-first revival of LOGH VII with the origin
 
 ## Phase pipeline
 
-### P0 — lineage와 격리 환경
+### P0 — lineage와 실행 환경별 runtime
 
 - canonical/patch EXE lineage, PE metadata, sentinel, backup/rollback을 확정한다.
-- Wine 실행에는 반드시 `$logh7-wine-live-qa`를 사용한다.
-- 모든 Wine command와 진단은 absolute binary와 repo 밖 전용 absolute `WINEPREFIX`를 사용한다. 기본 `~/.wine`과 repo 내부 prefix는 거부한다.
+- `$logh7-wine-live-qa`로 `sys.platform`을 먼저 기록한다. `win32`는 `native-windows`, `darwin`·`linux`는 `wine`, 그 밖은 `blocked`다.
+- `native-windows`는 Wine 입력·명령 없이 검증된 EXE를 direct native harness로 실행한다.
+- `wine`의 모든 command와 진단은 absolute binary와 repo 밖 전용 absolute `WINEPREFIX`를 사용한다. 기본 `~/.wine`과 repo 내부 prefix는 거부한다.
 - run9 evidence가 없으면 normal regression은 fail-closed한다. exact lineage가 확정된 경우에만 team spec의 `recovery-baseline` mode로 새 receipt를 만들 수 있으며 그 run을 regression `pass`로 부르지 않는다.
 
 ### P1 — client/proxy/server correlation
 
 - observe-only pass-through를 먼저 실행하고 양방향 byte count와 payload SHA-256 equality를 확인한다.
 - client plaintext/runtime, host PCAP/proxy, server frame/DB/event를 team spec의 JSONL schema로 join한다.
-- host network 판정과 Wine game/Win32/D3D8 판정을 분리한다.
+- host network 판정과 선택한 client runtime의 game/Win32/D3D8 판정을 분리한다.
 
 ### P2 — `0x030b` root/FSM
 
@@ -73,13 +74,13 @@ description: "Orchestrate the evidence-first revival of LOGH VII with the origin
 
 각 개입은 hypothesis, 원본/변형 hash, 예상 결과, rollback을 먼저 기록한다. 원본 EXE와 canonical asset을 in-place 수정하지 않는다.
 
-## Wine live QA
+## Platform-aware live QA
 
-- `.agents/skills/logh7-wine-live-qa/SKILL.md`를 canonical skill로 사용한다. `.codex/skills/logh7-wine-live-qa/`는 byte-identical mirror다.
-- live owner 한 명만 prefix/install copy/DB/ports/GUI를 소유한다.
-- D3D8, locale/codepage/font, audio, input/IME, drive mapping, registry pre/post hash를 environment receipt에 포함한다.
-- 기록된 PID만 종료하고 port listener, Wine server, registry, EXE, drive mapping rollback을 증명한다.
-- PCAP/proxy 성공은 gameplay 성공이 아니며 Wine screenshot은 server authority/DB 성공이 아니다.
+- `.agents/skills/logh7-wine-live-qa/SKILL.md`를 canonical skill로 사용한다. `.codex/skills/`와 `.claude/skills/`의 live-QA 사본은 byte-identical mirror다.
+- live owner 한 명만 runtime 자원, install copy, DB, ports, GUI를 소유한다.
+- 공통 D3D8, locale/codepage/font, audio, input/IME, registry pre/post hash와 mode별 native session 또는 Wine toolchain/prefix/drive mapping을 environment receipt에 포함한다.
+- 기록된 PID만 종료하고 port listener, registry, EXE, runtime 자원 rollback을 증명한다. Wine server 정리는 Wine mode에만 적용한다.
+- PCAP/proxy 성공은 gameplay 성공이 아니며 client screenshot은 server authority/DB 성공이 아니다.
 
 ## Remaster와 future-client portfolio
 
@@ -89,7 +90,7 @@ description: "Orchestrate the evidence-first revival of LOGH VII with the origin
 - 로그인 원본 영역 `644×484`와 로그인 뒤 게임 영역 `1920×1080` 경계를 보존한다.
 - 장기 재이식을 Unity에 고정하지 않는다. Godot+Unity equivalent thin slice, Unreal tactical-only spike, Stride/Bevy watch를 같은 portfolio decision에서 비교한다.
 - future client는 legacy protocol adapter와 shared gameplay contract를 분리하고 M4 gate를 대신하지 않는다.
-- future Windows x64 candidate의 Wine acceptance는 별도 Win64 prefix/ports/evidence를 사용하며 legacy `$logh7-wine-live-qa` verdict와 합치지 않는다.
+- future Windows x64 candidate acceptance는 별도 runtime 자원/ports/evidence를 사용하며 legacy `$logh7-wine-live-qa` verdict와 합치지 않는다. Wine host에서만 별도 Win64 prefix를 쓴다.
 - 현재 삭제된 `client-unity/`를 engine 결정 전에 active 제품 계약으로 복원하지 않는다.
 
 ## Producer-Reviewer와 실패 정책
@@ -107,4 +108,4 @@ description: "Orchestrate the evidence-first revival of LOGH VII with the origin
 - confirmed/contradicted/unobserved를 분리한 현재 판정.
 - 남은 blocker, untested surface, 다음 phase의 가장 작은 ticket.
 
-구현, 자동 test, host trace, Wine 화면 중 하나만으로 완료를 주장하지 않는다.
+구현, 자동 test, host trace, client runtime 화면 중 하나만으로 완료를 주장하지 않는다.

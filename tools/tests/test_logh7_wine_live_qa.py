@@ -310,6 +310,145 @@ class FakeWineRuntime:
 
 
 class WineLiveQaTests(unittest.TestCase):
+    def test_parser_accepts_explicit_wow64_prefix_mode(self) -> None:
+        args, unknown = live_qa.build_parser().parse_known_args(
+            [
+                "--wine-bin",
+                "/tmp/wine",
+                "--wineboot-bin",
+                "/tmp/wineboot",
+                "--wineserver-bin",
+                "/tmp/wineserver",
+                "--wine-prefix",
+                "/tmp/prefix",
+                "--run-id",
+                "20260717T000000Z-wow64",
+                "--client-exe",
+                "/tmp/G7MTClient.exe",
+                "--lineage-manifest",
+                "/tmp/client-lineage.json",
+                "--runtime-support-manifest",
+                "/tmp/runtime-support.json",
+                "--prefix-mode",
+                "wow64",
+            ]
+        )
+
+        self.assertEqual(unknown, [])
+        self.assertEqual(args.prefix_mode, "wow64")
+
+    def test_main_forwards_explicit_wow64_prefix_mode(self) -> None:
+        argv = [
+            "--wine-bin",
+            "/tmp/wine",
+            "--wineboot-bin",
+            "/tmp/wineboot",
+            "--wineserver-bin",
+            "/tmp/wineserver",
+            "--wine-prefix",
+            "/tmp/prefix",
+            "--run-id",
+            "20260717T000000Z-wow64",
+            "--client-exe",
+            "/tmp/G7MTClient.exe",
+            "--lineage-manifest",
+            "/tmp/client-lineage.json",
+            "--runtime-support-manifest",
+            "/tmp/runtime-support.json",
+            "--prefix-mode",
+            "wow64",
+            "--receipt",
+            "/tmp/receipt.json",
+        ]
+        with patch.object(live_qa.sys, "platform", "darwin"), patch.object(
+            live_qa,
+            "create_preflight_receipt",
+            return_value={"status": "ready"},
+        ) as create_mock, patch.object(live_qa, "write_receipt"), patch.object(
+            live_qa.sys, "stdout"
+        ):
+            exit_code = live_qa.main(argv)
+
+        self.assertEqual(exit_code, 0)
+        self.assertEqual(create_mock.call_args.kwargs.get("prefix_mode"), "wow64")
+
+    def test_native_windows_rejects_wine_adapter_before_parsing_args(self) -> None:
+        with patch.object(live_qa.sys, "platform", "win32"), patch.object(
+            live_qa, "build_parser"
+        ) as parser_mock, patch.object(live_qa.sys, "stderr"):
+            parser_mock.return_value.parse_args.side_effect = AssertionError(
+                "Windows에서 Wine 인자를 파싱하면 안 된다"
+            )
+            exit_code = live_qa.main([])
+
+        self.assertEqual(exit_code, 2)
+        parser_mock.assert_not_called()
+
+    def test_native_windows_direct_api_does_not_prepare_prefix_or_run_wine(self) -> None:
+        with TemporaryDirectory() as raw_root:
+            fixture = FakeLiveQaFixture(Path(raw_root))
+            fake_runtime = FakeWineRuntime(fixture)
+            with patch.object(live_qa.sys, "platform", "win32"), patch.object(
+                live_qa.subprocess, "run", side_effect=fake_runtime
+            ) as run_mock:
+                receipt = live_qa.create_preflight_receipt(
+                    repo_root=fixture.repo,
+                    run_id=fixture.RUN_ID,
+                    client_exe=fixture.working,
+                    lineage_manifest=fixture.lineage_manifest,
+                    run9_evidence=fixture.run9_index,
+                    mode="regression",
+                    execute=True,
+                )
+
+            self.assertEqual(receipt["status"], "blocked")
+            self.assertIn(
+                "wine_adapter_not_applicable_on_native_windows",
+                {reason["code"] for reason in receipt["blockedReasons"]},
+            )
+            self.assertEqual(receipt["environment"]["runtimeMode"], "native-windows")
+            self.assertEqual(
+                receipt["verdictCeiling"], "native-windows-delegation-required"
+            )
+            run_mock.assert_not_called()
+
+    def test_unsupported_host_rejects_wine_adapter_before_parsing_args(self) -> None:
+        with patch.object(live_qa.sys, "platform", "freebsd"), patch.object(
+            live_qa, "build_parser"
+        ) as parser_mock, patch.object(live_qa.sys, "stderr"):
+            parser_mock.return_value.parse_args.side_effect = AssertionError(
+                "지원하지 않는 host에서 Wine 인자를 파싱하면 안 된다"
+            )
+            exit_code = live_qa.main([])
+
+        self.assertEqual(exit_code, 2)
+        parser_mock.assert_not_called()
+
+    def test_unsupported_host_direct_api_does_not_run_wine(self) -> None:
+        with TemporaryDirectory() as raw_root:
+            fixture = FakeLiveQaFixture(Path(raw_root))
+            fake_runtime = FakeWineRuntime(fixture)
+            with patch.object(live_qa.sys, "platform", "freebsd"), patch.object(
+                live_qa.subprocess, "run", side_effect=fake_runtime
+            ) as run_mock:
+                receipt = live_qa.create_preflight_receipt(
+                    repo_root=fixture.repo,
+                    run_id=fixture.RUN_ID,
+                    client_exe=fixture.working,
+                    lineage_manifest=fixture.lineage_manifest,
+                    run9_evidence=fixture.run9_index,
+                    mode="regression",
+                    execute=True,
+                )
+
+            self.assertIn(
+                "wine_adapter_unsupported_host",
+                {reason["code"] for reason in receipt["blockedReasons"]},
+            )
+            self.assertEqual(receipt["environment"]["runtimeMode"], "unsupported")
+            self.assertEqual(receipt["verdictCeiling"], "unsupported-host")
+            run_mock.assert_not_called()
+
     def test_regression_preflight_is_ready_without_running_wine(self) -> None:
         with TemporaryDirectory() as raw_root:
             fixture = FakeLiveQaFixture(Path(raw_root))
@@ -323,6 +462,7 @@ class WineLiveQaTests(unittest.TestCase):
             self.assertTrue(receipt["clientLineage"]["complete"])
             self.assertTrue(receipt["run9Baseline"]["verified"])
             self.assertEqual(receipt["blockedReasons"], [])
+            self.assertEqual(receipt["environment"].get("runtimeMode"), "wine")
             for command in receipt["commands"]:
                 self.assertEqual(command["environment"]["WINEPREFIX"], str(fixture.prefix.resolve()))
                 if command["id"] == "wineboot-init":
@@ -725,6 +865,132 @@ class WineLiveQaTests(unittest.TestCase):
                 "win64",
             )
 
+    def test_existing_wow64_prefix_is_ready_when_explicitly_selected(self) -> None:
+        with TemporaryDirectory() as raw_root:
+            fixture = FakeLiveQaFixture(Path(raw_root))
+            fixture.write_prefix_architecture("win64")
+
+            receipt = live_qa.create_preflight_receipt(
+                **fixture.kwargs(prefix_mode="wow64", initialize_prefix=False)
+            )
+
+            self.assertEqual(receipt["status"], "ready")
+            architecture = receipt["environment"]["prefixArchitecture"]
+            self.assertEqual(architecture["prefixMode"], "wow64")
+            self.assertEqual(architecture["detectedArch"], "win64")
+            self.assertEqual(architecture["expectedArch"], "win64")
+            self.assertFalse(architecture["initializationRequired"])
+
+    def test_uninitialized_wow64_prefix_uses_explicit_wow64_winearch(self) -> None:
+        with TemporaryDirectory() as raw_root:
+            fixture = FakeLiveQaFixture(Path(raw_root))
+            fixture.system_reg.unlink()
+
+            receipt = live_qa.create_preflight_receipt(
+                **fixture.kwargs(prefix_mode="wow64", initialize_prefix=True)
+            )
+
+            self.assertEqual(receipt["status"], "ready")
+            architecture = receipt["environment"]["prefixArchitecture"]
+            self.assertEqual(architecture["prefixMode"], "wow64")
+            self.assertEqual(architecture["expectedArch"], "win64")
+            self.assertTrue(architecture["initializationRequired"])
+            initialize = receipt["commands"][0]
+            self.assertEqual(initialize["id"], "wineboot-init")
+            self.assertEqual(initialize["environment"]["WINEARCH"], "wow64")
+            self.assertEqual(initialize["expectedPrefixArchitecture"], "win64")
+
+    def test_incomplete_wow64_prefix_requires_wineboot_first(self) -> None:
+        with TemporaryDirectory() as raw_root:
+            fixture = FakeLiveQaFixture(Path(raw_root))
+            fixture.write_prefix_architecture("win64")
+            fixture.drive_c.rmdir()
+
+            receipt = live_qa.create_preflight_receipt(
+                **fixture.kwargs(prefix_mode="wow64", initialize_prefix=True)
+            )
+
+            self.assertEqual(receipt["status"], "ready")
+            architecture = receipt["environment"]["prefixArchitecture"]
+            self.assertEqual(architecture["state"], "incomplete")
+            self.assertTrue(architecture["initializationRequired"])
+            self.assertEqual(receipt["commands"][0]["id"], "wineboot-init")
+
+    def test_wow64_execute_uses_wow64_only_for_wineboot(self) -> None:
+        with TemporaryDirectory() as raw_root:
+            fixture = FakeLiveQaFixture(Path(raw_root))
+            fixture.write_prefix_architecture("win64")
+            fake_runtime = FakeWineRuntime(fixture)
+
+            with patch.dict(
+                live_qa.os.environ,
+                {"WINEARCH": "win32", "WINEPREFIX": "/forbidden/ambient-prefix"},
+                clear=False,
+            ), patch.object(
+                live_qa.subprocess,
+                "run",
+                side_effect=fake_runtime,
+            ) as run_mock:
+                receipt = live_qa.create_preflight_receipt(
+                    **fixture.kwargs(prefix_mode="wow64", execute=True)
+                )
+
+            self.assertEqual(receipt["status"], "executed")
+            by_id = {item["id"]: item for item in receipt["execution"]}
+            self.assertTrue(by_id["wineboot-init"]["architectureVerified"])
+            self.assertEqual(
+                by_id["wineboot-init"]["architectureAfter"]["detectedArch"],
+                "win64",
+            )
+            wineboot_calls = [
+                call
+                for call in run_mock.call_args_list
+                if call.args[0][0] == fixture.invoked(fixture.wineboot)
+            ]
+            self.assertEqual(len(wineboot_calls), 1)
+            self.assertEqual(wineboot_calls[0].kwargs["env"]["WINEARCH"], "wow64")
+            for call in run_mock.call_args_list:
+                if call not in wineboot_calls:
+                    self.assertNotIn("WINEARCH", call.kwargs["env"])
+
+    def test_fresh_prefix_delays_install_drive_lease_until_after_wineboot(self) -> None:
+        with TemporaryDirectory() as raw_root:
+            fixture = FakeLiveQaFixture(Path(raw_root))
+            fixture.system_reg.unlink()
+            (fixture.dosdevices / "c:").unlink()
+            (fixture.dosdevices / "z:").unlink()
+            fixture.drive_c.rmdir()
+            fixture.dosdevices.rmdir()
+            fake_runtime = FakeWineRuntime(fixture)
+            observed: dict[str, bool] = {}
+
+            def run(argv: list[str], **kwargs: object) -> subprocess.CompletedProcess[bytes]:
+                if argv[0] == fixture.invoked(fixture.wineboot):
+                    install_mapping = fixture.prefix / "dosdevices" / "r:"
+                    observed["installMappingBeforeWineboot"] = (
+                        install_mapping.exists() or install_mapping.is_symlink()
+                    )
+                    fixture.drive_c.mkdir()
+                    fixture.dosdevices.mkdir(exist_ok=True)
+                    (fixture.dosdevices / "c:").symlink_to(fixture.drive_c)
+                    fixture.write_prefix_architecture("win64")
+                    return subprocess.CompletedProcess(
+                        args=argv,
+                        returncode=0,
+                        stdout=b"",
+                        stderr=b"",
+                    )
+                return fake_runtime(argv, **kwargs)
+
+            with patch.object(live_qa.subprocess, "run", side_effect=run):
+                receipt = live_qa.create_preflight_receipt(
+                    **fixture.kwargs(prefix_mode="wow64", execute=True)
+                )
+
+            self.assertEqual(receipt["status"], "executed")
+            self.assertFalse(observed["installMappingBeforeWineboot"])
+            self.assertEqual(receipt["driveIsolation"]["state"], "released")
+
     def test_existing_win32_prefix_is_ready_and_records_expected_architecture(self) -> None:
         with TemporaryDirectory() as raw_root:
             fixture = FakeLiveQaFixture(Path(raw_root))
@@ -1042,6 +1308,650 @@ class WineLiveQaTests(unittest.TestCase):
             self.assertTrue((fixture.dosdevices / "z:").is_symlink())
             self.assertFalse((fixture.dosdevices / "r:").exists())
             self.assertEqual(receipt["driveIsolation"]["state"], "released")
+
+    def test_auto_mapped_host_drives_are_quarantined_then_restored(self) -> None:
+        with TemporaryDirectory() as raw_root:
+            fixture = FakeLiveQaFixture(Path(raw_root))
+            mounted_volume = fixture.root / "mounted-volume"
+            mounted_volume.mkdir()
+            raw_device = fixture.root / "raw-device"
+            raw_device.write_bytes(b"")
+            (fixture.dosdevices / "d:").symlink_to(mounted_volume)
+            (fixture.dosdevices / "d::").symlink_to(raw_device)
+            fake_runtime = FakeWineRuntime(fixture)
+            checked: list[str] = []
+
+            def assert_quarantine_during_spawn(
+                argv: list[str], **kwargs: object
+            ) -> subprocess.CompletedProcess[bytes]:
+                if (
+                    len(argv) > 1
+                    and str(argv[1]).casefold().endswith("g7mtclient.exe")
+                ) or argv[0] == fixture.invoked(fixture.wineserver):
+                    for name in ("d:", "d::", "z:"):
+                        mapping = fixture.dosdevices / name
+                        self.assertFalse(mapping.exists() or mapping.is_symlink())
+                    checked.append(
+                        "cleanup"
+                        if argv[0] == fixture.invoked(fixture.wineserver)
+                        else "client"
+                    )
+                completed = fake_runtime(argv, **kwargs)
+                if argv[0] in {
+                    fixture.invoked(fixture.wine),
+                    fixture.invoked(fixture.wineserver),
+                }:
+                    for name, target in (
+                        ("d:", mounted_volume),
+                        ("d::", raw_device),
+                        ("z:", Path("/")),
+                    ):
+                        mapping = fixture.dosdevices / name
+                        if not (mapping.exists() or mapping.is_symlink()):
+                            mapping.symlink_to(target)
+                return completed
+
+            with patch.object(
+                live_qa.subprocess,
+                "run",
+                side_effect=assert_quarantine_during_spawn,
+            ):
+                receipt = live_qa.create_preflight_receipt(
+                    **fixture.kwargs(execute=True, initialize_prefix=False)
+                )
+
+            self.assertEqual(receipt["status"], "executed")
+            self.assertEqual(checked, ["client", "cleanup"])
+            self.assertEqual(os.readlink(fixture.dosdevices / "d:"), str(mounted_volume))
+            self.assertEqual(os.readlink(fixture.dosdevices / "d::"), str(raw_device))
+            self.assertTrue((fixture.dosdevices / "z:").is_symlink())
+            self.assertEqual(receipt["driveIsolation"]["clientRevalidation"]["state"], "verified")
+            self.assertEqual(receipt["driveIsolation"]["cleanupRevalidation"]["state"], "verified")
+            self.assertEqual(receipt["driveIsolation"]["state"], "released")
+
+    def test_unexpected_error_after_drive_acquisition_still_releases_lease(self) -> None:
+        with TemporaryDirectory() as raw_root:
+            fixture = FakeLiveQaFixture(Path(raw_root))
+            with patch.object(
+                live_qa,
+                "revalidate_runtime_drive_lease",
+                side_effect=PermissionError("synthetic dosdevices failure"),
+            ):
+                receipt = live_qa.create_preflight_receipt(
+                    **fixture.kwargs(execute=True, initialize_prefix=False)
+                )
+            self.assertEqual(receipt["status"], "failed")
+            self.assertEqual(receipt["driveIsolation"]["state"], "released")
+            self.assertFalse((fixture.dosdevices / "r:").exists())
+            self.assertTrue((fixture.dosdevices / "z:").is_symlink())
+            self.assertEqual(os.readlink(fixture.dosdevices / "z:"), "/")
+
+    def test_runtime_support_exception_after_registry_mutation_rolls_back(self) -> None:
+        with TemporaryDirectory() as raw_root:
+            fixture = FakeLiveQaFixture(Path(raw_root))
+            fake_runtime = FakeWineRuntime(fixture)
+            with patch.object(
+                live_qa.subprocess,
+                "run",
+                side_effect=fake_runtime,
+            ), patch.object(
+                live_qa,
+                "_revalidate_runtime_support",
+                side_effect=PermissionError("synthetic runtime-support failure"),
+            ):
+                receipt = live_qa.create_preflight_receipt(
+                    **fixture.kwargs(execute=True, initialize_prefix=False)
+                )
+
+            self.assertEqual(receipt["status"], "failed")
+            self.assertTrue(receipt["registryTransaction"]["restored"])
+            self.assertIs(fake_runtime.key_exists, False)
+            self.assertIsNone(fake_runtime.install_value)
+            self.assertEqual(receipt["driveIsolation"]["state"], "released")
+
+    def test_keyboard_interrupt_after_registry_mutation_cleans_up_and_returns_receipt(self) -> None:
+        with TemporaryDirectory() as raw_root:
+            fixture = FakeLiveQaFixture(Path(raw_root))
+            fake_runtime = FakeWineRuntime(fixture)
+
+            def interrupt_client(
+                argv: list[str],
+                **kwargs: object,
+            ) -> subprocess.CompletedProcess[bytes]:
+                if len(argv) > 1 and str(argv[1]).casefold().endswith("g7mtclient.exe"):
+                    raise KeyboardInterrupt()
+                return fake_runtime(argv, **kwargs)
+
+            with patch.object(
+                live_qa.subprocess,
+                "run",
+                side_effect=interrupt_client,
+            ):
+                receipt = live_qa.create_preflight_receipt(
+                    **fixture.kwargs(execute=True, initialize_prefix=False)
+                )
+
+            self.assertEqual(receipt["status"], "failed")
+            self.assertTrue(receipt["registryTransaction"]["restored"])
+            self.assertIs(fake_runtime.key_exists, False)
+            self.assertIsNone(fake_runtime.install_value)
+            self.assertEqual(receipt["driveIsolation"]["state"], "released")
+            self.assertEqual(
+                receipt["driveIsolation"]["emergencyWineserverCleanup"]["state"],
+                "verified",
+            )
+
+    def test_outer_execution_exception_after_registry_mutation_rolls_back(self) -> None:
+        with TemporaryDirectory() as raw_root:
+            fixture = FakeLiveQaFixture(Path(raw_root))
+            fake_runtime = FakeWineRuntime(fixture)
+            original_condition = live_qa._registry_command_condition
+
+            def fail_before_client(
+                command: dict[str, object],
+                registry_state: dict[str, object],
+            ) -> tuple[bool, str | None]:
+                if command.get("id") == "client":
+                    raise RuntimeError("synthetic outer execution failure")
+                return original_condition(command, registry_state)
+
+            with patch.object(
+                live_qa.subprocess,
+                "run",
+                side_effect=fake_runtime,
+            ), patch.object(
+                live_qa,
+                "_registry_command_condition",
+                side_effect=fail_before_client,
+            ):
+                receipt = live_qa.create_preflight_receipt(
+                    **fixture.kwargs(execute=True, initialize_prefix=False)
+                )
+
+            self.assertEqual(receipt["status"], "failed")
+            self.assertTrue(receipt["registryTransaction"]["restored"])
+            self.assertIs(fake_runtime.key_exists, False)
+            self.assertIsNone(fake_runtime.install_value)
+            self.assertEqual(receipt["driveIsolation"]["state"], "released")
+            self.assertEqual(
+                receipt["driveIsolation"]["emergencyWineserverCleanup"]["state"],
+                "verified",
+            )
+
+    def test_drive_release_exception_returns_failed_receipt(self) -> None:
+        with TemporaryDirectory() as raw_root:
+            fixture = FakeLiveQaFixture(Path(raw_root))
+            fake_runtime = FakeWineRuntime(fixture)
+            with patch.object(
+                live_qa.subprocess,
+                "run",
+                side_effect=fake_runtime,
+            ), patch.object(
+                live_qa,
+                "release_runtime_drive_lease",
+                side_effect=RuntimeError("synthetic release failure"),
+            ):
+                receipt = live_qa.create_preflight_receipt(
+                    **fixture.kwargs(execute=True, initialize_prefix=False)
+                )
+
+            self.assertEqual(receipt["status"], "failed")
+            self.assertEqual(receipt["driveIsolation"]["state"], "release-failed")
+            release = receipt["driveIsolation"]["release"]
+            self.assertFalse(release["released"])
+            self.assertEqual(release["error"]["type"], "RuntimeError")
+
+    def test_failed_emergency_registry_import_preserves_backup(self) -> None:
+        with TemporaryDirectory() as raw_root:
+            fixture = FakeLiveQaFixture(Path(raw_root))
+            fake_runtime = FakeWineRuntime(fixture)
+            fake_runtime.key_exists = True
+            fake_runtime.install_value = "Q:\\legacy-install"
+            fake_runtime.extra_values = {"Unrelated": "preserve-me"}
+            original_condition = live_qa._registry_command_condition
+
+            def fail_before_client(
+                command: dict[str, object],
+                registry_state: dict[str, object],
+            ) -> tuple[bool, str | None]:
+                if command.get("id") == "client":
+                    raise RuntimeError("synthetic outer execution failure")
+                return original_condition(command, registry_state)
+
+            def fail_registry_import(
+                argv: list[str],
+                **kwargs: object,
+            ) -> subprocess.CompletedProcess[bytes]:
+                if argv[1:3] == ["reg", "import"]:
+                    return subprocess.CompletedProcess(
+                        args=argv,
+                        returncode=5,
+                        stdout=b"",
+                        stderr=b"synthetic import failure",
+                    )
+                return fake_runtime(argv, **kwargs)
+
+            with patch.object(
+                live_qa.subprocess,
+                "run",
+                side_effect=fail_registry_import,
+            ), patch.object(
+                live_qa,
+                "_registry_command_condition",
+                side_effect=fail_before_client,
+            ):
+                receipt = live_qa.create_preflight_receipt(
+                    **fixture.kwargs(execute=True, initialize_prefix=False)
+                )
+
+            backup = fixture.drive_c / live_qa.REGISTRY_BACKUP_NAME
+            self.assertEqual(receipt["status"], "failed")
+            self.assertEqual(receipt["registryTransaction"]["state"], "restore-failed")
+            self.assertTrue(backup.is_file())
+            emergency = receipt["registryTransaction"]["emergencyRollback"]
+            self.assertIn(
+                str(backup.resolve()),
+                {artifact["path"] for artifact in emergency["preservedArtifacts"]},
+            )
+
+    def test_failed_fresh_wineboot_before_layout_still_runs_wineserver(self) -> None:
+        with TemporaryDirectory() as raw_root:
+            fixture = FakeLiveQaFixture(Path(raw_root))
+            fixture.system_reg.unlink()
+            (fixture.dosdevices / "c:").unlink()
+            (fixture.dosdevices / "z:").unlink()
+            fixture.drive_c.rmdir()
+            fixture.dosdevices.rmdir()
+            wineserver_calls: list[list[str]] = []
+
+            def fail_before_layout(
+                argv: list[str],
+                **_: object,
+            ) -> subprocess.CompletedProcess[bytes]:
+                if argv[0] == fixture.invoked(fixture.wineboot):
+                    raise subprocess.TimeoutExpired(
+                        argv,
+                        timeout=30,
+                        output=b"",
+                        stderr=b"",
+                    )
+                if argv[0] == fixture.invoked(fixture.wineserver):
+                    wineserver_calls.append(argv)
+                    return subprocess.CompletedProcess(
+                        args=argv,
+                        returncode=0,
+                        stdout=b"",
+                        stderr=b"",
+                    )
+                raise AssertionError(f"unexpected subprocess: {argv}")
+
+            with patch.object(
+                live_qa.subprocess,
+                "run",
+                side_effect=fail_before_layout,
+            ):
+                receipt = live_qa.create_preflight_receipt(
+                    **fixture.kwargs(execute=True, initialize_prefix=True)
+                )
+
+            self.assertEqual(receipt["status"], "failed")
+            self.assertEqual(len(wineserver_calls), 1)
+            self.assertEqual(receipt["driveIsolation"]["state"], "released")
+            self.assertEqual(
+                receipt["driveIsolation"]["cleanupWithoutLease"]["state"],
+                "verified",
+            )
+
+    def test_failed_fresh_wineboot_after_system_reg_still_runs_wineserver(self) -> None:
+        with TemporaryDirectory() as raw_root:
+            fixture = FakeLiveQaFixture(Path(raw_root))
+            fixture.system_reg.unlink()
+            (fixture.dosdevices / "c:").unlink()
+            (fixture.dosdevices / "z:").unlink()
+            fixture.drive_c.rmdir()
+            fixture.dosdevices.rmdir()
+            wineserver_calls: list[list[str]] = []
+
+            def fail_after_system_reg(
+                argv: list[str],
+                **_: object,
+            ) -> subprocess.CompletedProcess[bytes]:
+                if argv[0] == fixture.invoked(fixture.wineboot):
+                    fixture.write_prefix_architecture("win32")
+                    raise subprocess.TimeoutExpired(
+                        argv,
+                        timeout=30,
+                        output=b"",
+                        stderr=b"",
+                    )
+                if argv[0] == fixture.invoked(fixture.wineserver):
+                    wineserver_calls.append(argv)
+                    return subprocess.CompletedProcess(
+                        args=argv,
+                        returncode=0,
+                        stdout=b"",
+                        stderr=b"",
+                    )
+                raise AssertionError(f"unexpected subprocess: {argv}")
+
+            with patch.object(
+                live_qa.subprocess,
+                "run",
+                side_effect=fail_after_system_reg,
+            ):
+                receipt = live_qa.create_preflight_receipt(
+                    **fixture.kwargs(execute=True, initialize_prefix=True)
+                )
+
+            self.assertEqual(receipt["status"], "failed")
+            self.assertEqual(len(wineserver_calls), 1)
+            self.assertEqual(receipt["driveIsolation"]["state"], "released")
+            self.assertEqual(
+                receipt["driveIsolation"]["cleanupWithoutLease"]["state"],
+                "verified",
+            )
+
+    def test_failed_fresh_wineboot_without_c_mapping_still_runs_wineserver(self) -> None:
+        with TemporaryDirectory() as raw_root:
+            fixture = FakeLiveQaFixture(Path(raw_root))
+            fixture.system_reg.unlink()
+            (fixture.dosdevices / "c:").unlink()
+            (fixture.dosdevices / "z:").unlink()
+            fixture.drive_c.rmdir()
+            fixture.dosdevices.rmdir()
+            wineserver_calls: list[list[str]] = []
+
+            def fail_before_c_mapping(
+                argv: list[str],
+                **_: object,
+            ) -> subprocess.CompletedProcess[bytes]:
+                if argv[0] == fixture.invoked(fixture.wineboot):
+                    fixture.write_prefix_architecture("win32")
+                    fixture.drive_c.mkdir()
+                    fixture.dosdevices.mkdir()
+                    (fixture.dosdevices / "z:").symlink_to("/")
+                    raise subprocess.TimeoutExpired(
+                        argv,
+                        timeout=30,
+                        output=b"",
+                        stderr=b"",
+                    )
+                if argv[0] == fixture.invoked(fixture.wineserver):
+                    wineserver_calls.append(argv)
+                    self.assertFalse((fixture.dosdevices / "z:").is_symlink())
+                    return subprocess.CompletedProcess(
+                        args=argv,
+                        returncode=0,
+                        stdout=b"",
+                        stderr=b"",
+                    )
+                raise AssertionError(f"unexpected subprocess: {argv}")
+
+            with patch.object(
+                live_qa.subprocess,
+                "run",
+                side_effect=fail_before_c_mapping,
+            ):
+                receipt = live_qa.create_preflight_receipt(
+                    **fixture.kwargs(execute=True, initialize_prefix=True)
+                )
+
+            self.assertEqual(receipt["status"], "failed")
+            self.assertEqual(len(wineserver_calls), 1)
+            self.assertEqual(receipt["driveIsolation"]["state"], "released")
+            self.assertFalse((fixture.dosdevices / "z:").is_symlink())
+
+    def test_failed_fresh_wineboot_with_only_drive_c_still_runs_wineserver(self) -> None:
+        with TemporaryDirectory() as raw_root:
+            fixture = FakeLiveQaFixture(Path(raw_root))
+            fixture.system_reg.unlink()
+            (fixture.dosdevices / "c:").unlink()
+            (fixture.dosdevices / "z:").unlink()
+            fixture.drive_c.rmdir()
+            fixture.dosdevices.rmdir()
+            wineserver_calls: list[list[str]] = []
+
+            def fail_before_dosdevices(
+                argv: list[str],
+                **_: object,
+            ) -> subprocess.CompletedProcess[bytes]:
+                if argv[0] == fixture.invoked(fixture.wineboot):
+                    fixture.write_prefix_architecture("win32")
+                    fixture.drive_c.mkdir()
+                    raise subprocess.TimeoutExpired(
+                        argv,
+                        timeout=30,
+                        output=b"",
+                        stderr=b"",
+                    )
+                if argv[0] == fixture.invoked(fixture.wineserver):
+                    wineserver_calls.append(argv)
+                    return subprocess.CompletedProcess(
+                        args=argv,
+                        returncode=0,
+                        stdout=b"",
+                        stderr=b"",
+                    )
+                raise AssertionError(f"unexpected subprocess: {argv}")
+
+            with patch.object(
+                live_qa.subprocess,
+                "run",
+                side_effect=fail_before_dosdevices,
+            ):
+                receipt = live_qa.create_preflight_receipt(
+                    **fixture.kwargs(execute=True, initialize_prefix=True)
+                )
+
+            self.assertEqual(receipt["status"], "failed")
+            self.assertEqual(len(wineserver_calls), 1)
+            self.assertEqual(receipt["driveIsolation"]["state"], "released")
+
+    def test_symlinked_dosdevices_directory_blocks_before_spawn(self) -> None:
+        with TemporaryDirectory() as raw_root:
+            fixture = FakeLiveQaFixture(Path(raw_root))
+            external = fixture.root / "external-dosdevices"
+            external.mkdir()
+            for mapping in fixture.dosdevices.iterdir():
+                mapping.unlink()
+            fixture.dosdevices.rmdir()
+            (external / "c:").symlink_to(fixture.drive_c)
+            (external / "z:").symlink_to("/")
+            fixture.dosdevices.symlink_to(external, target_is_directory=True)
+
+            with patch.object(
+                live_qa.subprocess,
+                "run",
+                side_effect=AssertionError("unsafe Wine invocation"),
+            ) as run_mock:
+                receipt = live_qa.create_preflight_receipt(
+                    **fixture.kwargs(execute=True, initialize_prefix=True)
+                )
+
+            run_mock.assert_not_called()
+            self.assertEqual(receipt["status"], "blocked")
+            self.assertIn(
+                "wineprefix_layout_invalid",
+                {reason["code"] for reason in receipt["blockedReasons"]},
+            )
+            self.assertTrue((external / "c:").is_symlink())
+            self.assertTrue((external / "z:").is_symlink())
+
+    def test_uninitialized_symlinked_dosdevices_blocks_before_wineboot(self) -> None:
+        with TemporaryDirectory() as raw_root:
+            fixture = FakeLiveQaFixture(Path(raw_root))
+            fixture.system_reg.unlink()
+            external = fixture.root / "external-uninitialized-dosdevices"
+            external.mkdir()
+            for mapping in fixture.dosdevices.iterdir():
+                mapping.unlink()
+            fixture.dosdevices.rmdir()
+            (external / "c:").symlink_to(fixture.drive_c)
+            (external / "z:").symlink_to("/")
+            fixture.dosdevices.symlink_to(external, target_is_directory=True)
+
+            with patch.object(live_qa.subprocess, "run") as run_mock:
+                receipt = live_qa.create_preflight_receipt(
+                    **fixture.kwargs(execute=True, initialize_prefix=True)
+                )
+
+            run_mock.assert_not_called()
+            self.assertEqual(receipt["status"], "blocked")
+            self.assertIn(
+                "wineprefix_layout_invalid",
+                {reason["code"] for reason in receipt["blockedReasons"]},
+            )
+            self.assertTrue((external / "c:").is_symlink())
+            self.assertTrue((external / "z:").is_symlink())
+
+    def test_external_c_mapping_blocks_before_wineboot(self) -> None:
+        with TemporaryDirectory() as raw_root:
+            fixture = FakeLiveQaFixture(Path(raw_root))
+            external_drive_c = fixture.root / "external-drive-c"
+            external_drive_c.mkdir()
+            (fixture.dosdevices / "c:").unlink()
+            (fixture.dosdevices / "c:").symlink_to(external_drive_c)
+
+            with patch.object(
+                live_qa.subprocess,
+                "run",
+                side_effect=AssertionError("unsafe Wine invocation"),
+            ) as run_mock:
+                receipt = live_qa.create_preflight_receipt(
+                    **fixture.kwargs(execute=True, initialize_prefix=True)
+                )
+
+            run_mock.assert_not_called()
+            self.assertEqual(receipt["status"], "blocked")
+            self.assertIn(
+                "wineprefix_layout_invalid",
+                {reason["code"] for reason in receipt["blockedReasons"]},
+            )
+
+    def test_failed_fresh_wineboot_quarantines_new_host_mapping_for_cleanup(self) -> None:
+        with TemporaryDirectory() as raw_root:
+            fixture = FakeLiveQaFixture(Path(raw_root))
+            fixture.system_reg.unlink()
+            (fixture.dosdevices / "c:").unlink()
+            (fixture.dosdevices / "z:").unlink()
+            fixture.drive_c.rmdir()
+            fixture.dosdevices.rmdir()
+            cleanup_observed: list[bool] = []
+
+            def timeout_after_layout_creation(
+                argv: list[str],
+                **_: object,
+            ) -> subprocess.CompletedProcess[bytes]:
+                if argv[0] == fixture.invoked(fixture.wineboot):
+                    fixture.drive_c.mkdir()
+                    fixture.dosdevices.mkdir()
+                    (fixture.dosdevices / "c:").symlink_to(fixture.drive_c)
+                    (fixture.dosdevices / "z:").symlink_to("/")
+                    fixture.write_prefix_architecture("win32")
+                    raise subprocess.TimeoutExpired(
+                        argv,
+                        timeout=30,
+                        output=b"",
+                        stderr=b"",
+                    )
+                if argv[0] == fixture.invoked(fixture.wineserver):
+                    cleanup_observed.append(
+                        not (fixture.dosdevices / "z:").exists()
+                        and not (fixture.dosdevices / "z:").is_symlink()
+                    )
+                    return subprocess.CompletedProcess(
+                        args=argv,
+                        returncode=0,
+                        stdout=b"",
+                        stderr=b"",
+                    )
+                raise AssertionError(f"unexpected subprocess: {argv}")
+
+            with patch.object(
+                live_qa.subprocess,
+                "run",
+                side_effect=timeout_after_layout_creation,
+            ):
+                receipt = live_qa.create_preflight_receipt(
+                    **fixture.kwargs(execute=True, initialize_prefix=True)
+                )
+
+            self.assertEqual(receipt["status"], "failed")
+            self.assertEqual(cleanup_observed, [True])
+            self.assertEqual(receipt["driveIsolation"]["state"], "released")
+            self.assertFalse((fixture.dosdevices / "z:").exists())
+            self.assertFalse((fixture.dosdevices / "z:").is_symlink())
+
+    def test_cleanup_revalidation_failure_blocks_wineserver(self) -> None:
+        with TemporaryDirectory() as raw_root:
+            fixture = FakeLiveQaFixture(Path(raw_root))
+            fake_runtime = FakeWineRuntime(fixture)
+            foreign_target = fixture.root / "foreign-z-target"
+            foreign_target.mkdir()
+            wineserver_calls: list[list[str]] = []
+
+            def change_mapping_after_client(
+                argv: list[str],
+                **kwargs: object,
+            ) -> subprocess.CompletedProcess[bytes]:
+                completed = fake_runtime(argv, **kwargs)
+                if len(argv) > 1 and str(argv[1]).casefold().endswith("g7mtclient.exe"):
+                    (fixture.dosdevices / "z:").symlink_to(foreign_target)
+                if argv[0] == fixture.invoked(fixture.wineserver):
+                    wineserver_calls.append(argv)
+                return completed
+
+            with patch.object(
+                live_qa.subprocess,
+                "run",
+                side_effect=change_mapping_after_client,
+            ):
+                receipt = live_qa.create_preflight_receipt(
+                    **fixture.kwargs(execute=True, initialize_prefix=False)
+                )
+
+            self.assertEqual(receipt["status"], "failed")
+            self.assertEqual(wineserver_calls, [])
+            self.assertEqual(
+                receipt["driveIsolation"]["cleanupRevalidation"]["state"],
+                "failed",
+            )
+
+    def test_cleanup_created_drive_mapping_makes_release_fail(self) -> None:
+        with TemporaryDirectory() as raw_root:
+            fixture = FakeLiveQaFixture(Path(raw_root))
+            fake_runtime = FakeWineRuntime(fixture)
+            unexpected_target = fixture.root / "unexpected-host-drive"
+            unexpected_target.mkdir()
+
+            def create_mapping_during_cleanup(
+                argv: list[str],
+                **kwargs: object,
+            ) -> subprocess.CompletedProcess[bytes]:
+                completed = fake_runtime(argv, **kwargs)
+                if argv[0] == fixture.invoked(fixture.wineserver):
+                    (fixture.dosdevices / "e:").symlink_to(unexpected_target)
+                return completed
+
+            with patch.object(
+                live_qa.subprocess,
+                "run",
+                side_effect=create_mapping_during_cleanup,
+            ):
+                receipt = live_qa.create_preflight_receipt(
+                    **fixture.kwargs(execute=True, initialize_prefix=False)
+                )
+
+            self.assertEqual(receipt["status"], "failed")
+            self.assertEqual(receipt["driveIsolation"]["state"], "release-failed")
+            release = receipt["driveIsolation"]["release"]
+            self.assertFalse(release["released"])
+            self.assertFalse(release["snapshotMatchesInitial"])
+            self.assertIn(
+                "e:",
+                {entry["name"] for entry in release["postSnapshot"]},
+            )
+            self.assertTrue((fixture.dosdevices / "e:").is_symlink())
 
     def test_preexisting_registry_key_is_exactly_restored(self) -> None:
         with TemporaryDirectory() as raw_root:

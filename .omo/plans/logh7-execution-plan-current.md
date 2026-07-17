@@ -1,6 +1,6 @@
-# LOGH VII 부활 - 실행 계획 (2026-07-16)
+# LOGH VII 부활 - 실행 계획 (2026-07-17)
 
-원본 `G7MTClient.exe`를 1차 제품 경로로 유지하고, M4 개발 전에 Wine 실행·증거·관측 경계를 복구한다. 현재 병목은 전략 커맨드 구현 자체가 아니라 동일한 클라이언트 입력을 client/proxy/server 세 면에서 재현 가능하게 설명하는 것이다.
+원본 `G7MTClient.exe`를 1차 제품 경로로 유지하고, M4 개발 전에 실행 환경별 client runtime·증거·관측 경계를 복구한다. native Windows에서는 직접 실행하고 macOS/Linux에서만 격리 Wine을 사용한다. 현재 병목은 전략 커맨드 구현 자체가 아니라 동일한 클라이언트 입력을 client/proxy/server 세 면에서 재현 가능하게 설명하는 것이다.
 
 ## 현재 판정과 증거 한계
 
@@ -13,20 +13,20 @@
 
 ## 개발 전 선행 게이트
 
-### P0 - 격리 Wine, 클라이언트 계보, 증거 복구
+### P0 - 실행 환경별 client runtime, 클라이언트 계보, 증거 복구
 
-모든 Wine 명령은 새 프로젝트/런 전용 32-bit `WINEPREFIX`에서만 실행한다. 기본 `~/.wine`에는 접근하지 않는다.
+`sys.platform`을 먼저 기록한다. native Windows는 Wine 입력·명령 없이 클라이언트를 직접 실행한다. macOS/Linux의 모든 Wine 명령은 새 프로젝트/런 전용 `WINEPREFIX`와 명시적 `win32|wow64` prefix mode에서만 실행하고 기본 `~/.wine`에는 접근하지 않는다. 그 외 host는 blocked다.
 
 완료 증거:
 
 1. CD base → 공식/update → 1080p → localization/diagnostic patch의 full SHA-256, PE timestamp/image base, patch receipt, rollback hash를 가진 client-lineage manifest.
-2. Wine build/hash, prefix 경로, drive mapping, locale/font/D3D8 설정, 실행 명령과 prefix 외 변경 0건을 기록한 environment receipt.
-3. run9/run3/run5의 원본 또는 redacted evidence를 복구하거나 격리 prefix에서 재실행하여 client/patch/server/seed hash, packet/log, DB, screenshot, cleanup을 tracked receipt로 남김.
+2. host platform, `runtimeMode`, client path/hash, locale/font/D3D8 설정, 실행 명령과 runtime 경계 밖 변경 0건을 기록한 environment receipt. Wine mode는 toolchain build/hash, prefix, drive mapping을 추가하고 native Windows mode는 Wine 필드·명령을 포함하지 않음.
+3. run9의 원본 또는 redacted evidence를 복구하거나 선택된 runtime에서 재실행하여 client/patch/server/seed hash, packet/log, DB, screenshot, cleanup을 tracked receipt로 남김. run3/run5는 보조 이력으로만 연결함.
 4. launcher와 Frida가 full hash·image base·sentinel bytes 불일치 시 attach/patch 전에 fail-closed함.
 
 ### P1 - client + proxy + server 세 면 상관관계
 
-client-facing `127.0.0.1:47900` → server-facing `127.0.0.1:47901`의 lab-only pass-through proxy를 두고, 원본 입력을 바꾸지 않은 관측부터 시작한다. PCAP/proxy는 host network 계층, 게임 화면·Win32 입력·Frida·D3D8 판정은 Wine 계층으로 분리한다.
+client-facing `127.0.0.1:47900` → server-facing `127.0.0.1:47901`의 lab-only pass-through proxy를 두고, 원본 입력을 바꾸지 않은 관측부터 시작한다. PCAP/proxy는 host network 계층, 게임 화면·Win32 입력·Frida·D3D8 판정은 선택된 client runtime 계층으로 분리한다.
 
 모든 이벤트는 다음 공통 필드를 갖는다: `runId`, `connectionId`, `direction`, `frameSeq`, `messageId`, `transportCode`, `innerCode`, `payloadLength`, `payloadSha256`, `stage`, `monotonicTimestamp`, `outcome`.
 
@@ -55,13 +55,13 @@ client-facing `127.0.0.1:47900` → server-facing `127.0.0.1:47901`의 lab-only 
 - `47900` client-facing → `47901` server-facing 양방향 byte-identical pass-through.
 - exact EXE hash와 address profile을 검사하는 단일 실행 recipe.
 - P1 공통 correlation schema로 proxy/server/Frida trace를 결합.
-- observe-only가 기본이며 process/port/prefix cleanup, 원본 설정·포트 rollback을 포함.
+- observe-only가 기본이며 process/port/runtime 작업 영역 cleanup, 원본 설정·포트 rollback을 포함.
 
 완료 증거:
 
-- 격리 Wine prefix에서 정본 hash가 확인된 클라이언트 1회 실행.
+- 선택된 runtime에서 정본 hash가 확인된 클라이언트 1회 실행.
 - 각 방향의 input/output payload SHA-256, byte count, frame sequence가 일치하고 서버 outcome까지 join됨.
-- proxy 우회 direct-server control과 게임 동작이 동일하며, 종료 뒤 47900/47901 listener·client/server/proxy process 0개, prefix 외 변경 0개.
+- proxy 우회 direct-server control과 게임 동작이 동일하며, 종료 뒤 47900/47901 listener·client/server/proxy process 0개, runtime 경계 밖 변경 0개.
 - tracked redacted receipt에 exact command, hashes, logs/PCAP index, screenshot, 실패 여부, cleanup/rollback 결과가 남음.
 
 ## M4 이후 실행 순서
@@ -69,21 +69,21 @@ client-facing `127.0.0.1:47900` → server-facing `127.0.0.1:47901`의 lab-only 
 1. **`0x2b` Warp vertical slice**: 실제 UI 입력 → wire factory → 권한/precondition → PCP/MCP/CP reservation → command ledger/idempotency → timer/job → domain outcome/event → SQLite commit → A response/B broadcast → client UI를 한 transaction/run으로 닫는다.
 2. **Persistence 경계**: disconnect `online=false`, restart/reconnect, 중복/경쟁 명령을 검증하고 UoW/dispatch를 async-capable port로 바꾼 뒤 SQLite/PostgreSQL contract suite와 backup/restore를 연결한다.
 3. **81 command 확장**: `0x2b` 패턴으로 factory, cost/source, mutation, timer/job, outcome, broadcast, canon grade를 채운다. 현재 확인된 2개 외 79개는 근거가 생길 때까지 fail-closed한다.
-4. **M4 data**: galaxy/fleet/facility/economy data를 source hash → extractor → provenance/rights → runtime consumer → Wine live gate로 승격한다. `0x0327` 미확정 stock은 zero-fill/blocked를 유지한다.
+4. **M4 data**: galaxy/fleet/facility/economy data를 source hash → extractor → provenance/rights → runtime consumer → client live gate로 승격한다. `0x0327` 미확정 stock은 zero-fill/blocked를 유지한다.
 5. **M5**: 전술맵 진입, 함대 이동, 사격, 전투 판정, 손실/퇴각/점령을 서버 권위 수직 슬라이스로 복원한다.
-6. **M6**: 채팅/사회 기능과 CP949 asset conversion 대 SJIS tunneling + GDI proxy/font/IME를 같은 Wine 시나리오로 A/B한 뒤 전체 한글화 경로를 선택한다.
+6. **M6**: 채팅/사회 기능과 CP949 asset conversion 대 SJIS tunneling + GDI proxy/font/IME를 같은 client runtime 시나리오로 A/B한 뒤 전체 한글화 경로를 선택한다.
 7. **M7**: 보안, rights ledger, artifact hygiene, 운영/백업/복구, 전체 두 클라이언트 회귀와 배포 gate를 닫는다.
 
 ## 병렬 리마스터·신규 클라이언트 트랙
 
 - legacy client가 계속 1차 제품·호환 오라클·live acceptance 경로다. 신규 클라이언트 때문에 M4 wire/FSM 변수를 바꾸지 않는다.
-- 리마스터 자산은 provenance, 원본 fallback, 별도 overlay/pack, `enabled: false`, hash guard, rollback을 가진 뒤에만 Wine A/B한다.
+- 리마스터 자산은 provenance, 원본 fallback, 별도 overlay/pack, `enabled: false`, hash guard, rollback을 가진 뒤에만 선택된 client runtime에서 A/B한다.
 - 장기 재이식은 Unity로 고정하지 않는다. Unity, Godot, 기타 엔진 후보가 동일한 shared command/event/asset contract로 작은 PoC를 구현하고 protocol parity, tooling, 배포 크기, 플랫폼, 2D/3D 적합성, 유지보수 비용을 같은 rubric으로 비교한 뒤 선택한다.
 - 신규 PoC는 검증된 서버 contract만 소비하며 legacy protocol adapter와 분리한다. 선택 전까지 삭제된 `client-unity/` 경로/manifest를 활성 제품 계약으로 복원하지 않는다.
 
 ## 공통 완료 원칙
 
-- host PCAP/proxy 성공은 Wine 게임/Win32 acceptance를 대신하지 않고, Wine 화면 성공은 서버 authority/DB 증거를 대신하지 않는다.
+- host PCAP/proxy 성공은 client runtime의 게임/Win32 acceptance를 대신하지 않고, client 화면 성공은 서버 authority/DB 증거를 대신하지 않는다.
 - 자동 테스트나 process exit code만으로 gameplay 완료를 주장하지 않는다.
 - 각 slice는 exact input/hash, client natural output, 양방향 packet, server state/event, persistence, cleanup/rollback이 한 receipt에 있을 때만 완료한다.
 - 같은 증상 3회 또는 새 증거 없는 조사 2회면 반복을 중단하고 client, proxy/network, server 중 다른 관측면으로 전환한다.

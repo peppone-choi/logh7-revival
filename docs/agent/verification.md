@@ -25,7 +25,8 @@
 | `server/src/**` 코드 | `verify-changes.sh --file` | 와이어 인코딩·세션·영속성 경로 변경 시 `cd server && npm test` 전체 | 종료 코드 0 + `git diff` 직접 검토 |
 | `server/tests/**` | 해당 테스트 파일 실행 | 공용 fixture 변경 시 전체 | 종료 코드 0, 실패 테스트 삭제·약화·skip 없음 |
 | `tools/**.py` | `py_compile` + 이름 매칭 pytest | pytest 가능 환경에서 `tools/tests` 관련 파일 | 종료 코드 0 (pytest 불가 시 SKIP을 결과에 명기) |
-| 와이어 프로토콜·클라이언트 가시 동작 | 위 테스트 전부 | **라이브 QA 증거** (원본 클라이언트 구동 로그·스크린샷) — 단 P0 게이트(run 전용 win32 WINEPREFIX, EXE hash fail-closed) 통과 전에는 라이브 실행 불가를 명시하고 중단 | 테스트 + 라이브 증거, 또는 "라이브 미검증" 명시 보고 |
+| `tools/live/logh7_wine_live_qa.py` 플랫폼 분기 | `python3 -m unittest tools.tests.test_logh7_wine_live_qa` | Windows·unsupported host simulation이 parser/subprocess 미호출을 검증하고 기존 Wine suite도 함께 통과 | 종료 코드 0 + runtime별 receipt/메시지 직접 검토 |
+| 와이어 프로토콜·클라이언트 가시 동작 | 위 테스트 전부 | **라이브 QA 증거** (원본 클라이언트 구동 로그·스크린샷) — P0 공통 lineage/evidence gate와 선택한 runtime gate 통과 필수. native Windows는 Wine 없이 직접 실행, macOS/Linux는 run 전용 WINEPREFIX와 명시적 `win32|wow64` prefix mode 사용 | 테스트 + 라이브 증거, 또는 "라이브 미검증" 명시 보고 |
 | `server/migrations/*.sql` | SQL 구문 검토 + `migrations/README.md` 컨벤션 준수 | 적용은 자동 실행 금지 (PG는 skeleton) | 사람 승인 후에만 적용 |
 | 문서 (`docs/`, `*.md`) | 참조 경로·링크 실재 확인 | — | 링크 대상 파일 존재 |
 | Codex 훅·부트스트랩 (`.codex/`, `scripts/agent/`) | `bash -n` + `bash scripts/agent/test-codex-hooks.sh` + hooks JSON 파싱 | 하위 cwd 실제 payload와 SessionStart `--check` 확인. `.codex/hooks.json` 변경 후 사용자가 `/hooks` hash를 신뢰하고 새 task에서 활성 상태를 확인하기 전에는 라이브 미확인 | 모든 로컬 회귀 종료 코드 0 + 라이브 신뢰 여부 구분 |

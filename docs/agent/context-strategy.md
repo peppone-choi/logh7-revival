@@ -96,7 +96,7 @@
 
 **④회수 probe 고정**: 맥락 검증용 고정 질문
 - "현재 포트는?" → 47900
-- "P0 게이트는?" → 격리 Wine prefix·정본 EXE 계보·evidence 복구
+- "P0 게이트는?" → 실행 환경별 client runtime·정본 EXE 계보·evidence 복구
 - "리셋 커밋은?" → 5bd249c
 
 따라서 NIAH 구멍은 모든 4개 층이 동시에 실패해야 발생한다.

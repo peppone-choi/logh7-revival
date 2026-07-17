@@ -4,6 +4,7 @@ from __future__ import annotations
 
 기본 동작은 Wine을 실행하지 않는 preflight이다. ``--execute``를 명시한
 경우에만 검증된 절대 경로의 Wine toolchain을 호출한다.
+native Windows에서는 Wine 인자를 처리하지 않고 direct client harness로 위임한다.
 """
 
 import argparse
@@ -30,6 +31,8 @@ LINEAGE_SENTINEL = "LOGH7-WINE-LINEAGE-V1"
 RUNTIME_SUPPORT_SENTINEL = "LOGH7-WINE-RUNTIME-SUPPORT-V1"
 DATA_TREE_SENTINEL = "LOGH7-DATA-TREE-MANIFEST-V1"
 PROJECT_ID = "logh7-revival"
+PREFIX_MODE_SYSTEM_ARCHITECTURES = {"win32": "win32", "wow64": "win64"}
+PREFIX_MODE_WINEARCH = {"win32": "win32", "wow64": "wow64"}
 SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
 RUN_ID_RE = re.compile(r"^\d{8}T\d{6}Z-[A-Za-z0-9][A-Za-z0-9._-]{3,63}$")
 RUN9_REQUIRED_KINDS = (
@@ -132,14 +135,20 @@ class ExecutionLock:
 
 @dataclass
 class DriveLease:
+    acquired_snapshot: list[dict[str, Any]]
     created_install_identity: tuple[int, int] | None
+    discarded_mappings: dict[str, str]
+    dosdevices: Path
+    dosdevices_identity: tuple[int, int]
+    drive_c: Path
+    drive_c_identity: tuple[int, int]
     install_mapping: Path
     install_preexisted: bool
     install_root: Path
     initial_snapshot: list[dict[str, Any]]
     letter: str
     prefix: Path
-    quarantined_z_target: str | None
+    quarantined_mappings: dict[str, str]
 
 
 def _wine_tool_snapshot(tool: WineTool) -> dict[str, Any]:
@@ -707,23 +716,86 @@ def _validate_prefix(
     return prefix, marker
 
 
-def inspect_prefix_architecture(prefix: Path) -> dict[str, Any]:
+def inspect_prefix_architecture(
+    prefix: Path,
+    *,
+    prefix_mode: str = "win32",
+) -> dict[str, Any]:
     """marker 검증이 끝난 prefix의 Wine architecture header를 읽는다."""
 
     system_reg = prefix / "system.reg"
     result: dict[str, Any] = {
         "detectedArch": None,
-        "expectedArch": "win32",
+        "expectedArch": PREFIX_MODE_SYSTEM_ARCHITECTURES.get(prefix_mode),
+        "prefixMode": prefix_mode,
         "state": "uninitialized",
         "systemReg": str(system_reg),
         "systemRegSha256": None,
     }
-    if not system_reg.exists():
+    drive_c = prefix / "drive_c"
+    dosdevices = prefix / "dosdevices"
+    c_mapping = dosdevices / "c:"
+    result["layout"] = {
+        "cMapping": str(c_mapping),
+        "dosdevices": str(dosdevices),
+        "driveC": str(drive_c),
+        "present": False,
+        "verified": False,
+    }
+    layout_invalid = False
+    directory_presence: dict[Path, bool] = {}
+    try:
+        for directory in (drive_c, dosdevices):
+            try:
+                current = os.lstat(directory)
+            except FileNotFoundError:
+                directory_presence[directory] = False
+                continue
+            directory_presence[directory] = True
+            result["layout"]["present"] = True
+            if stat.S_ISLNK(current.st_mode) or not stat.S_ISDIR(current.st_mode):
+                layout_invalid = True
+        if layout_invalid:
+            result["layout"]["error"] = (
+                "drive_c and dosdevices must be real directories inside the prefix"
+            )
+        elif all(directory_presence.get(path, False) for path in (drive_c, dosdevices)):
+            if not (c_mapping.exists() or c_mapping.is_symlink()):
+                pass
+            elif not c_mapping.is_symlink():
+                layout_invalid = True
+                result["layout"]["error"] = "dosdevices/c: must be a symlink to drive_c"
+            else:
+                try:
+                    c_target = c_mapping.resolve(strict=True)
+                    expected_c_target = drive_c.resolve(strict=True)
+                except (OSError, RuntimeError) as error:
+                    layout_invalid = True
+                    result["layout"]["error"] = str(error)
+                else:
+                    if c_target != expected_c_target:
+                        layout_invalid = True
+                        result["layout"]["error"] = (
+                            "dosdevices/c: must resolve to this prefix's drive_c"
+                        )
+                    else:
+                        result["layout"]["verified"] = True
+    except OSError as error:
+        layout_invalid = True
+        result["layout"]["error"] = str(error)
+
+    try:
+        system_reg_stat = os.lstat(system_reg)
+    except FileNotFoundError:
+        if layout_invalid:
+            result["state"] = "invalid"
         return result
-    result["state"] = "initialized"
-    if not system_reg.is_file():
+    if stat.S_ISLNK(system_reg_stat.st_mode) or not stat.S_ISREG(system_reg_stat.st_mode):
         result["state"] = "invalid"
+        result["systemRegError"] = "system.reg must be a regular file inside the prefix"
         return result
+
+    result["state"] = "initialized"
     data = system_reg.read_bytes()
     result["systemRegSha256"] = _sha256_bytes(data)
     # Wine이 쓰는 header는 파일 앞부분에 단 한 번 나와야 한다.
@@ -731,6 +803,10 @@ def inspect_prefix_architecture(prefix: Path) -> dict[str, Any]:
     architecture_lines = [line for line in header_lines if line.startswith("#arch=")]
     if len(architecture_lines) == 1:
         result["detectedArch"] = architecture_lines[0].removeprefix("#arch=")
+    if layout_invalid:
+        result["state"] = "invalid"
+    elif result["layout"]["verified"] is not True:
+        result["state"] = "incomplete"
     return result
 
 
@@ -758,24 +834,107 @@ def inspect_dosdevices(prefix: Path) -> list[dict[str, Any]]:
     return entries
 
 
+def _drive_snapshot_manifest(
+    snapshot: Sequence[Mapping[str, Any]],
+) -> list[dict[str, Any]]:
+    return sorted(
+        (
+            {
+                "name": str(entry.get("name", "")),
+                "rawTarget": entry.get("rawTarget"),
+                "state": str(entry.get("state", "invalid")),
+            }
+            for entry in snapshot
+        ),
+        key=lambda entry: entry["name"].casefold(),
+    )
+
+
+def _restore_quarantined_drive_mappings(
+    dosdevices: Path,
+    mappings: Mapping[str, str],
+) -> list[str]:
+    errors: list[str] = []
+    for name, raw_target in mappings.items():
+        mapping = dosdevices / name
+        if mapping.exists() or mapping.is_symlink():
+            try:
+                if mapping.is_symlink() and os.readlink(mapping) == raw_target:
+                    continue
+            except OSError as error:
+                errors.append(f"{name!r}: {error}")
+                continue
+            errors.append(f"{name!r}: mapping path occupied; foreign mapping preserved")
+            continue
+        try:
+            os.symlink(raw_target, mapping)
+        except OSError as error:
+            errors.append(f"{name}: {error}")
+    return errors
+
+
+def _real_directory_identity(path: Path) -> tuple[int, int]:
+    current = os.lstat(path)
+    if stat.S_ISLNK(current.st_mode) or not stat.S_ISDIR(current.st_mode):
+        raise ValueError(f"{path} must be a real directory, not a symlink")
+    return current.st_dev, current.st_ino
+
+
+def _revalidate_directory_identity(
+    path: Path,
+    expected: tuple[int, int],
+) -> dict[str, Any] | None:
+    try:
+        if _real_directory_identity(path) != expected:
+            return {
+                "code": "wineprefix_layout_directory_changed",
+                "path": str(path),
+            }
+    except (OSError, ValueError) as error:
+        return {
+            "code": "wineprefix_layout_directory_changed",
+            "error": str(error),
+            "path": str(path),
+        }
+    return None
+
+
 def acquire_runtime_drive_lease(
     prefix: Path,
     drive: Mapping[str, Any],
+    *,
+    restoration_snapshot: Sequence[Mapping[str, Any]] | None = None,
 ) -> tuple[DriveLease | None, dict[str, Any] | None]:
     letter = str(drive.get("letter", "")).upper()
     install_root = Path(str(drive.get("hostRoot", ""))).resolve(strict=False)
     dosdevices = prefix / "dosdevices"
-    dosdevices.mkdir(parents=True, exist_ok=True, mode=0o700)
-    initial_snapshot = inspect_dosdevices(prefix)
-    install_mapping = dosdevices / letter.lower()
-    z_mapping = dosdevices / "z:"
-    allowed_names = {"c:", letter.lower(), "z:"}
-    unexpected = [entry for entry in initial_snapshot if entry["name"].lower() not in allowed_names]
-    if unexpected:
+    drive_c = prefix / "drive_c"
+    try:
+        dosdevices_identity = _real_directory_identity(dosdevices)
+        drive_c_identity = _real_directory_identity(drive_c)
+    except (OSError, ValueError) as error:
         return None, {
-            "code": "wine_dosdevice_unexpected_mapping",
-            "mappings": unexpected,
+            "code": "wineprefix_layout_directory_invalid",
+            "error": str(error),
         }
+    acquired_snapshot = inspect_dosdevices(prefix)
+    initial_snapshot = (
+        [dict(entry) for entry in restoration_snapshot]
+        if restoration_snapshot is not None
+        else [dict(entry) for entry in acquired_snapshot]
+    )
+    acquired_by_name = {
+        entry["name"].casefold(): entry for entry in acquired_snapshot
+    }
+    initial_manifest_by_name = {
+        entry["name"].casefold(): entry
+        for entry in _drive_snapshot_manifest(initial_snapshot)
+    }
+    acquired_manifest_by_name = {
+        entry["name"].casefold(): entry
+        for entry in _drive_snapshot_manifest(acquired_snapshot)
+    }
+    install_mapping = dosdevices / letter.lower()
     c_mapping = dosdevices / "c:"
     if c_mapping.exists() or c_mapping.is_symlink():
         try:
@@ -791,53 +950,127 @@ def acquire_runtime_drive_lease(
                 "mapping": str(c_mapping),
             }
 
-    quarantined_z_target: str | None = None
-    if z_mapping.exists() or z_mapping.is_symlink():
+    install_preexisted = install_mapping.exists() or install_mapping.is_symlink()
+    if (
+        restoration_snapshot is not None
+        and install_preexisted
+        and letter.lower() not in initial_manifest_by_name
+    ):
+        return None, {
+            "code": "wine_dosdevice_install_mapping_appeared_during_initialization",
+            "mapping": str(install_mapping),
+        }
+    if install_preexisted:
         try:
-            if not z_mapping.is_symlink() or z_mapping.resolve(strict=True) != Path("/"):
+            if not install_mapping.is_symlink() or install_mapping.resolve(strict=True) != install_root:
                 return None, {
-                    "code": "wine_dosdevice_host_root_mapping_invalid",
-                    "mapping": str(z_mapping),
+                    "code": "wine_dosdevice_install_mapping_failed",
+                    "error": "declared install drive maps to a different host root",
+                    "mapping": str(install_mapping),
                 }
-            quarantined_z_target = os.readlink(z_mapping)
-            os.unlink(z_mapping)
         except (OSError, RuntimeError) as error:
             return None, {
-                "code": "wine_dosdevice_host_root_quarantine_failed",
+                "code": "wine_dosdevice_install_mapping_failed",
                 "error": str(error),
-                "mapping": str(z_mapping),
+                "mapping": str(install_mapping),
             }
 
-    install_preexisted = install_mapping.exists() or install_mapping.is_symlink()
+    protected_names = {"c:", letter.lower()}
+    for name, expected in initial_manifest_by_name.items():
+        if name in protected_names:
+            continue
+        if acquired_manifest_by_name.get(name) != expected:
+            return None, {
+                "code": "wine_dosdevice_initial_mapping_changed",
+                "expected": expected,
+                "mapping": acquired_manifest_by_name.get(name),
+            }
+    initial_c = initial_manifest_by_name.get("c:")
+    acquired_c = acquired_manifest_by_name.get("c:")
+    if initial_c is not None and acquired_c != initial_c:
+        return None, {
+            "code": "wine_dosdevice_c_mapping_changed",
+            "expected": initial_c,
+            "mapping": acquired_c,
+        }
+    if initial_c is None and acquired_c is not None:
+        initial_snapshot.append(dict(acquired_by_name["c:"]))
+
+    quarantined_mappings: dict[str, str] = {}
+    discarded_mappings: dict[str, str] = {}
+    removed_mappings: dict[str, str] = {}
+    quarantine_candidates = [
+        entry
+        for entry in acquired_snapshot
+        if entry["name"].casefold() not in protected_names
+    ]
+    for entry in quarantine_candidates:
+        name = str(entry["name"])
+        mapping = dosdevices / name
+        if re.fullmatch(r"[a-z]:{1,2}", name.casefold()) is None or not mapping.is_symlink():
+            restore_errors = _restore_quarantined_drive_mappings(
+                dosdevices,
+                removed_mappings,
+            )
+            return None, {
+                "code": "wine_dosdevice_unexpected_mapping",
+                "mapping": entry,
+                "restoreErrors": restore_errors,
+            }
+        try:
+            raw_target = os.readlink(mapping)
+            os.unlink(mapping)
+            removed_mappings[name] = raw_target
+            expected = initial_manifest_by_name.get(name.casefold())
+            observed = acquired_manifest_by_name.get(name.casefold())
+            if expected is not None and expected == observed:
+                quarantined_mappings[name] = raw_target
+            else:
+                discarded_mappings[name] = raw_target
+        except OSError as error:
+            restore_errors = _restore_quarantined_drive_mappings(
+                dosdevices,
+                removed_mappings,
+            )
+            return None, {
+                "code": "wine_dosdevice_host_mapping_quarantine_failed",
+                "error": str(error),
+                "mapping": str(mapping),
+                "restoreErrors": restore_errors,
+            }
+
     created_identity: tuple[int, int] | None = None
     try:
-        if install_preexisted:
-            if not install_mapping.is_symlink() or install_mapping.resolve(strict=True) != install_root:
-                raise ValueError("declared install drive maps to a different host root")
-        else:
+        if not install_preexisted:
             os.symlink(str(install_root), install_mapping)
             created = os.lstat(install_mapping)
             created_identity = (created.st_dev, created.st_ino)
-    except (OSError, RuntimeError, ValueError) as error:
-        if quarantined_z_target is not None and not z_mapping.exists():
-            try:
-                os.symlink(quarantined_z_target, z_mapping)
-            except OSError:
-                pass
+    except OSError as error:
+        restore_errors = _restore_quarantined_drive_mappings(
+            dosdevices,
+            removed_mappings,
+        )
         return None, {
             "code": "wine_dosdevice_install_mapping_failed",
             "error": str(error),
             "mapping": str(install_mapping),
+            "restoreErrors": restore_errors,
         }
     lease = DriveLease(
+        acquired_snapshot=acquired_snapshot,
         created_install_identity=created_identity,
+        discarded_mappings=discarded_mappings,
+        dosdevices=dosdevices,
+        dosdevices_identity=dosdevices_identity,
+        drive_c=drive_c,
+        drive_c_identity=drive_c_identity,
         install_mapping=install_mapping,
         install_preexisted=install_preexisted,
         install_root=install_root,
         initial_snapshot=initial_snapshot,
         letter=letter,
         prefix=prefix,
-        quarantined_z_target=quarantined_z_target,
+        quarantined_mappings=quarantined_mappings,
     )
     return lease, None
 
@@ -847,21 +1080,41 @@ def revalidate_runtime_drive_lease(
     *,
     require_c: bool,
 ) -> dict[str, Any] | None:
-    z_mapping = lease.prefix / "dosdevices" / "z:"
-    if z_mapping.exists() or z_mapping.is_symlink():
-        try:
-            if not z_mapping.is_symlink() or z_mapping.resolve(strict=True) != Path("/"):
+    for path, expected in (
+        (lease.dosdevices, lease.dosdevices_identity),
+        (lease.drive_c, lease.drive_c_identity),
+    ):
+        invalid = _revalidate_directory_identity(path, expected)
+        if invalid is not None:
+            return invalid
+    dosdevices = lease.dosdevices
+    for mapping_group, changed_code in (
+        (
+            lease.quarantined_mappings,
+            "wine_dosdevice_quarantined_mapping_changed",
+        ),
+        (
+            lease.discarded_mappings,
+            "wine_dosdevice_ephemeral_mapping_changed",
+        ),
+    ):
+        for name, expected_target in mapping_group.items():
+            mapping = dosdevices / name
+            if not (mapping.exists() or mapping.is_symlink()):
+                continue
+            try:
+                if not mapping.is_symlink() or os.readlink(mapping) != expected_target:
+                    return {
+                        "code": changed_code,
+                        "mapping": str(mapping),
+                    }
+                os.unlink(mapping)
+            except OSError as error:
                 return {
-                    "code": "wine_dosdevice_host_root_mapping_invalid",
-                    "mapping": str(z_mapping),
+                    "code": "wine_dosdevice_host_mapping_quarantine_failed",
+                    "error": str(error),
+                    "mapping": str(mapping),
                 }
-            os.unlink(z_mapping)
-        except (OSError, RuntimeError) as error:
-            return {
-                "code": "wine_dosdevice_host_root_quarantine_failed",
-                "error": str(error),
-                "mapping": str(z_mapping),
-            }
     try:
         if (
             not lease.install_mapping.is_symlink()
@@ -878,7 +1131,7 @@ def revalidate_runtime_drive_lease(
             "mapping": str(lease.install_mapping),
         }
     c_mapping = lease.prefix / "dosdevices" / "c:"
-    if require_c:
+    if require_c or c_mapping.exists() or c_mapping.is_symlink():
         try:
             expected_c = (lease.prefix / "drive_c").resolve(strict=True)
             if not c_mapping.is_symlink() or c_mapping.resolve(strict=True) != expected_c:
@@ -893,11 +1146,18 @@ def revalidate_runtime_drive_lease(
                 "mapping": str(c_mapping),
             }
     allowed_names = {"c:", lease.letter.lower()}
-    unexpected = [
-        entry
-        for entry in inspect_dosdevices(lease.prefix)
-        if entry["name"].lower() not in allowed_names
-    ]
+    try:
+        unexpected = [
+            entry
+            for entry in inspect_dosdevices(lease.prefix)
+            if entry["name"].lower() not in allowed_names
+        ]
+    except OSError as error:
+        return {
+            "code": "wine_dosdevice_snapshot_failed",
+            "error": str(error),
+            "path": str(dosdevices),
+        }
     if unexpected:
         return {
             "code": "wine_dosdevice_unexpected_mapping",
@@ -909,6 +1169,15 @@ def revalidate_runtime_drive_lease(
 def release_runtime_drive_lease(lease: DriveLease) -> dict[str, Any]:
     result: dict[str, Any] = {"released": False, "state": "release-failed"}
     errors: list[str] = []
+    for path, expected in (
+        (lease.dosdevices, lease.dosdevices_identity),
+        (lease.drive_c, lease.drive_c_identity),
+    ):
+        invalid = _revalidate_directory_identity(path, expected)
+        if invalid is not None:
+            result["errors"] = [invalid]
+            result["postSnapshot"] = []
+            return result
     if lease.created_install_identity is not None:
         try:
             current = os.lstat(lease.install_mapping)
@@ -918,21 +1187,63 @@ def release_runtime_drive_lease(lease: DriveLease) -> dict[str, Any]:
                 os.unlink(lease.install_mapping)
         except OSError as error:
             errors.append(str(error))
-    z_mapping = lease.prefix / "dosdevices" / "z:"
+    for name, expected_target in lease.discarded_mappings.items():
+        mapping = lease.dosdevices / name
+        if not (mapping.exists() or mapping.is_symlink()):
+            continue
+        try:
+            if not mapping.is_symlink() or os.readlink(mapping) != expected_target:
+                errors.append(
+                    f"{name!r}: ephemeral mapping changed; foreign mapping preserved"
+                )
+            else:
+                os.unlink(mapping)
+        except OSError as error:
+            errors.append(f"{name!r}: {error}")
+    errors.extend(
+        _restore_quarantined_drive_mappings(
+            lease.prefix / "dosdevices",
+            lease.quarantined_mappings,
+        )
+    )
     try:
-        if z_mapping.exists() or z_mapping.is_symlink():
-            os.unlink(z_mapping)
-        if lease.quarantined_z_target is not None:
-            os.symlink(lease.quarantined_z_target, z_mapping)
+        post_snapshot = inspect_dosdevices(lease.prefix)
+        result["postSnapshot"] = post_snapshot
     except OSError as error:
         errors.append(str(error))
-    result["postSnapshot"] = inspect_dosdevices(lease.prefix)
+        result["postSnapshot"] = []
+        post_snapshot = []
+    expected_manifest = _drive_snapshot_manifest(lease.initial_snapshot)
+    observed_manifest = _drive_snapshot_manifest(post_snapshot)
+    snapshot_matches = observed_manifest == expected_manifest
+    result["snapshotMatchesInitial"] = snapshot_matches
+    if not snapshot_matches:
+        result["snapshotMismatch"] = {
+            "expected": expected_manifest,
+            "observed": observed_manifest,
+        }
+        errors.append("dosdevices snapshot differs from the execution baseline")
     if errors:
         result["errors"] = errors
         return result
     result["released"] = True
     result["state"] = "released"
     return result
+
+
+def _release_runtime_drive_lease_safely(lease: DriveLease) -> dict[str, Any]:
+    try:
+        return release_runtime_drive_lease(lease)
+    except BaseException as error:
+        return {
+            "error": {
+                "message": str(error),
+                "type": type(error).__name__,
+            },
+            "postSnapshot": [],
+            "released": False,
+            "state": "release-failed",
+        }
 
 
 def _validate_prefix_architecture(
@@ -942,9 +1253,10 @@ def _validate_prefix_architecture(
     *,
     execute: bool,
     initialize_prefix: bool,
+    prefix_mode: str,
 ) -> dict[str, Any]:
     try:
-        architecture = inspect_prefix_architecture(prefix)
+        architecture = inspect_prefix_architecture(prefix, prefix_mode=prefix_mode)
     except OSError as error:
         blockers.append(
             Blocker(
@@ -955,8 +1267,9 @@ def _validate_prefix_architecture(
         )
         return {
             "detectedArch": None,
-            "expectedArch": "win32",
+            "expectedArch": PREFIX_MODE_SYSTEM_ARCHITECTURES.get(prefix_mode),
             "initializationPlanned": initialize_prefix,
+            "prefixMode": prefix_mode,
             "state": "invalid",
             "systemReg": str(prefix / "system.reg"),
             "systemRegSha256": None,
@@ -973,6 +1286,24 @@ def _validate_prefix_architecture(
                 size=system_reg.stat().st_size,
             )
         )
+    if architecture["state"] == "invalid":
+        architecture["initializationRequired"] = False
+        layout = architecture.get("layout")
+        blockers.append(
+            Blocker(
+                "wineprefix_layout_invalid",
+                str(
+                    layout.get("error", "unsafe prefix layout")
+                    if isinstance(layout, dict)
+                    else architecture.get(
+                        "systemRegError",
+                        "unsafe prefix architecture metadata",
+                    )
+                ),
+                str(prefix),
+            )
+        )
+        return architecture
     if architecture["state"] == "uninitialized":
         architecture["initializationRequired"] = True
         if execute and not initialize_prefix:
@@ -984,24 +1315,40 @@ def _validate_prefix_architecture(
                 )
             )
         return architecture
-    architecture["initializationRequired"] = False
     detected = architecture.get("detectedArch")
-    if detected == "win64":
+    expected = PREFIX_MODE_SYSTEM_ARCHITECTURES.get(prefix_mode)
+    if detected != expected:
+        if prefix_mode == "win32" and detected == "win64":
+            code = "wineprefix_win64_forbidden"
+            detail = (
+                "existing Wine prefix is win64; select --prefix-mode wow64 "
+                "only for a verified WoW64 Wine runtime"
+            )
+        else:
+            code = "wineprefix_architecture_mismatch"
+            detail = (
+                f"prefix mode {prefix_mode!r} requires exactly one #arch={expected} "
+                "header in the first 64 system.reg lines"
+            )
         blockers.append(
             Blocker(
-                "wineprefix_win64_forbidden",
-                "existing Wine prefix is win64; LOGH VII requires an isolated win32 prefix",
+                code,
+                detail,
                 str(system_reg),
             )
         )
-    elif detected != "win32":
-        blockers.append(
-            Blocker(
-                "wineprefix_architecture_unknown",
-                "system.reg must contain exactly one #arch=win32 header in its first 64 lines",
-                str(system_reg),
+    if architecture["state"] == "incomplete":
+        architecture["initializationRequired"] = True
+        if execute and not initialize_prefix:
+            blockers.append(
+                Blocker(
+                    "wineprefix_incomplete_requires_init",
+                    "an incomplete prefix requires --initialize-prefix before execution",
+                    str(prefix),
+                )
             )
-        )
+        return architecture
+    architecture["initializationRequired"] = False
     return architecture
 
 
@@ -2312,7 +2659,12 @@ def validate_run9_index(
     return result
 
 
-def _wine_environment(prefix: Path, *, initialize: bool) -> dict[str, str]:
+def _wine_environment(
+    prefix: Path,
+    *,
+    initialize: bool,
+    prefix_mode: str = "win32",
+) -> dict[str, str]:
     environment = {
         key: os.environ[key]
         for key in WINE_ENV_ALLOWED_HOST_KEYS
@@ -2320,15 +2672,17 @@ def _wine_environment(prefix: Path, *, initialize: bool) -> dict[str, str]:
     }
     environment["WINEPREFIX"] = str(prefix)
     if initialize:
-        environment["WINEARCH"] = "win32"
+        environment["WINEARCH"] = PREFIX_MODE_WINEARCH[prefix_mode]
     return environment
 
 
-def _wine_environment_policy_receipt() -> dict[str, Any]:
+def _wine_environment_policy_receipt(prefix_mode: str) -> dict[str, Any]:
+    initialization_arch = PREFIX_MODE_WINEARCH.get(prefix_mode)
     return {
         "allowedHostKeys": list(WINE_ENV_ALLOWED_HOST_KEYS),
         "forcedKeys": {"WINEPREFIX": "run-specific absolute prefix"},
-        "initOnlyKeys": {"WINEARCH": "win32"},
+        "initOnlyKeys": {"WINEARCH": initialization_arch},
+        "prefixMode": prefix_mode,
         "removedExactKeys": list(WINE_ENV_REMOVED_EXACT_KEYS),
         "removedPrefixes": list(WINE_ENV_REMOVED_PREFIXES),
         "strategy": "allowlist",
@@ -2401,15 +2755,18 @@ def _command_plan(
     *,
     initialize_prefix: bool,
     initialize_first: bool,
+    prefix_mode: str,
     client_timeout_seconds: int,
     runtime_support: Mapping[str, Any],
     lineage_snapshot: Sequence[Mapping[str, Any]],
 ) -> list[dict[str, Any]]:
+    expected_prefix_architecture = PREFIX_MODE_SYSTEM_ARCHITECTURES[prefix_mode]
     common_env = {"WINEPREFIX": str(prefix)}
     version_command = {
         "argv": [str(wine_bin.invoked_path), "--version"],
         "cwd": None,
         "environment": common_env,
+        "expectedPrefixArchitecture": expected_prefix_architecture,
         "id": "wine-version",
         "timeoutSeconds": 30,
         "toolSnapshot": _wine_tool_snapshot(wine_bin),
@@ -2419,8 +2776,12 @@ def _command_plan(
         initialize_command = {
             "argv": [str(wineboot_bin.invoked_path), "-u"],
             "cwd": None,
-            "environment": {"WINEARCH": "win32", "WINEPREFIX": str(prefix)},
-            "expectedPrefixArchitecture": "win32",
+            "environment": {
+                "WINEARCH": PREFIX_MODE_WINEARCH[prefix_mode],
+                "WINEPREFIX": str(prefix),
+            },
+            "expectedPrefixArchitecture": expected_prefix_architecture,
+            "prefixMode": prefix_mode,
             "id": "wineboot-init",
             "timeoutSeconds": 120,
             "toolSnapshot": _wine_tool_snapshot(wineboot_bin),
@@ -2798,10 +3159,82 @@ def _registry_command_condition(
     return True, None
 
 
-def _execute_commands(
+def _prefix_mode_from_commands(commands: Sequence[Mapping[str, Any]]) -> str:
+    expected_architecture = next(
+        (
+            command.get("expectedPrefixArchitecture")
+            for command in commands
+            if command.get("expectedPrefixArchitecture") is not None
+        ),
+        "win32",
+    )
+    return "wow64" if expected_architecture == "win64" else "win32"
+
+
+def _inspect_cleanup_without_drive_lease(
+    prefix: Path,
+    *,
+    prefix_mode: str,
+) -> dict[str, Any]:
+    try:
+        architecture = inspect_prefix_architecture(prefix, prefix_mode=prefix_mode)
+    except OSError as error:
+        return {
+            "error": str(error),
+            "state": "failed",
+        }
+    expected_architecture = PREFIX_MODE_SYSTEM_ARCHITECTURES[prefix_mode]
+    cleanup_layout: dict[str, Any] = {
+        "dosdevicesEntries": [],
+        "dosdevicesPresent": False,
+        "driveCPresent": False,
+        "safe": True,
+    }
+    for key, path in (
+        ("driveCPresent", prefix / "drive_c"),
+        ("dosdevicesPresent", prefix / "dosdevices"),
+    ):
+        try:
+            current = os.lstat(path)
+        except FileNotFoundError:
+            continue
+        except OSError as error:
+            cleanup_layout["error"] = str(error)
+            cleanup_layout["safe"] = False
+            continue
+        cleanup_layout[key] = True
+        if stat.S_ISLNK(current.st_mode) or not stat.S_ISDIR(current.st_mode):
+            cleanup_layout["error"] = f"{path} is not a real prefix directory"
+            cleanup_layout["safe"] = False
+    if cleanup_layout["dosdevicesPresent"] and cleanup_layout["safe"]:
+        try:
+            entries = sorted(
+                path.name for path in (prefix / "dosdevices").iterdir()
+            )
+        except OSError as error:
+            cleanup_layout["error"] = str(error)
+            cleanup_layout["safe"] = False
+        else:
+            cleanup_layout["dosdevicesEntries"] = entries
+            if entries:
+                cleanup_layout["safe"] = False
+    architecture_safe = architecture.get("state") == "uninitialized" or (
+        architecture.get("state") == "incomplete"
+        and architecture.get("detectedArch") == expected_architecture
+    )
+    verified = cleanup_layout["safe"] is True and architecture_safe
+    return {
+        "cleanupLayout": cleanup_layout,
+        "prefixArchitecture": architecture,
+        "state": "verified" if verified else "failed",
+    }
+
+
+def _execute_commands_inner(
     commands: Sequence[Mapping[str, Any]],
     prefix: Path,
     drive: Mapping[str, Any],
+    drive_guard: dict[str, Any],
 ) -> tuple[list[dict[str, Any]], dict[str, Any], dict[str, Any]]:
     results: list[dict[str, Any]] = []
     non_cleanup_failed = False
@@ -2812,6 +3245,7 @@ def _execute_commands(
         "mutationAttempted": False,
         "restored": False,
     }
+    drive_guard["registryState"] = registry_state
     registry_backup_identity: tuple[int, int] | None = None
     registry_backup_path = prefix / "drive_c" / REGISTRY_BACKUP_NAME
     registry_restored_identity: tuple[int, int] | None = None
@@ -2831,28 +3265,25 @@ def _execute_commands(
             {"state": "not-acquired"},
             {**registry_state, "state": "blocked"},
         )
-    drive_lease, drive_blocked = acquire_runtime_drive_lease(prefix, drive)
-    if drive_lease is None:
+    try:
+        execution_initial_snapshot = inspect_dosdevices(prefix)
+    except OSError as error:
+        blocked = {
+            "code": "wine_dosdevice_snapshot_failed",
+            "error": str(error),
+            "path": str(prefix / "dosdevices"),
+        }
         return (
-            [
-                {
-                    "id": "runtime-drive-prepare",
-                    "launchBlocked": drive_blocked,
-                    "returnCode": None,
-                }
-            ],
-            {"blocked": drive_blocked, "state": "blocked"},
-            {**registry_state, "state": "not-started"},
+            [{"id": "runtime-drive-snapshot", "launchBlocked": blocked, "returnCode": None}],
+            {"blocked": blocked, "state": "blocked"},
+            {**registry_state, "state": "blocked"},
         )
-    drive_receipt: dict[str, Any] = {
-        "initialSnapshot": drive_lease.initial_snapshot,
-        "installDrive": drive_lease.letter,
-        "installMapping": str(drive_lease.install_mapping),
-        "installRoot": str(drive_lease.install_root),
-        "state": "acquired",
-    }
+    drive_lease: DriveLease | None = None
+    cleanup_prefix_mode = _prefix_mode_from_commands(commands)
+    drive_receipt: dict[str, Any] = {"state": "not-acquired"}
     drive_released = False
     for command in commands:
+        cleanup_without_lease = False
         command_id = str(command["id"])
         should_run, skip_reason = _registry_command_condition(command, registry_state)
         always_run = command.get("alwaysRun") is True
@@ -2867,23 +3298,140 @@ def _execute_commands(
                 }
             )
             continue
+        if drive_lease is None and command_id != "wineboot-init":
+            try:
+                drive_lease, drive_blocked = acquire_runtime_drive_lease(
+                    prefix,
+                    drive,
+                    restoration_snapshot=execution_initial_snapshot,
+                )
+            except Exception as error:
+                drive_lease = None
+                drive_blocked = {
+                    "code": "wine_dosdevice_lease_acquisition_failed",
+                    "error": str(error),
+                    "type": type(error).__name__,
+                }
+            if drive_lease is None:
+                cleanup_inspection = (
+                    _inspect_cleanup_without_drive_lease(
+                        prefix,
+                        prefix_mode=cleanup_prefix_mode,
+                    )
+                    if command_id == "wineserver-cleanup"
+                    else {"state": "failed"}
+                )
+                if cleanup_inspection.get("state") == "verified":
+                    cleanup_without_lease = True
+                    drive_receipt = {
+                        "cleanupWithoutLease": cleanup_inspection,
+                        "state": "cleanup-only",
+                    }
+                else:
+                    results.append(
+                        {
+                            "id": "runtime-drive-prepare",
+                            "launchBlocked": drive_blocked,
+                            "returnCode": None,
+                        }
+                    )
+                    results.append(
+                        {
+                            "id": command_id,
+                            "reason": "runtime drive lease acquisition failed",
+                            "skipped": True,
+                        }
+                    )
+                    drive_receipt = {
+                        "blocked": drive_blocked,
+                        "cleanupWithoutLease": cleanup_inspection,
+                        "state": "blocked",
+                    }
+                    non_cleanup_failed = True
+                    continue
+            if drive_lease is not None:
+                drive_guard["lease"] = drive_lease
+                drive_receipt = {
+                    "acquiredSnapshot": drive_lease.acquired_snapshot,
+                    "discardedMappings": dict(sorted(drive_lease.discarded_mappings.items())),
+                    "initialSnapshot": drive_lease.initial_snapshot,
+                    "installDrive": drive_lease.letter,
+                    "installMapping": str(drive_lease.install_mapping),
+                    "installRoot": str(drive_lease.install_root),
+                    "quarantinedMappings": dict(sorted(drive_lease.quarantined_mappings.items())),
+                    "state": "acquired",
+                }
         argv = [str(value) for value in command["argv"]]
         executable = Path(argv[0])
+        launch_blocked: dict[str, Any] | None = None
         if not executable.is_absolute():
-            raise RuntimeError(f"internal invariant failed: {command_id} executable is not absolute")
+            launch_blocked = {
+                "code": "wine_command_executable_not_absolute",
+                "path": str(executable),
+            }
         initialize = command_id == "wineboot-init"
-        environment = _wine_environment(prefix, initialize=initialize)
+        command_prefix_mode = str(command.get("prefixMode", "win32"))
+        environment = _wine_environment(
+            prefix,
+            initialize=initialize,
+            prefix_mode=command_prefix_mode,
+        )
         if environment.get("WINEPREFIX") != str(prefix):
-            raise RuntimeError("internal invariant failed: WINEPREFIX drift")
-        launch_blocked = _revalidate_command_tool(command)
-        if launch_blocked is None and command_id != "wineserver-cleanup":
-            launch_blocked = revalidate_runtime_drive_lease(
-                drive_lease,
-                require_c=not initialize,
-            )
+            launch_blocked = {
+                "code": "wineprefix_environment_drift",
+                "expected": str(prefix),
+                "observed": environment.get("WINEPREFIX"),
+            }
+        if launch_blocked is None:
+            try:
+                launch_blocked = _revalidate_command_tool(command)
+            except Exception as error:
+                launch_blocked = {
+                    "code": "wine_tool_revalidation_failed",
+                    "error": str(error),
+                    "type": type(error).__name__,
+                }
+        if launch_blocked is None and drive_lease is not None:
+            try:
+                drive_revalidation = revalidate_runtime_drive_lease(
+                    drive_lease,
+                    require_c=not initialize and command_id != "wineserver-cleanup",
+                )
+            except Exception as error:
+                drive_revalidation = {
+                    "code": "wine_dosdevice_revalidation_failed",
+                    "error": str(error),
+                    "type": type(error).__name__,
+                }
+            if command_id == "wineserver-cleanup":
+                drive_receipt["cleanupRevalidation"] = (
+                    {"state": "verified"}
+                    if drive_revalidation is None
+                    else {"blocked": drive_revalidation, "state": "failed"}
+                )
+                if drive_revalidation is not None:
+                    launch_blocked = drive_revalidation
+                    non_cleanup_failed = True
+            else:
+                launch_blocked = drive_revalidation
+                if command_id == "client":
+                    drive_receipt["clientRevalidation"] = (
+                        {"state": "verified"}
+                        if drive_revalidation is None
+                        else {"blocked": drive_revalidation, "state": "failed"}
+                    )
         if launch_blocked is None and command_id == "client":
-            launch_blocked = _revalidate_runtime_support(command)
+            try:
+                launch_blocked = _revalidate_runtime_support(command)
+            except Exception as error:
+                launch_blocked = {
+                    "code": "runtime_support_revalidation_failed",
+                    "error": str(error),
+                    "type": type(error).__name__,
+                }
         if launch_blocked is not None:
+            if cleanup_without_lease:
+                drive_receipt["state"] = "release-failed"
             results.append(
                 {
                     "id": command_id,
@@ -2917,23 +3465,53 @@ def _execute_commands(
                 "stdoutSha256": _sha256_bytes(stdout),
                 "timedOut": False,
             }
+            if cleanup_without_lease:
+                cleanup_after = _inspect_cleanup_without_drive_lease(
+                    prefix,
+                    prefix_mode=cleanup_prefix_mode,
+                )
+                cleanup_receipt = drive_receipt["cleanupWithoutLease"]
+                cleanup_receipt["postCleanup"] = cleanup_after
+                cleanup_verified = cleanup_after.get("state") == "verified"
+                cleanup_receipt["state"] = (
+                    "verified" if cleanup_verified else "failed"
+                )
+                drive_receipt["state"] = (
+                    "released" if cleanup_verified else "release-failed"
+                )
+                result["cleanupWithoutLeaseVerified"] = cleanup_verified
+                if not cleanup_verified:
+                    non_cleanup_failed = True
             allowed_codes = command.get("allowedReturnCodes", [0])
             return_code_allowed = completed.returncode in allowed_codes
             if command_id == "wine-version":
                 result["versionText"] = stdout.decode("utf-8", errors="replace").strip()
             if command_id in {"wineboot-init", "wine-version"} and completed.returncode == 0:
+                expected_architecture = str(
+                    command.get("expectedPrefixArchitecture", "win32")
+                )
+                inspected_prefix_mode = (
+                    "wow64" if expected_architecture == "win64" else "win32"
+                )
                 try:
-                    architecture_after = inspect_prefix_architecture(prefix)
+                    architecture_after = inspect_prefix_architecture(
+                        prefix,
+                        prefix_mode=inspected_prefix_mode,
+                    )
                 except OSError as error:
                     architecture_after = {
                         "detectedArch": None,
                         "error": str(error),
-                        "expectedArch": "win32",
+                        "expectedArch": expected_architecture,
+                        "prefixMode": inspected_prefix_mode,
                         "state": "invalid",
                         "systemReg": str(prefix / "system.reg"),
                         "systemRegSha256": None,
                     }
-                architecture_verified = architecture_after.get("detectedArch") == "win32"
+                architecture_verified = (
+                    architecture_after.get("detectedArch") == expected_architecture
+                    and architecture_after.get("state") == "initialized"
+                )
                 result["architectureAfter"] = architecture_after
                 result["architectureVerified"] = architecture_verified
                 if not architecture_verified:
@@ -3040,6 +3618,8 @@ def _execute_commands(
             )
             if command_id != "wineserver-cleanup":
                 non_cleanup_failed = True
+            if cleanup_without_lease:
+                drive_receipt["state"] = "release-failed"
         except OSError as error:
             results.append(
                 {
@@ -3058,6 +3638,25 @@ def _execute_commands(
             )
             if command_id != "wineserver-cleanup":
                 non_cleanup_failed = True
+            if cleanup_without_lease:
+                drive_receipt["state"] = "release-failed"
+        except Exception as error:
+            results.append(
+                {
+                    "id": command_id,
+                    "launchError": {
+                        "message": str(error),
+                        "type": type(error).__name__,
+                    },
+                    "returnCode": None,
+                    "stderrSha256": _sha256_bytes(b""),
+                    "stdoutSha256": _sha256_bytes(b""),
+                    "timedOut": False,
+                }
+            )
+            non_cleanup_failed = True
+            if cleanup_without_lease:
+                drive_receipt["state"] = "release-failed"
     registry_state["restored"] = (
         registry_state.get("mutationAttempted") is True
         and registry_state.get("keyRestored") is True
@@ -3089,14 +3688,18 @@ def _execute_commands(
         except OSError as error:
             registry_state["restoredExportRemoved"] = False
             registry_state["restoredExportCleanupError"] = str(error)
-    if not drive_released:
-        drive_release = release_runtime_drive_lease(drive_lease)
+    if drive_lease is not None and not drive_released:
+        drive_guard["releaseAttempted"] = True
+        drive_release = _release_runtime_drive_lease_safely(drive_lease)
         drive_receipt["release"] = drive_release
         if drive_release.get("released") is not True:
             non_cleanup_failed = True
-    drive_receipt["state"] = (
-        "released" if drive_receipt.get("release", {}).get("released") else "release-failed"
-    )
+    if drive_lease is not None:
+        drive_receipt["state"] = (
+            "released"
+            if drive_receipt.get("release", {}).get("released")
+            else "release-failed"
+        )
     registry_state["executionFailed"] = non_cleanup_failed
     registry_state["state"] = (
         "restored"
@@ -3104,6 +3707,424 @@ def _execute_commands(
         else "restore-failed" if not registry_state["restored"] else "failed"
     )
     return results, drive_receipt, registry_state
+
+
+def _emergency_restore_registry(
+    commands: Sequence[Mapping[str, Any]],
+    prefix: Path,
+    lease: DriveLease | None,
+    registry_state: Mapping[str, Any],
+) -> dict[str, Any]:
+    result: dict[str, Any] = {
+        "attempted": registry_state.get("mutationAttempted") is True,
+        "restored": registry_state.get("mutationAttempted") is not True,
+        "results": [],
+        "state": "not-required",
+    }
+    if result["attempted"] is not True:
+        result["state"] = "restored"
+        return result
+    if lease is None:
+        result["error"] = "runtime drive lease is unavailable"
+        result["state"] = "restore-failed"
+        return result
+    try:
+        drive_blocked = revalidate_runtime_drive_lease(lease, require_c=True)
+    except Exception as error:
+        drive_blocked = {
+            "code": "wine_dosdevice_revalidation_failed",
+            "error": str(error),
+            "type": type(error).__name__,
+        }
+    if drive_blocked is not None:
+        result["blocked"] = drive_blocked
+        result["state"] = "restore-failed"
+        return result
+
+    key_existed = registry_state.get("keyExistedBefore")
+    install_existed = registry_state.get("installExistedBefore")
+    if not isinstance(key_existed, bool) or not isinstance(install_existed, bool):
+        result["error"] = "pre-mutation registry state is incomplete"
+        result["state"] = "restore-failed"
+        return result
+    command_by_id = {str(command.get("id")): command for command in commands}
+    restore_ids = (
+        [
+            "registry-key-delete-before-import",
+            "registry-import-restore",
+            "registry-export-restored",
+            "registry-key-query-restored",
+            "registry-install-query-restored",
+        ]
+        if key_existed
+        else [
+            "registry-key-delete-restore",
+            "registry-key-query-restored",
+            "registry-install-query-restored",
+        ]
+    )
+    completed_by_id: dict[str, subprocess.CompletedProcess[bytes]] = {}
+    for command_id in restore_ids:
+        try:
+            drive_blocked = revalidate_runtime_drive_lease(lease, require_c=True)
+        except Exception as error:
+            drive_blocked = {
+                "code": "wine_dosdevice_revalidation_failed",
+                "error": str(error),
+                "type": type(error).__name__,
+            }
+        if drive_blocked is not None:
+            result["blocked"] = drive_blocked
+            break
+        command = command_by_id.get(command_id)
+        if command is None:
+            result["error"] = f"missing emergency rollback command: {command_id}"
+            break
+        try:
+            tool_blocked = _revalidate_command_tool(command)
+        except Exception as error:
+            tool_blocked = {
+                "code": "wine_tool_revalidation_failed",
+                "error": str(error),
+                "type": type(error).__name__,
+            }
+        if tool_blocked is not None:
+            result["blocked"] = tool_blocked
+            break
+        argv = [str(value) for value in command["argv"]]
+        try:
+            completed = subprocess.run(
+                argv,
+                cwd=command.get("cwd"),
+                env=_wine_environment(prefix, initialize=False),
+                capture_output=True,
+                check=False,
+                timeout=int(command["timeoutSeconds"]),
+            )
+        except Exception as error:
+            result["results"].append(
+                {
+                    "id": command_id,
+                    "launchError": {
+                        "message": str(error),
+                        "type": type(error).__name__,
+                    },
+                    "returnCode": None,
+                }
+            )
+            break
+        stdout = completed.stdout or b""
+        stderr = completed.stderr or b""
+        command_result = {
+            "id": command_id,
+            "returnCode": completed.returncode,
+            "stderrSha256": _sha256_bytes(stderr),
+            "stdoutSha256": _sha256_bytes(stdout),
+        }
+        result["results"].append(command_result)
+        if completed.returncode not in command.get("allowedReturnCodes", [0]):
+            break
+        completed_by_id[command_id] = completed
+
+    key_query = completed_by_id.get("registry-key-query-restored")
+    install_query = completed_by_id.get("registry-install-query-restored")
+    key_restored = key_query is not None and ((key_query.returncode == 0) == key_existed)
+    restored_install = (
+        _extract_registry_install_value(install_query.stdout or b"")
+        if install_query is not None and install_query.returncode == 0
+        else None
+    )
+    install_restored = install_query is not None and (
+        (install_existed is False and install_query.returncode == 1)
+        or (
+            install_existed is True
+            and install_query.returncode == 0
+            and restored_install == registry_state.get("installValueBefore")
+        )
+    )
+    exact_export = not key_existed
+    restored_export_path: Path | None = None
+    if key_existed:
+        restored_command = command_by_id.get("registry-export-restored")
+        backup = registry_state.get("backup")
+        if isinstance(restored_command, Mapping):
+            raw_path = restored_command.get("backupPath")
+            if isinstance(raw_path, str):
+                restored_export_path = Path(raw_path)
+        if isinstance(backup, Mapping) and restored_export_path is not None:
+            try:
+                exact_export = (
+                    restored_export_path.is_file()
+                    and not restored_export_path.is_symlink()
+                    and _sha256_file(restored_export_path) == backup.get("sha256")
+                )
+            except OSError:
+                exact_export = False
+
+    restored = key_restored and install_restored and exact_export
+    result["keyRestored"] = key_restored
+    result["installRestored"] = install_restored
+    result["restoredExportExact"] = exact_export
+    result["restored"] = restored
+    result["state"] = "restored" if restored else "restore-failed"
+
+    backup = registry_state.get("backup")
+    cleanup_candidates: list[tuple[Path, str | None]] = []
+    if isinstance(backup, Mapping):
+        raw_backup_path = backup.get("path")
+        if isinstance(raw_backup_path, str):
+            cleanup_candidates.append((Path(raw_backup_path), backup.get("sha256")))
+    if (
+        restored_export_path is not None
+        and isinstance(backup, Mapping)
+        and "registry-export-restored" in completed_by_id
+    ):
+        cleanup_candidates.append((restored_export_path, backup.get("sha256")))
+    if restored:
+        cleanup_errors: list[str] = []
+        for path, expected_sha in cleanup_candidates:
+            try:
+                current = os.lstat(path)
+                if stat.S_ISLNK(current.st_mode) or not stat.S_ISREG(current.st_mode):
+                    raise OSError("registry rollback artifact is not a regular file")
+                if not isinstance(expected_sha, str) or _sha256_file(path) != expected_sha:
+                    raise OSError("registry rollback artifact hash changed")
+                os.unlink(path)
+            except OSError as error:
+                cleanup_errors.append(f"{path}: {error}")
+        if cleanup_errors:
+            result["cleanupErrors"] = cleanup_errors
+            result["state"] = "restore-failed"
+            result["restored"] = False
+    else:
+        preserved_artifacts: list[dict[str, Any]] = []
+        for path, expected_sha in cleanup_candidates:
+            artifact: dict[str, Any] = {
+                "expectedSha256": expected_sha,
+                "path": str(path),
+                "state": "missing",
+            }
+            try:
+                current = os.lstat(path)
+                artifact["state"] = (
+                    "regular"
+                    if stat.S_ISREG(current.st_mode) and not stat.S_ISLNK(current.st_mode)
+                    else "unsafe"
+                )
+                artifact["size"] = current.st_size
+                if artifact["state"] == "regular":
+                    artifact["sha256"] = _sha256_file(path)
+            except OSError as error:
+                artifact["error"] = str(error)
+            preserved_artifacts.append(artifact)
+        result["preservedArtifacts"] = preserved_artifacts
+    return result
+
+
+def _emergency_stop_wineserver(
+    commands: Sequence[Mapping[str, Any]],
+    prefix: Path,
+    lease: DriveLease | None,
+) -> dict[str, Any]:
+    result: dict[str, Any] = {
+        "attempted": False,
+        "state": "failed",
+    }
+    command = next(
+        (
+            candidate
+            for candidate in commands
+            if candidate.get("id") == "wineserver-cleanup"
+        ),
+        None,
+    )
+    if command is None:
+        result["error"] = "wineserver cleanup command is missing"
+        return result
+    if lease is not None:
+        try:
+            drive_blocked = revalidate_runtime_drive_lease(lease, require_c=False)
+        except BaseException as error:
+            drive_blocked = {
+                "code": "wine_dosdevice_revalidation_failed",
+                "error": str(error),
+                "type": type(error).__name__,
+            }
+        if drive_blocked is not None:
+            result["blocked"] = drive_blocked
+            return result
+    else:
+        cleanup_inspection = _inspect_cleanup_without_drive_lease(
+            prefix,
+            prefix_mode=_prefix_mode_from_commands(commands),
+        )
+        result["preCleanup"] = cleanup_inspection
+        if cleanup_inspection.get("state") != "verified":
+            result["blocked"] = {
+                "code": "wineprefix_cleanup_without_lease_unsafe",
+            }
+            return result
+    try:
+        tool_blocked = _revalidate_command_tool(command)
+    except BaseException as error:
+        tool_blocked = {
+            "code": "wine_tool_revalidation_failed",
+            "error": str(error),
+            "type": type(error).__name__,
+        }
+    if tool_blocked is not None:
+        result["blocked"] = tool_blocked
+        return result
+
+    argv = [str(value) for value in command["argv"]]
+    result["attempted"] = True
+    try:
+        completed = subprocess.run(
+            argv,
+            cwd=command.get("cwd"),
+            env=_wine_environment(prefix, initialize=False),
+            capture_output=True,
+            check=False,
+            timeout=int(command["timeoutSeconds"]),
+        )
+    except BaseException as error:
+        result["launchError"] = {
+            "message": str(error),
+            "type": type(error).__name__,
+        }
+        return result
+    stdout = completed.stdout or b""
+    stderr = completed.stderr or b""
+    result.update(
+        {
+            "returnCode": completed.returncode,
+            "stderrSha256": _sha256_bytes(stderr),
+            "stdoutSha256": _sha256_bytes(stdout),
+        }
+    )
+    post_blocked: dict[str, Any] | None = None
+    if lease is not None:
+        try:
+            post_blocked = revalidate_runtime_drive_lease(lease, require_c=False)
+        except BaseException as error:
+            post_blocked = {
+                "code": "wine_dosdevice_revalidation_failed",
+                "error": str(error),
+                "type": type(error).__name__,
+            }
+    else:
+        post_cleanup = _inspect_cleanup_without_drive_lease(
+            prefix,
+            prefix_mode=_prefix_mode_from_commands(commands),
+        )
+        result["postCleanup"] = post_cleanup
+        if post_cleanup.get("state") != "verified":
+            post_blocked = {
+                "code": "wineprefix_cleanup_without_lease_changed",
+            }
+    if post_blocked is not None:
+        result["postCleanupBlocked"] = post_blocked
+    verified = (
+        completed.returncode in command.get("allowedReturnCodes", [0])
+        and post_blocked is None
+    )
+    result["state"] = "verified" if verified else "failed"
+    return result
+
+
+def _execute_commands(
+    commands: Sequence[Mapping[str, Any]],
+    prefix: Path,
+    drive: Mapping[str, Any],
+) -> tuple[list[dict[str, Any]], dict[str, Any], dict[str, Any]]:
+    drive_guard: dict[str, Any] = {"lease": None, "releaseAttempted": False}
+    try:
+        return _execute_commands_inner(commands, prefix, drive, drive_guard)
+    except BaseException as error:
+        lease = drive_guard.get("lease")
+        registry_state = drive_guard.get("registryState")
+        registry_receipt = (
+            dict(registry_state)
+            if isinstance(registry_state, dict)
+            else {"restored": False}
+        )
+        try:
+            emergency_rollback = _emergency_restore_registry(
+                commands,
+                prefix,
+                lease if isinstance(lease, DriveLease) else None,
+                registry_receipt,
+            )
+        except BaseException as rollback_error:
+            emergency_rollback = {
+                "attempted": True,
+                "error": str(rollback_error),
+                "restored": False,
+                "state": "restore-failed",
+                "type": type(rollback_error).__name__,
+            }
+        registry_receipt["emergencyRollback"] = emergency_rollback
+        registry_receipt["restored"] = emergency_rollback.get("restored") is True
+        registry_receipt["executionFailed"] = True
+        registry_receipt["state"] = (
+            "failed"
+            if registry_receipt.get("restored") is True
+            else "restore-failed"
+        )
+        try:
+            emergency_wineserver = _emergency_stop_wineserver(
+                commands,
+                prefix,
+                lease if isinstance(lease, DriveLease) else None,
+            )
+        except BaseException as cleanup_error:
+            emergency_wineserver = {
+                "attempted": True,
+                "error": str(cleanup_error),
+                "state": "failed",
+                "type": type(cleanup_error).__name__,
+            }
+        drive_receipt: dict[str, Any] = {
+            "emergencyWineserverCleanup": emergency_wineserver,
+            "state": "not-acquired",
+        }
+        if isinstance(lease, DriveLease) and drive_guard.get("releaseAttempted") is not True:
+            drive_guard["releaseAttempted"] = True
+            release = _release_runtime_drive_lease_safely(lease)
+            drive_receipt = {
+                "emergencyWineserverCleanup": emergency_wineserver,
+                "release": release,
+                "state": (
+                    "released"
+                    if release.get("released") is True
+                    and emergency_wineserver.get("state") == "verified"
+                    else "release-failed"
+                ),
+            }
+        elif not isinstance(lease, DriveLease):
+            drive_receipt["state"] = (
+                "released"
+                if emergency_wineserver.get("state") == "verified"
+                else "release-failed"
+            )
+        return (
+            [
+                {
+                    "id": "runtime-execution",
+                    "launchError": {
+                        "message": str(error),
+                        "type": type(error).__name__,
+                    },
+                    "interrupted": isinstance(error, KeyboardInterrupt),
+                    "returnCode": None,
+                    "stderrSha256": _sha256_bytes(b""),
+                    "stdoutSha256": _sha256_bytes(b""),
+                    "timedOut": False,
+                }
+            ],
+            drive_receipt,
+            registry_receipt,
+        )
 
 
 def _deduplicate_files(files: Iterable[VerifiedFile]) -> list[dict[str, Any]]:
@@ -3128,16 +4149,17 @@ def _sorted_blockers(blockers: Iterable[Blocker]) -> list[dict[str, Any]]:
 def create_preflight_receipt(
     *,
     repo_root: Path,
-    wine_bin_raw: str | None,
-    wineboot_bin_raw: str | None,
-    wineserver_bin_raw: str | None,
-    wineprefix_raw: str | None,
+    wine_bin_raw: str | None = None,
+    wineboot_bin_raw: str | None = None,
+    wineserver_bin_raw: str | None = None,
+    wineprefix_raw: str | None = None,
     run_id: str,
     client_exe: Path,
     lineage_manifest: Path,
-    runtime_support_manifest: Path,
+    runtime_support_manifest: Path | None = None,
     run9_evidence: Path | None,
     mode: str,
+    prefix_mode: str = "win32",
     prepare_prefix: bool = False,
     execute: bool = False,
     initialize_prefix: bool = False,
@@ -3145,6 +4167,44 @@ def create_preflight_receipt(
     client_timeout_seconds: int = 300,
     home: Path | None = None,
 ) -> dict[str, Any]:
+    if sys.platform not in {"darwin", "linux"}:
+        native_windows = sys.platform == "win32"
+        return {
+            "blockedReasons": _sorted_blockers(
+                [
+                    Blocker(
+                        "wine_adapter_not_applicable_on_native_windows"
+                        if native_windows
+                        else "wine_adapter_unsupported_host",
+                        "native Windows uses the direct client harness; Wine was not started"
+                        if native_windows
+                        else f"unsupported host platform: {sys.platform}",
+                        "tools/logh7_ui_explorer.py" if native_windows else None,
+                    )
+                ]
+            ),
+            "commands": [],
+            "environment": {
+                "hostArchitecture": platform.machine(),
+                "hostPlatform": sys.platform,
+                "repoRoot": str(repo_root),
+                "runtimeMode": "native-windows" if native_windows else "unsupported",
+            },
+            "execution": [],
+            "fullPassEligible": False,
+            "mode": mode,
+            "overallVerdict": "blocked",
+            "preflightOnly": True,
+            "runId": run_id,
+            "schemaVersion": 1,
+            "status": "blocked",
+            "verdictCeiling": (
+                "native-windows-delegation-required"
+                if native_windows
+                else "unsupported-host"
+            ),
+            "wineToolchain": {},
+        }
     blockers: list[Blocker] = []
     files: list[VerifiedFile] = []
     if not repo_root.is_absolute():
@@ -3162,6 +4222,15 @@ def create_preflight_receipt(
         )
     if mode not in {"regression", "recovery-baseline"}:
         blockers.append(Blocker("mode_invalid", "mode must be regression or recovery-baseline", mode))
+    expected_prefix_architecture = PREFIX_MODE_SYSTEM_ARCHITECTURES.get(prefix_mode)
+    if expected_prefix_architecture is None:
+        blockers.append(
+            Blocker(
+                "wineprefix_mode_invalid",
+                f"prefix_mode must be one of {sorted(PREFIX_MODE_SYSTEM_ARCHITECTURES)}",
+                prefix_mode,
+            )
+        )
     if not client_exe.is_absolute():
         blockers.append(
             Blocker(
@@ -3180,15 +4249,23 @@ def create_preflight_receipt(
             )
         )
     lineage_manifest = lineage_manifest.resolve(strict=False)
-    if not runtime_support_manifest.is_absolute():
+    if runtime_support_manifest is None:
         blockers.append(
             Blocker(
-                "runtime_support_manifest_not_absolute",
-                "RUNTIME_SUPPORT_MANIFEST must be absolute",
-                str(runtime_support_manifest),
+                "runtime_support_manifest_missing",
+                "RUNTIME_SUPPORT_MANIFEST is required in Wine mode",
             )
         )
-    runtime_support_manifest = runtime_support_manifest.resolve(strict=False)
+    else:
+        if not runtime_support_manifest.is_absolute():
+            blockers.append(
+                Blocker(
+                    "runtime_support_manifest_not_absolute",
+                    "RUNTIME_SUPPORT_MANIFEST must be absolute",
+                    str(runtime_support_manifest),
+                )
+            )
+        runtime_support_manifest = runtime_support_manifest.resolve(strict=False)
     if run9_evidence is not None:
         if not run9_evidence.is_absolute():
             blockers.append(
@@ -3228,28 +4305,38 @@ def create_preflight_receipt(
     )
     prefix_architecture: dict[str, Any] = {
         "detectedArch": None,
-        "expectedArch": "win32",
+        "expectedArch": expected_prefix_architecture,
         "initializationPlanned": initialize_prefix,
         "initializationRequired": None,
+        "prefixMode": prefix_mode,
         "state": "unverified",
         "systemReg": None,
         "systemRegSha256": None,
     }
-    if prefix is not None and marker is not None:
+    if (
+        prefix is not None
+        and marker is not None
+        and expected_prefix_architecture is not None
+    ):
         prefix_architecture = _validate_prefix_architecture(
             prefix,
             blockers,
             files,
             execute=execute,
             initialize_prefix=initialize_prefix,
+            prefix_mode=prefix_mode,
         )
     lineage = validate_lineage(lineage_manifest, client_exe, blockers, files)
-    runtime_support = validate_runtime_support_manifest(
-        runtime_support_manifest,
-        client_exe,
-        run_id,
-        blockers,
-        files,
+    runtime_support = (
+        validate_runtime_support_manifest(
+            runtime_support_manifest,
+            client_exe,
+            run_id,
+            blockers,
+            files,
+        )
+        if runtime_support_manifest is not None
+        else {"manifest": None, "verified": False}
     )
     run9 = validate_run9_index(run9_evidence, mode, blockers, files)
     safe_client_args = _validate_client_arguments(client_args, blockers)
@@ -3269,6 +4356,7 @@ def create_preflight_receipt(
         and wineboot_bin is not None
         and wineserver_bin is not None
         and prefix is not None
+        and expected_prefix_architecture is not None
         and client_arguments_valid
         and runtime_support.get("verified") is True
     ):
@@ -3281,8 +4369,10 @@ def create_preflight_receipt(
             client_args=safe_client_args,
             initialize_prefix=initialize_prefix,
             initialize_first=(
-                initialize_prefix and prefix_architecture.get("state") == "uninitialized"
+                initialize_prefix
+                and prefix_architecture.get("state") in {"uninitialized", "incomplete"}
             ),
+            prefix_mode=prefix_mode,
             client_timeout_seconds=client_timeout_seconds,
             runtime_support=runtime_support,
             lineage_snapshot=[
@@ -3315,7 +4405,8 @@ def create_preflight_receipt(
             "pythonVersion": platform.python_version(),
             "prefixArchitecture": prefix_architecture,
             "repoRoot": str(repo_root),
-            "wineEnvironmentPolicy": _wine_environment_policy_receipt(),
+            "runtimeMode": "wine",
+            "wineEnvironmentPolicy": _wine_environment_policy_receipt(prefix_mode),
             "winePrefix": str(prefix) if prefix else None,
             "winePrefixMarker": str(marker) if marker else None,
         },
@@ -3368,7 +4459,10 @@ def create_preflight_receipt(
                 receipt["status"] = "blocked"
                 return receipt
             try:
-                architecture_before_execute = inspect_prefix_architecture(prefix)
+                architecture_before_execute = inspect_prefix_architecture(
+                    prefix,
+                    prefix_mode=prefix_mode,
+                )
             except OSError as error:
                 runtime_blocker = Blocker(
                     "wineprefix_architecture_unreadable_after_preflight",
@@ -3382,10 +4476,14 @@ def create_preflight_receipt(
             initial_state = prefix_architecture.get("state")
             architecture_drift = (
                 initial_state == "initialized"
-                and architecture_before_execute.get("detectedArch") != "win32"
+                and (
+                    architecture_before_execute.get("detectedArch")
+                    != expected_prefix_architecture
+                    or architecture_before_execute.get("state") != "initialized"
+                )
             ) or (
-                initial_state == "uninitialized"
-                and architecture_before_execute.get("state") != "uninitialized"
+                initial_state in {"uninitialized", "incomplete"}
+                and architecture_before_execute.get("state") != initial_state
             )
             if architecture_drift:
                 runtime_blocker = Blocker(
@@ -3474,6 +4572,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--prepare-prefix", action="store_true")
     parser.add_argument("--execute", action="store_true")
     parser.add_argument("--initialize-prefix", action="store_true")
+    parser.add_argument("--prefix-mode", choices=("win32", "wow64"), default="win32")
     parser.add_argument("--client-arg", action="append", default=[])
     parser.add_argument("--client-timeout-seconds", type=int, default=300)
     parser.add_argument("--receipt", type=Path)
@@ -3481,6 +4580,15 @@ def build_parser() -> argparse.ArgumentParser:
 
 
 def main(argv: Sequence[str] | None = None) -> int:
+    if sys.platform not in {"darwin", "linux"}:
+        if sys.platform == "win32":
+            sys.stderr.write(
+                "native Windows에서는 Wine 어댑터를 사용하지 않습니다. "
+                "tools/logh7_ui_explorer.py 또는 tools/live/_m3_multiclient_probe.py를 실행하세요.\n"
+            )
+        else:
+            sys.stderr.write(f"지원하지 않는 host platform입니다: {sys.platform}\n")
+        return 2
     args = build_parser().parse_args(argv)
     if args.client_timeout_seconds < 1:
         raise SystemExit("--client-timeout-seconds must be positive")
@@ -3496,6 +4604,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         runtime_support_manifest=args.runtime_support_manifest,
         run9_evidence=args.run9_evidence,
         mode=args.mode,
+        prefix_mode=args.prefix_mode,
         prepare_prefix=args.prepare_prefix,
         execute=args.execute,
         initialize_prefix=args.initialize_prefix,

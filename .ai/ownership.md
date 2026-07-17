@@ -2,6 +2,8 @@
 
 | Agent | Task | Branch/worktree | Owned files | Status | Updated at |
 |---|---|---|---|---|---|
+| Codex (root) | 플랫폼 분기 하네스 라이브 확인·배포 | codex/platform-aware-live-qa | 직전 플랫폼 분기 Allowed files + 라이브 결과 상태 문서 (`.codex/config.toml` 제외) | in_progress | 2026-07-17 |
+| Codex (root) | 실행 환경별 레거시 클라이언트 라이브 QA 하네스(Codex+Claude) | codex/platform-aware-live-qa | — (소유 해제) | done | 2026-07-17 |
 | Claude Code (메인+서브에이전트) | Claude Code 사용자 매뉴얼 레포 맞춤 개작 + 루트 README 신설 + 배포 방침 문서화(ADR-LITE-006) + 사용자 승인 merge | codex/codex-user-manual | — (소유 해제) | done | 2026-07-17 |
 | Codex (root) | Codex AI 자동 업무 관리 시스템 사용자 매뉴얼 작성 | current workspace | — (소유 해제) | done | 2026-07-17 |
 | Codex (root) | Codex-native Claude automation parity and project-scoped skills.sh acquisition | codex/codex-harness-parity | — (소유 해제; `CLAUDE.md`와 `.codex/config.toml`의 동시 변경은 미수정) | done | 2026-07-17 |

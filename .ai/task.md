@@ -1,5 +1,34 @@
 # Current Task
 
+## Active Contract: 플랫폼 분기 하네스 라이브 확인·배포
+
+- Status: ACTIVE — 2026-07-17 사용자 직접 지시(커밋·푸시·병합 및 서버+Wine 클라이언트 실제 실행 승인).
+- Goal: 현재 플랫폼 분기 하네스 변경을 실제 macOS Wine 경로에서 서버와 함께 실행해 프로세스 시작 여부를 fresh evidence로 판정하고, 검증된 변경을 작업 브랜치에서 커밋·푸시·PR 병합한다.
+- User value: native Windows 직접 실행과 macOS/Linux Wine 실행을 같은 하네스로 운용할 수 있는지, 문서·단위 테스트가 아니라 현재 머신의 실제 실행 결과로 확인한다.
+- In scope: host/runtime/lineage 입력 점검, run 전용 저장소 외부 Wine prefix와 install copy, 서버 `127.0.0.1:47900` 시작, Wine client launch attempt, PID/port/receipt 기반 정리, 라이브 결과에 따른 상태·현행 문서 갱신, 현재 플랫폼 분기 diff의 검증·리뷰, 명시적 path staging, commit·push·PR·merge.
+- Out of scope: Wine/런타임 지원 파일의 네트워크 설치, lineage/runtime gate 우회, 원본 EXE 패치, 서버·프로토콜 제품 기능 변경, `main` 직접 커밋, force push·히스토리 재작성, 사용자 소유 `.codex/config.toml` 변경 포함, 비밀 파일 접근, `server/data/**` 삭제, `reference/**` 코드 이식.
+- Acceptance criteria: (1) `sys.platform`과 선택된 `runtimeMode`를 receipt에 기록한다, (2) 서버 프로세스와 `127.0.0.1:47900` 응답을 fresh 관측한다, (3) exact lineage·runtime gate가 통과하면 Wine으로 실제 client process start를 관측하고 그렇지 않으면 실행 전 차단 사유를 새 receipt로 남긴다, (4) 기록된 PID와 전용 자원만 정리하고 listener 잔존 여부를 확인한다, (5) 라이브 결과와 실행 명령·종료 코드를 상태 문서에 반영한다, (6) `.codex/config.toml`과 `_workspace/**` 증거를 제외한 의도된 변경만 커밋·푸시하고 PR을 병합한다.
+- Allowed files: 직전 완료 계약의 모든 Allowed files, `.ai/{task.md,current-state.md,handoff.md,ownership.md,key-facts.md,known-issues.md}`, 라이브 결과에 직접 영향받는 `docs/logh7-wine-live-qa.md`, `docs/logh7-roadmap-current.md`, `docs/agent/tool-capabilities.md`, 저장소 비추적 `_workspace/**` evidence. 저장소 밖에는 이 run 전용 Wine prefix/install copy만 생성·변경한다.
+- Protected concurrent files: 기존 사용자 변경 `.codex/config.toml`, 비밀 파일, `server/data/**`, `reference/**`, 위 Allowed files 밖의 사용자/다른 에이전트 변경 전체.
+- Required verification: host/runtime receipt, 서버 시작·port probe, Wine adapter live attempt와 receipt, PID/listener cleanup probe, 변경 유형별 `docs/agent/verification.md` 최소 행렬, canonical↔Codex↔Claude mirror·skill 검증, `git diff --check`, staged diff review, 원격 PR merge 상태 확인.
+- Human checkpoints: commit·push·PR·merge와 실제 Wine GUI 실행은 이 계약을 승인한 현재 사용자 지시에 포함한다. gate 우회, 의존성 설치, force 작업은 포함하지 않는다.
+- Interim live evidence: macOS `darwin`에서 Wine Stable 11의 명시적 `wow64` prefix로 서버 `127.0.0.1:47900` ready와 client process 시작을 관측했다. 서버 trace는 `0x0034 → 0x0035 → 0x0036 → 0x0030` 로그인 흐름 뒤 `invalid-credentials`/login-ng를 기록했고, client는 exit 3으로 종료됐다. 로그인 시 runtime error는 사용자 화면 관측이다.
+- Interim verdict: macOS Wine 프로세스 실행·서버 도달 경로는 성립했지만 로그인·게임플레이와 native Windows/Linux 실기 검증은 통과하지 않아 cross-platform 전체 pass는 미달이다.
+- Latest delivery instruction: 2026-07-17 사용자 직접 지시로 이번에는 commit·push까지만 수행하고 PR·merge는 후속 지시까지 보류한다.
+
+## Completed Contract: 실행 환경별 레거시 클라이언트 라이브 QA 하네스
+
+- Status: DONE — 2026-07-17 사용자 직접 지시(Windows에서는 Wine 불필요, Codex와 Claude 모두 동일 적용).
+- Goal: 라이브 QA 하네스가 호스트 실행 환경을 먼저 판별하고, native Windows에서는 Wine을 요구·실행하지 않으며 macOS/Linux에서는 기존 격리 Wine 계약을 유지한다.
+- In scope: canonical live-QA skill의 `native-windows`/`wine` 분기, Codex·Claude 어댑터와 스킬 미러, 공통 prompt pack, P0/계보/검증/도구 현행 문서, 상태·인수인계·키팩트 동기화.
+- Out of scope: 실제 원본 클라이언트 실행, Wine prefix 생성·변경, native Windows 라이브 결과 재검증, 서버·프로토콜·클라이언트 제품 코드 변경, commit·push·PR·merge.
+- Acceptance criteria: (1) native Windows 분기는 `WINE_BIN`/`WINEBOOT_BIN`/`WINESERVER_BIN`/`WINEPREFIX`를 요구하거나 Wine 명령을 실행하지 않는다, (2) macOS/Linux 분기는 기존 Wine fail-closed 조건을 유지한다, (3) Codex와 Claude live-qa 진입점이 같은 canonical 계약을 사용한다, (4) runtime mode와 공통 lineage/evidence/cleanup 조건이 문서·프롬프트에서 일치한다, (5) 프로젝트 스킬 검증과 미러 일치 검사가 통과한다.
+- Allowed files: `tools/live/logh7_wine_live_qa.py`, `tools/tests/test_logh7_wine_live_qa.py`, `.agents/skills/{logh7-wine-live-qa,logh7-orchestrator}/**`, `.codex/skills/logh7-wine-live-qa/**`, `.codex/agents/live-qa.toml`, `.claude/agents/live-qa.md`, `.claude/skills/{logh7-wine-live-qa,logh7-orchestrator}/**`, `scripts/agent/required-skills.tsv`, `docs/logh7-wine-live-qa.md`, `docs/logh7-roadmap-current.md`, `docs/logh7-client-lineage-current.md`, `docs/logh7-remaster-prep-current.md`, `docs/harness/logh7-revival/team-spec.md`, `.omo/plans/logh7-execution-plan-current.md`, `docs/agent/{prompt-pack.md,verification.md,tool-capabilities.md,lifecycle-ops.md,context-strategy.md,codex-user-manual.md,claude-code-ai-업무관리-매뉴얼.md}`, `CLAUDE.md`, `AGENTS.md`, `.ai/{task.md,key-facts.md,known-issues.md,current-state.md,handoff.md,ownership.md}`.
+- Protected concurrent files: 기존 사용자 변경 `.codex/config.toml`, 비밀 파일, `server/data/**`, `reference/**`, 위 Allowed files 밖의 사용자/다른 에이전트 변경 전체.
+- Required verification: Windows platform simulation의 Wine parser/invocation 차단 테스트, 기존 Wine 관련 Python suite, canonical↔Codex↔Claude skill mirror byte equality, skill validator, `bash scripts/agent/bootstrap-skills.sh --check`, 변경 파일 `verify-changes.sh --file`, `git diff --check`, scoped diff review.
+- Human checkpoints: push·PR·merge는 별도 승인 필요. 실제 native Windows/Wine 라이브 실행은 lineage·runtime evidence 입력이 준비된 별도 QA run에서만 수행한다.
+- Completion evidence: Windows·unsupported host는 Wine parser/subprocess 전에 차단되고 Wine 전용 인자 없이 direct API 호출 가능, macOS/Linux Wine 전체 unittest 38개 통과, canonical↔Codex↔Claude live-QA 및 canonical↔Claude orchestrator 일치, bootstrap `OK=26 MISSING=0 STALE=0`, Codex 훅 회귀 26개 통과. 실제 클라이언트 라이브 실행은 범위 밖으로 미실행.
+
 ## Completed Contract: Codex 사용자 매뉴얼
 
 - Status: DONE — 2026-07-17 사용자 직접 요청. 사용자 매뉴얼 작성, 라우터 연결, Jira/Codex 현행 설명 보정 완료.
