@@ -233,7 +233,7 @@ export function registerGameHandlers({ commandBus, queryBus, isGridCellNavigable
     return { characters: worldCatalog.getCanonCharacters() };
   });
 
-  queryBus.register('GetFleetAtCell', (q, { uow, db }) => {
+  queryBus.register('GetFleetAtCell', (q, { db }) => {
     // 읽기 모델: world_fleet 테이블
     const rows = db.prepare(
       'SELECT unit_id, character_id, account_id, cell, revision FROM world_fleet WHERE cell = ?',
