@@ -25,6 +25,10 @@ jobs:
       - uses: anthropics/claude-code-action@v1
         with:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          # 유효 모델 ID로 고정 — 외부에서 주입되던 `claude-opus-4-8[1m]`(1M 컨텍스트
+          # 접미사)이 즉시 거부돼 review job이 is_error로 실패하던 것을 정정. Opus 4.8은
+          # 1M 컨텍스트가 기본값이라 접미사가 불필요하다.
+          model: claude-opus-4-8
           prompt: |
             REPO: ${{ github.repository }}
             PR NUMBER: ${{ github.event.pull_request.number }}
