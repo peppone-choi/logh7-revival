@@ -14,4 +14,5 @@
 - Linked worktree: `agents/commit-push-and-verify-next-steps@0b9c324d`는 main 대비 226 behind/1 ahead이며 staged 3, unstaged 1, untracked 4개다. 읽기 전용 보호 대상으로 유지하고 현재 제품 기준이나 병합 대상으로 사용하지 않는다.
 - Preserved concurrent change: 사용자 소유 `.codex/config.toml` dirty 변경은 읽거나 수정·stage하지 않는다. 소유권은 2026-07-17 사용자 승인으로 Codex→Claude Code로 인수됐다.
 - Current blockers: 제품 관점 — P0 fresh evidence와 successful authentication/gameplay 부재. 진행 중인 native Windows 라이브 런이 이 중 native Windows 축을 닫을 수 있다. Linux 실기·최신 전체 Wine suite는 다른 호스트가 필요하다.
-- Next: LOGH7-47(fail-closed guard) 착수 → 순서대로 진행, 라이브 evidence·검증·리뷰 후 work-branch commit, 필요 시 push·PR·merge·외부 쓰기 진행(상시 사전승인).
+- Batch #1 진척: LOGH7-43 native login-success + 입력 신뢰성(v2 unicode warm-up) 라이브 실증 완료. first-char-drop 종결(v1 SHIFT FAIL→v2 PASS). LOGH7-47 native fail-closed 게이트 구현·커밋(`b55860d0`, `tools/live/lineage_guard.py`+cmd_start `--lineage-manifest`, exit 3, 21 tests·직접 보안 리뷰) — 라이브 차단 실증 중(guard-live). 세션 커밋 chain `5441f574…b55860d0` push, CI PR #173.
+- Next: LOGH7-47 라이브 실증 후 live-qa 스킬에 `--lineage-manifest` 배선 → LOGH7-45(runtime-support manifest)→44(계보 integration)→46(run evidence) 순으로 배치 #1 계속. push·PR·merge·외부 쓰기·라이브는 상시 사전승인.
