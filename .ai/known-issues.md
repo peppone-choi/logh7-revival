@@ -11,8 +11,8 @@
 - 동기 SQLite bridge는 PostgreSQL 전환 전에 async-capable로 교체 필요. PG는 skeleton(기본 부팅은 SQLite).
 - run9/run3/run5 원증거와 당시 exact patch EXE 계보 영수증이 현재 checkout에 없음 — 과거 통과 기록을 fresh release gate로 재사용 금지.
 - macOS Wine Stable 11은 pure win32 prefix를 지원하지 않아 명시적 WoW64 prefix가 필요하다. 하네스는 이를 지원하지만 다른 Wine 배포판과 Linux 실기는 미검증이다.
-- 2026-07-17 macOS live run은 client process와 `0x0034/0035/0036/0030` 로그인 패킷 흐름까지 도달했으나 `invalid-credentials`/login-ng, client exit 3, 사용자 관측 runtime error로 종료됐다. successful login/gameplay와 cross-platform 전체 pass는 미종결이다.
-- native Windows 직접 실행 분기는 플랫폼 simulation으로만 검증됐다. Windows 실기 클라이언트·스크린샷 증거는 별도 live run 전까지 미검증이다.
+- 2026-07-17 native Windows 라이브 런에서 lineage PASS·서버 47900·로그인 성공(로비 진입)을 확인했다. macOS `invalid-credentials`/login-ng의 원인은 QA 하네스 `tools/logh7_ui_explorer.py` `_hw_type_text` 첫 글자 누락으로 확정(제품 버그 아님, focus warm-up 필요). in-game gameplay·relogin·persistence와 run9 frozen baseline·Linux 실기·전체 Wine suite는 미종결.
+- native Windows 직접 실행 분기는 2026-07-17 실기 login-success로 검증됨(gameplay는 미종결).
 
 ## 인프라·도구
 

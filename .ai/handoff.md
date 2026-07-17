@@ -1,7 +1,7 @@
 # Agent Handoff
 
 ## Goal
-Git·로컬 상태 정본·Jira/GitHub 업무 뷰가 PR #171의 실제 merge와 남은 P0 게이트를 같은 사실로 표시하도록 복구하고, 검증·리뷰 뒤 작업 브랜치를 push·PR·merge한다.
+P0 게이트(스토리 LOGH7-18) 완주 — LOGH7-47/43/45/44/46을 각 Jira 완료기준대로 닫는다. 순서 47→43→45→44→46. push·PR·merge·외부 쓰기·라이브 실기는 2026-07-17 상시 사전승인(하드 금지선 제외).
 
 ## Current result
 - 작업 브랜치 `codex/state-consistency-recovery`는 `main@a8420b8b`에서 생성됐다. 로컬 `origin/main`도 같은 SHA였다.
@@ -14,6 +14,7 @@ Git·로컬 상태 정본·Jira/GitHub 업무 뷰가 PR #171의 실제 merge와 
 - 2026-07-17 사용자 승인으로 소유권이 Codex에서 Claude Code로 인수됐다. Codex 레인은 10:53 KST 외부 쓰기까지 실행하고 상태 파일 갱신 전에 중단된 것으로 확인됐다.
 - 외부 manifest 3건(Jira LOGH7-43 제목+코멘트 10084, LOGH7-18 코멘트 10085, GitHub #10 제목+코멘트)은 적용 완료이며 2026-07-17 read-back으로 manifest 제안 값과 일치를 확인했다. Jira 상태 전환 0건 유지.
 - Jira read-back은 로컬 Atlassian MCP를 사용자 OAuth로 인증해 수행했다(정본 사이트 pepponechoi-jira.atlassian.net, cloudId 300c260a-54a7-4ab5-b843-ae94bf68dcd6). Rovo 커넥터의 pepponechoi.atlassian.net 테넌트는 suspended-inactivity로 사용 불가였다.
+- 전달 완료: commit `572bf8f5`, PR #172, merge `4f8c4281`(2026-07-17 12:20 KST, MERGED read-back). checks: test·CodeRabbit pass, claude review 워크플로는 액션 내부 오류 fail(재분류 금지).
 
 ## Decisions already made
 - 완료된 platform-aware 전달 계약은 DONE으로 종결하고 과거 승인을 재사용하지 않는다.
@@ -60,8 +61,9 @@ Git·로컬 상태 정본·Jira/GitHub 업무 뷰가 PR #171의 실제 merge와 
 - linked worktree는 오래되고 dirty지만 계약 밖이라 정리·merge하지 않는다.
 
 ## Remaining work
-- local commit → push → PR → checks 확인 → merge → 최종 read-back (승인된 전달 사슬).
-- 후속 계약: LOGH7-43 P0 fresh evidence 확보(native Windows 실기 라이브 런 등) — 2026-07-17 사용자 지시로 선택됨. merge 후 새 브랜치에서 계약 초안 작성.
+- live-qa 라이브 런 완료 대기: lineage receipt → 서버 47900 → 클라이언트 실행 → 로그인 시도 → cleanup receipt.
+- 라이브 결과의 .ai 상태·현행 문서 반영, 변경 Markdown 검증, 리뷰, 작업 브랜치 commit.
+- push·PR·merge는 별도 사용자 승인 요청.
 
 ## Required human decisions
 - 현재 계약의 계획·근거 기반 외부 쓰기·push·PR·merge는 2026-07-17 사용자 지시로 승인됐다.

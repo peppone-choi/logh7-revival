@@ -37,6 +37,11 @@ M4 코드 변경 전에 아래 순서를 지킨다. PCAP/proxy는 **host network
 
 ### P0 - 실행 환경별 client runtime, 정본 EXE 계보, evidence 복구
 
+**2026-07-17 fresh 증거:**
+- **native Windows 라이브 런**: 127.0.0.1:47900 서버 + PID 31108 클라이언트 직접 실행 → lineage PASS (EXE sha256 `825635783a9fb663ae3b9a2ecf8d4b74df648322256c57ee32f6426c42a23f22` 확인, timestamp 0x40779eb8, image base 0x00400000, sentinel mismatch 없음) → 로그인 성공 (0x0034/0x0035/0x0036/0x0030 trace → authOk=true → 로비 okCode=0x2001, 1920×1080 렌더) → cleanup receipt (listener 0개, process 0개, data 무변경). **verdict: login-success (in-game gameplay·relogin·persistence 미종결).**
+- **macOS 원인 확정**: 제품 버그 아님. QA 하네스 `tools/logh7_ui_explorer.py` `_hw_type_text` 첫 글자 누락 (`inei00`→`nei00`) 으로 invalid account id 반환. 재입력 시 정상.
+
+**실행 규칙:**
 - `sys.platform`을 먼저 기록한다. native Windows에서는 클라이언트를 직접 실행하고 Wine 입력·명령을 금지한다. macOS/Linux에서는 새 프로젝트/런 전용 `WINEPREFIX`와 명시적 `win32|wow64` prefix mode를 강제하고 기본 `~/.wine` 접근을 금지한다. 그 외 host는 blocked다.
 - CD base → official/update → 1080p → localization/diagnostic patch의 full SHA-256, PE timestamp/image base, patch/rollback hash를 client-lineage manifest로 고정한다.
 - run9 evidence를 복구하거나 같은 exact hash로 선택된 runtime에서 재실행해 client/server/seed hash, packet/log, DB, screenshot, cleanup을 tracked redacted receipt로 남긴다. run3/run5는 보조 이력이며 run9 대체 증거가 아니다.

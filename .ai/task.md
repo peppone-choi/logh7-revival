@@ -1,5 +1,75 @@
 # Current Task
 
+## Active Contract: P0 게이트 완주 (LOGH7-43~47, 스토리 LOGH7-18)
+
+- Status: **ACTIVE — 2026-07-17 사용자 "정정 후 구현 승인".** 5건 P0 작업 구현이 승인됐다. 구현 순서는 저위험 기반부터 LOGH7-47 → LOGH7-43 → LOGH7-45 → LOGH7-44 → LOGH7-46. push·PR·merge, Jira 상태 전환·GitHub 코멘트 쓰기, 라이브 실기 실행은 2026-07-17 사용자 상시 사전승인에 따라 매 단계 확인 없이 진행하되 결과를 보고한다. force push·main 직접 commit·히스토리 재작성·linked worktree 정리·server/data 삭제·비밀 접근은 이 사전승인에서 제외되어 그대로 금지한다. 검증 통과 후 work-branch commit은 허용(ADR-LITE-005). fail-closed 차단은 버그가 아니다.
+- 우선순위 근거: Jira priority는 5건 모두 Medium이라 변별력이 없어 로드맵 게이트 순서(P0 → P1 → P2)로 판정한다. 5건 전부 에픽 **LOGH7-9(M4 선행 게이트)** · 스토리 **LOGH7-18(P0 — 격리 Wine·정본 EXE 계보·evidence 복구)** 산하 P0 작업이다. P1(LOGH7-48/49, 스토리 LOGH7-19)은 이 P0가 닫힌 뒤 착수한다.
+- Problem: P0 스토리 LOGH7-18의 완료 증거가 없다. PR #171/#172는 하네스 기반과 상태 정합성만 반영했고, 실행 격리·계보 무결·fail-closed 가드·run 증거가 fresh evidence로 닫히지 않았다.
+- Goal: 아래 5개 P0 작업을 각 Jira 완료기준대로 닫아 스토리 LOGH7-18(P0 게이트)을 통과 가능 상태로 만든다.
+- User value: P0가 닫히면 P1(3면 correlation)·P2로 진행할 수 있고, "죽은 게임 복원·자체 서버 호환성" 검증의 실행 축이 증거로 확정된다.
+
+### 대상 5건 (P0, 로드맵 게이트 순 → 저위험 기반부터)
+
+| 순 | Jira | 크기 | GitHub | 요약 | Jira 완료기준(정본) |
+|---|---|---|---|---|---|
+| 1 | LOGH7-47 | S | #14 | launcher/Frida/patch fail-closed guard | hash·image base·sentinel 불일치 시 실행 전 종료·exit code 기록 |
+| 2 | LOGH7-43 | S | #10 | 실행 환경별 client runtime 격리(native Windows·Wine win32\|wow64)+기본 ~/.wine fail-closed | prefix 밖 변경 0, 기본 prefix에서 preflight fail-closed |
+| 3 | LOGH7-45 | M | #12 | V1 runtime-support manifest+sentinel 복구 | fresh `--execute --initialize-prefix`가 `runtime_support_manifest_missing`(exit 2) 없이 launch, `fullPassEligible=true` (하위 LOGH7-95/96/97, GH #67/66/65) |
+| 4 | LOGH7-44 | M | #11 | client-lineage 5단계 계보 재구성 integration | `LOGH7_LINEAGE_INTEGRATION=1`로 1+6+136+10+59 패치·sentinel/hash 영수증 통과, manifest/working path 산출 (하위 LOGH7-93/94/99, GH #62/63/64) |
+| 5 | LOGH7-46 | L | #13 | run9/run3/run5 evidence 복구 또는 동일 exact hash 재실행 | client/server/seed hash·packet/log·DB·screenshot·cleanup을 tracked redacted receipt로 기록 (하위 LOGH7-142/143/147/149, GH #116/113/114/115) |
+
+### 수용 기준 (측정 가능)
+
+- (AC-1 · LOGH7-47) EXE hash·image base·sentinel 중 하나라도 불일치하면 launch/attach/patch가 실행 전에 종료하고 exit code를 receipt에 기록한다. 일치 케이스는 정상 진행한다.
+- (AC-2 · LOGH7-43) native Windows는 Wine 없이, macOS/Linux는 명시적 `win32|wow64` prefix로만 실행하며, 기본 `~/.wine` 접근은 preflight fail-closed. run 전용 prefix 밖 변경 0을 fresh cleanup receipt로 입증한다.
+- (AC-3 · LOGH7-45) fresh `--execute --initialize-prefix` 실행이 `runtime_support_manifest_missing`(exit 2) 없이 launch되고 `fullPassEligible=true`를 관측한다. manifest 스키마·sentinel 복구 절차가 존재한다.
+- (AC-4 · LOGH7-44) `LOGH7_LINEAGE_INTEGRATION=1`에서 1+6+136+10+59 패치와 sentinel/hash 영수증이 통과하고 manifest·working path가 산출된다.
+- (AC-5 · LOGH7-46) run9/run3/run5의 client·server·seed hash, packet/log, DB, screenshot, cleanup이 tracked redacted receipt로 기록되거나 동일 exact hash 재실행으로 대체된다.
+- (AC-6) 각 항목 완료 시 Jira 상태 전환과 GitHub Issue 코멘트는 별도 승인 후 exact manifest로만 수행한다. 미검증 항목은 `해야 할 일` 유지.
+
+### 범위 / 비범위
+
+- In scope: 위 5개 P0 작업의 구현·검증, lineage/runtime/guard receipt 산출, native Windows 실기 라이브 evidence, 결과의 `.ai` 상태·현행 문서 반영.
+- Out of scope: P1(LOGH7-48/49)·P2 구현, 서버·프로토콜 게임 기능 확장, 원본 EXE 패치, Linux 실기·전체 Wine suite(다른 호스트 필요), push·PR·merge, Jira/GitHub 쓰기(별도 manifest 승인 필요), linked worktree 접근, `server/data/**` 삭제, 비밀 파일 접근.
+
+### Allowed files (승인 후, 항목 착수 시 구체화)
+
+- 상태·계약: `.ai/{task.md,current-state.md,handoff.md,ownership.md,key-facts.md,known-issues.md}`.
+- 실행·계보·가드(항목별로 소유 파일을 착수 시 확정): `tools/live/**`, `tools/tests/**`, `.agents/skills/logh7-wine-live-qa/**` 및 계보/런타임 매니페스트 관련 스크립트. 저장소 비추적 `_workspace/**` evidence.
+- 라이브 결과 반영 문서: `docs/logh7-wine-live-qa.md`, `docs/logh7-client-lineage-current.md`, `docs/logh7-roadmap-current.md`, `docs/agent/tool-capabilities.md`.
+- Protected: 사용자 소유 `.codex/config.toml`, 비밀 파일, `server/data/**`, `reference/**`, linked worktree 전체, 위 밖의 사용자/다른 에이전트 변경.
+
+### 검증 명령
+
+- 라이브 evidence: lineage/guard/cleanup receipt(스크린샷·로그·exit code), 서버 포트 47900 관측.
+- 코드 변경 시: `cd server && npm test`(서버 변경 시), `tools/tests` Python unittest(도구 변경 시), 변경 Markdown별 `bash scripts/agent/verify-changes.sh --file <경로>`, `git diff --check`.
+- 무결 게이트: `LOGH7_LINEAGE_INTEGRATION=1` 실행(LOGH7-44), `--execute --initialize-prefix` fresh 실행(LOGH7-45). 제품 코드 미변경 항목은 제품 테스트 미실행으로 명시.
+
+### 사람 승인 필요 지점
+
+- 이 계약의 ACTIVE 전환(현재 PROPOSED). 5건을 한 계약으로 진행할지, 항목별 개별 계약으로 쪼갤지 결정.
+- (상시 사전승인됨, 결과 보고로 갈음) 각 항목의 구현 착수, 라이브 실기 실행, Jira 상태 전환·GitHub 코멘트 쓰기, push·PR·merge. 제외·금지: force push·main 직접 commit·히스토리 재작성·linked worktree 정리·server/data 삭제·비밀 접근.
+- fail-closed 차단은 버그가 아니므로 mismatch 시 차단 receipt 후 보고한다.
+
+### 관계 노트
+
+- 현재 ACTIVE인 "LOGH7-43 P0 fresh evidence — native Windows 실기 라이브 런"은 이 P0 게이트의 2번 항목(LOGH7-43) 단건 계약이다. 승인 시 이 5건 계약이 그 단건 계약을 포함·대체하며, 진행 중인 native Windows 라이브 런 증거는 AC-2에 그대로 귀속된다.
+
+## Subsumed Contract: LOGH7-43 P0 fresh evidence — native Windows 실기 라이브 런
+
+- 2026-07-17 P0 게이트 완주 계약(LOGH7-43~47)에 AC-2로 포함됨. 이 단건 계약의 라이브 런 증거는 상위 계약 AC-2에 귀속된다.
+- Status: **ACTIVE — 2026-07-17 사용자 승인.** 사용자가 `/start-task` 지시로 "복구 종결 후 첫 후속 계약으로 LOGH7-43의 남은 P0 fresh evidence 확보(native Windows 실기 라이브 런 등)를 선택해 P0 게이트를 닫아"를 명시해 계약 선택과 실행이 승인됐다. push·PR 생성·merge는 이 승인에 포함되지 않으며 별도 승인이 필요하다. 작업 브랜치 local commit은 검증 후 허용(ADR-LITE-005).
+- Problem: P0 잔여 증거가 없다 — native Windows 실기 라이브 런(현재 platform simulation만 검증), successful login/gameplay(macOS Wine run은 `invalid-credentials`/login-ng·client exit 3으로 종료), post-fix live drive-cleanup receipt, run9 exact-hash tracked evidence. Linux 실기와 최신 전체 Wine suite는 다른 호스트가 필요해 이 머신에서 닫을 수 없다.
+- Goal: 이 native Windows 머신에서 lineage gate를 통과한 원본 클라이언트를 Wine 없이 직접 실행해 서버 `127.0.0.1:47900` 대상 fresh 라이브 증거를 확보하고, `invalid-credentials`의 원인을 판정해 가능하면 successful login까지 도달한다.
+- User value: P0 게이트의 native Windows 축을 실제 실행 증거로 닫고, 로그인 실패의 원인(계정 부재 vs 서버 결함)을 확정해 다음 게이트 진입 조건을 만든다.
+- In scope: EXE hash·image base·sentinel fresh 검증(lineage receipt), 서버 기동·port 관측, native Windows 직접 실행, 클라이언트 프로세스·스크린샷·로그·exit code 증거, 로그인 시도와 서버 trace 대조, 서버 정규 경로의 테스트 계정 준비, 기록된 PID·전용 자원만의 cleanup receipt, 라이브 결과의 상태·현행 문서 반영.
+- Out of scope: Linux 실기·최신 전체 Wine suite, 원본 EXE 패치, 서버·프로토콜 제품 기능 변경(로그인 실패가 서버 결함으로 판정되면 보고 후 별도 범위 확인), push·PR·merge, linked worktree 접근, Jira/GitHub 쓰기(별도 manifest 승인 필요), `server/data/**` 삭제, 비밀 파일 접근.
+- Allowed files: `.ai/{task.md,current-state.md,handoff.md,ownership.md,key-facts.md,known-issues.md}`, 저장소 비추적 `_workspace/**` evidence, 라이브 결과에 직접 영향받는 `docs/logh7-wine-live-qa.md`·`docs/logh7-roadmap-current.md`·`docs/agent/tool-capabilities.md`.
+- Protected concurrent files: 사용자 소유 `.codex/config.toml`, 비밀 파일, `server/data/**`(삭제 금지), `reference/**`, linked worktree 전체, 위 Allowed files 밖 전부.
+- Acceptance criteria: (1) lineage receipt — hash·base·sentinel 일치 관측 또는 fail-closed 차단 사유 기록, (2) 서버 fresh 기동과 `127.0.0.1:47900` 응답 관측, (3) 실제 클라이언트 프로세스 실행 관측(PID·스크린샷), (4) 로그인 시도 결과와 서버 trace의 대조 기록(성공 또는 원인 판정), (5) cleanup receipt — 기록된 PID·전용 자원만 정리, listener 잔존 확인, (6) 결과가 `.ai` 상태와 관련 현행 문서에 반영.
+- Required verification: 라이브 증거(스크린샷·로그·exit code·receipt), 변경 Markdown별 `verify-changes.sh --file`, `git diff --check`. 서버 코드 미변경 시 제품 테스트는 미실행으로 명시.
+- Stop conditions: lineage mismatch(fail-closed는 버그 아님 — 차단 receipt 후 보고), 같은 증상 3회 실패 또는 새 증거 없는 조사 2회, Allowed files 밖 수정 필요, ownership 충돌.
+
 ## Completed Contract: 상태 정합성 복구
 
 - Status: **DONE — 2026-07-17 완료.** 2026-07-17 사용자 승인(계획·근거 기반 외부 쓰기·merge, push·PR은 전달 사슬로 해석) 하에 실행됐고, 같은 날 사용자 승인으로 소유권이 Codex에서 Claude Code로 인수되어 잔여 단계가 종결됐다. 외부 manifest는 Jira LOGH7-43 제목·코멘트(10:53:17 KST)·LOGH7-18 코멘트(10:53:19 KST)·GitHub #10 제목·코멘트(10:53:58 KST)로 적용됐고 2026-07-17 read-back으로 일치를 확인했다. Jira 상태 전환 0건, Obsidian은 LOGH7_VAULT_DIR unset으로 미실행. 전달(local commit·push·PR·merge)은 이 승인 사슬 안에서 실행하며 force push·main 직접 commit은 금지 유지. 이 계약의 승인 권한은 전달 완료로 소비되며 후속 작업에 재사용하지 않는다.
