@@ -1,16 +1,17 @@
 # Current State
 
 - Updated at: 2026-07-17
-- Latest change (Claude Code 메인+opus 서브에이전트): 강의(딩코딩코 AI 네이티브 개발자 1~4주차) 방법론을 이 레포 하네스(커맨드 7종·훅 5종·에이전트 6종·MCP·승인 경계·검증 행렬)에 맞춰 개작한 Claude Code 사용자 매뉴얼을 `docs/agent/claude-code-ai-업무관리-매뉴얼.md`(457줄)로 저장하고 `docs/agent/README.md` 라우팅 표에 등록했다. 레포에 없는 강의 일반론(claude-squad·Terraform·Langfuse·Ralph Loop 등)은 부록 참고로 격하. 이어서 사용자 지시(2026-07-17)로 루트 `README.md`를 신설(Claude·Codex 매뉴얼 링크, 배포 계획), `docs/logh7-architecture-operations-current.md`에 Distribution and Repository Split Plan 절(클라이언트/서버 레포 분리, 부트스트랩 클라이언트 최종 배포)을 추가, ADR-LITE-006으로 기록했다. 사용자 승인으로 `codex/codex-user-manual` 브랜치에서 commit·push·PR #167 merge 완료(`cbcd7ea5`, Codex 선행 7커밋 포함). 후속으로 `docs/logh7-document-index-current.md`에 README·매뉴얼 2종·배포 방침을 등재(문서 현행화 게이트). 검증: `verify-changes.sh --file` 변경 문서 전부 exit 0. `.codex/config.toml` 동시 수정분은 스테이징 제외로 보존. `CLAUDE.md`·`AGENTS.md`는 운영 규칙 무변경이라 미갱신. 추가(2026-07-17): 이 맥에 `LOGH7_VAULT_DIR`를 옵시디언 볼트(`~/Desktop/기술팀 옵시디언/최병호`)로 설정(~/.zshrc + settings.local.json env; 새 세션부터 훅 반영), 볼트 프로젝트 노트 현재 상태를 2026-07-17로 현행화, `docs/agent/tool-capabilities.md` 하네스 변경 이력 기록.
-- Active agent: Claude Code (메인) — 직전 Codex (root) 작업은 PR #167로 merge 완료
-- Branch: `main` (codex/codex-user-manual의 볼트 연동·진입 문서 포인터 커밋까지 PR #169로 merge(`2f708402`) 후 전환. 사용자 지시로 잔여 미커밋 전부 정리: `.codex/config.toml` 스레드 설정 3줄 커밋, 볼트 노트도 볼트 레포에 커밋·푸시)
-- Current phase: Codex AI 자동 업무 관리 시스템 사용자 매뉴얼 작성·검증 완료; 사용자가 작업 브랜치 commit·push·PR·merge를 승인했다.
-- Result: `docs/agent/codex-user-manual.md`에 프로젝트 열기, 훅·스킬, 작업 계약, Jira/GitHub, 구현·검증·리뷰, 승인 경계, 체크포인트, 실패 대응, 완료 체크리스트를 사용자 관점으로 정리했다.
-- Routing: `docs/agent/README.md`에서 매뉴얼로 진입할 수 있다.
-- Planning correction: `docs/agent/lifecycle-planning.md`의 오래된 Codex Jira 부재 설명을 Atlassian Rovo 조건부 사용으로 교체하고, L/복합 M→S급 Sub-task 규칙과 Jira↔GitHub 1:1 매핑을 반영했다.
-- Source methodology: 사용자가 제공한 1~4주차 PDF의 컨텍스트·훅·스킬, MCP, DevOps·모니터링, PRD→백로그→완주 방법론을 프로젝트 규칙에 맞게 재구성했다. 원본 PDF는 저장소에 복사하지 않았다.
-- Fresh verification: `git diff --check` exit 0; 변경 문서·상태 파일 7개 `verify-changes.sh --file` 모두 exit 0; 관련 문서 링크 대상 9개 존재; 매뉴얼 461줄·제목 41개 확인.
-- Unrun: 제품 코드·서버 테스트는 문서 전용 변경이라 실행하지 않았다.
-- Preserved concurrent change: 기존 `.codex/config.toml` 수정은 읽거나 변경하지 않고 보존했다.
-- Existing human checkpoint: Codex 훅의 라이브 활성화는 사용자가 `/hooks`에서 프로젝트 hook hash를 신뢰한 뒤 새 작업에서 확인해야 한다.
-- Recommended next action: 매뉴얼 발행 후 다음 Jira 업무를 새 `.ai/task.md` 계약으로 선택한다.
+- Latest change: native Windows는 Wine parser·prefix·subprocess 전에 direct harness로 위임하고, macOS/Linux Wine은 명시적 `PREFIX_MODE=win32|wow64`를 사용한다. Wine Stable 11의 pure win32 미지원 때문에 WoW64 prefix와 자동 host-drive 격리·복구 경계를 추가했다.
+- Branch: `codex/platform-aware-live-qa`. 최신 사용자 지시에 따라 이번 배포는 commit·push까지만 수행하고 PR·merge는 보류한다.
+- Runtime contract: native Windows는 공통 lineage/run9/evidence gate 뒤 검증된 EXE를 직접 실행하며 Wine 입력·명령·placeholder를 쓰지 않는다. macOS/Linux는 absolute Wine toolchain, 저장소 밖 run 전용 `WINEPREFIX`, explicit prefix mode, runtime-support manifest를 fail-closed로 요구한다. `wow64`의 `#arch=win64`는 prefix 형식이며 PE32 client는 그대로 32-bit다.
+- Live evidence: 서버 `127.0.0.1:47900` ready와 실제 `G7MTClient.exe` process를 관측했다. server trace는 `0x0034 → 0x0035 → 0x0036 → 0x0030` 뒤 `invalid-credentials`/login-ng를 기록했다. client는 exit 3으로 종료됐고 로그인 시 runtime error는 사용자 화면 관측이다.
+- Live verdict: macOS Wine launch와 서버 도달 경로만 확인됐다. successful login/gameplay, native Windows 실기, Linux 실기는 미검증이므로 cross-platform 전체 pass가 아니다.
+- Cleanup: 서버는 SIGINT exit 0으로 끝났고 47900은 connection refused, 이번 client/Wine process는 0개였다. registry는 absent 상태로 복구됐다. 최초 drive receipt는 `release=false`; 동일 자동 mapping 복원, cleanup 재격리, prefix 디렉터리 inode 경계, 예외 시 release를 수정해 단위 테스트했지만 수정 후 live cleanup receipt는 아직 없다.
+- Harness parity: canonical/Codex/Claude `logh7-wine-live-qa`와 metadata는 byte-identical이고 canonical/Claude orchestrator도 동기화돼 있다. `required-skills.tsv`는 live-QA를 `both`로 배포한다.
+- Documentation: live-QA 계약, prompt pack, ops/verification/tool capability, roadmap, lineage, remaster, team spec, execution plan, Codex·Claude manuals, `AGENTS.md`, `CLAUDE.md`를 플랫폼·WoW64 기준으로 현행화했다.
+- Fresh verification: Python compile exit 0, native UI unittest 14/14 exit 0, drive isolation/exception/layout 회귀 12/12 exit 0, 서버 serial 499 tests/495 pass/0 fail/4 skip exit 0, Codex hooks 26/26 exit 0, bootstrap `OK=26 MISSING=0 STALE=0`, skill validators·repo diff check·live-QA mirror equality exit 0. 최신 전체 Wine unittest는 빠른 commit·push 지시로 완료 전에 중단했으므로 통과로 세지 않는다.
+- Review: 독립 drive-lease/registry cleanup 최종 재리뷰는 BLOCKER 0 / MAJOR 0 / MINOR 0이다.
+- Unrun: native Windows 실기, Linux Wine 실기, successful authentication/gameplay, 수정 후 live drive-cleanup receipt. 서버 제품 코드는 변경하지 않았다.
+- Isolated baselines: `basedpyright`·`yaml-ls` 미설치와 구체 정보 없는 Fablize/PostToolUse generic failure가 반복된다. 실제 판정은 `py_compile`·`unittest`·parser·skill validator·명령 exit/receipt로 분리한다.
+- Preserved concurrent change: 기존 사용자 소유 `.codex/config.toml` 수정은 읽거나 변경하지 않고 작업 diff·검증 대상에서 제외해 보존했다.
+- Recommended next action: `.codex/config.toml`과 `_workspace/**`를 제외해 commit·push한다. PR·merge는 사용자 후속 지시까지 보류한다. 제품 follow-up은 login-ng 이후 runtime error 진단과 successful gameplay, 수정 후 cleanup, Windows/Linux 실기 gate다.

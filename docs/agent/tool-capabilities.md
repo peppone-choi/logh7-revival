@@ -11,9 +11,9 @@
 | Node.js | ✅ | ✅ | ✅ v25.9.0 (engines ≥20) | |
 | Python 3 | ✅ | ✅ | ✅ 3.14.5 | pytest는 기본 환경 **미설치** — NEEDS_HUMAN_CONFIRMATION (과거 16/16 실행 환경 불명) |
 | Docker / Compose | ✅ | ✅ | ✅ 설치됨 (29.3.1), `docker-compose.yml`+`server/Dockerfile` | PG는 skeleton — 기본 부팅 SQLite |
-| Wine (라이브 QA) | ✅ | ✅ | ⚠️ PARTIAL — wine-11.0 설치, 단 P0 게이트(run 전용 WINEPREFIX·계보 manifest) 통과 전 launch 차단 | `docs/logh7-roadmap-current.md` P0 참조 |
+| 레거시 클라이언트 라이브 QA | ✅ | ✅ | ⚠️ PARTIAL — native Windows는 direct harness, macOS/Linux는 run 전용 Wine. 이 Mac의 Wine Stable 11+명시적 WoW64에서 client process와 로그인 패킷 도달을 확인했으나 login-ng·exit 3·runtime error로 gameplay는 실패 | `docs/logh7-roadmap-current.md` P0 참조; native Windows/Linux 실기 미검증 |
 | CodeGraph | ✅ MCP + CLI | ✅ CLI | ✅ `.codegraph/` 존재 | 코드 위치·영향범위는 codegraph 먼저 |
-| Browser 자동화 | ⚠️ Claude 전용 (Claude-in-Chrome MCP, 세션 연결 시) | ❌ | NOT_CONFIGURED (프로젝트 검증 절차에 미포함) | 클라이언트는 브라우저가 아님 — 라이브 QA는 Wine 하네스 |
+| Browser 자동화 | ⚠️ Claude 전용 (Claude-in-Chrome MCP, 세션 연결 시) | ❌ | NOT_CONFIGURED (프로젝트 검증 절차에 미포함) | 클라이언트는 브라우저가 아님 — 라이브 QA는 플랫폼별 native/Wine 하네스 |
 | E2E (Playwright 등) | ❌ | ❌ | NOT_CONFIGURED | UI 검증은 원본 클라이언트 + 스크린샷 증거 |
 | CI/CD | ✅ (`.github/workflows/ci.yml`·`claude.yml`, `.coderabbit.yaml`) | — | ✅ **라이브** — Secret 등록·CodeRabbit App 설치 완료(2026-07-16), PR #6에서 CI 첫 런 녹색(41s·39s, 489 테스트). Claude GHA 리뷰는 main 병합 후 다음 PR부터(첫 PR 스킵은 공식 정상 동작), CodeRabbit 실리뷰는 50파일 이하 PR에서 | 첫 실리뷰 실측은 Phase 3 소형 PR |
 | Jira | ⚠️ `.mcp.json`에 `atlassian` 정의, 활성화는 Claude 로컬 allowlist 필요 | ⚠️ Atlassian Rovo 플러그인 설치됨; 커넥터가 현재 세션에 노출될 때만 사용 | ✅ 사이트 `pepponechoi-jira.atlassian.net`, 프로젝트 **`LOGH7`**("은하영웅전설7 부활") — 분해 루틴 실증 완료. 옛 `pepponechoi` 사이트는 사용하지 않음 | 계획은 로컬 Markdown이 기본 폴백, Jira 분해 루틴은 `docs/agent/lifecycle-planning.md` |
@@ -22,7 +22,7 @@
 
 ## 도구별 어댑터와 공통 정본
 
-- Claude 전용: `.claude/commands/*`, `.claude/hooks/*`, Claude MCP와 `.claude/agents/`.
+- Claude 전용: `.claude/commands/*`, `.claude/hooks/*`, Claude MCP와 `.claude/agents/`; canonical live-QA skill의 `.claude/skills/logh7-wine-live-qa/` 미러.
 - Codex 전용: `.codex/hooks.json`, `.codex/hooks/*`, `.codex/agents/*.toml`, `.agents/skills/logh7-{start-task,analyze,implement,debug,verify,review,checkpoint,skill-manager}`.
 - 공통 정본: `scripts/agent/*`, `docs/agent/` Runbook, `.ai/` 상태 파일, canonical `.agents/skills/`, codegraph CLI.
 - 양쪽 Command·Hook·Skill은 얇은 어댑터이며 절차를 복제하지 않고 공통 정본을 호출한다.
@@ -39,6 +39,8 @@
 
 | 날짜 | 변경 | 대상 | 사유 |
 |---|---|---|---|
+| 2026-07-17 | 플랫폼별 live-QA 분기 | canonical/Codex/Claude `logh7-wine-live-qa`, canonical/Claude `logh7-orchestrator`, 양쪽 live-qa agent, Wine adapter guard | native Windows에서는 Wine 없이 직접 실행하고 macOS/Linux에서만 격리 Wine 계약 적용 |
+| 2026-07-17 | Wine Stable 11 WoW64 실측 | `--prefix-mode wow64`, prefix layout·자동 drive 격리, live receipt | PE32 client process와 서버 로그인 패킷 도달 확인; login-ng·exit 3으로 전체 pass는 미달 |
 | 2026-07-05 | 초기 구성 | 전체 | 리셋 후 재시작 |
 | 2026-07-05 | Advisor Strategy 도입 | agents frontmatter model 제거, 호출시 계층화 | 비용 대비 지능 최적화 |
 | 2026-07-09 | Fable 오케스트레이션 4계층 전역 설치 | `~/.claude/fable/` (deep-reasoner/runner·sonnet→Opus 리매핑·PreToolUse 게이트), 토글 `fable on/off/status` | 권고를 물리 차단으로 |

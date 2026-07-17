@@ -268,7 +268,7 @@ BLOCKER/MAJOR/MINOR/QUESTION 순으로 실제 위험과 근거만 보고하고, 
 | **wire-engineer** | 클라↔서버 와이어 프로토콜 인코딩/디코딩 구현·검증 | "re-analyst가 확정한 레이아웃(근거 링크)만 써서 server/src/wire/에 로그인 메시지 인코더/디코더를 구현하고, 라운드트립 테스트로 검증해. 근거 없는 필드는 만들지 말고 질문으로 반환해." |
 | **server-dev** | 권위적 게임 서버(Node.js) 구현 — 세션·명령·월드·영속성 | "승인된 계약 범위에서 로그인→로비 세션 전이를 TDD로 구현하고 cd server && npm test로 검증해." |
 | **localizer** | 한글화 — cp932/cp949, GDI 폰트, String.txt, 채팅 한글 | "extract-miner 원문과 re-analyst 인코딩 오프셋을 확인하고 ko 문자열 팩을 만들어. CP932 자산을 임의로 UTF-8 변환하지 말고, grammar-checker·humanize-korean으로 검토한 뒤 되돌림 절차를 붙여." |
-| **live-qa** | 원본 클라를 자체 서버에 붙여 실제 구동, 증거 수집 | "logh7-wine-live-qa 스킬의 필수 입력과 fail-closed 조건을 먼저 확인하고, 통과하면 로그인 시나리오를 구동해 스크린샷·서버로그를 증거로 남겨." |
+| **live-qa** | 원본 클라를 자체 서버에 붙여 실제 구동, 증거 수집 | "logh7-wine-live-qa 스킬로 host runtime을 먼저 판별해. native Windows는 Wine 없이 직접 실행하고 macOS/Linux만 격리 Wine gate를 적용한 뒤, 로그인 시나리오의 스크린샷·서버로그를 증거로 남겨." |
 
 ---
 
@@ -314,16 +314,17 @@ cd server && npm start
 
 ### 5.4 라이브 QA 증거 요구법
 
-클라이언트에 보이는 변화는 자동 테스트만으로 완료라고 할 수 없습니다. 현재 binary hash와 **격리된 run 전용 WINEPREFIX**에서 수집한 라이브 증거가 필요합니다. live-qa 에이전트에게 시킬 때는 증거를 명시적으로 요구하세요.
+클라이언트에 보이는 변화는 자동 테스트만으로 완료라고 할 수 없습니다. 현재 binary hash와 **실행 환경에 맞는 runtime**에서 수집한 라이브 증거가 필요합니다. native Windows는 Wine 없이 직접 실행하고, macOS/Linux만 격리된 run 전용 `WINEPREFIX`를 사용합니다. live-qa 에이전트에게 시킬 때는 증거를 명시적으로 요구하세요.
 
 ```
 live-qa로 로그인→로비 진입을 실제 구동해줘.
-logh7-wine-live-qa SKILL의 필수 입력(REPO_ROOT·WINE_BIN·WINEPREFIX·CLIENT_EXE·LINEAGE_MANIFEST 등)을
-모두 채우고 fail-closed 조건을 먼저 확인해. 하나라도 걸리면 실행하지 말고 blocked manifest를 남겨.
+logh7-wine-live-qa SKILL로 host platform과 runtimeMode를 먼저 기록해. native Windows면 Wine 입력 없이
+검증된 CLIENT_EXE를 직접 실행하고, macOS/Linux면 REPO_ROOT·WINE_BIN·WINEPREFIX·CLIENT_EXE·LINEAGE_MANIFEST 등
+Wine mode 필수 입력을 채워. 공통 lineage와 mode별 fail-closed 조건 중 하나라도 걸리면 실행하지 말고 blocked manifest를 남겨.
 통과하면 스크린샷과 서버로그 경로를 증거로 보고하고, 서버 로그와 클라 화면을 교차비교해줘.
 ```
 
-기본 `~/.wine` 사용, EXE hash·image base·sentinel 불일치 상태의 launch/attach/patch는 금지입니다. **fail-closed는 버그가 아니라 설계**입니다.
+native Windows에서 Wine 입력·명령을 요구하는 것, Wine mode에서 기본 `~/.wine`을 사용하는 것, EXE hash·image base·sentinel 불일치 상태로 launch/attach/patch하는 것은 금지입니다. **fail-closed는 버그가 아니라 설계**입니다.
 
 ---
 
@@ -448,7 +449,7 @@ Instruction Conflict로 보고해. 임의로 문서를 정답으로 삼지 마.
 - **claude-squad** — tmux + git worktree 멀티 세션 관제. 이 레포는 `codex/*` 브랜치 + PR + single-writer-per-file 소유권으로 병렬을 관리합니다.
 - **Terraform / CI 무중단 배포 / Langfuse** — IaC·LLM 관측. 이 레포의 관심사(원본 클라 호환)와 무관해 도입돼 있지 않습니다.
 - **CodeRabbit / 서버 Sentry 배선** — `.coderabbit.yaml`과 env-guard된 Sentry 훅 자리는 저장소에 있으나 아직 Phase 3(미실측)입니다. 라이브 절차로 간주하지 마세요.
-- **Playwright/Puppeteer E2E** — 웹 E2E. 이 레포의 제품은 Wine 위 원본 Windows 클라이언트라, E2E 대신 live-qa + `logh7-wine-live-qa` 스킬로 검증합니다.
+- **Playwright/Puppeteer E2E** — 웹 E2E. 이 레포의 제품은 원본 Windows 클라이언트라, E2E 대신 실행 환경별 live-qa + `logh7-wine-live-qa` 스킬로 검증합니다.
 
 일반 Claude Code 기능(`/clear`, Plan Mode(`Shift+Tab`×2), `/agents` 등)은 툴 자체의 기능이라 언제든 쓸 수 있지만, 이 레포의 커맨드 7종·에이전트 6종은 이미 정의돼 있으니 새로 만들 필요는 없습니다.
 

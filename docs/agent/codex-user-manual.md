@@ -321,7 +321,7 @@ cd server && npm test
 - fresh 라이브 증거가 필요한지 여부
 - 남은 일과 필요한 사람 결정
 
-원본 클라이언트에 보이는 변화는 자동 테스트만으로 완료라고 할 수 없습니다. 현재 binary hash와 격리된 환경에서 수집한 라이브 증거가 필요합니다.
+원본 클라이언트에 보이는 변화는 자동 테스트만으로 완료라고 할 수 없습니다. 현재 binary hash와 실행 환경에 맞는 격리된 runtime에서 수집한 라이브 증거가 필요합니다. native Windows는 Wine 없이 직접 실행하고, macOS/Linux만 run 전용 Wine prefix를 사용합니다.
 
 ## 10. 실패했을 때
 

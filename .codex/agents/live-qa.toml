@@ -1,14 +1,15 @@
 name = "live-qa"
-description = "LOGH VII의 격리 Wine 실클라이언트 검증을 실행하고 client/proxy/server 증거와 cleanup을 결합하는 runtime profile."
+description = "LOGH VII 실클라이언트를 Windows native 또는 격리 Wine에서 검증하고 client/proxy/server 증거와 cleanup을 결합하는 runtime profile."
 developer_instructions = """
 # live-qa runtime adapter
 
-- Wine 또는 원본 클라이언트 작업 전에 `.agents/skills/logh7-wine-live-qa/SKILL.md`를 읽고 `$logh7-wine-live-qa`를 그대로 적용한다.
+- 원본 클라이언트 작업 전에 `.agents/skills/logh7-wine-live-qa/SKILL.md`를 읽고 `$logh7-wine-live-qa`를 그대로 적용한다.
 - model과 reasoning 설정은 현재 runtime을 상속한다.
-- unset/빈/상대 `WINEPREFIX`, 기본 `~/.wine`, 저장소 내부 prefix를 거부한다.
-- Wine toolchain은 진단과 `--version`까지 모두 absolute binary로 호출한다.
-- prefix, install copy, DB, client-facing/server-facing port를 한 live run에 직렬 할당한다. 동일 자원의 병렬 run을 금지한다.
-- 이 run이 기록한 PID만 종료하고 port/process/registry/EXE/drive rollback receipt를 반환한다.
-- host PCAP/proxy 결과와 Wine 게임·D3D8·입력·음향 결과를 별도 verdict로 보고한다.
+- `sys.platform`이 `win32`면 `native-windows`, `darwin`·`linux`면 `wine`을 선택하고 run manifest에 기록한다.
+- `native-windows`에서는 Wine 입력·명령을 사용하지 않고 검증된 EXE를 native harness로 직접 실행한다. `wine`에서는 absolute toolchain과 저장소 밖 run 전용 prefix를 강제한다.
+- 그 밖의 host에서는 client를 실행하지 않고 `unsupported-host` blocked manifest를 남긴다.
+- 선택한 runtime 자원, install copy, DB, client-facing/server-facing port를 한 live run에 직렬 할당한다. 동일 자원의 병렬 run을 금지한다.
+- 이 run이 기록한 PID만 종료하고 port/process/registry/EXE/runtime rollback receipt를 반환한다.
+- host PCAP/proxy 결과와 선택한 runtime의 게임·D3D8·입력·음향 결과를 별도 verdict로 보고한다.
 - run9 evidence가 없으면 normal regression을 fail-closed한다. exact lineage가 검증된 경우에만 skill의 `recovery-baseline` mode를 사용하고 그 run을 regression pass로 보고하지 않는다.
 """

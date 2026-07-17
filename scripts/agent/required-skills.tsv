@@ -21,7 +21,7 @@ humanize-korean	claude	.claude/agents/localizer.md:6; .codex/agents/localizer.to
 humanizer	claude	docs/logh7-work-plan-current.md:107,123
 style-guide	claude	docs/logh7-work-plan-current.md:107,124
 karpathy-guidelines	claude	docs/logh7-work-plan-current.md:106,121
-logh7-wine-live-qa	codex	.codex/agents/live-qa.toml:6; docs/agent/prompt-pack.md:264,274
+logh7-wine-live-qa	both	.claude/agents/live-qa.md; .codex/agents/live-qa.toml:6; docs/agent/prompt-pack.md:264,274
 logh7-asset-provenance	codex	docs/agent/tool-capabilities.md:32
 logh7-engine-spike	codex	docs/agent/tool-capabilities.md:32
 harness	codex	docs/agent/tool-capabilities.md:32

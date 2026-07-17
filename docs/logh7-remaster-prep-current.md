@@ -8,7 +8,7 @@
 - 2026-07-14 run9 기록은 SHA256 `825635783a9fb663ae3b9a2ecf8d4b74df648322256c57ee32f6426c42a23f22` 클라이언트에서 로그인 내부 644×484를 유지하고 로그인 후 1920×1080 네이티브 레이아웃을 관측했다고 판정했다(창 캡처 1924×1084).
 - `postlogin` 패치 59개는 `lobby-res` 8개 + layout 13개 + `charsel` 38개다. 로그인 화면 확대를 시도한 `login-native-layout` 33개는 제거했다.
 - 현재 checkout에는 run9/run3/run5 evidence directory와 run9 exact patch EXE/lineage receipt가 없다. 직접 확인 가능한 EXE는 `bd192...` 계열뿐이므로 위 판정은 완료 이력이지 현재 재현 가능한 gate가 아니다.
-- 격리 Wine prefix에서 exact client lineage, screenshot, protocol/FSM trace, cleanup을 복구하기 전에는 1080p 경로를 새 변경의 기준선으로 인용하지 않는다. 고해상도 텍스처, 초상·아이콘 업스케일, 3D·이펙트·사운드 리마스터는 여전히 미완료다.
+- 선택된 client runtime(native Windows 직접 실행 또는 macOS/Linux 격리 Wine)에서 exact client lineage, screenshot, protocol/FSM trace, cleanup을 복구하기 전에는 1080p 경로를 새 변경의 기준선으로 인용하지 않는다. 고해상도 텍스처, 초상·아이콘 업스케일, 3D·이펙트·사운드 리마스터는 여전히 미완료다.
 - in-place 패치에도 원본 백업, source-hash guard, rollback 경로를 유지한다.
 
 ## 원칙
@@ -22,7 +22,7 @@
 | 좌표/히트박스 | UI 좌표를 깨는 리마스터는 적용 보류 |
 | 기본 off | 모든 pack과 신규 client PoC는 기본 비활성, 명시적 feature flag로만 실행 |
 | rollback | original fallback, patch receipt, output hash, 제거/복구 절차를 함께 검증 |
-| 관측 분리 | PCAP/proxy는 host 계층, 게임·Win32 입력·Frida·렌더 acceptance는 Wine 계층 |
+| 관측 분리 | PCAP/proxy는 host 계층, 게임·Win32 입력·Frida·렌더 acceptance는 선택된 client runtime 계층 |
 
 ## provenance 등급
 
@@ -114,7 +114,7 @@ Unity로 미리 고정하지 않는다. 1차 비교는 Godot와 Unity가 같은 
 ## 적용·검증 계층
 
 1. host 계층에서 overlay manifest/hash와 proxy/PCAP byte parity를 검증한다.
-2. 격리 Wine 계층에서 로그인 644×484 → 본게임 1920×1080, lobby/world/dialog/strategy/tactical, 9-slice, 입력, 폰트/IME, D3D8 렌더를 확인한다.
+2. 선택된 client runtime 계층에서 로그인 644×484 → 본게임 1920×1080, lobby/world/dialog/strategy/tactical, 9-slice, 입력, 폰트/IME, D3D8 렌더를 확인한다.
 3. original 대 remaster A/B에서 client/proxy/server protocol/FSM trace가 동일하고 screenshot/metric만 의도대로 달라야 한다.
 4. 실패 시 feature flag off와 rollback recipe로 R0 원본 상태를 복구한다.
 
@@ -122,10 +122,10 @@ Unity로 미리 고정하지 않는다. 1차 비교는 Godot와 Unity가 같은 
 
 - [ ] 원본 asset manifest + remaster manifest 동시 존재  
 - [ ] 자산마다 원본 해시·도구·파라미터·적용 위치  
-- [ ] 격리 Wine의 original/remaster A/B에서 깨짐 없는 스크린샷과 동일 protocol/FSM trace
+- [ ] 선택된 runtime의 original/remaster A/B에서 깨짐 없는 스크린샷과 동일 protocol/FSM trace
 - [ ] 기본 off, 플래그로만 활성  
 - [ ] rollback 후 R0 hash·화면·동작 복귀
 
 ## 현재 상태
 
-run9의 1080p 및 두 클라이언트 판정은 완료 이력으로 유지하지만 현재 checkout에서는 evidence/EXE lineage 부재로 재검증할 수 없다. 리마스터는 준비 단계이며 에셋 일괄 업스케일과 고해상도 texture 교체, shared contract PoC, engine 비교는 미착수다. 다음 실제 적용은 P0 격리 Wine/lineage/evidence와 P1 client+proxy+server correlation을 통과한 뒤에만 한다.
+run9의 1080p 및 두 클라이언트 판정은 완료 이력으로 유지하지만 현재 checkout에서는 evidence/EXE lineage 부재로 재검증할 수 없다. 리마스터는 준비 단계이며 에셋 일괄 업스케일과 고해상도 texture 교체, shared contract PoC, engine 비교는 미착수다. 다음 실제 적용은 P0 runtime/lineage/evidence와 P1 client+proxy+server correlation을 통과한 뒤에만 한다.
