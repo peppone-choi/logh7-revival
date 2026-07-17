@@ -23,6 +23,11 @@ jobs:
       # are deprecated/folded into these — see upstream README + migration
       # guide, fetched 2026-07-16).
       - uses: anthropics/claude-code-action@v1
+        # `model:` 입력만으론 org/repo 변수(ANTHROPIC_MODEL=claude-opus-4-8[1m])가
+        # 주입한 1M-컨텍스트 접미사를 못 막았다(PR #174 review가 여전히
+        # `claude-opus-4-8[1m]` is_error). env로 명시해 org 변수 주입을 덮어쓴다.
+        env:
+          ANTHROPIC_MODEL: claude-opus-4-8
         with:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
           # 유효 모델 ID로 고정 — 외부에서 주입되던 `claude-opus-4-8[1m]`(1M 컨텍스트

@@ -3,7 +3,8 @@
 
 ## Active contract
 - STANDING DIRECTIVE (2026-07-17 /ultragoal): process Jira issues in batches of 5, in gate order, unconditionally until the game is actually playable (in-game world entry + basic gameplay live-verified). Never fake completion; fail-closed/evidence invariants hold. On batch done → checkpoint → pull next 5.
-- Batch #1 (P0 LOGH7-43~47): 47(fail-closed gate) + 43(native login·입력 신뢰성) DONE on Windows w/ live evidence; 45/44/46 need a Wine host (macOS/Linux) + run9 baseline → deferred to a Wine-host follow-up batch (user decision 2026-07-17). Remaining live P0/P1/P2 mostly Wine/game-data dependent.
+- Batch #1 (P0 LOGH7-43~47): 47(fail-closed gate)+43(native login) DONE on Windows w/ live evidence (PR #174 merged `4564f427`); 45/44/46 → Wine-host deferred.
+- Batch #2 (2026-07-17 user redirect to Windows-native focus): M4 gameplay on Windows-native server+client — LOGH7-58(0x2b Warp slice)/59/60/62/63 (NOT Wine-dependent). First gate: lobby→in-game (strategy map) entry on Windows-native. CI `[1m]` still from org var ANTHROPIC_MODEL; env-override attempted, root fix is org-level (user).
 - State recovery is DELIVERED: PR #172 merged `4f8c4281` (12:20 KST). External manifest applied+read-back; review workflow failure is an action-internal error, not a pass.
 - Live-run gates: lineage fail-closed (EXE hash·image base·sentinel), server 47900, evidence (screenshots/logs/exit codes/cleanup receipt) required before any completion claim.
 - Preserve the user-owned `.codex/config.toml` edit. Do not read, modify, or stage it. Never git-reset the working tree.

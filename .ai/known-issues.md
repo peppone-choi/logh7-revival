@@ -19,6 +19,7 @@
 
 ## 인프라·도구
 
+- CI Claude GHA review job은 org/repo 변수 ANTHROPIC_MODEL이 주입하는 1M 접미사(claude-opus-4-8[1m])로 is_error 실패. workflow model: pin(PR #173, merged)만으론 불충분함이 PR #174 review로 확인됨. step env: ANTHROPIC_MODEL: claude-opus-4-8 오버라이드를 시도(실효는 후속 PR review로 관측). 근본 해결은 org 변수 값 정정(사용자 영역). CI test·CodeRabbit·세션 내 독립 리뷰는 정상.
 - Codex 프로젝트 훅은 로컬 payload 회귀 26/26을 통과했지만, `.codex/hooks.json` 변경 hash를 사용자가 `/hooks`에서 신뢰하고 새 task를 시작하기 전까지 라이브 활성은 미검증이다.
 - Codex Pre/Post 훅은 현재 `apply_patch`와 Bash 경로를 보호·후검증한다. 통합 실행기나 웹 도구 등 훅 matcher 밖의 경로는 자동 차단 범위가 아니므로 `AGENTS.md` 계약과 수동 검증이 계속 적용된다.
 - 로컬 `basedpyright`·`yaml-ls`가 설치돼 있지 않아 PostToolUse LSP 단계는 실패를 보고한다. 이 작업에서는 설치 범위를 추가하지 않았으며 Python은 `py_compile`·`unittest`, YAML은 parser·skill validator로 대체 검증한다.
