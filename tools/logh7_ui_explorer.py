@@ -266,12 +266,27 @@ def _resolve_hwnd(state: dict[str, Any]) -> int:
     return hwnd
 
 
-def _force_foreground(win32gui: Any, hwnd: int) -> None:
-    try:
-        win32gui.ShowWindow(hwnd, 5)
-        win32gui.SetForegroundWindow(hwnd)
-    except Exception:
-        return
+def _force_foreground(win32gui: Any, hwnd: int) -> bool:
+    """대상 창을 포그라운드로 확정한다. 실제 전환이 확인되면 True.
+
+    SetForegroundWindow 는 다른 스레드가 활성이거나 활성화 잠금이 걸리면
+    조용히 실패할 수 있어, GetForegroundWindow 로 확인하며 짧게 재시도한다.
+    전환 직후 포커스가 안정될 시간을 주지 않으면 첫 하드웨어 입력이
+    활성화 레이스에 흡수돼 첫 글자가 누락된다(로그인 id 첫 글자 손실).
+    """
+    for _ in range(5):
+        try:
+            win32gui.ShowWindow(hwnd, 5)
+            win32gui.SetForegroundWindow(hwnd)
+        except Exception:
+            pass
+        try:
+            if win32gui.GetForegroundWindow() == hwnd:
+                return True
+        except Exception:
+            return False
+        time.sleep(0.02)
+    return False
 
 
 def _capture_window(hwnd: int, output_path: Path) -> dict[str, Any]:
@@ -321,40 +336,76 @@ def _send_text(hwnd: int, text: str) -> dict[str, Any]:
 
 # ─── 하드웨어 입력 경로 (SendInput / keybd_event) ────────────────────────────
 
-def _hw_type_text(hwnd: int, text: str) -> dict[str, Any]:
+_VK_SHIFT = 0x10  # 필드 값에 영향을 주지 않는 워밍업용 modifier
+
+
+def _build_type_sequence(text: str, *, warmup: bool = True) -> list[dict[str, Any]]:
+    """하드웨어 타이핑 시퀀스를 순수 데이터로 구성한다(Win32 실호출 없음).
+
+    포그라운드 전환 직후 첫 SendInput 이 활성화 레이스에 흡수돼 첫 글자가
+    누락되는 문제를 막기 위해, 필드 값에 영향을 주지 않는 lone SHIFT
+    down/up 워밍업을 실문자 앞에 prepend 한다. 워밍업은 문자를 만들지 않고
+    포커스 커서를 이동시키지도 않으므로 입력값을 오염시키지 않는다.
+
+    반환 항목: {"kind": "warmup"|"char", "char": str|None, "vk": int,
+                "scan": int, "unicode": bool}
+    """
+    seq: list[dict[str, Any]] = []
+    if warmup:
+        seq.append(
+            {"kind": "warmup", "char": None, "vk": _VK_SHIFT, "scan": 0, "unicode": False}
+        )
+    for ch in text:
+        seq.append(
+            {"kind": "char", "char": ch, "vk": 0, "scan": ord(ch), "unicode": True}
+        )
+    return seq
+
+
+def _hw_type_text(hwnd: int, text: str, *, warmup: bool = True) -> dict[str, Any]:
     """SendInput + KEYEVENTF_UNICODE 로 유니코드 문자열 하드웨어 타이핑.
 
     PostMessage WM_CHAR 와 달리 GetAsyncKeyState 등에도 반영되므로
-    레거시 Win32 로그인 폼 PW 필드 포커스 문제를 우회한다.
+    레거시 Win32 로그인 폼 PW 필드 포커스 문제를 우회한다. 첫 실문자 앞에
+    무해한 워밍업 키를 넣어 포그라운드 전환 직후 첫 글자 누락을 방지한다.
     """
     _, _, win32gui, _ = _require_pywin32()
-    _force_foreground(win32gui, hwnd)
-    time.sleep(0.05)  # 포그라운드 전환 대기
+    foreground = _force_foreground(win32gui, hwnd)
+    time.sleep(0.05)  # 포그라운드 전환 후 포커스 안정 대기
 
     user32 = ctypes.WinDLL("user32", use_last_error=True)
     pair = (_INPUT * 2)()
     sent_total = 0
 
-    for ch in text:
-        cp = ord(ch)
+    for event in _build_type_sequence(text, warmup=warmup):
+        down_flags = _KEYEVENTF_UNICODE if event["unicode"] else 0
+        up_flags = down_flags | _KEYEVENTF_KEYUP
         # key down
         pair[0].type = _INPUT_KEYBOARD
-        pair[0]._input.ki.wVk   = 0
-        pair[0]._input.ki.wScan = cp
-        pair[0]._input.ki.dwFlags = _KEYEVENTF_UNICODE
+        pair[0]._input.ki.wVk   = event["vk"]
+        pair[0]._input.ki.wScan = event["scan"]
+        pair[0]._input.ki.dwFlags = down_flags
         pair[0]._input.ki.time  = 0
         # key up
         pair[1].type = _INPUT_KEYBOARD
-        pair[1]._input.ki.wVk   = 0
-        pair[1]._input.ki.wScan = cp
-        pair[1]._input.ki.dwFlags = _KEYEVENTF_UNICODE | _KEYEVENTF_KEYUP
+        pair[1]._input.ki.wVk   = event["vk"]
+        pair[1]._input.ki.wScan = event["scan"]
+        pair[1]._input.ki.dwFlags = up_flags
         pair[1]._input.ki.time  = 0
 
         sent = user32.SendInput(2, pair, ctypes.sizeof(_INPUT))
-        sent_total += sent
+        if event["kind"] == "char":
+            sent_total += sent
         time.sleep(0.015)  # 문자 간 딜레이 (구형 Win32 앱 처리 여유)
 
-    return {"mode": "hw-unicode", "text": text, "chars": len(text), "sent": sent_total}
+    return {
+        "mode": "hw-unicode",
+        "text": text,
+        "chars": len(text),
+        "sent": sent_total,
+        "warmup": warmup,
+        "foreground": foreground,
+    }
 
 
 def _hw_send_key(hwnd: int, key_name: str) -> dict[str, Any]:

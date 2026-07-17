@@ -10,6 +10,8 @@ from unittest.mock import MagicMock, patch
 
 from tools.logh7_ui_explorer import (
     VK_NAMES,
+    _VK_SHIFT,
+    _build_type_sequence,
     _load_session,
     _process_alive,
     _save_session,
@@ -235,6 +237,33 @@ class UiExplorerTests(unittest.TestCase):
         ):
             self.assertEqual(main(), 0)
         self.assertEqual(seen[0].exe, Path("client.exe"))
+
+    def test_type_sequence_prepends_focus_warmup_before_first_real_char(self) -> None:
+        seq = _build_type_sequence("inei00")
+        # 첫 항목은 필드 값에 영향 없는 워밍업(lone SHIFT)이어야 한다.
+        self.assertEqual(seq[0]["kind"], "warmup")
+        self.assertEqual(seq[0]["vk"], _VK_SHIFT)
+        self.assertFalse(seq[0]["unicode"])
+        self.assertIsNone(seq[0]["char"])
+        # 워밍업 직후 첫 실문자가 손실 없이 'i' 여야 한다(첫 글자 누락 회귀 방지).
+        self.assertEqual(seq[1]["kind"], "char")
+        self.assertEqual(seq[1]["char"], "i")
+
+    def test_type_sequence_preserves_all_characters_in_order(self) -> None:
+        text = "inei00"
+        chars = [ev["char"] for ev in _build_type_sequence(text) if ev["kind"] == "char"]
+        self.assertEqual("".join(chars), text)
+        # 각 실문자는 유니코드 스캔코드로 매핑돼야 한다.
+        for ev in _build_type_sequence(text):
+            if ev["kind"] == "char":
+                self.assertTrue(ev["unicode"])
+                self.assertEqual(ev["scan"], ord(ev["char"]))
+                self.assertEqual(ev["vk"], 0)
+
+    def test_type_sequence_without_warmup_starts_at_first_char(self) -> None:
+        seq = _build_type_sequence("ab", warmup=False)
+        self.assertEqual([ev["kind"] for ev in seq], ["char", "char"])
+        self.assertEqual(seq[0]["char"], "a")
 
     def test_main_allows_start_without_explicit_exe(self) -> None:
         seen: list[argparse.Namespace] = []
