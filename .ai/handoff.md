@@ -4,8 +4,8 @@
 P0 게이트(스토리 LOGH7-18) 완주 — LOGH7-47/43/45/44/46을 각 Jira 완료기준대로 닫는다. 순서 47→43→45→44→46. push·PR·merge·외부 쓰기·라이브 실기는 2026-07-17 상시 사전승인(하드 금지선 제외).
 
 ## Current result
-- 작업 브랜치 `codex/state-consistency-recovery`는 `main@a8420b8b`에서 생성됐다. 로컬 `origin/main`도 같은 SHA였다.
-- GitHub PR #171은 2026-07-17 09:37 KST에 merge됐다. base `e61f7fcd`, head `9af444d1`, merge `a8420b8b`, 변경 34 files/+2961/-462다.
+- 작업 브랜치 `codex/opcode-coverage-and-state-docs`는 `main@956c41ef` 기반으로 상태 문서 현행화 중.
+- GitHub PR #178 merge됨: base `d2cda7f1`, head `ddfb7ce2`, merge `956c41ef` (LOGH7-58: 전술 게이트 no-op 오타수정·`LOGH7_TACTICAL_ENTRY` 정본화·전략맵 전술 arm 크래시 기본 OFF·토글 재발방지 테스트).
 - PR #171의 `CI / test`와 CodeRabbit status는 success다. `Claude Code Review / review`는 merge 뒤 PR이 닫힌 상태에서 failure였고 제출 review·inline thread는 0건이다.
 - Jira 미완료 전수 조회는 188건(`LOGH7-9`~`196`), 전부 `해야 할 일`·Medium·미배정이다. 유형은 에픽 9, 스토리 25, 작업 50, 하위 작업 104다.
 - PR #171만으로 LOGH7-18, 43~49, 144, 145, 150, 151의 완료 기준을 모두 충족한 항목은 없다. Jira 상태 전환은 0건으로 유지한다.
@@ -62,7 +62,10 @@ P0 게이트(스토리 LOGH7-18) 완주 — LOGH7-47/43/45/44/46을 각 Jira 완
 - linked worktree는 오래되고 dirty지만 계약 밖이라 정리·merge하지 않는다.
 
 ## Remaining work
-- 배치 #2 다음 착수: LOGH7-58 유닛 스테이징 완결 — 라이브에서 fleet roster가 비는 원인(buildDeploymentFleetList/tactical-entry 방출 vs 클라 렌더 갭, 0x033b↔0x0325 unitId 매칭) 디버그로 전략맵에 플레이어 함대 렌더(FSM state 2 진행) → 그 위에 Warp(0x0b01+0x2b) 라이브. 병행 가능: LOGH7-62/59/60(함대 불필요).
+- (진행중) LOGH7-58 유닛 스테이징·Warp(0x032f OutfitParty 빌더+라이브): PR #178 merge로 전술 게이트 정상화. fleet roster 비는 원인 디버그(buildDeploymentFleetList/tactical-entry) → 전략맵 함대 렌더 → Warp(0x0b01+0x2b) 라이브.
+- (진행중) LOGH7-62/59/60 세션 라이프사이클: 미확인 command fail-closed·disconnect시 online=false·reconnect idempotency. `npm test` TDD+검증.
+- (병렬) 전수 opcode 커버리지 스윕: `docs/logh7-opcode-coverage-current.md` 원장에 Information/StaticInformation 확정, 나머지 엔드포인트 매핑 진행중.
+- (병렬) RE 확정 사항 구현 백로그(추출 1단, 승인불요): 0x031d 행성 수치(class_/diameter/revolution galaxy 캐논 채움), 0x032f 멤버리스트(0x0325↔0x033b unitId 매칭), 정적테이블 0x0309/030d/030f/0311 추출.
 - Wine 호스트(macOS/Linux) 세션에서 LOGH7-45(fullPassEligible 산출기 구현+`--execute --initialize-prefix` 라이브)·44(계보 integration)·46(run9/run3/run5 evidence, frozen baseline 복원 선행) 진행.
 - P1 LOGH7-48/49(proxy/Frida/server 3면 correlation)도 Wine 호스트 의존.
 - 이 Windows 호스트 완료분(43 login·47 gate)은 codex/logh7-43-p0-evidence에 있음 — PR로 main 정리 예정.
