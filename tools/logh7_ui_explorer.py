@@ -12,6 +12,8 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
+from tools.live.lineage_guard import check_client_lineage
+
 # ctypes 타입 별칭 (wintypes는 Windows 전용이므로 폴백 제공)
 try:
     from ctypes import wintypes as _wintypes  # type: ignore[attr-defined]
@@ -64,6 +66,9 @@ DESCRIPTION = "Minimal LOGH VII live UI driver restored from 5bd249c."
 DETACHED_PROCESS = 0x00000008
 CREATE_NEW_PROCESS_GROUP = 0x00000200
 CREATE_BREAKAWAY_FROM_JOB = 0x01000000
+
+# lineage 게이트가 launch를 차단할 때의 종료 코드 (hash·image base·sentinel 불일치).
+LINEAGE_MISMATCH_EXIT = 3
 
 VK_NAMES: dict[str, int] = {
     "ENTER": 0x0D,
@@ -502,6 +507,53 @@ def _prepare_default_client() -> tuple[Path, dict[str, Any]]:
     return exe, receipt
 
 
+def _enforce_lineage_gate(session: Path, exe: Path, manifest_path: Path) -> int | None:
+    """manifest가 주어지면 launch 전에 lineage를 강제한다(fail-closed).
+
+    대상 EXE의 sha256·PE image base·sentinel을 manifest ``working`` 블록과
+    대조해 하나라도 불일치하거나 검증 불가면 launch를 막고, 근거를 담은
+    blocked receipt(JSON)를 session에 남긴 뒤 non-zero exit code를 돌려준다.
+    전부 일치하면 ``None``을 돌려줘 정상 launch를 이어가게 한다.
+    """
+    reason: str | None = None
+    working: Any = None
+    try:
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+        if not isinstance(manifest, dict):
+            reason = "manifest must be a JSON object"
+        else:
+            working = manifest.get("working")
+            if working is None:
+                reason = "manifest is missing the working block"
+    except OSError as error:
+        reason = f"manifest unreadable: {error}"
+    except json.JSONDecodeError as error:
+        reason = f"manifest is not valid JSON: {error}"
+
+    if reason is not None:
+        verdict: dict[str, Any] = {"ok": False, "exe": str(exe), "checks": [], "mismatches": [], "reason": reason}
+    else:
+        verdict = check_client_lineage(exe, working)
+
+    if verdict["ok"]:
+        return None
+
+    receipt = {
+        "blocked": True,
+        "reason": "lineage mismatch — launch refused before start",
+        "exe": str(exe),
+        "manifest": str(manifest_path),
+        "exitCode": LINEAGE_MISMATCH_EXIT,
+        "verdict": verdict,
+        "blockedAt": datetime.now(UTC).astimezone().isoformat(),
+    }
+    receipt_path = session / "lineage-blocked.json"
+    receipt_path.write_text(json.dumps(receipt, ensure_ascii=False, indent=2), encoding="utf-8")
+    receipt["receiptPath"] = str(receipt_path)
+    print(json.dumps(receipt, ensure_ascii=False, indent=2))
+    return LINEAGE_MISMATCH_EXIT
+
+
 def cmd_start(args: argparse.Namespace) -> int:
     _require_windows()
     session: Path = args.session.resolve()
@@ -522,6 +574,11 @@ def cmd_start(args: argparse.Namespace) -> int:
         }
     if not exe.exists():
         raise SystemExit(f"client exe not found: {exe}")
+    lineage_manifest = getattr(args, "lineage_manifest", None)
+    if lineage_manifest is not None:
+        blocked = _enforce_lineage_gate(session, exe, Path(lineage_manifest).resolve())
+        if blocked is not None:
+            return blocked
     creationflags = DETACHED_PROCESS | CREATE_NEW_PROCESS_GROUP | CREATE_BREAKAWAY_FROM_JOB
     process = subprocess.Popen(
         [str(exe)],
@@ -687,6 +744,12 @@ def build_parser() -> argparse.ArgumentParser:
     p_start.add_argument("--settle", type=float, default=5.0)
     p_start.add_argument("--window-timeout", type=float, default=30.0)
     p_start.add_argument("--title-substring", default=None)
+    p_start.add_argument(
+        "--lineage-manifest",
+        type=Path,
+        default=None,
+        help="client lineage manifest v1; 주어지면 launch 전 sha256·image base·sentinel을 강제 검증",
+    )
     p_start.set_defaults(func=cmd_start)
 
     p_shot = sub.add_parser("shot")
