@@ -5,7 +5,11 @@
 
 ## 제품 (LOGH VII)
 
-- 함선 마커 root `DAT_009d2fa8`이 여전히 null — 전략 FSM이 state 2에서 진행하지 않음. (2026-07-17 라이브 재확인: Windows 네이티브 인게임 진입 후에도 fleet roster 빈 상태로 재현. tactical-entry 시퀀스 0x0325/0x0323/0x033b/0x0f1f는 방출되나 유닛 스테이징 미완으로 렌더 스킵. LOGH7-58 Warp의 관문. 0x033b unitId==0x0325 unitId 매칭 회귀가드 확인 필요.)
+- 전략맵 fleet roster/멤버리스트가 빈 상태 — LOGH7-58 Warp의 관문. **2026-07-17 라이브 A/B로 이전 진단 정정**(`_workspace/liveqa-20260717-logh7-58-staging/`, native Windows):
+  - **정정①(roster는 비지 않는다)**: 이전 known-issue "tactical-entry 시퀀스 방출되나 스테이징 미완/빈 roster"는 오판이었다. 0x0325 레코드/roster는 라이브에서 정상(25유닛: player 0x8 + NPC 24, 레이아웃 dual-parser 확증, 0x033b unitId==0x0325 매칭 회귀가드 통과). "빈 roster" 진단은 **오타 게이트로 인한 오판**이었다: 실행 서버 코드가 7 빠진 `LOGH_TACTICAL_ENTRY`를 읽어, 운영자가 프로젝트 관례 `LOGH7_TACTICAL_ENTRY=1`로 켜도 **침묵 no-op**이 되어 0x033b/0x0f1f가 실제로는 방출된 적이 없었다(직전 ingame run world-enter 트레이스 `0x0206,0x0204,0x0325,0x0323`뿐이 그 증거). → 커밋으로 코드가 정본 이름 `LOGH7_TACTICAL_ENTRY`(7 포함)를 읽도록 통일(code/test/docs), 토글이 실제 방출을 바꾸는지 assert하는 재발방지 테스트 추가.
+  - **정정②(핵심, world-enter arm은 크래시)**: 게이트 on으로 0x033b/0x0f1f를 world-enter에 방출하면 클라 FSM은 이전 정체를 통과하지만 **grid-init-spawn(0x0f02) 버스트 ~560ms 뒤 read ECONNRESET로 결정적 크래시(2/2 재현)**. 게이트 off 대조(같은 캐릭터/코드)는 같은 버스트를 정상 소화하고 전략맵 렌더+0x0300 heartbeat 지속(소켓에러 0건). → **world-enter(전략맵 문맥)에 battle 전술 arm을 붙이는 게 크래시 트리거이자 주입 지점 오배치**(전략맵 진입 ≠ 전술 battle arm). 기본 off 유지(안정), 전술 codec은 `LOGH7_TACTICAL_ENTRY=1` opt-in만 방출.
+  - **정정③(진짜 남은 블로커)**: 게임플레이 블로커는 **전략맵 함대 멤버리스트 "NO DATA"** — 전술 시퀀스와 무관한 **별개의 전략 멤버/유닛 스폰 데이터 경로**다(gate off 안정 런에서도 멤버리스트 공란). `DAT_009d2fa8` null / "FSM state 2"는 이 전략 스테이징의 원인이 아니다(state 2는 battle 전술 arm 목표). **re-analyst가 클라 파서로 전략 멤버리스트를 채우는 opcode/데이터 경로를 규명 중.**
+  - **다음 프로브**: (a) 전략맵 멤버리스트를 채우는 정확한 opcode/데이터 경로 RE 확정(grid-init-spawn 버스트 0x0b09/0x0b0a/0x031x/0x0356 중 어느 것이 멤버/유닛을 스테이징하는지, 필요한 필드가 서버에서 채워지는지). (b) 전술 시퀀스가 필요한 올바른 FSM 주입 지점(battle 진입 시점) RE 확정. (c) gate-on 크래시 트리거 프레임 이분탐색(버스트 프레임 1개씩 격리 A/B).
 - production `0x030b`는 SQLite 함선 catalog 63행 중 선두 19행만 전송 가능. 20행 이상은 클라이언트 admission 정지 재현 — 금지.
 - M4 커맨드 카탈로그 81개 중 factory 확인 2개. PCP/MCP ledger, CP charge, timers/jobs, `0x0327` 미확정 재고, disconnect의 `online=false` 영속화 미구현.
 - 동기 SQLite bridge는 PostgreSQL 전환 전에 async-capable로 교체 필요. PG는 skeleton(기본 부팅은 SQLite).

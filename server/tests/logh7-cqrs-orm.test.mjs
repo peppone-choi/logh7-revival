@@ -419,7 +419,7 @@ test('playable runtime routes world enter and wire move through CQRS/UoW', async
 // (게이트 ON 2/2 재현). 게이트 OFF 대조는 같은 버스트를 정상 소화하고 전략맵 렌더 + 0x0300 heartbeat가
 // 지속됐다. → world-enter에 전술 arm을 붙이는 것은 크래시 트리거이자(전략맵 진입은 battle arm이 아님)
 // 의미상 오배치다. 따라서 실 유저 경로는 기본적으로 이 시퀀스를 방출하지 않아야 한다(라이브 안정 가드).
-// 전술 codec 자체는 유효하며(matched roster) LOGH_TACTICAL_ENTRY=1 opt-in으로만 방출한다(RE 실험용).
+// 전술 codec 자체는 유효하며(matched roster) LOGH7_TACTICAL_ENTRY=1 opt-in으로만 방출한다(RE 실험용).
 function decodeUnitRosterIds(inner) {
   const body = msg32Body(inner);
   const count = body.readUInt16BE(0);
@@ -474,8 +474,8 @@ test('production runtime does NOT append tactical entry sequence to world-enter 
   await writeFile(accountsPath, JSON.stringify({
     accounts: [{ accountId: 'inei00', password: 'dummy' }],
   }), 'utf8');
-  const prevGate = process.env.LOGH_TACTICAL_ENTRY;
-  delete process.env.LOGH_TACTICAL_ENTRY;
+  const prevGate = process.env.LOGH7_TACTICAL_ENTRY;
+  delete process.env.LOGH7_TACTICAL_ENTRY;
   const runtime = createPlayableRuntime({
     port: 0, host: '127.0.0.1', dbPath: join(dir, 't.sqlite'), accountsPath, logger: { debug() {} },
   });
@@ -489,20 +489,20 @@ test('production runtime does NOT append tactical entry sequence to world-enter 
     assert.ok(codes.includes(CODE_INFO_UNIT), 'world-enter 0x0325 유닛 레지스트리는 유지');
   } finally {
     await runtime.close();
-    if (prevGate === undefined) delete process.env.LOGH_TACTICAL_ENTRY;
-    else process.env.LOGH_TACTICAL_ENTRY = prevGate;
+    if (prevGate === undefined) delete process.env.LOGH7_TACTICAL_ENTRY;
+    else process.env.LOGH7_TACTICAL_ENTRY = prevGate;
     await rm(dir, { recursive: true, force: true });
   }
 });
 
-test('LOGH_TACTICAL_ENTRY=1 opt-in emits tactical sequence with matched roster (codec 유효, RE 실험용)', async () => {
+test('LOGH7_TACTICAL_ENTRY=1 opt-in emits tactical sequence with matched roster (codec 유효, RE 실험용)', async () => {
   const dir = await mkdtemp(join(tmpdir(), 'logh7-rt-tactical-on-'));
   const accountsPath = join(dir, 'accounts.json');
   await writeFile(accountsPath, JSON.stringify({
     accounts: [{ accountId: 'inei00', password: 'dummy' }],
   }), 'utf8');
-  const prevGate = process.env.LOGH_TACTICAL_ENTRY;
-  process.env.LOGH_TACTICAL_ENTRY = '1';
+  const prevGate = process.env.LOGH7_TACTICAL_ENTRY;
+  process.env.LOGH7_TACTICAL_ENTRY = '1';
   const runtime = createPlayableRuntime({
     port: 0, host: '127.0.0.1', dbPath: join(dir, 't.sqlite'), accountsPath, logger: { debug() {} },
   });
@@ -523,8 +523,8 @@ test('LOGH_TACTICAL_ENTRY=1 opt-in emits tactical sequence with matched roster (
     assert.equal(shipIds[0], character.unitId, '플레이어가 roster unit[0]');
   } finally {
     await runtime.close();
-    if (prevGate === undefined) delete process.env.LOGH_TACTICAL_ENTRY;
-    else process.env.LOGH_TACTICAL_ENTRY = prevGate;
+    if (prevGate === undefined) delete process.env.LOGH7_TACTICAL_ENTRY;
+    else process.env.LOGH7_TACTICAL_ENTRY = prevGate;
     await rm(dir, { recursive: true, force: true });
   }
 });

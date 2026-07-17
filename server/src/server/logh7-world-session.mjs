@@ -80,9 +80,11 @@ export function createWorldSession({
   // LOGH_STRAT_GRID_EARLY=1: world-ready push 에서 0x0313 grid-type 를 조기 방출(reactive 0x0312
   // 응답과 합쳐 ×2). 스펙 §미방출 3(early-grid) 근거. 기본은 env 로 결정(프로덕션 opt-in).
   stratGridEarly = process.env.LOGH_STRAT_GRID_EARLY === '1',
-  // LOGH_TACTICAL_ENTRY=1: 월드진입 응답 말미에 전술 진입 시퀀스([0x0325,0x0323,0x033b,0x0f1f])를
+  // LOGH7_TACTICAL_ENTRY=1: 월드진입 응답 말미에 전술 진입 시퀀스([0x0325,0x0323,0x033b,0x0f1f])를
   // deferred 로 덧붙인다. 기본 off — off 면 전술 inner 0건(기존 동작 완전 불변). 전술 arm 트랙 게이트.
-  tacticalEntry = process.env.LOGH_TACTICAL_ENTRY === '1',
+  // ★env 이름은 프로젝트 관례대로 7 포함(LOGH7_)이 정본. 과거 코드가 7 없는 LOGH_TACTICAL_ENTRY를
+  //   읽어, 운영자가 LOGH7_TACTICAL_ENTRY=1로 켜도 침묵 no-op이 되어 "인게임 증명"을 오도했다(2026-07-17).
+  tacticalEntry = process.env.LOGH7_TACTICAL_ENTRY === '1',
 } = {}) {
   /** @type {Map<number, WorldPlayer>} */
   const players = new Map();

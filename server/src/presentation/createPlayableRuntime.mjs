@@ -55,8 +55,8 @@ export function createPlayableRuntime({
     // 전략맵 렌더 + 0x0300 heartbeat가 지속됐다 → 전술 arm이 크래시 트리거다. 전략맵 진입은
     // 전술(battle) arm이 아니므로 world-enter 방출은 의미상으로도 틀렸다. 빈 멤버리스트는
     // 별개의 전략 멤버/유닛 스테이징 데이터 문제다. 전술 시퀀스 codec은 유효하며(matched roster)
-    // LOGH_TACTICAL_ENTRY=1로 실험 가능하지만, 올바른 주입 지점을 RE로 확정하기 전까지 기본 off다.
-    tacticalEntry: process.env.LOGH_TACTICAL_ENTRY === '1',
+    // LOGH7_TACTICAL_ENTRY=1로 실험 가능하지만, 올바른 주입 지점을 RE로 확정하기 전까지 기본 off다.
+    tacticalEntry: process.env.LOGH7_TACTICAL_ENTRY === '1',
   });
 
   const server = createPlayableServer({
