@@ -438,6 +438,35 @@ not_together_troops[] : count u8 (cap ≤ 24), stride 6
 > packages it is carrying. The single most important record for rendering a fleet's org screen.
 > Store global `clientBase+0x35f35c`. `supplies/max_supplies` are the directly economic fields.
 
+#### 5c-impl. Implementation confirmation (2026-07-17) — `src/server/codec/outfit-party-record.mjs`
+
+The dedicated `0x032f` builder (`buildResponseInformationOutfitPartyInner`) is implemented and wired
+`req 0x032e → resp 0x032f` in `logh7-world-session.mjs` (same interception pattern as `0x032a`, plus a
+routing-recognition fallback in `ADMISSION_DEDICATED_BUILDERS`). Before this, `0x032e` was unregistered
+so the fleet-info member-list panel bound to a zero-count record ("NO DATA").
+
+- **Wire is a compact-cursor stream inside the fixed 0x8b04 (35588B) frame**, byte-for-byte like the
+  sibling `0x0327` warehouse (§4c): the dispatcher bulk-copies the body to `clientBase+0x35f35c` and the
+  parser reads it with a compact cursor into the *padded* native cache, so the wire carries **no native
+  alignment padding**. The header offsets in §5c (`+0x00…+0x14`) are the native cache offsets; the wire
+  header is compact 19B (`outfit u32, base u32, mode u8, power u8, camp u8, kind u32, index u32`) followed
+  by `characters_count u8`, then the length-prefixed arrays in the §5c order.
+- **Endianness = compact big-endian**, following the live-confirmed warehouse convention (B71: body first
+  u32 = `00000046` = base 70 = u32BE). `name` chars (u16) are read by the same stream reader
+  (`*stream+0x20`) so they are u16BE too. A single `options.wireEndian='le'` toggle flips everything if a
+  live capture shows reversed numbers/names.
+- **Caps (parser hard-reject)** the builder clamps: characters ≤ 10 (name ≤ 13 u16), ships ≤ 60
+  (units ≤ 70), troops ≤ 24, other_packages ≤ 3, troop_packages ≤ 24, not_together_ships ≤ 60,
+  not_together_troops ≤ 24. Max compact content ≈ 35145B ≤ 35588B (wire ≤ native, as expected).
+- **No-fabrication projection.** `characters[]` = the fleet's real command officer (player character:
+  id/rank/display_name from the seed), which is what the member-list widget binds to. `ships/troops/
+  packages` have no domain source yet → count 0. `supplies/max_supplies` stay 0 (economy unimplemented is
+  canon, manual p9). Header: `outfit=unitId`, `base=`current-system id, `power/camp=`faction; `kind/index`
+  unbacked → 0. Names use the same `charCodeAt`→u16 encoding as the `0x0323` character record (no CP932→UTF
+  transcoding).
+- Unit tests: `tests/logh7-outfit-party-record.test.mjs` (fixed size, full round-trip via a client-like
+  compact BE parser, member-list projection, cap clamping, scalar saturation).
+
 ### 5d. ResponseOutfitInformationUnit `0x331` (0x1814) — per-unit detail in an outfit
 
 - **Confidence: high** (parser `FUN_0041f3d0`). Outer **count u8 @0x00**, cap ≤ 70; **element
