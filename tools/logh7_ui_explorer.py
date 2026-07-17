@@ -540,7 +540,7 @@ def _enforce_lineage_gate(session: Path, exe: Path, manifest_path: Path) -> int 
 
     receipt = {
         "blocked": True,
-        "reason": "lineage mismatch — launch refused before start",
+        "reason": "lineage mismatch - launch refused before start",
         "exe": str(exe),
         "manifest": str(manifest_path),
         "exitCode": LINEAGE_MISMATCH_EXIT,
@@ -550,7 +550,10 @@ def _enforce_lineage_gate(session: Path, exe: Path, manifest_path: Path) -> int 
     receipt_path = session / "lineage-blocked.json"
     receipt_path.write_text(json.dumps(receipt, ensure_ascii=False, indent=2), encoding="utf-8")
     receipt["receiptPath"] = str(receipt_path)
-    print(json.dumps(receipt, ensure_ascii=False, indent=2))
+    # 콘솔 print는 ASCII-safe로 — cp949/cp932 기본 콘솔에서 non-ASCII(일본어 EXE
+    # 경로·기호)로 UnicodeEncodeError가 나면 exit 3 대신 크래시(exit 1)로 종료된다.
+    # receipt 파일(위)은 UTF-8로 그대로 두고, 콘솔 echo만 이스케이프한다.
+    print(json.dumps(receipt, ensure_ascii=True, indent=2))
     return LINEAGE_MISMATCH_EXIT
 
 
