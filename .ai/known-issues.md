@@ -5,7 +5,7 @@
 
 ## 제품 (LOGH VII)
 
-- 함선 마커 root `DAT_009d2fa8`이 여전히 null — 전략 FSM이 state 2에서 진행하지 않음.
+- 함선 마커 root `DAT_009d2fa8`이 여전히 null — 전략 FSM이 state 2에서 진행하지 않음. (2026-07-17 라이브 재확인: Windows 네이티브 인게임 진입 후에도 fleet roster 빈 상태로 재현. tactical-entry 시퀀스 0x0325/0x0323/0x033b/0x0f1f는 방출되나 유닛 스테이징 미완으로 렌더 스킵. LOGH7-58 Warp의 관문. 0x033b unitId==0x0325 unitId 매칭 회귀가드 확인 필요.)
 - production `0x030b`는 SQLite 함선 catalog 63행 중 선두 19행만 전송 가능. 20행 이상은 클라이언트 admission 정지 재현 — 금지.
 - M4 커맨드 카탈로그 81개 중 factory 확인 2개. PCP/MCP ledger, CP charge, timers/jobs, `0x0327` 미확정 재고, disconnect의 `online=false` 영속화 미구현.
 - 동기 SQLite bridge는 PostgreSQL 전환 전에 async-capable로 교체 필요. PG는 skeleton(기본 부팅은 SQLite).

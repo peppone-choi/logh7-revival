@@ -62,6 +62,7 @@ P0 게이트(스토리 LOGH7-18) 완주 — LOGH7-47/43/45/44/46을 각 Jira 완
 - linked worktree는 오래되고 dirty지만 계약 밖이라 정리·merge하지 않는다.
 
 ## Remaining work
+- 배치 #2 다음 착수: LOGH7-58 유닛 스테이징 완결 — 라이브에서 fleet roster가 비는 원인(buildDeploymentFleetList/tactical-entry 방출 vs 클라 렌더 갭, 0x033b↔0x0325 unitId 매칭) 디버그로 전략맵에 플레이어 함대 렌더(FSM state 2 진행) → 그 위에 Warp(0x0b01+0x2b) 라이브. 병행 가능: LOGH7-62/59/60(함대 불필요).
 - Wine 호스트(macOS/Linux) 세션에서 LOGH7-45(fullPassEligible 산출기 구현+`--execute --initialize-prefix` 라이브)·44(계보 integration)·46(run9/run3/run5 evidence, frozen baseline 복원 선행) 진행.
 - P1 LOGH7-48/49(proxy/Frida/server 3면 correlation)도 Wine 호스트 의존.
 - 이 Windows 호스트 완료분(43 login·47 gate)은 codex/logh7-43-p0-evidence에 있음 — PR로 main 정리 예정.
