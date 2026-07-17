@@ -2,6 +2,7 @@
 
 - Updated at: 2026-07-17
 - Active objective: P0 게이트 완주 계약(LOGH7-43~47, 스토리 LOGH7-18)이 ACTIVE. 구현 순서 LOGH7-47→43→45→44→46. push·PR·merge·외부 쓰기·라이브 실기는 2026-07-17 상시 사전승인. LOGH7-43 라이브 런은 AC-2로 포함.
+- Standing directive (2026-07-17 /ultragoal): 게임 실제 플레이 가능(in-game 월드진입·기본 플레이 라이브 검증)까지 Jira 이슈를 게이트 순 5개씩 배치로 무조건 계속 처리. 현재 배치 #1 = P0 LOGH7-43~47. fail-closed·증거 기반 완료 유지, 가짜 완료 금지. `.omc/ultragoal/` 마일스톤 원장(G001-G006)은 coarse 추적으로 유지하되 G001 "M3 월드 진입"은 현재 로드맵상 완료로 보여 재조정 대상(비차단).
 - Git baseline: `main`은 PR #172 merge `4f8c4281`(상태 정합성 복구, 2026-07-17 12:20 KST). 직전 PR #171 merge는 `a8420b8b`. 작업 브랜치 `codex/logh7-43-p0-evidence`는 `4f8c4281` 기반.
 - PR #171 checks: `CI / test`와 CodeRabbit status는 success. `Claude Code Review / review`는 PR이 이미 닫힌 뒤 failure로 끝났고, 제출 review와 inline thread는 0건이다. 따라서 병합 사실과 모든 review gate 통과를 같은 주장으로 취급하지 않는다. PR #172도 같은 패턴이다 — `CI / test`·CodeRabbit pass, `Claude Code Review / review`는 claude-code-action 내부 오류로 fail이며 성공으로 재분류하지 않는다.
 - Recovery delivery result: 상태 정합성 복구는 commit `572bf8f5` → PR #172 → merge `4f8c4281`로 전달 완료. 외부 manifest 적용·read-back, 검증 exit 0, 독립 리뷰 BLOCKER/MAJOR 0 해소 기록은 merge된 `.ai/handoff.md` 이력과 PR #172 본문에 있다.
