@@ -10,10 +10,13 @@ import {
   ensureUnitId,
 } from '../domain/entities.mjs';
 import {
-  buildAuthorityCommandRows,
+  authorizeNavigationCommand,
   grantAuthorityCard,
   revokeAuthorityCard,
 } from '../domain/authority-cards.mjs';
+
+// 확정된 warp(성계 이동) command factory id. 미확인 command 는 authorizeNavigationCommand 가 거부한다.
+const WARP_COMMAND_ID = 0x2b;
 
 function safeEqualString(a, b) {
   const ba = Buffer.from(String(a), 'utf8');
@@ -145,8 +148,9 @@ export function registerGameHandlers({ commandBus, queryBus, isGridCellNavigable
       throw new Error('character not owned');
     }
     if (!character.online) throw new Error('not in world');
-    if (!buildAuthorityCommandRows(character.authorityCards)
-      .some((row) => row.commands.includes(0x2b))) {
+    // 항행 command 게이트(fail-closed): 미확인 command 는 unknown-command 로,
+    // 확정 warp(0x2b)이라도 카드 권한 부재면 no-authority 로 거부된다.
+    if (!authorizeNavigationCommand(character.authorityCards, WARP_COMMAND_ID).allowed) {
       throw new Error('warp authority required');
     }
     const unitId = ensureUnitId(character);
