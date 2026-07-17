@@ -21,6 +21,11 @@ from dataclasses import asdict, dataclass
 from pathlib import Path, PurePosixPath
 from typing import Any, Iterable, Mapping, Sequence
 
+# 이 파일은 `python -m tools.live.logh7_wine_live_qa`(모듈)뿐 아니라 서버 테스트처럼
+# `python tools/live/logh7_wine_live_qa.py`(스크립트 경로)로도 실행된다. 스크립트
+# 모드에선 script dir만 sys.path에 있어 `tools.live` 절대 import가 실패하므로,
+# 공유 lineage_guard를 import하기 전에 repo root를 sys.path에 넣는다.
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 from tools.live.lineage_guard import inspect_pe
 
 
