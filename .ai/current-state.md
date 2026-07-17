@@ -1,17 +1,15 @@
 # Current State
 
 - Updated at: 2026-07-17
-- Latest change: native Windows는 Wine parser·prefix·subprocess 전에 direct harness로 위임하고, macOS/Linux Wine은 명시적 `PREFIX_MODE=win32|wow64`를 사용한다. Wine Stable 11의 pure win32 미지원 때문에 WoW64 prefix와 자동 host-drive 격리·복구 경계를 추가했다.
-- Branch: `codex/platform-aware-live-qa`. 최신 사용자 지시에 따라 이번 배포는 commit·push까지만 수행하고 PR·merge는 보류한다.
-- Runtime contract: native Windows는 공통 lineage/run9/evidence gate 뒤 검증된 EXE를 직접 실행하며 Wine 입력·명령·placeholder를 쓰지 않는다. macOS/Linux는 absolute Wine toolchain, 저장소 밖 run 전용 `WINEPREFIX`, explicit prefix mode, runtime-support manifest를 fail-closed로 요구한다. `wow64`의 `#arch=win64`는 prefix 형식이며 PE32 client는 그대로 32-bit다.
-- Live evidence: 서버 `127.0.0.1:47900` ready와 실제 `G7MTClient.exe` process를 관측했다. server trace는 `0x0034 → 0x0035 → 0x0036 → 0x0030` 뒤 `invalid-credentials`/login-ng를 기록했다. client는 exit 3으로 종료됐고 로그인 시 runtime error는 사용자 화면 관측이다.
-- Live verdict: macOS Wine launch와 서버 도달 경로만 확인됐다. successful login/gameplay, native Windows 실기, Linux 실기는 미검증이므로 cross-platform 전체 pass가 아니다.
-- Cleanup: 서버는 SIGINT exit 0으로 끝났고 47900은 connection refused, 이번 client/Wine process는 0개였다. registry는 absent 상태로 복구됐다. 최초 drive receipt는 `release=false`; 동일 자동 mapping 복원, cleanup 재격리, prefix 디렉터리 inode 경계, 예외 시 release를 수정해 단위 테스트했지만 수정 후 live cleanup receipt는 아직 없다.
-- Harness parity: canonical/Codex/Claude `logh7-wine-live-qa`와 metadata는 byte-identical이고 canonical/Claude orchestrator도 동기화돼 있다. `required-skills.tsv`는 live-QA를 `both`로 배포한다.
-- Documentation: live-QA 계약, prompt pack, ops/verification/tool capability, roadmap, lineage, remaster, team spec, execution plan, Codex·Claude manuals, `AGENTS.md`, `CLAUDE.md`를 플랫폼·WoW64 기준으로 현행화했다.
-- Fresh verification: Python compile exit 0, native UI unittest 14/14 exit 0, drive isolation/exception/layout 회귀 12/12 exit 0, 서버 serial 499 tests/495 pass/0 fail/4 skip exit 0, Codex hooks 26/26 exit 0, bootstrap `OK=26 MISSING=0 STALE=0`, skill validators·repo diff check·live-QA mirror equality exit 0. 최신 전체 Wine unittest는 빠른 commit·push 지시로 완료 전에 중단했으므로 통과로 세지 않는다.
-- Review: 독립 drive-lease/registry cleanup 최종 재리뷰는 BLOCKER 0 / MAJOR 0 / MINOR 0이다.
-- Unrun: native Windows 실기, Linux Wine 실기, successful authentication/gameplay, 수정 후 live drive-cleanup receipt. 서버 제품 코드는 변경하지 않았다.
-- Isolated baselines: `basedpyright`·`yaml-ls` 미설치와 구체 정보 없는 Fablize/PostToolUse generic failure가 반복된다. 실제 판정은 `py_compile`·`unittest`·parser·skill validator·명령 exit/receipt로 분리한다.
-- Preserved concurrent change: 기존 사용자 소유 `.codex/config.toml` 수정은 읽거나 변경하지 않고 작업 diff·검증 대상에서 제외해 보존했다.
-- Recommended next action: `.codex/config.toml`과 `_workspace/**`를 제외해 commit·push한다. PR·merge는 사용자 후속 지시까지 보류한다. 제품 follow-up은 login-ng 이후 runtime error 진단과 successful gameplay, 수정 후 cleanup, Windows/Linux 실기 gate다.
+- Active objective: 상태 정합성 복구 계약은 종결 단계다. 외부 manifest 적용을 read-back으로 확인했고, 남은 것은 승인된 전달 사슬(local commit·push·PR·merge)뿐이다. 다음 계약은 사용자 지시로 LOGH7-43 P0 fresh evidence 확보(native Windows 실기 라이브 런)로 선택됐다.
+- Git baseline: 작업 브랜치의 base는 `main`/로컬 `origin/main`과 같은 `a8420b8b`. 이 commit은 PR #171(`codex/platform-aware-live-qa@9af444d1`) merge이며 GitHub도 2026-07-17 09:37 KST 병합을 확인했다.
+- PR #171 checks: `CI / test`와 CodeRabbit status는 success. `Claude Code Review / review`는 PR이 이미 닫힌 뒤 failure로 끝났고, 제출 review와 inline thread는 0건이다. 따라서 병합 사실과 모든 review gate 통과를 같은 주장으로 취급하지 않는다.
+- Platform live-QA result: macOS Wine에서 서버 `127.0.0.1:47900`, 실제 client process, `0x0034 → 0x0035 → 0x0036 → 0x0030` 흐름까지 확인했다. `invalid-credentials`/login-ng와 client exit 3으로 끝났으며 successful login/gameplay는 미검증이다.
+- Remaining P0 evidence: native Windows·Linux 실기, 수정 후 live drive-cleanup receipt, 최신 전체 Wine unittest, run9 exact-hash tracked evidence가 없다. P1 proxy/Frida/server 3면 join과 P2 parser/cache/root/FSM도 열려 있다.
+- Jira snapshot: 2026-07-17 10:41 KST 기준 미완료 188건(`LOGH7-9`~`LOGH7-196`), 전부 `해야 할 일`·Medium·미배정. 에픽 9, 스토리 25, 작업 50, 하위 작업 104이며 진행 중 이슈는 0건이다.
+- Jira/GitHub mapping: LOGH7-43 ↔ GitHub #10은 1:1 대응하지만 PR #171의 closing issue나 Jira 키 직접 연결은 없다. PR #171만으로 LOGH7-18, 43~49, 144, 145, 150, 151 중 완료 전환 가능한 항목은 없다.
+- External sync result: LOGH7-43 제목·코멘트(10:53:17 KST), LOGH7-18 코멘트(10:53:19 KST), GitHub #10 제목·코멘트(10:53:58 KST) 적용을 2026-07-17 read-back으로 확인. Jira 전환 0건, Obsidian 미실행(LOGH7_VAULT_DIR unset). Jira 접근은 로컬 Atlassian MCP OAuth(정본 사이트 pepponechoi-jira.atlassian.net) 경유 — Rovo 커넥터의 pepponechoi.atlassian.net 테넌트는 suspended-inactivity.
+- Linked worktree: `agents/commit-push-and-verify-next-steps@0b9c324d`는 main 대비 226 behind/1 ahead이며 staged 3, unstaged 1, untracked 4개다. 읽기 전용 보호 대상으로 유지하고 현재 제품 기준이나 병합 대상으로 사용하지 않는다.
+- Preserved concurrent change: 사용자 소유 `.codex/config.toml` dirty 변경은 읽거나 수정·stage하지 않는다. 소유권은 2026-07-17 사용자 승인으로 Codex→Claude Code로 인수됐다.
+- Current blockers: 제품 관점에서는 P0 fresh evidence와 successful authentication/gameplay 부재가 블로커다. 상태 복구 관점의 블로커는 없다 — 외부 동기화는 적용·검증 완료, 전달만 남았다.
+- Recommended next action after recovery: 복구 브랜치 merge 후 새 작업 브랜치에서 LOGH7-43 P0 fresh evidence 계약(native Windows 실기 라이브 런, lineage fail-closed·포트 47900 직렬화·증거 필수)을 활성화한다. LOGH7-43 제목 정정은 이미 적용됐다.

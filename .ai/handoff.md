@@ -1,43 +1,72 @@
 # Agent Handoff
 
 ## Goal
-플랫폼별 client runtime 하네스를 Codex와 Claude에 동일 적용하고, macOS Wine 실제 실행 결과를 검증한 뒤 작업 브랜치를 commit·push·PR merge한다.
+Git·로컬 상태 정본·Jira/GitHub 업무 뷰가 PR #171의 실제 merge와 남은 P0 게이트를 같은 사실로 표시하도록 복구하고, 검증·리뷰 뒤 작업 브랜치를 push·PR·merge한다.
 
 ## Current result
-- `tools/live/logh7_wine_live_qa.py`는 `win32`와 unsupported host를 parser·prefix·subprocess 전에 반환한다. Python API도 Windows에서 Wine 전용 인자 없이 호출할 수 있다.
-- native Windows는 `tools/logh7_ui_explorer.py`/시나리오 direct harness로 위임한다. 이 어댑터의 EXE SHA 기록은 lineage authority가 아니므로 공통 hash·PE metadata·sentinel·run9 gate를 먼저 닫는다.
-- macOS/Linux Wine은 명시적 `PREFIX_MODE=win32|wow64`를 지원한다. Wine Stable 11에서는 pure win32 대신 WoW64를 사용했고 `#arch=win64`는 prefix 형식이다.
-- canonical/Codex/Claude live-QA skill과 canonical/Claude orchestrator가 동기화됐고 bootstrap은 `OK=26 MISSING=0 STALE=0`이다.
-- 서버 47900 ready와 실제 client process 시작을 확인했다. 서버는 `0x0034/0035/0036/0030` 뒤 `invalid-credentials`/login-ng를 기록했다.
-- client는 exit 3으로 종료됐고 로그인 시 runtime error는 사용자 화면 관측이다. Wine launch·서버 도달만 확인됐으며 cross-platform 전체 pass는 아니다.
-- 서버·client·Wine process와 port는 정리됐고 registry는 복구됐다. 최초 drive cleanup receipt는 false였으며 exact mapping 복원·cleanup 재격리·directory identity·예외 release를 수정하고 단위 테스트했다. 수정 후 live cleanup은 미확인이다.
+- 작업 브랜치 `codex/state-consistency-recovery`는 `main@a8420b8b`에서 생성됐다. 로컬 `origin/main`도 같은 SHA였다.
+- GitHub PR #171은 2026-07-17 09:37 KST에 merge됐다. base `e61f7fcd`, head `9af444d1`, merge `a8420b8b`, 변경 34 files/+2961/-462다.
+- PR #171의 `CI / test`와 CodeRabbit status는 success다. `Claude Code Review / review`는 merge 뒤 PR이 닫힌 상태에서 failure였고 제출 review·inline thread는 0건이다.
+- Jira 미완료 전수 조회는 188건(`LOGH7-9`~`196`), 전부 `해야 할 일`·Medium·미배정이다. 유형은 에픽 9, 스토리 25, 작업 50, 하위 작업 104다.
+- PR #171만으로 LOGH7-18, 43~49, 144, 145, 150, 151의 완료 기준을 모두 충족한 항목은 없다. Jira 상태 전환은 0건으로 유지한다.
+- 연결 worktree `agents/commit-push-and-verify-next-steps@0b9c324d`는 main 대비 226 behind/1 ahead이며 staged 3·unstaged 1·untracked 4개다. 내용은 읽거나 수정하지 않고 status 메타데이터만 기록했다.
+- 현재 머신에서 `LOGH7_VAULT_DIR`는 설정되지 않아 Obsidian 정본 경로를 식별할 수 없다. vault 쓰기는 미실행 대상으로 고정한다.
+- 2026-07-17 사용자 승인으로 소유권이 Codex에서 Claude Code로 인수됐다. Codex 레인은 10:53 KST 외부 쓰기까지 실행하고 상태 파일 갱신 전에 중단된 것으로 확인됐다.
+- 외부 manifest 3건(Jira LOGH7-43 제목+코멘트 10084, LOGH7-18 코멘트 10085, GitHub #10 제목+코멘트)은 적용 완료이며 2026-07-17 read-back으로 manifest 제안 값과 일치를 확인했다. Jira 상태 전환 0건 유지.
+- Jira read-back은 로컬 Atlassian MCP를 사용자 OAuth로 인증해 수행했다(정본 사이트 pepponechoi-jira.atlassian.net, cloudId 300c260a-54a7-4ab5-b843-ae94bf68dcd6). Rovo 커넥터의 pepponechoi.atlassian.net 테넌트는 suspended-inactivity로 사용 불가였다.
+
+## Decisions already made
+- 완료된 platform-aware 전달 계약은 DONE으로 종결하고 과거 승인을 재사용하지 않는다.
+- 제품 완료와 하네스 merge를 분리한다. successful login/gameplay, Windows/Linux 실기, post-fix live cleanup, 최신 전체 Wine suite, run9 exact-hash evidence는 계속 미검증이다.
+- `docs/agent/README.md`, `docs/agent/lifecycle-planning.md`, `docs/logh7-roadmap-current.md`, `AGENTS.md`, `CLAUDE.md`는 P0→P1→P2와 `win32|wow64` 계약이 이미 현행이라 수정하지 않는다.
+- Jira/GitHub 상태는 닫지 않는다. LOGH7-43 ↔ GitHub #10의 오래된 `32-bit WINEPREFIX` 제목만 현재 runtime 계약으로 맞추고, PR #171의 부분 구현·남은 증거를 코멘트로 남긴다.
+
+## External change manifest
+
+| 대상 | 현재 값 | 승인된 변경 | 상태 판정 | rollback |
+|---|---|---|---|---|
+| Jira LOGH7-43 | `프로젝트 전용 32-bit WINEPREFIX 강제 + 기본 ~/.wine 접근 fail-closed` | 제목을 `실행 환경별 client runtime 격리(native Windows·Wine win32\|wow64) + 기본 ~/.wine 접근 fail-closed`로 교체하고 PR #171 부분 진척 코멘트 추가 | 적용 완료·read-back 일치(2026-07-17) | 제목 복원 + 정정 코멘트 |
+| Jira LOGH7-18 | 코멘트에 PR #171 진척 없음 | P0의 부분 구현과 미충족 증거 목록 코멘트 추가 | 적용 완료·read-back 일치(2026-07-17) | 정정 코멘트 |
+| GitHub #10 | Jira의 오래된 제목, open/backlog | Jira와 같은 제목으로 교체하고 PR #171 부분 진척 코멘트 추가 | 적용 완료·read-back 일치(2026-07-17) | 제목 복원 + 코멘트 수정/삭제 |
+| Obsidian vault | `LOGH7_VAULT_DIR` unset | 미실행 | 미실행 확정(unset 재확인) | 해당 없음 |
 
 ## Files changed
-- Runtime/tests: `tools/live/logh7_wine_live_qa.py`, `tools/tests/test_logh7_wine_live_qa.py`.
-- Harness: canonical/Codex/Claude `logh7-wine-live-qa`, canonical/Claude `logh7-orchestrator`, Codex·Claude live-qa agents, `scripts/agent/required-skills.tsv`.
-- Current docs: live-QA, roadmap, lineage, remaster, team spec, execution plan, prompt/ops/verification/tool-capability/context docs, Codex·Claude manuals, `AGENTS.md`, `CLAUDE.md`.
-- State: `.ai/task.md`, `.ai/key-facts.md`, `.ai/known-issues.md`, `.ai/current-state.md`, `.ai/handoff.md`, `.ai/ownership.md`.
-- External configured vault: `은하영웅전설 7 리바이벌/현재 상태.md`, `로드맵.md` (미커밋).
+- `.ai/task.md`: 새 계약 ACTIVE, 이전 플랫폼 계약 DONE, 승인 경계 분리.
+- `.ai/current-state.md`: Git/PR/Jira/worktree/product gate 최신 관측 반영.
+- `.ai/ownership.md`: 새 작업 소유 등록, 이전 작업 소유 해제.
+- `.ai/key-facts.md`: 40줄 이하 현재 진입 카드로 갱신.
+- `.ai/handoff.md`: 이 복구 작업 기준으로 전면 교체.
+- `.omo/plans/logh7-state-consistency-recovery-plan.md`: 승인된 실행 계획.
+- 조건부 문서와 `.ai/known-issues.md`: fresh audit에서 사실 불일치가 없어 변경하지 않음.
+- 보호 파일 `.codex/config.toml`: 기존 사용자 dirty 상태를 읽거나 수정·stage하지 않음.
+
+## Commands executed
+- Git branch/HEAD/status/worktree/log/rev-list 조회: 모두 exit 0.
+- Jira JQL 전 페이지 조회: 2페이지, 188건; 대상 이슈 설명·관계 조회 성공. remote-link/transition 단건 조회는 응답 지연으로 중단했으나 상태 전환을 하지 않아 실행에 필요하지 않다.
+- GitHub PR #171/Issue #10 metadata·files·checks·reviews·threads 조회: 성공.
+- `LOGH7_VAULT_DIR` 확인: unset.
+- read-back: Atlassian MCP getJiraIssue LOGH7-43/LOGH7-18(제목·코멘트·상태 일치), gh issue view 10(제목·상태·코멘트 일치), LOGH7_VAULT_DIR unset 확인. 모두 성공.
 
 ## Verification result
-- Python compile exit 0, native UI unittest 14/14 exit 0, drive isolation/exception/layout 회귀 12/12 exit 0, 서버 serial 499 tests/495 pass/0 fail/4 skip exit 0.
-- Codex hooks 26/26, bootstrap `OK=26 MISSING=0 STALE=0`, skill validators, repo diff check, canonical↔Codex↔Claude live-QA mirror equality: exit 0.
-- 최신 전체 Wine unittest는 빠른 commit·push 지시로 완료 전에 중단했으므로 통과로 세지 않는다.
-- 독립 drive-lease/registry cleanup 최종 재리뷰: BLOCKER 0 / MAJOR 0 / MINOR 0.
-- 실제 live receipt: client exit 3, registry restored, 최초 drive release false. server trace는 invalid credentials/login-ng까지 fresh 관측했다.
+- 계획 단계: `.ai/task.md`와 계획 문서 `verify-changes.sh --file` exit 0, `git diff --check` exit 0.
+- 구현 단계 최종 검증(2026-07-17, 상태 파일 종결 편집 후 재실행): 변경 Markdown 6종(`.ai/task.md`·`current-state.md`·`handoff.md`·`ownership.md`·`key-facts.md`·`.omo/plans/logh7-state-consistency-recovery-plan.md`) `verify-changes.sh --file` 각 exit 0, `git diff --check` exit 0, allowlist 대조 위반 0건, placeholder(TBD/TODO 등) 0건, stale 실행 지시 rg 검색 일치 6건 전부 DONE/historical 문맥(실행 가능 지시 0건).
+- 보호 대상 before/after 대조: `.codex/config.toml` 상태 `M` 유지(내용 미열람), linked worktree staged 3·unstaged 1·untracked 4로 Task 2 baseline과 동일.
+- 독립 리뷰(Opus): BLOCKER 0·MAJOR 2(검증 기록 누락, 계획 Task 8과 task.md 승인 해석 상충) — 검증 기록 본 절 반영과 계획 Task 8 정렬 노트로 해소, 재검증 통과.
+- 제품 코드가 바뀌지 않아 server/Python 제품 테스트는 미실행한다.
 
-## Failed approaches and recovery
-- `basedpyright`·`yaml-ls`가 없어 apply 후 LSP가 반복 실패했다. 설치 범위를 추가하지 않고 알려진 환경 기준선으로 문서화한 뒤 `py_compile`/unittest/YAML parser/skill validator로 검증했다.
-- native UI suite 최초 1건은 macOS `/var`와 `/private/var` alias 비교로 실패했다. `TMPDIR=/private/tmp` 고정 후 14/14 통과했다. 해당 UI 코드·테스트는 수정하지 않았다.
-- 존재하지 않는 추정 문서 게이트·orchestrator metadata 경로와 `pgrep` sysmond 진단은 실제 파일 검색, 제어된 test session ID 회수로 전환했다.
+## Known failures
+- Jira remote-link와 transition 목록 조회가 응답 지연으로 완료되지 않았다. GitHub PR/Issue와 Jira 자체 관계는 별도 조회로 확인했고, transition 0건으로 범위를 줄였다.
+- PR #171의 Claude Code Review workflow는 merge 뒤 failure였다. 이 복구 작업에서 해당 과거 workflow를 성공으로 재분류하지 않는다.
+- linked worktree는 오래되고 dirty지만 계약 밖이라 정리·merge하지 않는다.
 
 ## Remaining work
-- 최신 사용자 지시에 따라 이번에는 명시적 staging, commit·push까지만 수행한다. PR·merge는 보류한다.
-- login-ng 이후 runtime error 원인 규명과 successful login/gameplay 재검증.
-- 수정된 drive mapping cleanup의 fresh live receipt.
-- native Windows 직접 실행과 Linux Wine 실기 검증.
-- 사용자 소유 `.codex/config.toml` dirty 변경을 계속 보존한다.
-- Obsidian vault 두 노트는 이 결과로 갱신하되 별도 저장소의 기존 dirty 상태를 보존한다.
+- local commit → push → PR → checks 확인 → merge → 최종 read-back (승인된 전달 사슬).
+- 후속 계약: LOGH7-43 P0 fresh evidence 확보(native Windows 실기 라이브 런 등) — 2026-07-17 사용자 지시로 선택됨. merge 후 새 브랜치에서 계약 초안 작성.
+
+## Required human decisions
+- 현재 계약의 계획·근거 기반 외부 쓰기·push·PR·merge는 2026-07-17 사용자 지시로 승인됐다.
+- linked worktree 정리·삭제·merge와 제품 P0 구현은 별도 계약이 필요하다.
+- 소유권 인수(Codex→Claude Code)와 후속 계약 선택은 2026-07-17 사용자 답변으로 승인됐다.
 
 ## Files to read first
-`.ai/task.md`, `.ai/current-state.md`, `.agents/skills/logh7-wine-live-qa/SKILL.md`, `.agents/skills/logh7-orchestrator/SKILL.md`, `docs/logh7-wine-live-qa.md`, `docs/agent/verification.md`.
+`.ai/task.md`, `.ai/current-state.md`, `.ai/ownership.md`, `.ai/key-facts.md`, `.omo/plans/logh7-state-consistency-recovery-plan.md`, `docs/logh7-roadmap-current.md`.
