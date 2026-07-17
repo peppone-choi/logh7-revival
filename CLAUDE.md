@@ -17,6 +17,7 @@
 - 마일스톤·현재 구현 상태·M4 선행 게이트(P0→P1→P2)·데이터 승격 규칙: `docs/logh7-roadmap-current.md`
 - 클라이언트 계보(EXE hash·image base·sentinel·패치 manifest): `docs/logh7-client-lineage-current.md` — 중간 산출물을 pristine/canonical로 부르지 않는다
 - 참고 방법론 라우터: `docs/logh7-reference-haul.md` — 착수 전 해당 트랙 필독, 캐논 근거 승격·코드 이식 금지
+- 프로토콜 API 커버리지(opcode 엔드포인트 매핑): `docs/logh7-opcode-coverage-current.md` — Information/StaticInformation 계열 확정, 전수 스윕 진행중. 데이터 원천 사다리: 원작→설정→설계, 클라 렌더경로 있는 것만; 추출 우선, 창작 건별 승인.
 - 현행·역사 문서 분류: `docs/logh7-document-index-current.md` — 역사 문서의 코드 경로는 리셋 전 기준이므로 불신
 - CD 이미지 `artifacts/logh7-cd/`(gitignored, md5 검증)·공식 매뉴얼 `docs/reference/*.pdf` — 게임 규칙의 근거
 - 미해결 문제·게이트 차단 현황: `.ai/known-issues.md`

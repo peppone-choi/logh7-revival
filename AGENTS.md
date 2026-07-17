@@ -35,7 +35,9 @@
 - 수정 전 `.ai/task.md`의 Allowed files와 `.ai/ownership.md` 소유를 확인한다.
 - 보호: 비밀 파일(`.env*`, `*.pem`, `*.key`, `credentials*`, `secrets*`, `terraform.tfstate*`) 읽기·쓰기 금지, `server/data/` 라이브 데이터 삭제 금지, `reference/`의 외부 코드 이식 금지.
 - 역사 문서(`docs/logh7-document-index-current.md`가 historical로 분류)의 코드 경로는 불신한다.
-- 정본 라우팅: 마일스톤·게이트 = `docs/logh7-roadmap-current.md`, 클라이언트 계보 = `docs/logh7-client-lineage-current.md`, 방법론 = `docs/logh7-reference-haul.md`.
+- 데이터 원천 사다리: 원작 데이터 → 설정 파일 → 레벨 디자인, 클라이언트 렌더 경로가 있는 것만 대상. 기준: 추출 우선(원본 모사), 창작은 건별 승인 필수. 게임 규칙의 근거는 공식 매뉴얼·패치 로그·클라 바이너리 순서.
+- 프로토콜=웹 API: opcode 쌍을 엔드포인트+DTO로 매핑. NO_DATA(서버 미구현)=zero-fill 클라 기본값. `docs/logh7-opcode-coverage-current.md` 커버리지 원장 참조.
+- 정본 라우팅: 마일스톤·게이트 = `docs/logh7-roadmap-current.md`, 클라이언트 계보 = `docs/logh7-client-lineage-current.md`, 방법론 = `docs/logh7-reference-haul.md`, 프로토콜 API 커버리지(opcode) = `docs/logh7-opcode-coverage-current.md`.
 
 ## Required Workflow
 
