@@ -138,6 +138,20 @@ export function registerGameHandlers({ commandBus, queryBus, isGridCellNavigable
     };
   });
 
+  // LOGH7-59: 접속 종료를 권위 상태에 반영한다. online=false 를 영속하되, 소켓 close
+  // 콜백에서 호출되므로 예외를 던지지 않고 soft-fail(ok:false) 한다. 이미 오프라인이면 멱등 no-op.
+  commandBus.register('LeaveWorld', (cmd, { uow }) => {
+    const character = uow.findCharacterById(cmd.characterId);
+    if (!character) return { ok: false, reason: 'character-not-found', changed: false };
+    if (cmd.accountId != null && character.accountId !== String(cmd.accountId)) {
+      return { ok: false, reason: 'character-not-owned', changed: false };
+    }
+    if (!character.online) return { ok: true, changed: false };
+    setCharacterOnline(character, false);
+    uow.flush();
+    return { ok: true, changed: true };
+  });
+
   commandBus.register('MoveGrid', (cmd, { uow }) => {
     const character = uow.findCharacterById(cmd.characterId);
     if (!character) throw new Error('character not found');

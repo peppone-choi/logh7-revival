@@ -874,6 +874,19 @@ export function createWorldSession({
     if (!player) return false;
     player.inWorld = false;
     gridInitSpawned.delete(connectionId);
+    // LOGH7-59: 접속 종료를 권위 상태에 반영 — online=false 를 DB 에 영속한다.
+    // 소켓 close 콜백에서 호출되므로 영속 실패가 콜백을 크래시시키지 않게 감싼다.
+    if (dispatchCommandSync && player.characterId > 0) {
+      try {
+        dispatchCommandSync({
+          type: 'LeaveWorld',
+          accountId: player.accountId,
+          characterId: player.characterId,
+        });
+      } catch {
+        // disconnect 는 항상 완료한다(영속은 best-effort). 실패는 다음 로그인 시 정정된다.
+      }
+    }
     logEvent('disconnect', connectionId, { accountId: player.accountId, characterId: player.characterId });
     return true;
   }
