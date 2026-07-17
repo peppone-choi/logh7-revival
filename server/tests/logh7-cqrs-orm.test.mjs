@@ -9,11 +9,18 @@ import { createPlayableRuntime } from '../src/presentation/createPlayableRuntime
 import { isStrategicGridCellNavigable } from '../src/server/logh7-galaxy-placement.mjs';
 import {
   CODE_INFO_CHARACTER,
+  CODE_INFO_UNIT,
+  CODE_INFO_UNIT_WIRE_HEADER,
   CODE_NOTIFY_MOVED_GRID,
   buildSsCharacterIdInner,
   msg32Body,
   readMsg32Code,
 } from '../src/server/logh7-world-records.mjs';
+import {
+  RESPONSE_TACTICS_UNIT_SHIP_CODE,
+  RESPONSE_NOTIFY_TACTICS_CODE,
+  UNIT_SHIP_RECORD_BYTES,
+} from '../src/server/codec/tactical-position-records.mjs';
 import { writeFile } from 'node:fs/promises';
 
 test('CQRS+ORM: create account/character, enter world, move grid with flush', async () => {
@@ -402,6 +409,122 @@ test('playable runtime routes world enter and wire move through CQRS/UoW', async
     await runtime.close();
     if (previousLiveClientLayout === undefined) delete process.env.LOGH_LIVE_CLIENT_LAYOUT;
     else process.env.LOGH_LIVE_CLIENT_LAYOUT = previousLiveClientLayout;
+    await rm(dir, { recursive: true, force: true });
+  }
+});
+
+// LOGH7-58 유닛 스테이징 라이브 A/B(2026-07-17, _workspace/liveqa-20260717-logh7-58-staging):
+// production runtime이 world-enter 말미에 전술 진입 시퀀스(0x033b 전술 함선 상태 + 0x0f1f arm=1)를
+// 방출하면 원본 클라가 grid-init-spawn(0x0f02) 버스트 ~560ms 뒤 read ECONNRESET로 결정적 크래시했다
+// (게이트 ON 2/2 재현). 게이트 OFF 대조는 같은 버스트를 정상 소화하고 전략맵 렌더 + 0x0300 heartbeat가
+// 지속됐다. → world-enter에 전술 arm을 붙이는 것은 크래시 트리거이자(전략맵 진입은 battle arm이 아님)
+// 의미상 오배치다. 따라서 실 유저 경로는 기본적으로 이 시퀀스를 방출하지 않아야 한다(라이브 안정 가드).
+// 전술 codec 자체는 유효하며(matched roster) LOGH7_TACTICAL_ENTRY=1 opt-in으로만 방출한다(RE 실험용).
+function decodeUnitRosterIds(inner) {
+  const body = msg32Body(inner);
+  const count = body.readUInt16BE(0);
+  const ids = [];
+  let cursor = CODE_INFO_UNIT_WIRE_HEADER;
+  for (let i = 0; i < count; i += 1) {
+    ids.push(body.readUInt32BE(cursor)); cursor += 4;
+    cursor += 2 + 1 + 4 + 4 + 4; // faction,+0x06,commander,cell,owner
+    const boats = body.readUInt8(cursor); cursor += 1;
+    cursor += boats * 4;
+    cursor += 4 + 2 + 2 + 2 + 4 + 4 + 4; // spot,+44/45,+46,mapSection,+4c,+50,+54
+  }
+  return ids;
+}
+function decodeTacticsShipIds(inner) {
+  const body = msg32Body(inner);
+  const count = body.readUInt16BE(0);
+  const ids = [];
+  for (let i = 0; i < count; i += 1) ids.push(body.readUInt32BE(4 + i * UNIT_SHIP_RECORD_BYTES));
+  return ids;
+}
+
+async function enterWorldOnRuntime(runtime) {
+  const character = runtime.characterStore.addCharacter('inei00', {
+    lastname: 'Tactic',
+    firstname: 'Entry',
+    power: 2,
+    cell: 2588,
+  });
+  runtime.worldSession.seedPlayer({
+    connectionId: 1,
+    accountId: 'inei00',
+    characterId: character.id,
+    unitId: character.unitId,
+    cell: 2588,
+    inWorld: false,
+  });
+  const enterInner = Buffer.alloc(2);
+  enterInner.writeUInt16BE(0x0205, 0);
+  const entered = runtime.worldSession.handleWorldInner({
+    connectionId: 1,
+    accountId: 'inei00',
+    inner: enterInner,
+  });
+  assert.equal(entered.kind, 'world-enter');
+  return { character, entered };
+}
+
+test('production runtime does NOT append tactical entry sequence to world-enter by default (live ECONNRESET crash guard)', async () => {
+  const dir = await mkdtemp(join(tmpdir(), 'logh7-rt-tactical-off-'));
+  const accountsPath = join(dir, 'accounts.json');
+  await writeFile(accountsPath, JSON.stringify({
+    accounts: [{ accountId: 'inei00', password: 'dummy' }],
+  }), 'utf8');
+  const prevGate = process.env.LOGH7_TACTICAL_ENTRY;
+  delete process.env.LOGH7_TACTICAL_ENTRY;
+  const runtime = createPlayableRuntime({
+    port: 0, host: '127.0.0.1', dbPath: join(dir, 't.sqlite'), accountsPath, logger: { debug() {} },
+  });
+  try {
+    const { entered } = await enterWorldOnRuntime(runtime);
+    const codes = entered.responses.map(({ inner }) => readMsg32Code(inner));
+    // 라이브 크래시 가드: 전술 함선 상태(0x033b)/전술 arm(0x0f1f)은 기본 world-enter에 없어야 한다.
+    assert.ok(!codes.includes(RESPONSE_TACTICS_UNIT_SHIP_CODE), `world-enter에 0x033b 방출(크래시 트리거): ${codes.map((c) => c.toString(16))}`);
+    assert.ok(!codes.includes(RESPONSE_NOTIFY_TACTICS_CODE), `world-enter에 0x0f1f 방출(크래시 트리거): ${codes.map((c) => c.toString(16))}`);
+    // 안정 baseline: 전략맵 등록용 0x0325(유닛 레지스트리)는 정상 방출된다.
+    assert.ok(codes.includes(CODE_INFO_UNIT), 'world-enter 0x0325 유닛 레지스트리는 유지');
+  } finally {
+    await runtime.close();
+    if (prevGate === undefined) delete process.env.LOGH7_TACTICAL_ENTRY;
+    else process.env.LOGH7_TACTICAL_ENTRY = prevGate;
+    await rm(dir, { recursive: true, force: true });
+  }
+});
+
+test('LOGH7_TACTICAL_ENTRY=1 opt-in emits tactical sequence with matched roster (codec 유효, RE 실험용)', async () => {
+  const dir = await mkdtemp(join(tmpdir(), 'logh7-rt-tactical-on-'));
+  const accountsPath = join(dir, 'accounts.json');
+  await writeFile(accountsPath, JSON.stringify({
+    accounts: [{ accountId: 'inei00', password: 'dummy' }],
+  }), 'utf8');
+  const prevGate = process.env.LOGH7_TACTICAL_ENTRY;
+  process.env.LOGH7_TACTICAL_ENTRY = '1';
+  const runtime = createPlayableRuntime({
+    port: 0, host: '127.0.0.1', dbPath: join(dir, 't.sqlite'), accountsPath, logger: { debug() {} },
+  });
+  try {
+    const { character, entered } = await enterWorldOnRuntime(runtime);
+    const codes = entered.responses.map(({ inner }) => readMsg32Code(inner));
+    assert.ok(codes.includes(RESPONSE_TACTICS_UNIT_SHIP_CODE), `opt-in 0x033b 방출: ${codes.map((c) => c.toString(16))}`);
+    assert.equal(codes[codes.length - 1], RESPONSE_NOTIFY_TACTICS_CODE, 'opt-in 말미 = 0x0f1f arm');
+    const armInner = entered.responses[entered.responses.length - 1].inner;
+    assert.equal(msg32Body(armInner).readUInt8(0), 0x01, 'arm payload[0]==1');
+    // 스킵방지 회귀가드: 0x033b unitId가 동반 0x0325 roster와 정확히 일치(값·순서).
+    const tacticsInner = entered.responses.find(({ inner }) => readMsg32Code(inner) === RESPONSE_TACTICS_UNIT_SHIP_CODE).inner;
+    const unitInners = entered.responses.filter(({ inner }) => readMsg32Code(inner) === CODE_INFO_UNIT);
+    const shipIds = decodeTacticsShipIds(tacticsInner);
+    const rosterIds = decodeUnitRosterIds(unitInners[unitInners.length - 1].inner);
+    assert.deepEqual(shipIds, rosterIds, '0x033b unitId == 0x0325 roster (매칭 가드)');
+    assert.ok(shipIds.length > 1, `roster 비어있지 않음(플레이어+NPC): ${shipIds.length}`);
+    assert.equal(shipIds[0], character.unitId, '플레이어가 roster unit[0]');
+  } finally {
+    await runtime.close();
+    if (prevGate === undefined) delete process.env.LOGH7_TACTICAL_ENTRY;
+    else process.env.LOGH7_TACTICAL_ENTRY = prevGate;
     await rm(dir, { recursive: true, force: true });
   }
 });

@@ -48,6 +48,15 @@ export function createPlayableRuntime({
     // 원본 클라이언트 라이브에서 20행 이상은 정지하므로 검증된 선두 19행만 보낸다.
     ships: app.worldCatalog.getShips().slice(0, 19),
     worldRedirect,
+    // LOGH7-58 전술 진입 시퀀스는 world-enter 말미에 붙이지 않는다(기본 off 유지).
+    // 2026-07-17 라이브 A/B(_workspace/liveqa-20260717-logh7-58-staging): world-enter에
+    // 0x033b/0x0f1f(전술 arm=1)를 방출하면 클라가 grid-init-spawn(0x0f02) 버스트 ~560ms 뒤
+    // read ECONNRESET로 결정적 크래시(2/2 재현). 게이트 off에서는 같은 버스트를 정상 소화하고
+    // 전략맵 렌더 + 0x0300 heartbeat가 지속됐다 → 전술 arm이 크래시 트리거다. 전략맵 진입은
+    // 전술(battle) arm이 아니므로 world-enter 방출은 의미상으로도 틀렸다. 빈 멤버리스트는
+    // 별개의 전략 멤버/유닛 스테이징 데이터 문제다. 전술 시퀀스 codec은 유효하며(matched roster)
+    // LOGH7_TACTICAL_ENTRY=1로 실험 가능하지만, 올바른 주입 지점을 RE로 확정하기 전까지 기본 off다.
+    tacticalEntry: process.env.LOGH7_TACTICAL_ENTRY === '1',
   });
 
   const server = createPlayableServer({
