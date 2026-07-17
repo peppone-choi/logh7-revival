@@ -11,7 +11,7 @@
 - 동기 SQLite bridge는 PostgreSQL 전환 전에 async-capable로 교체 필요. PG는 skeleton(기본 부팅은 SQLite).
 - run9/run3/run5 원증거와 당시 exact patch EXE 계보 영수증이 현재 checkout에 없음 — 과거 통과 기록을 fresh release gate로 재사용 금지.
 - macOS Wine Stable 11은 pure win32 prefix를 지원하지 않아 명시적 WoW64 prefix가 필요하다. 하네스는 이를 지원하지만 다른 Wine 배포판과 Linux 실기는 미검증이다.
-- 2026-07-17 native Windows 라이브 런에서 lineage PASS·서버 47900·로그인 성공(로비 진입)을 확인했다. macOS `invalid-credentials`/login-ng의 원인은 QA 하네스 `tools/logh7_ui_explorer.py` `_hw_type_text` 첫 글자 누락으로 확정(제품 버그 아님). **수정 적용**: `_force_foreground`가 `GetForegroundWindow`로 전환을 확인(≤5회 재시도)하고, `_build_type_sequence`가 첫 실문자 앞에 필드 무해한 lone SHIFT warm-up을 prepend — 단위 테스트 17개 통과·독립 리뷰 PASS. **라이브 재검증 대기**: `inei00` 1회 시도 로그인 성공을 후속 live-qa run으로 확인 필요(SHIFT 대안=첫 필드 클릭). in-game gameplay·relogin·persistence와 run9 frozen baseline·Linux 실기·전체 Wine suite는 미종결.
+- 2026-07-17 native Windows 라이브 런에서 lineage PASS·서버 47900·로그인 성공(로비 진입)을 확인했다. macOS `invalid-credentials`/login-ng의 원인은 QA 하네스 `tools/logh7_ui_explorer.py` `_hw_type_text` 첫 글자 누락으로 확정(제품 버그 아님). **원인 정밀화(라이브 재검증)**: 포커스 레이스가 아니라 **창 세션의 첫 `KEYEVENTF_UNICODE` 주입이 삼켜진다**(이후 unicode 문자는 정상). 필드 클릭 focus로도 재현. `313b666e`의 SHIFT warm-up은 VK 이벤트라 unicode 파이프라인을 워밍 못 해 **FAIL**(재검증 증거 `_workspace/liveqa-20260717-winnative-reverify/`). **v2 수정 적용**: `_build_type_sequence`가 진짜 문자 앞에 자기상쇄 `[unicode 더미 'x'][VK_BACK]` warm-up을 prepend — 더미가 삼켜지든 land하든 필드가 진짜 문자만 남는다. 단위 테스트 17개 통과·독립 리뷰 PASS. **라이브 재검증 대기**: `inei00` 1회 온전 입력을 후속 live-qa run으로 확인. in-game gameplay·relogin·persistence와 run9 frozen baseline·Linux 실기·전체 Wine suite는 미종결.
 - native Windows 직접 실행 분기는 2026-07-17 실기 login-success로 검증됨(gameplay는 미종결).
 
 ## 인프라·도구

@@ -336,16 +336,26 @@ def _send_text(hwnd: int, text: str) -> dict[str, Any]:
 
 # ─── 하드웨어 입력 경로 (SendInput / keybd_event) ────────────────────────────
 
-_VK_SHIFT = 0x10  # 필드 값에 영향을 주지 않는 워밍업용 modifier
+_VK_BACK = 0x08  # Backspace — 워밍업 더미 문자를 자기상쇄로 지운다
+_WARMUP_DUMMY_CHAR = "x"  # 무해한 단일 unicode 문자 (파이프라인 워밍용)
 
 
 def _build_type_sequence(text: str, *, warmup: bool = True) -> list[dict[str, Any]]:
     """하드웨어 타이핑 시퀀스를 순수 데이터로 구성한다(Win32 실호출 없음).
 
-    포그라운드 전환 직후 첫 SendInput 이 활성화 레이스에 흡수돼 첫 글자가
-    누락되는 문제를 막기 위해, 필드 값에 영향을 주지 않는 lone SHIFT
-    down/up 워밍업을 실문자 앞에 prepend 한다. 워밍업은 문자를 만들지 않고
-    포커스 커서를 이동시키지도 않으므로 입력값을 오염시키지 않는다.
+    창 세션에서 첫 KEYEVENTF_UNICODE 주입이 삼켜져 첫 실문자가 누락되는
+    문제(라이브 재검증으로 확정: `inei00` → `nei00`)를 막기 위해, 실문자
+    앞에 자기상쇄(self-cancelling) unicode 워밍업을 prepend 한다:
+
+      [더미 unicode 문자][VK_BACK Backspace]
+
+    더미는 반드시 실문자와 동일한 unicode 주입 방식(KEYEVENTF_UNICODE,
+    wScan=ord(ch))이라야 파이프라인을 워밍한다. 두 경우 모두 결정적으로
+    필드에는 진짜 문자만 남는다:
+      - 더미가 첫 unicode로 삼켜지면 → 필드는 비고, Backspace 는 빈 필드
+        no-op → 실문자 전부 land.
+      - 더미가 land 하면 → Backspace 가 지움 → 실문자 전부 land.
+    Backspace 는 삼킴 대상(첫 unicode)이 아니므로 VK_BACK 로 정상 동작한다.
 
     반환 항목: {"kind": "warmup"|"char", "char": str|None, "vk": int,
                 "scan": int, "unicode": bool}
@@ -353,7 +363,16 @@ def _build_type_sequence(text: str, *, warmup: bool = True) -> list[dict[str, An
     seq: list[dict[str, Any]] = []
     if warmup:
         seq.append(
-            {"kind": "warmup", "char": None, "vk": _VK_SHIFT, "scan": 0, "unicode": False}
+            {
+                "kind": "warmup",
+                "char": _WARMUP_DUMMY_CHAR,
+                "vk": 0,
+                "scan": ord(_WARMUP_DUMMY_CHAR),
+                "unicode": True,
+            }
+        )
+        seq.append(
+            {"kind": "warmup", "char": None, "vk": _VK_BACK, "scan": 0, "unicode": False}
         )
     for ch in text:
         seq.append(
@@ -367,7 +386,8 @@ def _hw_type_text(hwnd: int, text: str, *, warmup: bool = True) -> dict[str, Any
 
     PostMessage WM_CHAR 와 달리 GetAsyncKeyState 등에도 반영되므로
     레거시 Win32 로그인 폼 PW 필드 포커스 문제를 우회한다. 첫 실문자 앞에
-    무해한 워밍업 키를 넣어 포그라운드 전환 직후 첫 글자 누락을 방지한다.
+    자기상쇄 unicode 워밍업(더미 문자+Backspace)을 넣어, 창 세션의 첫
+    KEYEVENTF_UNICODE 주입이 삼켜져 첫 글자가 누락되는 문제를 방지한다.
     """
     _, _, win32gui, _ = _require_pywin32()
     foreground = _force_foreground(win32gui, hwnd)

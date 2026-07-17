@@ -10,7 +10,8 @@ from unittest.mock import MagicMock, patch
 
 from tools.logh7_ui_explorer import (
     VK_NAMES,
-    _VK_SHIFT,
+    _VK_BACK,
+    _WARMUP_DUMMY_CHAR,
     _build_type_sequence,
     _load_session,
     _process_alive,
@@ -238,16 +239,22 @@ class UiExplorerTests(unittest.TestCase):
             self.assertEqual(main(), 0)
         self.assertEqual(seen[0].exe, Path("client.exe"))
 
-    def test_type_sequence_prepends_focus_warmup_before_first_real_char(self) -> None:
+    def test_type_sequence_prepends_self_cancelling_unicode_warmup(self) -> None:
         seq = _build_type_sequence("inei00")
-        # 첫 항목은 필드 값에 영향 없는 워밍업(lone SHIFT)이어야 한다.
+        # 워밍업 1항: unicode 주입 더미 문자(파이프라인 워밍). SHIFT가 아니다.
         self.assertEqual(seq[0]["kind"], "warmup")
-        self.assertEqual(seq[0]["vk"], _VK_SHIFT)
-        self.assertFalse(seq[0]["unicode"])
-        self.assertIsNone(seq[0]["char"])
+        self.assertTrue(seq[0]["unicode"])
+        self.assertEqual(seq[0]["char"], _WARMUP_DUMMY_CHAR)
+        self.assertEqual(seq[0]["scan"], ord(_WARMUP_DUMMY_CHAR))
+        self.assertEqual(seq[0]["vk"], 0)
+        # 워밍업 2항: 더미를 자기상쇄로 지우는 Backspace(VK_BACK, non-unicode).
+        self.assertEqual(seq[1]["kind"], "warmup")
+        self.assertFalse(seq[1]["unicode"])
+        self.assertEqual(seq[1]["vk"], _VK_BACK)
+        self.assertIsNone(seq[1]["char"])
         # 워밍업 직후 첫 실문자가 손실 없이 'i' 여야 한다(첫 글자 누락 회귀 방지).
-        self.assertEqual(seq[1]["kind"], "char")
-        self.assertEqual(seq[1]["char"], "i")
+        self.assertEqual(seq[2]["kind"], "char")
+        self.assertEqual(seq[2]["char"], "i")
 
     def test_type_sequence_preserves_all_characters_in_order(self) -> None:
         text = "inei00"
