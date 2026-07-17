@@ -2,7 +2,8 @@
 # LOGH VII Key Facts (NIAH)
 
 ## Active contract
-- Active: P0 gate bundle LOGH7-43/44/45/46/47 (story LOGH7-18 / epic LOGH7-9, GitHub #10-14) — approved 2026-07-17 "정정 후 구현 승인". Implement order: 47→43→45→44→46.
+- STANDING DIRECTIVE (2026-07-17 /ultragoal): process Jira issues in batches of 5, in gate order, unconditionally until the game is actually playable (in-game world entry + basic gameplay live-verified). Never fake completion; fail-closed/evidence invariants hold. On batch done → checkpoint → pull next 5.
+- Active: P0 gate bundle LOGH7-43/44/45/46/47 (story LOGH7-18 / epic LOGH7-9, GitHub #10-14) — approved 2026-07-17. Implement order: 47→43→45→44→46. This is batch #1 of the standing directive.
 - State recovery is DELIVERED: PR #172 merged `4f8c4281` (12:20 KST). External manifest applied+read-back; review workflow failure is an action-internal error, not a pass.
 - Live-run gates: lineage fail-closed (EXE hash·image base·sentinel), server 47900, evidence (screenshots/logs/exit codes/cleanup receipt) required before any completion claim.
 - Preserve the user-owned `.codex/config.toml` edit. Do not read, modify, or stage it. Never git-reset the working tree.

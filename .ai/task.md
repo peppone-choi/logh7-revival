@@ -55,6 +55,15 @@
 
 - 현재 ACTIVE인 "LOGH7-43 P0 fresh evidence — native Windows 실기 라이브 런"은 이 P0 게이트의 2번 항목(LOGH7-43) 단건 계약이다. 승인 시 이 5건 계약이 그 단건 계약을 포함·대체하며, 진행 중인 native Windows 라이브 런 증거는 AC-2에 그대로 귀속된다.
 
+## Standing Directive (2026-07-17 /ultragoal): 게임 플레이 가능까지 5개씩 무조건 계속
+
+- 사용자 지시: 게임을 실제로 할 수 있을 때(in-game 월드진입·기본 플레이가 라이브 증거로 확인될 때)까지, 로드맵 게이트/우선순위 순으로 Jira 이슈를 **5개씩 배치**로 **무조건 계속** 처리한다.
+- 현재 배치 = **P0 LOGH7-43~47**(진행 중; login-success·harness fix까지 확보, LOGH7-47 음성 경로·45/44/46 잔여). 배치 완료 시 checkpoint → 다음 5개를 게이트 순(P0 잔여 → P1 LOGH7-48/49 등 → P2 → M4 gameplay 슬라이스)으로 선택해 반복.
+- "무조건 계속"의 경계: fail-closed 게이트·증거 기반 완료·비파괴 불변식을 무효화하지 않는다. 항목이 하드웨어/사용자 의존(예: `workflow` 스코프, 실기 조작)으로 막히면 블로커를 기록하고 **처리 가능한 것부터 계속**하며 블로커를 표면화한다. 가짜 완료·과장 금지.
+- 전달(push/PR/merge)·외부 쓰기(Jira/GitHub)·라이브 실기는 2026-07-17 상시 사전승인. force push·main 직접 commit·히스토리 재작성·linked worktree 정리·server/data 삭제·비밀 접근은 제외·금지.
+- 최종 배치·완료 게이트: ai-slop-cleaner + verification + code-review 통과(ultragoal 계약).
+- durable 추적: `.omc/ultragoal/` 원장(마일스톤 arc G001-G006)은 coarse 진행 추적으로 유지. G001 "M3 월드 진입"은 현재 로드맵상 historical 완료로 보여 재조정 대상(비차단). 배치 체크포인트마다 원장·`.ai` 상태 갱신.
+
 ## Subsumed Contract: LOGH7-43 P0 fresh evidence — native Windows 실기 라이브 런
 
 - 2026-07-17 P0 게이트 완주 계약(LOGH7-43~47)에 AC-2로 포함됨. 이 단건 계약의 라이브 런 증거는 상위 계약 AC-2에 귀속된다.
