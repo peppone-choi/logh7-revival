@@ -33,7 +33,9 @@ import {
   CODE_REQ_INFORMATION_WAREHOUSE,
   CODE_REQ_GRID_INIT,
   CODE_REQ_OUTFIT_INFO,
+  CODE_REQ_INFORMATION_OUTFIT_PARTY,
   buildOutfitInfo032b,
+  buildResponseInformationOutfitPartyInner,
   outfitPracticeFromAbility8,
 } from './logh7-world-records.mjs';
 import {
@@ -772,6 +774,56 @@ export function createWorldSession({
         reqCode: code,
         respCode: readMsg32Code(outfitResp),
         responses: [{ targets: [connectionId], inner: outfitResp, isMsg32: true }],
+      };
+    }
+
+    // 0x032e(RequestInformationOutfitParty) → 0x032f: 함대 정보 패널 멤버리스트. 플레이어 자기
+    //   함대의 지휘 사관 실데이터로 응답한다(전략맵 게임플레이 관문).
+    //
+    // 근거: docs/reference/legacy-evidence/logh7-proto-info-records.md §5c (parser FUN_0041e…,
+    //   dump FUN_0041eaa0). 클라는 0x032e 후 고정 0x8b04B 0x032f 를 기다린다. count=0 이면 멤버리스트
+    //   "NO DATA". 요청 body selector 는 미확정(RE unknown) → 파싱하지 않고 자기 함대로 응답(0x032a 패턴).
+    // 무날조: characters[] 에는 서버 도메인에 실재하는 사관(플레이어 캐릭터)만 투영한다.
+    //   ships/troops/packages 는 함대 구성 정본이 없어 count 0. supplies/max_supplies 는 경제 미구현이
+    //   정본(매뉴얼 p9)이라 도메인 값이 없으면 0. header 는 근거 있는 것만: outfit=unitId,
+    //   base=현재 성계 id, power/camp=faction. kind/index 는 근거 없어 0.
+    // 플레이어 미보유/미진입이면 합성 금지 → null(fail-closed).
+    if (code === CODE_REQ_INFORMATION_OUTFIT_PARTY) {
+      const player = players.get(connectionId);
+      if (!player || !player.inWorld || !(player.characterId > 0)) {
+        return null;
+      }
+      // 시드 캐릭터 조회(enterWorld/0x032a 와 동일 경로): 실 이름/rank/power.
+      let seed = null;
+      if (characterStore && typeof characterStore.getCharacters === 'function' && player.accountId) {
+        try {
+          const chars = characterStore.getCharacters(player.accountId) ?? [];
+          seed = chars.find((c) => Number(c?.id) === Number(player.characterId)) ?? chars[0] ?? null;
+        } catch {
+          seed = null;
+        }
+      }
+      const selectedBase = findStaticBase({ cell: player.cell });
+      const faction = seed?.power ?? player.power ?? 0;
+      const last = seed?.lastname ?? player.lastname ?? '';
+      const first = seed?.firstname ?? player.firstname ?? '';
+      const displayName = last && first ? `${last} ${first}` : (last || first || '');
+      const rank = Number.isInteger(seed?.rank)
+        ? seed.rank
+        : (Number.isInteger(player.rank) ? player.rank : 0);
+      const outfitPartyResp = buildResponseInformationOutfitPartyInner({
+        outfit: player.unitId, // 자기 함대 id (0x0325 unit[0].id 와 동일 앵커)
+        base: selectedBase?.id ?? 0,
+        power: faction, // 陣営/faction
+        camp: faction,
+        // 멤버리스트: 플레이어 지휘 사관 1명(실데이터). kind 근거 없어 0.
+        characters: [{ id: player.characterId, kind: 0, rank, displayName }],
+      });
+      return {
+        kind: 'admission',
+        reqCode: code,
+        respCode: readMsg32Code(outfitPartyResp),
+        responses: [{ targets: [connectionId], inner: outfitPartyResp, isMsg32: true }],
       };
     }
 
