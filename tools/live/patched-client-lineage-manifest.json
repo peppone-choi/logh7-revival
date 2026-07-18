@@ -1,0 +1,38 @@
+{
+  "manifestVersion": 2,
+  "note": "LOGH7-212 login first-key patch (Variant A). Original canonical node stays authorized alongside the patched node.",
+  "authorizedNodes": [
+    {
+      "nodeId": "logh7-canonical-install-g7mtclient",
+      "kind": "original",
+      "parentHash": null,
+      "sha256": "825635783a9fb663ae3b9a2ecf8d4b74df648322256c57ee32f6426c42a23f22",
+      "imageBase": "0x400000",
+      "sentinels": [
+        {
+          "offset": 256,
+          "hex": "661a593edf1c5f3e"
+        }
+      ],
+      "capabilityProfile": "canonical-original",
+      "provenance": "artifacts/logh7-install .../exe/g7mtclient.exe; docs/logh7-client-lineage-current.md canonical working node (PE timestamp 0x40779eb8, image base 0x400000).",
+      "approvalRef": "docs/logh7-client-lineage-current.md"
+    },
+    {
+      "nodeId": "logh7-212-login-firstkey-variantA",
+      "kind": "patch",
+      "parentHash": "825635783a9fb663ae3b9a2ecf8d4b74df648322256c57ee32f6426c42a23f22",
+      "sha256": "bb670cf0dff0f311759fa7f6ba3e1ce5bb00c5b5d9e4c3b3355f33c3bee70961",
+      "imageBase": "0x400000",
+      "sentinels": [
+        {
+          "offset": 256,
+          "hex": "661a593edf1c5f3e"
+        }
+      ],
+      "capabilityProfile": "login-firstkey-fix",
+      "provenance": "RE-measured disassembly (LOGH7-212 comment). Op1: login keysetup hook @VA 0x4ffbf6 (file 0xffbf6) diverts the function epilogue into a codecave via rel32 jmp (e9 da b0 16 00) + nop*2. Op2: .text tail zero-slack @VA 0x66acd5 (file 0x26acd5) holds the stub (8b ce = mov ecx,esi; e8 74 4e e9 ff = call; then re-runs the original epilogue 5f b0 01 5e c2 04 00). VA-to-file delta = 0x400000; size unchanged at 3956736 bytes.",
+      "approvalRef": "LOGH7-212"
+    }
+  ]
+}
