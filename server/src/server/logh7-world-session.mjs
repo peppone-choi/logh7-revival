@@ -42,7 +42,7 @@ import {
   getStrategicGridCells,
   getStrategicPaletteObjects,
 } from './logh7-galaxy-placement.mjs';
-import { buildDeploymentFleetList } from './logh7-deployment-units.mjs';
+import { buildDeploymentFleetList, getFactionCapitalCell } from './logh7-deployment-units.mjs';
 import { buildTacticalEntrySequenceInners } from './codec/tactical-entry-sequence.mjs';
 import {
   buildStaticInformationBaseFromGalaxy,
@@ -359,6 +359,14 @@ export function createWorldSession({
       if (Array.isArray(seed.authorityCards)) {
         p.authorityCards = normalizeAuthorityCards(seed.authorityCards);
       }
+    }
+
+    // LOGH7-197 스폰 셀 보정: 신규 캐릭터는 cell=0(스키마 NOT NULL 기본)으로 저장돼 함대가
+    // 그리드 밖에 놓여 전략맵에 선택 가능한 마커가 안 뜬다(→ 클라가 0x032e 미방출). 유효 cell 이
+    // 없으면 세력 수도(동맹 2014 / 제국 2588)로 투영한다. cell>0(이미 이동/warp 한 위치)은 불변.
+    if (!(Number(p.cell) > 0)) {
+      const capital = getFactionCapitalCell(seed?.power ?? p.power ?? 0);
+      p.cell = capital > 0 ? capital : defaultCell;
     }
 
     const selectedBase = findStaticBase({ cell: p.cell });

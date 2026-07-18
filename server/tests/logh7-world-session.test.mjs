@@ -1723,3 +1723,33 @@ test('static-info walk: isAdmissionRequestCode true for all walk request codes (
     );
   }
 });
+
+test('LOGH7-197: 스폰 셀 미배치(cell=0) 캐릭터는 세력 수도에 배치돼 0x0325 함대가 선택 가능해진다', () => {
+  // 라이브 LOGH7-197: 시드 캐릭터 "aa"(power=3 동맹, cell=0)가 전략맵에 선택 가능한 함대가
+  // 없어 클라가 0x032e 를 안 보냈다. cell=0 → unit[0].commander(+0x08)=0 → currentRaw11178=0 →
+  // 함대 미선택. 근거: initial-deployment 홈 함대 = 세력 수도(동맹 하이네센 2014 / 제국 오딘 2588).
+  for (const { power, expected, label } of [
+    { power: 3, expected: 2014, label: '동맹(하이네센)' },
+    { power: 2, expected: 2588, label: '제국(오딘)' },
+  ]) {
+    const world = createWorldSession();
+    world.seedPlayer({ connectionId: 1, characterId: 42, unitId: 7, cell: 0, power, inWorld: false });
+    const { emits } = world.enterWorld({ connectionId: 1 });
+    const enterUnit = emits.find((inner) => readMsg32Code(inner) === CODE_INFO_UNIT);
+    assert.ok(enterUnit, `${label}: world-enter 0x0325 present`);
+    const decoded = decodeInformationUnitsLikeFun419ca0(msg32Body(enterUnit));
+    assert.equal(decoded.rows[0].cell, expected, `${label}: unit[0].cell(+0x0c) = 세력 수도`);
+    assert.equal(decoded.rows[0].commander, expected, `${label}: unit[0].commander(+0x08) = 세력 수도 (선택/warp 근거)`);
+    assert.notEqual(decoded.rows[0].cell, 0, `${label}: off-grid cell=0 이 아니어야 렌더된다`);
+  }
+});
+
+test('LOGH7-197: 이미 유효 cell(2588)인 캐릭터는 수도 보정을 받지 않고 그대로 유지한다', () => {
+  // 회귀 방지: cell>0 이면(예: 이미 이동/warp 한 위치) 보정하지 않는다. 4999(미상 base)도 유지.
+  const world = createWorldSession();
+  world.seedPlayer({ connectionId: 1, characterId: 42, unitId: 7, cell: 4999, power: 3, inWorld: false });
+  const { emits } = world.enterWorld({ connectionId: 1 });
+  const enterUnit = emits.find((inner) => readMsg32Code(inner) === CODE_INFO_UNIT);
+  const decoded = decodeInformationUnitsLikeFun419ca0(msg32Body(enterUnit));
+  assert.equal(decoded.rows[0].cell, 4999, '유효 nonzero cell 은 보정 없이 그대로 유지');
+});
