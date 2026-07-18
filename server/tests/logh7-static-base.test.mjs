@@ -6,6 +6,7 @@ import {
   findStaticBaseByCell,
   getStaticBaseCatalog,
   readStaticBaseRequest,
+  spectralClassToIndex,
   STATIC_BASE_BODY_BYTES,
 } from '../src/server/logh7-static-base.mjs';
 import { msg32Body, readMsg32Code } from '../src/server/logh7-world-records.mjs';
@@ -87,13 +88,36 @@ test('0x031d builder preserves fixed framing and proven stream offsets', () => {
   assert.ok(body.subarray(record.next).every((byte) => byte === 0), 'padding/unknown bytes remain zero');
 });
 
-test('galaxy catalog emits deterministic system records and leaves unsupported astronomy zero', () => {
+test('spectral class maps 1-based (0 reserved for black/unknown) and defends malformed input', () => {
+  // 0x031d의 class_는 검은 항성구(index 0)를 sentinel로 쓰므로 실 스펙트럼은 1..7로 투영한다.
+  // 순서 보존: O(가장 뜨거움) → M(가장 차가움).
+  assert.equal(spectralClassToIndex('O'), 1);
+  assert.equal(spectralClassToIndex('B'), 2);
+  assert.equal(spectralClassToIndex('A'), 3);
+  assert.equal(spectralClassToIndex('F'), 4);
+  assert.equal(spectralClassToIndex('G'), 5);
+  assert.equal(spectralClassToIndex('K'), 6);
+  assert.equal(spectralClassToIndex('M'), 7);
+  // 데이터 없는/미상 스펙트럼은 0(검은 유지) — 날조 금지.
+  assert.equal(spectralClassToIndex(undefined), 0);
+  assert.equal(spectralClassToIndex(null), 0);
+  assert.equal(spectralClassToIndex(''), 0);
+  assert.equal(spectralClassToIndex('Z'), 0);
+  assert.equal(spectralClassToIndex('m'), 0);
+});
+
+test('galaxy catalog projects authoritative spectralClass into class_ and leaves unproven astronomy zero', () => {
   const catalog = getStaticBaseCatalog();
   assert.equal(catalog.length, 85);
   assert.equal(catalog[0].id, 1);
   assert.equal(catalog[0].grid, 2005);
   assert.equal(catalog[0].name, 'ルンビーニ');
-  assert.ok(catalog.every((record) => record.class_ === 0));
+  assert.equal(catalog[0].class_, 7, 'ルンビーニ spectralClass M → 1-based 7 (non-zero = not black)');
+  // 85개 성계 전부 authoritative spectralClass(game-mdx)를 갖고 있어 어떤 실 성계도 검게 남지 않는다.
+  assert.ok(catalog.every((record) => record.class_ >= 1 && record.class_ <= 7),
+    'every system carries a non-black spectral class');
+  // 천문(diameter/revolution)은 근거 데이터가 없어 0으로 유지한다.
+  assert.ok(catalog.every((record) => record.diameter === 0));
   assert.ok(catalog.every((record) => record.revolutionRadius === 0));
   const body = msg32Body(buildStaticInformationBaseFromGalaxy());
   assert.equal(body.readUInt16BE(0), 85);
@@ -101,7 +125,7 @@ test('galaxy catalog emits deterministic system records and leaves unsupported a
   assert.equal(first.id, 1);
   assert.equal(first.grid, 2005);
   assert.equal(first.name, 'ルンビーニ');
-  assert.equal(first.class_, 0);
+  assert.equal(first.class_, 7);
   assert.equal(first.revolutionRadius, 0);
 });
 

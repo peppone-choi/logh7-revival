@@ -26,6 +26,22 @@ const STATIC_BASE_SELECTOR_REQUEST_CODES = new Set([0x031c, 0x031e, 0x0320]);
 const DETAIL_BASE_SELECTOR_REQUEST_CODES = new Set([0x031e, 0x0320]);
 const DETAIL_BASE_SELECTOR_MAX = 4;
 
+// spectralClass(O/B/A/F/G/K/M) → class_ u8. 0x031d의 항성구 렌더는 index 0을 검은/빈
+// 항성 sentinel로 쓴다(populated 레코드라도 class_=0이면 검게 그려지는 라이브 증상이 근거).
+// 따라서 실 스펙트럼은 1..7로 투영(순서 보존: O 가장 뜨거움 → M 가장 차가움)해 어떤 실
+// 성계도 검게 남지 않게 한다. 이는 0x0313 맵 아이콘 테이블(0-based 0..6, logh7-galaxy-
+// placement.mjs SPECTRAL_SLOT)과는 별개 테이블이라 오프셋이 1 밀린다.
+// 정확한 색상↔인덱스 대응은 MEDIUM 신뢰도 — 라이브 QA로 확정 필요. 미상/무데이터는 0.
+const SPECTRAL_CLASS_INDEX = Object.freeze({ O: 1, B: 2, A: 3, F: 4, G: 5, K: 6, M: 7 });
+
+/** 스펙트럼 문자를 0x031d class_ 인덱스(1..7)로. 미상/무데이터는 0(검은 유지). */
+export function spectralClassToIndex(spectralClass) {
+  if (typeof spectralClass !== 'string') return 0;
+  return Object.prototype.hasOwnProperty.call(SPECTRAL_CLASS_INDEX, spectralClass)
+    ? SPECTRAL_CLASS_INDEX[spectralClass]
+    : 0;
+}
+
 export const STATIC_BASE_DEST_OFFSETS = Object.freeze({
   ID: 0x00,
   GRID: 0x04,
@@ -87,8 +103,8 @@ function systemCell(system) {
  *
  * 원본 서버의 별도 숫자 ID는 복구되지 않았으므로 DB seed의 삽입 순서와 동일한
  * 1-based catalog id를 사용한다. 이는 서버 내부의 안정적인 키이며 원본 ID라고
- * 주장하지 않는다. 이름·셀만 galaxy.json에서 직접 가져오고 class/천문 값은 근거가
- * 없어 0으로 둔다.
+ * 주장하지 않는다. 이름·셀·class_(spectralClass 투영)는 galaxy.json에서 직접 가져오고
+ * diameter/revolution 등 천문 수치는 근거 데이터가 없어 0으로 둔다.
  */
 export function getStaticBaseCatalog() {
   if (catalogCache) return catalogCache;
@@ -97,7 +113,7 @@ export function getStaticBaseCatalog() {
     id: Number.isInteger(system?.id) && system.id > 0 ? system.id : index + 1,
     grid: systemCell(system),
     name: String(system?.system ?? ''),
-    class_: 0,
+    class_: spectralClassToIndex(system?.spectralClass),
     diameter: 0,
     revolutionRadius: 0,
     revolutionDirection: 0,
