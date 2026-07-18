@@ -43,3 +43,10 @@
   - `skills-lock.json`의 humanize·humanize-redo 항목 skillPath가 실제 파일과 불일치(stale) — lock 정리 여부 결정.
 
 `logh7-orchestrator`의 Claude STALE은 2026-07-17 플랫폼별 live-QA 직접 지시를 canonical 선택 근거로 삼아 `.agents` 판으로 동기화해 해소했다.
+
+## 유닛 스테이징 = 게임플레이 게이트 블로커 (2026-07-18, 라이브 확정)
+
+- **증상**: native Windows 라이브(LOGH7-197)에서 로그인→전략맵까지 정상이나 **시드 캐릭터("aa")가 전략맵에 선택 가능한 함대가 없다.** 그래서 클라가 `0x032e`(함대정보 요청)를 방출하지 않아 서버 `0x032f`도 0건 → 멤버리스트 NO DATA. 증거: `_workspace/liveqa-20260718-197-fleetmember/`.
+- **파급**: 이 하나가 멤버리스트·함대 선택·이동(0x0b01)·Warp(0x2b) 전부의 **선행 블로커**. 0x032f 서버 빌더(codec/outfit-party-record.mjs:61)·핸들러(logh7-world-session.mjs:812)는 준비됐으나 라이브 도달 불가(in-process e2e만 통과).
+- **진단 중(2026-07-18)**: server-dev가 (a) 신규 캐릭터가 시작 함대를 배정·그리드 배치받는지 (b) world-enter 0x0325가 그 함대를 위치와 함께 담는지 (c) 클라 렌더 요건(DAT_009d2fa8) 중 어디가 갭인지 판정. key-fact `liveqa-worldentry-0323-crash`의 "잔여=유닛 스테이징 미완"과 동일 지점.
+- **다음 문**: 유닛 스테이징 완결 → 0x032e→0x032f 라이브 재검증 → 함대 선택→이동→Warp.
