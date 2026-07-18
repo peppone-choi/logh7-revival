@@ -51,3 +51,8 @@
 - **진단 완료(2026-07-18) → 근본원인 (a) 서버 스테이징 갭**: 캐릭터 "aa"는 함대(unit_id=1)는 있으나 **cell=0(off-grid)**. `createCharacterEntity`(entities.mjs:76)·`CreateCharacter`(handlers.mjs:80)가 cell 기본 0, 0x1006 생성 경로가 cell 미지정 → 신규 캐릭터 항상 cell=0 → 0x0325 unit[0].cell/commander(+0x08)=0 → 클라 선택 가능 함대 없음 → 0x032e 미방출. (0x0325 방출·유닛 포함은 정상; 위치만 0. B53 라이브: 유효 cell 2588이면 클라 렌더·warp 성공, off-grid면 실패 — 정합.)
 - **수정(commit `382ac752`, 브랜치 `codex/logh7-197-fleet-spawn-cell`)**: `getFactionCapitalCell(power)`(제국2=2588 오딘, 동맹3=2014 하이네센, 근거 `initial-deployment.json` 홈 함대, 미상=0 무날조). enterWorld에서 `!(p.cell>0)`이면 수도 셀 투영(비파괴 — DB cell=0 유지, 세션 투영, 첫 이동/warp 시 실 cell 영속; cell>0 불변=회귀방지). 단위테스트 95 pass: cell=0 캐릭터의 0x0325가 세력 수도로 스테이징됨 assert. **라이브 미검증(포트 후속)**: 원작 클라에서 aa 함대 아이콘 렌더+0x032e→0x032f 확인 필요.
 - **다음 문**: 유닛 스테이징 완결 → 0x032e→0x032f 라이브 재검증 → 함대 선택→이동→Warp.
+
+## 정적 마스터 테이블 4종 = 데이터 소스 부재 (2026-07-18, LOGH7-208~211 블록)
+
+- 0x0309(PowerDistribution)·0x030d(UnitTroop)·0x030f(Fighters)·0x0311(Arms): 와이어 레이아웃은 RE 확정(`docs/reference/legacy-evidence/logh7-proto-info-records.md` §2b-2e)이나 **숫자 데이터가 어디에도 없다** — (a) CD 추출 카탈로그=텍스트/메시지만, (b) 클라 EXE의 문서 RVA(0x4130a4 등)는 `.data` **zero-init BSS 런타임 수신 버퍼**(파일 raw 끝 0x3c1000 이후)로 클라가 서버 응답을 받아 채우는 곳. **클라는 파서·dump serializer만 보유, 서버가 유일 데이터 출처**(verdict `NONE-IN-CLIENT`, `server/content/generated/logh7-static-master-tables.json`, PR #205).
+- **블로커**: 추출로 채울 수 없음. content DB / 공식 매뉴얼(`docs/reference/*.pdf`) / 라이브 서버-레코드 캡처에서 값 확보해야 빌더 가능. 확보 전 zero-fill 유지(무날조). LOGH7-208~211은 이 데이터 확보가 선행.
