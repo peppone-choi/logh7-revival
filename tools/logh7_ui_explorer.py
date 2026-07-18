@@ -12,7 +12,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
-from tools.live.lineage_guard import check_client_lineage
+from tools.live.lineage_guard import check_client_lineage, check_client_lineage_set
 
 # ctypes 타입 별칭 (wintypes는 Windows 전용이므로 폴백 제공)
 try:
@@ -517,14 +517,22 @@ def _enforce_lineage_gate(session: Path, exe: Path, manifest_path: Path) -> int 
     """
     reason: str | None = None
     working: Any = None
+    nodes: Any = None
     try:
         manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
         if not isinstance(manifest, dict):
             reason = "manifest must be a JSON object"
         else:
+            # v2: 인가된 계보 노드 집합(원본 + 승인된 패치 노드). v1: 단일 working 블록.
+            # 빈 authorizedNodes([])는 "v2 부재"로 취급해 working으로 폴백한다 —
+            # 빈 리스트가 유효 working을 조용히 차단하는 함정을 없앤다.
+            nodes = manifest.get("authorizedNodes")
             working = manifest.get("working")
-            if working is None:
-                reason = "manifest is missing the working block"
+            if not nodes and working is None:
+                if isinstance(nodes, list):  # authorizedNodes: [] 인데 working도 없음
+                    reason = "manifest authorizedNodes is empty and no working block is present"
+                else:
+                    reason = "manifest is missing the authorizedNodes and working blocks"
     except OSError as error:
         reason = f"manifest unreadable: {error}"
     except json.JSONDecodeError as error:
@@ -532,7 +540,11 @@ def _enforce_lineage_gate(session: Path, exe: Path, manifest_path: Path) -> int 
 
     if reason is not None:
         verdict: dict[str, Any] = {"ok": False, "exe": str(exe), "checks": [], "mismatches": [], "reason": reason}
+    elif nodes:
+        # 인가 노드 중 하나에 완전 매치해야 통과. 미상 hash는 fail-closed 차단.
+        verdict = check_client_lineage_set(exe, nodes)
     else:
+        # nodes가 None이거나 []; 여기 도달하면 working은 반드시 존재(위 reason 가드).
         verdict = check_client_lineage(exe, working)
 
     if verdict["ok"]:
