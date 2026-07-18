@@ -95,6 +95,27 @@ export function buildDeploymentFleetList(player = {}) {
   return [playerUnit, ...npc];
 }
 
+/**
+ * 세력 수도(홈 함대 배치) 셀. 신규 캐릭터는 생성 시 cell=0(스키마 NOT NULL 기본값)으로
+ * 저장돼 함대가 갤럭시 그리드 밖(off-grid)에 놓인다. 월드진입 시 이 값으로 스폰 셀을
+ * 보정하지 않으면 0x0325 unit[0].commander(+0x08)=cell=0 이 되어 클라 currentRaw11178=0 →
+ * 전략맵에 선택 가능한 함대 마커가 렌더되지 않는다(라이브 LOGH7-197).
+ *
+ * 근거(무날조): initial-deployment.json 홈 함대 배치 = 세력 수도.
+ *   제국 fleet[0] = ヴァルハラ/オーディン cell 2588 (docs/logh7-db-seed-catalog.md: 서버 기본 스폰셀).
+ *   동맹 fleet[0] = バーラト/ハイネセン cell 2014 (동맹 수도).
+ * 미상 세력은 날조 없이 0 을 반환 — 호출측이 자체 defaultCell 로 폴백한다.
+ *
+ * @param {number} power powerId (2=제국, 3=동맹)
+ * @returns {number} 수도 셀(row*100+col) 또는 미상 세력이면 0
+ */
+export function getFactionCapitalCell(power) {
+  const dep = loadJson('initial-deployment.json');
+  if (power === FACTION_EMPIRE) return Number(dep?.imperial?.fleet?.[0]?.cell) || 0;
+  if (power === FACTION_ALLIANCE) return Number(dep?.alliance?.fleet?.[0]?.cell) || 0;
+  return 0;
+}
+
 /** 테스트/재시드용 캐시 무효화. */
 export function _resetDeploymentUnitsCache() {
   cache = null;
