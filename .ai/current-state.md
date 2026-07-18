@@ -1,6 +1,7 @@
 # Current State
 
-- Updated at: 2026-07-17
+- Updated at: 2026-07-18
+- 세션 재개(2026-07-18): 트래커 로드맵 정렬 완료 — GitHub 마일스톤 5개 생성·이슈 배정(M4:65·M5:15·M6:21·Phase R:11·M7:5), Jira priority High 69건(M4 게이트·게임플레이). 이번 세션 신규 Jira 14티켓: 사회 시뮬 에픽 LOGH7-198 + 스토리 199~203, opcode 백로그 작업 204(0x031d astronomy=검은행성)~211 + 0x032f=LOGH7-197. 트래킹 방식 확정: **Jira 스프린트 미사용(customfield_10020 금지), status 전이+증거 코멘트 칸반; GitHub는 라벨**. 오늘 실작업 병렬 착수: 0x032f 멤버리스트 라이브 검증(LOGH7-197, live-qa, 포트 47900 전용)·0x031d 검은행성 빌더(LOGH7-204, server-dev, 테스트만). 어제 두 백그라운드 에이전트는 세션 한도로 중단됐으나 산출물(마일스톤·priority)은 위 확인대로 반영됨.
 - Active objective: P0 게이트 완주 계약(LOGH7-43~47, 스토리 LOGH7-18)이 ACTIVE. 구현 순서 LOGH7-47→43→45→44→46. push·PR·merge·외부 쓰기·라이브 실기는 2026-07-17 상시 사전승인. LOGH7-43 라이브 런은 AC-2로 포함.
 - Standing directive (2026-07-17 /ultragoal): 게임 실제 플레이 가능(in-game 월드진입·기본 플레이 라이브 검증)까지 Jira 이슈를 게이트 순 5개씩 배치로 무조건 계속 처리. 현재 배치 #1 = P0 LOGH7-43~47. fail-closed·증거 기반 완료 유지, 가짜 완료 금지. `.omc/ultragoal/` 마일스톤 원장(G001-G006)은 coarse 추적으로 유지하되 G001 "M3 월드 진입"은 현재 로드맵상 완료로 보여 재조정 대상(비차단).
 - Git baseline: `main` = `a83888c1`. 이번 세션 병합 체인: PR #178(`956c41ef` LOGH7-58 전술게이트 no-op 수정·크래시 격리) → PR #181(`78990e60` 0x032f OutfitParty 함대 멤버리스트, NO DATA 해결, in-process e2e에서 member[0]=Yang Wenli 렌더 — **라이브 미검증**, endian BE 가정 `wireEndian` 토글 fallback) → PR #179(`a83888c1` opcode 커버리지 원장 + 사회 시뮬 설계 정본 `docs/logh7-social-simulation-design.md` + 상태·AGENTS·CLAUDE 현행화).
