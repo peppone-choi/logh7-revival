@@ -55,8 +55,8 @@
   - **0x031d 검은 행성(PR #193) = 라이브 PASS**: 성계가 스펙트럼 색(cyan/yellow/red)으로 렌더, 검정 탈피. spectralClass 투영 end-to-end 작동. (per-system 행성 패널은 선택 벽에 막혀 미확인.)
   - **유닛 스테이징(PR #197) = 서버 정확, 클라 미렌더**: cell 0→2014 투영·0x0325 채움·**이전 null-deref 크래시 사라짐**(실이득). 그러나 **갤럭시 맵에 선택 가능한 함대 마커가 안 그려진다**(별만, selectedD5=-1, listCount=0). 카메라는 발할라 2588 고정(aa는 2014 화면밖), **제국 NPC 함대 12개도 마커 0** — 단순 포커스 문제 아닐 수 있음.
   - **0x032f 멤버리스트(PR #181) = 블록**: 함대 선택 불가 → 0x032e 미방출(전 런 0건) → 0x032f 미도달. endian 판정 불가.
-- **현재 진짜 게임플레이 블로커(정밀)**: 클라가 전략 갤럭시 맵에 함대 마커를 렌더하지 않음. re-analyst RE 진행중 — (a)마커가 galaxy-map 렌더 vs cell-level 진입 후 렌더, (b)카메라 focus-cell 서버 투영 필요 여부. 이게 0x032e/이동/Warp 전부의 선행.
-- **로그인 첫 키 패치(LOGH7-212, PR #207)**: Variant A 재베이스라인 적용 완료(산출 hash bb670cf0… 일치, 인가노드 병존). 패치 클라 라이브 QA(첫키 온전·keysetup 크래시 0) 진행중 → 검증 후 #207 머지.
+- **현재 진짜 게임플레이 블로커 = 함대 마커 미렌더 (RE 규명 완료 2026-07-18)**: 갤럭시 맵은 3계층 — 계층A(성계 별=0x0313/0x0315 klass=3, 유닛 미참조=지금 보이는 것)·계층B(자기 함대 단일 모델, `own_cell`=`DAT_007cd04c+0x11178` 읽음, native 라이터 0·`strat-camera-focus` 패치만 씀)·계층C(다중 함대 per-cell 마커, `+0x58` 점유테이블 읽는데 world-enter가 제로화만 하고 안 채움). **0x0325 registry는 마커를 안 먹인다**(소비자 3곳=디스패처스폰·PLAYER_INFO·전술팩토리, own_cell/점유 미기록). 카메라=own_cell. 발할라 2588은 패치가 **COMMANDER 슬롯(0x0325 element+0x08)==0일 때 own_cell=2588 하드코딩**한 것 → 동맹 "aa"(COMMANDER=0) 화면밖. **실행 경로**: 서버가 COMMANDER 슬롯을 함대 셀(동맹 2014)로 채움(`LOGH_PLAYER_FOCUS_CELL`) → own_cell=2014 → 카메라·자기함대 선택 가능(계층B, 계층C 없이도). U1(COMMANDER→own_cell 흐름)은 라이브 watchpoint 확정 필요. 계층C(NPC 다중마커)는 별개 심층 프로브(점유테이블 라이터 미해석). server-dev 준비중(브랜치 codex/player-focus-cell). RE 근거: `docs/logh7-strategic-map-placement-re.md`·`logh7-fleet-render-re.md`·`logh7-0325-unit-loader-wire.md`, 디컴파일 FUN_004d3a40/4d6b70/4c4170.
+- **로그인 첫 키 패치(LOGH7-212) = 완료 (라이브 A/B PASS, PR #207 merge `94e4c2aa`)**: 클라 패치 프로그램 첫 실증. 패치 EXE hash bb670cf0… 일치, 라이너지 게이트 패치노드 인가·원본 병존. 첫키 raw 입력 A/B — 패치 `inei00`/원본 `nei00`(첫키 드롭). keysetup 크래시 0, 로그인→로비 회귀 0. Variant A 채택(B 불요). 후속 nit: `cmd_key` warmup 하드코딩 → `--no-warmup` 플래그(하네스-fix).
 
 ## 정적 마스터 테이블 4종 = 데이터 소스 부재 (2026-07-18, LOGH7-208~211 블록)
 
