@@ -49,12 +49,12 @@
 | 0x0324 | 0x0325 | ResponseInformationUnit | 0xce44 | ✅ 실데이터 | logh7-world-records.mjs:372 |
 | 0x0326 | 0x0327 | ResponseInformationWarehouse | 0x300 | ✅ 실데이터 | warehouse-record.mjs:109 |
 | 0x0328 | 0x0329 | ResponseInformationPackage | 0x154 | ❌ zero-fill | logh7-world-records.mjs:1070 |
-| 0x032a | 0x032b | ResponseInformationOutfit | 0xaf4 | ✅ 실데이터 | logh7-world-records.mjs:706 |
+| 0x032a | 0x032b | ResponseInformationOutfit(함대 편성) | 0xaf4 | ⚠️ 조건부 zero-fill (빌더 존재, outfits 미전달 시 payload 0) | logh7-world-records.mjs:706 |
 | 0x032c | 0x032d | ResponseGridInformationOutfit | 0xe14 | ❌ zero-fill | logh7-world-records.mjs:1070 |
 | 0x032e | 0x032f | ResponseInformationOutfitParty(함대 멤버리스트) | 0x8b04 | 🚧 구현 중 | logh7-world-records.mjs:1070 |
 | 0x0330 | 0x0331 | ResponseOutfitInformationUnit | 0x1814 | ❌ zero-fill | logh7-world-records.mjs:1070 |
-| 0x031e | 0x031f | ResponseInformationBase | 0x604 | ✅ 실데이터 | base-record.mjs:99 |
-| 0x0320 | 0x0321 | ResponseInformationInstitution | 0x8de4 | ✅ 실데이터 | institution-record.mjs:69 |
+| 0x031e | 0x031f | ResponseInformationBase(기지 경제·소유) | 0x604 | ⚠️ 조건부 zero-fill (빌더 존재, 호출자 bases 미전달 시 count=0 — 사회 시뮬 경제필드 패널) | base-record.mjs:99 |
+| 0x0320 | 0x0321 | ResponseInformationInstitution(시설) | 0x8de4 | ⚠️ 조건부 zero-fill (빌더 존재, institutions 미전달 시 count=0) | institution-record.mjs:69 |
 | **Static Information (마스터 테이블 — ❌ 4종은 EXE-embedded 데이터, 선행 추출 필요)** ||||||
 | 0x0304 | 0x0305 | ResponseStaticInformationCard | 0x520a | ✅ 실데이터 | logh7-world-records.mjs:1037 |
 | 0x0306 | 0x0307 | ResponseStaticInformationCardCommand | 0xe5b2 | ✅ 실데이터 | logh7-world-records.mjs:1043 |
