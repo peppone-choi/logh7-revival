@@ -55,7 +55,7 @@
 | 0x0330 | 0x0331 | ResponseOutfitInformationUnit | 0x1814 | ❌ zero-fill | logh7-world-records.mjs:1070 |
 | 0x031e | 0x031f | ResponseInformationBase | 0x604 | ✅ 실데이터 | base-record.mjs:99 |
 | 0x0320 | 0x0321 | ResponseInformationInstitution | 0x8de4 | ✅ 실데이터 | institution-record.mjs:69 |
-| **Static Information (마스터 테이블 — CD 추출 캐논으로 채움)** ||||||
+| **Static Information (마스터 테이블 — ❌ 4종은 EXE-embedded 데이터, 선행 추출 필요)** ||||||
 | 0x0304 | 0x0305 | ResponseStaticInformationCard | 0x520a | ✅ 실데이터 | logh7-world-records.mjs:1037 |
 | 0x0306 | 0x0307 | ResponseStaticInformationCardCommand | 0xe5b2 | ✅ 실데이터 | logh7-world-records.mjs:1043 |
 | 0x0308 | 0x0309 | ResponseStaticInformationPowerDistribution | 0x55c | ❌ zero-fill | logh7-world-records.mjs:1070 |
@@ -76,7 +76,8 @@
 - `0x032f` OutfitParty(함대 멤버리스트) — 🚧 진행 중. 전략맵 함대 선택 → 이동/Warp 게임플레이의 관문.
 - `0x032d` GridInformationOutfit, `0x0331` OutfitInformationUnit, `0x0329` Package.
 
-**마스터 테이블 (CD 추출 캐논 데이터 투영 — 추측 불요, 상대적으로 안전):**
+**마스터 테이블 (2026-07-18 정정: 데이터가 CD 아니라 EXE-embedded → 선행 추출 필요):**
+> `0x0309`/`0x030d`/`0x030f`/`0x0311`의 와이어 레이아웃은 RE 확정(`docs/reference/legacy-evidence/logh7-proto-info-records.md` §2b-2e)이나, **숫자 데이터가 CD 추출 카탈로그에 없고 클라 EXE 내부에 박혀 있다**(RVA: PowerDistribution `+0x4130a4`·UnitTroop `+0x412f20`·Fighters `+0x3f5ab4`·Arms `+0x3f5902`, image base 0x400000). CD 추출은 텍스트/메시지 데이터만. → **선행 EXE 추출 태스크**(extract-miner, PE 섹션 RVA→파일오프셋 매핑, fail-closed lineage 검증)로 카탈로그화한 뒤 빌더는 0x031d처럼 기계적. 추출 전엔 zero-fill 유지(무날조).
 - ⭐ `0x031d` StaticBase(astronomy) — **검은 행성 원인**. 성계별 `class_`(spectral 인덱스, dest +0x26 u8, 0이면 검은 항성구)·`diameter`(+0x28 f32be)·`revolution_*`를 정본 galaxy 데이터로 채워 방출. 와이어=u16be count 접두 + 순차 레코드(파서가 dest stride 0x3c 전개). 근거: `docs/reference/legacy-evidence/logh7-info-records-wire.md` §2. class_→항성색 LUT는 라이브/타 export 재확인 권장.
 - `0x0309` PowerDistribution(세력 분포), `0x030d` UnitTroop(육전대), `0x030f` Fighters(전투정), `0x0311` Arms(병기).
 
