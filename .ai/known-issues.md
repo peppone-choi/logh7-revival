@@ -23,7 +23,7 @@
 
 ## 인프라·도구
 
-- CI Claude GHA review job은 org/repo 변수 ANTHROPIC_MODEL이 주입하는 1M 접미사(claude-opus-4-8[1m])로 is_error 실패. workflow model: pin(PR #173, merged)만으론 불충분함이 PR #174 review로 확인됨. step env: ANTHROPIC_MODEL 오버라이드로 해결 확정(PR #175 review PASS, model=claude-opus-4-8; #174 [1m] is_error와 A/B). org 변수 정정 불필요. CI test·CodeRabbit·세션 내 독립 리뷰는 정상.
+- ~~CI Claude GHA review job 실패~~ **RESOLVED (2026-07-18, PR #195 merge `2056ebd4`)**. 경위: (1) org 변수 `ANTHROPIC_MODEL=claude-opus-4-8[1m]`의 1M 접미사 → env override로 정정(PR #175). (2) 그 뒤에도 review가 init 성공 후 첫 API 호출에서 **비용 $0·num_turns 1·is_error:true**로 즉시 실패 지속(#176~#193). 처음엔 계정 레벨(크레딧/접근)로 추정했으나 **오판**. (3) 실제 근본원인: workflow가 action v1이 지원 안 하는 **최상위 `model:` 입력**을 넘겨("Unexpected input" 경고) 첫 턴이 깨진 것. `model:` 입력 제거 + `claude_args --model claude-opus-4-8`(v1 정식 경로)로 이동해 해결 — PR #195 자신의 review job이 24s에 PASS로 실증. **이제 test·CodeRabbit·review 3면 green.** env `ANTHROPIC_MODEL`은 org 변수 [1m] 덮어쓰기용 유지.
 - Codex 프로젝트 훅은 로컬 payload 회귀 26/26을 통과했지만, `.codex/hooks.json` 변경 hash를 사용자가 `/hooks`에서 신뢰하고 새 task를 시작하기 전까지 라이브 활성은 미검증이다.
 - Codex Pre/Post 훅은 현재 `apply_patch`와 Bash 경로를 보호·후검증한다. 통합 실행기나 웹 도구 등 훅 matcher 밖의 경로는 자동 차단 범위가 아니므로 `AGENTS.md` 계약과 수동 검증이 계속 적용된다.
 - 로컬 `basedpyright`·`yaml-ls`가 설치돼 있지 않아 PostToolUse LSP 단계는 실패를 보고한다. 이 작업에서는 설치 범위를 추가하지 않았으며 Python은 `py_compile`·`unittest`, YAML은 parser·skill validator로 대체 검증한다.
@@ -48,5 +48,6 @@
 
 - **증상**: native Windows 라이브(LOGH7-197)에서 로그인→전략맵까지 정상이나 **시드 캐릭터("aa")가 전략맵에 선택 가능한 함대가 없다.** 그래서 클라가 `0x032e`(함대정보 요청)를 방출하지 않아 서버 `0x032f`도 0건 → 멤버리스트 NO DATA. 증거: `_workspace/liveqa-20260718-197-fleetmember/`.
 - **파급**: 이 하나가 멤버리스트·함대 선택·이동(0x0b01)·Warp(0x2b) 전부의 **선행 블로커**. 0x032f 서버 빌더(codec/outfit-party-record.mjs:61)·핸들러(logh7-world-session.mjs:812)는 준비됐으나 라이브 도달 불가(in-process e2e만 통과).
-- **진단 중(2026-07-18)**: server-dev가 (a) 신규 캐릭터가 시작 함대를 배정·그리드 배치받는지 (b) world-enter 0x0325가 그 함대를 위치와 함께 담는지 (c) 클라 렌더 요건(DAT_009d2fa8) 중 어디가 갭인지 판정. key-fact `liveqa-worldentry-0323-crash`의 "잔여=유닛 스테이징 미완"과 동일 지점.
+- **진단 완료(2026-07-18) → 근본원인 (a) 서버 스테이징 갭**: 캐릭터 "aa"는 함대(unit_id=1)는 있으나 **cell=0(off-grid)**. `createCharacterEntity`(entities.mjs:76)·`CreateCharacter`(handlers.mjs:80)가 cell 기본 0, 0x1006 생성 경로가 cell 미지정 → 신규 캐릭터 항상 cell=0 → 0x0325 unit[0].cell/commander(+0x08)=0 → 클라 선택 가능 함대 없음 → 0x032e 미방출. (0x0325 방출·유닛 포함은 정상; 위치만 0. B53 라이브: 유효 cell 2588이면 클라 렌더·warp 성공, off-grid면 실패 — 정합.)
+- **수정(commit `382ac752`, 브랜치 `codex/logh7-197-fleet-spawn-cell`)**: `getFactionCapitalCell(power)`(제국2=2588 오딘, 동맹3=2014 하이네센, 근거 `initial-deployment.json` 홈 함대, 미상=0 무날조). enterWorld에서 `!(p.cell>0)`이면 수도 셀 투영(비파괴 — DB cell=0 유지, 세션 투영, 첫 이동/warp 시 실 cell 영속; cell>0 불변=회귀방지). 단위테스트 95 pass: cell=0 캐릭터의 0x0325가 세력 수도로 스테이징됨 assert. **라이브 미검증(포트 후속)**: 원작 클라에서 aa 함대 아이콘 렌더+0x032e→0x032f 확인 필요.
 - **다음 문**: 유닛 스테이징 완결 → 0x032e→0x032f 라이브 재검증 → 함대 선택→이동→Warp.
