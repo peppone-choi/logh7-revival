@@ -51,6 +51,12 @@
 - **진단 완료(2026-07-18) → 근본원인 (a) 서버 스테이징 갭**: 캐릭터 "aa"는 함대(unit_id=1)는 있으나 **cell=0(off-grid)**. `createCharacterEntity`(entities.mjs:76)·`CreateCharacter`(handlers.mjs:80)가 cell 기본 0, 0x1006 생성 경로가 cell 미지정 → 신규 캐릭터 항상 cell=0 → 0x0325 unit[0].cell/commander(+0x08)=0 → 클라 선택 가능 함대 없음 → 0x032e 미방출. (0x0325 방출·유닛 포함은 정상; 위치만 0. B53 라이브: 유효 cell 2588이면 클라 렌더·warp 성공, off-grid면 실패 — 정합.)
 - **수정(commit `382ac752`, 브랜치 `codex/logh7-197-fleet-spawn-cell`)**: `getFactionCapitalCell(power)`(제국2=2588 오딘, 동맹3=2014 하이네센, 근거 `initial-deployment.json` 홈 함대, 미상=0 무날조). enterWorld에서 `!(p.cell>0)`이면 수도 셀 투영(비파괴 — DB cell=0 유지, 세션 투영, 첫 이동/warp 시 실 cell 영속; cell>0 불변=회귀방지). 단위테스트 95 pass: cell=0 캐릭터의 0x0325가 세력 수도로 스테이징됨 assert. **라이브 미검증(포트 후속)**: 원작 클라에서 aa 함대 아이콘 렌더+0x032e→0x032f 확인 필요.
 - **다음 문**: 유닛 스테이징 완결 → 0x032e→0x032f 라이브 재검증 → 함대 선택→이동→Warp.
+- **라이브 QA 결과(2026-07-18, `.omo/live-qa/liveqa-20260718-3fix-050002/`)**:
+  - **0x031d 검은 행성(PR #193) = 라이브 PASS**: 성계가 스펙트럼 색(cyan/yellow/red)으로 렌더, 검정 탈피. spectralClass 투영 end-to-end 작동. (per-system 행성 패널은 선택 벽에 막혀 미확인.)
+  - **유닛 스테이징(PR #197) = 서버 정확, 클라 미렌더**: cell 0→2014 투영·0x0325 채움·**이전 null-deref 크래시 사라짐**(실이득). 그러나 **갤럭시 맵에 선택 가능한 함대 마커가 안 그려진다**(별만, selectedD5=-1, listCount=0). 카메라는 발할라 2588 고정(aa는 2014 화면밖), **제국 NPC 함대 12개도 마커 0** — 단순 포커스 문제 아닐 수 있음.
+  - **0x032f 멤버리스트(PR #181) = 블록**: 함대 선택 불가 → 0x032e 미방출(전 런 0건) → 0x032f 미도달. endian 판정 불가.
+- **현재 진짜 게임플레이 블로커(정밀)**: 클라가 전략 갤럭시 맵에 함대 마커를 렌더하지 않음. re-analyst RE 진행중 — (a)마커가 galaxy-map 렌더 vs cell-level 진입 후 렌더, (b)카메라 focus-cell 서버 투영 필요 여부. 이게 0x032e/이동/Warp 전부의 선행.
+- **로그인 첫 키 패치(LOGH7-212, PR #207)**: Variant A 재베이스라인 적용 완료(산출 hash bb670cf0… 일치, 인가노드 병존). 패치 클라 라이브 QA(첫키 온전·keysetup 크래시 0) 진행중 → 검증 후 #207 머지.
 
 ## 정적 마스터 테이블 4종 = 데이터 소스 부재 (2026-07-18, LOGH7-208~211 블록)
 
