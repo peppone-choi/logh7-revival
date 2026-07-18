@@ -256,6 +256,104 @@ class UiExplorerTests(unittest.TestCase):
             payload = json.loads(output)
             self.assertEqual(payload["started"]["clientPid"], 42796)
 
+    def test_start_launches_when_exe_matches_authorized_patch_node(self) -> None:
+        # v2 authorizedNodes 매니페스트: 승인된 패치 노드에 완전 매치하면 launch.
+        with TemporaryDirectory() as raw_dir:
+            root = Path(raw_dir)
+            exe = root / "g7mtclient.exe"
+            _write_min_pe(exe, image_base=0x00400000, sentinel_hex="deadbeef", sentinel_offset=0x100)
+            actual_sha = hashlib.sha256(exe.read_bytes()).hexdigest()
+            manifest = {
+                "schemaVersion": 2,
+                "authorizedNodes": [
+                    {
+                        "nodeId": "original",
+                        "kind": "original",
+                        "sha256": "1" * 64,  # 원본은 다른 hash — 이 EXE와 안 맞음
+                        "imageBase": "0x00400000",
+                        "sentinels": [{"hex": "deadbeef", "offset": "0x100"}],
+                    },
+                    {
+                        "nodeId": "patch_v1",
+                        "kind": "patch",
+                        "parentHash": "1" * 64,
+                        "sha256": actual_sha,
+                        "imageBase": "0x00400000",
+                        "sentinels": [{"hex": "deadbeef", "offset": "0x100"}],
+                        "capabilityProfile": "layer3-notifybase-render",
+                        "provenance": "patch for Layer3 NotifyBaseParameter UI binding",
+                        "approvalRef": "LOGH7-212",
+                    },
+                ],
+            }
+            code, popen, output, session = self._run_start_with_manifest(root, exe, manifest)
+            self.assertEqual(code, 0)
+            popen.assert_called_once()
+            self.assertFalse((session / "lineage-blocked.json").exists())
+
+    def test_start_blocks_unknown_hash_against_authorized_nodes(self) -> None:
+        # 핵심 fail-closed: 어느 인가 노드에도 안 맞는 미상 EXE는 차단.
+        with TemporaryDirectory() as raw_dir:
+            root = Path(raw_dir)
+            exe = root / "g7mtclient.exe"
+            _write_min_pe(exe, image_base=0x00400000, sentinel_hex="deadbeef", sentinel_offset=0x100)
+            manifest = {
+                "schemaVersion": 2,
+                "authorizedNodes": [
+                    {
+                        "nodeId": "original",
+                        "kind": "original",
+                        "sha256": "1" * 64,  # 둘 다 이 EXE와 다른 hash
+                        "imageBase": "0x00400000",
+                        "sentinels": [{"hex": "deadbeef", "offset": "0x100"}],
+                    },
+                    {
+                        "nodeId": "patch_v1",
+                        "kind": "patch",
+                        "parentHash": "1" * 64,
+                        "sha256": "2" * 64,
+                        "imageBase": "0x00400000",
+                        "sentinels": [{"hex": "deadbeef", "offset": "0x100"}],
+                        "capabilityProfile": "layer3",
+                        "provenance": "p",
+                        "approvalRef": "LOGH7-212",
+                    },
+                ],
+            }
+            code, popen, output, session = self._run_start_with_manifest(root, exe, manifest)
+            self.assertEqual(code, 3)
+            popen.assert_not_called()
+            payload = json.loads(output)
+            self.assertTrue(payload["blocked"])
+            self.assertIsNone(payload["verdict"]["matchedNode"])
+            self.assertTrue((session / "lineage-blocked.json").is_file())
+
+    def test_start_blocks_patch_node_without_approval(self) -> None:
+        # hash는 맞지만 approval_ref 없는 패치 노드는 인가되지 않아 차단.
+        with TemporaryDirectory() as raw_dir:
+            root = Path(raw_dir)
+            exe = root / "g7mtclient.exe"
+            _write_min_pe(exe, image_base=0x00400000, sentinel_hex="deadbeef", sentinel_offset=0x100)
+            actual_sha = hashlib.sha256(exe.read_bytes()).hexdigest()
+            manifest = {
+                "schemaVersion": 2,
+                "authorizedNodes": [
+                    {
+                        "nodeId": "patch_v1",
+                        "kind": "patch",
+                        "sha256": actual_sha,  # 정확히 이 EXE
+                        "imageBase": "0x00400000",
+                        "sentinels": [{"hex": "deadbeef", "offset": "0x100"}],
+                        # capabilityProfile/provenance/approvalRef 누락 → 미인가
+                    },
+                ],
+            }
+            code, popen, output, session = self._run_start_with_manifest(root, exe, manifest)
+            self.assertEqual(code, 3)
+            popen.assert_not_called()
+            payload = json.loads(output)
+            self.assertIsNone(payload["verdict"]["matchedNode"])
+
     def test_shot_uses_saved_session(self) -> None:
         with TemporaryDirectory() as raw_dir:
             session = Path(raw_dir)

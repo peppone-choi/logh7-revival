@@ -105,6 +105,72 @@ def check_client_lineage(exe: Path, working: Any) -> dict[str, Any]:
     return _verdict(exe, checks)
 
 
+def _node_authorization_error(node: Any) -> str | None:
+    """노드가 자기 hash를 축복할 자격(인가)이 있는지 판정한다.
+
+    잘 형성된 ``original`` 노드는 자기 hash를 인가한다. ``patch`` 노드는 여기에
+    더해 ``capabilityProfile``·``provenance``·``approvalRef``를 모두 갖춰야 한다 —
+    승인되지 않은 패치는 어떤 hash도 인가할 수 없다(fail-closed). 자격 없는 노드는
+    hash가 우연히 맞아도 대상 EXE를 accept시키지 못한다. 자격이 있으면 ``None``.
+    """
+    if not isinstance(node, Mapping):
+        return "node must be an object"
+    kind = node.get("kind", "original")
+    if kind not in ("original", "patch"):
+        return f"unsupported node kind {kind!r}"
+    if kind == "patch":
+        for field in ("capabilityProfile", "provenance", "approvalRef"):
+            value = node.get(field)
+            if not isinstance(value, str) or not value.strip():
+                return f"patch node missing required authorization field {field!r}"
+    return None
+
+
+def check_client_lineage_set(exe: Path, nodes: Any) -> dict[str, Any]:
+    """대상 EXE를 **인가된 계보 노드 집합**과 대조한다(fail-closed 보존).
+
+    ``nodes``는 원본 노드 + 승인된 패치 노드의 배열이다. 각 노드는 자기 hash를
+    인가할 자격(``_node_authorization_error``)을 통과해야 하고, 그 뒤 EXE가 그
+    노드의 sha256·image base·sentinel을 **전부** 만족해야 그 노드에 매치된다.
+    자격 있는 노드 중 하나라도 완전 매치하면 accept한다.
+
+    fail-closed 불변식: 어느 인가 노드에도 완전 매치하지 않는 EXE(미상 hash 포함)는
+    ``ok=False``로 차단한다. 자격 없는 노드는 hash가 맞아도 매치 후보에서 빠진다.
+    """
+    node_results: list[dict[str, Any]] = []
+    if not isinstance(nodes, list) or not nodes:
+        return {
+            "ok": False,
+            "exe": str(exe),
+            "matchedNode": None,
+            "nodes": node_results,
+            "reason": "authorizedNodes must be a non-empty array",
+        }
+
+    matched_node: str | None = None
+    for index, node in enumerate(nodes):
+        node_id = node.get("nodeId", f"node[{index}]") if isinstance(node, Mapping) else f"node[{index}]"
+        auth_error = _node_authorization_error(node)
+        if auth_error is not None:
+            node_results.append(
+                {"nodeId": node_id, "authorized": False, "matched": False, "reason": auth_error}
+            )
+            continue
+        verdict = check_client_lineage(exe, node)
+        node_results.append(
+            {"nodeId": node_id, "authorized": True, "matched": verdict["ok"], "verdict": verdict}
+        )
+        if verdict["ok"] and matched_node is None:
+            matched_node = node_id
+
+    return {
+        "ok": matched_node is not None,
+        "exe": str(exe),
+        "matchedNode": matched_node,
+        "nodes": node_results,
+    }
+
+
 def _check_sentinels(exe_bytes: bytes, raw_sentinels: Any, record: Any) -> None:
     if not isinstance(raw_sentinels, list) or not raw_sentinels:
         record("sentinels", "non-empty array", raw_sentinels, False, "working.sentinels must be a non-empty array")
