@@ -75,5 +75,20 @@ P0 게이트(스토리 LOGH7-18) 완주 — LOGH7-47/43/45/44/46을 각 Jira 완
 - linked worktree 정리·삭제·merge와 제품 P0 구현은 별도 계약이 필요하다.
 - 소유권 인수(Codex→Claude Code)와 후속 계약 선택은 2026-07-17 사용자 답변으로 승인됐다.
 
+## 다음 세션 계획 (2026-07-18 사용자 확정) — main `70b16ca2`
+
+이번 세션 코드는 전부 병합됐으나 **라이브 미검증이 최대 리스크**(서버 단위 테스트만 통과). 다음 세션 = **라이브 검증 우선 + 2개 병행**.
+
+1. **[최우선] 라이브 검증 3종** (포트 47900 전용 슬롯, 직렬화 필수):
+   - **유닛 스테이징**: "aa"(동맹, 수도 셀 2014 투영)가 전략맵에 **선택 가능한 함대 아이콘**으로 뜨는가. (`getFactionCapitalCell` 세력 수도 투영, PR #197 `70b16ca2`.)
+   - **0x032f 멤버리스트**: 함대 선택 시 `0x032e→0x032f` 방출·멤버리스트 렌더 + **endian 확정**(BE 가정, 깨지면 `wireEndian='le'` 토글). (PR #181.)
+   - **0x031d 검은 행성**: 성계정보 패널에서 행성/항성이 색을 갖는가(spectralClass 1..7 투영, 색↔index 매핑 MEDIUM). (PR #193.)
+   - **연쇄 구조**: 함대 등장 → 선택 가능 → 멤버리스트 → 이동(0x0b01) → **Warp(0x2b, LOGH7-58 원 목표)**. 라이브 성공 시 Warp까지 구동 = standing directive "기본 게임플레이 라이브 검증" 실질 도달. 막히면 그 지점이 진짜 다음 블로커(RE 디버그).
+   - 하네스: `python -m tools.logh7_ui_explorer --lineage-manifest <정본>` (fail-closed), `LOGH7_TACTICAL_ENTRY` OFF 유지(전략맵 크래시). 증거 evdir(스크린샷·서버로그·exit·cleanup).
+2. **[병행] 로그인 첫 키 패치 (LOGH7-212)** — 클라 패치 프로그램 첫 MVP. 재베이스라인 인프라(LOGH7-201, PR #194 병합)는 준비됨. exact RE 바이트(FUN_004ffba0 tail에서 FUN_004ffb50 선호출)로 patch manifest transform_ops 채움 → **사용자 승인**(비가역 라이너지 결정) → 재베이스라인 → 패치 클라 라이브 검증(첫 키 온전 입력, keysetup 크래시 0). RE 근거는 LOGH7-212 설명 참조.
+3. **[병행] 추출 백로그 opcode** — 0x032d(GridInformationOutfit 205)·0x0329(Package 206)·0x0331(OutfitInformationUnit 207)·정적 테이블 0x0309/030d/030f/0311(208~211). 커버리지 원장 `docs/logh7-opcode-coverage-current.md` 근거, CD 추출 캐논, 테스트만(라이브는 후속). 무날조.
+
+트래킹: Jira 스프린트 미사용·status전이+증거코멘트, GitHub 라벨. 라이브 검증된 것만 완료 전환(가짜 완료 금지). 볼트 정본 `E:\obsidian-tech-vault\1. 프로젝트\은하영웅전설 7 리바이벌\`.
+
 ## Files to read first
-`.ai/task.md`, `.ai/current-state.md`, `.ai/ownership.md`, `.ai/key-facts.md`, `.omo/plans/logh7-state-consistency-recovery-plan.md`, `docs/logh7-roadmap-current.md`.
+`.ai/task.md`, `.ai/current-state.md`, `.ai/ownership.md`, `.ai/key-facts.md`, `.ai/known-issues.md`, `docs/logh7-roadmap-current.md`, `docs/logh7-opcode-coverage-current.md`, `docs/logh7-social-simulation-design.md`.
