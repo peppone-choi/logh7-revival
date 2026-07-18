@@ -23,17 +23,13 @@ jobs:
       # are deprecated/folded into these — see upstream README + migration
       # guide, fetched 2026-07-16).
       - uses: anthropics/claude-code-action@v1
-        # `model:` 입력만으론 org/repo 변수(ANTHROPIC_MODEL=claude-opus-4-8[1m])가
-        # 주입한 1M-컨텍스트 접미사를 못 막았다(PR #174 review가 여전히
-        # `claude-opus-4-8[1m]` is_error). env로 명시해 org 변수 주입을 덮어쓴다.
+        # 모델은 env(org 변수 `ANTHROPIC_MODEL=claude-opus-4-8[1m]`의 1M 접미사를 덮어씀)
+        # + claude_args의 `--model`(v1 정식 경로)로 고정한다. 최상위 `model:` 입력은
+        # v1이 지원하지 않아 "Unexpected input" 경고를 유발하므로 제거했다.
         env:
           ANTHROPIC_MODEL: claude-opus-4-8
         with:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
-          # 유효 모델 ID로 고정 — 외부에서 주입되던 `claude-opus-4-8[1m]`(1M 컨텍스트
-          # 접미사)이 즉시 거부돼 review job이 is_error로 실패하던 것을 정정. Opus 4.8은
-          # 1M 컨텍스트가 기본값이라 접미사가 불필요하다.
-          model: claude-opus-4-8
           prompt: |
             REPO: ${{ github.repository }}
             PR NUMBER: ${{ github.event.pull_request.number }}
@@ -68,4 +64,5 @@ jobs:
             Only post GitHub comments — don't submit review text as messages.
 
           claude_args: |
+            --model claude-opus-4-8
             --allowedTools "mcp__github_inline_comment__create_inline_comment,Bash(gh pr comment:*),Bash(gh pr diff:*),Bash(gh pr view:*)"
