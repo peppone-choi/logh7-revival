@@ -1,0 +1,95 @@
+{
+  "_schema": "logh7-static-master-tables/v1",
+  "_source": {
+    "exe": "G7MTClient.exe (canonical lineage node 825635…)",
+    "sha256": "825635783a9fb663ae3b9a2ecf8d4b74df648322256c57ee32f6426c42a23f22",
+    "imageBase": "0x400000",
+    "peTimestamp": "0x40779eb8"
+  },
+  "_method": "pe-section-map + byte-dump-decode (read-only, no launch/patch, no fabrication)",
+  "_layoutSpec": "docs/reference/legacy-evidence/logh7-proto-info-records.md §0,§2b-2e",
+  "_sections": [
+    {
+      "name": ".text",
+      "vaddr": "0x1000",
+      "vsize": "0x269cd5",
+      "rawptr": "0x1000",
+      "rawsize": "0x26a000"
+    },
+    {
+      "name": ".rdata",
+      "vaddr": "0x26b000",
+      "vsize": "0xf25e8",
+      "rawptr": "0x26b000",
+      "rawsize": "0xf3000"
+    },
+    {
+      "name": ".data",
+      "vaddr": "0x35e000",
+      "vsize": "0x2bf4fa8",
+      "rawptr": "0x35e000",
+      "rawsize": "0x63000"
+    },
+    {
+      "name": ".data1",
+      "vaddr": "0x2f53000",
+      "vsize": "0x8e0",
+      "rawptr": "0x3c1000",
+      "rawsize": "0x1000"
+    },
+    {
+      "name": ".rsrc",
+      "vaddr": "0x2f54000",
+      "vsize": "0x3c80",
+      "rawptr": "0x3c2000",
+      "rawsize": "0x4000"
+    }
+  ],
+  "tables": {
+    "PowerDistribution": {
+      "code": "0x0309",
+      "storeGlobalRva": "0x4130a4",
+      "bodySize": "0x55c (1372B)",
+      "section": ".data",
+      "fileOffset": "0x4130a4",
+      "rawBacked": false,
+      "status": "not-in-exe-bss-zerofill",
+      "decoded": null,
+      "note": "RVA falls in the zero-init (BSS) tail of .data — a runtime receive buffer the client fills from the server record, not static data. No table bytes exist in the on-disk EXE."
+    },
+    "UnitTroop": {
+      "code": "0x030d",
+      "storeGlobalRva": "0x412f20",
+      "bodySize": "0x184 (388B)",
+      "section": ".data",
+      "fileOffset": "0x412f20",
+      "rawBacked": false,
+      "status": "not-in-exe-bss-zerofill",
+      "decoded": null,
+      "note": "RVA falls in the zero-init (BSS) tail of .data — a runtime receive buffer the client fills from the server record, not static data. No table bytes exist in the on-disk EXE."
+    },
+    "Fighters": {
+      "code": "0x030f",
+      "storeGlobalRva": "0x3f5ab4",
+      "bodySize": "0x34 (52B)",
+      "section": ".data",
+      "fileOffset": "0x3f5ab4",
+      "rawBacked": false,
+      "status": "not-in-exe-bss-zerofill",
+      "decoded": null,
+      "note": "RVA falls in the zero-init (BSS) tail of .data — a runtime receive buffer the client fills from the server record, not static data. No table bytes exist in the on-disk EXE."
+    },
+    "Arms": {
+      "code": "0x0311",
+      "storeGlobalRva": "0x3f5902",
+      "bodySize": "0x1b0 (432B)",
+      "section": ".data",
+      "fileOffset": "0x3f5902",
+      "rawBacked": false,
+      "status": "not-in-exe-bss-zerofill",
+      "decoded": null,
+      "note": "RVA falls in the zero-init (BSS) tail of .data — a runtime receive buffer the client fills from the server record, not static data. No table bytes exist in the on-disk EXE."
+    }
+  },
+  "_verdict": "NONE-IN-CLIENT: all 4 store globals are BSS zero-fill; tables are server-sourced (proto doc §6). Not recoverable from client EXE."
+}
