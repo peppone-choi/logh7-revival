@@ -354,6 +354,40 @@ class UiExplorerTests(unittest.TestCase):
             payload = json.loads(output)
             self.assertIsNone(payload["verdict"]["matchedNode"])
 
+    def test_empty_authorized_nodes_falls_back_to_working(self) -> None:
+        # MINOR-2: authorizedNodes:[] + 유효 working이면 빈 리스트를 v2 부재로
+        # 취급해 working으로 판정한다(빈 리스트가 정상 클라를 조용히 차단하지 않음).
+        with TemporaryDirectory() as raw_dir:
+            root = Path(raw_dir)
+            exe = root / "g7mtclient.exe"
+            _write_min_pe(exe, image_base=0x00400000, sentinel_hex="deadbeef", sentinel_offset=0x100)
+            actual_sha = hashlib.sha256(exe.read_bytes()).hexdigest()
+            manifest = _lineage_manifest(
+                exe,
+                sha256=actual_sha,
+                image_base="0x00400000",
+                sentinel_hex="deadbeef",
+                sentinel_offset="0x100",
+            )
+            manifest["authorizedNodes"] = []  # 빈 v2 블록 — working으로 폴백해야 함
+            code, popen, output, session = self._run_start_with_manifest(root, exe, manifest)
+            self.assertEqual(code, 0)
+            popen.assert_called_once()
+            self.assertFalse((session / "lineage-blocked.json").exists())
+
+    def test_empty_authorized_nodes_without_working_blocked(self) -> None:
+        # authorizedNodes:[] 인데 working도 없으면 distinct reason으로 차단.
+        with TemporaryDirectory() as raw_dir:
+            root = Path(raw_dir)
+            exe = root / "g7mtclient.exe"
+            _write_min_pe(exe, image_base=0x00400000, sentinel_hex="deadbeef", sentinel_offset=0x100)
+            manifest = {"schemaVersion": 2, "authorizedNodes": []}
+            code, popen, output, session = self._run_start_with_manifest(root, exe, manifest)
+            self.assertEqual(code, 3)
+            popen.assert_not_called()
+            payload = json.loads(output)
+            self.assertIn("empty", payload["verdict"]["reason"])
+
     def test_shot_uses_saved_session(self) -> None:
         with TemporaryDirectory() as raw_dir:
             session = Path(raw_dir)

@@ -128,6 +128,44 @@ class LineageSetTests(unittest.TestCase):
             self.assertFalse(check_client_lineage_set(exe, [])["ok"])
             self.assertFalse(check_client_lineage_set(exe, None)["ok"])
 
+    def test_relabel_patch_as_original_still_requires_approval(self) -> None:
+        # MINOR-1: patched EXE 노드를 kind="original"로 relabel해도 parentHash가
+        # 있으면 provenance 요건을 회피할 수 없다(회피 시 patched exe가 무승인 통과).
+        with TemporaryDirectory() as tmp:
+            exe = self._write(tmp, "patched.exe", _PATCHED_PE)
+            relabelled = {
+                "nodeId": "sneaky",
+                "kind": "original",  # 거짓 라벨
+                "parentHash": _ORIGINAL_HASH,  # 그러나 패치 파생임이 드러남
+                "sha256": _PATCHED_HASH,
+                "imageBase": "0x00400000",
+                "sentinels": [{"offset": _STUB_OFFSET, "hex": _PATCHED_STUB.hex()}],
+                # capabilityProfile/provenance/approvalRef 없음
+            }
+            verdict = check_client_lineage_set(exe, [relabelled])
+            self.assertFalse(verdict["ok"])
+            self.assertIsNone(verdict["matchedNode"])
+            self.assertFalse(verdict["nodes"][0]["authorized"])
+
+    def test_approval_ref_format_enforced(self) -> None:
+        # MINOR-1: approvalRef는 LOGH7-<번호> 형식이어야 한다(임의 문자열 거부).
+        with TemporaryDirectory() as tmp:
+            exe = self._write(tmp, "patched.exe", _PATCHED_PE)
+            for bad in ("whatever", "LOGH7-", "logh7-212", "PROJ-9", " "):
+                node = _patch_node()
+                node["approvalRef"] = bad
+                verdict = check_client_lineage_set(exe, [node])
+                self.assertFalse(verdict["ok"], f"approvalRef {bad!r} must be rejected")
+                self.assertFalse(verdict["nodes"][0]["authorized"])
+
+    def test_genuine_original_without_parenthash_still_accepted(self) -> None:
+        # 회귀: parentHash 없는 진짜 원본은 provenance 없이도 인가된다.
+        with TemporaryDirectory() as tmp:
+            exe = self._write(tmp, "orig.exe", _ORIGINAL_PE)
+            verdict = check_client_lineage_set(exe, [_original_node()])
+            self.assertTrue(verdict["ok"])
+            self.assertEqual(verdict["matchedNode"], "original")
+
     def test_end_to_end_patcher_output_accepted_by_gate(self) -> None:
         # 패처가 만든 patched 바이너리 → 파생 노드 → 게이트 accept.
         with TemporaryDirectory() as tmp:

@@ -105,24 +105,35 @@ def check_client_lineage(exe: Path, working: Any) -> dict[str, Any]:
     return _verdict(exe, checks)
 
 
+APPROVAL_REF_RE = re.compile(r"^LOGH7-\d+$")
+
+
 def _node_authorization_error(node: Any) -> str | None:
     """노드가 자기 hash를 축복할 자격(인가)이 있는지 판정한다.
 
-    잘 형성된 ``original`` 노드는 자기 hash를 인가한다. ``patch`` 노드는 여기에
-    더해 ``capabilityProfile``·``provenance``·``approvalRef``를 모두 갖춰야 한다 —
-    승인되지 않은 패치는 어떤 hash도 인가할 수 없다(fail-closed). 자격 없는 노드는
-    hash가 우연히 맞아도 대상 EXE를 accept시키지 못한다. 자격이 있으면 ``None``.
+    진짜 ``original``(무패치 원본) 노드만 provenance 없이 자기 hash를 인가한다.
+    **패치 파생 여부는 self-declared ``kind``가 아니라 ``parentHash`` 존재로
+    판정한다** — 패치 EXE를 ``kind:"original"``로 relabel해도 ``parentHash``가 있으면
+    patch 요건을 회피할 수 없다. 파생 노드는 ``capabilityProfile``·``provenance``·
+    ``approvalRef``를 모두 갖춰야 하고, ``approvalRef``는 ``LOGH7-<번호>`` 형식이어야
+    한다(빈/임의 문자열 거부). 자격 없는 노드는 hash가 우연히 맞아도 대상 EXE를
+    accept시키지 못한다. 자격이 있으면 ``None``.
     """
     if not isinstance(node, Mapping):
         return "node must be an object"
     kind = node.get("kind", "original")
     if kind not in ("original", "patch"):
         return f"unsupported node kind {kind!r}"
-    if kind == "patch":
+    # parentHash가 있으면 patch 파생 — kind 라벨과 무관하게 provenance를 강제한다.
+    is_derived = node.get("parentHash") is not None or kind == "patch"
+    if is_derived:
         for field in ("capabilityProfile", "provenance", "approvalRef"):
             value = node.get(field)
             if not isinstance(value, str) or not value.strip():
                 return f"patch node missing required authorization field {field!r}"
+        approval = node.get("approvalRef").strip()
+        if not APPROVAL_REF_RE.fullmatch(approval):
+            return f"approvalRef must match LOGH7-<number>, got {approval!r}"
     return None
 
 

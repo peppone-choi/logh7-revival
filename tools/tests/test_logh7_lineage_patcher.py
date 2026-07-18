@@ -19,6 +19,7 @@ import struct
 import unittest
 
 from tools.live.lineage_patcher import (
+    MAX_APPEND_BYTES,
     PatchError,
     apply_patch_manifest,
     derive_authorized_node,
@@ -131,6 +132,17 @@ class PatcherTests(unittest.TestCase):
         manifest["expected_new_hash"] = hashlib.sha256(expected).hexdigest()
         out = apply_patch_manifest(_BASE, manifest)
         self.assertEqual(out, expected)
+
+    def test_append_cap_enforced(self) -> None:
+        # MINOR-3: append 방어심층 크기 상한. expected_new_hash가 유일 봉인이지만
+        # 비정상적으로 큰 코드케이브는 상한에서 먼저 거부한다.
+        manifest = _good_manifest()
+        oversized = b"\x00" * (MAX_APPEND_BYTES + 1)
+        manifest["transform_ops"].append({"op": "append", "bytes": oversized.hex()})
+        manifest["expected_new_hash"] = hashlib.sha256(_PATCHED + oversized).hexdigest()
+        with self.assertRaises(PatchError) as ctx:
+            apply_patch_manifest(_BASE, manifest)
+        self.assertIn("append exceeds cap", str(ctx.exception))
 
     def test_unknown_op_rejected(self) -> None:
         manifest = _good_manifest()

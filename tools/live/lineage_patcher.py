@@ -36,6 +36,9 @@ from typing import Any
 
 SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
 
+# append(코드케이브) op은 offset/expect 가드가 없다 — 방어심층 크기 상한.
+MAX_APPEND_BYTES = 1 << 20  # 1 MiB. 정당한 코드케이브는 이보다 훨씬 작다.
+
 
 class PatchError(Exception):
     """patch manifest 적용 중 fail-closed 위반. 부분 산출물은 절대 반환하지 않는다."""
@@ -98,7 +101,15 @@ def _apply_ops(buf: bytearray, ops: Any) -> None:
                 )
             buf[offset : offset + len(new)] = new
         elif kind == "append":
-            buf.extend(_as_hex(op.get("bytes"), f"transform_ops[{index}].bytes"))
+            # append는 offset/expect 위치 가드가 없다. 이 op의 무결성 봉인은 오직
+            # apply_patch_manifest 마지막의 expected_new_hash 전체검증이다 — 그것이
+            # 최종·유일 방어다. 방어심층으로 크기 상한만 추가로 강제한다.
+            cave = _as_hex(op.get("bytes"), f"transform_ops[{index}].bytes")
+            if len(cave) > MAX_APPEND_BYTES:
+                raise PatchError(
+                    f"transform_ops[{index}] append exceeds cap ({len(cave)} > {MAX_APPEND_BYTES} bytes)"
+                )
+            buf.extend(cave)
         else:
             raise PatchError(f"transform_ops[{index}] has unsupported op {kind!r}")
 
