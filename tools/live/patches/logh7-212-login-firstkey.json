@@ -1,0 +1,29 @@
+{
+  "patch_manifest_id": "logh7-212-login-firstkey-variantA",
+  "parent_hash": "825635783a9fb663ae3b9a2ecf8d4b74df648322256c57ee32f6426c42a23f22",
+  "transform_ops": [
+    {
+      "op": "replace",
+      "offset": "0xffbf6",
+      "expect": "5fb0015ec20400",
+      "bytes": "e9dab016009090"
+    },
+    {
+      "op": "replace",
+      "offset": "0x26acd5",
+      "expect": "0000000000000000000000000000",
+      "bytes": "8bcee8744ee9ff5fb0015ec20400"
+    }
+  ],
+  "expected_new_hash": "bb670cf0dff0f311759fa7f6ba3e1ce5bb00c5b5d9e4c3b3355f33c3bee70961",
+  "image_base": "0x400000",
+  "sentinel_set": [
+    {
+      "offset": 256,
+      "hex": "661a593edf1c5f3e"
+    }
+  ],
+  "capability_profile": "login-firstkey-fix",
+  "provenance": "RE-measured disassembly (LOGH7-212 comment). Op1: login keysetup hook @VA 0x4ffbf6 (file 0xffbf6) diverts the function epilogue into a codecave via rel32 jmp (e9 da b0 16 00) + nop*2. Op2: .text tail zero-slack @VA 0x66acd5 (file 0x26acd5) holds the stub (8b ce = mov ecx,esi; e8 74 4e e9 ff = call; then re-runs the original epilogue 5f b0 01 5e c2 04 00). VA-to-file delta = 0x400000; size unchanged at 3956736 bytes.",
+  "approval_ref": "LOGH7-212"
+}
