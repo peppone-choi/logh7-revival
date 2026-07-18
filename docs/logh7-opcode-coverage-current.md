@@ -76,8 +76,8 @@
 - `0x032f` OutfitParty(함대 멤버리스트) — 🚧 진행 중. 전략맵 함대 선택 → 이동/Warp 게임플레이의 관문.
 - `0x032d` GridInformationOutfit, `0x0331` OutfitInformationUnit, `0x0329` Package.
 
-**마스터 테이블 (2026-07-18 정정: 데이터가 CD 아니라 EXE-embedded → 선행 추출 필요):**
-> `0x0309`/`0x030d`/`0x030f`/`0x0311`의 와이어 레이아웃은 RE 확정(`docs/reference/legacy-evidence/logh7-proto-info-records.md` §2b-2e)이나, **숫자 데이터가 CD 추출 카탈로그에 없고 클라 EXE 내부에 박혀 있다**(RVA: PowerDistribution `+0x4130a4`·UnitTroop `+0x412f20`·Fighters `+0x3f5ab4`·Arms `+0x3f5902`, image base 0x400000). CD 추출은 텍스트/메시지 데이터만. → **선행 EXE 추출 태스크**(extract-miner, PE 섹션 RVA→파일오프셋 매핑, fail-closed lineage 검증)로 카탈로그화한 뒤 빌더는 0x031d처럼 기계적. 추출 전엔 zero-fill 유지(무날조).
+**마스터 테이블 (2026-07-18 최종 정정: 데이터가 CD·클라 EXE 어디에도 없음 = 서버가 유일 출처):**
+> `0x0309`/`0x030d`/`0x030f`/`0x0311`의 와이어 레이아웃은 RE 확정(`docs/reference/legacy-evidence/logh7-proto-info-records.md` §2b-2e). 그러나 데이터는 (a) CD 추출 카탈로그에 없고(텍스트/메시지만), (b) **클라 EXE에도 없다** — 문서상 RVA(0x4130a4 등)는 `.data`의 **zero-init BSS 런타임 수신 버퍼**로, 클라가 서버 응답을 받아 채우는 곳이다(raw-backed 파일 끝 0x3c1000 이후). 즉 **클라는 파서·dump serializer만 갖고 데이터를 정적으로 보유하지 않는다 — 서버가 유일 데이터 출처**(§6 verdict `NONE-IN-CLIENT`, `server/content/generated/logh7-static-master-tables.json`). → 이 4종을 채우려면 **content DB / 공식 매뉴얼(`docs/reference/*.pdf`) / 라이브 서버-레코드 캡처**에서 값을 확보해야 하며(추출로는 불가), 확보 전엔 zero-fill 유지(무날조). LOGH7-208~211 재분류 필요.
 - ⭐ `0x031d` StaticBase(astronomy) — **검은 행성 원인**. 성계별 `class_`(spectral 인덱스, dest +0x26 u8, 0이면 검은 항성구)·`diameter`(+0x28 f32be)·`revolution_*`를 정본 galaxy 데이터로 채워 방출. 와이어=u16be count 접두 + 순차 레코드(파서가 dest stride 0x3c 전개). 근거: `docs/reference/legacy-evidence/logh7-info-records-wire.md` §2. class_→항성색 LUT는 라이브/타 export 재확인 권장.
 - `0x0309` PowerDistribution(세력 분포), `0x030d` UnitTroop(육전대), `0x030f` Fighters(전투정), `0x0311` Arms(병기).
 
