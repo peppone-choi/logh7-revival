@@ -505,6 +505,14 @@ then trigger the server to re-broadcast the relevant Notify/Information record).
       `0x311 Arms` from the content DB (`content/` ship/troop/weapon master + `model/Ship`). These
       are immutable; emit them in the world-init handshake (the client stores them at the globals in
       §0 and the tactical sim reads the curves directly). Stride/caps per the tables above.
+  > **2026-07-18 extraction verdict (read-only PE, canonical EXE 825635…):** these 4 tables are
+  > **NOT statically embedded in the client**. Their §0 store globals (0x309→0x4130a4, 0x30d→0x412f20,
+  > 0x30f→0x3f5ab4, 0x311→0x3f5902) all resolve — via PE section headers, image base 0x400000 — into
+  > the **zero-init BSS tail of `.data`** (RVA > raw-backed end 0x3c1000, > file end 0x3c6000). They are
+  > runtime receive buffers, zero-fill on disk; there are no table bytes to extract. The server is the
+  > sole data source (this bullet). Evidence: `server/tools/extract-static-master-tables.mjs` →
+  > `server/content/generated/logh7-static-master-tables.json` (`_verdict: NONE-IN-CLIENT`). The
+  > 0x0309/030d/030f/0311 builders must synthesize from the content DB / manual, not from the EXE.
 - [ ] **Personnel cards:** `0x305 StaticInformationCard` + `0x307 StaticInformationCardCommand`
       remain parser/builder candidates for the 人事/card UI, but their live request/trigger path is not
       the conn3 world-login `0x0304/0x0306` walker. Find the real trigger before emitting them by default.
