@@ -17,6 +17,7 @@
 - Required human decisions: 없음. Packet-lab pre-existing failure를 별도 계약으로 고칠지는 후속 결정이며 A01에서 범위를 확장하지 않는다.
 - Files to read first: `.ai/task.md`, 본 절, `tools/causal-ledger/schema.json`, `tools/causal-ledger/source-manifest.json`, `server/tests/logh7-causal-ledger.test.mjs`.
 - Vault: `LOGH7_VAULT_DIR` unset이라 동기화 미실행.
+- Documentation gate exception: A01 관련 current docs와 session state는 PR #234에 반영했다. `AGENTS.md`·`CLAUDE.md`에는 새 영구 규칙·워크플로·도구 계약이 없어 무변경이며, vault는 `LOGH7_VAULT_DIR` unset이라 갱신하지 않았다.
 
 ## Goal
 P0 게이트(스토리 LOGH7-18) 완주 — LOGH7-47/43/45/44/46을 각 Jira 완료기준대로 닫는다. 순서 47→43→45→44→46. push·PR·merge·외부 쓰기·라이브 실기는 2026-07-17 상시 사전승인(하드 금지선 제외).

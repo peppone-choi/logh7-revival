@@ -12,6 +12,7 @@
 - Preserved concurrent change: 사용자 소유 `.codex/config.toml` dirty 변경은 읽거나 수정·stage하지 않는다.
 - Evidence gaps preserved: 함대 마커/선택, 0x032f 도달, Warp, 실제 행성 렌더, 정적 데이터, clock/RNG/replay, 제한 없는 자원, 권리 Unknown은 설계가 닫은 사실이 아니라 각 축의 차단 증거다.
 - Vault sync: 현재 머신의 `LOGH7_VAULT_DIR`가 unset이므로 옵시디언 볼트는 식별·갱신하지 못했다.
+- A01 documentation gate: 관련 현행 문서(`logh7-causal-ledger-master-design`, document index, roadmap, execution plan)와 task/state/handoff/ownership은 PR #234에서 갱신했다. `AGENTS.md`와 `CLAUDE.md`는 영구 작업 규칙·하네스·도구 계약 변경이 없으므로 수정하지 않았고, 진행 로그를 영구 규칙 파일에 누적하지 않는 계약을 따른다. `LOGH7_VAULT_DIR`가 unset이므로 vault note도 갱신 대상이 아니다.
 
 - Updated at: 2026-07-18
 - 세션 재개(2026-07-18): 트래커 로드맵 정렬 완료 — GitHub 마일스톤 5개 생성·이슈 배정(M4:65·M5:15·M6:21·Phase R:11·M7:5), Jira priority High 69건(M4 게이트·게임플레이). 이번 세션 신규 Jira 14티켓: 사회 시뮬 에픽 LOGH7-198 + 스토리 199~203, opcode 백로그 작업 204(0x031d astronomy=검은행성)~211 + 0x032f=LOGH7-197. 트래킹 방식 확정: **Jira 스프린트 미사용(customfield_10020 금지), status 전이+증거 코멘트 칸반; GitHub는 라벨**. 오늘 실작업 병렬 착수: 0x032f 멤버리스트 라이브 검증(LOGH7-197, live-qa, 포트 47900 전용)·0x031d 검은행성 빌더(LOGH7-204, server-dev, 테스트만). 어제 두 백그라운드 에이전트는 세션 한도로 중단됐으나 산출물(마일스톤·priority)은 위 확인대로 반영됨.
