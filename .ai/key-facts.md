@@ -5,7 +5,7 @@
 - GitHub #216 / Jira LOGH7-213 master design merged at `ec6d9b52`; A01 #217 / LOGH7-214 merged at `43ee007a` (2026-07-20).
 - **Wave-1 A02/A04/A06/A09/A13 MERGED** (PR #236 @ ffeb70ce, 2026-07-21): CI `test` pass after 4 fixes (path portability, in-process determinism, a02 evidence source, UTF-8/Buffer). Tests: A02 21/21, A04 7/7, A06 13/13, A09 4/4, A13 7/7, A01 regression 9/9 all pass.
 - Master design: `docs/logh7-causal-ledger-master-design.md` (`APPROVED-MERGED`). A01 machine contract: `tools/causal-ledger/schema.json` v`1.0.0`. All axes follow shared bootstrap pattern (importSources→append→coverage-attach→validateLedger).
-- Current baseline: `origin/main@ffeb70ce` (Wave-1 axes MERGED); A03/A05 next eligible.
+- Current baseline: `origin/main@eb6426bf`. **216 완주 계약 ACTIVE** (2026-07-21 사용자 지시): 잔여 축 A03·A05·A07·A08·A11·A12·A14·A15·A10 파동별 병렬 구현·commit·PR·merge 반복. Wave 2(A03 render/audio·A05 server authority) 진행 중, branch `peppone-choi/wave2-a03-a05`.
 - Preserve user-owned `.codex/config.toml`: never read, modify, stage, or reset it.
 
 ## Design invariants
