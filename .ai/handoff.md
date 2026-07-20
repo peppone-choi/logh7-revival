@@ -1,5 +1,14 @@
 # Agent Handoff
 
+## 2026-07-21 216 인과 원장 완주 마라톤 (Wave 2~5)
+
+- 사용자 지시: "새 계약 잡고 병렬구현하고 커밋PR머지 반복. 216 실 구현을 끝낼 것." → 계약 `.ai/task.md` ACTIVE. 잔여 축을 파동별 병렬 구현·commit·PR·merge 반복해 15축 완성.
+- 진행: **Wave 2 (A03·A05) merge 완료** (PR #241 `9185a43a`, CI `test` 첫 시도 통과). **Wave 3 (A07·A08·A12) 구현 중** (branch `peppone-choi/wave3-a07-a08-a12`). 남은: **Wave 4 (A11·A14·A15)**, **Wave 5 (A10 synthesis)**.
+- 구현 패턴(정본): 각 축 = A01 base 부트스트랩(`importSources(SOURCE_MANIFEST)`) → 도메인 node/edge/evidence append → 축 노드를 기존 coverage `targetNodeIds`에 부착 → `validateLedger(ledger,{manifest})`. Wave-1 CI 4교훈을 브리프·verify 게이트에 사전 주입(파일해시 LF정규화·비-base evidence 소스(master-design)·in-process 결정성·`import.meta.url` 이식 경로) → Wave 2는 CI 반복 0회로 통과.
+- 워크플로: `.claude/.../workflows/scripts/ledger-wave2-a03-a05-*.js`(AXES만 교체해 재사용). 각 파동 = 1 PR → CI(LF) green → merge.
+- 부수 정리: 축 생성 델타 `tools/causal-ledger/generated/a[0-9]*.json` gitignore로 추적 해제(재생성 산출물, master-design 변경 드리프트 churn 근절; A01 `ledger.json`/`import-report.json`은 유지).
+- 주의: 각 축은 실 아티팩트 인용만, 공백은 Unknown/Blocked(open blocker: clock/RNG/replay, bounded-resource enforcement, 라이브 픽셀/오디오, roundtrip A/B, String.txt 0바이트). 날조 0. `.codex/config.toml` 불가침(이전 사고 미해결, 복구후보 scratchpad 보존).
+
 ## 2026-07-21 Wave-1 A02/A04/A06/A09/A13 구현·검증 완료
 
 - Goal: A01 frozen schema를 소비하는 5개 축(A02 input/UI, A04 protocol, A06 data/P3, A09 lineage, A13 rights)의 axis-specific node/edge/evidence를 shared bootstrap pattern으로 납품한다.
