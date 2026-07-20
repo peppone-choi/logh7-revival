@@ -1,14 +1,14 @@
 # Current State
 
 - Updated at: 2026-07-20
-- Active contract: A01 GitHub #217 / Jira LOGH7-214 인과 원장 스키마·분류·누락 검출기. D0 설계 PR #232는 `origin/main@ec6d9b52`로 merge됐다.
+- Completed contract: A01 GitHub #217 / Jira LOGH7-214 인과 원장 스키마·분류·누락 검출기. PR #233는 `origin/main@43ee007a`로 merge됐다.
 - Implementation: `tools/causal-ledger/`에 version `1.0.0` fixed-key schema, iterative fail-closed validator, exact DAG, source manifest, 네 adapter와 deterministic CLI가 있다. 출력은 기존 data audit 자기 포함을 피하려 `tools/causal-ledger/generated/`에 둔다.
 - Import snapshot: opcode 22/22, EXE 함수 TSV 11,593/11,593, UI/render source 8/8, data audit `allJson` 170/170; excluded/rejected/loss 0. Auxiliary UI 116+6, data 9+11+60은 primary 분모 밖으로 count와 사유를 report에 명시한다.
 - Fresh focused verification: `node --test tests/logh7-causal-ledger.test.mjs` 9/9 pass, exit 0. 실제 12,000-node/11,999-dependency chain과 self/cycle fixture를 비재귀 검증한다. CLI 2회 ledger/report byte-identical; SHA-256 ledger `220c0b3f...f2e5`, report `42c3b054...7507`.
 - Independent review: 최종 판정 PASS, BLOCKER 0 / MAJOR 0. 2026-07-20 사용자가 A01 PR의 검증 후 merge까지 사전 승인했다.
 - Full regression blocker: exact `npm test`는 300초 timeout. `npm test -- --test-force-exit`은 530 tests, 520 pass, 2 fail, 8 skip, exit 1; 실패는 기존 `logh7-packet-lab-proxy.test.mjs` 2건이며 해당 파일 단독 실행에서도 같은 2건과 120초 timeout을 재현했다. A01 focused test는 full run에서도 통과했다.
-- Current branch/baseline: `peppone-choi/217-ledger-schema`, base `ec6d9b520a17857831832f6941f8997ac252bd2c`; implementation commits `7b2d7f37`, `bfcf3867`.
-- Tracker state: PR #233 OPEN/ready, GitHub #217 OPEN/backlog, Jira LOGH7-214 `진행 중`·Highest·미배정. GitHub/Jira description과 증거 comment를 동기화했고 issue close는 하지 않는다. PR CI `test`는 pass, CodeRabbit은 이 기록 시점 pending이다.
+- Merge/read-back: PR #233 MERGED at `43ee007a474f94b93fc3a9232add9f6813794ba3`; CI `test` pass. GitHub #217 OPEN/backlog, Jira LOGH7-214 `진행 중`·Highest·미배정이며 description/comment를 동기화했다.
+- Next contract: 미설정. A01 merge로 A02/A04/A06/A09/A13 첫 downstream 파동이 착수 가능하지만 새 `.ai/task.md` 승인·소유권 설정 전 구현하지 않는다.
 - Preserved concurrent change: 사용자 소유 `.codex/config.toml` dirty 변경은 읽거나 수정·stage하지 않는다.
 - Evidence gaps preserved: 함대 마커/선택, 0x032f 도달, Warp, 실제 행성 렌더, 정적 데이터, clock/RNG/replay, 제한 없는 자원, 권리 Unknown은 설계가 닫은 사실이 아니라 각 축의 차단 증거다.
 - Vault sync: 현재 머신의 `LOGH7_VAULT_DIR`가 unset이므로 옵시디언 볼트는 식별·갱신하지 못했다.

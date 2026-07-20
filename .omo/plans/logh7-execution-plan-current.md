@@ -2,9 +2,9 @@
 
 ## 2026-07-20 실행 오버레이: A01 인과 원장 구현 게이트
 
-GitHub #216 / Jira LOGH7-213의 마스터 설계는 PR #232 merge `ec6d9b52`로 D0를 닫았다. 현재 작업은 A01 GitHub #217 / Jira LOGH7-214이며, 기계 판독 정본은 `tools/causal-ledger/schema.json`과 고정 hash source manifest다.
+GitHub #216 / Jira LOGH7-213의 마스터 설계는 PR #232 merge `ec6d9b52`로 D0를 닫았고, A01 GitHub #217 / Jira LOGH7-214는 PR #233 merge `43ee007a`로 닫았다. 기계 판독 정본은 `tools/causal-ledger/schema.json`과 고정 hash source manifest다.
 
-실행 순서는 `D0(완료) → A01(schema, 현재 검증/PR 단계) → dependency DAG의 병렬 파동 → A10(15축 독립 검증)`이다. A01 merge read-back 전에는 downstream branch를 만들지 않는다. 기존 P0→P1→P2→M4 증거와 구현은 각 축의 입력으로 보존한다.
+실행 순서는 `D0(완료) → A01(schema, 완료) → dependency DAG의 병렬 파동 → A10(15축 독립 검증)`이다. 첫 downstream 파동은 A02/A04/A06/A09/A13이 dependency-eligible이며, 새 task 승인·소유권 설정 후 착수한다. 기존 P0→P1→P2→M4 증거와 구현은 각 축의 입력으로 보존한다.
 
 이 오버레이가 끝나는 조건은 설계 문서의 `최종 completion audit` 전수 통과다. PR 생성이나 테스트 통과만으로 종료하지 않는다.
 
