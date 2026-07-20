@@ -1,9 +1,9 @@
 # Current Task
 
-## Active Contract: A01 인과 원장 스키마·분류·누락 검출기
+## Completed Contract: A01 인과 원장 스키마·분류·누락 검출기
 
 - Tracker: GitHub #217 / Jira LOGH7-214, parent GitHub #216 / Jira LOGH7-213.
-- Status: **ACTIVE — 설계 PR #232가 `origin/main@ec6d9b520a17857831832f6941f8997ac252bd2c`로 merge됐다. 2026-07-20 사용자가 A01 구현 PR의 생성·검증 후 merge까지 사전 승인했으며, issue close는 수행하지 않는다.**
+- Status: **DONE — PR #233가 CI `test` pass와 독립 리뷰 BLOCKER 0 / MAJOR 0 후 `origin/main@43ee007a474f94b93fc3a9232add9f6813794ba3`로 merge됐다. GitHub #217과 Jira LOGH7-214는 증거 보존을 위해 open/진행 중으로 유지한다.**
 - Problem: opcode·EXE RE·render/UI·data audit가 서로 다른 형식과 등급을 사용해 node/edge/evidence를 합성할 통합 계약이 없고, orphan·dangling·근거 없는 canonical 승격·누락 import를 자동 검출하지 못한다.
 - Goal: 모든 후속 축이 소비할 versioned machine-readable 계약, fail-closed validator, 4종 lossless import adapter와 deterministic report를 표준 라이브러리만으로 구현한다.
 - User value: A02~A15가 같은 ID·분류·증거·누락 규칙을 사용하고, clean-room 구현자가 근거와 Unknown/P3를 혼동하지 않은 채 인과 사슬을 재구성할 수 있다.

@@ -2,7 +2,7 @@
 
 | Agent | Task | Branch/worktree | Owned files | Status | Updated at |
 |---|---|---|---|---|---|
-| Codex (root; 구현 executor·read-only 조사/검토 서브에이전트 조정) | A01 인과 원장 스키마·분류·누락 검출기 (#217 / LOGH7-214) | peppone-choi/217-ledger-schema / PR #233 | `.ai/{task.md,current-state.md,handoff.md,key-facts.md,ownership.md}`, `tools/causal-ledger/**`, `server/tests/logh7-causal-ledger.test.mjs`, `.omo/plans/logh7-execution-plan-current.md`, `docs/{logh7-causal-ledger-master-design.md,logh7-document-index-current.md,logh7-roadmap-current.md}` | awaiting_merge | 2026-07-20 |
+| Codex (root; 소유 해제) | A01 인과 원장 스키마·분류·누락 검출기 (#217 / LOGH7-214) | PR #233 merged `43ee007a` | — | done | 2026-07-20 |
 | Claude Code (메인+서브에이전트) | P0 게이트 (LOGH7-43~47) — batch #1: 43·47 완료(PR #174 merge 4564f427), 45/44/46 Wine-후속 이관 | codex/logh7-43-p0-evidence (PR #174 merged) | — (43·47 완료·병합; 45/44/46은 Wine 호스트 후속 배치) | in_progress | 2026-07-17 |
 | Claude Code (메인+서브에이전트, 2026-07-17 사용자 승인으로 Codex에서 인수) | 상태 정합성 복구 | codex/state-consistency-recovery | — (소유 해제; 외부 manifest 적용 확인·상태 종결, 전달은 승인 사슬로 진행) | done | 2026-07-17 |
 | Codex (root) | 플랫폼 분기 하네스 라이브 확인·배포 | codex/platform-aware-live-qa | — (소유 해제; PR #171 merge `a8420b8b`) | done | 2026-07-17 |

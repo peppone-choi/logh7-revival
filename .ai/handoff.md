@@ -1,19 +1,19 @@
 # Agent Handoff
 
-## 2026-07-20 active handoff — A01 #217 / LOGH7-214
+## 2026-07-20 completed handoff — A01 #217 / LOGH7-214
 
 - Goal: 모든 후속 축이 소비할 `1.0.0` node/edge/evidence/coverage/transition/migration/DAG 계약, fail-closed validator와 lossless audit adapter를 구현한다.
 - Current result: `tools/causal-ledger/` 구현과 focused test 9/9가 통과했다. 네 primary snapshot 11,793 records는 imported 11,793, excluded/rejected/loss 0이며 auxiliary 배열은 count+비대상 사유를 별도 기록한다.
 - Decisions already made: legacy status/grade/trust는 그대로 보존하고 O0/R1/I2/P3로 자동 변환하지 않는다. text/raw record hash는 LF-normalized exact slice SHA-256이다. generated output은 `server/content/generated` 밖에 둔다.
-- Branch/baseline: `peppone-choi/217-ledger-schema` / `origin/main@ec6d9b52`; commits `7b2d7f37`, `bfcf3867`; PR #233.
+- Merge: PR #233 / `origin/main@43ee007a474f94b93fc3a9232add9f6813794ba3`; commits `7b2d7f37`, `bfcf3867`, `2912e528`.
 - Files changed: `.ai/{task,current-state,handoff,key-facts,ownership}.md`, `.omo/plans/logh7-execution-plan-current.md`, `tools/causal-ledger/**`, `server/tests/logh7-causal-ledger.test.mjs`, `docs/{logh7-causal-ledger-master-design,logh7-document-index-current,logh7-roadmap-current}.md`.
 - Commands executed: focused RED exit 1(module absent), focused GREEN 9/9 exit 0, CLI regeneration+`cmp` exit 0, changed-file 검증, exact/forced full regression과 packet-lab 단독 재현.
 - Verification result: focused 9/9 exit 0(12,000-node/11,999-dependency chain 포함); ledger/report hashes `220c0b3f...f2e5` / `42c3b054...7507`; exact `npm test` 300초 timeout; forced full suite 520 pass/2 fail/8 skip exit 1. A01 tests는 full run에서도 pass.
 - Independent review: 최종 PASS, BLOCKER 0 / MAJOR 0.
 - Known failures: pre-existing `logh7-packet-lab-proxy.test.mjs` 2건(`438 !== 384`, SIGTERM exit `null !== 1`)이 단독 실행에서도 재현되고 열린 handle로 timeout된다. 첫 JSON changed-file 검증은 Windows CP949 때문에 실패했으며 `PYTHONUTF8=1` 재실행은 통과했다. LSP diagnostics는 매번 3초 timeout; `node --check`를 사용한다.
 - Do not repeat: EXE JSON의 top 80을 11,593 함수 분모로 쓰지 않는다. `.omo/re-galaxy/functions.tsv` 주소를 stable identity로 쓴다. 사용자 dirty `.codex/config.toml`은 읽기·수정·stage하지 않는다.
-- Remaining work: PR #233의 최종 check 확인과 승인된 merge. GitHub/Jira description/comment 동기화는 완료했다. Full regression 2건은 A01 허용 파일 밖 blocker로 OPEN 유지한다.
-- Recommended next action: PR #233 CI `test` pass를 유지하고 CodeRabbit에 blocker가 없으면 2026-07-20 사전 승인에 따라 merge한다. A01 merge 전 A02~A15를 시작하지 않는다.
+- Remaining work: A01 없음. Full regression의 기존 packet-lab 2건은 별도 계약 blocker로 OPEN 유지한다.
+- Recommended next action: A02/A04/A06/A09/A13 중 하나 또는 병렬 파동을 새 task 계약으로 승인·소유권 설정한 뒤 시작한다.
 - Required human decisions: 없음. Packet-lab pre-existing failure를 별도 계약으로 고칠지는 후속 결정이며 A01에서 범위를 확장하지 않는다.
 - Files to read first: `.ai/task.md`, 본 절, `tools/causal-ledger/schema.json`, `tools/causal-ledger/source-manifest.json`, `server/tests/logh7-causal-ledger.test.mjs`.
 - Vault: `LOGH7_VAULT_DIR` unset이라 동기화 미실행.
