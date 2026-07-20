@@ -1,5 +1,17 @@
 # Current State
 
+- Updated at: 2026-07-20
+- Active contract: GitHub #216 / Jira LOGH7-213의 15축 전체 인과 역기획 원장 마스터 설계. 2026-07-20 사용자가 설계와 PR #232 merge를 승인했다. 이전 P0/M4 계약 기록은 보존하되, PR #232 merge 전까지 제품 구현은 정지한다.
+- Design state: `docs/logh7-causal-ledger-master-design.md`는 `APPROVED-PENDING-MERGE`다. 입력→클라이언트 상태→요청→서버 권위/상태→응답·push→클라이언트 상태→픽셀·오디오→다음 입력의 인과 사슬, Node/Edge/Evidence 계약, 15축 DAG, 제한 자원·압력·종료·OOM 계약, 권리·클린룸·보안 게이트, MoveGrid 대표 수직 슬라이스를 포함한다.
+- Independent review: architecture/acceptance reviewer와 rights/security/resource reviewer가 설계 입력 SHA-256 `bcfdd971875603f2ddd3c1f07709d159c47609ba7003ff15e82e79fa756d3989`에 대해 BLOCKER/MAJOR 0, `PASS`를 각각 반환했다.
+- Fresh verification: 변경 Markdown 10종 `verify-changes.sh --file` 각각 exit 0; 15축/매핑/필드/DAG/resource/threat validator exit 0(축 15, graph node 16, cycle·unknown 0, resource 17, threat 10); tracked diff와 untracked master design whitespace check exit 0. 제품 코드·테스트·클라이언트 동작 변경이 없어 server/Python/live QA는 미실행(비적용)이다.
+- Tracker state: GitHub #216~#231은 open/backlog, Jira LOGH7-213~228은 `진행 중`·Highest·미배정이다. Jira의 LOGH7-213↔LOGH7-85 차단 방향, A01의 15축 선행 범위, A10의 A11~A15 소비 범위는 설계 병합 뒤 구조화 링크와 본문을 정정해야 한다.
+- Current branch/baseline: `peppone-choi/216-실제-구현`, 시작 HEAD `110718e12a1e0ec8bcad14cfe594e571e6c37b0e`. 사용자 merge 승인은 확보됐으며, 설계 review 보정만 명시적으로 commit·push한 뒤 최신 checks가 통과해야 merge한다.
+- Delivery: PR #232는 Ready로 전환됐고 head `97d25be732e40876a8c853b182970012cb7d282d`의 CI `test`는 PASS다. CodeRabbit 실제 리뷰의 actionable 4건(stale handoff, P3 dependency 범위, table pipe, MD028 blockquote)을 보정하며, 새 head의 CI·CodeRabbit BLOCKER/MAJOR 0을 read-back한 뒤 승인된 merge를 실행한다.
+- Preserved concurrent change: 사용자 소유 `.codex/config.toml` dirty 변경은 읽거나 수정·stage하지 않는다.
+- Evidence gaps preserved: 함대 마커/선택, 0x032f 도달, Warp, 실제 행성 렌더, 정적 데이터, clock/RNG/replay, 제한 없는 자원, 권리 Unknown은 설계가 닫은 사실이 아니라 각 축의 차단 증거다.
+- Vault sync: 현재 머신의 `LOGH7_VAULT_DIR`가 unset이므로 옵시디언 볼트는 식별·갱신하지 못했다.
+
 - Updated at: 2026-07-18
 - 세션 재개(2026-07-18): 트래커 로드맵 정렬 완료 — GitHub 마일스톤 5개 생성·이슈 배정(M4:65·M5:15·M6:21·Phase R:11·M7:5), Jira priority High 69건(M4 게이트·게임플레이). 이번 세션 신규 Jira 14티켓: 사회 시뮬 에픽 LOGH7-198 + 스토리 199~203, opcode 백로그 작업 204(0x031d astronomy=검은행성)~211 + 0x032f=LOGH7-197. 트래킹 방식 확정: **Jira 스프린트 미사용(customfield_10020 금지), status 전이+증거 코멘트 칸반; GitHub는 라벨**. 오늘 실작업 병렬 착수: 0x032f 멤버리스트 라이브 검증(LOGH7-197, live-qa, 포트 47900 전용)·0x031d 검은행성 빌더(LOGH7-204, server-dev, 테스트만). 어제 두 백그라운드 에이전트는 세션 한도로 중단됐으나 산출물(마일스톤·priority)은 위 확인대로 반영됨.
 - Active objective: P0 게이트 완주 계약(LOGH7-43~47, 스토리 LOGH7-18)이 ACTIVE. 구현 순서 LOGH7-47→43→45→44→46. push·PR·merge·외부 쓰기·라이브 실기는 2026-07-17 상시 사전승인. LOGH7-43 라이브 런은 AC-2로 포함.

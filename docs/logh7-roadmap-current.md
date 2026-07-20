@@ -1,8 +1,9 @@
 # LOGH VII Revival Current Roadmap
 
+> **2026-07-20 실행 오버레이:** 현재 최우선 게이트는 GitHub #216 / Jira LOGH7-213의 15축 전체 인과 역기획 원장이다. 사용자가 [`logh7-causal-ledger-master-design.md`](logh7-causal-ledger-master-design.md)와 PR #232 merge를 승인했으며, PR merge read-back 전에는 제품 구현을 재개하지 않는다. merge 뒤에는 D0→A01을 먼저 닫고 문서의 하드 DAG에 따라 #217~#231을 각각 독립 PR로 처리한다. 아래 P0→P1→P2→M4 기록은 폐기하지 않고 이 원장의 현행 증거·미해결 노드로 편입한다.
 > **TL;DR** M1~M3 라이브 완료(로그인→로비→월드·캐릭터), M4 전략맵은 구현 완료·관측 게이트 중. 다음 P0 = 실행 환경별 client runtime/EXE 계보/증거 복구(native Windows 직접 실행, macOS/Linux 격리 Wine). 데이터 승격 규칙: 정본 = 코드·테스트 실행 기록(명령·산출물·계보 함께), 문서는 예보일 뿐.
 
-작성일: 2026-07-06 (현행화: **2026-07-17**)
+작성일: 2026-07-06 (현행화: **2026-07-20**)
 
 > 상세 실시간 저널은 [[logh7-loop-state]]. 캐릭터 생성 플로우는 [[logh7-m2-character-creation-flow]]. 이 페이지는 마일스톤 수준 현황만 유지한다.
 
