@@ -2,31 +2,34 @@
 # LOGH VII Key Facts (NIAH)
 
 ## Active contract
-- STANDING DIRECTIVE (2026-07-17 /ultragoal): process Jira issues in batches of 5, in gate order, unconditionally until the game is actually playable (in-game world entry + basic gameplay live-verified). Never fake completion; fail-closed/evidence invariants hold. On batch done → checkpoint → pull next 5.
-- Batch #1 (P0 LOGH7-43~47): 47(fail-closed gate)+43(native login) DONE on Windows w/ live evidence (PR #174 merged `4564f427`); 45/44/46 → Wine-host deferred.
-- Batch #2 (2026-07-17 Windows-native M4 gameplay): LOGH7-58/59/60/62/63 (NOT Wine-dependent); PR #178 merged `956c41ef` (tactical gate no-op fix, LOGH7_TACTICAL_ENTRY canon, strategy map crash OFF by default). RE confirmed: black planet=0x031d ResponseStaticInformationBase(astronomy, zero-fill); fleet roster=0x032f OutfitParty(unimplemented server-side, builder in-flight). Methodology: Protocol=web API (opcode pair=endpoint+DTO, NO_DATA=server zero-fill); Data ladder (source→config→design, render-path only; extract-first, create per-approval; economy=canon-pending). Opcode coverage ledger `docs/logh7-opcode-coverage-current.md` created (Information/StaticInformation sweep in-progress). Parallel: 0x032f builder+live, full opcode sweep, 62/59/60 session-lifecycle. Backlog (extract-1, approval-free): 0x031d planet, 0x032f roster, statics 0x0309/030d/030f/0311.
-- State recovery is DELIVERED: PR #172 merged `4f8c4281` (12:20 KST). External manifest applied+read-back; review workflow failure is an action-internal error, not a pass.
-- Social-economy simulation (2026-07-17): Path A (in-client binary patch) confirmed; Path B (web dashboard) deprecated. 3-layer: Layer1(render-fields, extract only), Layer2(server tick sim, event-sourced), Layer3(client UI patch, multi-year). Rebaselining=human approval gate. All created values tagged `_canon:false`+provenance. Phase 1 gates on 0x031f offset verification (live/Frida). Non-blocking parallel track.
-- Live-run gates: lineage fail-closed (EXE hash·image base·sentinel), server 47900, evidence (screenshots/logs/exit codes/cleanup receipt) required before any completion claim.
-- Preserve the user-owned `.codex/config.toml` edit. Do not read, modify, or stage it. Never git-reset the working tree.
+- GitHub #216 / Jira LOGH7-213: 15-axis causal reverse-engineering ledger master design is the active gate (2026-07-20).
+- Children are GitHub #217~#231 / Jira LOGH7-214~228; each implementation must use one independent PR after its prerequisites merge.
+- Master design: `docs/logh7-causal-ledger-master-design.md` (`PROPOSED`). Product implementation is paused until explicit user approval and design PR merge.
+- Current branch/baseline: `peppone-choi/216-실제-구현` / `110718e12a1e0ec8bcad14cfe594e571e6c37b0e`.
+- Preserve user-owned `.codex/config.toml`: never read, modify, stage, or reset it.
 
-## Current product gate
-- M0.5/M1/M2/M3 are historical completions; current order is P0 → P1 → P2 before M4.
-- macOS Wine reached server 47900 and a real client process, then ended at `invalid-credentials`/login-ng with client exit 3.
-- Successful login/gameplay, native Windows·Linux live runs, post-fix live cleanup, the latest full Wine suite, and run9 tracked exact-hash evidence remain unverified.
-- Do not claim a cross-platform full pass. P1 proxy/Frida/server correlation and P2 parser/cache/root/FSM remain open.
-- Server-side SRV-CORR is complete in PR #8 (`3fd847b1`); it is not the missing three-surface live join.
+## Design invariants
+- Close the real chain: input → client state → request → server authority/state → response/push → client state → pixels/audio → next input.
+- Every claim is a versioned Node/Edge/Evidence record; `Unknown` and `Blocked` are explicit states, never silently canonical.
+- Every queue, buffer, cache, retry, correlation map, and session table is bounded with owner, pressure policy, shutdown drain, OOM behavior, metrics, and tests.
+- Server is authoritative; rejected commands commit no domain state or outbox event.
+- Rights and technical provenance are independent. Distribution is fail-closed; P3/reference-derived material never becomes canonical without approval.
+- Legacy client is untrusted. Lineage hash, image base, sentinel, payload bounds, replay/rate limits, redaction, and recovery evidence are required.
 
-## Work tracking
-- Jira snapshot: 188 open issues (`LOGH7-9`~`LOGH7-196`), all To Do/Medium/unassigned; no issue is In Progress.
-- PR #171 does not directly close or mention a Jira/GitHub issue. LOGH7-43 ↔ GitHub #10 remains open and only partially overlaps the merged harness.
-- `agents/commit-push-and-verify-next-steps@0b9c324d` is 226 behind/1 ahead and dirty; treat it as read-only protected state, not a product baseline.
-- P0 gate bundle is ACTIVE; push/PR/merge, Jira/GitHub writes, and live real-hardware runs each need separate approval.
+## Current evidence and blockers
+- Existing MoveGrid covers server decrypt/parse → authority → SQLite UoW → 0x0b07 broadcast, but lacks same-correlation real input and final pixels/audio/next-input proof.
+- Fleet marker/selection blocks 0x032f and Warp live reachability; actual planet render remains unproven.
+- Static data promotion, clock/RNG/replay, bounded-resource enforcement, restore evidence, and rights classification remain open.
+- Historical P0→P1→P2→M4 evidence remains input to the ledger, not a fresh completion gate.
 
-## Invariants
-- Server port: 47900.
-- Native Windows runs the verified EXE directly; macOS/Linux use an isolated explicit `win32|wow64` Wine prefix. Other hosts block.
+## Tracker corrections after design merge
+- Correct LOGH7-213 ↔ LOGH7-85 dependency direction.
+- Make A01 precede all 15 axes, not only A02~A09.
+- Make A10 consume A01~A09 and A11~A15.
+- Add structured dependency links and owners; do not infer completion from comments or status alone.
+
+## Live and repository safety
+- Server port: 47900. Native Windows runs verified EXE directly; macOS/Linux use isolated explicit Wine runtime.
 - Never launch, attach, or patch when EXE hash, image base, or sentinels mismatch.
-- Commit `5bd249c` is reference-only. Do not transplant reference code or arbitrarily convert CP932 assets.
-- Never claim live behavior without fresh command output, exit codes, screenshots, or equivalent evidence.
-- Secrets stay user-managed and must not be read or printed.
+- Never claim live behavior without fresh commands, exit codes, screenshots/audio or equivalent evidence, and cleanup receipts.
+- Never read secrets, delete `server/data/`, or transplant code from `reference/`.

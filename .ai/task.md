@@ -1,5 +1,63 @@
 # Current Task
 
+## Active Contract: GitHub #216 / Jira LOGH7-213 마스터 설계 승인 게이트
+
+- Status: **ACTIVE — 2026-07-20 사용자 직접 지시. 설계 작성·검증·commit·push·PR 생성까지 승인됨. 제품 구현과 merge는 사용자 승인 전 금지.**
+- Problem: 기존 P0/M4 중심 계약은 GitHub #216과 자식 #217~#231(Jira LOGH7-213~228)이 요구하는 15축 전체 인과 원장, clean-room 재구현 계약, 전수 완료 기준을 포괄하지 않는다.
+- Goal: 15개 축의 책임·비범위, 입출력·소유권, 공통 불변식, node/edge/evidence 계약, 의존성 DAG, 실패 전파, 데이터 흐름, 권리·clean-room 경계, 대표 수직 슬라이스, 측정 가능한 수용 기준, 검증 표면, 위험·해제 조건을 한 마스터 설계로 확정한다.
+- User value: 자식 이슈를 독립 PR로 구현해도 입력부터 실제 픽셀·오디오와 다음 입력 가능 상태까지 끊김 없이 합성할 수 있고, 독점 코드 이식 없이 합법적으로 확보한 리소스로 대표 흐름을 재구현할 수 있다.
+
+### Instruction Conflict
+
+- Source A: 2026-07-20 사용자 직접 지시 — #216 마스터 설계를 먼저 작성하고 승인 전 제품 구현 금지.
+- Source B: 기존 `.ai/task.md` — 라이브 검증 3종과 P0/M4 구현을 우선 실행.
+- Conflict: 현재 착수 우선순위와 제품 구현 허용 여부가 다르다.
+- Safe temporary behavior: 기존 계약을 이 절 아래의 보존 기록으로 유지하되 실행을 중지하고, #216 설계·문서·상태 작업만 수행한다.
+- Human decision required: 마스터 설계 PR merge와 설계 승인. 승인 뒤에만 자식 이슈 구현 루프를 시작한다.
+
+### 범위 / 비범위
+
+- In scope: GitHub #216~#231·Jira LOGH7-213~228·현행 정본 조사, 마스터 설계 문서, 의존성/수용/증거/위험 매트릭스, 관련 현행 문서와 `.ai` 상태 동기화, 독립 리뷰, 설계 브랜치 commit·push·PR 생성.
+- Out of scope: 제품 코드·테스트·스키마 구현, client/server/DB/port 47900 사용, 바이너리 실행·패치, 자식 이슈 상태 완료 전환, merge, 비밀·`server/data/**`·`reference/**` 접근.
+- Must not have: 미래 파일·함수 단위의 과도한 고정, P3의 canonical 승격, 무상한 큐·버퍼·캐시, 라이브 증거 없는 gameplay PASS, 미병합 선행 계약 의존.
+
+### Allowed files
+
+- `.ai/{task.md,current-state.md,handoff.md,key-facts.md,ownership.md}`
+- `.omo/drafts/logh7-causal-ledger-master-design.md`
+- `.omo/plans/logh7-execution-plan-current.md`
+- `docs/{logh7-causal-ledger-master-design.md,logh7-document-index-current.md,logh7-roadmap-current.md}`
+- Protected: 사용자 소유 `.codex/config.toml`, 비밀 파일, `server/data/**`, `reference/**`, linked worktree, 위 목록 밖의 사용자·다른 에이전트 변경.
+
+### 수용 기준
+
+- AC-1: 15개 축 각각에 책임·비범위·입력·출력·소유권·의존성·측정 가능한 완료 기준·검증 표면·위험 해제 조건이 있다.
+- AC-2: 공통 node/edge/evidence 스키마가 O0/R1/I2/P3, canonical/P3 분리, orphan·dangling edge·누락 provenance 자동 검출을 정의한다.
+- AC-3: 모든 큐·버퍼·캐시에 상한, 단위, 소유자, backpressure, 종료·OOM 동작, 관측 hook과 검증법이 있다.
+- AC-4: 대표 수직 슬라이스가 실제 입력→클라이언트 상태→wire→서버 권위·영속성→응답·push→클라이언트 상태→픽셀·오디오→다음 입력을 한 correlation chain으로 정의한다.
+- AC-5: 의존성 DAG는 merge된 선행 계약만 소비하고, 병렬 가능한 축과 stateful 직렬 자원을 구분하며, 플레이·픽셀·오디오에 가까운 독립 축을 우선한다.
+- AC-6: 권리·clean-room·보안·패키징 경계와 사람 승인 게이트가 기술적 확정 상태와 분리된다.
+- AC-7: 독립 reviewer가 설계 diff와 근거를 확인하고 `pass|fix|redo`로 판정하며, placeholder·TODO·stub·미구현 분기가 0건이다.
+- AC-8: 변경 Markdown 검증, `git diff --check`, 링크·tracker 매핑 검사, scoped diff review가 exit 0이다.
+- AC-9: 설계가 commit·push되고 GitHub #216을 연결한 PR이 생성되며, merge와 제품 구현은 사용자 승인 대기 상태다.
+
+### 검증 명령·증거
+
+- `bash scripts/agent/verify-changes.sh --file <변경 Markdown>`
+- `git diff --check`
+- `rg`로 15축/GitHub/Jira 매핑, placeholder·TODO·stub·skip/only, 무상한 resource 계약 누락 검사
+- GitHub #216~#231과 Jira LOGH7-213~228 current read-back
+- 독립 architect·security reviewer·critic 결과를 원문 근거와 재대조
+- 제품 코드 미변경이므로 server/Python/live 테스트는 미실행으로 보고
+
+### 사람 승인 필요 지점
+
+- 마스터 설계 내용과 PR merge.
+- 승인 설계를 바꾸는 아키텍처·권리 결정, 각 바이너리 재베이스라인, main 직접 commit, force push, 히스토리 재작성, 비밀 접근, 데이터 삭제.
+- 설계 승인 뒤 자식 이슈별 구현·검증·commit·push·PR·tracker 동기화는 승인된 설계 범위에서 계속 수행하되 merge는 사용자 승인 필요.
+
+---
+
 ## 다음 세션 계약 (2026-07-18 사용자 확정) — 라이브 검증 우선 + 2개 병행
 
 main `70b16ca2`. 이번 세션 코드 전량 병합됐으나 **라이브 미검증**이 최대 리스크. 상세·근거·하네스는 `.ai/handoff.md`의 "다음 세션 계획" 섹션이 정본. 요지:

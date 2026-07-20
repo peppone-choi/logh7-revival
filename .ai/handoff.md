@@ -1,5 +1,20 @@
 # Agent Handoff
 
+## 2026-07-20 active handoff — #216 / LOGH7-213 master design gate
+
+- Goal: 15축 전체 인과 역기획 원장을 설계·승인한 뒤 축별 자식 이슈를 독립 PR로 구현하고, 실제 입력에서 픽셀·오디오와 다음 입력까지 닫힌 수직 인과 사슬을 증명한다.
+- Current stage: 제품 구현 전 설계 게이트. `docs/logh7-causal-ledger-master-design.md`는 `PROPOSED`; 관련 계약·실행계획·로드맵·문서 인덱스 동기화와 독립 검토·로컬 검증을 마쳤고 설계 전용 commit·push·PR 발행이 남았다.
+- Independent review: architecture/acceptance와 rights/security/resource 분리 검토가 입력 SHA-256 `bcfdd971875603f2ddd3c1f07709d159c47609ba7003ff15e82e79fa756d3989`에 대해 각각 `PASS`; BLOCKER/MAJOR 0. 초기 FIX 지적은 DAG 입력, canonical 전이, edge class, reject/audio, 전역 자원 상한, TLS, prohibited/P3, updater/SBOM, clean-room 역할 분리를 보강해 해소했다.
+- Branch/baseline: `peppone-choi/216-실제-구현` / 시작 HEAD `110718e12a1e0ec8bcad14cfe594e571e6c37b0e`.
+- Tracker scope: parent GitHub #216 / Jira LOGH7-213, children #217~#231 / LOGH7-214~228. 모두 열려 있으며 Jira는 `진행 중`·Highest·미배정이다.
+- Known tracker drift: LOGH7-213과 LOGH7-85의 차단 방향이 본문 의도와 반대이고, A01은 일부 축만 언급하며, A10 의존성은 A11~A15를 빠뜨린다. 설계 병합 뒤 구조화 링크·본문을 바로잡는다.
+- Hard gate: 설계 PR merge는 사용자 승인 필요. 승인 전 제품 코드, 자식 이슈 구현, Jira 완료 전환, parent close를 금지한다.
+- Verification: 변경 Markdown 10종 `bash scripts/agent/verify-changes.sh --file <path>` 각각 exit 0. master validator는 축 계약 15/15, tracker mapping 15/15, graph node 16, cycle/unknown 0, A10 dependency 14, resource row 17, threat row 10으로 exit 0. tracked `git diff --check`와 untracked 설계 whitespace check도 exit 0. server/Python/live QA는 제품 코드·클라이언트 변경이 없어 미실행(비적용).
+- Verification correction: 첫 untracked whitespace 검사에서 설계 머리말 trailing space 6곳을 찾아 제거했다. 뒤이은 한 번의 tracked 검사에 `core.autocrlf=false`를 잘못 적용해 기존 CRLF 전체가 오류처럼 보였고, 저장소 기본 설정의 올바른 scoped 검사로 재실행해 exit 0을 확인했다.
+- Next exact actions: 소유 파일만 stage → staged diff 재감사 → commit/push/PR → PR checks/read-back → 사용자에게 설계와 merge 승인 요청.
+- Preserved state: `.codex/config.toml`은 사용자 소유 dirty 변경이므로 읽기·수정·stage 금지. 과거 P0/M4 기록은 역사 증거로 남기되 현재 실행 계약으로 사용하지 않는다.
+- Vault: `LOGH7_VAULT_DIR` unset으로 이번 설계 단계의 볼트 동기화는 미실행이다.
+
 ## Goal
 P0 게이트(스토리 LOGH7-18) 완주 — LOGH7-47/43/45/44/46을 각 Jira 완료기준대로 닫는다. 순서 47→43→45→44→46. push·PR·merge·외부 쓰기·라이브 실기는 2026-07-17 상시 사전승인(하드 금지선 제외).
 
