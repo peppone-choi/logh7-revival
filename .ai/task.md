@@ -1,5 +1,16 @@
 # Current Task
 
+## Active Contract: 216 인과 원장 완주 — 잔여 축 A03·A05·A07·A08·A11·A12·A14·A15·A10 파동별 병렬 구현
+
+- Status: **ACTIVE — 2026-07-21 사용자 직접 지시** ("새 계약 잡고 병렬구현하고 커밋PR머지 반복. 216 실 구현을 끝낼 것"). 구현·commit·push·PR·merge를 파동마다 반복 수행하는 권한을 사용자가 명시 승인했다. force push·main 직접 commit·히스토리 재작성·`server/data/**` 삭제·비밀 접근·사용자 소유 `.codex/config.toml` 접근은 이 승인에서 제외·금지한다.
+- Goal: A01 스키마(`tools/causal-ledger/`) 위에 잔여 9개 축을 Wave-1과 동일한 독립 모듈 패턴(importSources base 부트스트랩 → 도메인 node/edge/evidence append → 기존 coverage `targetNodeIds` 부착 → `validateLedger(ledger,{manifest})`)으로 구현해 15축 인과 원장을 완성한다. A10은 전 축 synthesis라 최후.
+- 파동: **Wave 2 = A03·A05**(현재 eligible) → **Wave 3 = A07·A08·A12** → **Wave 4 = A11·A14·A15** → **Wave 5 = A10**. 축 모듈은 서로 import하지 않고 각자 A01 base에 도메인 슬라이스를 얹으므로 파동 내 병렬 가능. 각 파동 = 1 PR(병렬 축 묶음) → CI green → merge → 다음 파동.
+- Wave-1 CI 교훈을 처음부터 강제(브리프·verify 게이트): 파일 해시 LF 정규화 필수, evidence.source는 비-base 문서 소스, 결정성 테스트는 in-process build-twice, 테스트 REPO_ROOT는 `import.meta.url` 이식 도출, edge 방향규칙·정확 키, id 3부분, 날조 0(공백은 Unknown/Blocked).
+- In scope: `tools/causal-ledger/axes/aXX-*.mjs`, `server/tests/logh7-causal-ledger-aXX.test.mjs`, `tools/causal-ledger/generated/aXX-*.json`, `.ai/` 상태, 관련 현행 문서(roadmap·document-index·master-design 상태). Out of scope / frozen: `tools/causal-ledger/{schema.json,index.mjs,cli.mjs,source-manifest.json}`, A01 테스트·생성물, 다른 축 모듈(자기 파동 밖), 제품 server runtime·client·라이브 QA·canonical/P3 승격.
+- 수용 기준(파동별): (AC-1) 각 축 focused test가 fresh green(직접 실행 확인). (AC-2) `validateLedger` 통과, frozen 파일 diff 0. (AC-3) 날조 0 — 모든 레코드가 실 아티팩트 인용, 공백은 Unknown/Blocked+blocker. (AC-4) LF-safe(해시 정규화·이식 경로·in-process 결정성) — CI(Linux/LF) `test` green으로 실증. (AC-5) 독립 verify BLOCKER 0. (AC-6) 파동 PR merge 후 상태·현행 문서 갱신.
+- 검증: `cd server && node --test tests/logh7-causal-ledger-aXX.test.mjs`(축별), CI `test` job(LF 오라클), `git diff --stat origin/main -- <frozen>` 빈값. 라이브 QA·제품 테스트는 비적용(원장 도구, 제품 런타임 무변경).
+- 진행: Wave 2(A03·A05) 착수 — branch `peppone-choi/wave2-a03-a05`.
+
 ## Completed Contract: Wave 1 인과 원장 축 A02/A04/A06/A09/A13
 
 - Tracker: GitHub #218/#220/#222/#225/#229 / Jira LOGH7-215/217/219/223/226, parent GitHub #216 / Jira LOGH7-213.
