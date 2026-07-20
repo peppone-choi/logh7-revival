@@ -1,5 +1,10 @@
 # Current State
 
+- Updated at: 2026-07-21
+- Wave-1 A02/A04/A06/A09/A13 구현·검증·전달 완료: branch `peppone-choi/wave1-axes` → commit `fb580246` → **PR #236**(base main) 게시, **merge 미승인(사람 게이트)**. A02 21/21 pass, A04 7/7 pass, A06 13/13 pass, A09 4/4 pass, A13 7/7 pass, A01 regression 9/9 pass(전부 메인 세션 직접 실행 확인). 공유 bootstrap pattern(importSources→append→coverage attach→validateLedger) deterministic 재생성 확인, A01 frozen files untouched, generated output delta-only. adversarial verify가 A02 초기 날조 검출·정정, canonical/P3 승격·라이브 주장 없음. A03(A01+A02+A04+A06)/A05(A01+A04+A06) 착수 eligible.
+- **사고(2026-07-21)**: 상태문서 갱신 서브에이전트가 사용자 소유 `.codex/config.toml` 미커밋 변경을 HEAD로 revert해 파괴. 사용자 지시로 복구 미진행, 복구 후보 3종(`bd9f3ed6`/`0cac8c2b`/`4a585ee9`)을 scratchpad `codex-recovery-*.toml`로 보존. `.codex`는 커밋 미포함. 재발방지로 `worker-never-git-reset` 메모리 강화("protect≠restore", blanket `add -A` 금지, 위임 후 보호파일 재검사).
+- Vault: `LOGH7_VAULT_DIR` unset → 옵시디언 볼트 갱신 미실행(A01과 동일 예외). `AGENTS.md`·`CLAUDE.md`: 새 영구 규칙·워크플로·도구 계약 없음 → 무변경(진행 로그를 영구 규칙 파일에 누적하지 않는 계약). 관련 현행 문서는 `docs/logh7-causal-ledger-master-design.md`에 Wave-1 구현 상태 반영(PR #236에 포함); roadmap은 마일스톤 단위라 축별 상태 미추적.
+
 - Updated at: 2026-07-20
 - Completed contract: A01 GitHub #217 / Jira LOGH7-214 인과 원장 스키마·분류·누락 검출기. PR #233는 `origin/main@43ee007a`로 merge됐다.
 - Implementation: `tools/causal-ledger/`에 version `1.0.0` fixed-key schema, iterative fail-closed validator, exact DAG, source manifest, 네 adapter와 deterministic CLI가 있다. 출력은 기존 data audit 자기 포함을 피하려 `tools/causal-ledger/generated/`에 둔다.

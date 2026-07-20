@@ -2,10 +2,10 @@
 # LOGH VII Key Facts (NIAH)
 
 ## Active contract
-- GitHub #216 / Jira LOGH7-213 master design is merged at `ec6d9b52`; A01 #217 / LOGH7-214 is merged at `43ee007a` (2026-07-20).
-- Children are GitHub #217~#231 / Jira LOGH7-214~228; each implementation must use one independent PR after its prerequisites merge.
-- Master design: `docs/logh7-causal-ledger-master-design.md` (`APPROVED-MERGED`). A01 machine contract is `tools/causal-ledger/schema.json` version `1.0.0`; A02/A04/A06/A09/A13 are now dependency-eligible.
-- Current baseline: `origin/main@43ee007a`; next task contract is not yet selected.
+- GitHub #216 / Jira LOGH7-213 master design merged at `ec6d9b52`; A01 #217 / LOGH7-214 merged at `43ee007a` (2026-07-20).
+- **Wave-1 A02/A04/A06/A09/A13 implemented+verified** (2026-07-21): branch `peppone-choi/wave1-axes`, single PR ready, merge NOT approved. Tests: A02 21/21, A04 7/7, A06 13/13, A09 4/4, A13 7/7, A01 regression 9/9 all pass. After merge: A03/A05 eligible.
+- Master design: `docs/logh7-causal-ledger-master-design.md` (`APPROVED-MERGED`). A01 machine contract: `tools/causal-ledger/schema.json` v`1.0.0`. All axes follow shared bootstrap pattern (importSources→append→coverage-attach→validateLedger).
+- Current baseline: `origin/main@43ee007a`; Wave-1 PR awaits merge authorization.
 - Preserve user-owned `.codex/config.toml`: never read, modify, stage, or reset it.
 
 ## Design invariants

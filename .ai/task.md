@@ -1,5 +1,52 @@
 # Current Task
 
+## Completed Contract: Wave 1 인과 원장 축 A02/A04/A06/A09/A13
+
+- Tracker: GitHub #218/#220/#222/#225/#229 / Jira LOGH7-215/217/219/223/226, parent GitHub #216 / Jira LOGH7-213.
+- Status: **IMPLEMENTED·VERIFIED (GREEN) — 단일 Wave-1 PR (peppone-choi/wave1-axes) 준비. merge 미승인.**
+- Problem: A01 frozen schema와 standardized bootstrap pattern만으로는 5개 축의 node/edge/evidence를 독립적으로 납품할 수 없었다.
+- Goal: A02(클라이언트 입출력·FSM), A04(프로토콜·세션), A06(데이터·자산·P3), A09(실패·운영·계보), A13(권리·재배포)의 axis-specific node·edge·evidence를 A01 schema로 납품하고 시각 기록한다.
+- Result: 5개 축이 shared bootstrap pattern을 따르는 독립 모듈로 구현됐다.
+  - **A02 (input/UI/FSM)**: 27 nodes (UI-surface + Unknown/Blocked), 21/21 tests pass, exit 0
+  - **A04 (protocol/session/sync)**: 66 nodes + 44 edges (opcode 22쌍 리버스 매핑), 7/7 tests pass, exit 0
+  - **A06 (data/assets/P3)**: 170 nodes (provenance/canonicality, P3 invariant), 13/13 tests pass, exit 0
+  - **A09 (failure/ops/lineage/safety)**: 18 lineage+failure nodes (documentary provenance only), 4/4 tests pass, exit 0
+  - **A13 (rights/redistribution)**: 4 rights-disposition nodes (fail-closed Unknown), 7/7 tests pass, exit 0
+- Shared pattern: 모든 축이 `importSources(SOURCE_MANIFEST)` → 축별 node/edge/evidence append → 기존 coverage 기록에 targetNodeIds 연결 → `validateLedger(ledger, { manifest: SOURCE_MANIFEST })`를 따른다. Deterministic, 벽시계 의존성 0, 타임스탬프 고정.
+- Frozen A01 unchanged: `tools/causal-ledger/schema.json`, `index.mjs`, `cli.mjs`, `source-manifest.json`, `generated/ledger.json`, `generated/import-report.json`, `server/tests/logh7-causal-ledger.test.mjs` 모두 origin/main과 git diff 공백.
+- Generated output: `tools/causal-ledger/generated/` delta-only (각 축당 JSON 2~3개).
+- A01 regression: 9/9 pass, exit 0 (frozen test 미변경).
+- New files: `tools/causal-ledger/axes/a{02,04,06,09,13}-*.mjs` (5개), `server/tests/logh7-causal-ledger-a0{2,4,6,9,13}.test.mjs` (5개), generated `a{02,04,06,09,13}-*.json` (12개).
+- Delivery: single PR `peppone-choi/wave1-axes` from verified implementation. push + PR creation authorized; merge NOT yet approved.
+- Next eligible after merge: A03 (needs A01+A02+A04+A06), A05 (needs A01+A04+A06).
+- Honesty note: 초기 A02 WndProc/VK hex 날조는 독립 검증 단계에서 적발되고 실제 UI 기록 + explicit Blocked로 정정됐다. 어떤 node도 canonical 승격되지 않았고 live behavior 주장 0.
+
+### 범위 / 비범위
+
+- In scope: 5개 축 node/edge/evidence 납품, A01 schema 준수, dedicated test suite, delta generated output, axis-specific proof.
+- Out of scope: merge 승인, live gameplay 검증, A01·A03~A15 추가 구현, dependency 변경, canonical 승격.
+
+### Allowed files
+
+- `tools/causal-ledger/axes/{a02-input-ui-fsm,a04-protocol-session,a06-data-assets-provenance,a09-lineage-failure-safety,a13-rights-and-redistribution}.mjs`
+- `server/tests/logh7-causal-ledger-a0{2,4,6,9,13}.test.mjs`
+- `tools/causal-ledger/generated/{a02-input-surfaces-states,a04-protocol-opcodes,a06-ledger,a06-report,a09-lineage-failure-safety,a13-rights-disposition}.json`
+- `.ai/{task.md,current-state.md,handoff.md,key-facts.md,ownership.md}`
+- Protected: 사용자 소유 `.codex/config.toml`, A01 frozen files, `reference/**`, `server/data/**`.
+
+### 검증 명령·증거
+
+- `cd server && node --test tests/logh7-causal-ledger-a0{2,4,6,9,13}.test.mjs`: 각 exit 0
+- `cd server && node --test tests/logh7-causal-ledger.test.mjs`: A01 regression 9/9 pass, exit 0
+- `bash scripts/agent/verify-changes.sh --file <path>`: 변경 파일 각각 exit 0
+- `git diff --check`: exit 0, frozen files diff empty
+
+### 사람 승인 필요 지점
+
+- Wave-1 PR merge (현재 미승인, 검증 완료).
+
+---
+
 ## Completed Contract: A01 인과 원장 스키마·분류·누락 검출기
 
 - Tracker: GitHub #217 / Jira LOGH7-214, parent GitHub #216 / Jira LOGH7-213.
