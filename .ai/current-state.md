@@ -7,7 +7,7 @@
 - Fresh verification: 변경 Markdown 10종 `verify-changes.sh --file` 각각 exit 0; 15축/매핑/필드/DAG/resource/threat validator exit 0(축 15, graph node 16, cycle·unknown 0, resource 17, threat 10); tracked diff와 untracked master design whitespace check exit 0. 제품 코드·테스트·클라이언트 동작 변경이 없어 server/Python/live QA는 미실행(비적용)이다.
 - Tracker state: GitHub #216~#231은 open/backlog, Jira LOGH7-213~228은 `진행 중`·Highest·미배정이다. Jira의 LOGH7-213↔LOGH7-85 차단 방향, A01의 15축 선행 범위, A10의 A11~A15 소비 범위는 설계 병합 뒤 구조화 링크와 본문을 정정해야 한다.
 - Current branch/baseline: `peppone-choi/216-실제-구현`, 시작 HEAD `110718e12a1e0ec8bcad14cfe594e571e6c37b0e`. 사용자 merge 승인은 확보됐으며, 설계 review 보정만 명시적으로 commit·push한 뒤 최신 checks가 통과해야 merge한다.
-- Delivery: PR #232는 Ready로 전환됐고 head `97d25be732e40876a8c853b182970012cb7d282d`의 CI `test`는 PASS다. CodeRabbit 실제 리뷰의 MAJOR 2건(stale handoff, P3 dependency 문구)을 이 commit에서 보정하며, 새 head의 CI·CodeRabbit BLOCKER/MAJOR 0을 read-back한 뒤 승인된 merge를 실행한다.
+- Delivery: PR #232는 Ready로 전환됐고 head `97d25be732e40876a8c853b182970012cb7d282d`의 CI `test`는 PASS다. CodeRabbit 실제 리뷰의 actionable 4건(stale handoff, P3 dependency 범위, table pipe, MD028 blockquote)을 보정하며, 새 head의 CI·CodeRabbit BLOCKER/MAJOR 0을 read-back한 뒤 승인된 merge를 실행한다.
 - Preserved concurrent change: 사용자 소유 `.codex/config.toml` dirty 변경은 읽거나 수정·stage하지 않는다.
 - Evidence gaps preserved: 함대 마커/선택, 0x032f 도달, Warp, 실제 행성 렌더, 정적 데이터, clock/RNG/replay, 제한 없는 자원, 권리 Unknown은 설계가 닫은 사실이 아니라 각 축의 차단 증거다.
 - Vault sync: 현재 머신의 `LOGH7_VAULT_DIR`가 unset이므로 옵시디언 볼트는 식별·갱신하지 못했다.

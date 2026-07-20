@@ -3,10 +3,10 @@
 ## 2026-07-20 active handoff — #216 / LOGH7-213 master design gate
 
 - Goal: 15축 전체 인과 역기획 원장을 설계·승인한 뒤 축별 자식 이슈를 독립 PR로 구현하고, 실제 입력에서 픽셀·오디오와 다음 입력까지 닫힌 수직 인과 사슬을 증명한다.
-- Current stage: 제품 구현 전 설계 merge 게이트. 사용자가 2026-07-20 설계와 PR #232 merge를 승인했으며, CodeRabbit 실제 리뷰의 MAJOR 2건을 보정하고 새 head 검증을 통과한 뒤 merge한다.
+- Current stage: 제품 구현 전 설계 merge 게이트. 사용자가 2026-07-20 설계와 PR #232 merge를 승인했으며, CodeRabbit 실제 리뷰의 actionable 4건을 보정하고 새 head 검증을 통과한 뒤 merge한다.
 - Independent review: architecture/acceptance와 rights/security/resource 분리 검토가 입력 SHA-256 `bcfdd971875603f2ddd3c1f07709d159c47609ba7003ff15e82e79fa756d3989`에 대해 각각 `PASS`; BLOCKER/MAJOR 0. 초기 FIX 지적은 DAG 입력, canonical 전이, edge class, reject/audio, 전역 자원 상한, TLS, prohibited/P3, updater/SBOM, clean-room 역할 분리를 보강해 해소했다.
 - Branch/baseline: `peppone-choi/216-실제-구현` / 시작 HEAD `110718e12a1e0ec8bcad14cfe594e571e6c37b0e`.
-- Delivery: PR #232 `https://github.com/peppone-choi/logh7-revival/pull/232`는 Ready·OPEN·mergeState CLEAN이다. head `97d25be732e40876a8c853b182970012cb7d282d`에서 CI `test` PASS, CodeRabbit 실제 리뷰 MAJOR 2건(stale handoff와 P3 dependency 범위 문구)을 확인했다. 보정 commit의 최신 checks를 fresh read-back한다.
+- Delivery: PR #232 `https://github.com/peppone-choi/logh7-revival/pull/232`는 Ready·OPEN·mergeState CLEAN이다. head `97d25be732e40876a8c853b182970012cb7d282d`에서 CI `test` PASS, CodeRabbit 실제 리뷰 actionable 4건(stale handoff, P3 dependency 범위, table pipe, MD028 blockquote)을 확인했다. 보정 commit의 최신 checks를 fresh read-back한다.
 - Tracker scope: parent GitHub #216 / Jira LOGH7-213, children #217~#231 / LOGH7-214~228. 모두 열려 있으며 Jira는 `진행 중`·Highest·미배정이다.
 - Known tracker drift: LOGH7-213과 LOGH7-85의 차단 방향이 본문 의도와 반대이고, A01은 일부 축만 언급하며, A10 의존성은 A11~A15를 빠뜨린다. 설계 병합 뒤 구조화 링크·본문을 바로잡는다.
 - Hard gate: 설계와 PR #232 merge 승인은 확보됐다. PR merge read-back 전에는 제품 코드, 자식 이슈 구현, Jira 완료 전환, parent close를 금지한다.

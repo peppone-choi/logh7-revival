@@ -131,7 +131,7 @@
 | identity | `schemaVersion`, `nodeId`, `axis`, `type`, `domain`, `owner` |
 | semantics | `summary`, `preconditions`, `postconditions`, `failureConditions` |
 | surface | input, client-state, function, opcode, command, event, data, asset, persistence, clock, RNG, render, audio, test, failure, security, package 중 하나 |
-| direction | `local|c2s|s2c|internal|none` |
+| direction | `local\|c2s\|s2c\|internal\|none` |
 | state | evidence grade, confidence, canonicality, rights, verification을 각각 기록 |
 | lifetime | creator, consumer, disposer, scope, hard bound 또는 `not-applicable` 근거 |
 | traceability | evidence IDs, related issue, AC IDs, source manifest hash |
