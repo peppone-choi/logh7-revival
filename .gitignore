@@ -64,3 +64,7 @@ __pycache__/
 /NUL
 /_ok.txt
 /*.stackdump
+
+# causal-ledger 축 생성 델타(재생성 가능한 빌드 산출물, 테스트가 in-memory 검증하므로 미추적).
+# A01 정본 ledger.json / import-report.json은 계속 추적한다.
+tools/causal-ledger/generated/a[0-9]*.json
