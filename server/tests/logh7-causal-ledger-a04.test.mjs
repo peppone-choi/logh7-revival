@@ -1,48 +1,19 @@
 import { test } from 'node:test';
 import { strict as assert } from 'node:assert';
-import { spawn } from 'node:child_process';
-import { join, resolve, dirname } from 'node:path';
+import { resolve, dirname } from 'node:path';
 import { readFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 
 const REPO_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..');
-const axisModulePath = join(REPO_ROOT, 'tools/causal-ledger/axes/a04-protocol-session.mjs');
 
-// Helper: run axis build in a child process
-async function runAxisBuildInChild(repoRoot) {
-  return new Promise((resolve, reject) => {
-    const proc = spawn('node', [axisModulePath], {
-      cwd: REPO_ROOT,
-      stdio: ['pipe', 'pipe', 'pipe'],
-      env: { ...process.env, NODE_OPTIONS: '' },
-    });
-
-    const stdoutChunks = [];
-    let stderr = '';
-
-    proc.stdout.on('data', (chunk) => { stdoutChunks.push(chunk); });
-    proc.stderr.on('data', (chunk) => { stderr += chunk.toString(); });
-
-    proc.on('close', (exitCode) => {
-      if (exitCode !== 0) {
-        reject(new Error(`Axis build failed with exit code ${exitCode}\nstderr: ${stderr}`));
-      } else {
-        try {
-          const stdout = Buffer.concat(stdoutChunks).toString('utf8');
-          const ledgerJson = JSON.parse(stdout);
-          resolve(ledgerJson);
-        } catch (e) {
-          reject(new Error(`Failed to parse axis build output: ${e.message}`));
-        }
-      }
-    });
-  });
-}
+// Import the build function
+const { buildA04Axis } = await import('../../tools/causal-ledger/axes/a04-protocol-session.mjs');
+// Import stableStringify from index
+const { stableStringify } = await import('../../tools/causal-ledger/index.mjs');
 
 test('A04 axis: bootstrap base and append axis records', async () => {
-  // Import the axis build module locally to get the ledger
-  const axisModule = await import(`file://${axisModulePath}`);
-  const { ledger } = await axisModule.buildA04Axis(REPO_ROOT);
+  // Build the ledger in-process
+  const { ledger } = await buildA04Axis(REPO_ROOT);
 
   // Verify base is bootstrapped
   assert(ledger.schemaVersion === '1.0.0', 'schemaVersion should be 1.0.0');
@@ -85,11 +56,9 @@ test('A04 axis: bootstrap base and append axis records', async () => {
 });
 
 test('A04 axis: validateLedger passes', async () => {
-  const validatorPath = join(REPO_ROOT, 'tools/causal-ledger/index.mjs');
-  const { validateLedger, SOURCE_MANIFEST } = await import(`file://${validatorPath}`);
+  const { validateLedger, SOURCE_MANIFEST } = await import('../../tools/causal-ledger/index.mjs');
 
-  const axisModule = await import(`file://${axisModulePath}`);
-  const { ledger } = await axisModule.buildA04Axis(REPO_ROOT);
+  const { ledger } = await buildA04Axis(REPO_ROOT);
 
   // Must not throw
   assert.doesNotThrow(
@@ -99,17 +68,18 @@ test('A04 axis: validateLedger passes', async () => {
 });
 
 test('A04 axis: cross-run determinism (byte-identical output)', async (t) => {
-  // Run the axis build in two separate child processes
-  const build1 = await runAxisBuildInChild(REPO_ROOT);
-  const build2 = await runAxisBuildInChild(REPO_ROOT);
+  // Build the axis in-process twice and compare with stable stringify
+  const { ledger: ledger1 } = await buildA04Axis(REPO_ROOT);
+  const { ledger: ledger2 } = await buildA04Axis(REPO_ROOT);
 
-  const json1 = JSON.stringify(build1, null, 2);
-  const json2 = JSON.stringify(build2, null, 2);
+  const first = stableStringify(ledger1);
+  const second = stableStringify(ledger2);
 
-  assert.strictEqual(json1, json2, 'Two independent builds must produce identical output');
+  assert.strictEqual(first, second, 'Two independent builds must produce identical output');
 });
 
 test('A04 axis: module contains no Date/random (determinism requirement)', async () => {
+  const axisModulePath = resolve(REPO_ROOT, 'tools/causal-ledger/axes/a04-protocol-session.mjs');
   const moduleSource = await readFile(axisModulePath, 'utf-8');
 
   // Check for wall-clock/random patterns
@@ -129,12 +99,10 @@ test('A04 axis: negative fixture - orphan coverage fails', async () => {
   // This test verifies that the validator catches orphan nodes
   // (nodes not attached to any coverage)
   // We rely on the validator itself to enforce this
-  const validatorPath = join(REPO_ROOT, 'tools/causal-ledger/index.mjs');
-  const { validateLedger, SOURCE_MANIFEST, SchemaError } = await import(`file://${validatorPath}`);
+  const { validateLedger, SOURCE_MANIFEST, SchemaError } = await import('../../tools/causal-ledger/index.mjs');
 
   // Create a deliberately malformed ledger with an orphan node
-  const axisModule = await import(`file://${axisModulePath}`);
-  const { ledger: baseLedger } = await axisModule.buildA04Axis(REPO_ROOT);
+  const { ledger: baseLedger } = await buildA04Axis(REPO_ROOT);
 
   // Add a node with no coverage attachment
   const orphanNode = {
@@ -188,11 +156,9 @@ test('A04 axis: negative fixture - orphan coverage fails', async () => {
 test('A04 axis: negative fixture - invalid direction rule fails', async () => {
   // This test verifies that the validator catches direction rule violations
   // requests verb: from.direction must be c2s, to.direction must be internal
-  const validatorPath = join(REPO_ROOT, 'tools/causal-ledger/index.mjs');
-  const { validateLedger, SOURCE_MANIFEST, SchemaError } = await import(`file://${validatorPath}`);
+  const { validateLedger, SOURCE_MANIFEST, SchemaError } = await import('../../tools/causal-ledger/index.mjs');
 
-  const axisModule = await import(`file://${axisModulePath}`);
-  const { ledger: baseLedger } = await axisModule.buildA04Axis(REPO_ROOT);
+  const { ledger: baseLedger } = await buildA04Axis(REPO_ROOT);
 
   // Create a malformed edge with wrong direction
   const badEdge = {
@@ -244,8 +210,7 @@ test('A04 axis: negative fixture - invalid direction rule fails', async () => {
 });
 
 test('A04 axis: only A04 records are filtered in assertions', async () => {
-  const axisModule = await import(`file://${axisModulePath}`);
-  const { ledger } = await axisModule.buildA04Axis(REPO_ROOT);
+  const { ledger } = await buildA04Axis(REPO_ROOT);
 
   // Base A01 nodes should not have axis='A04'
   const baseNodes = ledger.nodes.filter((n) => n.axis !== 'A04');

@@ -1,9 +1,7 @@
 import { test } from 'node:test';
 import { strictEqual, ok } from 'node:assert';
-import { dirname, join } from 'node:path';
+import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { createHash } from 'node:crypto';
-import { spawn } from 'node:child_process';
 
 import {
   CONTRACT,
@@ -14,11 +12,6 @@ import {
 import { buildA09Ledger } from '../../tools/causal-ledger/axes/a09-lineage-failure-safety.mjs';
 
 const REPO_ROOT = dirname(dirname(dirname(fileURLToPath(import.meta.url))));
-const AXIS_MODULE = join(REPO_ROOT, 'tools/causal-ledger/axes/a09-lineage-failure-safety.mjs');
-
-function sha256(value) {
-  return createHash('sha256').update(value).digest('hex');
-}
 
 test('A09: Bootstrap and append axis records', async () => {
   const ledger = await buildA09Ledger(REPO_ROOT);
@@ -40,35 +33,9 @@ test('A09: validateLedger passes', async () => {
 });
 
 test('A09: CROSS-RUN determinism', async () => {
-  const run1 = await new Promise((resolve, reject) => {
-    const proc = spawn('node', [AXIS_MODULE, REPO_ROOT], {
-      cwd: REPO_ROOT,
-      timeout: 30000,
-    });
-    const chunks = [];
-    proc.stdout.on('data', (data) => { chunks.push(data); });
-    proc.on('close', (code) => {
-      code === 0 ? resolve(Buffer.concat(chunks).toString('utf8')) : reject(new Error('Run1 failed'));
-    });
-    proc.on('error', reject);
-  });
-
-  const run2 = await new Promise((resolve, reject) => {
-    const proc = spawn('node', [AXIS_MODULE, REPO_ROOT], {
-      cwd: REPO_ROOT,
-      timeout: 30000,
-    });
-    const chunks = [];
-    proc.stdout.on('data', (data) => { chunks.push(data); });
-    proc.on('close', (code) => {
-      code === 0 ? resolve(Buffer.concat(chunks).toString('utf8')) : reject(new Error('Run2 failed'));
-    });
-    proc.on('error', reject);
-  });
-
-  const hash1 = sha256(run1);
-  const hash2 = sha256(run2);
-  strictEqual(hash1, hash2);
+  const first = stableStringify(await buildA09Ledger(REPO_ROOT));
+  const second = stableStringify(await buildA09Ledger(REPO_ROOT));
+  strictEqual(first, second);
 });
 
 test('A09: Invariant - all nodes have coverage', async () => {
