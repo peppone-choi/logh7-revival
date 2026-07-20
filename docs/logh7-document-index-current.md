@@ -76,7 +76,7 @@ use the current requirements, architecture, and plans for implementation and liv
 
 | Path | Role |
 | --- | --- |
-| `docs/logh7-causal-ledger-master-design.md` | Approved and merged 15-axis causal-ledger contract; A01 implements its `1.0.0` machine contract under `tools/causal-ledger/`. Wave-1 축 A02/A04/A06/A09/A13이 `tools/causal-ledger/axes/`에 구현됨(2026-07-21, PR #236, merge 대기). |
+| `docs/logh7-causal-ledger-master-design.md` | Approved and merged 15-axis causal-ledger contract; A01 implements its `1.0.0` machine contract under `tools/causal-ledger/`. Wave-1 축 A02/A04/A06/A09/A13이 `tools/causal-ledger/axes/`에 구현되고 main에 병합됨(2026-07-21, PR #236 → `ffeb70ce`). |
 
 ## Derived Status And Reference Routing
 
