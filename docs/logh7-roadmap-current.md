@@ -1,6 +1,6 @@
 # LOGH VII Revival Current Roadmap
 
-> **2026-07-20 실행 오버레이:** D0 설계 PR #232(`ec6d9b52`)와 A01 구현 PR #233(`43ee007a`)가 merge됐다. `1.0.0` schema·validator·고정 분모 adapter가 downstream 정본이며, A02/A04/A06/A09/A13이 첫 dependency-eligible 파동이다. **2026-07-21: 이 5축이 A01 스키마 위에 독립 모듈로 구현·검증됨(PR #236, merge 대기)** — base 부트스트랩→도메인 node/edge/evidence append→기존 coverage `targetNodeIds` 부착→`validateLedger` 통과, A01 frozen 무변경·A01 회귀 9/9·결정론·델타 생성물. 병합 시 A03(A01+A02+A04+A06)/A05(A01+A04+A06)가 다음 eligible. 아래 P0→P1→P2→M4 기록은 폐기하지 않고 원장의 현행 증거·미해결 노드로 편입한다.
+> **2026-07-20 실행 오버레이:** D0 설계 PR #232(`ec6d9b52`)와 A01 구현 PR #233(`43ee007a`)가 merge됐다. `1.0.0` schema·validator·고정 분모 adapter가 downstream 정본이며, A02/A04/A06/A09/A13이 첫 dependency-eligible 파동이다. **2026-07-21: 이 5축이 A01 스키마 위에 독립 모듈로 구현·검증되고 main에 병합됨(PR #236 → `ffeb70ce`, CI `test` pass)** — base 부트스트랩→도메인 node/edge/evidence append→기존 coverage `targetNodeIds` 부착→`validateLedger` 통과, A01 frozen 무변경·A01 회귀 9/9·결정론·델타 생성물. 병합 완료로 A03(A01+A02+A04+A06)/A05(A01+A04+A06)가 착수 eligible. 아래 P0→P1→P2→M4 기록은 폐기하지 않고 원장의 현행 증거·미해결 노드로 편입한다.
 > **TL;DR** M1~M3 라이브 완료(로그인→로비→월드·캐릭터), M4 전략맵은 구현 완료·관측 게이트 중. 다음 P0 = 실행 환경별 client runtime/EXE 계보/증거 복구(native Windows 직접 실행, macOS/Linux 격리 Wine). 데이터 승격 규칙: 정본 = 코드·테스트 실행 기록(명령·산출물·계보 함께), 문서는 예보일 뿐.
 
 작성일: 2026-07-06 (현행화: **2026-07-20**)
