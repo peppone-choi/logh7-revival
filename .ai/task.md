@@ -1,60 +1,53 @@
 # Current Task
 
-## Active Contract: GitHub #216 / Jira LOGH7-213 마스터 설계 승인 게이트
+## Active Contract: A01 인과 원장 스키마·분류·누락 검출기
 
-- Status: **ACTIVE — 2026-07-20 사용자 설계 승인 및 PR #232 merge 승인 완료. PR #232가 fresh review/CI를 통과해 merge되기 전까지 제품 구현은 금지하며, merge 뒤 A01부터 승인된 DAG 순서로 진행한다.**
-- Problem: 기존 P0/M4 중심 계약은 GitHub #216과 자식 #217~#231(Jira LOGH7-213~228)이 요구하는 15축 전체 인과 원장, clean-room 재구현 계약, 전수 완료 기준을 포괄하지 않는다.
-- Goal: 15개 축의 책임·비범위, 입출력·소유권, 공통 불변식, node/edge/evidence 계약, 의존성 DAG, 실패 전파, 데이터 흐름, 권리·clean-room 경계, 대표 수직 슬라이스, 측정 가능한 수용 기준, 검증 표면, 위험·해제 조건을 한 마스터 설계로 확정한다.
-- User value: 자식 이슈를 독립 PR로 구현해도 입력부터 실제 픽셀·오디오와 다음 입력 가능 상태까지 끊김 없이 합성할 수 있고, 독점 코드 이식 없이 합법적으로 확보한 리소스로 대표 흐름을 재구현할 수 있다.
-
-### Instruction Conflict
-
-- Source A: 2026-07-20 사용자 직접 지시 — #216 마스터 설계를 먼저 작성하고 승인 전 제품 구현 금지.
-- Source B: 기존 `.ai/task.md` — 라이브 검증 3종과 P0/M4 구현을 우선 실행.
-- Conflict: 현재 착수 우선순위와 제품 구현 허용 여부가 다르다.
-- Safe temporary behavior: 기존 계약을 이 절 아래의 보존 기록으로 유지하되 실행을 중지하고, #216 설계·문서·상태 작업만 수행한다.
-- Human decision required: 해결됨 — 2026-07-20 사용자가 마스터 설계와 PR #232 merge를 승인했다. 자식 이슈별 merge는 각각 별도 사용자 승인이 필요하다.
+- Tracker: GitHub #217 / Jira LOGH7-214, parent GitHub #216 / Jira LOGH7-213.
+- Status: **ACTIVE — 설계 PR #232가 `origin/main@ec6d9b520a17857831832f6941f8997ac252bd2c`로 merge됐다. 2026-07-20 사용자가 A01 구현 PR의 생성·검증 후 merge까지 사전 승인했으며, issue close는 수행하지 않는다.**
+- Problem: opcode·EXE RE·render/UI·data audit가 서로 다른 형식과 등급을 사용해 node/edge/evidence를 합성할 통합 계약이 없고, orphan·dangling·근거 없는 canonical 승격·누락 import를 자동 검출하지 못한다.
+- Goal: 모든 후속 축이 소비할 versioned machine-readable 계약, fail-closed validator, 4종 lossless import adapter와 deterministic report를 표준 라이브러리만으로 구현한다.
+- User value: A02~A15가 같은 ID·분류·증거·누락 규칙을 사용하고, clean-room 구현자가 근거와 Unknown/P3를 혼동하지 않은 채 인과 사슬을 재구성할 수 있다.
 
 ### 범위 / 비범위
 
-- In scope: GitHub #216~#231·Jira LOGH7-213~228·현행 정본 조사, 마스터 설계 문서, 의존성/수용/증거/위험 매트릭스, 관련 현행 문서와 `.ai` 상태 동기화, 독립 리뷰, 설계 브랜치 commit·push·PR 생성.
-- Out of scope: 제품 코드·테스트·스키마 구현, client/server/DB/port 47900 사용, 바이너리 실행·패치, 자식 이슈 상태 완료 전환, merge, 비밀·`server/data/**`·`reference/**` 접근.
-- Must not have: 미래 파일·함수 단위의 과도한 고정, P3의 canonical 승격, 무상한 큐·버퍼·캐시, 라이브 증거 없는 gameplay PASS, 미병합 선행 계약 의존.
+- In scope: Node/Edge/Evidence/coverage/transition/migration/DAG 계약, stable ID와 enum, JSON-safe validator, positive/negative fixtures, opcode·EXE RE·UI/render·data audit adapter, deterministic ledger/import report, current docs/state와 GitHub/Jira 진행 증거 동기화.
+- Out of scope: 제품 server runtime, client/EXE, DB·port 47900·GUI·라이브 QA, 개별 gameplay 의미 확정, canonical/P3 승격, 다른 축 구현, dependency 추가, issue close와 merge.
+- Must not have: 외부 schema dependency, raw proprietary bytes, 원본 audit 수정, legacy P0/P1/P2/P3의 O0/R1/I2/P3 자동 변환, import 누락 은폐, 입력값을 노출하는 오류, 재귀 graph walk, 생성물이 source audit에 자기 포함되는 경로.
 
 ### Allowed files
 
 - `.ai/{task.md,current-state.md,handoff.md,key-facts.md,ownership.md}`
-- `.omo/drafts/logh7-causal-ledger-master-design.md`
-- `.omo/plans/logh7-execution-plan-current.md`
+- `tools/causal-ledger/**`
+- `server/tests/logh7-causal-ledger.test.mjs`
 - `docs/{logh7-causal-ledger-master-design.md,logh7-document-index-current.md,logh7-roadmap-current.md}`
-- Protected: 사용자 소유 `.codex/config.toml`, 비밀 파일, `server/data/**`, `reference/**`, linked worktree, 위 목록 밖의 사용자·다른 에이전트 변경.
+- `.omo/plans/logh7-execution-plan-current.md`
+- Protected: 사용자 소유 `.codex/config.toml`, 비밀 파일, `server/data/**`, `reference/**`, 기존 audit producer와 source artifact, 위 목록 밖의 사용자·다른 에이전트 변경.
 
 ### 수용 기준
 
-- AC-1: 15개 축 각각에 책임·비범위·입력·출력·소유권·의존성·측정 가능한 완료 기준·검증 표면·위험 해제 조건이 있다.
-- AC-2: 공통 node/edge/evidence 스키마가 O0/R1/I2/P3, canonical/P3 분리, orphan·dangling edge·누락 provenance 자동 검출을 정의한다.
-- AC-3: 모든 큐·버퍼·캐시에 상한, 단위, 소유자, backpressure, 종료·OOM 동작, 관측 hook과 검증법이 있다.
-- AC-4: 대표 수직 슬라이스가 실제 입력→클라이언트 상태→wire→서버 권위·영속성→응답·push→클라이언트 상태→픽셀·오디오→다음 입력을 한 correlation chain으로 정의한다.
-- AC-5: 의존성 DAG는 merge된 선행 계약만 소비하고, 병렬 가능한 축과 stateful 직렬 자원을 구분하며, 플레이·픽셀·오디오에 가까운 독립 축을 우선한다.
-- AC-6: 권리·clean-room·보안·패키징 경계와 사람 승인 게이트가 기술적 확정 상태와 분리된다.
-- AC-7: 독립 reviewer가 설계 diff와 근거를 확인하고 `pass|fix|redo`로 판정하며, placeholder·TODO·stub·미구현 분기가 0건이다.
-- AC-8: 변경 Markdown 검증, `git diff --check`, 링크·tracker 매핑 검사, scoped diff review가 exit 0이다.
-- AC-9: 설계가 commit·push되고 GitHub #216을 연결한 PR이 생성되며, merge와 제품 구현은 사용자 승인 대기 상태다.
+- AC-1: `1.0.0` 계약이 필수 필드·고정 key·type·enum·stable ID·semantic version·migration receipt와 D0/A01~A15 DAG를 기계 판독 형식으로 정의한다.
+- AC-2: validator가 JSON 비호환 값, 전역 duplicate ID, orphan coverage/node, dangling endpoint/evidence, dependency cycle/self/unknown, 누락 owner/provenance/AC/evidence, invalid direction을 구조화 오류로 거부한다.
+- AC-3: P3 canonical, P3→canonical dependency, I2/P3/Unknown/contradicted의 canonical 전이, reviewer·`approvalRef`·source hash 없는 승격을 거부한다.
+- AC-4: opcode Markdown, EXE RE, UI/render, data audit의 고정 분모를 전부 stable source pointer/line과 raw-record SHA-256으로 import하고 `source = imported + excluded + rejected`, rejected 0, loss 0을 증명한다.
+- AC-5: 같은 입력은 byte-identical ledger/report를 만들며 source hash mismatch, record drift, artifact 부재를 실패시킨다. generated output은 `server/content/generated` 밖에 둔다.
+- AC-6: positive fixture와 필수 negative fixture, 12,000-node 비재귀 graph 검증, bounded input cap을 focused `node:test`가 fresh 통과한다.
+- AC-7: 오류는 `ERR_CAUSAL_LEDGER_SCHEMA`와 `{path, reason, id?}`만 노출하고 raw 입력값·비밀을 포함하지 않는다.
+- AC-8: targeted test, 변경 파일 verification, 전체 `npm test`, deterministic regeneration/diff, placeholder·skip/only·scoped diff 검사가 통과하고 독립 reviewer BLOCKER/MAJOR가 0이다.
+- AC-9: PR이 GitHub #217/Jira LOGH7-214를 연결하고 tracker/doc/state/handoff가 실제 branch·HEAD·검증 상태와 일치한다. issue close와 merge는 수행하지 않는다.
 
 ### 검증 명령·증거
 
-- `bash scripts/agent/verify-changes.sh --file <변경 Markdown>`
-- `git diff --check`
-- `rg`로 15축/GitHub/Jira 매핑, placeholder·TODO·stub·skip/only, 무상한 resource 계약 누락 검사
-- GitHub #216~#231과 Jira LOGH7-213~228 current read-back
-- 독립 architect·security reviewer·critic 결과를 원문 근거와 재대조
-- 제품 코드 미변경이므로 server/Python/live 테스트는 미실행으로 보고
+- RED/GREEN: `cd server && node --test tests/logh7-causal-ledger.test.mjs`
+- changed file: `bash scripts/agent/verify-changes.sh --file <path>`
+- full regression: `cd server && npm test`
+- deterministic CLI를 두 번 실행해 ledger/report hash와 working-tree diff를 비교
+- `git diff --check`, allowlist 대조, `rg` placeholder·stub·skip/only 검사, staged diff review
+- GitHub #217·PR과 Jira LOGH7-214 current read-back; 제품·client 가시 변경이 없어 live QA는 미실행(비적용)
 
 ### 사람 승인 필요 지점
 
-- 마스터 설계 내용과 PR merge.
-- 승인 설계를 바꾸는 아키텍처·권리 결정, 각 바이너리 재베이스라인, main 직접 commit, force push, 히스토리 재작성, 비밀 접근, 데이터 삭제.
-- 설계 승인 뒤 자식 이슈별 구현·검증·commit·push·PR·tracker 동기화는 승인된 설계 범위에서 계속 수행하되 merge는 사용자 승인 필요.
+- A01 PR merge는 2026-07-20 사용자 사전 승인됨. 검증·리뷰·CI 실패 시에는 병합하지 않는다.
+- breaking schema/migration, 새 dependency, canonical/P3 승격, 승인 DAG 변경, 제품 runtime 소비, EXE patch/rebaseline, 권리·보안 결정, main 직접 commit, force push, 히스토리 재작성, 비밀 접근, 데이터 삭제.
 
 ---
 

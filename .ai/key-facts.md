@@ -2,9 +2,9 @@
 # LOGH VII Key Facts (NIAH)
 
 ## Active contract
-- GitHub #216 / Jira LOGH7-213: 15-axis causal reverse-engineering ledger master design is the active gate (2026-07-20).
+- GitHub #216 / Jira LOGH7-213 master design is merged at `ec6d9b52`; A01 #217 / LOGH7-214 is the active gate (2026-07-20).
 - Children are GitHub #217~#231 / Jira LOGH7-214~228; each implementation must use one independent PR after its prerequisites merge.
-- Master design: `docs/logh7-causal-ledger-master-design.md` (`APPROVED-PENDING-MERGE`). User approval is recorded; product implementation remains paused until PR #232 merge read-back.
+- Master design: `docs/logh7-causal-ledger-master-design.md` (`APPROVED-MERGED`). A01 machine contract is `tools/causal-ledger/schema.json` version `1.0.0`; downstream waits for A01 merge.
 - Current branch/baseline: `peppone-choi/216-실제-구현` / `110718e12a1e0ec8bcad14cfe594e571e6c37b0e`.
 - Preserve user-owned `.codex/config.toml`: never read, modify, stage, or reset it.
 

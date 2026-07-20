@@ -1,10 +1,10 @@
 # LOGH VII 부활 - 실행 계획 (2026-07-17)
 
-## 2026-07-20 실행 오버레이: 전체 인과 원장 승인 게이트
+## 2026-07-20 실행 오버레이: A01 인과 원장 구현 게이트
 
-GitHub #216 / Jira LOGH7-213의 15축 전체 인과 원장을 현재 상위 작업으로 둔다. 마스터 설계 정본 후보는 `docs/logh7-causal-ledger-master-design.md`다. 사용자 승인과 설계 PR merge 전에는 자식 제품 구현을 시작하지 않는다.
+GitHub #216 / Jira LOGH7-213의 마스터 설계는 PR #232 merge `ec6d9b52`로 D0를 닫았다. 현재 작업은 A01 GitHub #217 / Jira LOGH7-214이며, 기계 판독 정본은 `tools/causal-ledger/schema.json`과 고정 hash source manifest다.
 
-승인 뒤 실행 순서는 `D0(설계 merge) → A01(schema) → dependency DAG의 병렬 파동 → A10(15축 독립 검증)`이다. 기존 P0→P1→P2→M4 증거와 구현은 각 축의 입력으로 보존한다. 같은 파동에서 가능한 축 중 실제 입력·플레이·픽셀·오디오에 가까운 경로를 먼저 진행한다. 미병합 선행 PR에 의존하는 후속 branch는 만들지 않는다.
+실행 순서는 `D0(완료) → A01(schema, 현재 검증/PR 단계) → dependency DAG의 병렬 파동 → A10(15축 독립 검증)`이다. A01 merge read-back 전에는 downstream branch를 만들지 않는다. 기존 P0→P1→P2→M4 증거와 구현은 각 축의 입력으로 보존한다.
 
 이 오버레이가 끝나는 조건은 설계 문서의 `최종 completion audit` 전수 통과다. PR 생성이나 테스트 통과만으로 종료하지 않는다.
 

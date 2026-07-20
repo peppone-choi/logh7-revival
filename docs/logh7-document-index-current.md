@@ -1,6 +1,6 @@
 # LOGH VII Current Document Index
 
-> **2026-07-20 설계 게이트:** GitHub #216 / Jira LOGH7-213의 마스터 설계는 [`logh7-causal-ledger-master-design.md`](logh7-causal-ledger-master-design.md)다. 사용자가 승인했으며 현재 상태는 `APPROVED-PENDING-MERGE`다. PR #232 merge 전에는 구현 권위가 아니고, merge 뒤 15축 자식 이슈의 공통 계약과 완료 감사 기준으로 승격한다.
+> **2026-07-20 설계 게이트:** GitHub #216 / Jira LOGH7-213의 마스터 설계는 [`logh7-causal-ledger-master-design.md`](logh7-causal-ledger-master-design.md)다. PR #232가 `ec6d9b52`로 merge돼 `APPROVED-MERGED`이며, A01의 기계 판독 정본은 `tools/causal-ledger/schema.json`이다.
 > **현재 라우팅 (2026-07-15):** 시작 권위는 아래 세 문서뿐이다. 핸드오프·로드맵·대시보드는 근거 또는 파생 상태이며 계획 권위가 아니다.
 
 > **현재 플레이어 경로:** 설치 폴더의 수정된 `g7mtclient.exe`를 직접 실행한다. 보조 런처·`ui_explorer`·overlay는 정상 경로가 아니며, 수정 도구 언어(Python 포함)는 제한하지 않는다. 직접 in-place 패치에도 원본 백업, source-hash guard, rollback 경로가 필수다.
@@ -76,7 +76,7 @@ use the current requirements, architecture, and plans for implementation and liv
 
 | Path | Role |
 | --- | --- |
-| `docs/logh7-causal-ledger-master-design.md` | Proposed 15-axis causal-ledger contract; becomes implementation authority only after explicit approval and merge. |
+| `docs/logh7-causal-ledger-master-design.md` | Approved and merged 15-axis causal-ledger contract; A01 implements its `1.0.0` machine contract under `tools/causal-ledger/`. |
 
 ## Derived Status And Reference Routing
 
