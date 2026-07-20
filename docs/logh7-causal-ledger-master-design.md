@@ -1,6 +1,6 @@
 # LOGH VII 전체 인과 원장 마스터 설계
 
-> 상태: **PROPOSED — 사용자 승인 전 제품 구현 금지**
+> 상태: **APPROVED-PENDING-MERGE — PR #232 merge 전 제품 구현 금지**
 > 설계 버전: `0.1.0`
 > 기준 checkout: `110718e12a1e0ec8bcad14cfe594e571e6c37b0e`
 > 적용 브랜치: `peppone-choi/216-실제-구현`
@@ -147,7 +147,7 @@
 | outcomes | accepted, rejected, failed, retry, reconnect edge를 분리 |
 | replay | idempotency key, dedupe window, duplicate outcome |
 | evidence | grade, confidence, provenance, evidence IDs |
-| validation | 양 endpoint 존재, direction 적합, 금지된 P3→canonical edge 아님 |
+| validation | 양 endpoint 존재, direction 적합, `edgeClass=dependency`이면 금지된 P3→canonical dependency 아님 |
 
 `edgeClass`는 `causal|dependency|evidence|lifecycle` 중 하나다. dependency cycle과 P3→canonical dependency 검사는 `edgeClass=dependency`에만 적용한다. `observes`, `requests`, `validates`, `depends-on`, `mutates`, `persists`, `emits`, `responds`, `broadcasts`, `stages`, `renders`, `plays`, `releases`, `recovers`, `supersedes`를 기본 verb로 사용한다. 새 class나 verb는 A01 schema 변경으로 추가한다.
 

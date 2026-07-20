@@ -2,7 +2,7 @@
 
 ## Active Contract: GitHub #216 / Jira LOGH7-213 마스터 설계 승인 게이트
 
-- Status: **ACTIVE — 2026-07-20 사용자 직접 지시. 설계 작성·검증·commit·push·PR 생성까지 승인됨. 제품 구현과 merge는 사용자 승인 전 금지.**
+- Status: **ACTIVE — 2026-07-20 사용자 설계 승인 및 PR #232 merge 승인 완료. PR #232가 fresh review/CI를 통과해 merge되기 전까지 제품 구현은 금지하며, merge 뒤 A01부터 승인된 DAG 순서로 진행한다.**
 - Problem: 기존 P0/M4 중심 계약은 GitHub #216과 자식 #217~#231(Jira LOGH7-213~228)이 요구하는 15축 전체 인과 원장, clean-room 재구현 계약, 전수 완료 기준을 포괄하지 않는다.
 - Goal: 15개 축의 책임·비범위, 입출력·소유권, 공통 불변식, node/edge/evidence 계약, 의존성 DAG, 실패 전파, 데이터 흐름, 권리·clean-room 경계, 대표 수직 슬라이스, 측정 가능한 수용 기준, 검증 표면, 위험·해제 조건을 한 마스터 설계로 확정한다.
 - User value: 자식 이슈를 독립 PR로 구현해도 입력부터 실제 픽셀·오디오와 다음 입력 가능 상태까지 끊김 없이 합성할 수 있고, 독점 코드 이식 없이 합법적으로 확보한 리소스로 대표 흐름을 재구현할 수 있다.
@@ -13,7 +13,7 @@
 - Source B: 기존 `.ai/task.md` — 라이브 검증 3종과 P0/M4 구현을 우선 실행.
 - Conflict: 현재 착수 우선순위와 제품 구현 허용 여부가 다르다.
 - Safe temporary behavior: 기존 계약을 이 절 아래의 보존 기록으로 유지하되 실행을 중지하고, #216 설계·문서·상태 작업만 수행한다.
-- Human decision required: 마스터 설계 PR merge와 설계 승인. 승인 뒤에만 자식 이슈 구현 루프를 시작한다.
+- Human decision required: 해결됨 — 2026-07-20 사용자가 마스터 설계와 PR #232 merge를 승인했다. 자식 이슈별 merge는 각각 별도 사용자 승인이 필요하다.
 
 ### 범위 / 비범위
 

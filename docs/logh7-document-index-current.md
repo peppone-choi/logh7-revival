@@ -1,6 +1,6 @@
 # LOGH VII Current Document Index
 
-> **2026-07-20 설계 게이트:** GitHub #216 / Jira LOGH7-213의 제안 마스터 설계는 [`logh7-causal-ledger-master-design.md`](logh7-causal-ledger-master-design.md)다. 현재 상태는 `PROPOSED`이며 사용자 승인·PR 병합 전에는 구현 권위가 아니다. 승인 뒤 15축 자식 이슈의 공통 계약과 완료 감사 기준으로 승격한다.
+> **2026-07-20 설계 게이트:** GitHub #216 / Jira LOGH7-213의 마스터 설계는 [`logh7-causal-ledger-master-design.md`](logh7-causal-ledger-master-design.md)다. 사용자가 승인했으며 현재 상태는 `APPROVED-PENDING-MERGE`다. PR #232 merge 전에는 구현 권위가 아니고, merge 뒤 15축 자식 이슈의 공통 계약과 완료 감사 기준으로 승격한다.
 
 > **현재 라우팅 (2026-07-15):** 시작 권위는 아래 세 문서뿐이다. 핸드오프·로드맵·대시보드는 근거 또는 파생 상태이며 계획 권위가 아니다.
 
