@@ -2,6 +2,7 @@
 
 | Agent | Task | Branch/worktree | Owned files | Status | Updated at |
 |---|---|---|---|---|---|
+| Claude Code (executor) | Wave-1 인과 원장 축 A02/A04/A06/A09/A13 (#218/#220/#222/#225/#229 / LOGH7-215/217/219/223/226) | peppone-choi/wave1-axes (PR 준비, merge 미승인) | `tools/causal-ledger/axes/a{02,04,06,09,13}-*.mjs` (5) + tests (5) + generated (12) | implemented·verified | 2026-07-21 |
 | Codex (root; 소유 해제) | A01 인과 원장 스키마·분류·누락 검출기 (#217 / LOGH7-214) | PR #233 merged `43ee007a` | — | done | 2026-07-20 |
 | Claude Code (메인+서브에이전트) | P0 게이트 (LOGH7-43~47) — batch #1: 43·47 완료(PR #174 merge 4564f427), 45/44/46 Wine-후속 이관 | codex/logh7-43-p0-evidence (PR #174 merged) | — (43·47 완료·병합; 45/44/46은 Wine 호스트 후속 배치) | in_progress | 2026-07-17 |
 | Claude Code (메인+서브에이전트, 2026-07-17 사용자 승인으로 Codex에서 인수) | 상태 정합성 복구 | codex/state-consistency-recovery | — (소유 해제; 외부 manifest 적용 확인·상태 종결, 전달은 승인 사슬로 진행) | done | 2026-07-17 |

@@ -1,5 +1,20 @@
 # Agent Handoff
 
+## 2026-07-21 Wave-1 A02/A04/A06/A09/A13 구현·검증 완료
+
+- Goal: A01 frozen schema를 소비하는 5개 축(A02 input/UI, A04 protocol, A06 data/P3, A09 lineage, A13 rights)의 axis-specific node/edge/evidence를 shared bootstrap pattern으로 납품한다.
+- Result: 5개 모듈이 A01 schema 검증을 통과하고 독립 테스트 전부 green. A02 27 nodes 21/21 tests, A04 66 nodes+44 edges 7/7 tests, A06 170 nodes 13/13 tests, A09 18 nodes 4/4 tests, A13 4 nodes 7/7 tests. A01 regression 9/9 pass. Deterministic CLI 2회 실행 byte-identical, frozen files untouched, generated output delta-only.
+- Branch: `peppone-choi/wave1-axes`, single PR `peppone-choi/wave1-axes → origin/main`. push authorized, merge NOT yet approved.
+- Files changed: `tools/causal-ledger/axes/a{02,04,06,09,13}-*.mjs` (5), `server/tests/logh7-causal-ledger-a0{2,4,6,9,13}.test.mjs` (5), `tools/causal-ledger/generated/a{02,04,06,09,13}-*.json` (12).
+- Commands executed: `node --test tests/logh7-causal-ledger-a0*.test.mjs` 각 exit 0, A01 test 9/9 exit 0, verify-changes.sh 각 exit 0, git diff --check exit 0, frozen files diff empty.
+- Verification result: focused 5×pass, deterministic regeneration hash match, A01 regression preserved, no frozen file touch, no code/test leftover (console.log/TODO/debugger).
+- Independent review: 초기 A02 WndProc hex 날조 적발 → 실제 UI 기록 + explicit Blocked로 정정, 재검증 pass. 어떤 node도 canonical 미승격, live behavior 주장 0.
+- Known failures: 없음 (this wave).
+- Remaining work: A03 (needs A01+A02+A04+A06 merge), A05 (needs A01+A04+A06 merge) 착수 eligible. Wave-1 PR merge 승인 대기.
+- Files to read first: `.ai/task.md`, `tools/causal-ledger/axes/a02-input-ui-fsm.mjs`, `tools/causal-ledger/axes/a04-protocol-session.mjs`, `tools/causal-ledger/axes/a06-data-assets-provenance.mjs`, `tools/causal-ledger/axes/a09-lineage-failure-safety.mjs`, `tools/causal-ledger/axes/a13-rights-and-redistribution.mjs`, 해당 test 파일들.
+
+---
+
 ## 2026-07-20 completed handoff — A01 #217 / LOGH7-214
 
 - Goal: 모든 후속 축이 소비할 `1.0.0` node/edge/evidence/coverage/transition/migration/DAG 계약, fail-closed validator와 lossless audit adapter를 구현한다.

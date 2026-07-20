@@ -1,5 +1,8 @@
 # Current State
 
+- Updated at: 2026-07-21
+- Wave-1 A02/A04/A06/A09/A13 구현·검증 완료: branch `peppone-choi/wave1-axes`, 단일 PR 준비, merge 미승인. A02 21/21 pass, A04 7/7 pass, A06 13/13 pass, A09 4/4 pass, A13 7/7 pass, A01 regression 9/9 pass. 공유 bootstrap pattern(importSources→append→coverage attach→validateLedger) deterministic 재생성 확인, A01 frozen files untouched, generated output delta-only. A03/A05 착수 eligible.
+
 - Updated at: 2026-07-20
 - Completed contract: A01 GitHub #217 / Jira LOGH7-214 인과 원장 스키마·분류·누락 검출기. PR #233는 `origin/main@43ee007a`로 merge됐다.
 - Implementation: `tools/causal-ledger/`에 version `1.0.0` fixed-key schema, iterative fail-closed validator, exact DAG, source manifest, 네 adapter와 deterministic CLI가 있다. 출력은 기존 data audit 자기 포함을 피하려 `tools/causal-ledger/generated/`에 둔다.
