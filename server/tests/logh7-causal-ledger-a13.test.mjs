@@ -14,10 +14,10 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { spawn } from 'node:child_process';
-import { join, resolve } from 'node:path';
+import { join, resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const REPO_ROOT = resolve('C:/Users/user/orca/workspaces/logh7-revival/216-실제-구현');
+const REPO_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const AXIS_ID = 'A13';
 
 async function importAxisModule() {
@@ -33,11 +33,11 @@ async function runAxisBuildInProcess() {
       stdio: ['ignore', 'pipe', 'pipe'],
     });
 
-    let stdout = '';
+    const stdoutChunks = [];
     let stderr = '';
 
     proc.stdout.on('data', (data) => {
-      stdout += data.toString();
+      stdoutChunks.push(data);
     });
     proc.stderr.on('data', (data) => {
       stderr += data.toString();
@@ -48,6 +48,7 @@ async function runAxisBuildInProcess() {
         reject(new Error(`Build failed with exit code ${code}: ${stderr}`));
       } else {
         try {
+          const stdout = Buffer.concat(stdoutChunks).toString('utf8');
           const result = JSON.parse(stdout);
           resolve(result);
         } catch (e) {

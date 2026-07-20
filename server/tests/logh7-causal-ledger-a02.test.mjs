@@ -120,12 +120,12 @@ test('A02 axis — client input, UI, FSM — RED: module loads and builds valid 
     assert.ok(coverageWithA02.length > 0, 'should have coverage records targeting A02 nodes');
   });
 
-  await t.test('A02 evidence records reference ui-coordinate-audit source', async () => {
+  await t.test('A02 evidence records reference master-design source (non-base)', async () => {
     const ledger = await buildA02Ledger(REPO_ROOT);
-    const a02Evidence = ledger.evidence.filter(e => e.evidenceId.startsWith('run:ui-coordinate-audit:'));
-    assert.ok(a02Evidence.length > 0, 'should have A02 evidence records from ui-coordinate-audit');
+    const a02Evidence = ledger.evidence.filter(e => e.evidenceId.startsWith('run:master-design:'));
+    assert.ok(a02Evidence.length > 0, 'should have A02 evidence records from master-design');
     for (const ev of a02Evidence) {
-      assert.strictEqual(ev.source.path, 'server/content/generated/logh7-ui-coordinate-audit.json');
+      assert.strictEqual(ev.source.path, 'docs/logh7-causal-ledger-master-design.md');
       assert.ok(ev.source.recordPointer.length > 0, 'evidence should have record pointer');
     }
   });

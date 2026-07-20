@@ -1,10 +1,11 @@
 import { test } from 'node:test';
 import { strict as assert } from 'node:assert';
 import { spawn } from 'node:child_process';
-import { join, resolve } from 'node:path';
+import { join, resolve, dirname } from 'node:path';
 import { readFile } from 'node:fs/promises';
+import { fileURLToPath } from 'node:url';
 
-const REPO_ROOT = resolve('C:\\Users\\user\\orca\\workspaces\\logh7-revival\\216-실제-구현');
+const REPO_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const axisModulePath = join(REPO_ROOT, 'tools/causal-ledger/axes/a04-protocol-session.mjs');
 
 // Helper: run axis build in a child process
@@ -16,10 +17,10 @@ async function runAxisBuildInChild(repoRoot) {
       env: { ...process.env, NODE_OPTIONS: '' },
     });
 
-    let stdout = '';
+    const stdoutChunks = [];
     let stderr = '';
 
-    proc.stdout.on('data', (chunk) => { stdout += chunk.toString(); });
+    proc.stdout.on('data', (chunk) => { stdoutChunks.push(chunk); });
     proc.stderr.on('data', (chunk) => { stderr += chunk.toString(); });
 
     proc.on('close', (exitCode) => {
@@ -27,10 +28,11 @@ async function runAxisBuildInChild(repoRoot) {
         reject(new Error(`Axis build failed with exit code ${exitCode}\nstderr: ${stderr}`));
       } else {
         try {
+          const stdout = Buffer.concat(stdoutChunks).toString('utf8');
           const ledgerJson = JSON.parse(stdout);
           resolve(ledgerJson);
         } catch (e) {
-          reject(new Error(`Failed to parse axis build output: ${e.message}\nstdout: ${stdout}`));
+          reject(new Error(`Failed to parse axis build output: ${e.message}`));
         }
       }
     });

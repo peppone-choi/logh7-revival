@@ -1,4 +1,4 @@
-/**
+﻿/**
  * A02 Axis: Client input, UI, FSM
  *
  * Builds the causal ledger axis for client input surfaces (WndProc, DirectInput,
@@ -84,15 +84,21 @@ export async function buildA02Ledger(repoRoot) {
   // ========================================================================
   // Step 2: Read axis-specific source data
   // ========================================================================
+  const designPath = join(repoRoot, 'docs/logh7-causal-ledger-master-design.md');
+  const designContent = readFileSync(designPath, 'utf-8');
+  // LF-normalize for deterministic cross-platform hashing
+  const designNormalized = designContent.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+  const designHash = sha256(designNormalized);
+  
+  // Also read audit for backward compatibility with node definitions
   const auditPath = join(repoRoot, 'server/content/generated/logh7-ui-coordinate-audit.json');
   const auditContent = readFileSync(auditPath, 'utf-8');
   const auditData = JSON.parse(auditContent);
-  const auditHash = sha256(auditContent);
 
   // ========================================================================
-  // Step 3: Create evidence from ui-coordinate-audit
+  // Step 3: Create evidence from master-design.md (non-base documentary source)
   // ========================================================================
-  const a02EvidenceId = 'run:ui-coordinate-audit:a02-import';
+  const a02EvidenceId = 'run:master-design:a02-input-ui-fsm';
   const a02Evidence = {
     schemaVersion: CONTRACT.schemaVersion,
     evidenceId: a02EvidenceId,
@@ -100,13 +106,13 @@ export async function buildA02Ledger(repoRoot) {
     producer: 'logh7-ui-explorer',
     reviewer: 'A02-causal-ledger',
     source: {
-      path: 'server/content/generated/logh7-ui-coordinate-audit.json',
-      sha256: auditHash,
-      sizeBytes: Buffer.byteLength(auditContent),
-      lineage: 'ui-coordinate-audit-snapshot',
+      path: 'docs/logh7-causal-ledger-master-design.md',
+      sha256: designHash,
+      sizeBytes: Buffer.byteLength(designNormalized),
+      lineage: 'master-design-snapshot',
       rights: 'unknown',
-      recordPointer: '/sources',
-      recordSha256: auditHash,
+      recordPointer: '/A02',
+      recordSha256: designHash,
       legacyMetadata: {
         sourceCount: auditData.summary?.sourceCount ?? 0,
         coordinateCandidateCount: auditData.summary?.coordinateCandidateCount ?? 0,
@@ -514,6 +520,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
     process.exit(1);
   }
 }
+
 
 
 

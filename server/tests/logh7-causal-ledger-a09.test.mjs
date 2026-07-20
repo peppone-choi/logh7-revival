@@ -45,10 +45,10 @@ test('A09: CROSS-RUN determinism', async () => {
       cwd: REPO_ROOT,
       timeout: 30000,
     });
-    let stdout = '';
-    proc.stdout.on('data', (data) => { stdout += data.toString(); });
+    const chunks = [];
+    proc.stdout.on('data', (data) => { chunks.push(data); });
     proc.on('close', (code) => {
-      code === 0 ? resolve(stdout) : reject(new Error('Run1 failed'));
+      code === 0 ? resolve(Buffer.concat(chunks).toString('utf8')) : reject(new Error('Run1 failed'));
     });
     proc.on('error', reject);
   });
@@ -58,10 +58,10 @@ test('A09: CROSS-RUN determinism', async () => {
       cwd: REPO_ROOT,
       timeout: 30000,
     });
-    let stdout = '';
-    proc.stdout.on('data', (data) => { stdout += data.toString(); });
+    const chunks = [];
+    proc.stdout.on('data', (data) => { chunks.push(data); });
     proc.on('close', (code) => {
-      code === 0 ? resolve(stdout) : reject(new Error('Run2 failed'));
+      code === 0 ? resolve(Buffer.concat(chunks).toString('utf8')) : reject(new Error('Run2 failed'));
     });
     proc.on('error', reject);
   });
