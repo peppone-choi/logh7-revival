@@ -7,8 +7,8 @@
 - Fresh focused verification: `node --test tests/logh7-causal-ledger.test.mjs` 9/9 pass, exit 0. 실제 12,000-node/11,999-dependency chain과 self/cycle fixture를 비재귀 검증한다. CLI 2회 ledger/report byte-identical; SHA-256 ledger `220c0b3f...f2e5`, report `42c3b054...7507`.
 - Independent review: 최종 판정 PASS, BLOCKER 0 / MAJOR 0. 2026-07-20 사용자가 A01 PR의 검증 후 merge까지 사전 승인했다.
 - Full regression blocker: exact `npm test`는 300초 timeout. `npm test -- --test-force-exit`은 530 tests, 520 pass, 2 fail, 8 skip, exit 1; 실패는 기존 `logh7-packet-lab-proxy.test.mjs` 2건이며 해당 파일 단독 실행에서도 같은 2건과 120초 timeout을 재현했다. A01 focused test는 full run에서도 통과했다.
-- Current branch/baseline: `peppone-choi/217-ledger-schema`, base/HEAD 시작점 `ec6d9b520a17857831832f6941f8997ac252bd2c` (`origin/main`).
-- Tracker state: GitHub #217 OPEN/backlog, Jira LOGH7-214 `진행 중`·Highest·미배정. 구현 PR과 증거 코멘트 동기화 전이며 issue close는 하지 않는다.
+- Current branch/baseline: `peppone-choi/217-ledger-schema`, base `ec6d9b520a17857831832f6941f8997ac252bd2c`; implementation commits `7b2d7f37`, `bfcf3867`.
+- Tracker state: PR #233 OPEN/ready, GitHub #217 OPEN/backlog, Jira LOGH7-214 `진행 중`·Highest·미배정. GitHub/Jira description과 증거 comment를 동기화했고 issue close는 하지 않는다. PR CI `test`는 pass, CodeRabbit은 이 기록 시점 pending이다.
 - Preserved concurrent change: 사용자 소유 `.codex/config.toml` dirty 변경은 읽거나 수정·stage하지 않는다.
 - Evidence gaps preserved: 함대 마커/선택, 0x032f 도달, Warp, 실제 행성 렌더, 정적 데이터, clock/RNG/replay, 제한 없는 자원, 권리 Unknown은 설계가 닫은 사실이 아니라 각 축의 차단 증거다.
 - Vault sync: 현재 머신의 `LOGH7_VAULT_DIR`가 unset이므로 옵시디언 볼트는 식별·갱신하지 못했다.
