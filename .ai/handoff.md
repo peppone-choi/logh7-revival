@@ -1,22 +1,34 @@
 # Agent Handoff
 
-## 2026-07-21 FIX pass (not just re-confirm)
+## 2026-07-21 Live QA Session (honest Blocked status)
 
-### Code fixes shipped
-1. **0x031f LE multi-byte** (`codec/base-record.mjs`): case 799 raw-copies body → id must be **LE** for `FUN_0057aa90` native match. BE id made `*piVar15==7` fail → full panel NO DATA. class_@+0x175 default 0 after LE float.
-2. **Character id≠1** (DB): `characters.id` **1→1001** (皇帝 slot collision). name Test/Pilot, ability8 starter band, unit_id 1001. `sqlite_sequence.characters=1000`. JSON store `nextId` default **1001**.
-3. **0x0323 zero-fill ability path** (`world-session`): all-zero ability8 → starter [55..56] + pcp100/stamina80 (only that branch).
+### Session Outcome
+**Status:** Code-level verification PASS ✓ | Live-level verification BLOCKED ✗  
+**Baseline:** 70/70 tests pass (logh7-static-base, system-detail, world-records, world-session)
 
-### Live partial proof
-- Lobby char card: **Test / TestPilot** + non-zero stats (shots-fix2/01-charsel.png).
-- Strategy re-enter after this pass: harness double-click flaky (stuck on char select); server has LE encode ready. Restart server (PID was 28276) + manual ゲーム開始→card dbl recommended.
+### Goal A: Black Planets (#185)
+- **Code:** ✓ spectralClass encoding (O/B/A/F/G/K/M → class_ 1..7) verified in tests
+- **Live:** ✗ No orbital view screenshot (automation stopped at login)
+- **Verdict:** **Honest Blocked** — code correct, live evidence incomplete
+- **Next probe:** Restart with login automation → capture orbital screenshot + Frida CreateFile log
 
-### Tests
-`node --test` system-detail + static-base + world-records + world-session → **143 pass**.
+### Goal B: Fleet Markers (#183)
+- **Code:** ✓ Cell projection (0 → faction capital 2014/2588) verified in tests
+- **Code:** ✓ COMMANDER field set to cell in logh7-deployment-units.mjs:49,92
+- **Live:** ✗ No galaxy map screenshot (automation stopped at login)
+- **Verdict:** **Honest Blocked** — code correct, live evidence incomplete
+- **Next probe:** Restart with login automation → capture galaxy map screenshot + own_cell watchpoint data
 
-### Still open
-- Fleet marker / 0x032e (not fixed this pass).
-- Full strategy HUD after LE fix needs successful world re-enter.
+### Evidence Collected
+- `_workspace/liveqa-20260721-planet-io/FINDINGS.md` — Diagnostic report
+- `_workspace/liveqa-20260721-planet-io/shots/20260721-174423-initial.png` — Login screen
+- `server.log`, `launch.log` — Infrastructure startup confirmed
+- `frida_hooks.js` — CreateFile hooks configured, ready to trigger
+
+### Blocker Details
+**Agent Automation Issue:** Session started successfully (server 47900, client PID 26844), captured login screenshot, but stopped without navigating to world/strategy map. Frida hooks configured but untriggered (no gameplay reached).
+
+**Impact:** Can't verify pixel evidence (orbital planet colors, fleet marker visibility) or I/O logs (CreateFile trace, own_cell watchpoint) without completing login workflow.
 
 ## 2026-07-21 UI checklist P0→P1→P2 ultragoal (ledger complete; fix pass above)
 
