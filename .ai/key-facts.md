@@ -5,7 +5,7 @@
 - GitHub #216 / Jira LOGH7-213 master design merged at `ec6d9b52`; A01 #217 / LOGH7-214 merged at `43ee007a` (2026-07-20).
 - **Wave-1 A02/A04/A06/A09/A13 MERGED** (PR #236 @ ffeb70ce, 2026-07-21): CI `test` pass after 4 fixes (path portability, in-process determinism, a02 evidence source, UTF-8/Buffer). Tests: A02 21/21, A04 7/7, A06 13/13, A09 4/4, A13 7/7, A01 regression 9/9 all pass.
 - Master design: `docs/logh7-causal-ledger-master-design.md` (`APPROVED-MERGED`). A01 machine contract: `tools/causal-ledger/schema.json` v`1.0.0`. All axes follow shared bootstrap pattern (importSources→append→coverage-attach→validateLedger).
-- Current baseline: `origin/main@cfa7c253` (Wave 3 A07/A08/A12 MERGED, PR #242 — main에 10축 A02~A09·A12·A13). **216 완주 계약 ACTIVE** (2026-07-21): 잔여 축 파동별 병렬 구현·commit·PR·merge 반복, CI `test` 첫 시도 통과 연속. Wave 4(A11 gameplay·A14 security·A15 packaging) 진행 중, branch `peppone-choi/wave4-a11-a14-a15`. 남은 Wave 5(A10 synthesis)로 15축 완성. 축 생성 델타는 gitignore.
+- Current baseline: `origin/main@b6fd2968` (Wave 4 A11/A14/A15 MERGED, PR #243 — main에 13축 A02~A09·A11~A15). **216 완주 계약 ACTIVE** (2026-07-21): CI `test` 첫 시도 통과 연속. **Wave 5(A10 verification-matrix synthesis = 최종 축) 진행 중**, branch `peppone-choi/wave5-a10`. 병합 시 A01~A15 전 15축 완성 = 216 인과 원장 완주. 축 생성 델타는 gitignore.
 - Preserve user-owned `.codex/config.toml`: never read, modify, stage, or reset it.
 
 ## Design invariants
