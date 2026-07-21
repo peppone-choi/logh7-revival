@@ -1,32 +1,38 @@
 # Current Task
 
-## Active Contract: Ultragoal standing backlog — 배치 5장 자동 계속 (Windows-native)
+## Active Contract: UI 체크리스트 P0→P1→P2 전수 스윕 (ultragoal)
 
-- Status: **ACTIVE — 2026-07-21** 사용자 `/ultragoal` + 계약 프롬프트 승인.
-- Plan: `.omc/ultragoal/plans/standing-backlog-win-native/` (aggregate Claude/Grok goal; OMC stories G001–G008).
-- Goal: 원본 클라+자체 서버로 **in-game 월드 진입·기본 플레이**(함대 선택→이동→Warp)가 **fresh 라이브 증거**로 확인될 때까지 게이트 순 이슈를 **5개 배치**로 구현·검증·전달하고 배치마다 checkpoint 후 다음 5개 자동 계속. 가짜 완료·날조 금지.
-- Host: sole 워크트리; client/install `E:\logh7-revival`; lineage fail-closed; server `127.0.0.1:47900` 직렬; native Windows live; `LOGH7_TACTICAL_ENTRY` 기본 OFF.
-- Auth: 2026-07-17 상시 — commit/push/PR/merge/Jira·GitHub 증거/라이브. 금지: force push·main 직접·history rewrite·secrets·`server/data/**` 삭제·`.codex/config.toml`·reference 이식·subagent git reset/checkout/restore/stash/clean·`git add -A`.
-- Git baseline: branch `peppone-choi/sole` @ `d10143e7` (= `origin/main`, ahead/behind 0/0). Working tree clean at contract open.
+- Status: **DONE — 2026-07-21** ultragoal ledger 8/8 (honest **Blocked/Unknown**; no fake non-NO-DATA pixels).
+- Plan: `.omc/ultragoal/plans/ui-checklist-p0-p1-p2/` (aggregate; G001–G008).
+- Parent (resume later): `standing-backlog-win-native` — select→move/Warp; fleet still Blocked (0x032e=0).
+- Delivered (skeptic-corrected): **G001 Blocked** — owner@+0x04 only; **no owner→class_ invent**; scalars provisional. **G002** sticky enterWorld→0x0f02 + buildPlayerCharacterRecord; seed-less pcp stays 0; 皇帝 title strip; S-IV **Blocked** until seed+re-shot. G003 Unknown; G004–G006 Blocked/UNSEEN; checklist+binding map; tests exit 0.
+- Host: sole; client `E:\logh7-revival`; `127.0.0.1:47900`; tactical OFF. Auth 2026-07-17. Never force-push / secrets / data delete / `.codex/config.toml` / `git add -A`.
 
-### Batch #1 (exact 5) — 2026-07-21 갱신
+### Ultragoal stories (`ui-checklist-p0-p1-p2`)
 
-| # | Item | Tracker / path | AC (측정) | Status |
-|---|------|----------------|-----------|--------|
-| 1 | 함대 마커 / own_cell U1 | 0x0325 commander=+0x08 | 선택 가능 마커 **또는** Blocked+live 증거 | **G002 done (Blocked+evidence)**; 코드: commander 기본값 cell 정렬 구현 |
-| 2 | 검은 행성 정보 (0x031d) | 성계 뷰 검은 구 = 행성 비주얼 페이로드 | class_ 항성색 유지; diameter/revolution은 캐논 있을 때만; 날조 금지; 갭 문서화 | **구현 중** — 사용자 정본 의미 확정 |
-| 3 | 0x032f 멤버리스트 | 선행: 함대 선택 | 0x032e→0x032f | **G003 blocked** (0x032e=0) |
-| 4 | 이동/Warp 라이브 | 0x0b01 / 0x2b | 선택 후 라이브 | pending — G004/G005 (마커 선행) |
-| 5 | 조건부 zero-fill 배선 | 0x031f 소속 등 | galaxy.faction→소유 필드; tests green | **구현 중** |
-
-### Ultragoal stories
-G001 Contract (this bootstrap) → G002 FleetMarkerU1 → G003 OutfitParty032f → G004 Move0x0b01 → G005 Warp0x2b → G006 ZeroFillWire → G007 BatchLoop → G008 FinalGate (ai-slop + verify + code-review).
+| ID | P | Title | AC (한 줄) | Status |
+|----|---|-------|------------|--------|
+| G001 | P0 | BasePanel031f | **Blocked+binding**: owner@+0x04; +0x175 only if explicit; no invent | **complete** |
+| G002 | P0 | InfoView0323 | sticky bind tests; **Blocked** when seed lacks pcp; binding map | **complete** |
+| G003 | P0 | MapOwnerShipCount | Unknown consumer; no invent | **complete** |
+| G004 | P0 | FleetMarker032e | Blocked+evidence (markers 0 / 032e=0) | **complete** |
+| G005 | P1 | CommandGridOrbit | BLOCKED on G004 | **complete** |
+| G006 | P2 | TacticalFacilitySweep | T-*/P-* UNSEEN documented | **complete** |
+| G007 | docs | ChecklistHandoff | checklist + .ai state | **complete** |
+| G008 | gate | FinalGate | tests + quality-gate | **complete** |
 
 ### Stop AC
-월드 진입 + 함대 선택 + (이동 **또는** Warp) 라이브 성공, 또는 사람 중단. Wine-only P0(45/44/46) 이 호스트 완료 주장 금지.
+P0 G001–G004 각각 DONE 또는 honest Blocked+evidence, checklist P0 행 공백 사유 코드 근거로 고정, 또는 사람 중단.
 
-### Allowed files (배치 진행 중 확장 가능)
-`.ai/**`, `server/src/**`, `server/tests/**`, `tools/live/**`, `tools/**`(lineage/live), `docs/logh7-*.md`, 증거 `_workspace/**` / `.omo/live-qa/**`, `.omc/ultragoal/plans/standing-backlog-win-native/**`.
+### Allowed files
+`.ai/**`, `server/src/**`, `server/tests/**`, `tools/live/**`, `tools/**`(lineage/live/RE), `docs/logh7-*.md`, `_workspace/**`, `.omo/live-qa/**`, `.omc/ultragoal/plans/ui-checklist-p0-p1-p2/**`, standing-backlog plan 연계 메모.
+
+---
+
+## Parent Contract (not cancelled): Ultragoal standing backlog — 배치 5장
+
+- Plan: `standing-backlog-win-native`. Stop: world enter + fleet select + move **or** Warp live.
+- Batch #1: G002 FleetMarker **done Blocked+evidence**; G003 0x032f **blocked (0x032e=0)** until ui-checklist G004; G004/G005 move/Warp pending; G006 zero-fill overlaps ui G001.
 
 ---
 

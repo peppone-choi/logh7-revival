@@ -153,9 +153,12 @@ test('0x031f fixed slot: galaxy faction at elem+0x04 and P3 economy filled', () 
   const body = msg32Body(buildResponseInformationBaseInner({ bases: [aRec] }));
   // fixed: count@0, id@4, owner@8
   assert.equal(body.readUInt8(0), 1);
-  assert.equal(body.readUInt32BE(4), aRec.id);
+  assert.equal(body.readUInt32LE(4), aRec.id, 'LE id for FUN_0057aa90 native match');
   assert.equal(body.readUInt8(8), 0x02, 'ownership at element+0x04 for client FUN_004c32a0');
-  assert.equal(body.readUInt32BE(4 + 0x08), aRec.field08);
+  assert.equal(body.readUInt32LE(4 + 0x08), aRec.field08);
+  assert.equal(aRec.class_, undefined, 'no invented class_ from ownership (template not faction)');
+  assert.equal(eRec.class_, undefined, 'no invented class_ from ownership');
+  assert.equal(body.readUInt8(4 + 0x175), 0, 'class_@+0x175 default 0');
 });
 
 test('player cell 2588 resolves to the Valhalla base id instead of the old hardcoded id 1', () => {

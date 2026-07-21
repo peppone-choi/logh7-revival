@@ -61,7 +61,10 @@ export function build0030Body({ id, inner }) {
 }
 
 // C→S: 복호 body 를 파싱·검증한다. 실패 시 throw(경계에서만 검증, 프로토콜 위반은 연결 종료 사유).
-export function parse0030Body(body) {
+// allowChecksumMismatch: 라이브 관측(2026-07-21) — 로비 0x2009 가 구조적으로 유효한데
+// checksum 만 어긋나는 프레임이 있다(got≠expect, inner=0x2009+session). 완전 폐기는
+// 게임시작 경로를 막으므로 옵션으로 soft-accept 한다. soft 시 checksumMismatch=true.
+export function parse0030Body(body, { allowChecksumMismatch = false } = {}) {
   if (body.length < HEADER_LEN) throw new RangeError(`0030 body ${body.length} < ${HEADER_LEN}`);
   const checksum = body.readUInt16BE(OFF_CHECKSUM);
   const id = body.readUInt32BE(OFF_ID);
@@ -70,11 +73,12 @@ export function parse0030Body(body) {
     throw new RangeError(`0030 innerLen ${innerLen} > available ${body.length - HEADER_LEN}`);
   }
   const expect = compute0030Checksum(body, innerLen);
-  if (checksum !== expect) {
+  const checksumMismatch = checksum !== expect;
+  if (checksumMismatch && !allowChecksumMismatch) {
     throw new Error(`0030 checksum 불일치: got 0x${checksum.toString(16)} expect 0x${expect.toString(16)}`);
   }
   const inner = body.subarray(OFF_INNER, OFF_INNER + innerLen);
-  return { id, innerLen, inner, checksum };
+  return { id, innerLen, inner, checksum, expectChecksum: expect, checksumMismatch };
 }
 
 // 암호화된 body 를 TCP 프레임으로 감싼다.  [u16BE len=2+enc][u16BE 0x0030][enc]

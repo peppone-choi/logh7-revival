@@ -15,20 +15,26 @@
 //   정의한 후보 id와 정합한다.
 
 /**
- * @typedef {{ id: number, power: number, provisional: true }} OriginalCandidate
+ * @typedef {{
+ *   id: number,
+ *   power: number,
+ *   lastname: string,
+ *   firstname: string,
+ *   provisional: true,
+ * }} OriginalCandidate
  */
 
 /**
- * 잠정 후보 목록. id 만 와이어 정합에 쓰이고, power 는 0x2004 카드의 진영/camp
- * 표시용 최소 필드다. 이름/능력치는 의도적으로 비운다(날조 금지) — 0x2004 카드는
- * 이름이 없으면 `Char<storeId>` 로 폴백한다.
+ * 잠정 후보 목록. id 는 와이어 정합, power 는 0x2004 카드 진영(폼과 동일 2|3).
+ * lastname/firstname 은 정본 이름이 아니라 ORM 영속 게이트용 잠정 표기
+ * (createCharacterEntity 가 빈 이름을 거부 — 황제 폴백 방지). 원작 로스터 승격 시 교체.
  *
  * @type {OriginalCandidate[]}
  */
 export const ORIGINAL_CANDIDATES = [
-  { id: 501, power: 2, provisional: true }, // 잠정 후보 A (진영 2)
-  { id: 502, power: 3, provisional: true }, // 잠정 후보 B (진영 3)
-  { id: 503, power: 2, provisional: true }, // 잠정 후보 C (진영 2)
+  { id: 501, power: 2, lastname: 'Orig', firstname: '501', provisional: true },
+  { id: 502, power: 3, lastname: 'Orig', firstname: '502', provisional: true },
+  { id: 503, power: 2, lastname: 'Orig', firstname: '503', provisional: true },
 ];
 
 /** 서버가 광고하는 후보 오리지널 캐릭터 id 목록. */

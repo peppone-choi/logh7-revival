@@ -217,7 +217,7 @@ test('0x1008 생성 → 이후 0x2003 재요청의 0x2004 count가 1로 증가 (
   assert.equal(readResponseCode(before), CODE_LOBBY_RESP_INFO_CHAR);
   assert.equal(responseBody(before)[0], 0, '생성 전 information_count는 0이어야 함');
 
-  // 0x1008 커스텀 생성 (파싱→영속)
+  // 0x1008 커스텀 생성 (파싱→영속) — 테스트 벡터 category=0+이름 = 커밋 호환
   handleLobbyInner(makeReinhard(), 'acc1', store);
   assert.equal(store.getCharacters('acc1').length, 1);
 
@@ -225,6 +225,16 @@ test('0x1008 생성 → 이후 0x2003 재요청의 0x2004 count가 1로 증가 (
   const after = handleLobbyInner(makeInner(CODE_LOBBY_REQ_INFO_CHAR), 'acc1', store);
   assert.equal(readResponseCode(after), CODE_LOBBY_RESP_INFO_CHAR);
   assert.equal(responseBody(after)[0], 1, '생성 후 information_count는 1이어야 로비 잠금이 풀림');
+});
+
+test('0x1008 intermediate phase(1..3) 는 OK echo 만 하고 영속하지 않음', () => {
+  const store = makeTmpStore();
+  // Reinhard 바디를 복사해 category=2 로 바꿈
+  const draft = Buffer.from(makeReinhard());
+  draft.writeUInt32LE(2, 2); // body starts after u16 code
+  const resp = handleLobbyInner(draft, 'acc1', store);
+  assert.equal(readResponseCode(resp), CODE_CMD_GENERATE_CHARGE);
+  assert.equal(store.getCharacters('acc1').length, 0, 'phase 2 는 미영속');
 });
 
 // ─── 0x2008 캐릭터 삭제 ────────────────────────────────────────────────────────

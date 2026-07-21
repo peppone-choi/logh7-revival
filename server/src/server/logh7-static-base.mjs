@@ -186,6 +186,8 @@ export function buildInformationBaseRecordFromStatic(selected) {
   const population = Math.min(0xffffffff, Math.trunc(pop * 10000));
   const foodU = Math.min(0xffffffff, Math.trunc(food));
   const indU = Math.min(0xffffffff, Math.trunc(industry));
+  // +0x175 class_ = FUN_0057aa90 템플릿 idx 0..3 (0=성계/1=요새/2=행성/3=기지).
+  // 성계 기본 0 (base-record 미지정 → 0). 진영은 field04(0x02/0x03) — class_ 에 진영 날조 금지.
   return {
     id: selected.id,
     field04: ownership,

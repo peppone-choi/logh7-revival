@@ -3,6 +3,8 @@
 // 클라 thin-renderer: Command* 수신 → 서버 검증 → Notify* 브로드캐스트.
 // 순수 상태 모듈; TCP 는 playable-server / harness 가 담당.
 
+import { appendFileSync } from 'node:fs';
+import { join } from 'node:path';
 import {
   buildWorldEntryInners,
   buildInformationCharacterInner,
@@ -101,6 +103,16 @@ export function createWorldSession({
     seq += 1;
     const entry = { seq, type, from, payload };
     eventLog.push(entry);
+    // 조인 진단: 궤도 패널/0x031f 누락 재현 시 stdout/다른 서버 PID로 유실되지 않게 고정 파일에도 남긴다.
+    if (type === 'grid-init-spawn' || type === 'base-join' || type === 'session-login' || type === 'enter-world') {
+      try {
+        const line = `${JSON.stringify({ ts: new Date().toISOString(), event: type, from, ...((payload && typeof payload === 'object') ? payload : { payload }) })}\n`;
+        process.stdout.write(line);
+        appendFileSync(join(process.cwd(), 'data', 'join-debug.jsonl'), line);
+      } catch {
+        /* ignore */
+      }
+    }
     return entry;
   }
 
@@ -169,6 +181,13 @@ export function createWorldSession({
       face: character?.face ?? 0,
       rank: character?.rank ?? 0,
       ability8: Array.isArray(character?.ability8) ? character.ability8.slice(0, 8) : null,
+      // 0x0323 표시 스탯 sticky (시드에 있을 때만; 없으면 null → 클라 0/NO DATA 정직)
+      pcp: Number.isInteger(character?.pcp) ? character.pcp : null,
+      mcp: Number.isInteger(character?.mcp) ? character.mcp : null,
+      stamina: Number.isInteger(character?.stamina) ? character.stamina : null,
+      money: Number.isInteger(character?.money) ? character.money : null,
+      influence: Number.isInteger(character?.influence) ? character.influence : null,
+      titleName: character?.titleName ?? character?.title ?? null,
       authorityCards: normalizeAuthorityCards(character?.authorityCards),
     };
     players.set(connectionId, player);
@@ -236,6 +255,12 @@ export function createWorldSession({
 
   function buildPlayerCharacterRecord(player) {
     const selectedBase = findStaticBase({ cell: player.cell });
+    // 0x0323 sticky: enterWorld/session에 붙은 표시 스탯을 peer·rebuild 경로에도 동일 투영.
+    const titleRaw = player.titleName ?? player.title ?? null;
+    const safeTitle = (titleRaw != null && String(titleRaw).length > 0
+      && !/皇帝|emperor/i.test(String(titleRaw)))
+      ? String(titleRaw)
+      : null;
     return {
       characterId: player.characterId,
       gridUnitId: player.unitId,
@@ -246,6 +271,12 @@ export function createWorldSession({
       face: Number.isInteger(player.face) ? player.face : 0,
       rank: Number.isInteger(player.rank) ? player.rank : 0,
       abilities: player.ability8,
+      pcp: Number.isInteger(player.pcp) ? player.pcp : null,
+      mcp: Number.isInteger(player.mcp) ? player.mcp : null,
+      stamina: Number.isInteger(player.stamina) ? player.stamina : null,
+      money: Number.isInteger(player.money) ? player.money : null,
+      influence: Number.isInteger(player.influence) ? player.influence : null,
+      title: safeTitle,
       online: true,
       officerCount: Math.max(1, Number.isInteger(player.officerCount) ? player.officerCount : 0),
     };
@@ -350,6 +381,10 @@ export function createWorldSession({
       }
     }
     const seedAbilities = Array.isArray(seed?.ability8) ? seed.ability8 : null;
+    const seedInt = (obj, key) => {
+      const v = obj?.[key];
+      return Number.isInteger(v) ? v : null;
+    };
     if (seed) {
       p.power = Number.isInteger(seed.power) ? seed.power : p.power;
       p.lastname = seed.lastname ?? p.lastname;
@@ -357,6 +392,15 @@ export function createWorldSession({
       p.face = Number.isInteger(seed.face) ? seed.face : p.face;
       p.rank = Number.isInteger(seed.rank) ? seed.rank : p.rank;
       p.ability8 = seedAbilities ? seedAbilities.slice(0, 8) : p.ability8;
+      // sticky: grid-init 0x0323(buildGridInitializeSpawnInners / buildPlayerCharacterRecord)가 읽음
+      p.pcp = seedInt(seed, 'pcp') ?? p.pcp ?? null;
+      p.mcp = seedInt(seed, 'mcp') ?? p.mcp ?? null;
+      p.stamina = seedInt(seed, 'stamina') ?? p.stamina ?? null;
+      p.money = seedInt(seed, 'money') ?? p.money ?? null;
+      p.influence = seedInt(seed, 'influence') ?? p.influence ?? null;
+      if (seed.titleName != null || seed.title != null) {
+        p.titleName = seed.titleName ?? seed.title;
+      }
       if (Array.isArray(seed.authorityCards)) {
         p.authorityCards = normalizeAuthorityCards(seed.authorityCards);
       }
@@ -381,6 +425,22 @@ export function createWorldSession({
       spotResolverBase: selectedBase?.id ?? 0,
     });
 
+    // 0x0323: sticky 스탯. ability 가 전부 0 이면 표시용 스타터 밴드(동맹 함장급 완만) —
+    // 라이브 카드/시드가 0-fill 이라 패널 전칸 NO DATA 가 되는 경로를 막는다(캐논 황제 스탯 아님).
+    let abilitiesOut = seedAbilities ?? p.ability8;
+    const abilitiesAllZero = Array.isArray(abilitiesOut) && abilitiesOut.length >= 8
+      && abilitiesOut.every((v) => !Number(v));
+    if (abilitiesAllZero) {
+      abilitiesOut = [55, 50, 52, 48, 60, 58, 54, 56];
+      p.ability8 = abilitiesOut.slice();
+    }
+    // pcp/stamina/mcp 시드 컬럼이 없어도 표시 패널(S-IV)이 0/NO DATA 로 고착되지 않게
+    // 비-null 기본값을 sticky 한다. 시드 정수가 있으면 그대로 유지(날조 덮어쓰기 없음).
+    if (!Number.isInteger(p.pcp)) p.pcp = 100;
+    if (!Number.isInteger(p.mcp)) p.mcp = 100;
+    if (!Number.isInteger(p.stamina)) p.stamina = 80;
+    const lastnameOut = seed?.lastname ?? p.lastname ?? '';
+    const firstnameOut = seed?.firstname ?? p.firstname ?? '';
     const emits = buildWorldEntryInners({
       characterId: p.characterId,
       gridUnitId: p.unitId,
@@ -388,11 +448,17 @@ export function createWorldSession({
       power: seed?.power ?? p.power ?? 0,
       spot: selectedBase?.id ?? 0,
       fleets,
-      lastname: seed?.lastname ?? p.lastname ?? '',
-      firstname: seed?.firstname ?? p.firstname ?? '',
+      lastname: lastnameOut,
+      firstname: firstnameOut,
       face: Number.isInteger(seed?.face) ? seed.face : (Number.isInteger(p.face) ? p.face : 0),
       rank: Number.isInteger(seed?.rank) ? seed.rank : (Number.isInteger(p.rank) ? p.rank : 0),
-      abilities: seedAbilities ?? p.ability8,
+      abilities: abilitiesOut,
+      pcp: Number.isInteger(p.pcp) ? p.pcp : null,
+      mcp: Number.isInteger(p.mcp) ? p.mcp : null,
+      stamina: Number.isInteger(p.stamina) ? p.stamina : null,
+      money: Number.isInteger(p.money) ? p.money : null,
+      influence: Number.isInteger(p.influence) ? p.influence : null,
+      title: p.titleName ?? p.title ?? null,
       officerCount: Number.isInteger(p.officerCount) ? p.officerCount : 0,
     });
     // 전술 진입 시퀀스(off-default 게이트). 게이트 미설정이면 아무것도 덧붙이지 않아
@@ -660,6 +726,15 @@ export function createWorldSession({
         reqCode: code,
         respCode: readMsg32Code(staticBaseResp),
         responses: [{ targets: [connectionId], inner: staticBaseResp, isMsg32: true }],
+        debug: {
+          selectorStatus: request.selectorStatus,
+          requestValue: request.requestValue,
+          systemId: request.systemId,
+          cell: request.cell,
+          reqBodyHex: Buffer.isBuffer(rawForDecode)
+            ? rawForDecode.subarray(0, Math.min(24, rawForDecode.length)).toString('hex')
+            : null,
+        },
       };
     }
 
@@ -684,6 +759,21 @@ export function createWorldSession({
         reqCode: code,
         respCode: readMsg32Code(response),
         responses: [{ targets: [connectionId], inner: response, isMsg32: true }],
+        debug: {
+          selectorStatus: request.selectorStatus,
+          requestValue: request.requestValue,
+          systemId: request.systemId,
+          cell: request.cell ?? fallbackCell,
+          playerCell: player?.cell ?? null,
+          selectedBaseId: selected?.id ?? null,
+          selectedName: selected?.name ?? null,
+          selectedGrid: selected?.grid ?? null,
+          planetCount: selected?.planetCount ?? 0,
+          emittedBaseCount: baseRecord ? 1 : 0,
+          reqBodyHex: Buffer.isBuffer(rawForDecode)
+            ? rawForDecode.subarray(0, Math.min(24, rawForDecode.length)).toString('hex')
+            : null,
+        },
       };
     }
 
@@ -737,6 +827,12 @@ export function createWorldSession({
           face: Number.isInteger(player.face) ? player.face : 0,
           rank: Number.isInteger(player.rank) ? player.rank : 0,
           abilities: Array.isArray(player.ability8) ? player.ability8 : null,
+          pcp: Number.isInteger(player.pcp) ? player.pcp : null,
+          mcp: Number.isInteger(player.mcp) ? player.mcp : null,
+          stamina: Number.isInteger(player.stamina) ? player.stamina : null,
+          money: Number.isInteger(player.money) ? player.money : null,
+          influence: Number.isInteger(player.influence) ? player.influence : null,
+          title: player.titleName ?? player.title ?? null,
           officerCount: Number.isInteger(player.officerCount) ? player.officerCount : 0,
           // 정본 갤럭시 팔레트/셀 — 스폰 경로가 SPACE-only 로 스테이징을 덮어 마커를 지우지 않게 한다.
           paletteObjects: getStrategicPaletteObjects(),
@@ -751,11 +847,23 @@ export function createWorldSession({
             .slice(1)
             .map(buildPlayerCharacterRecord),
         });
-        logEvent('grid-init-spawn', connectionId, { codes: listWorldEntryCodes(spawnInners) });
+        const joinDebug = {
+          playerCell: player.cell,
+          selectedBaseId: selectedBase?.id ?? null,
+          selectedName: selectedBase?.name ?? null,
+          selectedGrid: selectedBase?.grid ?? null,
+          planetCount: selectedBase?.planetCount ?? 0,
+          spot: selectedBase?.id ?? 0,
+          emitted031f: Number.isInteger(selectedBase?.id) && selectedBase.id > 0,
+          codes: listWorldEntryCodes(spawnInners).map((c) => `0x${Number(c).toString(16)}`),
+        };
+        logEvent('grid-init-spawn', connectionId, joinDebug);
         return {
           kind: 'grid-init-spawn',
           reqCode: code,
           responses: spawnInners.map((inner) => ({ targets: [connectionId], inner, isMsg32: true })),
+          // 우하단 궤도 패널 조인: baseId null이면 0x031f/0x0321 push 생략 → 스폿 공백.
+          debug: joinDebug,
         };
       }
       const ackInner = buildAdmissionResponseInner(code); // plain 0x0f03 (status=1) ack
@@ -945,6 +1053,12 @@ export function createWorldSession({
       face: player.face ?? 0,
       rank: player.rank ?? 0,
       ability8: Array.isArray(player.ability8) ? player.ability8.slice(0, 8) : null,
+      pcp: Number.isInteger(player.pcp) ? player.pcp : null,
+      mcp: Number.isInteger(player.mcp) ? player.mcp : null,
+      stamina: Number.isInteger(player.stamina) ? player.stamina : null,
+      money: Number.isInteger(player.money) ? player.money : null,
+      influence: Number.isInteger(player.influence) ? player.influence : null,
+      titleName: player.titleName ?? player.title ?? null,
       authorityCards: normalizeAuthorityCards(player.authorityCards),
     };
     players.set(p.connectionId, p);

@@ -78,11 +78,26 @@ class UiExplorerTests(unittest.TestCase):
             self.assertFalse(_taskkill_pid(4242))
         run_mock.assert_not_called()
 
-    def test_process_alive_uses_tasklist_on_windows(self) -> None:
-        completed = MagicMock(returncode=0, stdout='"g7mtclient.exe","4242","Console","1","12,000 K"\n')
+    def test_process_alive_uses_openprocess_on_windows(self) -> None:
+        fake_kernel = MagicMock()
+        fake_kernel.OpenProcess.return_value = 0x100  # non-null handle
         with patch("tools.logh7_ui_explorer.sys.platform", "win32"), patch(
-            "tools.logh7_ui_explorer.subprocess.run", return_value=completed
+            "tools.logh7_ui_explorer.ctypes.windll.kernel32", fake_kernel
         ):
+            self.assertTrue(_process_alive(4242))
+        fake_kernel.OpenProcess.assert_called()
+        fake_kernel.CloseHandle.assert_called_with(0x100)
+
+    def test_process_alive_tasklist_fallback_decodes_bytes(self) -> None:
+        completed = MagicMock(
+            returncode=0,
+            stdout=b'"g7mtclient.exe","4242","Console","1","12,000 K"\n',
+        )
+        fake_kernel = MagicMock()
+        fake_kernel.OpenProcess.return_value = 0  # force fallback
+        with patch("tools.logh7_ui_explorer.sys.platform", "win32"), patch(
+            "tools.logh7_ui_explorer.ctypes.windll.kernel32", fake_kernel
+        ), patch("tools.logh7_ui_explorer.subprocess.run", return_value=completed):
             self.assertTrue(_process_alive(4242))
 
     def test_start_launches_client_and_saves_session(self) -> None:

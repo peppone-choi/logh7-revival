@@ -30,13 +30,13 @@ test('0x031f codec uses fixed 0x604 body: count@0 + 4×0x180 slots@+4 (owner at 
   assert.equal(readMsg32Code(inner), 0x031f);
   assert.equal(body.length, 0x604);
   assert.equal(body.readUInt8(0), 4, 'outer count is capped at four');
-  // element[i] @ 4 + i*0x180
-  assert.equal(body.readUInt32BE(4), 1);
+  // element[i] @ 4 + i*0x180 — multi-byte LE (case 799 raw copy / native match)
+  assert.equal(body.readUInt32LE(4), 1);
   assert.equal(body.readUInt8(4 + 0x04), 11, 'owner/state at elem+0x04');
-  assert.equal(body.readUInt32BE(4 + 0x180), 2);
+  assert.equal(body.readUInt32LE(4 + 0x180), 2);
   assert.equal(body.readUInt8(4 + 0x180 + 0x04), 12);
-  assert.equal(body.readUInt32BE(4 + 2 * 0x180), 3);
-  assert.equal(body.readUInt32BE(4 + 3 * 0x180), 4);
+  assert.equal(body.readUInt32LE(4 + 2 * 0x180), 3);
+  assert.equal(body.readUInt32LE(4 + 3 * 0x180), 4);
   assert.ok(body.subarray(4 + 4 * 0x180).every((byte) => byte === 0) || body.length === 0x604);
 });
 
@@ -54,15 +54,33 @@ test('0x031f fixed slots place array caps at RE offsets inside each 0x180 elemen
   });
   const body = msg32Body(inner);
   const base = 4;
-  assert.equal(body.readUInt32BE(base), 0x01020304);
+  assert.equal(body.readUInt32LE(base), 0x01020304);
   assert.equal(body.readUInt8(base + 0x04), 0x02, 'affiliation ownership byte');
   assert.equal(body.readUInt8(base + 0x20), 30, 'transport count @+0x20');
-  assert.equal(body.readUInt32BE(base + 0x24), 1);
-  assert.equal(body.readUInt32BE(base + 0x24 + 29 * 4), 30);
+  assert.equal(body.readUInt32LE(base + 0x24), 1);
+  assert.equal(body.readUInt32LE(base + 0x24 + 29 * 4), 30);
   assert.equal(body.readUInt8(base + 0x9c), 30, 'outfit count');
   assert.equal(body.readUInt8(base + 0x12e), 6, 'budgeting count');
   assert.equal(body.readUInt8(base + 0x13c), 5, 'budget count');
   assert.equal(body.readUInt8(base + 0x164), 3, 'commodity count');
+});
+
+test('0x031f LE id matches native baseId and class_@0x175 is 0..3', () => {
+  const ownerOnly = buildResponseInformationBaseInner({
+    bases: [{ id: 7, field04: 0x02, field174: 1.0 }],
+  });
+  const explicit = buildResponseInformationBaseInner({
+    bases: [{ id: 8, field04: 0x03, class_: 3, field174: 1.0 }],
+  });
+  const oBody = msg32Body(ownerOnly);
+  const eBody = msg32Body(explicit);
+  const base = 4;
+  assert.equal(oBody.readUInt32LE(base), 7, 'LE id for case-799 native match');
+  assert.equal(oBody.readUInt8(base + 0x04), 0x02);
+  // float LE 1.0 + default class 0 → +0x175 is 0 (not BE mid-byte 0x80)
+  assert.equal(oBody.readUInt8(base + 0x175), 0, 'default class_ 0 (no owner invent)');
+  assert.equal(eBody.readUInt8(base + 0x175), 3, 'explicit class_ written at +0x175');
+  assert.equal(eBody.readUInt32LE(base), 8);
 });
 
 test('0x0321 codec preserves every P0 fixed size/stride/cap and nested BE fields', () => {

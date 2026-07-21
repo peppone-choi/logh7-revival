@@ -143,15 +143,22 @@ class INPUT(ctypes.Structure):
 
 
 def find_client_hwnd(expected_pid: int | None = None) -> int:
-    """G7MTClient 메인 창 탐색 (Toolhelp 프로세스명 + EnumWindows)."""
+    """G7MTClient 메인 창 탐색 (Toolhelp 프로세스명 + EnumWindows + 제목 폴백).
+
+    Win64에서 PROCESSENTRY32W.th32DefaultHeapID 는 ULONG_PTR(포인터 크기)여야 한다.
+    POINTER(c_ulong) 로 두면 구조체 크기가 어긋나 Process32Next 가 프로세스명을 깨뜨리고
+    pids 가 비어 'window not found' 가 반복된다(프로세스는 살아 있는데 하네스만 실패).
+    """
     TH32CS_SNAPPROCESS = 0x00000002
+    # ULONG_PTR: 32-bit=4, 64-bit=8
+    _ULONG_PTR = ctypes.c_uint64 if ctypes.sizeof(ctypes.c_void_p) == 8 else ctypes.c_uint32
 
     class PROCESSENTRY32W(ctypes.Structure):
         _fields_ = [
             ("dwSize", wintypes.DWORD),
             ("cntUsage", wintypes.DWORD),
             ("th32ProcessID", wintypes.DWORD),
-            ("th32DefaultHeapID", ctypes.POINTER(ctypes.c_ulong)),
+            ("th32DefaultHeapID", _ULONG_PTR),
             ("th32ModuleID", wintypes.DWORD),
             ("cntThreads", wintypes.DWORD),
             ("th32ParentProcessID", wintypes.DWORD),
@@ -168,14 +175,18 @@ def find_client_hwnd(expected_pid: int | None = None) -> int:
             pe.dwSize = ctypes.sizeof(PROCESSENTRY32W)
             if kernel32.Process32FirstW(snap, ctypes.byref(pe)):
                 while True:
-                    if "g7mtclient" in pe.szExeFile.lower() and (expected_pid is None or pe.th32ProcessID == expected_pid):
+                    name = pe.szExeFile.lower()
+                    if "g7mtclient" in name and (
+                        expected_pid is None or pe.th32ProcessID == expected_pid
+                    ):
                         pids.add(pe.th32ProcessID)
                     if not kernel32.Process32NextW(snap, ctypes.byref(pe)):
                         break
         finally:
             kernel32.CloseHandle(snap)
 
-    found = []
+    found: list[int] = []
+    title_fallback: list[int] = []
 
     @ctypes.WINFUNCTYPE(wintypes.BOOL, wintypes.HWND, wintypes.LPARAM)
     def enum_cb(hwnd, _lp):
@@ -185,14 +196,25 @@ def find_client_hwnd(expected_pid: int | None = None) -> int:
             return True
         pid = wintypes.DWORD()
         user32.GetWindowThreadProcessId(hwnd, ctypes.byref(pid))
+        if expected_pid is not None and pid.value != expected_pid:
+            return True
         if pid.value in pids:
             found.append(hwnd)
+            return True
+        # 프로세스 스냅샷 실패 시 창 제목 폴백 (한국어 타이틀 "은하영웅전설7" 등)
+        buf = ctypes.create_unicode_buffer(512)
+        user32.GetWindowTextW(hwnd, buf, 512)
+        title = buf.value or ""
+        if any(tok in title for tok in ("은하영웅", "英雄伝説", "G7MT", "logh7", "LOGH")):
+            title_fallback.append(hwnd)
         return True
 
     user32.EnumWindows(enum_cb, 0)
-    if not found:
-        raise RuntimeError("G7MTClient window not found")
-    return found[0]
+    if found:
+        return found[0]
+    if title_fallback:
+        return title_fallback[0]
+    raise RuntimeError("G7MTClient window not found")
 
 
 def client_geometry(hwnd: int):

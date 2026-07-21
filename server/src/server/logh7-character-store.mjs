@@ -43,12 +43,15 @@ export function createCharacterStore(storePath) {
       const parsed = JSON.parse(raw);
       // 최소 구조 보장
       if (!parsed || typeof parsed.accounts !== 'object') {
-        return { accounts: {}, nextId: 1 };
+        // nextId≥2: id=1 은 클라 황제/프리드리히 슬롯과 충돌 (HUD "皇帝" 폴백)
+        return { accounts: {}, nextId: 1001 };
       }
-      if (typeof parsed.nextId !== 'number') parsed.nextId = 1;
+      if (typeof parsed.nextId !== 'number' || parsed.nextId < 2) {
+        parsed.nextId = Math.max(1001, Number(parsed.nextId) || 1001);
+      }
       return parsed;
     } catch {
-      return { accounts: {}, nextId: 1 };
+      return { accounts: {}, nextId: 1001 };
     }
   }
 
