@@ -1,8 +1,8 @@
 # Current Task
 
-## Active Contract: 216 인과 원장 완주 — 잔여 축 A03·A05·A07·A08·A11·A12·A14·A15·A10 파동별 병렬 구현
+## Completed Contract: 216 인과 원장 완주 — 잔여 축 A03·A05·A07·A08·A11·A12·A14·A15·A10 파동별 병렬 구현·병합 (15축 완성)
 
-- Status: **ACTIVE — 2026-07-21 사용자 직접 지시** ("새 계약 잡고 병렬구현하고 커밋PR머지 반복. 216 실 구현을 끝낼 것"). 구현·commit·push·PR·merge를 파동마다 반복 수행하는 권한을 사용자가 명시 승인했다. force push·main 직접 commit·히스토리 재작성·`server/data/**` 삭제·비밀 접근·사용자 소유 `.codex/config.toml` 접근은 이 승인에서 제외·금지한다.
+- Status: **DONE — 2026-07-21 완주.** A01~A15 전 15축이 main(`7760c285`)에 구현·병합됐다(Wave 2~5 = PR #241/#242/#243/#244, Wave 1 = PR #236, 모두 CI `test` green). 전체 인과 원장 스위트 128 pass / 0 fail(15개 파일, 메인 세션 직접 실행). 각 축은 A01 base-append 패턴·LF-safe·in-process 결정성·날조 0(공백은 Unknown/Blocked). 원 계약: **ACTIVE — 2026-07-21 사용자 직접 지시** ("새 계약 잡고 병렬구현하고 커밋PR머지 반복. 216 실 구현을 끝낼 것"). 구현·commit·push·PR·merge를 파동마다 반복 수행하는 권한을 사용자가 명시 승인했다. force push·main 직접 commit·히스토리 재작성·`server/data/**` 삭제·비밀 접근·사용자 소유 `.codex/config.toml` 접근은 이 승인에서 제외·금지한다.
 - Goal: A01 스키마(`tools/causal-ledger/`) 위에 잔여 9개 축을 Wave-1과 동일한 독립 모듈 패턴(importSources base 부트스트랩 → 도메인 node/edge/evidence append → 기존 coverage `targetNodeIds` 부착 → `validateLedger(ledger,{manifest})`)으로 구현해 15축 인과 원장을 완성한다. A10은 전 축 synthesis라 최후.
 - 파동: **Wave 2 = A03·A05**(현재 eligible) → **Wave 3 = A07·A08·A12** → **Wave 4 = A11·A14·A15** → **Wave 5 = A10**. 축 모듈은 서로 import하지 않고 각자 A01 base에 도메인 슬라이스를 얹으므로 파동 내 병렬 가능. 각 파동 = 1 PR(병렬 축 묶음) → CI green → merge → 다음 파동.
 - Wave-1 CI 교훈을 처음부터 강제(브리프·verify 게이트): 파일 해시 LF 정규화 필수, evidence.source는 비-base 문서 소스, 결정성 테스트는 in-process build-twice, 테스트 REPO_ROOT는 `import.meta.url` 이식 도출, edge 방향규칙·정확 키, id 3부분, 날조 0(공백은 Unknown/Blocked).
