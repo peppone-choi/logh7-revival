@@ -1262,7 +1262,9 @@ export function buildWorldEntryInners({
       unitId: gridUnitId,
       unitCount: 1,
       cell: unitCell,
-      commander: characterId,
+      // own_cell 포커스: wire +0x08 commander = 함대 셀(cell). characterId를 넣으면
+      // 클라가 own_cell을 잘못 읽어 마커/카메라가 빗나간다(known-issue U1 / LOGH7-197).
+      commander: unitCell,
       fleets, // 지정 시 full 레코드(레지스트리 충전), 미지정 시 minimal
     }),
     buildInformationCharacterInner({
@@ -1416,6 +1418,8 @@ export function buildGridInitializeSpawnInners({
   fleets = null,
   // 0x031d/0x031f/0x0321 조인 키. 현재 cell이 정적 catalog에 없으면 null로 두어 상세 push를 생략한다.
   baseId = null,
+  // 0x031f compact 레코드(id+field04 소속 등). 없으면 { id: baseId } 최소만.
+  baseInfo = null,
   // 0x0356/0305/0307과 공유하는 영속 권한카드. 문맥이 없을 때만 personal kind 0으로 폴백한다.
   authorityCards = null,
   // target self와 같은 staging transaction에 추가할 live peer 캐릭터.
@@ -1440,7 +1444,8 @@ export function buildGridInitializeSpawnInners({
   inners.push(buildNotifyEnterGridBeginInner({ value: 0 }));
   // 3) 0x0325 유닛 테이블 (unit gate 충족: count≥1, unit[0].id = flagship 링크).
   //    fleets 지정 시 full 레코드 N개(레지스트리 충전 → 마커 클릭 null-deref 해소).
-  inners.push(buildInformationUnitInner({ unitId, unitCount: 1, cell: unitCell, commander: characterId, fleets }));
+  // commander = unitCell: 0x0325 element+0x08 → own_cell (전략맵 자기함대 포커스). characterId 금지.
+  inners.push(buildInformationUnitInner({ unitId, unitCount: 1, cell: unitCell, commander: unitCell, fleets }));
   // 4) 0x0323 캐릭터 레코드 (char count 복구: 0x0b09 reset 후 1 로 되돌림. flagship(+0x24)=unitId 링크)
   inners.push(buildInformationCharacterInner({
     characterId,
@@ -1488,9 +1493,13 @@ export function buildGridInitializeSpawnInners({
       : [{ col, row, value: TERRAIN_SPACE }],
   }));
   // 7) 상세 source cache. FUN_004c4170이 0x031f를 먼저, 0x0321을 다음에 live cache로 복사한다.
-  //    값 근거가 없는 필드는 모두 0이며, 두 레코드는 같은 base id 하나만 공유한다.
+  //    0x031f: 호출측이 넘긴 baseInfo 우선(id+소속 field04). 경제 수치는 P3 금지로 0 유지.
+  //    static-base 순환 import 금지 — ownership 배선은 world-session이 buildInformationBaseRecordFromStatic으로 채운다.
   if (Number.isInteger(baseId) && baseId > 0) {
-    inners.push(buildResponseInformationBaseInner({ bases: [{ id: baseId }] }));
+    const bases = (baseInfo && baseInfo.id === baseId)
+      ? [baseInfo]
+      : [{ id: baseId }];
+    inners.push(buildResponseInformationBaseInner({ bases }));
     inners.push(buildResponseInformationInstitutionInner({
       institutions: [{ id: baseId, institutions: [] }],
     }));

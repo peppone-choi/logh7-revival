@@ -105,23 +105,56 @@ function systemCell(system) {
  * 1-based catalog id를 사용한다. 이는 서버 내부의 안정적인 키이며 원본 ID라고
  * 주장하지 않는다. 이름·셀·class_(spectralClass 투영)는 galaxy.json에서 직접 가져오고
  * diameter/revolution 등 천문 수치는 근거 데이터가 없어 0으로 둔다.
+ *
+ * 검은 행성 구(라이브): 성계 선택 시 클라가 p%03d_low.mdx 를 기본 마스크로 로드하고
+ * 0x031d 항성 class_ 와는 별 경로다(docs/reference/legacy-evidence/logh7-strategic-map-wire.md §D).
+ * planet 이름·경제는 NotifyBaseParameter/0x031f 계열 컴패니언 — diameter 날조로 색을 채우지 않는다.
+ * galaxy.planets[] 개수·이름은 catalog 메타로만 노출(wire field 승격 전).
  */
 export function getStaticBaseCatalog() {
   if (catalogCache) return catalogCache;
   const systems = Array.isArray(loadGalaxy()?.systems) ? loadGalaxy().systems : [];
-  catalogCache = Object.freeze(systems.map((system, index) => Object.freeze({
-    id: Number.isInteger(system?.id) && system.id > 0 ? system.id : index + 1,
-    grid: systemCell(system),
-    name: String(system?.system ?? ''),
-    class_: spectralClassToIndex(system?.spectralClass),
-    diameter: 0,
-    revolutionRadius: 0,
-    revolutionDirection: 0,
-    revolutionCycle: 0,
-    revolutionInitAngle: 0,
-    sourceIndex: index,
-  })));
+  catalogCache = Object.freeze(systems.map((system, index) => {
+    const planets = Array.isArray(system?.planets) ? system.planets : [];
+    return Object.freeze({
+      id: Number.isInteger(system?.id) && system.id > 0 ? system.id : index + 1,
+      grid: systemCell(system),
+      name: String(system?.system ?? ''),
+      class_: spectralClassToIndex(system?.spectralClass),
+      // 캐논 diameter/revolution 부재 → 0 유지(날조 금지). 검은 궤도 구 증상과 직결될 수 있으나
+      // placeholder MDX 경로도 동시에 열려 있어 임의 float 주입 금지.
+      diameter: 0,
+      revolutionRadius: 0,
+      revolutionDirection: 0,
+      revolutionCycle: 0,
+      revolutionInitAngle: 0,
+      planetCount: planets.length,
+      planetNames: Object.freeze(planets.map((p) => String(p?.name ?? '')).filter(Boolean)),
+      faction: system?.faction === 'empire' || system?.faction === 'alliance' ? system.faction : null,
+      sourceIndex: index,
+    });
+  }));
   return catalogCache;
+}
+
+/** 0x031f 등 동적 base 소속 바이트. 문서: 0x02=동맹, 0x03=제국 (placement-re §5). 미상=0. */
+export function factionToBaseOwnership(faction) {
+  if (faction === 'alliance') return 0x02;
+  if (faction === 'empire') return 0x03;
+  return 0;
+}
+
+/**
+ * 선택된 정적 base에 대해 0x031f에 실을 최소 레코드.
+ * id + 소속(field04)만 캐논 연동; 경제 수치는 planet-economy.json이 P3 procedural 이라 넣지 않는다.
+ */
+export function buildInformationBaseRecordFromStatic(selected) {
+  if (!selected || !(Number.isInteger(selected.id) && selected.id > 0)) return null;
+  const ownership = factionToBaseOwnership(selected.faction);
+  return {
+    id: selected.id,
+    field04: ownership,
+  };
 }
 
 function catalogMatch(value) {

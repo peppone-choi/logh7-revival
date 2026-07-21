@@ -45,14 +45,15 @@ function mapFactionFleet(fleet, faction, idBase, out) {
       cell: cell >>> 0, // 시드 정본 (row*100+col)
       faction, // 시드 정본 powerId
       owner: 0,
-      commander: 0,
+      // own_cell 소비자와 동일 규칙: commander 슬롯 = 함대 셀(cell). 0이면 마커 포커스 붕괴.
+      commander: cell >>> 0,
     });
   }
 }
 
 /**
  * 초기 배치 NPC 유닛 목록(제국+동맹 함대). 메모이즈.
- * 각 원소: { id(유니크 키), cell(정본), faction(정본), owner:0, commander:0 }.
+ * 각 원소: { id(유니크 키), cell(정본), faction(정본), owner:0, commander:cell }.
  * @returns {Array<{id:number, cell:number, faction:number, owner:number, commander:number}>}
  */
 export function getDeploymentFleetUnits() {
@@ -75,7 +76,7 @@ export function getDeploymentFleetUnits() {
  * ★player native +0x08은 이름과 달리 이 경로에서 실제 캐릭터 지휘관 ID가 아니다. FUN_004c2c80이
  *   source+0x320으로 복사하고 FUN_004c4170이 currentRaw11178로 전달한다. B53 라이브에서 +0x08=2588일 때
  *   자연 SendWarp가 성공했고, B54에서 +0x08=characterId(1)이면 currentRaw11178=1/sendWarp=0이었다.
- *   따라서 player에는 current cell을 투영하고 캐릭터 ID는 owner와 0x0323에만 둔다. NPC는 근거가 없어 0 유지.
+ *   따라서 player·NPC 모두 commander=cell 을 투영하고 캐릭터 ID는 owner와 0x0323에만 둔다.
  *
  * @param {{ unitId:number, cell?:number, characterId?:number, faction?:number, spotResolverBase?:number }} player
  * @returns {Array<{id:number, cell:number, faction:number, owner:number, commander:number, spotResolverBase?:number}>}

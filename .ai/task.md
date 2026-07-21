@@ -1,5 +1,35 @@
 # Current Task
 
+## Active Contract: Ultragoal standing backlog — 배치 5장 자동 계속 (Windows-native)
+
+- Status: **ACTIVE — 2026-07-21** 사용자 `/ultragoal` + 계약 프롬프트 승인.
+- Plan: `.omc/ultragoal/plans/standing-backlog-win-native/` (aggregate Claude/Grok goal; OMC stories G001–G008).
+- Goal: 원본 클라+자체 서버로 **in-game 월드 진입·기본 플레이**(함대 선택→이동→Warp)가 **fresh 라이브 증거**로 확인될 때까지 게이트 순 이슈를 **5개 배치**로 구현·검증·전달하고 배치마다 checkpoint 후 다음 5개 자동 계속. 가짜 완료·날조 금지.
+- Host: sole 워크트리; client/install `E:\logh7-revival`; lineage fail-closed; server `127.0.0.1:47900` 직렬; native Windows live; `LOGH7_TACTICAL_ENTRY` 기본 OFF.
+- Auth: 2026-07-17 상시 — commit/push/PR/merge/Jira·GitHub 증거/라이브. 금지: force push·main 직접·history rewrite·secrets·`server/data/**` 삭제·`.codex/config.toml`·reference 이식·subagent git reset/checkout/restore/stash/clean·`git add -A`.
+- Git baseline: branch `peppone-choi/sole` @ `d10143e7` (= `origin/main`, ahead/behind 0/0). Working tree clean at contract open.
+
+### Batch #1 (exact 5) — 2026-07-21 갱신
+
+| # | Item | Tracker / path | AC (측정) | Status |
+|---|------|----------------|-----------|--------|
+| 1 | 함대 마커 / own_cell U1 | 0x0325 commander=+0x08 | 선택 가능 마커 **또는** Blocked+live 증거 | **G002 done (Blocked+evidence)**; 코드: commander 기본값 cell 정렬 구현 |
+| 2 | 검은 행성 정보 (0x031d) | 성계 뷰 검은 구 = 행성 비주얼 페이로드 | class_ 항성색 유지; diameter/revolution은 캐논 있을 때만; 날조 금지; 갭 문서화 | **구현 중** — 사용자 정본 의미 확정 |
+| 3 | 0x032f 멤버리스트 | 선행: 함대 선택 | 0x032e→0x032f | **G003 blocked** (0x032e=0) |
+| 4 | 이동/Warp 라이브 | 0x0b01 / 0x2b | 선택 후 라이브 | pending — G004/G005 (마커 선행) |
+| 5 | 조건부 zero-fill 배선 | 0x031f 소속 등 | galaxy.faction→소유 필드; tests green | **구현 중** |
+
+### Ultragoal stories
+G001 Contract (this bootstrap) → G002 FleetMarkerU1 → G003 OutfitParty032f → G004 Move0x0b01 → G005 Warp0x2b → G006 ZeroFillWire → G007 BatchLoop → G008 FinalGate (ai-slop + verify + code-review).
+
+### Stop AC
+월드 진입 + 함대 선택 + (이동 **또는** Warp) 라이브 성공, 또는 사람 중단. Wine-only P0(45/44/46) 이 호스트 완료 주장 금지.
+
+### Allowed files (배치 진행 중 확장 가능)
+`.ai/**`, `server/src/**`, `server/tests/**`, `tools/live/**`, `tools/**`(lineage/live), `docs/logh7-*.md`, 증거 `_workspace/**` / `.omo/live-qa/**`, `.omc/ultragoal/plans/standing-backlog-win-native/**`.
+
+---
+
 ## Completed Contract: 216 인과 원장 완주 — 잔여 축 A03·A05·A07·A08·A11·A12·A14·A15·A10 파동별 병렬 구현·병합 (15축 완성)
 
 - Status: **DONE — 2026-07-21 완주.** A01~A15 전 15축이 main(`7760c285`)에 구현·병합됐다(Wave 2~5 = PR #241/#242/#243/#244, Wave 1 = PR #236, 모두 CI `test` green). 전체 인과 원장 스위트 128 pass / 0 fail(15개 파일, 메인 세션 직접 실행). 각 축은 A01 base-append 패턴·LF-safe·in-process 결정성·날조 0(공백은 Unknown/Blocked). 원 계약: **ACTIVE — 2026-07-21 사용자 직접 지시** ("새 계약 잡고 병렬구현하고 커밋PR머지 반복. 216 실 구현을 끝낼 것"). 구현·commit·push·PR·merge를 파동마다 반복 수행하는 권한을 사용자가 명시 승인했다. force push·main 직접 commit·히스토리 재작성·`server/data/**` 삭제·비밀 접근·사용자 소유 `.codex/config.toml` 접근은 이 승인에서 제외·금지한다.

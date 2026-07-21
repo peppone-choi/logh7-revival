@@ -46,6 +46,7 @@ import { buildDeploymentFleetList, getFactionCapitalCell } from './logh7-deploym
 import { buildTacticalEntrySequenceInners } from './codec/tactical-entry-sequence.mjs';
 import {
   buildStaticInformationBaseFromGalaxy,
+  buildInformationBaseRecordFromStatic,
   findStaticBase,
   readStaticBaseRequest,
 } from './logh7-static-base.mjs';
@@ -672,8 +673,9 @@ export function createWorldSession({
         systemId: request.systemId,
         cell: request.cell ?? fallbackCell,
       });
+      const baseRecord = selected ? buildInformationBaseRecordFromStatic(selected) : null;
       const response = code === CODE_REQ_INFORMATION_BASE
-        ? buildResponseInformationBaseInner({ bases: selected ? [{ id: selected.id }] : [] })
+        ? buildResponseInformationBaseInner({ bases: baseRecord ? [baseRecord] : [] })
         : buildResponseInformationInstitutionInner({
           institutions: selected ? [{ id: selected.id, institutions: [] }] : [],
         });
@@ -743,6 +745,7 @@ export function createWorldSession({
           // 실 유닛으로 채워 마커/오브젝트 클릭 null-deref(FUN_004c9a80) 크래시를 해소한다.
           fleets: buildAggregateFleetList(player),
           baseId: selectedBase?.id ?? null,
+          baseInfo: buildInformationBaseRecordFromStatic(selectedBase),
           authorityCards: player.authorityCards,
           additionalCharacters: listLivePlayersForTarget(player)
             .slice(1)

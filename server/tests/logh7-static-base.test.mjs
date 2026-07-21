@@ -3,12 +3,15 @@ import assert from 'node:assert/strict';
 import {
   buildStaticInformationBaseFromGalaxy,
   buildStaticInformationBaseInner,
+  buildInformationBaseRecordFromStatic,
+  factionToBaseOwnership,
   findStaticBaseByCell,
   getStaticBaseCatalog,
   readStaticBaseRequest,
   spectralClassToIndex,
   STATIC_BASE_BODY_BYTES,
 } from '../src/server/logh7-static-base.mjs';
+import { buildResponseInformationBaseInner } from '../src/server/codec/base-record.mjs';
 import { msg32Body, readMsg32Code } from '../src/server/logh7-world-records.mjs';
 import { createWorldSession } from '../src/server/logh7-world-session.mjs';
 
@@ -119,6 +122,10 @@ test('galaxy catalog projects authoritative spectralClass into class_ and leaves
   // 천문(diameter/revolution)은 근거 데이터가 없어 0으로 유지한다.
   assert.ok(catalog.every((record) => record.diameter === 0));
   assert.ok(catalog.every((record) => record.revolutionRadius === 0));
+  // 행성 메타(이름·개수)는 galaxy.json 캐논 — wire 승격 전 catalog 메타로만 보유.
+  assert.equal(catalog[0].planetCount, 3);
+  assert.deepEqual(catalog[0].planetNames, ['バクタプール', 'カライヤ', 'バドガオン']);
+  assert.equal(catalog[0].faction, 'alliance');
   const body = msg32Body(buildStaticInformationBaseFromGalaxy());
   assert.equal(body.readUInt16BE(0), 85);
   const first = readStreamRecord(body);
@@ -127,6 +134,24 @@ test('galaxy catalog projects authoritative spectralClass into class_ and leaves
   assert.equal(first.name, 'ルンビーニ');
   assert.equal(first.class_, 7);
   assert.equal(first.revolutionRadius, 0);
+});
+
+test('0x031f base record wires galaxy faction ownership (0x02 alliance / 0x03 empire), not economy P3', () => {
+  assert.equal(factionToBaseOwnership('alliance'), 0x02);
+  assert.equal(factionToBaseOwnership('empire'), 0x03);
+  assert.equal(factionToBaseOwnership(null), 0);
+  const alliance = getStaticBaseCatalog().find((r) => r.faction === 'alliance');
+  const empire = getStaticBaseCatalog().find((r) => r.faction === 'empire');
+  assert.ok(alliance && empire);
+  const aRec = buildInformationBaseRecordFromStatic(alliance);
+  const eRec = buildInformationBaseRecordFromStatic(empire);
+  assert.equal(aRec.field04, 0x02);
+  assert.equal(eRec.field04, 0x03);
+  const inner = buildResponseInformationBaseInner({ bases: [aRec] });
+  // compact stream: u8 count @0, then u32be id, u8 field04
+  assert.equal(inner.readUInt8(6), 1);
+  assert.equal(inner.readUInt32BE(7), aRec.id);
+  assert.equal(inner.readUInt8(11), 0x02);
 });
 
 test('player cell 2588 resolves to the Valhalla base id instead of the old hardcoded id 1', () => {

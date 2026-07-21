@@ -112,7 +112,7 @@ test('buildDeploymentFleetList: selected base id는 player spot resolver에만 �
     'wire NPC unit+0x40 remains zero');
 });
 
-test('buildDeploymentFleetList: env와 무관하게 player native +0x08은 cell이고 NPC commander는 0이다', () => {
+test('buildDeploymentFleetList: env와 무관하게 player·NPC native +0x08은 각자의 cell이다', () => {
   const previous = process.env.LOGH_PLAYER_FOCUS_CELL;
   const bodies = [];
   try {
@@ -129,7 +129,10 @@ test('buildDeploymentFleetList: env와 무관하게 player native +0x08은 cell�
       assert.equal(fleets[0].commander, 2588, `${label}: player current-cell source`);
       assert.equal(fleets[0].cell, 2588, `${label}: player location`);
       assert.equal(fleets[0].owner, 42, `${label}: character identity stays in owner`);
-      assert.ok(fleets.slice(1).every((fleet) => fleet.commander === 0), `${label}: NPC commander remains unknown/zero`);
+      assert.ok(
+        fleets.slice(1).every((fleet) => fleet.commander === fleet.cell && fleet.cell > 0),
+        `${label}: NPC commander == cell (own_cell 정렬)`,
+      );
 
       const body = msg32Body(buildInformationUnitInner({ unitId: 7, fleets }));
       const decoded = decodeInformationUnitsLikeFun419ca0(body);
