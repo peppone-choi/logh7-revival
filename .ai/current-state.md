@@ -1,5 +1,14 @@
 # Current State
 
+- Updated at: 2026-07-21 (latest)
+- **2026-07-21 Strategic Map Play Gate (Goals A+B) — PARTIAL SESSION**
+  - **Goal A (Black Planets #185):** Code verified ✓ (spectralClass→class_ fix in `logh7-static-base.mjs`), tests 70/70 pass ✓, **live evidence MISSING** ✗ (agent stopped at login, no orbital view reached)
+  - **Goal B (Fleet Markers #183):** Code verified ✓ (cell projection in `logh7-world-session.mjs:409-415`, COMMANDER=cell in `logh7-deployment-units.mjs`), tests pass ✓, **live evidence MISSING** ✗ (no galaxy map reached)
+  - **Live QA Status:** Agent launched server (127.0.0.1:47900) ✓, launched client (PID 26844) ✓, captured initial login screenshot ✓, **stopped without world entry** ✗
+  - **Blocker:** Live validation incomplete — GOAL requires "완료=픽셀+로그만" (pixels+logs only) but no gameplay evidence collected
+  - **Evidence:** `_workspace/liveqa-20260721-planet-io/FINDINGS.md` (code-level verification PASS, live-level verification INCOMPLETE)
+  - **Next:** Restart live QA to reach world/strategy map, collect Frida I/O + own_cell watchpoint data, verify black planets and fleet markers rendering
+  
 - Updated at: 2026-07-21
 - **DONE ultragoal ui-checklist-p0-p1-p2** (G001–G008 ledger complete): plan `.omc/ultragoal/plans/ui-checklist-p0-p1-p2/`. **G001 Blocked+binding** (owner@+0x04 only; **no product class_@+0x175 invent**). **G002** sticky 0x0323 path + seed-less pcp=0; S-IV Blocked until seed+re-shot. G003 ship-count **Unknown**. G004 fleet **Blocked** (0x032e=0). G005 BLOCKED on G004. G006 T-*/P-* UNSEEN. Checklist §5–6 aligned BLOCKED. Parent standing-backlog paused. Client `E:\logh7-revival`, port 47900, tactical OFF. `.codex/config.toml` 불가침.
 - **Parent standing backlog** (`standing-backlog-win-native`): select→move/Warp; G002 Blocked+evidence; G003 0x032f blocked on 0x032e.
