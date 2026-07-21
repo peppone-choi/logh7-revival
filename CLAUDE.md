@@ -21,6 +21,7 @@
 - 현행·역사 문서 분류: `docs/logh7-document-index-current.md` — 역사 문서의 코드 경로는 리셋 전 기준이므로 불신
 - CD 이미지 `artifacts/logh7-cd/`(gitignored, md5 검증)·공식 매뉴얼 `docs/reference/*.pdf` — 게임 규칙의 근거
 - 미해결 문제·게이트 차단 현황: `.ai/known-issues.md`
+- 인과 원장(15축 causal ledger): 설계 정본 `docs/logh7-causal-ledger-master-design.md`, 구현 `tools/causal-ledger/`(A01 스키마·검증기 + A02~A15 축 모듈, 2026-07-21 15축 완성). 원장은 스키마·node/edge/evidence 레코드·검증기 구현물이며, 라이브 게임행동·clock/RNG·권리 등 열린 사실은 A10 verification-matrix에 Unknown/Blocked로 명시 — 완료/canonical로 오독 금지
 - 문서와 코드가 충돌하면 코드·테스트가 우선 — 충돌은 Instruction Conflict로 보고 (`AGENTS.md` 형식)
 
 ## Project Commands

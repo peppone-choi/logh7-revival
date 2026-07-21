@@ -10,6 +10,7 @@
 3. `docs/agent/README.md` — 작업 유형별 문서 라우팅 (모든 문서를 읽지 않는다)
 4. `.ai/current-state.md`, `.ai/handoff.md`, `.ai/ownership.md` — 재개·병렬 작업 시
 5. 현재 작업 유형의 Runbook (`docs/agent/lifecycle-*.md`)
+6. 인과 원장 작업 시: `docs/logh7-causal-ledger-master-design.md`(15축 설계 정본) + `tools/causal-ledger/`(구현, 2026-07-21 15축 완성). 열린 사실은 Unknown/Blocked이며 완료가 아니다.
 
 ## Instruction Hierarchy
 
