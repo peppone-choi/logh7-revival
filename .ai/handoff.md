@@ -3,7 +3,7 @@
 ## 2026-07-21 216 인과 원장 완주 마라톤 (Wave 2~5)
 
 - 사용자 지시: "새 계약 잡고 병렬구현하고 커밋PR머지 반복. 216 실 구현을 끝낼 것." → 계약 `.ai/task.md` ACTIVE. 잔여 축을 파동별 병렬 구현·commit·PR·merge 반복해 15축 완성.
-- 진행: **Wave 1~3 merge 완료** — main에 10축 A02~A09·A12·A13 (PR #236/#241/#242, `cfa7c253`; CI `test` 첫 시도 통과 연속으로 교훈 사전주입 안정화). **Wave 4 (A11 gameplay capability·A14 security/anti-cheat·A15 packaging/config) 구현 중** (branch `peppone-choi/wave4-a11-a14-a15`). 남은: **Wave 5 (A10 synthesis)** → 15축 완성.
+- 진행: **Wave 1~4 merge 완료** — main에 13축 A02~A09·A11~A15 (PR #236/#241/#242/#243, `b6fd2968`; CI `test` 첫 시도 통과 연속으로 교훈 사전주입 안정화). **Wave 5 (A10 verification-matrix/clean-room synthesis = 최종 축) 구현 중** (branch `peppone-choi/wave5-a10`). 병합 시 A01~A15 **전 15축 완성 = 216 인과 원장 완주**.
 - 구현 패턴(정본): 각 축 = A01 base 부트스트랩(`importSources(SOURCE_MANIFEST)`) → 도메인 node/edge/evidence append → 축 노드를 기존 coverage `targetNodeIds`에 부착 → `validateLedger(ledger,{manifest})`. Wave-1 CI 4교훈을 브리프·verify 게이트에 사전 주입(파일해시 LF정규화·비-base evidence 소스(master-design)·in-process 결정성·`import.meta.url` 이식 경로) → Wave 2는 CI 반복 0회로 통과.
 - 워크플로: `.claude/.../workflows/scripts/ledger-wave2-a03-a05-*.js`(AXES만 교체해 재사용). 각 파동 = 1 PR → CI(LF) green → merge.
 - 부수 정리: 축 생성 델타 `tools/causal-ledger/generated/a[0-9]*.json` gitignore로 추적 해제(재생성 산출물, master-design 변경 드리프트 churn 근절; A01 `ledger.json`/`import-report.json`은 유지).
