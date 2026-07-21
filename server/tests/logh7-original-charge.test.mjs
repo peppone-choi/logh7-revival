@@ -86,6 +86,8 @@ test('0x1006 charge — 빈 계정에 후보 캐릭터 1개 생성·영속', () 
   assert.equal(chars[0].candidateId, candId, '후보 id 로 매핑된 캐릭터');
   const cand = getOriginalCandidate(candId);
   assert.equal(chars[0].power, cand.power, '후보 풀의 진영이 실림');
+  assert.ok(String(chars[0].lastname || '').length > 0, 'ORM 영속용 lastname 필수');
+  assert.ok(String(chars[0].firstname || '').length > 0, 'ORM 영속용 firstname 필수');
 });
 
 // ─── (b) 0x1006 응답 = 24B 형식 echo ─────────────────────────────────────────

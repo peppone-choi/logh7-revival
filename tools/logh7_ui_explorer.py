@@ -151,20 +151,29 @@ def _load_session(session: Path) -> dict[str, Any]:
 
 
 def _process_alive(pid: int | None) -> bool:
+    """PID 생존 여부. Windows는 OpenProcess 우선(콘솔 코드페이지/ tasklist 디코드 무관)."""
     if not pid or pid <= 0:
         return False
     if sys.platform == "win32":
+        # PROCESS_QUERY_LIMITED_INFORMATION — tasklist CSV 인코딩(cp949) 의존 제거
+        PROCESS_QUERY_LIMITED_INFORMATION = 0x1000
+        handle = ctypes.windll.kernel32.OpenProcess(
+            PROCESS_QUERY_LIMITED_INFORMATION, False, int(pid)
+        )
+        if handle:
+            ctypes.windll.kernel32.CloseHandle(handle)
+            return True
+        # OpenProcess 실패 시 tasklist 폴백 (bytes + replace — UnicodeDecodeError 금지)
         completed = subprocess.run(
             ["tasklist", "/FI", f"PID eq {pid}", "/FO", "CSV", "/NH"],
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
-            text=True,
             check=False,
         )
-        if completed.returncode != 0:
+        if completed.returncode != 0 or not completed.stdout:
             return False
-        output = completed.stdout.strip()
-        return bool(output) and not output.startswith("INFO:")
+        output = completed.stdout.decode(errors="replace").strip()
+        return bool(output) and not output.upper().startswith("INFO:")
     try:
         os.kill(pid, 0)
     except OSError:
@@ -594,15 +603,28 @@ def cmd_start(args: argparse.Namespace) -> int:
         blocked = _enforce_lineage_gate(session, exe, Path(lineage_manifest).resolve())
         if blocked is not None:
             return blocked
+    # Job 제한 셸에서는 CREATE_BREAKAWAY_FROM_JOB 이 PermissionError 날 수 있음 → 플래그 없이 재시도.
+    # 정상 플레이 경로는 Desktop bat / Start-Process 를 권장; 여기 실패 시 사용자 클라를 죽이지 않는다.
     creationflags = DETACHED_PROCESS | CREATE_NEW_PROCESS_GROUP | CREATE_BREAKAWAY_FROM_JOB
-    process = subprocess.Popen(
-        [str(exe)],
-        cwd=str(exe.parent),
-        stdin=subprocess.DEVNULL,
-        stdout=subprocess.DEVNULL,
-        stderr=subprocess.DEVNULL,
-        creationflags=creationflags,
-    )
+    try:
+        process = subprocess.Popen(
+            [str(exe)],
+            cwd=str(exe.parent),
+            stdin=subprocess.DEVNULL,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+            creationflags=creationflags,
+        )
+    except OSError:
+        process = subprocess.Popen(
+            [str(exe)],
+            cwd=str(exe.parent),
+            stdin=subprocess.DEVNULL,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+            creationflags=DETACHED_PROCESS | CREATE_NEW_PROCESS_GROUP,
+        )
+    hwnd: int | None = None
     try:
         hwnd = _wait_for_window(
             process.pid,
@@ -623,7 +645,9 @@ def cmd_start(args: argparse.Namespace) -> int:
         print(json.dumps({"started": state, "initial": report}, ensure_ascii=False, indent=2))
         return 0
     except BaseException:
-        _taskkill_pid(process.pid)
+        # 창을 한 번도 못 잡은 실패 기동만 정리. 창이 뜬 뒤 관찰 실패는 사용자 세션을 유지한다.
+        if hwnd is None:
+            _taskkill_pid(process.pid)
         raise
 
 

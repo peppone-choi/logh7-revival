@@ -228,11 +228,15 @@ function _handleOriginalCharge(inner, accountId, store) {
   for (const id of charIds) {
     const cand = getOriginalCandidate(id);
     if (!cand) continue; // 서버 후보 풀에 없는 id 는 무시(형식만 맞으면 클라는 성공 처리)
+    // ORM createCharacterEntity 는 빈 이름 거부. 잠정 last/first 를 실어 영속 게이트를 통과한다.
+    // power 2|3 = 생성 폼 진영 라디오와 동일 계열(lifecycle RE).
     store.addCharacter(accountId, {
-      candidateId: cand.id,     // 어느 후보에서 왔는지(정합 추적)
-      power: cand.power,        // 진영 — 0x2004 카드 최소 필드(잠정)
+      candidateId: cand.id,
+      power: cand.power,
       camp: cand.power,
-      provisional: true,        // 정본 아님 표시
+      lastname: cand.lastname ?? `Orig`,
+      firstname: cand.firstname ?? String(cand.id),
+      provisional: true,
     });
   }
   return encodeOriginalCharOk({ count, charIds });
@@ -249,20 +253,32 @@ function _handleExtensionCharge(inner) {
 
 function _handleGenerateCharge(inner, accountId, store) {
   const req = decodeGenerateCharReq(inner);
-  // store에 캐릭터 영속
-  store.addCharacter(accountId, {
-    power: req.power,
-    blood: req.blood,
-    sex: req.sex,
-    lastname: req.lastname,
-    firstname: req.firstname,
-    face: req.face,
-    ability8: req.ability8,
-    bonusPoint: req.bonusPoint,
-    specialAbilityNum: req.specialAbilityNum,
-    title: req.title,
-    rank: req.rank,
-  });
+  // 라이브 multi-phase: request_category 0..4, **4=최종 커밋**
+  // (logh7-character-creation-wire.md / lifecycle RE). 중간 phase 는 128B OK echo 만
+  // 하고 영속하지 않는다 — 매 phase 영속 시 extension 상한(≤2) 을 즉시 넘긴다.
+  const category = Number(req.requestCategory) || 0;
+  const shouldCommit = category === 4
+    // 구 캡처/테스트 벡터(category=0 + 이름 있음) 호환: 최종 한 장으로 취급
+    || (category === 0 && (String(req.lastname || '') || String(req.firstname || '')));
+  if (shouldCommit) {
+    const existing = store.getCharacters?.(accountId) ?? [];
+    // extension 카드 슬롯 상한 2 (0x2004 max + account extension_count)
+    if (existing.length < 2) {
+      store.addCharacter(accountId, {
+        power: req.power,
+        blood: req.blood,
+        sex: req.sex,
+        lastname: req.lastname,
+        firstname: req.firstname,
+        face: req.face,
+        ability8: req.ability8,
+        bonusPoint: req.bonusPoint,
+        specialAbilityNum: req.specialAbilityNum,
+        title: req.title,
+        rank: req.rank,
+      });
+    }
+  }
   return encodeGenerateCharOk({
     requestCategory: req.requestCategory,
     accepted: 1,

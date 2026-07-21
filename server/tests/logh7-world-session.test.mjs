@@ -745,8 +745,10 @@ test('0x031e returns a populated fixed 0x031f joined by the current player cell'
   const body = msg32Body(result.responses[0].inner);
   assert.equal(body.length, 0x604);
   assert.equal(body.readUInt8(0), 1);
-  assert.equal(body.readUInt32BE(1), 70, 'player cell 2588 joins static base id 70');
-  assert.ok(body.subarray(5).every((byte) => byte === 0), 'unproven base fields stay zero');
+  // 고정 0x604: count@0, elem0@+4, id LE (FUN_0057aa90 native match)
+  assert.equal(body.readUInt32LE(4), 70, 'player cell 2588 joins static base id 70');
+  // owner@elem+0x04 소속 바이트(0x02/0x03) 허용. 경제 스칼라는 P3 provisional.
+  assert.ok([0, 2, 3].includes(body.readUInt8(4 + 0x04)), 'owner@+0x04 in {0,2,3}');
 });
 
 test('0x0320 returns a fixed 0x0321 for the same base with no fabricated facilities', () => {

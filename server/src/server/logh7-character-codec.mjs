@@ -600,27 +600,50 @@ function writeLobbyCharacterChargeRecord(payload, cursor, record) {
  * @param {import('./logh7-character-store.mjs').CharRecord[]} chars
  * @returns {Buffer} message32
  */
+/**
+ * 로비 카드 진영 바이트. 생성 폼 power∈{2,3} (제국/동맹). 0/1 레거시·미설정은 2로 승격.
+ * 0x500/0x501 등 확장 id 가 오면 1/2 계열로 접는다 (tmp-2004 lobbyPowerByte).
+ */
+function lobbyCardPowerByte(value) {
+  const n = Number(value);
+  if (!Number.isFinite(n)) return 2;
+  if (n === 0x500) return 2;
+  if (n === 0x501) return 3;
+  if (n === 0x502) return 3;
+  if (n === 1) return 2; // 구 서버 1=제국 표기 → 폼 2
+  if (n >= 2 && n <= 0xff) return n & 0xff;
+  return 2;
+}
+
 export function encodeLobbyCharCardList(chars = []) {
   const payload = Buffer.alloc(LOBBY_CHAR_CARD_LIST_SIZE);
   const list = (chars ?? []).slice(0, 2);
   payload.writeUInt8(list.length, 0);
   let cursor = 1;
+  let written = 0;
   for (const c of list) {
     const id = Number(c.id) || 0;
     if (id <= 0) continue;
     const lastname = String(c.lastname ?? '');
     const firstname = String(c.firstname ?? '');
-    const display = String(c.display ?? ((lastname + firstname) || `Char${id}`));
+    // 카드 헤더 name / detail display — 성+이름 우선, 공백 시 Char<id>
+    const display = String(
+      c.display
+      ?? c.displayName
+      ?? ([lastname, firstname].filter(Boolean).join('') || `Char${id}`),
+    );
     const ab = Array.isArray(c.ability8) ? c.ability8.slice(0, 8) : [];
     while (ab.length < 8) ab.push(0);
     const ageYears = Number.isFinite(c.age) ? Number(c.age) : 18;
+    const power = lobbyCardPowerByte(c.power);
+    const camp = lobbyCardPowerByte(c.camp ?? c.power);
     const record = {
-      id,
-      status: 1, // selectable (G136: status 1|2)
+      id: id & 0xffff, // 카드 헤더 id 는 u16 LE (FUN_0043fd60)
+      status: 1, // selectable (G136: status 1|2) — 게임시작 패널 게이트
       name: display,
       description: display,
-      power: (c.power ?? 1) & 0xff,
-      camp: (c.camp ?? c.power ?? 1) & 0xff,
+      power,
+      camp,
       generated: (c.generated ?? 1) & 0xff,
       sex: (c.sex ?? 0) & 0xff,
       bdayMonth: (c.bdayMonth ?? 1) & 0xff,
@@ -628,12 +651,15 @@ export function encodeLobbyCharCardList(chars = []) {
       ageSeconds: (Math.max(0, ageYears) * LOBBY_CC_AGE_SEC_PER_YEAR) >>> 0,
       state: (c.charState ?? 1) & 0xff,
       abilities: ab.map((v) => (v ?? 0) & 0xffff),
-      lastname,
+      lastname: lastname || display,
       firstname,
       displayName: display,
     };
     cursor = writeLobbyCharacterChargeRecord(payload, cursor, record);
+    written += 1;
   }
+  // id<=0 스킵 시 count 와 실제 레코드 수를 맞춘다 (파서 misalign 방지)
+  payload.writeUInt8(written, 0);
   return buildMsg32Inner(CODE_LOBBY_RESP_INFO_CHAR, payload);
 }
 

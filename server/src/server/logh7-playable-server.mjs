@@ -53,6 +53,7 @@ import {
   buildSsLoginOkInner,
   buildCharacterRosterTransaction,
   isAdmissionRequestCode,
+  decodeLobbySessionLoginReq,
 } from './logh7-world-records.mjs';
 import { CODE_REQ_INFO_ACCOUNT } from './logh7-character-codec.mjs';
 import { buildPhase3ResponseFromPhase1Frame } from './logh7-login-harness-server.mjs';
@@ -310,6 +311,64 @@ export function createPlayableServer({
     };
   };
 
+  // 소켓별 S→C 직렬 쓰기 큐.
+  // 0x0325(≈52KB)·0x0321(≈36KB) 등 대형 프레임을 연속 socket.write 하면
+  // highWater 초과 시 부분 버퍼만 나가고 이후 프레임이 깨져 클라 디스패처에
+  // 0x0325 가 안 보이는 증상(Frida 2026-07-21: 0x323/b09 는 오고 0x325 누락).
+  const writeQueues = new WeakMap();
+
+  function enqueueSocketWrite(socket, buf) {
+    const data = Buffer.isBuffer(buf) ? buf : Buffer.from(buf);
+    let q = writeQueues.get(socket);
+    if (!q) {
+      q = { chain: Promise.resolve(), dropped: false };
+      writeQueues.set(socket, q);
+      socket.once('close', () => {
+        q.dropped = true;
+        writeQueues.delete(socket);
+      });
+      try {
+        // 대형 버스트(≥100KB) 여유
+        socket.setDefaultEncoding?.('binary');
+        if (typeof socket.setNoDelay === 'function') socket.setNoDelay(true);
+      } catch {
+        /* ignore */
+      }
+    }
+    q.chain = q.chain.then(
+      () => new Promise((resolve) => {
+        if (q.dropped || socket.destroyed) {
+          resolve();
+          return;
+        }
+        const ok = socket.write(data, (err) => {
+          if (err) {
+            writeTrace({
+              event: 'socket-write-error',
+              message: err.message,
+              bytes: data.length,
+            });
+          }
+        });
+        if (ok) {
+          resolve();
+          return;
+        }
+        const onDrain = () => {
+          socket.off('error', onErr);
+          resolve();
+        };
+        const onErr = () => {
+          socket.off('drain', onDrain);
+          resolve();
+        };
+        socket.once('drain', onDrain);
+        socket.once('error', onErr);
+      }),
+    );
+    return q.chain;
+  }
+
   function sendInner(socket, connectionId, id, inner) {
     const frame = encryptInnerFrame({
       tables,
@@ -317,7 +376,16 @@ export function createPlayableServer({
       id,
       inner,
     });
-    socket.write(frame);
+    enqueueSocketWrite(socket, frame);
+    if (frame.length > 32767) {
+      writeTrace({
+        event: 'large-frame-queued',
+        connectionId,
+        frameBytes: frame.length,
+        lenField: frame.readUInt16BE(0),
+        note: 'u16 len>0x7fff — client signed-length 가설 시 드롭 가능; drain 큐로 부분쓰기 완화',
+      });
+    }
     return frame;
   }
 
@@ -381,7 +449,7 @@ export function createPlayableServer({
               decipherKey: resolvedDecipherKey.bytes,
             });
             phase1Key = phase3.phase1Key;
-            socket.write(phase3.frame);
+            enqueueSocketWrite(socket, phase3.frame);
             writeTrace({
               event: 'phase3-sent',
               connectionId,
@@ -399,7 +467,37 @@ export function createPlayableServer({
           }
           try {
             const decodedBody = decryptBuffer(frame.body, expandChildCodecKey(phase1Key, tables));
-            const parsed0030 = parse0030Body(decodedBody);
+            let parsed0030;
+            try {
+              parsed0030 = parse0030Body(decodedBody);
+            } catch (strictErr) {
+              // 로비 0x2009 등: 복호 구조는 유효한데 checksum 만 불일치 → soft-accept
+              // (live 2026-07-21: got 0xbca expect 0x8c9, inner=2009+char/session field)
+              const soft = parse0030Body(decodedBody, { allowChecksumMismatch: true });
+              const softCode = soft.inner.length >= 2 ? soft.inner.readUInt16BE(0) : 0;
+              const softOk = soft.checksumMismatch
+                && soft.innerLen >= 2
+                && soft.innerLen <= 64
+                && (
+                  softCode === CODE_LOBBY_SESSION_LOGIN_REQ
+                  || softCode === 0x1008
+                  || softCode === 0x1006
+                  || softCode === 0x2008
+                );
+              if (!softOk) throw strictErr;
+              parsed0030 = soft;
+              writeTrace({
+                event: '0030-checksum-soft-accept',
+                connectionId,
+                message: strictErr.message,
+                id: soft.id,
+                innerCodeHex: codeHex(softCode),
+                innerLen: soft.innerLen,
+                checksumWire: soft.checksum,
+                checksumExpect: soft.expectChecksum,
+                bodyHeadHex: decodedBody.subarray(0, Math.min(16, decodedBody.length)).toString('hex'),
+              });
+            }
             const innerCode = readInnerCode(parsed0030.inner);
 
             writeTrace({
@@ -408,6 +506,7 @@ export function createPlayableServer({
               id: parsed0030.id,
               innerCodeHex: codeHex(innerCode),
               innerLen: parsed0030.innerLen,
+              checksumMismatch: !!parsed0030.checksumMismatch,
               ...(innerCode === CODE_CMD_MOVE_GRID ? traceInner(parsed0030.inner) : {}),
             });
 
@@ -429,7 +528,7 @@ export function createPlayableServer({
                     decipherKey: resolvedDecipherKey.bytes,
                     tables,
                   });
-                  socket.write(ngFrame);
+                  enqueueSocketWrite(socket, ngFrame);
                   writeTrace({
                     event: 'login-ng-sent',
                     connectionId,
@@ -456,7 +555,7 @@ export function createPlayableServer({
                   decodedBody,
                   redirectInner: loginRedirectInner,
                 });
-                socket.write(Buffer.concat([keysetupFrame, redirectFrame]));
+                enqueueSocketWrite(socket, Buffer.concat([keysetupFrame, redirectFrame]));
                 writeTrace({
                   event: 'login-response-sent',
                   connectionId,
@@ -479,7 +578,7 @@ export function createPlayableServer({
                   format: 'message32',
                   subheaderLen: LOBBY_SUBHEADER_LEN,
                 });
-                socket.write(earlyFrame);
+                enqueueSocketWrite(socket, earlyFrame);
                 writeTrace({
                   event: 'lobby-early-ok-sent',
                   connectionId,
@@ -595,7 +694,7 @@ export function createPlayableServer({
                 format: 'message32',
                 subheaderLen: LOBBY_SUBHEADER_LEN,
               });
-              socket.write(okFrame);
+              enqueueSocketWrite(socket, okFrame);
               writeTrace({
                 event: 'lobby-login-ok-sent',
                 connectionId,
@@ -649,11 +748,10 @@ export function createPlayableServer({
               }
               lobbyAccount = authenticatedAccount;
               // 월드 권위 경로
-              let character = null;
-              if (lobbyAccount) {
-                const chars = resolvedCharacterStore.getCharacters(lobbyAccount);
-                character = chars[0] ?? null;
-              }
+              const rosterChars = lobbyAccount
+                ? resolvedCharacterStore.getCharacters(lobbyAccount)
+                : [];
+              let character = rosterChars[0] ?? null;
               // session-login 시 character 주입을 위해 handleSessionLogin 직접 분기
               let result;
               if (innerCode === CODE_LOBBY_SESSION_LOGIN_REQ) {
@@ -661,11 +759,36 @@ export function createPlayableServer({
                   kind: 'session-login',
                   responses: [],
                 };
+                // 라이브: 캐릭 카드 더블클릭 시 0x2009 짧은 바디의 u16 필드에
+                // sessionId 대신 characterId 가 실리는 경우가 있다(id=1 이면 session 1 과
+                // 우연히 일치해 과거 통과). 로스터 id 와 일치하면 해당 캐릭 선택.
+                let sessionCharacter = character;
+                let loginInner = parsed0030.inner;
+                try {
+                  const req2009 = decodeLobbySessionLoginReq(parsed0030.inner);
+                  const field = Number(req2009.sessionId) || 0;
+                  const byId = rosterChars.find((c) => Number(c.id) === field);
+                  if (byId) {
+                    sessionCharacter = byId;
+                    // session 피커 id 는 1|2. characterId 가 실린 경우 session=1 로 정규화.
+                    if (field > 64) {
+                      const norm = Buffer.alloc(4);
+                      norm.writeUInt16BE(CODE_LOBBY_SESSION_LOGIN_REQ, 0);
+                      norm.writeUInt16LE(1, 2);
+                      loginInner = norm;
+                    }
+                  } else if (req2009.characterId > 0) {
+                    const byChar = rosterChars.find((c) => Number(c.id) === Number(req2009.characterId));
+                    if (byChar) sessionCharacter = byChar;
+                  }
+                } catch {
+                  /* 디코드 실패 시 chars[0] 폴백 */
+                }
                 const login = resolvedWorld.handleSessionLogin({
                   connectionId,
                   accountId: lobbyAccount,
-                  inner: parsed0030.inner,
-                  character,
+                  inner: loginInner,
+                  character: sessionCharacter,
                 });
                 issueReconnectHandoff(authenticatedAccount, socket, 'world');
                 result.responses.push({
@@ -803,7 +926,29 @@ export function createPlayableServer({
               }
             }
           } catch (error) {
-            writeTrace({ event: '0030-decode-error', connectionId, message: error.message });
+            // 로비 버튼 클릭 직후 checksum 실패 진단: 복호 실패 vs 봉투 필드 불일치 구분
+            let decodeDiag = null;
+            try {
+              if (phase1Key && frame?.body?.length) {
+                const raw = decryptBuffer(frame.body, expandChildCodecKey(phase1Key, tables));
+                decodeDiag = {
+                  bodyBytes: raw.length,
+                  bodyHeadHex: raw.subarray(0, Math.min(16, raw.length)).toString('hex'),
+                  checksumWire: raw.length >= 2 ? raw.readUInt16BE(0) : null,
+                  idWire: raw.length >= 6 ? raw.readUInt32BE(2) : null,
+                  innerLenWire: raw.length >= 8 ? raw.readUInt16BE(6) : null,
+                };
+              }
+            } catch {
+              decodeDiag = { note: 'decrypt-also-failed' };
+            }
+            writeTrace({
+              event: '0030-decode-error',
+              connectionId,
+              message: error.message,
+              frameBodyBytes: frame?.body?.length ?? null,
+              decodeDiag,
+            });
           }
         } else if (frame.code === CONFIRM_CODE) {
           // traced via frame-received

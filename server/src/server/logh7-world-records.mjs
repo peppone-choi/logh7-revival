@@ -368,18 +368,19 @@ export function buildInformationCharacterInner({
 
 // ─── 0x0325 ResponseInformationUnit ──────────────────────────────────────────
 
-// 정본 클라이언트 FUN_00419ca0은 고정 0xce44 wire body를 native 0x58 구조체로 디코드한다.
-// wire에는 native pad/stride가 없다. u16 BE count 직후부터 각 행을 다음 순서로 연속 소비한다.
-//   u32 id, u16 faction, u8 native+0x06, u32 commander/cell/owner,
-//   u8 boats count + u32 boats[], u32 spotResolverBase,
-//   u8 tail44, u8 tail45, u16 tail46, u16 mapSection, u32 tail4c, u32 tail50, float tail54.
-// 근거: 0x419cd2(count), 0x419dba..0x419dff(행 본문), 0x419e3d..0x419e96(tail).
-// 의미가 확인되지 않은 native+0x06 및 tail 값은 Buffer.alloc의 0을 그대로 소비시킨다.
+// 정본 클라이언트 FUN_00419ca0: 고정 0xce44 body → native 0x58 구조체 (compact wire).
+// count u16 BE (ntohs 경로, focusid-lookup-re §8.7 + 라이브 회귀 2026-07-21: LE 고정stride는
+// 월드진입 직후 클라 크래시). 레코드는 count 직후 cursor-packed.
+//   u32 id, u16 faction, u8 pad, u32 commander/cell/owner,
+//   u8 boats + u32 boats[], u32 spotResolverBase, pad…, u16 mapSection, …
+// 스테이징 LE 해석(unit-loader-wire)과 충돌 기록 있음 — 마커 0 은 별도 RE. 제품 경로는 BE compact.
 export function buildInformationUnitInner({
   unitId = 1, unitCount = 1, cell = 0, commander = 0, fleets = null,
 } = {}) {
   const list = Array.isArray(fleets) && fleets.length ? fleets : null;
-  const count = list ? Math.min(list.length, CODE_INFO_UNIT_MAX) : Math.max(0, Math.min(unitCount, CODE_INFO_UNIT_MAX));
+  const count = list
+    ? Math.min(list.length, CODE_INFO_UNIT_MAX)
+    : Math.max(0, Math.min(unitCount, CODE_INFO_UNIT_MAX));
   const body = Buffer.alloc(CODE_INFO_UNIT_BYTES);
   body.writeUInt16BE(count & 0xffff, 0);
   let cursor = CODE_INFO_UNIT_WIRE_HEADER;
@@ -387,7 +388,7 @@ export function buildInformationUnitInner({
     const f = list?.[i] ?? (i === 0 ? { id: unitId, commander, cell } : {});
     writeWireU32(body, f.id ?? 0, cursor, 'be'); cursor += 4;
     body.writeUInt16BE((f.faction ?? 0) & 0xffff, cursor); cursor += 2;
-    cursor += 1; // native +0x06: 의미 미확정, zero 유지
+    cursor += 1; // native +0x06
     writeWireU32(body, f.commander ?? 0, cursor, 'be'); cursor += 4;
     writeWireU32(body, f.cell ?? 0, cursor, 'be'); cursor += 4;
     writeWireU32(body, f.owner ?? 0, cursor, 'be'); cursor += 4;
@@ -397,14 +398,52 @@ export function buildInformationUnitInner({
       writeWireU32(body, boat ?? 0, cursor, 'be'); cursor += 4;
     }
     writeWireU32(body, f.spotResolverBase ?? 0, cursor, 'be'); cursor += 4;
-    cursor += 2; // native +0x44/+0x45: u8×2, 의미 미확정
-    cursor += 2; // native +0x46: u16, 의미 미확정
+    cursor += 2 + 2;
     body.writeUInt16BE((f.mapSection ?? 0) & 0xffff, cursor); cursor += 2;
-    cursor += 4; // native +0x4c: u32, 의미 미확정
-    cursor += 4; // native +0x50: u32, 의미 미확정
-    cursor += 4; // native +0x54: float, 의미 미확정
+    cursor += 4 + 4 + 4;
   }
   return buildMsg32Inner(CODE_INFO_UNIT, body);
+}
+
+/** 0x0325 바디 디코드 (테스트) — BE count + compact cursor (FUN_00419ca0 계약). */
+export function decodeInformationUnitsWire(body) {
+  const buf = Buffer.isBuffer(body) ? body : Buffer.from(body ?? []);
+  if (buf.length < 2) return { count: 0, rows: [], cursor: 0 };
+  const count = Math.min(buf.readUInt16BE(0), CODE_INFO_UNIT_MAX);
+  const rows = [];
+  let cursor = CODE_INFO_UNIT_WIRE_HEADER;
+  for (let index = 0; index < count; index += 1) {
+    if (cursor + 44 > buf.length) break;
+    const wireStart = cursor;
+    const id = buf.readUInt32BE(cursor); cursor += 4;
+    const faction = buf.readUInt16BE(cursor); cursor += 2;
+    cursor += 1;
+    const commander = buf.readUInt32BE(cursor); cursor += 4;
+    const cell = buf.readUInt32BE(cursor); cursor += 4;
+    const owner = buf.readUInt32BE(cursor); cursor += 4;
+    const boatsCount = Math.min(buf.readUInt8(cursor), UNIT_BOATS_MAX); cursor += 1;
+    const boats = [];
+    for (let b = 0; b < boatsCount; b += 1) {
+      boats.push(buf.readUInt32BE(cursor)); cursor += 4;
+    }
+    const spotResolverBase = buf.readUInt32BE(cursor); cursor += 4;
+    cursor += 1 + 1 + 2;
+    const mapSection = buf.readUInt16BE(cursor); cursor += 2;
+    cursor += 4 + 4 + 4;
+    rows.push({
+      wireStart,
+      wireEnd: cursor,
+      id,
+      faction,
+      commander,
+      cell,
+      owner,
+      boats,
+      spotResolverBase,
+      mapSection,
+    });
+  }
+  return { count, rows, cursor };
 }
 
 // ─── 0x200a LobbySessionLoginOK (월드 리다이렉트) ─────────────────────────────
@@ -1235,6 +1274,12 @@ export function buildWorldEntryInners({
   face = 0,
   rank = 0,
   abilities = null,
+  pcp = null,
+  mcp = null,
+  stamina = null,
+  money = null,
+  influence = null,
+  title = null,
   serverTime = 0x40000000,
   includeEmptyGrid = true,
   placeUnitCellOnGrid = true,
@@ -1248,6 +1293,11 @@ export function buildWorldEntryInners({
   if (!Number.isInteger(gridUnitId) || gridUnitId <= 0) {
     throw new Error('buildWorldEntryInners: gridUnitId required');
   }
+  // 빈 이름 → 클라 "皇帝" 폴백 방지: 세션 이름이 비면 플레이스홀더 금지, rank/title만 실값.
+  // title 문자열에 皇帝를 서버가 넣지 않는다(직무카드 UI 라벨과 혼동).
+  const safeTitle = (title != null && String(title).length > 0 && !/皇帝|emperor/i.test(String(title)))
+    ? String(title)
+    : null;
   // unsolicited 테이블 채움 4코드만 push. 요청-응답 4코드(0x0301/0x0f01/0x0f03/0x0315)는
   // pre-push 시 send-ring 미배수로 로더 정지 → reactive 어드미션 핸들러로 분리(위 JSDoc 참조).
   const emits = [
@@ -1262,7 +1312,9 @@ export function buildWorldEntryInners({
       unitId: gridUnitId,
       unitCount: 1,
       cell: unitCell,
-      commander: characterId,
+      // own_cell 포커스: wire +0x08 commander = 함대 셀(cell). characterId를 넣으면
+      // 클라가 own_cell을 잘못 읽어 마커/카메라가 빗나간다(known-issue U1 / LOGH7-197).
+      commander: unitCell,
       fleets, // 지정 시 full 레코드(레지스트리 충전), 미지정 시 minimal
     }),
     buildInformationCharacterInner({
@@ -1275,6 +1327,12 @@ export function buildWorldEntryInners({
       firstname,
       face,
       rank,
+      title: safeTitle,
+      pcp: Number.isInteger(pcp) ? pcp : null,
+      mcp: Number.isInteger(mcp) ? mcp : null,
+      stamina: Number.isInteger(stamina) ? stamina : null,
+      money: Number.isInteger(money) ? money : null,
+      influence: Number.isInteger(influence) ? influence : null,
       abilities: Array.isArray(abilities) && abilities.length ? abilities : null,
       // seat count@0x24c 최소 1 (commander 자신 1행) — 0 이면 C002 유닛리스트 미렌더.
       officerCount: Math.max(1, officerCount),
@@ -1406,6 +1464,12 @@ export function buildGridInitializeSpawnInners({
   face = 0,
   rank = 0,
   abilities = null,
+  pcp = null,
+  mcp = null,
+  stamina = null,
+  money = null,
+  influence = null,
+  title = null,
   officerCount = 0,
   // 정본 갤럭시 배치(logh7-galaxy-placement). 주어지면 SPACE-only 폴백 대신 실 성계 팔레트/셀을
   // 방출한다 — 스테이징→라이브 run-once 복사(FUN_004c5350) 전에 이 경로가 팔레트/셀을 재기록하므로
@@ -1416,6 +1480,8 @@ export function buildGridInitializeSpawnInners({
   fleets = null,
   // 0x031d/0x031f/0x0321 조인 키. 현재 cell이 정적 catalog에 없으면 null로 두어 상세 push를 생략한다.
   baseId = null,
+  // 0x031f compact 레코드(id+field04 소속 등). 없으면 { id: baseId } 최소만.
+  baseInfo = null,
   // 0x0356/0305/0307과 공유하는 영속 권한카드. 문맥이 없을 때만 personal kind 0으로 폴백한다.
   authorityCards = null,
   // target self와 같은 staging transaction에 추가할 live peer 캐릭터.
@@ -1440,8 +1506,12 @@ export function buildGridInitializeSpawnInners({
   inners.push(buildNotifyEnterGridBeginInner({ value: 0 }));
   // 3) 0x0325 유닛 테이블 (unit gate 충족: count≥1, unit[0].id = flagship 링크).
   //    fleets 지정 시 full 레코드 N개(레지스트리 충전 → 마커 클릭 null-deref 해소).
-  inners.push(buildInformationUnitInner({ unitId, unitCount: 1, cell: unitCell, commander: characterId, fleets }));
+  // commander = unitCell: 0x0325 element+0x08 → own_cell (전략맵 자기함대 포커스). characterId 금지.
+  inners.push(buildInformationUnitInner({ unitId, unitCount: 1, cell: unitCell, commander: unitCell, fleets }));
   // 4) 0x0323 캐릭터 레코드 (char count 복구: 0x0b09 reset 후 1 로 되돌림. flagship(+0x24)=unitId 링크)
+  const safeTitle = (title != null && String(title).length > 0 && !/皇帝|emperor/i.test(String(title)))
+    ? String(title)
+    : null;
   inners.push(buildInformationCharacterInner({
     characterId,
     gridUnitId: unitId,
@@ -1452,6 +1522,12 @@ export function buildGridInitializeSpawnInners({
     firstname,
     face,
     rank,
+    title: safeTitle,
+    pcp: Number.isInteger(pcp) ? pcp : null,
+    mcp: Number.isInteger(mcp) ? mcp : null,
+    stamina: Number.isInteger(stamina) ? stamina : null,
+    money: Number.isInteger(money) ? money : null,
+    influence: Number.isInteger(influence) ? influence : null,
     abilities: Array.isArray(abilities) && abilities.length ? abilities : null,
     // seat count@0x24c 최소 1 (commander 자신 1행) — 0 이면 C002 유닛리스트 미렌더.
     officerCount: Math.max(1, officerCount),
@@ -1488,9 +1564,13 @@ export function buildGridInitializeSpawnInners({
       : [{ col, row, value: TERRAIN_SPACE }],
   }));
   // 7) 상세 source cache. FUN_004c4170이 0x031f를 먼저, 0x0321을 다음에 live cache로 복사한다.
-  //    값 근거가 없는 필드는 모두 0이며, 두 레코드는 같은 base id 하나만 공유한다.
+  //    0x031f: 호출측이 넘긴 baseInfo 우선(id+소속 field04). 경제 수치는 P3 금지로 0 유지.
+  //    static-base 순환 import 금지 — ownership 배선은 world-session이 buildInformationBaseRecordFromStatic으로 채운다.
   if (Number.isInteger(baseId) && baseId > 0) {
-    inners.push(buildResponseInformationBaseInner({ bases: [{ id: baseId }] }));
+    const bases = (baseInfo && baseInfo.id === baseId)
+      ? [baseInfo]
+      : [{ id: baseId }];
+    inners.push(buildResponseInformationBaseInner({ bases }));
     inners.push(buildResponseInformationInstitutionInner({
       institutions: [{ id: baseId, institutions: [] }],
     }));

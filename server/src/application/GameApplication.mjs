@@ -66,10 +66,12 @@ export function createGameApplication({
           return uow.findCharactersByAccount(accountId).map((c) => ({
             id: c.id,
             power: c.power,
+            camp: c.power,
             blood: c.blood,
             sex: c.sex,
             lastname: c.lastname,
             firstname: c.firstname,
+            display: [c.lastname, c.firstname].filter(Boolean).join(''),
             face: c.face,
             rank: c.rank,
             unitId: c.unitId,

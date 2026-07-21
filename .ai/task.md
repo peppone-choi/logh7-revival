@@ -1,5 +1,41 @@
 # Current Task
 
+## Active Contract: UI 체크리스트 P0→P1→P2 전수 스윕 (ultragoal)
+
+- Status: **DONE — 2026-07-21** ultragoal ledger 8/8 (honest **Blocked/Unknown**; no fake non-NO-DATA pixels).
+- Plan: `.omc/ultragoal/plans/ui-checklist-p0-p1-p2/` (aggregate; G001–G008).
+- Parent (resume later): `standing-backlog-win-native` — select→move/Warp; fleet still Blocked (0x032e=0).
+- Delivered (skeptic-corrected): **G001 Blocked** — owner@+0x04 only; **no owner→class_ invent**; scalars provisional. **G002** sticky enterWorld→0x0f02 + buildPlayerCharacterRecord; seed-less pcp stays 0; 皇帝 title strip; S-IV **Blocked** until seed+re-shot. G003 Unknown; G004–G006 Blocked/UNSEEN; checklist+binding map; tests exit 0.
+- Host: sole; client `E:\logh7-revival`; `127.0.0.1:47900`; tactical OFF. Auth 2026-07-17. Never force-push / secrets / data delete / `.codex/config.toml` / `git add -A`.
+
+### Ultragoal stories (`ui-checklist-p0-p1-p2`)
+
+| ID | P | Title | AC (한 줄) | Status |
+|----|---|-------|------------|--------|
+| G001 | P0 | BasePanel031f | **Blocked+binding**: owner@+0x04; +0x175 only if explicit; no invent | **complete** |
+| G002 | P0 | InfoView0323 | sticky bind tests; **Blocked** when seed lacks pcp; binding map | **complete** |
+| G003 | P0 | MapOwnerShipCount | Unknown consumer; no invent | **complete** |
+| G004 | P0 | FleetMarker032e | Blocked+evidence (markers 0 / 032e=0) | **complete** |
+| G005 | P1 | CommandGridOrbit | BLOCKED on G004 | **complete** |
+| G006 | P2 | TacticalFacilitySweep | T-*/P-* UNSEEN documented | **complete** |
+| G007 | docs | ChecklistHandoff | checklist + .ai state | **complete** |
+| G008 | gate | FinalGate | tests + quality-gate | **complete** |
+
+### Stop AC
+P0 G001–G004 각각 DONE 또는 honest Blocked+evidence, checklist P0 행 공백 사유 코드 근거로 고정, 또는 사람 중단.
+
+### Allowed files
+`.ai/**`, `server/src/**`, `server/tests/**`, `tools/live/**`, `tools/**`(lineage/live/RE), `docs/logh7-*.md`, `_workspace/**`, `.omo/live-qa/**`, `.omc/ultragoal/plans/ui-checklist-p0-p1-p2/**`, standing-backlog plan 연계 메모.
+
+---
+
+## Parent Contract (not cancelled): Ultragoal standing backlog — 배치 5장
+
+- Plan: `standing-backlog-win-native`. Stop: world enter + fleet select + move **or** Warp live.
+- Batch #1: G002 FleetMarker **done Blocked+evidence**; G003 0x032f **blocked (0x032e=0)** until ui-checklist G004; G004/G005 move/Warp pending; G006 zero-fill overlaps ui G001.
+
+---
+
 ## Completed Contract: 216 인과 원장 완주 — 잔여 축 A03·A05·A07·A08·A11·A12·A14·A15·A10 파동별 병렬 구현·병합 (15축 완성)
 
 - Status: **DONE — 2026-07-21 완주.** A01~A15 전 15축이 main(`7760c285`)에 구현·병합됐다(Wave 2~5 = PR #241/#242/#243/#244, Wave 1 = PR #236, 모두 CI `test` green). 전체 인과 원장 스위트 128 pass / 0 fail(15개 파일, 메인 세션 직접 실행). 각 축은 A01 base-append 패턴·LF-safe·in-process 결정성·날조 0(공백은 Unknown/Blocked). 원 계약: **ACTIVE — 2026-07-21 사용자 직접 지시** ("새 계약 잡고 병렬구현하고 커밋PR머지 반복. 216 실 구현을 끝낼 것"). 구현·commit·push·PR·merge를 파동마다 반복 수행하는 권한을 사용자가 명시 승인했다. force push·main 직접 commit·히스토리 재작성·`server/data/**` 삭제·비밀 접근·사용자 소유 `.codex/config.toml` 접근은 이 승인에서 제외·금지한다.

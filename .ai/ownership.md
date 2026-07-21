@@ -2,9 +2,10 @@
 
 | Agent | Task | Branch/worktree | Owned files | Status | Updated at |
 |---|---|---|---|---|---|
-| Claude Code (executor) | Wave-1 인과 원장 축 A02/A04/A06/A09/A13 (#218/#220/#222/#225/#229 / LOGH7-215/217/219/223/226) | peppone-choi/wave1-axes (PR 준비, merge 미승인) | `tools/causal-ledger/axes/a{02,04,06,09,13}-*.mjs` (5) + tests (5) + generated (12) | implemented·verified | 2026-07-21 |
+| Grok (main) | Ultragoal standing backlog Batch #1 (plan standing-backlog-win-native G001–G008) | peppone-choi/sole @ d10143e7 | `.ai/**`, batch-related `server/**` `tools/live/**` `docs/logh7-*.md`, `.omc/ultragoal/plans/standing-backlog-win-native/**`, live evidence dirs | in_progress | 2026-07-21 |
+| — (stale release) | Wave-1 인과 원장 A02/A04/A06/A09/A13 | merged main | — | done | 2026-07-21 |
 | Codex (root; 소유 해제) | A01 인과 원장 스키마·분류·누락 검출기 (#217 / LOGH7-214) | PR #233 merged `43ee007a` | — | done | 2026-07-20 |
-| Claude Code (메인+서브에이전트) | P0 게이트 (LOGH7-43~47) — batch #1: 43·47 완료(PR #174 merge 4564f427), 45/44/46 Wine-후속 이관 | codex/logh7-43-p0-evidence (PR #174 merged) | — (43·47 완료·병합; 45/44/46은 Wine 호스트 후속 배치) | in_progress | 2026-07-17 |
+| — (stale release) | P0 게이트 43·47 완료; 45/44/46 Wine-후속 | PR #174 merged | — | done / Wine-blocked | 2026-07-21 |
 | Claude Code (메인+서브에이전트, 2026-07-17 사용자 승인으로 Codex에서 인수) | 상태 정합성 복구 | codex/state-consistency-recovery | — (소유 해제; 외부 manifest 적용 확인·상태 종결, 전달은 승인 사슬로 진행) | done | 2026-07-17 |
 | Codex (root) | 플랫폼 분기 하네스 라이브 확인·배포 | codex/platform-aware-live-qa | — (소유 해제; PR #171 merge `a8420b8b`) | done | 2026-07-17 |
 | Codex (root) | 실행 환경별 레거시 클라이언트 라이브 QA 하네스(Codex+Claude) | codex/platform-aware-live-qa | — (소유 해제) | done | 2026-07-17 |
@@ -14,8 +15,8 @@
 | Claude Code (메인) | Agent OS 부트스트랩 | feat/ai-work-system (베이스라인 커밋 34b4b36d) | — (소유 해제) | done | 2026-07-16 |
 | Claude Code (메인+서브에이전트) | AI 업무 시스템 고도화 (`.ai/task.md` DONE, 계획 `.omc/plans/logh7-ai-work-system-plan.md`) — Phase 1+2 PR #6 `be6499a3`, Phase 3 SRV-CORR PR #8 `3fd847b1` merge 완료 | chore/phase3-closeout (종결 커밋만) | — (소유 해제; 종결 브랜치 push/PR 승인 대기) | done | 2026-07-16 |
 | Claude Code (메인+서브에이전트) | 문서 전수 분해 티켓화(Jira LOGH7-9~92, GH #10~59) + 스킬 부트스트랩(bootstrap-skills.sh) | chore/backlog-ticketization | — (소유 해제; push/PR 승인 대기) | done | 2026-07-17 |
-| Claude Code 서브에이전트(server-dev A) | LOGH7-58 유닛 스테이징·Warp | codex/logh7-58-unit-staging | worktree 격리, 라이브 47900 전용 | in_progress | 2026-07-17 |
-| Claude Code 서브에이전트(server-dev B) | LOGH7-62/59/60 세션 라이프사이클 | codex/logh7-62-59-60-session-lifecycle | worktree 격리, npm test 검증만 | in_progress | 2026-07-17 |
+| — (stale) | LOGH7-58 유닛 스테이징·Warp | historical worktree | — | done/merged (live open under G002–G005) | 2026-07-21 |
+| — (stale) | LOGH7-62/59/60 세션 라이프사이클 | historical | — | done/merged | 2026-07-21 |
 
 ## 규칙 (정본: docs/agent/collaboration-protocol.md)
 
