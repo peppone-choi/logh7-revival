@@ -16,6 +16,11 @@ import { buildMsg32Inner } from './logh7-world-records.mjs';
 
 const CONTENT_DIR = join(dirname(fileURLToPath(import.meta.url)), '..', '..', 'content');
 
+// P3 임시 천문 스케일(캐논 diameter 부재). 라이브 검은 구 완화용 placeholder — provenance 명시.
+const P3_STAR_DIAMETER = 2.5;
+const P3_ORBIT_RADIUS_STEP = 12;
+const P3_ORBIT_CYCLE = 120;
+
 export const STATIC_BASE_CODE = 0x031d;
 export const STATIC_BASE_BODY_BYTES = 0x520c;
 export const STATIC_BASE_STREAM_COUNT_BYTES = 2;
@@ -102,59 +107,111 @@ function systemCell(system) {
  * galaxy.json에서 0x031d에 사용할 시스템 정적 레코드를 만든다.
  *
  * 원본 서버의 별도 숫자 ID는 복구되지 않았으므로 DB seed의 삽입 순서와 동일한
- * 1-based catalog id를 사용한다. 이는 서버 내부의 안정적인 키이며 원본 ID라고
- * 주장하지 않는다. 이름·셀·class_(spectralClass 투영)는 galaxy.json에서 직접 가져오고
- * diameter/revolution 등 천문 수치는 근거 데이터가 없어 0으로 둔다.
- *
- * 검은 행성 구(라이브): 성계 선택 시 클라가 p%03d_low.mdx 를 기본 마스크로 로드하고
- * 0x031d 항성 class_ 와는 별 경로다(docs/reference/legacy-evidence/logh7-strategic-map-wire.md §D).
- * planet 이름·경제는 NotifyBaseParameter/0x031f 계열 컴패니언 — diameter 날조로 색을 채우지 않는다.
- * galaxy.planets[] 개수·이름은 catalog 메타로만 노출(wire field 승격 전).
+ * 1-based catalog id를 사용한다. 이름·셀·class_(spectralClass 투영)는 galaxy.json에서 가져온다.
+ * diameter/revolution: 캐논 부재 → 2026-07-21 사용자 승인 **P3 임시 스케일**.
+ * 소속(陣営) UI: 0x031f element+0x04 (고정 0x180 슬롯) — compact 스트림이면 소속 누락.
  */
 export function getStaticBaseCatalog() {
   if (catalogCache) return catalogCache;
   const systems = Array.isArray(loadGalaxy()?.systems) ? loadGalaxy().systems : [];
   catalogCache = Object.freeze(systems.map((system, index) => {
     const planets = Array.isArray(system?.planets) ? system.planets : [];
+    const n = planets.length;
+    const firstOrbit = Number(planets[0]?.orbit) > 0 ? Number(planets[0].orbit) : 1;
+    const faction = (system?.faction === 'empire' || system?.faction === 'alliance'
+      || system?.faction === 'neutral')
+      ? system.faction
+      : null;
     return Object.freeze({
       id: Number.isInteger(system?.id) && system.id > 0 ? system.id : index + 1,
       grid: systemCell(system),
       name: String(system?.system ?? ''),
       class_: spectralClassToIndex(system?.spectralClass),
-      // 캐논 diameter/revolution 부재 → 0 유지(날조 금지). 검은 궤도 구 증상과 직결될 수 있으나
-      // placeholder MDX 경로도 동시에 열려 있어 임의 float 주입 금지.
-      diameter: 0,
-      revolutionRadius: 0,
-      revolutionDirection: 0,
-      revolutionCycle: 0,
-      revolutionInitAngle: 0,
-      planetCount: planets.length,
+      diameter: P3_STAR_DIAMETER,
+      revolutionRadius: Math.max(1, n) * P3_ORBIT_RADIUS_STEP,
+      revolutionDirection: 1,
+      revolutionCycle: P3_ORBIT_CYCLE,
+      revolutionInitAngle: (firstOrbit - 1) * 0.7,
+      planetCount: n,
       planetNames: Object.freeze(planets.map((p) => String(p?.name ?? '')).filter(Boolean)),
-      faction: system?.faction === 'empire' || system?.faction === 'alliance' ? system.faction : null,
+      faction,
       sourceIndex: index,
+      _astronomyProvenance: 'p3-temporary-astronomy',
     });
   }));
   return catalogCache;
 }
 
-/** 0x031f 등 동적 base 소속 바이트. 문서: 0x02=동맹, 0x03=제국 (placement-re §5). 미상=0. */
+/** 0x031f 소속 바이트. 0x02=동맹, 0x03=제국. 중립/미상=0. */
 export function factionToBaseOwnership(faction) {
   if (faction === 'alliance') return 0x02;
   if (faction === 'empire') return 0x03;
   return 0;
 }
 
+let economyCache;
+
+function loadPlanetEconomy() {
+  if (economyCache !== undefined) return economyCache;
+  try {
+    economyCache = JSON.parse(readFileSync(join(CONTENT_DIR, 'planet-economy.json'), 'utf8'));
+  } catch {
+    economyCache = null;
+  }
+  return economyCache;
+}
+
+function economyForSystemName(systemName) {
+  const eco = loadPlanetEconomy();
+  const list = Array.isArray(eco?.systems) ? eco.systems : [];
+  return list.find((row) => row && row.system === systemName) ?? null;
+}
+
 /**
- * 선택된 정적 base에 대해 0x031f에 실을 최소 레코드.
- * id + 소속(field04)만 캐논 연동; 경제 수치는 planet-economy.json이 P3 procedural 이라 넣지 않는다.
+ * 0x031f 레코드: field04 소속(galaxy.faction) + planet-economy.json P3 임시 경제.
  */
 export function buildInformationBaseRecordFromStatic(selected) {
   if (!selected || !(Number.isInteger(selected.id) && selected.id > 0)) return null;
   const ownership = factionToBaseOwnership(selected.faction);
+  const eco = economyForSystemName(selected.name);
+  const planets = Array.isArray(eco?.planets) ? eco.planets : [];
+  let pop = 0;
+  let food = 0;
+  let industry = 0;
+  for (const planet of planets) {
+    pop += Number(planet?.population_M) > 0 ? Number(planet.population_M) : 0;
+    food += Number(planet?.food) > 0 ? Number(planet.food) : 0;
+    industry += Number(planet?.industry) > 0 ? Number(planet.industry) : 0;
+  }
+  const population = Math.min(0xffffffff, Math.trunc(pop * 10000));
+  const foodU = Math.min(0xffffffff, Math.trunc(food));
+  const indU = Math.min(0xffffffff, Math.trunc(industry));
   return {
     id: selected.id,
     field04: ownership,
+    field05: 0,
+    field08: population,
+    field14: foodU,
+    field18: indU,
+    commodity: [foodU, indU, Math.trunc((foodU + indU) / 2)],
+    budget: [
+      Math.trunc(population / 100),
+      foodU,
+      indU,
+      Math.trunc(pop),
+      Math.trunc((food + industry) / 2),
+    ],
+    budgeting: [10, 20, 15, 15, 20, 20],
+    field154: Math.min(0xffff, Math.trunc(pop)),
+    field156: Math.min(0xffff, foodU),
+    field158: Math.min(0xffff, indU),
+    field174: 1.0,
+    _provenance: 'p3-temporary-economy:planet-economy.json',
   };
+}
+
+export function _resetPlanetEconomyCache() {
+  economyCache = undefined;
 }
 
 function catalogMatch(value) {
@@ -316,4 +373,5 @@ export function buildStaticInformationBaseFromGalaxy({ systemId = null, cell = n
 export function _resetStaticBaseCache() {
   galaxyCache = undefined;
   catalogCache = undefined;
+  economyCache = undefined;
 }

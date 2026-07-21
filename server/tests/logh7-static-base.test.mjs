@@ -119,10 +119,10 @@ test('galaxy catalog projects authoritative spectralClass into class_ and leaves
   // 85개 성계 전부 authoritative spectralClass(game-mdx)를 갖고 있어 어떤 실 성계도 검게 남지 않는다.
   assert.ok(catalog.every((record) => record.class_ >= 1 && record.class_ <= 7),
     'every system carries a non-black spectral class');
-  // 천문(diameter/revolution)은 근거 데이터가 없어 0으로 유지한다.
-  assert.ok(catalog.every((record) => record.diameter === 0));
-  assert.ok(catalog.every((record) => record.revolutionRadius === 0));
-  // 행성 메타(이름·개수)는 galaxy.json 캐논 — wire 승격 전 catalog 메타로만 보유.
+  // 천문: P3 임시 스케일(사용자 승인). diameter/revolutionRadius > 0.
+  assert.ok(catalog.every((record) => record.diameter > 0));
+  assert.ok(catalog.every((record) => record.revolutionRadius > 0));
+  assert.equal(catalog[0]._astronomyProvenance, 'p3-temporary-astronomy');
   assert.equal(catalog[0].planetCount, 3);
   assert.deepEqual(catalog[0].planetNames, ['バクタプール', 'カライヤ', 'バドガオン']);
   assert.equal(catalog[0].faction, 'alliance');
@@ -133,10 +133,11 @@ test('galaxy catalog projects authoritative spectralClass into class_ and leaves
   assert.equal(first.grid, 2005);
   assert.equal(first.name, 'ルンビーニ');
   assert.equal(first.class_, 7);
-  assert.equal(first.revolutionRadius, 0);
+  assert.ok(first.revolutionRadius > 0);
+  assert.ok(first.diameter > 0);
 });
 
-test('0x031f base record wires galaxy faction ownership (0x02 alliance / 0x03 empire), not economy P3', () => {
+test('0x031f fixed slot: galaxy faction at elem+0x04 and P3 economy filled', () => {
   assert.equal(factionToBaseOwnership('alliance'), 0x02);
   assert.equal(factionToBaseOwnership('empire'), 0x03);
   assert.equal(factionToBaseOwnership(null), 0);
@@ -147,11 +148,14 @@ test('0x031f base record wires galaxy faction ownership (0x02 alliance / 0x03 em
   const eRec = buildInformationBaseRecordFromStatic(empire);
   assert.equal(aRec.field04, 0x02);
   assert.equal(eRec.field04, 0x03);
-  const inner = buildResponseInformationBaseInner({ bases: [aRec] });
-  // compact stream: u8 count @0, then u32be id, u8 field04
-  assert.equal(inner.readUInt8(6), 1);
-  assert.equal(inner.readUInt32BE(7), aRec.id);
-  assert.equal(inner.readUInt8(11), 0x02);
+  assert.ok(aRec.field08 > 0, 'P3 population');
+  assert.equal(aRec._provenance.includes('p3-temporary-economy'), true);
+  const body = msg32Body(buildResponseInformationBaseInner({ bases: [aRec] }));
+  // fixed: count@0, id@4, owner@8
+  assert.equal(body.readUInt8(0), 1);
+  assert.equal(body.readUInt32BE(4), aRec.id);
+  assert.equal(body.readUInt8(8), 0x02, 'ownership at element+0x04 for client FUN_004c32a0');
+  assert.equal(body.readUInt32BE(4 + 0x08), aRec.field08);
 });
 
 test('player cell 2588 resolves to the Valhalla base id instead of the old hardcoded id 1', () => {
